@@ -61,6 +61,7 @@ class PlayerViewController: UIViewController {
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
         SVC.userName = self.userNameString
+        AddWorkoutHomeViewController.groupBool = false
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     

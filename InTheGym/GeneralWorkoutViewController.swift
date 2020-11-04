@@ -142,8 +142,9 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
             
         }else{
             let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let SVC = Storyboard.instantiateViewController(identifier: "GroupAddViewController") as! GroupAddViewController
-            SVC.players = self.yesPlayers
+            let SVC = Storyboard.instantiateViewController(identifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
+            SVC.groupPlayers = self.yesPlayers
+            AddWorkoutHomeViewController.groupBool = true
             
             self.navigationController?.pushViewController(SVC, animated: true)
         }

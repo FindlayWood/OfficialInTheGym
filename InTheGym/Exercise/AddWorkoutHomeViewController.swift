@@ -93,54 +93,86 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
                                 "exercises": AddWorkoutHomeViewController.exercises,
                                 "coach": username] as [String : Any]
             
-            if stepCount > 1{
-                for _ in 1...stepCount{
-                    
-                    if AddWorkoutHomeViewController.groupBool{
-                        
-                        myGroup.enter()
+            
+            
+            
+            // need to rewrite this section for if group, then if multiple
+            
+            // begin with group check
+            if AddWorkoutHomeViewController.groupBool{
+                // this is for a group add
+                // then add check for multiple
+                if stepCount > 1{
+                    // MARK: GROUP Multiple
+                    // multiple add for a group
+                    // in here add loop to add for stepcount times
+                    myGroup.enter()
+                    for _ in 1...stepCount{
                         for player in groupPlayers{
                             self.GroupDBRef.child(player).childByAutoId().setValue(exerciseData)
                         }
-                        myGroup.leave()
-                        
-                        myGroup.notify(queue: DispatchQueue.main){
-                            let actData = ["time":ServerValue.timestamp(),
-                                           "type":"Set Workout",
-                                           "message":"You created \(self.stepCount) group Workouts."] as [String:AnyObject]
-                            self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
-                            
-                            self.workoutsCount += self.stepCount * self.groupPlayers.count
-                            self.ActRef.child("users").child(self.userID).child("NumberOfWorkouts").setValue(self.workoutsCount)
-                        }
-                    }else{
-                        DBRef.childByAutoId().setValue(exerciseData)
+                    }
+                    myGroup.leave()
+                    myGroup.notify(queue: DispatchQueue.main){
                         let actData = ["time":ServerValue.timestamp(),
                                        "type":"Set Workout",
-                                       "message":"You created \(stepCount) workouts for \(userName!)."] as [String:AnyObject]
+                                       "message":"You created \(self.stepCount) group Workouts."] as [String:AnyObject]
+                        self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
+                                            
+                        self.workoutsCount += self.stepCount * self.groupPlayers.count
+                        self.ActRef.child("users").child(self.userID).child("NumberOfWorkouts").setValue(self.workoutsCount)
+                    }
+                    
+                    
+                }else{
+                    // single add for a group
+                    // MARK: GROUP Single
+                    myGroup.enter()
+                    for player in groupPlayers{
+                        self.GroupDBRef.child(player).childByAutoId().setValue(exerciseData)
+                    }
+                    myGroup.leave()
+                    myGroup.notify(queue: DispatchQueue.main){
+                        let actData = ["time":ServerValue.timestamp(),
+                                       "type":"Set Workout",
+                                       "message":"You created a group Workout."] as [String:AnyObject]
                         self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
                         
-                        workoutsCount += stepCount
-                        self.ActRef.child("users").child(userID).child("NumberOfWorkouts").setValue(workoutsCount)
+                        self.workoutsCount += self.groupPlayers.count
+                        self.ActRef.child("users").child(self.userID).child("NumberOfWorkouts").setValue(self.workoutsCount)
                     }
                 }
             }else{
-                DBRef.childByAutoId().setValue(exerciseData)
-                let actData = ["time":ServerValue.timestamp(),
-                               "type":"Set Workout",
-                               "message":"You created a workout for \(userName!)."] as [String:AnyObject]
-                self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
-                
-                workoutsCount += 1
-                self.ActRef.child("users").child(userID).child("NumberOfWorkouts").setValue(workoutsCount)
+                // this is single person add
+                // add check for multiple here
+                if stepCount > 1{
+                    // add loop to add stepcoount times
+                    // MARK: SINGLE multiple
+                    for _ in 1...stepCount{
+                        DBRef.childByAutoId().setValue(exerciseData)
+                    }
+                    let actData = ["time":ServerValue.timestamp(),
+                                   "type":"Set Workout",
+                                   "message":"You created \(stepCount) workouts for \(userName!)."] as [String:AnyObject]
+                    self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
+                    workoutsCount += stepCount
+                    self.ActRef.child("users").child(userID).child("NumberOfWorkouts").setValue(workoutsCount)
+                    
+                    
+                    
+                }else{
+                    // just add single time
+                    // MARK: SINGLE single
+                    DBRef.childByAutoId().setValue(exerciseData)
+                    let actData = ["time":ServerValue.timestamp(),
+                                   "type":"Set Workout",
+                                   "message":"You created a workout for \(userName!)."] as [String:AnyObject]
+                    self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
+                    workoutsCount += 1
+                    self.ActRef.child("users").child(userID).child("NumberOfWorkouts").setValue(workoutsCount)
+                    
+                }
             }
-            
-            
-//            DBRef.childByAutoId().setValue(exerciseData)
-//            let actData = ["time":ServerValue.timestamp(),
-//                           "type":"Set Workout",
-//                           "message":"You created a workout for \(userName!)."] as [String:AnyObject]
-//            self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
             titleField.text = ""
             AddWorkoutHomeViewController.exercises.removeAll()
             tableview.reloadData()
@@ -148,18 +180,19 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
             // new alert
             let alert = SCLAlertView()
             alert.showSuccess("Uploaded", subTitle: "This workout has been uploaded and the player can now view it.", closeButtonTitle: "Ok")
-            
-//            workoutsCount += 1
-//            self.ActRef.child("users").child(userID).child("NumberOfWorkouts").setValue(workoutsCount)
         }
     }
 
 
     override func viewDidLoad() {
+        
+        print(AddWorkoutHomeViewController.groupBool!)
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
         
-        DBRef = Database.database().reference().child("Workouts").child(userName)
+        if !AddWorkoutHomeViewController.groupBool{
+            DBRef = Database.database().reference().child("Workouts").child(userName)
+        }
         ActRef = Database.database().reference()
         GroupDBRef = Database.database().reference().child("Workouts")
         
