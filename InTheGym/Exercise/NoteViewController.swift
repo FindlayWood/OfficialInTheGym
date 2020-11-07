@@ -74,11 +74,19 @@ class NoteViewController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func skip(_ sender:UIButton){
-        
-        let dictData = ["exercise": self.exercise,
+        var dictData : [String:Any] = [:]
+        if variedReps{
+            dictData = ["exercise": self.exercise,
+                        "sets": self.sets,
+                        "reps": self.repArray,
+                        "weight": self.weight]
+        }else{
+            dictData = ["exercise": self.exercise,
                         "sets": self.sets,
                         "reps": self.reps,
                         "weight": self.weight]
+        }
+        
         
         AddWorkoutHomeViewController.exercises.append(dictData)
         

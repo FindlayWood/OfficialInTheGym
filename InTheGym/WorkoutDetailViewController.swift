@@ -39,6 +39,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     var ScoreRef: DatabaseReference!
     var CoachRef: DatabaseReference!
     var feedRef: DatabaseReference!
+    var workLoadRef: DatabaseReference!
     
     //parentviewcontroller variable, may not be needed
     var PVC: ViewWorkoutViewController!
@@ -149,6 +150,10 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 }else if Int((score.text)!)! < 1 || Int((score.text)!)! > 10{
                     self.showError()
                 }else{
+                    // haptic feedback : complete workout
+                    let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
+                    notificationFeedbackGenerator.prepare()
+                    notificationFeedbackGenerator.notificationOccurred(.success)
                     self.DBRef.child("\(self.workoutID)").updateChildValues(["completed" : true])
                     let scoreNum = score.text!
                     self.DBRef.child("\(self.workoutID)").updateChildValues(["score" : scoreNum])
@@ -189,14 +194,22 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
                         self.ScoreRef.child(self.assignedCoach).childByAutoId().setValue(scoreInfo)
                         self.ScoreRef.child(self.username).childByAutoId().setValue(scoreInfo)
                     }
+                    // uploading to database : time to complete and workload
                     self.DBRef.child("\(self.workoutID)").updateChildValues(["timeToComplete":timeToComplete])
+                    let workload = (timeToComplete/60) * Int(scoreNum)!
+                    self.DBRef.child("\(self.workoutID)").updateChildValues(["workload":workload])
+                    let workloadData = ["endTime": endTime,
+                                        "workload": workload,
+                                        "workoutID": self.workoutID] as [String : Any]
+                    self.workLoadRef.childByAutoId().updateChildValues(workloadData)
+                    
                     
                     self.navigationController?.popViewController(animated: true)
                     
                 }
             }
             
-            alert.showSuccess("Completed!", subTitle: "Enter RPE score to complete upload. Workout Time = \(mins) minutes, \(secs) seconds", closeButtonTitle: "Cancel")
+            alert.showSuccess("Completed!", subTitle: "Great Job! Enter RPE score to complete the upload.", closeButtonTitle: "Cancel")
         }
     }
     
@@ -252,9 +265,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         beginView.layer.shadowOpacity = 1.0
         beginView.layer.masksToBounds = false
         
-        
-        
-        
+    
         
         
         navigationItem.title = titleString
@@ -262,18 +273,24 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         ActRef = Database.database().reference().child("users").child(userID!).child("activities")
         ComRef = Database.database().reference().child("users").child(userID!)
         feedRef = Database.database().reference().child("Public Feed")
+        workLoadRef = Database.database().reference().child("Workloads").child(username)
+        
+        // checking if there is a start time and removing begin view if there is
+        DBRef.child("\(self.workoutID)").child("startTime").observeSingleEvent(of: .value) { (snapshot) in
+            if (snapshot.value as? Double) != nil{
+                self.flashView.isHidden = true
+                self.beginView.isHidden = true
+                self.workoutBegun = true
+            }
+            
+        }
+        
         
 // MARK: change the location of score ref to use user ids
 // below can change as now a coach can not complete a workout
-        if ViewController.admin == true{
-            //ScoreRef = Database.database().reference().child("Scores").child(AdminActivityViewController.username).child(username)
-        }
-        else{
-            //ScoreRef = Database.database().reference().child("Scores").child(PlayerActivityViewController.coachName).child(userID!)
-            //CoachRef = Database.database().reference().child("users")
+        if ViewController.admin == false{
             loadCoachName()
         }
-        //ScoreRef = Database.database().reference().child("Scores").child(userID!).child(username)
         loadActivities()
         loadNumberOfCompletes()
        
@@ -372,21 +389,6 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         if ViewController.admin == true || complete == true || workoutBegun == false{
             cell.rpeButton.isUserInteractionEnabled = false
         }
-        
-        // converting the rep var into a list of reps
-//        let setInt = Int(sets)!
-//        var x = 0
-//        var repString = ""
-//        while x < setInt {
-//            repString += reps
-//            if x != setInt - 1{
-//                repString += ","
-//            }
-//            x += 1
-//        }
-//        cell.repsLabel.text = repString
-        
-        
         
         return cell
         
@@ -564,6 +566,10 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
             }else if Int((rpe.text)!)! < 1 || Int((rpe.text)!)! > 10{
                 self.showError()
             }else{
+                // haptic feedback : complete exercise
+                let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
+                notificationFeedbackGenerator.prepare()
+                notificationFeedbackGenerator.notificationOccurred(.success)
                 let colourIndex = Int(rpe.text!)!-1
                 sender.setTitle("\(rpe.text!)", for: .normal)
                 self.exercises[index.section]["rpe"] = rpe.text as AnyObject?
@@ -598,25 +604,46 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     @IBAction func workoutHasBegun(_ sender:UIButton){
-        self.workoutBegun = true
-        self.flashLabel.isHidden = false
-        startTime = Date.timeIntervalSinceReferenceDate
-        self.DBRef.child("\(self.workoutID)").updateChildValues(["startTime" : startTime!])
+        let screenSize: CGRect = UIScreen.main.bounds
+        let screenWidth = screenSize.width
         
-        UIView.animate(withDuration: 1) {
-            self.flashView.backgroundColor = UIColor.white
-            self.flashLabel.textColor = .black
-            self.beginView.frame.origin.y += self.beginView.frame.height + 50
-        } completion: { (_) in
-            self.beginView.isHidden = true
-            UIView.animate(withDuration: 0.4) {
-                self.flashView.backgroundColor = .clear
-                self.flashLabel.textColor = .clear
+        let appearance = SCLAlertView.SCLAppearance(
+            kWindowWidth: screenWidth - 40 )
+        
+        let alert = SCLAlertView(appearance: appearance)
+        alert.addButton("Continue") {
+            // haptic feedback : begin workout
+            let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
+            notificationFeedbackGenerator.prepare()
+            
+            self.workoutBegun = true
+            self.flashLabel.isHidden = false
+            self.startTime = Date.timeIntervalSinceReferenceDate
+            self.DBRef.child("\(self.workoutID)").updateChildValues(["startTime" : self.startTime!])
+            
+            UIView.animate(withDuration: 1) {
+                self.flashView.backgroundColor = UIColor.white
+                self.flashLabel.textColor = .black
+                self.beginView.frame.origin.y += self.beginView.frame.height + 50
             } completion: { (_) in
-                self.flashView.removeFromSuperview()
+                notificationFeedbackGenerator.notificationOccurred(.success)
+                self.beginView.isHidden = true
+                UIView.animate(withDuration: 0.4, delay: 1.0) {
+                    self.flashView.backgroundColor = .clear
+                    //self.flashLabel.textColor = .clear
+                } completion: { (_) in
+                    self.flashView.removeFromSuperview()
+                }
+                UIView.transition(with: self.flashLabel, duration: 1.4, options: .transitionCrossDissolve, animations: {
+                    self.flashLabel.textColor = .clear
+                }, completion: nil)
             }
         }
-
+        let indexToScroll = IndexPath.init(row: 0, section: 0)
+        self.tableview.scrollToRow(at: indexToScroll, at: .top, animated: true)
+        
+        alert.showInfo("Ready to Workout?", subTitle: "Are you ready to begin your workout now? If you continue the timer will begin to record the length of your workout and you can't stop it. If you are ready press continue and have a good workout!", closeButtonTitle: "Cancel", colorStyle: 0x347aeb, animationStyle: .topToBottom)
+    
         
     }
     

@@ -259,7 +259,6 @@
 				7492265722DA49E500EAD386 /* RequestTableViewCell.swift */,
 				74163A4522E39523005A7D2E /* PlayerTableViewCell.swift */,
 				7492263522CBD66600EAD386 /* Users.swift */,
-				7492263722CE3B0E00EAD386 /* PlayerViewController.swift */,
 				74DC1C8625127122007156A0 /* Exercise */,
 				7492264322D2624D00EAD386 /* Exercise.swift */,
 				7492264522D3A9C100EAD386 /* PBsViewController.swift */,
@@ -347,6 +346,7 @@
 			children = (
 				743B1E7C22EF440E0046006C /* AdminActivityViewController.swift */,
 				743B1E7E22EF49CF0046006C /* AdminPlayersViewController.swift */,
+				7492263722CE3B0E00EAD386 /* PlayerViewController.swift */,
 				7492263122C8D1DF00EAD386 /* AddPlayerViewController.swift */,
 				74606275252A7C33005B1480 /* CoachInfoViewController.swift */,
 				7460627A252D1C02005B1480 /* CoachScoresViewController.swift */,

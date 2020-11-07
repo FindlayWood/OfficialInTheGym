@@ -147,8 +147,8 @@ class NewRepsViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell") as! RepsTableViewCell
         cell.setsLabel.text = "Set \(indexPath.row + 1)"
-        let repString = setsAndReps[indexPath.row]["Set \(indexPath.row + 1)"]
-        cell.repsText.text = "\(repString!)"
+        let repString = repArray[indexPath.row]
+        cell.repsText.text = "\(repString)"
         
         return cell
     }

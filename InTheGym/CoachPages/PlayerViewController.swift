@@ -53,6 +53,9 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var secondView:UIView!
     @IBOutlet weak var thirdView:UIView!
     
+    // outlet to top view behind user info
+    @IBOutlet weak var topView:UIView!
+    
     
     //function for when the user taps add workout
     @IBAction func addWorkoutPressed(_ sender:UIButton){
@@ -97,13 +100,15 @@ class PlayerViewController: UIViewController {
         
         pieChart.backgroundColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
 
-        // Do any additional setup after loading the view.
+        
         DBRef = Database.database().reference().child("Scores").child(userNameString)
         
+        // setup the views
+        topView.layer.cornerRadius = 20
         behind.layer.cornerRadius = 20
-        firstView.layer.cornerRadius = 20
-        secondView.layer.cornerRadius = 20
-        thirdView.layer.cornerRadius = 20
+        firstView.layer.cornerRadius = 40
+        secondView.layer.cornerRadius = 40
+        thirdView.layer.cornerRadius = 40
         
         pieChart.legend.enabled = false
     }
@@ -141,7 +146,6 @@ class PlayerViewController: UIViewController {
         case 1:
             print("1 item, last score is \(array[0])")
             self.firstScore.text = "\(array[0])"
-            //self.firstScore.textColor = colours[(array[0]-1)]
             self.firstView.backgroundColor = colours[array[0]-1]
             self.secondScore.text = ""
             self.thirdScore.text = ""
@@ -150,22 +154,17 @@ class PlayerViewController: UIViewController {
         case 2:
             print("2 items, last scores are \(array[1]), \(array[0])")
             self.firstScore.text = "\(array[1])"
-            //self.firstScore.textColor = colours[(array[1]-1)]
             self.firstView.backgroundColor = colours[array[1]-1]
             self.secondScore.text = "\(array[0])"
-            //self.secondScore.textColor = colours[(array[0]-1)]
             self.secondView.backgroundColor = colours[array[0]-1]
             self.thirdScore.text = ""
         case 3:
             print("3 items, last scores are \(array[2]), \(array[1]), \(array[0])")
             self.firstScore.text = "\(array[2])"
-            //self.firstScore.textColor = colours[(array[2]-1)]
             self.firstView.backgroundColor = colours[array[2]-1]
             self.secondScore.text = "\(array[1])"
-            //self.secondScore.textColor = colours[(array[1]-1)]
             self.secondView.backgroundColor = colours[array[1]-1]
             self.thirdScore.text = "\(array[0])"
-            //self.thirdScore.textColor = colours[(array[0]-1)]
             self.thirdView.backgroundColor = colours[array[0]-1]
         default:
             print("error")

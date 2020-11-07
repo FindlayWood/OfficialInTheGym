@@ -28,13 +28,18 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     // varibale to check for first time
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
+    // keep gaps between cells
     var headerHeight: CGFloat = 10.0
 
+    // varibale to store last index of where user was
+    static var lastIndex : IndexPath?
+    var myGroup = DispatchGroup()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableview.rowHeight = 130
-        self.tableview.backgroundColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
+        self.tableview.backgroundColor = #colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 0.5)
         
         let userID = Auth.auth().currentUser?.uid
         
@@ -59,10 +64,6 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
                 self.workoutIDs.insert(userSnap.key, at: 0)
             }
         }
-        
-        
-        
-        
     }
     
     func loadUsername(){
@@ -76,14 +77,21 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell") as! TableViewCell
         let score = self.workouts[indexPath.section]["score"] as? String
+        let startTime = self.workouts[indexPath.section]["startTime"] as? Double
+        let timeToComplete = self.workouts[indexPath.section]["timeToComplete"] as? Int
         cell.main.text = self.workouts[indexPath.section]["title"] as? String
         if self.workouts[indexPath.section]["completed"] as! Bool == true{
-            cell.second.textColor = #colorLiteral(red: 0, green: 0.9768045545, blue: 0, alpha: 1)
+            cell.second.textColor = #colorLiteral(red: 0.00234289733, green: 0.8251151509, blue: 0.003635218529, alpha: 1)
             cell.second.text = "COMPLETED"
             cell.score.text = "Score: \(score!)"
+        }else if startTime != nil && timeToComplete == nil{
+            cell.second.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+            cell.second.text = "IN PROGRESS"
+            cell.score.text = ""
+            PlayerWorkoutViewController.lastIndex = indexPath
         }else{
-            cell.second.textColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
-            cell.second.text = "UNCOMPLETED"
+            cell.second.textColor = #colorLiteral(red: 0.8643916561, green: 0.1293050488, blue: 0.007468156787, alpha: 1)
+            cell.second.text = "NOT STARTED"
             cell.score.text = ""
         }
         if let assignedCoach = self.workouts[indexPath.section]["coach"] as? String{
@@ -95,9 +103,9 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         let exerciseNum = self.workouts[indexPath.section]["exercises"] as! [[String:AnyObject]]
         cell.exNumber.text = "Exercises: \(exerciseNum.count)"
         
-        if let time = self.workouts[indexPath.section]["timeToComplete"] as? Int{
-            let mins = time / 60
-            let secs = time % 60
+        if timeToComplete != nil{
+            let mins = timeToComplete! / 60
+            let secs = timeToComplete! % 60
             cell.timeLabel.text = "Time: \(mins):\(secs)"
         }else{
             cell.timeLabel.text = ""
@@ -106,6 +114,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         cell.accessoryType = .disclosureIndicator
         cell.layer.cornerRadius = 10
         cell.backgroundColor = #colorLiteral(red: 0.9160451311, green: 0.9251148849, blue: 0.9251148849, alpha: 1)
+        
         
         return cell
     }
@@ -124,7 +133,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let background = UILabel()
-        background.backgroundColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
+        background.backgroundColor = #colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 1)
         return background
     }
     
@@ -143,6 +152,8 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         }else{
             SVC.assignedCoach = ""
         }
+        PlayerWorkoutViewController.lastIndex = indexPath
+        
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     
@@ -161,6 +172,16 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
+    func setScroll(){
+        if let indexToScroll = PlayerWorkoutViewController.lastIndex{
+            tableview.scrollToRow(at: indexToScroll, at: .middle, animated: true)
+            PlayerWorkoutViewController.lastIndex = nil
+        }
+    }
+    
+    
+    
+    
     // working on displaying message for the first time
     // function
     override func viewDidAppear(_ animated: Bool) {
@@ -178,6 +199,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
             let alert = SCLAlertView(appearance: appearance)
             alert.showInfo("WORKOUTS", subTitle: "This page will display all of the workouts that your coach has set for you. You can get a detailed view by tapping on them!", closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
         }
+        setScroll()
     }
 
 

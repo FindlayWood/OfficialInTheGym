@@ -88,10 +88,16 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
             
         }else{
             let username = AdminActivityViewController.username
-            let exerciseData = ["title": titleField.text!,
+            var exerciseData = ["title": titleField.text!,
                                 "completed": false,
                                 "exercises": AddWorkoutHomeViewController.exercises,
                                 "coach": username] as [String : Any]
+            
+            // haptic feedback : successfull upload
+            let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
+            notificationFeedbackGenerator.prepare()
+            
+            notificationFeedbackGenerator.notificationOccurred(.success)
             
             
             
@@ -107,7 +113,8 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
                     // multiple add for a group
                     // in here add loop to add for stepcount times
                     myGroup.enter()
-                    for _ in 1...stepCount{
+                    for step in 1...stepCount{
+                        exerciseData["title"] = self.titleField.text! + "\(step)"
                         for player in groupPlayers{
                             self.GroupDBRef.child(player).childByAutoId().setValue(exerciseData)
                         }
@@ -148,7 +155,8 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
                 if stepCount > 1{
                     // add loop to add stepcoount times
                     // MARK: SINGLE multiple
-                    for _ in 1...stepCount{
+                    for step in 1...stepCount{
+                        exerciseData["title"] = self.titleField.text! + "\(step)"
                         DBRef.childByAutoId().setValue(exerciseData)
                     }
                     let actData = ["time":ServerValue.timestamp(),

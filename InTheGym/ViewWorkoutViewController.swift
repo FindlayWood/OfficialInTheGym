@@ -59,13 +59,20 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell") as! TableViewCell
         let score = self.workouts[indexPath.section]["score"] as? String
+        let startTime = self.workouts[indexPath.section]["startTime"] as? Double
+        let timeToComplete = self.workouts[indexPath.section]["timeToComplete"] as? Int
         cell.main.text = self.workouts[indexPath.section]["title"] as? String
         if self.workouts[indexPath.section]["completed"] as! Bool == true{
-            cell.second.textColor = #colorLiteral(red: 0, green: 0.9768045545, blue: 0, alpha: 1)
+            cell.second.textColor = #colorLiteral(red: 0.002346782246, green: 0.8264833299, blue: 0.00364124633, alpha: 1)
             cell.second.text = "COMPLETED"
             cell.score.text = "Score: \(score!)"
+        }else if startTime != nil && timeToComplete == nil{
+            cell.second.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+            cell.second.text = "IN PROGRESS"
+            cell.score.text = ""
+            PlayerWorkoutViewController.lastIndex = indexPath
         }else{
-            cell.second.textColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
+            cell.second.textColor = #colorLiteral(red: 0.8518797589, green: 0.1274333839, blue: 0.007360056703, alpha: 1)
             cell.second.text = "UNCOMPLETED"
             cell.score.text = ""
         }
@@ -148,7 +155,18 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         DBRef = Database.database().reference().child("Workouts").child(username)
         loadWorkouts()
-        tableview.reloadData()
+        //tableview.reloadData()
         
+    }
+    
+    func setScroll(){
+        if let indexToScroll = PlayerWorkoutViewController.lastIndex{
+            tableview.scrollToRow(at: indexToScroll, at: .middle, animated: true)
+            PlayerWorkoutViewController.lastIndex = nil
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        setScroll()
     }
 }
