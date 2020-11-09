@@ -6,6 +6,8 @@
 //  Copyright © 2019 FindlayWood. All rights reserved.
 //
 
+// coach page
+
 import UIKit
 import Firebase
 
@@ -29,7 +31,7 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
         
         navigationItem.title = "Workouts"
-        self.tableview.rowHeight = 130
+        self.tableview.rowHeight = 150
         self.tableview.backgroundColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
         
     }
@@ -61,6 +63,7 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         let score = self.workouts[indexPath.section]["score"] as? String
         let startTime = self.workouts[indexPath.section]["startTime"] as? Double
         let timeToComplete = self.workouts[indexPath.section]["timeToComplete"] as? Int
+        cell.timeImage.isHidden = true
         cell.main.text = self.workouts[indexPath.section]["title"] as? String
         if self.workouts[indexPath.section]["completed"] as! Bool == true{
             cell.second.textColor = #colorLiteral(red: 0.002346782246, green: 0.8264833299, blue: 0.00364124633, alpha: 1)
@@ -73,7 +76,7 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
             PlayerWorkoutViewController.lastIndex = indexPath
         }else{
             cell.second.textColor = #colorLiteral(red: 0.8518797589, green: 0.1274333839, blue: 0.007360056703, alpha: 1)
-            cell.second.text = "UNCOMPLETED"
+            cell.second.text = "NOT STARTED"
             cell.score.text = ""
         }
         
@@ -90,6 +93,7 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
             let mins = time / 60
             let secs = time % 60
             cell.timeLabel.text = "Time: \(mins):\(secs)"
+            cell.timeImage.isHidden = false
         }else{
             cell.timeLabel.text = ""
         }

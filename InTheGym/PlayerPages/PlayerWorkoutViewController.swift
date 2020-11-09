@@ -38,7 +38,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableview.rowHeight = 130
+        self.tableview.rowHeight = 150
         self.tableview.backgroundColor = #colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 0.5)
         
         let userID = Auth.auth().currentUser?.uid
@@ -79,6 +79,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         let score = self.workouts[indexPath.section]["score"] as? String
         let startTime = self.workouts[indexPath.section]["startTime"] as? Double
         let timeToComplete = self.workouts[indexPath.section]["timeToComplete"] as? Int
+        cell.timeImage.isHidden = true
         cell.main.text = self.workouts[indexPath.section]["title"] as? String
         if self.workouts[indexPath.section]["completed"] as! Bool == true{
             cell.second.textColor = #colorLiteral(red: 0.00234289733, green: 0.8251151509, blue: 0.003635218529, alpha: 1)
@@ -107,6 +108,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
             let mins = timeToComplete! / 60
             let secs = timeToComplete! % 60
             cell.timeLabel.text = "Time: \(mins):\(secs)"
+            cell.timeImage.isHidden = false
         }else{
             cell.timeLabel.text = ""
         }

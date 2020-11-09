@@ -114,7 +114,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
                     // in here add loop to add for stepcount times
                     myGroup.enter()
                     for step in 1...stepCount{
-                        exerciseData["title"] = self.titleField.text! + "\(step)"
+                        exerciseData["title"] = self.titleField.text! + " (\(step))"
                         for player in groupPlayers{
                             self.GroupDBRef.child(player).childByAutoId().setValue(exerciseData)
                         }
@@ -156,7 +156,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
                     // add loop to add stepcoount times
                     // MARK: SINGLE multiple
                     for step in 1...stepCount{
-                        exerciseData["title"] = self.titleField.text! + "\(step)"
+                        exerciseData["title"] = self.titleField.text! + " (\(step))"
                         DBRef.childByAutoId().setValue(exerciseData)
                     }
                     let actData = ["time":ServerValue.timestamp(),
@@ -253,6 +253,8 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
         view.layer.shadowRadius = 5.0
         view.layer.shadowOpacity = 0.7
         view.layer.masksToBounds = false
+        view.layer.borderWidth = 2.0
+        view.layer.borderColor = UIColor.black.cgColor
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return AddWorkoutHomeViewController.exercises.count
@@ -296,7 +298,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     override func viewWillAppear(_ animated: Bool) {
         loadNumberOfWorkouts()
         tableview.reloadData()
-        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.tintColor = #colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 1)
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
 

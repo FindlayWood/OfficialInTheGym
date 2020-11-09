@@ -106,9 +106,14 @@ class PlayerViewController: UIViewController {
         // setup the views
         topView.layer.cornerRadius = 20
         behind.layer.cornerRadius = 20
-        firstView.layer.cornerRadius = 40
-        secondView.layer.cornerRadius = 40
-        thirdView.layer.cornerRadius = 40
+        firstView.layer.cornerRadius = 25
+        secondView.layer.cornerRadius = 25
+        thirdView.layer.cornerRadius = 25
+        
+        topView.layer.borderWidth = 2.0
+        topView.layer.borderColor = UIColor.black.cgColor
+        behind.layer.borderWidth = 2.0
+        behind.layer.borderColor = UIColor.black.cgColor
         
         pieChart.legend.enabled = false
     }
