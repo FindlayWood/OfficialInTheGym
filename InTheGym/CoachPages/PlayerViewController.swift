@@ -13,7 +13,13 @@ import Charts
 import Firebase
 import Flurry_iOS_SDK
 
-class PlayerViewController: UIViewController {
+protocol GetChartData {
+    func getChartData(with dataPoints: [String], values: [String])
+    var workoutDuration: [String] {get set}
+    var beatsPerMinutes: [String] {get set}
+}
+
+class PlayerViewController: UIViewController, GetChartData {
     
     // outlet variables for user info
     @IBOutlet weak var userName:UILabel!
@@ -53,8 +59,16 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var secondView:UIView!
     @IBOutlet weak var thirdView:UIView!
     
-    // outlet to top view behind user info
+    // outlet to top view behind user info and its height
     @IBOutlet weak var topView:UIView!
+    
+    @IBOutlet var topViewHeight: NSLayoutConstraint!
+    
+    // outlet to line view
+    @IBOutlet var lineView:UIView!
+    
+    var workoutDuration = [String]()
+    var beatsPerMinutes = [String]()
     
     
     //function for when the user taps add workout
@@ -103,12 +117,17 @@ class PlayerViewController: UIViewController {
         
         DBRef = Database.database().reference().child("Scores").child(userNameString)
         
+        let screenSize = view.frame.size
+        
         // setup the views
+        topViewHeight.constant = screenSize.height/5
         topView.layer.cornerRadius = 20
         behind.layer.cornerRadius = 20
-        firstView.layer.cornerRadius = 40
-        secondView.layer.cornerRadius = 40
-        thirdView.layer.cornerRadius = 40
+        behind.layer.borderWidth = 2
+        behind.layer.borderColor = UIColor.black.cgColor
+        firstView.layer.cornerRadius = 25
+        secondView.layer.cornerRadius = 25
+        thirdView.layer.cornerRadius = 25
         
         pieChart.legend.enabled = false
     }
@@ -235,7 +254,6 @@ class PlayerViewController: UIViewController {
         
         let chartData = PieChartData(dataSet: chartDataSet)
         
-        //let colors = [#colorLiteral(red: 0.3021106021, green: 0.4654112241, blue: 1, alpha: 0.3329141695), #colorLiteral(red: 0.3021106021, green: 0.4654112241, blue: 1, alpha: 0.549604024), #colorLiteral(red: 0.3021106021, green: 0.4654112241, blue: 1, alpha: 0.7467893836), #colorLiteral(red: 0.3021106021, green: 0.4654112241, blue: 1, alpha: 0.8184931507), #colorLiteral(red: 0.3021106021, green: 0.4654112241, blue: 1, alpha: 0.9183433219), #colorLiteral(red: 0.004983612501, green: 0.1452928051, blue: 0.7435358503, alpha: 1), #colorLiteral(red: 0.004527620861, green: 0.131998773, blue: 0.6755036485, alpha: 1), #colorLiteral(red: 0.003697771897, green: 0.107805262, blue: 0.5516933693, alpha: 1),#colorLiteral(red: 0.003351292677, green: 0.09770396748, blue: 0.5, alpha: 1), #colorLiteral(red: 0.00270232527, green: 0.07878389795, blue: 0.4031765546, alpha: 1), #colorLiteral(red: 0.00198916551, green: 0.05799235728, blue: 0.2967758566, alpha: 1)]
         let colors = [#colorLiteral(red: 0, green: 0.5, blue: 1, alpha: 1), #colorLiteral(red: 0.6332940925, green: 0.8493953339, blue: 1, alpha: 1), #colorLiteral(red: 0.7802333048, green: 1, blue: 0.5992883134, alpha: 1), #colorLiteral(red: 0.9427440068, green: 1, blue: 0.3910798373, alpha: 1), #colorLiteral(red: 1, green: 1, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.8438837757, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.7074058219, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.4706228596, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.3134631849, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)]
         chartDataSet.colors = colors
         
@@ -246,6 +264,28 @@ class PlayerViewController: UIViewController {
         pieChart.drawEntryLabelsEnabled = false
         
         pieChart.data = chartData
+        
+        populateChart()
+        lineChart()
+        
+    }
+    
+    func populateChart(){
+        self.workoutDuration  = ["1", "2", "3", "4", "5"]
+        self.beatsPerMinutes = ["109","412","333","457","289"]
+        getChartData(with: workoutDuration, values: beatsPerMinutes)
+    }
+    
+    func getChartData(with dataPoints: [String], values: [String]) {
+        self.workoutDuration = dataPoints
+        self.beatsPerMinutes = values
+    }
+    
+    func lineChart(){
+        let lineChart = LineChart(frame: CGRect(x: 0.0, y: 0.0, width: self.lineView.frame.width, height: self.lineView.frame.height))
+        lineChart.delegate = self
+        lineView.addSubview(lineChart)
+        
     }
     
 

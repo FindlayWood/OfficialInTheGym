@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0E349A7477D2539DAE3A94E5 /* Pods_InTheGymTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC23BC44C3C9A09DE281F7E7 /* Pods_InTheGymTests.framework */; };
 		5897B79D27809EFB7B6DD91A /* Pods_InTheGymUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CE4D8ACFF7689612D54F163 /* Pods_InTheGymUITests.framework */; };
+		7413A05E25583EAF009C7F97 /* LineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7413A05D25583EAF009C7F97 /* LineChart.swift */; };
 		74163A4422E37089005A7D2E /* ButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74163A4322E37089005A7D2E /* ButtonExtension.swift */; };
 		74163A4622E39523005A7D2E /* PlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74163A4522E39523005A7D2E /* PlayerTableViewCell.swift */; };
 		74163A4822E4A7AF005A7D2E /* ActivityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74163A4722E4A7AF005A7D2E /* ActivityTableViewCell.swift */; };
@@ -103,6 +104,7 @@
 /* Begin PBXFileReference section */
 		2D789E9B204DC6129DD665D6 /* Pods-InTheGym.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGym.release.xcconfig"; path = "Target Support Files/Pods-InTheGym/Pods-InTheGym.release.xcconfig"; sourceTree = "<group>"; };
 		5CE4D8ACFF7689612D54F163 /* Pods_InTheGymUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGymUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7413A05D25583EAF009C7F97 /* LineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChart.swift; sourceTree = "<group>"; };
 		74163A4322E37089005A7D2E /* ButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonExtension.swift; sourceTree = "<group>"; };
 		74163A4522E39523005A7D2E /* PlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewCell.swift; sourceTree = "<group>"; };
 		74163A4722E4A7AF005A7D2E /* ActivityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTableViewCell.swift; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				7479AFA3253F807900E6A79C /* ScrollTableViewCell.swift */,
 				7479AFA8253F844500E6A79C /* InsideCollectionViewCell.swift */,
 				7425D4172545AE8000567DAB /* Constants.swift */,
+				7413A05D25583EAF009C7F97 /* LineChart.swift */,
 			);
 			path = InTheGym;
 			sourceTree = "<group>";
@@ -659,6 +662,7 @@
 				74163A4822E4A7AF005A7D2E /* ActivityTableViewCell.swift in Sources */,
 				74F6E57523FD99FD00233438 /* LeaderboardViewController.swift in Sources */,
 				74DC18EA244B3AC900D3F8A3 /* GroupWeightViewController.swift in Sources */,
+				7413A05E25583EAF009C7F97 /* LineChart.swift in Sources */,
 				7460620C25278D34005B1480 /* MYSCORESViewController.swift in Sources */,
 				74172204245B41230013EAC8 /* FeedbackViewController.swift in Sources */,
 				74606276252A7C33005B1480 /* CoachInfoViewController.swift in Sources */,

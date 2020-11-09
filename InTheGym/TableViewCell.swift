@@ -16,6 +16,10 @@ class TableViewCell: UITableViewCell {
     @IBOutlet var coach:UILabel!
     @IBOutlet var exNumber:UILabel!
     @IBOutlet var timeLabel:UILabel!
+    
+    @IBOutlet var coachImage:UIImageView!
+    @IBOutlet var exerciseImange:UIImageView!
+    @IBOutlet var timeImage:UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
