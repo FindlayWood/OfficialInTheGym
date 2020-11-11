@@ -72,6 +72,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     @IBAction func savePressed(_ sender:UIButton){
         Flurry.logEvent("Single add workout - Save Pressed.")
         
+        
         print("you want to upload this multiple times, \(stepCount) times to be exact. now we have to go to a new page to allow edits to 2nd or 3rd")
         
         
@@ -292,6 +293,16 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
             let count = snapshot.value as? Int ?? 0
             self.workoutsCount = count
         }
+    }
+    
+    @IBAction func helpCounter(_ sender:UIButton){
+        let screenSize = UIScreen.main.bounds
+        let width = screenSize.width
+        
+        let appearance = SCLAlertView.SCLAppearance(kWindowWidth: width - 40)
+        
+        let alert = SCLAlertView(appearance: appearance)
+        alert.showInfo("Workout Counter", subTitle: "This is the number of times you want to set this workout. If 1, this workout will appear once on the workout page. If 4, then this workout will be set 4 times. We are working on being able to edit the sets and reps in repeating workouts. The maximum number you can set is 4 at the moment.", closeButtonTitle: "OK!")
     }
 
     

@@ -82,7 +82,9 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     var flashView = UIView()
     var flashLabel = UILabel()
     
-    @IBOutlet weak var beginView:UIView!
+    var beginView = UIView()
+    var heightAnchor:NSLayoutConstraint?
+    //@IBOutlet weak var beginView:UIView!
     @IBOutlet var bottomViewHeight: NSLayoutConstraint!
     @IBOutlet var bottomViewBottomAnchor: NSLayoutConstraint!
     
@@ -235,35 +237,16 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
             flashView.isHidden = true
             beginView.isHidden = true
         }
+        else{
+            setBeginView()
+        }
         
         
-        // flashview
+        // flashview, set behind to darken the screen
         flashView.frame = self.view.frame
         flashView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5)
         self.view.insertSubview(flashView, at: 2)
         flashView.isUserInteractionEnabled = false
-        
-        // label in flashview
-        flashView.addSubview(flashLabel)
-        flashLabel.translatesAutoresizingMaskIntoConstraints = false
-        flashLabel.centerXAnchor.constraint(equalTo: flashView.centerXAnchor).isActive = true
-        flashLabel.centerYAnchor.constraint(equalTo: flashView.centerYAnchor).isActive = true
-        flashLabel.text = titleString
-        flashLabel.textColor = .clear
-        flashLabel.font = .boldSystemFont(ofSize: 30)
-        
-        
-        
-        // bottom view
-        let screenSize = view.frame.size
-        bottomViewHeight.constant = screenSize.height / 4
-        beginView.layer.cornerRadius = 10
-        beginView.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
-        beginView.layer.shadowColor = UIColor.black.cgColor
-        beginView.layer.shadowOffset = CGSize(width: 0, height: 5.0)
-        beginView.layer.shadowRadius = 10.0
-        beginView.layer.shadowOpacity = 1.0
-        beginView.layer.masksToBounds = false
         
     
         
@@ -280,9 +263,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
             if (snapshot.value as? Double) != nil{
                 self.flashView.isHidden = true
                 self.beginView.isHidden = true
-                self.workoutBegun = true
             }
-            
         }
         
         
@@ -295,7 +276,6 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         loadNumberOfCompletes()
        
     }
-    // function to load the uid of coach to update their activity feed
     
     
     
@@ -603,47 +583,201 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         alert.showSuccess("RPE", subTitle: "Enter rpe for \(exercises[index[0]]["exercise"] as! String)",closeButtonTitle: "cancel")
     }
     
-    @IBAction func workoutHasBegun(_ sender:UIButton){
-        let screenSize: CGRect = UIScreen.main.bounds
-        let screenWidth = screenSize.width
+    @objc func workoutHasBegun(){
         
-        let appearance = SCLAlertView.SCLAppearance(
-            kWindowWidth: screenWidth - 40 )
+        for view in beginView.subviews{
+            view.removeFromSuperview()
+        }
+    
+        // haptic feedback : begin workout
+        let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
+        notificationFeedbackGenerator.prepare()
         
-        let alert = SCLAlertView(appearance: appearance)
-        alert.addButton("Continue") {
-            // haptic feedback : begin workout
-            let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
-            notificationFeedbackGenerator.prepare()
-            
-            self.workoutBegun = true
+        self.workoutBegun = true
+        self.startTime = Date.timeIntervalSinceReferenceDate
+        self.DBRef.child("\(self.workoutID)").updateChildValues(["startTime" : self.startTime!])
+        
+        heightAnchor?.isActive = false
+        heightAnchor = beginView.heightAnchor.constraint(equalTo: self.view.heightAnchor)
+        heightAnchor?.isActive = true
+        
+        flashLabel.text = titleString
+        flashLabel.textColor = .black
+        flashLabel.font = UIFont(name: "Menlo-Bold", size: 25)
+        flashLabel.textAlignment = .center
+        flashLabel.translatesAutoresizingMaskIntoConstraints = false
+        beginView.addSubview(flashLabel)
+        flashLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        flashLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        flashLabel.isHidden = true
+
+        UIView.animate(withDuration: 0.5) {
+            self.view.layoutIfNeeded()
+        } completion: { (_) in
             self.flashLabel.isHidden = false
-            self.startTime = Date.timeIntervalSinceReferenceDate
-            self.DBRef.child("\(self.workoutID)").updateChildValues(["startTime" : self.startTime!])
-            
-            UIView.animate(withDuration: 1) {
-                self.flashView.backgroundColor = UIColor.white
-                self.flashLabel.textColor = .black
-                self.beginView.frame.origin.y += self.beginView.frame.height + 50
+            self.flashView.removeFromSuperview()
+            notificationFeedbackGenerator.notificationOccurred(.success)
+            let indexToScroll = IndexPath.init(row: 0, section: 0)
+            self.tableview.scrollToRow(at: indexToScroll, at: .top, animated: true)
+            UIView.animate(withDuration: 0.2, delay: 1.0) {
+                self.beginView.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
             } completion: { (_) in
-                notificationFeedbackGenerator.notificationOccurred(.success)
-                self.beginView.isHidden = true
-                UIView.animate(withDuration: 0.4, delay: 1.0) {
-                    self.flashView.backgroundColor = .clear
-                    //self.flashLabel.textColor = .clear
-                } completion: { (_) in
-                    self.flashView.removeFromSuperview()
-                }
-                UIView.transition(with: self.flashLabel, duration: 1.4, options: .transitionCrossDissolve, animations: {
-                    self.flashLabel.textColor = .clear
-                }, completion: nil)
+                self.beginView.removeFromSuperview()
+                self.flashLabel.removeFromSuperview()
             }
         }
-        let indexToScroll = IndexPath.init(row: 0, section: 0)
-        self.tableview.scrollToRow(at: indexToScroll, at: .top, animated: true)
-        
-        alert.showInfo("Ready to Workout?", subTitle: "Are you ready to begin your workout now? If you continue the timer will begin to record the length of your workout and you can't stop it. If you are ready press continue and have a good workout!", closeButtonTitle: "Cancel", colorStyle: 0x347aeb, animationStyle: .topToBottom)
+   }
     
+    @objc func setBeginView(){
+        
+        for view in beginView.subviews{
+            view.removeFromSuperview()
+        }
+        beginView.removeFromSuperview()
+        heightAnchor?.isActive = false
+        
+        
+        beginView.backgroundColor = .white
+        beginView.layer.cornerRadius = 10
+        beginView.layer.borderWidth = 2
+        beginView.layer.borderColor = UIColor.black.cgColor
+        beginView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(beginView)
+        beginView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        beginView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        beginView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        
+        heightAnchor = beginView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.25)
+        heightAnchor?.isActive = true
+        
+        let beginButton = UIButton()
+        beginButton.setTitle("Begin Workout", for: .normal)
+        beginButton.backgroundColor = #colorLiteral(red: 0, green: 0.2308298707, blue: 0.5, alpha: 1)
+        beginButton.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 31)
+        beginButton.layer.cornerRadius = 26
+        beginButton.layer.borderWidth = 2
+        beginButton.layer.borderColor = UIColor.black.cgColor
+        beginButton.translatesAutoresizingMaskIntoConstraints = false
+        beginButton.addTarget(self, action: #selector(setViewToStage2), for: .touchUpInside)
+        
+        let label = UILabel()
+        label.text = "Timer will begin on button click."
+        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        label.textColor = .black
+        label.textAlignment = .center
+        
+        let label2 = UILabel()
+        label2.text = "Scroll to view exercises."
+        label2.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        label2.textColor = .black
+        label2.textAlignment = .center
+        
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 20
+        
+        stackView.addArrangedSubview(beginButton)
+        stackView.addArrangedSubview(label)
+        stackView.addArrangedSubview(label2)
+        
+        self.beginView.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.centerYAnchor.constraint(equalTo: self.beginView.centerYAnchor).isActive = true
+        stackView.centerXAnchor.constraint(equalTo: self.beginView.centerXAnchor).isActive = true
+        beginButton.leadingAnchor.constraint(equalTo: self.beginView.leadingAnchor, constant: 25).isActive = true
+        beginButton.trailingAnchor.constraint(equalTo: self.beginView.trailingAnchor, constant: -25).isActive = true
+        beginButton.heightAnchor.constraint(equalToConstant: 49).isActive = true
+    }
+    
+    @objc func setViewToStage2(){
+        
+        for view in self.beginView.subviews{
+            view.removeFromSuperview()
+        }
+        
+        let label = UILabel()
+        label.text = "ARE YOU READY TO BEGIN?"
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textColor = .black
+        label.textAlignment = .center
+        
+        let button = UIButton()
+        button.setTitle("CONTINUE", for: .normal)
+        button.backgroundColor = #colorLiteral(red: 0, green: 0.2308298707, blue: 0.5, alpha: 1)
+        button.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 31)
+        button.layer.cornerRadius = 26
+        button.layer.borderWidth = 2
+        button.layer.borderColor = UIColor.black.cgColor
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.heightAnchor.constraint(equalToConstant: 49).isActive = true
+        button.addTarget(self, action: #selector(workoutHasBegun), for: .touchUpInside)
+        
+        
+        let noticeLabel = UILabel()
+        noticeLabel.text = "The timer will begin and can't be stopped."
+        noticeLabel.font = UIFont.boldSystemFont(ofSize: 12)
+        noticeLabel.textColor = .black
+        noticeLabel.textAlignment = .center
+        
+        let noticeLabel2 = UILabel()
+        noticeLabel2.text = "Press CONTINUE to begin workout."
+        noticeLabel2.font = UIFont.boldSystemFont(ofSize: 12)
+        noticeLabel2.textColor = .black
+        noticeLabel2.textAlignment = .center
+        
+        let cancelButton = UIButton()
+        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.backgroundColor = #colorLiteral(red: 0.8572136739, green: 0.1282312886, blue: 0.007406140574, alpha: 1)
+        cancelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        cancelButton.layer.cornerRadius = 15
+        cancelButton.layer.borderWidth = 1
+        cancelButton.layer.borderColor = UIColor.black.cgColor
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelButton.addTarget(self, action: #selector(setBeginView), for: .touchUpInside)
+        
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .center
+        stackView.spacing = 20.0
+        
+        stackView.addArrangedSubview(label)
+        stackView.addArrangedSubview(button)
+        stackView.addArrangedSubview(noticeLabel)
+        stackView.addArrangedSubview(noticeLabel2)
+        self.beginView.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.centerXAnchor.constraint(equalTo: self.beginView.centerXAnchor).isActive = true
+        stackView.topAnchor.constraint(equalTo: self.beginView.topAnchor, constant: 20).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: self.beginView.leadingAnchor, constant: 10).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: self.beginView.trailingAnchor, constant: -10).isActive = true
+        button.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 15).isActive = true
+        button.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -15).isActive = true
+        self.beginView.addSubview(cancelButton)
+        cancelButton.bottomAnchor.constraint(equalTo: self.beginView.bottomAnchor, constant: -20).isActive = true
+        cancelButton.centerXAnchor.constraint(equalTo: self.beginView.centerXAnchor).isActive = true
+        cancelButton.leadingAnchor.constraint(equalTo: self.beginView.leadingAnchor, constant: 35).isActive = true
+        cancelButton.trailingAnchor.constraint(equalTo: self.beginView.trailingAnchor, constant: -35).isActive = true
+        
+        stackView.isHidden = true
+        cancelButton.isHidden = true
+        
+        heightAnchor?.isActive = false
+        heightAnchor = beginView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.35)
+        heightAnchor?.isActive = true
+        
+        let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
+        notificationFeedbackGenerator.prepare()
+        
+        UIView.animate(withDuration: 0.5) {
+            self.view.layoutIfNeeded()
+        } completion: { (_) in
+            stackView.isHidden = false
+            cancelButton.isHidden = false
+            notificationFeedbackGenerator.notificationOccurred(.warning)
+        }
         
     }
     

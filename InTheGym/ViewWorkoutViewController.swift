@@ -26,7 +26,18 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet var tableview:UITableView!
     
     var headerHeight: CGFloat = 10.0
-
+    
+    @IBOutlet var segment:UISegmentedControl!
+    var notStartedWorkouts : [[String:Any]] = []
+    var inProgressWorkouts : [[String:Any]] = []
+    var completedWorkouts : [[String:Any]] = []
+    var rowsToDisplay : [[String:Any]] = []
+    
+    var notStartedIDs = [String]()
+    var inProgressIDs = [String]()
+    var completedIDs = [String]()
+    var rowsToDisplayIDs = [String]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,38 +45,82 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         self.tableview.rowHeight = 150
         self.tableview.backgroundColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
         
+        // added for selecting which workouts to view
+        segment.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
+        let NotSelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font : UIFont(name: "Menlo-Bold", size: 12) ?? UIFont.systemFont(ofSize: 12)]
+        let SelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font : UIFont(name: "Menlo-Bold", size: 12) ?? UIFont.systemFont(ofSize: 12)]
+        segment.setTitleTextAttributes(NotSelectedTextAttributes, for: .normal)
+        segment.setTitleTextAttributes(SelectedTextAttributes, for: .selected)
+        
     }
     
     func loadWorkouts(){
-        workouts.removeAll()
+        self.workouts.removeAll()
+        self.workoutIDs.removeAll()
+        self.completedWorkouts.removeAll()
+        self.completedIDs.removeAll()
+        self.inProgressWorkouts.removeAll()
+        self.inProgressIDs.removeAll()
+        self.notStartedWorkouts.removeAll()
+        self.notStartedIDs.removeAll()
         DBRef.observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
                 self.workouts.insert(snap, at: 0)
+                self.workoutIDs.insert(snapshot.key, at: 0)
+                
+                
+                let startTime = snap["startTime"] as? Double
+                let timeToComplete = snap["timeToComplete"] as? Int
+                
+                if snap["completed"] as! Bool == true {
+                    self.completedWorkouts.insert(snap, at: 0)
+                    self.completedIDs.insert(snapshot.key, at: 0)
+                }else if startTime != nil && timeToComplete == nil{
+                    self.inProgressWorkouts.insert(snap, at: 0)
+                    self.inProgressIDs.insert(snapshot.key, at: 0)
+                }else{
+                    self.notStartedWorkouts.insert(snap, at: 0)
+                    self.notStartedIDs.insert(snapshot.key, at: 0)
+                }
+                self.rowsToDisplay = self.workouts
+                self.rowsToDisplayIDs = self.workoutIDs
+                
                 self.tableview.reloadData()
             }
         }, withCancel: nil)
-        
-        workoutIDs.removeAll()
-        DBRef.observe(.value) { (snapshot) in
-            for snap in snapshot.children{
-                let userSnap = snap as! DataSnapshot
-                self.workoutIDs.insert(userSnap.key, at: 0)
-            }
-            print(self.workoutIDs)
+    }
+    
+    
+    // added for selecting which workouts to display
+    @objc fileprivate func handleSegmentChange(){
+        switch segment.selectedSegmentIndex {
+        case 0:
+            rowsToDisplay = workouts
+            rowsToDisplayIDs = workoutIDs
+        case 1:
+            rowsToDisplay = notStartedWorkouts
+            rowsToDisplayIDs = notStartedIDs
+        case 2:
+            rowsToDisplay = inProgressWorkouts
+            rowsToDisplayIDs = inProgressIDs
+        case 3:
+            rowsToDisplay = completedWorkouts
+            rowsToDisplayIDs = completedIDs
+        default:
+            rowsToDisplay = workouts
+            rowsToDisplayIDs = workoutIDs
         }
-        
-        
-       
+        tableview.reloadData()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell") as! TableViewCell
-        let score = self.workouts[indexPath.section]["score"] as? String
-        let startTime = self.workouts[indexPath.section]["startTime"] as? Double
-        let timeToComplete = self.workouts[indexPath.section]["timeToComplete"] as? Int
+        let score = self.rowsToDisplay[indexPath.section]["score"] as? String
+        let startTime = self.rowsToDisplay[indexPath.section]["startTime"] as? Double
+        let timeToComplete = self.rowsToDisplay[indexPath.section]["timeToComplete"] as? Int
         cell.timeImage.isHidden = true
-        cell.main.text = self.workouts[indexPath.section]["title"] as? String
-        if self.workouts[indexPath.section]["completed"] as! Bool == true{
+        cell.main.text = self.rowsToDisplay[indexPath.section]["title"] as? String
+        if self.rowsToDisplay[indexPath.section]["completed"] as! Bool == true{
             cell.second.textColor = #colorLiteral(red: 0.002346782246, green: 0.8264833299, blue: 0.00364124633, alpha: 1)
             cell.second.text = "COMPLETED"
             cell.score.text = "Score: \(score!)"
@@ -80,16 +135,16 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
             cell.score.text = ""
         }
         
-        if let assignedCoach = self.workouts[indexPath.section]["coach"] as? String{
+        if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
             cell.coach.text = assignedCoach
         }else{
             cell.coach.text = ""
         }
         
-        let exerciseNum = self.workouts[indexPath.section]["exercises"] as! [[String:AnyObject]]
+        let exerciseNum = self.rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
         cell.exNumber.text = "Exercises: \(exerciseNum.count)"
         
-        if let time = self.workouts[indexPath.section]["timeToComplete"] as? Int{
+        if let time = self.rowsToDisplay[indexPath.section]["timeToComplete"] as? Int{
             let mins = time / 60
             let secs = time % 60
             cell.timeLabel.text = "Time: \(mins):\(secs)"
@@ -110,7 +165,7 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return workouts.count
+        return rowsToDisplay.count
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -125,16 +180,16 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let titleLabel = workouts[indexPath.section]["title"] as! String
-        let complete = workouts[indexPath.section]["completed"] as! Bool
+        let titleLabel = rowsToDisplay[indexPath.section]["title"] as! String
+        let complete = rowsToDisplay[indexPath.section]["completed"] as! Bool
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
         SVC.username = self.username
         SVC.titleString = titleLabel
-        SVC.exercises = workouts[indexPath.section]["exercises"] as! [[String:AnyObject]]
+        SVC.exercises = rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
         SVC.complete = complete
-        SVC.workoutID = workoutIDs[indexPath.section]
-        if let assignedCoach = self.workouts[indexPath.section]["coach"] as? String{
+        SVC.workoutID = rowsToDisplayIDs[indexPath.section]
+        if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
             SVC.assignedCoach = assignedCoach
         }else{
             SVC.assignedCoach = ""
@@ -143,14 +198,14 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete{
-            workouts.remove(at: indexPath.section)
-            tableView.deleteRows(at: [indexPath], with: .left)
-            DBRef.setValue(workouts)
-        }
-        
-    }
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete{
+//            rowsToDisplay.remove(at: indexPath.section)
+//            tableView.deleteRows(at: [indexPath], with: .left)
+//            DBRef.setValue(rowsToDisplay)
+//        }
+//
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -160,6 +215,9 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         DBRef = Database.database().reference().child("Workouts").child(username)
         loadWorkouts()
         //tableview.reloadData()
+        
+        segment.selectedSegmentIndex = 0
+        segment.sendActions(for: UIControl.Event.valueChanged)
         
     }
     
@@ -171,6 +229,6 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setScroll()
+        //setScroll()
     }
 }
