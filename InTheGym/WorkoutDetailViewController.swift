@@ -730,7 +730,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         let cancelButton = UIButton()
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.backgroundColor = #colorLiteral(red: 0.8572136739, green: 0.1282312886, blue: 0.007406140574, alpha: 1)
-        cancelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        cancelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         cancelButton.layer.cornerRadius = 15
         cancelButton.layer.borderWidth = 1
         cancelButton.layer.borderColor = UIColor.black.cgColor
@@ -756,7 +756,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         button.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 15).isActive = true
         button.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -15).isActive = true
         self.beginView.addSubview(cancelButton)
-        cancelButton.bottomAnchor.constraint(equalTo: self.beginView.bottomAnchor, constant: -20).isActive = true
+        cancelButton.bottomAnchor.constraint(equalTo: self.beginView.bottomAnchor, constant: -30).isActive = true
         cancelButton.centerXAnchor.constraint(equalTo: self.beginView.centerXAnchor).isActive = true
         cancelButton.leadingAnchor.constraint(equalTo: self.beginView.leadingAnchor, constant: 35).isActive = true
         cancelButton.trailingAnchor.constraint(equalTo: self.beginView.trailingAnchor, constant: -35).isActive = true
