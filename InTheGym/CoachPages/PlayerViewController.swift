@@ -20,11 +20,13 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var userEmail:UILabel!
     @IBOutlet weak var firstName:UILabel!
     @IBOutlet weak var lastName:UILabel!
+    @IBOutlet weak var workoutsCompleted:UILabel!
     // string variables for user info
     var userNameString:String = ""
     var userEmailString:String = ""
     var firstNameString:String = ""
     var lastNameString:String = ""
+    var workoutsCompletedInt: Int = 0
     
     // outlets for last 3 scores
     @IBOutlet weak var firstScore:UILabel!
@@ -52,6 +54,9 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var firstView:UIView!
     @IBOutlet weak var secondView:UIView!
     @IBOutlet weak var thirdView:UIView!
+    
+    @IBOutlet weak var usernameView:UIView!
+    @IBOutlet weak var workoutsView:UIView!
     
     // outlet to top view behind user info
     @IBOutlet weak var topView:UIView!
@@ -96,6 +101,21 @@ class PlayerViewController: UIViewController {
         userEmail.text = "Email: \(userEmailString)"
         firstName.text = "First Name: \(firstNameString)"
         lastName.text = "Last Name: \(lastNameString)"
+        workoutsCompleted.text = "Workouts Completed: \(workoutsCompletedInt)"
+        
+        
+
+//        let attachment = NSTextAttachment()
+//        attachment.image = UIImage(named: "fire_icon")
+//        attachment.bounds = CGRect(x: 0, y: -2.5, width: 20, height: 20)
+//        
+//        let attachmentString = NSAttributedString(attachment: attachment)
+//        let beforeString = NSMutableAttributedString(string: "Workouts Completed: \(workoutsCompletedInt) ")
+//        beforeString.append(attachmentString)
+//        workoutsCompleted.attributedText = beforeString
+        
+        
+        
         navigationItem.title = "Player Info"
         
         pieChart.backgroundColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
@@ -109,13 +129,29 @@ class PlayerViewController: UIViewController {
         firstView.layer.cornerRadius = 25
         secondView.layer.cornerRadius = 25
         thirdView.layer.cornerRadius = 25
+        //usernameView.layer.cornerRadius = 20
+        //workoutsView.layer.cornerRadius = 20
         
         topView.layer.borderWidth = 2.0
         topView.layer.borderColor = UIColor.black.cgColor
         behind.layer.borderWidth = 2.0
         behind.layer.borderColor = UIColor.black.cgColor
+//        usernameView.layer.borderWidth = 2.0
+//        usernameView.layer.borderColor = UIColor.black.cgColor
+//        workoutsView.layer.borderWidth = 2.0
+//        workoutsView.layer.borderColor = UIColor.black.cgColor
         
         pieChart.legend.enabled = false
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(sendToWorkload))
+        behind.addGestureRecognizer(gesture)
+    }
+    
+    @objc fileprivate func sendToWorkload(){
+        let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+        let SVC = StoryBoard.instantiateViewController(withIdentifier: "WorkloadDisplayViewController") as! WorkloadDisplayViewController
+        SVC.username = self.userNameString
+        self.navigationController?.pushViewController(SVC, animated: true)
     }
     
     func loadScores(){

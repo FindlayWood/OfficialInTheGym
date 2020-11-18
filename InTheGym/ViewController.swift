@@ -16,6 +16,8 @@ import SCLAlertView
 
 class ViewController: UIViewController {
     
+    @IBOutlet var circleView: UIView!
+    
     var DBref: DatabaseReference!
     
     
@@ -25,6 +27,13 @@ class ViewController: UIViewController {
     
 
     override func viewDidLoad() {
+        
+        let arcCenter = CGPoint(x: circleView.bounds.size.width / 2, y: circleView.bounds.size.height)
+        
+        let circlePath = UIBezierPath(arcCenter: arcCenter, radius: circleView.bounds.size.height, startAngle: 0.0, endAngle: .pi, clockwise: false)
+        let circleShape = CAShapeLayer()
+        circleShape.path = circlePath.cgPath
+        circleView.layer.mask = circleShape
         
         //check for internet connection
         monitor.pathUpdateHandler = { path in

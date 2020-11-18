@@ -85,6 +85,7 @@ class NewRepsViewController: UIViewController, UITableViewDelegate, UITableViewD
             destVC.sets = self.sets
             destVC.variedReps = self.varyReps
             destVC.exercise = self.exercise
+            destVC.type = self.type
             if varyReps{
                 destVC.repArray = self.repArray
             }else{

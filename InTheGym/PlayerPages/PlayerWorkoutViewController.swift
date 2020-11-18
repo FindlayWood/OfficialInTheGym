@@ -60,8 +60,8 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         
         // added for selecting which workouts to view
         segment.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
-        let NotSelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font : UIFont(name: "Menlo-Bold", size: 12) ?? UIFont.systemFont(ofSize: 12)]
-        let SelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font : UIFont(name: "Menlo-Bold", size: 12) ?? UIFont.systemFont(ofSize: 12)]
+        let NotSelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 12)]
+        let SelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 12)]
         segment.setTitleTextAttributes(NotSelectedTextAttributes, for: .normal)
         segment.setTitleTextAttributes(SelectedTextAttributes, for: .selected)
         
@@ -166,9 +166,20 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         cell.exNumber.text = "Exercises: \(exerciseNum.count)"
         
         if timeToComplete != nil{
-            let mins = timeToComplete! / 60
-            let secs = timeToComplete! % 60
-            cell.timeLabel.text = "Time: \(mins):\(secs)"
+            
+            let formatter = DateComponentsFormatter()
+            
+            if timeToComplete! > 3600{
+                formatter.allowedUnits = [.hour, .minute]
+                formatter.unitsStyle = .abbreviated
+            }else{
+                formatter.allowedUnits = [.minute, .second]
+                formatter.unitsStyle = .abbreviated
+            }
+            
+            let timeString = formatter.string(from: TimeInterval(timeToComplete!))
+            
+            cell.timeLabel.text = timeString
             cell.timeImage.isHidden = false
         }else{
             cell.timeLabel.text = ""

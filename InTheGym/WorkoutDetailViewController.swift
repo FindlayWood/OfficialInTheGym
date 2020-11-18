@@ -200,7 +200,9 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
                     self.DBRef.child("\(self.workoutID)").updateChildValues(["timeToComplete":timeToComplete])
                     let workload = (timeToComplete/60) * Int(scoreNum)!
                     self.DBRef.child("\(self.workoutID)").updateChildValues(["workload":workload])
-                    let workloadData = ["endTime": endTime,
+                    let workloadData = ["timeToComplete": timeToComplete,
+                                        "rpe": scoreNum,
+                                        "endTime": endTime,
                                         "workload": workload,
                                         "workoutID": self.workoutID] as [String : Any]
                     self.workLoadRef.childByAutoId().updateChildValues(workloadData)
@@ -363,6 +365,12 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
             cell.noteButton.isHidden = false
         }else{
             cell.noteButton.isHidden = true
+        }
+        
+        if let type = exercises[indexPath.section]["type"] as? String{
+            cell.typeLabel.text = type
+        }else{
+            cell.typeLabel.text = ""
         }
         
         // checking if workout complete or user is coach and then enabling rpe button or not

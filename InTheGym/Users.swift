@@ -15,4 +15,5 @@ class Users: NSObject {
     var username: String?
     var firstName: String?
     var lastName: String?
+    var numberOfCompletes: Int?
 }

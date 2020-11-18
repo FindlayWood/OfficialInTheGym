@@ -64,6 +64,10 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
         
         // added for new feed
         segment.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
+        let NotSelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 12)]
+        let SelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 12)]
+        segment.setTitleTextAttributes(NotSelectedTextAttributes, for: .normal)
+        segment.setTitleTextAttributes(SelectedTextAttributes, for: .selected)
     }
     
     

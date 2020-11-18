@@ -97,6 +97,20 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
             }
         }
         
+        switch self.exerciseType {
+        case "Upper Body":
+            SVC.type = "UB"
+        case "Lower Body":
+            SVC.type = "LB"
+        case "Core":
+            SVC.type = "CO"
+        case "Cardio":
+            SVC.type = "CA"
+        default:
+            SVC.type = "Weights"
+        }
+        //SVC.type = self.exerciseType
+        
         
         self.navigationController?.pushViewController(SVC, animated: true)
         

@@ -24,8 +24,9 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var passwordConfirm :UITextField!
     @IBOutlet var segment: UISegmentedControl!
     
+    @IBOutlet var accountLabel:UILabel!
     
-    
+
     
     
     // database reference
@@ -154,11 +155,19 @@ class SignUpViewController: UIViewController {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
         
+        if admin{
+            accountLabel.text = "COACH ACCOUNT"
+        }else{
+            accountLabel.text = "PLAYER ACCOUNT"
+        }
+        
+        segment.isHidden = true
+        
         userRef = Database.database().reference().child("users")
         checkUsernames()
         
-        let warningalert = SCLAlertView()
-        warningalert.showNotice("Verification", subTitle: "New accounts must be verified and you will be sent an email to verify your account before you can login.", closeButtonTitle: "Ok")
+//        let warningalert = SCLAlertView()
+//        warningalert.showNotice("Verification", subTitle: "New accounts must be verified and you will be sent an email to verify your account before you can login.", closeButtonTitle: "Ok")
         
         
     }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0E349A7477D2539DAE3A94E5 /* Pods_InTheGymTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC23BC44C3C9A09DE281F7E7 /* Pods_InTheGymTests.framework */; };
 		5897B79D27809EFB7B6DD91A /* Pods_InTheGymUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CE4D8ACFF7689612D54F163 /* Pods_InTheGymUITests.framework */; };
+		7413A066255D743E009C7F97 /* CustomTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7413A065255D743E009C7F97 /* CustomTopView.swift */; };
 		74163A4422E37089005A7D2E /* ButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74163A4322E37089005A7D2E /* ButtonExtension.swift */; };
 		74163A4622E39523005A7D2E /* PlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74163A4522E39523005A7D2E /* PlayerTableViewCell.swift */; };
 		74163A4822E4A7AF005A7D2E /* ActivityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74163A4722E4A7AF005A7D2E /* ActivityTableViewCell.swift */; };
@@ -28,6 +29,8 @@
 		745D0E7822A007A3007670E3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 745D0E7722A007A3007670E3 /* GoogleService-Info.plist */; };
 		745D0E7A22A17E26007670E3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745D0E7922A17E26007670E3 /* LoginViewController.swift */; };
 		745D0E7C22A17ED2007670E3 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745D0E7B22A17ED2007670E3 /* SignUpViewController.swift */; };
+		745DA4DC2562AE2300FDA053 /* WorkloadDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DA4DB2562AE2300FDA053 /* WorkloadDisplayViewController.swift */; };
+		745DA4E12562FADE00FDA053 /* PlayerOrCoachViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DA4E02562FADE00FDA053 /* PlayerOrCoachViewController.swift */; };
 		746061BD252547E9005B1480 /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746061BC252547E9005B1480 /* AppTrackingTransparency.framework */; };
 		746061E225264147005B1480 /* NewInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746061E125264147005B1480 /* NewInfoViewController.swift */; };
 		746062072526843F005B1480 /* NewInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746062062526843F005B1480 /* NewInfoTableViewCell.swift */; };
@@ -65,6 +68,7 @@
 		7492265422D91C1900EAD386 /* RoundButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492265322D91C1900EAD386 /* RoundButtons.swift */; };
 		7492265622DA43BB00EAD386 /* RequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492265522DA43BB00EAD386 /* RequestsViewController.swift */; };
 		7492265822DA49E500EAD386 /* RequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492265722DA49E500EAD386 /* RequestTableViewCell.swift */; };
+		74BAB0E725642600009D35E8 /* LineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BAB0E625642600009D35E8 /* LineChart.swift */; };
 		74BDA835246C479F00DFAEEF /* PlayerInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BDA834246C479F00DFAEEF /* PlayerInfoCell.swift */; };
 		74C57A292531197E00078C42 /* NewRepsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C57A282531197E00078C42 /* NewRepsViewController.swift */; };
 		74DB061B2303017B00C4A19C /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DB061A2303017B00C4A19C /* ResetPasswordViewController.swift */; };
@@ -103,6 +107,7 @@
 /* Begin PBXFileReference section */
 		2D789E9B204DC6129DD665D6 /* Pods-InTheGym.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGym.release.xcconfig"; path = "Target Support Files/Pods-InTheGym/Pods-InTheGym.release.xcconfig"; sourceTree = "<group>"; };
 		5CE4D8ACFF7689612D54F163 /* Pods_InTheGymUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGymUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7413A065255D743E009C7F97 /* CustomTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTopView.swift; sourceTree = "<group>"; };
 		74163A4322E37089005A7D2E /* ButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonExtension.swift; sourceTree = "<group>"; };
 		74163A4522E39523005A7D2E /* PlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewCell.swift; sourceTree = "<group>"; };
 		74163A4722E4A7AF005A7D2E /* ActivityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTableViewCell.swift; sourceTree = "<group>"; };
@@ -122,6 +127,8 @@
 		745D0E7722A007A3007670E3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		745D0E7922A17E26007670E3 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		745D0E7B22A17ED2007670E3 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		745DA4DB2562AE2300FDA053 /* WorkloadDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkloadDisplayViewController.swift; sourceTree = "<group>"; };
+		745DA4E02562FADE00FDA053 /* PlayerOrCoachViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerOrCoachViewController.swift; sourceTree = "<group>"; };
 		746061BC252547E9005B1480 /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
 		746061E125264147005B1480 /* NewInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewInfoViewController.swift; sourceTree = "<group>"; };
 		746062062526843F005B1480 /* NewInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewInfoTableViewCell.swift; sourceTree = "<group>"; };
@@ -165,6 +172,7 @@
 		7492265322D91C1900EAD386 /* RoundButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButtons.swift; sourceTree = "<group>"; };
 		7492265522DA43BB00EAD386 /* RequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsViewController.swift; sourceTree = "<group>"; };
 		7492265722DA49E500EAD386 /* RequestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTableViewCell.swift; sourceTree = "<group>"; };
+		74BAB0E625642600009D35E8 /* LineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChart.swift; sourceTree = "<group>"; };
 		74BDA834246C479F00DFAEEF /* PlayerInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerInfoCell.swift; sourceTree = "<group>"; };
 		74C57A282531197E00078C42 /* NewRepsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRepsViewController.swift; sourceTree = "<group>"; };
 		74DB061A2303017B00C4A19C /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
@@ -253,6 +261,7 @@
 				745D0E7722A007A3007670E3 /* GoogleService-Info.plist */,
 				7479A90F229F2B4C00D39E2E /* InTheGym.xcdatamodeld */,
 				745D0E7922A17E26007670E3 /* LoginViewController.swift */,
+				745DA4E02562FADE00FDA053 /* PlayerOrCoachViewController.swift */,
 				745D0E7B22A17ED2007670E3 /* SignUpViewController.swift */,
 				74163A4722E4A7AF005A7D2E /* ActivityTableViewCell.swift */,
 				7492265522DA43BB00EAD386 /* RequestsViewController.swift */,
@@ -289,6 +298,9 @@
 				7479AFA3253F807900E6A79C /* ScrollTableViewCell.swift */,
 				7479AFA8253F844500E6A79C /* InsideCollectionViewCell.swift */,
 				7425D4172545AE8000567DAB /* Constants.swift */,
+				7413A065255D743E009C7F97 /* CustomTopView.swift */,
+				745DA4DB2562AE2300FDA053 /* WorkloadDisplayViewController.swift */,
+				74BAB0E625642600009D35E8 /* LineChart.swift */,
 			);
 			path = InTheGym;
 			sourceTree = "<group>";
@@ -619,15 +631,18 @@
 				7479AFA4253F807900E6A79C /* ScrollTableViewCell.swift in Sources */,
 				7492265822DA49E500EAD386 /* RequestTableViewCell.swift in Sources */,
 				74DC1C882512751B007156A0 /* NoteViewController.swift in Sources */,
+				745DA4DC2562AE2300FDA053 /* WorkloadDisplayViewController.swift in Sources */,
 				74BDA835246C479F00DFAEEF /* PlayerInfoCell.swift in Sources */,
 				7492264422D2624D00EAD386 /* Exercise.swift in Sources */,
 				743B1E7D22EF440E0046006C /* AdminActivityViewController.swift in Sources */,
+				7413A066255D743E009C7F97 /* CustomTopView.swift in Sources */,
 				7479AF9F253F7E7300E6A79C /* ScrollViewController.swift in Sources */,
 				746062712528C35D005B1480 /* COACHESViewController.swift in Sources */,
 				74C57A292531197E00078C42 /* NewRepsViewController.swift in Sources */,
 				74443B9822F1CD6B00DD18B3 /* ViewDesign.swift in Sources */,
 				745D0E7A22A17E26007670E3 /* LoginViewController.swift in Sources */,
 				7492263622CBD66600EAD386 /* Users.swift in Sources */,
+				745DA4E12562FADE00FDA053 /* PlayerOrCoachViewController.swift in Sources */,
 				74DC1C8C251A27F1007156A0 /* GroupNoteViewController.swift in Sources */,
 				7479A90B229F2B4C00D39E2E /* ViewController.swift in Sources */,
 				74DC18E4244B3A9900D3F8A3 /* GroupBodyTypeViewController.swift in Sources */,
@@ -648,6 +663,7 @@
 				7492265622DA43BB00EAD386 /* RequestsViewController.swift in Sources */,
 				743B1E8522F065DB0046006C /* PlayerWorkoutViewController.swift in Sources */,
 				74DC18E2244B3A8000D3F8A3 /* GroupExerciseViewController.swift in Sources */,
+				74BAB0E725642600009D35E8 /* LineChart.swift in Sources */,
 				743B1E8322F060990046006C /* PlayerActivityViewController.swift in Sources */,
 				741722002459A42E0013EAC8 /* DistanceViewController.swift in Sources */,
 				7460627B252D1C02005B1480 /* CoachScoresViewController.swift in Sources */,

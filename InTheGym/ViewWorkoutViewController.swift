@@ -47,8 +47,8 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         
         // added for selecting which workouts to view
         segment.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
-        let NotSelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font : UIFont(name: "Menlo-Bold", size: 12) ?? UIFont.systemFont(ofSize: 12)]
-        let SelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font : UIFont(name: "Menlo-Bold", size: 12) ?? UIFont.systemFont(ofSize: 12)]
+        let NotSelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 12)]
+        let SelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 12)]
         segment.setTitleTextAttributes(NotSelectedTextAttributes, for: .normal)
         segment.setTitleTextAttributes(SelectedTextAttributes, for: .selected)
         
@@ -144,10 +144,21 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         let exerciseNum = self.rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
         cell.exNumber.text = "Exercises: \(exerciseNum.count)"
         
-        if let time = self.rowsToDisplay[indexPath.section]["timeToComplete"] as? Int{
-            let mins = time / 60
-            let secs = time % 60
-            cell.timeLabel.text = "Time: \(mins):\(secs)"
+        if timeToComplete != nil{
+            
+            let formatter = DateComponentsFormatter()
+            
+            if timeToComplete! > 3600{
+                formatter.allowedUnits = [.hour, .minute]
+                formatter.unitsStyle = .abbreviated
+            }else{
+                formatter.allowedUnits = [.minute, .second]
+                formatter.unitsStyle = .abbreviated
+            }
+            
+            let timeString = formatter.string(from: TimeInterval(timeToComplete!))
+            
+            cell.timeLabel.text = timeString
             cell.timeImage.isHidden = false
         }else{
             cell.timeLabel.text = ""

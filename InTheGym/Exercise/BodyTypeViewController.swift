@@ -22,6 +22,7 @@ class BodyTypeViewController: UIViewController {
         
         SVC.exerciseType = sender.titleLabel!.text as! String
         
+        
         self.navigationController?.pushViewController(SVC, animated: true)
     }
 

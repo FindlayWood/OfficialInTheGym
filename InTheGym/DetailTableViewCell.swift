@@ -23,6 +23,7 @@ class DetailTableViewCell: UITableViewCell {
     @IBOutlet var weightLabel:UILabel!
     @IBOutlet var setsLabel:UILabel!
     @IBOutlet var repsLabel:UILabel!
+    @IBOutlet var typeLabel:UILabel!
     @IBOutlet var setsTextField:UITextField!
     @IBOutlet var repsTextField:UITextField!
     @IBOutlet var infoButton:UIButton!

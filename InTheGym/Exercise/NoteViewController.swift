@@ -17,6 +17,7 @@ class NoteViewController: UIViewController, UITextViewDelegate {
     var exercise: String = ""
     var reps: String = ""
     var weight: String = ""
+    var type: String = ""
     
     var variedReps:Bool!
     var repArray = [String]()
@@ -33,11 +34,13 @@ class NoteViewController: UIViewController, UITextViewDelegate {
             
             if variedReps{
                 dictData = ["exercise": self.exercise,
+                                "type": self.type,
                                 "sets": self.sets,
                                 "reps": self.repArray,
                                 "weight": self.weight]
             }else{
                 dictData = ["exercise": self.exercise,
+                                "type": self.type,
                                 "sets": self.sets,
                                 "reps": self.reps,
                                 "weight": self.weight]
@@ -48,12 +51,14 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         else{
             if variedReps{
                 dictData = ["exercise": self.exercise,
+                                "type": self.type,
                                 "sets": self.sets,
                                 "reps": self.repArray,
                                 "weight": self.weight,
                                 "note": noteText!]
             }else{
                 dictData = ["exercise": self.exercise,
+                                "type": self.type,
                                 "sets": self.sets,
                                 "reps": self.reps,
                                 "weight": self.weight,
@@ -65,8 +70,9 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         
         AddWorkoutHomeViewController.exercises.append(dictData)
         
-        let alert = SCLAlertView()
-        alert.showSuccess("Added!", subTitle: "Exercise has been added to the list.", closeButtonTitle: "ok")
+        displayTopView()
+//        let alert = SCLAlertView()
+//        alert.showSuccess("Added!", subTitle: "Exercise has been added to the list.", closeButtonTitle: "ok")
         let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
         self.navigationController?.popToViewController(viewControllers[viewControllers.count - 7], animated: true)
         
@@ -77,11 +83,13 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         var dictData : [String:Any] = [:]
         if variedReps{
             dictData = ["exercise": self.exercise,
+                        "type": self.type,
                         "sets": self.sets,
                         "reps": self.repArray,
                         "weight": self.weight]
         }else{
             dictData = ["exercise": self.exercise,
+                        "type": self.type,
                         "sets": self.sets,
                         "reps": self.reps,
                         "weight": self.weight]
@@ -90,8 +98,11 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         
         AddWorkoutHomeViewController.exercises.append(dictData)
         
-        let alert = SCLAlertView()
-        alert.showSuccess("Added!", subTitle: "Exercise has been added to the list.", closeButtonTitle: "ok")
+        displayTopView()
+
+        
+//        let alert = SCLAlertView()
+//        alert.showSuccess("Added!", subTitle: "Exercise has been added to the list.", closeButtonTitle: "ok")
         let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
         self.navigationController?.popToViewController(viewControllers[viewControllers.count - 7], animated: true)
     }
@@ -125,6 +136,30 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         if note.text.isEmpty {
             note.text = placeHolder
             note.textColor = UIColor.lightGray
+        }
+    }
+    
+    // this function displays a custom top view etting user know exercise has been added
+    func displayTopView(){
+        let viewHeight = self.view.bounds.height * 0.12
+        let viewWidth = self.view.bounds.width - 20
+        let startingPoint = CGRect(x: 10, y: -30 - viewHeight, width: viewWidth, height: viewHeight)
+        let showingPoint = CGRect(x: 10, y: 30, width: viewWidth, height: viewHeight)
+        
+        
+        let topView = CustomTopView(frame: startingPoint)
+        topView.image = UIImage(named: "added_icon")
+        topView.message = "Exercise added to the list."
+        self.navigationController?.view.addSubview(topView)
+        
+        UIView.animate(withDuration: 0.6) {
+            topView.frame = showingPoint
+        } completion: { (_) in
+            UIView.animate(withDuration: 0.6, delay: 1.8, options: .curveEaseOut) {
+                topView.frame = startingPoint
+                } completion: { (_) in
+                    topView.removeFromSuperview()
+            }
         }
     }
     

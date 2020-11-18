@@ -62,6 +62,7 @@ class NewWeightViewController: UIViewController {
             destVC.variedReps = self.variedReps
             destVC.repArray = self.repArray
             destVC.exercise = self.exercise
+            destVC.type = self.type
             self.navigationController?.pushViewController(destVC, animated: true)
             //self.present(destVC, animated: true, completion: nil)
         }
@@ -78,6 +79,7 @@ class NewWeightViewController: UIViewController {
             destVC.variedReps = self.variedReps
             destVC.repArray = self.repArray
             destVC.exercise = self.exercise
+            destVC.type = self.type
             self.navigationController?.pushViewController(destVC, animated: true)
             //self.present(destVC, animated: true, completion: nil)
         }
@@ -93,6 +95,7 @@ class NewWeightViewController: UIViewController {
         destVC.variedReps = self.variedReps
         destVC.repArray = self.repArray
         destVC.exercise = self.exercise
+        destVC.type = self.type
         self.navigationController?.pushViewController(destVC, animated: true)
         //self.present(destVC, animated: true, completion: nil)
     }
