@@ -49,6 +49,7 @@
 		7479AF9F253F7E7300E6A79C /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479AF9E253F7E7300E6A79C /* ScrollViewController.swift */; };
 		7479AFA4253F807900E6A79C /* ScrollTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479AFA3253F807900E6A79C /* ScrollTableViewCell.swift */; };
 		7479AFA9253F844500E6A79C /* InsideCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479AFA8253F844500E6A79C /* InsideCollectionViewCell.swift */; };
+		747FED3525659A2900080AC8 /* AddNewGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FED3425659A2900080AC8 /* AddNewGroupViewController.swift */; };
 		748B403D25236EBD00C947B6 /* SavedWorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748B403C25236EBD00C947B6 /* SavedWorkoutsViewController.swift */; };
 		7492263222C8D1DF00EAD386 /* AddPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492263122C8D1DF00EAD386 /* AddPlayerViewController.swift */; };
 		7492263622CBD66600EAD386 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492263522CBD66600EAD386 /* Users.swift */; };
@@ -153,6 +154,7 @@
 		7479AF9E253F7E7300E6A79C /* ScrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
 		7479AFA3253F807900E6A79C /* ScrollTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollTableViewCell.swift; sourceTree = "<group>"; };
 		7479AFA8253F844500E6A79C /* InsideCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsideCollectionViewCell.swift; sourceTree = "<group>"; };
+		747FED3425659A2900080AC8 /* AddNewGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewGroupViewController.swift; sourceTree = "<group>"; };
 		748B403C25236EBD00C947B6 /* SavedWorkoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWorkoutsViewController.swift; sourceTree = "<group>"; };
 		7492263122C8D1DF00EAD386 /* AddPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerViewController.swift; sourceTree = "<group>"; };
 		7492263522CBD66600EAD386 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
@@ -286,8 +288,6 @@
 				74DB061A2303017B00C4A19C /* ResetPasswordViewController.swift */,
 				74F6E57423FD99FD00233438 /* LeaderboardViewController.swift */,
 				74F6E57623FDA0F900233438 /* LeaderboardTableViewCell.swift */,
-				74F6E57A24002CAD00233438 /* GeneralWorkoutViewController.swift */,
-				74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */,
 				74DC1C8525126389007156A0 /* Group */,
 				746062062526843F005B1480 /* NewInfoTableViewCell.swift */,
 				748B403C25236EBD00C947B6 /* SavedWorkoutsViewController.swift */,
@@ -360,6 +360,9 @@
 				743B1E7E22EF49CF0046006C /* AdminPlayersViewController.swift */,
 				7492263722CE3B0E00EAD386 /* PlayerViewController.swift */,
 				7492263122C8D1DF00EAD386 /* AddPlayerViewController.swift */,
+				74F6E57A24002CAD00233438 /* GeneralWorkoutViewController.swift */,
+				74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */,
+				747FED3425659A2900080AC8 /* AddNewGroupViewController.swift */,
 				74606275252A7C33005B1480 /* CoachInfoViewController.swift */,
 				7460627A252D1C02005B1480 /* CoachScoresViewController.swift */,
 			);
@@ -687,6 +690,7 @@
 				74DB061B2303017B00C4A19C /* ResetPasswordViewController.swift in Sources */,
 				74F6E57B24002CAD00233438 /* GeneralWorkoutViewController.swift in Sources */,
 				743B1E7F22EF49CF0046006C /* AdminPlayersViewController.swift in Sources */,
+				747FED3525659A2900080AC8 /* AddNewGroupViewController.swift in Sources */,
 				741722022459D12C0013EAC8 /* GroupDistanceViewController.swift in Sources */,
 				7492264222D2350400EAD386 /* RepsViewController.swift in Sources */,
 				7492263C22D2255000EAD386 /* ExerciseViewController.swift in Sources */,

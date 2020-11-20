@@ -84,6 +84,9 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
     
     // array to hold dates number for line chart
     var chartDays : [Int] = []
+    
+    // var dispatch group for loading data
+    var myGroup = DispatchGroup()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,13 +122,13 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
             chartLabel.text = "7d ago"
         case 2:
             twoWeekSetUp()
-            chartLabel.text = "14d ago"
+            chartLabel.text = "2w ago"
         case 3:
             fourWeekSetUp()
-            chartLabel.text = "2w ago"
+            chartLabel.text = "4w ago"
         default:
             threeSetUp()
-            chartLabel.text = "4w ago"
+            chartLabel.text = "3d ago"
         }
         //setLabels()
     }
@@ -147,6 +150,8 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
         let twoWeekRange = twoWeeksAgo!...now
         let fourWeekRange = fourWeeksAgo!...now
         
+        var initialLoad = true
+        
         DBRef.observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String: AnyObject]{
                 let time = snap["endTime"] as! TimeInterval
@@ -160,7 +165,6 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
                     self.threeTimeArray.append(timeToComplete)
                     self.threeRPEArray.append(Int(rpe)!)
                     self.threeEndDates.append(endDate)
-                    self.threeSetUp()
                 }
                 if sevenDayRange.contains(endDate){
                     self.sevenWorkloadArray.append(workload)
@@ -181,8 +185,21 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
                     self.fourWeekEndDates.append(endDate)
                 }
             }
+            
+            if initialLoad == false{
+                print("not sure when this will happen")
+            }
+            
         }, withCancel: nil)
-        //threeSetUp()
+        
+        DBRef.observeSingleEvent(of: .value) { (_) in
+            self.threeSetUp()
+            initialLoad = false
+        }
+        
+        
+        
+        
     }
     
     func threeSetUp(){
@@ -262,7 +279,9 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
         if globalRPE == 0{
             rpeLabel.text = "0"
         }else{
-            rpeLabel.text = "\(Double(globalRPE) / Double(globalCount))"
+            let average = (Double(globalRPE) / Double(globalCount))
+            let rounded = round(average * 10)/10
+            rpeLabel.text = "\(rounded)"
         }
         workoutLabel.text = globalCount.description
     }

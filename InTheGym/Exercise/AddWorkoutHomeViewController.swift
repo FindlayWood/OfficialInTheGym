@@ -70,7 +70,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
         
     
     @IBAction func savePressed(_ sender:UIButton){
-        Flurry.logEvent("Single add workout - Save Pressed.")
+        Flurry.logEvent("Upload Workout - Pressed.")
         
         
         print("you want to upload this multiple times, \(stepCount) times to be exact. now we have to go to a new page to allow edits to 2nd or 3rd")

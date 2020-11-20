@@ -15,7 +15,7 @@ class Constants {
     
     var bannedUsernames = ["Admin", "admin", "InTheGym", "OfficialInTheGym"]
     
-    var backgroundColour : UIColor = #colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 1)
+    static let backgroundColour : UIColor = #colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 1)
     
-    var buttonColour : UIColor = #colorLiteral(red: 0, green: 0.3692765302, blue: 0.7998889594, alpha: 1)
+    static let buttonColour : UIColor = #colorLiteral(red: 0, green: 0.3692765302, blue: 0.7998889594, alpha: 1)
 }
