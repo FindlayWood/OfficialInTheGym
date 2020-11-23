@@ -98,11 +98,13 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
                 }
                 self.rowsToDisplay = self.workouts
                 self.rowsToDisplayIDs = self.workoutIDs
-                
-                self.tableview.reloadData()
 
             }
         }, withCancel: nil)
+        
+        DBref.child(PlayerActivityViewController.username).observeSingleEvent(of: .value) { (_) in
+            self.handleSegmentChange()
+        }
     }
     
     func loadUsername(){
@@ -243,9 +245,6 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         loadWorkouts()
         tableview.reloadData()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-        
-        segment.selectedSegmentIndex = 0
-        segment.sendActions(for: UIControl.Event.valueChanged)
     }
     
     func setScroll(){
@@ -273,7 +272,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
                 kWindowWidth: screenWidth - 40 )
 
             let alert = SCLAlertView(appearance: appearance)
-            alert.showInfo("WORKOUTS", subTitle: "This page will display all of the workouts that your coach has set for you. You can get a detailed view by tapping on them!", closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
+            alert.showInfo("WORKOUTS", subTitle: "This page will display all of the workouts that your coach has set for you. Switch between workouts you have not started, workouts that are in progress and workouts you have completed easily with the switch bar at the top. You can get a detailed view by tapping on them!", closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
         }
         //setScroll()
     }

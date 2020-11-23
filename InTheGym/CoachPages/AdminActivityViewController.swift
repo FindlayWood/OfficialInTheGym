@@ -84,9 +84,7 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func viewWillAppear(_ animated: Bool) {
         loadActivities()
-        // added for new feed
-        //loadUsername()
-        
+        loadFeed()
     }
     
     // loading tableview using switch segment
@@ -114,47 +112,23 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
     
     func loadActivities(){
         activities.removeAll()
-        //myGroup.enter()
         self.ActRef.observe(.childAdded, with: { (snapshot) in
-            self.myGroup.enter()
             if let snap = snapshot.value as? [String:AnyObject]{
                 self.activities.insert(snap, at: 0)
-                self.myGroup.leave()
-                self.handleSegmentChange()
-                
             }
  
         }, withCancel: nil)
-        //myGroup.leave()
-        myGroup.notify(queue: DispatchQueue.main){
-            self.loadUsername()
-            //self.tableview.reloadData()
-            //self.handleSegmentChange()
+
+        self.ActRef.observeSingleEvent(of: .value) { (_) in
+            self.handleSegmentChange()
         }
         
     }
+
     
-    // added for new feed
-    func loadUsername(){
-        let userID = Auth.auth().currentUser?.uid
-        myGroup.enter()
-        self.DBRef.child("users").child(userID!).child("username").observeSingleEvent(of: .value) { (snapshot) in
-            let snap = snapshot.value as! String
-            self.localusername = snap
-            self.myGroup.leave()
-        }
-        myGroup.notify(queue: DispatchQueue.main){
-            self.loadFeed()
-        
-            
-        }
-        
-    }
-    // added for new feed
-    
+    // loading public feed
     func loadFeed(){
         feed.removeAll()
-        myGroup.enter()
         self.DBRef.child("Public Feed").child(userID!).observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
                 self.feed.insert(snap, at: 0)
@@ -162,18 +136,15 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
             
         }, withCancel: nil)
         
-        myGroup.leave()
-        
-        myGroup.notify(queue: DispatchQueue.main){
-            self.tableview.reloadData()
+        self.DBRef.child("Public Feed").child(userID!).observeSingleEvent(of: .value) { (snapshot) in
             self.handleSegmentChange()
-            
         }
         
+        
+
     }
     
-    // working on displaying message for the first time
-    // function
+    // display first time message
     override func viewDidAppear(_ animated: Bool) {
          if(!appDelegate.hasAlreadyLaunched){
             //set hasAlreadyLaunched to false

@@ -85,9 +85,12 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
                 self.rowsToDisplay = self.workouts
                 self.rowsToDisplayIDs = self.workoutIDs
                 
-                self.tableview.reloadData()
             }
         }, withCancel: nil)
+        
+        DBRef.observeSingleEvent(of: .value) { (_) in
+            self.handleSegmentChange()
+        }
     }
     
     
@@ -225,10 +228,6 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         DBRef = Database.database().reference().child("Workouts").child(username)
         loadWorkouts()
-        //tableview.reloadData()
-        
-        segment.selectedSegmentIndex = 0
-        segment.sendActions(for: UIControl.Event.valueChanged)
         
     }
     

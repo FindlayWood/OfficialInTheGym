@@ -103,14 +103,16 @@ class PBsViewController: UIViewController {
         let actDataPublic = ["time":ServerValue.timestamp(),
                        "type":"Update PBs",
                        "message":"\(username) updated their PB scores."] as [String:AnyObject]
-        if ViewController.admin == false{
+        if ViewController.admin == false && coaches.count != 0{
             // using coach userid to add to public feed instead of username
             for coach in coaches{
                 self.ActRef.child("Public Feed").child(coach).childByAutoId().setValue(actDataPublic)
             }
 //            self.ActRef.child("Public Feed").child(self.coachUserName).childByAutoId().setValue(actDataPublic)
-            
+        }else{
+            print("no coaches to upload to.")
         }
+        
         
     }
     
@@ -127,8 +129,10 @@ class PBsViewController: UIViewController {
         
         if ViewController.admin == false{
             ActRef.child("users").child(userID!).child("coachName").observeSingleEvent(of: .value) { (snapshot) in
-                let snap = snapshot.value as? String
-                self.coachUserName = snap!
+                if let snap = snapshot.value as? String{
+                    self.coachUserName = snap
+                }
+                
             }
             ActRef.child("users").child(userID!).child("coaches").observe(.childAdded) { (snapshot) in
                 if let snap = snapshot.value as? String{

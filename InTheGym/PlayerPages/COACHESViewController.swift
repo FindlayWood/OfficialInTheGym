@@ -101,6 +101,22 @@ class COACHESViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         return headerView
     }
+    
+    // emptydataset functions
+    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+        let str = "No Coaches"
+        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
+        return NSAttributedString(string: str, attributes: attrs)
+    }
+    
+    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+        let str = "Tell your Coach your username and ask them to send you a request. Once you have accepted their request they will appear here."
+        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
+        return NSAttributedString(string: str, attributes: attrs)
+    }
+    
+    
+    
 
 // TODO: make this alert delete a coach from a player
     @objc func showCoachMessage(){

@@ -56,6 +56,7 @@ class ViewController: UIViewController {
         
         super.viewDidLoad()
         // check if current user exists and log them in
+        
         if Auth.auth().currentUser != nil{
             let userID = Auth.auth().currentUser?.uid
             if let user = Auth.auth().currentUser{
@@ -90,7 +91,7 @@ class ViewController: UIViewController {
                             self.showSuccess()
                         }
                         
-                        alertview.showWarning("Verify", subTitle: "You must verify your account from the email we sent you. The we can log you in straight away.", closeButtonTitle: "OK")
+                        alertview.showWarning("Verify", subTitle: "You must verify your account from the email we sent you. Then we can log you in straight away.", closeButtonTitle: "OK")
                         
                         
                     }

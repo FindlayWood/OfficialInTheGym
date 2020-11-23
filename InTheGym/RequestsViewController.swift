@@ -105,18 +105,20 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
                     self.tableview.reloadData()
                     
                 }
-                self.DBRef.child(adminID).child("players").child("accepted").observeSingleEvent(of: .value) { (snapshot) in
-                    if let snap = snapshot.value as? [String]{
-                        self.accepted = snap
-                        self.accepted.append(self.userID!)
-                        self.DBRef.child(adminID).child("players").child("accepted").setValue(self.accepted)
-                    }
-                    else{
-                        self.accepted.append(self.userID!)
-                        self.DBRef.child(adminID).child("players").child("accepted").setValue(self.accepted)
-                    }
-                
-            }
+            
+            self.DBRef.child(adminID).child("players").child("accepted").childByAutoId().setValue(self.userID)
+//                self.DBRef.child(adminID).child("players").child("accepted").observeSingleEvent(of: .value) { (snapshot) in
+//                    if let snap = snapshot.value as? [String]{
+//                        self.accepted = snap
+//                        self.accepted.append(self.userID!)
+//                        self.DBRef.child(adminID).child("players").child("accepted").setValue(self.accepted)
+//                    }
+//                    else{
+//                        self.accepted.append(self.userID!)
+//                        self.DBRef.child(adminID).child("players").child("accepted").setValue(self.accepted)
+//                    }
+//
+//            }
         }
     
         infowarning.showWarning("Are you Sure?", subTitle: "Are you sure you want to accept \(requesters[sender.tag]) as your new coach?", closeButtonTitle: "No")

@@ -87,7 +87,7 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 let email = snap["email"] as? String
                                 self.tabA.append(email!)
                                 let counted = snap["numberOfCompletes"] as? Int
-                                self.tabA.append("\(counted!)")
+                                self.tabA.append("\(counted ?? 0)")
                                 //self.countedLabel.text = "\(counted ?? 0)"
                                     
                                     
@@ -205,7 +205,7 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let email = snap["email"] as? String
                 self.tabA.append(email!)
                 let counted = snap["numberOfCompletes"] as? Int
-                self.tabA.append("\(counted!)")
+                self.tabA.append("\(counted ?? 0)")
                 //self.countedLabel.text = "\(counted ?? 0)"
                 coachName = snap["coachName"] as? String ?? ""
                 //self.coachUsernameLabel.text = "@\(coachName!)"
