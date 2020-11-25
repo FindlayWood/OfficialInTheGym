@@ -123,6 +123,7 @@
 		743B1E8422F065DB0046006C /* PlayerWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerWorkoutViewController.swift; sourceTree = "<group>"; };
 		74443B9722F1CD6B00DD18B3 /* ViewDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDesign.swift; sourceTree = "<group>"; };
 		74443B9922F1E18500DD18B3 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		7445503A256C613600E4E4CC /* InTheGym.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InTheGym.entitlements; sourceTree = "<group>"; };
 		745994772539093600FBDC00 /* RepsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsTableViewCell.swift; sourceTree = "<group>"; };
 		7459947C253DE5F800FBDC00 /* NewWeightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWeightViewController.swift; sourceTree = "<group>"; };
 		745D0E7722A007A3007670E3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -254,6 +255,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				7445503A256C613600E4E4CC /* InTheGym.entitlements */,
 				7479A908229F2B4C00D39E2E /* AppDelegate.swift */,
 				7479A90A229F2B4C00D39E2E /* ViewController.swift */,
 				7479A90C229F2B4C00D39E2E /* Main.storyboard */,
@@ -875,8 +877,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = InTheGym/InTheGym.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = H6WZPTFL8D;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -942,7 +946,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.2.2;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -1053,8 +1057,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = InTheGym/InTheGym.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = H6WZPTFL8D;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1120,7 +1126,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.2.2;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
