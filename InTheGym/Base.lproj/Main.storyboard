@@ -7044,8 +7044,8 @@
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="DlQ-Ta-vHz"/>
-        <segue reference="A69-XW-2yR"/>
+        <segue reference="kNf-eK-jfC"/>
+        <segue reference="dhP-hp-Sw7"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="add player" width="20" height="21"/>
@@ -7064,10 +7064,10 @@
         <image name="player_icon" width="96" height="96"/>
         <image name="plus_icon_large_3" width="480" height="480"/>
         <namedColor name="darkColour">
-            <color red="0.1119553968" green="0.28736510869999998" blue="0.43277412650000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.1120000034570694" green="0.28700000047683716" blue="0.43299999833106995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="lightColour">
-            <color red="0.25556766990000002" green="0.47669970989999999" blue="0.74239724870000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.25600001215934753" green="0.47699999809265137" blue="0.74199998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
