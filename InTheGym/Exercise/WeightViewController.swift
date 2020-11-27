@@ -12,7 +12,7 @@ import UIKit
 import SCLAlertView
 
 
-class WeightViewController: UIViewController, UITextFieldDelegate{
+class WeightViewController: UIViewController{
     
     var sets: String = ""
     var exercise: String = ""

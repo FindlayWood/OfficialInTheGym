@@ -45,6 +45,10 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        titleField.delegate = self
+        titleField.returnKeyType = .done
+        subTitleField.delegate = self
+        subTitleField.returnKeyType = .done
         
         DBRef = Database.database().reference().child("users").child(userID!).child("groups")
         

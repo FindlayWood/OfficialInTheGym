@@ -395,7 +395,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         label.text = "EXERCISE \(section+1)"
         label.font = .boldSystemFont(ofSize: 15)
         label.font = .preferredFont(forTextStyle: UIFont.TextStyle(rawValue: "Menlo Bold"))
-        label.backgroundColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
+        label.backgroundColor = Constants.lightColour
         label.textAlignment = .center
         label.textColor = UIColor.white
         
@@ -425,7 +425,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         cell.contentView.layer.borderColor = UIColor.black.cgColor
         //cell.layer.masksToBounds = true
         cell.contentView.layer.masksToBounds = true
-        cell.backgroundColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
+        cell.backgroundColor = Constants.lightColour
         
         cell.layer.shadowColor = UIColor.black.cgColor
         cell.layer.shadowOffset = CGSize(width: 0, height: 5.0)
@@ -660,7 +660,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         let beginButton = UIButton()
         beginButton.setTitle("Begin Workout", for: .normal)
-        beginButton.backgroundColor = #colorLiteral(red: 0, green: 0.2308298707, blue: 0.5, alpha: 1)
+        beginButton.backgroundColor = Constants.darkColour
         beginButton.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 31)
         beginButton.layer.cornerRadius = 26
         beginButton.layer.borderWidth = 2
@@ -713,7 +713,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         let button = UIButton()
         button.setTitle("CONTINUE", for: .normal)
-        button.backgroundColor = #colorLiteral(red: 0, green: 0.2308298707, blue: 0.5, alpha: 1)
+        button.backgroundColor = Constants.darkColour
         button.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 31)
         button.layer.cornerRadius = 26
         button.layer.borderWidth = 2
@@ -736,13 +736,10 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         noticeLabel2.textAlignment = .center
         
         let cancelButton = UIButton()
-        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.setTitle("cancel", for: .normal)
         cancelButton.backgroundColor = UIColor.clear
         cancelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        cancelButton.titleLabel?.textColor = UIColor.red
-        cancelButton.layer.cornerRadius = 15
-        cancelButton.layer.borderWidth = 1
-        cancelButton.layer.borderColor = UIColor.black.cgColor
+        cancelButton.setTitleColor(UIColor.red, for: .normal)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.addTarget(self, action: #selector(setBeginView), for: .touchUpInside)
         
@@ -765,7 +762,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         button.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 15).isActive = true
         button.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -15).isActive = true
         self.beginView.addSubview(cancelButton)
-        cancelButton.bottomAnchor.constraint(equalTo: self.beginView.bottomAnchor, constant: -30).isActive = true
+        cancelButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 30).isActive = true
         cancelButton.centerXAnchor.constraint(equalTo: self.beginView.centerXAnchor).isActive = true
         //cancelButton.leadingAnchor.constraint(equalTo: self.beginView.leadingAnchor, constant: 35).isActive = true
         //cancelButton.trailingAnchor.constraint(equalTo: self.beginView.trailingAnchor, constant: -35).isActive = true
@@ -792,6 +789,9 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
+        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
+        self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     }
     
 

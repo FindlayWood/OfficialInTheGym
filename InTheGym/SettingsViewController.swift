@@ -61,7 +61,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         cell.accessoryType = .disclosureIndicator
         cell.textLabel?.textColor = .white
-        cell.backgroundColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
+        cell.backgroundColor = Constants.lightColour
         cell.selectionStyle = .none
         cell.textLabel?.text = tableContent[indexPath.row]
         return cell

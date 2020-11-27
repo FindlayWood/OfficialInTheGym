@@ -88,13 +88,11 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
                     let index = self.currentRequested.firstIndex(of: self.username)
                     self.currentRequested.remove(at: index!)
                     self.DBRef.child(adminID).child("players").child("requested").setValue(self.currentRequested)
-                    let coachName = self.requesters[sender.tag]
 // MARK: next section will be to add coach to array rather than single value using ID
                 
                 self.DBRef.child(userID!).child("coaches").childByAutoId().setValue(adminID)
 // section ends here
-// still have line below but will need removing
-                    //self.DBRef.child(userID!).child("coachName").setValue(coachName)
+
                     let actData = ["time":ServerValue.timestamp(),
                                    "type":"New Coach",
                                    "message":"You accepted a request from \(self.requesters[sender.tag])."] as [String:AnyObject]
@@ -107,56 +105,15 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
                 }
             
             self.DBRef.child(adminID).child("players").child("accepted").childByAutoId().setValue(self.userID)
-//                self.DBRef.child(adminID).child("players").child("accepted").observeSingleEvent(of: .value) { (snapshot) in
-//                    if let snap = snapshot.value as? [String]{
-//                        self.accepted = snap
-//                        self.accepted.append(self.userID!)
-//                        self.DBRef.child(adminID).child("players").child("accepted").setValue(self.accepted)
-//                    }
-//                    else{
-//                        self.accepted.append(self.userID!)
-//                        self.DBRef.child(adminID).child("players").child("accepted").setValue(self.accepted)
-//                    }
-//
-//            }
+            let coachData = ["time":ServerValue.timestamp(),
+                             "type":"New Coach",
+            "message":"\(PlayerActivityViewController.username ?? "username") accepted your request! You can now set them workouts."] as [String:AnyObject]
+            self.DBRef.child(adminID).child("activities").childByAutoId().setValue(coachData)
+            
+
         }
     
         infowarning.showWarning("Are you Sure?", subTitle: "Are you sure you want to accept \(requesters[sender.tag]) as your new coach?", closeButtonTitle: "No")
-        
-        /*let alert = UIAlertController(title: "Accept Request", message: "Are you sure you want to accept \(requesters[sender.tag]) as your new Coach?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) in
-            self.DBRef.child(adminID).child("players").child("requested").observeSingleEvent(of: .value) { (snapshot) in
-                let snap = snapshot.value as? [String]
-                self.currentRequested = snap!
-                let index = self.currentRequested.firstIndex(of: self.username)
-                self.currentRequested.remove(at: index!)
-                self.DBRef.child(adminID).child("players").child("requested").setValue(self.currentRequested)
-                let coachName = self.requesters[sender.tag]
-                self.DBRef.child(userID!).child("coachName").setValue(coachName)
-                let actData = ["time":ServerValue.timestamp(),
-                               "type":"New Coach",
-                               "message":"You accepted a request from \(self.requesters[sender.tag])."] as [String:AnyObject]
-                //self.activities.insert(actData, at: 0)
-                self.DBRef.child(userID!).child("activities").childByAutoId().setValue(actData)
-                self.requesters.remove(at: sender.tag)
-                self.requestKeys.remove(at: sender.tag)
-                self.tableview.reloadData()
-                
-            }
-            self.DBRef.child(adminID).child("players").child("accepted").observeSingleEvent(of: .value) { (snapshot) in
-                if let snap = snapshot.value as? [String]{
-                    self.accepted = snap
-                    self.accepted.append(self.userID!)
-                    self.DBRef.child(adminID).child("players").child("accepted").setValue(self.accepted)
-                }
-                else{
-                    self.accepted.append(self.userID!)
-                    self.DBRef.child(adminID).child("players").child("accepted").setValue(self.accepted)
-                }
-            }
-        }))
-        alert.addAction(UIAlertAction(title: "NO", style: .destructive, handler: nil))
-        self.present(alert, animated: true, completion: nil)*/
     }
     
     // emptydataset functions
@@ -196,20 +153,12 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    // function to load all activities for user
-    // no need for this function anymore after update
-    /*
-    func loadActivities(){
-        let userID = Auth.auth().currentUser?.uid
-        DBRef.child(userID!).observe(.childAdded, with: { (snapshot) in
-            if let snap = snapshot.value as? [String:AnyObject]{
-                self.activities.append(snap)
-            }
-        }, withCancel: nil)
-    }*/
-    
     override func viewWillAppear(_ animated: Bool) {
         //loadActivities()
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
+        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
+        self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     }
 
 

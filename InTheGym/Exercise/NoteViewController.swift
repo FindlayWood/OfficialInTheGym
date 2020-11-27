@@ -144,7 +144,7 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         let viewHeight = self.view.bounds.height * 0.12
         let viewWidth = self.view.bounds.width - 20
         let startingPoint = CGRect(x: 10, y: -30 - viewHeight, width: viewWidth, height: viewHeight)
-        let showingPoint = CGRect(x: 10, y: 30, width: viewWidth, height: viewHeight)
+        let showingPoint = CGRect(x: 10, y: 50, width: viewWidth, height: viewHeight)
         
         
         let topView = CustomTopView(frame: startingPoint)

@@ -43,7 +43,7 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         
         navigationItem.title = "Workouts"
         self.tableview.rowHeight = 150
-        self.tableview.backgroundColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
+        self.tableview.backgroundColor = Constants.lightColour
         
         // added for selecting which workouts to view
         segment.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
@@ -188,7 +188,7 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let background = UILabel()
-        background.backgroundColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
+        background.backgroundColor = Constants.lightColour
         return background
     }
     

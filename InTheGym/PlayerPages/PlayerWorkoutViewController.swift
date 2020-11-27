@@ -51,7 +51,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         super.viewDidLoad()
         
         self.tableview.rowHeight = 150
-        self.tableview.backgroundColor = #colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 0.5)
+        self.tableview.backgroundColor = Constants.lightColour
         
         let userID = Auth.auth().currentUser?.uid
         
@@ -209,7 +209,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let background = UILabel()
-        background.backgroundColor = #colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 1)
+        background.backgroundColor = Constants.lightColour
         return background
     }
     

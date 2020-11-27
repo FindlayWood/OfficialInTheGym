@@ -17,8 +17,10 @@ class PlayerOrCoachViewController: UIViewController {
     @IBOutlet var playerButton:UIView!
     
     var cornerRadia : CGFloat = 10.0
-    var borderColour = UIColor.black.cgColor
+    var borderColour = UIColor.white.cgColor
     var borderWidth : CGFloat = 2.0
+    
+    let selection = UISelectionFeedbackGenerator()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,9 +44,12 @@ class PlayerOrCoachViewController: UIViewController {
         let warningalert = SCLAlertView()
         warningalert.showNotice("Verification", subTitle: "New accounts must be verified and you will be sent an email to verify your account before you can login.", closeButtonTitle: "Ok")
         
+        selection.prepare()
+        
     }
     
     @objc fileprivate func coachPressed(){
+        self.selection.selectionChanged()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let svc = storyboard.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
         svc.admin = true
@@ -52,6 +57,7 @@ class PlayerOrCoachViewController: UIViewController {
     }
     
     @objc fileprivate func playerPressed(){
+        self.selection.selectionChanged()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let svc = storyboard.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
         svc.admin = false

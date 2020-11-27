@@ -41,7 +41,7 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
     // header height
     var headerHeight : CGFloat = 15.0
     
-    let backgroundColour = Constants.backgroundColour
+    let backgroundColour = Constants.lightColour
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,11 +129,15 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
     
     
     func loadPlayers(){
-        DBRef.child("players").child("accepted").observeSingleEvent(of: .value) { (snapshot) in
-            if let snap = snapshot.value as? [String]{
-                self.playersID = snap
-                self.loadUsers()
+        self.playersID.removeAll()
+        DBRef.child("players").child("accepted").observe(.childAdded) { (snapshot) in
+            if let snap = snapshot.value as? String{
+                self.playersID.append(snap)
             }
+        }
+        
+        DBRef.child("players").child("accepted").observeSingleEvent(of: .value) { (snapshot) in
+            self.loadUsers()
         }
     }
     
