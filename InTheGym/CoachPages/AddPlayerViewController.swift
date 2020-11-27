@@ -28,6 +28,8 @@ class AddPlayerViewController: UIViewController {
     // varibale to check for first time
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
+    let haptic = UINotificationFeedbackGenerator()
+    
     @IBOutlet weak var playerfield:UITextField!
     
     @IBAction func addTapped(_ sender:UIButton){
@@ -35,11 +37,13 @@ class AddPlayerViewController: UIViewController {
         let typedNamed = playerfield.text
         if playerUsernames.contains(typedNamed!){
             if self.requestedPlayers.contains(typedNamed!){
+                haptic.notificationOccurred(.warning)
                 let alert = SCLAlertView()
                 alert.showWarning("Already Sent", subTitle: "A request has already been sent to this username. You must wait for them to respond", closeButtonTitle: "ok", animationStyle: .noAnimation)
                 playerfield.text = ""
             }
             else if self.acceptedUsername.contains(typedNamed!){
+                haptic.notificationOccurred(.warning)
                 let alert = SCLAlertView()
                 alert.showWarning("Already Added", subTitle: "You have already added this player and they are part of your team.", closeButtonTitle: "ok", animationStyle: .noAnimation)
                 playerfield.text = ""
@@ -52,6 +56,7 @@ class AddPlayerViewController: UIViewController {
                         self.adminsUsers.append(user)
                     }
                 }
+                haptic.notificationOccurred(.success)
                 self.DBref.child("users").child(self.userID).child("players").child("requested").setValue(requestedPlayers)
                 let actData = ["time":ServerValue.timestamp(),
                                "type":"Request Sent",
@@ -66,6 +71,7 @@ class AddPlayerViewController: UIViewController {
             
         }
         else{
+            haptic.notificationOccurred(.error)
             let alert = SCLAlertView()
             alert.showError("Error!", subTitle: "This username doesn't exist. Be sure to check with your players what their usernames are. Be careful when typing, they are case sensitive.", closeButtonTitle: "ok", animationStyle: .noAnimation)
             
@@ -76,6 +82,8 @@ class AddPlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
+        playerfield.delegate = self
+        haptic.prepare()
         
         DBref = Database.database().reference()
         

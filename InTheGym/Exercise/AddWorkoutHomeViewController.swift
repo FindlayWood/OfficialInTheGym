@@ -198,6 +198,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
         print(AddWorkoutHomeViewController.groupBool!)
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
+        titleField.delegate = self
         
         if !AddWorkoutHomeViewController.groupBool{
             DBRef = Database.database().reference().child("Workouts").child(userName)
@@ -314,7 +315,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     }
 
 }
-extension UIViewController {
+extension UIViewController: UITextFieldDelegate {
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -323,5 +324,10 @@ extension UIViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

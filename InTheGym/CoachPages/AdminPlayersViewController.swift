@@ -39,16 +39,22 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
     
     
     func loadPlayers(){
-        DBref.child("players").child("accepted").observeSingleEvent(of: .value) { (snapshot) in
-            if let snap = snapshot.value as? [String]{
-                AdminPlayersViewController.self.players = snap
-                self.tableview.reloadData()
-                self.loadUsers()
+        AdminPlayersViewController.players.removeAll()
+        DBref.child("players").child("accepted").observe(.childAdded) { (snapshot) in
+            if let snap = snapshot.value as? String{
+                AdminPlayersViewController.self.players.append(snap)
             }
+        }
+        
+        
+        DBref.child("players").child("accepted").observeSingleEvent(of: .value) { (_) in
+            //self.tableview.reloadData()
+            self.loadUsers()
         }
     }
     
     func loadUsers(){
+        self.users.removeAll()
         for player in AdminPlayersViewController.players{
             userRef.child("users").child(player).observe(.value) { (snapshot) in
                 if let snap = snapshot.value as? [String:AnyObject]{
@@ -59,7 +65,7 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
                     user.lastName = snap["lastName"] as? String
                     user.numberOfCompletes = snap["numberOfCompletes"] as? Int ?? 0
                     self.users.append(user)
-                    
+                    self.tableview.reloadData()
                 }
             }
         }
@@ -99,14 +105,14 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete{
-            AdminPlayersViewController.players.remove(at: indexPath.row)
-            users.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .left)
-            DBref.child("players").setValue(AdminPlayersViewController.players)
-        }
-    }
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete{
+//            AdminPlayersViewController.players.remove(at: indexPath.row)
+//            users.remove(at: indexPath.row)
+//            tableView.deleteRows(at: [indexPath], with: .left)
+//            DBref.child("players").setValue(AdminPlayersViewController.players)
+//        }
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         //loadUsers()

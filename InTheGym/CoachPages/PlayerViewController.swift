@@ -118,7 +118,7 @@ class PlayerViewController: UIViewController {
         
         navigationItem.title = "Player Info"
         
-        pieChart.backgroundColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
+        pieChart.backgroundColor = Constants.lightColour
 
         
         DBRef = Database.database().reference().child("Scores").child(userNameString)

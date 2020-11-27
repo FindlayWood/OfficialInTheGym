@@ -70,8 +70,8 @@ class LineChart: UIView, ChartViewDelegate {
         chartData.addDataSet(chartDataSet)
         chartData.setDrawValues(true)
         chartDataSet.colors = [#colorLiteral(red: 0, green: 0.5, blue: 1, alpha: 1), #colorLiteral(red: 0.6332940925, green: 0.8493953339, blue: 1, alpha: 1), #colorLiteral(red: 0.7802333048, green: 1, blue: 0.5992883134, alpha: 1), #colorLiteral(red: 0.9427440068, green: 1, blue: 0.3910798373, alpha: 1), #colorLiteral(red: 1, green: 1, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.8438837757, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.7074058219, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.4706228596, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.3134631849, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)]
-        chartDataSet.setCircleColor(#colorLiteral(red: 0, green: 0.4566611071, blue: 1, alpha: 1))
-        chartDataSet.circleHoleColor = #colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 1)
+        chartDataSet.setCircleColor(Constants.backgroundColour)
+        chartDataSet.circleHoleColor = Constants.backgroundColour
         chartDataSet.circleHoleRadius = 1
         chartDataSet.circleRadius = 5
         chartDataSet.mode = .cubicBezier
@@ -85,7 +85,7 @@ class LineChart: UIView, ChartViewDelegate {
             return
         }
         //chartDataSet.fill = Fill.fillWithLinearGradient(gradient, angle: 90.0)
-        chartDataSet.fill = Fill.fillWithColor(#colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 1))
+        chartDataSet.fill = Fill.fillWithColor(Constants.lightColour)
         chartDataSet.drawFilledEnabled = true
         
         

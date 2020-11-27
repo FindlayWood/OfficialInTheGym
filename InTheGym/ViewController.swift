@@ -16,6 +16,8 @@ import SCLAlertView
 
 class ViewController: UIViewController {
     
+    @IBOutlet var middleLabel:UILabel!
+    
     @IBOutlet var circleView: UIView!
     
     var DBref: DatabaseReference!
@@ -28,7 +30,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         
-        let arcCenter = CGPoint(x: circleView.bounds.size.width / 2, y: circleView.bounds.size.height)
+        let arcCenter = CGPoint(x: view.bounds.size.width / 2, y: circleView.bounds.size.height)
         
         let circlePath = UIBezierPath(arcCenter: arcCenter, radius: circleView.bounds.size.height, startAngle: 0.0, endAngle: .pi, clockwise: false)
         let circleShape = CAShapeLayer()
@@ -122,7 +124,9 @@ class ViewController: UIViewController {
     @IBAction func tapped(_ sender:UIButton){
         sender.pulsate()
         Flurry.logEvent("Login/Signup", withParameters: ["title":sender.titleLabel?.text! ?? "NA"])
-        
+        let selection = UISelectionFeedbackGenerator()
+        selection.prepare()
+        selection.selectionChanged()
         
     }
     

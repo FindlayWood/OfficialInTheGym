@@ -22,10 +22,10 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var lastName: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var passwordConfirm :UITextField!
-    @IBOutlet var segment: UISegmentedControl!
     
     @IBOutlet var accountLabel:UILabel!
     
+    let haptic = UINotificationFeedbackGenerator()
 
     
     
@@ -37,17 +37,6 @@ class SignUpViewController: UIViewController {
     var admin: Bool = false
     var usernames = [String]()
     
-    // function for choosing either coach or player user
-    @IBAction func segmentTapped(_ sender: Any) {
-        switch segment.selectedSegmentIndex {
-        case 0:
-            admin = true
-        case 1:
-            admin = false
-        default:
-            break
-        }
-    }
     
     
     // function for when the user taps signup. checks all fields for valid info
@@ -56,26 +45,23 @@ class SignUpViewController: UIViewController {
         sender.pulsate()
         // check no field is emoty
         if firstName.text!.isEmpty || lastName.text!.isEmpty || email.text!.isEmpty || username.text!.isEmpty{
-            let alert = UIAlertController(title: "Error!", message: "Make sure all information has been entered.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler:  nil))
-            self.present(alert, animated: true, completion: nil)
+            let alert = SCLAlertView()
+            alert.showError("Error!", subTitle: "Make sure all information has been entered.")
             Flurry.logEvent("SignUp Page-Empty Info")
         }
         else{
             // check that username is unique
-            if usernames.contains(username.text!){
-                let alert = UIAlertController(title: "Error!", message: "Username already exists. Please choose another username.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler:  nil))
-                self.present(alert, animated: true, completion: nil)
+            if usernames.contains(username.text!) || Constants.bannedUsernames.contains(username.text!){
+                let alert = SCLAlertView()
+                alert.showError("Error!", subTitle: "Username already exists. Please choose another username.")
                 username.text = ""
                 Flurry.logEvent("SignUp Page-Username exists")
             }
             else{
                 // check if passwords match
                 if password.text != passwordConfirm.text{
-                    let alert = UIAlertController(title: "Error!", message: "Passwords do not match.", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler:  nil))
-                    self.present(alert, animated: true, completion: nil)
+                    let alert = SCLAlertView()
+                    alert.showError("Error!", subTitle: "Passwords do not match.")
                     password.text = ""
                     passwordConfirm.text = ""
                     Flurry.logEvent("SignUp Page-Passwords dont match")
@@ -84,6 +70,7 @@ class SignUpViewController: UIViewController {
                     // create new user
                     Auth.auth().createUser(withEmail: email.text!, password: password.text!) { (user, error) in
                         if error == nil{
+                            self.haptic.prepare()
                             Flurry.logEvent("SignUp Page-Clean SignUp")
                             
                             //let key = self.userRef.childByAutoId().key
@@ -107,8 +94,10 @@ class SignUpViewController: UIViewController {
                             
                             self.userRef.child(userID).child("activities").childByAutoId().setValue(actData)
                             
+                            self.haptic.notificationOccurred(.success)
+                            
                             let newAlert = SCLAlertView()
-                            newAlert.showSuccess("Account Created!", subTitle: "You have successfully created an account. We have sent a verification email to \(user.email ?? "NA"), follow the steps in the email to verify your account then you will be able to login.", closeButtonTitle: "Ok")
+                            newAlert.showSuccess("Account Created!", subTitle: "You have successfully created an account. We have sent a verification email to \(user.email ?? "NA"), follow the steps in the email to verify your account then you will be able to login. Once you have successfully logged in your device will be remembered and you will be automatically logged in.", closeButtonTitle: "Ok")
                             
                             
                             // send user to the correct page. either coach or player
@@ -155,13 +144,18 @@ class SignUpViewController: UIViewController {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
         
+        email.delegate = self
+        username.delegate = self
+        firstName.delegate = self
+        lastName.delegate = self
+        password.delegate = self
+        passwordConfirm.delegate = self
+        
         if admin{
             accountLabel.text = "COACH ACCOUNT"
         }else{
             accountLabel.text = "PLAYER ACCOUNT"
         }
-        
-        segment.isHidden = true
         
         userRef = Database.database().reference().child("users")
         checkUsernames()

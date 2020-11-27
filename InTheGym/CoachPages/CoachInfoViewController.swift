@@ -40,6 +40,8 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     // id of the current user
     let userID = Auth.auth().currentUser?.uid
     
+    var players = [String]()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -182,10 +184,14 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func loadNumberOfUsers(){
-        DBRef.child("users").child(userID!).child("players").child("accepted").observeSingleEvent(of: .value) { (snapshot) in
-            if let snap = snapshot.value as? [String]{
-                self.playerCount = snap.count
+        DBRef.child("users").child(userID!).child("players").child("accepted").observe(.childAdded) { (snapshot) in
+            if let snap = snapshot.value as? String{
+                self.players.append(snap)
             }
+        }
+        
+        DBRef.child("users").child(userID!).child("players").child("accepted").observeSingleEvent(of: .value) { (snapshot) in
+            self.playerCount = self.players.count
         }
     }
     

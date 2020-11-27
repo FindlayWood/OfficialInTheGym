@@ -23,6 +23,8 @@ class LoginViewController: UIViewController {
     //database reference variable
     var DBref:DatabaseReference!
     
+    let haptic = UINotificationFeedbackGenerator()
+    
     //function to login user checking for valid info
     @IBAction func logIn(_ sender: UIButton){
         Flurry.logEvent("Login Page-login button pressed")
@@ -42,6 +44,7 @@ class LoginViewController: UIViewController {
                     user.reload { (error) in
                         switch user.isEmailVerified{
                         case true:
+                            self.haptic.notificationOccurred(.success)
                             self.DBref.child("users").child(userID!).child("admin").observeSingleEvent(of: .value, with: { (snapshot) in
                                 if snapshot.value as! Int == 1{
                                     self.performSegue(withIdentifier: "logInAdmin2", sender: self)
@@ -97,6 +100,8 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
+        email.delegate = self
+        password.delegate = self
         
         DBref = Database.database().reference()
         
@@ -110,6 +115,8 @@ class LoginViewController: UIViewController {
         let attributeString = NSMutableAttributedString(string: "FORGOT PASSWORD?",
                                                         attributes: attrs)
         forgotButton.setAttributedTitle(attributeString, for: .normal)
+        
+        haptic.prepare()
 
     }
     override func viewWillAppear(_ animated: Bool) {

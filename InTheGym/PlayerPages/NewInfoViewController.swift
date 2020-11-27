@@ -29,7 +29,7 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     //@IBOutlet weak var countedLabel:UILabel!
     
     // array of tableview contents
-    var tableContents = ["Coaches", "PBs", "Workout Scores", "Requests", "Settings"]
+    var tableContents = ["Coaches", "PBs", "Workout Scores", "Workload", "Requests", "Settings"]
     var tabQ = ["AccountType", "Username", "Email", "Workouts Complete"]
     var tabA = [String]()
     
@@ -64,7 +64,7 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         case 0:
             return 4
         case 1:
-            return 5
+            return tableContents.count
         default:
             return 0
         }
@@ -135,10 +135,14 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                     cell.QLabel.text = tableContents[indexPath.row]
                     cell.ALabel.text = ""
                 case 3:
-                    cell.pic.image = UIImage(named: "trainer_icon")
+                    cell.pic.image = UIImage(named: "linechart_icon")
                     cell.QLabel.text = tableContents[indexPath.row]
                     cell.ALabel.text = ""
                 case 4:
+                    cell.pic.image = UIImage(named: "trainer_icon")
+                    cell.QLabel.text = tableContents[indexPath.row]
+                    cell.ALabel.text = ""
+                case 5:
                     cell.pic.image = UIImage(named: "settings_icon")
                     cell.QLabel.text = tableContents[indexPath.row]
                     cell.ALabel.text = ""
@@ -173,14 +177,20 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "MYSCORESViewController") as! MYSCORESViewController
                 navigationController?.pushViewController(SVC, animated: true)
+                
             case 3:
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let SVC = storyboard.instantiateViewController(withIdentifier: "WorkloadDisplayViewController") as! WorkloadDisplayViewController
+                SVC.username = self.username
+                navigationController?.pushViewController(SVC, animated: true)
+            case 4:
                 let Storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = Storyboard.instantiateViewController(withIdentifier: "RequestsViewController") as! RequestsViewController
                 SVC.requesters = self.requesters
                 SVC.requestKeys = self.requestKeys
                 SVC.username = self.username
                 self.navigationController?.pushViewController(SVC, animated: true)
-            case 4:
+            case 5:
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
                 navigationController?.pushViewController(SVC, animated: true)
