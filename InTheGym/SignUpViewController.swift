@@ -92,7 +92,8 @@ class SignUpViewController: UIViewController {
                                            "type":"Account Created"] as [String:AnyObject]
                             
                             
-                            self.userRef.child(userID).child("activities").childByAutoId().setValue(actData)
+                            self.ActRef.child(userID).childByAutoId().setValue(actData)
+                            //self.userRef.child(userID).child("activities").childByAutoId().setValue(actData)
                             
                             self.haptic.notificationOccurred(.success)
                             
@@ -158,6 +159,7 @@ class SignUpViewController: UIViewController {
         }
         
         userRef = Database.database().reference().child("users")
+        ActRef = Database.database().reference().child("Activities")
         checkUsernames()
         
 //        let warningalert = SCLAlertView()

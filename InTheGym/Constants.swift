@@ -11,9 +11,9 @@ import UIKit
 
 class Constants {
     
-    var appVersion = "2.2.2"
+    var appVersion = "3.1"
     
-    static var bannedUsernames = ["Admin", "admin", "InTheGym", "OfficialInTheGym"]
+    static var bannedUsernames = ["Admin", "admin", "InTheGym", "OfficialInTheGym", "inthegym"]
     
     static let backgroundColour : UIColor = #colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 1)
     

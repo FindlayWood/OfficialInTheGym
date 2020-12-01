@@ -95,7 +95,7 @@ class PBsViewController: UIViewController {
         let actData = ["time":ServerValue.timestamp(),
                        "type":"Update PBs",
                        "message":"You updated your PB scores."] as [String:AnyObject]
-        ActRef.child("users").child(userID!).child("activities").childByAutoId().setValue(actData)
+        ActRef.child("Activities").child(userID!).childByAutoId().setValue(actData)
         
         // added for new feature
         // adding to public feed of coach
@@ -108,7 +108,6 @@ class PBsViewController: UIViewController {
             for coach in coaches{
                 self.ActRef.child("Public Feed").child(coach).childByAutoId().setValue(actDataPublic)
             }
-//            self.ActRef.child("Public Feed").child(self.coachUserName).childByAutoId().setValue(actDataPublic)
         }else{
             print("no coaches to upload to.")
         }

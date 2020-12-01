@@ -125,8 +125,8 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
                         let actData = ["time":ServerValue.timestamp(),
                                        "type":"Set Workout",
                                        "message":"You created \(self.stepCount) group Workouts."] as [String:AnyObject]
-                        self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
-                                            
+                        self.ActRef.child("Activities").child(self.userID).childByAutoId().setValue(actData)
+                        //self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
                         self.workoutsCount += self.stepCount * self.groupPlayers.count
                         self.ActRef.child("users").child(self.userID).child("NumberOfWorkouts").setValue(self.workoutsCount)
                     }
@@ -144,8 +144,8 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
                         let actData = ["time":ServerValue.timestamp(),
                                        "type":"Set Workout",
                                        "message":"You created a group Workout."] as [String:AnyObject]
-                        self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
-                        
+                        self.ActRef.child("Activities").child(self.userID).childByAutoId().setValue(actData)
+                        //self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
                         self.workoutsCount += self.groupPlayers.count
                         self.ActRef.child("users").child(self.userID).child("NumberOfWorkouts").setValue(self.workoutsCount)
                     }
@@ -163,7 +163,8 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
                     let actData = ["time":ServerValue.timestamp(),
                                    "type":"Set Workout",
                                    "message":"You created \(stepCount) workouts for \(userName!)."] as [String:AnyObject]
-                    self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
+                    self.ActRef.child("Activities").child(self.userID).childByAutoId().setValue(actData)
+                    //self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
                     workoutsCount += stepCount
                     self.ActRef.child("users").child(userID).child("NumberOfWorkouts").setValue(workoutsCount)
                     
@@ -176,7 +177,8 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
                     let actData = ["time":ServerValue.timestamp(),
                                    "type":"Set Workout",
                                    "message":"You created a workout for \(userName!)."] as [String:AnyObject]
-                    self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
+                    self.ActRef.child("Activities").child(self.userID).childByAutoId().setValue(actData)
+                    //self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
                     workoutsCount += 1
                     self.ActRef.child("users").child(userID).child("NumberOfWorkouts").setValue(workoutsCount)
                     

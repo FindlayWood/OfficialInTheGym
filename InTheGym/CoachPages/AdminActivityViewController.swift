@@ -112,14 +112,14 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
     
     func loadActivities(){
         activities.removeAll()
-        self.ActRef.observe(.childAdded, with: { (snapshot) in
+        self.DBRef.child("Activities").child(self.userID!).observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
                 self.activities.insert(snap, at: 0)
             }
  
         }, withCancel: nil)
 
-        self.ActRef.observeSingleEvent(of: .value) { (_) in
+        self.DBRef.child("Activities").child(self.userID!).observeSingleEvent(of: .value) { (_) in
             self.handleSegmentChange()
         }
         

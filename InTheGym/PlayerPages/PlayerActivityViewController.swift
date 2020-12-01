@@ -21,7 +21,7 @@ class PlayerActivityViewController: UIViewController, UITableViewDelegate, UITab
     static var coachName:String!
     static var coachID:String!
     
-    var activities:[[String:AnyObject]] = []
+    var activities : [[String:AnyObject]] = []
     
     var DBref:DatabaseReference!
     var UserRef:DatabaseReference!
@@ -36,7 +36,7 @@ class PlayerActivityViewController: UIViewController, UITableViewDelegate, UITab
         
         let userID = Auth.auth().currentUser?.uid
         
-        DBref = Database.database().reference().child("users").child(userID!).child("activities")
+        DBref = Database.database().reference().child("Activities").child(userID!)
         UserRef = Database.database().reference().child("users").child(userID!)
         UserRef.child("username").observeSingleEvent(of: .value) { (snapshot) in
             PlayerActivityViewController.username = snapshot.value as? String
@@ -70,19 +70,16 @@ class PlayerActivityViewController: UIViewController, UITableViewDelegate, UITab
         self.DBref.observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
                 self.activities.insert(snap, at: 0)
-                self.tableview.reloadData()
             }
         }, withCancel: nil)
+        
+        self.DBref.observeSingleEvent(of: .value) { (_) in
+            self.tableview.reloadData()
+        }
     }
         
     override func viewWillAppear(_ animated: Bool) {
         loadActivities()
-        
-        UserRef.child("coachName").observeSingleEvent(of: .value) { (snapshot) in
-            if let snap = snapshot.value as? String{
-                PlayerActivityViewController.coachName = snap
-            }
-        }
         
         tableview.reloadData()
         self.navigationController?.setNavigationBarHidden(true, animated: true)

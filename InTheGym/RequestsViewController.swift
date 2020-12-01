@@ -45,6 +45,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         tableview.rowHeight = 120
         
         DBRef = Database.database().reference().child("users")
+        FeedRef = Database.database().reference().child("Activities")
         
         self.tableview.emptyDataSetSource = self
         self.tableview.emptyDataSetDelegate = self
@@ -83,32 +84,33 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         let infowarning = SCLAlertView()
         infowarning.addButton("Yes", backgroundColor: #colorLiteral(red: 0.1745709982, green: 0.8417274746, blue: 0.1462364076, alpha: 1)) {
             self.DBRef.child(adminID).child("players").child("requested").observeSingleEvent(of: .value) { (snapshot) in
-                    let snap = snapshot.value as? [String]
-                    self.currentRequested = snap!
-                    let index = self.currentRequested.firstIndex(of: self.username)
-                    self.currentRequested.remove(at: index!)
-                    self.DBRef.child(adminID).child("players").child("requested").setValue(self.currentRequested)
+                let snap = snapshot.value as? [String]
+                self.currentRequested = snap!
+                let index = self.currentRequested.firstIndex(of: self.username)
+                self.currentRequested.remove(at: index!)
+                self.DBRef.child(adminID).child("players").child("requested").setValue(self.currentRequested)
 // MARK: next section will be to add coach to array rather than single value using ID
                 
                 self.DBRef.child(userID!).child("coaches").childByAutoId().setValue(adminID)
 // section ends here
 
-                    let actData = ["time":ServerValue.timestamp(),
-                                   "type":"New Coach",
-                                   "message":"You accepted a request from \(self.requesters[sender.tag])."] as [String:AnyObject]
-                    //self.activities.insert(actData, at: 0)
-                    self.DBRef.child(userID!).child("activities").childByAutoId().setValue(actData)
-                    self.requesters.remove(at: sender.tag)
-                    self.requestKeys.remove(at: sender.tag)
-                    self.tableview.reloadData()
+                let actData = ["time":ServerValue.timestamp(),
+                                "type":"New Coach",
+                                "message":"You accepted a request from \(self.requesters[sender.tag])."] as [String:AnyObject]
+                self.FeedRef.child(userID!).childByAutoId().setValue(actData)
+                //self.DBRef.child(userID!).child("activities").childByAutoId().setValue(actData)
+                self.requesters.remove(at: sender.tag)
+                self.requestKeys.remove(at: sender.tag)
+                self.tableview.reloadData()
                     
-                }
+            }
             
             self.DBRef.child(adminID).child("players").child("accepted").childByAutoId().setValue(self.userID)
             let coachData = ["time":ServerValue.timestamp(),
-                             "type":"New Coach",
+                             "type":"New Player",
             "message":"\(PlayerActivityViewController.username ?? "username") accepted your request! You can now set them workouts."] as [String:AnyObject]
-            self.DBRef.child(adminID).child("activities").childByAutoId().setValue(coachData)
+            self.FeedRef.child(adminID).childByAutoId().setValue(coachData)
+            //self.DBRef.child(adminID).child("activities").childByAutoId().setValue(coachData)
             
 
         }
@@ -145,8 +147,9 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
             let actData = ["time":ServerValue.timestamp(),
                            "type":"Request Declined",
                            "message":"You declined a request from \(self.requesters[sender.tag])"] as [String:AnyObject]
-            //self.activities.insert(actData, at: 0)
-            self.DBRef.child(userID!).child("activities").childByAutoId().setValue(actData)
+
+            self.FeedRef.child(userID!).childByAutoId().setValue(actData)
+            //self.DBRef.child(userID!).child("activities").childByAutoId().setValue(actData)
             self.requesters.remove(at: sender.tag)
             self.requestKeys.remove(at: sender.tag)
             self.tableview.reloadData()

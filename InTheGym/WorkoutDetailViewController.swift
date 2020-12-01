@@ -255,7 +255,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         navigationItem.title = titleString
         DBRef = Database.database().reference().child("Workouts").child(username)
-        ActRef = Database.database().reference().child("users").child(userID!).child("activities")
+        ActRef = Database.database().reference().child("Activities").child(userID!)
         ComRef = Database.database().reference().child("users").child(userID!)
         feedRef = Database.database().reference().child("Public Feed")
         workLoadRef = Database.database().reference().child("Workloads").child(username)
