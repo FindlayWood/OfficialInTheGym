@@ -28,6 +28,9 @@ class PlayerViewController: UIViewController {
     var lastNameString:String = ""
     var workoutsCompletedInt: Int = 0
     
+    // the user id of the current player
+    var playerID:String!
+    
     // outlets for last 3 scores
     @IBOutlet weak var firstScore:UILabel!
     @IBOutlet weak var secondScore:UILabel!
@@ -69,6 +72,7 @@ class PlayerViewController: UIViewController {
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
         SVC.userName = self.userNameString
+        SVC.uid = self.playerID
         AddWorkoutHomeViewController.groupBool = false
         self.navigationController?.pushViewController(SVC, animated: true)
     }
@@ -90,6 +94,7 @@ class PlayerViewController: UIViewController {
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "ViewWorkoutViewController") as! ViewWorkoutViewController
         SVC.username = self.userNameString
+        SVC.playerID = self.playerID
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     

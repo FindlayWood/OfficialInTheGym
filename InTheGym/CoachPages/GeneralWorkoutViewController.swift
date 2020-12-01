@@ -161,9 +161,13 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
         DBRef.child("groups").observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
                 self.createdGroups.append(snap)
-                self.tableview.reloadData()
+                
             }
         }, withCancel: nil)
+        
+        DBRef.child("groups").observeSingleEvent(of: .value) { (_) in
+            self.tableview.reloadData()
+        }
     }
     
     @objc fileprivate func addNewGroup(_ sender: UIButton){
@@ -173,6 +177,7 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
         let svc = storyboard.instantiateViewController(identifier: "AddNewGroupViewController") as! AddNewGroupViewController
         svc.allPlayers = self.allPlayers
         svc.noPlayers = self.allPlayers
+        svc.playersID = self.playersID
         navigationController?.pushViewController(svc, animated: true)
     }
     
@@ -184,7 +189,7 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let svc = storyboard.instantiateViewController(identifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
         if index.section == 0{
-            svc.groupPlayers = self.allPlayers
+            svc.groupPlayers = self.playersID
         }else{
             svc.groupPlayers = self.createdGroups[index.section - 1]["players"] as! [String]
         }

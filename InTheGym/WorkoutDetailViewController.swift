@@ -18,6 +18,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     var username: String = ""
     var titleString: String = ""
     var assignedCoach: String = ""
+    var playerID: String = ""
     
     //number of workouts completed
     var numberCompleted:Int!
@@ -254,7 +255,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         
         navigationItem.title = titleString
-        DBRef = Database.database().reference().child("Workouts").child(username)
+        DBRef = Database.database().reference().child("Workouts").child(playerID)
         ActRef = Database.database().reference().child("Activities").child(userID!)
         ComRef = Database.database().reference().child("users").child(userID!)
         feedRef = Database.database().reference().child("Public Feed")
@@ -490,10 +491,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     // load coachname
     func loadCoachName(){
-        ComRef.child("coachName").observeSingleEvent(of: .value) { (snapshot) in
-            let snap = snapshot.value as! String
-            self.coachName = snap
-        }
+
         
         // load array of coaches and set variable equal
         ComRef.child("coaches").observe(.childAdded) { (snapshot) in

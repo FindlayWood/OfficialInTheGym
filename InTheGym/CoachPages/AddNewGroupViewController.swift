@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import EmptyDataSet_Swift
+import SCLAlertView
 
 class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EmptyDataSetSource, EmptyDataSetDelegate {
 
@@ -27,9 +28,11 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
     // array of all players passed from previous page
     var allPlayers : [String] = []
     var noPlayers : [String] = []
+    var playersID : [String] = []
     
     // array of players in the new group
     var newGroup : [String] = []
+    var newGroupUsernames : [String] = []
     
     // varibles to create the new view displaying the players
     let subTableview = UITableView()
@@ -40,6 +43,7 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
     
     // database reference
     var DBRef : DatabaseReference!
+    var actRef : DatabaseReference!
     let userID = Auth.auth().currentUser?.uid
     
     
@@ -51,6 +55,7 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
         subTitleField.returnKeyType = .done
         
         DBRef = Database.database().reference().child("users").child(userID!).child("groups")
+        actRef = Database.database().reference().child("Activities")
         
         tableview.layer.cornerRadius = 10
         tableview.layer.borderWidth = 2
@@ -76,14 +81,16 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
         cell.separatorInset = UIEdgeInsets.zero
         
         if tableView == subTableview {
-            cell.textLabel?.text = noPlayers[indexPath.row]} else {cell.textLabel?.text = newGroup[indexPath.row]}
+            cell.textLabel?.text = noPlayers[indexPath.row]} else {cell.textLabel?.text = newGroupUsernames[indexPath.row]}
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == subTableview{
-            self.newGroup.append(noPlayers[indexPath.row])
+            self.newGroup.append(playersID[indexPath.row])
+            self.newGroupUsernames.append(noPlayers[indexPath.row])
             self.noPlayers.remove(at: indexPath.row)
+            self.playersID.remove(at: indexPath.row)
             counter += 1
             playerCount.text = "Players: \(counter)"
             subTableview.reloadData()
@@ -125,6 +132,22 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
                                 "players": self.newGroup] as [String : Any]
             
             DBRef.childByAutoId().setValue(newGroupData)
+            let actData = ["time": ServerValue.timestamp(),
+                           "message": "You created a new group, \(self.titleField.text!).",
+                           "type": "New Group"] as [String:AnyObject]
+            
+            actRef.child(self.userID!).childByAutoId().setValue(actData)
+            
+            
+            let alert = SCLAlertView()
+            alert.showSuccess("New Group", subTitle: "You created a new group, \(titleField.text ?? "group"), you can now set workouts for this group specifically.", closeButtonTitle: "Ok")
+            titleField.text = ""
+            subTitleField.text = ""
+            newGroup.removeAll()
+
+            
+            navigationController?.popViewController(animated: true)
+            
         }
         
     }

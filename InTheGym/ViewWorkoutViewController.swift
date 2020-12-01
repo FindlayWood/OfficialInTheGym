@@ -16,6 +16,8 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
     var username:String = ""
     var workouts : [[String:Any]] = []
     
+    var playerID : String!
+    
     //array for workout ids, after update stored in different way
     var workoutIDs = [String]()
     
@@ -51,7 +53,6 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         let SelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 12)]
         segment.setTitleTextAttributes(NotSelectedTextAttributes, for: .normal)
         segment.setTitleTextAttributes(SelectedTextAttributes, for: .selected)
-        
     }
     
     func loadWorkouts(){
@@ -199,6 +200,7 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
         SVC.username = self.username
+        SVC.playerID = self.playerID
         SVC.titleString = titleLabel
         SVC.exercises = rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
         SVC.complete = complete
@@ -226,19 +228,8 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        DBRef = Database.database().reference().child("Workouts").child(username)
+        DBRef = Database.database().reference().child("Workouts").child(playerID)
         loadWorkouts()
         
-    }
-    
-    func setScroll(){
-        if let indexToScroll = PlayerWorkoutViewController.lastIndex{
-            tableview.scrollToRow(at: indexToScroll, at: .middle, animated: true)
-            PlayerWorkoutViewController.lastIndex = nil
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        //setScroll()
     }
 }

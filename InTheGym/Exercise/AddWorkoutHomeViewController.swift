@@ -21,8 +21,9 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     @IBOutlet weak var titleField:UITextField!
     @IBOutlet weak var tableview:UITableView!
     
-    // username of player
+    // username & user id of player
     var userName:String!
+    var uid:String!
     
     // database referneces
     var DBRef:DatabaseReference!
@@ -35,7 +36,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     // array of activity feed to be updated, may not need anympre
     var activities:[[String:AnyObject]] = []
     
-    // user id of curent user
+    // user id of curent user, which will be coach
     let userID = Auth.auth().currentUser!.uid
     
     // array of exercises and workouts, may not need workouts
@@ -203,7 +204,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
         titleField.delegate = self
         
         if !AddWorkoutHomeViewController.groupBool{
-            DBRef = Database.database().reference().child("Workouts").child(userName)
+            DBRef = Database.database().reference().child("Workouts").child(uid)
         }
         ActRef = Database.database().reference()
         GroupDBRef = Database.database().reference().child("Workouts")

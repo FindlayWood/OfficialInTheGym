@@ -47,6 +47,8 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     static var lastIndex : IndexPath?
     var myGroup = DispatchGroup()
     
+    let userID = Auth.auth().currentUser?.uid
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -56,7 +58,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         let userID = Auth.auth().currentUser?.uid
         
         UsernameRef = Database.database().reference().child("users").child(userID!).child("username")
-        DBref = Database.database().reference().child("Workouts")
+        DBref = Database.database().reference().child("Workouts").child(userID!)
         
         // added for selecting which workouts to view
         segment.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
@@ -76,7 +78,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         self.inProgressIDs.removeAll()
         self.notStartedWorkouts.removeAll()
         self.notStartedIDs.removeAll()
-        DBref.child(PlayerActivityViewController.username).observe(.childAdded, with: { (snapshot) in
+        DBref.observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
                 
                 self.workouts.insert(snap, at: 0)
@@ -102,7 +104,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
             }
         }, withCancel: nil)
         
-        DBref.child(PlayerActivityViewController.username).observeSingleEvent(of: .value) { (_) in
+        DBref.observeSingleEvent(of: .value) { (_) in
             self.handleSegmentChange()
         }
     }
@@ -219,6 +221,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
         SVC.username = PlayerActivityViewController.username
+        SVC.playerID = self.userID!
         SVC.titleString = titleLabel
         SVC.exercises = self.rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
         SVC.complete = complete
@@ -247,15 +250,6 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
-    func setScroll(){
-        if let indexToScroll = PlayerWorkoutViewController.lastIndex{
-            tableview.scrollToRow(at: indexToScroll, at: .middle, animated: true)
-            PlayerWorkoutViewController.lastIndex = nil
-        }
-    }
-    
-    
-    
     
     // working on displaying message for the first time
     // function
@@ -274,7 +268,6 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
             let alert = SCLAlertView(appearance: appearance)
             alert.showInfo("WORKOUTS", subTitle: "This page will display all of the workouts that your coach has set for you. Switch between workouts you have not started, workouts that are in progress and workouts you have completed easily with the switch bar at the top. You can get a detailed view by tapping on them!", closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
         }
-        //setScroll()
     }
 
 

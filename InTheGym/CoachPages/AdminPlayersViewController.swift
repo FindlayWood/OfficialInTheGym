@@ -64,6 +64,7 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
                     user.firstName = snap["firstName"] as? String
                     user.lastName = snap["lastName"] as? String
                     user.numberOfCompletes = snap["numberOfCompletes"] as? Int ?? 0
+                    user.uid = player
                     self.users.append(user)
                     self.tableview.reloadData()
                 }
@@ -101,6 +102,7 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
         SVC.userNameString = currentUser.username!
         SVC.userEmailString = currentUser.email!
         SVC.workoutsCompletedInt = currentUser.numberOfCompletes!
+        SVC.playerID = currentUser.uid
         
         self.navigationController?.pushViewController(SVC, animated: true)
     }
