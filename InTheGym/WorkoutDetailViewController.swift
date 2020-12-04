@@ -129,7 +129,11 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 SVC.endTime = endTime
                 SVC.timeToComplete = timeToComplete
                 SVC.coaches = self.coaches
-                SVC.averageExerciseRPE = rounded.description
+                if rounded.isNaN{
+                    SVC.averageExerciseRPE = "0"
+                }else{
+                    SVC.averageExerciseRPE = rounded.description
+                }
                 SVC.playerUsername = self.username
                 self.navigationController?.pushViewController(SVC, animated: true)
 
