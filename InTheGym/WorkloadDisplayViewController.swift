@@ -70,6 +70,7 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
     
     // username of player passed from previous page
     var username : String!
+    var playerID : String!
     
     // database reference
     var DBRef : DatabaseReference!
@@ -91,7 +92,7 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        DBRef = Database.database().reference().child("Workloads").child(username)
+        DBRef = Database.database().reference().child("Workloads").child(playerID)
         
         setupViews()
         
@@ -159,6 +160,7 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
                 let workload = snap["workload"] as! Int
                 let timeToComplete = snap["timeToComplete"] as! Int
                 let rpe = snap["rpe"] as! String
+                let workoutID = snap["workoutID"] as! String
                 
                 if threeDayRange.contains(endDate){
                     self.threeWorkloadArray.append(workload)
@@ -184,6 +186,7 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
                     self.fourWeekRPEArray.append(Int(rpe)!)
                     self.fourWeekEndDates.append(endDate)
                 }
+                
             }
             
             if initialLoad == false{

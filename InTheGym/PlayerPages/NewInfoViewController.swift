@@ -182,6 +182,7 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = storyboard.instantiateViewController(withIdentifier: "WorkloadDisplayViewController") as! WorkloadDisplayViewController
                 SVC.username = self.username
+                SVC.playerID = Auth.auth().currentUser?.uid
                 navigationController?.pushViewController(SVC, animated: true)
             case 4:
                 let Storyboard = UIStoryboard(name: "Main", bundle: nil)

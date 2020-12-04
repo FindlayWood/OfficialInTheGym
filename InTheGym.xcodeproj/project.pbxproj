@@ -27,6 +27,7 @@
 		74443B9A22F1E18500DD18B3 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74443B9922F1E18500DD18B3 /* SettingsViewController.swift */; };
 		745994782539093600FBDC00 /* RepsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745994772539093600FBDC00 /* RepsTableViewCell.swift */; };
 		7459947D253DE5F800FBDC00 /* NewWeightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7459947C253DE5F800FBDC00 /* NewWeightViewController.swift */; };
+		745B330325782FF100594019 /* CompletedWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B330225782FF100594019 /* CompletedWorkoutViewController.swift */; };
 		745D0E7822A007A3007670E3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 745D0E7722A007A3007670E3 /* GoogleService-Info.plist */; };
 		745D0E7A22A17E26007670E3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745D0E7922A17E26007670E3 /* LoginViewController.swift */; };
 		745D0E7C22A17ED2007670E3 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745D0E7B22A17ED2007670E3 /* SignUpViewController.swift */; };
@@ -128,6 +129,7 @@
 		7445503A256C613600E4E4CC /* InTheGym.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InTheGym.entitlements; sourceTree = "<group>"; };
 		745994772539093600FBDC00 /* RepsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsTableViewCell.swift; sourceTree = "<group>"; };
 		7459947C253DE5F800FBDC00 /* NewWeightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWeightViewController.swift; sourceTree = "<group>"; };
+		745B330225782FF100594019 /* CompletedWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedWorkoutViewController.swift; sourceTree = "<group>"; };
 		745D0E7722A007A3007670E3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		745D0E7922A17E26007670E3 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		745D0E7B22A17ED2007670E3 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 				7492264722D4F05D00EAD386 /* ViewWorkoutViewController.swift */,
 				7492264D22D7873300EAD386 /* TableViewCell.swift */,
 				7492264922D50E4400EAD386 /* WorkoutDetailViewController.swift */,
+				745B330225782FF100594019 /* CompletedWorkoutViewController.swift */,
 				7492265122D8D0BA00EAD386 /* DetailTableViewCell.swift */,
 				7492265322D91C1900EAD386 /* RoundButtons.swift */,
 				74163A4322E37089005A7D2E /* ButtonExtension.swift */,
@@ -656,6 +659,7 @@
 				74DC18E4244B3A9900D3F8A3 /* GroupBodyTypeViewController.swift in Sources */,
 				745994782539093600FBDC00 /* RepsTableViewCell.swift in Sources */,
 				746061E225264147005B1480 /* NewInfoViewController.swift in Sources */,
+				745B330325782FF100594019 /* CompletedWorkoutViewController.swift in Sources */,
 				7492264E22D7873300EAD386 /* TableViewCell.swift in Sources */,
 				74172206245B413B0013EAC8 /* AppInfoViewController.swift in Sources */,
 				7492265422D91C1900EAD386 /* RoundButtons.swift in Sources */,
@@ -950,7 +954,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2;
+				MARKETING_VERSION = 3.3;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -1130,7 +1134,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2;
+				MARKETING_VERSION = 3.3;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (

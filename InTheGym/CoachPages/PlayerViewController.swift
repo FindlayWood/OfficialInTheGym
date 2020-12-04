@@ -156,6 +156,7 @@ class PlayerViewController: UIViewController {
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "WorkloadDisplayViewController") as! WorkloadDisplayViewController
         SVC.username = self.userNameString
+        SVC.playerID = self.playerID
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     

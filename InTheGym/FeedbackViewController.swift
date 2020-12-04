@@ -53,7 +53,10 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
         }
         else{
             let text = feedback.text
-            DBRef.childByAutoId().setValue(text)
+            let feedbackData = ["feedback":text,
+                            "email":Auth.auth().currentUser?.email] as [String:AnyObject]
+            
+            DBRef.childByAutoId().setValue(feedbackData)
             
             // new alert
             let alert = SCLAlertView()

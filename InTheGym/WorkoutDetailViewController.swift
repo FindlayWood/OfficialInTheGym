@@ -96,6 +96,51 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     @IBAction func completed(_ sender:UIButton){
         sender.pulsate()
+        
+        let endTime = Date.timeIntervalSinceReferenceDate
+        var timeToComplete : Int = 0
+        self.DBRef.child("\(self.workoutID)").child("startTime").observeSingleEvent(of: .value) { (snapshot) in
+            
+            if let snap = snapshot.value as? Double{
+                let startTime = Int(snap)
+                
+                let completionTimeSeconds = Int(endTime) - startTime
+                timeToComplete = completionTimeSeconds
+                
+                
+                
+                var scores : [Int] = []
+                for exercise in self.exercises{
+                    if let RPEscore = exercise["rpe"] as? String{
+                        scores.append(Int(RPEscore)!)
+                    }
+                }
+                let total = scores.reduce(0, +)
+                let average = Double(total) / Double(scores.count)
+                let rounded = round(average * 10)/10
+                
+                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+                let SVC = StoryBoard.instantiateViewController(withIdentifier: "CompletedWorkoutViewController") as! CompletedWorkoutViewController
+                SVC.workoutID = self.workoutID
+                SVC.workoutTitle = self.titleString
+                SVC.assignedCoach = self.assignedCoach
+                SVC.playerID = self.playerID
+                SVC.numberCompleted = self.numberCompleted
+                SVC.endTime = endTime
+                SVC.timeToComplete = timeToComplete
+                SVC.coaches = self.coaches
+                SVC.averageExerciseRPE = rounded.description
+                SVC.playerUsername = self.username
+                self.navigationController?.pushViewController(SVC, animated: true)
+
+            }
+        }
+        
+
+        
+        
+        
+/*
 // MARK: can no longer uncomplete workout. was part of 1.3 therefore below can go
         if complete == true{
             let alert = UIAlertController(title: "Uncomplete", message: "Are you sure this workout is uncomplete?", preferredStyle: .alert)
@@ -216,6 +261,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
             
             alert.showSuccess("Completed!", subTitle: "Great Job! Enter RPE score to complete the upload.", closeButtonTitle: "Cancel")
         }
+        */
     }
     
     func showError(){
@@ -268,7 +314,6 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 self.beginView.isHidden = true
             }
         }
-        
         
 // MARK: change the location of score ref to use user ids
 // below can change as now a coach can not complete a workout

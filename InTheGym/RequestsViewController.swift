@@ -108,7 +108,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
             self.DBRef.child(adminID).child("players").child("accepted").childByAutoId().setValue(self.userID)
             let coachData = ["time":ServerValue.timestamp(),
                              "type":"New Player",
-            "message":"\(PlayerActivityViewController.username ?? "username") accepted your request! You can now set them workouts."] as [String:AnyObject]
+            "message":"\(PlayerActivityViewController.username ?? "username") accepted your request!"] as [String:AnyObject]
             self.FeedRef.child(adminID).childByAutoId().setValue(coachData)
             //self.DBRef.child(adminID).child("activities").childByAutoId().setValue(coachData)
             

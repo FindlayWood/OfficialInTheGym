@@ -2579,6 +2579,149 @@
             </objects>
             <point key="canvasLocation" x="866.66666666666674" y="2288.8392857142858"/>
         </scene>
+        <!--Completed Workout View Controller-->
+        <scene sceneID="HQ2-St-pWn">
+            <objects>
+                <viewController storyboardIdentifier="CompletedWorkoutViewController" id="C4N-zV-Fuw" customClass="CompletedWorkoutViewController" customModule="InTheGym" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JCJ-ex-Q92">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ENTER WORKOUT RPE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="edv-yZ-aVl">
+                                <rect key="frame" x="53.5" y="219.5" width="307.5" height="35"/>
+                                <fontDescription key="fontDescription" name="Menlo-BoldItalic" family="Menlo" pointSize="30"/>
+                                <color key="textColor" name="darkColour"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="workout rpe..." textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2Vs-os-twj">
+                                <rect key="frame" x="60" y="264.5" width="294" height="100"/>
+                                <color key="backgroundColor" name="lightColour"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="mep-NQ-YBw"/>
+                                </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="Menlo-BoldItalic" family="Menlo" pointSize="45"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JFg-l4-KXs" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
+                                <rect key="frame" x="60" y="374.5" width="294" height="42"/>
+                                <color key="backgroundColor" name="lightColour"/>
+                                <fontDescription key="fontDescription" name="Menlo-BoldItalic" family="Menlo" pointSize="25"/>
+                                <state key="normal" title="UPLOAD">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="21"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" name="darkColour"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="upload:" destination="C4N-zV-Fuw" eventType="touchUpInside" id="emS-uW-NRY"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="58m 43s" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bGu-xw-Waw">
+                                <rect key="frame" x="154.5" y="44" width="105.5" height="29.5"/>
+                                <fontDescription key="fontDescription" name="Menlo-BoldItalic" family="Menlo" pointSize="25"/>
+                                <color key="textColor" name="lightColour"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kph-0J-cc7">
+                                <rect key="frame" x="20" y="203.5" width="374" height="1"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="G96-f7-mzl"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eLE-DO-lL0">
+                                <rect key="frame" x="20" y="81.5" width="374" height="1"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="vyV-iU-1Ql"/>
+                                </constraints>
+                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="egt-mq-lEY">
+                                <rect key="frame" x="20" y="90.5" width="374" height="105"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xdE-nf-272">
+                                        <rect key="frame" x="0.0" y="0.0" width="144.5" height="105"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="0ZV-TW-9DA">
+                                                <rect key="frame" x="9" y="0.0" width="126.5" height="35"/>
+                                                <fontDescription key="fontDescription" name="Menlo-BoldItalic" family="Menlo" pointSize="30"/>
+                                                <color key="textColor" name="lightColour"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exercise" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="Nuv-7r-99x">
+                                                <rect key="frame" x="0.0" y="35" width="144.5" height="35"/>
+                                                <fontDescription key="fontDescription" name="Menlo-BoldItalic" family="Menlo" pointSize="30"/>
+                                                <color key="textColor" name="lightColour"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RPE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nl5-9h-5Az">
+                                                <rect key="frame" x="45" y="70" width="54.5" height="35"/>
+                                                <fontDescription key="fontDescription" name="Menlo-BoldItalic" family="Menlo" pointSize="30"/>
+                                                <color key="textColor" name="lightColour"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="=" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SEb-Y6-pcE">
+                                        <rect key="frame" x="172" y="0.0" width="30.5" height="105"/>
+                                        <fontDescription key="fontDescription" name="Menlo-BoldItalic" family="Menlo" pointSize="50"/>
+                                        <color key="textColor" name="lightColour"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9.9" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="6Uw-OH-LIn">
+                                        <rect key="frame" x="229.5" y="0.0" width="144.5" height="105"/>
+                                        <fontDescription key="fontDescription" name="Menlo-BoldItalic" family="Menlo" pointSize="80"/>
+                                        <color key="textColor" name="lightColour"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="5ga-6H-7SW"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="bGu-xw-Waw" firstAttribute="centerX" secondItem="JCJ-ex-Q92" secondAttribute="centerX" id="3uP-Ju-HCK"/>
+                            <constraint firstItem="kph-0J-cc7" firstAttribute="trailing" secondItem="JCJ-ex-Q92" secondAttribute="trailingMargin" id="41X-Jv-pzW"/>
+                            <constraint firstItem="egt-mq-lEY" firstAttribute="centerX" secondItem="JCJ-ex-Q92" secondAttribute="centerX" id="ABB-8k-bAu"/>
+                            <constraint firstItem="2Vs-os-twj" firstAttribute="leading" secondItem="5ga-6H-7SW" secondAttribute="leading" constant="60" id="BrC-Kc-Tgt"/>
+                            <constraint firstItem="5ga-6H-7SW" firstAttribute="trailing" secondItem="egt-mq-lEY" secondAttribute="trailing" constant="20" id="CZ4-C5-M3n"/>
+                            <constraint firstItem="edv-yZ-aVl" firstAttribute="centerX" secondItem="JCJ-ex-Q92" secondAttribute="centerX" id="PGY-oF-b1s"/>
+                            <constraint firstItem="kph-0J-cc7" firstAttribute="leading" secondItem="JCJ-ex-Q92" secondAttribute="leadingMargin" id="QW4-7h-xn1"/>
+                            <constraint firstItem="JFg-l4-KXs" firstAttribute="top" secondItem="2Vs-os-twj" secondAttribute="bottom" constant="10" id="SkC-O6-d7O"/>
+                            <constraint firstItem="2Vs-os-twj" firstAttribute="top" secondItem="edv-yZ-aVl" secondAttribute="bottom" constant="10" id="TKT-mm-5qc"/>
+                            <constraint firstItem="2Vs-os-twj" firstAttribute="centerX" secondItem="JCJ-ex-Q92" secondAttribute="centerX" id="Wf5-Nk-Wjf"/>
+                            <constraint firstItem="5ga-6H-7SW" firstAttribute="trailing" secondItem="2Vs-os-twj" secondAttribute="trailing" constant="60" id="bZy-9o-5cH"/>
+                            <constraint firstItem="bGu-xw-Waw" firstAttribute="top" secondItem="5ga-6H-7SW" secondAttribute="top" id="cui-0f-cbe"/>
+                            <constraint firstItem="edv-yZ-aVl" firstAttribute="top" secondItem="kph-0J-cc7" secondAttribute="bottom" constant="15" id="esd-X9-abX"/>
+                            <constraint firstItem="egt-mq-lEY" firstAttribute="leading" secondItem="5ga-6H-7SW" secondAttribute="leading" constant="20" id="ezn-9p-xQB"/>
+                            <constraint firstItem="5ga-6H-7SW" firstAttribute="trailing" secondItem="JFg-l4-KXs" secondAttribute="trailing" constant="60" id="fcn-2m-Zq4"/>
+                            <constraint firstItem="egt-mq-lEY" firstAttribute="top" secondItem="eLE-DO-lL0" secondAttribute="bottom" constant="8" symbolic="YES" id="hsX-5U-ZDN"/>
+                            <constraint firstItem="eLE-DO-lL0" firstAttribute="top" secondItem="bGu-xw-Waw" secondAttribute="bottom" constant="8" symbolic="YES" id="qUs-fN-BRy"/>
+                            <constraint firstItem="eLE-DO-lL0" firstAttribute="leading" secondItem="JCJ-ex-Q92" secondAttribute="leadingMargin" id="tSZ-VF-b4I"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="eLE-DO-lL0" secondAttribute="trailing" id="uNY-B8-JQb"/>
+                            <constraint firstItem="kph-0J-cc7" firstAttribute="top" secondItem="egt-mq-lEY" secondAttribute="bottom" constant="8" symbolic="YES" id="xk6-rv-n62"/>
+                            <constraint firstItem="JFg-l4-KXs" firstAttribute="leading" secondItem="5ga-6H-7SW" secondAttribute="leading" constant="60" id="yWq-77-UTq"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="averageRPE" destination="6Uw-OH-LIn" id="kSO-QF-vyF"/>
+                        <outlet property="timeLabel" destination="bGu-xw-Waw" id="4hm-vN-Q07"/>
+                        <outlet property="workoutRPE" destination="2Vs-os-twj" id="RLa-BQ-QDg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ye6-DE-bdk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="866.66666666666674" y="2958.4821428571427"/>
+        </scene>
         <!--Bs View Controller-->
         <scene sceneID="2DX-TQ-5zG">
             <objects>
@@ -6900,6 +7043,9 @@
         </designable>
         <designable name="HRs-sE-5mc">
             <size key="intrinsicContentSize" width="161" height="48"/>
+        </designable>
+        <designable name="JFg-l4-KXs">
+            <size key="intrinsicContentSize" width="91" height="42"/>
         </designable>
         <designable name="JYO-Lr-SDW">
             <size key="intrinsicContentSize" width="43" height="36"/>
