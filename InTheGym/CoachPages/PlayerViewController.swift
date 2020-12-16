@@ -299,9 +299,9 @@ class PlayerViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         loadScores()
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)]
+        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
+        self.navigationController?.navigationBar.tintColor = Constants.lightColour
         
     }
 

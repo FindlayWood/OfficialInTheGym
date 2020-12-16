@@ -11,7 +11,7 @@ import UIKit
 
 class Constants {
     
-    var appVersion = "3.3.1"
+    var appVersion = "3.4"
     
     static var bannedUsernames = ["Admin", "admin", "InTheGym", "OfficialInTheGym", "inthegym"]
     

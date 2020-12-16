@@ -142,6 +142,8 @@ class CompletedWorkoutViewController: UIViewController {
                                 "workoutID": self.workoutID!] as [String : Any]
             self.WorkloadRef.childByAutoId().updateChildValues(workloadData)
             
+            workoutRPE.resignFirstResponder()
+            
             let showView = UIView()
             showView.backgroundColor = .white
             self.view.addSubview(showView)

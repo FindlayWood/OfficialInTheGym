@@ -43,5 +43,7 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>&quot;INTHEGYM&quot; would like to access your photo library.</string>
 </dict>
 </plist>

@@ -15,6 +15,12 @@ class ActivityTableViewCell: UITableViewCell {
     @IBOutlet weak var time:UILabel!
     @IBOutlet weak var message:UILabel!
     @IBOutlet var pic:UIImageView!
+    
+    
+    @IBOutlet weak var username:UILabel!
+    @IBOutlet weak var postTime:UILabel!
+    @IBOutlet weak var postText:UITextView!
+    @IBOutlet weak var profilePhoto:UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -8,16 +8,23 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
 import SCLAlertView
+import FirebaseStorage
 
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // new look with tableview for 1.4
     @IBOutlet var tableview:UITableView!
     
+    @IBOutlet weak var profilePictureImageView:UIImageView!
+    
     // array holding labels in tableview
     var tableContent = ["Provide Feedback", "App Information", "Contact us", "Reset Password", "Logout"]
     
+    let userID = Auth.auth().currentUser?.uid
+    
+    var DBRef : DatabaseReference!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,9 +33,47 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tableview.isScrollEnabled = false
         
         
+        profilePictureImageView.layer.cornerRadius = profilePictureImageView.bounds.width / 2.0
+        profilePictureImageView.layer.borderWidth = 2.0
+        profilePictureImageView.layer.borderColor = Constants.darkColour.cgColor
+        profilePictureImageView.layer.masksToBounds = true
+        profilePictureImageView.isUserInteractionEnabled = true
+        
         hideKeyboardWhenTappedAround()
         
+        DBRef = Database.database().reference().child("users").child(userID!)
         
+    }
+    
+    @IBAction func changeProfilePhoto(_ sender:UIButton){
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        picker.sourceType = .photoLibrary
+        present(picker, animated: true, completion: nil)
+    }
+    
+    func loadProfilePhoto(){
+        
+        DBRef.child("profilePhotoURL").observeSingleEvent(of: .value) { (snapshot) in
+            guard let imageURL = snapshot.value else{
+                print("no profile pic")
+                return
+            }
+            
+            let storageRef = Storage.storage().reference()
+            let storageProfileRef = storageRef.child("ProfilePhotos").child(self.userID!)
+            storageProfileRef.downloadURL { (url, error) in
+                if error != nil{
+                    print(error?.localizedDescription as Any)
+                    return
+                }
+                let data = NSData(contentsOf: url!)
+                let image = UIImage(data: data! as Data)
+                self.profilePictureImageView.image = image
+                
+            }
+        }
     }
     
 
@@ -111,9 +156,56 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        loadProfilePhoto()
     }
     
 
 
 
+}
+
+extension SettingsViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let selectedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            profilePictureImageView.image = selectedImage
+            
+            guard let imageData = selectedImage.jpegData(compressionQuality: 0.4) else {
+                return
+            }
+            
+            
+            let storageRef = Storage.storage().reference()
+            let storageProfileRef = storageRef.child("ProfilePhotos").child(userID!)
+            
+            let metaData = StorageMetadata()
+            metaData.contentType = "image/jpg"
+            
+            storageProfileRef.putData(imageData, metadata: metaData) { (storage, error) in
+                if error != nil{
+                    print(error?.localizedDescription as Any)
+                    return
+                }
+                
+                storageProfileRef.downloadURL { (url, error) in
+                    if let metaImageURL = url?.absoluteString{
+                        print(metaImageURL)
+                        self.DBRef.updateChildValues(["profilePhotoURL": metaImageURL])
+                        
+                    }
+                }
+                
+                
+            }
+            
+        }
+        
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        
+        picker.dismiss(animated: true, completion: nil)
+    }
 }

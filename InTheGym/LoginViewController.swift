@@ -10,7 +10,6 @@
 
 import UIKit
 import Firebase
-import Flurry_iOS_SDK
 import SCLAlertView
 
 class LoginViewController: UIViewController {
@@ -27,7 +26,6 @@ class LoginViewController: UIViewController {
     
     //function to login user checking for valid info
     @IBAction func logIn(_ sender: UIButton){
-        Flurry.logEvent("Login Page-login button pressed")
         sender.pulsate()
         
         // checking verification
@@ -92,7 +90,6 @@ class LoginViewController: UIViewController {
                 newalert.showError("Error", subTitle: "Invalid login information. Please enter valid login information.", closeButtonTitle: "Ok")
                 
                 //show alert when invalid info is entered
-                Flurry.logEvent("Error with login information.")
             }
         }
     }

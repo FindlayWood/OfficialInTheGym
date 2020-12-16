@@ -186,11 +186,10 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
                     self.fourWeekRPEArray.append(Int(rpe)!)
                     self.fourWeekEndDates.append(endDate)
                 }
-                
             }
             
             if initialLoad == false{
-                print("not sure when this will happen")
+                self.handleSegmentChange()
             }
             
         }, withCancel: nil)

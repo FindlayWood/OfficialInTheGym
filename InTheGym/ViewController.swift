@@ -10,7 +10,6 @@
 import UIKit
 import Firebase
 import Network
-import Flurry_iOS_SDK
 import SCLAlertView
 
 
@@ -72,12 +71,10 @@ class ViewController: UIViewController {
                             if snapshot.value as! Int == 1{
                                 self.performSegue(withIdentifier: "adminLoggedIn2", sender: self)
                                 ViewController.admin = true
-                                Flurry.logEvent("Coach Already logged in")
                             }
                             else{
                                 self.performSegue(withIdentifier: "alreadyLoggedIn2", sender: self)
                                 ViewController.admin = false
-                                Flurry.logEvent("Player already logged in")
                             }
                         }
                     case false:
@@ -123,7 +120,6 @@ class ViewController: UIViewController {
     // function when either button is tapped to navigate to the correct page
     @IBAction func tapped(_ sender:UIButton){
         sender.pulsate()
-        Flurry.logEvent("Login/Signup", withParameters: ["title":sender.titleLabel?.text! ?? "NA"])
         let selection = UISelectionFeedbackGenerator()
         selection.prepare()
         selection.selectionChanged()

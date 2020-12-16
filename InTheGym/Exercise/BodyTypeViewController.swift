@@ -10,12 +10,10 @@
 // select body type of exercise
 
 import UIKit
-//import Flurry_iOS_SDK
 
 class BodyTypeViewController: UIViewController {
     
     @IBAction func buttonTapped(_ sender:UIButton){
-        //Flurry.logEvent("Body type page - button", withParameters: ["title": sender.titleLabel?.text ?? "NA"])
         sender.pulsate()
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "ExerciseViewController") as! ExerciseViewController

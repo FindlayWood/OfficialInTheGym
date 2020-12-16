@@ -56,6 +56,8 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
         tableview.rowHeight = 180
         tableview.backgroundColor = backgroundColour
         
+        loadGroups()
+        loadPlayers()
 
         
     }
@@ -129,15 +131,20 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
     
     
     func loadPlayers(){
-        self.playersID.removeAll()
+        //self.playersID.removeAll()
+        var initialLoad = true
         DBRef.child("players").child("accepted").observe(.childAdded) { (snapshot) in
             if let snap = snapshot.value as? String{
                 self.playersID.append(snap)
+            }
+            if initialLoad == false{
+                self.loadUsers()
             }
         }
         
         DBRef.child("players").child("accepted").observeSingleEvent(of: .value) { (snapshot) in
             self.loadUsers()
+            initialLoad = false
         }
     }
     
@@ -145,7 +152,7 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
         usernames.removeAll()
         allPlayers.removeAll()
         for player in playersID{
-            userRef.child("users").child(player).observe(.value) { (snapshot) in
+            userRef.child("users").child(player).observeSingleEvent(of: .value) { (snapshot) in
                 if let snap = snapshot.value as? [String:AnyObject]{
                     let username = snap["username"] as! String
                     self.usernames.append(username)
@@ -157,16 +164,22 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func loadGroups(){
-        createdGroups.removeAll()
+        //createdGroups.removeAll()
+        var initialLoad = true
         DBRef.child("groups").observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
                 self.createdGroups.append(snap)
-                
+            }
+            
+            if initialLoad == false{
+                self.tableview.reloadData()
             }
         }, withCancel: nil)
         
+        
         DBRef.child("groups").observeSingleEvent(of: .value) { (_) in
             self.tableview.reloadData()
+            initialLoad = false
         }
     }
     
@@ -204,8 +217,8 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
     
     
     override func viewWillAppear(_ animated: Bool) {
-        loadPlayers()
-        loadGroups()
+        //loadPlayers()
+        //loadGroups()
         navigationController?.setNavigationBarHidden(true, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes

@@ -10,7 +10,6 @@
 
 import UIKit
 import Firebase
-import Flurry_iOS_SDK
 import SCLAlertView
 import EmptyDataSet_Swift
 
@@ -73,7 +72,6 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     
     // fucntion when a request is accepted
     @objc func acceptPressed(_ sender:UIButton){
-        Flurry.logEvent("Request Page - Accept pressed.")
         sender.pulsate()
         let adminID = requestKeys[sender.tag]
         PlayerActivityViewController.coachID = adminID
@@ -133,7 +131,6 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     
     //function when a request is declined
     @objc func declinePressed(_ sender:UIButton){
-        Flurry.logEvent("Request Page - decline pressed.")
         sender.pulsate()
         let adminID = requestKeys[sender.tag]
         let userID = Auth.auth().currentUser?.uid

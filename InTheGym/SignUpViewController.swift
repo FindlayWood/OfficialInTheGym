@@ -10,7 +10,6 @@
 
 import UIKit
 import Firebase
-import Flurry_iOS_SDK
 import SCLAlertView
 
 class SignUpViewController: UIViewController {
@@ -41,13 +40,11 @@ class SignUpViewController: UIViewController {
     
     // function for when the user taps signup. checks all fields for valid info
     @IBAction func signUp(_ sender: UIButton){
-        Flurry.logEvent("SignUp Page-SignUp button")
         sender.pulsate()
         // check no field is emoty
         if firstName.text!.isEmpty || lastName.text!.isEmpty || email.text!.isEmpty || username.text!.isEmpty{
             let alert = SCLAlertView()
             alert.showError("Error!", subTitle: "Make sure all information has been entered.")
-            Flurry.logEvent("SignUp Page-Empty Info")
         }
         else{
             // check that username is unique
@@ -55,7 +52,6 @@ class SignUpViewController: UIViewController {
                 let alert = SCLAlertView()
                 alert.showError("Error!", subTitle: "Username already exists. Please choose another username.")
                 username.text = ""
-                Flurry.logEvent("SignUp Page-Username exists")
             }
             else{
                 // check if passwords match
@@ -64,14 +60,12 @@ class SignUpViewController: UIViewController {
                     alert.showError("Error!", subTitle: "Passwords do not match.")
                     password.text = ""
                     passwordConfirm.text = ""
-                    Flurry.logEvent("SignUp Page-Passwords dont match")
                 }
                 else{
                     // create new user
                     Auth.auth().createUser(withEmail: email.text!, password: password.text!) { (user, error) in
                         if error == nil{
                             self.haptic.prepare()
-                            Flurry.logEvent("SignUp Page-Clean SignUp")
                             
                             //let key = self.userRef.childByAutoId().key
                             let userID = Auth.auth().currentUser!.uid
@@ -123,7 +117,6 @@ class SignUpViewController: UIViewController {
                             
                             self.password.text = ""
                             self.passwordConfirm.text = ""
-                            Flurry.logEvent("SignUp Page-Password too short")
                         }
                             
                         else{
@@ -132,9 +125,7 @@ class SignUpViewController: UIViewController {
                             // new alert
                             let alert = SCLAlertView()
                             alert.showError("Error!", subTitle: "An account with this email address already exists. If you have previously created an account you can login with this email address.")
-                            self.email.text = ""
-                            Flurry.logEvent("SignUp Page-Email already exists exists")
-                        }
+                            self.email.text = ""                        }
                     }
                 }
             }
