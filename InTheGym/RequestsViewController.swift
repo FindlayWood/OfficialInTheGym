@@ -94,7 +94,22 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
 
                 let actData = ["time":ServerValue.timestamp(),
                                 "type":"New Coach",
-                                "message":"You accepted a request from \(self.requesters[sender.tag])."] as [String:AnyObject]
+                                "message":"\(PlayerActivityViewController.username ?? "username") accepted a request from \(self.requesters[sender.tag]).",
+                                "isPrivate" : true] as [String:AnyObject]
+                
+                
+                // adding to posts and timeline
+                let postRef = Database.database().reference().child("Posts").child(userID!).childByAutoId()
+                let postKey = postRef.key
+                let timeLineRef = Database.database().reference().child("Timeline")
+                
+                let timeLineData = ["postID" : postKey,
+                                    "posterID" : userID!]
+                
+                postRef.setValue(actData)
+                timeLineRef.child(userID!).childByAutoId().setValue(timeLineData)
+                timeLineRef.child(adminID).childByAutoId().setValue(timeLineData)
+                
                 self.FeedRef.child(userID!).childByAutoId().setValue(actData)
                 //self.DBRef.child(userID!).child("activities").childByAutoId().setValue(actData)
                 self.requesters.remove(at: sender.tag)

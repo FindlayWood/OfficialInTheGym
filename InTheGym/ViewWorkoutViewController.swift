@@ -139,7 +139,9 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
             cell.score.text = ""
         }
         
-        if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
+        if let createdBy = self.rowsToDisplay[indexPath.section]["createdBy"] as? String{
+            cell.coach.text = createdBy
+        }else if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
             cell.coach.text = assignedCoach
         }else{
             cell.coach.text = ""

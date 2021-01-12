@@ -32,12 +32,14 @@ class SavedWorkoutsViewController: UIViewController {
         if text.text == ""{
             showError()
         }else{
+            let completedArray = Array(repeating: false, count: Int(text.text!)!)
             let Storyboard = UIStoryboard(name: "Main", bundle: nil)
             let destVC = Storyboard.instantiateViewController(withIdentifier: "NewRepsViewController") as! NewRepsViewController
             destVC.varyReps = self.varyReps
             destVC.sets = self.text.text!
             destVC.exercise = self.exercise
             destVC.type = self.type
+            destVC.completedArray = completedArray
             self.navigationController?.pushViewController(destVC, animated: true)
             //self.present(destVC, animated: true, completion: nil)
         }

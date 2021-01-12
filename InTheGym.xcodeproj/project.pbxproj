@@ -53,6 +53,8 @@
 		7479AFA9253F844500E6A79C /* InsideCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479AFA8253F844500E6A79C /* InsideCollectionViewCell.swift */; };
 		747FED3525659A2900080AC8 /* AddNewGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FED3425659A2900080AC8 /* AddNewGroupViewController.swift */; };
 		748B403D25236EBD00C947B6 /* SavedWorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748B403C25236EBD00C947B6 /* SavedWorkoutsViewController.swift */; };
+		748E092225A7A74100ABE9C9 /* PublicProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E092125A7A74100ABE9C9 /* PublicProfileViewController.swift */; };
+		748E094825AB446900ABE9C9 /* TabBarSelectionImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E094725AB446800ABE9C9 /* TabBarSelectionImage.swift */; };
 		7492263222C8D1DF00EAD386 /* AddPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492263122C8D1DF00EAD386 /* AddPlayerViewController.swift */; };
 		7492263622CBD66600EAD386 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492263522CBD66600EAD386 /* Users.swift */; };
 		7492263822CE3B0E00EAD386 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492263722CE3B0E00EAD386 /* PlayerViewController.swift */; };
@@ -74,6 +76,7 @@
 		74BAB0E725642600009D35E8 /* LineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BAB0E625642600009D35E8 /* LineChart.swift */; };
 		74BDA835246C479F00DFAEEF /* PlayerInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BDA834246C479F00DFAEEF /* PlayerInfoCell.swift */; };
 		74C57A292531197E00078C42 /* NewRepsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C57A282531197E00078C42 /* NewRepsViewController.swift */; };
+		74D1EF93258D529800A719BC /* Posts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D1EF92258D529800A719BC /* Posts.swift */; };
 		74DB061B2303017B00C4A19C /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DB061A2303017B00C4A19C /* ResetPasswordViewController.swift */; };
 		74DC18E0244B3A6A00D3F8A3 /* GroupAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DC18DF244B3A6A00D3F8A3 /* GroupAddViewController.swift */; };
 		74DC18E2244B3A8000D3F8A3 /* GroupExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DC18E1244B3A8000D3F8A3 /* GroupExerciseViewController.swift */; };
@@ -87,6 +90,10 @@
 		74F6E57723FDA0F900233438 /* LeaderboardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F6E57623FDA0F900233438 /* LeaderboardTableViewCell.swift */; };
 		74F6E57B24002CAD00233438 /* GeneralWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F6E57A24002CAD00233438 /* GeneralWorkoutViewController.swift */; };
 		74F6E57D24049FB100233438 /* GeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */; };
+		74FDB97D25A4978A00CC18EF /* DiscoverPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB97C25A4978A00CC18EF /* DiscoverPageViewController.swift */; };
+		74FDB98225A4981B00CC18EF /* DiscoverPageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB98125A4981B00CC18EF /* DiscoverPageCollectionViewCell.swift */; };
+		74FDB98725A65C7700CC18EF /* SearchForUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB98625A65C7700CC18EF /* SearchForUsersViewController.swift */; };
+		74FDB98C25A7684800CC18EF /* SearchUsersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB98B25A7684800CC18EF /* SearchUsersTableViewCell.swift */; };
 		75B6CB282FAD8B4717452D10 /* Pods_InTheGymUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED26225DD12D52B82FDA0756 /* Pods_InTheGymUITests.framework */; };
 		7858E022EBB60963F1921059 /* Pods_InTheGym.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02183A83BFE04BD97E510DA7 /* Pods_InTheGym.framework */; };
 /* End PBXBuildFile section */
@@ -167,6 +174,8 @@
 		7479AFA8253F844500E6A79C /* InsideCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsideCollectionViewCell.swift; sourceTree = "<group>"; };
 		747FED3425659A2900080AC8 /* AddNewGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewGroupViewController.swift; sourceTree = "<group>"; };
 		748B403C25236EBD00C947B6 /* SavedWorkoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWorkoutsViewController.swift; sourceTree = "<group>"; };
+		748E092125A7A74100ABE9C9 /* PublicProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicProfileViewController.swift; sourceTree = "<group>"; };
+		748E094725AB446800ABE9C9 /* TabBarSelectionImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarSelectionImage.swift; sourceTree = "<group>"; };
 		7492263122C8D1DF00EAD386 /* AddPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerViewController.swift; sourceTree = "<group>"; };
 		7492263522CBD66600EAD386 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		7492263722CE3B0E00EAD386 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
@@ -188,6 +197,7 @@
 		74BAB0E625642600009D35E8 /* LineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChart.swift; sourceTree = "<group>"; };
 		74BDA834246C479F00DFAEEF /* PlayerInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerInfoCell.swift; sourceTree = "<group>"; };
 		74C57A282531197E00078C42 /* NewRepsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRepsViewController.swift; sourceTree = "<group>"; };
+		74D1EF92258D529800A719BC /* Posts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Posts.swift; sourceTree = "<group>"; };
 		74DB061A2303017B00C4A19C /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		74DC18DF244B3A6A00D3F8A3 /* GroupAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupAddViewController.swift; sourceTree = "<group>"; };
 		74DC18E1244B3A8000D3F8A3 /* GroupExerciseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupExerciseViewController.swift; sourceTree = "<group>"; };
@@ -202,6 +212,10 @@
 		74F6E57623FDA0F900233438 /* LeaderboardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardTableViewCell.swift; sourceTree = "<group>"; };
 		74F6E57A24002CAD00233438 /* GeneralWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralWorkoutViewController.swift; sourceTree = "<group>"; };
 		74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTableViewCell.swift; sourceTree = "<group>"; };
+		74FDB97C25A4978A00CC18EF /* DiscoverPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageViewController.swift; sourceTree = "<group>"; };
+		74FDB98125A4981B00CC18EF /* DiscoverPageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageCollectionViewCell.swift; sourceTree = "<group>"; };
+		74FDB98625A65C7700CC18EF /* SearchForUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForUsersViewController.swift; sourceTree = "<group>"; };
+		74FDB98B25A7684800CC18EF /* SearchUsersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersTableViewCell.swift; sourceTree = "<group>"; };
 		841B5448D63330DC02FF8526 /* Pods-InTheGymUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymUITests.debug.xcconfig"; path = "Target Support Files/Pods-InTheGymUITests/Pods-InTheGymUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		EB6C93F0A87AAD3CAF4F37EF /* Pods_InTheGymTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGymTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED26225DD12D52B82FDA0756 /* Pods_InTheGymUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGymUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -285,6 +299,7 @@
 				7492264722D4F05D00EAD386 /* ViewWorkoutViewController.swift */,
 				7492264D22D7873300EAD386 /* TableViewCell.swift */,
 				7492264922D50E4400EAD386 /* WorkoutDetailViewController.swift */,
+				7479AFA8253F844500E6A79C /* InsideCollectionViewCell.swift */,
 				745B330225782FF100594019 /* CompletedWorkoutViewController.swift */,
 				7492265122D8D0BA00EAD386 /* DetailTableViewCell.swift */,
 				7492265322D91C1900EAD386 /* RoundButtons.swift */,
@@ -300,17 +315,20 @@
 				74F6E57623FDA0F900233438 /* LeaderboardTableViewCell.swift */,
 				74DC1C8525126389007156A0 /* Group */,
 				746062062526843F005B1480 /* NewInfoTableViewCell.swift */,
-				748B403C25236EBD00C947B6 /* SavedWorkoutsViewController.swift */,
-				74C57A282531197E00078C42 /* NewRepsViewController.swift */,
 				745994772539093600FBDC00 /* RepsTableViewCell.swift */,
-				7459947C253DE5F800FBDC00 /* NewWeightViewController.swift */,
 				7479AF9E253F7E7300E6A79C /* ScrollViewController.swift */,
 				7479AFA3253F807900E6A79C /* ScrollTableViewCell.swift */,
-				7479AFA8253F844500E6A79C /* InsideCollectionViewCell.swift */,
 				7425D4172545AE8000567DAB /* Constants.swift */,
 				7413A065255D743E009C7F97 /* CustomTopView.swift */,
 				745DA4DB2562AE2300FDA053 /* WorkloadDisplayViewController.swift */,
 				74BAB0E625642600009D35E8 /* LineChart.swift */,
+				74D1EF92258D529800A719BC /* Posts.swift */,
+				74FDB97C25A4978A00CC18EF /* DiscoverPageViewController.swift */,
+				74FDB98125A4981B00CC18EF /* DiscoverPageCollectionViewCell.swift */,
+				74FDB98625A65C7700CC18EF /* SearchForUsersViewController.swift */,
+				74FDB98B25A7684800CC18EF /* SearchUsersTableViewCell.swift */,
+				748E092125A7A74100ABE9C9 /* PublicProfileViewController.swift */,
+				748E094725AB446800ABE9C9 /* TabBarSelectionImage.swift */,
 			);
 			path = InTheGym;
 			sourceTree = "<group>";
@@ -354,8 +372,11 @@
 				7492263922CE6CD400EAD386 /* AddWorkoutHomeViewController.swift */,
 				7492263D22D226F400EAD386 /* BodyTypeViewController.swift */,
 				7492263B22D2255000EAD386 /* ExerciseViewController.swift */,
+				748B403C25236EBD00C947B6 /* SavedWorkoutsViewController.swift */,
 				7492263F22D230CA00EAD386 /* SetsViewController.swift */,
+				74C57A282531197E00078C42 /* NewRepsViewController.swift */,
 				7492264122D2350400EAD386 /* RepsViewController.swift */,
+				7459947C253DE5F800FBDC00 /* NewWeightViewController.swift */,
 				7492264F22D7C29700EAD386 /* WeightViewController.swift */,
 				741721FF2459A42E0013EAC8 /* DistanceViewController.swift */,
 				74DC1C872512751B007156A0 /* NoteViewController.swift */,
@@ -654,13 +675,16 @@
 				746062712528C35D005B1480 /* COACHESViewController.swift in Sources */,
 				74C57A292531197E00078C42 /* NewRepsViewController.swift in Sources */,
 				74443B9822F1CD6B00DD18B3 /* ViewDesign.swift in Sources */,
+				748E092225A7A74100ABE9C9 /* PublicProfileViewController.swift in Sources */,
 				745D0E7A22A17E26007670E3 /* LoginViewController.swift in Sources */,
+				74FDB98C25A7684800CC18EF /* SearchUsersTableViewCell.swift in Sources */,
 				7492263622CBD66600EAD386 /* Users.swift in Sources */,
 				745DA4E12562FADE00FDA053 /* PlayerOrCoachViewController.swift in Sources */,
 				74DC1C8C251A27F1007156A0 /* GroupNoteViewController.swift in Sources */,
 				7479A90B229F2B4C00D39E2E /* ViewController.swift in Sources */,
 				74DC18E4244B3A9900D3F8A3 /* GroupBodyTypeViewController.swift in Sources */,
 				745994782539093600FBDC00 /* RepsTableViewCell.swift in Sources */,
+				74D1EF93258D529800A719BC /* Posts.swift in Sources */,
 				746061E225264147005B1480 /* NewInfoViewController.swift in Sources */,
 				745B330325782FF100594019 /* CompletedWorkoutViewController.swift in Sources */,
 				7492264E22D7873300EAD386 /* TableViewCell.swift in Sources */,
@@ -673,6 +697,7 @@
 				74DC18E6244B3AAC00D3F8A3 /* GroupSetsViewController.swift in Sources */,
 				748B403D25236EBD00C947B6 /* SavedWorkoutsViewController.swift in Sources */,
 				74F6E57723FDA0F900233438 /* LeaderboardTableViewCell.swift in Sources */,
+				74FDB98225A4981B00CC18EF /* DiscoverPageCollectionViewCell.swift in Sources */,
 				7425D4182545AE8000567DAB /* Constants.swift in Sources */,
 				74163A4422E37089005A7D2E /* ButtonExtension.swift in Sources */,
 				7492265622DA43BB00EAD386 /* RequestsViewController.swift in Sources */,
@@ -688,6 +713,7 @@
 				74163A4622E39523005A7D2E /* PlayerTableViewCell.swift in Sources */,
 				7492264622D3A9C100EAD386 /* PBsViewController.swift in Sources */,
 				74163A4822E4A7AF005A7D2E /* ActivityTableViewCell.swift in Sources */,
+				748E094825AB446900ABE9C9 /* TabBarSelectionImage.swift in Sources */,
 				74F6E57523FD99FD00233438 /* LeaderboardViewController.swift in Sources */,
 				74DC18EA244B3AC900D3F8A3 /* GroupWeightViewController.swift in Sources */,
 				7460620C25278D34005B1480 /* MYSCORESViewController.swift in Sources */,
@@ -698,10 +724,12 @@
 				74220899256FFE2C00B42563 /* LaunchPageViewController.swift in Sources */,
 				7492263222C8D1DF00EAD386 /* AddPlayerViewController.swift in Sources */,
 				7492264A22D50E4400EAD386 /* WorkoutDetailViewController.swift in Sources */,
+				74FDB98725A65C7700CC18EF /* SearchForUsersViewController.swift in Sources */,
 				745D0E7C22A17ED2007670E3 /* SignUpViewController.swift in Sources */,
 				74F6E57D24049FB100233438 /* GeneralTableViewCell.swift in Sources */,
 				74DC18E8244B3ABA00D3F8A3 /* GroupRepsViewController.swift in Sources */,
 				74DB061B2303017B00C4A19C /* ResetPasswordViewController.swift in Sources */,
+				74FDB97D25A4978A00CC18EF /* DiscoverPageViewController.swift in Sources */,
 				74F6E57B24002CAD00233438 /* GeneralWorkoutViewController.swift in Sources */,
 				743B1E7F22EF49CF0046006C /* AdminPlayersViewController.swift in Sources */,
 				747FED3525659A2900080AC8 /* AddNewGroupViewController.swift in Sources */,
@@ -958,7 +986,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.1;
+				MARKETING_VERSION = 3.4;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -1138,7 +1166,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.1;
+				MARKETING_VERSION = 3.4;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (

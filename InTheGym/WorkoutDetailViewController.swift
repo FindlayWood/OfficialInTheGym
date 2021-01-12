@@ -10,7 +10,8 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, infoButtonsDelegate, noteButtonDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, infoButtonsDelegate, noteButtonDelegate, UICollectionViewDelegate, UICollectionViewDataSource, CollectionViewCompleted {
+    
     
     // variables passed from previous page - username and workout title
     // username is always username of player
@@ -129,6 +130,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 SVC.endTime = endTime
                 SVC.timeToComplete = timeToComplete
                 SVC.coaches = self.coaches
+                SVC.numberOfExercises = self.exercises.count
                 if rounded.isNaN{
                     SVC.averageExerciseRPE = "0"
                 }else{
@@ -476,6 +478,9 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         //cell.layer.masksToBounds = true
         cell.contentView.layer.masksToBounds = true
         cell.backgroundColor = Constants.lightColour
+        cell.delegate = self
+        cell.indexPath = indexPath
+        cell.collectionIndex = collectionView.tag
         
         cell.layer.shadowColor = UIColor.black.cgColor
         cell.layer.shadowOffset = CGSize(width: 0, height: 5.0)
@@ -505,17 +510,69 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         if let weight = exercises[collectionIndex]["weight"] as? String{
             cell.weightLabel.text = "\(weight)"
         }
+        
+        
 
         cell.setLabels.text = "SET \(indexPath.row + 1)"
+        
+        
+        if let completedSets = exercises[collectionIndex]["completedSets"] as? [Bool]{
+            if completedSets[indexPath.row] == true {
+                cell.completedButton.setImage(UIImage(named: "tickRing"), for: .normal)
+                cell.isUserInteractionEnabled = false
+            }else{
+                cell.completedButton.setImage(UIImage(named: "emptyRing"), for: .normal)
+                cell.isUserInteractionEnabled = true
+            }
+        }else{
+            cell.completedButton.isHidden = true
+        }
+        
+        // checking if workout complete or user is coach and then enabling tick check button or not
+        if ViewController.admin == true || complete == true || workoutBegun == false{
+            cell.completedButton.isUserInteractionEnabled = false
+        }
+        
+        
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let lastIndexToScroll = collectionView.numberOfItems(inSection: 0) - 1
-        if indexPath.row < lastIndexToScroll{
-            let indexToScroll = IndexPath.init(row: indexPath.row + 1, section: 0)
-            collectionView.scrollToItem(at: indexToScroll, at: .left, animated: true)
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let lastIndexToScroll = collectionView.numberOfItems(inSection: 0) - 1
+//        if indexPath.row < lastIndexToScroll{
+//            let indexToScroll = IndexPath.init(row: indexPath.row + 1, section: 0)
+//            collectionView.scrollToItem(at: indexToScroll, at: .left, animated: true)
+//        }
+//
+//    }
+    
+    func completionTapped(at index:IndexPath, sender:UIButton, section: Int, with cell: UICollectionViewCell){
+        
+        if var completedSets = exercises[section]["completedSets"] as? [Bool]{
+            completedSets[index.row] = true
+            self.exercises[section]["completedSets"] = completedSets as AnyObject
+            self.DBRef.child(workoutID).child("exercises").child("\(section)").updateChildValues(["completedSets" : completedSets])
         }
+        
+        sender.setImage(UIImage(named: "tickRing"), for: .normal)
+        
+        UIView.animate(withDuration: 0.5) {
+            cell.backgroundColor = UIColor.green
+        } completion: { (_) in
+            UIView.animate(withDuration: 0.5) {
+                cell.backgroundColor = Constants.lightColour
+            } completion: { (_) in
+                let collection = cell.superview as! UICollectionView
+                let lastindextoscroll = collection.numberOfItems(inSection: 0) - 1
+                if index.row < lastindextoscroll{
+                    let indextoscroll = IndexPath.init(row: index.row + 1, section: 0)
+                    collection.scrollToItem(at: indextoscroll, at: .left, animated: true)
+                }
+            }
+
+        }
+
+        
         
     }
     

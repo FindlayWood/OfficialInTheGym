@@ -149,7 +149,7 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
        // MARK: - UISearchResultsUpdating method
        
        func updateSearchResults(for searchController: UISearchController) {
-           // If the search bar contains text, filter our data with the string
+           // If the search bar contains text, filter out data with the string
            if let searchText = searchController.searchBar.text {
                filterContent(for: searchText)
                // Reload the table view with the search result data.

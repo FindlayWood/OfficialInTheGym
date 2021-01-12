@@ -69,6 +69,14 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         
     }
     
+    @IBAction func addWorkoutPressed(_ sender:UIButton){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let nextVC = storyboard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
+        nextVC.playerBool = true
+        AddWorkoutHomeViewController.groupBool = false
+        navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
     func loadWorkouts(){
         self.workouts.removeAll()
         self.workoutIDs.removeAll()
@@ -160,7 +168,10 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
             cell.second.text = "NOT STARTED"
             cell.score.text = ""
         }
-        if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
+        
+        if let createdBy = self.rowsToDisplay[indexPath.section]["createdBy"] as? String{
+            cell.coach.text = createdBy
+        }else if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
             cell.coach.text = assignedCoach
         }else{
             cell.coach.text = ""

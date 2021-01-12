@@ -23,12 +23,18 @@ class PlayerActivityViewController: UIViewController, UITableViewDelegate, UITab
     
     var activities : [[String:AnyObject]] = []
     
+    // new version of timeline posts
+    var posts : [[String:AnyObject]] = []
+    var timeline : [[String:AnyObject]] = []
+    
     var DBref:DatabaseReference!
     var UserRef:DatabaseReference!
     var PostRef:DatabaseReference!
     
     // varibale to check for first time
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
+    let userID = Auth.auth().currentUser?.uid
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +52,14 @@ class PlayerActivityViewController: UIViewController, UITableViewDelegate, UITab
         }
         PostRef = Database.database().reference()
         
-        loadActivities() 
+        loadActivities()
+        loadPosts()
+        
+        // add tab bar selection image
+//        let tabBar = self.tabBarController!.tabBar
+//        tabBar.selectionIndicatorImage = UIImage().createSelectionIndicator(color: Constants.darkColour, size: CGSize(width: tabBar.frame.width/CGFloat(tabBar.items!.count), height: tabBar.frame.height), lineWidth: 2.0)
+        
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -105,7 +118,6 @@ class PlayerActivityViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func loadActivities(){
-        //activities.removeAll()
         var initialLoad = true
         self.DBref.observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
@@ -121,13 +133,74 @@ class PlayerActivityViewController: UIViewController, UITableViewDelegate, UITab
         self.DBref.observeSingleEvent(of: .value) { (_) in
             self.tableview.reloadData()
             initialLoad = false
+            
         }
     }
+    
+    func loadPosts(){
+        var initialLoad = true
+        let timelineRef = Database.database().reference().child("Timeline").child(self.userID!)
+        timelineRef.observe(.childAdded, with: { (snapshot) in
+            if let snap = snapshot.value as? [String:AnyObject]{
+                
+                let postID = snap["postID"] as! String
+                let posterID = snap["posterID"] as! String
+                let postData = ["postID" : postID,
+                "posterID" : posterID] as [String:AnyObject]
+                self.posts.insert(postData, at: 0)
+            }
+                        
+            if initialLoad == false{
+                    print("something has been updated!")
+            }
+            
+            
+        }, withCancel: nil)
+            
+    
+        timelineRef.observeSingleEvent(of: .value) { (_) in
+            initialLoad = false
+            print(self.posts)
+            self.loadTimeLine()
+        }
+        
+    }
+    
+    func loadTimeLine(){
+        let postRef = Database.database().reference().child("Posts")
+        
+        let myGroup = DispatchGroup()
+        
+        for post in posts{
+            myGroup.enter()
+            let postID = post["postID"] as! String
+            let posterID = post["posterID"] as! String
+            postRef.child(posterID).child(postID).observe(.value, with: { (snapshot) in
+                
+                defer {myGroup.leave()}
+                
+                guard let snap = snapshot.value as? [String:AnyObject] else{
+                    return
+                }
+                self.timeline.insert(snap, at: 0)
+                
+                
+            }, withCancel: nil)
+        }
+        myGroup.notify(queue: .main){
+            print(self.timeline)
+        }
+        
+        
+        
+    }
+    
+    
         
     override func viewWillAppear(_ animated: Bool) {
-        loadActivities()
+        //loadActivities()
         
-        tableview.reloadData()
+        //tableview.reloadData()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     

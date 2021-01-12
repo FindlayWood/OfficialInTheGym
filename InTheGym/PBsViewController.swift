@@ -94,8 +94,22 @@ class PBsViewController: UIViewController {
         let userID = Auth.auth().currentUser?.uid
         let actData = ["time":ServerValue.timestamp(),
                        "type":"Update PBs",
-                       "message":"You updated your PB scores."] as [String:AnyObject]
+                       "message":"You updated your PB scores.",
+                       "isPrivate" : true] as [String:AnyObject]
         ActRef.child("Activities").child(userID!).childByAutoId().setValue(actData)
+        
+        // adding to posts and timeline
+        let postRef = Database.database().reference().child("Posts").child(userID!).childByAutoId()
+        let postKey = postRef.key
+        let timeLineRef = Database.database().reference().child("Timeline")
+        
+        let timeLineData = ["postID" : postKey,
+                            "posterID" : userID!]
+        
+        postRef.setValue(actData)
+        timeLineRef.child(userID!).childByAutoId().setValue(timeLineData)
+        
+        
         
         // added for new feature
         // adding to public feed of coach
@@ -103,10 +117,22 @@ class PBsViewController: UIViewController {
         let actDataPublic = ["time":ServerValue.timestamp(),
                        "type":"Update PBs",
                        "message":"\(username) updated their PB scores."] as [String:AnyObject]
+        
+        
         if ViewController.admin == false && coaches.count != 0{
             // using coach userid to add to public feed instead of username
             for coach in coaches{
                 self.ActRef.child("Public Feed").child(coach).childByAutoId().setValue(actDataPublic)
+                
+                let coachPostRef = Database.database().reference().child("Posts").child(coach).childByAutoId()
+                let coachPostKey = coachPostRef.key
+                let timeLineData = ["postID" : coachPostKey,
+                                    "posterID" : coach]
+                
+                coachPostRef.setValue(actDataPublic)
+                timeLineRef.child(coach).childByAutoId().setValue(timeLineData)
+                    
+    
             }
         }else{
             print("no coaches to upload to.")

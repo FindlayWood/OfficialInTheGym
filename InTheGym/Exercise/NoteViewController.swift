@@ -21,6 +21,7 @@ class NoteViewController: UIViewController, UITextViewDelegate {
     
     var variedReps:Bool!
     var repArray = [String]()
+    var completedArray : [Bool] = []
     
     
     var placeHolder : String = "enter a note for the player to view..."
@@ -37,13 +38,15 @@ class NoteViewController: UIViewController, UITextViewDelegate {
                                 "type": self.type,
                                 "sets": self.sets,
                                 "reps": self.repArray,
-                                "weight": self.weight]
+                                "weight": self.weight,
+                                "completedSets":self.completedArray]
             }else{
                 dictData = ["exercise": self.exercise,
                                 "type": self.type,
                                 "sets": self.sets,
                                 "reps": self.reps,
-                                "weight": self.weight]
+                                "weight": self.weight,
+                                "completedSets":self.completedArray]
             }
             
             
@@ -55,14 +58,16 @@ class NoteViewController: UIViewController, UITextViewDelegate {
                                 "sets": self.sets,
                                 "reps": self.repArray,
                                 "weight": self.weight,
-                                "note": noteText!]
+                                "note": noteText!,
+                                "completedSets":self.completedArray]
             }else{
                 dictData = ["exercise": self.exercise,
                                 "type": self.type,
                                 "sets": self.sets,
                                 "reps": self.reps,
                                 "weight": self.weight,
-                                "note": noteText!]
+                                "note": noteText!,
+                                "completedSets":self.completedArray]
             }
             
             
@@ -86,13 +91,15 @@ class NoteViewController: UIViewController, UITextViewDelegate {
                         "type": self.type,
                         "sets": self.sets,
                         "reps": self.repArray,
-                        "weight": self.weight]
+                        "weight": self.weight,
+                        "completedSets":self.completedArray]
         }else{
             dictData = ["exercise": self.exercise,
                         "type": self.type,
                         "sets": self.sets,
                         "reps": self.reps,
-                        "weight": self.weight]
+                        "weight": self.weight,
+                        "completedSets":self.completedArray]
         }
         
         
@@ -139,7 +146,7 @@ class NoteViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    // this function displays a custom top view etting user know exercise has been added
+    // this function displays a custom top view letting user know exercise has been added
     func displayTopView(){
         let viewHeight = self.view.bounds.height * 0.12
         let viewWidth = self.view.bounds.width - 20

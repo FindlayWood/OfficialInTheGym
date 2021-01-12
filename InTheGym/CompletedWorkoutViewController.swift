@@ -32,12 +32,14 @@ class CompletedWorkoutViewController: UIViewController {
     var ActRef : DatabaseReference!
     var ComRef : DatabaseReference!
     var FeedRef : DatabaseReference!
+    var CoachAct : DatabaseReference!
     var ScoreRef : DatabaseReference!
     var WorkloadRef : DatabaseReference!
     
     // workout id
     var workoutID:String!
     
+    // title of workout
     var workoutTitle:String!
     
     // the user id of the player
@@ -51,6 +53,9 @@ class CompletedWorkoutViewController: UIViewController {
     
     // the time when user presses completed
     var endTime:Double!
+    
+    // the number of exercises in the workout
+    var numberOfExercises:Int!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,6 +86,7 @@ class CompletedWorkoutViewController: UIViewController {
         ActRef = Database.database().reference().child("Activities").child(playerID)
         ComRef = Database.database().reference().child("users").child(playerID)
         FeedRef = Database.database().reference().child("Public Feed")
+        CoachAct = Database.database().reference().child("Activities")
         ScoreRef = Database.database().reference().child("Scores")
         WorkloadRef = Database.database().reference().child("Workloads").child(playerID)
     }
@@ -143,6 +149,51 @@ class CompletedWorkoutViewController: UIViewController {
             self.WorkloadRef.childByAutoId().updateChildValues(workloadData)
             
             workoutRPE.resignFirstResponder()
+            
+            
+            // in here we will create a post that will be sent to all coaches and the player. coaches can then interact with this post
+            // in the future this will be shown to all followers and allow players to copy this workout for themselfs
+            
+            let postMessage = "\(playerUsername!) just completed the workout \(workoutTitle!) in \(timeToComplete)! They scored this workout a \(scoreNum). Give them a like! You can tap to view the workout in more detail."
+            
+            let postRef = Database.database().reference().child("Posts").child(playerID).childByAutoId()
+            let postID = postRef.key!
+            
+            let timeLineRef = Database.database().reference().child("Timeline")
+            let newpost = ["postID": postID,
+                           "posterID": playerID]
+            
+            let formatter = DateComponentsFormatter()
+            
+            if timeToComplete > 3600{
+                formatter.allowedUnits = [.hour, .minute]
+                formatter.unitsStyle = .abbreviated
+            }else{
+                formatter.allowedUnits = [.minute, .second]
+                formatter.unitsStyle = .abbreviated
+            }
+            
+            let timeString = formatter.string(from: TimeInterval(timeToComplete))
+            
+            let postData = ["type": "workout",
+                            "posterID": playerID!,
+                            "workoutID": workoutID!,
+                            "timeToComplete":timeString!,
+                            "message": postMessage,
+                            "score": workoutRPE.text!,
+                            "numberOfExercises": numberOfExercises!,
+                            "username": playerUsername!,
+                            "time": ServerValue.timestamp(),
+                            "workoutTitle":self.workoutTitle!,
+                            "isPrivate" : false] as [String : Any]
+            
+            postRef.setValue(postData)
+            timeLineRef.child(playerID!).childByAutoId().setValue(newpost)
+            for coach in self.coaches{
+                timeLineRef.child(coach).childByAutoId().setValue(newpost)
+            }
+            
+            
             
             let showView = UIView()
             showView.backgroundColor = .white

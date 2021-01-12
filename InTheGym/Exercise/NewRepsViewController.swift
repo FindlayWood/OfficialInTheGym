@@ -6,6 +6,8 @@
 //  Copyright © 2020 FindlayWood. All rights reserved.
 //
 
+//this is the new reps page. it is used instead of repviewcontroller
+
 import UIKit
 import SCLAlertView
 
@@ -16,6 +18,7 @@ class NewRepsViewController: UIViewController, UITableViewDelegate, UITableViewD
     var type: String = "weights"
     var varyReps: Bool = false
     var sets : String = ""
+    var completedArray : [Bool] = []
     
     // if reps are varied this will hold all the reps
     var repArray = [String]()
@@ -86,6 +89,7 @@ class NewRepsViewController: UIViewController, UITableViewDelegate, UITableViewD
             destVC.variedReps = self.varyReps
             destVC.exercise = self.exercise
             destVC.type = self.type
+            destVC.completedArray = self.completedArray
             if varyReps{
                 destVC.repArray = self.repArray
             }else{

@@ -121,20 +121,18 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
             let coachID = rowsToDisplay[indexPath.row]["posterID"] as? String
      
             self.DBRef.child("users").child(coachID!).child("profilePhotoURL").observeSingleEvent(of: .value) { (snapshot) in
-                guard let imageURL = snapshot.value else{
-                    print("no profile pic")
-                    cell.profilePhoto.image = UIImage(named: "coach_icon")
-                    return
-                }
-                
-                DispatchQueue.global(qos: .background).async {
-                    let url = URL(string: imageURL as! String)
-                    let data = NSData(contentsOf: url!)
-                    let image = UIImage(data: data! as Data)
-                    DispatchQueue.main.async {
-                        cell.profilePhoto.image = image
-                        cell.profilePhoto.layer.cornerRadius = cell.profilePhoto.bounds.width / 2.0
+                if let imageURL = snapshot.value as? String{
+                    DispatchQueue.global(qos: .background).async {
+                        let url = URL(string: imageURL)
+                        let data = NSData(contentsOf: url!)
+                        let image = UIImage(data: data! as Data)
+                        DispatchQueue.main.async {
+                            cell.profilePhoto.image = image
+                            cell.profilePhoto.layer.cornerRadius = cell.profilePhoto.bounds.width / 2.0
+                        }
                     }
+                }else{
+                    cell.profilePhoto.image = UIImage(named: "coach_icon")
                 }
             }
             
@@ -143,6 +141,25 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
             cell.postText.text = rowsToDisplay[indexPath.row]["message"] as? String
             return cell
         }
+        else if rowsToDisplay[indexPath.row]["type"] as? String == "workout"{
+            let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell3") as! ActivityTableViewCell
+            
+            cell.profilePhoto.image = UIImage(named: "benchpress_icon")
+            cell.username.text = rowsToDisplay[indexPath.row]["username"] as? String
+            cell.postTime.text = final
+            cell.workoutExerciseCount.text = rowsToDisplay[indexPath.row]["numberOfExercises"] as? String
+            cell.workoutScore.text = rowsToDisplay[indexPath.row]["score"] as? String
+            cell.workoutTime.text = rowsToDisplay[indexPath.row]["timeToComplete"] as? String
+            cell.workoutTitle.text = rowsToDisplay[indexPath.row]["workoutTitle"] as? String
+            
+            
+            return cell
+            
+            
+        }
+        
+        
+        
         else{
             
             let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell") as! ActivityTableViewCell
@@ -161,6 +178,7 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
     
     func loadActivities(){
         //activities.removeAll()
+        
         var initialLoad = true
         self.DBRef.child("Activities").child(self.userID!).observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
@@ -176,9 +194,11 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
  
         }, withCancel: nil)
 
-        self.DBRef.child("Activities").child(self.userID!).observeSingleEvent(of: .value) { (_) in
+        self.DBRef.child("Activities").child(self.userID!).observeSingleEvent(of: .value) { [self] (_) in
             self.handleSegmentChange()
             initialLoad = false
+            print(activities.count)
+            
         }
         
     }

@@ -57,28 +57,25 @@ class MakePostViewController: UIViewController, UITextViewDelegate {
         }else{
             
             let postRef = Database.database().reference().child("Posts").child(userID!).childByAutoId()
-            print(postRef.key!)
             let postID = postRef.key!
-            let post = ["message":"ahahaha",
-            "posterID": userID!] as [String:Any]
-            postRef.setValue(post)
             
-            let timeLineRef = Database.database().reference().child("Timeline").child(userID!).childByAutoId()
+            let timeLineRef = Database.database().reference().child("Timeline")
             let newpost = ["postID": postID,
                            "posterID": userID!]
-            timeLineRef.setValue(newpost)
             
-//            let postData = ["type": "post",
-//                            "posterID": userID!,
-//                            "message": text.text!,
-//                            "username": coachUsername,
-//                            "time": ServerValue.timestamp()] as [String : Any]
-//
-//            DBRef.child("Activities").child(userID!).childByAutoId().setValue(postData)
-//
-//            for player in playersID{
-//                DBRef.child("Activities").child(player).childByAutoId().setValue(postData)
-//            }
+            
+            let postData = ["type": "post",
+                            "posterID": userID!,
+                            "message": text.text!,
+                            "username": coachUsername,
+                            "time": ServerValue.timestamp(),
+                            "isPrivate" : false] as [String : Any]
+
+            postRef.setValue(postData)
+            timeLineRef.child(userID!).childByAutoId().setValue(newpost)
+            for player in playersID{
+                timeLineRef.child(player).childByAutoId().setValue(newpost)
+            }
             
             text.text = ""
             navigationController?.popViewController(animated: true)

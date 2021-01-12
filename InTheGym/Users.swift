@@ -18,3 +18,10 @@ class Users: NSObject {
     var numberOfCompletes: Int?
     var uid: String?
 }
+
+enum userRank {
+    case beginner
+    case intermediate
+    case expert
+    case master
+}

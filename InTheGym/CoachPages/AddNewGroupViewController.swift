@@ -134,9 +134,20 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
             DBRef.childByAutoId().setValue(newGroupData)
             let actData = ["time": ServerValue.timestamp(),
                            "message": "You created a new group, \(self.titleField.text!).",
-                           "type": "New Group"] as [String:AnyObject]
+                           "type": "New Group",
+                           "isPrivate" : true] as [String:AnyObject]
             
             actRef.child(self.userID!).childByAutoId().setValue(actData)
+            
+            let PostRef = Database.database().reference().child("Posts").child(self.userID!).childByAutoId()
+            let postRefKey = PostRef.key
+                                
+            let timeLineData = ["postID" : postRefKey,
+                                "posterID" : self.userID!]
+            
+            let timeLineRef = Database.database().reference().child("Timeline").child(self.userID!).childByAutoId()
+            timeLineRef.setValue(timeLineData)
+            PostRef.setValue(actData)
             
             
             let alert = SCLAlertView()

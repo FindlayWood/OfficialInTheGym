@@ -6,6 +6,8 @@
 //  Copyright © 2020 FindlayWood. All rights reserved.
 //
 
+// this page is used instead of weightviewcontroller
+
 import UIKit
 import SCLAlertView
 
@@ -32,6 +34,7 @@ class NewWeightViewController: UIViewController {
     // variables from previous page, body type/exercise name/
     var exercise: String = ""
     var type: String = "weights"
+    var completedArray : [Bool] = []
     
     
     
@@ -63,6 +66,7 @@ class NewWeightViewController: UIViewController {
             destVC.repArray = self.repArray
             destVC.exercise = self.exercise
             destVC.type = self.type
+            destVC.completedArray = self.completedArray
             self.navigationController?.pushViewController(destVC, animated: true)
             //self.present(destVC, animated: true, completion: nil)
         }
@@ -80,6 +84,7 @@ class NewWeightViewController: UIViewController {
             destVC.repArray = self.repArray
             destVC.exercise = self.exercise
             destVC.type = self.type
+            destVC.completedArray = self.completedArray
             self.navigationController?.pushViewController(destVC, animated: true)
             //self.present(destVC, animated: true, completion: nil)
         }
@@ -96,6 +101,7 @@ class NewWeightViewController: UIViewController {
         destVC.repArray = self.repArray
         destVC.exercise = self.exercise
         destVC.type = self.type
+        destVC.completedArray = self.completedArray
         self.navigationController?.pushViewController(destVC, animated: true)
         //self.present(destVC, animated: true, completion: nil)
     }
