@@ -34,7 +34,7 @@ extension DiscussionAdapter: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier(for: rowModel), for: indexPath)
         if var cell = cell as? DiscussionCellConfigurable{
             cell.setup(rowViewModel: rowModel)
-            cell.delegate = self.delegate as! DiscussionTapProtocol
+            cell.delegate = self.delegate as? DiscussionTapProtocol
         }
         return cell
     }

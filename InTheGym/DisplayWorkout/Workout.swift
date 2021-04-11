@@ -44,7 +44,7 @@ struct workout: WorkoutDelegate, Completeable{
         self.workload = object["workload"] as? Int
         self.fromDiscover = object["fromDiscover"] as? Bool
         self.title = object["title"] as? String
-        self.liveWorkout = object["liveWorkout"] as? Bool
+        self.liveWorkout = object["liveWorkout"] as? Bool ?? false
         self.creatorID = object["creatorID"] as? String
         self.savedID = object["savedID"] as? String
         self.assigned = object["assigned"] as? Bool ?? false
@@ -190,7 +190,7 @@ struct discoverWorkout : WorkoutDelegate {
         self.savedID = snap["savedID"] as? String
         self.timeToComplete = snap["timeToComplete"] as? String
         self.completed = snap["completed"] as? Bool
-        self.liveWorkout = snap["liveWorkout"] as? Bool
+        self.liveWorkout = snap["liveWorkout"] as? Bool ?? false
         self.fromDiscover = true
         self.numberOfDownloads = snap["NumberOfDownloads"] as? Int
         self.numberOfCompletes = snap["NumberOfCompletes"] as? Int
@@ -208,7 +208,7 @@ struct discoverWorkout : WorkoutDelegate {
         self.savedID = object["savedID"] as? String
         self.timeToComplete = object["timeToComplete"] as? String
         self.completed = object["completed"] as? Bool
-        self.liveWorkout = object["liveWorkout"] as? Bool
+        self.liveWorkout = object["liveWorkout"] as? Bool ?? false
         self.fromDiscover = true
         self.numberOfDownloads = object["NumberOfDownloads"] as? Int
         self.numberOfCompletes = object["NumberOfCompletes"] as? Int

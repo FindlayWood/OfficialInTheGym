@@ -132,11 +132,11 @@ extension DisplayNotificationsViewController: DisplayNotificationsProtocol{
                 var tempPost:PostProtocol!
                 switch snap["type"] as! String {
                 case "post":
-                    tempPost = TimelinePostModel(snapshot: snapshot)
+                    tempPost = DiscussionPost(snapshot: snapshot)
                 case "createdNewWorkout":
-                    tempPost = TimelineCreatedWorkoutModel(snapshot: snapshot)
+                    tempPost = DiscussionCreatedWorkout(snapshot: snapshot)
                 case "workout":
-                    tempPost = TimelineCompletedWorkoutModel(snapshot: snapshot)
+                    tempPost = DiscussionCompletedWorkout(snapshot: snapshot)
                 default:
                     break
                 }

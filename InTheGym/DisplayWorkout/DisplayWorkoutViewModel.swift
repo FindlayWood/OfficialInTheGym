@@ -66,7 +66,7 @@ class DisplayWorkoutViewModel: NSObject{
     
     func isLive() -> Bool {
         
-        return selectedWorkout!.liveWorkout
+        return selectedWorkout!.liveWorkout ?? false
     }
     
     func updateCompletedSet(at indexPath: IndexPath){

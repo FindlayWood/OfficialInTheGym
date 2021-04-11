@@ -31,6 +31,20 @@ struct DiscussionPost:PostProtocol {
         self.replyCount = model.replyCount
     }
     
+    init?(snapshot:DataSnapshot){
+        guard let snap = snapshot.value as? [String:AnyObject] else{
+            return
+        }
+        self.username = snap["username"] as? String
+        self.posterID = snap["posterID"] as? String
+        self.postID = snapshot.key
+        self.message = snap["message"] as? String
+        self.likeCount = snap["likeCount"] as? Int
+        self.replyCount = snap["replyCount"] as? Int
+        self.isPrivate = snap["isPrivate"] as? Bool
+        self.time = snap["time"] as? TimeInterval
+    }
+    
     func toObject() -> [String : AnyObject] {
         return [:]
     }
@@ -60,6 +74,21 @@ struct DiscussionCreatedWorkout:PostProtocol{
         self.replyCount = model.replyCount
     }
     
+    init?(snapshot:DataSnapshot){
+        guard let snap = snapshot.value as? [String:AnyObject] else{
+            return
+        }
+        self.username = snap["username"] as? String
+        self.posterID = snap["posterID"] as? String
+        self.postID = snapshot.key
+        self.likeCount = snap["likeCount"] as? Int
+        self.replyCount = snap["replyCount"] as? Int
+        self.isPrivate = snap["isPrivate"] as? Bool
+        self.time = snap["time"] as? TimeInterval
+        self.createdWorkout = discoverWorkout(object: snap["exerciseData"] as! [String : AnyObject])
+
+    }
+    
     func toObject() -> [String : AnyObject] {
         return [:]
     }
@@ -87,6 +116,20 @@ struct DiscussionCompletedWorkout:PostProtocol{
         self.isPrivate = model.isPrivate
         self.likeCount = model.likeCount
         self.replyCount = model.replyCount
+    }
+    
+    init?(snapshot:DataSnapshot){
+        guard let snap = snapshot.value as? [String:AnyObject] else{
+            return
+        }
+        self.username = snap["username"] as? String
+        self.posterID = snap["posterID"] as? String
+        self.postID = snapshot.key
+        self.likeCount = snap["likeCount"] as? Int
+        self.replyCount = snap["replyCount"] as? Int
+        self.isPrivate = snap["isPrivate"] as? Bool
+        self.time = snap["time"] as? TimeInterval
+        self.completedWorkout = discoverWorkout(object: snap["exerciseData"] as! [String : AnyObject])
     }
     
     func toObject() -> [String : AnyObject] {

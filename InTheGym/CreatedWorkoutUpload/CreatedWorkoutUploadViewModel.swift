@@ -101,6 +101,9 @@ class CreatedWorkoutUploadViewModel {
                     }
                 }
             }
+        } else {
+            
+            print(createdFor)
         }
     }
     
