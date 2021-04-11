@@ -40,6 +40,8 @@ class PBsViewController: UIViewController {
     var pbArray : [[String:Any]] = []
     var activities : [[String:AnyObject]] = []
     
+    let userID = Auth.auth().currentUser?.uid
+    
     @IBAction func editPressed(_ sender:UIButton){
         sender.pulsate()
         bench1.isUserInteractionEnabled = true
@@ -72,7 +74,7 @@ class PBsViewController: UIViewController {
                           "PBs": pbData] as [String : Any]
         self.pbArray.append(uploadData)
         
-        DBRef.child(username).setValue(pbData)
+        DBRef.child(self.userID!).setValue(pbData)
         
         saveButton.isHidden = true
         editButton.isHidden = false
@@ -91,7 +93,6 @@ class PBsViewController: UIViewController {
     
     
     func uploadActivity(){
-        let userID = Auth.auth().currentUser?.uid
         let actData = ["time":ServerValue.timestamp(),
                        "type":"Update PBs",
                        "message":"You updated your PB scores.",
@@ -99,15 +100,15 @@ class PBsViewController: UIViewController {
         ActRef.child("Activities").child(userID!).childByAutoId().setValue(actData)
         
         // adding to posts and timeline
-        let postRef = Database.database().reference().child("Posts").child(userID!).childByAutoId()
+        let postSelfReferences = Database.database().reference().child("PostSelfReferences").child(self.userID!)
+        let postRef = Database.database().reference().child("Posts").childByAutoId()
         let postKey = postRef.key
         let timeLineRef = Database.database().reference().child("Timeline")
         
-        let timeLineData = ["postID" : postKey,
-                            "posterID" : userID!]
         
         postRef.setValue(actData)
-        timeLineRef.child(userID!).childByAutoId().setValue(timeLineData)
+        postSelfReferences.child(postKey!).setValue(true)
+        timeLineRef.child(userID!).child(postKey!).setValue(true)
         
         
         
@@ -116,26 +117,23 @@ class PBsViewController: UIViewController {
         
         let actDataPublic = ["time":ServerValue.timestamp(),
                        "type":"Update PBs",
-                       "message":"\(username) updated their PB scores."] as [String:AnyObject]
+                       "message":"\(username) updated their PB scores.",
+                       "posterID":self.userID!,
+                       "isPrivate":true] as [String:AnyObject]
         
         
         if ViewController.admin == false && coaches.count != 0{
             // using coach userid to add to public feed instead of username
+            
+            let coachPostRef = Database.database().reference().child("Posts").childByAutoId()
+            let coachPostKey = coachPostRef.key
+            coachPostRef.setValue(actDataPublic)
+            
             for coach in coaches{
                 self.ActRef.child("Public Feed").child(coach).childByAutoId().setValue(actDataPublic)
-                
-                let coachPostRef = Database.database().reference().child("Posts").child(coach).childByAutoId()
-                let coachPostKey = coachPostRef.key
-                let timeLineData = ["postID" : coachPostKey,
-                                    "posterID" : coach]
-                
-                coachPostRef.setValue(actDataPublic)
-                timeLineRef.child(coach).childByAutoId().setValue(timeLineData)
+                timeLineRef.child(coach).child(coachPostKey!).setValue(true)
                     
-    
             }
-        }else{
-            print("no coaches to upload to.")
         }
         
         
@@ -153,16 +151,10 @@ class PBsViewController: UIViewController {
         let userID = Auth.auth().currentUser?.uid
         
         if ViewController.admin == false{
-            ActRef.child("users").child(userID!).child("coachName").observeSingleEvent(of: .value) { (snapshot) in
-                if let snap = snapshot.value as? String{
-                    self.coachUserName = snap
-                }
-                
-            }
-            ActRef.child("users").child(userID!).child("coaches").observe(.childAdded) { (snapshot) in
-                if let snap = snapshot.value as? String{
-                    self.coaches.append(snap)
-                }
+            
+            ActRef.child("PlayerCoaches").child(userID!)
+            ActRef.observe(.childAdded) { (snapshot) in
+                self.coaches.append(snapshot.key)
             }
         }
         else{
@@ -171,7 +163,7 @@ class PBsViewController: UIViewController {
         
         
         
-        DBRef.child(username).observeSingleEvent(of: .value) { (snapshot) in
+        DBRef.child(userID!).observeSingleEvent(of: .value) { (snapshot) in
             if let snap = snapshot.value as? [String : AnyObject]{
                 self.bench1.text = snap["Bench1"] as? String
                 self.bench3.text = snap["Bench3"] as? String

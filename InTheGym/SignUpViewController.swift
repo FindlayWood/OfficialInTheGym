@@ -22,11 +22,11 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var passwordConfirm :UITextField!
     
-    @IBOutlet var accountLabel:UILabel!
     
     let haptic = UINotificationFeedbackGenerator()
 
-    
+    private var usernamesViewModel : loadUsernamesViewModel!
+    private var signUpViewModel : SignUpViewModel!
     
     // database reference
     var userRef: DatabaseReference!
@@ -63,6 +63,13 @@ class SignUpViewController: UIViewController {
                 }
                 else{
                     // create new user
+                    let user = Users()
+                    user.email = email.text!
+                    user.firstName = self.firstName.text!
+                    user.lastName = self.lastName.text!
+                    user.admin = self.admin
+                    user.username = self.username.text!
+                    checkForUserCreation(user: user, password: password.text!)
                     Auth.auth().createUser(withEmail: email.text!, password: password.text!) { (user, error) in
                         if error == nil{
                             self.haptic.prepare()
@@ -85,7 +92,13 @@ class SignUpViewController: UIViewController {
                                            "message":"\(self.username.text!), welcome to InTheGym!",
                                            "type":"Account Created"] as [String:AnyObject]
                             
-                            
+                            let postRef = Database.database().reference().child("Posts").child(userID).childByAutoId()
+                            let postKey = postRef.key
+                            let timelineRef = Database.database().reference().child("Timeline").child(userID).childByAutoId()
+                            let timelineData = ["postID": postKey,
+                                                "posterID": userID]
+                            postRef.setValue(actData)
+                            timelineRef.setValue(timelineData)
                             self.ActRef.child(userID).childByAutoId().setValue(actData)
                             //self.userRef.child(userID).child("activities").childByAutoId().setValue(actData)
                             
@@ -144,32 +157,35 @@ class SignUpViewController: UIViewController {
         passwordConfirm.delegate = self
         
         if admin{
-            accountLabel.text = "COACH ACCOUNT"
+            navigationItem.title = "COACH ACCOUNT"
         }else{
-            accountLabel.text = "PLAYER ACCOUNT"
+            navigationItem.title = "PLAYER ACCOUNT"
         }
         
         userRef = Database.database().reference().child("users")
         ActRef = Database.database().reference().child("Activities")
-        checkUsernames()
-        
-//        let warningalert = SCLAlertView()
-//        warningalert.showNotice("Verification", subTitle: "New accounts must be verified and you will be sent an email to verify your account before you can login.", closeButtonTitle: "Ok")
-        
-        
+        getUsernames()
+           
     }
     
     
-    // fucntion to load over all usernames. used later to check for unique password
-    func checkUsernames(){
-        self.userRef.observe(.childAdded, with: { (snapshot) in
-            if let dictionary = snapshot.value as? [String:AnyObject]{
-                let user = Users()
-                user.username = dictionary["username"] as? String
-                self.usernames.append(user.username!)
-            }
-        }, withCancel: nil)
+    func getUsernames(){
+        self.usernamesViewModel = loadUsernamesViewModel()
+        self.usernamesViewModel.bindAllUsernamesToController = {
+            self.usernames = self.usernamesViewModel.allUsernames
+            print(self.usernames)
+        }
     }
+    
+    func checkForUserCreation(user:Users, password:String){
+        self.signUpViewModel = SignUpViewModel(this: user, with: password)
+        self.signUpViewModel.bindSignUpViewModelToController = {
+            print("user created...")
+            let newAlert = SCLAlertView()
+            newAlert.showSuccess("Account Created!", subTitle: "You have successfully created an account. We have sent a verification email to \(user.email ?? "NA"), follow the steps in the email to verify your account then you will be able to login. Once you have successfully logged in your device will be remembered and you will be automatically logged in.", closeButtonTitle: "Ok")
+        }
+    }
+    
     
 
     override func viewWillAppear(_ animated: Bool) {

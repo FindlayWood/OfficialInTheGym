@@ -9,7 +9,7 @@
 import UIKit
 import SCLAlertView
 
-class GroupNoteViewController: UIViewController, UITextViewDelegate {
+class GroupNoteViewController: UIViewController {
     
     var sets: String = ""
     var exercise: String = ""

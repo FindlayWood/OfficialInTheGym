@@ -12,7 +12,7 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class PlayerActivityViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class PlayerActivityViewController: UIViewController {
     
     @IBOutlet weak var tableview:UITableView!
     
@@ -21,11 +21,6 @@ class PlayerActivityViewController: UIViewController, UITableViewDelegate, UITab
     static var coachName:String!
     static var coachID:String!
     
-    var activities : [[String:AnyObject]] = []
-    
-    // new version of timeline posts
-    var posts : [[String:AnyObject]] = []
-    var timeline : [[String:AnyObject]] = []
     
     var DBref:DatabaseReference!
     var UserRef:DatabaseReference!
@@ -35,6 +30,12 @@ class PlayerActivityViewController: UIViewController, UITableViewDelegate, UITab
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     let userID = Auth.auth().currentUser?.uid
+    
+    // array of coaches
+    var coaches:[String] = []
+    
+    // tableview class
+    var postsTableView: PostTableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,165 +43,62 @@ class PlayerActivityViewController: UIViewController, UITableViewDelegate, UITab
         self.tableview.rowHeight = UITableView.automaticDimension
         self.tableview.estimatedRowHeight = 90
         self.tableview.tableFooterView = UIView()
+        self.tableview.backgroundColor = Constants.darkColour
         
         let userID = Auth.auth().currentUser?.uid
         
         DBref = Database.database().reference().child("Activities").child(userID!)
         UserRef = Database.database().reference().child("users").child(userID!)
-        UserRef.child("username").observeSingleEvent(of: .value) { (snapshot) in
-            PlayerActivityViewController.username = snapshot.value as? String
-        }
+//        UserRef.child("username").observeSingleEvent(of: .value) { (snapshot) in
+//            PlayerActivityViewController.username = snapshot.value as? String
+//            self.postsTableView = PostTableView(tableview: self.tableview, userID: userID!, parent: self, username: PlayerActivityViewController.username)
+//        }
         PostRef = Database.database().reference()
         
-        loadActivities()
-        loadPosts()
+
+        loadCoaches()
         
+        UserIDToUser.transform(userID: userID!) { (user) in
+            self.postsTableView = PostTableView(tableview: self.tableview, userID: userID!, parent: self, username: user.username!)
+            PlayerActivityViewController.username = user.username!
+        }
+        
+        LoadFollowers.returnFollowers(for: userID!) { (followers) in
+            print(followers)
+        }
+        
+
         // add tab bar selection image
 //        let tabBar = self.tabBarController!.tabBar
 //        tabBar.selectionIndicatorImage = UIImage().createSelectionIndicator(color: Constants.darkColour, size: CGSize(width: tabBar.frame.width/CGFloat(tabBar.items!.count), height: tabBar.frame.height), lineWidth: 2.0)
         
+    }
+    
+    
+    @IBAction func writePost(_ sender:UIButton){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let postVC = storyboard.instantiateViewController(withIdentifier: "MakePostViewController") as! MakePostViewController
+        postVC.playerCoaches = self.coaches
+        postVC.playerPost = true
+        postVC.groupBool = false
+        postVC.modalTransitionStyle = .coverVertical
+        postVC.modalPresentationStyle = .fullScreen
+        self.navigationController?.present(postVC, animated: true, completion: nil)
+        //self.navigationController?.pushViewController(postVC, animated: true)
         
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return activities.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let dateStamp = self.activities[indexPath.row]["time"] as? TimeInterval
-        let date = NSDate(timeIntervalSince1970: dateStamp!/1000)
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .short
-        let final = formatter.string(from: date as Date)
-        
-        if activities[indexPath.row]["type"] as? String == "post"{
-            //tableview.rowHeight = 180
-            let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell2") as! ActivityTableViewCell
-            
-            let coachID = activities[indexPath.row]["posterID"] as? String
-     
-            self.PostRef.child("users").child(coachID!).child("profilePhotoURL").observeSingleEvent(of: .value) { (snapshot) in
-                guard let imageURL = snapshot.value else{
-                    print("no profile pic")
-                    cell.profilePhoto.image = UIImage(named: "coach_icon")
-                    return
-                }
-                
-                DispatchQueue.global(qos: .background).async {
-                    let url = URL(string: imageURL as! String)
-                    let data = NSData(contentsOf: url!)
-                    let image = UIImage(data: data! as Data)
-                    DispatchQueue.main.async {
-                        cell.profilePhoto.image = image
-                        cell.profilePhoto.layer.cornerRadius = cell.profilePhoto.bounds.width / 2.0
-                    }
-                }
+    func loadCoaches(){
+        // load array of coaches and set variable equal
+        UserRef.child("coaches").observe(.childAdded) { (snapshot) in
+            if let snap = snapshot.value as? String{
+                self.coaches.append(snap)
             }
-            cell.postTime.text = final
-            cell.username.text = activities[indexPath.row]["username"] as? String
-            cell.postText.text = activities[indexPath.row]["message"] as? String
-            return cell
-        }
-        else{
-            
-            let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell") as! ActivityTableViewCell
-            //tableview.rowHeight = 90
-            cell.backgroundColor = .white
-            let type = self.activities[indexPath.row]["type"] as? String
-            cell.type.text = type
-            cell.time.text = final
-            cell.message.text = self.activities[indexPath.row]["message"] as? String
-            cell.pic.image = UIImage(named: type!)
-            return cell
-
         }
     }
-    
-    func loadActivities(){
-        var initialLoad = true
-        self.DBref.observe(.childAdded, with: { (snapshot) in
-            if let snap = snapshot.value as? [String:AnyObject]{
-                self.activities.insert(snap, at: 0)
-            }
-            
-            if initialLoad == false{
-                self.tableview.reloadData()
-            }
-            
-        }, withCancel: nil)
-        
-        self.DBref.observeSingleEvent(of: .value) { (_) in
-            self.tableview.reloadData()
-            initialLoad = false
-            
-        }
-    }
-    
-    func loadPosts(){
-        var initialLoad = true
-        let timelineRef = Database.database().reference().child("Timeline").child(self.userID!)
-        timelineRef.observe(.childAdded, with: { (snapshot) in
-            if let snap = snapshot.value as? [String:AnyObject]{
-                
-                let postID = snap["postID"] as! String
-                let posterID = snap["posterID"] as! String
-                let postData = ["postID" : postID,
-                "posterID" : posterID] as [String:AnyObject]
-                self.posts.insert(postData, at: 0)
-            }
-                        
-            if initialLoad == false{
-                    print("something has been updated!")
-            }
-            
-            
-        }, withCancel: nil)
-            
-    
-        timelineRef.observeSingleEvent(of: .value) { (_) in
-            initialLoad = false
-            print(self.posts)
-            self.loadTimeLine()
-        }
-        
-    }
-    
-    func loadTimeLine(){
-        let postRef = Database.database().reference().child("Posts")
-        
-        let myGroup = DispatchGroup()
-        
-        for post in posts{
-            myGroup.enter()
-            let postID = post["postID"] as! String
-            let posterID = post["posterID"] as! String
-            postRef.child(posterID).child(postID).observe(.value, with: { (snapshot) in
-                
-                defer {myGroup.leave()}
-                
-                guard let snap = snapshot.value as? [String:AnyObject] else{
-                    return
-                }
-                self.timeline.insert(snap, at: 0)
-                
-                
-            }, withCancel: nil)
-        }
-        myGroup.notify(queue: .main){
-            print(self.timeline)
-        }
-        
-        
-        
-    }
-    
     
         
     override func viewWillAppear(_ animated: Bool) {
-        //loadActivities()
-        
-        //tableview.reloadData()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     

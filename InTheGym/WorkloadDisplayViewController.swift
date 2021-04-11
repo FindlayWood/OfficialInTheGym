@@ -162,6 +162,7 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
                 let rpe = snap["rpe"] as! String
                 let workoutID = snap["workoutID"] as! String
                 
+                
                 if threeDayRange.contains(endDate){
                     self.threeWorkloadArray.append(workload)
                     self.threeTimeArray.append(timeToComplete)
@@ -214,7 +215,6 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
         }
         globalCount += threeWorkloadArray.count
         setLabels()
-        print(chartDays)
         populateChart(with: chartDays, and: threeWorkloadArray, withSize: 3)
         lineChart()
     }

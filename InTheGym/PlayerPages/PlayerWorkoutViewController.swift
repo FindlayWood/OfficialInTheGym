@@ -71,9 +71,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     
     @IBAction func addWorkoutPressed(_ sender:UIButton){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let nextVC = storyboard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
-        nextVC.playerBool = true
-        AddWorkoutHomeViewController.groupBool = false
+        let nextVC = storyboard.instantiateViewController(withIdentifier: "AddWorkoutSelectionViewController") as! AddWorkoutSelectionViewController
         navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -152,12 +150,17 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         let score = self.rowsToDisplay[indexPath.section]["score"] as? String
         let startTime = self.rowsToDisplay[indexPath.section]["startTime"] as? Double
         let timeToComplete = self.rowsToDisplay[indexPath.section]["timeToComplete"] as? Int
+        let live = self.rowsToDisplay[indexPath.section]["liveWorkout"] as? Bool
         cell.timeImage.isHidden = true
         cell.main.text = self.rowsToDisplay[indexPath.section]["title"] as? String
         if self.rowsToDisplay[indexPath.section]["completed"] as! Bool == true{
             cell.second.textColor = #colorLiteral(red: 0.00234289733, green: 0.8251151509, blue: 0.003635218529, alpha: 1)
             cell.second.text = "COMPLETED"
             cell.score.text = "Score: \(score!)"
+        }else if live == true{
+            cell.second.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+            cell.second.text = "LIVE"
+            cell.score.text = ""
         }else if startTime != nil && timeToComplete == nil{
             cell.second.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
             cell.second.text = "IN PROGRESS"
@@ -177,8 +180,12 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
             cell.coach.text = ""
         }
         
-        let exerciseNum = self.rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
-        cell.exNumber.text = "Exercises: \(exerciseNum.count)"
+        if let exerciseNum = self.rowsToDisplay[indexPath.section]["exercises"] as? [[String:AnyObject]]{
+            cell.exNumber.text = "Exercises: \(exerciseNum.count)"
+        }else{
+            cell.exNumber.text = "Exercises: 0"
+        }
+        
         
         if timeToComplete != nil{
             
@@ -231,29 +238,32 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         let complete = self.rowsToDisplay[indexPath.section]["completed"] as! Bool
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
-        SVC.username = PlayerActivityViewController.username
+        SVC.username = ViewController.username
         SVC.playerID = self.userID!
         SVC.titleString = titleLabel
-        SVC.exercises = self.rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
+        WorkoutDetailViewController.exercises = self.rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
         SVC.complete = complete
         SVC.workoutID = rowsToDisplayIDs[indexPath.section]
+        SVC.fromDiscover = false
+        SVC.savedID = rowsToDisplay[indexPath.section]["savedID"] as? String ?? ""
+        SVC.creatorUsername = rowsToDisplay[indexPath.section]["createdBy"] as! String
         if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
             SVC.assignedCoach = assignedCoach
         }else{
             SVC.assignedCoach = ""
         }
+        if let live = rowsToDisplay[indexPath.section]["liveWorkout"] as? Bool{
+            if live == true && complete == false {
+                SVC.liveAdd = true
+            } else {
+                SVC.liveAdd = false
+            }
+            
+        }
         PlayerWorkoutViewController.lastIndex = indexPath
         
         self.navigationController?.pushViewController(SVC, animated: true)
     }
-    
-//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete{
-//            self.rowsToDisplay.remove(at: indexPath.section)
-//            tableView.deleteRows(at: [indexPath], with: .left)
-//            DBref.child(self.username).setValue(workouts)
-//        }
-//    }
     
     override func viewWillAppear(_ animated: Bool) {
         loadWorkouts()

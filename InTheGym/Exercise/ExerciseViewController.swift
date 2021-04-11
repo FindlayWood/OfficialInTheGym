@@ -11,9 +11,15 @@ import Firebase
 
 class ExerciseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
     
+    var fromLiveWorkout:Bool!
+    let userID = Auth.auth().currentUser!.uid
+    var workoutID:String!
+    
     var exerciseType: String = ""
     var exerciseList = [String]()
     @IBOutlet weak var tableview:UITableView!
+    
+    @IBOutlet weak var pageNumberLabel:UILabel!
     
     var DBRef:DatabaseReference!
     
@@ -49,6 +55,12 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
         // to hide it when the view is first presented.
         //self.tableview.contentOffset = CGPoint(x: 0, y: searchController.searchBar.frame.height)
         
+        if fromLiveWorkout == true{
+            pageNumberLabel.text = "2 of 2"
+        }else{
+            pageNumberLabel.text = "2 of 6"
+        }
+        
     }
     
     
@@ -77,42 +89,65 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-        let SVC = StoryBoard.instantiateViewController(withIdentifier: "SavedWorkoutsViewController") as! SavedWorkoutsViewController
         
-        if exerciseType == "Cardio"{
-            if searchController.isActive{
-                SVC.exercise = searchResults[indexPath.row]
-            }else{
-                SVC.exercise = exerciseList[indexPath.row]
-            }
-            SVC.type = "cardio"
-        }
-        
-        else{
-            if searchController.isActive{
-                SVC.exercise = searchResults[indexPath.row]
-            }else{
-                SVC.exercise = exerciseList[indexPath.row]
-            }
-        }
+        var globalType:String = ""
+        var globalExercise:String = ""
         
         switch self.exerciseType {
         case "Upper Body":
-            SVC.type = "UB"
+            globalType = "UB"
         case "Lower Body":
-            SVC.type = "LB"
+            globalType = "LB"
         case "Core":
-            SVC.type = "CO"
+            globalType = "CO"
         case "Cardio":
-            SVC.type = "CA"
+            globalType = "CA"
         default:
-            SVC.type = "Weights"
+            globalType = "UB"
         }
-        //SVC.type = self.exerciseType
         
+        if searchController.isActive{
+            globalExercise = searchResults[indexPath.row]
+        }else{
+            globalExercise = exerciseList[indexPath.row]
+        }
         
-        self.navigationController?.pushViewController(SVC, animated: true)
+        if fromLiveWorkout == true{
+            
+
+            
+            //let backto = WorkoutDetailViewController()
+            let exerciseData = ["exercise":globalExercise,
+                                "type": globalType,
+                                "sets": "0",
+                                "reps": "",
+                                "weight":""] as [String:AnyObject]
+            WorkoutDetailViewController.exercises.append(exerciseData)
+            let updateRef = Database.database().reference().child("Workouts").child(self.userID).child(self.workoutID)
+            updateRef.updateChildValues(["exercises":WorkoutDetailViewController.exercises])
+
+            
+            let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+            self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+
+        }else{
+            let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+            let SVC = StoryBoard.instantiateViewController(withIdentifier: "ExerciseSetsViewController") as! ExerciseSetsViewController
+            
+
+            
+//            if searchController.isActive{
+//                SVC.exercise = searchResults[indexPath.row]
+//            }else{
+//                SVC.exercise = exerciseList[indexPath.row]
+//            }
+
+            SVC.type = globalType
+            SVC.exercise = globalExercise
+            
+            self.navigationController?.pushViewController(SVC, animated: true)
+        }
+        
         
     }
     

@@ -14,8 +14,6 @@ target 'InTheGym' do
 	pod 'IQKeyboardManagerSwift'
 	pod 'SkyFloatingLabelTextField'
 	pod 'Charts'
-	pod 'Flurry-iOS-SDK/FlurrySDK'
-	pod 'Flurry-iOS-SDK/FlurryAds'
 	pod 'SCLAlertView'
 	pod 'EmptyDataSet-Swift'
 

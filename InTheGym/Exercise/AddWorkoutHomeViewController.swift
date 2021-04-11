@@ -67,17 +67,17 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     // variables to check if group or single.
     static var groupBool:Bool!
     var groupPlayers = [String]()
+    var groupID : String!
     let myGroup = DispatchGroup()
     
     // variable to check if a player or coach
     var playerBool:Bool!
-        
+    
+    // array to hold follower ids
+    var followers:[String] = []
+    var coaches:[String] = []
     
     @IBAction func savePressed(_ sender:UIButton){
-        
-        
-        print("you want to upload this multiple times, \(stepCount) times to be exact. now we have to go to a new page to allow edits to 2nd or 3rd")
-        
         
         if titleField.text == ""{
             
@@ -90,368 +90,281 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
             let alert = SCLAlertView()
             alert.showWarning("OOPS!", subTitle: "You must enter at least one exercise. Add exercises by tapping the Add Exercise button.", closeButtonTitle: "Ok")
             
-        }else{
-            let username = AdminActivityViewController.username
-            var exerciseData = ["title": titleField.text!,
-                                "completed": false,
-                                "exercises": AddWorkoutHomeViewController.exercises,
-                                "createdBy": username] as [String : Any]
-            
-            // haptic feedback : successfull upload
-            let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
-            notificationFeedbackGenerator.prepare()
-            
-            notificationFeedbackGenerator.notificationOccurred(.success)
-            
-            
-            
-            // add to posts for self
-            // add to timeline of players and self
-            // refernce to coach posts, post key of this reference and player reference to posts
-            let postRef = Database.database().reference().child("Posts").child(userID).childByAutoId()
-            let postID = postRef.key
-            let playerPostRef = Database.database().reference().child("Posts")
-            
-            // reference to timeline and creation of timeline data for coach
-            let timeLineRef = Database.database().reference().child("Timeline")
-            let timelineData = ["postID" : postID,
-                                "posterID": userID]
-            
-            
-            if playerBool {
-                // add workout to self
-                let myusername = PlayerActivityViewController.username
-                
-                for step in 1...stepCount{
-                    //print("adding...")
-                    //let myID = Auth.auth().currentUser?.uid
-                    
-                    if stepCount > 1{
-                        exerciseData["title"] = self.titleField.text! + " (\(step))"
-                    }
-                    
-                    exerciseData["createdBy"] = myusername
-
-                    let workoutRef = Database.database().reference().child("Workouts").child(self.userID).childByAutoId()
-                    workoutRef.setValue(exerciseData)
-                    
-                    
-
-                }
-                let actData = ["time":ServerValue.timestamp(),
-                               "type":"Set Workout",
-                                "message":"You created a new workout.",
-                                "isPrivate" : false] as [String:AnyObject]
-                let activityRef = Database.database().reference().child("Activities").child(self.userID).childByAutoId()
-                activityRef.setValue(actData)
-                                    
-                let selfPostRef = Database.database().reference().child("Posts").child(self.userID).childByAutoId()
-                let postRefKey = selfPostRef.key
-                                    
-                let timeLineData = ["postID" : postRefKey,
-                                    "posterID" : self.userID]
-                                    
-                let playerTimeLineRef = Database.database().reference().child("Timeline").child(self.userID).childByAutoId()
-                playerTimeLineRef.setValue(timeLineData)
-                selfPostRef.setValue(actData)
-                
+        } else {
+            // send to upload workout page
+            // need who its for/number of ex
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let uploadPage = storyboard.instantiateViewController(withIdentifier: "CreatedWorkoutUploadViewController") as! CreatedWorkoutUploadViewController
+            uploadPage.noOfExercises = AddWorkoutHomeViewController.exercises.count
+            uploadPage.workoutTitle = titleField.text
+            if AddWorkoutHomeViewController.groupBool == true {
+                uploadPage.createdFor = self.groupID
+                uploadPage.groupBool = true
+            } else if playerBool == true {
+                uploadPage.createdFor = self.userID
+                uploadPage.groupBool = false
+            } else  {
+                uploadPage.createdFor = self.uid
+                uploadPage.groupBool = false
             }
+            self.navigationController?.pushViewController(uploadPage, animated: true)
             
-            
-            
-            
-            // begin with group check
-            else if AddWorkoutHomeViewController.groupBool{
-                // this is for a group add
-                // then add check for multiple
-                if stepCount > 1{
-                    // MARK: GROUP Multiple
-                    // multiple add for a group
-                    // in here add loop to add for stepcount times
-                    myGroup.enter()
-                    for step in 1...stepCount{
-                        exerciseData["title"] = self.titleField.text! + " (\(step))"
-                        for player in groupPlayers{
-                            self.GroupDBRef.child(player).childByAutoId().setValue(exerciseData)
-                        }
-                    }
-                    myGroup.leave()
-                    myGroup.notify(queue: DispatchQueue.main){
-                        let actData = ["time":ServerValue.timestamp(),
-                                       "type":"Set Workout",
-                                       "message":"You created \(self.stepCount) group Workouts."] as [String:AnyObject]
-                        self.ActRef.child("Activities").child(self.userID).childByAutoId().setValue(actData)
-                        
-                        let playerTimeLineData = ["time" : ServerValue.timestamp(),
-                                                  "type" : "Set Workout",
-                                                  "message" : "\(username) created \(self.stepCount) new workouts for you.",
-                                                  "isPrivate" : true] as [String:AnyObject]
-                        
-                        postRef.setValue(actData)
-                        timeLineRef.child(self.userID).childByAutoId().setValue(timelineData)
-                        for player in self.groupPlayers{
-                            // creating brand new post for each player
-                            let postkeyref = playerPostRef.child(player).childByAutoId()
-                            let playerPostKey = postkeyref.key
-                            
-                            let playerPostData = ["postID" : playerPostKey,
-                                                      "posterID" : player]
-                            postkeyref.setValue(playerTimeLineData)
-                            
-                            
-                            // timeline data for each player, pointing to different post
-                            timeLineRef.child(player).childByAutoId().setValue(playerPostData)
-                        }
-                        
-                        //self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
-                        self.workoutsCount += self.stepCount * self.groupPlayers.count
-                        self.ActRef.child("users").child(self.userID).child("NumberOfWorkouts").setValue(self.workoutsCount)
-                    }
-                    
-                    
-                }else{
-                    // single add for a group
-                    // MARK: GROUP Single
-                    myGroup.enter()
-                    for player in groupPlayers{
-                        self.GroupDBRef.child(player).childByAutoId().setValue(exerciseData)
-                    }
-                    myGroup.leave()
-                    myGroup.notify(queue: DispatchQueue.main){
-                        let actData = ["time":ServerValue.timestamp(),
-                                       "type":"Set Workout",
-                                       "message":"You created a group Workout."] as [String:AnyObject]
-                        self.ActRef.child("Activities").child(self.userID).childByAutoId().setValue(actData)
-                        
-                        // post for coach and timeline data for coach
-                        postRef.setValue(actData)
-                        timeLineRef.child(self.userID).childByAutoId().setValue(timelineData)
-                        
-                        // post data to send to each player
-                        let playerTimeLineData = ["time" : ServerValue.timestamp(),
-                                                  "type" : "Set Workout",
-                                                  "message" : "\(username) created a new workout for you.",
-                                                  "isPrivate" : true] as [String:AnyObject]
-                        
-                        for player in self.groupPlayers{
-                            // create new post for each player
-                            let postKeyRef = playerPostRef.child(player).childByAutoId()
-                            let playerPostKey = postKeyRef.key
-                            
-                            // data to post to player
-                            let playerPostData = ["postID" : playerPostKey,
-                                                  "posterID" : player]
-                            
-                            // add postdata to posts in database
-                            postKeyRef.setValue(playerTimeLineData)
-                            
-                            // add timelinedata to timeline in database
-                            timeLineRef.child(player).childByAutoId().setValue(playerPostData)
-                            
-                            
-                        }
-                        
-                        
-                        
-                        //self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
-                        self.workoutsCount += self.groupPlayers.count
-                        self.ActRef.child("users").child(self.userID).child("NumberOfWorkouts").setValue(self.workoutsCount)
-                    }
-                }
-            }else{
-                // this is single person add
-                // add check for multiple here
-                if stepCount > 1{
-                    // add loop to add stepcoount times
-                    // MARK: SINGLE multiple
-                    for step in 1...stepCount{
-                        exerciseData["title"] = self.titleField.text! + " (\(step))"
-                        DBRef.childByAutoId().setValue(exerciseData)
-                    }
-                    let actData = ["time":ServerValue.timestamp(),
-                                   "type":"Set Workout",
-                                   "message":"You created \(stepCount) workouts for \(userName!)."] as [String:AnyObject]
-                    self.ActRef.child("Activities").child(self.userID).childByAutoId().setValue(actData)
-                    //self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
-                    workoutsCount += stepCount
-                    self.ActRef.child("users").child(userID).child("NumberOfWorkouts").setValue(workoutsCount)
-                    
-                    
-                    
-                    // adding to posts and timeline
-                    postRef.setValue(actData)
-                    timeLineRef.child(self.userID).childByAutoId().setValue(timelineData)
-                    
-                    // post data to send to each player
-                    let playerPostData = ["time" : ServerValue.timestamp(),
-                                          "type" : "Set Workout",
-                                          "message" : "\(username) created \(stepCount) new workouts for you.",
-                                          "isPrivate" : true] as [String:AnyObject]
-                    
-                    // create new post for player
-                    let postKeyRef = playerPostRef.child(uid).childByAutoId()
-                    let playerPostKey = postKeyRef.key
-                    
-                    // data to post to player
-                    let playerTimeLineData = ["postID" : playerPostKey,
-                                              "posterID" : uid]
-                    
-                    // add postdata to posts in database
-                    postKeyRef.setValue(playerPostData)
-                    
-                    // add timelinedata to timeline in database
-                    timeLineRef.child(uid).childByAutoId().setValue(playerTimeLineData)
-                    
-                    
-                    
-                    
-                }else{
-                    // just add single time
-                    // MARK: SINGLE single
-                    DBRef.childByAutoId().setValue(exerciseData)
-                    let actData = ["time":ServerValue.timestamp(),
-                                   "type":"Set Workout",
-                                   "message":"You created a workout for \(userName!)."] as [String:AnyObject]
-                    self.ActRef.child("Activities").child(self.userID).childByAutoId().setValue(actData)
-                    //self.ActRef.child("users").child(self.userID).child("activities").childByAutoId().setValue(actData)
-                    workoutsCount += 1
-                    self.ActRef.child("users").child(userID).child("NumberOfWorkouts").setValue(workoutsCount)
-                    
-                    
-                    // adding to posts and timeline
-                    // add to coach posts and timeline
-                    postRef.setValue(actData)
-                    timeLineRef.child(self.userID).childByAutoId().setValue(timelineData)
-                    
-                    // post data to send to each player
-                    let playerPostData = ["time" : ServerValue.timestamp(),
-                                          "type" : "Set Workout",
-                                          "message" : "\(username) created a new workout for you.",
-                                          "isPrivate" : true] as [String:AnyObject]
-                    
-                    // create new post for player
-                    let postKeyRef = playerPostRef.child(uid).childByAutoId()
-                    let playerPostKey = postKeyRef.key
-                    
-                    // data to post to player
-                    let playerTimeLineData = ["postID" : playerPostKey,
-                                              "posterID" : uid]
-                    
-                    // add postdata to posts in database
-                    postKeyRef.setValue(playerPostData)
-                    
-                    // add timelinedata to timeline in database
-                    timeLineRef.child(uid).childByAutoId().setValue(playerTimeLineData)
-                    
-                    
-                }
-            }
-            
-            let screenSize = UIScreen.main.bounds
-            let width = screenSize.width
-            
-            let appearance = SCLAlertView.SCLAppearance(kWindowWidth: width - 40)
-            
-            let alert = SCLAlertView(appearance: appearance)
-            alert.addButton("Save") {
-                
-                // add to saved workouts
-                let savedRef = Database.database().reference().child("SavedWorkouts").child(self.userID).childByAutoId()
-                let refKey = savedRef.key
-                
-                savedRef.setValue(exerciseData)
-                
-                // add to posts
-                let postRef = Database.database().reference().child("Posts").child(self.userID).childByAutoId()
-                let postID = postRef.key!
-                
-                // add to timeline
-                let timeLineRef = Database.database().reference().child("Timeline")
-                let newpost = ["postID": postID,
-                               "posterID": self.userID]
-                
-                let postMessage = "\(username) just created a new workout. Check it out below!"
-                
-                let postData = ["posterID" : self.userID,
-                                "workoutID" : refKey!,
-                                "username" : username,
-                                "time" : ServerValue.timestamp(),
-                                "message" : postMessage,
-                                "type" : "createdNewWorkout",
-                                "exerciseData" : exerciseData,
-                                "isPrivate" : true] as [String : Any]
-                
-                postRef.setValue(postData)
-                timeLineRef.setValue(newpost)
-                
-            }
-            alert.addButton("Save and Post to Timeline") {
-                
-                // add to saved workouts
-                let savedRef = Database.database().reference().child("SavedWorkouts").child(self.userID).childByAutoId()
-                let refKey = savedRef.key
-                
-                // add to discover posts
-                let discoverRef = Database.database().reference().child("Discover").child("Workouts").childByAutoId()
-                let newDiscoverPost = ["posterID" : self.userID,
-                                       "postID" : refKey]
-                
-                // add to posts
-                let postRef = Database.database().reference().child("Posts").child(self.userID).childByAutoId()
-                let postID = postRef.key!
-                
-                // add to timeline
-                let timeLineRef = Database.database().reference().child("Timeline")
-                let newpost = ["postID": postID,
-                               "posterID": self.userID]
-                
-                let postMessage = "\(username) just created a new workout. Check it out below!"
-                
-                let postData = ["posterID" : self.userID,
-                                "workoutID" : refKey!,
-                                "username" : username,
-                                "time" : ServerValue.timestamp(),
-                                "message" : postMessage,
-                                "type" : "createdNewWorkout",
-                                "exerciseData" : exerciseData,
-                                "isPrivate" : false] as [String : Any]
-                
-                savedRef.setValue(exerciseData)
-                discoverRef.setValue(newDiscoverPost)
-                postRef.setValue(postData)
-                timeLineRef.setValue(newpost)
-                
-                
-                
-            }
-            alert.showInfo("Save This Workout?", subTitle: "Would you like to save this workout? If you save it, you can access it at a later date. If you press save and post to timeline, this will save your workout and post it to your timeline, where your followers will be able to see it, and it will make it may appear on the Discover Page for other users to view.", closeButtonTitle: "Neither")
-            
-            
-            
-            
-            titleField.text = ""
-            AddWorkoutHomeViewController.exercises.removeAll()
-            tableview.reloadData()
-            
-            if playerBool{
-                displayTopView(with: "Workout Uploaded.")
-            }else{
-                displayTopView(with: "Workout Uploaded. Players can now view it!")
-            }
-            
-            // new alert
-//            let alert = SCLAlertView()
-//            alert.showSuccess("Uploaded", subTitle: "This workout has been uploaded and the player can now view it.", closeButtonTitle: "Ok")
         }
+        //else{
+//            var username : String = ""
+//            if playerBool{
+//                username = PlayerActivityViewController.username
+//            }else{
+//                username = AdminActivityViewController.username
+//            }
+//
+//            let savedReferences = Database.database().reference().child("SavedWorkoutReferences").child(userID)
+//            let savedWorkoutRef = Database.database().reference().child("SavedWorkouts").childByAutoId()
+//            let savedWorkoutCreatorsRef = Database.database().reference().child("SavedWorkoutCreators").child(userID)
+//            let savedID = savedWorkoutRef.key!
+//            savedReferences.child(savedID).setValue(true)
+//            savedWorkoutCreatorsRef.child(savedID).setValue(true)
+//
+//            var exerciseData = ["title": titleField.text!,
+//                                "completed": false,
+//                                "exercises": AddWorkoutHomeViewController.exercises,
+//                                "createdBy": username,
+//                                "savedID": savedID,
+//                                "creatorID": userID] as [String : Any]
+//
+//            // haptic feedback : successfull upload
+//            let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
+//            notificationFeedbackGenerator.prepare()
+//
+//            notificationFeedbackGenerator.notificationOccurred(.success)
+//
+//
+//
+//            // add to posts for self
+//            // add to timeline of players and self
+//            // refernce to coach posts, post key of this reference and player reference to posts
+//            let postRef = Database.database().reference().child("Posts").childByAutoId()
+//            let postID = postRef.key!
+//            let playerPostRef = Database.database().reference().child("Posts").childByAutoId()
+//            let playerPostRefKey = playerPostRef.key!
+//            let postSelfReferences = Database.database().reference().child("PostSelfReferences")
+//
+//            // reference to timeline and creation of timeline data for coach
+//            let timeLineRef = Database.database().reference().child("Timeline")
+//
+//
+//            if playerBool {
+//                // add workout to self
+//                let myusername = PlayerActivityViewController.username
+//
+//                for step in 1...stepCount{
+//
+//                    if stepCount > 1{
+//                        exerciseData["title"] = self.titleField.text! + " (\(step))"
+//                    }
+//
+//                    exerciseData["createdBy"] = myusername
+//                    exerciseData["assigned"] = false
+//
+//                    let workoutRef = Database.database().reference().child("Workouts").child(self.userID).childByAutoId()
+//                    workoutRef.setValue(exerciseData)
+//
+//                }
+//                let actData = ["time":ServerValue.timestamp(),
+//                               "type":"Set Workout",
+//                                "message":"You created a new workout.",
+//                                "isPrivate" : true] as [String:AnyObject]
+//                let activityRef = Database.database().reference().child("Activities").child(self.userID).childByAutoId()
+//                activityRef.setValue(actData)
+//
+//            }
+//
+//
+//
+//
+//            // begin with group check
+//            // MARK: - GROUP
+//            else if AddWorkoutHomeViewController.groupBool{
+//
+//                for step in 1...stepCount{
+//
+//                    if stepCount > 1{
+//                        exerciseData["title"] = self.titleField.text! + " \(step)"
+//                    }
+//                    exerciseData["createdBy"] = ViewController.username
+//                    exerciseData["assigned"] = true
+//                    for player in groupPlayers{
+//                        self.GroupDBRef.child(player).childByAutoId().setValue(exerciseData)
+//                    }
+//                }
+//                let actData = ["time":ServerValue.timestamp(),
+//                               "type":"Set Workout",
+//                               "message":"You created \(self.stepCount) group Workouts.",
+//                               "isPrivate":true] as [String:AnyObject]
+//                postRef.setValue(actData)
+//                postSelfReferences.child(self.userID).child(postID).setValue(true)
+//                self.ActRef.child("Activities").child(self.userID).childByAutoId().setValue(actData)
+//                let playerTimeLineData = ["time" : ServerValue.timestamp(),
+//                                          "type" : "Set Workout",
+//                                          "message" : "\(username) created \(self.stepCount) new workouts for you.",
+//                                          "isPrivate" : true] as [String:AnyObject]
+//                timeLineRef.child(self.userID).child(postID).setValue(true)
+//                playerPostRef.setValue(playerTimeLineData)
+//                for player in groupPlayers{
+//                    timeLineRef.child(player).child(playerPostRefKey).setValue(true)
+//                    postSelfReferences.child(player).child(playerPostRefKey).setValue(true)
+//                }
+//                self.workoutsCount += self.stepCount * self.groupPlayers.count
+//                self.ActRef.child("users").child(self.userID).child("NumberOfWorkouts").setValue(self.workoutsCount)
+//
+//            }else{
+//                // MARK: - SINGLE
+//                for step in 1...stepCount{
+//                    if stepCount > 1{
+//                        exerciseData["title"] = self.titleField.text! + " \(step)"
+//                    }
+//                    exerciseData["createdBy"] = ViewController.username
+//                    exerciseData["assigned"] = true
+//                    DBRef.childByAutoId().setValue(exerciseData)
+//                }
+//                let actData = ["time":ServerValue.timestamp(),
+//                               "type":"Set Workout",
+//                               "message":"You created \(stepCount) workouts for \(userName!).",
+//                               "isPrivate":true] as [String:AnyObject]
+//                postRef.setValue(actData)
+//                postSelfReferences.child(self.userID).child(postID).setValue(true)
+//                self.ActRef.child("Activities").child(self.userID).childByAutoId().setValue(actData)
+//                workoutsCount += stepCount
+//                self.ActRef.child("users").child(userID).child("NumberOfWorkouts").setValue(workoutsCount)
+//                timeLineRef.child(self.userID).child(postID).setValue(true)
+//                let playerPostData = ["time" : ServerValue.timestamp(),
+//                                      "type" : "Set Workout",
+//                                      "message" : "\(username) created \(stepCount) new workouts for you.",
+//                                      "isPrivate" : true] as [String:AnyObject]
+//
+//                playerPostRef.setValue(playerPostData)
+//                timeLineRef.child(uid).child(playerPostRefKey).setValue(true)
+//                postSelfReferences.child(uid).child(playerPostRefKey).setValue(true)
+//
+//            }
+//
+//            // save the workout
+//            // add to own posts/timeline
+//
+//
+//            let screenSize = UIScreen.main.bounds
+//            let width = screenSize.width
+//
+//            let appearance = SCLAlertView.SCLAppearance(kWindowWidth: width - 40, showCloseButton: false)
+//
+//            let alert = SCLAlertView(appearance: appearance)
+//            alert.addButton("Public") {
+//
+//                //save workout
+//                exerciseData["Views"] = 0
+//                exerciseData["NumberOfCompletes"] = 0
+//                exerciseData["NumberOfDownloads"] = 0
+//                exerciseData["TotalTime"] = 0
+//                exerciseData["TotalScore"] = 0
+//                exerciseData["isPrivate"] = false
+//                exerciseData.removeValue(forKey: "assigned")
+//
+//                savedWorkoutRef.setValue(exerciseData)
+//
+//                // add to posts
+//                let postSelfReferences = Database.database().reference().child("PostSelfReferences").child(self.userID)
+//                let postRef = Database.database().reference().child("Posts").childByAutoId()
+//                let postID = postRef.key!
+//
+//                // add to discover posts
+//                let discoverRef = Database.database().reference().child("Discover").child("Workouts")
+//                discoverRef.child(savedID).setValue(true)
+//
+//                // add to timeline
+//                let timeLineRef = Database.database().reference().child("Timeline").child(self.userID)
+//
+//                let postData = ["posterID" : self.userID,
+//                                "workoutID" : savedID,
+//                                "username" : username,
+//                                "time" : ServerValue.timestamp(),
+//                                "type" : "createdNewWorkout",
+//                                "exerciseData" : exerciseData,
+//                                "isPrivate" : false] as [String : Any]
+//
+//                postRef.setValue(postData)
+//                timeLineRef.child(postID).setValue(true)
+//                postSelfReferences.child(postID).setValue(true)
+//                let followerTimeLine = Database.database().reference().child("Timeline")
+//
+//                // post to followers timeline
+//                for follower in self.followers{
+//                    followerTimeLine.child(follower).child(postID).setValue(true)
+//                }
+//                if self.playerBool{
+//                    self.displayTopView(with: "Workout Uploaded.")
+//                    for coach in self.coaches{
+//                        followerTimeLine.child(coach).child(postID).setValue(true)
+//                    }
+//                }else{
+//                    self.displayTopView(with: "Workout Uploaded. Players can now view it!")
+//                }
+//
+//            }
+//            alert.addButton("Private") {
+//
+//                //save workout
+//                exerciseData["NumberOfCompletes"] = 0
+//                exerciseData["TotalTime"] = 0
+//                exerciseData["TotalScore"] = 0
+//                exerciseData["isPrivate"] = true
+//                exerciseData.removeValue(forKey: "assigned")
+//
+//                savedWorkoutRef.setValue(exerciseData)
+//
+//                // add to posts
+//                let postSelfReferences = Database.database().reference().child("PostSelfReferences").child(self.userID)
+//                let postRef = Database.database().reference().child("Posts").childByAutoId()
+//                let postID = postRef.key!
+//
+//                // add to timeline
+//                let timeLineRef = Database.database().reference().child("Timeline").child(self.userID)
+//
+//                let postData = ["posterID" : self.userID,
+//                                "workoutID" : savedID,
+//                                "username" : username,
+//                                "time" : ServerValue.timestamp(),
+//                                "type" : "createdNewWorkout",
+//                                "exerciseData" : exerciseData,
+//                                "isPrivate" : true] as [String : Any]
+//
+//                postRef.setValue(postData)
+//                timeLineRef.child(postID).setValue(true)
+//                postSelfReferences.child(postID).setValue(true)
+//                if self.playerBool{
+//                    self.displayTopView(with: "Workout Uploaded.")
+//                }else{
+//                    self.displayTopView(with: "Workout Uploaded. Players can now view it!")
+//                }
+//            }
+//            alert.showInfo("Public or Private?", subTitle: "Would you like to this workout to be PUBLIC or PRIVATE? A public workout can be viewed by anyone on the app and may appear on the DISCOVER page. A private workout can only be viewed by your followers and coaches and will NOT appear on the DISCOVER page.")
+//
+//
+//
+//
+//            titleField.text = ""
+//            AddWorkoutHomeViewController.exercises.removeAll()
+//            tableview.reloadData()
+//
+//        }
     }
 
 
     override func viewDidLoad() {
         
-        print(AddWorkoutHomeViewController.groupBool!)
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
         titleField.delegate = self
+        titleField.tintColor = .white
         
         if !AddWorkoutHomeViewController.groupBool && !playerBool{
             DBRef = Database.database().reference().child("Workouts").child(uid)
@@ -498,6 +411,8 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
         uploadButton.layer.shadowRadius = 5.0
         uploadButton.layer.shadowOpacity = 0.7
         uploadButton.layer.masksToBounds = false
+        
+        loadFollowers()
         
         
     }
@@ -559,6 +474,13 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
         alert.showInfo("Workout Counter", subTitle: "This is the number of times you want to set this workout. If 1, this workout will appear once on the workout page. If 4, then this workout will be set 4 times. We are working on being able to edit the sets and reps in repeating workouts. The maximum number you can set is 4 at the moment.", closeButtonTitle: "OK!")
     }
     
+    func loadFollowers(){
+        
+        LoadFollowers.returnFollowers(for: userID) { (followers) in
+            self.followers = followers
+        }
+    }
+    
     // this function displays a custom top view letting user know exercise has been added
     func displayTopView(with message:String){
         let viewHeight = self.view.bounds.height * 0.12
@@ -597,20 +519,4 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
     }
 
-}
-extension UIViewController: UITextFieldDelegate {
-    func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
-    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
 }

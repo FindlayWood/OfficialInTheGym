@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class NoteViewController: UIViewController, UITextViewDelegate {
+class NoteViewController: UIViewController {
     
     // variables passed from the previous page
     var sets: String = ""

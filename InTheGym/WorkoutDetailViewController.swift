@@ -28,7 +28,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     var complete: Bool!
     
     //array of exercises for workout
-    var exercises: [[String:AnyObject]] = []
+    static var exercises: [[String:AnyObject]] = []
     
     //array of workouts and activities, may not be needed anymore
     var workouts: [[String:AnyObject]] = []
@@ -57,6 +57,9 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     //workout ID string for update
     var workoutID: String = ""
+    
+    // id of where the workout is saved
+    var savedID: String = ""
     
     // key for coach, not used
     var adminkey: String = ""
@@ -93,6 +96,19 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     // queue to order events
     let myGroup = DispatchGroup()
     
+    // variable to say if user came from discover page
+    var fromDiscover:Bool!
+    var discoverView = UIView()
+    
+    // variable to say if live add
+    var liveAdd:Bool!
+    
+    // id of user who created the workout
+    var creatorID:String = ""
+    var creatorUsername:String = ""
+    
+    // var for assigned or not
+    var isAssigned:Bool?
     
     
     @IBAction func completed(_ sender:UIButton){
@@ -108,10 +124,9 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 let completionTimeSeconds = Int(endTime) - startTime
                 timeToComplete = completionTimeSeconds
                 
-                
-                
+                                
                 var scores : [Int] = []
-                for exercise in self.exercises{
+                for exercise in WorkoutDetailViewController.exercises{
                     if let RPEscore = exercise["rpe"] as? String{
                         scores.append(Int(RPEscore)!)
                     }
@@ -130,144 +145,63 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 SVC.endTime = endTime
                 SVC.timeToComplete = timeToComplete
                 SVC.coaches = self.coaches
-                SVC.numberOfExercises = self.exercises.count
+                SVC.numberOfExercises = WorkoutDetailViewController.exercises.count
+                SVC.exercises = WorkoutDetailViewController.exercises
+                SVC.savedID = self.savedID
                 if rounded.isNaN{
                     SVC.averageExerciseRPE = "0"
                 }else{
                     SVC.averageExerciseRPE = rounded.description
                 }
                 SVC.playerUsername = self.username
-                self.navigationController?.pushViewController(SVC, animated: true)
-
-            }
-        }
-        
-
-        
-        
-        
-/*
-// MARK: can no longer uncomplete workout. was part of 1.3 therefore below can go
-        if complete == true{
-            let alert = UIAlertController(title: "Uncomplete", message: "Are you sure this workout is uncomplete?", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
-                self.DBRef.child("\(self.workoutID)").updateChildValues(["completed" : false])
-                self.DBRef.child("\(self.workoutID)").updateChildValues(["score" : ""])
-                self.completeButton.setTitle("COMPLETED", for: .normal)
-                let actData = ["time":ServerValue.timestamp(),
-                               "message":"You uncompleted the workout \(self.titleString).",
-                            "type":"Workout UnCompleted"] as [String:AnyObject]
-                //self.activies.insert(actData, at: 0)
-                //self.ActRef.setValue(self.activies)
-                self.ActRef.childByAutoId().setValue(actData)
-                self.numberCompleted -= 1
-                self.ComRef.child("numberOfCompletes").setValue(self.numberCompleted)
-                self.navigationController?.popViewController(animated: true)
-                
-            }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-            
-        }
-        else if complete == false{
-            
-            let endTime = Date.timeIntervalSinceReferenceDate
-            var mins:Int = 0
-            var secs:Int = 0
-            var timeToComplete : Int = 0
-            self.DBRef.child("\(self.workoutID)").child("startTime").observeSingleEvent(of: .value) { (snapshot) in
-                
-                if let snap = snapshot.value as? Double{
-                    let startTime = Int(snap)
-                    
-                    let completionTimeSeconds = Int(endTime) - startTime
-                    timeToComplete = completionTimeSeconds
-                    mins = Int(completionTimeSeconds / 60)
-                    secs = Int(completionTimeSeconds % 60)
-                    print("\(mins) mins, \(secs) secs")
+                if self.liveAdd == true{
+                    SVC.assignedCoach = self.username
                 }
-            }
-            
-            // set scoreref
-            ScoreRef = Database.database().reference().child("Scores")
-            let userID = Auth.auth().currentUser?.uid
-            
-            // new alert - bigger one coming
-            let alert = SCLAlertView()
-            let score = alert.addTextField()
-            score.placeholder = "RPE score from 1 to 10..."
-            score.keyboardType = .numberPad
-            score.becomeFirstResponder()
-            alert.addButton("Upload") {
-                if score.text == "" {
-                    self.showError()
-                }else if Int((score.text)!)! < 1 || Int((score.text)!)! > 10{
-                    self.showError()
+                
+                // new section
+                let formatter = DateComponentsFormatter()
+                
+                if timeToComplete > 3600{
+                    formatter.allowedUnits = [.hour, .minute]
+                    formatter.unitsStyle = .abbreviated
                 }else{
-                    // haptic feedback : complete workout
-                    let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
-                    notificationFeedbackGenerator.prepare()
-                    notificationFeedbackGenerator.notificationOccurred(.success)
-                    self.DBRef.child("\(self.workoutID)").updateChildValues(["completed" : true])
-                    let scoreNum = score.text!
-                    self.DBRef.child("\(self.workoutID)").updateChildValues(["score" : scoreNum])
-                    //self.ScoreRef.updateChildValues([self.titleString:scoreNum])
-                    self.completeButton.setTitle("UNCOMPLETED", for: .normal)
-                    let actData = ["time":ServerValue.timestamp(),
-                                   "message":"You completed the workout \(self.titleString).",
-                                    "type":"Workout Completed"] as [String:AnyObject]
-                    //self.activies.insert(actData, at: 0)
-                    //self.ActRef.setValue(self.activies)
-                    self.ActRef.childByAutoId().setValue(actData)
-                    self.numberCompleted += 1
-                    self.ComRef.child("numberOfCompletes").setValue(self.numberCompleted)
-                    if ViewController.admin == false{
-                        let actData2 = ["time":ServerValue.timestamp(),
-                        "message":"\(self.username) completed the workout \(self.titleString).",
-                        "type":"Workout Completed"] as [String:AnyObject]
-                        
-// MARK: commented out to trial new loop below
-                        //self.feedRef.child(self.coachName).childByAutoId().setValue(actData2)
-                        let scoreInfo = [self.titleString:scoreNum]
-// MARK: new section for looping coaches, adding activity and scores
-                        for coach in self.coaches{
-                            
-                            // loop all coaches and add activity to public feed
-
-                            self.feedRef.child(coach).childByAutoId().setValue(actData2)
-                            //self.ScoreRef.child(coach).child(userID!).setValue(scoreInfo)
-
-                        }
-// end of new section
-                        
-                        
-                        // newest section
-                        // only a player can complete a workout therefor a coach can never get to this section.
-                        // this is where the crash occured in version 2 when completing a GROUP workout.
-                        // version 2.1 resolves this issue
-                        self.ScoreRef.child(self.assignedCoach).childByAutoId().setValue(scoreInfo)
-                        self.ScoreRef.child(self.username).childByAutoId().setValue(scoreInfo)
-                    }
-                    // uploading to database : time to complete and workload
-                    self.DBRef.child("\(self.workoutID)").updateChildValues(["timeToComplete":timeToComplete])
-                    let workload = (timeToComplete/60) * Int(scoreNum)!
-                    self.DBRef.child("\(self.workoutID)").updateChildValues(["workload":workload])
-                    let workloadData = ["timeToComplete": timeToComplete,
-                                        "rpe": scoreNum,
-                                        "endTime": endTime,
-                                        "workload": workload,
-                                        "workoutID": self.workoutID] as [String : Any]
-                    self.workLoadRef.childByAutoId().updateChildValues(workloadData)
-                    
-                    
-                    self.navigationController?.popViewController(animated: true)
-                    
+                    formatter.allowedUnits = [.minute, .second]
+                    formatter.unitsStyle = .abbreviated
                 }
+                
+                let timeString = formatter.string(from: TimeInterval(timeToComplete))
+                
+                let workoutData = ["exercises":WorkoutDetailViewController.exercises,
+                                   "title":self.titleString,
+                                   "savedID":self.savedID,
+                                   "createdBy":self.creatorUsername,
+                                   "creatorID":self.creatorID,
+                                   "liveWorkout":self.liveAdd!,
+                                   "fromDiscover":self.fromDiscover!,
+                                   "completed":false,
+                                   "assigned":self.isAssigned ?? false,
+                                   "workoutID":self.workoutID
+                ] as [String : AnyObject]
+                
+                
+                
+                let selectedWorkout = workout(object: workoutData)
+                
+                let completedPage = StoryBoard.instantiateViewController(withIdentifier: "WorkoutCompletedViewController") as! WorkoutCompletedViewController
+                completedPage.workout = selectedWorkout
+                if rounded.isNaN{
+                    completedPage.averageRPE = 0
+                } else {
+                    completedPage.averageRPE = rounded
+                }
+                completedPage.timeString = timeString!
+                completedPage.secondsToComplete = timeToComplete
+                
+                
+                self.navigationController?.pushViewController(completedPage, animated: true)
+
             }
-            
-            alert.showSuccess("Completed!", subTitle: "Great Job! Enter RPE score to complete the upload.", closeButtonTitle: "Cancel")
         }
-        */
     }
     
     func showError(){
@@ -283,12 +217,17 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         self.tableview.rowHeight = 380
         let userID = Auth.auth().currentUser?.uid
         
+        //
         if complete == true || ViewController.admin == true{
             completeButton.isHidden = true
             // set tableview to very bottom
             bottomButton.constant = 50
             completeButton.setTitle("UNCOMPLETED", for: .normal)
             
+            flashView.isHidden = true
+            beginView.isHidden = true
+        }else if fromDiscover{
+            fromDiscoverView()
             flashView.isHidden = true
             beginView.isHidden = true
         }
@@ -313,13 +252,16 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         feedRef = Database.database().reference().child("Public Feed")
         workLoadRef = Database.database().reference().child("Workloads").child(username)
         
+        if !fromDiscover{
         // checking if there is a start time and removing begin view if there is
-        DBRef.child("\(self.workoutID)").child("startTime").observeSingleEvent(of: .value) { (snapshot) in
-            if (snapshot.value as? Double) != nil{
-                self.flashView.isHidden = true
-                self.beginView.isHidden = true
+            DBRef.child("\(self.workoutID)").child("startTime").observeSingleEvent(of: .value) { (snapshot) in
+                if (snapshot.value as? Double) != nil{
+                    self.flashView.isHidden = true
+                    self.beginView.isHidden = true
+                }
             }
         }
+        
         
 // MARK: change the location of score ref to use user ids
 // below can change as now a coach can not complete a workout
@@ -334,103 +276,123 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell") as! DetailTableViewCell
-        //let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-        // next 5 lines for collectionview
-        cell.collection.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        let indexPath2 = IndexPath(item: 0, section: 0)
-        cell.collection.scrollToItem(at: indexPath2, at: .left, animated: false)
-        self.counter = indexPath.section
-        cell.collection.tag = indexPath.section
-        cell.collection.reloadData()
+        
+        if liveAdd == true && indexPath.section == WorkoutDetailViewController.exercises.count{
+            let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell2") as! DetailTableViewCell
+            return cell
+        }else{
+            
+            let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell") as! DetailTableViewCell
+            //let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+            // next 5 lines for collectionview
+            cell.collection.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+            let indexPath2 = IndexPath(item: 0, section: 0)
+            cell.collection.scrollToItem(at: indexPath2, at: .left, animated: false)
+            self.counter = indexPath.section
+            cell.collection.tag = indexPath.section
+            cell.collection.reloadData()
 
-        
-        // hiding the textfields
-        cell.repsTextField.isHidden = true
-        cell.setsTextField.isHidden = true
-        //cell.weightLabel.isHidden = true
-        
-        cell.layer.cornerRadius = 10
-        cell.layer.masksToBounds = true
-        cell.delegate = self
-        cell.ndelegate = self
-        cell.indexPath = indexPath
-        cell.weightLabel.text = ""
-        cell.rpeButton.setTitle("RPE", for: .normal)
-        cell.rpeButton.setTitleColor(#colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1), for: .normal)
-        cell.accessoryType = .none
-        let exercise = exercises[indexPath.section]["exercise"] as! String
-        //let reps = exercises[indexPath.section]["reps"] as! String
-        let sets = exercises[indexPath.section]["sets"] as! String
-        if let reps = exercises[indexPath.section]["reps"] as? String{
-            let setInt = Int(sets)!
-            var x = 0
-            var repString = ""
-            while x < setInt {
-                repString += reps
-                if x != setInt - 1{
-                    repString += ","
-                }
-                x += 1
-            }
-            cell.repsLabel.text = repString
-        }
-        if let repArray = exercises[indexPath.section]["reps"] as? [String]{
-            var repString = ""
-            for rep in repArray{
-                repString += rep
-                repString += ","
-            }
-            cell.repsLabel.text = String(repString.dropLast())
-        }
-        cell.setsLabel.text = "\(sets) SETS"
-        if let weight = exercises[indexPath.section]["weight"] as? String{
-            if weight == ""{
-                cell.exerciseLabel.text = "\(exercise)"
-                cell.setsTextField.text = "\(sets)"
-                //cell.repsTextField.text = "\(reps)"
-            }
-            else{
-                cell.exerciseLabel.text = "\(exercise)"
-                cell.setsTextField.text = "\(sets)"
-                //cell.repsTextField.text = "\(reps)"
-                //cell.weightLabel.text = "\(weight)"
+            
+            // hiding the textfields
+            cell.repsTextField.isHidden = true
+            cell.setsTextField.isHidden = true
+            //cell.weightLabel.isHidden = true
+            
+            cell.layer.cornerRadius = 10
+            cell.layer.masksToBounds = true
+            cell.delegate = self
+            cell.ndelegate = self
+            cell.indexPath = indexPath
+            cell.weightLabel.text = ""
+            cell.rpeButton.setTitle("RPE", for: .normal)
+            cell.rpeButton.setTitleColor( .systemBlue, for: .normal)
+            cell.accessoryType = .none
+            let exercise = WorkoutDetailViewController.exercises[indexPath.section]["exercise"] as! String
+            //cell.exerciseLabel.text = exercise
+            //let reps = exercises[indexPath.section]["reps"] as! String
+            let sets = WorkoutDetailViewController.exercises[indexPath.section]["sets"] as! String 
+            cell.setsLabel.text = "\(sets) SETS"
+
+            if let reps = WorkoutDetailViewController.exercises[indexPath.section]["reps"] as? String{
                 let setInt = Int(sets)!
                 var x = 0
-                var weightString = ""
+                var repString = ""
                 while x < setInt {
-                    weightString += weight
-                    weightString += ","
+                    repString += reps
+                    if x != setInt - 1{
+                        repString += ","
+                    }
                     x += 1
                 }
-                cell.weightLabel.text = weight
+                cell.repsLabel.text = repString
             }
-        }
-        if let rpe = exercises[indexPath.section]["rpe"] as? String{
-            cell.rpeButton.setTitle("\(rpe)", for: .normal)
-            let colourIndex = Int(rpe)!-1
-            cell.rpeButton.setTitleColor(colors[colourIndex], for: .normal)
+            if let repArray = WorkoutDetailViewController.exercises[indexPath.section]["reps"] as? [String]{
+                var repString = ""
+                for rep in repArray{
+                    repString += rep
+                    repString += ","
+                }
+                cell.repsLabel.text = String(repString.dropLast())
+            }
+            
+            if let weight = WorkoutDetailViewController.exercises[indexPath.section]["weight"] as? String{
+                if weight == ""{
+                    cell.exerciseLabel.text = "\(exercise)"
+                    cell.setsTextField.text = "\(sets)"
+                    //cell.repsTextField.text = "\(reps)"
+                }
+                else{
+                    cell.exerciseLabel.text = "\(exercise)"
+                    cell.setsTextField.text = "\(sets)"
+                    //cell.repsTextField.text = "\(reps)"
+                    //cell.weightLabel.text = "\(weight)"
+                    let setInt = Int(sets)!
+                    var x = 0
+                    var weightString = ""
+                    while x < setInt {
+                        weightString += weight
+                        weightString += ","
+                        x += 1
+                    }
+                    cell.weightLabel.text = weight
+                }
+            }
+            
+            if let weight = WorkoutDetailViewController.exercises[indexPath.section]["weight"] as? [String]{
+                cell.exerciseLabel.text = exercise
+                cell.weightLabel.text = ""
+            }
+            
+            
+            if let rpe = WorkoutDetailViewController.exercises[indexPath.section]["rpe"] as? String{
+                cell.rpeButton.setTitle("\(rpe)", for: .normal)
+                let colourIndex = Int(rpe)!-1
+                cell.rpeButton.setTitleColor(colors[colourIndex], for: .normal)
+            }
+            
+            // checking if there is a note and deciding whether to display the button
+            if (WorkoutDetailViewController.exercises[indexPath.section]["note"] as? String) != nil{
+                cell.noteButton.isHidden = false
+            }else{
+                cell.noteButton.isHidden = true
+            }
+            
+            if let type = WorkoutDetailViewController.exercises[indexPath.section]["type"] as? String{
+                cell.typeLabel.text = type
+            }else{
+                cell.typeLabel.text = ""
+            }
+            
+            // checking if workout complete or user is coach and then enabling rpe button or not
+            if ViewController.admin == true || complete == true || workoutBegun == false || fromDiscover {
+                cell.rpeButton.isUserInteractionEnabled = false
+            }
+            
+            return cell
         }
         
-        // checking if there is a note and deciding whether to display the button
-        if (exercises[indexPath.section]["note"] as? String) != nil{
-            cell.noteButton.isHidden = false
-        }else{
-            cell.noteButton.isHidden = true
-        }
         
-        if let type = exercises[indexPath.section]["type"] as? String{
-            cell.typeLabel.text = type
-        }else{
-            cell.typeLabel.text = ""
-        }
-        
-        // checking if workout complete or user is coach and then enabling rpe button or not
-        if ViewController.admin == true || complete == true || workoutBegun == false{
-            cell.rpeButton.isUserInteractionEnabled = false
-        }
-        
-        return cell
+
         
     }
     
@@ -439,7 +401,12 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return exercises.count
+        if liveAdd == true{
+            return WorkoutDetailViewController.exercises.count + 1
+        }else{
+            return WorkoutDetailViewController.exercises.count
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -457,100 +424,136 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     // add check mark to tick off each exercise
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("detetced tap in row \(indexPath.section)")
+        if indexPath.section + 1 == WorkoutDetailViewController.exercises.count + 1{
+            //show exercise page
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let nextVC = storyboard.instantiateViewController(withIdentifier: "BodyTypeViewController") as! BodyTypeViewController
+            nextVC.fromLiveWorkout = true
+            nextVC.workoutID = self.workoutID
+            navigationController?.pushViewController(nextVC, animated: true)
+        }
     }
     
     // MARK: functions for the collection view
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let sets = exercises[collectionView.tag]["sets"] as! String
-        let setInt = Int(sets)!
-        return setInt
-
+        if liveAdd == true{
+            if let sets = WorkoutDetailViewController.exercises[collectionView.tag]["sets"] as? String{
+                let setInt = Int(sets)!
+                return setInt + 1
+            }else{
+                return 1
+            }
+        }else{
+            let sets = WorkoutDetailViewController.exercises[collectionView.tag]["sets"] as! String
+            let setInt = Int(sets)!
+            return setInt
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! InsideCollectionViewCell
-        cell.layer.cornerRadius = 10
-        cell.contentView.layer.cornerRadius = 10
-        //cell.layer.borderWidth = 2
-        cell.contentView.layer.borderWidth = 2
-        //cell.layer.borderColor = UIColor.black.cgColor
-        cell.contentView.layer.borderColor = UIColor.black.cgColor
-        //cell.layer.masksToBounds = true
-        cell.contentView.layer.masksToBounds = true
-        cell.backgroundColor = Constants.lightColour
-        cell.delegate = self
-        cell.indexPath = indexPath
-        cell.collectionIndex = collectionView.tag
         
-        cell.layer.shadowColor = UIColor.black.cgColor
-        cell.layer.shadowOffset = CGSize(width: 0, height: 5.0)
-        cell.layer.shadowRadius = 6.0
-        cell.layer.shadowOpacity = 1.0
-        cell.layer.masksToBounds = false
-        //cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.contentView.layer.cornerRadius).cgPath
-
-
-        let collectionIndex = collectionView.tag
+        let sets = WorkoutDetailViewController.exercises[collectionView.tag]["sets"] as! String
+        let setInt = Int(sets)!
         
-//        let reps = exercises[collectionIndex]["reps"] as! String
-//        cell.repsLabel.text = "\(reps) reps"
-        
-        let sets = exercises[collectionIndex]["sets"] as! String
-
-        if let reps = exercises[collectionIndex]["reps"] as? String{
-            
-            cell.repsLabel.text = "\(reps) reps"
-        }
-        if let repArray = exercises[collectionIndex]["reps"] as? [String]{
-            
-            cell.repsLabel.text = "\(repArray[indexPath.row]) reps"
-        }
-        
-        
-        if let weight = exercises[collectionIndex]["weight"] as? String{
-            cell.weightLabel.text = "\(weight)"
-        }
-        
-        
-
-        cell.setLabels.text = "SET \(indexPath.row + 1)"
-        
-        
-        if let completedSets = exercises[collectionIndex]["completedSets"] as? [Bool]{
-            if completedSets[indexPath.row] == true {
-                cell.completedButton.setImage(UIImage(named: "tickRing"), for: .normal)
-                cell.isUserInteractionEnabled = false
-            }else{
-                cell.completedButton.setImage(UIImage(named: "emptyRing"), for: .normal)
-                cell.isUserInteractionEnabled = true
-            }
+        if liveAdd == true && indexPath.row == setInt{
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as! InsideCollectionViewCell
+            return cell
         }else{
-            cell.completedButton.isHidden = true
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! InsideCollectionViewCell
+            cell.layer.cornerRadius = 10
+            cell.contentView.layer.cornerRadius = 10
+            //cell.layer.borderWidth = 2
+            cell.contentView.layer.borderWidth = 2
+            //cell.layer.borderColor = UIColor.black.cgColor
+            cell.contentView.layer.borderColor = UIColor.black.cgColor
+            //cell.layer.masksToBounds = true
+            cell.contentView.layer.masksToBounds = true
+            cell.backgroundColor = Constants.lightColour
+            cell.delegate = self
+            cell.indexPath = indexPath
+            cell.collectionIndex = collectionView.tag
+            
+            cell.layer.shadowColor = UIColor.black.cgColor
+            cell.layer.shadowOffset = CGSize(width: 0, height: 5.0)
+            cell.layer.shadowRadius = 6.0
+            cell.layer.shadowOpacity = 1.0
+            cell.layer.masksToBounds = false
+            //cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.contentView.layer.cornerRadius).cgPath
+
+
+            let collectionIndex = collectionView.tag
+            
+    //        let reps = exercises[collectionIndex]["reps"] as! String
+    //        cell.repsLabel.text = "\(reps) reps"
+            
+            let sets = WorkoutDetailViewController.exercises[collectionIndex]["sets"] as! String
+
+            if let reps = WorkoutDetailViewController.exercises[collectionIndex]["reps"] as? String{
+                
+                cell.repsLabel.text = "\(reps) reps"
+            }
+            if let repArray = WorkoutDetailViewController.exercises[collectionIndex]["reps"] as? [String]{
+                
+                cell.repsLabel.text = "\(repArray[indexPath.row]) reps"
+            }
+            
+            
+            if let weight = WorkoutDetailViewController.exercises[collectionIndex]["weight"] as? String{
+                cell.weightLabel.text = "\(weight)"
+            }
+            
+            if let weightArray = WorkoutDetailViewController.exercises[collectionIndex]["weight"] as? [String]{
+                cell.weightLabel.text = weightArray[indexPath.row]
+            }
+            
+
+            cell.setLabels.text = "SET \(indexPath.row + 1)"
+            
+            
+            if let completedSets = WorkoutDetailViewController.exercises[collectionIndex]["completedSets"] as? [Bool]{
+                if completedSets[indexPath.row] == true {
+                    cell.completedButton.setImage(UIImage(named: "tickRing"), for: .normal)
+                    cell.isUserInteractionEnabled = false
+                }else{
+                    cell.completedButton.setImage(UIImage(named: "emptyRing"), for: .normal)
+                    cell.isUserInteractionEnabled = true
+                }
+            }else{
+                cell.completedButton.isHidden = true
+            }
+            
+            // checking if workout complete or user is coach and then enabling tick check button or not
+            if ViewController.admin == true || complete == true || workoutBegun == false || fromDiscover {
+                cell.completedButton.isUserInteractionEnabled = false
+            }
+            
+            
+            return cell
         }
         
-        // checking if workout complete or user is coach and then enabling tick check button or not
-        if ViewController.admin == true || complete == true || workoutBegun == false{
-            cell.completedButton.isUserInteractionEnabled = false
-        }
-        
-        
-        return cell
+
     }
     
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let lastIndexToScroll = collectionView.numberOfItems(inSection: 0) - 1
-//        if indexPath.row < lastIndexToScroll{
-//            let indexToScroll = IndexPath.init(row: indexPath.row + 1, section: 0)
-//            collectionView.scrollToItem(at: indexToScroll, at: .left, animated: true)
-//        }
-//
-//    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let sets = WorkoutDetailViewController.exercises[collectionView.tag]["sets"] as! String
+        let setInt = Int(sets)!
+        if liveAdd == true && indexPath.row == setInt{
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let repsVC = storyboard.instantiateViewController(withIdentifier: "NewRepsViewController") as! NewRepsViewController
+            repsVC.fromLiveWorkout = true
+            repsVC.whichExercise = collectionView.tag
+            repsVC.workoutID = self.workoutID
+            navigationController?.pushViewController(repsVC, animated: true)
+        }
+
+    }
     
     func completionTapped(at index:IndexPath, sender:UIButton, section: Int, with cell: UICollectionViewCell){
         
-        if var completedSets = exercises[section]["completedSets"] as? [Bool]{
+        if var completedSets = WorkoutDetailViewController.exercises[section]["completedSets"] as? [Bool]{
             completedSets[index.row] = true
-            self.exercises[section]["completedSets"] = completedSets as AnyObject
+            WorkoutDetailViewController.exercises[section]["completedSets"] = completedSets as AnyObject
             self.DBRef.child(workoutID).child("exercises").child("\(section)").updateChildValues(["completedSets" : completedSets])
         }
         
@@ -571,9 +574,6 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
             }
 
         }
-
-        
-        
     }
     
     
@@ -597,8 +597,6 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     // load coachname
     func loadCoachName(){
-
-        
         // load array of coaches and set variable equal
         ComRef.child("coaches").observe(.childAdded) { (snapshot) in
             if let snap = snapshot.value as? String{
@@ -611,7 +609,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
     // load info tapped
     func infoButtonTapped(at index: IndexPath){
         let alert = SCLAlertView()
-        alert.showInfo("Info", subTitle: "You tapped on info for \(exercises[index[0]]["exercise"] as! String)")
+        alert.showInfo("Info", subTitle: "You tapped on info for \(WorkoutDetailViewController.exercises[index[0]]["exercise"] as! String)")
     }
     
     // display alert view with note in it and allows edit
@@ -635,7 +633,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         if ViewController.admin == false{
             coachText.isUserInteractionEnabled = false
         }
-        if let note = exercises[index.section]["note"] as? String{
+        if let note = WorkoutDetailViewController.exercises[index.section]["note"] as? String{
             coachText.textColor = .black
             coachText.text = note
         }else{
@@ -664,9 +662,9 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 notificationFeedbackGenerator.notificationOccurred(.success)
                 let colourIndex = Int(rpe.text!)!-1
                 sender.setTitle("\(rpe.text!)", for: .normal)
-                self.exercises[index.section]["rpe"] = rpe.text as AnyObject?
-                print(self.exercises[index.section])
-                self.DBRef.child(self.workoutID).updateChildValues(["exercises" : self.exercises])
+                WorkoutDetailViewController.exercises[index.section]["rpe"] = rpe.text as AnyObject?
+                print(WorkoutDetailViewController.exercises[index.section])
+                self.DBRef.child(self.workoutID).updateChildValues(["exercises" : WorkoutDetailViewController.exercises])
                 let cellIndex = IndexPath.init(row: 0, section: index.section)
                 let row = self.tableview.cellForRow(at: cellIndex)
                 UIView.animate(withDuration: 0.5) {
@@ -692,8 +690,143 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
             
             
         }
-        alert.showSuccess("RPE", subTitle: "Enter rpe for \(exercises[index[0]]["exercise"] as! String)",closeButtonTitle: "cancel")
+        alert.showSuccess("RPE", subTitle: "Enter rpe for \(WorkoutDetailViewController.exercises[index[0]]["exercise"] as! String)",closeButtonTitle: "cancel")
     }
+    
+    // function for adding to own workouts from discover page
+    @objc func addToMyWorkouts(_ sender:UIButton){
+        // we need the exercise data passed to here, all of it
+        // then this will work
+        // make sure completed sets and any rpe numbers are reset
+        // will be added from saved workouts which will always be zero completed sets
+        // need to update number of downloads
+        // need the creatorID and workoutID
+        let downloadsRef = Database.database().reference().child("SavedWorkouts").child(workoutID)
+        downloadsRef.runTransactionBlock { (currentData:MutableData) -> TransactionResult in
+            if var post = currentData.value as? [String:AnyObject]{
+                var downloads = post["NumberOfDownloads"] as? Int ?? 0
+                downloads += 1
+                post["NumberOfDownloads"] = downloads as AnyObject
+                currentData.value = post
+                return TransactionResult.success(withValue: currentData)
+            }
+            return TransactionResult.success(withValue: currentData)
+        } andCompletionBlock: { (error, committed, snapshot) in
+            if let error = error{
+                print(error.localizedDescription)
+            }
+        }
+        
+        let userID = Auth.auth().currentUser!.uid
+        let downloadersRef = Database.database().reference().child("SavedWorkoutDownloaders").child(workoutID).child(userID)
+        let uploadRef = Database.database().reference().child("SavedWorkoutReferences").child(userID).child(workoutID)
+        let savedDownloadedRef = Database.database().reference().child("SavedWorkoutDownloads").child(userID).child(workoutID)
+        savedDownloadedRef.observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.exists(){
+                DisplayTopView.displayTopView(with: "Already Saved", on: self)
+            }else{
+                DisplayTopView.displayTopView(with: "Added To Saved Workouts", on: self)
+                uploadRef.setValue(true)
+                savedDownloadedRef.setValue(true)
+                downloadersRef.setValue(true)
+            }
+        }
+    }
+    
+    // view for when coming from discover page
+    func fromDiscoverView(){
+        discoverView.backgroundColor = .white
+        discoverView.layer.cornerRadius = 10
+        discoverView.layer.borderWidth = 2
+        discoverView.layer.borderColor = UIColor.black.cgColor
+        discoverView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(discoverView)
+        discoverView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        discoverView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        discoverView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        
+        heightAnchor = discoverView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.15)
+        heightAnchor?.isActive = true
+        
+        let addButton = UIButton()
+        if creatorID == Auth.auth().currentUser!.uid{
+            addButton.setTitle("Your Workout", for: .normal)
+            addButton.backgroundColor = Constants.darkColour
+            addButton.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 25)
+            addButton.layer.cornerRadius = 10
+            addButton.layer.borderWidth = 2
+            addButton.layer.borderColor = UIColor.black.cgColor
+            addButton.translatesAutoresizingMaskIntoConstraints = false
+            //addButton.addTarget(self, action: #selector(addToMyWorkouts), for: .touchUpInside)
+            
+            discoverView.addSubview(addButton)
+        }else{
+            addButton.setTitle("Add to Saved Workouts", for: .normal)
+            addButton.backgroundColor = Constants.darkColour
+            addButton.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 25)
+            addButton.layer.cornerRadius = 10
+            addButton.layer.borderWidth = 2
+            addButton.layer.borderColor = UIColor.black.cgColor
+            addButton.translatesAutoresizingMaskIntoConstraints = false
+            addButton.addTarget(self, action: #selector(addToMyWorkouts), for: .touchUpInside)
+            
+            discoverView.addSubview(addButton)
+        }
+        
+        
+        addButton.leadingAnchor.constraint(equalTo: self.discoverView.leadingAnchor, constant: 25).isActive = true
+        addButton.trailingAnchor.constraint(equalTo: self.discoverView.trailingAnchor, constant: -25).isActive = true
+        addButton.centerYAnchor.constraint(equalTo: self.discoverView.centerYAnchor).isActive = true
+        addButton.centerXAnchor.constraint(equalTo: self.discoverView.centerXAnchor).isActive = true
+        addButton.heightAnchor.constraint(equalToConstant: 49).isActive = true
+        
+        //transactionblock to update views
+        let viewsRef = Database.database().reference().child("SavedWorkouts").child(workoutID)
+        viewsRef.runTransactionBlock { (currentData:MutableData) -> TransactionResult in
+            if var post = currentData.value as? [String:AnyObject]{
+                var views = post["Views"] as? Int ?? 0
+                views += 1
+                post["Views"] = views as AnyObject
+                currentData.value = post
+                
+                return TransactionResult.success(withValue: currentData)
+            }
+            return TransactionResult.success(withValue: currentData)
+        } andCompletionBlock: { (error, committed, snapshot) in
+            if let error = error{
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    // this function displays a custom top view letting user know exercise has been added
+    func displayTopView(with message:String){
+        let viewHeight = self.view.bounds.height * 0.18
+        let viewWidth = self.view.bounds.width
+        let startingPoint = CGRect(x: 0, y: -30 - viewHeight, width: viewWidth, height: viewHeight)
+        let showingPoint = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
+        
+        
+        let topView = CustomTopView(frame: startingPoint)
+        topView.image = UIImage(named: "Workout Completed")
+        topView.message = message
+        topView.label.textColor = .white
+        topView.backgroundColor = Constants.darkColour
+        topView.layer.cornerRadius = 0
+        topView.layer.borderColor = Constants.darkColour.cgColor
+        self.navigationController?.view.addSubview(topView)
+        
+        UIView.animate(withDuration: 0.6) {
+            topView.frame = showingPoint
+        } completion: { (_) in
+            UIView.animate(withDuration: 0.6, delay: 2.8, options: .curveEaseOut) {
+                topView.frame = startingPoint
+                } completion: { (_) in
+                    topView.removeFromSuperview()
+            }
+        }
+    }
+    
     
     @objc func workoutHasBegun(){
         
@@ -896,6 +1029,9 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        if liveAdd == true{
+            self.tableview.reloadData()
+        }
     }
     
 

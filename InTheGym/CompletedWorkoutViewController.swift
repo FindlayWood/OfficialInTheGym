@@ -39,6 +39,9 @@ class CompletedWorkoutViewController: UIViewController {
     // workout id
     var workoutID:String!
     
+    // saved id
+    var savedID:String!
+    
     // title of workout
     var workoutTitle:String!
     
@@ -56,6 +59,18 @@ class CompletedWorkoutViewController: UIViewController {
     
     // the number of exercises in the workout
     var numberOfExercises:Int!
+    
+    // the array holding all exercises
+    var exercises:[[String:AnyObject]] = []
+    
+    // to tell how many view controllers to pop back
+    
+    // variable to say if the workout was from discover
+    var fromDiscover:Bool!
+    var creatorID:String?
+    
+    var followers:[String] = []
+ 
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,6 +104,11 @@ class CompletedWorkoutViewController: UIViewController {
         CoachAct = Database.database().reference().child("Activities")
         ScoreRef = Database.database().reference().child("Scores")
         WorkloadRef = Database.database().reference().child("Workloads").child(playerID)
+        
+        let userID = Auth.auth().currentUser?.uid
+        LoadFollowers.returnFollowers(for: userID!) { (followers) in
+            self.followers = followers
+        }
     }
     
     
@@ -98,11 +118,16 @@ class CompletedWorkoutViewController: UIViewController {
         }else if Int(workoutRPE.text!)! > 10 || Int(workoutRPE.text!)! < 1{
             showError()
         }else{
+            if fromDiscover == true{
+                //do function to update stats for the public workout
+                updateDiscoverWorkoutStats(with: Int(workoutRPE.text!)!)
+            }
             // haptic feedback : complete workout
             let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
             notificationFeedbackGenerator.prepare()
             notificationFeedbackGenerator.notificationOccurred(.success)
             self.DBRef.child("\(self.workoutID!)").updateChildValues(["completed" : true])
+            //self.DBRef.child(self.workoutID).updateChildValues(["liveWorkout" : false])
             let scoreNum = workoutRPE.text!
             self.DBRef.child("\(self.workoutID!)").updateChildValues(["score" : scoreNum])
             let actData = ["time":ServerValue.timestamp(),
@@ -116,8 +141,7 @@ class CompletedWorkoutViewController: UIViewController {
                             "message":"\(self.playerUsername!) completed the workout \(self.workoutTitle!).",
                             "type":"Workout Completed"] as [String:AnyObject]
                 
-// MARK: commented out to trial new loop below
-            //self.feedRef.child(self.coachName).childByAutoId().setValue(actData2)
+
             let scoreInfo = [self.workoutTitle:scoreNum]
 // MARK: new section for looping coaches, adding activity and scores
             for coach in self.coaches{
@@ -134,34 +158,38 @@ class CompletedWorkoutViewController: UIViewController {
             // only a player can complete a workout therefor a coach can never get to this section.
             // this is where the crash occured in version 2 when completing a GROUP workout.
             // version 2.1 resolves this issue
-            self.ScoreRef.child(self.assignedCoach).childByAutoId().setValue(scoreInfo)
-            self.ScoreRef.child(self.playerUsername).childByAutoId().setValue(scoreInfo)
+            // 22/1/21 changing from username to userID
+            // means that workout now must contain creatorID which can be used instead of assignedCoach
+            // then this brings up the point whether a public workout should do this?
+            // separate section in scores child - created or a new child completley
+            // commented out line below until this issue is resolved.
+            // when a workout is created it needs a variable called creatorID
+            //self.ScoreRef.child(self.assignedCoach).childByAutoId().setValue(scoreInfo)
+            
+            // TODO: if from discover and not your own workout = workout from coach therefor update his scores by using creator id
+            
+            self.ScoreRef.child(self.playerID).childByAutoId().setValue(scoreInfo)
             
             // uploading to database : time to complete and workload
-            self.DBRef.child("\(self.workoutID!)").updateChildValues(["timeToComplete":timeToComplete])
+            self.DBRef.child(self.workoutID).updateChildValues(["timeToComplete":timeToComplete])
             let workload = (timeToComplete/60) * Int(scoreNum)!
-            self.DBRef.child("\(self.workoutID!)").updateChildValues(["workload":workload])
+            self.DBRef.child(self.workoutID).updateChildValues(["workload":workload])
             let workloadData = ["timeToComplete": timeToComplete,
                                 "rpe": scoreNum,
                                 "endTime": endTime!,
                                 "workload": workload,
                                 "workoutID": self.workoutID!] as [String : Any]
             self.WorkloadRef.childByAutoId().updateChildValues(workloadData)
-            
             workoutRPE.resignFirstResponder()
             
             
             // in here we will create a post that will be sent to all coaches and the player. coaches can then interact with this post
             // in the future this will be shown to all followers and allow players to copy this workout for themselfs
             
-            let postMessage = "\(playerUsername!) just completed the workout \(workoutTitle!) in \(timeToComplete)! They scored this workout a \(scoreNum). Give them a like! You can tap to view the workout in more detail."
-            
-            let postRef = Database.database().reference().child("Posts").child(playerID).childByAutoId()
+            let postRef = Database.database().reference().child("Posts").childByAutoId()
             let postID = postRef.key!
             
             let timeLineRef = Database.database().reference().child("Timeline")
-            let newpost = ["postID": postID,
-                           "posterID": playerID]
             
             let formatter = DateComponentsFormatter()
             
@@ -175,22 +203,29 @@ class CompletedWorkoutViewController: UIViewController {
             
             let timeString = formatter.string(from: TimeInterval(timeToComplete))
             
+            let exerciseData = ["title":self.workoutTitle!,
+                                "completed":true,
+                                "createdBy":assignedCoach!,
+                                "exercises":self.exercises,
+                                "score":scoreNum,
+                                "timeToComplete":timeString!,
+                                "savedID":savedID!] as [String : Any]
+            
             let postData = ["type": "workout",
                             "posterID": playerID!,
                             "workoutID": workoutID!,
-                            "timeToComplete":timeString!,
-                            "message": postMessage,
-                            "score": workoutRPE.text!,
-                            "numberOfExercises": numberOfExercises!,
                             "username": playerUsername!,
                             "time": ServerValue.timestamp(),
-                            "workoutTitle":self.workoutTitle!,
-                            "isPrivate" : false] as [String : Any]
+                            "isPrivate" : false,
+                            "exerciseData":exerciseData] as [String : Any]
             
             postRef.setValue(postData)
-            timeLineRef.child(playerID!).childByAutoId().setValue(newpost)
+            timeLineRef.child(playerID!).child(postID).setValue(true)
             for coach in self.coaches{
-                timeLineRef.child(coach).childByAutoId().setValue(newpost)
+                timeLineRef.child(coach).child(postID).setValue(true)
+            }
+            for follower in followers{
+                timeLineRef.child(follower).child(postID).setValue(true)
             }
             
             
@@ -216,6 +251,37 @@ class CompletedWorkoutViewController: UIViewController {
             
             
         }
+    }
+    
+    func updateDiscoverWorkoutStats(with workoutRPE:Int){
+        // this function does three things
+        // updates number of completes
+        // updates number of total rpe score
+        // updates number of total time
+        
+        let completedRef = Database.database().reference().child("SavedWorkouts").child(savedID)
+        
+        completedRef.runTransactionBlock { (currentData) -> TransactionResult in
+            if var post = currentData.value as? [String:AnyObject]{
+                var completes = post["NumberOfCompletes"] as? Int ?? 0
+                var totalScore = post["TotalScore"] as? Int ?? 0
+                var totalTime = post["TotalTime"] as? Int ?? 0
+                completes += 1
+                totalScore += workoutRPE
+                totalTime += self.timeToComplete
+                post["NumberOfCompletes"] = completes as AnyObject
+                post["TotalScore"] = totalScore as AnyObject
+                post["TotalTime"] = totalTime as AnyObject
+                currentData.value = post
+                return TransactionResult.success(withValue: currentData)
+            }
+            return TransactionResult.success(withValue: currentData)
+        } andCompletionBlock: { (error, committed, snapshot) in
+            if let error = error{
+                print(error.localizedDescription)
+            }
+        }
+
     }
     
     func showError(){

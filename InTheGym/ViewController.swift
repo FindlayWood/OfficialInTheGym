@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     
     
     static var admin:Bool!
+    static var username:String!
     
     let monitor = NWPathMonitor()
     

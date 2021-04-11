@@ -14,7 +14,7 @@ import Firebase
 class COACHESViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EmptyDataSetSource, EmptyDataSetDelegate {
     
     // array of coaches, atm just array of strings
-    var coaches = [String]()
+    var coaches = [Users]()
     
     // array of all coach data
     var coachFullData :[[String:Any]] = []
@@ -38,20 +38,21 @@ class COACHESViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableview.emptyDataSetSource = self
         tableview.emptyDataSetDelegate = self
         tableview.tableFooterView = UIView()
-
         
+        loadCoaches()
+
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return coachFullData.count
+        return coaches.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! PlayerInfoCell
         //cell.coachName.text = "Phil Jackson"
-        cell.coachName.text = coachFullData[indexPath.row]["name"] as? String
-        cell.coachUsername.text = coachFullData[indexPath.row]["username"] as? String
-        cell.coachEmail.text = coachFullData[indexPath.row]["email"] as? String
+        cell.coachName.text = coaches[indexPath.row].firstName! + " " + coaches[indexPath.row].lastName!
+        cell.coachUsername.text = coaches[indexPath.row].username
+        cell.coachEmail.text = coaches[indexPath.row].email
         cell.backgroundColor = #colorLiteral(red: 0.9364961361, green: 0.9364961361, blue: 0.9364961361, alpha: 1)
         cell.layer.cornerRadius = 8
         cell.layer.borderWidth = 0
@@ -60,20 +61,12 @@ class COACHESViewController: UIViewController, UITableViewDelegate, UITableViewD
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let screenSize: CGRect = UIScreen.main.bounds
-//        let screenWidth = screenSize.width
-//
-//        let appearance = SCLAlertView.SCLAppearance(
-//            kWindowWidth: screenWidth - 40, showCircularIcon: false
-//        )
-//// TODO: add delete coach function on button below
-//        let alert = SCLAlertView(appearance: appearance)
-//        alert.addButton("Delete Coach") {
-//            print("deleting \(self.coachFullData[indexPath.row]["username"] ?? "COACH")...")
-//        }
-//        alert.showError("Coach", subTitle: "\(coachFullData[indexPath.row]["username"] ?? "COACH") is one of your coaches. They can view all your workouts and create new ones. You can remove them if you like below.", closeButtonTitle: "Cancel")
-//    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let profile = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
+        profile.user = coaches[indexPath.row]
+        self.navigationController?.pushViewController(profile, animated: true)
+    }
     
     // header for tableview
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -131,32 +124,24 @@ class COACHESViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func loadCoaches(){
-        coaches.removeAll()
-        coachFullData.removeAll()
-        DBRef.child("users").child(userID!).child("coaches").observe(.childAdded) { (snapshot) in
-            if let snap = snapshot.value as? String{
-                self.coaches.append(snap)
-                self.DBRef.child("users").child(snap).observe(.value) { (snapshot) in
-                    if let snap = snapshot.value as? [String:Any]{
-                        let username = snap["username"] as? String
-                        let email = snap["email"] as? String
-                        let first = snap["firstName"] as? String
-                        let last = snap["lastName"] as? String
-                        let coachData = ["name": first! + " " + last!,
-                                         "username": username!,
-                                         "email": email!
-                        ]
-                        self.coachFullData.append(coachData)
-                        self.tableview.reloadData()
-                    }
+        let myGroup = DispatchGroup()
+        let coachRef = Database.database().reference().child("PlayerCoaches").child(userID!)
+        coachRef.observeSingleEvent(of: .value) { (snapshot) in
+            for child in snapshot.children {
+                myGroup.enter()
+                UserIDToUser.transform(userID: (child as AnyObject).key) { (coach) in
+                    defer {myGroup.leave()}
+                    self.coaches.append(coach)
                 }
+            }
+            myGroup.notify(queue: .main) {
+                self.tableview.reloadData()
             }
         }
     }
     
 
     override func viewWillAppear(_ animated: Bool) {
-        loadCoaches()
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes

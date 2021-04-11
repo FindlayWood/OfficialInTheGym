@@ -13,12 +13,18 @@ import UIKit
 
 class BodyTypeViewController: UIViewController {
     
+    var fromLiveWorkout:Bool!
+    var workoutID:String!
+    
+    @IBOutlet weak var pageNumberLabel:UILabel!
+    
     @IBAction func buttonTapped(_ sender:UIButton){
         sender.pulsate()
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "ExerciseViewController") as! ExerciseViewController
-        
+        SVC.fromLiveWorkout = self.fromLiveWorkout
         SVC.exerciseType = sender.titleLabel!.text as! String
+        SVC.workoutID = self.workoutID
         
         
         self.navigationController?.pushViewController(SVC, animated: true)
@@ -27,6 +33,11 @@ class BodyTypeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Body Type"
+        if fromLiveWorkout == true{
+            pageNumberLabel.text = "1 of 2"
+        }else{
+            pageNumberLabel.text = "1 of 6"
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

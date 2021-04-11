@@ -7,16 +7,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "06EBEF9E-C017-4586-A6E4-18921AE1547A"
+            uuid = "664B3B11-ED7B-4969-8B2D-566EC06D3307"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "InTheGym/PlayerPages/PlayerWorkoutViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "246"
+            endingLineNumber = "246"
+            landmarkName = "tableView(_:didSelectRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6B43B1BA-35DF-470E-801C-D8CD914BB846"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "InTheGym/DetailTableViewCell.swift"
+            filePath = "InTheGym/Timeline/PlayerTimeline/PlayerTimelineViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
-            landmarkName = "setCollectionDataSourceDelegate(_:forRow:)"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "newPostsPressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -12,7 +12,7 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class AdminActivityViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class AdminActivityViewController: UIViewController {
     
     // outlet to tableview
     @IBOutlet weak var tableview:UITableView!
@@ -35,6 +35,7 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
     // database references
     var DBRef:DatabaseReference!
     var UserRef:DatabaseReference!
+    var PostRef:DatabaseReference!
     
     
     // to display first
@@ -50,16 +51,22 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
     
     // array to hold all players id
     var playersID : [String] = []
+    
+    // new version of timeline posts
+    var posts : [[String:AnyObject]] = []
+    var timeline : [[String:AnyObject]] = []
+    
+    // array to hold likes
+    var likedPosts:[String] = []
+    
+    // class that makes tableview
+    var postsTableView:PostTableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //self.tableview.rowHeight = 90
-        tableview.rowHeight = UITableView.automaticDimension
-        tableview.estimatedRowHeight = 90
-        tableview.backgroundColor = .white
-        tableview.tableFooterView = UIView()
         let userID = Auth.auth().currentUser?.uid
         DBRef = Database.database().reference()
+        PostRef = Database.database().reference()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         UserRef = Database.database().reference().child("users").child(userID!)
         UserRef.child("username").observeSingleEvent(of: .value) { (snapshot) in
@@ -73,9 +80,12 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
         segment.setTitleTextAttributes(NotSelectedTextAttributes, for: .normal)
         segment.setTitleTextAttributes(SelectedTextAttributes, for: .selected)
         
-        loadActivities()
-        loadFeed()
-        loadPlayers()
+        //loadActivities()
+        //loadFeed()
+        //loadPlayers()
+        
+        
+        postsTableView = PostTableView(tableview: tableview, userID: userID!, parent: self, username: AdminActivityViewController.username)
         
     }
     
@@ -84,11 +94,19 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
     @objc fileprivate func handleSegmentChange(){
         switch segment.selectedSegmentIndex {
         case 0:
-            rowsToDisplay = activities
+            //rowsToDisplay = timeline
+            postsTableView.rowsToDisplay = postsTableView.timeline
+            postsTableView.tableview.reloadData()
+            
         default:
-            rowsToDisplay = feed
+            //rowsToDisplay = feed
+            postsTableView.rowsToDisplay = postsTableView.playerFeed
+            postsTableView.tableview.reloadData()
         }
-        tableview.reloadData()
+        //tableview.reloadData()
+//        postsTableView = PostTableView(tableview: tableview, posts: rowsToDisplay)
+//        postsTableView.tableview.reloadData()
+//        postsTableView.observeChanges()
     }
     
     
@@ -96,110 +114,9 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let postVC = storyboard.instantiateViewController(withIdentifier: "MakePostViewController") as! MakePostViewController
         postVC.playersID = self.playersID
-        self.navigationController?.pushViewController(postVC, animated: true)
-        
-    }
-    
-    // loading tableview using switch segment
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return rowsToDisplay.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let dateStamp = self.rowsToDisplay[indexPath.row]["time"] as? TimeInterval
-        let date = NSDate(timeIntervalSince1970: dateStamp!/1000)
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .short
-        let final = formatter.string(from: date as Date)
-        
-        if rowsToDisplay[indexPath.row]["type"] as? String == "post"{
-            //tableview.rowHeight = 180
-            let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell2") as! ActivityTableViewCell
-            
-            let coachID = rowsToDisplay[indexPath.row]["posterID"] as? String
-     
-            self.DBRef.child("users").child(coachID!).child("profilePhotoURL").observeSingleEvent(of: .value) { (snapshot) in
-                if let imageURL = snapshot.value as? String{
-                    DispatchQueue.global(qos: .background).async {
-                        let url = URL(string: imageURL)
-                        let data = NSData(contentsOf: url!)
-                        let image = UIImage(data: data! as Data)
-                        DispatchQueue.main.async {
-                            cell.profilePhoto.image = image
-                            cell.profilePhoto.layer.cornerRadius = cell.profilePhoto.bounds.width / 2.0
-                        }
-                    }
-                }else{
-                    cell.profilePhoto.image = UIImage(named: "coach_icon")
-                }
-            }
-            
-            cell.postTime.text = final
-            cell.username.text = rowsToDisplay[indexPath.row]["username"] as? String
-            cell.postText.text = rowsToDisplay[indexPath.row]["message"] as? String
-            return cell
-        }
-        else if rowsToDisplay[indexPath.row]["type"] as? String == "workout"{
-            let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell3") as! ActivityTableViewCell
-            
-            cell.profilePhoto.image = UIImage(named: "benchpress_icon")
-            cell.username.text = rowsToDisplay[indexPath.row]["username"] as? String
-            cell.postTime.text = final
-            cell.workoutExerciseCount.text = rowsToDisplay[indexPath.row]["numberOfExercises"] as? String
-            cell.workoutScore.text = rowsToDisplay[indexPath.row]["score"] as? String
-            cell.workoutTime.text = rowsToDisplay[indexPath.row]["timeToComplete"] as? String
-            cell.workoutTitle.text = rowsToDisplay[indexPath.row]["workoutTitle"] as? String
-            
-            
-            return cell
-            
-            
-        }
-        
-        
-        
-        else{
-            
-            let cell = self.tableview.dequeueReusableCell(withIdentifier: "cell") as! ActivityTableViewCell
-            //tableview.rowHeight = 90
-            cell.backgroundColor = .white
-            let type = self.rowsToDisplay[indexPath.row]["type"] as? String
-            cell.type.text = type
-            cell.time.text = final
-            cell.message.text = self.rowsToDisplay[indexPath.row]["message"] as? String
-            cell.pic.image = UIImage(named: type!)
-            return cell
-
-        }
-        
-    }
-    
-    func loadActivities(){
-        //activities.removeAll()
-        
-        var initialLoad = true
-        self.DBRef.child("Activities").child(self.userID!).observe(.childAdded, with: { (snapshot) in
-            if let snap = snapshot.value as? [String:AnyObject]{
-                self.activities.insert(snap, at: 0)
-            }
-            
-            if initialLoad == false{
-                if self.segment.selectedSegmentIndex == 0{
-                    self.tableview.reloadData()
-                }
-
-            }
- 
-        }, withCancel: nil)
-
-        self.DBRef.child("Activities").child(self.userID!).observeSingleEvent(of: .value) { [self] (_) in
-            self.handleSegmentChange()
-            initialLoad = false
-            print(activities.count)
-            
-        }
+        postVC.modalTransitionStyle = .coverVertical
+        postVC.modalPresentationStyle = .fullScreen
+        self.navigationController?.present(postVC, animated: true, completion: nil)
         
     }
 
@@ -214,27 +131,29 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
             }
             
             if initialLoad == false{
-                if self.segment.selectedSegmentIndex == 1{
-                    self.tableview.reloadData()
-                }
+                self.handleSegmentChange()
+
             }
             
         }, withCancel: nil)
         
         self.DBRef.child("Public Feed").child(userID!).observeSingleEvent(of: .value) { (snapshot) in
-            //self.handleSegmentChange()
+            self.postsTableView = PostTableView(tableview: self.tableview, userID: self.userID!, playerFeed: self.feed)
+            self.postsTableView.parent = self
+            self.postsTableView.username = AdminActivityViewController.username
             initialLoad = false
         }
     }
     
     func loadPlayers(){
-        self.playersID.removeAll()
-        self.DBRef.child("users").child(userID!).child("players").child("accepted").observe(.childAdded) { (snapshot) in
-            if let snap = snapshot.value as? String{
-                self.playersID.append(snap)
-            }
+        let playerRef = Database.database().reference().child("CoachPlayers").child(userID!)
+        playerRef.observe(.childAdded) { (snapshot) in
+            self.playersID.append(snapshot.key)
         }
     }
+    
+    
+    
     
     // display first time message
     override func viewDidAppear(_ animated: Bool) {
@@ -255,9 +174,7 @@ class AdminActivityViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        loadActivities()
-//        loadFeed()
-//        loadPlayers()
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
     

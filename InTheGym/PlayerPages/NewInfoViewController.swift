@@ -14,9 +14,6 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     // variable to hold the user id of the coach
     var adminKey:String = ""
     
-    var requesters = [String]()
-    var requestKeys = [String]()
-    
     // varibale to hold the username.
     // MARK: hard coding the username to test new page. Will need to change
     var username:String = ""
@@ -29,7 +26,7 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     //@IBOutlet weak var countedLabel:UILabel!
     
     // array of tableview contents
-    var tableContents = ["Coaches", "PBs", "Workout Scores", "Workload", "Requests", "Settings"]
+    var tableContents = ["Coaches", "PBs", "Workout Scores", "Workload", "Requests", "Settings", "Saved Workouts", "Notifications"]
     var tabQ = ["AccountType", "Username", "Email", "Workouts Complete"]
     var tabA = [String]()
     
@@ -49,8 +46,7 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         self.tableview.tableFooterView = UIView()
         
-        self.username = PlayerActivityViewController.username
-        //self.usernameLabel.text = "@\(PlayerActivityViewController.username ?? "@username")"
+        self.username = ViewController.username
 
         
     }
@@ -146,6 +142,14 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                     cell.pic.image = UIImage(named: "settings_icon")
                     cell.QLabel.text = tableContents[indexPath.row]
                     cell.ALabel.text = ""
+                case 6:
+                    cell.pic.image = UIImage(named: "scores_icon")
+                    cell.QLabel.text = tableContents[indexPath.row]
+                    cell.ALabel.text = ""
+                case 7:
+                    cell.pic.image = UIImage(named: "scores_icon")
+                    cell.QLabel.text = tableContents[indexPath.row]
+                    cell.ALabel.text = ""
                 default:
                     print("ouch")
                 }
@@ -177,7 +181,6 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "MYSCORESViewController") as! MYSCORESViewController
                 navigationController?.pushViewController(SVC, animated: true)
-                
             case 3:
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = storyboard.instantiateViewController(withIdentifier: "WorkloadDisplayViewController") as! WorkloadDisplayViewController
@@ -187,13 +190,18 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
             case 4:
                 let Storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = Storyboard.instantiateViewController(withIdentifier: "RequestsViewController") as! RequestsViewController
-                SVC.requesters = self.requesters
-                SVC.requestKeys = self.requestKeys
-                SVC.username = self.username
                 self.navigationController?.pushViewController(SVC, animated: true)
             case 5:
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+                navigationController?.pushViewController(SVC, animated: true)
+            case 6:
+                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+                let SVC = StoryBoard.instantiateViewController(withIdentifier: "SavedWorkoutsViewController") as! SavedWorkoutsViewController
+                navigationController?.pushViewController(SVC, animated: true)
+            case 7:
+                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+                let SVC = StoryBoard.instantiateViewController(withIdentifier: "DisplayNotificationsViewController") as! DisplayNotificationsViewController
                 navigationController?.pushViewController(SVC, animated: true)
             default:
                 print("ouch")
@@ -250,44 +258,13 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         }, withCancel: nil)
         
     }
-    
-    func requests(){
-        self.requesters.removeAll()
-        self.requestKeys.removeAll()
-        var requestCount = 0
-        self.DBRef.child("users").observe(.childAdded, with: { (snapshot) in
-            if let snap = snapshot.value as? [String:Any]{
-                if snap["admin"] as! Bool == true{
-                    if let playerSnap = snap["players"] as? [String:Any]{
-                        if let requests = playerSnap["requested"] as? [String]{
-                            if requests.contains(self.username){
-                                requestCount = requestCount + 1
-                                let coach = snap["username"] as! String
-                                self.requesters.append(coach)
-                                self.requestKeys.append(snapshot.key)
-                                //self.adminLabel.text = "you have \(requestCount) new requests"
-                                //self.acceptRequestButton.isHidden = false
-                            }
-                            else{
-                                //self.adminLabel.text = "You don't have any new requests."
-                               //self.acceptRequestButton.isHidden = true
-                            }
-                        }
-                        else{
-                            //self.adminLabel.text = "You don't have any new requests."
-                            //self.acceptRequestButton.isHidden = true
-                        }
-                    }
-                }
-            }
-        }, withCancel: nil)
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         loadUserInfo()
-        requests()
-        //self.tableview.reloadData()
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
+        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
+        self.navigationController?.navigationBar.tintColor = Constants.lightColour
     }
 
 }

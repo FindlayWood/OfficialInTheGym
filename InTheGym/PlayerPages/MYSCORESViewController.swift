@@ -33,7 +33,7 @@ class MYSCORESViewController: UIViewController {
     
     let userID = Auth.auth().currentUser?.uid
     
-    let username = PlayerActivityViewController.username
+    let username = ViewController.username
 
     override func viewDidLoad() {
         super.viewDidLoad()

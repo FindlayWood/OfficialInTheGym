@@ -17,10 +17,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     // new look with tableview for 1.4
     @IBOutlet var tableview:UITableView!
     
-    @IBOutlet weak var profilePictureImageView:UIImageView!
     
     // array holding labels in tableview
-    var tableContent = ["Provide Feedback", "App Information", "Contact us", "Reset Password", "Logout"]
+    var tableContent = ["Provide Feedback", "App Information", "How To Best Use the App", "Contact us", "Reset Password", "Logout"]
     
     let userID = Auth.auth().currentUser?.uid
     
@@ -33,47 +32,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tableview.isScrollEnabled = false
         
         
-        profilePictureImageView.layer.cornerRadius = profilePictureImageView.bounds.width / 2.0
-        profilePictureImageView.layer.borderWidth = 2.0
-        profilePictureImageView.layer.borderColor = Constants.darkColour.cgColor
-        profilePictureImageView.layer.masksToBounds = true
-        profilePictureImageView.isUserInteractionEnabled = true
-        
         hideKeyboardWhenTappedAround()
         
         DBRef = Database.database().reference().child("users").child(userID!)
         
-    }
-    
-    @IBAction func changeProfilePhoto(_ sender:UIButton){
-        let picker = UIImagePickerController()
-        picker.delegate = self
-        picker.allowsEditing = true
-        picker.sourceType = .photoLibrary
-        present(picker, animated: true, completion: nil)
-    }
-    
-    func loadProfilePhoto(){
+        tableview.backgroundColor = Constants.lightColour
         
-        DBRef.child("profilePhotoURL").observeSingleEvent(of: .value) { (snapshot) in
-            guard let imageURL = snapshot.value else{
-                print("no profile pic")
-                return
-            }
-            
-            let storageRef = Storage.storage().reference()
-            let storageProfileRef = storageRef.child("ProfilePhotos").child(self.userID!)
-            storageProfileRef.downloadURL { (url, error) in
-                if error != nil{
-                    print(error?.localizedDescription as Any)
-                    return
-                }
-                let data = NSData(contentsOf: url!)
-                let image = UIImage(data: data! as Data)
-                self.profilePictureImageView.image = image
-                
-            }
-        }
     }
     
 
@@ -96,6 +60,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let initial = storyboard.instantiateInitialViewController()
             UIApplication.shared.keyWindow?.rootViewController = initial
+            ViewController.admin = nil
+            ViewController.username = nil
         }
         alert.showWarning("Logout?", subTitle: "Are you sure you want to logout?", closeButtonTitle: "No", colorStyle: 0xe01212, colorTextButton: 0xfcfcfc)
         
@@ -127,11 +93,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
             let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
             navigationController?.pushViewController(SVC, animated: true)
+        
         case 2:
+            let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+            let SVC = StoryBoard.instantiateViewController(withIdentifier: "BestUseMessageViewController") as! BestUseMessageViewController
+            navigationController?.pushViewController(SVC, animated: true)
+        
+        case 3:
             let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
             let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
             navigationController?.pushViewController(SVC, animated: true)
-        case 3:
+        case 4:
             let email = (Auth.auth().currentUser?.email!)!
             
             let appearance = SCLAlertView.SCLAppearance(
@@ -142,7 +114,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 Auth.auth().sendPasswordReset(withEmail: email, completion: nil)
             }
             alert.showError("Reset Password?", subTitle: "We will send you an email with instructions to change your password. Are you Sure?",closeButtonTitle: "NO", colorStyle: 0xe01212, colorTextButton: 0xfcfcfc )
-        case 4:
+        case 5:
             logout()
     
         default:
@@ -156,56 +128,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        loadProfilePhoto()
+        //loadProfilePhoto()
     }
     
 
 
 
-}
-
-extension SettingsViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate{
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        if let selectedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            profilePictureImageView.image = selectedImage
-            
-            guard let imageData = selectedImage.jpegData(compressionQuality: 0.4) else {
-                return
-            }
-            
-            
-            let storageRef = Storage.storage().reference()
-            let storageProfileRef = storageRef.child("ProfilePhotos").child(userID!)
-            
-            let metaData = StorageMetadata()
-            metaData.contentType = "image/jpg"
-            
-            storageProfileRef.putData(imageData, metadata: metaData) { (storage, error) in
-                if error != nil{
-                    print(error?.localizedDescription as Any)
-                    return
-                }
-                
-                storageProfileRef.downloadURL { (url, error) in
-                    if let metaImageURL = url?.absoluteString{
-                        print(metaImageURL)
-                        self.DBRef.updateChildValues(["profilePhotoURL": metaImageURL])
-                        
-                    }
-                }
-                
-                
-            }
-            
-        }
-        
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        
-        picker.dismiss(animated: true, completion: nil)
-    }
 }

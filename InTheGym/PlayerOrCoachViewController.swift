@@ -16,11 +16,16 @@ class PlayerOrCoachViewController: UIViewController {
     @IBOutlet var coachButton:UIView!
     @IBOutlet var playerButton:UIView!
     
+    @IBOutlet weak var contineButton:UIButton!
+    @IBOutlet weak var text:UITextView!
+    
     var cornerRadia : CGFloat = 10.0
     var borderColour = UIColor.white.cgColor
     var borderWidth : CGFloat = 2.0
     
     let selection = UISelectionFeedbackGenerator()
+    
+    var isAdmin:Bool!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,22 +50,39 @@ class PlayerOrCoachViewController: UIViewController {
         warningalert.showNotice("Verification", subTitle: "New accounts must be verified and you will be sent an email to verify your account before you can login.", closeButtonTitle: "Ok")
         
         selection.prepare()
+        contineButton.isHidden = true
+        text.isHidden = true
+        navigationItem.title = "ACCOUNT TYPE"
         
     }
     
     @objc fileprivate func coachPressed(){
+        text.text = SignUpMessages.coachMessage
+        text.isHidden = false
+        contineButton.isHidden = false
+        coachView.backgroundColor = Constants.lightColour
+        playerView.backgroundColor = Constants.darkColour
+        isAdmin = true
         self.selection.selectionChanged()
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let svc = storyboard.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
-        svc.admin = true
-        self.navigationController?.pushViewController(svc, animated: true)
+        self.contineButton.setTitle("CONTINUE AS COACH", for: .normal)
     }
     
     @objc fileprivate func playerPressed(){
+        text.text = SignUpMessages.playerMessage
+        text.isHidden = false
+        contineButton.isHidden = false
+        playerView.backgroundColor = Constants.lightColour
+        coachView.backgroundColor = Constants.darkColour
+        isAdmin = false
+        self.selection.selectionChanged()
+        self.contineButton.setTitle("CONTINUE AS PLAYER", for: .normal)
+    }
+    
+    @IBAction func continuePressed(_ sender:UIButton){
         self.selection.selectionChanged()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let svc = storyboard.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
-        svc.admin = false
+        svc.admin = self.isAdmin
         self.navigationController?.pushViewController(svc, animated: true)
     }
     

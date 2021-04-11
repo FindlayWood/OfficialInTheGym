@@ -10,6 +10,7 @@
 
 import UIKit
 import SCLAlertView
+import Firebase
 
 class NewWeightViewController: UIViewController {
     
@@ -26,6 +27,8 @@ class NewWeightViewController: UIViewController {
     @IBOutlet weak var text:UITextField!
     @IBOutlet weak var measurement:UITextField!
     
+    @IBOutlet weak var pageNumberLabel:UILabel!
+    
     // sets and reps varibales to be passed from previous page
     var sets = ""
     var reps = ""
@@ -36,7 +39,10 @@ class NewWeightViewController: UIViewController {
     var type: String = "weights"
     var completedArray : [Bool] = []
     
-    
+    var fromLiveWorkout:Bool!
+    var whichExercise:Int!
+    var workoutID:String!
+    let userID = Auth.auth().currentUser!.uid
     
     @IBAction func buttonPressed(_ sender:UIButton){
         nextButton.isHidden = false
@@ -51,59 +57,159 @@ class NewWeightViewController: UIViewController {
         }else{
             text.isUserInteractionEnabled = true
             maxButton.isSelected = false
+            text.becomeFirstResponder()
         }
     }
     
     @IBAction func nextPressed(_ sender:UIButton){
         if  maxButton.isSelected{
-            print("Continuing to next page with max")
-            let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let destVC = Storyboard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
-            destVC.sets = self.sets
-            destVC.reps = self.reps
-            destVC.weight = "MAX"
-            destVC.variedReps = self.variedReps
-            destVC.repArray = self.repArray
-            destVC.exercise = self.exercise
-            destVC.type = self.type
-            destVC.completedArray = self.completedArray
-            self.navigationController?.pushViewController(destVC, animated: true)
-            //self.present(destVC, animated: true, completion: nil)
+            
+            if fromLiveWorkout == true{
+                //WorkoutDetailViewController.exercises[whichExercise]["reps"] = self.reps as AnyObject
+                
+                let sets = WorkoutDetailViewController.exercises[whichExercise]["sets"] as! String
+                let setInt = Int(sets)! + 1
+                let completedSets = Array(repeating: true, count: setInt)
+                WorkoutDetailViewController.exercises[whichExercise]["sets"] = String(setInt) as AnyObject
+                WorkoutDetailViewController.exercises[whichExercise]["completedSets"] = completedSets as AnyObject
+                if var repArray = WorkoutDetailViewController.exercises[whichExercise]["reps"] as? [String]{
+                    repArray.append(self.reps)
+                    WorkoutDetailViewController.exercises[whichExercise]["reps"] = repArray as AnyObject
+                }else{
+                    WorkoutDetailViewController.exercises[whichExercise]["reps"] = [self.reps] as AnyObject
+                }
+                if var weightArray = WorkoutDetailViewController.exercises[whichExercise]["weight"] as? [String]{
+                    weightArray.append("MAX")
+                    WorkoutDetailViewController.exercises[whichExercise]["weight"] = weightArray as AnyObject
+                }else{
+                    WorkoutDetailViewController.exercises[whichExercise]["weight"] = ["MAX"] as AnyObject
+                }
+                
+                let workoutRef = Database.database().reference().child("Workouts").child(self.userID).child(self.workoutID)
+                workoutRef.updateChildValues(["exercises":WorkoutDetailViewController.exercises])
+                
+                
+                let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+                self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+                
+            }else{
+                print("Continuing to next page with max")
+                let Storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let destVC = Storyboard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
+                destVC.sets = self.sets
+                destVC.reps = self.reps
+                destVC.weight = "MAX"
+                destVC.variedReps = self.variedReps
+                destVC.repArray = self.repArray
+                destVC.exercise = self.exercise
+                destVC.type = self.type
+                destVC.completedArray = self.completedArray
+                self.navigationController?.pushViewController(destVC, animated: true)
+
+            }
+
         }
         else if text.text == ""{
             showEmptyAlert()
         }else{
-            let m = measurement.text!
-            let t = text.text!
-            let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let destVC = Storyboard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
-            destVC.sets = self.sets
-            destVC.reps = self.reps
-            destVC.weight = "\(t)\(m)"
-            destVC.variedReps = self.variedReps
-            destVC.repArray = self.repArray
-            destVC.exercise = self.exercise
-            destVC.type = self.type
-            destVC.completedArray = self.completedArray
-            self.navigationController?.pushViewController(destVC, animated: true)
-            //self.present(destVC, animated: true, completion: nil)
+            
+            if fromLiveWorkout == true{
+                //WorkoutDetailViewController.exercises[whichExercise]["reps"] = self.reps as AnyObject
+                
+                let sets = WorkoutDetailViewController.exercises[whichExercise]["sets"] as! String
+                let setInt = Int(sets)! + 1
+                let completedSets = Array(repeating: true, count: setInt)
+                WorkoutDetailViewController.exercises[whichExercise]["sets"] = String(setInt) as AnyObject
+                WorkoutDetailViewController.exercises[whichExercise]["completedSets"] = completedSets as AnyObject
+                if var repArray = WorkoutDetailViewController.exercises[whichExercise]["reps"] as? [String]{
+                    repArray.append(self.reps)
+                    WorkoutDetailViewController.exercises[whichExercise]["reps"] = repArray as AnyObject
+                }else{
+                    WorkoutDetailViewController.exercises[whichExercise]["reps"] = [self.reps] as AnyObject
+                }
+                if var weightArray = WorkoutDetailViewController.exercises[whichExercise]["weight"] as? [String]{
+                    weightArray.append(text.text! + measurement.text!)
+                    WorkoutDetailViewController.exercises[whichExercise]["weight"] = weightArray as AnyObject
+                }else{
+                    WorkoutDetailViewController.exercises[whichExercise]["weight"] = [text.text! + measurement.text!] as AnyObject
+                }
+                //WorkoutDetailViewController.exercises[whichExercise]["weight"] = text.text! + measurement.text! as AnyObject
+                
+                
+                let workoutRef = Database.database().reference().child("Workouts").child(self.userID).child(self.workoutID)
+                workoutRef.updateChildValues(["exercises":WorkoutDetailViewController.exercises])
+                
+                
+                let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+                self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+                
+            }else{
+                let m = measurement.text!
+                let t = text.text!
+                let Storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let destVC = Storyboard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
+                destVC.sets = self.sets
+                destVC.reps = self.reps
+                destVC.weight = "\(t)\(m)"
+                destVC.variedReps = self.variedReps
+                destVC.repArray = self.repArray
+                destVC.exercise = self.exercise
+                destVC.type = self.type
+                destVC.completedArray = self.completedArray
+                self.navigationController?.pushViewController(destVC, animated: true)
+                //self.present(destVC, animated: true, completion: nil)
+            }
+            
         }
         
     }
     
     @IBAction func skipPressed(_ sender:UIButton){
-        let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let destVC = Storyboard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
-        destVC.sets = self.sets
-        destVC.reps = self.reps
-        destVC.weight = ""
-        destVC.variedReps = self.variedReps
-        destVC.repArray = self.repArray
-        destVC.exercise = self.exercise
-        destVC.type = self.type
-        destVC.completedArray = self.completedArray
-        self.navigationController?.pushViewController(destVC, animated: true)
-        //self.present(destVC, animated: true, completion: nil)
+        if fromLiveWorkout == true{
+            //WorkoutDetailViewController.exercises[whichExercise]["reps"] = self.reps as AnyObject
+            
+            let sets = WorkoutDetailViewController.exercises[whichExercise]["sets"] as! String
+            let setInt = Int(sets)! + 1
+            let completedSets = Array(repeating: true, count: setInt)
+            WorkoutDetailViewController.exercises[whichExercise]["sets"] = String(setInt) as AnyObject
+            WorkoutDetailViewController.exercises[whichExercise]["completedSets"] = completedSets as AnyObject
+            if var repArray = WorkoutDetailViewController.exercises[whichExercise]["reps"] as? [String]{
+                repArray.append(self.reps)
+                WorkoutDetailViewController.exercises[whichExercise]["reps"] = repArray as AnyObject
+            }else{
+                WorkoutDetailViewController.exercises[whichExercise]["reps"] = [self.reps] as AnyObject
+            }
+            if var weightArray = WorkoutDetailViewController.exercises[whichExercise]["weight"] as? [String]{
+                weightArray.append("")
+                WorkoutDetailViewController.exercises[whichExercise]["weight"] = weightArray as AnyObject
+            }else{
+                WorkoutDetailViewController.exercises[whichExercise]["weight"] = [""] as AnyObject
+            }
+            //WorkoutDetailViewController.exercises[whichExercise]["weight"] = text.text! + measurement.text! as AnyObject
+            
+            
+            let workoutRef = Database.database().reference().child("Workouts").child(self.userID).child(self.workoutID)
+            workoutRef.updateChildValues(["exercises":WorkoutDetailViewController.exercises])
+            
+            
+            let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+            self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+            
+        }else{
+            
+            let Storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let destVC = Storyboard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
+            destVC.sets = self.sets
+            destVC.reps = self.reps
+            destVC.weight = ""
+            destVC.variedReps = self.variedReps
+            destVC.repArray = self.repArray
+            destVC.exercise = self.exercise
+            destVC.type = self.type
+            destVC.completedArray = self.completedArray
+            self.navigationController?.pushViewController(destVC, animated: true)
+        }
+
     }
     
     
@@ -117,6 +223,13 @@ class NewWeightViewController: UIViewController {
         measurement.isUserInteractionEnabled = false
         hideKeyboardWhenTappedAround()
         shadowButtons()
+        
+        if fromLiveWorkout == true{
+            pageNumberLabel.text = "2 of 2"
+        }else{
+            pageNumberLabel.text = "5 of 6"
+        }
+        
         
     }
     
@@ -141,6 +254,7 @@ class NewWeightViewController: UIViewController {
         let alert = SCLAlertView(appearance: appearance)
         alert.addButton("Continue Anyway") {
             print("continuing to next page with no weight...")
+            self.skipPressed(UIButton())
         }
         alert.showError("Enter a Weight!", subTitle: "You have not entered a number for the weight for this exercise. To enter a weight tap on the left side of the big dark blue box. You can continue without entering a weight if you would like. Continue with no weight?", closeButtonTitle: "Cancel!")
     }

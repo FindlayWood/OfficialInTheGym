@@ -36,6 +36,12 @@ class NewRepsViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var continueButton:UIButton!
     @IBOutlet weak var nextButton:UIButton!
     
+    @IBOutlet weak var pageNumberLabel:UILabel!
+    
+    
+    var fromLiveWorkout:Bool!
+    var whichExercise:Int!
+    var workoutID:String!
     
 
     override func viewDidLoad() {
@@ -53,16 +59,23 @@ class NewRepsViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         self.navigationItem.title = "Reps"
         
-        let setNumber = Int(self.sets)!
+        
+        
         if (!varyReps){
             tableview.isHidden = true
             self.setLabel.isHidden = true
             self.nextButton.isHidden = true
         }else{
+            let setNumber = Int(self.sets)!
             self.setLabel.text = "SET 1 / SET \(setNumber)"
             self.continueButton.isHidden = true
         }
         
+        if fromLiveWorkout == true{
+            pageNumberLabel.text = "1 0f 2"
+        }else{
+            pageNumberLabel.text = "4 of 6"
+        }
         
         
 
@@ -95,6 +108,9 @@ class NewRepsViewController: UIViewController, UITableViewDelegate, UITableViewD
             }else{
                 destVC.reps = text.text!
             }
+            destVC.fromLiveWorkout = self.fromLiveWorkout
+            destVC.whichExercise = self.whichExercise
+            destVC.workoutID = self.workoutID
             self.navigationController?.pushViewController(destVC, animated: true)
         }
         

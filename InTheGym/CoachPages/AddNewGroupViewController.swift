@@ -46,15 +46,20 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
     var actRef : DatabaseReference!
     let userID = Auth.auth().currentUser?.uid
     
+    // delegate to report back to mygroups
+    var delegate : MyGroupsProtocol!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         titleField.delegate = self
         titleField.returnKeyType = .done
+        titleField.tintColor = .white
         subTitleField.delegate = self
         subTitleField.returnKeyType = .done
+        subTitleField.tintColor = .white
         
-        DBRef = Database.database().reference().child("users").child(userID!).child("groups")
+        DBRef = Database.database().reference().child("Groups")
         actRef = Database.database().reference().child("Activities")
         
         tableview.layer.cornerRadius = 10
@@ -66,6 +71,16 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
         tableview.tableFooterView = UIView()
         subTableview.tableFooterView = UIView()
 
+        loadPlayers()
+    }
+    
+    func loadPlayers(){
+        LoadFollowers.returnPlayers(for: userID!) { (players) in
+            for player in players{
+                self.playersID.append(player.uid!)
+                self.noPlayers.append(player.username!)
+            }
+        }
     }
     
     
@@ -128,10 +143,26 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
         }else{
             tableview.layer.borderColor = UIColor.black.cgColor
             let newGroupData = ["title": self.titleField.text!,
-                                "subTitle": self.subTitleField.text!,
-                                "players": self.newGroup] as [String : Any]
+                                "description": self.subTitleField.text!,
+                                "leader":self.userID!] as [String : Any]
             
-            DBRef.childByAutoId().setValue(newGroupData)
+            let groupRef = Database.database().reference().child("Groups").childByAutoId()
+            let groupID = groupRef.key!
+            let membersRef = Database.database().reference().child("GroupMembers").child(groupID)
+            let groupSelfRef = Database.database().reference().child("GroupsReferences")
+            let leaderRef = Database.database().reference().child("GroupsLeaderReferences").child(self.userID!).child(groupID)
+            
+            groupRef.setValue(newGroupData)
+            
+            membersRef.child(self.userID!).setValue(true)
+            groupSelfRef.child(self.userID!).child(groupID).setValue(true)
+            leaderRef.setValue(true)
+            
+            for player in self.newGroup{
+                membersRef.child(player).setValue(true)
+                groupSelfRef.child(player).child(groupID).setValue(true)
+            }
+            
             let actData = ["time": ServerValue.timestamp(),
                            "message": "You created a new group, \(self.titleField.text!).",
                            "type": "New Group",
@@ -139,14 +170,12 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
             
             actRef.child(self.userID!).childByAutoId().setValue(actData)
             
-            let PostRef = Database.database().reference().child("Posts").child(self.userID!).childByAutoId()
-            let postRefKey = PostRef.key
+            let PostRef = Database.database().reference().child("Posts").childByAutoId()
+            let postRefKey = PostRef.key!
                                 
-            let timeLineData = ["postID" : postRefKey,
-                                "posterID" : self.userID!]
             
-            let timeLineRef = Database.database().reference().child("Timeline").child(self.userID!).childByAutoId()
-            timeLineRef.setValue(timeLineData)
+            let timeLineRef = Database.database().reference().child("Timeline").child(self.userID!)
+            timeLineRef.child(postRefKey).setValue(true)
             PostRef.setValue(actData)
             
             
@@ -155,6 +184,7 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
             titleField.text = ""
             subTitleField.text = ""
             newGroup.removeAll()
+            self.delegate.addedNewGroup()
 
             
             navigationController?.popViewController(animated: true)

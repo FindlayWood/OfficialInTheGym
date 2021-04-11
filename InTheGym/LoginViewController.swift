@@ -43,16 +43,17 @@ class LoginViewController: UIViewController {
                         switch user.isEmailVerified{
                         case true:
                             self.haptic.notificationOccurred(.success)
-                            self.DBref.child("users").child(userID!).child("admin").observeSingleEvent(of: .value, with: { (snapshot) in
-                                if snapshot.value as! Int == 1{
-                                    self.performSegue(withIdentifier: "logInAdmin2", sender: self)
+                            UserIDToUser.transform(userID: userID!) { (user) in
+                                ViewController.username = user.username
+                                if user.admin! {
                                     ViewController.admin = true
-                                }
-                                else{
-                                    self.performSegue(withIdentifier: "logInHome2", sender: self)
+                                    self.performSegue(withIdentifier: "logInAdmin2", sender: self)
+                                } else {
                                     ViewController.admin = false
+                                    self.performSegue(withIdentifier: "logInHome2", sender: self)
                                 }
-                            })
+                            }
+                            
                         case false:
                             // new alert
                             let alert = SCLAlertView()
@@ -99,6 +100,8 @@ class LoginViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         email.delegate = self
         password.delegate = self
+        email.tintColor = .white
+        password.tintColor = .white
         
         DBref = Database.database().reference()
         
@@ -114,6 +117,7 @@ class LoginViewController: UIViewController {
         forgotButton.setAttributedTitle(attributeString, for: .normal)
         
         haptic.prepare()
+        
 
     }
     override func viewWillAppear(_ animated: Bool) {

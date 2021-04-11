@@ -204,7 +204,7 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         SVC.username = self.username
         SVC.playerID = self.playerID
         SVC.titleString = titleLabel
-        SVC.exercises = rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
+        WorkoutDetailViewController.exercises = rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
         SVC.complete = complete
         SVC.workoutID = rowsToDisplayIDs[indexPath.section]
         if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
@@ -212,7 +212,8 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         }else{
             SVC.assignedCoach = ""
         }
-        
+        SVC.liveAdd = false
+        SVC.fromDiscover = false
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     

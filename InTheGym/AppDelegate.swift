@@ -10,7 +10,6 @@ import UIKit
 import CoreData
 import Firebase
 import IQKeyboardManagerSwift
-import Flurry_iOS_SDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -33,10 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = false
         
-        Flurry.startSession("RRBCYJJNX79S3X334GB4", with: FlurrySessionBuilder
-        .init()
-        .withCrashReporting(true)
-        .withLogLevel(FlurryLogLevelAll))
         
         //retrieve value from local store, if value doesn't exist then false is returned
         // line below to show everytime

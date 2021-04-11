@@ -25,7 +25,6 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     // outlets to view
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var nameLabel:UILabel!
-    @IBOutlet weak var profilePictureImageView:UIImageView!
     
     // array of tableview contents
     var tableContents = ["Workout Scores", "Settings"]
@@ -50,13 +49,8 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.tableview.tableFooterView = UIView()
         
-        self.username = AdminActivityViewController.username
-        //self.usernameLabel.text = "@\(PlayerActivityViewController.username ?? "@username")"
+        self.username = ViewController.username
 
-        profilePictureImageView.layer.cornerRadius = profilePictureImageView.bounds.width / 2.0
-        profilePictureImageView.layer.borderWidth = 2.0
-        profilePictureImageView.layer.borderColor = Constants.darkColour.cgColor
-        profilePictureImageView.layer.masksToBounds = true
         
     }
     
@@ -174,28 +168,6 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    func loadProfilePhoto(){
-        
-        DBRef.child("profilePhotoURL").observeSingleEvent(of: .value) { (snapshot) in
-            guard let imageURL = snapshot.value else{
-                print("no profile pic")
-                return
-            }
-            
-            let storageRef = Storage.storage().reference()
-            let storageProfileRef = storageRef.child("ProfilePhotos").child(self.userID!)
-            storageProfileRef.downloadURL { (url, error) in
-                if error != nil{
-                    print(error?.localizedDescription as Any)
-                    return
-                }
-                let data = NSData(contentsOf: url!)
-                let image = UIImage(data: data! as Data)
-                self.profilePictureImageView.image = image
-                
-            }
-        }
-    }
     
     func loadInfo(){
         DBRef.child("users").child(userID!).observe(.value) { (snapshot) in
@@ -225,8 +197,10 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillAppear(_ animated: Bool) {
         loadInfo()
         loadNumberOfUsers()
-        loadProfilePhoto()
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
+        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
+        self.navigationController?.navigationBar.tintColor = Constants.lightColour
     }
 
 }

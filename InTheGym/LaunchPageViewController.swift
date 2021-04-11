@@ -8,7 +8,6 @@
 
 import UIKit
 import Firebase
-import Flurry_iOS_SDK
 import SCLAlertView
 
 class LaunchPageViewController: UIViewController {
@@ -39,21 +38,19 @@ class LaunchPageViewController: UIViewController {
                     switch user.isEmailVerified {
                     case true:
                         //self.perform(#selector(self.showAlert), with: nil, afterDelay: 10)
-                        self.DBref.child("users").child(userID!).child("admin").observeSingleEvent(of: .value) { (snapshot) in
-                            
-                            if snapshot.value as! Int == 1{
+                        UserIDToUser.transform(userID: userID!) { (user) in
+                            ViewController.username = user.username
+                            if user.admin! {
+                                ViewController.admin = true
                                 self.spinner.stopAnimating()
                                 self.performSegue(withIdentifier: "coachLoggedIn", sender: self)
-                                ViewController.admin = true
-                                Flurry.logEvent("Coach Already logged in")
-                            }
-                            else{
+                            } else {
+                                ViewController.admin = false
                                 self.spinner.stopAnimating()
                                 self.performSegue(withIdentifier: "playerLoggedIn", sender: self)
-                                ViewController.admin = false
-                                Flurry.logEvent("Player already logged in")
                             }
                         }
+                        
                     case false:
                         self.spinner.stopAnimating()
                         let screenSize: CGRect = UIScreen.main.bounds

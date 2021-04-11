@@ -11,6 +11,7 @@ import UIKit
 
 protocol addWorkout {
     func sendToWorkoutPage(sender:UIButton, at index:IndexPath)
+    func postToGroup(at index:IndexPath)
 }
 
 class GeneralTableViewCell: UITableViewCell {
@@ -21,6 +22,7 @@ class GeneralTableViewCell: UITableViewCell {
     @IBOutlet weak var subTitle:UILabel!
     @IBOutlet weak var playerCount:UILabel!
     @IBOutlet weak var addWorkoutButton:UIButton!
+    @IBOutlet weak var postButton:UIButton!
     
     // ooutlet for last tableview cell
     @IBOutlet weak var addButton:UIButton!
@@ -42,7 +44,10 @@ class GeneralTableViewCell: UITableViewCell {
     
     @IBAction func sendToWorkoutPage(_ sender:UIButton){
         self.delegate?.sendToWorkoutPage(sender: sender, at: indexPath)
-        
+    }
+    
+    @IBAction func postToGroup(_ sender:UIButton){
+        self.delegate.postToGroup(at: indexPath)
     }
 
 }

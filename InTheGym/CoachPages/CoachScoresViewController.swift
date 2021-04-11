@@ -32,7 +32,7 @@ class CoachScoresViewController: UIViewController {
         super.viewDidLoad()
         
         DBRef = Database.database().reference().child("users").child(userID!)
-        ScoreRef = Database.database().reference().child("Scores").child(AdminActivityViewController.username)
+        ScoreRef = Database.database().reference().child("Scores").child(ViewController.username)
 
     }
     

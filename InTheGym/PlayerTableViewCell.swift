@@ -13,10 +13,12 @@ class PlayerTableViewCell: UITableViewCell {
     // outlet variables inside the player tableview cell
     @IBOutlet weak var name:UILabel!
     @IBOutlet weak var username:UILabel!
+    @IBOutlet weak var profilePhoto:UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.selectionStyle = .none
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

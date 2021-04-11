@@ -11,7 +11,6 @@
 import UIKit
 import Charts
 import Firebase
-import Flurry_iOS_SDK
 
 class PlayerViewController: UIViewController {
     
@@ -67,19 +66,18 @@ class PlayerViewController: UIViewController {
     
     //function for when the user taps add workout
     @IBAction func addWorkoutPressed(_ sender:UIButton){
-        Flurry.logEvent("Coaches Player view - Add Workouts.")
         sender.pulsate()
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
         SVC.userName = self.userNameString
         SVC.uid = self.playerID
+        SVC.playerBool = false
         AddWorkoutHomeViewController.groupBool = false
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     
     //function for when the user taps view pbs
     @IBAction func viewPBsPressed(_ sender:UIButton){
-        Flurry.logEvent("Coaches Player view - View PBs.")
         sender.pulsate()
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "PBsViewController") as! PBsViewController
@@ -89,7 +87,6 @@ class PlayerViewController: UIViewController {
     
     //function for when the user taps view workouts
     @IBAction func viewWorkoutsPressed(_ sender:UIButton){
-        Flurry.logEvent("Coaches Player view - View Workouts.")
         sender.pulsate()
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "ViewWorkoutViewController") as! ViewWorkoutViewController
@@ -189,24 +186,19 @@ class PlayerViewController: UIViewController {
     func lastThree(array: [Int]){
         switch array.count {
         case 0:
-            print("0 items, last score nothing")
+            break
         case 1:
-            print("1 item, last score is \(array[0])")
             self.firstScore.text = "\(array[0])"
             self.firstView.backgroundColor = colours[array[0]-1]
             self.secondScore.text = ""
             self.thirdScore.text = ""
-            
-            
         case 2:
-            print("2 items, last scores are \(array[1]), \(array[0])")
             self.firstScore.text = "\(array[1])"
             self.firstView.backgroundColor = colours[array[1]-1]
             self.secondScore.text = "\(array[0])"
             self.secondView.backgroundColor = colours[array[0]-1]
             self.thirdScore.text = ""
         case 3:
-            print("3 items, last scores are \(array[2]), \(array[1]), \(array[0])")
             self.firstScore.text = "\(array[2])"
             self.firstView.backgroundColor = colours[array[2]-1]
             self.secondScore.text = "\(array[1])"
@@ -223,7 +215,6 @@ class PlayerViewController: UIViewController {
         for item in scores{
             counter[String(item)] = (counter[String(item)] ?? 0) + 1
         }
-        print(counter)
         setChartData()
     }
     

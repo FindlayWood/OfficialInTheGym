@@ -32,6 +32,8 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
     // varibale to check for first time
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
+    // array for all players as users
+    var players = [Users]()
     
     // array to hold all players
     var allPlayers : [String] = []
@@ -91,6 +93,7 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
         cell.layer.borderColor = UIColor.black.cgColor
         cell.selectionStyle = .none
         
+        
         if indexPath.section == 0 {
             cell.title.text = "ALL PLAYERS"
             cell.subTitle.text = "This group contains all the players you have added."
@@ -119,32 +122,48 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
     
     //selecting each row
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let membersPage = storyboard.instantiateViewController(withIdentifier: "GroupMembersViewController") as! GroupMembersViewController
+        
 
         if indexPath.section == 0{
             print(allPlayers)
+            membersPage.groupMembers = self.playersID
         }else if indexPath.section == createdGroups.count + 1{
             print("do nothing")
         }else{
+            membersPage.groupMembers = createdGroups[indexPath.section - 1]["players"] as! [String]
             print(createdGroups[indexPath.section - 1]["players"] as! [String])
         }
+        
+        self.navigationController?.pushViewController(membersPage, animated: true)
     }
     
     
     func loadPlayers(){
         //self.playersID.removeAll()
-        var initialLoad = true
-        DBRef.child("players").child("accepted").observe(.childAdded) { (snapshot) in
-            if let snap = snapshot.value as? String{
-                self.playersID.append(snap)
+        let userID = Auth.auth().currentUser!.uid
+        let myGroup = DispatchGroup()
+        var tempPlayers = [Users]()
+        let playerRef = Database.database().reference().child("CoachPlayers").child(userID)
+        playerRef.observe(.value) { (snapshot) in
+            if snapshot.exists(){
+                for child in snapshot.children{
+                    myGroup.enter()
+                    UserIDToUser.transform(userID: (child as AnyObject).key) { (user) in
+                        tempPlayers.append(user)
+                        self.playersID.append(user.uid!)
+                        self.usernames.append(user.username!)
+                        self.allPlayers.append(user.username!)
+                        myGroup.leave()
+                    }
+                    myGroup.notify(queue: .main){
+                        self.players = tempPlayers
+                        self.tableview.reloadData()
+                    }
+                }
             }
-            if initialLoad == false{
-                self.loadUsers()
-            }
-        }
-        
-        DBRef.child("players").child("accepted").observeSingleEvent(of: .value) { (snapshot) in
-            self.loadUsers()
-            initialLoad = false
         }
     }
     
@@ -211,7 +230,21 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
         
     }
     
-    
+    func postToGroup(at index: IndexPath) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let postVC = storyboard.instantiateViewController(withIdentifier: "MakePostViewController") as! MakePostViewController
+        if index.section == 0{
+            postVC.group = self.playersID
+            postVC.groupName = "All Players"
+        }else{
+            postVC.group = self.createdGroups[index.section - 1]["players"] as! [String]
+            postVC.groupName = self.createdGroups[index.section - 1]["title"] as? String
+        }
+        postVC.groupBool = true
+        postVC.modalPresentationStyle = .fullScreen
+        postVC.modalTransitionStyle = .coverVertical
+        self.navigationController?.present(postVC, animated: true, completion: nil)
+    }
     
     
     
