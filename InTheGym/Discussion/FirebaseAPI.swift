@@ -11,7 +11,24 @@ import Firebase
 
 class FirebaseAPI {
     
-    static let shared = FirebaseAPI()
+    private static var privateShared : FirebaseAPI?
+    private let userID = Auth.auth().currentUser?.uid
+    static var currentUserID = String()
+    
+    
+    private init(){}
+    
+    static func shared() -> FirebaseAPI {
+        guard let privateShared = FirebaseAPI.privateShared else {
+            FirebaseAPI.privateShared = FirebaseAPI()
+            return FirebaseAPI.privateShared!
+        }
+        return privateShared
+    }
+
+    func dispose(){
+        FirebaseAPI.privateShared = nil
+    }
     
     func loadProfileTimeline(for user:String, completion: @escaping (Result<[PostProtocol], Error>) -> Void) {
         let myGroup = DispatchGroup()
@@ -79,26 +96,25 @@ class FirebaseAPI {
     }
     
     func loadTimeline(for userID:String, completion: @escaping (Result<[PostProtocol], Error>) -> Void){
-        var initialLoad = true
         var references = [String]()
         let ref = Database.database().reference().child("Timeline").child(userID)
-        ref.observe(.childAdded) { (snapshot) in
-            references.insert(snapshot.key, at: 0)
-            if initialLoad == false {
-                
+        ref.observeSingleEvent(of: .value) { (snapshot) in
+            for child in snapshot.children {
+                references.insert((child as AnyObject).key, at: 0)
             }
-        }
-        ref.observeSingleEvent(of: .value) { (_) in
-            initialLoad = false
             self.loadPosts(with: references, completion: completion)
         }
-        
     }
     
     func loadPosts( with references:[String], completion: @escaping (Result<[PostProtocol], Error>) -> Void) {
         let myGroup = DispatchGroup()
         let ref = Database.database().reference().child("Posts")
         var tempPosts = [PostProtocol]()
+        
+        if references.isEmpty{
+            completion(.success(tempPosts))
+        }
+        
         for post in references {
             myGroup.enter()
             ref.child(post).observeSingleEvent(of: .value) { (snapshot) in
@@ -118,15 +134,69 @@ class FirebaseAPI {
                     tempPosts.append(TimelineActivityModel(snapshot: snapshot)!)
                 }
             }
-            
-            myGroup.notify(queue: .main){
-                completion(.success(tempPosts))
-            }
-            
+        }
+        myGroup.notify(queue: .main){
+            completion(.success(tempPosts))
         }
     }
     
     
-    
-    
+    func uploadActivity(with type:ActivityType){
+        let activityRef = Database.database().reference().child("Activities").child(self.userID!).childByAutoId()
+        var activityData = ["time":ServerValue.timestamp(),
+                            "isPrivate":true] as [String:AnyObject]
+        switch type {
+        case .AccountCreated:
+            activityData["type"] = "Account Created" as AnyObject
+            activityData["message"] = "You created your account." as AnyObject
+        case .RequestSent(let player):
+            activityData["type"] = "Request Sent" as AnyObject
+            activityData["message"] = "You sent a request to \(player)." as AnyObject
+        case .RequestAccepted(let player, let coachID):
+            activityData["type"] = "Request Accepted" as AnyObject
+            activityData["message"] = "\(player) accepted your request." as AnyObject
+            let ref = Database.database().reference().child("Activities").child(coachID).childByAutoId()
+            ref.setValue(activityData)
+            return
+        case .NewCoach(let coach):
+            activityData["type"] = "New Coach" as AnyObject
+            activityData["message"] = "You accepted a request from \(coach)." as AnyObject
+        case .CreatedWorkout(let workoutTitle):
+            activityData["type"] = "Created Workout" as AnyObject
+            activityData["message"] = "You created a new workout \(workoutTitle)." as AnyObject
+        case .CompletedWorkout(let workoutTitle):
+            activityData["type"] = "Workout Completed" as AnyObject
+            activityData["message"] = "You completed the workout \(workoutTitle)." as AnyObject
+        case .UpdatePBs:
+            activityData["type"] = "Update PBs" as AnyObject
+            activityData["message"] = "You updated your PBs." as AnyObject
+        case .SetWorkout(let player):
+            activityData["type"] = "Set Workout" as AnyObject
+            activityData["message"] = "You set a workout for \(player)." as AnyObject
+        case .StartedFollowing(let following):
+            activityData["type"] = "Started Following" as AnyObject
+            activityData["message"] = "You started following \(following)." as AnyObject
+        }
+        
+        activityRef.setValue(activityData)
+        
+    }
+}
+
+enum ActivityType {
+    case AccountCreated
+    case RequestSent(String)
+    case RequestAccepted(String, String)
+    case NewCoach(String)
+    case CreatedWorkout(String)
+    case CompletedWorkout(String)
+    case UpdatePBs
+    case SetWorkout(String)
+    case StartedFollowing(String)
+}
+
+enum PostType {
+    case post(String)
+    case createdNewWorkout(workout)
+    case completedWorkout(workout)
 }

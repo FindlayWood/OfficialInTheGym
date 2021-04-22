@@ -68,7 +68,7 @@ class FollowersViewModel {
         
         switch followersBool {
         case true:
-            followersRef.child("Followers").child(userID).observe(.value) { (snapshot) in
+            followersRef.child("Followers").child(userID).observeSingleEvent(of: .value) { (snapshot) in
                 if snapshot.childrenCount != 0{
                     for child in snapshot.children{
                         myGroup.enter()
@@ -87,7 +87,7 @@ class FollowersViewModel {
             }
             
         case false:
-            followersRef.child("Following").child(userID).observe(.value) { (snapshot) in
+            followersRef.child("Following").child(userID).observeSingleEvent(of: .value) { (snapshot) in
                 if snapshot.childrenCount != 0{
                     for child in snapshot.children{
                         myGroup.enter()

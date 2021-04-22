@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PlayerTimelineViewController: UIViewController {
+class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate {
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
@@ -38,6 +38,10 @@ class PlayerTimelineViewController: UIViewController {
         tableview.register(UINib(nibName: "TimelineCompletedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCompletedTableViewCell")
         tableview.register(UINib(nibName: "TimelineActivityTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineActivityTableViewCell")
         tableview.tableFooterView = UIView()
+        tableview.separatorInset = .zero
+        tableview.layoutMargins = .zero
+        
+        self.tabBarController?.delegate = self
         
         initViewModel()
         initNewPostButton()
@@ -69,6 +73,7 @@ class PlayerTimelineViewController: UIViewController {
                     UIView.animate(withDuration: 0.2, animations: {
                         self?.tableview.alpha = 0.0
                     })
+                    
                 } else {
                     self?.activityIndicator.stopAnimating()
                     UIView.animate(withDuration: 0.2, animations: {
@@ -87,6 +92,7 @@ class PlayerTimelineViewController: UIViewController {
             if !isRefreshing {
                 self?.tableview.reloadData()
                 self?.refreshControl.endRefreshing()
+                self?.tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             }
         }
         
@@ -110,7 +116,6 @@ class PlayerTimelineViewController: UIViewController {
     
     func initRefreshControl(){
         refreshControl = UIRefreshControl()
-        //refreshControl.attributedTitle = NSAttributedString(string: "Pull to Refresh")
         refreshControl.tintColor = .white
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
         self.tableview.refreshControl = refreshControl
@@ -124,12 +129,6 @@ class PlayerTimelineViewController: UIViewController {
     @objc func newPostsPressed(_ sender:UIButton){
         toggleNewPostsButton(hidden: true)
         viewModel.fetchData()
-//        let newIndexPaths = self.viewModel.addNewPosts()
-//        self.tableview.beginUpdates()
-//        self.tableview.insertRows(at: newIndexPaths, with: .top)
-//        self.tableview.endUpdates()
-        self.tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-        
     }
     
     func toggleNewPostsButton(hidden:Bool){
@@ -137,7 +136,7 @@ class PlayerTimelineViewController: UIViewController {
             self.newPostsButton.isHidden = true
         } else {
             self.newPostsButton.isHidden = false
-            UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut, animations: {
+            UIView.animate(withDuration: 0.5, delay: 1.0, options: .curveEaseOut, animations: {
                 self.newPostsButtonTopAnchor.constant = 12
                 self.view.layoutIfNeeded()
             }, completion: nil)
@@ -153,10 +152,19 @@ class PlayerTimelineViewController: UIViewController {
             postVC.playerPost = true
         }
         postVC.groupBool = false
+        postVC.timelineDelegate = self
         postVC.modalTransitionStyle = .coverVertical
         postVC.modalPresentationStyle = .fullScreen
         self.navigationController?.present(postVC, animated: true, completion: nil)
         
+    }
+    
+    // tap tab bar to scroll to top
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if tabBarController.selectedViewController === viewController {
+            self.tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+        }
+        return true
     }
     
 
@@ -200,6 +208,10 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
         self.tableview.endUpdates()
     }
     
+    func postFromSelf(post: TimelinePostModel) {
+        self.viewModel.fetchData()
+    }
+    
     func workoutTapped(on cell: UITableViewCell) {
         let index = self.tableview.indexPath(for: cell)!
         let post = viewModel.getData(at:index)
@@ -225,22 +237,40 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
     }
     
     func likeButtonTapped(on cell: UITableViewCell, sender: UIButton, label: UILabel) {
+        
         let index = self.tableview.indexPath(for: cell)!
         let post = viewModel.getData(at: index)
-        viewModel.likePost(on: post, with: index)
-        let likeCount = Int(label.text!)! + 1
-        label.text = likeCount.description
-        if #available(iOS 13.0, *) {
-            UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
-                sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        
+        
+        viewModel.isLiked(on: post.postID!) { (result) in
+            switch result {
+            
+            case .success(let liked):
+                if !liked {
+                    // here is where we like the post
+                    self.viewModel.likePost(on: post, with: index)
+                    let likeCount = Int(label.text!)! + 1
+                    label.text = likeCount.description
+                    if #available(iOS 13.0, *) {
+                        UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
+                            sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+                        }
+                    } else {
+                        // Fallback on earlier versions
+                        print("needs fixing")
+                    }
+                    let selection = UISelectionFeedbackGenerator()
+                    selection.prepare()
+                    selection.selectionChanged()
+                }
+                
+            case .failure(let error):
+                print(error.localizedDescription)
             }
-        } else {
-            // Fallback on earlier versions
-            print("needs fixing")
         }
-        let selection = UISelectionFeedbackGenerator()
-        selection.prepare()
-        selection.selectionChanged()
+        
+        
+
     }
     
     func userTapped(on cell: UITableViewCell) {
@@ -248,7 +278,7 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
         let post = viewModel.getData(at: index)
         if post.posterID == viewModel.userID {
             if ViewController.admin{
-                self.tabBarController?.selectedIndex = 4
+                self.tabBarController?.selectedIndex = 3
             } else {
                 self.tabBarController?.selectedIndex = 3
             }

@@ -47,6 +47,7 @@ class PlayerViewController: UIViewController {
     
     //database reference
     var DBRef:DatabaseReference!
+    var handle:DatabaseHandle!
     
     // data of scores for piechart
     var numberOfScores = [PieChartDataEntry]()
@@ -123,7 +124,7 @@ class PlayerViewController: UIViewController {
         pieChart.backgroundColor = Constants.lightColour
 
         
-        DBRef = Database.database().reference().child("Scores").child(userNameString)
+        DBRef = Database.database().reference().child("Scores").child(playerID)
         
         // setup the views
         topView.layer.cornerRadius = 20
@@ -161,7 +162,7 @@ class PlayerViewController: UIViewController {
         score.removeAll()
         
         
-        self.DBRef.observe(.childAdded, with: { (snapshot) in
+        handle = DBRef.observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
                 self.score.append(snap)
                 self.calcValues()
@@ -288,12 +289,18 @@ class PlayerViewController: UIViewController {
     
 
     override func viewWillAppear(_ animated: Bool) {
-        loadScores()
+        if isMovingToParent{
+            loadScores()
+        }
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = Constants.lightColour
-        
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        if isMovingFromParent{
+            DBRef.removeObserver(withHandle: handle)
+        }
     }
 
 }

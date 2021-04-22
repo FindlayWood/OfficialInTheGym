@@ -19,8 +19,9 @@ class CoachScoresViewController: UIViewController {
     
     var numberOfScores = [PieChartDataEntry]()
     
-    var DBRef:DatabaseReference!
     var ScoreRef:DatabaseReference!
+    var handle:DatabaseHandle!
+    var childHandle:DatabaseHandle!
     
     var score:[[String:AnyObject]] = []
     var scores:[Int] = []
@@ -31,25 +32,21 @@ class CoachScoresViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        DBRef = Database.database().reference().child("users").child(userID!)
-        ScoreRef = Database.database().reference().child("Scores").child(ViewController.username)
+        ScoreRef = Database.database().reference().child("Scores").child(userID!)
 
     }
     
     func loadScores(){
         var numberPlease: Int!
         score.removeAll()
-        ScoreRef.observe(.value) { (snapshot) in
+        handle = ScoreRef.observe(.value) { (snapshot) in
             numberPlease = Int(snapshot.childrenCount)
             var x = 0
-            self.ScoreRef.observe(.childAdded, with: { (snapshot) in
+            self.childHandle = self.ScoreRef.observe(.childAdded, with: { (snapshot) in
                 if let snap = snapshot.value as? [String:AnyObject]{
                     self.score.append(snap)
                     if x < (numberPlease-1){
                         x += 1
-                    }
-                    else{
-                        self.printValues()
                     }
                 }
             }, withCancel: nil)
@@ -144,11 +141,18 @@ class CoachScoresViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        loadScores()
+        if isMovingToParent{
+            loadScores()
+        }
         navigationController?.setNavigationBarHidden(false, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        if isMovingFromParent{
+            ScoreRef.removeAllObservers()
+        }
     }
 
 

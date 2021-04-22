@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import EmptyDataSet_Swift
 
 
 class PublicTimelineAdapter:NSObject{
@@ -20,7 +21,7 @@ class PublicTimelineAdapter:NSObject{
     
 }
 
-extension PublicTimelineAdapter: UITableViewDelegate, UITableViewDataSource {
+extension PublicTimelineAdapter: UITableViewDelegate, UITableViewDataSource, EmptyDataSetSource, EmptyDataSetDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return delegate.retreiveNumberOfItems()
@@ -58,5 +59,22 @@ extension PublicTimelineAdapter: UITableViewDelegate, UITableViewDataSource {
         default:
             return "Unexpected row model type \(rowModel)"
         }
+    }
+    
+    // emptydataset functions
+    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+        let str = "No Posts"
+        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
+        return NSAttributedString(string: str, attributes: attrs)
+    }
+    
+    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+        let str = "This user has no public posts."
+        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
+        return NSAttributedString(string: str, attributes: attrs)
+    }
+    
+    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
+        return UIImage(named: "lock_icon")
     }
 }

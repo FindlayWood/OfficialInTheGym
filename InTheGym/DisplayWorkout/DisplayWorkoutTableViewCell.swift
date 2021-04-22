@@ -58,6 +58,24 @@ class DisplayWorkoutTableViewCell: UITableViewCell {
                 }
                 self.repsLabel.text = repString
             }
+            if let repArray = exercise.repArray{
+                var repString = ""
+                for rep in repArray{
+                    repString += rep + ","
+                }
+                self.repsLabel.text = String(repString.dropLast())
+            }
+            if let weightArray = exercise.weightArray{
+                var weightString = ""
+                for weight in weightArray{
+                    weightString += weight + ","
+                }
+                self.weightLabel.text = String(weightString.dropLast())
+            }
+            if let score = exercise.rpe {
+                self.rpeButton.setTitle(score, for: .normal)
+                self.rpeButton.setTitleColor(Constants.rpeColors[Int(score)! - 1], for: .normal)
+            }
         }
     }
     var isLive : Bool!
@@ -126,11 +144,27 @@ extension DisplayWorkoutTableViewCell: UICollectionViewDelegate, UICollectionVie
             
             // here will go normal cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DisplayWorkoutCollectionCell", for: indexPath) as! DisplayWorkoutCollectionViewCell
-            let cellModel = CollectionCellModel(set: indexPath.item + 1,
-                                                weight: self.exercise.weight,
-                                                completed: self.exercise.completedSets![indexPath.item],
-                                                reps: self.exercise.reps,
-                                                parentTableViewCell: self)
+            var cellModel = CollectionCellModel()
+            cellModel.set = indexPath.item + 1
+            cellModel.completed = self.exercise.completedSets![indexPath.item]
+            cellModel.parentTableViewCell = self
+            cellModel.reps = self.exercise.reps
+            cellModel.weight = self.exercise.weight
+            if let repArray = self.exercise.repArray{
+                cellModel.reps = repArray[indexPath.item]
+            }
+            if let weightArray = self.exercise.weightArray{
+                cellModel.weight = weightArray[indexPath.item]
+            }
+            cellModel.repArray = self.exercise.repArray
+            cellModel.weightArray = self.exercise.weightArray
+            
+            
+//            let cellModel = CollectionCellModel(set: indexPath.item + 1,
+//                                                weight: self.exercise.weight,
+//                                                completed: self.exercise.completedSets![indexPath.item],
+//                                                reps: self.exercise.reps,
+//                                                parentTableViewCell: self)
             cell.model = cellModel
             cell.delegate = self.cellDelegate
             cell.completedButton.isUserInteractionEnabled = cellDelegate.returnInteractionEnbabled()

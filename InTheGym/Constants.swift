@@ -11,9 +11,9 @@ import UIKit
 
 class Constants {
     
-    var appVersion = "3.4"
+    var appVersion = "4.0"
     
-    static var bannedUsernames = ["Admin", "admin", "InTheGym", "OfficialInTheGym", "inthegym"]
+    static var bannedUsernames = ["Admin", "admin", "InTheGym", "OfficialInTheGym", "inthegym", "INTHEGYM"]
     
     static let backgroundColour : UIColor = #colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 1)
     
@@ -28,5 +28,14 @@ class Constants {
     static let darkButtonColour : UIColor = #colorLiteral(red: 0, green: 0.3677578866, blue: 0.8003394008, alpha: 1)
     
     static let oldWorkloadColour : UIColor = #colorLiteral(red: 0.2021819651, green: 0.4008832574, blue: 0.8439363241, alpha: 1)
+    
+    static let offWhiteColour : UIColor = #colorLiteral(red: 0.9176470588, green: 0.9254901961, blue: 0.9254901961, alpha: 1)
+    
+    // array of colours to set rpe button
+    static let rpeColors = [#colorLiteral(red: 0, green: 0.5, blue: 1, alpha: 1), #colorLiteral(red: 0.6332940925, green: 0.8493953339, blue: 1, alpha: 1), #colorLiteral(red: 0.7802333048, green: 1, blue: 0.5992883134, alpha: 1), #colorLiteral(red: 0.9427440068, green: 1, blue: 0.3910798373, alpha: 1), #colorLiteral(red: 1, green: 1, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.8438837757, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.7074058219, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.4706228596, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.3134631849, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)]
+    
+    static let websiteString = "https://findlaywood1.wixsite.com/inthegym"
+    
+    static let instagramLink = "https://instagram.com/inthegym_official"
     
 }

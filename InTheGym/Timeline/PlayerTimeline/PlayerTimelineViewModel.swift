@@ -20,6 +20,7 @@ class PlayerTimelineViewModel{
     var updateLoadingStatusClosure: (() -> ())?
     var newPostsLoadedClosure: (() -> ())?
     var tableViewReloadedClosure: (() -> ())?
+    var notificationAlert: (() -> ())?
     
     
     
@@ -27,14 +28,15 @@ class PlayerTimelineViewModel{
     
     // We defined the FakeAPIServiceProtocol in the FakeAPIService.swift file.
     // We also defined a class and make it conform to that protocol.
-    var apiService: DatabaseReference!
+    static var apiService: DatabaseReference!
+    static var handle : DatabaseHandle!
     let userID = Auth.auth().currentUser!.uid
 
     // This will contain info about the picture eventually selectded by the user by tapping an item on the screen
     var selectedNotifications: PostProtocol?
     
     // The collection that will contain our fetched data
-    private var posts: [PostProtocol] = [] {
+    var posts: [PostProtocol] = [] {
         didSet {
             if !tableLoaded{
                 self.reloadTableViewClosure?()
@@ -66,11 +68,15 @@ class PlayerTimelineViewModel{
         didSet {
             posts.sort(by: { $0.time! > $1.time! })
             self.tableViewReloadedClosure?()
-
         }
     }
     
     weak var delegate : PlayerTimelineProtocol?
+    
+    //MARK: - Initialiser
+    init(){
+        PlayerTimelineViewModel.apiService = Database.database().reference().child("Timeline").child(userID)
+    }
  
     // MARK: - Fetching functions
     func fetchData(){
@@ -84,16 +90,16 @@ class PlayerTimelineViewModel{
         
         var references:[String] = []
         // first get references from timeline - which will be just postID
-        apiService = Database.database().reference().child("Timeline").child(userID)
-        apiService.observe(.childAdded) { (snapshot) in
+        PlayerTimelineViewModel.handle = PlayerTimelineViewModel.apiService.observe(.childAdded) { (snapshot) in
             if initialLoad == false{
                 //add new posts
                 self.loadNewPost(with: snapshot.key)
+                //self.newPostsLoadedClosure?()
             } else {
                 references.insert(snapshot.key, at: 0)
             }
         }
-        apiService.observeSingleEvent(of: .value) { (_) in
+        PlayerTimelineViewModel.apiService.observeSingleEvent(of: .value) { (_) in
             //load timeline with references
             self.fetchPosts(with: references)
             initialLoad = false
@@ -155,28 +161,11 @@ class PlayerTimelineViewModel{
                 return
             }
 
-            var newPost:PostProtocol!
-            switch snap["type"] as! String{
-            case "post":
-                newPost = TimelinePostModel(snapshot: snapshot)
-            case "createdNewWorkout":
-                newPost = TimelineCreatedWorkoutModel(snapshot: snapshot)
-            case "workout":
-                newPost = TimelineCompletedWorkoutModel(snapshot: snapshot)
-            default:
-                newPost = TimelineActivityModel(snapshot: snapshot)
-            }
+            let posterID = snap["posterID"] as? String
             
-            
-            if newPost.posterID == self.userID {
-                self.posts.insert(newPost, at: 0)
-                self.delegate?.newPosts()
-            } else {
-                // closure has been alerted, vc should show button
-                self.newPosts.insert(newPost, at: 0)
-            }
-            
-            
+            if posterID != self.userID {
+                self.newPostsLoadedClosure?()
+            } 
         }
     }
     
@@ -231,4 +220,14 @@ class PlayerTimelineViewModel{
         return posts[indexPath.row]
     }
     
+    func isLiked(on post:String, completion: @escaping (Result<Bool, Error>) -> ()){
+        let ref = Database.database().reference().child("Likes").child(self.userID).child(post)
+        ref.observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.exists(){
+                completion(.success(true))
+            } else {
+                completion(.success(false))
+            }
+        }
+    }
 }

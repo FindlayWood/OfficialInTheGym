@@ -25,18 +25,9 @@ class ReplyTableViewCell: UITableViewCell, DiscussionCellConfigurable {
         self.username.setTitle(model.username, for: .normal)
         let then = Date(timeIntervalSince1970: (model.time!) / 1000)
         self.time.text = "\(then.timeAgo()) ago"
-        UserIDToUser.transform(userID: model.posterID!) { (user) in
-            if let purl = user.profilePhotoURL{
-                DispatchQueue.global(qos: .background).async {
-                    let url = URL(string: purl)
-                    let data = NSData(contentsOf: url!)
-                    let image = UIImage(data: data! as Data)
-                    DispatchQueue.main.async {
-                        self.profileImage.setImage(image, for: .normal)
-                    }
-                }
-            }else{
-                self.profileImage.setImage(UIImage(named: "player_icon"), for: .normal)
+        ImageAPIService.shared.getProfileImage(for: model.posterID!) { (image) in
+            if let image = image {
+                self.profileImage.setImage(image, for: .normal)
             }
         }
     }
@@ -51,6 +42,11 @@ class ReplyTableViewCell: UITableViewCell, DiscussionCellConfigurable {
         self.profileImage.layer.cornerRadius = self.profileImage.bounds.width / 2
         self.profileImage.layer.masksToBounds = true
         self.selectionStyle = .none
+        self.message.layer.cornerRadius = 5
+        self.message.backgroundColor = Constants.offWhiteColour
+        self.message.textColor = .darkGray
+        self.message.sizeToFit()
+        self.message.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -32,6 +32,7 @@ class OriginalCompletedWorkoutTableViewCell: UITableViewCell, DiscussionCellConf
         self.workoutTitle.text = model.completedWorkout?.title
         self.creatorLabel.text = model.completedWorkout?.createdBy
         self.exerciseCountLabel.text = model.completedWorkout?.exercises?.count.description
+        self.exerciseTimeLabel.text = model.completedWorkout?.timeToComplete
         let then = Date(timeIntervalSince1970: (model.time!) / 1000)
         self.time.text = "\(then.timeAgo()) ago"
         checkFor.like(on: model.postID!) { (liked) in
@@ -43,25 +44,9 @@ class OriginalCompletedWorkoutTableViewCell: UITableViewCell, DiscussionCellConf
                 }
             }
         }
-        UserIDToUser.transform(userID: model.posterID!) { (user) in
-            if let purl = user.profilePhotoURL{
-                ImageAPIService.shared.getImage(with: purl) { (image) in
-                    if image != nil {
-                        self.profileImage.setImage(image, for: .normal)
-                    }
-                }
-                
-//                DispatchQueue.global(qos: .background).async {
-//                    let url = URL(string: purl)
-//                    let data = NSData(contentsOf: url!)
-//                    let image = UIImage(data: data! as Data)
-//                    DispatchQueue.main.async {
-//                        self.profileImage.setImage(image, for: .normal)
-//                    }
-//                }
-//            }else{
-//                self.profileImage.setImage(UIImage(named: "player_icon"), for: .normal)
-//            }
+        ImageAPIService.shared.getProfileImage(for: model.posterID!) { (image) in
+            if let image = image {
+                self.profileImage.setImage(image, for: .normal)
             }
         }
     }

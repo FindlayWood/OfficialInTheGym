@@ -24,7 +24,7 @@ struct publicSavedWorkout : savedWorkoutDelegate{
     var liveWorkout: Bool!
     var fromDiscover: Bool!
     var isPrivate: Bool?
-    var workoutID: String!
+    var workoutID: String?
     var savedID:String!
     var exercises:[exercise]?
     var createdBy:String?
@@ -88,18 +88,12 @@ struct publicSavedWorkout : savedWorkoutDelegate{
 
 struct privateSavedWorkout : savedWorkoutDelegate{
     var title: String!
-    
     var creatorID: String!
-    
     var completed: Bool!
-    
     var liveWorkout: Bool!
-    
     var fromDiscover: Bool!
-    
-    var workoutID: String!
+    var workoutID: String?
     var savedID:String!
-    
     var exercises: [exercise]?
     var createdBy: String?
     var isPrivate: Bool?

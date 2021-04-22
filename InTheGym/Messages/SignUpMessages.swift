@@ -10,9 +10,9 @@ import Foundation
 
 class SignUpMessages: NSObject {
     
-    static let coachMessage = "Sign Up as a COACH if you want to create workouts, create groups, add players, monitor workouts, workload, scores and PBs of players. A coach can not complete workouts."
+    static let coachMessage = "Sign Up as a COACH if you want to create workouts, create groups, add players, monitor workouts, workload, scores and PBs of players. A coach can not complete workouts. A coach can follow other users, download workouts from the DISCOVER page and post workouts."
     
-    static let playerMessage = "Sign Up as a PLAYER if you want to complete workouts, share workouts, monitor your workouts, workload, scores and PBs. A player can not create groups, set workouts for other players or monitor other players."
+    static let playerMessage = "Sign Up as a PLAYER if you want to complete workouts, share workouts, monitor your workouts, workload, scores and PBs. A player can not create groups, set workouts for other players or monitor other players. A player can follow other users, download workouts from the DISCOVER page and post workouts."
     
     
 }

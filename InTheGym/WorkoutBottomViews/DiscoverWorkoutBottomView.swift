@@ -55,6 +55,11 @@ class DiscoverWorkoutBottomView: UIView {
             addButton.layer.borderColor = UIColor.black.cgColor
             addButton.translatesAutoresizingMaskIntoConstraints = false
             addButton.isUserInteractionEnabled = false
+            addButton.layer.shadowColor = UIColor.black.cgColor
+            addButton.layer.shadowOffset = CGSize(width: 0, height: 0.0)
+            addButton.layer.shadowRadius = 6.0
+            addButton.layer.shadowOpacity = 1.0
+            addButton.layer.masksToBounds = false
         }else{
             addButton.setTitle("Add to Saved Workouts", for: .normal)
             addButton.backgroundColor = Constants.darkColour
@@ -65,6 +70,11 @@ class DiscoverWorkoutBottomView: UIView {
             addButton.translatesAutoresizingMaskIntoConstraints = false
             addButton.isUserInteractionEnabled = true
             addButton.addTarget(self, action: #selector(addToMyWorkouts), for: .touchUpInside)
+            addButton.layer.shadowColor = UIColor.black.cgColor
+            addButton.layer.shadowOffset = CGSize(width: 0, height: 0.0)
+            addButton.layer.shadowRadius = 6.0
+            addButton.layer.shadowOpacity = 1.0
+            addButton.layer.masksToBounds = false
         }
 
         

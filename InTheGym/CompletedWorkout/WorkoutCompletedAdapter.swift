@@ -31,16 +31,28 @@ extension WorkoutCompletedAdapter : UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.item == 2{
+        if indexPath.item == 3{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WorkoutPrivacyCollectionViewCell", for: indexPath) as! WorkoutPrivacyCollectionViewCell
             if delegate.isPrivate() {
                 cell.privacyImage.image = UIImage(named: "locked_icon")
                 cell.privacyLabel.text = "Private"
-                cell.descriptionView.text = "This is private. It will only be seen by your followers and coaches/players. Tap to change."
+                cell.descriptionView.text = "This post is private. It will only be seen by your followers and coaches/players. Tap to change."
             } else {
                 cell.privacyImage.image = UIImage(named: "public_icon")
                 cell.privacyLabel.text = "Public"
-                cell.descriptionView.text = "This is public. It will be seen by all your followers and players/coaches and anyone who views your public profile. Tap to change."
+                cell.descriptionView.text = "This post is public. It will be seen by all your followers and players/coaches and anyone who views your public profile. Tap to change."
+            }
+            return cell
+        } else if indexPath.item == 2 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WorkoutPrivacyCollectionViewCell", for: indexPath) as! WorkoutPrivacyCollectionViewCell
+            if delegate.isPosting() {
+                cell.privacyImage.image = UIImage(named: "Workout Completed")
+                cell.privacyLabel.text = "Post to Timeline"
+                cell.descriptionView.text = "Posting to timeline that you completed this workout. The visibility of this post will depend on privacy setting. Tap to change."
+            } else {
+                cell.privacyImage.image = UIImage(named: "Workout UnCompleted")
+                cell.privacyLabel.text = "Post to Timeline"
+                cell.descriptionView.text = "Not posting to timeline that you completed this workout. Tap to change."
             }
             return cell
         } else {
@@ -55,7 +67,7 @@ extension WorkoutCompletedAdapter : UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        if indexPath.item == 2{
+        if indexPath.item == 2 || indexPath.item == 3 {
             return CGSize(width: width-20, height: 110)
         }else{
             return CGSize(width: width/2-15, height: 100)

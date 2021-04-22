@@ -39,16 +39,23 @@ class RequestsViewController: UIViewController {
         tableview.register(UINib(nibName: "RequestsTableViewCell", bundle: nil), forCellReuseIdentifier: "RequestsTableViewCell")
         tableview.tableFooterView = UIView()
         
-        initViewModel()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if isMovingToParent{
+            initViewModel()
+        }
         navigationItem.title = "Requests"
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if isMovingFromParent{
+            viewModel.removeObserver()
+        }
     }
     
     

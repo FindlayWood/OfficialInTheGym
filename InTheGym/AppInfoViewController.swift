@@ -11,6 +11,7 @@ import UIKit
 class AppInfoViewController: UIViewController {
     
     @IBOutlet weak var version:UILabel!
+    @IBOutlet weak var message:UITextView!
     
     let constants = Constants()
 
@@ -19,6 +20,7 @@ class AppInfoViewController: UIViewController {
         
         let appVersion = constants.appVersion
         self.version.text = "App Version: \(appVersion)"
+        self.message.text = SettingsMessages.howToMakeMostOfAppMessage
 
         // Do any additional setup after loading the view.
     }

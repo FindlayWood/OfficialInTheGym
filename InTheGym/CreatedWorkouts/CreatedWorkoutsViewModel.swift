@@ -25,6 +25,7 @@ class CreatedWorkoutsViewModel:NSObject {
     // We defined the FakeAPIServiceProtocol in the FakeAPIService.swift file.
     // We also defined a class and make it conform to that protocol.
     var apiService: DatabaseReference
+    var handle : DatabaseHandle!
     let userID = Auth.auth().currentUser!.uid
     
 
@@ -49,13 +50,11 @@ class CreatedWorkoutsViewModel:NSObject {
         }
     }
     
-    var workoutReferences : [String] = []
-    
     // MARK: - Constructor
     
     // Note: apiService has a default value in case this constructor is executed without passing parameters
-    init(apiService: DatabaseReference) {
-        self.apiService = apiService
+    override init() {
+        self.apiService = Database.database().reference().child("SavedWorkoutCreators").child(userID)
     }
     
     
@@ -69,30 +68,29 @@ class CreatedWorkoutsViewModel:NSObject {
     
     // MARK: - Saved Workout Downloading
     func loadReferences(){
-        
-        apiService = Database.database().reference().child("SavedWorkoutCreators").child(userID)
-        apiService.observe(.childAdded) { (snapshot) in
-            self.workoutReferences.append(snapshot.key)
+        var workoutReferences : [String] = []
+        handle = apiService.observe(.childAdded) { (snapshot) in
+            workoutReferences.append(snapshot.key)
         }
         
         apiService.observeSingleEvent(of: .value) { (_) in
-            self.loadSavedWorkouts()
+            self.loadSavedWorkouts(with: workoutReferences)
         }
         
     }
     
-    func loadSavedWorkouts(){
+    func loadSavedWorkouts(with references: [String]){
         
         var tempWorkouts = [savedWorkoutDelegate]()
         let myGroup = DispatchGroup()
         let api = Database.database().reference().child("SavedWorkouts")
         
-        if workoutReferences.isEmpty {
+        if references.isEmpty {
             self.isLoading = false
             self.createdWorkouts = []
         }
         
-        for workout in workoutReferences{
+        for workout in references{
             myGroup.enter()
             api.child(workout).observeSingleEvent(of: .value) { (snapshot) in
                 defer {myGroup.leave()}
@@ -113,6 +111,11 @@ class CreatedWorkoutsViewModel:NSObject {
                 self.isLoading = false
             }
         }
+    }
+    
+    //MARK: - RemoveObservers
+    func removeObservers(){
+        apiService.removeObserver(withHandle: handle)
     }
     
     

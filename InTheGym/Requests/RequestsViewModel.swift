@@ -27,6 +27,8 @@ class RequestsViewModel{
     // We also defined a class and make it conform to that protocol.
     var apiService: DatabaseReference
     let userID = Auth.auth().currentUser!.uid
+    let requestsRef  : DatabaseReference!
+    var handle : DatabaseHandle!
 
     // This will contain info about the picture eventually selectded by the user by tapping an item on the screen
     var selectedUser: Users?
@@ -54,6 +56,7 @@ class RequestsViewModel{
     // Note: apiService has a default value in case this constructor is executed without passing parameters
     init(apiService: DatabaseReference) {
         self.apiService = apiService
+        self.requestsRef = Database.database().reference().child("PlayerRequests").child(self.userID)
     }
  
     
@@ -61,31 +64,55 @@ class RequestsViewModel{
     func fetchData(){
         self.isLoading = true
         
-        var tempRequest = [Users]()
-        let myGroup = DispatchGroup()
+        var tempRequest = [String]()
+        var initialLoad = true
         
-        let requestsRef = Database.database().reference().child("PlayerRequests").child(self.userID)
-        requestsRef.observe(.value) { (snapshot) in
-            
-            if snapshot.childrenCount == 0 {
-                self.requests = []
+        handle = requestsRef.observe(.childAdded) { (snapshot) in
+            if initialLoad {
+                tempRequest.append(snapshot.key)
+            } else {
+                self.addRequest(with: snapshot.key)
+            }
+        }
+        
+        requestsRef.observeSingleEvent(of: .value) { (snapshot) in
+            // run function to load requeters
+            if tempRequest.isEmpty {
                 self.isLoading = false
+            } else {
+                self.loadRequests(with: tempRequest)
             }
-            for child in snapshot.children{
-                myGroup.enter()
-                UserIDToUser.transform(userID: (child as AnyObject).key) { (user) in
-                    tempRequest.append(user)
-                    myGroup.leave()
-                }
-            }
-            myGroup.notify(queue: .main){
-                self.requests = tempRequest
-                self.isLoading = false
-            }
+            initialLoad = false
         }
     }
     
+    func loadRequests(with userIDs : [String]) {
+        var tempRequests = [Users]()
+        let myGroup = DispatchGroup()
+        for id in userIDs {
+            myGroup.enter()
+            UserIDToUser.transform(userID: id) { (user) in
+                tempRequests.append(user)
+                myGroup.leave()
+            }
+        }
+        myGroup.notify(queue: .main) {
+            self.requests = tempRequests
+            self.isLoading = false
+        }
+    }
     
+    func addRequest(with id : String) {
+        UserIDToUser.transform(userID: id) { (user) in
+            self.requests.append(user)
+        }
+    }
+
+    
+    // MARK: - Remove Observer
+    func removeObserver(){
+        requestsRef.removeObserver(withHandle: handle)
+    }
     
     
     // MARK: - Retieve Data
@@ -128,38 +155,12 @@ class RequestsViewModel{
             self.acceptedRequestClosure?()
         }
         
-        // post for self
-        let actData = ["time":ServerValue.timestamp(),
-                       "type":"Request Accepted",
-                       "message":"You accepted a request from \(user.username!).",
-                       "isPrivate":true,
-                       "posterID":self.userID] as [String:AnyObject]
-        let postRef = Database.database().reference().child("Posts").childByAutoId()
-        let postRefKey = postRef.key
-        postRef.setValue(actData)
-        let posselfreferences = Database.database().reference().child("PostSelfReferences").child(self.userID).child(postRefKey!)
-        posselfreferences.setValue(true)
-        let timelineref = Database.database().reference().child("Timeline").child(self.userID).child(postRefKey!)
-        timelineref.setValue(true)
+        FirebaseAPI.shared().uploadActivity(with: .NewCoach(user.username!))
         
-        UserIDToUser.transform(userID: self.userID) { (selfuser) in
-            // post for coach
-            let coachActData = ["time":ServerValue.timestamp(),
-                                "type":"Request Accepted",
-                                "message":"\(selfuser.username!) accepted your request.",
-                                "isPrivate":true,
-                                "posterID":user.uid!] as [String:AnyObject]
-            
-            let coachPostRef = Database.database().reference().child("Posts").childByAutoId()
-            let coachPostRefKey = coachPostRef.key
-            coachPostRef.setValue(coachActData)
-            let coachposselfreferences = Database.database().reference().child("PostSelfReferences").child(user.uid!).child(coachPostRefKey!)
-            coachposselfreferences.setValue(true)
-            let coachtimelineref = Database.database().reference().child("Timeline").child(user.uid!).child(coachPostRefKey!)
-            coachtimelineref.setValue(true)
-        }
-        
-
+        FirebaseAPI.shared().uploadActivity(with: .RequestAccepted(ViewController.username!, user.uid!))
+        let notification = NotificationAcceptedRequest(from: self.userID, to: user.uid!)
+        let uploadNotification = NotificationManager(delegate: notification)
+        uploadNotification.upload()
     }
     
     func declinedRequest(from user:Users, at index:IndexPath){

@@ -76,4 +76,8 @@ extension SavedWorkoutsAdapter : UITableViewDataSource, UITableViewDelegate, Emp
         let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
         return NSAttributedString(string: str, attributes: attrs)
     }
+    
+    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
+        return UIImage(named: "benchpress_icon")
+    }
 }

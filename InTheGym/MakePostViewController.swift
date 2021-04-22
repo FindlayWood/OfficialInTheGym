@@ -52,6 +52,9 @@ class MakePostViewController: UIViewController {
     // delegate to report back to group
     var delegate : GroupPageProtocol!
     
+    // delegate to report back to timeline
+    var timelineDelegate : PlayerTimelineProtocol!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -106,26 +109,28 @@ class MakePostViewController: UIViewController {
                 let timeLineRef = Database.database().reference().child("Timeline")
                 
                 
-                let postData = ["type": "post",
+                var postData = ["type": "post",
                                 "posterID": userID!,
-                                "message": text.text!,
+                                "message": text.text!.trimTrailingWhiteSpaces(),
                                 "username": userName!,
                                 "time": ServerValue.timestamp(),
-                                "isPrivate" : self.isPrivate,
-                                "group": false] as [String : Any]
+                                "isPrivate" : self.isPrivate] as [String : AnyObject]
 
                 postRef.setValue(postData)
                 timeLineRef.child(userID!).child(postID).setValue(true)
                 postSelfReferences.child(postID).setValue(true)
-                for player in playersID{
-                    timeLineRef.child(player).child(postID).setValue(true)
-                }
+//                for player in playersID{
+//                    timeLineRef.child(player).child(postID).setValue(true)
+//                }
                 
                 for follower in followers{
                     timeLineRef.child(follower).child(postID).setValue(true)
                 }
                 
+                postData["postID"] = postID as AnyObject
+                postData.removeValue(forKey: "type")
                 
+                self.timelineDelegate.postFromSelf(post: TimelinePostModel(object: postData)!)
                 text.text = ""
                 self.dismiss(animated: true, completion: nil)
             }   
@@ -139,11 +144,10 @@ class MakePostViewController: UIViewController {
         
         let postData = ["type": "post",
                         "posterID": userID!,
-                        "message": text.text!,
+                        "message": text.text!.trimTrailingWhiteSpaces(),
                         "username": userName!,
                         "time": ServerValue.timestamp(),
-                        "isPrivate" : true,
-                        "group": true] as [String : Any]
+                        "isPrivate" : true] as [String : Any]
 
         postRef.setValue(postData) { (error, snapshot) in
             if let error = error {
@@ -163,25 +167,28 @@ class MakePostViewController: UIViewController {
         
         let timeLineRef = Database.database().reference().child("Timeline")
         
-        let postData = ["type": "post",
+        var postData = ["type": "post",
                         "posterID": userID!,
-                        "message": text.text!,
+                        "message": text.text!.trimTrailingWhiteSpaces(),
                         "username": userName!,
                         "time": ServerValue.timestamp(),
-                        "isPrivate" : self.isPrivate,
-                        "group": false] as [String : Any]
+                        "isPrivate" : self.isPrivate] as [String : AnyObject]
 
         postRef.setValue(postData)
         timeLineRef.child(userID!).child(postID).setValue(true)
         postSelfReferences.child(postID).setValue(true)
-        for coach in playerCoaches{
-            timeLineRef.child(coach).child(postID).setValue(true)
-        }
+//        for coach in playerCoaches{
+//            timeLineRef.child(coach).child(postID).setValue(true)
+//        }
 
         for follower in followers{
             timeLineRef.child(follower).child(postID).setValue(true)
         }
         
+        postData["postID"] = postID as AnyObject
+        postData.removeValue(forKey: "type")
+        
+        self.timelineDelegate.postFromSelf(post: TimelinePostModel(object: postData)!)
         
         text.text = ""
         self.dismiss(animated: true, completion: nil)

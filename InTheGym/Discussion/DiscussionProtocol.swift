@@ -14,6 +14,7 @@ protocol DiscussionProtocol {
     func retreiveNumberOfItems() -> Int
     func retreiveNumberOfSections() -> Int
     func itemSelected(at: IndexPath)
+    func replyPosted()
 }
 
 protocol DiscussionCellConfigurable {

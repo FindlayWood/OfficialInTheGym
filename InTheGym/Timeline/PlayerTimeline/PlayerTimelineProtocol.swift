@@ -14,4 +14,5 @@ protocol PlayerTimelineProtocol: class {
     func retreiveNumberOfItems() -> Int
     func retreiveNumberOfSections() -> Int
     func newPosts()
+    func postFromSelf(post:TimelinePostModel)
 }

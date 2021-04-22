@@ -58,10 +58,10 @@ class MyProfileViewModel {
     
     let collectionData = [
                 ["title":"MyGroups",
-                "image":UIImage(named: "New Group")!,
+                "image":UIImage(named: "groups_icon")!,
                 "description":"This will show all of the groups you are a part of."],
                 ["title": "Workout Scores",
-                 "image": UIImage(named: "scores_icon")!,
+                 "image": UIImage(named: "bell_icon")!,
                  "description": "View your workout scores. See the scores from all of the workouts you have completed / created."],
                 ["title": "Saved Workouts",
                  "image": UIImage(named: "benchpress_icon")!,
@@ -70,7 +70,7 @@ class MyProfileViewModel {
                  "image": UIImage(named: "hammer_icon")!,
                  "description": "View all of the workouts you have created. All the workouts you created are stored in here."],
                 ["title": "Notifications",
-                 "image": UIImage(named: "bell_icon")!,
+                 "image": UIImage(named: "scores_icon")!,
                  "description":"View your notifications. Notifications include when another user likes or replies to one of your posts or when another user follows you."],
                 ["title": "Edit",
                 "image": UIImage(named: "edit_icon")!,
@@ -85,16 +85,13 @@ class MyProfileViewModel {
     func fetchData(){
         self.isLoading = true
         var references:[String] = []
-        var initialLoad = true
+        //var initialLoad = true
         let ref = Database.database().reference().child("PostSelfReferences").child(self.userID)
-        ref.observe(.childAdded) { (snapshot) in
-            references.insert(snapshot.key, at: 0)
-            if initialLoad == false{
-                // something else
+        
+        ref.observeSingleEvent(of: .value) { (snapshot) in
+            for child in snapshot.children{
+                references.insert((child as AnyObject).key, at: 0)
             }
-        }
-        ref.observeSingleEvent(of: .value) { (_) in
-            initialLoad = false
             self.fetchPosts(with: references)
         }
     }
@@ -143,7 +140,7 @@ class MyProfileViewModel {
         myGroup.enter()
         
         let followerRef = Database.database().reference().child("Followers").child(userID)
-        followerRef.observe(.value) { (snapshot) in
+        followerRef.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.exists(){
                 followers = Int(snapshot.childrenCount)
                 myGroup.leave()
@@ -154,7 +151,7 @@ class MyProfileViewModel {
         }
         
         let followingRef = Database.database().reference().child("Following").child(userID)
-        followingRef.observe(.value) { (snapshot) in
+        followingRef.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.exists(){
                 following = Int(snapshot.childrenCount)
                 myGroup.leave()
@@ -212,5 +209,14 @@ class MyProfileViewModel {
         return posts[indexPath.row]
     }
     
-    
+    func isLiked(on post:String, completion: @escaping (Result<Bool, Error>) -> ()){
+        let ref = Database.database().reference().child("Likes").child(self.userID).child(post)
+        ref.observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.exists(){
+                completion(.success(true))
+            } else {
+                completion(.success(false))
+            }
+        }
+    }
 }

@@ -10,11 +10,11 @@ import Foundation
 import UIKit
 import Firebase
 
-class SignUpViewModel:NSObject {
+class SignUpUserViewModel:NSObject {
     // this class takes a user and signs them up to the firebase database
     
     // user to sign up
-    var user : Users =  Users()
+    var user : Users!
     var password : String = String()
     
     var userRef:DatabaseReference!

@@ -12,16 +12,27 @@ class MyGroupTableViewCell: UITableViewCell {
     
     @IBOutlet weak var groupTitle:UILabel!
     @IBOutlet weak var groupDescription:UITextView!
+    @IBOutlet weak var leaderProfileImage:UIImageView!
+    @IBOutlet weak var leaderUsernameLabel:UILabel!
     
     func setup(with group:groupModel){
         self.groupTitle.text = group.groupTitle
         self.groupDescription.text = group.groupDescription
+        ImageAPIService.shared.getProfileImage(for: group.groupLeader!) { (image) in
+            self.leaderProfileImage.image = image
+        }
+        UserIDToUser.transform(userID: group.groupLeader!) { (leader) in
+            self.leaderUsernameLabel.text = leader.username
+        }
     }
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         self.selectionStyle = .none
+        self.layer.cornerRadius = 10
+        self.backgroundColor = Constants.offWhiteColour
+        self.leaderProfileImage.layer.cornerRadius = self.leaderProfileImage.bounds.width / 2
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

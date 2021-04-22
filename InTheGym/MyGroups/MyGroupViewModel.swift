@@ -9,7 +9,11 @@
 import Foundation
 import Firebase
 
-class MyGroupViewModel {
+class MyGroupViewModel:NSObject {
+    
+    //MARK: - Database Reference
+    var ref : DatabaseReference!
+    var handle : DatabaseHandle!
     
     // MARK: - Closures
     var updateLoadingStatusClosure:(()->())?
@@ -33,11 +37,15 @@ class MyGroupViewModel {
     
     let userID = Auth.auth().currentUser!.uid
     
+    override init(){
+        self.ref = Database.database().reference().child("GroupsReferences").child(userID)
+    }
+    
     func fetchData(){
         self.isLoading = true
         var groupReferences = [String]()
-        let ref = Database.database().reference().child("GroupsReferences").child(userID)
-        ref.observe(.childAdded) { (snapshot) in
+        //let ref = Database.database().reference().child("GroupsReferences").child(userID)
+        handle = ref.observe(.childAdded) { (snapshot) in
             groupReferences.append(snapshot.key)
         }
         ref.observeSingleEvent(of: .value) { (snapshot) in
@@ -71,9 +79,13 @@ class MyGroupViewModel {
         
     }
     
+    //MARK: - Remove Observers
+    func removeObservers(){
+        self.ref.removeObserver(withHandle: handle)
+    }
     
     // MARK: - Retreive functions
     func getGroup(at indexPath:IndexPath) -> groupModel{
-        return myGroups[indexPath.row]
+        return myGroups[indexPath.section]
     }
 }

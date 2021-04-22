@@ -15,12 +15,14 @@ struct NotificationLikedPost: NotificationDelegate {
     var toUserID:String?
     var type:NotificationType?
     var postID:String?
+    var seen: Bool?
     
     init(from:String,to:String, postID:String){
         self.fromUserID = from
         self.toUserID = to
         self.postID = postID
         self.type = .LikedPost
+        self.seen = false
     }
 
     func toObject() -> [String:AnyObject]{
@@ -28,7 +30,8 @@ struct NotificationLikedPost: NotificationDelegate {
                       "toUserID":toUserID!,
                       "postID":postID!,
                       "type":"LikedPost",
-                      "time":ServerValue.timestamp()] as [String:AnyObject]
+                      "time":ServerValue.timestamp(),
+                      "seen": false] as [String:AnyObject]
         return object
     }
 
@@ -41,6 +44,7 @@ struct NotificationGroupLikedPost : GroupNotificationDelegate {
     var toUserID:String?
     var type:NotificationType?
     var postID:String?
+    var seen: Bool?
     
     init(from:String,to:String, postID:String, groupID:String){
         self.fromUserID = from
@@ -48,6 +52,7 @@ struct NotificationGroupLikedPost : GroupNotificationDelegate {
         self.postID = postID
         self.type = .groupLikedPost
         self.groupID = groupID
+        self.seen = false
     }
 
     func toObject() -> [String:AnyObject]{
@@ -56,7 +61,8 @@ struct NotificationGroupLikedPost : GroupNotificationDelegate {
                       "postID":postID!,
                       "type":"LikedPost",
                       "groupID":groupID!,
-                      "time":ServerValue.timestamp()] as [String:AnyObject]
+                      "time":ServerValue.timestamp(),
+                      "seen":false] as [String:AnyObject]
         return object
     }
 }

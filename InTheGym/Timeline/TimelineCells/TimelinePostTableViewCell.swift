@@ -39,19 +39,11 @@ class TimelinePostTableViewCell: UITableViewCell, CellConfiguarable {
                 }
             }
         }
-
-        UserIDToUser.transform(userID: model.posterID!) { (user) in
-            if let purl = user.profilePhotoURL{
-                ImageAPIService.shared.getImage(with: purl) { (image) in
-                    if image != nil {
-                        self.profileImage.setImage(image, for: .normal)
-                    } else {
-                        self.profileImage.setImage(UIImage(named: "player_icon"), for: .normal)
-                    }
-                }
+        ImageAPIService.shared.getProfileImage(for: model.posterID!) { (image) in
+            if let image = image {
+                self.profileImage.setImage(image, for: .normal)
             }
         }
-        
     }
     
     static func cellIdentifier() -> String{
@@ -65,6 +57,7 @@ class TimelinePostTableViewCell: UITableViewCell, CellConfiguarable {
         self.profileImage.layer.cornerRadius = self.profileImage.bounds.width / 2
         self.profileImage.layer.masksToBounds = true
         self.selectionStyle = .none
+        self.profileImage.setImage(nil, for: .normal)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

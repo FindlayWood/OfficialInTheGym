@@ -9,195 +9,148 @@
 import UIKit
 import Firebase
 
-class DiscoverPageViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class DiscoverPageViewController: UIViewController {
     
     @IBOutlet weak var collection:UICollectionView!
+    @IBOutlet weak var ActivityIndicator:UIActivityIndicatorView!
     
     let width = UIScreen.main.bounds.width
     let height = UIScreen.main.bounds.height
     
-    
-    var discoverPosts = [DiscoverPosts]()
-    var initialPostRef : [String] = []
-    var posts : [[String:AnyObject]] = []
-    var WOD : [String:AnyObject] = [:]
-    
     var activityIndicator:UIActivityIndicatorView = UIActivityIndicatorView()
     
-    var selfUsername:String!
+    var adapter : DiscoverPageAdapter!
+    
+    var refreshControl : UIRefreshControl!
+    
+    lazy var viewModel: DiscoverPageViewModel = {
+        return DiscoverPageViewModel()
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        adapter = DiscoverPageAdapter(delegate: self)
+        collection.delegate = adapter
+        collection.dataSource = adapter
+        
         let layout : UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 20, left: 5, bottom: 10, right: 5)
-        layout.itemSize = CGSize(width: width/2-10, height: width/3)
+        //layout.itemSize = CGSize(width: width/2-10, height: width/3)
         layout.minimumInteritemSpacing = 5
         layout.minimumLineSpacing = 10
         collection.collectionViewLayout = layout
         
-        loadPosts()
         view.addSubview(activityIndicator)
         activityIndicator.frame = self.view.frame
         activityIndicator.startAnimating()
         activityIndicator.color = Constants.darkColour
         self.collection.alpha = 0.0
-
+        
+        initRefreshControl()
+        initViewModel()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        if section == 0{
-            return 1
-        }else{
-            return posts.count
-        }
-        
+    func initRefreshControl(){
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .white
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        self.collection.refreshControl = refreshControl
     }
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+    @objc func handleRefresh(){
+        viewModel.fetchWODKey()
+        viewModel.fetchWorkoutKeys()
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! DiscoverPageCollectionViewCell
-        cell.layer.cornerRadius = 8
+    func initViewModel(){
         
-        cell.layer.shadowColor = UIColor.black.cgColor
-        cell.layer.shadowOffset = CGSize(width: 0, height: 3.0)
-        cell.layer.shadowRadius = 4.0
-        cell.layer.shadowOpacity = 1.0
-        cell.layer.masksToBounds = false
-        
-        if indexPath.section == 0{
-            cell.username.text = WOD["createdBy"] as? String ?? ""
-            cell.title.text = WOD["title"] as? String ?? ""
-            cell.exerciseCount.text = "\(WOD["exercises"]?.count ?? 0) exercises"
-            cell.downloadCount.text = WOD["NumberOfDownloads"]?.description
-            cell.viewCount.text = WOD["Views"]?.description
-            cell.crownImage.isHidden = false
-            cell.wodMessage.isHidden = false
-            
-        }
-        
-        else{
-            cell.username.text = posts[indexPath.item]["createdBy"] as? String
-            cell.title.text = posts[indexPath.item]["title"] as? String
-            cell.exerciseCount.text = posts[indexPath.item]["exercises"]?.count?.description
-            cell.downloadCount.text = posts[indexPath.item]["NumberOfDownloads"]?.description
-            cell.viewCount.text = posts[indexPath.item]["Views"]?.description
-            cell.crownImage.isHidden = true
-            cell.wodMessage.isHidden = true
-        }
-        
-        cell.imageview.image = UIImage(named: "benchpress_icon")
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let workoutOutDetail = storyboard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
-        workoutOutDetail.playerID = Auth.auth().currentUser!.uid
-        workoutOutDetail.username = selfUsername
-        workoutOutDetail.fromDiscover = true
-        
-        if indexPath.section == 0{
-            WorkoutDetailViewController.exercises = self.WOD["exercises"] as! [[String:AnyObject]]
-            workoutOutDetail.titleString = WOD["title"] as! String
-            workoutOutDetail.creatorID = WOD["creatorID"] as! String
-            workoutOutDetail.creatorUsername = WOD["createdBy"] as! String
-            workoutOutDetail.workoutID = WOD["workoutID"] as! String
-        }else{
-            WorkoutDetailViewController.exercises = self.posts[indexPath.item]["exercises"] as! [[String : AnyObject]]
-            workoutOutDetail.titleString = posts[indexPath.item]["title"] as! String
-            workoutOutDetail.creatorID = posts[indexPath.item]["creatorID"] as! String
-            workoutOutDetail.creatorUsername = posts[indexPath.item]["createdBy"] as! String
-            workoutOutDetail.workoutID = posts[indexPath.item]["workoutID"] as! String
-        }
-        
-        self.navigationController?.pushViewController(workoutOutDetail, animated: true)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        if indexPath.section == 0{
-            return CGSize(width: width-10, height: height/5)
-        }else{
-            return CGSize(width: width/2-10, height: width/2.5)
-        }
-    }
-    
-    
-    func loadPosts(){
-        let discoverRef = Database.database().reference().child("Discover").child("WOD")
-        let savedWorkoutRef = Database.database().reference().child("SavedWorkouts")
-        
-        
-        discoverRef.observeSingleEvent(of: .childAdded) { (snapshot) in
-            let wodID = snapshot.key
-            savedWorkoutRef.child(wodID).observeSingleEvent(of: .value) { (snapshot) in
-                if var snap = snapshot.value as? [String:AnyObject]{
-                    snap["workoutID"] = wodID as AnyObject
-                    self.WOD = snap
+        viewModel.updatewodLoadinsStatusClosure = { [unowned self] () in
+            let isWODLoading = self.viewModel.isWODLoading
+            if isWODLoading {
+                self.activityIndicator.startAnimating()
+                UIView.animate(withDuration: 0.2) {
+                    self.collection.alpha = 0.0
                 }
+            } else if !self.viewModel.isWorkoutsLoading {
+                self.ActivityIndicator.stopAnimating()
+                UIView.animate(withDuration: 0.2) {
+                    self.collection.alpha = 1.0
+                }
+                self.collection.refreshControl?.endRefreshing()
             }
         }
         
-        
-        let discoverWorkoutsRef = Database.database().reference().child("Discover").child("Workouts")
-        discoverWorkoutsRef.observe(.childAdded) { (snapshot) in
-            self.initialPostRef.insert(snapshot.key, at: 0)
-            
-        }
-        discoverWorkoutsRef.observeSingleEvent(of: .value) { (_) in
-            self.loadDiscoverWorkouts()
-        }
-    }
-    
-    func observePosts(){
-        // in here will need to be observers to catch updates
-        // but will not change unless pull to refresh
-        
-    }
-    
-    func loadDiscoverWorkouts(){
-        
-        let savedWorkoutRef = Database.database().reference().child("SavedWorkouts")
-        
-        let myGroup = DispatchGroup()
-        
-        for post in initialPostRef{
-            myGroup.enter()
-            savedWorkoutRef.child(post).observeSingleEvent(of: .value) { (snapshot) in
-                defer {myGroup.leave()}
-                
-                guard var snap = snapshot.value as? [String:AnyObject] else{
-                    return
+        viewModel.updateWorkoutsLoadingStatusClosure = { [unowned self] () in
+            let isLoading = self.viewModel.isWorkoutsLoading
+            if isLoading {
+                self.activityIndicator.startAnimating()
+                UIView.animate(withDuration: 0.2) {
+                    self.collection.alpha = 0.0
                 }
-                snap["workoutID"] = post as AnyObject
-                self.posts.insert(snap, at: 0)
-                
-                
-            }
-            myGroup.notify(queue: .main){
-                self.collection.reloadData()
+            } else if !self.viewModel.isWODLoading {
                 self.activityIndicator.stopAnimating()
                 UIView.animate(withDuration: 0.2) {
                     self.collection.alpha = 1.0
                 }
-                self.activityIndicator.isHidden = true
+                self.collection.refreshControl?.endRefreshing()
             }
+        }
+        
+        viewModel.wodLoadedClosure = { [unowned self] () in
+            DispatchQueue.main.async {
+                self.collection.reloadData()
+            }
+        }
+        
+        viewModel.tableViewReloadClosure = { [unowned self] () in
+            DispatchQueue.main.async {
+                self.collection.reloadData()
+            }
+        }
+        
+        viewModel.fetchWODKey()
+        viewModel.fetchWorkoutKeys()
+        
+    }
+    
+}
+
+extension DiscoverPageViewController : DiscoverPageProtocol {
+    func getWorkout(at indexPath: IndexPath) -> discoverWorkout {
+        return viewModel.getWorkout(at: indexPath)
+    }
+    
+    func getWOD() -> discoverWorkout {
+        return viewModel.getWOD()
+    }
+    
+    func retreiveNumberOfWorkouts() -> Int {
+        return viewModel.numberOfWorkouts
+    }
+    
+    func retrieveWOD() -> Bool {
+        return viewModel.wodLoaded
+    }
+    
+    func workoutSelected(at indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let displayWorkoutVC = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
+        var workout : discoverWorkout!
+        if indexPath.section == 0 {
+            workout = viewModel.getWOD()
+            displayWorkoutVC.selectedWorkout = workout
+            self.navigationController?.pushViewController(displayWorkoutVC, animated: true)
+        } else {
+            workout = viewModel.getWorkout(at: indexPath)
+            displayWorkoutVC.selectedWorkout = workout
+            self.navigationController?.pushViewController(displayWorkoutVC, animated: true)
         }
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        selfUsername = ViewController.username
-    }
     
-    
-
 }

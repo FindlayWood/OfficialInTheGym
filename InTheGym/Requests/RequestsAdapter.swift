@@ -28,7 +28,8 @@ extension RequestsAdapter: UITableViewDelegate, UITableViewDataSource, EmptyData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RequestsTableViewCell", for: indexPath) as! RequestTableViewCell
         
-        cell.user = delegate.getData(at: indexPath)
+        let user = delegate.getData(at: indexPath)
+        cell.setup(with: user)
         cell.delegate = self.delegate as? buttonTapsRequestDelegate
         
         return cell

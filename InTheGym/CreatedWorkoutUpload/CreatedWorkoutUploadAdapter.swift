@@ -44,9 +44,9 @@ extension CreatedWorkoutUploadAdapter: UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.item == 0 || indexPath.item == 1 {
-            return CGSize(width: (width / 2) - 20, height: height / 6)
+            return CGSize(width: (width / 2) - 20, height: height / 8)
         } else {
-            return CGSize(width: (width / 2) - 20, height: height / 3.5)
+            return CGSize(width: width - 20, height: height / 6)
         }
         
     }

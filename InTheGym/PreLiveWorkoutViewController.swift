@@ -29,8 +29,7 @@ class PreLiveWorkoutViewController: UIViewController {
         if titlefield.text?.trimmingCharacters(in: .whitespaces) == ""{
             print("no title")
         }else{
-            print(titlefield.text!)
-            print("create a workout id \n send over user id and username")
+
             let workoutRef = Database.database().reference().child("Workouts").child(self.userID).childByAutoId()
             let workoutID = workoutRef.key!
             let workoutTitle = titlefield.text!
@@ -39,7 +38,9 @@ class PreLiveWorkoutViewController: UIViewController {
                                "title":workoutTitle,
                                "startTime":Date.timeIntervalSinceReferenceDate,
                                "liveWorkout": true,
-                               "creatorID":self.userID] as [String : Any]
+                               "creatorID":self.userID,
+                               "fromDiscover":false,
+                               "assigned":false] as [String : Any]
             workoutRef.setValue(workoutData)
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let workoutPage = storyboard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
@@ -49,6 +50,8 @@ class PreLiveWorkoutViewController: UIViewController {
             workoutPage.titleString = workoutTitle
             workoutPage.playerID = self.userID
             workoutPage.username = ViewController.username
+            workoutPage.creatorUsername = ViewController.username
+            workoutPage.creatorID = self.userID
             WorkoutDetailViewController.exercises.removeAll()
             titlefield.text = ""
             navigationController?.pushViewController(workoutPage, animated: true)

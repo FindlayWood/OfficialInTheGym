@@ -53,22 +53,7 @@ class LaunchPageViewController: UIViewController {
                         
                     case false:
                         self.spinner.stopAnimating()
-                        let screenSize: CGRect = UIScreen.main.bounds
-                        let screenWidth = screenSize.width
-                        
-                        let appearance = SCLAlertView.SCLAppearance(
-                            kWindowWidth: screenWidth - 40 )
-                        
-                        let alertview = SCLAlertView(appearance: appearance)
-                        alertview.addButton("Resend Verification Email") {
-                            user.sendEmailVerification()
-                            self.showSuccess()
-                            self.performSegue(withIdentifier: "toLoginSignUp", sender: self)
-                        }
-                        
-                        alertview.showWarning("Verify", subTitle: "You must verify your account from the email we sent you. Then we can log you in straight away.", closeButtonTitle: "OK")
-                        
-                        
+                        self.performSegue(withIdentifier: "toLoginSignUp", sender: self)
                     }
                 }
                

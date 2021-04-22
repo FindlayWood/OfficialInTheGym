@@ -107,6 +107,20 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
                 uploadPage.createdFor = self.uid
                 uploadPage.groupBool = false
             }
+            
+            let exerciseData = ["title":titleField.text!,
+                                "completed":false,
+                                "exercises":AddWorkoutHomeViewController.exercises,
+                                "createdBy":ViewController.username!,
+                                "creatorID":self.userID,
+                                "fromDiscover":false,
+                                "liveWorkout":false
+            ] as [String:AnyObject]
+            
+            let createdWorkout = workout(object: exerciseData)
+            uploadPage.createdWorkout = createdWorkout
+            uploadPage.stepCount = stepCount
+            
             self.navigationController?.pushViewController(uploadPage, animated: true)
             
         }

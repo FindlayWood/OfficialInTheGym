@@ -15,41 +15,25 @@ class LoadFollowers: NSObject {
     
     static func returnFollowers(for user:String, completion:@escaping([String])->()){
         var followers = [String]()
-        var initialLoad = true
         let followerRef = Database.database().reference().child("Followers").child(user)
-        followerRef.observe(.value) { (DataSnapshot) in
+        followerRef.observeSingleEvent(of: .value) { (DataSnapshot) in
             
             for child in DataSnapshot.children{
                 followers.append((child as AnyObject).key)
             }
-            
-            if initialLoad == false{
-                completion(followers)
-            }
-        }
-        followerRef.observeSingleEvent(of: .value) { (_) in
             completion(followers)
-            initialLoad = false
         }
     }
     
     static func returnCoaches(for user:String, completion:@escaping([String])->()){
         var coaches = [String]()
-        var initialLoad = true
         let coachesRef = Database.database().reference().child("PlayerCoaches").child(user)
-        coachesRef.observe(.value) { (DataSnapshot) in
+        coachesRef.observeSingleEvent(of: .value) { (DataSnapshot) in
             
             for child in DataSnapshot.children{
                 coaches.append((child as AnyObject).key)
             }
-            
-            if initialLoad == false{
-                completion(coaches)
-            }
-        }
-        coachesRef.observeSingleEvent(of: .value) { (_) in
             completion(coaches)
-            initialLoad = false
         }
     }
     

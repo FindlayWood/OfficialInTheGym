@@ -11,27 +11,17 @@ import Firebase
 
 class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    // variable to hold the user id of the coach
-    var adminKey:String = ""
-    
-    // varibale to hold the username.
-    // MARK: hard coding the username to test new page. Will need to change
-    var username:String = ""
-    
     // outlets to view
     @IBOutlet weak var tableview:UITableView!
-    @IBOutlet weak var nameLabel:UILabel!
-    //@IBOutlet weak var usernameLabel:UILabel!
-    //@IBOutlet weak var emailLabel:UILabel!
-    //@IBOutlet weak var countedLabel:UILabel!
     
     // array of tableview contents
-    var tableContents = ["Coaches", "PBs", "Workout Scores", "Workload", "Requests", "Settings", "Saved Workouts", "Notifications"]
+    var tableContents = ["Coaches", "PBs", "Workload", "Requests", "Settings"]
     var tabQ = ["AccountType", "Username", "Email", "Workouts Complete"]
     var tabA = [String]()
     
     // reference to the database
     var DBRef:DatabaseReference!
+    var handle:DatabaseHandle!
     
     // id of the current user
     let userID = Auth.auth().currentUser?.uid
@@ -45,9 +35,6 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.tableview.isScrollEnabled = true
         
         self.tableview.tableFooterView = UIView()
-        
-        self.username = ViewController.username
-
         
     }
     
@@ -72,19 +59,14 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             if indexPath.section == 0{
                 
-                self.DBRef.child("users").child(userID!).observe(.value) { (snapshot) in
+                self.DBRef.child("users").child(userID!).observeSingleEvent(of: .value) { (snapshot) in
                             if let snap = snapshot.value as? [String:Any]{
                                 self.tabA.removeAll()
-                                let first = snap["firstName"] as? String ?? "FIRST"
-                                let last = snap["lastName"] as? String ?? "LAST"
-                                self.tabA.append(self.username)
-                                //self.nameLabel.text = "\(first) \(last)"
-                                //self.emailLabel.text = snap["email"] as? String
+                                self.tabA.append(ViewController.username)
                                 let email = snap["email"] as? String
                                 self.tabA.append(email!)
                                 let counted = snap["numberOfCompletes"] as? Int
                                 self.tabA.append("\(counted ?? 0)")
-                                //self.countedLabel.text = "\(counted ?? 0)"
                                     
                                     
                                 switch indexPath.row {
@@ -95,7 +77,7 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                                             case 1:
                                                 cell.pic.image = UIImage(named: "name_icon")
                                                 cell.QLabel.text = "Username:"
-                                                cell.ALabel.text = self.username
+                                                cell.ALabel.text = ViewController.username
                                             case 2:
                                                 cell.pic.image = UIImage(named: "email2_icon")
                                                 cell.QLabel.text = "Email:"
@@ -127,27 +109,15 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                     cell.QLabel.text = tableContents[indexPath.row]
                     cell.ALabel.text = ""
                 case 2:
-                    cell.pic.image = UIImage(named: "scores_icon")
-                    cell.QLabel.text = tableContents[indexPath.row]
-                    cell.ALabel.text = ""
-                case 3:
                     cell.pic.image = UIImage(named: "linechart_icon")
                     cell.QLabel.text = tableContents[indexPath.row]
                     cell.ALabel.text = ""
-                case 4:
+                case 3:
                     cell.pic.image = UIImage(named: "trainer_icon")
                     cell.QLabel.text = tableContents[indexPath.row]
                     cell.ALabel.text = ""
-                case 5:
+                case 4:
                     cell.pic.image = UIImage(named: "settings_icon")
-                    cell.QLabel.text = tableContents[indexPath.row]
-                    cell.ALabel.text = ""
-                case 6:
-                    cell.pic.image = UIImage(named: "scores_icon")
-                    cell.QLabel.text = tableContents[indexPath.row]
-                    cell.ALabel.text = ""
-                case 7:
-                    cell.pic.image = UIImage(named: "scores_icon")
                     cell.QLabel.text = tableContents[indexPath.row]
                     cell.ALabel.text = ""
                 default:
@@ -161,7 +131,12 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
+        
+        if section == 1 {
+            return 20
+        } else {
+            return 0
+        }
     }
     
     
@@ -175,33 +150,21 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
             case 1:
                 let Storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = Storyboard.instantiateViewController(withIdentifier: "PBsViewController") as! PBsViewController
-                SVC.username = self.username
+                SVC.username = ViewController.username
                 self.navigationController?.pushViewController(SVC, animated: true)
             case 2:
-                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "MYSCORESViewController") as! MYSCORESViewController
-                navigationController?.pushViewController(SVC, animated: true)
-            case 3:
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = storyboard.instantiateViewController(withIdentifier: "WorkloadDisplayViewController") as! WorkloadDisplayViewController
-                SVC.username = self.username
+                SVC.username = ViewController.username
                 SVC.playerID = Auth.auth().currentUser?.uid
                 navigationController?.pushViewController(SVC, animated: true)
-            case 4:
+            case 3:
                 let Storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = Storyboard.instantiateViewController(withIdentifier: "RequestsViewController") as! RequestsViewController
                 self.navigationController?.pushViewController(SVC, animated: true)
-            case 5:
+            case 4:
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
-                navigationController?.pushViewController(SVC, animated: true)
-            case 6:
-                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "SavedWorkoutsViewController") as! SavedWorkoutsViewController
-                navigationController?.pushViewController(SVC, animated: true)
-            case 7:
-                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "DisplayNotificationsViewController") as! DisplayNotificationsViewController
                 navigationController?.pushViewController(SVC, animated: true)
             default:
                 print("ouch")
@@ -211,56 +174,23 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     
     // function to load user info to display at the top of the view
-    func loadUserInfo(){
-        
-        var coachName:String!
-        self.DBRef.child("users").child(userID!).observe(.value) { (snapshot) in
-            if let snap = snapshot.value as? [String:Any]{
-                let first = snap["firstName"] as? String ?? "FIRST"
-                let last = snap["lastName"] as? String ?? "LAST"
-                self.tabA.append("\(first) \(last)")
-                self.nameLabel.text = "\(first) \(last)"
-                //self.emailLabel.text = snap["email"] as? String
-                let email = snap["email"] as? String
-                self.tabA.append(email!)
-                let counted = snap["numberOfCompletes"] as? Int
-                self.tabA.append("\(counted ?? 0)")
-                //self.countedLabel.text = "\(counted ?? 0)"
-                coachName = snap["coachName"] as? String ?? ""
-                //self.coachUsernameLabel.text = "@\(coachName!)"
-                //self.tableview.reloadData()
-            }
-        }
-        
-        // needs edit. cant use .contain
-        
-        self.DBRef.child("users").observe(.childAdded, with: { (snapshot) in
-            if let snap = snapshot.value as? [String:Any]{
-                let x = snap["username"] as! String
-                // editing below line from x.contains(coachName) to x == coachName
-                // worked fine and fixed error
-                if (x == coachName){
-                    self.adminKey = snapshot.key
-                    self.DBRef.child("users").child(self.adminKey).observe(.value, with: { (snapshot) in
-                        if let snap = snapshot.value as? [String:Any]{
-                            let first = snap["firstName"] as? String ?? "First"
-                            let last = snap["lastName"] as? String ?? "Last"
-                            //self.nameLabel.text = "\(first) \(last)"
-                            //self.coachNameLabel.text = "\(first) \(last)"
-                            let username = snap["username"] as? String
-                            //self.coachUsernameLabel.text = "@\(username ?? "")"
-                            //self.coachEmailLabel.text = snap["email"] as? String
-                            //self.tableview.reloadData()
-                        }
-                    }, withCancel: nil)
-                }
-            }
-        }, withCancel: nil)
-        
-    }
+//    func loadUserInfo(){
+//
+//        self.DBRef.child("users").child(userID!).observeSingleEvent(of: .value) { (snapshot) in
+//            if let snap = snapshot.value as? [String:Any]{
+//                let first = snap["firstName"] as? String ?? "FIRST"
+//                let last = snap["lastName"] as? String ?? "LAST"
+//                self.tabA.append("\(first) \(last)")
+//                let email = snap["email"] as? String
+//                self.tabA.append(email!)
+//                let counted = snap["numberOfCompletes"] as? Int
+//                self.tabA.append("\(counted ?? 0)")
+//            }
+//        }
+//    }
 
     override func viewWillAppear(_ animated: Bool) {
-        loadUserInfo()
+        //loadUserInfo()
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes

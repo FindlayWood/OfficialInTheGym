@@ -15,6 +15,8 @@ class DiscussionViewModel{
     var updateLoadingStatusClosure: (() -> ())?
     
     let userID = Auth.auth().currentUser!.uid
+    let postReplyRef : DatabaseReference!
+    var handle : DatabaseHandle!
     
     var originalPost : PostProtocol!
     
@@ -25,7 +27,7 @@ class DiscussionViewModel{
     }
     
     var numberOfItems: Int {
-        return replies.count + 1
+        return replies.count
     }
     
     var isLoading: Bool = false {
@@ -36,27 +38,38 @@ class DiscussionViewModel{
     
     init(originalPost:PostProtocol){
         self.originalPost = originalPost
+        self.postReplyRef = Database.database().reference().child("PostReplies").child(originalPost.postID!)
     }
     
     func fetchData(){
         self.isLoading = true
+        var initialLoad = true
         var tempReplies = [PostProtocol]()
         
-        let ref = Database.database().reference().child("PostReplies").child(originalPost.postID!)
-        ref.observe(.childAdded) { (snapshot) in
+        
+        handle = postReplyRef.observe(.childAdded) { (snapshot) in
             tempReplies.append(DiscussionReply(snapshot: snapshot)!)
+            if initialLoad == false {
+                self.replies = tempReplies
+            }
         }
-        ref.observeSingleEvent(of: .value) { (_) in
+        postReplyRef.observeSingleEvent(of: .value) { (_) in
             self.replies = tempReplies
             self.isLoading = false
+            initialLoad = false
         }
         
+    }
+    
+    // MARK: - Remove observer
+    func removeObserver(){
+        self.postReplyRef.removeObserver(withHandle: handle)
     }
     
     // MARK: - Retieve Data
     
     func getData( at indexPath: IndexPath ) -> PostProtocol {
-        return replies[indexPath.row - 1]
+        return replies[indexPath.row]
     }
     
     

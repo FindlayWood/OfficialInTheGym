@@ -30,6 +30,7 @@ class PlayerOrCoachViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        text.textAlignment = .center
         coachView.layer.cornerRadius = cornerRadia
         coachView.layer.borderColor = borderColour
         coachView.layer.borderWidth = borderWidth

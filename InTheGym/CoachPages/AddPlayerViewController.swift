@@ -148,19 +148,23 @@ class AddPlayerViewController: UIViewController {
         requestSentRef.setValue(true)
         playerRequestRef.setValue(true)
 
+        FirebaseAPI.shared().uploadActivity(with: .RequestSent(user.username!))
+        let notification = NotificationNewRequest(from: self.userID, to: user.uid!)
+        let uploadNotification = NotificationManager(delegate: notification)
+        uploadNotification.upload()
         // posts
-        let actData = ["time":ServerValue.timestamp(),
-                       "type":"Request Sent",
-                       "message":"You sent a request to \(user.username!).",
-                       "isPrivate":true,
-                       "posterID":self.userID] as [String:AnyObject]
-        let postRef = Database.database().reference().child("Posts").childByAutoId()
-        let postRefKey = postRef.key
-        postRef.setValue(actData)
-        let posselfreferences = Database.database().reference().child("PostSelfReferences").child(self.userID).child(postRefKey!)
-        posselfreferences.setValue(true)
-        let timelineref = Database.database().reference().child("Timeline").child(self.userID).child(postRefKey!)
-        timelineref.setValue(true)
+//        let actData = ["time":ServerValue.timestamp(),
+//                       "type":"Request Sent",
+//                       "message":"You sent a request to \(user.username!).",
+//                       "isPrivate":true,
+//                       "posterID":self.userID] as [String:AnyObject]
+//        let postRef = Database.database().reference().child("Posts").childByAutoId()
+//        let postRefKey = postRef.key
+//        postRef.setValue(actData)
+//        let posselfreferences = Database.database().reference().child("PostSelfReferences").child(self.userID).child(postRefKey!)
+//        posselfreferences.setValue(true)
+//        let timelineref = Database.database().reference().child("Timeline").child(self.userID).child(postRefKey!)
+//        timelineref.setValue(true)
         
         // userx
         activityIndicator.stopAnimating()
@@ -184,7 +188,7 @@ class AddPlayerViewController: UIViewController {
     func alertRequestSent(){
         haptic.notificationOccurred(.warning)
         let alert = SCLAlertView()
-        alert.showError("Already Sent!", subTitle: "You have already sent a request to this player. You will have to wait until they accept it before you can assign them workouts, add them to groups and monitor their workout data.", closeButtonTitle: "ok", animationStyle: .topToBottom)
+        alert.showWarning("Already Sent!", subTitle: "You have already sent a request to this player. You will have to wait until they accept it before you can assign them workouts, add them to groups and monitor their workout data.", closeButtonTitle: "ok", animationStyle: .topToBottom)
         
         playerfield.text = ""
     }

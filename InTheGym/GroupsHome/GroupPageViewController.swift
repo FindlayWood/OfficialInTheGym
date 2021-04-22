@@ -55,14 +55,22 @@ class GroupPageViewController: UIViewController {
 
         initUI()
         initRefreshControl()
-        initViewModel()
+        //initViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if isMovingToParent {
+            initViewModel()
+        }
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = Constants.lightColour
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        if isMovingFromParent {
+            viewModel.removeObservers()
+        }
     }
     
     func initUI(){
@@ -215,12 +223,15 @@ extension GroupPageViewController : GroupPageProtocol{
     func memberSelected(at indexPath: IndexPath) {
         // go to user profile
         let member = getMemberData(at: indexPath)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let publicTimeline = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
-        UserIDToUser.transform(userID: member.uid!) { (user) in
-            publicTimeline.user = user
-            self.navigationController?.pushViewController(publicTimeline, animated: true)
+        if !viewModel.isIDSelf(id: member.uid!) {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let publicTimeline = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
+            UserIDToUser.transform(userID: member.uid!) { (user) in
+                publicTimeline.user = user
+                self.navigationController?.pushViewController(publicTimeline, animated: true)
+            }
         }
+
     }
     
     func retreiveNumberOfPosts() -> Int {

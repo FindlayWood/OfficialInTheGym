@@ -16,7 +16,7 @@ class WorkoutCompletedViewModel {
     var updateLoadingStatusClosure: (()->())?
     
     var numberOfItems: Int {
-        return data.count + 1
+        return data.count + 2
     }
     
     var timeToComplete : String!
@@ -104,8 +104,16 @@ class WorkoutCompletedViewModel {
         }
     }
     
-    func updateWorkload(with workout:workout, workload:Int){
+    func updateWorkload(with workout:workout, workload:Int, endTime : Double){
         
+        
+        let workloadData = ["timeToComplete": workout.timeToComplete!,
+                            "rpe": workout.score!,
+                            "endTime": endTime,
+                            "workload": workload,
+                            "workoutID": workout.workoutID!] as [String : Any]
+        let ref = Database.database().reference().child("Workload").child(self.userID).childByAutoId()
+        ref.setValue(workloadData)
     }
     
     // MARK: - Update Coach stats
@@ -142,6 +150,7 @@ class WorkoutCompletedViewModel {
     func uploadPost(with workout: workout, privacy isPrivate: Bool){
         
         let postRef = Database.database().reference().child("Posts").childByAutoId()
+        let postSelfReferences = Database.database().reference().child("PostSelfReferences").child(self.userID)
         let postID = postRef.key!
         let timelineRef = Database.database().reference().child("Timeline")
         
@@ -151,7 +160,13 @@ class WorkoutCompletedViewModel {
                             "createdBy":workout.createdBy!,
                             "score":workout.score!,
                             "timeToComplete":workout.timeToComplete!,
-                            "savedID":workout.savedID!] as [String : Any]
+                            "creatorID":workout.creatorID!,
+                            "liveWorkout":workout.liveWorkout!,
+                            "fromDiscover":workout.fromDiscover!] as [String : Any]
+        
+        if !workout.liveWorkout{
+            exerciseData["savedID"] = workout.savedID as AnyObject
+        }
         
         if let data = workout.exercises{
             exerciseData["exercises"] = data.map { ($0.toObject())} as AnyObject
@@ -166,12 +181,14 @@ class WorkoutCompletedViewModel {
                         "exerciseData":exerciseData] as [String : Any]
         
         postRef.setValue(postData)
+        postSelfReferences.child(postID).setValue(true)
         timelineRef.child(userID).child(postID).setValue(true)
-        LoadFollowers.returnCoaches(for: userID) { (coaches) in
-            for coach in coaches {
-                timelineRef.child(coach).child(postID).setValue(true)
-            }
-        }
+        FirebaseAPI.shared().uploadActivity(with: .CompletedWorkout(workout.title!))
+//        LoadFollowers.returnCoaches(for: userID) { (coaches) in
+//            for coach in coaches {
+//                timelineRef.child(coach).child(postID).setValue(true)
+//            }
+//        }
         LoadFollowers.returnFollowers(for: userID) { (followers) in
             for follower in followers {
                 timelineRef.child(follower).child(postID).setValue(true)
@@ -184,11 +201,10 @@ class WorkoutCompletedViewModel {
         let ref = Database.database().reference().child("Workouts").child(userID).child(workout.workoutID!)
         ref.runTransactionBlock { (currentData) -> TransactionResult in
             if var workoutData = currentData.value as? [String:AnyObject] {
-                var completed = workoutData["completed"] as? Bool ?? false
-                completed = true
-                workoutData["completed"] = completed as AnyObject
+                workoutData["completed"] = true as AnyObject
                 workoutData["score"] = workout.score?.description as AnyObject
                 workoutData["timeToComplete"] = time as AnyObject
+                workoutData["workload"] = workout.workload as AnyObject
                 currentData.value = workoutData
                 return TransactionResult.success(withValue: currentData)
             }

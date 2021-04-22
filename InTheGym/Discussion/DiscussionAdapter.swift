@@ -20,13 +20,21 @@ class DiscussionAdapter: NSObject {
 }
 extension DiscussionAdapter: UITableViewDelegate, UITableViewDataSource{
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return delegate.retreiveNumberOfSections()
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return delegate.retreiveNumberOfItems()
+        if section == 0 {
+            return 1
+        } else {
+            return delegate.retreiveNumberOfItems()
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let rowModel:PostProtocol!
-        if indexPath.row == 0{
+        if indexPath.section == 0 {
             rowModel = delegate.getOriginalPost()
         } else {
             rowModel = delegate.getData(at: indexPath)
@@ -37,6 +45,14 @@ extension DiscussionAdapter: UITableViewDelegate, UITableViewDataSource{
             cell.delegate = self.delegate as? DiscussionTapProtocol
         }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 1{
+            return 5
+        } else {
+            return 0
+        }
     }
     
     

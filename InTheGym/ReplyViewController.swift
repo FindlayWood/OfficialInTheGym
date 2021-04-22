@@ -25,6 +25,8 @@ class ReplyViewController: UIViewController {
     var isGroupPost : Bool!
     var groupID : String!
     
+    // protocol to connect back when
+    var delegate : DiscussionProtocol!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +37,7 @@ class ReplyViewController: UIViewController {
         message.tintColor = .white
         replyButton.setTitleColor(.lightGray, for: .normal)
         replyButton.isUserInteractionEnabled = false
+        replyButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8)
         
         hideKeyboardWhenTappedAround()
         
@@ -44,6 +47,14 @@ class ReplyViewController: UIViewController {
         if message.textColor == UIColor.lightGray {
             message.text = nil
             message.textColor = UIColor.white
+        }
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            replyButton.setTitleColor(UIColor.lightGray, for: .normal)
+            replyButton.isUserInteractionEnabled = false
+        } else {
             replyButton.setTitleColor(UIColor.white, for: .normal)
             replyButton.isUserInteractionEnabled = true
         }
@@ -65,7 +76,7 @@ class ReplyViewController: UIViewController {
             print("nope!")
         }else{
             let replyRef = Database.database().reference().child("PostReplies").child(postID)
-            let replyData = ["message": message.text!,
+            let replyData = ["message": message.text!.trimTrailingWhiteSpaces(),
                              "posterID": self.userID,
                              "time": ServerValue.timestamp(),
                              "username": ViewController.username!] as [String : Any]
@@ -87,6 +98,8 @@ class ReplyViewController: UIViewController {
                 } andCompletionBlock: { (error, committed, snapshot) in
                     if let error = error{
                         print(error.localizedDescription)
+                    } else {
+                        self.delegate.replyPosted()
                     }
                 }
                 if self.userID != posterID{
@@ -97,8 +110,6 @@ class ReplyViewController: UIViewController {
                 }
             }
 
-            
-           
             self.dismiss(animated: true, completion: nil)
 
         }
@@ -119,13 +130,14 @@ class ReplyViewController: UIViewController {
         } andCompletionBlock: { (error, committed, snapshot) in
             if let error = error{
                 print(error.localizedDescription)
+            } else {
+                self.delegate.replyPosted()
             }
         }
         if self.userID != posterID{
             let notification = NotificationGroupReplied(from: self.userID, to: posterID, postID: postID, groupID: groupID)
             let uploadNotification = NotificationManager(delegate: notification)
             uploadNotification.upload()
-            
         }
     }
     

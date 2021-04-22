@@ -36,14 +36,23 @@ class MyGroupsViewController: UIViewController {
         tableview.backgroundColor = Constants.lightColour
 
         initUI()
-        initViewModel()
+        //initViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if isMovingToParent{
+            initViewModel()
+        }
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = UIColor.white
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if isMovingFromParent{
+            viewModel.removeObservers()
+        }
     }
     
     func initUI(){

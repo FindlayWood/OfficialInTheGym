@@ -19,6 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // check if it is first launch for user. to check whether to show alert
     // for both player and coach side
     var hasAlreadyLaunched : Bool!
+    var hasLaunchedDiscover : Bool!
+    var hasLaunchedMyProfile : Bool!
+    
     // for coach side only
     var hasLaunchedPlayers : Bool!
     var hasLaunchedAddPlayers : Bool!
@@ -38,10 +41,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //hasAlreadyLaunched = false
 
         hasAlreadyLaunched = UserDefaults.standard.bool(forKey: "hasAlreadyLaunched")
+        hasLaunchedDiscover = UserDefaults.standard.bool(forKey: "hasLaunchedDiscover")
+        hasLaunchedWorkouts = UserDefaults.standard.bool(forKey: "hasLaunchedWorkouts")
         hasLaunchedPlayers = UserDefaults.standard.bool(forKey: "hasLaunchedPlayers")
+        
+        
+        
         hasLaunchedAddPlayers = UserDefaults.standard.bool(forKey: "hasLaunchedAddPlayers")
         hasLaunchedGroup = UserDefaults.standard.bool(forKey: "hasLaunchedGroup")
-        hasLaunchedWorkouts = UserDefaults.standard.bool(forKey: "hasLaunchedWorkouts")
+        
         
         if (hasAlreadyLaunched)
         {

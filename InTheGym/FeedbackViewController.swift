@@ -30,7 +30,9 @@ class FeedbackViewController: UIViewController {
         feedback.textColor = UIColor.lightGray
         feedback.delegate = self
         feedback.backgroundColor = .white
-        feedback.layer.cornerRadius = 10
+        feedback.layer.cornerRadius = 4
+        
+        self.navigationItem.title = "Feedback"
         
         hideKeyboardWhenTappedAround()
 
@@ -52,19 +54,35 @@ class FeedbackViewController: UIViewController {
             
         }
         else{
-            let text = feedback.text
+            let text = feedback.text.trimTrailingWhiteSpaces()
             let feedbackData = ["feedback":text,
                             "email":Auth.auth().currentUser?.email] as [String:AnyObject]
-            
-            DBRef.childByAutoId().setValue(feedbackData)
-            
-            // new alert
-            let alert = SCLAlertView()
-            alert.showSuccess("Feedback Uploaded!", subTitle: "Thank you for your feedback. We read all of it and are always looking to improve user experience so every bit of feedback is much appreciated.", closeButtonTitle: "Ok")
-            
-            feedback.text = plcholder
-            feedback.textColor = UIColor.lightGray
+
+            DBRef.childByAutoId().setValue(feedbackData) { (error, snapshot) in
+                if let error = error {
+                    print(error.localizedDescription)
+                    self.showError()
+                } else {
+                    self.showSuccess()
+                }
+            }
+
+ 
         }
+    }
+    
+    func showSuccess(){
+        // new alert
+        let alert = SCLAlertView()
+        alert.showSuccess("Feedback Uploaded!", subTitle: "Thank you for your feedback. We read all of it and are always looking to improve user experience so every bit of feedback is much appreciated.", closeButtonTitle: "Ok")
+
+        feedback.text = plcholder
+        feedback.textColor = UIColor.lightGray
+    }
+    
+    func showError(){
+        let alert = SCLAlertView()
+        alert.showError("Woops", subTitle: "Sorry there was an error trying to upload your feedback. Please try again.", closeButtonTitle: "Ok")
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {

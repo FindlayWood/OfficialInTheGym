@@ -24,6 +24,8 @@ class MyProfileViewController: UIViewController {
     @IBOutlet weak var accountType:UIButton!
     @IBOutlet weak var accountTypeLabel:UILabel!
     
+    var refreshControl : UIRefreshControl!
+    
     var adapter : MyProfileAdapter!
     
     lazy var viewModel : MyProfileViewModel = {
@@ -47,8 +49,10 @@ class MyProfileViewController: UIViewController {
         tableview.alpha = 0.0
         tableview.backgroundColor = Constants.darkColour
         
+        
         initViewModel()
         initUI()
+        initRefreshControl()
         topActivityIndicator.hidesWhenStopped = true
         self.profileImage.alpha = 0.0
     }
@@ -60,6 +64,10 @@ class MyProfileViewController: UIViewController {
         self.navigationController?.navigationBar.tintColor = Constants.lightColour
     }
     
+    override func viewWillLayoutSubviews() {
+        self.profileImage.layer.cornerRadius = self.profileImage.bounds.width / 2
+    }
+    
     func initUI(){
         self.username.text = ViewController.username!
         if ViewController.admin {
@@ -69,21 +77,16 @@ class MyProfileViewController: UIViewController {
             self.accountTypeLabel.text = "Player"
             self.accountType.setImage(UIImage(named: "player_icon"), for: .normal)
         }
-        self.profileImage.layer.cornerRadius = self.profileImage.bounds.width / 2
+
         viewModel.returnUser { (user) in
             self.name.text = user.firstName! + " " + user.lastName!
             self.profileBio.text = user.profileBio
-            if let purl = user.profilePhotoURL {
-                ImageAPIService.shared.getImage(with: purl) { (image) in
-                    if image != nil {
-                        self.profileImage.image = image
-                        self.profileImage.alpha = 1.0
-                    }
+            ImageAPIService.shared.getProfileImage(for: user.uid!) { (image) in
+                if let image = image {
+                    self.profileImage.image = image
+                    self.profileImage.alpha = 1.0
                 }
-            } else {
-                self.profileImage.alpha = 1.0
             }
-            
         }
     }
     
@@ -95,6 +98,9 @@ class MyProfileViewController: UIViewController {
         viewModel.reloadTableViewClosure = { [weak self] () in
             DispatchQueue.main.async {
                 self?.tableview.reloadData()
+                if self!.tableview.refreshControl!.isRefreshing{
+                    self?.tableview.refreshControl?.endRefreshing()
+                }
             }
         }
         
@@ -104,9 +110,11 @@ class MyProfileViewController: UIViewController {
                 let isLoading = self?.viewModel.isLoading ?? false
                 if isLoading {
                     self?.activityIndicator.startAnimating()
-                    UIView.animate(withDuration: 0.2, animations: {
-                        self?.tableview.alpha = 0.0
-                    })
+                    if !self!.tableview.refreshControl!.isRefreshing{
+                        UIView.animate(withDuration: 0.2, animations: {
+                            self?.tableview.alpha = 0.0
+                        })
+                    }
                 } else {
                     self?.activityIndicator.stopAnimating()
                     UIView.animate(withDuration: 0.2, animations: {
@@ -138,6 +146,18 @@ class MyProfileViewController: UIViewController {
         viewModel.fetchData()
     }
     
+    func initRefreshControl(){
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .white
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        self.tableview.refreshControl = refreshControl
+    }
+    
+    @objc func handleRefresh(){
+        viewModel.followerCount()
+        viewModel.fetchData()
+    }
+    
     @IBAction func editProfile(_ sender:UIButton) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let editPage = storyboard.instantiateViewController(withIdentifier: "EditProfileViewController") as! EditProfileViewController
@@ -145,6 +165,7 @@ class MyProfileViewController: UIViewController {
             editPage.theImage = self.profileImage.image
         }
         editPage.theText = self.profileBio.text
+        editPage.delegate = self
         editPage.modalTransitionStyle = .coverVertical
         editPage.modalPresentationStyle = .fullScreen
         self.navigationController?.present(editPage, animated: true, completion: nil)
@@ -202,13 +223,8 @@ extension MyProfileViewController: MyProfileProtocol, TimelineTapProtocol {
             let SVC = StoryBoard.instantiateViewController(withIdentifier: "MyGroupsViewController") as! MyGroupsViewController
             self.navigationController?.pushViewController(SVC, animated: true)
         case 1:
-            if ViewController.admin {
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "CoachScoresViewController") as! CoachScoresViewController
-                self.navigationController?.pushViewController(SVC, animated: true)
-            } else {
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "MYSCORESViewController") as! MYSCORESViewController
-                navigationController?.pushViewController(SVC, animated: true)
-            }
+            let SVC = StoryBoard.instantiateViewController(withIdentifier: "DisplayNotificationsViewController") as! DisplayNotificationsViewController
+            navigationController?.pushViewController(SVC, animated: true)
         case 2:
             let SVC = StoryBoard.instantiateViewController(withIdentifier: "SavedWorkoutsViewController") as! SavedWorkoutsViewController
             navigationController?.pushViewController(SVC, animated: true)
@@ -217,8 +233,13 @@ extension MyProfileViewController: MyProfileProtocol, TimelineTapProtocol {
             let SVC = StoryBoard.instantiateViewController(withIdentifier: "CreatedWorkoutsViewController") as! CreatedWorkoutsViewController
             navigationController?.pushViewController(SVC, animated: true)
         case 4:
-            let SVC = StoryBoard.instantiateViewController(withIdentifier: "DisplayNotificationsViewController") as! DisplayNotificationsViewController
-            navigationController?.pushViewController(SVC, animated: true)
+            if ViewController.admin {
+                let SVC = StoryBoard.instantiateViewController(withIdentifier: "CoachScoresViewController") as! CoachScoresViewController
+                self.navigationController?.pushViewController(SVC, animated: true)
+            } else {
+                let SVC = StoryBoard.instantiateViewController(withIdentifier: "MYSCORESViewController") as! MYSCORESViewController
+                navigationController?.pushViewController(SVC, animated: true)
+            }
         case 5:
             let editPage = StoryBoard.instantiateViewController(withIdentifier: "EditProfileViewController") as! EditProfileViewController
             if self.profileImage.image != nil{
@@ -256,6 +277,14 @@ extension MyProfileViewController: MyProfileProtocol, TimelineTapProtocol {
         self.followingCount.isUserInteractionEnabled = true
     }
     
+    func changedProfilePhoto(to newImage:UIImage) {
+        self.profileImage.image = newImage
+        viewModel.fetchData()
+    }
+    func changedBio(to newBio: String) {
+        self.profileBio.text = newBio
+    }
+    
     func workoutTapped(on cell: UITableViewCell) {
         let index = self.tableview.indexPath(for: cell)!
         let post = viewModel.getData(at:index)
@@ -281,22 +310,38 @@ extension MyProfileViewController: MyProfileProtocol, TimelineTapProtocol {
     }
     
     func likeButtonTapped(on cell: UITableViewCell, sender: UIButton, label: UILabel) {
+        
         let index = self.tableview.indexPath(for: cell)!
         let post = viewModel.getData(at: index)
-        viewModel.likePost(on: post, with: index)
-        let likeCount = Int(label.text!)! + 1
-        label.text = likeCount.description
-        if #available(iOS 13.0, *) {
-            UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
-                sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        
+        
+        viewModel.isLiked(on: post.postID!) { (result) in
+            switch result {
+            
+            case .success(let liked):
+                if !liked {
+                    // here is where we like the post
+                    print("post is not liked - like it now")
+                    self.viewModel.likePost(on: post, with: index)
+                    let likeCount = Int(label.text!)! + 1
+                    label.text = likeCount.description
+                    if #available(iOS 13.0, *) {
+                        UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
+                            sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+                        }
+                    } else {
+                        // Fallback on earlier versions
+                        print("needs fixing")
+                    }
+                    let selection = UISelectionFeedbackGenerator()
+                    selection.prepare()
+                    selection.selectionChanged()
+                }
+                
+            case .failure(let error):
+                print(error.localizedDescription)
             }
-        } else {
-            // Fallback on earlier versions
-            print("needs fixing")
         }
-        let selection = UISelectionFeedbackGenerator()
-        selection.prepare()
-        selection.selectionChanged()
     }
     
     func userTapped(on cell: UITableViewCell) {

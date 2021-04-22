@@ -21,4 +21,22 @@ class DiscoverPageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var averageTime:UILabel!
     @IBOutlet weak var averageScore:UILabel!
     
+    func setup(with workout:discoverWorkout){
+        self.username.text = workout.createdBy
+        self.title.text = workout.title
+        self.exerciseCount.text = workout.exercises?.count.description
+        self.viewCount.text = workout.views?.description
+        self.downloadCount.text = workout.numberOfDownloads?.description
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.layer.cornerRadius = 8
+        
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOffset = CGSize(width: 0, height: 3.0)
+        self.layer.shadowRadius = 4.0
+        self.layer.shadowOpacity = 1.0
+        self.layer.masksToBounds = false
+    }
 }

@@ -44,7 +44,7 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
             cell.delegate = self.delegate as NSObject as? WorkoutTableCellTapDelegate
             cell.cellDelegate = self.delegate
             cell.rpeButton.isUserInteractionEnabled = delegate.returnInteractionEnbabled()
-            cell.noteButton.isUserInteractionEnabled = delegate.returnInteractionEnbabled()
+            cell.noteButton.isUserInteractionEnabled = true
             
             return cell
         }

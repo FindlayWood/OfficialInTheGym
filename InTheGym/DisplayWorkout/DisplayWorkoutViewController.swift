@@ -12,6 +12,8 @@ import SCLAlertView
 class DisplayWorkoutViewController: UIViewController {
     
     @IBOutlet weak var tableview:UITableView!
+    @IBOutlet weak var completeButton:UIButton!
+    @IBOutlet weak var completeButtonBottomConstraint:NSLayoutConstraint!
     
     var selectedWorkout : WorkoutDelegate!
     
@@ -60,43 +62,67 @@ class DisplayWorkoutViewController: UIViewController {
         switch selectedWorkout {
         case is publicSavedWorkout:
             // function to increase the views by 1
-            let bv = SavedWorkoutBottomView(workout: selectedWorkout, parent: self.view)
-            bv.bottomViewSetUpClosure = { [weak self] () in
-                self?.viewModel.addToWorkouts()
-                DisplayTopView.displayTopView(with: "Added To Workouts", on: self!)
-                // fucntion to add workout on viewmodel
+            self.completeButton.isHidden = true
+            self.completeButtonBottomConstraint.constant = 50
+            if !ViewController.admin{
+                let bv = SavedWorkoutBottomView(workout: selectedWorkout, parent: self.view)
+                bv.bottomViewSetUpClosure = { [weak self] () in
+                    self?.viewModel.addToWorkouts()
+                    DisplayTopView.displayTopView(with: "Added To Workouts", on: self!)
+                    // fucntion to add workout on viewmodel
+                }
             }
         case is privateSavedWorkout:
-            let bv = SavedWorkoutBottomView(workout: selectedWorkout, parent: self.view)
-            bv.bottomViewSetUpClosure = { [weak self] () in
-                self?.viewModel.addToWorkouts()
-                DisplayTopView.displayTopView(with: "Added To Workouts", on: self!)
-                // fucntion to add workout on viewmodel
+            self.completeButton.isHidden = true
+            self.completeButtonBottomConstraint.constant = 50
+            if !ViewController.admin{
+                let bv = SavedWorkoutBottomView(workout: selectedWorkout, parent: self.view)
+                bv.bottomViewSetUpClosure = { [weak self] () in
+                    self?.viewModel.addToWorkouts()
+                    DisplayTopView.displayTopView(with: "Added To Workouts", on: self!)
+                    // fucntion to add workout on viewmodel
+                }
             }
         case is discoverWorkout:
+            self.completeButton.isHidden = true
+            self.completeButtonBottomConstraint.constant = 50
             if !selectedWorkout.liveWorkout {
-                let bv = DiscoverWorkoutBottomView(workout: selectedWorkout, parent: self.view)
-                bv.bottomViewSetUpClosure = { [weak self] () in
-                    //add to saved workouts
-                    self?.viewModel.addToSavedWorkouts()
-                    print("adding to saved workouts")
+                if !(selectedWorkout.creatorID == viewModel.userId){
+                    viewModel.addAView(to: selectedWorkout as! discoverWorkout)
+                    let bv = DiscoverWorkoutBottomView(workout: selectedWorkout, parent: self.view)
+                    bv.bottomViewSetUpClosure = { [weak self] () in
+                        //add to saved workouts
+                        self?.viewModel.addToSavedWorkouts()
+                    }
+                } else {
+                    let bv = YourWorkoutBottomView(parent: self.view)
+                    self.view.addSubview(bv)
                 }
             }
             
         case is workout:
+            let s = selectedWorkout as! workout
             if selectedWorkout.completed{
+                self.completeButton.isHidden = true
+                self.completeButtonBottomConstraint.constant = 50
+                // no view
+            }else if s.startTime != nil {
+                self.completeButton.isHidden = false
+                self.completeButtonBottomConstraint.constant = 0
                 // no view
             }else{
-                let bv = MainWorkoutBottomView(workout: selectedWorkout, parent: self.view)
-                self.view.addSubview(bv)
-                bv.bottomViewSetUpClosure = { [weak self] () in
-                    self?.tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-                    print("loaded and ready to go")
-                    self?.viewModel.startTheWorkout()
+                self.completeButton.isHidden = false
+                self.completeButtonBottomConstraint.constant = 0
+                if !ViewController.admin{
+                    let bv = MainWorkoutBottomView(workout: selectedWorkout, parent: self.view)
+                    self.view.addSubview(bv)
+                    bv.bottomViewSetUpClosure = { [weak self] () in
+                        self?.viewModel.startTheWorkout()
+                    }
                 }
             }
         default:
-            print("there is no need for any views")
+            break
         }
     }
     
@@ -125,8 +151,50 @@ class DisplayWorkoutViewController: UIViewController {
             
         }
         
+        // called when workout started
+        viewModel.workoutReadyToStartClosure = { [weak self] () in
+            DispatchQueue.main.async {
+                self?.tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+                self?.tableview.reloadData()
+            }
+        }
+        
         viewModel.setup()
         
+    }
+    
+    @IBAction func completedTapped(_ sender:UIButton){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let completedVC = storyboard.instantiateViewController(withIdentifier: "WorkoutCompletedViewController") as! WorkoutCompletedViewController
+        completedVC.workout = self.selectedWorkout as? workout
+        var scores : [Int] = []
+        for exercise in selectedWorkout.exercises!{
+            if let RPEscore = exercise.rpe {
+                scores.append(Int(RPEscore)!)
+            }
+        }
+        let total = scores.reduce(0, +)
+        let average = Double(total) / Double(scores.count)
+        let rounded = round(average * 10)/10
+        completedVC.averageRPE = rounded
+        let endTime = Date.timeIntervalSinceReferenceDate
+        let startTime = (selectedWorkout as? workout)!.startTime
+        let completionTimeSeconds = Int(endTime) - Int(startTime!)
+        completedVC.secondsToComplete = completionTimeSeconds
+        completedVC.endTime = endTime
+        let formatter = DateComponentsFormatter()
+        
+        if completionTimeSeconds > 3600{
+            formatter.allowedUnits = [.hour, .minute]
+            formatter.unitsStyle = .abbreviated
+        }else{
+            formatter.allowedUnits = [.minute, .second]
+            formatter.unitsStyle = .abbreviated
+        }
+        
+        let timeString = formatter.string(from: TimeInterval(completionTimeSeconds))
+        completedVC.timeString = timeString
+        self.navigationController?.pushViewController(completedVC, animated: true)
     }
     
     func showError(){
@@ -167,7 +235,7 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
     }
     
     func returnInteractionEnbabled() -> Bool {
-        switch selectedWorkout {
+        switch viewModel.selectedWorkout {
         case is publicSavedWorkout:
             return false
         case is privateSavedWorkout:
@@ -178,7 +246,7 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
             return false
         case is workout:
             let s = selectedWorkout as! workout
-            if selectedWorkout.completed {
+            if s.completed {
                 return false
             }else if s.startTime != nil{
                 return true
@@ -189,6 +257,7 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
             return false
         }
     }
+    
     
     func returnAlreadySaved(saved: Bool) {
         switch saved {
@@ -221,16 +290,9 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
                 let colourIndex = Int(rpe.text!)!-1
                 sender.setTitle("\(rpe.text!)", for: .normal)
                 self.viewModel.updateRPE(at: index!, with: Int(rpe.text!)!)
-                //WorkoutDetailViewController.exercises[index.section]["rpe"] = rpe.text as AnyObject?
-                //print(WorkoutDetailViewController.exercises[index.section])
-                //self.DBRef.child(self.workoutID).updateChildValues(["exercises" : WorkoutDetailViewController.exercises])
-                //let cellIndex = IndexPath.init(row: 0, section: index.section)
-                //let row = self.tableview.cellForRow(at: index!)
                 UIView.animate(withDuration: 0.5) {
                     tableviewcell.backgroundColor = self.colors[colourIndex]
                     collection.backgroundColor = self.colors[colourIndex]
-                    
-                    //sender.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
                     sender.setTitleColor(self.colors[colourIndex], for: .normal)
                 } completion: { (_) in
                     UIView.animate(withDuration: 0.5) {
@@ -250,8 +312,6 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
             
         }
         alert.showSuccess("RPE", subTitle: "Enter rpe for exercise title!!!",closeButtonTitle: "cancel")
-        
-        // add call to viewmodel function to update database
     }
     
     
@@ -289,12 +349,13 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
         
         
         sender.setImage(UIImage(named: "tickRing"), for: .normal)
+        sender.isUserInteractionEnabled = false
         
         UIView.animate(withDuration: 0.5) {
             cell.backgroundColor = UIColor.green
         } completion: { (_) in
             UIView.animate(withDuration: 0.5) {
-                cell.backgroundColor = Constants.lightColour
+                cell.backgroundColor = Constants.darkColour
             } completion: { (_) in
                 let collection = cell.superview as! UICollectionView
                 let lastindextoscroll = collection.numberOfItems(inSection: 0) - 1

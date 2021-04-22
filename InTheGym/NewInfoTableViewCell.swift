@@ -14,6 +14,7 @@ class NewInfoTableViewCell: UITableViewCell {
     @IBOutlet weak var ALabel:UILabel!
     
     @IBOutlet var pic:UIImageView!
+    
 
     override func awakeFromNib() {
         super.awakeFromNib()

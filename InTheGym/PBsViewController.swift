@@ -27,6 +27,7 @@ class PBsViewController: UIViewController {
     var username:String = ""
     var DBRef : DatabaseReference!
     var ActRef : DatabaseReference!
+    var handle:DatabaseHandle!
     
     //reference to leaderboard
     var LeaderRef:DatabaseReference!
@@ -93,24 +94,8 @@ class PBsViewController: UIViewController {
     
     
     func uploadActivity(){
-        let actData = ["time":ServerValue.timestamp(),
-                       "type":"Update PBs",
-                       "message":"You updated your PB scores.",
-                       "isPrivate" : true] as [String:AnyObject]
-        ActRef.child("Activities").child(userID!).childByAutoId().setValue(actData)
-        
         // adding to posts and timeline
-        let postSelfReferences = Database.database().reference().child("PostSelfReferences").child(self.userID!)
-        let postRef = Database.database().reference().child("Posts").childByAutoId()
-        let postKey = postRef.key
-        let timeLineRef = Database.database().reference().child("Timeline")
-        
-        
-        postRef.setValue(actData)
-        postSelfReferences.child(postKey!).setValue(true)
-        timeLineRef.child(userID!).child(postKey!).setValue(true)
-        
-        
+        FirebaseAPI.shared().uploadActivity(with: .UpdatePBs)
         
         // added for new feature
         // adding to public feed of coach
@@ -124,15 +109,8 @@ class PBsViewController: UIViewController {
         
         if ViewController.admin == false && coaches.count != 0{
             // using coach userid to add to public feed instead of username
-            
-            let coachPostRef = Database.database().reference().child("Posts").childByAutoId()
-            let coachPostKey = coachPostRef.key
-            coachPostRef.setValue(actDataPublic)
-            
             for coach in coaches{
                 self.ActRef.child("Public Feed").child(coach).childByAutoId().setValue(actDataPublic)
-                timeLineRef.child(coach).child(coachPostKey!).setValue(true)
-                    
             }
         }
         
@@ -153,7 +131,7 @@ class PBsViewController: UIViewController {
         if ViewController.admin == false{
             
             ActRef.child("PlayerCoaches").child(userID!)
-            ActRef.observe(.childAdded) { (snapshot) in
+            handle = ActRef.observe(.childAdded) { (snapshot) in
                 self.coaches.append(snapshot.key)
             }
         }
@@ -185,5 +163,11 @@ class PBsViewController: UIViewController {
         let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        if !ViewController.admin{
+            ActRef.removeObserver(withHandle: handle)
+        }
     }
 }

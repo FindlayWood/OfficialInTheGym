@@ -10,21 +10,12 @@ import UIKit
 import Firebase
 
 class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
-    
-    // variable to hold the user id of the coach
-    var adminKey:String = ""
     
     // number of added players
     var playerCount:Int!
     
-    // varibale to hold the username.
-    // MARK: hard coding the username to test new page. Will need to change
-    var username:String = ""
-    
     // outlets to view
     @IBOutlet weak var tableview:UITableView!
-    @IBOutlet weak var nameLabel:UILabel!
     
     // array of tableview contents
     var tableContents = ["Workout Scores", "Settings"]
@@ -49,7 +40,7 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.tableview.tableFooterView = UIView()
         
-        self.username = ViewController.username
+        self.navigationItem.title = "MORE"
 
         
     }
@@ -77,12 +68,9 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                 
                 
                 
-                self.DBRef.child("users").child(userID!).observe(.value) { (snapshot) in
+                self.DBRef.child("users").child(userID!).observeSingleEvent(of: .value) { (snapshot) in
                             if let snap = snapshot.value as? [String:Any]{
-                                let first = snap["firstName"] as? String ?? "FIRST"
-                                let last = snap["lastName"] as? String ?? "LAST"
-                                self.nameLabel.text = "\(first) \(last)"
-                                self.tabA.append(self.username)
+                                self.tabA.append(ViewController.username)
                                 let email = snap["email"] as? String
                                 self.tabA.append(email!)
                                 let numberOfWorkouts = snap["NumberOfWorkouts"] as? Int
@@ -98,7 +86,7 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                                             case 1:
                                                 cell.pic.image = UIImage(named: "name_icon")
                                                 cell.QLabel.text = "Username:"
-                                                cell.ALabel.text = self.username
+                                                cell.ALabel.text = ViewController.username
                                             case 2:
                                                 cell.pic.image = UIImage(named: "email2_icon")
                                                 cell.QLabel.text = "Email:"
@@ -136,17 +124,18 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                     cell.QLabel.text = tableContents[indexPath.row]
                     cell.ALabel.text = ""
                 default:
-                    print("ouch")
+                    break
                 }
             }
-            
-            
-            
             return cell
         }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
+        if section == 1 {
+            return 20
+        } else {
+            return 0
+        }
     }
     
 
@@ -163,31 +152,18 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
                 navigationController?.pushViewController(SVC, animated: true)
             default:
-                print("ouch")
+                break
             }
         }
     }
     
-    
-    func loadInfo(){
-        DBRef.child("users").child(userID!).observe(.value) { (snapshot) in
-            if let snap = snapshot.value as? [String:AnyObject]{
-                let first = snap["firstName"] as? String ?? "First"
-                let last = snap["lastName"] as? String ?? "Last"
-                self.nameLabel.text = "\(first) \(last)"
-            }
-        }
-    }
     
     func loadNumberOfUsers(){
-        DBRef.child("users").child(userID!).child("players").child("accepted").observe(.childAdded) { (snapshot) in
-            if let snap = snapshot.value as? String{
-                self.players.append(snap)
-            }
-        }
-        
-        DBRef.child("users").child(userID!).child("players").child("accepted").observeSingleEvent(of: .value) { (snapshot) in
-            self.playerCount = self.players.count
+        let playerCountRef = Database.database().reference().child("CoachPlayers").child(userID!)
+        playerCountRef.observeSingleEvent(of: .value) { (snapshot) in
+            let playerCount = snapshot.childrenCount
+            self.playerCount = Int(playerCount)
+            self.tableview.reloadData()
         }
     }
     
@@ -195,7 +171,6 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     
 
     override func viewWillAppear(_ animated: Bool) {
-        loadInfo()
         loadNumberOfUsers()
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]

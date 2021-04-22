@@ -35,6 +35,15 @@ class TimelinePostModel: PostProtocol {
         self.time = snap["time"] as? TimeInterval
     }
     
+    init?(object : [String:AnyObject]){
+        self.username = object["username"] as? String
+        self.posterID = object["posterID"] as? String
+        self.time = object["time"] as? TimeInterval
+        self.message = object["message"] as? String
+        self.isPrivate = object["isPrivate"] as? Bool
+        self.postID = object["postID"] as? String
+    }
+    
     func toObject() -> [String : AnyObject] {
         var object:[String:AnyObject] = [:]
         object = ["username":username!,

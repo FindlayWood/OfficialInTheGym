@@ -15,19 +15,22 @@ struct NotificationFollowed: NotificationDelegate {
     var toUserID:String?
     var type:NotificationType?
     var postID:String?
+    var seen :Bool?
     
     init(from:String,to:String){
         self.fromUserID = from
         self.toUserID = to
         self.type = .Followed
         self.postID = nil
+        self.seen = false
     }
 
     func toObject() -> [String:AnyObject]{
         let object = ["fromUserID":fromUserID!,
                       "toUserID":toUserID!,
                       "type":"Followed",
-                      "time":ServerValue.timestamp()] as [String:AnyObject]
+                      "time":ServerValue.timestamp(),
+                      "seen":false] as [String:AnyObject]
         return object
     }
 

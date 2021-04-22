@@ -21,15 +21,8 @@ class MYSCORESViewController: UIViewController {
     var scores:[Int] = []
     var counter:[String:Int] = [:]
     
-    var DBRef:DatabaseReference!
     var ScoreRef:DatabaseReference!
-    
-    
-    // array of coaches, atm just array of strings
-    var coaches = [String]()
-    
-    // array of all coach data
-    var coachFullData :[[String:Any]] = []
+    var handle:DatabaseHandle!
     
     let userID = Auth.auth().currentUser?.uid
     
@@ -38,45 +31,14 @@ class MYSCORESViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        DBRef = Database.database().reference()
         ScoreRef = Database.database().reference().child("Scores").child(username!)
         
         pieChart.legend.enabled = false
-        
-
-        // Do any additional setup after loading the view.
-    }
-    
-    func loadCoaches(){
-        coaches.removeAll()
-        coachFullData.removeAll()
-        DBRef.child("users").child(userID!).child("coaches").observe(.childAdded) { (snapshot) in
-            if let snap = snapshot.value as? String{
-                self.coaches.append(snap)
-                self.DBRef.child("users").child(snap).observe(.value) { (snapshot) in
-                    if let snap = snapshot.value as? [String:Any]{
-                        let username = snap["username"] as? String
-                        let email = snap["email"] as? String
-                        let first = snap["firstName"] as? String
-                        let last = snap["lastName"] as? String
-                        let coachData = ["name": first! + " " + last!,
-                                         "username": username!,
-                                         "email": email!
-                        ]
-                        self.coachFullData.append(coachData)
-                        //self.tableview.reloadData()
-                    }
-                }
-                //self.loadScores()
-                
-            }
-//            self.loadScores()
-        }
     }
     
     func loadScores(){
         score.removeAll()
-        self.ScoreRef.observe(.childAdded, with: { (snapshot) in
+        handle = ScoreRef.observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
                 self.score.append(snap)
                 self.calcValues()
@@ -176,12 +138,13 @@ class MYSCORESViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        loadCoaches()
-        //loadUserInfo()
-        //requests()
         loadScores()
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        ScoreRef.removeObserver(withHandle: handle)
     }
 
 

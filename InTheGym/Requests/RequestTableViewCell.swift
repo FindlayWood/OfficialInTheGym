@@ -18,15 +18,14 @@ class RequestTableViewCell: UITableViewCell {
     
     var delegate:buttonTapsRequestDelegate!
     
-    var user : Users? {
-        didSet{
-            self.name.text = user!.username
-            if let purl = user!.profilePhotoURL{
-                ImageAPIService.shared.getImage(with: purl) { (image) in
-                    if image != nil {
-                        self.profileImage.setImage(image, for: .normal)
-                    }
-                }
+    var user : Users!
+
+    func setup(with user:Users){
+        self.name.text = user.username
+        self.user = user
+        ImageAPIService.shared.getProfileImage(for: user.uid!) { (image) in
+            if let image = image {
+                self.profileImage.setImage(image, for: .normal)
             }
         }
     }

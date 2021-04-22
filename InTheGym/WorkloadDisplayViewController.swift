@@ -74,6 +74,7 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
     
     // database reference
     var DBRef : DatabaseReference!
+    var handle : DatabaseHandle!
     
     // arrays to populate the linechart
     var workoutLoad = [Int]()
@@ -153,7 +154,7 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
         
         var initialLoad = true
         
-        DBRef.observe(.childAdded, with: { (snapshot) in
+        handle = DBRef.observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String: AnyObject]{
                 let time = snap["endTime"] as! TimeInterval
                 let endDate = Date(timeIntervalSinceReferenceDate: time)
@@ -320,6 +321,10 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
         let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.darkColour]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = Constants.darkColour
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        DBRef.removeObserver(withHandle: handle)
     }
 
 }

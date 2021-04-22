@@ -24,6 +24,8 @@ class EditProfileViewController: UIViewController {
     
     var theImageToUpload:UIImage?
     
+    var delegate : MyProfileProtocol!
+    
     var photoChanged:Bool = false{
         didSet{
             if photoChanged{
@@ -95,8 +97,17 @@ class EditProfileViewController: UIViewController {
         if bioChanged{
             let bioText = profileBIO.text!
             self.DBRef.updateChildValues(["profileBio" : bioText])
-            DisplayTopView.displayTopView(with: "Updated Profile", on: self)
-            self.bioChanged = false
+            self.DBRef.updateChildValues(["profileBio" : bioText]) { (error, snapshot) in
+                if let error = error {
+                    DisplayTopView.displayTopView(with: "Error. Try Again.", on: self)
+                    print(error.localizedDescription)
+                } else {
+                    DisplayTopView.displayTopView(with: "Updated Profile", on: self)
+                    self.bioChanged = false
+                    self.delegate.changedBio(to: bioText)
+                }
+            }
+
         }
         if photoChanged{
             
@@ -113,15 +124,24 @@ class EditProfileViewController: UIViewController {
             storageProfileRef.putData(imageData, metadata: metaData) { (storage, error) in
                 if error != nil{
                     print(error?.localizedDescription as Any)
+                    DisplayTopView.displayTopView(with: "Error. Try Again", on: self)
                     return
                 }
                 
                 storageProfileRef.downloadURL { (url, error) in
                     if let metaImageURL = url?.absoluteString{
-                        print(metaImageURL)
-                        self.DBRef.updateChildValues(["profilePhotoURL": metaImageURL])
-                        DisplayTopView.displayTopView(with: "Updated Profile Photo", on: self)
-                        self.photoChanged = false
+                        self.DBRef.updateChildValues(["profilePhotoURL": metaImageURL]) { (error, snapshot) in
+                            if let error = error {
+                                DisplayTopView.displayTopView(with: "Error. Try again.", on: self)
+                                print(error.localizedDescription)
+                            } else {
+                                DisplayTopView.displayTopView(with: "Updated Profile Photo", on: self)
+                                ImageAPIService.shared.profileImageCache.removeObject(forKey: self.userID! as NSString)
+                                ImageAPIService.shared.profileImageCache.setObject(self.theImageToUpload!, forKey: self.userID! as NSString)
+                                self.photoChanged = false
+                                self.delegate.changedProfilePhoto(to: self.theImageToUpload!)
+                            }
+                        }
                     }
                 }
                 

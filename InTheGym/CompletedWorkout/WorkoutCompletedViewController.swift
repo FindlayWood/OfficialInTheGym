@@ -14,16 +14,22 @@ class WorkoutCompletedViewController: UIViewController {
     @IBOutlet weak var collection:UICollectionView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     
+    @IBOutlet weak var collectionHeight: NSLayoutConstraint!
+    
     @IBOutlet weak var workoutRPE:UITextField!
+    
+    let haptic = UINotificationFeedbackGenerator()
     
     var workout : workout!
     
-    var secondsToComplete : Int = 3400
-    var timeString : String = "56m 32s"
+    var secondsToComplete : Int!
+    var timeString : String!
+    var endTime : Double!
     
-    var averageRPE : Double = 8.2
+    var averageRPE : Double!
     
     var isPrivateVar : Bool = false
+    var postToTimeline : Bool = true
     
     var adapter : WorkoutCompletedAdapter!
     
@@ -51,6 +57,8 @@ class WorkoutCompletedViewController: UIViewController {
 
         collection.collectionViewLayout = layout
         
+        haptic.prepare()
+        
         initUI()
         initViewModel()
 
@@ -69,6 +77,7 @@ class WorkoutCompletedViewController: UIViewController {
         self.workoutRPE.layer.cornerRadius = 10
         self.workoutRPE.layer.borderColor = UIColor.black.cgColor
         self.workoutRPE.layer.masksToBounds = true
+        self.workoutRPE.tintColor = .white
     }
     
     func initViewModel(){
@@ -113,13 +122,17 @@ class WorkoutCompletedViewController: UIViewController {
         } else if Int(workoutRPE.text!)! > 10 || Int(workoutRPE.text!)! < 1{
             showError()
         } else {
+            workoutRPE.resignFirstResponder()
+            workoutRPE.resignFirstResponder()
+            haptic.notificationOccurred(.success)
             let rpeInt : Int = Int(workoutRPE.text!)!
             let workload : Int = (secondsToComplete/60) * rpeInt
             workout.score = rpeInt
             workout.timeToComplete = timeString
             workout.workload = workload
+            workout.completed = true
             
-            if workout.fromDicover! {
+            if workout.fromDiscover! {
                 // update discover stats
                 viewModel.updateDiscoverStats(for: workout, with: rpeInt, and: self.secondsToComplete)
             }
@@ -135,24 +148,31 @@ class WorkoutCompletedViewController: UIViewController {
                 viewModel.updateDiscoverStats(for: workout, with: rpeInt, and: self.secondsToComplete)
             }
 
+            if self.postToTimeline {
+                // post to timeline if user allows
+                viewModel.uploadPost(with: workout, privacy: isPrivateVar)
+            }
+
             viewModel.uploadActivityToCoaches(for: workout, with: rpeInt)
             viewModel.updateNumberOfCompletes()
             viewModel.updateSelfScores(for: workout, with: rpeInt)
-            viewModel.updateWorkload(with: workout, workload: workload)
-            viewModel.uploadPost(with: workout, privacy: isPrivateVar)
+            viewModel.updateWorkload(with: workout, workload: workload, endTime: endTime)
             viewModel.completeWorkout(for: workout, with: secondsToComplete)
             self.uploadedView()
         }
     }
     
     func changePrivacy(){
-        switch isPrivateVar {
-        case true:
-            self.isPrivateVar = false
-        case false:
-            self.isPrivateVar = true
-        }
+        self.isPrivateVar.toggle()
         self.collection.reloadItems(at: [IndexPath(item: 2, section: 0)])
+    }
+    func changePosting(){
+        switch postToTimeline {
+        case true:
+            self.collectionHeight.constant = 360
+        case false:
+            self.collectionHeight.constant = 240
+        }
     }
     
     func uploadedView(){
@@ -186,10 +206,19 @@ extension WorkoutCompletedViewController : WorkoutCompletedProtocol {
     func isPrivate() -> Bool {
         return isPrivateVar
     }
+    func isPosting() -> Bool {
+        return postToTimeline
+    }
     
     func itemSelected(at indexPath: IndexPath) {
+        if indexPath.item == 3 {
+            self.isPrivateVar.toggle()
+            self.collection.reloadItems(at: [indexPath])
+        }
         if indexPath.item == 2 {
-            self.changePrivacy()
+            self.postToTimeline.toggle()
+            self.collection.reloadItems(at: [indexPath])
+            self.changePosting()
         }
     }
     

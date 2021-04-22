@@ -34,7 +34,6 @@ class TimelineActivityTableViewCell: UITableViewCell, CellConfiguarable {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        //self.activityImage.layer.cornerRadius = self.activityImage.bounds.width / 2
         self.selectionStyle = .none
     }
 

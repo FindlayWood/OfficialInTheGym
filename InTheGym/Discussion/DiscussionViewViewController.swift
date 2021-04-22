@@ -13,8 +13,12 @@ class DiscussionViewViewController: UIViewController {
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     
+    
     var isGroup : Bool!
     var groupID : String!
+    
+    // pull to refresh the data on the screen
+    var refreshControl : UIRefreshControl!
     
     var adapter : DiscussionAdapter!
     
@@ -37,17 +41,28 @@ class DiscussionViewViewController: UIViewController {
         tableview.register(UINib(nibName: "OriginalCompletedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "OriginalCompletedWorkoutTableViewCell")
         tableview.register(UINib(nibName: "ReplyTableViewCell", bundle: nil), forCellReuseIdentifier: "ReplyTableViewCell")
         tableview.tableFooterView = UIView()
+        tableview.separatorStyle = .none
         
-        initViewModel()
+        //initViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if isMovingToParent{
+            initViewModel()
+        }
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = Constants.lightColour
         navigationItem.title = "\(originalPost.username!)'s post"
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if isMovingFromParent{
+            viewModel.removeObserver()
+        }
+    }
+    
     
     func initViewModel(){
         
@@ -81,7 +96,7 @@ class DiscussionViewViewController: UIViewController {
 
 }
 
-extension DiscussionViewViewController: DiscussionProtocol, DiscussionTapProtocol{
+extension DiscussionViewViewController: DiscussionProtocol{
     func getOriginalPost() -> PostProtocol {
         return originalPost
     }
@@ -95,12 +110,20 @@ extension DiscussionViewViewController: DiscussionProtocol, DiscussionTapProtoco
     }
     
     func retreiveNumberOfSections() -> Int {
-        return 1
+        return 2
     }
     
     func itemSelected(at: IndexPath) {
         
     }
+    
+    func replyPosted() {
+        self.originalPost.replyCount = (self.originalPost.replyCount ?? 0) + 1
+        self.tableview.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+        //self.viewModel.fetchData()
+    }
+}
+extension DiscussionViewViewController: DiscussionTapProtocol {
     
     func workoutTapped(on cell: UITableViewCell) {
         var workoutData : discoverWorkout!
@@ -143,16 +166,20 @@ extension DiscussionViewViewController: DiscussionProtocol, DiscussionTapProtoco
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let publicTimeline = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
         let index = self.tableview.indexPath(for: cell)!
-        if index.row == 0{
-            UserIDToUser.transform(userID: originalPost.posterID!) { (user) in
-                publicTimeline.user = user
-                self.navigationController?.pushViewController(publicTimeline, animated: true)
+        if index.section == 0{
+            if originalPost.posterID! != viewModel.userID {
+                UserIDToUser.transform(userID: originalPost.posterID!) { (user) in
+                    publicTimeline.user = user
+                    self.navigationController?.pushViewController(publicTimeline, animated: true)
+                }
             }
-        }else{
+        } else {
             let posterID = viewModel.getData(at: index).posterID
-            UserIDToUser.transform(userID: posterID!) { (user) in
-                publicTimeline.user = user
-                self.navigationController?.pushViewController(publicTimeline, animated: true)
+            if posterID != viewModel.userID {
+                UserIDToUser.transform(userID: posterID!) { (user) in
+                    publicTimeline.user = user
+                    self.navigationController?.pushViewController(publicTimeline, animated: true)
+                }
             }
         }
     }
@@ -169,6 +196,7 @@ extension DiscussionViewViewController: DiscussionProtocol, DiscussionTapProtoco
         }
         replyVC.postID = originalPost.postID
         replyVC.posterID = originalPost.posterID
+        replyVC.delegate = self
         replyVC.modalTransitionStyle = .coverVertical
         replyVC.modalPresentationStyle = .formSheet
         self.present(replyVC, animated: true, completion: nil)

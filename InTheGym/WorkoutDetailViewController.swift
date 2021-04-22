@@ -196,7 +196,7 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 }
                 completedPage.timeString = timeString!
                 completedPage.secondsToComplete = timeToComplete
-                
+                completedPage.endTime = endTime
                 
                 self.navigationController?.pushViewController(completedPage, animated: true)
 

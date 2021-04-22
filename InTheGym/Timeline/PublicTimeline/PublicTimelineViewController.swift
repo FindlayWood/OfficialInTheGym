@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import EmptyDataSet_Swift
 
 class PublicTimelineViewController: UIViewController {
 
@@ -25,6 +26,8 @@ class PublicTimelineViewController: UIViewController {
     
     @IBOutlet weak var followStackView:UIStackView!
     
+    var refreshControl : UIRefreshControl!
+    let selection = UISelectionFeedbackGenerator()
     
     var adapter : PublicTimelineAdapter!
     
@@ -48,20 +51,40 @@ class PublicTimelineViewController: UIViewController {
         tableview.register(UINib(nibName: "TimelineCompletedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCompletedTableViewCell")
         tableview.register(UINib(nibName: "TimelineActivityTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineActivityTableViewCell")
         tableview.tableFooterView = UIView()
+        tableview.backgroundColor = Constants.darkColour
+        tableview.emptyDataSetSource = adapter
+        tableview.emptyDataSetDelegate = adapter
+        tableview.separatorInset = .zero
+        tableview.layoutMargins = .zero
         self.profileImage.alpha = 0.0
         
-        initViewModel()
         initUI()
+        initRefreshControl()
 
         self.topViewIndicator.hidesWhenStopped = true
+        
+        selection.prepare()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if isMovingToParent{
+            initViewModel()
+        }
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = Constants.lightColour
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        if isMovingFromParent{
+            viewModel.removeObservers()
+        }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        self.profileImage.layer.cornerRadius = self.profileImage.bounds.width / 2
     }
     
     func initUI(){
@@ -76,7 +99,6 @@ class PublicTimelineViewController: UIViewController {
             self.accountType.setImage(UIImage(named: "player_icon"), for: .normal)
             self.accountTypeLabel.text = "Player"
         }
-        self.profileImage.layer.cornerRadius = self.profileImage.bounds.width / 2
         if let purl = user.profilePhotoURL{
             ImageAPIService.shared.getImage(with: purl) { (image) in
                 if image != nil {
@@ -101,6 +123,9 @@ class PublicTimelineViewController: UIViewController {
         viewModel.reloadTableViewClosure = { [weak self] () in
             DispatchQueue.main.async {
                 self?.tableview.reloadData()
+                if self!.tableview.refreshControl!.isRefreshing{
+                    self?.tableview.refreshControl?.endRefreshing()
+                }
             }
         }
         
@@ -109,10 +134,12 @@ class PublicTimelineViewController: UIViewController {
             DispatchQueue.main.async {
                 let isLoading = self?.viewModel.isLoading ?? false
                 if isLoading {
-                    self?.activityIndicator.startAnimating()
-                    UIView.animate(withDuration: 0.2, animations: {
-                        self?.tableview.alpha = 0.0
-                    })
+                    if !self!.tableview.refreshControl!.isRefreshing{
+                        self?.activityIndicator.startAnimating()
+                        UIView.animate(withDuration: 0.2, animations: {
+                            self?.tableview.alpha = 0.0
+                        })
+                    }
                 } else {
                     self?.activityIndicator.stopAnimating()
                     UIView.animate(withDuration: 0.2, animations: {
@@ -143,8 +170,36 @@ class PublicTimelineViewController: UIViewController {
         viewModel.isFollowing()
     }
     
+    func initRefreshControl(){
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .white
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        self.tableview.refreshControl = refreshControl
+    }
+    
+    @objc func handleRefresh(){
+        viewModel.followerCount()
+        viewModel.isFollowing()
+    }
+    
     @IBAction func follow(_ sender:UIButton){
-        viewModel.follow()
+        sender.backgroundColor = .lightGray
+        sender.setTitle("Following", for: .normal)
+        sender.isUserInteractionEnabled = false
+        selection.selectionChanged()
+        viewModel.follow { [weak self] (result) in
+            switch result{
+            case .success(_):
+                self?.viewModel.followerCount()
+                self?.viewModel.isFollowing()
+            case .failure(let error):
+                print(error.localizedDescription)
+                sender.isUserInteractionEnabled = true
+                sender.backgroundColor = Constants.lightColour
+                sender.setTitle("Follow", for: .normal)
+                DisplayTopView.displayTopView(with: "Try Again", on: self!)
+            }
+        }
     }
 
 }
@@ -194,6 +249,10 @@ extension PublicTimelineViewController: PublicTimelineProtocol, TimelineTapProto
             self.followButton.setTitle("Following", for: .normal)
             self.followButton.backgroundColor = .lightGray
             self.followButton.isUserInteractionEnabled = false
+        } else {
+            self.followButton.setTitle("Follow", for: .normal)
+            self.followButton.backgroundColor = Constants.lightColour
+            self.followButton.isUserInteractionEnabled = true
         }
     }
     
@@ -224,20 +283,33 @@ extension PublicTimelineViewController: PublicTimelineProtocol, TimelineTapProto
     func likeButtonTapped(on cell: UITableViewCell, sender: UIButton, label: UILabel) {
         let index = self.tableview.indexPath(for: cell)!
         let post = viewModel.getData(at: index)
-        viewModel.likePost(on: post)
-        let likeCount = Int(label.text!)! + 1
-        label.text = likeCount.description
-        if #available(iOS 13.0, *) {
-            UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
-                sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        
+        
+        viewModel.isLiked(on: post.postID!) { (result) in
+            switch result {
+            
+            case .success(let liked):
+                if !liked {
+                    // here is where we like the post
+                    print("post is not liked - like it now")
+                    self.viewModel.likePost(on: post, with: index)
+                    let likeCount = Int(label.text!)! + 1
+                    label.text = likeCount.description
+                    if #available(iOS 13.0, *) {
+                        UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
+                            sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+                        }
+                    } else {
+                        // Fallback on earlier versions
+                        print("needs fixing")
+                    }
+                    self.selection.selectionChanged()
+                }
+                
+            case .failure(let error):
+                print(error.localizedDescription)
             }
-        } else {
-            // Fallback on earlier versions
-            print("needs fixing")
         }
-        let selection = UISelectionFeedbackGenerator()
-        selection.prepare()
-        selection.selectionChanged()
     }
     
     func userTapped(on cell: UITableViewCell) {

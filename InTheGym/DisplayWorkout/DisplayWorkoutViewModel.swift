@@ -21,6 +21,7 @@ class DisplayWorkoutViewModel: NSObject{
     var reloadTableViewClosure: (() -> ())?
     var updateLoadingStatusClosure: (() -> ())?
     var bottomViewSetUpClosure: (() -> ())?
+    var workoutReadyToStartClosure: (() ->())?
     
     let userId = Auth.auth().currentUser?.uid
     let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
@@ -65,26 +66,43 @@ class DisplayWorkoutViewModel: NSObject{
     }
     
     func isLive() -> Bool {
-        
-        return selectedWorkout!.liveWorkout ?? false
+        if selectedWorkout?.liveWorkout ?? false && !(selectedWorkout?.completed ?? false) {
+            return true
+        } else {
+            return false
+        }
     }
     
     func updateCompletedSet(at indexPath: IndexPath){
         // must update database
+        let ref = Database.database().reference().child("Workouts").child(self.userId!).child((selectedWorkout?.workoutID!)!).child("exercises").child("\(indexPath.section)").child("completedSets")
         self.selectedWorkout?.exercises![indexPath.section].completedSets![indexPath.item] = true
-        
+        ref.child("\(indexPath.item)").setValue(true)
     }
     
     func updateRPE(at indexPath: IndexPath, with rpe:Int){
         // update database
         // update model selected workout
-        self.selectedWorkout?.exercises![indexPath.section].rpe = rpe
+        self.selectedWorkout?.exercises![indexPath.section].rpe = rpe.description
+        let ref = Database.database().reference().child("Workouts").child(self.userId!).child((selectedWorkout?.workoutID!)!).child("exercises").child("\(indexPath.section)")
+        ref.child("rpe").setValue(rpe.description)
     }
     
     // MARK: - Setup functions
     
     func startTheWorkout(){
         // start the workout, add starttime, update database with starttime,
+        let s = selectedWorkout as! workout
+        s.startTime = Date.timeIntervalSinceReferenceDate
+        let ref = Database.database().reference().child("Workouts").child(self.userId!).child(selectedWorkout!.workoutID!)
+        ref.child("startTime").setValue(Date.timeIntervalSinceReferenceDate) { (error, snapshot) in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                // tell delegate that we are ready to start workout
+                self.workoutReadyToStartClosure?()
+            }
+        }
         
     }
     
@@ -112,8 +130,25 @@ class DisplayWorkoutViewModel: NSObject{
         workoutRef.setValue(selectedWorkout?.toObject())
         notificationFeedbackGenerator.prepare()
         notificationFeedbackGenerator.notificationOccurred(.success)
+    }
     
-        
+    func addAView(to workout:discoverWorkout){
+        let ref = Database.database().reference().child("SavedWorkouts").child(workout.savedID)
+        ref.runTransactionBlock { (currentData) -> TransactionResult in
+            if var workout = currentData.value as? [String:AnyObject]{
+                var views = workout["Views"] as? Int ?? 0
+                views += 1
+                workout["Views"] = views as AnyObject
+                currentData.value = workout
+                return TransactionResult.success(withValue: currentData)
+            }
+            return TransactionResult.success(withValue: currentData)
+        } andCompletionBlock: { (error, committed, snapshot) in
+            if let error = error{
+                print(error.localizedDescription)
+            }
+        }
+
     }
     
 }

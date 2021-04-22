@@ -18,6 +18,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     
     var workouts:[[String:AnyObject]] = []
     var DBref:DatabaseReference!
+    var handle:DatabaseHandle!
     var UsernameRef:DatabaseReference!
     var username:String = ""
     
@@ -84,7 +85,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         self.inProgressIDs.removeAll()
         self.notStartedWorkouts.removeAll()
         self.notStartedIDs.removeAll()
-        DBref.observe(.childAdded, with: { (snapshot) in
+        handle = DBref.observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
                 
                 self.workouts.insert(snap, at: 0)
@@ -237,38 +238,52 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         let titleLabel = self.rowsToDisplay[indexPath.section]["title"] as! String
         let complete = self.rowsToDisplay[indexPath.section]["completed"] as! Bool
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-        let SVC = StoryBoard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
-        SVC.username = ViewController.username
-        SVC.playerID = self.userID!
-        SVC.titleString = titleLabel
-        WorkoutDetailViewController.exercises = self.rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
-        SVC.complete = complete
-        SVC.workoutID = rowsToDisplayIDs[indexPath.section]
-        SVC.fromDiscover = false
-        SVC.savedID = rowsToDisplay[indexPath.section]["savedID"] as? String ?? ""
-        SVC.creatorUsername = rowsToDisplay[indexPath.section]["createdBy"] as! String
-        if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
-            SVC.assignedCoach = assignedCoach
-        }else{
-            SVC.assignedCoach = ""
+//        let SVC = StoryBoard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
+//        SVC.username = ViewController.username
+//        SVC.playerID = self.userID!
+//        SVC.titleString = titleLabel
+//        WorkoutDetailViewController.exercises = self.rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
+//        SVC.complete = complete
+//        SVC.workoutID = rowsToDisplayIDs[indexPath.section]
+//        SVC.fromDiscover = false
+//        SVC.creatorID = rowsToDisplay[indexPath.section]["creatorID"] as! String
+//
+//        if let savedID = rowsToDisplay[indexPath.section]["savedID"] as? String {
+//            SVC.savedID = savedID
+//        }
+//        SVC.creatorUsername = rowsToDisplay[indexPath.section]["createdBy"] as! String
+//        if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
+//            SVC.assignedCoach = assignedCoach
+//        }else{
+//            SVC.assignedCoach = ""
+//        }
+//        if let live = rowsToDisplay[indexPath.section]["liveWorkout"] as? Bool{
+//            if live == true && complete == false {
+//                SVC.liveAdd = true
+//            } else {
+//                SVC.liveAdd = false
+//            }
+//        }
+//        PlayerWorkoutViewController.lastIndex = indexPath
+//
+//        self.navigationController?.pushViewController(SVC, animated: true)
+        let DisplayVC = StoryBoard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
+        let workoutID = rowsToDisplayIDs[indexPath.section]
+        let ref = Database.database().reference().child("Workouts").child(self.userID!).child(workoutID)
+        ref.observeSingleEvent(of: .value) { (snapshot) in
+            let workoutToDisplay = workout(snapshot: snapshot)
+            DisplayVC.selectedWorkout = workoutToDisplay
+            self.navigationController?.pushViewController(DisplayVC, animated: true)
         }
-        if let live = rowsToDisplay[indexPath.section]["liveWorkout"] as? Bool{
-            if live == true && complete == false {
-                SVC.liveAdd = true
-            } else {
-                SVC.liveAdd = false
-            }
-            
-        }
-        PlayerWorkoutViewController.lastIndex = indexPath
-        
-        self.navigationController?.pushViewController(SVC, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         loadWorkouts()
         tableview.reloadData()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        DBref.removeObserver(withHandle: handle)
     }
     
     

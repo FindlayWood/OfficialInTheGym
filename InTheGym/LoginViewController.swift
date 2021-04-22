@@ -102,6 +102,9 @@ class LoginViewController: UIViewController {
         password.delegate = self
         email.tintColor = .white
         password.tintColor = .white
+        email.textContentType = .username
+        password.textContentType = .password
+        navigationItem.title = "Login"
         
         DBref = Database.database().reference()
         

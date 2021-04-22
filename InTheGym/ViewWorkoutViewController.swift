@@ -23,6 +23,7 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
     
     //databse reference variable
     var DBRef : DatabaseReference!
+    var handle : DatabaseHandle!
     
     //outlet to tableview
     @IBOutlet var tableview:UITableView!
@@ -64,7 +65,7 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         self.inProgressIDs.removeAll()
         self.notStartedWorkouts.removeAll()
         self.notStartedIDs.removeAll()
-        DBRef.observe(.childAdded, with: { (snapshot) in
+        handle = DBRef.observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
                 self.workouts.insert(snap, at: 0)
                 self.workoutIDs.insert(snapshot.key, at: 0)
@@ -200,21 +201,30 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         let titleLabel = rowsToDisplay[indexPath.section]["title"] as! String
         let complete = rowsToDisplay[indexPath.section]["completed"] as! Bool
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-        let SVC = StoryBoard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
-        SVC.username = self.username
-        SVC.playerID = self.playerID
-        SVC.titleString = titleLabel
-        WorkoutDetailViewController.exercises = rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
-        SVC.complete = complete
-        SVC.workoutID = rowsToDisplayIDs[indexPath.section]
-        if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
-            SVC.assignedCoach = assignedCoach
-        }else{
-            SVC.assignedCoach = ""
+//        let SVC = StoryBoard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
+//        SVC.username = self.username
+//        SVC.playerID = self.playerID
+//        SVC.titleString = titleLabel
+//        WorkoutDetailViewController.exercises = rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
+//        SVC.complete = complete
+//        SVC.workoutID = rowsToDisplayIDs[indexPath.section]
+//        if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
+//            SVC.assignedCoach = assignedCoach
+//        }else{
+//            SVC.assignedCoach = ""
+//        }
+//        SVC.liveAdd = false
+//        SVC.fromDiscover = false
+//        self.navigationController?.pushViewController(SVC, animated: true)
+        
+        let DisplayVC = StoryBoard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
+        let workoutID = rowsToDisplayIDs[indexPath.section]
+        let ref = Database.database().reference().child("Workouts").child(self.playerID).child(workoutID)
+        ref.observeSingleEvent(of: .value) { (snapshot) in
+            let workoutToDisplay = workout(snapshot: snapshot)
+            DisplayVC.selectedWorkout = workoutToDisplay
+            self.navigationController?.pushViewController(DisplayVC, animated: true)
         }
-        SVC.liveAdd = false
-        SVC.fromDiscover = false
-        self.navigationController?.pushViewController(SVC, animated: true)
     }
     
 //    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -233,6 +243,8 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         DBRef = Database.database().reference().child("Workouts").child(playerID)
         loadWorkouts()
-        
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        DBRef.removeObserver(withHandle: handle)
     }
 }

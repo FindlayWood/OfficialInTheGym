@@ -60,6 +60,9 @@ extension DisplayNotificationsAdapter: UITableViewDelegate, UITableViewDataSourc
         return NSAttributedString(string: str, attributes: attrs)
     }
     
+    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
+        return UIImage(named: "bell_icon")
+    }
     
     
 }

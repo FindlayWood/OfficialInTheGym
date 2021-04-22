@@ -27,9 +27,11 @@ class DisplayWorkoutCollectionViewCell: UICollectionViewCell {
             if model.completed == true {
                 self.completedButton.setImage(UIImage(named: "tickRing"), for: .normal)
                 self.completedButton.isUserInteractionEnabled = false
+                self.backgroundColor = Constants.darkColour
             }else{
                 self.completedButton.setImage(UIImage(named: "emptyRing"), for: .normal)
                 self.completedButton.isUserInteractionEnabled = true
+                self.backgroundColor = Constants.lightColour
             }
         }
     }

@@ -87,11 +87,10 @@ class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITab
         cell.profileImage.layer.borderColor = Constants.darkColour.cgColor
         cell.username.text = "@" + searchResults[indexPath.row].username!
         
-        if let imageURL = searchResults[indexPath.row].profilePhotoURL{
-            ImageAPIService.shared.getImage(with: imageURL) { (image) in
-                if image != nil {
-                    cell.profileImage.image = image
-                }
+        let usersID = searchResults[indexPath.row].uid!
+        ImageAPIService.shared.getProfileImage(for: usersID) { (image) in
+            if let image = image {
+                cell.profileImage.image = image
             }
         }
         
@@ -160,15 +159,15 @@ class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITab
                 return
             }else{
                 if let snap = snapshot.value as? [String:AnyObject]{
-                let newUser = Users()
-                newUser.username = snap["username"] as? String
-                newUser.firstName = snap["firstName"] as? String ?? "no"
-                newUser.lastName = snap["lastName"] as? String ?? "name"
-                newUser.admin = snap["admin"] as? Bool ?? false
-                newUser.uid = snapshot.key
-                newUser.profilePhotoURL = snap["profilePhotoURL"] as? String
-                newUser.profileBio = snap["profileBio"] as? String
-                self.users.append(newUser)
+                    let newUser = Users()
+                    newUser.username = snap["username"] as? String
+                    newUser.firstName = snap["firstName"] as? String ?? "no"
+                    newUser.lastName = snap["lastName"] as? String ?? "name"
+                    newUser.admin = snap["admin"] as? Bool ?? false
+                    newUser.uid = snapshot.key
+                    newUser.profilePhotoURL = snap["profilePhotoURL"] as? String
+                    newUser.profileBio = snap["profileBio"] as? String
+                    self.users.append(newUser)
                 }
             }
             

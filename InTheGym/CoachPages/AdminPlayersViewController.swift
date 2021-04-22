@@ -19,8 +19,12 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
     
     var DBref:DatabaseReference!
     var userRef:DatabaseReference!
+    var playersRef:DatabaseReference!
+    var playersFeedRef:DatabaseReference!
+    var handle:DatabaseHandle!
+    var feedHandle:DatabaseHandle!
     
-    static var players = [Users]()
+    var players = [Users]()
     var users = [Users]()
     
     // varibale to check for first time
@@ -34,6 +38,9 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
     
     // self user id
     let userID = Auth.auth().currentUser!.uid
+    
+    //refreshControl for tableview
+    var refreshControl:UIRefreshControl!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,9 +59,26 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
         tableview.backgroundColor = Constants.lightColour
         tableview.register(UINib(nibName: "UserCell", bundle: nil), forCellReuseIdentifier: "UserCell")
         tableview.register(UINib(nibName: "TimelineActivityTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineActivityTableViewCell")
+        tableview.tableFooterView = UIView()
         
+        playersRef = Database.database().reference().child("CoachPlayers").child(userID)
+        playersFeedRef = Database.database().reference().child("Public Feed").child(userID)
+        
+        initRefreshControl()
         fetchPlayers()
-        loadFeed()
+
+        
+    }
+    
+    func initRefreshControl(){
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .white
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        self.tableview.refreshControl = refreshControl
+    }
+    
+    @objc func handleRefresh(){
+        self.fetchPlayers()
     }
     
     // added for new feed
@@ -76,11 +100,12 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
     func fetchPlayers(){
         self.activityIndicator.hidesWhenStopped = true
         self.activityIndicator.startAnimating()
-        let userID = Auth.auth().currentUser!.uid
+        //let userID = Auth.auth().currentUser!.uid
         let myGroup = DispatchGroup()
         var tempPlayers = [Users]()
-        let playerRef = Database.database().reference().child("CoachPlayers").child(userID)
-        playerRef.observe(.value) { (snapshot) in
+        //let playerRef = Database.database().reference().child("CoachPlayers").child(userID)
+        playersRef.observeSingleEvent(of: .value) { (snapshot) in
+            self.players.removeAll()
             if snapshot.exists(){
                 for child in snapshot.children{
                     myGroup.enter()
@@ -89,14 +114,20 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
                         myGroup.leave()
                     }
                     myGroup.notify(queue: .main){
-                        AdminPlayersViewController.players = tempPlayers
+                        self.players = tempPlayers
                         self.activityIndicator.stopAnimating()
                         self.tableview.reloadData()
+                        if (self.tableview.refreshControl!.isRefreshing){
+                            self.tableview.refreshControl!.endRefreshing()
+                        }
                     }
                 }
                 
             }else{
                 self.activityIndicator.stopAnimating()
+                if (self.tableview.refreshControl!.isRefreshing){
+                    self.tableview.refreshControl!.endRefreshing()
+                }
             }
         }
         
@@ -105,8 +136,8 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
     func loadFeed(){
         //feed.removeAll()
         var initialLoad = true
-        let playerFeedRef = Database.database().reference().child("Public Feed").child(userID)
-        playerFeedRef.observe(.childAdded, with: { (snapshot) in
+        //let playerFeedRef = Database.database().reference().child("Public Feed").child(userID)
+        feedHandle = playersFeedRef.observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
                 self.playerFeed.insert(snap, at: 0)
             }
@@ -118,16 +149,20 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
             
         }, withCancel: nil)
         
-        playerFeedRef.observeSingleEvent(of: .value) { (snapshot) in
+        playersFeedRef.observeSingleEvent(of: .value) { (snapshot) in
 
             initialLoad = false
         }
     }
     
+    func removeObservers(){
+        self.playersFeedRef.removeObserver(withHandle: feedHandle)
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch segmentControl.selectedSegmentIndex{
         case 0:
-            return AdminPlayersViewController.players.count
+            return self.players.count
         case 1:
             return playerFeed.count
         default:
@@ -140,19 +175,15 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
         switch segmentControl.selectedSegmentIndex{
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! PlayerTableViewCell
-            cell.name.text = AdminPlayersViewController.players[indexPath.row].firstName! + " " +  AdminPlayersViewController.players[indexPath.row].lastName!
-            cell.username.text = AdminPlayersViewController.players[indexPath.row].username
-            if let purl = AdminPlayersViewController.players[indexPath.row].profilePhotoURL{
-                DispatchQueue.global(qos: .background).async {
-                    let url = URL(string: purl)
-                    let data = NSData(contentsOf: url!)
-                    let image = UIImage(data: data! as Data)
-                    DispatchQueue.main.async {
-                        cell.profilePhoto.image = image
-                    }
+            cell.name.text = self.players[indexPath.row].firstName! + " " +  self.players[indexPath.row].lastName!
+            cell.username.text = "@" + self.players[indexPath.row].username!
+            let playerID = self.players[indexPath.row].uid!
+            ImageAPIService.shared.getProfileImage(for: playerID) { (image) in
+                if let image = image{
+                    cell.profilePhoto.image = image
+                } else {
+                    cell.profilePhoto.image = UIImage(named: "player_icon")
                 }
-            }else{
-                cell.profilePhoto.image = UIImage(named: "player_icon")
             }
             return cell
         case 1:
@@ -166,25 +197,8 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
             cell.activityImage.image = UIImage(named: image!)
             return cell
         default:
-            break
+            return UITableViewCell()
         }
-        
-        let cell = self.tableview.dequeueReusableCell(withIdentifier: "UserCell") as! PlayerTableViewCell
-        cell.name.text = AdminPlayersViewController.players[indexPath.row].firstName! + " " +  AdminPlayersViewController.players[indexPath.row].lastName!
-        cell.username.text = AdminPlayersViewController.players[indexPath.row].username
-        if let purl = AdminPlayersViewController.players[indexPath.row].profilePhotoURL{
-            DispatchQueue.global(qos: .background).async {
-                let url = URL(string: purl)
-                let data = NSData(contentsOf: url!)
-                let image = UIImage(data: data! as Data)
-                DispatchQueue.main.async {
-                    cell.profilePhoto.image = image
-                }
-            }
-        }else{
-            cell.profilePhoto.image = UIImage(named: "player_icon")
-        }
-        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -192,7 +206,7 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
             let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
             let SVC = StoryBoard.instantiateViewController(withIdentifier: "PlayerViewController") as! PlayerViewController
             
-            let currentUser = AdminPlayersViewController.players[indexPath.row]
+            let currentUser = self.players[indexPath.row]
             SVC.firstNameString = currentUser.firstName!
             SVC.lastNameString = currentUser.lastName!
             SVC.userNameString = currentUser.username!
@@ -236,10 +250,34 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
         return NSAttributedString(string: str, attributes: attrs)
     }
     
+    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
+        return UIImage(named: "player_icon")
+    }
+    
+    func buttonTitle(forEmptyDataSet scrollView: UIScrollView, for state: UIControl.State) -> NSAttributedString? {
+        let str = "Add Player"
+        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .callout)]
+        return NSAttributedString(string: str, attributes: attrs)
+    }
+
+    func emptyDataSet(_ scrollView: UIScrollView, didTap button: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let addPage = storyboard.instantiateViewController(withIdentifier: "AddPlayerViewController") as! AddPlayerViewController
+        addPage.modalTransitionStyle = .coverVertical
+        addPage.modalPresentationStyle = .fullScreen
+        self.navigationController?.present(addPage, animated: true, completion: nil)
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        loadFeed()
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.removeObservers()
+    }
+
     
     // working on displaying message for the first time
     // function

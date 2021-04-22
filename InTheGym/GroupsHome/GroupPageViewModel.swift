@@ -11,6 +11,11 @@ import Firebase
 
 class GroupPageViewModel {
     
+    //MARK: - Database References
+    var groupPostsRef : DatabaseReference!
+    var groupMembersRef : DatabaseReference!
+    var handle : DatabaseHandle!
+    
     // MARK: - Closures to alert vc when appropriate
     var postsLoadedClosure:(()->())?
     var loadingStatusClosure:(()->())?
@@ -51,6 +56,8 @@ class GroupPageViewModel {
     init(groupID:String, groupLeader:String){
         self.groupID = groupID
         self.groupLeader = groupLeader
+        self.groupPostsRef = Database.database().reference().child("GroupPosts").child(groupID)
+        self.groupMembersRef = Database.database().reference().child("GroupMembers").child(groupID)
     }
     
     
@@ -61,8 +68,8 @@ class GroupPageViewModel {
     func fetchGroupPosts(){
         self.isLoading = true
         var tempPosts = [PostProtocol]()
-        let ref = Database.database().reference().child("GroupPosts").child(groupID)
-        ref.observe(.childAdded) { (snapshot) in
+        
+        handle = groupPostsRef.observe(.childAdded) { (snapshot) in
             guard let snap = snapshot.value as? [String:AnyObject] else{
                 return
             }
@@ -79,7 +86,7 @@ class GroupPageViewModel {
             
         }
         
-        ref.observeSingleEvent(of: .value) { (_) in
+        groupPostsRef.observeSingleEvent(of: .value) { (_) in
             self.groupPosts = tempPosts
             self.isLoading = false
         }
@@ -90,8 +97,7 @@ class GroupPageViewModel {
     func fetchMembers(){
         var members = [Users]()
         let myGroup = DispatchGroup()
-        let ref = Database.database().reference().child("GroupMembers").child(groupID)
-        ref.observeSingleEvent(of: .value) { (snapshot) in
+        groupMembersRef.observeSingleEvent(of: .value) { (snapshot) in
             for child in snapshot.children {
                 myGroup.enter()
                 UserIDToUser.transform(userID: (child as AnyObject).key) { (member) in
@@ -108,6 +114,11 @@ class GroupPageViewModel {
                 self.membersLoadedClosure?()
             }
         }
+    }
+    
+    // MARK: - Remove Observers
+    func removeObservers(){
+        groupPostsRef.removeObserver(withHandle: handle)
     }
     
     // MARK: - Actions
@@ -153,5 +164,13 @@ class GroupPageViewModel {
     
     func getMemberData(at indexPath:IndexPath) -> Users{
         return self.groupMembers[indexPath.item]
+    }
+    
+    func isIDSelf(id:String) -> Bool {
+        if id == self.userID{
+            return true
+        } else {
+            return false
+        }
     }
 }

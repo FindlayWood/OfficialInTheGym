@@ -15,13 +15,18 @@ class GroupMemberCollectionViewCell: UICollectionViewCell {
 
     func setup(with member:Users){
         self.usernameLabel.text = member.username
-        if let purl = member.profilePhotoURL {
-            ImageAPIService.shared.getImage(with: purl) { (image) in
-                if image != nil {
-                    self.profileImage.image = image
-                }
+        ImageAPIService.shared.getProfileImage(for: member.uid!) { (image) in
+            if let image = image {
+                self.profileImage.image = image
             }
         }
+//        if let purl = member.profilePhotoURL {
+//            ImageAPIService.shared.getImage(with: purl) { (image) in
+//                if image != nil {
+//                    self.profileImage.image = image
+//                }
+//            }
+//        }
     }
     
     func makeLeader(){

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 // class for a user 
 class Users: NSObject {

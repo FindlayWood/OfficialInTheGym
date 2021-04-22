@@ -13,6 +13,7 @@ protocol NotificationDelegate {
     var toUserID:String? {get}
     var type:NotificationType? {get}
     var postID:String?{get}
+    var seen:Bool? {get set}
     func toObject() -> [String:AnyObject]
 }
 
@@ -26,4 +27,7 @@ enum NotificationType {
     case Followed
     case groupLikedPost
     case groupReply
+    case NewRequest
+    case AcceptedRequest
+    case NewWorkout
 }

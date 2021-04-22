@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Firebase
 import EmptyDataSet_Swift
 
 class SavedWorkoutsViewController: UIViewController {
@@ -17,16 +16,14 @@ class SavedWorkoutsViewController: UIViewController {
     
     var adapter : SavedWorkoutsAdapter!
     
-    var DBRef : DatabaseReference!
-    
     lazy var viewModel: SavedWorkoutsViewModel = {
-        return SavedWorkoutsViewModel(apiService: DBRef)
+        return SavedWorkoutsViewModel()
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        DBRef = Database.database().reference()
+
         adapter = SavedWorkoutsAdapter(delegate: self)
         tableview.delegate = adapter
         tableview.dataSource = adapter
@@ -36,8 +33,21 @@ class SavedWorkoutsViewController: UIViewController {
         tableview.emptyDataSetDelegate = adapter
         tableview.emptyDataSetSource = adapter
         
+        //initUI()
+        //initViewModel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if isMovingToParent{
+            initViewModel()
+        }
         initUI()
-        initViewModel()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        if isMovingFromParent{
+            viewModel.removeObservers()
+        }
     }
     
     func initUI(){

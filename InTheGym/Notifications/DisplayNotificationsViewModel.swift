@@ -26,6 +26,8 @@ class DisplayNotificationsViewModel {
     // We also defined a class and make it conform to that protocol.
     var apiService: DatabaseReference
     let userID = Auth.auth().currentUser!.uid
+    var notificationsReference : DatabaseReference!
+    var handle : DatabaseHandle!
 
     // This will contain info about the picture eventually selectded by the user by tapping an item on the screen
     var selectedNotifications: NotificationTableViewModel?
@@ -53,6 +55,7 @@ class DisplayNotificationsViewModel {
     // Note: apiService has a default value in case this constructor is executed without passing parameters
     init(apiService: DatabaseReference) {
         self.apiService = apiService
+        self.notificationsReference = Database.database().reference().child("Notifications").child(self.userID)
     }
  
     
@@ -63,8 +66,8 @@ class DisplayNotificationsViewModel {
         var tempNotifs = [NotificationTableViewModel]()
         let myGroup = DispatchGroup()
         
-        let notificationsReference = Database.database().reference().child("Notifications").child(self.userID)
-        notificationsReference.observe(.childAdded) { (snapshot) in
+        //let notificationsReference = Database.database().reference().child("Notifications").child(self.userID)
+        handle = notificationsReference.observe(.childAdded) { (snapshot) in
             
             if snapshot.childrenCount == 0 {
                 self.notifications = []
@@ -81,6 +84,7 @@ class DisplayNotificationsViewModel {
                     myGroup.leave()
                 }
                 myGroup.notify(queue: .main){
+                    tempNotifs.sort(by: {$0.time! > $1.time!})
                     self.notifications = tempNotifs
                     self.isLoading = false
                 }
@@ -88,6 +92,10 @@ class DisplayNotificationsViewModel {
         }
     }
     
+    //MARK: - Remove Observers
+    func removeObservers(){
+        notificationsReference.removeObserver(withHandle: handle)
+    }
     
     
     

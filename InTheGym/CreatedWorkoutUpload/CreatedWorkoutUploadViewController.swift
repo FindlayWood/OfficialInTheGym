@@ -13,10 +13,20 @@ class CreatedWorkoutUploadViewController: UIViewController {
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     @IBOutlet weak var collection:UICollectionView!
     
+    let haptic = UINotificationFeedbackGenerator()
+    
     var noOfExercises:Int!
     var createdFor:String!
     var workoutTitle:String!
+    
+    // is this workout for a group
     var groupBool:Bool!
+    
+    // number of times to upload the workout
+    var stepCount:Int!
+    
+    // the workout to upload
+    var createdWorkout:workout!
     
     
     var isPrivate:Bool = false
@@ -29,6 +39,9 @@ class CreatedWorkoutUploadViewController: UIViewController {
     lazy var viewModel : CreatedWorkoutUploadViewModel = {
         return CreatedWorkoutUploadViewModel(createdFor: createdFor, noOfExercises: noOfExercises, group:groupBool)
     }()
+    
+    // feedback
+    let selection = UISelectionFeedbackGenerator()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +57,9 @@ class CreatedWorkoutUploadViewController: UIViewController {
         collection.register(UINib(nibName: "UploadWorkoutOneCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "UploadCellOne")
         collection.register(UINib(nibName: "UploadWorkoutTwoCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "UploadCellTwo")
 
+        haptic.prepare()
+        selection.prepare()
+        
         initUI()
         initBarButton()
         initViewModel()
@@ -91,8 +107,13 @@ class CreatedWorkoutUploadViewController: UIViewController {
     }
     
     @objc func uploadWorkout(){
-        print("uploading...")
-        viewModel.upload()
+        haptic.notificationOccurred(.success)
+        viewModel.uploadPost(with: createdWorkout, addToSaved: addToSaved, addToCreated: addToCreated, postToTimeline: postToTimeline, isPrivate: isPrivate, stepCount: stepCount)
+        viewModel.updateWorkoutsCreated()
+        DisplayTopView.displayTopView(with: "Workout Uploaded", on: self)
+        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+        self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+        
     }
     
 
@@ -104,6 +125,7 @@ extension CreatedWorkoutUploadViewController : CreatedWorkoutUploadDelegate {
     }
     
     func itemSelected(at indexPath: IndexPath) {
+        selection.selectionChanged()
         switch indexPath.item {
         case 2:
             viewModel.changePrivacy(isPrivate: isPrivate)

@@ -23,11 +23,9 @@ class NotificationsTableViewCell: UITableViewCell {
             
             self.timeLabel.text = "\(then.timeAgo()) ago"
             
-            if let purl = notification!.from!.profilePhotoURL{
-                ImageAPIService.shared.getImage(with: purl) { (image) in
-                    if image != nil {
-                        self.profileImage.setImage(image, for: .normal)
-                    }
+            ImageAPIService.shared.getProfileImage(for: notification!.from!.uid!) { (image) in
+                if let image = image {
+                    self.profileImage.setImage(image, for: .normal)
                 }
             }
         }
@@ -39,6 +37,9 @@ class NotificationsTableViewCell: UITableViewCell {
         self.profileImage.layer.cornerRadius = self.profileImage.bounds.width / 2
         self.profileImage.layer.masksToBounds = true
         self.selectionStyle = .none
+    }
+    override func prepareForReuse() {
+        self.profileImage.setImage(nil, for: .normal)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

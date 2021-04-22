@@ -35,15 +35,24 @@ class DisplayNotificationsViewController: UIViewController {
         tableview.emptyDataSetDelegate = adapter
         tableview.emptyDataSetSource = adapter
         
-        initViewModel()
+        //initViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if isMovingToParent{
+            initViewModel()
+        }
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = .white
         navigationItem.title = "Notifications"
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        if isMovingFromParent{
+            viewModel.removeObservers()
+        }
     }
     
     func initViewModel(){
@@ -111,11 +120,11 @@ extension DisplayNotificationsViewController: DisplayNotificationsProtocol{
                 var tempPost:PostProtocol!
                 switch snap["type"] as! String {
                 case "post":
-                    tempPost = TimelinePostModel(snapshot: snapshot)
+                    tempPost = DiscussionPost(snapshot: snapshot)
                 case "createdNewWorkout":
-                    tempPost = TimelineCreatedWorkoutModel(snapshot: snapshot)
+                    tempPost = DiscussionCreatedWorkout(snapshot: snapshot)
                 case "workout":
-                    tempPost = TimelineCompletedWorkoutModel(snapshot: snapshot)
+                    tempPost = DiscussionCompletedWorkout(snapshot: snapshot)
                 default:
                     break
                 }

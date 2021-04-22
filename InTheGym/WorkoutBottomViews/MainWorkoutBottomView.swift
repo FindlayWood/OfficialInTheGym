@@ -58,29 +58,35 @@ class MainWorkoutBottomView:UIView{
         beginButton.setTitle("Begin Workout", for: .normal)
         beginButton.backgroundColor = Constants.darkColour
         beginButton.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 31)
-        beginButton.layer.cornerRadius = 26
+        beginButton.layer.cornerRadius = 10
         beginButton.layer.borderWidth = 2
         beginButton.layer.borderColor = UIColor.black.cgColor
         beginButton.translatesAutoresizingMaskIntoConstraints = false
         beginButton.addTarget(self, action: #selector(setViewToStage2), for: .touchUpInside)
+        // add shadows to the add button
+        beginButton.layer.shadowColor = UIColor.black.cgColor
+        beginButton.layer.shadowOffset = CGSize(width: 0, height: 0.0)
+        beginButton.layer.shadowRadius = 6.0
+        beginButton.layer.shadowOpacity = 1.0
+        beginButton.layer.masksToBounds = false
         
         let label = UILabel()
         label.text = "Timer will begin on button click."
         label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        label.textColor = .black
+        label.textColor = .lightGray
         label.textAlignment = .center
         
         let label2 = UILabel()
         label2.text = "Scroll to view exercises."
         label2.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        label2.textColor = .black
+        label2.textColor = .lightGray
         label2.textAlignment = .center
         
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.distribution = .equalSpacing
-        stackView.spacing = 20
+        stackView.spacing = 10
         
         stackView.addArrangedSubview(beginButton)
         stackView.addArrangedSubview(label)
@@ -111,24 +117,29 @@ class MainWorkoutBottomView:UIView{
         button.setTitle("CONTINUE", for: .normal)
         button.backgroundColor = Constants.darkColour
         button.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 31)
-        button.layer.cornerRadius = 26
+        button.layer.cornerRadius = 10
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.black.cgColor
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalToConstant: 49).isActive = true
         button.addTarget(self, action: #selector(workoutHasBegun), for: .touchUpInside)
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOffset = CGSize(width: 0, height: 0.0)
+        button.layer.shadowRadius = 6.0
+        button.layer.shadowOpacity = 1.0
+        button.layer.masksToBounds = false
         
         
         let noticeLabel = UILabel()
         noticeLabel.text = "The timer will begin and can't be stopped."
         noticeLabel.font = UIFont.boldSystemFont(ofSize: 12)
-        noticeLabel.textColor = .black
+        noticeLabel.textColor = .lightGray
         noticeLabel.textAlignment = .center
         
         let noticeLabel2 = UILabel()
         noticeLabel2.text = "Press CONTINUE to begin workout."
         noticeLabel2.font = UIFont.boldSystemFont(ofSize: 12)
-        noticeLabel2.textColor = .black
+        noticeLabel2.textColor = .lightGray
         noticeLabel2.textAlignment = .center
         
         let cancelButton = UIButton()
@@ -143,7 +154,7 @@ class MainWorkoutBottomView:UIView{
         stackView.axis = .vertical
         stackView.distribution = .equalSpacing
         stackView.alignment = .center
-        stackView.spacing = 20.0
+        stackView.spacing = 10.0
         
         stackView.addArrangedSubview(label)
         stackView.addArrangedSubview(button)

@@ -19,24 +19,25 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     // array holding labels in tableview
-    var tableContent = ["Provide Feedback", "App Information", "How To Best Use the App", "Contact us", "Reset Password", "Logout"]
+    var tableContent = ["Provide Feedback", "App Information", "Check out our Instagram", "Visit our Website", "Contact us", "Reset Password", "Logout"]
     
     let userID = Auth.auth().currentUser?.uid
     
     var DBRef : DatabaseReference!
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableview.rowHeight = 80
         tableview.isScrollEnabled = false
-        
-        
         hideKeyboardWhenTappedAround()
         
         DBRef = Database.database().reference().child("users").child(userID!)
         
         tableview.backgroundColor = Constants.lightColour
+        self.navigationItem.title = "Settings"
         
     }
     
@@ -53,15 +54,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         alert.addButton("Yes", backgroundColor: #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1), textColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)) {
             do{
                 try Auth.auth().signOut()
+                FirebaseAPI.shared().dispose()
+                ViewController.admin = nil
+                ViewController.username = nil
+                PlayerTimelineViewModel.apiService.removeObserver(withHandle: PlayerTimelineViewModel.handle)
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let initial = storyboard.instantiateInitialViewController()
+                UIApplication.shared.keyWindow?.rootViewController = initial
+                
             }
             catch let signOutError as NSError{
                 print("Error signing out: %@", signOutError)
             }
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let initial = storyboard.instantiateInitialViewController()
-            UIApplication.shared.keyWindow?.rootViewController = initial
-            ViewController.admin = nil
-            ViewController.username = nil
+
         }
         alert.showWarning("Logout?", subTitle: "Are you sure you want to logout?", closeButtonTitle: "No", colorStyle: 0xe01212, colorTextButton: 0xfcfcfc)
         
@@ -75,6 +80,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         cell.backgroundColor = Constants.lightColour
         cell.selectionStyle = .none
         cell.textLabel?.text = tableContent[indexPath.row]
+        if indexPath.row == 6 {
+            cell.textLabel?.textColor = .red
+        }
         return cell
     }
     
@@ -95,15 +103,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             navigationController?.pushViewController(SVC, animated: true)
         
         case 2:
-            let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-            let SVC = StoryBoard.instantiateViewController(withIdentifier: "BestUseMessageViewController") as! BestUseMessageViewController
-            navigationController?.pushViewController(SVC, animated: true)
-        
+            UIApplication.shared.open(URL(string: Constants.instagramLink)!)
         case 3:
-            let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-            let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
-            navigationController?.pushViewController(SVC, animated: true)
+            UIApplication.shared.open(URL(string: Constants.websiteString)!)
         case 4:
+            let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+            let SVC = StoryBoard.instantiateViewController(withIdentifier: "ContactUsViewController") as! ContactUsViewController
+            navigationController?.pushViewController(SVC, animated: true)
+        case 5:
             let email = (Auth.auth().currentUser?.email!)!
             
             let appearance = SCLAlertView.SCLAppearance(
@@ -114,7 +121,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 Auth.auth().sendPasswordReset(withEmail: email, completion: nil)
             }
             alert.showError("Reset Password?", subTitle: "We will send you an email with instructions to change your password. Are you Sure?",closeButtonTitle: "NO", colorStyle: 0xe01212, colorTextButton: 0xfcfcfc )
-        case 5:
+        case 6:
             logout()
     
         default:
@@ -128,7 +135,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        //loadProfilePhoto()
     }
     
 

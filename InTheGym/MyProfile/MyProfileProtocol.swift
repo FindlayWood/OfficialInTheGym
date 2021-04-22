@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol MyProfileProtocol: class {
     func getData(at: IndexPath) -> PostProtocol
@@ -16,4 +17,6 @@ protocol MyProfileProtocol: class {
     func retreiveNumberOfItems() -> Int
     func retreiveNumberOfSections() -> Int
     func returnFollowerCounts(followerCount:Int, FollowingCount:Int)
+    func changedProfilePhoto(to newImage: UIImage)
+    func changedBio(to newBio:String)
 }
