@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PrivateCreatedWorkoutCell" rowHeight="156" id="cXC-Z9-y9G" customClass="PrivateCreatedWorkoutTableViewCell" customModule="InTheGym" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="150"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cXC-Z9-y9G" id="1c1-GR-TmD">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="150"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="MLm-Ga-9cc">
+                        <rect key="frame" x="20" y="7" width="336" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="VCP-HA-Nq2"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clock_icon" translatesAutoresizingMaskIntoConstraints="NO" id="ik9-Up-bl3">
+                        <rect key="frame" x="20" y="109" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="CC5-wh-0IU"/>
+                            <constraint firstAttribute="height" constant="30" id="Xw1-gv-3kC"/>
+                        </constraints>
+                    </imageView>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dumbbell_icon" translatesAutoresizingMaskIntoConstraints="NO" id="gWd-CO-qys">
+                        <rect key="frame" x="20" y="75" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="SKg-SL-er8"/>
+                            <constraint firstAttribute="height" constant="30" id="TNG-Bc-NEd"/>
+                        </constraints>
+                    </imageView>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="coach_icon" translatesAutoresizingMaskIntoConstraints="NO" id="mcG-v0-7l8">
+                        <rect key="frame" x="20" y="41" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="uZV-Ta-JGJ"/>
+                            <constraint firstAttribute="height" constant="30" id="vAH-W8-hQA"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ulo-Rc-nN4">
+                        <rect key="frame" x="58" y="47" width="38" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fsB-ll-RoV">
+                        <rect key="frame" x="58" y="81" width="38" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AgP-6R-iiA">
+                        <rect key="frame" x="58" y="115" width="38" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ggU-tZ-5PO">
+                        <rect key="frame" x="345" y="115" width="49" height="24"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="locked_icon" translatesAutoresizingMaskIntoConstraints="NO" id="g9z-hd-dfD">
+                        <rect key="frame" x="364" y="7" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="4Lm-GT-or4"/>
+                            <constraint firstAttribute="height" constant="30" id="Xfp-de-Jd1"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="ik9-Up-bl3" firstAttribute="bottom" secondItem="1c1-GR-TmD" secondAttribute="bottomMargin" id="0Jr-0w-Xli"/>
+                    <constraint firstItem="AgP-6R-iiA" firstAttribute="top" secondItem="fsB-ll-RoV" secondAttribute="bottom" constant="16" id="3B3-Vw-8gS"/>
+                    <constraint firstItem="ik9-Up-bl3" firstAttribute="top" secondItem="gWd-CO-qys" secondAttribute="bottom" constant="4" id="5HE-j5-MnA"/>
+                    <constraint firstItem="gWd-CO-qys" firstAttribute="leading" secondItem="1c1-GR-TmD" secondAttribute="leadingMargin" id="6kO-qV-f9Q"/>
+                    <constraint firstItem="Ulo-Rc-nN4" firstAttribute="leading" secondItem="mcG-v0-7l8" secondAttribute="trailing" constant="8" symbolic="YES" id="9qM-FJ-0w1"/>
+                    <constraint firstItem="mcG-v0-7l8" firstAttribute="leading" secondItem="1c1-GR-TmD" secondAttribute="leading" constant="20" symbolic="YES" id="FON-vr-TLH"/>
+                    <constraint firstItem="MLm-Ga-9cc" firstAttribute="top" secondItem="1c1-GR-TmD" secondAttribute="top" constant="7" id="GvN-Kk-Ih8"/>
+                    <constraint firstItem="g9z-hd-dfD" firstAttribute="top" secondItem="1c1-GR-TmD" secondAttribute="top" constant="7" id="HCV-d7-ZdP"/>
+                    <constraint firstItem="g9z-hd-dfD" firstAttribute="trailing" secondItem="1c1-GR-TmD" secondAttribute="trailingMargin" id="IUz-bJ-dlK"/>
+                    <constraint firstItem="ggU-tZ-5PO" firstAttribute="bottom" secondItem="1c1-GR-TmD" secondAttribute="bottomMargin" id="JLn-M5-HTh"/>
+                    <constraint firstItem="AgP-6R-iiA" firstAttribute="leading" secondItem="ik9-Up-bl3" secondAttribute="trailing" constant="8" symbolic="YES" id="LRp-WS-GEW"/>
+                    <constraint firstItem="fsB-ll-RoV" firstAttribute="leading" secondItem="gWd-CO-qys" secondAttribute="trailing" constant="8" symbolic="YES" id="N1W-Yb-NRd"/>
+                    <constraint firstItem="gWd-CO-qys" firstAttribute="top" secondItem="mcG-v0-7l8" secondAttribute="bottom" constant="4" id="Qis-99-2pO"/>
+                    <constraint firstItem="MLm-Ga-9cc" firstAttribute="leading" secondItem="1c1-GR-TmD" secondAttribute="leading" constant="20" id="SEc-hQ-Err"/>
+                    <constraint firstItem="fsB-ll-RoV" firstAttribute="top" secondItem="Ulo-Rc-nN4" secondAttribute="bottom" constant="16" id="U0g-Rj-vkS"/>
+                    <constraint firstItem="ik9-Up-bl3" firstAttribute="leading" secondItem="1c1-GR-TmD" secondAttribute="leadingMargin" id="U1V-pI-Aal"/>
+                    <constraint firstItem="g9z-hd-dfD" firstAttribute="leading" secondItem="MLm-Ga-9cc" secondAttribute="trailing" constant="8" symbolic="YES" id="VuJ-Qo-XPS"/>
+                    <constraint firstItem="Ulo-Rc-nN4" firstAttribute="top" secondItem="MLm-Ga-9cc" secondAttribute="bottom" constant="10" id="XnW-PM-cOJ"/>
+                    <constraint firstItem="ggU-tZ-5PO" firstAttribute="trailing" secondItem="1c1-GR-TmD" secondAttribute="trailingMargin" id="YHK-zd-eqI"/>
+                    <constraint firstItem="gWd-CO-qys" firstAttribute="top" secondItem="mcG-v0-7l8" secondAttribute="bottom" constant="4" id="gsD-n6-PaZ"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="averageScore" destination="ggU-tZ-5PO" id="a3Z-SP-Szr"/>
+                <outlet property="averageTime" destination="AgP-6R-iiA" id="GR0-iV-Pu8"/>
+                <outlet property="averageTimeIcon" destination="ik9-Up-bl3" id="eY7-B5-eOA"/>
+                <outlet property="createdBy" destination="Ulo-Rc-nN4" id="XvU-VZ-Bho"/>
+                <outlet property="createdByIcon" destination="mcG-v0-7l8" id="I3b-3Z-BCr"/>
+                <outlet property="exerciseCount" destination="fsB-ll-RoV" id="3OR-rT-WzP"/>
+                <outlet property="exerciseCountIcon" destination="gWd-CO-qys" id="LCW-wg-uy5"/>
+                <outlet property="title" destination="MLm-Ga-9cc" id="eSS-Sd-90H"/>
+            </connections>
+            <point key="canvasLocation" x="150.72463768115944" y="37.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="clock_icon" width="80" height="80"/>
+        <image name="coach_icon" width="96" height="96"/>
+        <image name="dumbbell_icon" width="96" height="96"/>
+        <image name="locked_icon" width="48" height="48"/>
+    </resources>
+</document>

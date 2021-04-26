@@ -135,59 +135,75 @@ class PublicTimelineViewModel {
     
     
     func fetchData(){
-
-        var references:[String] = []
-        var initialLoad = true
-        // first get references from timeline - which will be just postID
-        handle = publicTimelineRef.observe(.childAdded) { (snapshot) in
-            references.insert(snapshot.key, at: 0)
-            if initialLoad == false{
-
+        
+        
+        FirebaseAPI.shared().loadPublicTimelineReferences(for: user.uid!, isFollowing: self.following!) { [weak self] (result) in
+            switch result{
+            case .success(let posts):
+                self?.posts = posts
+                self?.isLoading = false
+            case .failure(let error):
+                print(error.localizedDescription)
+                self?.isLoading = false
             }
         }
-        publicTimelineRef.observeSingleEvent(of: .value) { (_) in
-            //load timeline with references
-            self.fetchPosts(with: references)
-            initialLoad = true
-        }
+        
+        
+        
+        
+
+//        var references:[String] = []
+//        var initialLoad = true
+//        // first get references from timeline - which will be just postID
+//        handle = publicTimelineRef.observe(.childAdded) { (snapshot) in
+//            references.insert(snapshot.key, at: 0)
+//            if initialLoad == false{
+//
+//            }
+//        }
+//        publicTimelineRef.observeSingleEvent(of: .value) { (_) in
+//            //load timeline with references
+//            self.fetchPosts(with: references)
+//            initialLoad = true
+//        }
         
     }
     
-    func fetchPosts(with references:[String]){
-        
-        var tempPosts = [PostProtocol]()
-        let postRef = Database.database().reference().child("Posts")
-        let myGroup = DispatchGroup()
-        
-        for post in references{
-            myGroup.enter()
-            postRef.child(post).observeSingleEvent(of: .value) { (snapshot) in
-                defer{myGroup.leave()}
-                guard let snap = snapshot.value as? [String:AnyObject] else{
-                    return
-                }
-                
-                if self.following! || snap["isPrivate"] as? Bool ?? true == false {
-                    // add post
-                    switch snap["type"] as! String{
-                    case "post":
-                        tempPosts.append(TimelinePostModel(snapshot: snapshot)!)
-                    case "createdNewWorkout":
-                        tempPosts.append(TimelineCreatedWorkoutModel(snapshot: snapshot)!)
-                    case "workout":
-                        tempPosts.append(TimelineCompletedWorkoutModel(snapshot: snapshot)!)
-                    default:
-                        tempPosts.append(TimelineActivityModel(snapshot: snapshot)!)
-                    }
-                }
-            }
-        }
-        myGroup.notify(queue: .main){
-            self.posts = tempPosts
-            self.isLoading = false
-            
-        }
-    }
+//    func fetchPosts(with references:[String]){
+//        
+//        var tempPosts = [PostProtocol]()
+//        let postRef = Database.database().reference().child("Posts")
+//        let myGroup = DispatchGroup()
+//        
+//        for post in references{
+//            myGroup.enter()
+//            postRef.child(post).observeSingleEvent(of: .value) { (snapshot) in
+//                defer{myGroup.leave()}
+//                guard let snap = snapshot.value as? [String:AnyObject] else{
+//                    return
+//                }
+//                
+//                if self.following! || snap["isPrivate"] as? Bool ?? true == false {
+//                    // add post
+//                    switch snap["type"] as! String{
+//                    case "post":
+//                        tempPosts.append(TimelinePostModel(snapshot: snapshot)!)
+//                    case "createdNewWorkout":
+//                        tempPosts.append(TimelineCreatedWorkoutModel(snapshot: snapshot)!)
+//                    case "workout":
+//                        tempPosts.append(TimelineCompletedWorkoutModel(snapshot: snapshot)!)
+//                    default:
+//                        tempPosts.append(TimelineActivityModel(snapshot: snapshot)!)
+//                    }
+//                }
+//            }
+//        }
+//        myGroup.notify(queue: .main){
+//            self.posts = tempPosts
+//            self.isLoading = false
+//            
+//        }
+//    }
     
     func insertPost(with postID:String){
         let postRef = Database.database().reference().child("Posts").child(postID)

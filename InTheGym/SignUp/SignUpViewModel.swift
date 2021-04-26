@@ -124,12 +124,12 @@ class SignUpViewModel {
                 let postSelfReferences = Database.database().reference().child("PostSelfReferences").child(userID)
                 let postRef = Database.database().reference().child("Posts").childByAutoId()
                 let postKey = postRef.key!
-                let timelineRef = Database.database().reference().child("Timeline").child(userID).child(postKey)
+                let timelineRef = Database.database().reference().child("Timeline").child(userID)
                 let usernamesRef = Database.database().reference().child("Usernames")
             
                 postRef.setValue(actData)
                 postSelfReferences.child(postKey).setValue(true)
-                timelineRef.setValue(true)
+                timelineRef.child(postKey).setValue(true)
                 usernamesRef.child(self.user.username).setValue(true)
                 FirebaseAPI.shared().uploadActivity(with: .AccountCreated)
                 

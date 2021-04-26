@@ -111,16 +111,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             let SVC = StoryBoard.instantiateViewController(withIdentifier: "ContactUsViewController") as! ContactUsViewController
             navigationController?.pushViewController(SVC, animated: true)
         case 5:
-            let email = (Auth.auth().currentUser?.email!)!
-            
-            let appearance = SCLAlertView.SCLAppearance(
-                showCircularIcon: false
-            )
-            let alert = SCLAlertView(appearance: appearance)
-            alert.addButton("Yes", backgroundColor: #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1), textColor: .white) {
-                Auth.auth().sendPasswordReset(withEmail: email, completion: nil)
-            }
-            alert.showError("Reset Password?", subTitle: "We will send you an email with instructions to change your password. Are you Sure?",closeButtonTitle: "NO", colorStyle: 0xe01212, colorTextButton: 0xfcfcfc )
+            let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+            let SVC = StoryBoard.instantiateViewController(withIdentifier: "ResetPasswordViewController") as! ResetPasswordViewController
+            navigationController?.pushViewController(SVC, animated: true)
+//            let email = (Auth.auth().currentUser?.email!)!
+//
+//            let appearance = SCLAlertView.SCLAppearance(
+//                showCircularIcon: false
+//            )
+//            let alert = SCLAlertView(appearance: appearance)
+//            alert.addButton("Yes", backgroundColor: #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1), textColor: .white) {
+//                Auth.auth().sendPasswordReset(withEmail: email, completion: nil)
+//            }
+//            alert.showError("Reset Password?", subTitle: "We will send you an email with instructions to change your password. Are you Sure?",closeButtonTitle: "NO", colorStyle: 0xe01212, colorTextButton: 0xfcfcfc )
         case 6:
             logout()
     

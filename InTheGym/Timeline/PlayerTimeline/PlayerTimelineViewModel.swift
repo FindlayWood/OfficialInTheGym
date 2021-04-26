@@ -90,7 +90,7 @@ class PlayerTimelineViewModel{
         
         var references:[String] = []
         // first get references from timeline - which will be just postID
-        PlayerTimelineViewModel.handle = PlayerTimelineViewModel.apiService.observe(.childAdded) { (snapshot) in
+        PlayerTimelineViewModel.handle = PlayerTimelineViewModel.apiService.queryLimited(toLast: 200).observe(.childAdded) { (snapshot) in
             if initialLoad == false{
                 //add new posts
                 self.loadNewPost(with: snapshot.key)

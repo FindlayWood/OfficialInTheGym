@@ -35,6 +35,7 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.tableview.isScrollEnabled = true
         
         self.tableview.tableFooterView = UIView()
+        self.navigationItem.title = "More"
         
     }
     
@@ -171,23 +172,6 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
         }
     }
-    
-    
-    // function to load user info to display at the top of the view
-//    func loadUserInfo(){
-//
-//        self.DBRef.child("users").child(userID!).observeSingleEvent(of: .value) { (snapshot) in
-//            if let snap = snapshot.value as? [String:Any]{
-//                let first = snap["firstName"] as? String ?? "FIRST"
-//                let last = snap["lastName"] as? String ?? "LAST"
-//                self.tabA.append("\(first) \(last)")
-//                let email = snap["email"] as? String
-//                self.tabA.append(email!)
-//                let counted = snap["numberOfCompletes"] as? Int
-//                self.tabA.append("\(counted ?? 0)")
-//            }
-//        }
-//    }
 
     override func viewWillAppear(_ animated: Bool) {
         //loadUserInfo()

@@ -66,9 +66,8 @@ class DisplayNotificationsViewModel {
         var tempNotifs = [NotificationTableViewModel]()
         let myGroup = DispatchGroup()
         
-        //let notificationsReference = Database.database().reference().child("Notifications").child(self.userID)
         handle = notificationsReference.observe(.childAdded) { (snapshot) in
-            
+                        
             if snapshot.childrenCount == 0 {
                 self.notifications = []
                 self.isLoading = false
@@ -88,6 +87,11 @@ class DisplayNotificationsViewModel {
                     self.notifications = tempNotifs
                     self.isLoading = false
                 }
+            }
+        }
+        notificationsReference.observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.childrenCount == 0 {
+                self.isLoading = false
             }
         }
     }

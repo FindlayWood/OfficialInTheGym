@@ -174,9 +174,10 @@ class PlayerViewController: UIViewController {
         scores.removeAll()
         for x in score{
             for (_, value) in x{
-                let sval = value as! String
-                let ival = Int(sval)
-                scores.append(ival!)
+                //let sval = value as! String
+                //let ival = Int(sval)
+                let scoreInt = value as! Int
+                scores.append(scoreInt)
             }
         }
         lastThree(array: scores.suffix(3))

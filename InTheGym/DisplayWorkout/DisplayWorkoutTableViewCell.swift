@@ -146,7 +146,7 @@ extension DisplayWorkoutTableViewCell: UICollectionViewDelegate, UICollectionVie
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DisplayWorkoutCollectionCell", for: indexPath) as! DisplayWorkoutCollectionViewCell
             var cellModel = CollectionCellModel()
             cellModel.set = indexPath.item + 1
-            cellModel.completed = self.exercise.completedSets![indexPath.item]
+            cellModel.completed = self.exercise.completedSets?[indexPath.item] ?? false
             cellModel.parentTableViewCell = self
             cellModel.reps = self.exercise.reps
             cellModel.weight = self.exercise.weight

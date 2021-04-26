@@ -118,6 +118,9 @@ class DisplayWorkoutViewModel: NSObject{
             }else{
                 savedWorkoutRef.setValue(true)
                 self.delegate.returnAlreadySaved(saved: false)
+                self.addADownload()
+                self.notificationFeedbackGenerator.prepare()
+                self.notificationFeedbackGenerator.notificationOccurred(.success)
             }
         }
         
@@ -132,7 +135,7 @@ class DisplayWorkoutViewModel: NSObject{
         notificationFeedbackGenerator.notificationOccurred(.success)
     }
     
-    func addAView(to workout:discoverWorkout){
+    func addAView(to workout:WorkoutDelegate){
         let ref = Database.database().reference().child("SavedWorkouts").child(workout.savedID)
         ref.runTransactionBlock { (currentData) -> TransactionResult in
             if var workout = currentData.value as? [String:AnyObject]{
@@ -148,7 +151,25 @@ class DisplayWorkoutViewModel: NSObject{
                 print(error.localizedDescription)
             }
         }
-
+        
+    }
+    
+    func addADownload(){
+        let ref = Database.database().reference().child("SavedWorkouts").child(selectedWorkout!.savedID)
+        ref.runTransactionBlock { (currentData) -> TransactionResult in
+            if var workout = currentData.value as? [String:AnyObject]{
+                var downloads = workout["NumberOfDownloads"] as? Int ?? 0
+                downloads += 1
+                workout["NumberOfDownloads"] = downloads as AnyObject
+                currentData.value = workout
+                return TransactionResult.success(withValue: currentData)
+            }
+            return TransactionResult.success(withValue: currentData)
+        } andCompletionBlock: { (error, committed, snapshot) in
+            if let error = error{
+                print(error.localizedDescription)
+            }
+        }
     }
     
 }

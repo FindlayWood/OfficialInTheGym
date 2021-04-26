@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SCLAlertView
 
 class MyProfileViewController: UIViewController {
     
@@ -34,6 +35,8 @@ class MyProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        showFirstMessage()
 
         adapter = MyProfileAdapter(delegate: self)
         tableview.delegate = adapter
@@ -84,6 +87,8 @@ class MyProfileViewController: UIViewController {
             ImageAPIService.shared.getProfileImage(for: user.uid!) { (image) in
                 if let image = image {
                     self.profileImage.image = image
+                    self.profileImage.alpha = 1.0
+                } else {
                     self.profileImage.alpha = 1.0
                 }
             }
@@ -348,4 +353,21 @@ extension MyProfileViewController: MyProfileProtocol, TimelineTapProtocol {
         
     }
     
+}
+
+// extension for first time message
+extension MyProfileViewController {
+    func showFirstMessage() {
+        if UIApplication.isFirstProfileLaunch() {
+
+            let screenSize: CGRect = UIScreen.main.bounds
+            let screenWidth = screenSize.width
+            
+            let appearance = SCLAlertView.SCLAppearance(
+                kWindowWidth: screenWidth - 40 )
+
+            let alert = SCLAlertView(appearance: appearance)
+            alert.showInfo("MY PROFILE!", subTitle: FirstTimeMessages.myPRofileMessage, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
+        }
+    }
 }

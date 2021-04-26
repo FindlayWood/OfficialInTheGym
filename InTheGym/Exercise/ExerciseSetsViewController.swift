@@ -56,6 +56,7 @@ class ExerciseSetsViewController: UIViewController {
         text.layer.cornerRadius = 6
         text.keyboardType = .numberPad
         text.becomeFirstResponder()
+        text.tintColor = .white
         hideKeyboardWhenTappedAround()
         
         onoff.isOn = false

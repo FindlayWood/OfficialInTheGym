@@ -45,6 +45,8 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        showFirstMessage()
+        
         // added for new feed
         segmentControl.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
         let NotSelectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 12)]
@@ -60,6 +62,8 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
         tableview.register(UINib(nibName: "UserCell", bundle: nil), forCellReuseIdentifier: "UserCell")
         tableview.register(UINib(nibName: "TimelineActivityTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineActivityTableViewCell")
         tableview.tableFooterView = UIView()
+        tableview.separatorStyle = .none
+        tableview.separatorColor = .clear
         
         playersRef = Database.database().reference().child("CoachPlayers").child(userID)
         playersFeedRef = Database.database().reference().child("Public Feed").child(userID)
@@ -100,7 +104,8 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
     func fetchPlayers(){
         self.activityIndicator.hidesWhenStopped = true
         self.activityIndicator.startAnimating()
-        //let userID = Auth.auth().currentUser!.uid
+        self.tableview.alpha = 0.0
+        
         let myGroup = DispatchGroup()
         var tempPlayers = [Users]()
         //let playerRef = Database.database().reference().child("CoachPlayers").child(userID)
@@ -117,16 +122,18 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
                         self.players = tempPlayers
                         self.activityIndicator.stopAnimating()
                         self.tableview.reloadData()
-                        if (self.tableview.refreshControl!.isRefreshing){
-                            self.tableview.refreshControl!.endRefreshing()
+                        self.tableview.refreshControl?.endRefreshing()
+                        UIView.animate(withDuration: 0.2) {
+                            self.tableview.alpha = 1.0
                         }
                     }
                 }
                 
             }else{
                 self.activityIndicator.stopAnimating()
-                if (self.tableview.refreshControl!.isRefreshing){
-                    self.tableview.refreshControl!.endRefreshing()
+                self.tableview.refreshControl?.endRefreshing()
+                UIView.animate(withDuration: 0.2) {
+                    self.tableview.alpha = 1.0
                 }
             }
         }
@@ -277,16 +284,13 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
     override func viewDidDisappear(_ animated: Bool) {
         self.removeObservers()
     }
+}
 
-    
-    // working on displaying message for the first time
-    // function
-    override func viewDidAppear(_ animated: Bool) {
-         if(!appDelegate.hasLaunchedPlayers){
-            //set hasAlreadyLaunched to false
-            appDelegate.setLaunchedPlayers()
-            //display user agreement license
-            // get width of screen to adjust alert appearance
+// extension for first time message
+extension AdminPlayersViewController {
+    func showFirstMessage() {
+        if UIApplication.isFirstPlayersLaunch() {
+
             let screenSize: CGRect = UIScreen.main.bounds
             let screenWidth = screenSize.width
             
@@ -294,8 +298,7 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
                 kWindowWidth: screenWidth - 40 )
 
             let alert = SCLAlertView(appearance: appearance)
-            alert.showInfo("PLAYERS", subTitle: "This page will display all of your players. Players will need to accept your request before they appear on this page. You can send requests on the ADDPLAYER page. You can tap on a player to get more info about them as well as being able to set a workout for them, view all their previous workouts and view their PBs. You can delete a player from your team by swiping left on their name. Enjoy!", closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
+            alert.showInfo("PLAYERS!", subTitle: FirstTimeMessages.playersMessage, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
         }
     }
-
 }

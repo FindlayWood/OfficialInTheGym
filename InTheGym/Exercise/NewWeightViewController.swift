@@ -220,6 +220,7 @@ class NewWeightViewController: UIViewController {
         
         nextButton.isHidden = true
         text.keyboardType = .decimalPad
+        text.tintColor = .white
         measurement.isUserInteractionEnabled = false
         hideKeyboardWhenTappedAround()
         shadowButtons()

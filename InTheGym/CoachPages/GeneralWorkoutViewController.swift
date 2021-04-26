@@ -258,23 +258,4 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     }
 
-    // working on displaying message for the first time
-    // function
-    override func viewDidAppear(_ animated: Bool) {
-         if(!appDelegate.hasLaunchedGroup){
-            //set hasAlreadyLaunched to false
-            appDelegate.setLaunchedGroup()
-            //display user agreement license
-            // get width of screen to adjust alert appearance
-            let screenSize: CGRect = UIScreen.main.bounds
-            let screenWidth = screenSize.width
-            
-            let appearance = SCLAlertView.SCLAppearance(
-                kWindowWidth: screenWidth - 40 )
-
-            let alert = SCLAlertView(appearance: appearance)
-            alert.showInfo("GROUPWORKOUT", subTitle: "This page allows you to set workouts for a group of players. We have already made a group containing all your players. You can make more groups containing who you like by tapping the big blue plus button underneath all the groups. You can assign workouts to certain groups by tapping on the group. Enjoy!", closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
-        }
-    }
-
 }

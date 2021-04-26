@@ -75,7 +75,7 @@ class NoteViewController: UIViewController {
         
         AddWorkoutHomeViewController.exercises.append(dictData)
         
-        displayTopView()
+        DisplayTopView.displayTopView(with: "Exercise added.", on: self)
 //        let alert = SCLAlertView()
 //        alert.showSuccess("Added!", subTitle: "Exercise has been added to the list.", closeButtonTitle: "ok")
         let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
@@ -105,7 +105,7 @@ class NoteViewController: UIViewController {
         
         AddWorkoutHomeViewController.exercises.append(dictData)
         
-        displayTopView()
+        DisplayTopView.displayTopView(with: "Exercise added.", on: self)
 
         
 //        let alert = SCLAlertView()
@@ -125,6 +125,7 @@ class NoteViewController: UIViewController {
         note.text = placeHolder
         note.textColor = .lightGray
         note.delegate = self
+        note.tintColor = Constants.lightColour
         hideKeyboardWhenTappedAround()
     }
     
@@ -145,30 +146,4 @@ class NoteViewController: UIViewController {
             note.textColor = UIColor.lightGray
         }
     }
-    
-    // this function displays a custom top view letting user know exercise has been added
-    func displayTopView(){
-        let viewHeight = self.view.bounds.height * 0.12
-        let viewWidth = self.view.bounds.width - 20
-        let startingPoint = CGRect(x: 10, y: -30 - viewHeight, width: viewWidth, height: viewHeight)
-        let showingPoint = CGRect(x: 10, y: 50, width: viewWidth, height: viewHeight)
-        
-        
-        let topView = CustomTopView(frame: startingPoint)
-        topView.image = UIImage(named: "added_icon")
-        topView.message = "Exercise added to the list."
-        self.navigationController?.view.addSubview(topView)
-        
-        UIView.animate(withDuration: 0.6) {
-            topView.frame = showingPoint
-        } completion: { (_) in
-            UIView.animate(withDuration: 0.6, delay: 1.8, options: .curveEaseOut) {
-                topView.frame = startingPoint
-                } completion: { (_) in
-                    topView.removeFromSuperview()
-            }
-        }
-    }
-    
-
 }

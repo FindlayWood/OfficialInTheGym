@@ -25,15 +25,15 @@ class CreatedWorkoutsAdapter: NSObject {
 extension CreatedWorkoutsAdapter : UITableViewDataSource, UITableViewDelegate, EmptyDataSetSource, EmptyDataSetDelegate{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        switch delegate.getData(at: indexPath) {
-        case is publicSavedWorkout:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SavedWorkoutCell", for: indexPath) as! SavedWorkoutTableViewCell
-            cell.workout = delegate.getData(at: indexPath) as? publicSavedWorkout
+        let workoutModel = delegate.getData(at: indexPath)
+        switch workoutModel {
+        case is PublicCreatedWorkout:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PublicCreatedWorkoutCell", for: indexPath) as! PublicCreatedWorkoutTableViewCell
+            cell.setup(workoutModel: workoutModel as! PublicCreatedWorkout)
             return cell
-        case is privateSavedWorkout:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "PrivateSavedWorkoutCell", for: indexPath) as! PrivateSavedWorkoutTableViewCell
-            cell.workout = delegate.getData(at: indexPath) as? privateSavedWorkout
+        case is PrivateCreatedWorkout:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PrivateCreatedWorkoutCell", for: indexPath) as! PrivateCreatedWorkoutTableViewCell
+            cell.setup(workoutModel: workoutModel as! PrivateCreatedWorkout)
             return cell
         default:
             return UITableViewCell()

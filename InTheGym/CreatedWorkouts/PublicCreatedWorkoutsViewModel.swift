@@ -1,8 +1,8 @@
 //
-//  CreatedWorkoutsViewModel.swift
+//  PublicCreatedWorkoutsViewModel.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 01/04/2021.
+//  Created by Findlay Wood on 26/04/2021.
 //  Copyright © 2021 FindlayWood. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import Foundation
 import Firebase
 import UIKit
 
-class CreatedWorkoutsViewModel:NSObject {
+class PublicCreatedWorkoutsViewModel:NSObject {
     
     // MARK: - Closures
         
@@ -26,7 +26,9 @@ class CreatedWorkoutsViewModel:NSObject {
     // We also defined a class and make it conform to that protocol.
     var apiService: DatabaseReference
     var handle : DatabaseHandle!
-    let userID = Auth.auth().currentUser!.uid
+    let user : Users!
+    let userID = Auth.auth().currentUser?.uid
+    
     
 
     // This will contain info about the picture eventually selectded by the user by tapping an item on the screen
@@ -50,12 +52,33 @@ class CreatedWorkoutsViewModel:NSObject {
         }
     }
     
+    var isFollowing: Bool! {
+        didSet{
+            fetchData()
+        }
+    }
+    
     // MARK: - Constructor
     
     // Note: apiService has a default value in case this constructor is executed without passing parameters
-    override init() {
-        self.apiService = Database.database().reference().child("SavedWorkoutCreators").child(userID)
+    init(for user:Users) {
+        self.user = user
+        self.apiService = Database.database().reference().child("SavedWorkoutCreators").child(user.uid!)
     }
+    
+    // MARK: - Check if following
+    
+    func checkFollowing(){
+        let ref = Database.database().reference().child("Following").child(self.userID!).child(user.uid!)
+        ref.observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.exists() {
+                self.isFollowing = true
+            } else {
+                self.isFollowing = false
+            }
+        }
+    }
+    
     
     
     // MARK: - Fetching functions
@@ -98,13 +121,16 @@ class CreatedWorkoutsViewModel:NSObject {
                 guard let snap = snapshot.value as? [String:AnyObject] else{
                     return
                 }
-                    
-                switch snap["isPrivate"] as! Bool {
-                case true:
-                    tempWorkouts.append(PrivateCreatedWorkout(snapshot: snapshot)!)
-                case false:
-                    tempWorkouts.append(PublicCreatedWorkout(snapshot: snapshot)!)
+                
+                if self.isFollowing || snap["isPrivate"] as? Bool ?? true == false {
+                    switch snap["isPrivate"] as! Bool {
+                    case true:
+                        tempWorkouts.append(PrivateCreatedWorkout(snapshot: snapshot)!)
+                    case false:
+                        tempWorkouts.append(PublicCreatedWorkout(snapshot: snapshot)!)
+                    }
                 }
+                
             }
             myGroup.notify(queue: .main){
                 self.createdWorkouts = tempWorkouts

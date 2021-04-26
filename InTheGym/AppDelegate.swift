@@ -16,96 +16,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    // check if it is first launch for user. to check whether to show alert
-    // for both player and coach side
-    var hasAlreadyLaunched : Bool!
-    var hasLaunchedDiscover : Bool!
-    var hasLaunchedMyProfile : Bool!
-    
-    // for coach side only
-    var hasLaunchedPlayers : Bool!
-    var hasLaunchedAddPlayers : Bool!
-    var hasLaunchedGroup : Bool!
-    // for player side only
-    var hasLaunchedWorkouts : Bool!
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = false
         
-        
-        //retrieve value from local store, if value doesn't exist then false is returned
-        // line below to show everytime
-        //hasAlreadyLaunched = false
-
-        hasAlreadyLaunched = UserDefaults.standard.bool(forKey: "hasAlreadyLaunched")
-        hasLaunchedDiscover = UserDefaults.standard.bool(forKey: "hasLaunchedDiscover")
-        hasLaunchedWorkouts = UserDefaults.standard.bool(forKey: "hasLaunchedWorkouts")
-        hasLaunchedPlayers = UserDefaults.standard.bool(forKey: "hasLaunchedPlayers")
-        
-        
-        
-        hasLaunchedAddPlayers = UserDefaults.standard.bool(forKey: "hasLaunchedAddPlayers")
-        hasLaunchedGroup = UserDefaults.standard.bool(forKey: "hasLaunchedGroup")
-        
-        
-        if (hasAlreadyLaunched)
-        {
-            hasAlreadyLaunched = true
-        }else{
-            UserDefaults.standard.set(true, forKey: "hasAlreadyLaunched")
-        }
-        
-        if (hasLaunchedPlayers){
-            hasLaunchedPlayers = true
-        }else{
-            UserDefaults.standard.set(true, forKey: "hasLaunchedPlayers")
-        }
-        
-        if (hasLaunchedAddPlayers){
-            hasLaunchedAddPlayers = true
-        }else{
-            UserDefaults.standard.set(true, forKey: "hasLaunchedAddPlayers")
-        }
-        
-        if (hasLaunchedGroup){
-            hasLaunchedGroup = true
-        }else{
-            UserDefaults.standard.set(true, forKey: "hasLaunchedGroup")
-        }
-        
-        if (hasLaunchedWorkouts){
-            hasLaunchedWorkouts = true
-        }else{
-            UserDefaults.standard.set(true, forKey: "hasLaunchedWorkouts")
-        }
-        
-
         return true
     }
     
-    // function to change value for first time launch
-    func sethasAlreadyLaunched(){
-        hasAlreadyLaunched = true
-    }
-    
-    func setLaunchedWorkouts(){
-        hasLaunchedWorkouts = true
-    }
-    
-    func setLaunchedPlayers(){
-        hasLaunchedPlayers = true
-    }
-    
-    func setLaunchedAddPlayers(){
-        hasLaunchedAddPlayers = true
-    }
-    
-    func setLaunchedGroup(){
-        hasLaunchedGroup = true
-    }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

@@ -205,25 +205,7 @@ class AddPlayerViewController: UIViewController {
         //loadActivities()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
-    
-    // working on displaying message for the first time
-    // function
-    override func viewDidAppear(_ animated: Bool) {
-         if(!appDelegate.hasLaunchedAddPlayers){
-            //set hasAlreadyLaunched to false
-            appDelegate.setLaunchedAddPlayers()
-            //display user agreement license
-            // get width of screen to adjust alert appearance
-            let screenSize: CGRect = UIScreen.main.bounds
-            let screenWidth = screenSize.width
-            
-            let appearance = SCLAlertView.SCLAppearance(
-                kWindowWidth: screenWidth - 40 )
 
-            let alert = SCLAlertView(appearance: appearance)
-            alert.showInfo("ADDPLAYER", subTitle: "This page will allow you to send requests to players. You just have to type in the player's username (not email) to send them a request. Once they accept, you will then be able to set them workouts. So tell your players to download the app and signup with a player account. Enjoy!", closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
-        }
-    }
 
 
 }

@@ -1,23 +1,24 @@
 //
-//  CreatedWorkoutsViewController.swift
+//  PublicCreatedWorkoutsViewController.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 01/04/2021.
+//  Created by Findlay Wood on 26/04/2021.
 //  Copyright © 2021 FindlayWood. All rights reserved.
 //
 
 import UIKit
 import EmptyDataSet_Swift
 
-class CreatedWorkoutsViewController: UIViewController {
+class PublicCreatedWorkoutsViewController: UIViewController {
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     
     var adapter : CreatedWorkoutsAdapter!
+    var user : Users!
     
-    lazy var viewModel: CreatedWorkoutsViewModel = {
-        return CreatedWorkoutsViewModel()
+    lazy var viewModel: PublicCreatedWorkoutsViewModel = {
+        return PublicCreatedWorkoutsViewModel(for: user)
     }()
 
     override func viewDidLoad() {
@@ -33,8 +34,6 @@ class CreatedWorkoutsViewController: UIViewController {
         tableview.emptyDataSetSource = adapter
         tableview.emptyDataSetDelegate = adapter
         
-        //initUI()
-        //initViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -84,7 +83,7 @@ class CreatedWorkoutsViewController: UIViewController {
             }
         }
         
-        viewModel.fetchData()
+        viewModel.checkFollowing()
     }
     
     func moveToView(){
@@ -98,7 +97,7 @@ class CreatedWorkoutsViewController: UIViewController {
     }
 
 }
-extension CreatedWorkoutsViewController : CreatedWorkoutsProtocol{
+extension PublicCreatedWorkoutsViewController : CreatedWorkoutsProtocol{
     func getData(at: IndexPath) -> CreatedWorkoutDelegate {
         return self.viewModel.getData(at: at)
     }
@@ -118,3 +117,4 @@ extension CreatedWorkoutsViewController : CreatedWorkoutsProtocol{
     
     
 }
+

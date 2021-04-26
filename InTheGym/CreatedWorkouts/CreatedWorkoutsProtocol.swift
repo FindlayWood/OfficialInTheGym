@@ -9,7 +9,7 @@
 import Foundation
 
 protocol CreatedWorkoutsProtocol {
-    func getData(at: IndexPath) -> savedWorkoutDelegate
+    func getData(at: IndexPath) -> CreatedWorkoutDelegate
     func itemSelected(at: IndexPath)
     func retreiveNumberOfItems() -> Int
     func retreiveNumberOfSections() -> Int

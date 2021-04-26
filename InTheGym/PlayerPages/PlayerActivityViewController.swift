@@ -101,24 +101,4 @@ class PlayerActivityViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
-    
-    // working on displaying message for the first time
-    // function
-    override func viewDidAppear(_ animated: Bool) {
-         if(!appDelegate.hasAlreadyLaunched){
-            //set hasAlreadyLaunched to false
-            appDelegate.sethasAlreadyLaunched()
-            //display user agreement license
-            // get width of screen to adjust alert appearance
-            let screenSize: CGRect = UIScreen.main.bounds
-            let screenWidth = screenSize.width
-            
-            let appearance = SCLAlertView.SCLAppearance(
-                kWindowWidth: screenWidth - 40 )
-
-            let alert = SCLAlertView(appearance: appearance)
-            alert.showInfo("Welcome!", subTitle: "Welcome to InTheGym!, You have signed up as a Player which means a coach will need to add you to their 'team'. Then they will be able to set workouts which you will be able to view and complete. So let your Coach know your username and wait for them to send you a request. You can view your Coach requests in the MYINFO page. In the mean time you can set your PBs in the MYINFO page. Thanks for signing up. Enjoy!", closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
-        }
-    }
-
 }

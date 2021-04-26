@@ -11,8 +11,9 @@
 import UIKit
 import Firebase
 import SCLAlertView
+import EmptyDataSet_Swift
 
-class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, EmptyDataSetSource, EmptyDataSetDelegate{
     
     @IBOutlet weak var tableview:UITableView!
     
@@ -53,8 +54,12 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        showFirstMessage()
+        
         self.tableview.rowHeight = 150
         self.tableview.backgroundColor = Constants.lightColour
+        tableview.emptyDataSetSource = self
+        tableview.emptyDataSetDelegate = self
         
         let userID = Auth.auth().currentUser?.uid
         
@@ -235,38 +240,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let titleLabel = self.rowsToDisplay[indexPath.section]["title"] as! String
-        let complete = self.rowsToDisplay[indexPath.section]["completed"] as! Bool
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-//        let SVC = StoryBoard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
-//        SVC.username = ViewController.username
-//        SVC.playerID = self.userID!
-//        SVC.titleString = titleLabel
-//        WorkoutDetailViewController.exercises = self.rowsToDisplay[indexPath.section]["exercises"] as! [[String:AnyObject]]
-//        SVC.complete = complete
-//        SVC.workoutID = rowsToDisplayIDs[indexPath.section]
-//        SVC.fromDiscover = false
-//        SVC.creatorID = rowsToDisplay[indexPath.section]["creatorID"] as! String
-//
-//        if let savedID = rowsToDisplay[indexPath.section]["savedID"] as? String {
-//            SVC.savedID = savedID
-//        }
-//        SVC.creatorUsername = rowsToDisplay[indexPath.section]["createdBy"] as! String
-//        if let assignedCoach = self.rowsToDisplay[indexPath.section]["coach"] as? String{
-//            SVC.assignedCoach = assignedCoach
-//        }else{
-//            SVC.assignedCoach = ""
-//        }
-//        if let live = rowsToDisplay[indexPath.section]["liveWorkout"] as? Bool{
-//            if live == true && complete == false {
-//                SVC.liveAdd = true
-//            } else {
-//                SVC.liveAdd = false
-//            }
-//        }
-//        PlayerWorkoutViewController.lastIndex = indexPath
-//
-//        self.navigationController?.pushViewController(SVC, animated: true)
         let DisplayVC = StoryBoard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
         let workoutID = rowsToDisplayIDs[indexPath.section]
         let ref = Database.database().reference().child("Workouts").child(self.userID!).child(workoutID)
@@ -277,6 +251,36 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         }
     }
     
+    // emptydataset functions
+    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+        let str = "No Workouts"
+        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
+        return NSAttributedString(string: str, attributes: attrs)
+    }
+    
+    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+        var stringToShow:String!
+        switch segment.selectedSegmentIndex {
+        case 0:
+            stringToShow = "No workouts. Add new workouts with the button in the top right"
+        case 1:
+            stringToShow = "No new workouts to start. Add new workouts with the button in the top right."
+        case 2:
+            stringToShow = "No workouts in progress. Add new workouts with the button in the top right"
+        case 3:
+            stringToShow = "No completed workouts. Add new workouts with the button in the top right."
+        default:
+            break
+        }
+        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
+        return NSAttributedString(string: stringToShow, attributes: attrs)
+    }
+    
+    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
+        return UIImage(named: "benchpress_icon")
+    }
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         loadWorkouts()
         tableview.reloadData()
@@ -285,16 +289,13 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     override func viewDidDisappear(_ animated: Bool) {
         DBref.removeObserver(withHandle: handle)
     }
-    
-    
-    // working on displaying message for the first time
-    // function
-    override func viewDidAppear(_ animated: Bool) {
-         if(!appDelegate.hasLaunchedWorkouts){
-            //set hasAlreadyLaunched to false
-            appDelegate.setLaunchedWorkouts()
-            //display user agreement license
-            // get width of screen to adjust alert appearance
+}
+
+// extension for first time message
+extension PlayerWorkoutViewController {
+    func showFirstMessage() {
+        if UIApplication.isFirstWorkoutsLaunch() {
+
             let screenSize: CGRect = UIScreen.main.bounds
             let screenWidth = screenSize.width
             
@@ -302,9 +303,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
                 kWindowWidth: screenWidth - 40 )
 
             let alert = SCLAlertView(appearance: appearance)
-            alert.showInfo("WORKOUTS", subTitle: "This page will display all of the workouts that your coach has set for you. Switch between workouts you have not started, workouts that are in progress and workouts you have completed easily with the switch bar at the top. You can get a detailed view by tapping on them!", closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
+            alert.showInfo("WORKOUTS!", subTitle: FirstTimeMessages.workoutsMessage, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
         }
     }
-
-
 }

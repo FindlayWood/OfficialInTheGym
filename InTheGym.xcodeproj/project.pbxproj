@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		57F4BCCC67DA206DD392D34D /* Pods_InTheGymUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAD561374BBA0AEAF4D7840D /* Pods_InTheGymUITests.framework */; };
+		45DCBC92B8F73D78F351DA96 /* Pods_InTheGymTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59668AF886083494ECC672C /* Pods_InTheGymTests.framework */; };
 		74028E0525E45C0F005A1D21 /* UserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74028E0425E45C0F005A1D21 /* UserCell.xib */; };
 		74028E0A25E462B6005A1D21 /* GroupMembersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E0925E462B6005A1D21 /* GroupMembersViewController.swift */; };
 		74028E1325E5610E005A1D21 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E1225E5610E005A1D21 /* EditProfileViewController.swift */; };
@@ -23,8 +23,16 @@
 		741722002459A42E0013EAC8 /* DistanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741721FF2459A42E0013EAC8 /* DistanceViewController.swift */; };
 		74172204245B41230013EAC8 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74172203245B41230013EAC8 /* FeedbackViewController.swift */; };
 		74172206245B413B0013EAC8 /* AppInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74172205245B413B0013EAC8 /* AppInfoViewController.swift */; };
+		741B21FA2635A3F700B1F5B3 /* TimelineEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741B21F92635A3F700B1F5B3 /* TimelineEndpoints.swift */; };
+		741B22022636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741B22012636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift */; };
+		741B22072637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741B22062637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift */; };
 		741E07D72630E18E008B93C9 /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741E07D62630E18E008B93C9 /* ContactUsViewController.swift */; };
 		74220899256FFE2C00B42563 /* LaunchPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74220898256FFE2C00B42563 /* LaunchPageViewController.swift */; };
+		74226E0726370E1A0074E616 /* CreatedWorkoutModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74226E0626370E1A0074E616 /* CreatedWorkoutModels.swift */; };
+		74226E0D2637148E0074E616 /* PrivateCreatedWorkoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74226E0B2637148E0074E616 /* PrivateCreatedWorkoutTableViewCell.swift */; };
+		74226E0E2637148E0074E616 /* PrivateCreatedWorkoutTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74226E0C2637148E0074E616 /* PrivateCreatedWorkoutTableViewCell.xib */; };
+		74226E142637157A0074E616 /* PublicCreatedWorkoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74226E122637157A0074E616 /* PublicCreatedWorkoutTableViewCell.swift */; };
+		74226E152637157A0074E616 /* PublicCreatedWorkoutTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74226E132637157A0074E616 /* PublicCreatedWorkoutTableViewCell.xib */; };
 		7425D4182545AE8000567DAB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7425D4172545AE8000567DAB /* Constants.swift */; };
 		7433F0E72627B6EF0014034B /* DiscoverPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7433F0E62627B6EF0014034B /* DiscoverPageViewModel.swift */; };
 		7439E03A260CF9E000C91C0C /* DiscussionViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7439E039260CF9E000C91C0C /* DiscussionViewViewController.swift */; };
@@ -249,8 +257,6 @@
 		74F5468F25E9911200C1A6A9 /* UserIDToUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F5468E25E9911200C1A6A9 /* UserIDToUser.swift */; };
 		74F5469425EA810800C1A6A9 /* TransformPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F5469325EA810800C1A6A9 /* TransformPost.swift */; };
 		74F5469925EB137400C1A6A9 /* TransformWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F5469825EB137400C1A6A9 /* TransformWorkout.swift */; };
-		74F546BE25EC03ED00C1A6A9 /* Pods_InTheGymTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F546BD25EC03EC00C1A6A9 /* Pods_InTheGymTests.framework */; };
-		74F546C025EC03F800C1A6A9 /* Pods_InTheGymUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F546BF25EC03F800C1A6A9 /* Pods_InTheGymUITests.framework */; };
 		74F546C525EC129900C1A6A9 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F546C425EC129900C1A6A9 /* TestData.swift */; };
 		74F546F625ED4D1700C1A6A9 /* SignUpMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F546F525ED4D1700C1A6A9 /* SignUpMessages.swift */; };
 		74F546FB25ED60EC00C1A6A9 /* FirstTimeMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F546FA25ED60EC00C1A6A9 /* FirstTimeMessages.swift */; };
@@ -259,6 +265,7 @@
 		74F6E57B24002CAD00233438 /* GeneralWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F6E57A24002CAD00233438 /* GeneralWorkoutViewController.swift */; };
 		74F6E57D24049FB100233438 /* GeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */; };
 		74F78B992631BF5600C21077 /* YourWorkoutBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F78B982631BF5600C21077 /* YourWorkoutBottomView.swift */; };
+		74F78B9E2631D0EC00C21077 /* LaunchMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F78B9D2631D0EC00C21077 /* LaunchMessageController.swift */; };
 		74FCFA2D2614E9E80064699F /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FCFA2C2614E9E80064699F /* MyProfileViewController.swift */; };
 		74FCFA352614EE830064699F /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FCFA342614EE830064699F /* MyProfileViewModel.swift */; };
 		74FCFA3A2614EE950064699F /* MyProfileAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FCFA392614EE950064699F /* MyProfileAdapter.swift */; };
@@ -269,8 +276,8 @@
 		74FDB98225A4981B00CC18EF /* DiscoverPageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB98125A4981B00CC18EF /* DiscoverPageCollectionViewCell.swift */; };
 		74FDB98725A65C7700CC18EF /* SearchForUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB98625A65C7700CC18EF /* SearchForUsersViewController.swift */; };
 		74FDB98C25A7684800CC18EF /* SearchUsersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB98B25A7684800CC18EF /* SearchUsersTableViewCell.swift */; };
-		7FDD99E1198C08A466024875 /* Pods_InTheGym.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9B859170847D1610C14845 /* Pods_InTheGym.framework */; };
-		B76B2B914FC47AA5457360E3 /* Pods_InTheGymTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAB8559C9228E0A5018A9B3C /* Pods_InTheGymTests.framework */; };
+		86E111249751E1087F399E72 /* Pods_InTheGymUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0368802E69EB0090D4665159 /* Pods_InTheGymUITests.framework */; };
+		CFB3610FCDBC21AADAD97DFC /* Pods_InTheGym.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E27A6CDECF228653A4A5C0 /* Pods_InTheGym.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -291,10 +298,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0A9B859170847D1610C14845 /* Pods_InTheGym.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGym.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1D348189BDEEFDFA8E90326D /* Pods-InTheGymTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymTests.debug.xcconfig"; path = "Target Support Files/Pods-InTheGymTests/Pods-InTheGymTests.debug.xcconfig"; sourceTree = "<group>"; };
-		6CC25323C1743410700498A5 /* Pods-InTheGymUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymUITests.release.xcconfig"; path = "Target Support Files/Pods-InTheGymUITests/Pods-InTheGymUITests.release.xcconfig"; sourceTree = "<group>"; };
-		6D6D1C4AE07527E72BA43C36 /* Pods-InTheGym.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGym.release.xcconfig"; path = "Target Support Files/Pods-InTheGym/Pods-InTheGym.release.xcconfig"; sourceTree = "<group>"; };
+		0368802E69EB0090D4665159 /* Pods_InTheGymUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGymUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B25882D94C182884687AC36 /* Pods-InTheGymUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymUITests.debug.xcconfig"; path = "Target Support Files/Pods-InTheGymUITests/Pods-InTheGymUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		4E2A4A62498CF285FF791C07 /* Pods-InTheGymUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymUITests.release.xcconfig"; path = "Target Support Files/Pods-InTheGymUITests/Pods-InTheGymUITests.release.xcconfig"; sourceTree = "<group>"; };
+		67C9739166FC10AF40F61DF7 /* Pods-InTheGymTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymTests.release.xcconfig"; path = "Target Support Files/Pods-InTheGymTests/Pods-InTheGymTests.release.xcconfig"; sourceTree = "<group>"; };
+		67E27A6CDECF228653A4A5C0 /* Pods_InTheGym.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGym.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6BF67A2CCC5DF95ADC0FD8E4 /* Pods-InTheGym.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGym.release.xcconfig"; path = "Target Support Files/Pods-InTheGym/Pods-InTheGym.release.xcconfig"; sourceTree = "<group>"; };
 		74028E0425E45C0F005A1D21 /* UserCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserCell.xib; sourceTree = "<group>"; };
 		74028E0925E462B6005A1D21 /* GroupMembersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMembersViewController.swift; sourceTree = "<group>"; };
 		74028E1225E5610E005A1D21 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
@@ -310,8 +319,16 @@
 		741721FF2459A42E0013EAC8 /* DistanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceViewController.swift; sourceTree = "<group>"; };
 		74172203245B41230013EAC8 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		74172205245B413B0013EAC8 /* AppInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
+		741B21F92635A3F700B1F5B3 /* TimelineEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineEndpoints.swift; sourceTree = "<group>"; };
+		741B22012636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCreatedWorkoutsViewModel.swift; sourceTree = "<group>"; };
+		741B22062637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCreatedWorkoutsViewController.swift; sourceTree = "<group>"; };
 		741E07D62630E18E008B93C9 /* ContactUsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
 		74220898256FFE2C00B42563 /* LaunchPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchPageViewController.swift; sourceTree = "<group>"; };
+		74226E0626370E1A0074E616 /* CreatedWorkoutModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedWorkoutModels.swift; sourceTree = "<group>"; };
+		74226E0B2637148E0074E616 /* PrivateCreatedWorkoutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateCreatedWorkoutTableViewCell.swift; sourceTree = "<group>"; };
+		74226E0C2637148E0074E616 /* PrivateCreatedWorkoutTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrivateCreatedWorkoutTableViewCell.xib; sourceTree = "<group>"; };
+		74226E122637157A0074E616 /* PublicCreatedWorkoutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCreatedWorkoutTableViewCell.swift; sourceTree = "<group>"; };
+		74226E132637157A0074E616 /* PublicCreatedWorkoutTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PublicCreatedWorkoutTableViewCell.xib; sourceTree = "<group>"; };
 		7425D4172545AE8000567DAB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7433F0E62627B6EF0014034B /* DiscoverPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageViewModel.swift; sourceTree = "<group>"; };
 		7439E039260CF9E000C91C0C /* DiscussionViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewViewController.swift; sourceTree = "<group>"; };
@@ -543,8 +560,6 @@
 		74F5468E25E9911200C1A6A9 /* UserIDToUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIDToUser.swift; sourceTree = "<group>"; };
 		74F5469325EA810800C1A6A9 /* TransformPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformPost.swift; sourceTree = "<group>"; };
 		74F5469825EB137400C1A6A9 /* TransformWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformWorkout.swift; sourceTree = "<group>"; };
-		74F546BD25EC03EC00C1A6A9 /* Pods_InTheGymTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_InTheGymTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		74F546BF25EC03F800C1A6A9 /* Pods_InTheGymUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_InTheGymUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74F546C425EC129900C1A6A9 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		74F546F525ED4D1700C1A6A9 /* SignUpMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpMessages.swift; sourceTree = "<group>"; };
 		74F546FA25ED60EC00C1A6A9 /* FirstTimeMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeMessages.swift; sourceTree = "<group>"; };
@@ -553,6 +568,7 @@
 		74F6E57A24002CAD00233438 /* GeneralWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralWorkoutViewController.swift; sourceTree = "<group>"; };
 		74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTableViewCell.swift; sourceTree = "<group>"; };
 		74F78B982631BF5600C21077 /* YourWorkoutBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourWorkoutBottomView.swift; sourceTree = "<group>"; };
+		74F78B9D2631D0EC00C21077 /* LaunchMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchMessageController.swift; sourceTree = "<group>"; };
 		74FCFA2C2614E9E80064699F /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		74FCFA342614EE830064699F /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
 		74FCFA392614EE950064699F /* MyProfileAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileAdapter.swift; sourceTree = "<group>"; };
@@ -563,11 +579,9 @@
 		74FDB98125A4981B00CC18EF /* DiscoverPageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageCollectionViewCell.swift; sourceTree = "<group>"; };
 		74FDB98625A65C7700CC18EF /* SearchForUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForUsersViewController.swift; sourceTree = "<group>"; };
 		74FDB98B25A7684800CC18EF /* SearchUsersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersTableViewCell.swift; sourceTree = "<group>"; };
-		7846125D2C221878DD235DAD /* Pods-InTheGymUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymUITests.debug.xcconfig"; path = "Target Support Files/Pods-InTheGymUITests/Pods-InTheGymUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		89C39C94A05C41D75DF86969 /* Pods-InTheGymTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymTests.release.xcconfig"; path = "Target Support Files/Pods-InTheGymTests/Pods-InTheGymTests.release.xcconfig"; sourceTree = "<group>"; };
-		9652D1530DBCE8454CCC377B /* Pods-InTheGym.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGym.debug.xcconfig"; path = "Target Support Files/Pods-InTheGym/Pods-InTheGym.debug.xcconfig"; sourceTree = "<group>"; };
-		BAB8559C9228E0A5018A9B3C /* Pods_InTheGymTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGymTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CAD561374BBA0AEAF4D7840D /* Pods_InTheGymUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGymUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C59668AF886083494ECC672C /* Pods_InTheGymTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGymTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9671226E70F65E57DAAE4F1 /* Pods-InTheGymTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymTests.debug.xcconfig"; path = "Target Support Files/Pods-InTheGymTests/Pods-InTheGymTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FC51DD12C78A7A2211722394 /* Pods-InTheGym.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGym.debug.xcconfig"; path = "Target Support Files/Pods-InTheGym/Pods-InTheGym.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -575,10 +589,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74F546C025EC03F800C1A6A9 /* Pods_InTheGymUITests.framework in Frameworks */,
-				74F546BE25EC03ED00C1A6A9 /* Pods_InTheGymTests.framework in Frameworks */,
 				746061BD252547E9005B1480 /* AppTrackingTransparency.framework in Frameworks */,
-				7FDD99E1198C08A466024875 /* Pods_InTheGym.framework in Frameworks */,
+				CFB3610FCDBC21AADAD97DFC /* Pods_InTheGym.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -586,7 +598,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B76B2B914FC47AA5457360E3 /* Pods_InTheGymTests.framework in Frameworks */,
+				45DCBC92B8F73D78F351DA96 /* Pods_InTheGymTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,7 +606,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57F4BCCC67DA206DD392D34D /* Pods_InTheGymUITests.framework in Frameworks */,
+				86E111249751E1087F399E72 /* Pods_InTheGymUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -928,6 +940,7 @@
 			children = (
 				747C074E2612433500E9F1E2 /* FirebaseAPI.swift */,
 				747C07962613CF9C00E9F1E2 /* ImageAPIService.swift */,
+				741B21F92635A3F700B1F5B3 /* TimelineEndpoints.swift */,
 			);
 			path = DatabaseManager;
 			sourceTree = "<group>";
@@ -1034,6 +1047,13 @@
 				74CCBAC7261617C100A20A94 /* CreatedWorkoutsViewModel.swift */,
 				74CCBACC261617DB00A20A94 /* CreatedWorkoutsAdapter.swift */,
 				74CCBAD1261617EB00A20A94 /* CreatedWorkoutsProtocol.swift */,
+				741B22012636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift */,
+				741B22062637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift */,
+				74226E0626370E1A0074E616 /* CreatedWorkoutModels.swift */,
+				74226E0B2637148E0074E616 /* PrivateCreatedWorkoutTableViewCell.swift */,
+				74226E0C2637148E0074E616 /* PrivateCreatedWorkoutTableViewCell.xib */,
+				74226E122637157A0074E616 /* PublicCreatedWorkoutTableViewCell.swift */,
+				74226E132637157A0074E616 /* PublicCreatedWorkoutTableViewCell.xib */,
 			);
 			path = CreatedWorkouts;
 			sourceTree = "<group>";
@@ -1176,6 +1196,7 @@
 				74F546F525ED4D1700C1A6A9 /* SignUpMessages.swift */,
 				74F546FA25ED60EC00C1A6A9 /* FirstTimeMessages.swift */,
 				74F5471225EE929900C1A6A9 /* SettingsMessages.swift */,
+				74F78B9D2631D0EC00C21077 /* LaunchMessageController.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -1213,12 +1234,12 @@
 		7A24691514823F63D6403175 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9652D1530DBCE8454CCC377B /* Pods-InTheGym.debug.xcconfig */,
-				6D6D1C4AE07527E72BA43C36 /* Pods-InTheGym.release.xcconfig */,
-				1D348189BDEEFDFA8E90326D /* Pods-InTheGymTests.debug.xcconfig */,
-				89C39C94A05C41D75DF86969 /* Pods-InTheGymTests.release.xcconfig */,
-				7846125D2C221878DD235DAD /* Pods-InTheGymUITests.debug.xcconfig */,
-				6CC25323C1743410700498A5 /* Pods-InTheGymUITests.release.xcconfig */,
+				FC51DD12C78A7A2211722394 /* Pods-InTheGym.debug.xcconfig */,
+				6BF67A2CCC5DF95ADC0FD8E4 /* Pods-InTheGym.release.xcconfig */,
+				D9671226E70F65E57DAAE4F1 /* Pods-InTheGymTests.debug.xcconfig */,
+				67C9739166FC10AF40F61DF7 /* Pods-InTheGymTests.release.xcconfig */,
+				2B25882D94C182884687AC36 /* Pods-InTheGymUITests.debug.xcconfig */,
+				4E2A4A62498CF285FF791C07 /* Pods-InTheGymUITests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1226,12 +1247,10 @@
 		D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				74F546BF25EC03F800C1A6A9 /* Pods_InTheGymUITests.framework */,
-				74F546BD25EC03EC00C1A6A9 /* Pods_InTheGymTests.framework */,
 				746061BC252547E9005B1480 /* AppTrackingTransparency.framework */,
-				0A9B859170847D1610C14845 /* Pods_InTheGym.framework */,
-				BAB8559C9228E0A5018A9B3C /* Pods_InTheGymTests.framework */,
-				CAD561374BBA0AEAF4D7840D /* Pods_InTheGymUITests.framework */,
+				67E27A6CDECF228653A4A5C0 /* Pods_InTheGym.framework */,
+				C59668AF886083494ECC672C /* Pods_InTheGymTests.framework */,
+				0368802E69EB0090D4665159 /* Pods_InTheGymUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1243,11 +1262,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7479A930229F2B4D00D39E2E /* Build configuration list for PBXNativeTarget "InTheGym" */;
 			buildPhases = (
-				7F78FB7C1C3602470B4DE4C3 /* [CP] Check Pods Manifest.lock */,
+				2C075C31C3D3AD9393275BE8 /* [CP] Check Pods Manifest.lock */,
 				7479A901229F2B4C00D39E2E /* Sources */,
 				7479A902229F2B4C00D39E2E /* Frameworks */,
 				7479A903229F2B4C00D39E2E /* Resources */,
-				3A7105457512FED33B011FD1 /* [CP] Embed Pods Frameworks */,
+				373637D06CF20E7BF7ACB0C1 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1262,7 +1281,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7479A933229F2B4D00D39E2E /* Build configuration list for PBXNativeTarget "InTheGymTests" */;
 			buildPhases = (
-				3D03EC87A2D2BE2DCBB4BABE /* [CP] Check Pods Manifest.lock */,
+				42B994DA9BD2E2FCAC5C96A0 /* [CP] Check Pods Manifest.lock */,
 				7479A918229F2B4D00D39E2E /* Sources */,
 				7479A919229F2B4D00D39E2E /* Frameworks */,
 				7479A91A229F2B4D00D39E2E /* Resources */,
@@ -1281,7 +1300,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7479A936229F2B4D00D39E2E /* Build configuration list for PBXNativeTarget "InTheGymUITests" */;
 			buildPhases = (
-				F5BF503261210F017E1E203C /* [CP] Check Pods Manifest.lock */,
+				CAF330966A2B96D9EDFE30B6 /* [CP] Check Pods Manifest.lock */,
 				7479A923229F2B4D00D39E2E /* Sources */,
 				7479A924229F2B4D00D39E2E /* Frameworks */,
 				7479A925229F2B4D00D39E2E /* Resources */,
@@ -1349,12 +1368,14 @@
 				747B67A22600F1DC000AD6B7 /* TimelineCompletedWorkoutTableViewCell.xib in Resources */,
 				7479A916229F2B4D00D39E2E /* LaunchScreen.storyboard in Resources */,
 				747B672F25FFAAFC000AD6B7 /* NotificationsTableViewCell.xib in Resources */,
+				74226E152637157A0074E616 /* PublicCreatedWorkoutTableViewCell.xib in Resources */,
 				74536D7025DD866E007DCE22 /* PostCell.xib in Resources */,
 				74CCBAB32615F1D800A20A94 /* MyProfileCollectionTableViewCell.xib in Resources */,
 				747B68A82603F2E2000AD6B7 /* RequestsTableViewCell.xib in Resources */,
 				7480EBC625F5136800E4E768 /* DisplayWorkout.xib in Resources */,
 				74FCFA4C261541640064699F /* MyInfoTableViewCell.xib in Resources */,
 				745D0E7822A007A3007670E3 /* GoogleService-Info.plist in Resources */,
+				74226E0E2637148E0074E616 /* PrivateCreatedWorkoutTableViewCell.xib in Resources */,
 				74A1EC5A260D05DF00943745 /* OriginalCompletedWorkoutTableViewCell.xib in Resources */,
 				7479A913229F2B4D00D39E2E /* Assets.xcassets in Resources */,
 				74028E0525E45C0F005A1D21 /* UserCell.xib in Resources */,
@@ -1402,46 +1423,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3A7105457512FED33B011FD1 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-InTheGym/Pods-InTheGym-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-InTheGym/Pods-InTheGym-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-InTheGym/Pods-InTheGym-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3D03EC87A2D2BE2DCBB4BABE /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-InTheGymTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7F78FB7C1C3602470B4DE4C3 /* [CP] Check Pods Manifest.lock */ = {
+		2C075C31C3D3AD9393275BE8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1463,7 +1445,46 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F5BF503261210F017E1E203C /* [CP] Check Pods Manifest.lock */ = {
+		373637D06CF20E7BF7ACB0C1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-InTheGym/Pods-InTheGym-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-InTheGym/Pods-InTheGym-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-InTheGym/Pods-InTheGym-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		42B994DA9BD2E2FCAC5C96A0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-InTheGymTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CAF330966A2B96D9EDFE30B6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1512,10 +1533,12 @@
 				7466A82025EED31800F4050F /* BestUseMessageViewController.swift in Sources */,
 				74D31F1125FE4ADD0024CC05 /* NotificationLikedPost.swift in Sources */,
 				743B1E7D22EF440E0046006C /* AdminActivityViewController.swift in Sources */,
+				74226E0726370E1A0074E616 /* CreatedWorkoutModels.swift in Sources */,
 				7413A066255D743E009C7F97 /* CustomTopView.swift in Sources */,
 				7439E03F260CFA0000C91C0C /* DiscussionViewModel.swift in Sources */,
 				7479AF9F253F7E7300E6A79C /* ScrollViewController.swift in Sources */,
 				746062712528C35D005B1480 /* COACHESViewController.swift in Sources */,
+				741B22022636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift in Sources */,
 				74C57A292531197E00078C42 /* NewRepsViewController.swift in Sources */,
 				74FCFA352614EE830064699F /* MyProfileViewModel.swift in Sources */,
 				74443B9822F1CD6B00DD18B3 /* ViewDesign.swift in Sources */,
@@ -1587,6 +1610,7 @@
 				74D31D1C25F948850024CC05 /* MainWorkoutBottomView.swift in Sources */,
 				7492263A22CE6CD400EAD386 /* AddWorkoutHomeViewController.swift in Sources */,
 				74F5468A25E96DAA00C1A6A9 /* UploadPostViewModel.swift in Sources */,
+				74F78B9E2631D0EC00C21077 /* LaunchMessageController.swift in Sources */,
 				748B403D25236EBD00C947B6 /* ExerciseSetsViewController.swift in Sources */,
 				747B674825FFC071000AD6B7 /* DisplayNotificationsProtocol.swift in Sources */,
 				74028E6425E69B52005A1D21 /* TextFieldReturning.swift in Sources */,
@@ -1618,6 +1642,7 @@
 				7466A85A25EFD7C300F4050F /* ProfileViewProtocol.swift in Sources */,
 				74FCFA2D2614E9E80064699F /* MyProfileViewController.swift in Sources */,
 				748E3C3625B89202004D6D4A /* PreLiveWorkoutViewController.swift in Sources */,
+				741B21FA2635A3F700B1F5B3 /* TimelineEndpoints.swift in Sources */,
 				74CCF8DE262D9D4C00262345 /* NotificationRequests.swift in Sources */,
 				747C07582613634400E9F1E2 /* SeeNewPostsButton.swift in Sources */,
 				74F5468F25E9911200C1A6A9 /* UserIDToUser.swift in Sources */,
@@ -1636,6 +1661,7 @@
 				7466A85525EFD78100F4050F /* ProfileViewAdapter.swift in Sources */,
 				7492264622D3A9C100EAD386 /* PBsViewController.swift in Sources */,
 				7466A86525EFDB8B00F4050F /* ProfileCollectionViewCell.swift in Sources */,
+				74226E0D2637148E0074E616 /* PrivateCreatedWorkoutTableViewCell.swift in Sources */,
 				74D31E8B25FC13060024CC05 /* FollowersDisplayViewController.swift in Sources */,
 				7471AC9B25D348020042C561 /* CoachProfileViewController.swift in Sources */,
 				74536C2C25D6CF43007DCE22 /* Workout.swift in Sources */,
@@ -1657,6 +1683,7 @@
 				74220899256FFE2C00B42563 /* LaunchPageViewController.swift in Sources */,
 				747B679A2600EE47000AD6B7 /* TimelineCreatedWorkoutTableViewCell.swift in Sources */,
 				7492263222C8D1DF00EAD386 /* AddPlayerViewController.swift in Sources */,
+				741B22072637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift in Sources */,
 				74CCBAD2261617EB00A20A94 /* CreatedWorkoutsProtocol.swift in Sources */,
 				747B677026001FB8000AD6B7 /* PlayerTimelineViewController.swift in Sources */,
 				74536D9A25DDC039007DCE22 /* PostsTableview.swift in Sources */,
@@ -1676,6 +1703,7 @@
 				74DB061B2303017B00C4A19C /* ResetPasswordViewController.swift in Sources */,
 				74FDB97D25A4978A00CC18EF /* DiscoverPageViewController.swift in Sources */,
 				74CCBAC0261617AF00A20A94 /* CreatedWorkoutsViewController.swift in Sources */,
+				74226E142637157A0074E616 /* PublicCreatedWorkoutTableViewCell.swift in Sources */,
 				747B687E2603EA8D000AD6B7 /* RequestsAdapter.swift in Sources */,
 				74D31F0C25FE47FB0024CC05 /* NotificationProtocol.swift in Sources */,
 				74D31F1B25FE52960024CC05 /* NotificationFollowed.swift in Sources */,
@@ -1883,7 +1911,7 @@
 		};
 		7479A931229F2B4D00D39E2E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9652D1530DBCE8454CCC377B /* Pods-InTheGym.debug.xcconfig */;
+			baseConfigurationReference = FC51DD12C78A7A2211722394 /* Pods-InTheGym.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1956,7 +1984,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4;
+				MARKETING_VERSION = 4.0.1;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -2059,7 +2087,7 @@
 		};
 		7479A932229F2B4D00D39E2E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6D6D1C4AE07527E72BA43C36 /* Pods-InTheGym.release.xcconfig */;
+			baseConfigurationReference = 6BF67A2CCC5DF95ADC0FD8E4 /* Pods-InTheGym.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -2132,7 +2160,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4;
+				MARKETING_VERSION = 4.0.1;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -2234,7 +2262,7 @@
 		};
 		7479A934229F2B4D00D39E2E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1D348189BDEEFDFA8E90326D /* Pods-InTheGymTests.debug.xcconfig */;
+			baseConfigurationReference = D9671226E70F65E57DAAE4F1 /* Pods-InTheGymTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2256,7 +2284,7 @@
 		};
 		7479A935229F2B4D00D39E2E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C39C94A05C41D75DF86969 /* Pods-InTheGymTests.release.xcconfig */;
+			baseConfigurationReference = 67C9739166FC10AF40F61DF7 /* Pods-InTheGymTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2278,7 +2306,7 @@
 		};
 		7479A937229F2B4D00D39E2E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7846125D2C221878DD235DAD /* Pods-InTheGymUITests.debug.xcconfig */;
+			baseConfigurationReference = 2B25882D94C182884687AC36 /* Pods-InTheGymUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -2299,7 +2327,7 @@
 		};
 		7479A938229F2B4D00D39E2E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6CC25323C1743410700498A5 /* Pods-InTheGymUITests.release.xcconfig */;
+			baseConfigurationReference = 4E2A4A62498CF285FF791C07 /* Pods-InTheGymUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

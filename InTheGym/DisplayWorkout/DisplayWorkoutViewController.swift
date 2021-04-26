@@ -83,18 +83,39 @@ class DisplayWorkoutViewController: UIViewController {
                     // fucntion to add workout on viewmodel
                 }
             }
+        case is CreatedWorkoutDelegate:
+            self.completeButton.isHidden = true
+            self.completeButtonBottomConstraint.constant = 50
+            if !(selectedWorkout.creatorID == viewModel.userId){
+                viewModel.addAView(to: selectedWorkout)
+                let bv = DiscoverWorkoutBottomView(workout: selectedWorkout, parent: self.view)
+                bv.bottomViewSetUpClosure = { [weak self] () in
+                    self?.viewModel.addToSavedWorkouts()
+                    
+                }
+            }
+            else if !ViewController.admin{
+                let bv = SavedWorkoutBottomView(workout: selectedWorkout, parent: self.view)
+                bv.bottomViewSetUpClosure = { [weak self] () in
+                    self?.viewModel.addToWorkouts()
+                    DisplayTopView.displayTopView(with: "Added To Workouts", on: self!)
+                    // fucntion to add workout on viewmodel
+                }
+            }
+            
+        
         case is discoverWorkout:
             self.completeButton.isHidden = true
             self.completeButtonBottomConstraint.constant = 50
             if !selectedWorkout.liveWorkout {
-                if !(selectedWorkout.creatorID == viewModel.userId){
-                    viewModel.addAView(to: selectedWorkout as! discoverWorkout)
+                if !(selectedWorkout.creatorID == viewModel.userId) && selectedWorkout.savedID != nil{
+                    viewModel.addAView(to: selectedWorkout)
                     let bv = DiscoverWorkoutBottomView(workout: selectedWorkout, parent: self.view)
                     bv.bottomViewSetUpClosure = { [weak self] () in
                         //add to saved workouts
                         self?.viewModel.addToSavedWorkouts()
                     }
-                } else {
+                } else if selectedWorkout.creatorID == viewModel.userId {
                     let bv = YourWorkoutBottomView(parent: self.view)
                     self.view.addSubview(bv)
                 }
@@ -102,7 +123,7 @@ class DisplayWorkoutViewController: UIViewController {
             
         case is workout:
             let s = selectedWorkout as! workout
-            if selectedWorkout.completed{
+            if selectedWorkout.completed || ViewController.admin {
                 self.completeButton.isHidden = true
                 self.completeButtonBottomConstraint.constant = 50
                 // no view

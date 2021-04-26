@@ -79,7 +79,7 @@ class PublicTimelineViewController: UIViewController {
     }
     override func viewDidDisappear(_ animated: Bool) {
         if isMovingFromParent{
-            viewModel.removeObservers()
+            //viewModel.removeObservers()
         }
     }
     
@@ -91,7 +91,7 @@ class PublicTimelineViewController: UIViewController {
         self.navigationItem.title = user.username!
         self.profileBio.text = user.profileBio
         self.name.text = user.firstName! + " " + user.lastName!
-        self.accountType.isUserInteractionEnabled = false
+        self.accountType.isUserInteractionEnabled = true
         if user.admin == true{
             self.accountType.setImage(UIImage(named: "coach_icon"), for: .normal)
             self.accountTypeLabel.text = "Coach"
@@ -182,6 +182,9 @@ class PublicTimelineViewController: UIViewController {
         viewModel.isFollowing()
     }
     
+    
+    // MARK: - Actions
+    
     @IBAction func follow(_ sender:UIButton){
         sender.backgroundColor = .lightGray
         sender.setTitle("Following", for: .normal)
@@ -200,6 +203,13 @@ class PublicTimelineViewController: UIViewController {
                 DisplayTopView.displayTopView(with: "Try Again", on: self!)
             }
         }
+    }
+    
+    @IBAction func showCreatedWorkouts(_ sender:UIButton){
+        let Storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let nextVC = Storyboard.instantiateViewController(withIdentifier: "PublicCreatedWorkoutsViewController") as! PublicCreatedWorkoutsViewController
+        nextVC.user = self.user
+        self.navigationController?.pushViewController(nextVC, animated: true)
     }
 
 }

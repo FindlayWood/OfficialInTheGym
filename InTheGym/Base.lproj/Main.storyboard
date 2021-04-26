@@ -2279,7 +2279,7 @@
         <!--Reset Password View Controller-->
         <scene sceneID="eWs-hm-jOb">
             <objects>
-                <viewController id="awG-AD-bc0" customClass="ResetPasswordViewController" customModule="InTheGym" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ResetPasswordViewController" id="awG-AD-bc0" customClass="ResetPasswordViewController" customModule="InTheGym" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="phg-ks-04f">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2578,7 +2578,7 @@
                                     <constraint firstAttribute="height" constant="50" id="z7J-Bk-992"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="emailAddress" returnKeyType="done" textContentType="username"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="emailAddress" returnKeyType="done"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="textColor">
                                         <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2616,7 +2616,7 @@
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="21"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done" secureTextEntry="YES"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="textColor">
                                         <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2654,7 +2654,7 @@
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done" secureTextEntry="YES" textContentType="new-password"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done" secureTextEntry="YES"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="textColor">
                                         <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2692,7 +2692,7 @@
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done" textContentType="username"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="textColor">
                                         <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2793,7 +2793,7 @@
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done" textContentType="username"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="textColor">
                                         <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -4768,6 +4768,9 @@
                                                     <constraint firstAttribute="width" constant="30" id="bWf-nP-Pkb"/>
                                                 </constraints>
                                                 <state key="normal" title="Button" image="player_icon"/>
+                                                <connections>
+                                                    <action selector="showCreatedWorkouts:" destination="Lz3-2L-mne" eventType="touchUpInside" id="eH9-CX-ZTp"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Player" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RO1-Q1-QHh">
                                                 <rect key="frame" x="0.0" y="34" width="50" height="20"/>
@@ -4805,6 +4808,7 @@
                             <constraint firstItem="6uL-ZB-IGv" firstAttribute="top" secondItem="iNH-29-ODr" secondAttribute="bottom" constant="8" symbolic="YES" id="YFh-NR-Qhp"/>
                             <constraint firstItem="Gr4-To-MIF" firstAttribute="top" secondItem="NPj-af-A3y" secondAttribute="top" id="cfG-Ww-A0j"/>
                             <constraint firstItem="iNH-29-ODr" firstAttribute="top" secondItem="pyy-JU-nYV" secondAttribute="bottom" constant="8.5" id="dsA-EN-c2F"/>
+                            <constraint firstItem="RIO-Dz-LiK" firstAttribute="top" secondItem="Gr4-To-MIF" secondAttribute="bottom" constant="8" symbolic="YES" id="eBx-41-bpG"/>
                             <constraint firstItem="NPj-af-A3y" firstAttribute="trailing" secondItem="RIO-Dz-LiK" secondAttribute="trailing" constant="20" id="hDb-Kq-WJ4"/>
                             <constraint firstItem="NPj-af-A3y" firstAttribute="trailing" secondItem="pyy-JU-nYV" secondAttribute="trailing" constant="20" id="itq-Iv-1Fe"/>
                             <constraint firstItem="RIO-Dz-LiK" firstAttribute="leading" secondItem="NPj-af-A3y" secondAttribute="leading" constant="20" id="k8l-ct-yN4"/>
@@ -4985,6 +4989,7 @@
                             <constraint firstItem="yYX-Gd-2Sz" firstAttribute="top" secondItem="CT2-PK-sdq" secondAttribute="bottom" constant="2" id="FY9-JS-qgl"/>
                             <constraint firstItem="JFP-Wr-8Xf" firstAttribute="leading" secondItem="vmW-SZ-njl" secondAttribute="leading" constant="20" id="MRH-83-Nr1"/>
                             <constraint firstItem="Hy7-D3-u0l" firstAttribute="leading" secondItem="vmW-SZ-njl" secondAttribute="leading" id="NpF-Q2-0bu"/>
+                            <constraint firstItem="e9i-IY-rbi" firstAttribute="top" secondItem="JFP-Wr-8Xf" secondAttribute="bottom" constant="8" symbolic="YES" id="Nsv-5A-BoI"/>
                             <constraint firstItem="Kgw-UM-fxP" firstAttribute="leading" secondItem="JFP-Wr-8Xf" secondAttribute="trailing" constant="8" symbolic="YES" id="SIi-id-f1W"/>
                             <constraint firstItem="8eI-WS-CyP" firstAttribute="top" secondItem="yYX-Gd-2Sz" secondAttribute="bottom" constant="26.5" id="U50-6G-Rag"/>
                             <constraint firstItem="8eI-WS-CyP" firstAttribute="leading" secondItem="JFP-Wr-8Xf" secondAttribute="trailing" constant="115" id="Uh2-oF-his"/>
@@ -4996,6 +5001,7 @@
                             <constraint firstItem="vmW-SZ-njl" firstAttribute="trailing" secondItem="CT2-PK-sdq" secondAttribute="trailing" constant="20" id="duM-Bm-3Sn"/>
                             <constraint firstAttribute="bottom" secondItem="Hy7-D3-u0l" secondAttribute="bottom" id="fOC-aX-oao"/>
                             <constraint firstItem="vmW-SZ-njl" firstAttribute="trailing" secondItem="yYX-Gd-2Sz" secondAttribute="trailing" constant="20" id="ine-RQ-RNr"/>
+                            <constraint firstItem="e9i-IY-rbi" firstAttribute="top" secondItem="JFP-Wr-8Xf" secondAttribute="bottom" constant="8" symbolic="YES" id="pSG-aM-Leu"/>
                             <constraint firstItem="Kgw-UM-fxP" firstAttribute="top" secondItem="yYX-Gd-2Sz" secondAttribute="bottom" constant="12.5" id="t60-q7-h9c"/>
                             <constraint firstItem="vmW-SZ-njl" firstAttribute="trailing" secondItem="Kgw-UM-fxP" secondAttribute="trailing" constant="20" id="tFY-9V-7GO"/>
                             <constraint firstItem="Hy7-D3-u0l" firstAttribute="top" secondItem="e9i-IY-rbi" secondAttribute="bottom" constant="8" symbolic="YES" id="viy-Tg-WV5"/>
@@ -7900,6 +7906,42 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cPO-Vn-IqU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="9213" y="955"/>
+        </scene>
+        <!--Public Created Workouts View Controller-->
+        <scene sceneID="rh9-NU-iNw">
+            <objects>
+                <viewController storyboardIdentifier="PublicCreatedWorkoutsViewController" id="j7t-ul-5X4" customClass="PublicCreatedWorkoutsViewController" customModule="InTheGym" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="tbQ-Tt-s1z">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="cDV-wW-3ti">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                            </activityIndicatorView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="DzQ-gU-6u4">
+                                <rect key="frame" x="5" y="44" width="404" height="852"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="giq-uN-m6a"/>
+                        <color key="backgroundColor" name="lightColour"/>
+                        <constraints>
+                            <constraint firstItem="DzQ-gU-6u4" firstAttribute="leading" secondItem="giq-uN-m6a" secondAttribute="leading" constant="5" id="5VP-oN-ogc"/>
+                            <constraint firstItem="cDV-wW-3ti" firstAttribute="centerY" secondItem="tbQ-Tt-s1z" secondAttribute="centerY" id="ACo-KT-9xg"/>
+                            <constraint firstAttribute="bottom" secondItem="DzQ-gU-6u4" secondAttribute="bottom" id="qk1-a8-cXe"/>
+                            <constraint firstItem="cDV-wW-3ti" firstAttribute="centerX" secondItem="tbQ-Tt-s1z" secondAttribute="centerX" id="ru0-fA-qOt"/>
+                            <constraint firstItem="giq-uN-m6a" firstAttribute="trailing" secondItem="DzQ-gU-6u4" secondAttribute="trailing" constant="5" id="u9T-Aa-xkS"/>
+                            <constraint firstItem="DzQ-gU-6u4" firstAttribute="top" secondItem="giq-uN-m6a" secondAttribute="top" id="vI8-Zw-YPM"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="activityIndicator" destination="cDV-wW-3ti" id="eqa-gr-qW8"/>
+                        <outlet property="tableview" destination="DzQ-gU-6u4" id="nCA-p0-fcv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tM2-UQ-iSd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="10052.17391304348" y="971.65178571428567"/>
         </scene>
         <!--MYPROFILE-->
         <scene sceneID="qoX-nP-fJ9">

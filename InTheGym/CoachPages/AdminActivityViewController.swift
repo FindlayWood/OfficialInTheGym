@@ -152,27 +152,6 @@ class AdminActivityViewController: UIViewController {
         }
     }
     
-    
-    
-    
-    // display first time message
-    override func viewDidAppear(_ animated: Bool) {
-         if(!appDelegate.hasAlreadyLaunched){
-            //set hasAlreadyLaunched to false
-            appDelegate.sethasAlreadyLaunched()
-            //display user agreement license
-            // get width of screen to adjust alert appearance
-            let screenSize: CGRect = UIScreen.main.bounds
-            let screenWidth = screenSize.width
-            
-            let appearance = SCLAlertView.SCLAppearance(
-                kWindowWidth: screenWidth - 40 )
-
-            let alert = SCLAlertView(appearance: appearance)
-            alert.showInfo("Welcome!", subTitle: "Welcome to InTheGym!, You have signed up as a Coach which means you can add players to your 'team', set them workouts and keep a track of their workouts. This page displays the activity of you and your players in the app. Switch between your feed and the players feed with the button near the top of the screen. You can switch pages using the tab bar at the bottom of the screen. Switch page to find out more about it. The first step would be to add players to your team on the ADDPLAYER page. All your info and the app settings are on the My Info page. Thanks for signing up. Enjoy!", closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }

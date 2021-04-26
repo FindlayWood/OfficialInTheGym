@@ -60,4 +60,8 @@ extension MyGroupsAdapter : UITableViewDelegate, UITableViewDataSource, EmptyDat
         return NSAttributedString(string: str, attributes: attrs)
     }
     
+    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
+        return UIImage(named: "groups_icon")
+    }
+    
 }

@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import SCLAlertView
 
 class DiscoverPageViewController: UIViewController {
     
@@ -29,6 +30,8 @@ class DiscoverPageViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        showFirstMessage()
         
         adapter = DiscoverPageAdapter(delegate: self)
         collection.delegate = adapter
@@ -153,4 +156,21 @@ extension DiscoverPageViewController : DiscoverPageProtocol {
     }
     
     
+}
+
+// extension for first time message
+extension DiscoverPageViewController {
+    func showFirstMessage() {
+        if UIApplication.isFirstDiscoverLaunch() {
+
+            let screenSize: CGRect = UIScreen.main.bounds
+            let screenWidth = screenSize.width
+            
+            let appearance = SCLAlertView.SCLAppearance(
+                kWindowWidth: screenWidth - 40 )
+
+            let alert = SCLAlertView(appearance: appearance)
+            alert.showInfo("DISCOVER!", subTitle: FirstTimeMessages.discoverMessage, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
+        }
+    }
 }

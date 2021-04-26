@@ -21,5 +21,5 @@ class FirstTimeMessages:NSObject{
     
     static let workoutsMessage = "Welcome to your WORKOUTS page! Here you will see all of your workouts. You can switch between workouts you have completed, not started or currently in progress workouts using the switch bar near the top of the screen. Tapping on workouts will allow you to view the workout in more detail and begin the workout if you want."
     
-    static let myPRofileMessage = "Welcome to your MYPROFILE page! Here you will see all of the details about your profile. You can acces your GROUPS, WORKOUT SCORES, SAVED WORKOUTS, CREATED WORKOUTS, NOTIFICATIONS and more from the horizontal collection near the top of the screen. To access settings or more info aout the app tap the more button. Below that you will see all of your own posts."
+    static let myPRofileMessage = "Welcome to your MYPROFILE page! Here you will see all of the details about your profile. You can acces your GROUPS, WORKOUT NOTIFICATIONS, SAVED WORKOUTS, CREATED WORKOUTS, SCORES and MORE from the horizontal collection near the top of the screen. To access settings or more info aout the app tap the more button. Below that you will see all of your own posts."
 }

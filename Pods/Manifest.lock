@@ -277,7 +277,7 @@ PODS:
     - "gRPC-C++ (~> 1.28.0)"
     - leveldb-library (~> 1.22)
     - nanopb (~> 2.30906.0)
-  - FirebaseInstallations (7.10.0):
+  - FirebaseInstallations (7.11.0):
     - FirebaseCore (~> 7.0)
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/UserDefaults (~> 7.0)
@@ -400,7 +400,7 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnostics: d50e11039e5984d92c8a512be2395f13df747350
   FirebaseDatabase: efb4d986413f55f7d9a05e621bd86ca1589e6ca7
   FirebaseFirestore: 526c70e247f550206e5c02a7bafc264588847499
-  FirebaseInstallations: bf2ec8dbf36ff4c91af6b9a003d15855757680c1
+  FirebaseInstallations: a58d4f72ec5861840b84df489f2668d970df558a
   FirebaseStorage: 4c2cdd98dfe5f6b3fae02db0da72105ac5554bbd
   GoogleAppMeasurement: 793ab7b9a09326f991c089152a2ba5beecef0c83
   GoogleDataTransport: 116c84c4bdeb76be2a7a46de51244368f9794eab

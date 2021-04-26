@@ -52,7 +52,6 @@ class SignUpViewController: UIViewController {
         password.tintColor = .white
         passwordConfirm.tintColor = .white
         
-        password.textContentType = .newPassword
         
         if admin{
             navigationItem.title = "COACH ACCOUNT"
@@ -94,15 +93,20 @@ class SignUpViewController: UIViewController {
             alert.showError("Error", subTitle: errorMessage, closeButtonTitle: "ok")
         }
         
-        viewModel.SignUpSuccesfulClosure = { (email) in
-            let newAlert = SCLAlertView()
+        viewModel.SignUpSuccesfulClosure = { [weak self] (email) in
+            let screenSize: CGRect = UIScreen.main.bounds
+            let screenWidth = screenSize.width
+            
+            let appearance = SCLAlertView.SCLAppearance(
+                kWindowWidth: screenWidth - 40 )
+            let newAlert = SCLAlertView(appearance: appearance)
             newAlert.showSuccess("Account Created!", subTitle: "You have successfully created an account. We have sent a verification email to \(email), follow the steps in the email to verify your account then you will be able to login. Once you have successfully logged in your device will be remembered and you will be automatically logged in.", closeButtonTitle: "Ok")
-            self.email.text = ""
-            self.firstName.text = ""
-            self.lastName.text = ""
-            self.username.text = ""
-            self.password.text = ""
-            self.passwordConfirm.text = ""
+            self?.email.text = ""
+            self?.firstName.text = ""
+            self?.lastName.text = ""
+            self?.username.text = ""
+            self?.password.text = ""
+            self?.passwordConfirm.text = ""
         }
     }
 
