@@ -38,7 +38,7 @@ class COACHESViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableview.emptyDataSetSource = self
         tableview.emptyDataSetDelegate = self
         tableview.tableFooterView = UIView()
-        
+        self.navigationItem.title = "Coaches"
         loadCoaches()
 
     }

@@ -111,6 +111,7 @@ class CreatedWorkoutUploadViewController: UIViewController {
         viewModel.uploadPost(with: createdWorkout, addToSaved: addToSaved, addToCreated: addToCreated, postToTimeline: postToTimeline, isPrivate: isPrivate, stepCount: stepCount)
         viewModel.updateWorkoutsCreated()
         DisplayTopView.displayTopView(with: "Workout Uploaded", on: self)
+        AddWorkoutHomeViewController.exercises.removeAll()
         let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
         self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
         

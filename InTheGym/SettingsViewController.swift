@@ -70,7 +70,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         alert.showWarning("Logout?", subTitle: "Are you sure you want to logout?", closeButtonTitle: "No", colorStyle: 0xe01212, colorTextButton: 0xfcfcfc)
         
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

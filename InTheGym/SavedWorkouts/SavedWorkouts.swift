@@ -12,7 +12,7 @@ import Firebase
 
 protocol savedWorkoutDelegate: WorkoutDelegate {
     var title:String! { get }
-    var exercises:[exercise]? { get set}
+    var exercises:[WorkoutType]? { get set}
     var createdBy:String? { get }
     var isPrivate:Bool? { get }
 }
@@ -26,7 +26,7 @@ struct publicSavedWorkout : savedWorkoutDelegate{
     var isPrivate: Bool?
     var workoutID: String?
     var savedID:String!
-    var exercises:[exercise]?
+    var exercises:[WorkoutType]?
     var createdBy:String?
     var views:Int?
     var completes:Int?
@@ -41,7 +41,7 @@ struct publicSavedWorkout : savedWorkoutDelegate{
         }
         self.isPrivate = false
         self.liveWorkout = false
-        self.fromDiscover = false
+        self.fromDiscover = snap["fromDiscover"] as? Bool
         self.completed = false
         self.workoutID = snapshot.key
         self.title = snap["title"] as? String
@@ -64,7 +64,7 @@ struct publicSavedWorkout : savedWorkoutDelegate{
                       "createdBy" : createdBy!,
                       "completed": false,
                       "liveWorkout": false,
-                      "fromDiscover": false,
+                      "fromDiscover": fromDiscover!,
                       "savedID" : workoutID!,
                       "creatorID" : creatorID!,
                       "isPrivate": false,
@@ -94,7 +94,7 @@ struct privateSavedWorkout : savedWorkoutDelegate{
     var fromDiscover: Bool!
     var workoutID: String?
     var savedID:String!
-    var exercises: [exercise]?
+    var exercises: [WorkoutType]?
     var createdBy: String?
     var isPrivate: Bool?
     var completes: Int?
@@ -109,7 +109,7 @@ struct privateSavedWorkout : savedWorkoutDelegate{
         }
         self.isPrivate = true
         self.liveWorkout = false
-        self.fromDiscover = false
+        self.fromDiscover = snap["fromDiscover"] as? Bool
         self.completed = false
         self.workoutID = snapshot.key
         self.title = snap["title"] as? String
@@ -129,7 +129,7 @@ struct privateSavedWorkout : savedWorkoutDelegate{
                       "createdBy" : createdBy!,
                       "completed": false,
                       "liveWorkout": false,
-                      "fromDiscover": false,
+                      "fromDiscover": fromDiscover!,
                       "savedID" : workoutID!,
                       "creatorID" : creatorID!,
                       "isPrivate": true] as [String:AnyObject]

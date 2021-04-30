@@ -37,30 +37,21 @@ class CoachScoresViewController: UIViewController {
     }
     
     func loadScores(){
-        var numberPlease: Int!
         score.removeAll()
-        handle = ScoreRef.observe(.value) { (snapshot) in
-            numberPlease = Int(snapshot.childrenCount)
-            var x = 0
-            self.childHandle = self.ScoreRef.observe(.childAdded, with: { (snapshot) in
-                if let snap = snapshot.value as? [String:AnyObject]{
-                    self.score.append(snap)
-                    if x < (numberPlease-1){
-                        x += 1
-                    }
-                }
-            }, withCancel: nil)
-        }
+        handle = ScoreRef.observe(.childAdded, with: { (snapshot) in
+            if let snap = snapshot.value as? [String:AnyObject]{
+                self.score.append(snap)
+                self.calcValues()
+            }
+        }, withCancel: nil)
         
     }
     
-    func printValues(){
+    func calcValues(){
         scores.removeAll()
         for x in score{
             for (_, value) in x{
-                let sval = value as! String
-                let ival = Int(sval)
-                scores.append(ival!)
+                scores.append(value as! Int)
             }
         }
         countOccur()

@@ -13,7 +13,7 @@ protocol WorkoutDelegate {
     var creatorID:String! {get}
     var savedID:String! {get}
     var workoutID:String? {get}
-    var exercises:[exercise]? {get set}
+    var exercises:[WorkoutType]? {get set}
     var completed:Bool! {get}
     var liveWorkout:Bool! {get set}
     var fromDiscover:Bool! {get set}

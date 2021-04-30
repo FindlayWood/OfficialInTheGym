@@ -34,7 +34,7 @@ class WeightViewController: UIViewController{
             let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
             let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
             SVC.sets = self.sets
-            SVC.exercise = self.exercise
+            SVC.exerciseName = self.exercise
             SVC.reps = self.reps
             SVC.weight = ""
             self.navigationController?.pushViewController(SVC, animated: true)
@@ -71,7 +71,7 @@ class WeightViewController: UIViewController{
             let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
             let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
             SVC.sets = self.sets
-            SVC.exercise = self.exercise
+            SVC.exerciseName = self.exercise
             SVC.reps = self.reps
             SVC.weight = "MAX"
             self.navigationController?.pushViewController(SVC, animated: true)
@@ -104,7 +104,7 @@ class WeightViewController: UIViewController{
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
                 SVC.sets = self.sets
-                SVC.exercise = self.exercise
+                SVC.exerciseName = self.exercise
                 SVC.reps = self.reps
                 SVC.weight = ""
                 self.navigationController?.pushViewController(SVC, animated: true)
@@ -135,7 +135,7 @@ class WeightViewController: UIViewController{
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
                 SVC.sets = self.sets
-                SVC.exercise = self.exercise
+                SVC.exerciseName = self.exercise
                 SVC.reps = self.reps
                 SVC.weight = "\(weightAmount)kg"
                 self.navigationController?.pushViewController(SVC, animated: true)
@@ -170,7 +170,7 @@ class WeightViewController: UIViewController{
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
                 SVC.sets = self.sets
-                SVC.exercise = self.exercise
+                SVC.exerciseName = self.exercise
                 SVC.reps = self.reps
                 SVC.weight = ""
                 self.navigationController?.pushViewController(SVC, animated: true)
@@ -202,7 +202,7 @@ class WeightViewController: UIViewController{
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
                 SVC.sets = self.sets
-                SVC.exercise = self.exercise
+                SVC.exerciseName = self.exercise
                 SVC.reps = self.reps
                 SVC.weight = "\(percent)%"
                 self.navigationController?.pushViewController(SVC, animated: true)

@@ -14,6 +14,7 @@ class AddWorkoutSelectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = "Add a Workout"
 
     }
     

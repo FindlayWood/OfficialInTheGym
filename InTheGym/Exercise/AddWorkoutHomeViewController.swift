@@ -40,8 +40,9 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     let userID = Auth.auth().currentUser!.uid
     
     // array of exercises and workouts, may not need workouts
-    static var exercises :[[String:Any]] = []
-    static var workouts :[[String:Any]] = []
+    //static var exercises : [WorkoutType] = []
+    static var exercises : [[String:Any]] = []
+    static var workouts : [[String:Any]] = []
     
     // stepper
     @IBOutlet weak var stepper:UIStepper!
@@ -108,6 +109,13 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
                 uploadPage.groupBool = false
             }
             
+//            var exercisesToUpload : [[String:AnyObject]] = []
+//            for ex in AddWorkoutHomeViewController.exercises{
+//                exercisesToUpload.append(ex.toObject())
+//            }
+//
+//            print(exercisesToUpload)
+            
             let exerciseData = ["title":titleField.text!,
                                 "completed":false,
                                 "exercises":AddWorkoutHomeViewController.exercises,
@@ -116,11 +124,11 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
                                 "fromDiscover":false,
                                 "liveWorkout":false
             ] as [String:AnyObject]
-            
+
             let createdWorkout = workout(object: exerciseData)
             uploadPage.createdWorkout = createdWorkout
             uploadPage.stepCount = stepCount
-            
+
             self.navigationController?.pushViewController(uploadPage, animated: true)
             
         }
@@ -201,6 +209,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         cell.textLabel?.text = AddWorkoutHomeViewController.exercises[indexPath.row]["exercise"] as? String
+        //cell.textLabel?.text = AddWorkoutHomeViewController.exercises[indexPath.row].exercise
         cell.isUserInteractionEnabled = false
         return cell
     }
@@ -281,10 +290,10 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     override func viewWillAppear(_ animated: Bool) {
         loadNumberOfWorkouts()
         tableview.reloadData()
-        navigationController?.navigationBar.tintColor = Constants.lightColour
         navigationController?.setNavigationBarHidden(false, animated: true)
         let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
+        navigationController?.navigationBar.tintColor = Constants.lightColour
     }
 
 }

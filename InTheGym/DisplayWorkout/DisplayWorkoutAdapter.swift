@@ -32,21 +32,30 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
             return cell
             
         }else{
+            let rowModel = delegate.getData(at: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier(for: rowModel), for: indexPath)
+            if var cell = cell as? workoutCellConfigurable{
+                cell.delegate = self.delegate
+                cell.setup(with: rowModel)
+            }
+            return cell
+            
+            
             
             // here will go the normal cell
-            let cell = tableView.dequeueReusableCell(withIdentifier: "DisplayWorkoutCell", for: indexPath) as! DisplayWorkoutTableViewCell
-            
-            cell.exercise = delegate.getData(at: indexPath)
-            cell.isLive = delegate.isLive()
-            cell.collection.reloadData()
-            cell.collection.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-            cell.collection.scrollToItem(at: IndexPath(item: 0, section: 0), at: .left, animated: false)
-            cell.delegate = self.delegate as NSObject as? WorkoutTableCellTapDelegate
-            cell.cellDelegate = self.delegate
-            cell.rpeButton.isUserInteractionEnabled = delegate.returnInteractionEnbabled()
-            cell.noteButton.isUserInteractionEnabled = true
-            
-            return cell
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "DisplayWorkoutCell", for: indexPath) as! DisplayWorkoutTableViewCell
+//
+//            cell.exercise = delegate.getData(at: indexPath)
+//            cell.isLive = delegate.isLive()
+//            cell.collection.reloadData()
+//            cell.collection.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+//            cell.collection.scrollToItem(at: IndexPath(item: 0, section: 0), at: .left, animated: false)
+//            cell.delegate = self.delegate as NSObject as? WorkoutTableCellTapDelegate
+//            cell.cellDelegate = self.delegate
+//            cell.rpeButton.isUserInteractionEnabled = delegate.returnInteractionEnbabled()
+//            cell.noteButton.isUserInteractionEnabled = true
+//
+//            return cell
         }
     }
     
@@ -74,6 +83,10 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
         return label
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate.itemSelected(at: indexPath)
+    }
+    
     func noteButtonTapped(on tableviewcell: UITableViewCell) {
         delegate.noteButtonTapped(on: tableviewcell)
     }
@@ -84,6 +97,17 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
     
     func completedCell(on tableviewcell: UITableViewCell, on item: Int, sender: UIButton, with cell:UICollectionViewCell) {
         delegate.completedCell(on: tableviewcell, on: item, sender: sender, with: cell)
+    }
+    
+    private func cellIdentifier(for rowModel: WorkoutType) -> String{
+        switch rowModel{
+        case is exercise:
+            return "DisplayWorkoutCell"
+        case is circuit:
+            return "DisplayWorkoutCircuitTableViewCell"
+        default:
+            return "Unexpected row model type \(rowModel)"
+        }
     }
     
 }

@@ -164,8 +164,11 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let SVC = Storyboard.instantiateViewController(withIdentifier: "RequestsViewController") as! RequestsViewController
                 self.navigationController?.pushViewController(SVC, animated: true)
             case 4:
+//                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+//                let SVC = StoryBoard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+//                navigationController?.pushViewController(SVC, animated: true)
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+                let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
                 navigationController?.pushViewController(SVC, animated: true)
             default:
                 print("ouch")

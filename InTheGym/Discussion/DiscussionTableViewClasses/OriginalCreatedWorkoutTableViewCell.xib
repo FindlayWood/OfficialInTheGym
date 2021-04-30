@@ -28,8 +28,8 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CREATED A WORKOUT" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nl8-et-zbd">
-                        <rect key="frame" x="92" y="60" width="205" height="24"/>
-                        <fontDescription key="fontDescription" name="Menlo-BoldItalic" family="Menlo" pointSize="20"/>
+                        <rect key="frame" x="92" y="60" width="215.5" height="24"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -123,12 +123,12 @@
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iqj-3m-xK6">
                         <rect key="frame" x="20" y="20" width="50" height="50"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="50" id="7Pd-wJ-3GC"/>
                             <constraint firstAttribute="width" constant="50" id="qJN-gL-hz1"/>
                         </constraints>
                         <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <state key="normal" image="person.fill" catalog="system"/>
                         <connections>
                             <action selector="userTapped:" destination="A6a-D4-YXd" eventType="touchUpInside" id="moM-k7-qXD"/>
                         </connections>
@@ -214,7 +214,6 @@
         <image name="arrow.turn.left.down" catalog="system" width="120" height="128"/>
         <image name="coach_icon" width="96" height="96"/>
         <image name="dumbbell_icon" width="96" height="96"/>
-        <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <namedColor name="darkColour">
             <color red="0.1120000034570694" green="0.28700000047683716" blue="0.43299999833106995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

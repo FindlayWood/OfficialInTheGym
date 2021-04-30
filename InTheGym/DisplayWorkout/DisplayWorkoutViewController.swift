@@ -35,9 +35,12 @@ class DisplayWorkoutViewController: UIViewController {
         tableview.delegate = adapter
         tableview.dataSource = adapter
         tableview.tableFooterView = UIView()
-        tableview.rowHeight = 380
+        tableview.rowHeight = UITableView.automaticDimension
+        tableview.estimatedRowHeight = 380
+        //tableview.rowHeight = 380
         tableview.register(UINib(nibName: "DisplayWorkout", bundle: nil), forCellReuseIdentifier: "DisplayWorkoutCell")
         tableview.register(UINib(nibName: "DisplayPlusTableView", bundle: nil), forCellReuseIdentifier: "DisplayPlusTableView")
+        tableview.register(UINib(nibName: "DisplayWorkoutCircuitTableViewCell", bundle: nil), forCellReuseIdentifier: "DisplayWorkoutCircuitTableViewCell")
         
         loadTableview()
         initViewModel()
@@ -190,9 +193,18 @@ class DisplayWorkoutViewController: UIViewController {
         completedVC.workout = self.selectedWorkout as? workout
         var scores : [Int] = []
         for exercise in selectedWorkout.exercises!{
-            if let RPEscore = exercise.rpe {
-                scores.append(Int(RPEscore)!)
+            if exercise is circuit{
+                let exercise = exercise as! circuit
+                if let score = exercise.newRPE.value{
+                    scores.append(score)
+                }
+            } else {
+                let exercise = exercise as! exercise
+                if let RPEscore = exercise.rpe {
+                    scores.append(Int(RPEscore)!)
+                }
             }
+           
         }
         let total = scores.reduce(0, +)
         let average = Double(total) / Double(scores.count)
@@ -220,12 +232,14 @@ class DisplayWorkoutViewController: UIViewController {
     
     func showError(){
         // show alertview error
+        let alert = SCLAlertView()
+        alert.showError("Error", subTitle: "Enter a score between 1 and 10", closeButtonTitle: "ok", animationStyle: .noAnimation)
     }
     
 }
 extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
     
-    func getData(at: IndexPath) -> exercise {
+    func getData(at: IndexPath) -> WorkoutType {
         return self.viewModel.getData(at: at)
     }
     
@@ -237,6 +251,17 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
         if isLive() && at.section == viewModel.numberOfItems{
             // here have viewmodel method to send to next page
             // which will be body type page
+        } else if viewModel.selectedWorkout?.exercises![at.section] is circuit {
+            print("tapped a circuit")
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let nextVC = storyboard.instantiateViewController(withIdentifier: "DisplayCircuitViewController") as! DisplayCircuitViewController
+            let circuit: circuit = (viewModel.getData(at: at) as? circuit)!
+            nextVC.circuit = circuit
+            let rowModels = circuit.integrate()
+            nextVC.exercises = rowModels
+            nextVC.workout = selectedWorkout
+            nextVC.exercisePosition = at.section
+            self.navigationController?.pushViewController(nextVC, animated: true)
         }
     }
     
@@ -352,12 +377,19 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
         coachText.isScrollEnabled = false
         coachText.isUserInteractionEnabled = false
         coachText.layer.cornerRadius = 6
-        if let note = viewModel.selectedWorkout?.exercises![index!.section].note{
+        let selectedWorkoutExercises = viewModel.selectedWorkout?.exercises![index!.section] as! exercise
+        if let note = selectedWorkoutExercises.note {
             coachText.textColor = .black
             coachText.text = note
-        }else{
-            coachText.text = "no note from coach"
         }
+        
+        
+//        if let note = viewModel.selectedWorkout?.exercises![index!.section].note{
+//            coachText.textColor = .black
+//            coachText.text = note
+//        }else{
+//            coachText.text = "no note from coach"
+//        }
         
         alert.showInfo("Exercise note", subTitle: "Notes for this exercise from your coach.", closeButtonTitle: "close")
         

@@ -12,10 +12,15 @@ class BestUseMessageViewController: UIViewController {
     
     @IBOutlet weak var textview:UITextView!
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         textview.text = SettingsMessages.howToMakeMostOfAppMessage
+    }
+    
+    @IBAction func dismissView(_ sender:UIButton){
+        self.dismiss(animated: true, completion: nil)
     }
 
 }

@@ -14,7 +14,7 @@ class NoteViewController: UIViewController {
     
     // variables passed from the previous page
     var sets: String = ""
-    var exercise: String = ""
+    var exerciseName: String = ""
     var reps: String = ""
     var weight: String = ""
     var type: String = ""
@@ -30,44 +30,53 @@ class NoteViewController: UIViewController {
     
     @IBAction func finished(_ sender:UIButton){
         let noteText = note.text
-        var dictData : [String: Any] = [:]
+        var dictData : [String: AnyObject] = [:]
+        var exerciseToAdd : exercise!
         if noteText == placeHolder{
             
             if variedReps{
-                dictData = ["exercise": self.exercise,
+                dictData = ["exercise": self.exerciseName,
                                 "type": self.type,
                                 "sets": self.sets,
                                 "reps": self.repArray,
                                 "weight": self.weight,
-                                "completedSets":self.completedArray]
+                                "completedSets":self.completedArray] as [String:AnyObject]
+                exerciseToAdd = exercise(exercises: dictData)
+                
             }else{
-                dictData = ["exercise": self.exercise,
+                dictData = ["exercise": self.exerciseName,
                                 "type": self.type,
                                 "sets": self.sets,
                                 "reps": self.reps,
                                 "weight": self.weight,
-                                "completedSets":self.completedArray]
+                                "completedSets":self.completedArray] as [String:AnyObject]
+                exerciseToAdd = exercise(exercises: dictData)
+                
             }
             
             
         }
         else{
             if variedReps{
-                dictData = ["exercise": self.exercise,
+                dictData = ["exercise": self.exerciseName,
                                 "type": self.type,
                                 "sets": self.sets,
                                 "reps": self.repArray,
                                 "weight": self.weight,
                                 "note": noteText!,
-                                "completedSets":self.completedArray]
+                                "completedSets":self.completedArray] as [String:AnyObject]
+                exerciseToAdd = exercise(exercises: dictData)
+                
             }else{
-                dictData = ["exercise": self.exercise,
+                dictData = ["exercise": self.exerciseName,
                                 "type": self.type,
                                 "sets": self.sets,
                                 "reps": self.reps,
                                 "weight": self.weight,
                                 "note": noteText!,
-                                "completedSets":self.completedArray]
+                                "completedSets":self.completedArray] as [String:AnyObject]
+                exerciseToAdd = exercise(exercises: dictData)
+                
             }
             
             
@@ -85,21 +94,26 @@ class NoteViewController: UIViewController {
     }
     
     @IBAction func skip(_ sender:UIButton){
-        var dictData : [String:Any] = [:]
+        var dictData : [String:AnyObject] = [:]
+        var exerciseToAdd : exercise!
         if variedReps{
-            dictData = ["exercise": self.exercise,
+            dictData = ["exercise": self.exerciseName,
                         "type": self.type,
                         "sets": self.sets,
                         "reps": self.repArray,
                         "weight": self.weight,
-                        "completedSets":self.completedArray]
+                        "completedSets":self.completedArray] as [String:AnyObject]
+            exerciseToAdd = exercise(exercises: dictData)
+            
         }else{
-            dictData = ["exercise": self.exercise,
+            dictData = ["exercise": self.exerciseName,
                         "type": self.type,
                         "sets": self.sets,
                         "reps": self.reps,
                         "weight": self.weight,
-                        "completedSets":self.completedArray]
+                        "completedSets":self.completedArray] as [String:AnyObject]
+            exerciseToAdd = exercise(exercises: dictData)
+            
         }
         
         
@@ -107,9 +121,6 @@ class NoteViewController: UIViewController {
         
         DisplayTopView.displayTopView(with: "Exercise added.", on: self)
 
-        
-//        let alert = SCLAlertView()
-//        alert.showSuccess("Added!", subTitle: "Exercise has been added to the list.", closeButtonTitle: "ok")
         let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
         self.navigationController?.popToViewController(viewControllers[viewControllers.count - 7], animated: true)
     }

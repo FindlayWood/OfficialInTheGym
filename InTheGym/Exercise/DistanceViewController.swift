@@ -37,7 +37,7 @@ class DistanceViewController: UIViewController {
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
         SVC.sets = self.sets
-        SVC.exercise = self.exercise
+        SVC.exerciseName = self.exercise
         SVC.reps = self.reps
         SVC.weight = ""
         self.navigationController?.pushViewController(SVC, animated: true)
@@ -80,7 +80,7 @@ class DistanceViewController: UIViewController {
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
                 SVC.sets = self.sets
-                SVC.exercise = self.exercise
+                SVC.exerciseName = self.exercise
                 SVC.reps = self.reps
                 SVC.weight = ""
                 self.navigationController?.pushViewController(SVC, animated: true)
@@ -109,7 +109,7 @@ class DistanceViewController: UIViewController {
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
                 SVC.sets = self.sets
-                SVC.exercise = self.exercise
+                SVC.exerciseName = self.exercise
                 SVC.reps = self.reps
                 SVC.weight = "\(metres)m"
                 self.navigationController?.pushViewController(SVC, animated: true)
@@ -145,7 +145,7 @@ class DistanceViewController: UIViewController {
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
                 SVC.sets = self.sets
-                SVC.exercise = self.exercise
+                SVC.exerciseName = self.exercise
                 SVC.reps = self.reps
                 SVC.weight = ""
                 self.navigationController?.pushViewController(SVC, animated: true)
@@ -174,7 +174,7 @@ class DistanceViewController: UIViewController {
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
                 SVC.sets = self.sets
-                SVC.exercise = self.exercise
+                SVC.exerciseName = self.exercise
                 SVC.reps = self.reps
                 SVC.weight = "\(km)km"
                 self.navigationController?.pushViewController(SVC, animated: true)
@@ -206,7 +206,7 @@ class DistanceViewController: UIViewController {
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
                 SVC.sets = self.sets
-                SVC.exercise = self.exercise
+                SVC.exerciseName = self.exercise
                 SVC.reps = self.reps
                 SVC.weight = ""
                 self.navigationController?.pushViewController(SVC, animated: true)
@@ -234,7 +234,7 @@ class DistanceViewController: UIViewController {
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "NoteViewController") as! NoteViewController
                 SVC.sets = self.sets
-                SVC.exercise = self.exercise
+                SVC.exerciseName = self.exercise
                 SVC.reps = self.reps
                 SVC.weight = "\(minutes)mins"
                 self.navigationController?.pushViewController(SVC, animated: true)

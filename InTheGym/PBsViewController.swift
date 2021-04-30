@@ -123,6 +123,8 @@ class PBsViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         saveButton.isHidden = true
         
+        self.navigationItem.title = "PBs"
+        
         //creating database references
         DBRef = Database.database().reference().child("PBs")
         ActRef = Database.database().reference()

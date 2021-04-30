@@ -60,7 +60,7 @@ class FirebaseAPI {
     ///   - references: array of post IDs to load
     ///   - following: is current user following given user
     ///   - completion: returning array of posts or error
-    func loadPublicTimelinePosts(with references:[String], isFollowing following:Bool, completion: @escaping (Result<[PostProtocol], Error>) -> Void ) {
+    private func loadPublicTimelinePosts(with references:[String], isFollowing following:Bool, completion: @escaping (Result<[PostProtocol], Error>) -> Void ) {
         var tempPosts = [PostProtocol]()
         let myGroup = DispatchGroup()
         for reference in references {
@@ -104,6 +104,19 @@ class FirebaseAPI {
         }
     }
     
+    // MARK: - Created Workouts
+    func getCreatedWorkouts(for user:String, completion: @escaping (Result<[CreatedWorkoutDelegate], Error>) -> () ) {
+        
+        ref.child("SavedWorkoutCreators").child(user).observeSingleEvent(of: .value) { (snapshot) in
+            for child in snapshot.children{
+                
+            }
+        }
+    }
+    
+    private func loadCreatedWorkouts(){
+        
+    }
     
     
     

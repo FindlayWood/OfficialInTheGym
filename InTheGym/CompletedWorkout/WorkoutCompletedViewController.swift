@@ -123,7 +123,6 @@ class WorkoutCompletedViewController: UIViewController {
             showError()
         } else {
             workoutRPE.resignFirstResponder()
-            workoutRPE.resignFirstResponder()
             haptic.notificationOccurred(.success)
             let rpeInt : Int = Int(workoutRPE.text!)!
             let workload : Int = (secondsToComplete/60) * rpeInt
@@ -132,7 +131,7 @@ class WorkoutCompletedViewController: UIViewController {
             workout.workload = workload
             workout.completed = true
             
-            if workout.fromDiscover! {
+            if workout.savedID != nil {
                 // update discover stats
                 viewModel.updateDiscoverStats(for: workout, with: rpeInt, and: self.secondsToComplete)
             }
@@ -143,10 +142,10 @@ class WorkoutCompletedViewController: UIViewController {
                 viewModel.updateCoachScores(for: workout, with: rpeInt, to: workout.creatorID)
             }
 
-            if !workout.liveWorkout {
-                // means it has savedid, therfor update saved stats
-                viewModel.updateDiscoverStats(for: workout, with: rpeInt, and: self.secondsToComplete)
-            }
+//            if !workout.liveWorkout {
+//                // means it has savedid, therfor update saved stats
+//                viewModel.updateDiscoverStats(for: workout, with: rpeInt, and: self.secondsToComplete)
+//            }
 
             if self.postToTimeline {
                 // post to timeline if user allows

@@ -101,7 +101,7 @@ class NewWeightViewController: UIViewController {
                 destVC.weight = "MAX"
                 destVC.variedReps = self.variedReps
                 destVC.repArray = self.repArray
-                destVC.exercise = self.exercise
+                destVC.exerciseName = self.exercise
                 destVC.type = self.type
                 destVC.completedArray = self.completedArray
                 self.navigationController?.pushViewController(destVC, animated: true)
@@ -153,7 +153,7 @@ class NewWeightViewController: UIViewController {
                 destVC.weight = "\(t)\(m)"
                 destVC.variedReps = self.variedReps
                 destVC.repArray = self.repArray
-                destVC.exercise = self.exercise
+                destVC.exerciseName = self.exercise
                 destVC.type = self.type
                 destVC.completedArray = self.completedArray
                 self.navigationController?.pushViewController(destVC, animated: true)
@@ -204,7 +204,7 @@ class NewWeightViewController: UIViewController {
             destVC.weight = ""
             destVC.variedReps = self.variedReps
             destVC.repArray = self.repArray
-            destVC.exercise = self.exercise
+            destVC.exerciseName = self.exercise
             destVC.type = self.type
             destVC.completedArray = self.completedArray
             self.navigationController?.pushViewController(destVC, animated: true)

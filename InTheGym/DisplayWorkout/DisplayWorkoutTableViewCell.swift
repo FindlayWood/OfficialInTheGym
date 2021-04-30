@@ -14,7 +14,7 @@ protocol WorkoutTableCellTapDelegate:NSObject {
     func completedCell(on tableviewcell:UITableViewCell, on item:Int, sender:UIButton, with cell:UICollectionViewCell)
 }
 
-class DisplayWorkoutTableViewCell: UITableViewCell {
+class DisplayWorkoutTableViewCell: UITableViewCell, workoutCellConfigurable {
     
     @IBOutlet var exerciseLabel:UILabel!
     @IBOutlet var weightLabel:UILabel!
@@ -28,9 +28,26 @@ class DisplayWorkoutTableViewCell: UITableViewCell {
     @IBOutlet var noteButton:UIButton!
     @IBOutlet var collection:UICollectionView!
     
-    weak var delegate:WorkoutTableCellTapDelegate!
+    var delegate:DisplayWorkoutProtocol! {
+        didSet{
+            self.rpeButton.isUserInteractionEnabled = delegate.returnInteractionEnbabled()
+            self.noteButton.isUserInteractionEnabled = true
+        }
+    }
     
     var cellDelegate:DisplayWorkoutProtocol!
+    
+    func setup(with rowModel:WorkoutType){
+        let model = rowModel as! exercise
+        self.exercise = model
+        self.exerciseLabel.text = model.exercise
+        self.setsLabel.text = model.sets! + " SETS"
+        self.weightLabel.text = model.weight
+        self.typeLabel.text = TransformWorkout.bodyTypeToString(from: model.type!)
+        self.collection.reloadData()
+        self.collection.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        self.collection.scrollToItem(at: IndexPath(item: 0, section: 0), at: .left, animated: false)
+    }
     
     
     var exercise : exercise! {
@@ -125,7 +142,7 @@ extension DisplayWorkoutTableViewCell: UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let setInt = Int(self.exercise.sets!)!
-        if isLive == true {
+        if delegate.isLive() == true {
             return setInt + 1
         }else{
             return setInt
@@ -135,7 +152,7 @@ extension DisplayWorkoutTableViewCell: UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if isLive && indexPath.item == Int(self.exercise.sets!){
+        if delegate.isLive() && indexPath.item == Int(self.exercise.sets!){
             
             // here will go the plus cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DisplayPlusCollection", for: indexPath) as! DisplayPlusCollectionViewCell
@@ -166,8 +183,8 @@ extension DisplayWorkoutTableViewCell: UICollectionViewDelegate, UICollectionVie
 //                                                reps: self.exercise.reps,
 //                                                parentTableViewCell: self)
             cell.model = cellModel
-            cell.delegate = self.cellDelegate
-            cell.completedButton.isUserInteractionEnabled = cellDelegate.returnInteractionEnbabled()
+            cell.delegate = self.delegate
+            cell.completedButton.isUserInteractionEnabled = delegate.returnInteractionEnbabled()
             return cell
         }
         

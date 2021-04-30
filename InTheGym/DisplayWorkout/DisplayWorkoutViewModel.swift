@@ -60,8 +60,9 @@ class DisplayWorkoutViewModel: NSObject{
 
     // MARK: - Retieve Data
 
-    func getData(at indexPath: IndexPath ) -> exercise {
-        
+    func getData(at indexPath: IndexPath ) -> WorkoutType {
+        //let selectedWorkoutExercises = selectedWorkout?.exercises as! [exercise]
+        //return selectedWorkoutExercises[indexPath.section]
         return (selectedWorkout?.exercises![indexPath.section])!
     }
     
@@ -76,14 +77,18 @@ class DisplayWorkoutViewModel: NSObject{
     func updateCompletedSet(at indexPath: IndexPath){
         // must update database
         let ref = Database.database().reference().child("Workouts").child(self.userId!).child((selectedWorkout?.workoutID!)!).child("exercises").child("\(indexPath.section)").child("completedSets")
-        self.selectedWorkout?.exercises![indexPath.section].completedSets![indexPath.item] = true
+        let selectedWorkoutExercises = selectedWorkout?.exercises![indexPath.section] as! exercise
+        selectedWorkoutExercises.completedSets![indexPath.item] = true
+        //self.selectedWorkout?.exercises![indexPath.section].completedSets![indexPath.item] = true
         ref.child("\(indexPath.item)").setValue(true)
     }
     
     func updateRPE(at indexPath: IndexPath, with rpe:Int){
         // update database
         // update model selected workout
-        self.selectedWorkout?.exercises![indexPath.section].rpe = rpe.description
+        let selectedWorkoutExercises = selectedWorkout?.exercises![indexPath.section] as! exercise
+        selectedWorkoutExercises.rpe = rpe.description
+        //self.selectedWorkout?.exercises![indexPath.section].rpe = rpe.description
         let ref = Database.database().reference().child("Workouts").child(self.userId!).child((selectedWorkout?.workoutID!)!).child("exercises").child("\(indexPath.section)")
         ref.child("rpe").setValue(rpe.description)
     }
@@ -130,7 +135,13 @@ class DisplayWorkoutViewModel: NSObject{
     func addToWorkouts(){
         // add to workouts, show top view
         let workoutRef = Database.database().reference().child("Workouts").child(userId!).childByAutoId()
-        workoutRef.setValue(selectedWorkout?.toObject())
+        var theWorkout = selectedWorkout?.toObject()
+        theWorkout?.removeValue(forKey: "Views")
+        theWorkout?.removeValue(forKey: "NumberOfCompletes")
+        theWorkout?.removeValue(forKey: "NumberOfDownloads")
+        theWorkout?.removeValue(forKey: "TotalScore")
+        theWorkout?.removeValue(forKey: "TotalTime")
+        workoutRef.setValue(theWorkout)
         notificationFeedbackGenerator.prepare()
         notificationFeedbackGenerator.notificationOccurred(.success)
     }

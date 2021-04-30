@@ -18,7 +18,7 @@ struct PublicCreatedWorkout: CreatedWorkoutDelegate {
     var isPrivate: Bool?
     var workoutID: String?
     var savedID:String!
-    var exercises:[exercise]?
+    var exercises:[WorkoutType]?
     var createdBy:String?
     var views:Int?
     var completes:Int?
@@ -78,7 +78,7 @@ struct PublicCreatedWorkout: CreatedWorkoutDelegate {
     
 }
 
-struct PrivateCreatedWorkout: CreatedWorkoutDelegate {
+struct PrivateCreatedWorkout: CreatedWorkoutDelegate { 
     var title: String!
     var creatorID: String!
     var completed: Bool!
@@ -86,7 +86,7 @@ struct PrivateCreatedWorkout: CreatedWorkoutDelegate {
     var fromDiscover: Bool!
     var workoutID: String?
     var savedID:String!
-    var exercises: [exercise]?
+    var exercises: [WorkoutType]?
     var createdBy: String?
     var isPrivate: Bool?
     var completes: Int?

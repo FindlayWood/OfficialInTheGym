@@ -20,7 +20,7 @@ class workout: WorkoutDelegate, Completeable{
     var savedID:String!
     var createdBy:String?
     var completed:Bool!
-    var exercises:[exercise]?
+    var exercises:[WorkoutType]?
     var numberOfDownloads:Int?
     var numberOfCompletes:Int?
     var score:Int?
@@ -46,15 +46,33 @@ class workout: WorkoutDelegate, Completeable{
         self.workload = snap["workload"] as? Int
         self.assigned = snap["assigned"] as? Bool ?? false
         if let data = snap["exercises"] as? [[String:AnyObject]]{
-            self.exercises = data.map {(exercise(exercises: $0)!)}
+            var tempEx : [WorkoutType] = []
+            for item in data{
+                if let _ = item["circuit"] as? Bool{
+                    tempEx.append(circuit(item: item)!)
+                } else {
+                    tempEx.append(exercise(exercises: item)!)
+                }
+            }
+            self.exercises = tempEx
+             //self.exercises = data.map {(exercise(exercises: $0)!)}
         }
     }
     
     init?(object:[String:AnyObject]){
         self.createdBy = object["createdBy"] as? String
         self.completed = object["completed"] as? Bool
-        if let ex = object["exercises"] as? [[String:AnyObject]]{
-            self.exercises = ex.map { (exercise(exercises: $0)!)}
+        if let data = object["exercises"] as? [[String:AnyObject]]{
+            var tempEx : [WorkoutType] = []
+            for item in data{
+                if let _ = item["circuit"] as? Bool{
+                    tempEx.append(circuit(item: item)!)
+                } else {
+                    tempEx.append(exercise(exercises: item)!)
+                }
+            }
+            self.exercises = tempEx
+            //self.exercises = ex.map { (exercise(exercises: $0)!)}
         }
         self.numberOfDownloads = object["NumberOfDownloads"] as? Int
         self.numberOfCompletes = object["NumberOfCompletes"] as? Int
@@ -97,11 +115,149 @@ class workout: WorkoutDelegate, Completeable{
     
 }
 
+struct circuitExercise : Codable{
+    var exercise:String!
+    var reps:Int!
+    var sets:Int!
+    //var type:bodyType!
+    var weight:Double?
+    var completedSets:[Bool]!
+    
+    init?(item:[String:AnyObject]){
+        self.exercise = item["exercise"] as? String
+        self.reps = item["reps"] as? Int
+        self.sets = item["sets"] as? Int
+        self.weight = item["weight"] as? Double
+        self.completedSets = item["completedSets"] as? [Bool]
+    }
+    
+    func toObject() -> [String:AnyObject]{
+        var object = ["exercise": exercise!,
+                      "reps": reps!,
+                      "sets": sets!,
+                      "completedSets": completedSets!,] as [String : AnyObject]
+        
+        if let weight = weight{
+            object["weight"] = weight as AnyObject
+        }
+        
+        return object
+    }
+}
+
+class circuit : WorkoutType{
+    var exercise:String!
+    var exercises:[circuitExercise]?
+    var circuitName:String!
+    var createdBy:String!
+    var creatorID:String!
+    var savedID:String!
+    var integrated:Bool!
+    var circuit: Bool = true
+    var completed: Observable<Bool> = Observable<Bool>()
+    var startTime:TimeInterval!
+    var rpe: Int?
+    var newRPE: Observable<Int> = Observable<Int>()
+    
+    init?(item: [String:AnyObject]) {
+        self.exercise = item["exercise"] as? String
+        self.circuitName = item["exercise"] as? String
+        self.createdBy = item["createdBy"] as? String
+        self.creatorID = item["creatorID"] as? String
+        self.integrated = item["integrated"] as? Bool
+        self.completed.value = item["completed"] as? Bool
+        self.startTime = item["startTime"] as? TimeInterval
+        self.integrated = item["integrated"] as? Bool
+        self.newRPE.value = item["rpe"] as? Int
+        if let data = item["exercises"] as? [[String:AnyObject]] {
+            self.exercises = data.map {(circuitExercise(item: $0)!)}
+        }
+        
+    }
+    
+    func toObject() -> [String:AnyObject]{
+        var object = ["exercise":exercise!,
+                      "createdBy":createdBy!,
+                      "creatorID":creatorID!,
+                      "completed":completed.value!,
+                      "circuit":circuit] as [String:AnyObject]
+        
+        if let exerciseData = exercises{
+            object["exercises"] = exerciseData.map { ($0.toObject()) } as AnyObject
+        }
+        if let saved = savedID{
+            object["savedID"] = saved as AnyObject
+        }
+        if let rpe = newRPE.value{
+            object["rpe"] = rpe as AnyObject
+        }
+        
+        return object
+    }
+    
+    func integrate() -> [CircuitTableModel]{
+        var reps: [Int] = []
+        var sets: [Int] = []
+        var originalSets: [Int] = []
+        var exerciseNames:[String] = []
+        var circuitTableModels: [CircuitTableModel] = []
+        var exerciseCompletions : [[Bool]] = []
+        for exercise in exercises!{
+            reps.append(exercise.reps)
+            sets.append(exercise.sets)
+            originalSets.append(exercise.sets)
+            exerciseNames.append(exercise.exercise)
+            exerciseCompletions.append(exercise.completedSets)
+        }
+        
+        while sets.reduce(0,+) != 0 {
+            for i in 0..<sets.count{
+                if sets[i] != 0 {
+                    let set = originalSets[i] - sets[i]
+                    circuitTableModels.append(CircuitTableModel(exerciseName: exerciseNames[i],
+                                                                reps: reps[i],
+                                                                set: set + 1,
+                                                                overallSet: circuitTableModels.count + 1,
+                                                                completed: exerciseCompletions[i][set],
+                                                                exerciseOrder: i))
+                    sets[i] -= 1
+                }
+            }
+        }
+        return circuitTableModels
+    }
+}
+
+class Observable<T>{
+    var value : T? {
+        didSet{
+            if let value = value{
+                DispatchQueue.main.async {
+                    self.valueChanged?(value)
+                }
+            }
+        }
+    }
+    var valueChanged: ((T) -> Void)?
+}
+
+struct CircuitTableModel{
+    var exerciseName:String
+    var reps:Int
+    var set:Int
+    var overallSet:Int
+    var completed:Bool
+    var exerciseOrder:Int
+}
+
+protocol WorkoutType {
+    var exercise:String! {get}
+    func toObject() -> [String:AnyObject]
+}
 
 
 
-
-struct exercise{
+class exercise : WorkoutType{
     
     var exercise:String!
     var reps:String?
@@ -173,7 +329,7 @@ struct liveWorkout : WorkoutDelegate, Completeable {
     var title: String!
     var creatorID: String!
     var savedID:String!
-    var exercises: [exercise]?
+    var exercises: [WorkoutType]?
     var completed: Bool!
     var liveWorkout : Bool!
     var createdBy:String!
@@ -224,7 +380,7 @@ struct discoverWorkout : WorkoutDelegate {
     var title: String!
     var creatorID: String!
     var savedID:String!
-    var exercises: [exercise]?
+    var exercises: [WorkoutType]?
     var completed: Bool!
     var liveWorkout : Bool!
     var createdBy:String!
@@ -285,7 +441,7 @@ struct discoverWorkout : WorkoutDelegate {
                       "savedID":savedID!,
                       "completed":completed!,
                       "liveWorkout":liveWorkout!,
-                      "fromDiscover":fromDiscover!,
+                      "fromDiscover":true,
                       "NumberOfDownloads":numberOfDownloads!,
                       "NumberOfCompletes":numberOfCompletes!,
                       "Views":views!,

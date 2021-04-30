@@ -31,7 +31,7 @@ class MYSCORESViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ScoreRef = Database.database().reference().child("Scores").child(username!)
+        ScoreRef = Database.database().reference().child("Scores").child(userID!)
         
         pieChart.legend.enabled = false
     }
@@ -50,9 +50,7 @@ class MYSCORESViewController: UIViewController {
         scores.removeAll()
         for x in score{
             for (_, value) in x{
-                let sval = value as! String
-                let ival = Int(sval)
-                scores.append(ival!)
+                scores.append(value as! Int)
             }
         }
         countOccur()

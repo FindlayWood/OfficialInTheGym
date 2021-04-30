@@ -97,6 +97,7 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
         
         setupViews()
         
+        self.navigationItem.title = "Workload"
         
         // added for new feed
         segment.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)

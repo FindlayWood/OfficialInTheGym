@@ -40,7 +40,7 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.tableview.tableFooterView = UIView()
         
-        self.navigationItem.title = "MORE"
+        self.navigationItem.title = "More"
 
         
     }
@@ -148,8 +148,11 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                 let SVC = Storyboard.instantiateViewController(withIdentifier: "CoachScoresViewController") as! CoachScoresViewController
                 self.navigationController?.pushViewController(SVC, animated: true)
             case 1:
+//                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+//                let SVC = StoryBoard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+//                navigationController?.pushViewController(SVC, animated: true)
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+                let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
                 navigationController?.pushViewController(SVC, animated: true)
             default:
                 break

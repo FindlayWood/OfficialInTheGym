@@ -29,6 +29,12 @@ class BodyTypeViewController: UIViewController {
         
         self.navigationController?.pushViewController(SVC, animated: true)
     }
+    
+    @IBAction func circuitTapped(_ sender:UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let nextVC = storyboard.instantiateViewController(withIdentifier: "CreateCircuitViewController") as! CreateCircuitViewController
+        self.navigationController?.pushViewController(nextVC, animated: true)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +47,10 @@ class BodyTypeViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.tintColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
+        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
+        navigationController?.navigationBar.tintColor = Constants.lightColour
     }
 
 }

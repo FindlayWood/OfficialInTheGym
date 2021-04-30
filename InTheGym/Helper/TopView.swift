@@ -14,7 +14,7 @@ class DisplayTopView{
     // this function displays a custom top view letting user know exercise has been added
     static func displayTopView(with message:String, on parent:UIViewController){
         
-        let viewHeight = parent.view.bounds.height * 0.1
+        let viewHeight = parent.view.bounds.height * 0.07
         let screenWidth = parent.view.bounds.width
         let viewWidth = parent.view.bounds.width * 0.8
         let margins = parent.navigationController?.view.safeAreaInsets

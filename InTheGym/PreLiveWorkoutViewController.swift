@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import SCLAlertView
 
 class PreLiveWorkoutViewController: UIViewController {
     
@@ -19,15 +20,18 @@ class PreLiveWorkoutViewController: UIViewController {
         super.viewDidLoad()
 
         titlefield.delegate = self
-        titlefield.returnKeyType = .continue
-        navigationItem.title = "Workout Title"
+        titlefield.tintColor = Constants.darkColour
+        titlefield.returnKeyType = .done
+        navigationItem.title = "Live Workout Title"
+        hideKeyboardWhenTappedAround()
     }
     
     @IBAction func continuePressed(_ sender:UIButton){
 
         
         if titlefield.text?.trimmingCharacters(in: .whitespaces) == ""{
-            print("no title")
+            let alert = SCLAlertView()
+            alert.showError("Enter a title!", subTitle: "You must enter a title to begin the workout. The title can be anything you want.")
         }else{
 
             let workoutRef = Database.database().reference().child("Workouts").child(self.userID).childByAutoId()
