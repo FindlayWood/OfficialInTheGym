@@ -52,7 +52,7 @@ class GroupPageViewController: UIViewController {
         layout.minimumInteritemSpacing = 0
         collection.collectionViewLayout = layout
         collection.register(UINib(nibName: "GroupMemberCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "GroupMemberCollectionViewCell")
-
+        
         initUI()
         initRefreshControl()
         //initViewModel()

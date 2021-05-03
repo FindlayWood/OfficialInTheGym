@@ -32,6 +32,8 @@ class FollowersDisplayViewController: UIViewController {
         tableview.dataSource = adapter
         tableview.register(UINib(nibName: "FollowersDisplayTableViewCell", bundle: nil), forCellReuseIdentifier: "FollowersDisplayTableViewCell")
         tableview.tableFooterView = UIView()
+        tableview.separatorInset = .zero
+        tableview.layoutMargins = .zero
         
         initViewModel()
     }

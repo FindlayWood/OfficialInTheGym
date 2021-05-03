@@ -59,7 +59,7 @@ struct NotificationGroupReplied: GroupNotificationDelegate {
         let object = ["fromUserID":fromUserID!,
                       "toUserID":toUserID!,
                       "postID":postID!,
-                      "type":"Reply",
+                      "type":"groupReply",
                       "groupID":groupID!,
                       "time":ServerValue.timestamp(),
                       "seen": false] as [String:AnyObject]

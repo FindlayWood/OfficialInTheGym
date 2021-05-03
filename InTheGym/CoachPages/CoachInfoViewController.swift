@@ -131,11 +131,17 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1 {
-            return 20
+        return 15
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemGray5
         } else {
-            return 0
+            view.backgroundColor = .lightGray
         }
+        return view
     }
     
 

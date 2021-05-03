@@ -28,8 +28,10 @@ class AppInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableview.register(UINib(nibName: "AppInformationTableViewCell", bundle: nil), forCellReuseIdentifier: "AppInformationTableViewCell")
         tableview.register(UINib(nibName: "AppInformationTwoTableViewCell", bundle: nil), forCellReuseIdentifier: "AppInformationTwoTableViewCell")
         tableview.tableFooterView = UIView()
-        tableview.separatorStyle = .none
-        tableview.separatorColor = .clear
+//        tableview.separatorStyle = .none
+//        tableview.separatorColor = .clear
+        tableview.separatorInset = .zero
+        tableview.layoutMargins = .zero
 
         // Do any additional setup after loading the view.
     }
@@ -89,6 +91,20 @@ class AppInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         default:
             break
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemGray5
+        } else {
+            // Fallback on earlier versions
+        }
+        return view
     }
     
     

@@ -15,6 +15,7 @@ class BodyTypeViewController: UIViewController {
     
     var fromLiveWorkout:Bool!
     var workoutID:String!
+    @IBOutlet weak var circuitButton:UIButton!
     
     @IBOutlet weak var pageNumberLabel:UILabel!
     
@@ -41,6 +42,7 @@ class BodyTypeViewController: UIViewController {
         self.navigationItem.title = "Body Type"
         if fromLiveWorkout == true{
             pageNumberLabel.text = "1 of 2"
+            self.circuitButton.isHidden = true
         }else{
             pageNumberLabel.text = "1 of 6"
         }

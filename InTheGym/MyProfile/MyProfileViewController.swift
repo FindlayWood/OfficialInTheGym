@@ -51,6 +51,8 @@ class MyProfileViewController: UIViewController {
         tableview.tableFooterView = UIView()
         tableview.alpha = 0.0
         tableview.backgroundColor = Constants.darkColour
+        tableview.separatorInset = .zero
+        tableview.layoutMargins = .zero
         
         
         initViewModel()

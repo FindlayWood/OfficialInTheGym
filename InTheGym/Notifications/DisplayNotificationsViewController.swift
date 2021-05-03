@@ -34,6 +34,8 @@ class DisplayNotificationsViewController: UIViewController {
         tableview.tableFooterView = UIView()
         tableview.emptyDataSetDelegate = adapter
         tableview.emptyDataSetSource = adapter
+        tableview.separatorInset = .zero
+        tableview.layoutMargins = .zero
         
         //initViewModel()
     }

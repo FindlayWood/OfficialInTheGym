@@ -12,6 +12,7 @@ import SCLAlertView
 class DisplayCircuitViewController: UIViewController {
     
     @IBOutlet weak var tableview:UITableView!
+
     
     var exercises : [CircuitTableModel]!
     var circuit : circuit!
@@ -44,7 +45,11 @@ class DisplayCircuitViewController: UIViewController {
         self.navigationItem.title = circuit.exercise
         if !isButtonInteractionEnabled() {
             displayShadowView()
-        }
+        } else if !circuit.completed.value! {
+            let rightBarButton = UIBarButtonItem(title: "Completed", style: .done, target: self, action: #selector(completePressed(_:)))
+            self.navigationItem.rightBarButtonItem = rightBarButton
+        } 
+
     }
     
     func displayShadowView(){

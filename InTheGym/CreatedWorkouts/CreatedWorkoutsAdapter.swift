@@ -73,7 +73,15 @@ extension CreatedWorkoutsAdapter : UITableViewDataSource, UITableViewDelegate, E
     }
     
     func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "All the workouts you create will appear here. It seems you haven't created any yet."
+        var str : String = ""
+        switch delegate{
+        case is PublicCreatedWorkoutsViewController:
+            str = "This user has no Created Workouts to view."
+        case is CreatedWorkoutsViewController:
+            str = "All the workouts you create will appear here. It seems you haven't created any yet."
+        default:
+            break
+        }
         let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
         return NSAttributedString(string: str, attributes: attrs)
     }

@@ -66,7 +66,7 @@ extension MyProfileAdapter: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
-            return 0
+            return 10
         } else {
             return 25
         }
@@ -74,16 +74,25 @@ extension MyProfileAdapter: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let label = UILabel()
-        label.text = "POSTS"
-        label.font = .boldSystemFont(ofSize: 20)
-        //label.font = .preferredFont(forTextStyle: UIFont.TextStyle(rawValue: "Menlo Bold"))
-        label.backgroundColor = .white
-        label.textAlignment = .center
-        label.textColor = Constants.darkColour
-        
-        
-        return label
+        if section == 0 {
+            let view = UIView()
+            if #available(iOS 13.0, *) {
+                view.backgroundColor = .systemGray5
+            } else {
+                view.backgroundColor = .lightGray
+            }
+            return view
+        } else {
+            let label = UILabel()
+            label.text = "POSTS"
+            label.font = .boldSystemFont(ofSize: 20)
+            //label.font = .preferredFont(forTextStyle: UIFont.TextStyle(rawValue: "Menlo Bold"))
+            label.backgroundColor = .white
+            label.textAlignment = .center
+            label.textColor = Constants.darkColour
+            return label
+        }
+
     }
     
     private func cellIdentifier(for rowModel:PostProtocol) -> String{

@@ -48,11 +48,17 @@ extension DiscussionAdapter: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1{
-            return 5
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemGray5
         } else {
-            return 0
+            view.backgroundColor = .lightGray
         }
+        return view
     }
     
     

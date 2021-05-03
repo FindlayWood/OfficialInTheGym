@@ -20,7 +20,7 @@ class PlayerOrCoachViewController: UIViewController {
     @IBOutlet weak var text:UITextView!
     
     var cornerRadia : CGFloat = 10.0
-    var borderColour = UIColor.white.cgColor
+    var borderColour = Constants.darkColour.cgColor
     var borderWidth : CGFloat = 2.0
     
     let selection = UISelectionFeedbackGenerator()
@@ -52,8 +52,8 @@ class PlayerOrCoachViewController: UIViewController {
         
         selection.prepare()
         contineButton.isHidden = true
-        text.isHidden = true
         navigationItem.title = "ACCOUNT TYPE"
+        text.text = "Choose your ACCOUNT type."
         
     }
     
@@ -61,8 +61,8 @@ class PlayerOrCoachViewController: UIViewController {
         text.text = SignUpMessages.coachMessage
         text.isHidden = false
         contineButton.isHidden = false
-        coachView.backgroundColor = Constants.lightColour
-        playerView.backgroundColor = Constants.darkColour
+        coachView.backgroundColor = Constants.darkColour
+        playerView.backgroundColor = Constants.lightColour
         isAdmin = true
         self.selection.selectionChanged()
         self.contineButton.setTitle("CONTINUE AS COACH", for: .normal)
@@ -72,8 +72,8 @@ class PlayerOrCoachViewController: UIViewController {
         text.text = SignUpMessages.playerMessage
         text.isHidden = false
         contineButton.isHidden = false
-        playerView.backgroundColor = Constants.lightColour
-        coachView.backgroundColor = Constants.darkColour
+        playerView.backgroundColor = Constants.darkColour
+        coachView.backgroundColor = Constants.lightColour
         isAdmin = false
         self.selection.selectionChanged()
         self.contineButton.setTitle("CONTINUE AS PLAYER", for: .normal)
@@ -89,9 +89,9 @@ class PlayerOrCoachViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
-        let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
+        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.darkColour]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        self.navigationController?.navigationBar.tintColor = Constants.darkColour
     }
     
 

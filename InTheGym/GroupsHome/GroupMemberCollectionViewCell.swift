@@ -39,6 +39,7 @@ class GroupMemberCollectionViewCell: UICollectionViewCell {
         // Initialization code
         self.profileImage.layer.cornerRadius = self.profileImage.bounds.width / 2
         self.profileImage.layer.masksToBounds = true
+        
     }
 
 }

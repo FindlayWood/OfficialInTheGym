@@ -54,7 +54,7 @@ class PublicCreatedWorkoutsViewModel:NSObject {
     
     var isFollowing: Bool! {
         didSet{
-            fetchData()
+            loadReferences()
         }
     }
     
@@ -69,6 +69,7 @@ class PublicCreatedWorkoutsViewModel:NSObject {
     // MARK: - Check if following
     
     func checkFollowing(){
+        self.isLoading = true
         let ref = Database.database().reference().child("Following").child(self.userID!).child(user.uid!)
         ref.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.exists() {

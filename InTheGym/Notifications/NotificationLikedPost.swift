@@ -59,7 +59,7 @@ struct NotificationGroupLikedPost : GroupNotificationDelegate {
         let object = ["fromUserID":fromUserID!,
                       "toUserID":toUserID!,
                       "postID":postID!,
-                      "type":"LikedPost",
+                      "type":"groupLikedPost",
                       "groupID":groupID!,
                       "time":ServerValue.timestamp(),
                       "seen":false] as [String:AnyObject]

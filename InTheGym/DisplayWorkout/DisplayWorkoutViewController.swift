@@ -209,7 +209,11 @@ class DisplayWorkoutViewController: UIViewController {
         let total = scores.reduce(0, +)
         let average = Double(total) / Double(scores.count)
         let rounded = round(average * 10)/10
-        completedVC.averageRPE = rounded
+        if rounded.isNaN{
+            completedVC.averageRPE = 0.0
+        } else {
+            completedVC.averageRPE = rounded
+        }
         let endTime = Date.timeIntervalSinceReferenceDate
         let startTime = (selectedWorkout as? workout)!.startTime
         let completionTimeSeconds = Int(endTime) - Int(startTime!)
