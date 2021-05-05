@@ -10,7 +10,7 @@ import Foundation
 import Firebase
 
 // class for a user 
-class Users: NSObject {
+class Users: NSObject, Codable {
     var admin: Bool?
     var email: String?
     var username: String?

@@ -11,7 +11,9 @@
 import UIKit
 import SCLAlertView
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator: MainCoordinator?
     
     // outlet variables to for the signup fields
     @IBOutlet weak var email: UITextField!
@@ -45,12 +47,12 @@ class SignUpViewController: UIViewController {
         lastName.delegate = self
         password.delegate = self
         passwordConfirm.delegate = self
-        email.tintColor = .white
-        username.tintColor = .white
-        firstName.tintColor = .white
-        lastName.tintColor = .white
-        password.tintColor = .white
-        passwordConfirm.tintColor = .white
+        email.tintColor = Constants.darkColour
+        username.tintColor = Constants.darkColour
+        firstName.tintColor = Constants.darkColour
+        lastName.tintColor = Constants.darkColour
+        password.tintColor = Constants.darkColour
+        passwordConfirm.tintColor = Constants.darkColour
         
         
         if admin{

@@ -9,7 +9,9 @@
 import UIKit
 import SCLAlertView
 
-class PlayerOrCoachViewController: UIViewController {
+class PlayerOrCoachViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator: MainCoordinator?
     
     @IBOutlet var coachView:UIView!
     @IBOutlet var playerView:UIView!
@@ -81,10 +83,11 @@ class PlayerOrCoachViewController: UIViewController {
     
     @IBAction func continuePressed(_ sender:UIButton){
         self.selection.selectionChanged()
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let svc = storyboard.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
-        svc.admin = self.isAdmin
-        self.navigationController?.pushViewController(svc, animated: true)
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let svc = storyboard.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
+//        svc.admin = self.isAdmin
+//        self.navigationController?.pushViewController(svc, animated: true)
+        self.coordinator?.signUpStepTwo(isAdmin: isAdmin)
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -11,7 +11,9 @@ import Firebase
 import SCLAlertView
 import EmptyDataSet_Swift
 
-class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EmptyDataSetSource, EmptyDataSetDelegate {
+class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EmptyDataSetSource, EmptyDataSetDelegate, Storyboarded {
+    
+    var coordinator: PlayersFlow?
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
@@ -70,6 +72,7 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
         
         initRefreshControl()
         fetchPlayers()
+        //loading()
 
         
     }
@@ -100,6 +103,31 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
         self.navigationController?.present(addPage, animated: true, completion: nil)
     }
     
+    func loading(){
+        self.activityIndicator.hidesWhenStopped = true
+        self.activityIndicator.startAnimating()
+        self.tableview.alpha = 0.0
+        DatabaseEndpoints.getPlayers(id: self.userID).retreive(expectedReturnType: Users.self) { result in
+            switch result{
+            case .success(let returnedPlayers):
+                self.players = returnedPlayers
+                self.activityIndicator.stopAnimating()
+                self.tableview.reloadData()
+                self.tableview.refreshControl?.endRefreshing()
+                UIView.animate(withDuration: 0.2) {
+                    self.tableview.alpha = 1.0
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+                self.activityIndicator.stopAnimating()
+                self.tableview.reloadData()
+                self.tableview.refreshControl?.endRefreshing()
+                UIView.animate(withDuration: 0.2) {
+                    self.tableview.alpha = 1.0
+                }
+            }
+        }
+    }
     
     func fetchPlayers(){
         self.activityIndicator.hidesWhenStopped = true

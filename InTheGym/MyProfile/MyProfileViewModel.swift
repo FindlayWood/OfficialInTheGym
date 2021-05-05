@@ -82,6 +82,22 @@ class MyProfileViewModel {
     
     
     // MARK: - Fetching functions
+    func loading(){
+        self.isLoading = true
+        DatabaseEndpoints.getProfileTimeline.retreiveProfileTimeline { result in
+            switch result{
+            case .success(let returnedPosts):
+                self.posts = returnedPosts
+                self.isLoading = false
+            case .failure(let error):
+                print(error.localizedDescription)
+                self.isLoading = false
+                self.posts = []
+            }
+        }
+    }
+    
+    
     func fetchData(){
         self.isLoading = true
         var references:[String] = []

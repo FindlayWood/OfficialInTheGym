@@ -13,7 +13,9 @@ import Firebase
 import SCLAlertView
 import EmptyDataSet_Swift
 
-class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, EmptyDataSetSource, EmptyDataSetDelegate{
+class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, EmptyDataSetSource, EmptyDataSetDelegate, Storyboarded {
+    
+    var coordinator: WorkoutsFlow?
     
     @IBOutlet weak var tableview:UITableView!
     

@@ -65,6 +65,7 @@ class DisplayNotificationsViewModel {
         
         var tempNotifs = [NotificationTableViewModel]()
         let myGroup = DispatchGroup()
+        var unseenKeys = [String]()
         
         handle = notificationsReference.observe(.childAdded) { (snapshot) in
                         
@@ -77,6 +78,9 @@ class DisplayNotificationsViewModel {
                     return
                 }
                 let tempModel = NotificationTableViewModel(snapshot: snapshot)
+                if tempModel?.seen == false {
+                    unseenKeys.append(snapshot.key)
+                }
                 UserIDToUser.transform(userID: snap["fromUserID"] as! String) { (user) in
                     tempModel!.from = user
                     tempNotifs.insert(tempModel!, at: 0)
@@ -86,9 +90,11 @@ class DisplayNotificationsViewModel {
                     tempNotifs.sort(by: {$0.time! > $1.time!})
                     self.notifications = tempNotifs
                     self.isLoading = false
+                    
                 }
             }
         }
+        
         notificationsReference.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.childrenCount == 0 {
                 self.isLoading = false

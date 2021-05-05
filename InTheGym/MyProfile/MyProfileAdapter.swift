@@ -66,7 +66,7 @@ extension MyProfileAdapter: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
-            return 10
+            return 5
         } else {
             return 25
         }

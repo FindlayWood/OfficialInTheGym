@@ -30,10 +30,10 @@ class EditProfileViewController: UIViewController {
         didSet{
             if photoChanged{
                 self.saveButton.isUserInteractionEnabled = true
-                self.saveButton.setTitleColor(.white, for: .normal)
+                self.saveButton.setTitleColor(Constants.darkColour, for: .normal)
             }else if !bioChanged{
                 self.saveButton.isUserInteractionEnabled = false
-                self.saveButton.setTitleColor(.darkGray, for: .normal)
+                self.saveButton.setTitleColor(.white, for: .normal)
             }
         }
     }
@@ -41,10 +41,10 @@ class EditProfileViewController: UIViewController {
         didSet{
             if bioChanged{
                 self.saveButton.isUserInteractionEnabled = true
-                self.saveButton.setTitleColor(.white, for: .normal)
+                self.saveButton.setTitleColor(Constants.darkColour, for: .normal)
             }else if !photoChanged{
                 self.saveButton.isUserInteractionEnabled = false
-                self.saveButton.setTitleColor(.darkGray, for: .normal)
+                self.saveButton.setTitleColor(.white, for: .normal)
             }
         }
     }
@@ -58,7 +58,7 @@ class EditProfileViewController: UIViewController {
         super.viewDidLoad()
     
         self.saveButton.isUserInteractionEnabled = false
-        self.saveButton.setTitleColor(.darkGray, for: .normal)
+        self.saveButton.setTitleColor(.white, for: .normal)
         
         self.profilePhoto.layer.cornerRadius = self.profilePhoto.bounds.width / 2.0
         
@@ -71,7 +71,7 @@ class EditProfileViewController: UIViewController {
         }
         self.profileBIO.text = theText
         self.profileBIO.delegate = self
-        profileBIO.tintColor = UIColor.white
+        profileBIO.tintColor = Constants.darkColour
         profileBIO.textContainer.maximumNumberOfLines = 8
         profileBIO.textContainer.lineBreakMode = .byTruncatingTail
         
@@ -122,30 +122,34 @@ class EditProfileViewController: UIViewController {
             metaData.contentType = "image/jpg"
             
             storageProfileRef.putData(imageData, metadata: metaData) { (storage, error) in
-                if error != nil{
-                    print(error?.localizedDescription as Any)
+                if let error = error{
+                    print(error.localizedDescription as Any)
                     DisplayTopView.displayTopView(with: "Error. Try Again", on: self)
                     return
+                } else {
+                    DisplayTopView.displayTopView(with: "Updated Profile Photo", on: self)
+                    ImageAPIService.shared.profileImageCache.removeObject(forKey: self.userID! as NSString)
+                    ImageAPIService.shared.profileImageCache.setObject(self.theImageToUpload!, forKey: self.userID! as NSString)
+                    self.photoChanged = false
+                    self.delegate.changedProfilePhoto(to: self.theImageToUpload!)
                 }
                 
-                storageProfileRef.downloadURL { (url, error) in
-                    if let metaImageURL = url?.absoluteString{
-                        self.DBRef.updateChildValues(["profilePhotoURL": metaImageURL]) { (error, snapshot) in
-                            if let error = error {
-                                DisplayTopView.displayTopView(with: "Error. Try again.", on: self)
-                                print(error.localizedDescription)
-                            } else {
-                                DisplayTopView.displayTopView(with: "Updated Profile Photo", on: self)
-                                ImageAPIService.shared.profileImageCache.removeObject(forKey: self.userID! as NSString)
-                                ImageAPIService.shared.profileImageCache.setObject(self.theImageToUpload!, forKey: self.userID! as NSString)
-                                self.photoChanged = false
-                                self.delegate.changedProfilePhoto(to: self.theImageToUpload!)
-                            }
-                        }
-                    }
-                }
-                
-                
+//                storageProfileRef.downloadURL { (url, error) in
+//                    if let metaImageURL = url?.absoluteString{
+//                        self.DBRef.updateChildValues(["profilePhotoURL": metaImageURL]) { (error, snapshot) in
+//                            if let error = error {
+//                                DisplayTopView.displayTopView(with: "Error. Try again.", on: self)
+//                                print(error.localizedDescription)
+//                            } else {
+//                                DisplayTopView.displayTopView(with: "Updated Profile Photo", on: self)
+//                                ImageAPIService.shared.profileImageCache.removeObject(forKey: self.userID! as NSString)
+//                                ImageAPIService.shared.profileImageCache.setObject(self.theImageToUpload!, forKey: self.userID! as NSString)
+//                                self.photoChanged = false
+//                                self.delegate.changedProfilePhoto(to: self.theImageToUpload!)
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
     }

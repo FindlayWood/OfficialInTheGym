@@ -10,12 +10,54 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class LaunchPageViewController: UIViewController {
+class LaunchPageViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator: MainCoordinator?
     
     @IBOutlet var spinner:UIActivityIndicatorView!
     
     var DBref: DatabaseReference!
 
+    fileprivate func checkForUser() {
+        if Auth.auth().currentUser != nil{
+            let userID = Auth.auth().currentUser?.uid
+            if let user = Auth.auth().currentUser{
+                
+                user.reload { (error) in
+                    switch user.isEmailVerified {
+                    case true:
+                        //self.perform(#selector(self.showAlert), with: nil, afterDelay: 10)
+                        UserIDToUser.transform(userID: userID!) { (user) in
+                            ViewController.username = user.username
+                            if user.admin! {
+                                ViewController.admin = true
+                                self.spinner.stopAnimating()
+                                //self.performSegue(withIdentifier: "coachLoggedIn", sender: self)
+                                self.coordinator?.coordinateToTabBar()
+                            } else {
+                                ViewController.admin = false
+                                self.spinner.stopAnimating()
+                                //self.performSegue(withIdentifier: "playerLoggedIn", sender: self)
+                                self.coordinator?.coordinateToTabBar()
+                            }
+                        }
+                        
+                    case false:
+                        self.spinner.stopAnimating()
+                        //self.performSegue(withIdentifier: "toLoginSignUp", sender: self)
+                        self.coordinator?.notLoggedIn()
+                    }
+                }
+                
+            }
+            
+        }else{
+            self.spinner.stopAnimating()
+            //self.performSegue(withIdentifier: "toLoginSignUp", sender: self)
+            self.coordinator?.notLoggedIn()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,39 +72,7 @@ class LaunchPageViewController: UIViewController {
         spinner.startAnimating()
         spinner.hidesWhenStopped = true
         
-        if Auth.auth().currentUser != nil{
-            let userID = Auth.auth().currentUser?.uid
-            if let user = Auth.auth().currentUser{
-                
-                user.reload { (error) in
-                    switch user.isEmailVerified {
-                    case true:
-                        //self.perform(#selector(self.showAlert), with: nil, afterDelay: 10)
-                        UserIDToUser.transform(userID: userID!) { (user) in
-                            ViewController.username = user.username
-                            if user.admin! {
-                                ViewController.admin = true
-                                self.spinner.stopAnimating()
-                                self.performSegue(withIdentifier: "coachLoggedIn", sender: self)
-                            } else {
-                                ViewController.admin = false
-                                self.spinner.stopAnimating()
-                                self.performSegue(withIdentifier: "playerLoggedIn", sender: self)
-                            }
-                        }
-                        
-                    case false:
-                        self.spinner.stopAnimating()
-                        self.performSegue(withIdentifier: "toLoginSignUp", sender: self)
-                    }
-                }
-               
-            }
-            
-        }else{
-            self.spinner.stopAnimating()
-            self.performSegue(withIdentifier: "toLoginSignUp", sender: self)
-        }
+        //checkForUser()
     }
     
     func showSuccess(){
@@ -74,6 +84,7 @@ class LaunchPageViewController: UIViewController {
     // set navigation bar hidden
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        checkForUser()
     }
     
 

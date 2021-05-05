@@ -10,7 +10,9 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class DiscoverPageViewController: UIViewController {
+class DiscoverPageViewController: UIViewController, Storyboarded {
+    
+    var coordinator: DiscoverFlow?
     
     @IBOutlet weak var collection:UICollectionView!
     @IBOutlet weak var ActivityIndicator:UIActivityIndicatorView!
@@ -146,10 +148,12 @@ extension DiscoverPageViewController : DiscoverPageProtocol {
         if indexPath.section == 0 {
             workout = viewModel.getWOD()
             displayWorkoutVC.selectedWorkout = workout
+            displayWorkoutVC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(displayWorkoutVC, animated: true)
         } else {
             workout = viewModel.getWorkout(at: indexPath)
             displayWorkoutVC.selectedWorkout = workout
+            displayWorkoutVC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(displayWorkoutVC, animated: true)
         }
         

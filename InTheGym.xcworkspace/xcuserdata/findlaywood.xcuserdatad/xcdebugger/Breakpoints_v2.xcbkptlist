@@ -1,50 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Bucket
-   uuid = "6DDCE8AA-D112-4F6A-8A2E-9B761D60FBED"
+   uuid = "E996F43C-9A7E-485D-91EB-CBC72D94FB8F"
    type = "0"
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
-         <BreakpointContent
-            uuid = "D31FD7FE-5001-423C-ACC8-F48C7F104F61"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            breakpointStackSelectionBehavior = "1"
-            scope = "0"
-            stopOnStyle = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1B0BD386-89A2-4408-B516-9575D8224FD2"
+            uuid = "B8E7F146-4C6B-458F-BBC7-1A6010BD179E"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "InTheGym/DisplayWorkout/DisplayWorkoutTableViewCell.swift"
+            filePath = "InTheGym/Timeline/PlayerTimeline/PlayerTimelineViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "166"
-            endingLineNumber = "166"
-            landmarkName = "collectionView(_:cellForItemAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "D6F65B02-D54E-49B4-9ECA-69546264DE6A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "InTheGym/DisplayWorkout/DisplayWorkoutAdapter.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
-            landmarkName = "tableView(_:cellForRowAt:)"
+            startingLineNumber = "200"
+            endingLineNumber = "200"
+            landmarkName = "itemSelected(at:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -16,6 +16,7 @@ target 'InTheGym' do
 	pod 'Charts'
 	pod 'SCLAlertView'
 	pod 'EmptyDataSet-Swift'
+	pod 'CodableFirebase'
 
 
 

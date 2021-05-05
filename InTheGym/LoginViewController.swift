@@ -12,7 +12,9 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator: MainCoordinator?
     
     //variable outlets created for textfields and buttons
     @IBOutlet weak var email:UITextField!
@@ -47,10 +49,15 @@ class LoginViewController: UIViewController {
                                 ViewController.username = user.username
                                 if user.admin! {
                                     ViewController.admin = true
-                                    self.performSegue(withIdentifier: "logInAdmin2", sender: self)
+                                    //self.performSegue(withIdentifier: "logInAdmin2", sender: self)
+                                    self.coordinator?.coordinateToTabBar()
+                                    self.navigationController?.popToRootViewController(animated: false)
+                                    
                                 } else {
                                     ViewController.admin = false
-                                    self.performSegue(withIdentifier: "logInHome2", sender: self)
+                                    //self.performSegue(withIdentifier: "logInHome2", sender: self)
+                                    self.coordinator?.coordinateToTabBar()
+                                    self.navigationController?.popToRootViewController(animated: false)
                                 }
                             }
                             
@@ -100,8 +107,8 @@ class LoginViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         email.delegate = self
         password.delegate = self
-        email.tintColor = .white
-        password.tintColor = .white
+        email.tintColor = Constants.darkColour
+        password.tintColor = Constants.darkColour
         email.textContentType = .username
         password.textContentType = .password
         navigationItem.title = "Login"
@@ -111,7 +118,7 @@ class LoginViewController: UIViewController {
         //set attributes for the text button
         let attrs : [NSAttributedString.Key : Any] = [
             NSAttributedString.Key.font : UIFont(name: "Menlo", size: 15)!,
-            NSAttributedString.Key.foregroundColor : UIColor.white,
+            NSAttributedString.Key.foregroundColor : UIColor.black,
             NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue
         ]
         
@@ -126,6 +133,9 @@ class LoginViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         //make sure navigation bar is shown
         navigationController?.setNavigationBarHidden(false, animated: true)
+        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.darkColour]
+        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
+        self.navigationController?.navigationBar.tintColor = Constants.darkColour
     }
     
     func showSuccess(){

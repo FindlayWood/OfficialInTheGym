@@ -9,7 +9,9 @@
 import UIKit
 import SCLAlertView
 
-class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate {
+class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate, Storyboarded {
+    
+    var coordinator : TimelineFlow?
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
@@ -46,6 +48,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         
         self.tabBarController?.delegate = self
         
+        //checkForNotifications()
         initViewModel()
         initNewPostButton()
         initRefreshControl()
@@ -100,6 +103,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         }
         
         viewModel.fetchData()
+        //viewModel.checkForNotifications()
     }
     
     func initNewPostButton(){
@@ -192,8 +196,8 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
             default:
                 break
             }
-            
-            self.navigationController?.pushViewController(discussionVC, animated: true)
+            //self.navigationController?.pushViewController(discussionVC, animated: true)
+            coordinator?.showDiscussion()
         }
     }
     
@@ -317,5 +321,15 @@ extension PlayerTimelineViewController {
             let alert = SCLAlertView(appearance: appearance)
             alert.showInfo("Welcome!", subTitle: message, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
         }
+    }
+}
+
+extension PlayerTimelineViewController {
+    func checkForNotifications(){
+        NotificationCenter.default.addObserver(self, selector: #selector(unseenNotification), name: .unseenNotification, object: nil)
+    }
+    
+    @objc func unseenNotification(){
+        self.tabBarController?.tabBar.items?[3].badgeValue = " "
     }
 }

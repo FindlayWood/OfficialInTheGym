@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import CodableFirebase
 
 class FirebaseAPI {
     
@@ -34,6 +35,54 @@ class FirebaseAPI {
         // remove observers on timeline
         // remove observers on players
         
+    }
+    
+    // MARK: - MyProfile Timeline
+    func loadProfileTimelineReferences(from path:String, completion: @escaping (Result<[PostProtocol], Error>) -> Void) {
+        var postReferences = [String]()
+        ref.child("\(path)/\(self.userID!)").observeSingleEvent(of: .value) { snapshot in
+            for child in snapshot.children{
+                postReferences.insert((child as AnyObject).key, at: 0)
+            }
+            self.loadProfileTimelinePosts(from: postReferences, completion: completion)
+        }
+    }
+    private func loadProfileTimelinePosts(from references: [String], completion: @escaping (Result<[PostProtocol], Error>) -> Void) {
+        var tempPosts = [PostProtocol]()
+        let myGroup = DispatchGroup()
+        for reference in references {
+            myGroup.enter()
+            ref.child("Posts").child(reference).observeSingleEvent(of: .value) { (snapshot) in
+                defer{myGroup.leave()}
+                if let post = self.configurePost(from: snapshot) {
+                    tempPosts.append(post)
+                }
+            }
+        }
+        myGroup.notify(queue: .main) {
+            completion(.success(tempPosts))
+        }
+    }
+    
+    /// configures a snapshot to the right type of post
+    /// - Parameters:
+    ///   - snapshot: the snapshot from firebase
+    ///   - following: is the current user following the given user
+    /// - Returns: returns a model that conforms to PstProtocol or nil
+    private func configurePost(from snapshot:DataSnapshot) -> PostProtocol? {
+        guard let snap = snapshot.value as? [String:AnyObject] else {
+            return nil
+        }
+        switch snap["type"] as! String{
+        case "post":
+            return TimelinePostModel(snapshot: snapshot)!
+        case "createdNewWorkout":
+            return TimelineCreatedWorkoutModel(snapshot: snapshot)!
+        case "workout":
+            return TimelineCompletedWorkoutModel(snapshot: snapshot)!
+        default:
+            return TimelineActivityModel(snapshot: snapshot)!
+        }
     }
     
     // MARK: - Public Timeline
@@ -104,21 +153,53 @@ class FirebaseAPI {
         }
     }
     
-    // MARK: - Created Workouts
-    func getCreatedWorkouts(for user:String, completion: @escaping (Result<[CreatedWorkoutDelegate], Error>) -> () ) {
-        
-        ref.child("SavedWorkoutCreators").child(user).observeSingleEvent(of: .value) { (snapshot) in
+    // MARK: - Returning Generic Codable Type
+    
+    
+    /// generic function for returning a model from the database - the model must be codable and this is called through the database endpoint enum
+    /// - Parameters:
+    ///   - path: the path in the database of where to load the data
+    ///   - expectingReturnType: the type of model that the function will return - this is set when the method is called whereever it is needed
+    ///   - completion: escaping with an array of the correct model type or an error
+    func retreive<T:Codable>(from path:String, expectingReturnType: T.Type, completion: @escaping (Result<[T], Error>) -> Void) {
+        var userIDs = [String]()
+        ref.child(path).observeSingleEvent(of: .value) { (snapshot) in
             for child in snapshot.children{
-                
+                userIDs.append((child as AnyObject).key)
             }
+            self.loadRetreive(from: userIDs, expectingReturnType: expectingReturnType, completion: completion)
         }
     }
     
-    private func loadCreatedWorkouts(){
-        
+    
+    /// transforming referecnes into model type
+    /// - Parameters:
+    ///   - references: array of references of the data to b loaded
+    ///   - expectingReturnType: the type of model that the function will return - this must be codable
+    ///   - completion: escaping with an array of the correct model type or an error
+    func loadRetreive<T:Codable>(from references: [String], expectingReturnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
+        let myGroup = DispatchGroup()
+        var tempModel = [T]()
+        for userID in references{
+            myGroup.enter()
+            ref.child("users/\(userID)").observeSingleEvent(of: .value) { snapshot in
+                defer { myGroup.leave() }
+                guard let snap = snapshot.value as? [String:AnyObject] else {
+                    return
+                }
+                do {
+                    let decodedResult = try FirebaseDecoder().decode(T.self, from: snap)
+                    tempModel.append(decodedResult)
+                }
+                catch let error {
+                    completion(.failure(error))
+                }
+            }
+        }
+        myGroup.notify(queue: .main) {
+            completion(.success(tempModel))
+        }
     }
-    
-    
     
     
     func get(from : String, completion: @escaping (Result<[PostProtocol],Error>) -> () ) {

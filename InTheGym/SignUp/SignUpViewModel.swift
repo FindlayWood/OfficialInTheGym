@@ -110,7 +110,8 @@ class SignUpViewModel {
                                 "username":self.user.username,
                                 "admin":self.user.admin!,
                                 "firstName":self.user.firstName,
-                                "lastName":self.user.lastName] as [String : Any]
+                                "lastName":self.user.lastName,
+                                "uid":userID] as [String : Any]
                 
                 let userRef = Database.database().reference().child("users").child(userID)
                 userRef.setValue(userData)

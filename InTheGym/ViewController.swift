@@ -13,7 +13,9 @@ import Network
 import SCLAlertView
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator: MainCoordinator?
     
     @IBOutlet var middleLabel:UILabel!
     
@@ -27,8 +29,11 @@ class ViewController: UIViewController {
     
     let monitor = NWPathMonitor()
     
+    let selection = UISelectionFeedbackGenerator()
 
     override func viewDidLoad() {
+        
+        selection.prepare()
         
         let arcCenter = CGPoint(x: view.bounds.size.width / 2, y: circleView.bounds.size.height)
         
@@ -124,7 +129,16 @@ class ViewController: UIViewController {
         let selection = UISelectionFeedbackGenerator()
         selection.prepare()
         selection.selectionChanged()
-        
+    }
+    
+    @IBAction func login(_ sender: UIButton) {
+        selection.selectionChanged()
+        coordinator?.login()
+    }
+    
+    @IBAction func signUp(_ sender: UIButton) {
+        selection.selectionChanged()
+        coordinator?.signUpStepOne()
     }
     
     // set navigation bar hidden

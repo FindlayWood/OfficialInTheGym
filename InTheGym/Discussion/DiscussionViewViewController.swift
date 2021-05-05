@@ -8,7 +8,9 @@
 
 import UIKit
 
-class DiscussionViewViewController: UIViewController {
+class DiscussionViewViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator : TimelineCoordinator?
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!

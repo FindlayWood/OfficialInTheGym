@@ -230,4 +230,30 @@ class PlayerTimelineViewModel{
             }
         }
     }
+    
+    
+    
+    
+    // MARK: - Check for Notifications
+    func checkForNotifications(){
+        let ref = Database.database().reference().child("Notifications").child(self.userID).queryLimited(toLast: 1)
+        ref.observe(.childAdded) { (snapshot) in
+            guard let snap = snapshot.value as? [String:AnyObject] else {
+                return
+            }
+            if snap["seen"] as? Bool ?? true == false {
+                //call notificationcenter to add badge icon
+                NotificationCenter.default.post(name: .unseenNotification, object: nil)
+            }
+            
+        }
+    }
+    
+    
+    
+}
+
+extension Notification.Name {
+    static let unseenNotification = Notification.Name("unseenNotification")
+    static let seenAllNotifications = Notification.Name("seenAllNotifications")
 }

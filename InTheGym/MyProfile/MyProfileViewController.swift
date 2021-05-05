@@ -9,7 +9,9 @@
 import UIKit
 import SCLAlertView
 
-class MyProfileViewController: UIViewController {
+class MyProfileViewController: UIViewController, Storyboarded {
+    
+    var coordinator: MyProfileFlow?
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
@@ -55,6 +57,7 @@ class MyProfileViewController: UIViewController {
         tableview.layoutMargins = .zero
         
         
+        checkForNotifications()
         initViewModel()
         initUI()
         initRefreshControl()
@@ -150,7 +153,8 @@ class MyProfileViewController: UIViewController {
         }
         
         viewModel.followerCount()
-        viewModel.fetchData()
+        //viewModel.fetchData()
+        viewModel.loading()
     }
     
     func initRefreshControl(){
@@ -371,5 +375,15 @@ extension MyProfileViewController {
             let alert = SCLAlertView(appearance: appearance)
             alert.showInfo("MY PROFILE!", subTitle: FirstTimeMessages.myPRofileMessage, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
         }
+    }
+}
+
+extension MyProfileViewController {
+    func checkForNotifications(){
+        NotificationCenter.default.addObserver(self, selector: #selector(removeIcon), name: .seenAllNotifications, object: nil)
+    }
+    
+    @objc func removeIcon(){
+        self.tabBarController?.tabBar.items?[3].badgeValue = nil
     }
 }

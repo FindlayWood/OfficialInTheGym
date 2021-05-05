@@ -42,6 +42,7 @@ class DisplayWorkoutViewController: UIViewController {
         tableview.register(UINib(nibName: "DisplayPlusTableView", bundle: nil), forCellReuseIdentifier: "DisplayPlusTableView")
         tableview.register(UINib(nibName: "DisplayWorkoutCircuitTableViewCell", bundle: nil), forCellReuseIdentifier: "DisplayWorkoutCircuitTableViewCell")
         
+        
         loadTableview()
         initViewModel()
         initUI()

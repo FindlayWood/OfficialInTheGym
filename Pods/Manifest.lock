@@ -221,6 +221,7 @@ PODS:
   - Charts (3.6.0):
     - Charts/Core (= 3.6.0)
   - Charts/Core (3.6.0)
+  - CodableFirebase (0.2.1)
   - EmptyDataSet-Swift (5.0.0)
   - Firebase/Auth (7.2.0-M1):
     - Firebase/CoreOnly
@@ -350,6 +351,7 @@ PODS:
 
 DEPENDENCIES:
   - Charts
+  - CodableFirebase
   - EmptyDataSet-Swift
   - Firebase/Auth
   - Firebase/Core (= 7.2-M1)
@@ -365,6 +367,7 @@ SPEC REPOS:
     - abseil
     - BoringSSL-GRPC
     - Charts
+    - CodableFirebase
     - EmptyDataSet-Swift
     - Firebase
     - FirebaseAnalytics
@@ -392,6 +395,7 @@ SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
+  CodableFirebase: 0bf201991eeec35eb9fcd987d271ea463cf34a80
   EmptyDataSet-Swift: eb382c0c87a2d9c678077385a595cec52da38171
   Firebase: 76901b8673a44f7f266f7c1e36d48cd44de834c2
   FirebaseAnalytics: c6cc3299ee79e1312c88d8a9cd4430fae49522c5
@@ -415,6 +419,6 @@ SPEC CHECKSUMS:
   SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
   SkyFloatingLabelTextField: 79ddc40e4ad59707fedbb48d605417aee48bb78a
 
-PODFILE CHECKSUM: d0964db3aa000d4f12c71f4f5d2fa3863d195c23
+PODFILE CHECKSUM: e7c77d3d1529b56d8636120cdcc7b0ef140a3954
 
 COCOAPODS: 1.10.1

@@ -37,6 +37,7 @@ class DisplayNotificationsViewController: UIViewController {
         tableview.separatorInset = .zero
         tableview.layoutMargins = .zero
         
+        //removeTabIcon()
         //initViewModel()
     }
     
@@ -169,4 +170,10 @@ extension DisplayNotificationsViewController: DisplayNotificationsProtocol{
     }
     
     
+}
+
+extension DisplayNotificationsViewController {
+    func removeTabIcon() {
+        NotificationCenter.default.post(name: .seenAllNotifications, object: nil)
+    }
 }
