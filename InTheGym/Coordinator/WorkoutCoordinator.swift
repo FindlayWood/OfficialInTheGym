@@ -1,33 +1,31 @@
 //
-//  WorkoutsCoordinator.swift
+//  WorkoutCoordinator.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 05/05/2021.
+//  Created by Findlay Wood on 06/05/2021.
 //  Copyright © 2021 FindlayWood. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-protocol WorkoutsFlow {
-    func showWorkout(workout: WorkoutDelegate)
-    func addNewWorkout()
-}
-
-class WorkoutsCoordinator: NSObject, Coordinator {
+/// Child Coordinator to handle the flow when a workout is displayed
+class WorkoutCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     
-    init(navigationController: UINavigationController) {
+    var workout: WorkoutDelegate
+    
+    init(navigationController: UINavigationController, workout: WorkoutDelegate) {
         self.navigationController = navigationController
-        self.navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController.navigationBar.shadowImage = UIImage()
-        self.navigationController.navigationBar.tintColor = .white
+        self.workout = workout
     }
     
     func start() {
-        let vc = PlayerWorkoutViewController.instantiate()
+        let vc = DisplayWorkoutViewController.instantiate()
         vc.coordinator = self
+        vc.selectedWorkout = workout
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
     
@@ -39,32 +37,32 @@ class WorkoutsCoordinator: NSObject, Coordinator {
             }
         }
     }
+    
 }
 
+
 //MARK: - Flow Methods
-extension WorkoutsCoordinator: WorkoutsFlow {
-    func showWorkout(workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
-    func addNewWorkout() {
-        let vc = AddWorkoutSelectionViewController.instantiate()
+extension WorkoutCoordinator {
+    func showCircuit() {
+        let vc = DisplayCircuitViewController.instantiate()
         navigationController.pushViewController(vc, animated: true)
     }
     
-}
-
-
-//MARK: - Child Coordinators
-extension WorkoutsCoordinator {
+    func showCompletedPage() {
+        let vc = WorkoutCompletedViewController.instantiate()
+        navigationController.pushViewController(vc, animated: true)
+    }
     
+    func showUser(with user: Users) {
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        childCoordinators.append(child)
+        child.start()
+    }
 }
 
 
 //MARK: - Navigation Delegate Method
-extension WorkoutsCoordinator: UINavigationControllerDelegate {
+extension WorkoutCoordinator: UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
         guard let fromViewController = navigationController.transitionCoordinator?.viewController(forKey: .from) else {
@@ -77,14 +75,6 @@ extension WorkoutsCoordinator: UINavigationControllerDelegate {
         
         if let PublicViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(PublicViewController.coordinator)
-        }
-        
-        if let DiscussionViewController = fromViewController as? DiscussionViewViewController {
-            childDidFinish(DiscussionViewController.coordinator)
-        }
-        
-        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
-            childDidFinish(WorkoutViewController.coordinator)
         }
     }
 }

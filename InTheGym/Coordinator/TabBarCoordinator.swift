@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+
 class TabBarCoordinator: Coordinator {
     
     var childCoordinators = [Coordinator]()
@@ -22,31 +23,49 @@ class TabBarCoordinator: Coordinator {
         let tabBarController = PlayerInitialViewController.instantiate()
         tabBarController.coordinator = self
         
-        if ViewController.admin{
-            print("admin is here")
-        } else {
-            print("no admin here")
-        }
-        
         let timelineNavigationController = UINavigationController()
-        timelineNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 0)
+        if #available(iOS 13.0, *) {
+            timelineNavigationController.tabBarItem = UITabBarItem(title: "NEWSFEED", image: UIImage(systemName: "newspaper.fill"), tag: 0)
+        } else {
+            timelineNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 0)
+            timelineNavigationController.tabBarItem.title = "NEWSFEED"
+        }
         let timeLineCoord = TimelineCoordinator(navigationController: timelineNavigationController)
         
+        
         let discoverNavigationController = UINavigationController()
-        discoverNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 1)
+        if #available(iOS 13.0, *) {
+            discoverNavigationController.tabBarItem = UITabBarItem(title: "DISCOVER", image: UIImage(systemName: "magnifyingglass"), tag: 1)
+        } else {
+            discoverNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 1)
+        }
         let discoverCoord = DiscoverCoordinator(navigationController: discoverNavigationController)
         
+        
         let workoutsNavigationController = UINavigationController()
-        workoutsNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .downloads, tag: 2)
+        workoutsNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 2)
         let workoutsCoord = WorkoutsCoordinator(navigationController: workoutsNavigationController)
         
+        
         let playersNavigationController = UINavigationController()
-        playersNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 2)
+        if #available(iOS 13.0, *) {
+            playersNavigationController.tabBarItem = UITabBarItem(title: "PLAYERS", image: UIImage(systemName: "person.2.fill"), tag: 2)
+        } else {
+            playersNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 2)
+            playersNavigationController.tabBarItem.title = "PLAYERS"
+        }
         let playerCoord = PlayersCoordinator(navigationController: playersNavigationController)
         
+        
         let myProfileNavigationController = UINavigationController()
-        myProfileNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 3)
+        if #available(iOS 13.0, *) {
+            myProfileNavigationController.tabBarItem = UITabBarItem(title: "MYPROFILE", image: UIImage(systemName: "person.fill"), tag: 3)
+        } else {
+            myProfileNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .featured, tag: 3)
+            myProfileNavigationController.tabBarItem.title = "MYPROFILE"
+        }
         let myProfileCoord = MyProfileCoordinator(navigationController: myProfileNavigationController)
+        
         
         if ViewController.admin {
             tabBarController.viewControllers = [timelineNavigationController,
@@ -61,9 +80,9 @@ class TabBarCoordinator: Coordinator {
                                                 myProfileNavigationController]
         }
         
-        //tabBarController.viewControllers = [timelineNavigationController, discoverNavigationController]
+
         tabBarController.modalPresentationStyle = .fullScreen
-        navigationController.present(tabBarController, animated: false, completion: nil)
+        navigationController.present(tabBarController, animated: true, completion: nil)
         
         coordinate(to: timeLineCoord)
         coordinate(to: discoverCoord)

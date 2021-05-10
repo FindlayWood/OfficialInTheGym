@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddWorkoutSelectionViewController: UIViewController {
+class AddWorkoutSelectionViewController: UIViewController, Storyboarded {
     
 
     override func viewDidLoad() {
@@ -34,6 +34,7 @@ class AddWorkoutSelectionViewController: UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let nextVC = storyboard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
         nextVC.playerBool = true
+        nextVC.hidesBottomBarWhenPushed = true
         AddWorkoutHomeViewController.groupBool = false
         navigationController?.pushViewController(nextVC, animated: true)
     }

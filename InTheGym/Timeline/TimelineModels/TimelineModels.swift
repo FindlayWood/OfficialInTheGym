@@ -20,6 +20,7 @@ class TimelinePostModel: PostProtocol {
     var likeCount:Int?
     var replyCount:Int?
     var isPrivate:Bool?
+    var isLiked:Bool?
     
     init?(snapshot:DataSnapshot){
         guard let snap = snapshot.value as? [String:AnyObject] else{
@@ -33,6 +34,13 @@ class TimelinePostModel: PostProtocol {
         self.replyCount = snap["replyCount"] as? Int
         self.isPrivate = snap["isPrivate"] as? Bool
         self.time = snap["time"] as? TimeInterval
+        checkFor.like(on: postID!) { liked in
+            if liked {
+                self.isLiked = true
+            } else {
+                self.isLiked = false
+            }
+        }
     }
     
     init?(object : [String:AnyObject]){

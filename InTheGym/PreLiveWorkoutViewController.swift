@@ -56,6 +56,7 @@ class PreLiveWorkoutViewController: UIViewController {
             workoutPage.username = ViewController.username
             workoutPage.creatorUsername = ViewController.username
             workoutPage.creatorID = self.userID
+            workoutPage.hidesBottomBarWhenPushed = true
             WorkoutDetailViewController.exercises.removeAll()
             titlefield.text = ""
             navigationController?.pushViewController(workoutPage, animated: true)

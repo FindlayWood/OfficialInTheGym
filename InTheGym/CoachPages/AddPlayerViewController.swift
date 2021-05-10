@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class AddPlayerViewController: UIViewController {
+class AddPlayerViewController: UIViewController, Storyboarded {
     
     //activity indicator when loading
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
@@ -74,6 +74,7 @@ class AddPlayerViewController: UIViewController {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
         playerfield.delegate = self
+        playerfield.tintColor = .white
         haptic.prepare()
         loadUsers()
         activityIndicator.hidesWhenStopped = true

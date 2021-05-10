@@ -12,7 +12,7 @@
 import UIKit
 import Firebase
 
-class EditProfileViewController: UIViewController {
+class EditProfileViewController: UIViewController, Storyboarded {
     
     @IBOutlet weak var profilePhoto:UIImageView!
     @IBOutlet weak var profileBIO:UITextView!
@@ -99,10 +99,10 @@ class EditProfileViewController: UIViewController {
             self.DBRef.updateChildValues(["profileBio" : bioText])
             self.DBRef.updateChildValues(["profileBio" : bioText]) { (error, snapshot) in
                 if let error = error {
-                    DisplayTopView.displayTopView(with: "Error. Try Again.", on: self)
+                    //DisplayTopView.displayTopView(with: "Error. Try Again.", on: self)
                     print(error.localizedDescription)
                 } else {
-                    DisplayTopView.displayTopView(with: "Updated Profile", on: self)
+                    //DisplayTopView.displayTopView(with: "Updated Profile", on: self)
                     self.bioChanged = false
                     self.delegate.changedBio(to: bioText)
                 }
@@ -124,10 +124,10 @@ class EditProfileViewController: UIViewController {
             storageProfileRef.putData(imageData, metadata: metaData) { (storage, error) in
                 if let error = error{
                     print(error.localizedDescription as Any)
-                    DisplayTopView.displayTopView(with: "Error. Try Again", on: self)
+                    //DisplayTopView.displayTopView(with: "Error. Try Again", on: self)
                     return
                 } else {
-                    DisplayTopView.displayTopView(with: "Updated Profile Photo", on: self)
+                    //DisplayTopView.displayTopView(with: "Updated Profile Photo", on: self)
                     ImageAPIService.shared.profileImageCache.removeObject(forKey: self.userID! as NSString)
                     ImageAPIService.shared.profileImageCache.setObject(self.theImageToUpload!, forKey: self.userID! as NSString)
                     self.photoChanged = false

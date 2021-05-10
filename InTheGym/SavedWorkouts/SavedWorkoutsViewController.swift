@@ -9,7 +9,9 @@
 import UIKit
 import EmptyDataSet_Swift
 
-class SavedWorkoutsViewController: UIViewController {
+class SavedWorkoutsViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator: MyProfileFlow?
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
@@ -92,10 +94,12 @@ class SavedWorkoutsViewController: UIViewController {
         // move to new views
         // move with this workout
         let workouttomove = viewModel.selectedWorkout!
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let workoutView = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
-        workoutView.selectedWorkout = workouttomove
-        navigationController?.pushViewController(workoutView, animated: true)
+        coordinator?.showWorkouts(with: workouttomove)
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let workoutView = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
+//        workoutView.selectedWorkout = workouttomove
+//        workoutView.hidesBottomBarWhenPushed = true
+//        navigationController?.pushViewController(workoutView, animated: true)
     }
 
 }

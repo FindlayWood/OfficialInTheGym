@@ -257,10 +257,9 @@ extension GroupPageViewController : TimelineTapProtocol {
         if #available(iOS 13.0, *) {
             UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
                 sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            } completion: { _ in
+                sender.isUserInteractionEnabled = false
             }
-        } else {
-            // Fallback on earlier versions
-            print("needs fixing")
         }
         let selection = UISelectionFeedbackGenerator()
         selection.prepare()

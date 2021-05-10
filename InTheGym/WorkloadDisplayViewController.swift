@@ -161,32 +161,32 @@ class WorkloadDisplayViewController: UIViewController, GetChartData {
                 let endDate = Date(timeIntervalSinceReferenceDate: time)
                 let workload = snap["workload"] as! Int
                 let timeToComplete = snap["timeToComplete"] as! Int
-                let rpe = snap["rpe"] as! String
+                let rpe = snap["rpe"] as? Int ?? 0
                 let workoutID = snap["workoutID"] as! String
                 
                 
                 if threeDayRange.contains(endDate){
                     self.threeWorkloadArray.append(workload)
                     self.threeTimeArray.append(timeToComplete)
-                    self.threeRPEArray.append(Int(rpe)!)
+                    self.threeRPEArray.append(rpe)
                     self.threeEndDates.append(endDate)
                 }
                 if sevenDayRange.contains(endDate){
                     self.sevenWorkloadArray.append(workload)
                     self.sevenTimeArray.append(timeToComplete)
-                    self.sevenRPEArray.append(Int(rpe)!)
+                    self.sevenRPEArray.append(rpe)
                     self.sevenEndDates.append(endDate)
                 }
                 if twoWeekRange.contains(endDate){
                     self.twoWeekWorkloadArray.append(workload)
                     self.twoWeekTimeArray.append(timeToComplete)
-                    self.twoWeekRPEArray.append(Int(rpe)!)
+                    self.twoWeekRPEArray.append(rpe)
                     self.twoWeekEndDates.append(endDate)
                 }
                 if fourWeekRange.contains(endDate){
                     self.fourWeekWorkloadArray.append(workload)
                     self.fourWeekTimeArray.append(timeToComplete)
-                    self.fourWeekRPEArray.append(Int(rpe)!)
+                    self.fourWeekRPEArray.append(rpe)
                     self.fourWeekEndDates.append(endDate)
                 }
             }

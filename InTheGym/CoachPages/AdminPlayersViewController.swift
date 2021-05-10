@@ -96,11 +96,12 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     @IBAction func addPressed(_ sender:UIButton){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let addPage = storyboard.instantiateViewController(withIdentifier: "AddPlayerViewController") as! AddPlayerViewController
-        addPage.modalTransitionStyle = .coverVertical
-        addPage.modalPresentationStyle = .fullScreen
-        self.navigationController?.present(addPage, animated: true, completion: nil)
+        coordinator?.addNewPlayer()
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let addPage = storyboard.instantiateViewController(withIdentifier: "AddPlayerViewController") as! AddPlayerViewController
+//        addPage.modalTransitionStyle = .coverVertical
+//        addPage.modalPresentationStyle = .fullScreen
+//        self.navigationController?.present(addPage, animated: true, completion: nil)
     }
     
     func loading(){
@@ -238,18 +239,21 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if segmentControl.selectedSegmentIndex == 0{
-            let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-            let SVC = StoryBoard.instantiateViewController(withIdentifier: "PlayerViewController") as! PlayerViewController
+            //let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+            //let SVC = StoryBoard.instantiateViewController(withIdentifier: "PlayerViewController") as! PlayerViewController
             
             let currentUser = self.players[indexPath.row]
-            SVC.firstNameString = currentUser.firstName!
-            SVC.lastNameString = currentUser.lastName!
-            SVC.userNameString = currentUser.username!
-            SVC.userEmailString = currentUser.email!
-            SVC.workoutsCompletedInt = currentUser.numberOfCompletes!
-            SVC.playerID = currentUser.uid
-            
-            self.navigationController?.pushViewController(SVC, animated: true)
+            coordinator?.showPlayerInMoreDetail(player: currentUser)
+//            SVC.player = currentUser
+//            SVC.firstNameString = currentUser.firstName!
+//            SVC.lastNameString = currentUser.lastName!
+//            SVC.userNameString = currentUser.username!
+//            SVC.userEmailString = currentUser.email!
+//            SVC.workoutsCompletedInt = currentUser.numberOfCompletes!
+//            SVC.playerID = currentUser.uid
+//            SVC.hidesBottomBarWhenPushed = true
+//
+//            self.navigationController?.pushViewController(SVC, animated: true)
         }
 
     }

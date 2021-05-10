@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import EmptyDataSet_Swift
 
-class DisplayNotificationsViewController: UIViewController {
+class DisplayNotificationsViewController: UIViewController, Storyboarded {
     
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     @IBOutlet weak var tableview:UITableView!

@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import EmptyDataSet_Swift
 
-class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, EmptyDataSetSource, EmptyDataSetDelegate  {
+class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, EmptyDataSetSource, EmptyDataSetDelegate, Storyboarded  {
 
     
     
@@ -62,7 +62,7 @@ class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITab
         tableview.estimatedRowHeight = 90
         loadUsers()
         
-        
+        navigationItem.title = "Discover"
         
     }
     

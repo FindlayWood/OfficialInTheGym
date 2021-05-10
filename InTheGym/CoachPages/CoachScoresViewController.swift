@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import Charts
 
-class CoachScoresViewController: UIViewController {
+class CoachScoresViewController: UIViewController, Storyboarded {
     
     @IBOutlet weak var pieChartView:PieChartView!
     

@@ -124,6 +124,15 @@ class DiscoverPageViewController: UIViewController, Storyboarded {
     
 }
 
+//MARK: - Actions
+extension DiscoverPageViewController {
+    @IBAction func searchTapped(_ sender: UIButton) {
+        coordinator?.search()
+    }
+}
+
+
+//MARK: - Protocol Methods
 extension DiscoverPageViewController : DiscoverPageProtocol {
     func getWorkout(at indexPath: IndexPath) -> discoverWorkout {
         return viewModel.getWorkout(at: indexPath)
@@ -142,19 +151,21 @@ extension DiscoverPageViewController : DiscoverPageProtocol {
     }
     
     func workoutSelected(at indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let displayWorkoutVC = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let displayWorkoutVC = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
         var workout : discoverWorkout!
         if indexPath.section == 0 {
             workout = viewModel.getWOD()
-            displayWorkoutVC.selectedWorkout = workout
-            displayWorkoutVC.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(displayWorkoutVC, animated: true)
+            coordinator?.wodSelected(workout: workout)
+//            displayWorkoutVC.selectedWorkout = workout
+//            displayWorkoutVC.hidesBottomBarWhenPushed = true
+//            self.navigationController?.pushViewController(displayWorkoutVC, animated: true)
         } else {
             workout = viewModel.getWorkout(at: indexPath)
-            displayWorkoutVC.selectedWorkout = workout
-            displayWorkoutVC.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(displayWorkoutVC, animated: true)
+            coordinator?.workoutSelected(workout: workout)
+//            displayWorkoutVC.selectedWorkout = workout
+//            displayWorkoutVC.hidesBottomBarWhenPushed = true
+//            self.navigationController?.pushViewController(displayWorkoutVC, animated: true)
         }
         
     }
@@ -162,7 +173,8 @@ extension DiscoverPageViewController : DiscoverPageProtocol {
     
 }
 
-// extension for first time message
+
+//MARK: - First Launch Message
 extension DiscoverPageViewController {
     func showFirstMessage() {
         if UIApplication.isFirstDiscoverLaunch() {

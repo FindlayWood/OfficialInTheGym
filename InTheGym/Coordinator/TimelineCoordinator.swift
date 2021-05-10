@@ -9,18 +9,18 @@
 import Foundation
 import UIKit
 
-protocol TimelineFlow {
-    func showDiscussion()
-    func showWorkouts()
-    func showUser()
+protocol TimelineFlow: AnyObject {
+    func showDiscussion(with post: PostProtocol, isGroup: Bool)
+    func showWorkouts(with workout: WorkoutDelegate)
+    func showUser(user: Users)
 }
 
 
 protocol NewsFeedFlow: TimelineFlow {
-    func makePost()
+    func makePost(groupPost: Bool, delegate: PlayerTimelineProtocol)
 }
 
-class TimelineCoordinator: Coordinator {
+class TimelineCoordinator: NSObject, Coordinator {
     
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
@@ -33,29 +33,83 @@ class TimelineCoordinator: Coordinator {
     }
     
     func start() {
+        navigationController.delegate = self
         let playerTimeline = PlayerTimelineViewController.instantiate()
         playerTimeline.coordinator = self
         navigationController.pushViewController(playerTimeline, animated: false)
     }
     
+    func childDidFinish(_ child: Coordinator?) {
+        for (index, coordinator) in childCoordinators.enumerated() {
+            if coordinator === child {
+                childCoordinators.remove(at: index)
+                break
+            }
+        }
+    }
 }
 
-  //MARK: - Flow Methods
+
+//MARK: - Flow Methods
 extension TimelineCoordinator: NewsFeedFlow {
-    func showDiscussion() {
-        
+    
+    func makePost(groupPost: Bool, delegate: PlayerTimelineProtocol) {
+        let vc = MakePostViewController.instantiate()
+        vc.groupBool = groupPost
+        vc.timelineDelegate = delegate
+        vc.modalTransitionStyle = .coverVertical
+        vc.modalPresentationStyle = .fullScreen
+        navigationController.present(vc, animated: true, completion: nil)
+    }
+}
+
+
+//MARK: - Child Coordinators
+extension TimelineCoordinator: TimelineFlow {
+    
+    func showDiscussion(with post: PostProtocol, isGroup: Bool) {
+        let child = DiscussionCoordinator(navigationController: navigationController, post: post, isGroup: isGroup)
+        childCoordinators.append(child)
+        child.start()
     }
     
-    func showWorkouts() {
-        
+    func showWorkouts(with workout: WorkoutDelegate) {
+        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
+        childCoordinators.append(child)
+        child.start()
     }
     
-    func showUser() {
+    func showUser(user: Users) {
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        child.parentCoordinator = self
+        childCoordinators.append(child)
+        child.start()
         
     }
+}
+
+//MARK: - Navigation Delegate Method
+extension TimelineCoordinator: UINavigationControllerDelegate {
     
-    func makePost(){
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        guard let fromViewController = navigationController.transitionCoordinator?.viewController(forKey: .from) else {
+            return
+        }
         
+        if navigationController.viewControllers.contains(fromViewController){
+            return
+        }
+        
+        if let PublicViewController = fromViewController as? PublicTimelineViewController {
+            childDidFinish(PublicViewController.coordinator)
+        }
+        
+        if let DiscussionViewController = fromViewController as? DiscussionViewViewController {
+            childDidFinish(DiscussionViewController.coordinator)
+        }
+        
+        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
+            childDidFinish(WorkoutViewController.coordinator)
+        }
     }
-    
 }

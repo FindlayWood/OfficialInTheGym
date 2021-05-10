@@ -74,9 +74,9 @@ class DiscussionViewModel{
     
     
     // MARK: - Actions
-    func likePost(on post:PostProtocol){
-        let postID = post.postID!
-        let posterID = post.posterID!
+    func likePost(){
+        let postID = originalPost.postID!
+        let posterID = originalPost.posterID!
         let postRef = Database.database().reference().child("Posts").child(postID)
         postRef.runTransactionBlock { (currentData) -> TransactionResult in
             if var post = currentData.value as? [String:AnyObject]{
@@ -92,11 +92,18 @@ class DiscussionViewModel{
                 print(error.localizedDescription)
             }
         }
+        if let likes = originalPost.likeCount {
+            originalPost.likeCount = likes + 1
+        } else {
+            originalPost.likeCount = 1
+        }
         
         let postLikesRef = Database.database().reference().child("PostLikes").child(postID).child(self.userID)
         postLikesRef.setValue(true)
         let likesRef = Database.database().reference().child("Likes").child(self.userID).child(postID)
         likesRef.setValue(true)
+        LikesAPIService.shared.LikedPostsCache.removeObject(forKey: postID as NSString)
+        LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: postID as NSString)
         
         // notification
         if self.userID != posterID{
@@ -105,6 +112,18 @@ class DiscussionViewModel{
             uploadNotification.upload()
         }
 
+    }
+    
+    func isLiked(completion: @escaping (Result<Bool, Error>) -> ()){
+        let postID = originalPost.postID!
+        let ref = Database.database().reference().child("PostLikes").child(postID).child(self.userID)
+        ref.observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.exists(){
+                completion(.success(true))
+            } else {
+                completion(.success(false))
+            }
+        }
     }
     
 }

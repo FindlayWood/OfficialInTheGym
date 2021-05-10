@@ -12,7 +12,10 @@ import UIKit
 import Charts
 import Firebase
 
-class PlayerViewController: UIViewController {
+class PlayerViewController: UIViewController, Storyboarded {
+    
+    // user model of player in view
+    var player: Users!
     
     // outlet variables for user info
     @IBOutlet weak var userName:UILabel!
@@ -70,8 +73,8 @@ class PlayerViewController: UIViewController {
         sender.pulsate()
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
-        SVC.userName = self.userNameString
-        SVC.uid = self.playerID
+        SVC.userName = player.username
+        SVC.uid = player.uid
         SVC.playerBool = false
         AddWorkoutHomeViewController.groupBool = false
         self.navigationController?.pushViewController(SVC, animated: true)
@@ -82,7 +85,7 @@ class PlayerViewController: UIViewController {
         sender.pulsate()
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "PBsViewController") as! PBsViewController
-        SVC.username = self.userNameString
+        SVC.username = player.username!
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     
@@ -91,8 +94,8 @@ class PlayerViewController: UIViewController {
         sender.pulsate()
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "ViewWorkoutViewController") as! ViewWorkoutViewController
-        SVC.username = self.userNameString
-        SVC.playerID = self.playerID
+        SVC.username = player.username!
+        SVC.playerID = player.uid
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     
@@ -100,11 +103,11 @@ class PlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        userName.text = "Username: \(userNameString)"
-        userEmail.text = "Email: \(userEmailString)"
-        firstName.text = "First Name: \(firstNameString)"
-        lastName.text = "Last Name: \(lastNameString)"
-        workoutsCompleted.text = "Workouts Completed: \(workoutsCompletedInt)"
+        userName.text = "Username: \(player.username ?? "username")"
+        userEmail.text = "Email: \(player.email ?? "email@.com")"
+        firstName.text = "First Name: \(player.firstName ?? "first")"
+        lastName.text = "Last Name: \(player.lastName ?? "last")"
+        workoutsCompleted.text = "Workouts Completed: \(player.numberOfCompletes ?? 0)"
         
         
 
@@ -124,7 +127,7 @@ class PlayerViewController: UIViewController {
         pieChart.backgroundColor = Constants.lightColour
 
         
-        DBRef = Database.database().reference().child("Scores").child(playerID)
+        DBRef = Database.database().reference().child("Scores").child(player.uid!)
         
         // setup the views
         topView.layer.cornerRadius = 20
@@ -153,8 +156,9 @@ class PlayerViewController: UIViewController {
     @objc fileprivate func sendToWorkload(){
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "WorkloadDisplayViewController") as! WorkloadDisplayViewController
-        SVC.username = self.userNameString
-        SVC.playerID = self.playerID
+        SVC.username = player.username
+        SVC.playerID = player.uid
+        SVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     

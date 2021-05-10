@@ -1,35 +1,33 @@
 //
-//  DiscoverCoordinator.swift
+//  DiscussionCoordinator.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 05/05/2021.
+//  Created by Findlay Wood on 06/05/2021.
 //  Copyright © 2021 FindlayWood. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-protocol DiscoverFlow {
-    func wodSelected(workout: WorkoutDelegate)
-    func workoutSelected(workout: WorkoutDelegate)
-    func search()
-}
-
-class DiscoverCoordinator: NSObject, Coordinator {
-
+/// Child Coordinator to handle the flow when the discussion view controller appears
+class DiscussionCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     
-    init(navigationController: UINavigationController){
+    var post: PostProtocol
+    var isGroup: Bool
+    
+    init(navigationController: UINavigationController, post: PostProtocol, isGroup: Bool) {
         self.navigationController = navigationController
-        self.navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController.navigationBar.shadowImage = UIImage()
-        self.navigationController.navigationBar.tintColor = .white
+        self.post = post
+        self.isGroup = isGroup
     }
     
     func start() {
-        let vc = DiscoverPageViewController.instantiate()
+        let vc = DiscussionViewViewController.instantiate()
         vc.coordinator = self
+        vc.originalPost = post
+        vc.isGroup = isGroup
         navigationController.pushViewController(vc, animated: true)
     }
     
@@ -45,29 +43,36 @@ class DiscoverCoordinator: NSObject, Coordinator {
 
 
 //MARK: - Flow Methods
-extension DiscoverCoordinator: DiscoverFlow {
+extension DiscussionCoordinator {
     
-    func wodSelected(workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
-    /// add child coordinator, push new navigation controller and have child coordinator take control of navigation
-    func workoutSelected(workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
-    func search() {
-        let vc = SearchForUsersViewController.instantiate()
-        navigationController.pushViewController(vc, animated: true)
+    func addReply() {
+        let vc = ReplyViewController.instantiate()
+        vc.modalTransitionStyle = .coverVertical
+        vc.modalPresentationStyle = .formSheet
+        navigationController.present(vc, animated: true, completion: nil)
     }
 }
 
-//MARK: - Navigation Delegate Method
-extension DiscoverCoordinator: UINavigationControllerDelegate {
+
+//MARK: - Child Coordinator Methods
+extension DiscussionCoordinator {
+    
+    func showUser(with user: Users) {
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
+    func showWorkout(with workout: WorkoutDelegate) {
+        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
+        childCoordinators.append(child)
+        child.start()
+    }
+}
+
+
+//MARK: - Navigation Delegate Methods
+extension DiscussionCoordinator: UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
         guard let fromViewController = navigationController.transitionCoordinator?.viewController(forKey: .from) else {
@@ -82,12 +87,9 @@ extension DiscoverCoordinator: UINavigationControllerDelegate {
             childDidFinish(PublicViewController.coordinator)
         }
         
-//        if let DiscussionViewController = fromViewController as? DiscussionViewViewController {
-//            childDidFinish(DiscussionViewController.coordinator)
-//        }
-        
         if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
             childDidFinish(WorkoutViewController.coordinator)
         }
     }
+
 }

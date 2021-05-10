@@ -11,7 +11,7 @@ import UIKit
 
 protocol DiscussionTapProtocol {
     func userTapped(on cell:UITableViewCell)
-    func likeButtonTapped(on cell:UITableViewCell, sender:UIButton)
+    func likeButtonTapped(on cell:UITableViewCell, sender:UIButton, label: UILabel)
     func workoutTapped(on cell:UITableViewCell)
     func replyButtonTapped()
 }

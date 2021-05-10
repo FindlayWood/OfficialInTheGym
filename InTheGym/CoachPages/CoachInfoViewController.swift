@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, Storyboarded {
     
     // number of added players
     var playerCount:Int!
@@ -152,13 +152,12 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
             case 0:
                 let Storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = Storyboard.instantiateViewController(withIdentifier: "CoachScoresViewController") as! CoachScoresViewController
+                SVC.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(SVC, animated: true)
             case 1:
-//                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-//                let SVC = StoryBoard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
-//                navigationController?.pushViewController(SVC, animated: true)
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
+                SVC.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(SVC, animated: true)
             default:
                 break

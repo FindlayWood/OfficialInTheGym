@@ -26,6 +26,7 @@ class ImageAPIService {
         storage.getData(maxSize: 1 * 1024 * 1024) { (data, error) in
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil)
                 return
             }
             if let data = data{

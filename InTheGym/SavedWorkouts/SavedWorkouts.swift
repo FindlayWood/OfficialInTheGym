@@ -41,7 +41,7 @@ struct publicSavedWorkout : savedWorkoutDelegate{
         }
         self.isPrivate = false
         self.liveWorkout = false
-        self.fromDiscover = snap["fromDiscover"] as? Bool
+        self.fromDiscover = snap["fromDiscover"] as? Bool ?? false
         self.completed = false
         self.workoutID = snapshot.key
         self.title = snap["title"] as? String
@@ -109,7 +109,7 @@ struct privateSavedWorkout : savedWorkoutDelegate{
         }
         self.isPrivate = true
         self.liveWorkout = false
-        self.fromDiscover = snap["fromDiscover"] as? Bool
+        self.fromDiscover = snap["fromDiscover"] as? Bool ?? false
         self.completed = false
         self.workoutID = snapshot.key
         self.title = snap["title"] as? String

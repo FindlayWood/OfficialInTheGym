@@ -83,10 +83,6 @@ class PlayerOrCoachViewController: UIViewController, Storyboarded {
     
     @IBAction func continuePressed(_ sender:UIButton){
         self.selection.selectionChanged()
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let svc = storyboard.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
-//        svc.admin = self.isAdmin
-//        self.navigationController?.pushViewController(svc, animated: true)
         self.coordinator?.signUpStepTwo(isAdmin: isAdmin)
     }
     

@@ -9,7 +9,9 @@
 import UIKit
 import SCLAlertView
 
-class DisplayWorkoutViewController: UIViewController {
+class DisplayWorkoutViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator: WorkoutCoordinator?
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var completeButton:UIButton!
@@ -73,7 +75,16 @@ class DisplayWorkoutViewController: UIViewController {
                 bv.bottomViewSetUpClosure = { [weak self] () in
                     self?.viewModel.addToWorkouts()
                     DisplayTopView.displayTopView(with: "Added To Workouts", on: self!)
-                    // fucntion to add workout on viewmodel
+                }
+                bv.viewProfileTapped = { [weak self] () in
+                    guard let self = self else {return}
+                    if self.selectedWorkout.creatorID == self.viewModel.userId {
+                        DisplayTopView.displayTopView(with: "Your Workout", on: self)
+                    } else {
+                        UserIDToUser.transform(userID: (self.selectedWorkout.creatorID)) { user in
+                            self.coordinator?.showUser(with: user)
+                        }
+                    }
                 }
             }
         case is privateSavedWorkout:
@@ -86,6 +97,16 @@ class DisplayWorkoutViewController: UIViewController {
                     DisplayTopView.displayTopView(with: "Added To Workouts", on: self!)
                     // fucntion to add workout on viewmodel
                 }
+                bv.viewProfileTapped = { [weak self] () in
+                    guard let self = self else {return}
+                    if self.selectedWorkout.creatorID == self.viewModel.userId {
+                        DisplayTopView.displayTopView(with: "Your Workout", on: self)
+                    } else {
+                        UserIDToUser.transform(userID: (self.selectedWorkout.creatorID)) { user in
+                            self.coordinator?.showUser(with: user)
+                        }
+                    }
+                }
             }
         case is CreatedWorkoutDelegate:
             self.completeButton.isHidden = true
@@ -95,15 +116,18 @@ class DisplayWorkoutViewController: UIViewController {
                 let bv = DiscoverWorkoutBottomView(workout: selectedWorkout, parent: self.view)
                 bv.bottomViewSetUpClosure = { [weak self] () in
                     self?.viewModel.addToSavedWorkouts()
-                    
                 }
             }
             else if !ViewController.admin{
                 let bv = SavedWorkoutBottomView(workout: selectedWorkout, parent: self.view)
                 bv.bottomViewSetUpClosure = { [weak self] () in
-                    self?.viewModel.addToWorkouts()
-                    DisplayTopView.displayTopView(with: "Added To Workouts", on: self!)
-                    // fucntion to add workout on viewmodel
+                    guard let self = self else {return}
+                    self.viewModel.addToWorkouts()
+                    DisplayTopView.displayTopView(with: "Added To Workouts", on: self)
+                }
+                bv.viewProfileTapped = { [weak self] () in
+                    guard let self = self else {return}
+                    DisplayTopView.displayTopView(with: "Your Workout", on: self)
                 }
             }
             
@@ -119,6 +143,13 @@ class DisplayWorkoutViewController: UIViewController {
                         //add to saved workouts
                         self?.viewModel.addToSavedWorkouts()
                     }
+                    bv.profileTappedClosure = { [weak self] () in
+                        guard let self = self else {return}
+                        UserIDToUser.transform(userID: (self.selectedWorkout.creatorID)) { user in
+                            self.coordinator?.showUser(with: user)
+                        }
+                    }
+                    
                 } else if selectedWorkout.creatorID == viewModel.userId {
                     let bv = YourWorkoutBottomView(parent: self.view)
                     self.view.addSubview(bv)

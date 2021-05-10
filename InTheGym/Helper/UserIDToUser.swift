@@ -36,7 +36,7 @@ class UserIDToUser:NSObject{
     static func groupIdToGroupName(groupID:String, completion: @escaping (groupModel) -> ()) {
         let groupRef = Database.database().reference().child("Groups").child(groupID)
         groupRef.observeSingleEvent(of: .value) { (snapshot) in
-            guard let snap = snapshot.value as? [String:AnyObject] else {
+            guard let _ = snapshot.value as? [String:AnyObject] else {
                 return
             }
             let group = groupModel(snapshot: snapshot)!

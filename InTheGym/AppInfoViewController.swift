@@ -10,7 +10,7 @@ import UIKit
 import SCLAlertView
 import Firebase
 
-class AppInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class AppInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, Storyboarded {
     
 
     @IBOutlet weak var tableview:UITableView!
@@ -150,6 +150,7 @@ class AppInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
             do{
                 try Auth.auth().signOut()
                 FirebaseAPI.shared().dispose()
+                LikesAPIService.shared.LikedPostsCache.removeAllObjects()
                 ViewController.admin = nil
                 ViewController.username = nil
                 PlayerTimelineViewModel.apiService.removeObserver(withHandle: PlayerTimelineViewModel.handle)

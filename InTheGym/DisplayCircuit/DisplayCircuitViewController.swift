@@ -9,7 +9,7 @@
 import UIKit
 import SCLAlertView
 
-class DisplayCircuitViewController: UIViewController {
+class DisplayCircuitViewController: UIViewController, Storyboarded {
     
     @IBOutlet weak var tableview:UITableView!
 

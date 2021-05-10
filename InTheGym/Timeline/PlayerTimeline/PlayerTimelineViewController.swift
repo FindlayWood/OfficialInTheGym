@@ -11,7 +11,7 @@ import SCLAlertView
 
 class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate, Storyboarded {
     
-    var coordinator : TimelineFlow?
+    var coordinator : NewsFeedFlow?
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
@@ -153,16 +153,12 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     @IBAction func makePostPressed(_ sender:UIButton){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let postVC = storyboard.instantiateViewController(withIdentifier: "MakePostViewController") as! MakePostViewController
-        if ViewController.admin {
-            postVC.playerPost = false
-        } else {
-            postVC.playerPost = true
-        }
-        postVC.groupBool = false
-        postVC.timelineDelegate = self
-        postVC.modalTransitionStyle = .coverVertical
-        postVC.modalPresentationStyle = .fullScreen
-        self.navigationController?.present(postVC, animated: true, completion: nil)
+        coordinator?.makePost(groupPost: false, delegate: self)
+//        postVC.groupBool = false
+//        postVC.timelineDelegate = self
+//        postVC.modalTransitionStyle = .coverVertical
+//        postVC.modalPresentationStyle = .fullScreen
+//        self.navigationController?.present(postVC, animated: true, completion: nil)
         
     }
     
@@ -184,20 +180,18 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
     func itemSelected(at: IndexPath) {
         let post = viewModel.getData(at: at)
         if post is TimelinePostModel || post is TimelineCreatedWorkoutModel || post is TimelineCompletedWorkoutModel{
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let discussionVC = storyboard.instantiateViewController(withIdentifier: "DiscussionViewViewController") as! DiscussionViewViewController
+            var discussionPost: PostProtocol!
             switch post {
             case is TimelinePostModel:
-                discussionVC.originalPost = DiscussionPost(model: post as! TimelinePostModel)
+                discussionPost = DiscussionPost(model: post as! TimelinePostModel)
             case is TimelineCreatedWorkoutModel:
-                discussionVC.originalPost = DiscussionCreatedWorkout(model: post as! TimelineCreatedWorkoutModel)
+                discussionPost = DiscussionCreatedWorkout(model: post as! TimelineCreatedWorkoutModel)
             case is TimelineCompletedWorkoutModel:
-                discussionVC.originalPost = DiscussionCompletedWorkout(model: post as! TimelineCompletedWorkoutModel)
+                discussionPost = DiscussionCompletedWorkout(model: post as! TimelineCompletedWorkoutModel)
             default:
                 break
             }
-            //self.navigationController?.pushViewController(discussionVC, animated: true)
-            coordinator?.showDiscussion()
+            coordinator?.showDiscussion(with: discussionPost, isGroup: false)
         }
     }
     
@@ -223,19 +217,15 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
         let index = self.tableview.indexPath(for: cell)!
         let post = viewModel.getData(at:index)
         var workoutData : discoverWorkout!
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let displayWorkout = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
         switch post {
         case is TimelineCreatedWorkoutModel:
             let p = post as! TimelineCreatedWorkoutModel
             workoutData = p.createdWorkout
-            displayWorkout.selectedWorkout = workoutData
-            self.navigationController?.pushViewController(displayWorkout, animated: true)
+            coordinator?.showWorkouts(with: workoutData)
         case is TimelineCompletedWorkoutModel:
             let p = post as! TimelineCompletedWorkoutModel
             workoutData = p.createdWorkout
-            displayWorkout.selectedWorkout = workoutData
-            self.navigationController?.pushViewController(displayWorkout, animated: true)
+            coordinator?.showWorkouts(with: workoutData)
         default:
             break
         }
@@ -244,6 +234,19 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
     }
     
     func likeButtonTapped(on cell: UITableViewCell, sender: UIButton, label: UILabel) {
+        
+        let selection = UISelectionFeedbackGenerator()
+        selection.prepare()
+        selection.selectionChanged()
+        
+        if #available(iOS 13.0, *) {
+            UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
+                sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            } completion: { _ in
+                sender.isUserInteractionEnabled = false
+            }
+
+        }
         
         let index = self.tableview.indexPath(for: cell)!
         let post = viewModel.getData(at: index)
@@ -258,17 +261,6 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
                     self.viewModel.likePost(on: post, with: index)
                     let likeCount = Int(label.text!)! + 1
                     label.text = likeCount.description
-                    if #available(iOS 13.0, *) {
-                        UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
-                            sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
-                        }
-                    } else {
-                        // Fallback on earlier versions
-                        print("needs fixing")
-                    }
-                    let selection = UISelectionFeedbackGenerator()
-                    selection.prepare()
-                    selection.selectionChanged()
                 }
                 
             case .failure(let error):
@@ -290,12 +282,9 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
                 self.tabBarController?.selectedIndex = 3
             }
         } else {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let publicTimeline = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
             let posterID = post.posterID
             UserIDToUser.transform(userID: posterID!) { (user) in
-                publicTimeline.user = user
-                self.navigationController?.pushViewController(publicTimeline, animated: true)
+                self.coordinator?.showUser(user: user)
             }
         }
     }

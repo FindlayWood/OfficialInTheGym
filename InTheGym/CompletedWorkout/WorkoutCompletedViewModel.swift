@@ -104,15 +104,15 @@ class WorkoutCompletedViewModel {
         }
     }
     
-    func updateWorkload(with workout:workout, workload:Int, endTime : Double){
+    func updateWorkload(with workout:workout, workload:Int, endTime : Double, time: Int){
         
         
-        let workloadData = ["timeToComplete": workout.timeToComplete!,
+        let workloadData = ["timeToComplete": time,
                             "rpe": workout.score!,
                             "endTime": endTime,
                             "workload": workload,
                             "workoutID": workout.workoutID!] as [String : Any]
-        let ref = Database.database().reference().child("Workload").child(self.userID).childByAutoId()
+        let ref = Database.database().reference().child("Workloads").child(self.userID).childByAutoId()
         ref.setValue(workloadData)
     }
     

@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class ReplyViewController: UIViewController {
+class ReplyViewController: UIViewController, Storyboarded {
     
     @IBOutlet weak var message:UITextView!
     @IBOutlet weak var replyButton:UIButton!

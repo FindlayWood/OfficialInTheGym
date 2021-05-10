@@ -9,7 +9,7 @@
 import UIKit
 import EmptyDataSet_Swift
 
-class MyGroupsViewController: UIViewController {
+class MyGroupsViewController: UIViewController, Storyboarded {
     
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     @IBOutlet weak var tableview:UITableView!
@@ -112,6 +112,7 @@ extension MyGroupsViewController: MyGroupsProtocol {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let groupPage = storyboard.instantiateViewController(withIdentifier: "GroupPageViewController") as! GroupPageViewController
         groupPage.group = viewModel.getGroup(at: indexPath)
+        groupPage.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(groupPage, animated: true)
     }
     

@@ -42,9 +42,9 @@ class MainWorkoutBottomView:UIView{
         
         
         self.backgroundColor = .white
-        self.layer.cornerRadius = 10
-        self.layer.borderWidth = 2
-        self.layer.borderColor = UIColor.black.cgColor
+        self.layer.cornerRadius = 20
+        //self.layer.borderWidth = 2
+        //self.layer.borderColor = UIColor.black.cgColor
         self.translatesAutoresizingMaskIntoConstraints = false
         parentView.addSubview(self)
         self.bottomAnchor.constraint(equalTo: self.parentView.bottomAnchor).isActive = true
@@ -58,13 +58,13 @@ class MainWorkoutBottomView:UIView{
         beginButton.setTitle("Begin Workout", for: .normal)
         beginButton.backgroundColor = Constants.darkColour
         beginButton.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 31)
-        beginButton.layer.cornerRadius = 10
-        beginButton.layer.borderWidth = 2
-        beginButton.layer.borderColor = UIColor.black.cgColor
+        beginButton.layer.cornerRadius = 24.5
+        //beginButton.layer.borderWidth = 2
+        //beginButton.layer.borderColor = UIColor.black.cgColor
         beginButton.translatesAutoresizingMaskIntoConstraints = false
         beginButton.addTarget(self, action: #selector(setViewToStage2), for: .touchUpInside)
         // add shadows to the add button
-        beginButton.layer.shadowColor = UIColor.black.cgColor
+        beginButton.layer.shadowColor = UIColor.darkGray.cgColor
         beginButton.layer.shadowOffset = CGSize(width: 0, height: 0.0)
         beginButton.layer.shadowRadius = 6.0
         beginButton.layer.shadowOpacity = 1.0
@@ -117,13 +117,13 @@ class MainWorkoutBottomView:UIView{
         button.setTitle("CONTINUE", for: .normal)
         button.backgroundColor = Constants.darkColour
         button.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 31)
-        button.layer.cornerRadius = 10
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
+        button.layer.cornerRadius = 24.5
+        //button.layer.borderWidth = 2
+        //button.layer.borderColor = UIColor.black.cgColor
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalToConstant: 49).isActive = true
         button.addTarget(self, action: #selector(workoutHasBegun), for: .touchUpInside)
-        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowColor = UIColor.darkGray.cgColor
         button.layer.shadowOffset = CGSize(width: 0, height: 0.0)
         button.layer.shadowRadius = 6.0
         button.layer.shadowOpacity = 1.0

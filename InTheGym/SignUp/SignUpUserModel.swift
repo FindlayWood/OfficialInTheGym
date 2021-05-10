@@ -16,4 +16,13 @@ struct SignUpUserModel {
     var password = ""
     var confirmPassword = ""
     var admin:Bool!
+    
+    func toObject() -> [String:AnyObject] {
+        let object = ["email": email,
+                      "username": username,
+                      "firstName": firstName,
+                      "lastName": lastName,
+                      "admin": admin!] as [String:AnyObject]
+        return object
+    }
 }

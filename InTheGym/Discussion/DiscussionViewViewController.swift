@@ -10,7 +10,7 @@ import UIKit
 
 class DiscussionViewViewController: UIViewController, Storyboarded {
     
-    weak var coordinator : TimelineCoordinator?
+    weak var coordinator : DiscussionCoordinator?
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
@@ -131,6 +131,7 @@ extension DiscussionViewViewController: DiscussionTapProtocol {
         var workoutData : discoverWorkout!
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let displayWorkout = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
+        displayWorkout.hidesBottomBarWhenPushed = true
         switch originalPost {
         case is DiscussionCreatedWorkout:
             let post = originalPost as! DiscussionCreatedWorkout
@@ -149,38 +150,49 @@ extension DiscussionViewViewController: DiscussionTapProtocol {
     
     }
     
-    func likeButtonTapped(on cell: UITableViewCell, sender: UIButton) {
-        viewModel.likePost(on: originalPost)
-        if #available(iOS 13.0, *) {
-            UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
-                sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
-            }
-        } else {
-            // Fallback on earlier versions
-            print("needs fixing")
-        }
+    func likeButtonTapped(on cell: UITableViewCell, sender: UIButton, label: UILabel) {
         let selection = UISelectionFeedbackGenerator()
         selection.prepare()
         selection.selectionChanged()
+        
+        if #available(iOS 13.0, *) {
+            UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
+                sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            } completion: { _ in
+                sender.isUserInteractionEnabled = false
+            }
+
+        }
+    
+        viewModel.isLiked() { (result) in
+            switch result {
+            
+            case .success(let liked):
+                if !liked {
+                    self.viewModel.likePost()
+                    let likeCount = Int(label.text!)! + 1
+                    label.text = likeCount.description
+                }
+                
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
     
     func userTapped(on cell: UITableViewCell) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let publicTimeline = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
         let index = self.tableview.indexPath(for: cell)!
         if index.section == 0{
             if originalPost.posterID! != viewModel.userID {
                 UserIDToUser.transform(userID: originalPost.posterID!) { (user) in
-                    publicTimeline.user = user
-                    self.navigationController?.pushViewController(publicTimeline, animated: true)
+                    self.coordinator?.showUser(with: user)
                 }
             }
         } else {
             let posterID = viewModel.getData(at: index).posterID
             if posterID != viewModel.userID {
                 UserIDToUser.transform(userID: posterID!) { (user) in
-                    publicTimeline.user = user
-                    self.navigationController?.pushViewController(publicTimeline, animated: true)
+                    self.coordinator?.showUser(with: user)
                 }
             }
         }

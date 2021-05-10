@@ -95,6 +95,13 @@ class MyProfileViewController: UIViewController, Storyboarded {
                     self.profileImage.alpha = 1.0
                 } else {
                     self.profileImage.alpha = 1.0
+                    let margins = self.navigationController?.view.safeAreaInsets
+                    let alert = ProfilePhotoAlert(frame: CGRect(x: 5, y: margins!.top, width: UIScreen.main.bounds.width - 10, height: 60))
+                    self.view.addSubview(alert)
+                    alert.editProfile = { [weak self] () in
+                        guard let self = self else {return}
+                        self.coordinator?.editProfile(profileImage: nil, profileBIO: self.profileBio.text, delegate: self)
+                    }
                 }
             }
         }
@@ -183,17 +190,11 @@ class MyProfileViewController: UIViewController, Storyboarded {
     }
     
     @IBAction func showFollowers(_ sender:UIButton){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let nextVC = storyboard.instantiateViewController(withIdentifier: "FollowersDisplayViewController") as! FollowersDisplayViewController
-        nextVC.followers = true
-        self.navigationController?.pushViewController(nextVC, animated: true)
+        coordinator?.showFollowers(true)
     }
     
     @IBAction func showFollowing(_ sender:UIButton){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let nextVC = storyboard.instantiateViewController(withIdentifier: "FollowersDisplayViewController") as! FollowersDisplayViewController
-        nextVC.followers = false
-        self.navigationController?.pushViewController(nextVC, animated: true)
+        coordinator?.showFollowers(false)
     }
 
 }
@@ -228,46 +229,21 @@ extension MyProfileViewController: MyProfileProtocol, TimelineTapProtocol {
     }
     
     func collectionItemSelected(at: IndexPath) {
-        let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         switch at.item {
         case 0:
-            let SVC = StoryBoard.instantiateViewController(withIdentifier: "MyGroupsViewController") as! MyGroupsViewController
-            self.navigationController?.pushViewController(SVC, animated: true)
+            coordinator?.showGroups()
         case 1:
-            let SVC = StoryBoard.instantiateViewController(withIdentifier: "DisplayNotificationsViewController") as! DisplayNotificationsViewController
-            navigationController?.pushViewController(SVC, animated: true)
+            coordinator?.showNotifications()
         case 2:
-            let SVC = StoryBoard.instantiateViewController(withIdentifier: "SavedWorkoutsViewController") as! SavedWorkoutsViewController
-            navigationController?.pushViewController(SVC, animated: true)
+            coordinator?.showSavedWorkouts()
         case 3:
-            
-            let SVC = StoryBoard.instantiateViewController(withIdentifier: "CreatedWorkoutsViewController") as! CreatedWorkoutsViewController
-            navigationController?.pushViewController(SVC, animated: true)
+            coordinator?.showCreatedWorkouts()
         case 4:
-            if ViewController.admin {
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "CoachScoresViewController") as! CoachScoresViewController
-                self.navigationController?.pushViewController(SVC, animated: true)
-            } else {
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "MYSCORESViewController") as! MYSCORESViewController
-                navigationController?.pushViewController(SVC, animated: true)
-            }
+            coordinator?.showScores()
         case 5:
-            let editPage = StoryBoard.instantiateViewController(withIdentifier: "EditProfileViewController") as! EditProfileViewController
-            if self.profileImage.image != nil{
-                editPage.theImage = self.profileImage.image
-            }
-            editPage.theText = self.profileBio.text
-            editPage.modalTransitionStyle = .coverVertical
-            editPage.modalPresentationStyle = .fullScreen
-            self.navigationController?.present(editPage, animated: true, completion: nil)
+            coordinator?.editProfile(profileImage: profileImage.image, profileBIO: profileBio.text, delegate: self)
         case 6:
-            if ViewController.admin {
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "CoachInfoViewController") as! CoachInfoViewController
-                navigationController?.pushViewController(SVC, animated: true)
-            } else {
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "NewInfoViewController") as! NewInfoViewController
-                navigationController?.pushViewController(SVC, animated: true)
-            }
+            coordinator?.showMoreInfo()
         default:
             break
         }
@@ -302,6 +278,7 @@ extension MyProfileViewController: MyProfileProtocol, TimelineTapProtocol {
         var workoutData : discoverWorkout!
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let displayWorkout = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
+        displayWorkout.hidesBottomBarWhenPushed = true
         switch post {
         case is TimelineCreatedWorkoutModel:
             let p = post as! TimelineCreatedWorkoutModel

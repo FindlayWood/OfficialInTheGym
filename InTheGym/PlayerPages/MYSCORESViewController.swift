@@ -10,7 +10,7 @@ import UIKit
 import Charts
 import Firebase
 
-class MYSCORESViewController: UIViewController {
+class MYSCORESViewController: UIViewController, Storyboarded {
     
     // outlet to pie chart
     @IBOutlet weak var pieChart:PieChartView!

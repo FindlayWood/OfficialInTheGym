@@ -69,27 +69,27 @@ class SignUpViewController: UIViewController, Storyboarded {
     func initViewModel(){
         
         viewModel.SignUpFailedClosure = { (error) in
-            var errorMessage:String!
+            var errorMessage: String!
             switch error {
             case .emailTaken:
-                errorMessage = "This is email is already in use."
+                errorMessage = SignUpError.emailTaken.rawValue
                 self.email.text = ""
             case .fillAllFields:
-                errorMessage = "Please fill in all the fields."
+                errorMessage = SignUpError.fillAllFields.rawValue
             case .invalidEmail:
-                errorMessage = "Please use a valid email."
+                errorMessage = SignUpError.invalidEmail.rawValue
                 self.email.text = ""
             case .passwordTooShort:
-                errorMessage = "That password is too short. Passwords must be at least six characters."
+                errorMessage = SignUpError.passwordTooShort.rawValue
             case .passwordsDoNotMatch:
-                errorMessage = "Passwords do not match."
+                errorMessage = SignUpError.passwordsDoNotMatch.rawValue
                 self.password.text = ""
                 self.passwordConfirm.text = ""
             case .takenUsername:
-                errorMessage = "This username is already in use. Please choose another."
+                errorMessage = SignUpError.takenUsername.rawValue
                 self.username.text = ""
             case .unknown:
-                errorMessage = "There was an error."
+                errorMessage = SignUpError.unknown.rawValue
             }
             let alert = SCLAlertView()
             alert.showError("Error", subTitle: errorMessage, closeButtonTitle: "ok")
@@ -122,28 +122,6 @@ class SignUpViewController: UIViewController, Storyboarded {
 
 }
 extension SignUpViewController  {
-    
-//    func textFieldDidEndEditing(_ textField: UITextField) {
-//        let text = textField.text!
-//        if textField == email {
-//            viewModel.updateEmail(with: text)
-//        }
-//        if textField == username {
-//            viewModel.updateUsername(with: text)
-//        }
-//        if textField == firstName {
-//            viewModel.updateFirstName(with: text)
-//        }
-//        if textField == lastName {
-//            viewModel.updateLastName(with: text)
-//        }
-//        if textField == password {
-//            viewModel.updatePassword(with: text)
-//        }
-//        if textField == passwordConfirm {
-//            viewModel.updateConfirmPassword(with: text)
-//        }
-//    }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)

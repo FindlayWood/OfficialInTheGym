@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class FollowersDisplayViewController: UIViewController {
+class FollowersDisplayViewController: UIViewController, Storyboarded {
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!

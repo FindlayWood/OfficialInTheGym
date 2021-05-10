@@ -14,42 +14,45 @@ enum SignUpValidationState {
     case Valid
     case InValid(SignUpError)
 }
-enum SignUpError {
-    case fillAllFields
-    case invalidEmail
-    case emailTaken
-    case takenUsername
-    case passwordsDoNotMatch
-    case passwordTooShort
-    case unknown
+enum SignUpError: String {
+    case fillAllFields = "Please fill in all fields."
+    case invalidEmail = "Please use a valid email."
+    case emailTaken = "An account with this email is already in use."
+    case takenUsername = "An account with this username is already in use."
+    case passwordsDoNotMatch = "Passwords do not match."
+    case passwordTooShort = "Password is too short. Passwords must be at least six characters long."
+    case unknown = "There was en error. Please try again."
 }
 
+typealias successClosure = ((String) -> Void)?
+typealias failedClosure = ((SignUpError) -> Void)?
+
 class SignUpViewModel {
-    var SignUpSuccesfulClosure:((String)->())?
-    var SignUpFailedClosure:((SignUpError)->())?
+    var SignUpSuccesfulClosure: ((String)->())?
+    var SignUpFailedClosure: ((SignUpError)->())?
     private var minimumPasswordLength = 6
     private var user = SignUpUserModel()
     let haptic = UINotificationFeedbackGenerator()
     
-    var email : String {
+    var email: String {
         return user.email
     }
-    var username : String {
+    var username: String {
         return user.username
     }
-    var firstName : String {
+    var firstName: String {
         return user.firstName
     }
-    var lastName : String {
+    var lastName: String {
         return user.lastName
     }
-    var password : String {
+    var password: String {
         return user.password
     }
-    var confirmPassword : String {
+    var confirmPassword: String {
         return user.confirmPassword
     }
-    var admin : Bool {
+    var admin: Bool {
         return user.admin
     }
     
@@ -110,8 +113,7 @@ class SignUpViewModel {
                                 "username":self.user.username,
                                 "admin":self.user.admin!,
                                 "firstName":self.user.firstName,
-                                "lastName":self.user.lastName,
-                                "uid":userID] as [String : Any]
+                                "lastName":self.user.lastName] as [String : Any]
                 
                 let userRef = Database.database().reference().child("users").child(userID)
                 userRef.setValue(userData)

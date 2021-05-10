@@ -9,7 +9,7 @@
 import UIKit
 import SCLAlertView
 
-class WorkoutCompletedViewController: UIViewController {
+class WorkoutCompletedViewController: UIViewController, Storyboarded {
     
     @IBOutlet weak var collection:UICollectionView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
@@ -78,6 +78,9 @@ class WorkoutCompletedViewController: UIViewController {
         self.workoutRPE.layer.borderColor = UIColor.black.cgColor
         self.workoutRPE.layer.masksToBounds = true
         self.workoutRPE.tintColor = .white
+        workoutRPE.returnKeyType = .done
+        workoutRPE.delegate = self
+        hideKeyboardWhenTappedAround()
     }
     
     func initViewModel(){
@@ -155,7 +158,7 @@ class WorkoutCompletedViewController: UIViewController {
             viewModel.uploadActivityToCoaches(for: workout, with: rpeInt)
             viewModel.updateNumberOfCompletes()
             viewModel.updateSelfScores(for: workout, with: rpeInt)
-            viewModel.updateWorkload(with: workout, workload: workload, endTime: endTime)
+            viewModel.updateWorkload(with: workout, workload: workload, endTime: endTime, time: secondsToComplete)
             viewModel.completeWorkout(for: workout, with: secondsToComplete)
             self.uploadedView()
         }

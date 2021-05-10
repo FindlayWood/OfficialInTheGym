@@ -28,12 +28,16 @@ class OriginalPostTableViewCell: UITableViewCell, DiscussionCellConfigurable {
         self.message.text = model.message
         let then = Date(timeIntervalSince1970: (model.time!) / 1000)
         self.time.text = "\(then.timeAgo()) ago"
-        checkFor.like(on: model.postID!) { (liked) in
-            if liked{
+        LikesAPIService.shared.check(postID: model.postID!) { liked in
+            if liked {
                 if #available(iOS 13.0, *) {
                     self.likeButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
-                } else {
-                    // Fallback on earlier versions
+                    self.likeButton.isUserInteractionEnabled = false
+                }
+            } else {
+                if #available(iOS 13.0, *) {
+                    self.likeButton.setImage(UIImage(systemName: "star"), for: .normal)
+                    self.likeButton.isUserInteractionEnabled = true
                 }
             }
         }
@@ -67,7 +71,7 @@ class OriginalPostTableViewCell: UITableViewCell, DiscussionCellConfigurable {
     }
     
     @IBAction func likeTapped(_ sender:UIButton){
-        self.delegate.likeButtonTapped(on: self, sender: sender)
+        self.delegate.likeButtonTapped(on: self, sender: sender, label: self.likeCount)
     }
     
     @IBAction func replyTapped(_ sender:UIButton){

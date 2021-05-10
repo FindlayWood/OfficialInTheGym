@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, Storyboarded {
     
     // outlets to view
     @IBOutlet weak var tableview:UITableView!
@@ -163,17 +163,16 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let SVC = storyboard.instantiateViewController(withIdentifier: "WorkloadDisplayViewController") as! WorkloadDisplayViewController
                 SVC.username = ViewController.username
                 SVC.playerID = Auth.auth().currentUser?.uid
+                SVC.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(SVC, animated: true)
             case 3:
                 let Storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = Storyboard.instantiateViewController(withIdentifier: "RequestsViewController") as! RequestsViewController
                 self.navigationController?.pushViewController(SVC, animated: true)
             case 4:
-//                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-//                let SVC = StoryBoard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
-//                navigationController?.pushViewController(SVC, animated: true)
                 let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
+                SVC.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(SVC, animated: true)
             default:
                 print("ouch")

@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class MakePostViewController: UIViewController {
+class MakePostViewController: UIViewController, Storyboarded {
     
     @IBOutlet weak var text:UITextView!
     
@@ -76,11 +76,8 @@ class MakePostViewController: UIViewController {
             viewerLabel.text = "This post will only be seen by users who are a part of the group \(groupName!). It will not appear on your public profile."
             self.privacyButton.setImage(UIImage(named: "locked_icon"), for: .normal)
             self.privacyButton.isUserInteractionEnabled = false
-        }else if playerPost == true{
-            self.loadCoaches()
-            viewerLabel.text = "This post is public and will be seen by all your coaches, followers and anyone who views your public profile. Tap the icon below to make it private."
         }else{
-            viewerLabel.text = "This post is public and will be seen by all of your players, followers and anyone who views your public profile. Tap the icon below to make it private."
+            viewerLabel.text = "This post is public and will be seen by all of your followers and anyone who views your public profile. Tap the icon below to make it private."
         }
         
         LoadFollowers.returnFollowers(for: userID!) { (followers) in
@@ -99,8 +96,6 @@ class MakePostViewController: UIViewController {
             haptic.notificationOccurred(.success)
             if groupBool == true{
                 postToGroup()
-            }else if playerPost == true{
-                postFromPlayer()
             }else{
                 let postSelfReferences = Database.database().reference().child("PostSelfReferences").child(self.userID!)
                 let postRef = Database.database().reference().child("Posts").childByAutoId()
@@ -119,9 +114,6 @@ class MakePostViewController: UIViewController {
                 postRef.setValue(postData)
                 timeLineRef.child(userID!).child(postID).setValue(true)
                 postSelfReferences.child(postID).setValue(true)
-//                for player in playersID{
-//                    timeLineRef.child(player).child(postID).setValue(true)
-//                }
                 
                 for follower in followers{
                     timeLineRef.child(follower).child(postID).setValue(true)
@@ -177,9 +169,7 @@ class MakePostViewController: UIViewController {
         postRef.setValue(postData)
         timeLineRef.child(userID!).child(postID).setValue(true)
         postSelfReferences.child(postID).setValue(true)
-//        for coach in playerCoaches{
-//            timeLineRef.child(coach).child(postID).setValue(true)
-//        }
+
 
         for follower in followers{
             timeLineRef.child(follower).child(postID).setValue(true)
@@ -233,19 +223,11 @@ class MakePostViewController: UIViewController {
         switch self.isPrivate {
         case true:
             self.isPrivate = false
-            if playerPost == true{
-                viewerLabel.text = "This post is public and will be seen by all your coaches, followers and anyone who views your public profile. Tap the icon below to make it private."
-            }else{
-                viewerLabel.text = "This post is public and will be seen by all of your players, followers and anyone who views your public profile. Tap the icon below to make it private."
-            }
+            viewerLabel.text = "This post is public and will be seen by all of your followers and anyone who views your public profile. Tap the icon below to make it private."
             sender.setImage(UIImage(named: "public_icon"), for: .normal)
         case false:
             self.isPrivate = true
-            if playerPost == true{
-                viewerLabel.text = "This post is private and will only be seen by your coaches and followers. Tap the icon below to make it public."
-            }else{
-                viewerLabel.text = "This post is private and will only be seen by your players, followers. Tap the icon below to make it public."
-            }
+            viewerLabel.text = "This post is private and will only be seen by your followers. Tap the icon below to make it public."
             sender.setImage(UIImage(named: "locked_icon"), for: .normal)
         }
     }

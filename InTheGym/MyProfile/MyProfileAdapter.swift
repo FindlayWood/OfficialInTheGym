@@ -76,11 +76,12 @@ extension MyProfileAdapter: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             let view = UIView()
-            if #available(iOS 13.0, *) {
-                view.backgroundColor = .systemGray5
-            } else {
-                view.backgroundColor = .lightGray
-            }
+//            if #available(iOS 13.0, *) {
+//                view.backgroundColor = .systemGray5
+//            } else {
+//                view.backgroundColor = .lightGray
+//            }
+            view.backgroundColor = Constants.darkColour
             return view
         } else {
             let label = UILabel()

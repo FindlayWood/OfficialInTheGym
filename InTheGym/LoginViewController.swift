@@ -31,73 +31,38 @@ class LoginViewController: UIViewController, Storyboarded {
         sender.pulsate()
         
         // checking verification
-            
-            
-            
-        Auth.auth().signIn(withEmail: email.text!, password: password.text!) { (user, error) in
-            if error == nil{
-                let userID = Auth.auth().currentUser?.uid
-
-// MARK: comment out for easy access from here
-                
-                if let user = Auth.auth().currentUser{
-                    user.reload { (error) in
-                        switch user.isEmailVerified{
+        
+        FirebaseAuthManager.shared.loginUser(with: email.text!, and: password.text!) { result in
+            switch result {
+            case .success(let user):
+                user.reload { error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        return
+                    } else {
+                        switch user.isEmailVerified {
                         case true:
-                            self.haptic.notificationOccurred(.success)
-                            UserIDToUser.transform(userID: userID!) { (user) in
-                                ViewController.username = user.username
-                                if user.admin! {
-                                    ViewController.admin = true
-                                    //self.performSegue(withIdentifier: "logInAdmin2", sender: self)
-                                    self.coordinator?.coordinateToTabBar()
-                                    self.navigationController?.popToRootViewController(animated: false)
-                                    
-                                } else {
-                                    ViewController.admin = false
-                                    //self.performSegue(withIdentifier: "logInHome2", sender: self)
-                                    self.coordinator?.coordinateToTabBar()
-                                    self.navigationController?.popToRootViewController(animated: false)
-                                }
+                            UserIDToUser.transform(userID: user.uid) { userModel in
+                                ViewController.username = userModel.username
+                                ViewController.admin = userModel.admin
+                                self.coordinator?.coordinateToTabBar()
+                                self.navigationController?.popToRootViewController(animated: false)
                             }
-                            
                         case false:
-                            // new alert
                             let alert = SCLAlertView()
                             alert.addButton("Resend verification email?") {
                                 user.sendEmailVerification()
                                 self.showSuccess()
                             }
                             alert.showError("Verify!", subTitle: "You have not verified your account. Please do so to login.", closeButtonTitle: "Cancel")
-
+                            
                         }
                     }
                 }
-
-// to here
-                
-// MARK: uncomment for easy access from here
-                
-//                self.DBref.child("users").child(userID!).child("admin").observeSingleEvent(of: .value, with: { (snapshot) in
-//                    if snapshot.value as! Int == 1{
-//                        self.performSegue(withIdentifier: "logInAdmin2", sender: self)
-//                        ViewController.admin = true
-//                    }
-//                    else{
-//                        self.performSegue(withIdentifier: "logInHome2", sender: self)
-//                        ViewController.admin = false
-//                    }
-//                })
-                
-// to here
-                
-            }
-            else{
-                // new alert with scl
+            case .failure(let error):
+                print(error.localizedDescription)
                 let newalert = SCLAlertView()
                 newalert.showError("Error", subTitle: "Invalid login information. Please enter valid login information.", closeButtonTitle: "Ok")
-                
-                //show alert when invalid info is entered
             }
         }
     }
@@ -112,6 +77,7 @@ class LoginViewController: UIViewController, Storyboarded {
         email.textContentType = .username
         password.textContentType = .password
         navigationItem.title = "Login"
+        email.becomeFirstResponder()
         
         DBref = Database.database().reference()
         

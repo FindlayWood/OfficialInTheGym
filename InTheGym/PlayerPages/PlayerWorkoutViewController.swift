@@ -78,9 +78,10 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     @IBAction func addWorkoutPressed(_ sender:UIButton){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let nextVC = storyboard.instantiateViewController(withIdentifier: "AddWorkoutSelectionViewController") as! AddWorkoutSelectionViewController
-        navigationController?.pushViewController(nextVC, animated: true)
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let nextVC = storyboard.instantiateViewController(withIdentifier: "AddWorkoutSelectionViewController") as! AddWorkoutSelectionViewController
+//        navigationController?.pushViewController(nextVC, animated: true)
+        coordinator?.addNewWorkout()
     }
     
     func loadWorkouts(){
@@ -242,15 +243,38 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-        let DisplayVC = StoryBoard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
-        let workoutID = rowsToDisplayIDs[indexPath.section]
-        let ref = Database.database().reference().child("Workouts").child(self.userID!).child(workoutID)
-        ref.observeSingleEvent(of: .value) { (snapshot) in
-            let workoutToDisplay = workout(snapshot: snapshot)
-            DisplayVC.selectedWorkout = workoutToDisplay
-            self.navigationController?.pushViewController(DisplayVC, animated: true)
+        let live = self.rowsToDisplay[indexPath.section]["liveWorkout"] as? Bool
+        if live == true{
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let workoutPage = storyboard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
+            workoutPage.liveAdd = true
+            workoutPage.fromDiscover = false
+            workoutPage.workoutID = rowsToDisplayIDs[indexPath.section]
+            workoutPage.titleString = rowsToDisplay[indexPath.section]["title"] as? String ?? "ERROR"
+            workoutPage.playerID = self.userID!
+            workoutPage.username = ViewController.username
+            workoutPage.creatorUsername = ViewController.username
+            workoutPage.creatorID = self.userID!
+            if let exercises = rowsToDisplay[indexPath.section]["exercises"] as? [[String:AnyObject]] {
+                WorkoutDetailViewController.exercises = exercises
+            }
+            workoutPage.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(workoutPage, animated: true)
+
+        } else {
+            //let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+            //let DisplayVC = StoryBoard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
+            let workoutID = rowsToDisplayIDs[indexPath.section]
+            let ref = Database.database().reference().child("Workouts").child(self.userID!).child(workoutID)
+            ref.observeSingleEvent(of: .value) { (snapshot) in
+                let workoutToDisplay: WorkoutDelegate = workout(snapshot: snapshot)!
+//                DisplayVC.selectedWorkout = workoutToDisplay
+//                DisplayVC.hidesBottomBarWhenPushed = true
+//                self.navigationController?.pushViewController(DisplayVC, animated: true)
+                self.coordinator?.showWorkout(workout: workoutToDisplay)
+            }
         }
+        
     }
     
     // emptydataset functions

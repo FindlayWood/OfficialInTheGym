@@ -9,7 +9,9 @@
 import UIKit
 import EmptyDataSet_Swift
 
-class PublicTimelineViewController: UIViewController {
+class PublicTimelineViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator: UserProfileCoordinator?
 
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
@@ -210,6 +212,7 @@ class PublicTimelineViewController: UIViewController {
         let nextVC = Storyboard.instantiateViewController(withIdentifier: "PublicCreatedWorkoutsViewController") as! PublicCreatedWorkoutsViewController
         nextVC.user = self.user
         self.navigationController?.pushViewController(nextVC, animated: true)
+//        coordinator?.showCreatedWorkouts(for: user)
     }
 
 }
@@ -224,6 +227,7 @@ extension PublicTimelineViewController: PublicTimelineProtocol, TimelineTapProto
         if post is TimelinePostModel || post is TimelineCreatedWorkoutModel || post is TimelineCompletedWorkoutModel{
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let discussionVC = storyboard.instantiateViewController(withIdentifier: "DiscussionViewViewController") as! DiscussionViewViewController
+            discussionVC.hidesBottomBarWhenPushed = true
             switch post {
             case is TimelinePostModel:
                 discussionVC.originalPost = DiscussionPost(model: post as! TimelinePostModel)
@@ -272,6 +276,7 @@ extension PublicTimelineViewController: PublicTimelineProtocol, TimelineTapProto
         var workoutData : discoverWorkout!
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let displayWorkout = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
+        displayWorkout.hidesBottomBarWhenPushed = true
         switch post {
         case is TimelineCreatedWorkoutModel:
             let p = post as! TimelineCreatedWorkoutModel
@@ -291,6 +296,17 @@ extension PublicTimelineViewController: PublicTimelineProtocol, TimelineTapProto
     }
     
     func likeButtonTapped(on cell: UITableViewCell, sender: UIButton, label: UILabel) {
+        
+        self.selection.selectionChanged()
+        if #available(iOS 13.0, *) {
+            UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
+                sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            } completion: { _ in
+                sender.isUserInteractionEnabled = false
+            }
+
+        }
+        
         let index = self.tableview.indexPath(for: cell)!
         let post = viewModel.getData(at: index)
         
@@ -305,15 +321,6 @@ extension PublicTimelineViewController: PublicTimelineProtocol, TimelineTapProto
                     self.viewModel.likePost(on: post, with: index)
                     let likeCount = Int(label.text!)! + 1
                     label.text = likeCount.description
-                    if #available(iOS 13.0, *) {
-                        UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
-                            sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
-                        }
-                    } else {
-                        // Fallback on earlier versions
-                        print("needs fixing")
-                    }
-                    self.selection.selectionChanged()
                 }
                 
             case .failure(let error):
