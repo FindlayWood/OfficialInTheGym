@@ -37,8 +37,12 @@ class ProfilePhotoAlert: UIView {
         return button
     }()
     
+    let showingPoint: CGRect!
+    let startingPoint: CGRect = CGRect(x: 5, y: -60, width: UIScreen.main.bounds.width - 10, height: 60)
+    
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        self.showingPoint = frame
+        super.init(frame: startingPoint)
         setupView()
     }
     
@@ -71,13 +75,12 @@ class ProfilePhotoAlert: UIView {
                                       dismissButton.centerYAnchor.constraint(equalTo: centerYAnchor),
                                       dismissButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
         ])
-        //animateAppearance()
+        animateAppearance()
     }
     
     private func animateAppearance() {
-        let showingPoint = CGRect(x: 0, y: 40, width: UIScreen.main.bounds.width, height: 40)
         UIView.animate(withDuration: 0.3) {
-            self.frame = showingPoint
+            self.frame = self.showingPoint
         }
     }
     
@@ -86,9 +89,8 @@ class ProfilePhotoAlert: UIView {
     }
     
     @objc func dismiss() {
-        let dismissPoint = CGRect(x: 5, y: -60, width: UIScreen.main.bounds.width - 10, height: 60)
         UIView.animate(withDuration: 0.3) {
-            self.frame = dismissPoint
+            self.frame = self.startingPoint
         } completion: { _ in
             self.removeFromSuperview()
         }
