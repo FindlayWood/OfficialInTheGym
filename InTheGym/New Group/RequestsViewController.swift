@@ -38,6 +38,7 @@ class RequestsViewController: UIViewController {
         tableview.emptyDataSetDelegate = adapter
         tableview.register(UINib(nibName: "RequestsTableViewCell", bundle: nil), forCellReuseIdentifier: "RequestsTableViewCell")
         tableview.tableFooterView = UIView()
+        tableview.backgroundColor = Constants.lightColour
         
     }
     
@@ -122,11 +123,11 @@ extension RequestsViewController: RequestsProtocol{
     }
     
     func retreiveNumberOfItems() -> Int {
-        return viewModel.numberOfItems
+        return 1
     }
     
     func retreiveNumberOfSections() -> Int {
-        return 1
+        return viewModel.numberOfItems
     }
 }
 

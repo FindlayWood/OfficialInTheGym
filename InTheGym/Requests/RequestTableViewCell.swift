@@ -48,6 +48,7 @@ class RequestTableViewCell: UITableViewCell {
         self.profileImage.layer.cornerRadius = self.profileImage.bounds.width / 2
         self.profileImage.layer.masksToBounds = true
         self.selectionStyle = .none
+        layer.cornerRadius = 10
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

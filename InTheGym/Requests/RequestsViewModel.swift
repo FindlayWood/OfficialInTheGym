@@ -118,7 +118,7 @@ class RequestsViewModel{
     // MARK: - Retieve Data
     
     func getData( at indexPath: IndexPath ) -> Users {
-        return requests[indexPath.row]
+        return requests[indexPath.section]
     }
     
     func acceptRequest(from user:Users, at index:IndexPath){

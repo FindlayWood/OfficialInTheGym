@@ -21,6 +21,19 @@ class RequestsAdapter:NSObject{
 }
 
 extension RequestsAdapter: UITableViewDelegate, UITableViewDataSource, EmptyDataSetDelegate, EmptyDataSetSource {
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return UIView()
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return delegate.retreiveNumberOfSections()
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return delegate.retreiveNumberOfItems()
     }
