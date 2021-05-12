@@ -16,7 +16,7 @@
 		74095A79257FE66500CF335A /* MakePostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74095A78257FE66500CF335A /* MakePostViewController.swift */; };
 		740E549A25F25C73005D3A8C /* PrivateSavedWorkoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740E549925F25C73005D3A8C /* PrivateSavedWorkoutTableViewCell.swift */; };
 		740E549F25F261C4005D3A8C /* PrivateSavedWorkoutCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 740E549E25F261C4005D3A8C /* PrivateSavedWorkoutCell.xib */; };
-		7413A066255D743E009C7F97 /* CustomTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7413A065255D743E009C7F97 /* CustomTopView.swift */; };
+		7413A066255D743E009C7F97 /* AlertTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7413A065255D743E009C7F97 /* AlertTopView.swift */; };
 		74163A4422E37089005A7D2E /* ButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74163A4322E37089005A7D2E /* ButtonExtension.swift */; };
 		74163A4622E39523005A7D2E /* PlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74163A4522E39523005A7D2E /* PlayerTableViewCell.swift */; };
 		74163A4822E4A7AF005A7D2E /* ActivityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74163A4722E4A7AF005A7D2E /* ActivityTableViewCell.swift */; };
@@ -342,7 +342,7 @@
 		74095A78257FE66500CF335A /* MakePostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakePostViewController.swift; sourceTree = "<group>"; };
 		740E549925F25C73005D3A8C /* PrivateSavedWorkoutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateSavedWorkoutTableViewCell.swift; sourceTree = "<group>"; };
 		740E549E25F261C4005D3A8C /* PrivateSavedWorkoutCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrivateSavedWorkoutCell.xib; sourceTree = "<group>"; };
-		7413A065255D743E009C7F97 /* CustomTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTopView.swift; sourceTree = "<group>"; };
+		7413A065255D743E009C7F97 /* AlertTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertTopView.swift; sourceTree = "<group>"; };
 		74163A4322E37089005A7D2E /* ButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonExtension.swift; sourceTree = "<group>"; };
 		74163A4522E39523005A7D2E /* PlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewCell.swift; sourceTree = "<group>"; };
 		74163A4722E4A7AF005A7D2E /* ActivityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTableViewCell.swift; sourceTree = "<group>"; };
@@ -713,7 +713,7 @@
 			isa = PBXGroup;
 			children = (
 				74028E5B25E693FB005A1D21 /* TopView.swift */,
-				7413A065255D743E009C7F97 /* CustomTopView.swift */,
+				7413A065255D743E009C7F97 /* AlertTopView.swift */,
 				74028E6325E69B52005A1D21 /* TextFieldReturning.swift */,
 				74F5468E25E9911200C1A6A9 /* UserIDToUser.swift */,
 				74F5469325EA810800C1A6A9 /* TransformPost.swift */,
@@ -1662,7 +1662,7 @@
 				7466A82025EED31800F4050F /* BestUseMessageViewController.swift in Sources */,
 				74D31F1125FE4ADD0024CC05 /* NotificationLikedPost.swift in Sources */,
 				74226E0726370E1A0074E616 /* CreatedWorkoutModels.swift in Sources */,
-				7413A066255D743E009C7F97 /* CustomTopView.swift in Sources */,
+				7413A066255D743E009C7F97 /* AlertTopView.swift in Sources */,
 				7439E03F260CFA0000C91C0C /* DiscussionViewModel.swift in Sources */,
 				74226E3A26383C8E0074E616 /* CircuitTableViewCell.swift in Sources */,
 				74226E282637417C0074E616 /* CreateCircuitProtocol.swift in Sources */,
@@ -2136,7 +2136,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.1;
+				MARKETING_VERSION = 4.1.1;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -2312,7 +2312,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.1;
+				MARKETING_VERSION = 4.1.1;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (

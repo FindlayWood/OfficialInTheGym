@@ -95,8 +95,8 @@ class MyProfileViewController: UIViewController, Storyboarded {
                     self.profileImage.alpha = 1.0
                 } else {
                     self.profileImage.alpha = 1.0
-                    let margins = self.navigationController?.view.safeAreaInsets
-                    let alert = ProfilePhotoAlert(frame: CGRect(x: 5, y: margins!.top, width: UIScreen.main.bounds.width - 10, height: 60))
+                    let ystart = self.profileImage.frame.minY
+                    let alert = ProfilePhotoAlert(frame: CGRect(x: 5, y: ystart, width: UIScreen.main.bounds.width - 10, height: 60))
                     self.view.addSubview(alert)
                     alert.editProfile = { [weak self] () in
                         guard let self = self else {return}

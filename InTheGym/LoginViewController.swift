@@ -45,10 +45,12 @@ class LoginViewController: UIViewController, Storyboarded {
                             UserIDToUser.transform(userID: user.uid) { userModel in
                                 ViewController.username = userModel.username
                                 ViewController.admin = userModel.admin
+                                self.haptic.notificationOccurred(.success)
                                 self.coordinator?.coordinateToTabBar()
                                 self.navigationController?.popToRootViewController(animated: false)
                             }
                         case false:
+                            self.haptic.notificationOccurred(.warning)
                             let alert = SCLAlertView()
                             alert.addButton("Resend verification email?") {
                                 user.sendEmailVerification()
@@ -60,6 +62,7 @@ class LoginViewController: UIViewController, Storyboarded {
                     }
                 }
             case .failure(let error):
+                self.haptic.notificationOccurred(.error)
                 print(error.localizedDescription)
                 let newalert = SCLAlertView()
                 newalert.showError("Error", subTitle: "Invalid login information. Please enter valid login information.", closeButtonTitle: "Ok")

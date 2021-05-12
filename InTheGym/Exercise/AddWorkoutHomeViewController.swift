@@ -258,35 +258,6 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
         }
     }
     
-    // this function displays a custom top view letting user know exercise has been added
-    func displayTopView(with message:String){
-        let viewHeight = self.view.bounds.height * 0.12
-        let viewWidth = self.view.bounds.width
-        let startingPoint = CGRect(x: 0, y: -30 - viewHeight, width: viewWidth, height: viewHeight)
-        let showingPoint = CGRect(x: 0, y: 50, width: viewWidth, height: viewHeight)
-        
-        
-        let topView = CustomTopView(frame: startingPoint)
-        topView.image = UIImage(named: "added_icon")
-        topView.message = message
-        topView.label.textColor = .white
-        topView.backgroundColor = Constants.darkColour
-        topView.layer.cornerRadius = 0
-        topView.layer.borderColor = Constants.darkColour.cgColor
-        self.navigationController?.view.addSubview(topView)
-        
-        UIView.animate(withDuration: 0.6) {
-            topView.frame = showingPoint
-        } completion: { (_) in
-            UIView.animate(withDuration: 0.6, delay: 1.8, options: .curveEaseOut) {
-                topView.frame = startingPoint
-                } completion: { (_) in
-                    topView.removeFromSuperview()
-            }
-        }
-    }
-
-    
     override func viewWillAppear(_ animated: Bool) {
         loadNumberOfWorkouts()
         tableview.reloadData()

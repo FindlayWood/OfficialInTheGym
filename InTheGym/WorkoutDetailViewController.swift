@@ -173,7 +173,6 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 
                 let workoutData = ["exercises":WorkoutDetailViewController.exercises,
                                    "title":self.titleString,
-                                   "savedID":self.savedID,
                                    "createdBy":self.creatorUsername,
                                    "creatorID":self.creatorID,
                                    "liveWorkout":self.liveAdd!,
@@ -795,34 +794,6 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         } andCompletionBlock: { (error, committed, snapshot) in
             if let error = error{
                 print(error.localizedDescription)
-            }
-        }
-    }
-    
-    // this function displays a custom top view letting user know exercise has been added
-    func displayTopView(with message:String){
-        let viewHeight = self.view.bounds.height * 0.18
-        let viewWidth = self.view.bounds.width
-        let startingPoint = CGRect(x: 0, y: -30 - viewHeight, width: viewWidth, height: viewHeight)
-        let showingPoint = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
-        
-        
-        let topView = CustomTopView(frame: startingPoint)
-        topView.image = UIImage(named: "Workout Completed")
-        topView.message = message
-        topView.label.textColor = .white
-        topView.backgroundColor = Constants.darkColour
-        topView.layer.cornerRadius = 0
-        topView.layer.borderColor = Constants.darkColour.cgColor
-        self.navigationController?.view.addSubview(topView)
-        
-        UIView.animate(withDuration: 0.6) {
-            topView.frame = showingPoint
-        } completion: { (_) in
-            UIView.animate(withDuration: 0.6, delay: 2.8, options: .curveEaseOut) {
-                topView.frame = startingPoint
-                } completion: { (_) in
-                    topView.removeFromSuperview()
             }
         }
     }

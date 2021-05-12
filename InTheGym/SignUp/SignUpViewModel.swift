@@ -32,7 +32,6 @@ class SignUpViewModel {
     var SignUpFailedClosure: ((SignUpError)->())?
     private var minimumPasswordLength = 6
     private var user = SignUpUserModel()
-    let haptic = UINotificationFeedbackGenerator()
     
     var email: String {
         return user.email
@@ -102,7 +101,6 @@ class SignUpViewModel {
                 }
             } else {
                 //succes
-                self.haptic.prepare()
                 
                 let userID = Auth.auth().currentUser!.uid
                 let user = Auth.auth().currentUser!
@@ -136,7 +134,6 @@ class SignUpViewModel {
                 usernamesRef.child(self.user.username).setValue(true)
                 FirebaseAPI.shared().uploadActivity(with: .AccountCreated)
                 
-                self.haptic.notificationOccurred(.success)
                 self.SignUpSuccesfulClosure?(self.user.email)
             }
         }
