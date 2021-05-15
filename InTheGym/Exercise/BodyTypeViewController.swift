@@ -11,7 +11,9 @@
 
 import UIKit
 
-class BodyTypeViewController: UIViewController {
+class BodyTypeViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator: CreationDelegate?
     
     var fromLiveWorkout:Bool!
     var workoutID:String!
@@ -27,11 +29,25 @@ class BodyTypeViewController: UIViewController {
         SVC.exerciseType = sender.titleLabel!.text as! String
         SVC.workoutID = self.workoutID
         
+//        switch sender.titleLabel?.text{
+//        case "Upper Body":
+//            coordinator?.bodyTypeSelected(.UB)
+//        case "Lower Body":
+//            coordinator?.bodyTypeSelected(.LB)
+//        case "Core":
+//            coordinator?.bodyTypeSelected(.CO)
+//        case "Cardio":
+//            coordinator?.bodyTypeSelected(.CA)
+//        default:
+//            coordinator?.bodyTypeSelected(.UB)
+//        }
         
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     
     @IBAction func circuitTapped(_ sender:UIButton) {
+//        let coordinator = coordinator as? RegularWorkoutFlow
+//        coordinator?.addCircuit()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let nextVC = storyboard.instantiateViewController(withIdentifier: "CreateCircuitViewController") as! CreateCircuitViewController
         self.navigationController?.pushViewController(nextVC, animated: true)

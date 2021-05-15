@@ -6187,8 +6187,8 @@
                                         </constraints>
                                         <state key="normal" title="Button" image="bluePlus3"/>
                                         <connections>
+                                            <action selector="addExercise:" destination="hf5-Hs-MG9" eventType="touchUpInside" id="z7P-gE-meO"/>
                                             <action selector="buttonPulsate:" destination="hf5-Hs-MG9" eventType="touchUpInside" id="0d1-Dh-V4s"/>
-                                            <segue destination="s7l-eY-Ty5" kind="show" id="vcQ-3f-JUP"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -6242,11 +6242,11 @@
             <objects>
                 <viewController storyboardIdentifier="BodyTypeViewController" id="s7l-eY-Ty5" customClass="BodyTypeViewController" customModule="InTheGym" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OSi-d3-0WF">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cvE-OC-qwp" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                <rect key="frame" x="20" y="30" width="374" height="80"/>
+                                <rect key="frame" x="20" y="74" width="374" height="80"/>
                                 <color key="backgroundColor" name="lightColour"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="QYv-lA-zgl"/>
@@ -6268,7 +6268,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FRH-18-Hn6" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                <rect key="frame" x="20" y="125" width="374" height="80"/>
+                                <rect key="frame" x="20" y="169" width="374" height="80"/>
                                 <color key="backgroundColor" name="lightColour"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="7A5-Xa-8fL"/>
@@ -6293,7 +6293,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="og0-F6-ofO" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                <rect key="frame" x="20" y="315" width="374" height="80"/>
+                                <rect key="frame" x="20" y="359" width="374" height="80"/>
                                 <color key="backgroundColor" name="lightColour"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="9y7-kh-PEh"/>
@@ -6318,7 +6318,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="brK-Tg-rQq" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                <rect key="frame" x="20" y="220" width="374" height="80"/>
+                                <rect key="frame" x="20" y="264" width="374" height="80"/>
                                 <color key="backgroundColor" name="lightColour"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="zBM-Bw-a9y"/>
@@ -6343,13 +6343,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 of 6" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dnm-zg-13i">
-                                <rect key="frame" x="170.5" y="784" width="73" height="24"/>
+                                <rect key="frame" x="170.5" y="838" width="73" height="24"/>
                                 <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ng0-nK-RwM" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                <rect key="frame" x="20" y="410" width="374" height="80"/>
+                                <rect key="frame" x="20" y="454" width="374" height="80"/>
                                 <color key="backgroundColor" name="lightColour"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="SWH-kq-Ajg"/>

@@ -12,10 +12,10 @@ import CodableFirebase
 
 class FirebaseAPI {
     
-    private static var privateShared : FirebaseAPI?
+    private static var privateShared: FirebaseAPI?
     private let userID = Auth.auth().currentUser?.uid
     static var currentUserID = String()
-    private var ref : DatabaseReference = Database.database().reference()
+    private var ref: DatabaseReference = Database.database().reference()
     
     
     private init(){}
@@ -68,7 +68,7 @@ class FirebaseAPI {
     /// - Parameters:
     ///   - snapshot: the snapshot from firebase
     ///   - following: is the current user following the given user
-    /// - Returns: returns a model that conforms to PstProtocol or nil
+    /// - Returns: returns a model that conforms to PostProtocol or nil
     private func configurePost(from snapshot:DataSnapshot) -> PostProtocol? {
         guard let snap = snapshot.value as? [String:AnyObject] else {
             return nil
@@ -201,160 +201,55 @@ class FirebaseAPI {
         }
     }
     
-    
-    func get(from : String, completion: @escaping (Result<[PostProtocol],Error>) -> () ) {
-        var tempReferences:[String] = []
-        ref.child(from).observeSingleEvent(of: .value) { (snapshot) in
-            for child in snapshot.children {
-                tempReferences.insert((child as AnyObject).key, at: 0)
-            }
-            self.loadPosts(from: tempReferences, completion: completion)
-        }
-    }
-    
-    func loadPosts(from references:[String], completion: @escaping (Result<[PostProtocol],Error>) -> () ) {
-        let myGroup = DispatchGroup()
-        var tempPosts = [PostProtocol]()
-        for reference in references{
-            myGroup.enter()
-            ref.child("Posts/\(reference)").observeSingleEvent(of: .value) { (snapshot) in
-                defer {myGroup.leave()}
-                guard let _ = snapshot.value as? [String:AnyObject] else {
-                    return
-                }
-                tempPosts.append(self.configurePost(from: snapshot))
-            }
-        }
-        myGroup.notify(queue: .main) {
-            completion(.success(tempPosts))
-        }
-    }
-    
-    private func configurePost(from snapshot:DataSnapshot) -> PostProtocol{
-        let snap = snapshot.value as! [String:AnyObject]
-        switch snap["type"] as! String{
-        case "post":
-            return TimelinePostModel(snapshot: snapshot)!
-        case "createdNewWorkout":
-            return TimelineCreatedWorkoutModel(snapshot: snapshot)!
-        case "workout":
-            return TimelineCompletedWorkoutModel(snapshot: snapshot)!
-        default:
-            return TimelineActivityModel(snapshot: snapshot)!
-        }
-    }
-    
-    
-    
-    func loadProfileTimeline(for user:String, completion: @escaping (Result<[PostProtocol], Error>) -> Void) {
-        let myGroup = DispatchGroup()
-        var tempPosts = [PostProtocol]()
-        var initialLoad = true
-        let ref = Database.database().reference().child("Posts")
-        loadReferences(for: user) { (result) in
-            switch result{
-            case .success(let references):
-                for reference in references{
-                    myGroup.enter()
-                    ref.child(reference).observe(.value) { (snapshot) in
-                        
-                        guard let snap = snapshot.value as? [String:AnyObject] else {
-                            return
-                        }
-                        
-                        if initialLoad{
-                            defer { myGroup.leave() }
-                            
-                            switch snap["type"] as! String{
-                            case "post":
-                                tempPosts.append(TimelinePostModel(snapshot: snapshot)!)
-                            case "createdNewWorkout":
-                                tempPosts.append(TimelineCreatedWorkoutModel(snapshot: snapshot)!)
-                            case "workout":
-                                tempPosts.append(TimelineCompletedWorkoutModel(snapshot: snapshot)!)
-                            default:
-                                tempPosts.append(TimelineActivityModel(snapshot: snapshot)!)
-                            }
-                        } else {
-                            
-                            // return the single post that has been updated 
-                            
-                            
-                        }
-                        
-                        
-                        
-                        
-                    }
-                    
-                    myGroup.notify(queue: .main){
-                        completion(.success(tempPosts))
-                        initialLoad = false
-                    }
-                }
+    func timeline(completion: @escaping ([PostProtocol]) -> Void) {
+        var posts = [PostProtocol]()
+        ref.child("Posts").queryLimited(toLast: 10).observe(.childAdded) { snapshot in
             
-            case .failure(let error):
-                completion(.failure(error))
-                    
-            }
-        }
-    }
-    
-    func loadReferences(for user:String, completion: @escaping (Result<[String], Error>) -> Void) {
-        var references = [String]()
-        let ref = Database.database().reference().child("PostSelfReferences").child(user)
-        ref.observe(.childAdded) { (snapshot) in
-            references.append(snapshot.key)
-        }
-        ref.observeSingleEvent(of: .value) { (_) in
-            completion(.success(references))
-        }
-    }
-    
-    func loadTimeline(for userID:String, completion: @escaping (Result<[PostProtocol], Error>) -> Void){
-        var references = [String]()
-        let ref = Database.database().reference().child("Timeline").child(userID)
-        ref.observeSingleEvent(of: .value) { (snapshot) in
-            for child in snapshot.children {
-                references.insert((child as AnyObject).key, at: 0)
-            }
-            self.loadPosts(with: references, completion: completion)
-        }
-    }
-    
-    func loadPosts( with references:[String], completion: @escaping (Result<[PostProtocol], Error>) -> Void) {
-        let myGroup = DispatchGroup()
-        let ref = Database.database().reference().child("Posts")
-        var tempPosts = [PostProtocol]()
-        
-        if references.isEmpty{
-            completion(.success(tempPosts))
-        }
-        
-        for post in references {
-            myGroup.enter()
-            ref.child(post).observeSingleEvent(of: .value) { (snapshot) in
-                defer{myGroup.leave()}
-                guard let snap = snapshot.value as? [String:AnyObject] else{
-                    return
-                }
-                
-                switch snap["type"] as! String{
-                case "post":
-                    tempPosts.append(TimelinePostModel(snapshot: snapshot)!)
-                case "createdNewWorkout":
-                    tempPosts.append(TimelineCreatedWorkoutModel(snapshot: snapshot)!)
-                case "workout":
-                    tempPosts.append(TimelineCompletedWorkoutModel(snapshot: snapshot)!)
-                default:
-                    tempPosts.append(TimelineActivityModel(snapshot: snapshot)!)
+            guard let post: PostProtocol = self.configurePost(from: snapshot) else {return}
+            self.timelineAlgorithm(post: post) { add in
+                if add {
+                    posts.insert(post, at: 0)
                 }
             }
         }
-        myGroup.notify(queue: .main){
-            completion(.success(tempPosts))
+        ref.child("Posts").observeSingleEvent(of: .value) { _ in
+            completion(posts)
         }
     }
+    
+    private func timelineAlgorithm(post: PostProtocol, completion: @escaping (Bool) -> Void) {
+        let likes = post.likeCount ?? 0, replies = post.replyCount ?? 0
+        let id = post.posterID!
+        if id == self.userID{
+            completion(true)
+        }else if (likes > 10 || replies > 5) && post.isPrivate == false {
+            completion(true)
+        } else {
+            isFollowing(post: post) { following in
+                if following {
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            }
+        }
+    }
+    
+    private func isFollowing(post: PostProtocol, completion: @escaping (Bool) -> Void) {
+        guard let followerID = post.posterID else {return}
+        FollowingAPIService.shared.get(followerID: followerID) { following in
+            if following{
+                completion(true)
+            } else {
+                completion(false)
+            }
+        }
+    }
+    
+    
+    
+    
+
     
     
     func uploadActivity(with type:ActivityType){

@@ -12,6 +12,7 @@ import UIKit
 protocol WorkoutsFlow {
     func showWorkout(workout: WorkoutDelegate)
     func addNewWorkout()
+    func regularWorkout()
 }
 
 class WorkoutsCoordinator: NSObject, Coordinator {
@@ -51,7 +52,14 @@ extension WorkoutsCoordinator: WorkoutsFlow {
     
     func addNewWorkout() {
         let vc = AddWorkoutSelectionViewController.instantiate()
+        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func regularWorkout() {
+        let child = RegularWorkoutCoordinator(navigationController: navigationController)
+        childCoordinators.append(child)
+        child.start()
     }
     
 }

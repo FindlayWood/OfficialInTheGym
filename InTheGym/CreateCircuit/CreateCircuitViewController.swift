@@ -11,7 +11,9 @@ import SCLAlertView
 import EmptyDataSet_Swift
 import Firebase
 
-class CreateCircuitViewController: UIViewController {
+class CreateCircuitViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator: CircuitFlow?
     
     @IBOutlet weak var titleField:UITextField!
     @IBOutlet weak var tableview:UITableView!
@@ -73,7 +75,8 @@ class CreateCircuitViewController: UIViewController {
                                "creatorID":Auth.auth().currentUser!.uid,
                                "integrated":true,
                                "circuit": true,
-                               "exercises":objectExercises
+                               "exercises":objectExercises,
+                               "completed":false
             ] as [String:AnyObject]
             
             //let newCircuit = circuit(item: circuitData)!

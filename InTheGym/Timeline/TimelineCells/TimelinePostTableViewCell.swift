@@ -73,7 +73,9 @@ class TimelinePostTableViewCell: UITableViewCell, CellConfiguarable {
     override func prepareForReuse() {
         if #available(iOS 13.0, *) {
             self.likeButton.setImage(UIImage(systemName: "star"), for: .normal)
-        } 
+        }
+        self.profileImage.setImage(nil, for: .normal)
+        
     }
     
     @IBAction func likeButtonTapped(_ sender:UIButton){

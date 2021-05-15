@@ -10,6 +10,7 @@ import UIKit
 
 class AddWorkoutSelectionViewController: UIViewController, Storyboarded {
     
+    var coordinator: WorkoutsFlow?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,12 +32,13 @@ class AddWorkoutSelectionViewController: UIViewController, Storyboarded {
     
     
     @IBAction func addWorkout(_ sender:UIButton){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let nextVC = storyboard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
-        nextVC.playerBool = true
-        nextVC.hidesBottomBarWhenPushed = true
-        AddWorkoutHomeViewController.groupBool = false
-        navigationController?.pushViewController(nextVC, animated: true)
+        coordinator?.regularWorkout()
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let nextVC = storyboard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
+//        nextVC.playerBool = true
+//        nextVC.hidesBottomBarWhenPushed = true
+//        AddWorkoutHomeViewController.groupBool = false
+//        navigationController?.pushViewController(nextVC, animated: true)
     }
     
 

@@ -30,7 +30,7 @@ protocol TimelineEndPointProtocol {
 extension TimelineEndPointProtocol{
     
     func retreive(completion: @escaping (Result<[PostProtocol], Error>) -> () ){
-        FirebaseAPI.shared().get(from: self.path, completion: completion)
+        //FirebaseAPI.shared().get(from: self.path, completion: completion)
     }
 }
 

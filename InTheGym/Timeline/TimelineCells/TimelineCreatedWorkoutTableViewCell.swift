@@ -83,9 +83,8 @@ class TimelineCreatedWorkoutTableViewCell: UITableViewCell, CellConfiguarable {
     override func prepareForReuse() {
         if #available(iOS 13.0, *) {
             self.likeButton.setImage(UIImage(systemName: "star"), for: .normal)
-        } else {
-            // Fallback on earlier versions
         }
+        self.profileImage.setImage(nil, for: .normal)
     }
     
     
