@@ -19,8 +19,13 @@ class DisplayCircuitExerciseTableViewCell: UITableViewCell {
     
     func setup(with rowModel:CircuitTableModel){
         self.exerciseName.text = rowModel.exerciseName
+        let rep = rowModel.reps
+        if rep == 0 {
+            exerciseReps.text = "MAX"
+        } else {
+            self.exerciseReps.text = "\(rep) reps"
+        }
         self.exerciseSet.text = "Set \(rowModel.set.description)"
-        self.exerciseReps.text = "\(rowModel.reps.description) reps"
         if rowModel.completed{
             self.completedButton.setImage(UIImage(named: "tickRing"), for: .normal)
             self.completedButton.tintColor = Constants.lightColour

@@ -92,9 +92,4 @@ class OriginalCompletedWorkoutTableViewCell: UITableViewCell, DiscussionCellConf
     @IBAction func workoutTapped(_ sender:Any){
         self.delegate.workoutTapped(on: self)
     }
-    
-    @IBAction func replyTapped(_ sender:UIButton){
-        self.delegate.replyButtonTapped()
-    }
-    
 }

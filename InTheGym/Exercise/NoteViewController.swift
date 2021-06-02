@@ -10,119 +10,34 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class NoteViewController: UIViewController {
+class NoteViewController: UIViewController, Storyboarded, UITextViewDelegate {
     
-    // variables passed from the previous page
-    var sets: String = ""
-    var exerciseName: String = ""
-    var reps: String = ""
-    var weight: String = ""
-    var type: String = ""
-    
-    var variedReps:Bool!
-    var repArray = [String]()
-    var completedArray : [Bool] = []
-    
+    weak var coordinator: RegularWorkoutFlow?
+    var newExercise: exercise?
     
     var placeHolder : String = "enter a note for the player to view..."
     
     @IBOutlet weak var note:UITextView!
     
-    @IBAction func finished(_ sender:UIButton){
+    @IBAction func finished(_ sender:UIButton) {
         let noteText = note.text
-        var dictData : [String: AnyObject] = [:]
-        var exerciseToAdd : exercise!
-        if noteText == placeHolder{
+        if noteText == placeHolder {
             
-            if variedReps{
-                dictData = ["exercise": self.exerciseName,
-                                "type": self.type,
-                                "sets": self.sets,
-                                "reps": self.repArray,
-                                "weight": self.weight,
-                                "completedSets":self.completedArray] as [String:AnyObject]
-                exerciseToAdd = exercise(exercises: dictData)
-                
-            }else{
-                dictData = ["exercise": self.exerciseName,
-                                "type": self.type,
-                                "sets": self.sets,
-                                "reps": self.reps,
-                                "weight": self.weight,
-                                "completedSets":self.completedArray] as [String:AnyObject]
-                exerciseToAdd = exercise(exercises: dictData)
-                
-            }
-            
-            
+            guard let newExercise = newExercise else {return}
+            coordinator?.noteAdded(newExercise)
+        } else {
+            guard let newExercise = newExercise else {return}
+            newExercise.note = noteText
+            coordinator?.noteAdded(newExercise)
         }
-        else{
-            if variedReps{
-                dictData = ["exercise": self.exerciseName,
-                                "type": self.type,
-                                "sets": self.sets,
-                                "reps": self.repArray,
-                                "weight": self.weight,
-                                "note": noteText!,
-                                "completedSets":self.completedArray] as [String:AnyObject]
-                exerciseToAdd = exercise(exercises: dictData)
-                
-            }else{
-                dictData = ["exercise": self.exerciseName,
-                                "type": self.type,
-                                "sets": self.sets,
-                                "reps": self.reps,
-                                "weight": self.weight,
-                                "note": noteText!,
-                                "completedSets":self.completedArray] as [String:AnyObject]
-                exerciseToAdd = exercise(exercises: dictData)
-                
-            }
-            
-            
-        }
-        
-        AddWorkoutHomeViewController.exercises.append(dictData)
         
         DisplayTopView.displayTopView(with: "Exercise added.", on: self)
-//        let alert = SCLAlertView()
-//        alert.showSuccess("Added!", subTitle: "Exercise has been added to the list.", closeButtonTitle: "ok")
-        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
-        self.navigationController?.popToViewController(viewControllers[viewControllers.count - 7], animated: true)
-        
-        
     }
     
-    @IBAction func skip(_ sender:UIButton){
-        var dictData : [String:AnyObject] = [:]
-        var exerciseToAdd : exercise!
-        if variedReps{
-            dictData = ["exercise": self.exerciseName,
-                        "type": self.type,
-                        "sets": self.sets,
-                        "reps": self.repArray,
-                        "weight": self.weight,
-                        "completedSets":self.completedArray] as [String:AnyObject]
-            exerciseToAdd = exercise(exercises: dictData)
-            
-        }else{
-            dictData = ["exercise": self.exerciseName,
-                        "type": self.type,
-                        "sets": self.sets,
-                        "reps": self.reps,
-                        "weight": self.weight,
-                        "completedSets":self.completedArray] as [String:AnyObject]
-            exerciseToAdd = exercise(exercises: dictData)
-            
-        }
-        
-        
-        AddWorkoutHomeViewController.exercises.append(dictData)
-        
+    @IBAction func skip(_ sender:UIButton) {
+        guard let newExercise = newExercise else {return}
+        coordinator?.noteAdded(newExercise)
         DisplayTopView.displayTopView(with: "Exercise added.", on: self)
-
-        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
-        self.navigationController?.popToViewController(viewControllers[viewControllers.count - 7], animated: true)
     }
 
     override func viewDidLoad() {

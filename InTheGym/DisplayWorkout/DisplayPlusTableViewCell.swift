@@ -10,7 +10,13 @@ import UIKit
 
 class DisplayPlusTableViewCell: UITableViewCell {
     
+    var delegate: LiveWorkoutAddMethods!
+    
     @IBOutlet weak var plusButton:UIButton!
+    @IBAction func addExercise(_ sender: UIButton) {
+        delegate.addExercise()
+    }
+    
 
     override func awakeFromNib() {
         super.awakeFromNib()

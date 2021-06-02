@@ -10,33 +10,44 @@ import Foundation
 import UIKit
 
 protocol CreationDelegate: AnyObject {
-    func addExercise()
-    func bodyTypeSelected(_ type: bodyType)
-    func exerciseSelected()
-    func repsSelected()
+    func bodyTypeSelected(_ exercise: exercise)
+    func exerciseSelected(_ exercise: exercise)
+    func repsSelected(_ exercise: exercise)
 }
 
-protocol RegularWorkoutFlow: CreationDelegate {
+protocol RegularWorkoutFlow: RegularDelegate {
+    func addExercise(_ exercise: exercise)
     func addCircuit()
-    func setsSelected()
-    func weightSelected()
-    func noteAdded()
+    func noteAdded(_ exercise: exercise)
 }
 
-protocol LiveWorkoutFlow: CreationDelegate {
-    func weightSelected()
+protocol LiveWorkoutFlow: LiveDelegate {
+    func addExercise(_ exercise: exercise)
+    func addSet(_ exercise: exercise)
 }
 
-protocol CircuitFlow: CreationDelegate {
-    func setsSelected()
+protocol CircuitFlow: CircuitDelegate {
+    func addExercise(_ circuit: exercise)
 }
 
 protocol AmrapFlow: CreationDelegate {
     
 }
 
+protocol RegularAndCircuitFlow: AnyObject {
+    func setsSelected(_ exercise: exercise)
+}
 
-class RegularWorkoutCoordinator: Coordinator {
+protocol RegularAndLiveFlow: AnyObject {
+    func weightSelected(_ exercise: exercise)
+}
+
+typealias RegularDelegate = CreationDelegate & RegularAndCircuitFlow & RegularAndLiveFlow
+typealias LiveDelegate = CreationDelegate & RegularAndLiveFlow & WorkoutDisplayCoordinator
+typealias CircuitDelegate = CreationDelegate & RegularAndCircuitFlow
+
+
+class RegularWorkoutCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     
@@ -45,6 +56,7 @@ class RegularWorkoutCoordinator: Coordinator {
     }
     
     func start() {
+        navigationController.delegate = self
         let vc = AddWorkoutHomeViewController.instantiate()
         AddWorkoutHomeViewController.groupBool = false
         vc.coordinator = self
@@ -60,40 +72,77 @@ extension RegularWorkoutCoordinator: RegularWorkoutFlow {
         childCoordinators.append(child)
         child.start()
     }
-    func addExercise() {
+    func addExercise(_ exercise: exercise) {
         let vc = BodyTypeViewController.instantiate()
         vc.coordinator = self
+        vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func setsSelected() {
-        let vc = NewRepsViewController()
+    func bodyTypeSelected(_ exercise: exercise) {
+        let vc = ExerciseViewController.instantiate()
+        vc.coordinator = self
+        vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func weightSelected() {
-        let vc = NoteViewController()
+    func exerciseSelected(_ exercise: exercise) {
+        let vc = ExerciseSetsViewController.instantiate()
+        vc.coordinator = self
+        vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func noteAdded() {
-        navigationController.popToRootViewController(animated: true)
-    }
-    
-    func bodyTypeSelected(_ type: bodyType) {
-        print(type)
-    }
-    
-    func exerciseSelected() {
-        let vc = ExerciseSetsViewController()
+    func setsSelected(_ exercise: exercise) {
+        let vc = NewRepsViewController.instantiate()
+        vc.coordinator = self
+        vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func repsSelected() {
-        let vc = NewWeightViewController()
+    func repsSelected(_ exercise: exercise) {
+        let vc = NewWeightViewController.instantiate()
+        vc.coordinator = self
+        vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
     
+    func weightSelected(_ exercise: exercise) {
+        let vc = NoteViewController.instantiate()
+        vc.coordinator = self
+        vc.newExercise = exercise
+        navigationController.pushViewController(vc, animated: true)
+    }
     
+    func noteAdded(_ exercise: exercise) {
+        let object = exercise.toObject()
+        print(object)
+        AddWorkoutHomeViewController.exercises.append(object)
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for controller in viewControllers {
+            if controller.isKind(of: AddWorkoutHomeViewController.self) {
+                navigationController.popToViewController(controller, animated: true)
+                break
+            }
+        }
+    }
+}
+
+//MARK: - Navigation Delegate Method
+extension RegularWorkoutCoordinator: UINavigationControllerDelegate {
+    
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        guard let fromViewController = navigationController.transitionCoordinator?.viewController(forKey: .from) else {
+            return
+        }
+        
+        if navigationController.viewControllers.contains(fromViewController){
+            return
+        }
+        
+        if let circuitViewController = fromViewController as? CreateCircuitViewController {
+            childDidFinish(circuitViewController.coordinator)
+        }
+    }
 }
 

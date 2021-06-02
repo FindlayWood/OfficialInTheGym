@@ -14,6 +14,7 @@ import UIKit
 class BodyTypeViewController: UIViewController, Storyboarded {
     
     weak var coordinator: CreationDelegate?
+    var newExercise: exercise?
     
     var fromLiveWorkout:Bool!
     var workoutID:String!
@@ -28,29 +29,34 @@ class BodyTypeViewController: UIViewController, Storyboarded {
         SVC.fromLiveWorkout = self.fromLiveWorkout
         SVC.exerciseType = sender.titleLabel!.text as! String
         SVC.workoutID = self.workoutID
+        guard var newExercise = newExercise else {return}
+        switch sender.titleLabel?.text{
+        case "Upper Body":
+            newExercise.type = .UB
+            coordinator?.bodyTypeSelected(newExercise)
+        case "Lower Body":
+            newExercise.type = .LB
+            coordinator?.bodyTypeSelected(newExercise)
+        case "Core":
+            newExercise.type = .CO
+            coordinator?.bodyTypeSelected(newExercise)
+        case "Cardio":
+            newExercise.type = .CA
+            coordinator?.bodyTypeSelected(newExercise)
+        default:
+            newExercise.type = .UB
+            coordinator?.bodyTypeSelected(newExercise)
+        }
         
-//        switch sender.titleLabel?.text{
-//        case "Upper Body":
-//            coordinator?.bodyTypeSelected(.UB)
-//        case "Lower Body":
-//            coordinator?.bodyTypeSelected(.LB)
-//        case "Core":
-//            coordinator?.bodyTypeSelected(.CO)
-//        case "Cardio":
-//            coordinator?.bodyTypeSelected(.CA)
-//        default:
-//            coordinator?.bodyTypeSelected(.UB)
-//        }
-        
-        self.navigationController?.pushViewController(SVC, animated: true)
+        //self.navigationController?.pushViewController(SVC, animated: true)
     }
     
     @IBAction func circuitTapped(_ sender:UIButton) {
-//        let coordinator = coordinator as? RegularWorkoutFlow
-//        coordinator?.addCircuit()
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let nextVC = storyboard.instantiateViewController(withIdentifier: "CreateCircuitViewController") as! CreateCircuitViewController
-        self.navigationController?.pushViewController(nextVC, animated: true)
+        let coordinator = coordinator as? RegularWorkoutFlow
+        coordinator?.addCircuit()
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let nextVC = storyboard.instantiateViewController(withIdentifier: "CreateCircuitViewController") as! CreateCircuitViewController
+//        self.navigationController?.pushViewController(nextVC, animated: true)
     }
 
     override func viewDidLoad() {
@@ -61,6 +67,21 @@ class BodyTypeViewController: UIViewController, Storyboarded {
             self.circuitButton.isHidden = true
         }else{
             pageNumberLabel.text = "1 of 6"
+        }
+        if let _ = coordinator as? CircuitCoordinator {
+            self.circuitButton.isHidden = true
+        }
+        switch coordinator{
+        case is RegularWorkoutCoordinator:
+            pageNumberLabel.text = "1 of 6"
+        case is CircuitCoordinator:
+            pageNumberLabel.text = "1 of 4"
+            self.circuitButton.isHidden = true
+        case is LiveWorkoutCoordinator:
+            pageNumberLabel.text = "1 of 2"
+            self.circuitButton.isHidden = true
+        default:
+             break
         }
     }
     

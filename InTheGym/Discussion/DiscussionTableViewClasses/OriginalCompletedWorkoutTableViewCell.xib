@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,11 +11,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OriginalCompletedWorkoutTableViewCell" rowHeight="339" id="Xtg-4R-70q" customClass="OriginalCompletedWorkoutTableViewCell" customModule="InTheGym" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="339"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OriginalCompletedWorkoutTableViewCell" rowHeight="306" id="Xtg-4R-70q" customClass="OriginalCompletedWorkoutTableViewCell" customModule="InTheGym" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="306"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Xtg-4R-70q" id="P59-b7-tF6">
-                <rect key="frame" x="0.0" y="0.0" width="414" height="339"/>
+                <rect key="frame" x="0.0" y="0.0" width="414" height="306"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LVs-dc-C6B">
@@ -128,16 +128,6 @@
                             <action selector="likeTapped:" destination="Xtg-4R-70q" eventType="touchUpInside" id="dl7-iM-Ge1"/>
                         </connections>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eyB-zf-KWr">
-                        <rect key="frame" x="126" y="270" width="40" height="20"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="40" id="MA5-tQ-4rz"/>
-                            <constraint firstAttribute="height" constant="20" id="oa0-Lt-qlR"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Wm-JI-Mb3">
                         <rect key="frame" x="20" y="20" width="50" height="50"/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -163,17 +153,6 @@
                             <action selector="userTapped:" destination="Xtg-4R-70q" eventType="touchUpInside" id="hUf-gI-jUv"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bel-Rt-mil">
-                        <rect key="frame" x="92" y="298" width="302" height="30"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="30" id="umJ-aH-Zxs"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                        <state key="normal" title="add a reply"/>
-                        <connections>
-                            <action selector="replyTapped:" destination="Xtg-4R-70q" eventType="touchUpInside" id="LmC-qw-hqk"/>
-                        </connections>
-                    </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hhk-p7-jxI">
                         <rect key="frame" x="354" y="270" width="40" height="20"/>
                         <constraints>
@@ -184,31 +163,38 @@
                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eyB-zf-KWr">
+                        <rect key="frame" x="126" y="270" width="40" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="MA5-tQ-4rz"/>
+                            <constraint firstAttribute="height" constant="20" id="oa0-Lt-qlR"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Bel-Rt-mil" firstAttribute="top" secondItem="4q9-A9-Avb" secondAttribute="bottom" constant="3" id="238-bc-hiC"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Hhk-p7-jxI" secondAttribute="bottom" constant="5" id="06Q-09-odt"/>
                     <constraint firstItem="4q9-A9-Avb" firstAttribute="top" secondItem="aT5-sl-Rr0" secondAttribute="bottom" constant="15" id="6yY-3E-NcW"/>
                     <constraint firstItem="LVs-dc-C6B" firstAttribute="leading" secondItem="8Wm-JI-Mb3" secondAttribute="trailing" constant="22" id="71O-wX-cmW"/>
                     <constraint firstItem="unI-bI-41M" firstAttribute="top" secondItem="aT5-sl-Rr0" secondAttribute="bottom" constant="15" id="7Or-yz-TGh"/>
                     <constraint firstItem="unI-bI-41M" firstAttribute="leading" secondItem="P59-b7-tF6" secondAttribute="leadingMargin" constant="72" id="82s-K0-oQL"/>
                     <constraint firstItem="8Wm-JI-Mb3" firstAttribute="leading" secondItem="P59-b7-tF6" secondAttribute="leading" constant="20" symbolic="YES" id="8tf-g6-53q"/>
                     <constraint firstItem="w0h-dc-wcC" firstAttribute="top" secondItem="LVs-dc-C6B" secondAttribute="bottom" constant="2" id="AJq-t3-IkX"/>
-                    <constraint firstItem="Bel-Rt-mil" firstAttribute="top" secondItem="Hhk-p7-jxI" secondAttribute="bottom" constant="8" symbolic="YES" id="BKw-oQ-6Re"/>
                     <constraint firstItem="LVs-dc-C6B" firstAttribute="top" secondItem="8sq-cr-DGW" secondAttribute="bottom" constant="2" id="Ecf-Ug-MeW"/>
                     <constraint firstItem="aT5-sl-Rr0" firstAttribute="trailing" secondItem="P59-b7-tF6" secondAttribute="trailingMargin" id="HRF-De-M2X"/>
-                    <constraint firstItem="Bel-Rt-mil" firstAttribute="top" secondItem="unI-bI-41M" secondAttribute="bottom" constant="3" id="WPp-3R-BLt"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="eyB-zf-KWr" secondAttribute="bottom" constant="5" id="Tho-ic-Xh8"/>
                     <constraint firstItem="8sq-cr-DGW" firstAttribute="top" secondItem="P59-b7-tF6" secondAttribute="top" constant="20" symbolic="YES" id="Y4C-6a-RwH"/>
-                    <constraint firstItem="Bel-Rt-mil" firstAttribute="top" secondItem="eyB-zf-KWr" secondAttribute="bottom" constant="8" symbolic="YES" id="Y9Q-xh-I0v"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="unI-bI-41M" secondAttribute="bottom" id="YLG-80-dCM"/>
                     <constraint firstItem="Hhk-p7-jxI" firstAttribute="trailing" secondItem="P59-b7-tF6" secondAttribute="trailingMargin" id="YPa-kF-NyY"/>
-                    <constraint firstItem="Bel-Rt-mil" firstAttribute="bottom" secondItem="P59-b7-tF6" secondAttribute="bottomMargin" id="YaH-kd-jhO"/>
-                    <constraint firstItem="Bel-Rt-mil" firstAttribute="leading" secondItem="P59-b7-tF6" secondAttribute="leadingMargin" constant="72" id="avI-gf-qf7"/>
                     <constraint firstItem="8Wm-JI-Mb3" firstAttribute="top" secondItem="P59-b7-tF6" secondAttribute="top" constant="20" symbolic="YES" id="dQ5-Ib-j3K"/>
                     <constraint firstItem="Hhk-p7-jxI" firstAttribute="leading" secondItem="4q9-A9-Avb" secondAttribute="trailing" constant="4" id="fX1-Vb-lxY"/>
                     <constraint firstItem="aT5-sl-Rr0" firstAttribute="leading" secondItem="P59-b7-tF6" secondAttribute="leadingMargin" constant="72" id="iXb-kv-do5"/>
                     <constraint firstItem="eyB-zf-KWr" firstAttribute="leading" secondItem="unI-bI-41M" secondAttribute="trailing" constant="4" id="j5Y-VL-Bak"/>
-                    <constraint firstItem="Bel-Rt-mil" firstAttribute="trailing" secondItem="P59-b7-tF6" secondAttribute="trailingMargin" id="k2Z-qt-oD3"/>
                     <constraint firstItem="aT5-sl-Rr0" firstAttribute="top" secondItem="w0h-dc-wcC" secondAttribute="bottom" constant="20" id="sHL-wh-Bzw"/>
                     <constraint firstItem="w0h-dc-wcC" firstAttribute="leading" secondItem="8Wm-JI-Mb3" secondAttribute="trailing" constant="22" id="sLU-fq-Y7w"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="4q9-A9-Avb" secondAttribute="bottom" id="v5g-vB-aEw"/>
                     <constraint firstItem="8sq-cr-DGW" firstAttribute="leading" secondItem="8Wm-JI-Mb3" secondAttribute="trailing" constant="22" id="y2j-cl-Suh"/>
                 </constraints>
             </tableViewCellContentView>
@@ -225,7 +211,7 @@
                 <outlet property="workoutTitle" destination="UGR-Uo-cYr" id="fYB-aP-Jf6"/>
                 <outlet property="workoutView" destination="aT5-sl-Rr0" id="HJq-35-1Ou"/>
             </connections>
-            <point key="canvasLocation" x="18.840579710144929" y="32.477678571428569"/>
+            <point key="canvasLocation" x="18.840579710144929" y="21.428571428571427"/>
         </tableViewCell>
     </objects>
     <resources>

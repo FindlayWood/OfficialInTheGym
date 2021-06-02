@@ -15,11 +15,11 @@ struct TableViewCellModel{
 }
 
 struct CollectionCellModel{
-    var set:Int?
-    var weight:String?
-    var weightArray:[String]?
-    var completed:Bool?
-    var reps:String?
-    var repArray:[String]?
-    var parentTableViewCell:UITableViewCell?
+    var set: Int?
+    var weight: String?
+    var weightArray: [String]?
+    var completed: Bool?
+    var reps: Int?
+    var repArray: [String]?
+    var parentTableViewCell: UITableViewCell?
 }

@@ -17,9 +17,15 @@ class NotificationManager {
         self.delegate = delegate
     }
     
-    func upload(){
+    func upload(withCompletionBlock: @escaping (Result<Bool, Error>) -> Void) {
         let notificationReference = Database.database().reference().child("Notifications").child(delegate.toUserID!).childByAutoId()
-        notificationReference.setValue(delegate.toObject())
+        notificationReference.setValue(delegate.toObject()) { error, snapshot in
+            if let error = error {
+                withCompletionBlock(.failure(error))
+            } else {
+                withCompletionBlock(.success(true))
+            }
+        }
     }
     
 }

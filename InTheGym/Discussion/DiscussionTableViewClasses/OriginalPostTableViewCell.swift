@@ -74,8 +74,4 @@ class OriginalPostTableViewCell: UITableViewCell, DiscussionCellConfigurable {
         self.delegate.likeButtonTapped(on: self, sender: sender, label: self.likeCount)
     }
     
-    @IBAction func replyTapped(_ sender:UIButton){
-        self.delegate.replyButtonTapped()
-    }
-    
 }

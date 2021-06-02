@@ -11,20 +11,24 @@ import SCLAlertView
 
 class DisplayWorkoutViewController: UIViewController, Storyboarded {
     
-    weak var coordinator: WorkoutCoordinator?
+    weak var coordinator: WorkoutDisplayCoordinator?
+    
+    var flashView: FlashView!
+    var bottomView: WorkoutBottomView!
+    var bottomViewFrame: CGRect!
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var completeButton:UIButton!
     @IBOutlet weak var completeButtonBottomConstraint:NSLayoutConstraint!
     
-    var selectedWorkout : WorkoutDelegate!
+    static var selectedWorkout : WorkoutDelegate!
     
     var adapter : DisplayWorkoutAdapter!
     
     var workoutHasBegun : Bool?
     
     lazy var viewModel: DisplayWorkoutViewModel = {
-        return DisplayWorkoutViewModel(workout: selectedWorkout)
+        return DisplayWorkoutViewModel(workout: DisplayWorkoutViewController.selectedWorkout)
     }()
     
     // array of colours to set rpe button
@@ -44,6 +48,9 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
         tableview.register(UINib(nibName: "DisplayPlusTableView", bundle: nil), forCellReuseIdentifier: "DisplayPlusTableView")
         tableview.register(UINib(nibName: "DisplayWorkoutCircuitTableViewCell", bundle: nil), forCellReuseIdentifier: "DisplayWorkoutCircuitTableViewCell")
         
+        flashView = FlashView(frame: view.frame)
+        bottomViewFrame = CGRect(x: 0, y: Constants.screenSize.height - Constants.screenSize.height * 0.15, width: Constants.screenSize.width, height: Constants.screenSize.height * 0.15)
+        bottomView = WorkoutBottomView(frame: bottomViewFrame)
         
         loadTableview()
         initViewModel()
@@ -58,107 +65,133 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
         let textAttributes = [NSAttributedString.Key.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        tableview.reloadData()
     }
     
     func initUI(){
-        navigationItem.title = selectedWorkout.title
+        navigationItem.title = DisplayWorkoutViewController.selectedWorkout.title
     }
     
     func initBottomView(){
-        switch selectedWorkout {
+        switch DisplayWorkoutViewController.selectedWorkout {
+        
         case is publicSavedWorkout:
-            // function to increase the views by 1
             self.completeButton.isHidden = true
             self.completeButtonBottomConstraint.constant = 50
-            if !ViewController.admin{
-                let bv = SavedWorkoutBottomView(workout: selectedWorkout, parent: self.view)
-                bv.bottomViewSetUpClosure = { [weak self] () in
-                    self?.viewModel.addToWorkouts()
-                    DisplayTopView.displayTopView(with: "Added To Workouts", on: self!)
-                }
-                bv.viewProfileTapped = { [weak self] () in
-                    guard let self = self else {return}
-                    if self.selectedWorkout.creatorID == self.viewModel.userId {
-                        DisplayTopView.displayTopView(with: "Your Workout", on: self)
-                    } else {
-                        UserIDToUser.transform(userID: (self.selectedWorkout.creatorID)) { user in
-                            self.coordinator?.showUser(with: user)
-                        }
-                    }
-                }
-            }
+        if !ViewController.admin {
+            bottomView.mainButton.setTitle("Add to Workouts", for: .normal)
+            bottomView.mainButton.addTarget(self, action: #selector(addToWorkouts), for: .touchUpInside)
+            bottomView.tableview.delegate = self
+            bottomView.flashview = flashView
+            view.addSubview(flashView)
+            view.addSubview(bottomView)
+        }
+            
         case is privateSavedWorkout:
             self.completeButton.isHidden = true
             self.completeButtonBottomConstraint.constant = 50
             if !ViewController.admin{
-                let bv = SavedWorkoutBottomView(workout: selectedWorkout, parent: self.view)
-                bv.bottomViewSetUpClosure = { [weak self] () in
-                    self?.viewModel.addToWorkouts()
-                    DisplayTopView.displayTopView(with: "Added To Workouts", on: self!)
-                    // fucntion to add workout on viewmodel
-                }
-                bv.viewProfileTapped = { [weak self] () in
-                    guard let self = self else {return}
-                    if self.selectedWorkout.creatorID == self.viewModel.userId {
-                        DisplayTopView.displayTopView(with: "Your Workout", on: self)
-                    } else {
-                        UserIDToUser.transform(userID: (self.selectedWorkout.creatorID)) { user in
-                            self.coordinator?.showUser(with: user)
-                        }
-                    }
-                }
+//                let bv = SavedWorkoutBottomView(workout: DisplayWorkoutViewController.selectedWorkout, parent: self.view)
+//                bv.bottomViewSetUpClosure = { [weak self] () in
+//                    self?.viewModel.addToWorkouts()
+//                    DisplayTopView.displayTopView(with: "Added To Workouts", on: self!)
+//                    // fucntion to add workout on viewmodel
+//                }
+//                bv.viewProfileTapped = { [weak self] () in
+//                    guard let self = self else {return}
+//                    if DisplayWorkoutViewController.selectedWorkout.creatorID == self.viewModel.userId {
+//                        DisplayTopView.displayTopView(with: "Your Workout", on: self)
+//                    } else {
+//                        UserIDToUser.transform(userID: (DisplayWorkoutViewController.selectedWorkout.creatorID)) { user in
+//                            let coordinator = self.coordinator as! WorkoutCoordinatorFlow
+//                            coordinator.showUser(with: user)
+//                        }
+//                    }
+//                }
+                bottomView.mainButton.setTitle("Add to Workouts", for: .normal)
+                bottomView.mainButton.addTarget(self, action: #selector(addToWorkouts), for: .touchUpInside)
+                bottomView.tableview.delegate = self
+                bottomView.flashview = flashView
+                view.addSubview(flashView)
+                view.addSubview(bottomView)
             }
+            
         case is CreatedWorkoutDelegate:
             self.completeButton.isHidden = true
             self.completeButtonBottomConstraint.constant = 50
-            if !(selectedWorkout.creatorID == viewModel.userId){
-                viewModel.addAView(to: selectedWorkout)
-                let bv = DiscoverWorkoutBottomView(workout: selectedWorkout, parent: self.view)
-                bv.bottomViewSetUpClosure = { [weak self] () in
-                    self?.viewModel.addToSavedWorkouts()
-                }
+            if !(DisplayWorkoutViewController.selectedWorkout.creatorID == viewModel.userId){
+                viewModel.addAView(to: DisplayWorkoutViewController.selectedWorkout)
+                self.bottomView.mainButton.setTitle("Add to Saved Workouts", for: .normal)
+                self.bottomView.mainButton.addTarget(self, action: #selector(addToSavedWorkouts), for: .touchUpInside)
+                self.bottomView.tableview.delegate = self
+                self.bottomView.flashview = flashView
+                self.view.addSubview(flashView)
+                self.view.addSubview(bottomView)
+//                let bv = DiscoverWorkoutBottomView(workout: DisplayWorkoutViewController.selectedWorkout, parent: self.view)
+//                bv.bottomViewSetUpClosure = { [weak self] () in
+//                    self?.viewModel.addToSavedWorkouts()
+//                }
             }
             else if !ViewController.admin{
-                let bv = SavedWorkoutBottomView(workout: selectedWorkout, parent: self.view)
-                bv.bottomViewSetUpClosure = { [weak self] () in
-                    guard let self = self else {return}
-                    self.viewModel.addToWorkouts()
-                    DisplayTopView.displayTopView(with: "Added To Workouts", on: self)
-                }
-                bv.viewProfileTapped = { [weak self] () in
-                    guard let self = self else {return}
-                    DisplayTopView.displayTopView(with: "Your Workout", on: self)
-                }
+//                let bv = SavedWorkoutBottomView(workout: DisplayWorkoutViewController.selectedWorkout, parent: self.view)
+//                bv.bottomViewSetUpClosure = { [weak self] () in
+//                    guard let self = self else {return}
+//                    self.viewModel.addToWorkouts()
+//                    DisplayTopView.displayTopView(with: "Added To Workouts", on: self)
+//                }
+//                bv.viewProfileTapped = { [weak self] () in
+//                    guard let self = self else {return}
+//                    DisplayTopView.displayTopView(with: "Your Workout", on: self)
+//                }
+                bottomView.mainButton.setTitle("Add to Workouts", for: .normal)
+                bottomView.mainButton.addTarget(self, action: #selector(addToWorkouts), for: .touchUpInside)
+                bottomView.tableview.delegate = self
+                bottomView.flashview = flashView
+                view.addSubview(flashView)
+                view.addSubview(bottomView)
             }
             
         
         case is discoverWorkout:
             self.completeButton.isHidden = true
             self.completeButtonBottomConstraint.constant = 50
-            if !selectedWorkout.liveWorkout {
-                if !(selectedWorkout.creatorID == viewModel.userId) && selectedWorkout.savedID != nil{
-                    viewModel.addAView(to: selectedWorkout)
-                    let bv = DiscoverWorkoutBottomView(workout: selectedWorkout, parent: self.view)
-                    bv.bottomViewSetUpClosure = { [weak self] () in
-                        //add to saved workouts
-                        self?.viewModel.addToSavedWorkouts()
-                    }
-                    bv.profileTappedClosure = { [weak self] () in
-                        guard let self = self else {return}
-                        UserIDToUser.transform(userID: (self.selectedWorkout.creatorID)) { user in
-                            self.coordinator?.showUser(with: user)
-                        }
-                    }
+            if !DisplayWorkoutViewController.selectedWorkout.liveWorkout {
+                if !(DisplayWorkoutViewController.selectedWorkout.creatorID == viewModel.userId) && DisplayWorkoutViewController.selectedWorkout.savedID != nil{
+                    viewModel.addAView(to: DisplayWorkoutViewController.selectedWorkout)
+//                    let bv = DiscoverWorkoutBottomView(workout: DisplayWorkoutViewController.selectedWorkout, parent: self.view)
+//                    bv.bottomViewSetUpClosure = { [weak self] () in
+//                        //add to saved workouts
+//                        self?.viewModel.addToSavedWorkouts()
+//                    }
+//                    bv.profileTappedClosure = { [weak self] () in
+//                        guard let self = self else {return}
+//                        UserIDToUser.transform(userID: (DisplayWorkoutViewController.selectedWorkout.creatorID)) { user in
+//                            let coordinator = self.coordinator as! WorkoutCoordinatorFlow
+//                            coordinator.showUser(with: user)
+//                        }
+//                    }
+                    self.bottomView.mainButton.setTitle("Add to Saved Workouts", for: .normal)
+                    self.bottomView.mainButton.addTarget(self, action: #selector(addToSavedWorkouts), for: .touchUpInside)
+                    self.bottomView.tableview.delegate = self
+                    self.bottomView.flashview = flashView
+                    self.view.addSubview(flashView)
+                    self.view.addSubview(bottomView)
                     
-                } else if selectedWorkout.creatorID == viewModel.userId {
-                    let bv = YourWorkoutBottomView(parent: self.view)
-                    self.view.addSubview(bv)
+                } else if DisplayWorkoutViewController.selectedWorkout.creatorID == viewModel.userId {
+                    bottomView.mainButton.setTitle("Add to Workouts", for: .normal)
+                    bottomView.mainButton.addTarget(self, action: #selector(addToWorkouts), for: .touchUpInside)
+                    bottomView.tableview.delegate = self
+                    bottomView.flashview = flashView
+                    view.addSubview(flashView)
+                    view.addSubview(bottomView)
+//                    let bv = YourWorkoutBottomView(parent: self.view)
+//                    self.view.addSubview(bv)
                 }
             }
             
         case is workout:
-            let s = selectedWorkout as! workout
-            if selectedWorkout.completed || ViewController.admin {
+            let s = DisplayWorkoutViewController.selectedWorkout as! workout
+            if s.completed || ViewController.admin {
                 self.completeButton.isHidden = true
                 self.completeButtonBottomConstraint.constant = 50
                 // no view
@@ -170,12 +203,21 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
                 self.completeButton.isHidden = false
                 self.completeButtonBottomConstraint.constant = 0
                 if !ViewController.admin{
-                    let bv = MainWorkoutBottomView(workout: selectedWorkout, parent: self.view)
+                    let bv = MainWorkoutBottomView(workout: DisplayWorkoutViewController.selectedWorkout, parent: self.view)
                     self.view.addSubview(bv)
                     bv.bottomViewSetUpClosure = { [weak self] () in
                         self?.viewModel.startTheWorkout()
                     }
                 }
+            }
+        case is liveWorkout:
+            let workout = DisplayWorkoutViewController.selectedWorkout as! liveWorkout
+            if workout.completed == true {
+                self.completeButton.isHidden = true
+                self.completeButtonBottomConstraint.constant = 50
+            } else {
+                self.completeButton.isHidden = false
+                self.completeButtonBottomConstraint.constant = 0
             }
         default:
             break
@@ -183,7 +225,7 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
     }
     
     func loadTableview(){
-        viewModel.selectedWorkout = self.selectedWorkout
+        viewModel.selectedWorkout = DisplayWorkoutViewController.selectedWorkout
         tableview.reloadData()
     }
     
@@ -220,11 +262,13 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
     }
     
     @IBAction func completedTapped(_ sender:UIButton){
+        let completedWorkout = DisplayWorkoutViewController.selectedWorkout as! Completeable
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let completedVC = storyboard.instantiateViewController(withIdentifier: "WorkoutCompletedViewController") as! WorkoutCompletedViewController
-        completedVC.workout = self.selectedWorkout as? workout
+        completedVC.workout = completedWorkout
+        guard let exercises = DisplayWorkoutViewController.selectedWorkout.exercises else {return}
         var scores : [Int] = []
-        for exercise in selectedWorkout.exercises!{
+        for exercise in exercises {
             if exercise is circuit{
                 let exercise = exercise as! circuit
                 if let score = exercise.newRPE.value{
@@ -247,8 +291,9 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
             completedVC.averageRPE = rounded
         }
         let endTime = Date.timeIntervalSinceReferenceDate
-        let startTime = (selectedWorkout as? workout)!.startTime
-        let completionTimeSeconds = Int(endTime) - Int(startTime!)
+        //let startTime = (DisplayWorkoutViewController.selectedWorkout as? workout)!.startTime
+        guard let startTime = completedWorkout.startTime else {return}
+        let completionTimeSeconds = Int(endTime) - Int(startTime)
         completedVC.secondsToComplete = completionTimeSeconds
         completedVC.endTime = endTime
         let formatter = DateComponentsFormatter()
@@ -288,14 +333,13 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
             // here have viewmodel method to send to next page
             // which will be body type page
         } else if viewModel.selectedWorkout?.exercises![at.section] is circuit {
-            print("tapped a circuit")
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let nextVC = storyboard.instantiateViewController(withIdentifier: "DisplayCircuitViewController") as! DisplayCircuitViewController
             let circuit: circuit = (viewModel.getData(at: at) as? circuit)!
             nextVC.circuit = circuit
             let rowModels = circuit.integrate()
             nextVC.exercises = rowModels
-            nextVC.workout = selectedWorkout
+            nextVC.workout = DisplayWorkoutViewController.selectedWorkout
             nextVC.exercisePosition = at.section
             self.navigationController?.pushViewController(nextVC, animated: true)
         }
@@ -327,7 +371,7 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
         case is discoverWorkout:
             return false
         case is workout:
-            let s = selectedWorkout as! workout
+            let s = DisplayWorkoutViewController.selectedWorkout as! workout
             if s.completed {
                 return false
             }else if s.startTime != nil{
@@ -419,14 +463,6 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
             coachText.text = note
         }
         
-        
-//        if let note = viewModel.selectedWorkout?.exercises![index!.section].note{
-//            coachText.textColor = .black
-//            coachText.text = note
-//        }else{
-//            coachText.text = "no note from coach"
-//        }
-        
         alert.showInfo("Exercise note", subTitle: "Notes for this exercise from your coach.", closeButtonTitle: "close")
         
     }
@@ -456,7 +492,53 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
 
         }
     }
+}
+
+extension DisplayWorkoutViewController: LiveWorkoutAddMethods {
+    func addSet(_ cell: UITableViewCell) {
+        guard let section = self.tableview.indexPath(for: cell) else {return}
+        let exercise = viewModel.getData(at: section) as! exercise
+        let coordinator = coordinator as! LiveWorkoutCoordinator
+        coordinator.addSet(exercise)
+        
+    }
     
+    func addExercise() {
+        guard let newExercise = exercise() else {return}
+        let coordinator = coordinator as! LiveWorkoutCoordinator
+        coordinator.addExercise(newExercise)
+    }
+}
+
+extension DisplayWorkoutViewController: UIViewControllerTransitioningDelegate {
     
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        BottomViewPresentationController(presentedViewController: presented, presenting: presenting)
+    }
+}
+
+// MARK: - Methods for bottom views
+extension DisplayWorkoutViewController: UITableViewDelegate {
     
+    @objc func addToWorkouts() {
+        viewModel.addToWorkouts()
+        DisplayTopView.displayTopView(with: "Added to Workouts", on: self)
+    }
+    
+    @objc func addToSavedWorkouts() {
+        viewModel.addToSavedWorkouts()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            if DisplayWorkoutViewController.selectedWorkout.creatorID == self.viewModel.userId {
+                DisplayTopView.displayTopView(with: "Your Workout", on: self)
+            } else {
+                UserIDToUser.transform(userID: (DisplayWorkoutViewController.selectedWorkout.creatorID)) { user in
+                    guard let coordinator = self.coordinator as? WorkoutCoordinatorFlow else {return}
+                    coordinator.showUser(with: user)
+                }
+            }
+        }
+    }
 }

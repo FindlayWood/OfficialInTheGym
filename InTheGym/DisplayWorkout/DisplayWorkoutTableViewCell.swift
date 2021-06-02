@@ -41,7 +41,7 @@ class DisplayWorkoutTableViewCell: UITableViewCell, workoutCellConfigurable {
         let model = rowModel as! exercise
         self.exercise = model
         self.exerciseLabel.text = model.exercise
-        self.setsLabel.text = model.sets! + " SETS"
+        //self.setsLabel.text = model.setString! + " SETS"
         self.weightLabel.text = model.weight
         self.typeLabel.text = TransformWorkout.bodyTypeToString(from: model.type!)
         self.collection.reloadData()
@@ -53,7 +53,7 @@ class DisplayWorkoutTableViewCell: UITableViewCell, workoutCellConfigurable {
     var exercise : exercise! {
         didSet{
             self.exerciseLabel.text = exercise.exercise
-            self.setsLabel.text = exercise.sets! + " SETS"
+            //self.setsLabel.text = exercise.setString! + " SETS"
             self.weightLabel.text = exercise.weight
             self.typeLabel.text = TransformWorkout.bodyTypeToString(from: exercise.type!)
             if exercise.note != nil{
@@ -61,24 +61,47 @@ class DisplayWorkoutTableViewCell: UITableViewCell, workoutCellConfigurable {
             }else{
                 self.noteButton.isHidden = true
             }
+            var setInt: Int = 0
+            if let setString = exercise.setString {
+                self.setsLabel.text = setString + " SETS"
+                setInt = Int(setString) ?? 0
+            } else if let set = exercise.sets {
+                self.setsLabel.text = set.description + " SETS"
+                setInt = set
+            }
             
-            let setInt = Int(exercise.sets!)!
-            if exercise.reps != nil{
+            //let setInt = Int(exercise.setString!)!
+            if let rep = exercise.reps {
+                if rep == 0 {
+                    repsLabel.text = "MAX REPS"
+                } else {
+                    self.repsLabel.text = "\(rep) REPS"
+                }
+            } else if exercise.repString != nil{
                 var x = 0
                 var repString = ""
                 while x < setInt {
-                    repString += exercise.reps!
+                    repString += exercise.repString!
                     if x != setInt - 1{
                         repString += ","
                     }
                     x += 1
                 }
                 self.repsLabel.text = repString
-            }
-            if let repArray = exercise.repArray{
+            } else if let repArray = exercise.repStringArray {
                 var repString = ""
                 for rep in repArray{
                     repString += rep + ","
+                }
+                self.repsLabel.text = String(repString.dropLast())
+            } else if let repArray = exercise.repArray {
+                var repString = ""
+                for rep in repArray {
+                    if rep == 0 {
+                        repString += "MAX,"
+                    } else {
+                        repString += rep.description + ","
+                    }
                 }
                 self.repsLabel.text = String(repString.dropLast())
             }
@@ -131,6 +154,7 @@ class DisplayWorkoutTableViewCell: UITableViewCell, workoutCellConfigurable {
         super.prepareForReuse()
         self.rpeButton.setTitle("RPE", for: .normal)
         self.rpeButton.setTitleColor( .systemBlue, for: .normal)
+        self.repsLabel.text = nil
     }
 
 }
@@ -141,7 +165,13 @@ extension DisplayWorkoutTableViewCell: UICollectionViewDelegate, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let setInt = Int(self.exercise.sets!)!
+        var setInt: Int = 0
+        if let set = exercise.sets {
+            setInt = set
+        } else if let setString = exercise.setString {
+            setInt = Int(setString) ?? 0
+        }
+        //let setInt = Int(self.exercise.setString!)!
         if delegate.isLive() == true {
             return setInt + 1
         }else{
@@ -152,10 +182,14 @@ extension DisplayWorkoutTableViewCell: UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if delegate.isLive() && indexPath.item == Int(self.exercise.sets!){
+        let set = exercise.sets ?? 0
+        
+        if delegate.isLive() && indexPath.item == set {
             
             // here will go the plus cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DisplayPlusCollection", for: indexPath) as! DisplayPlusCollectionViewCell
+            cell.parentCell = self
+            cell.delegate = self.delegate
             return cell
         }else{
             
@@ -165,23 +199,21 @@ extension DisplayWorkoutTableViewCell: UICollectionViewDelegate, UICollectionVie
             cellModel.set = indexPath.item + 1
             cellModel.completed = self.exercise.completedSets?[indexPath.item] ?? false
             cellModel.parentTableViewCell = self
-            cellModel.reps = self.exercise.reps
-            cellModel.weight = self.exercise.weight
-            if let repArray = self.exercise.repArray{
-                cellModel.reps = repArray[indexPath.item]
+            if let rep = exercise.reps {
+                cellModel.reps = rep
+            } else if let rep = self.exercise.repString {
+                cellModel.reps = Int(rep) ?? 0
+            } else if let reps = exercise.repArray {
+                cellModel.reps = reps[indexPath.item]
+            } else if let repArray = self.exercise.repStringArray{
+                cellModel.reps = Int(repArray[indexPath.item]) ?? 0
             }
-            if let weightArray = self.exercise.weightArray{
+            if let weight = self.exercise.weight{
+                cellModel.weight = weight
+            } else if let weightArray = self.exercise.weightArray{
                 cellModel.weight = weightArray[indexPath.item]
             }
-            cellModel.repArray = self.exercise.repArray
             cellModel.weightArray = self.exercise.weightArray
-            
-            
-//            let cellModel = CollectionCellModel(set: indexPath.item + 1,
-//                                                weight: self.exercise.weight,
-//                                                completed: self.exercise.completedSets![indexPath.item],
-//                                                reps: self.exercise.reps,
-//                                                parentTableViewCell: self)
             cell.model = cellModel
             cell.delegate = self.delegate
             cell.completedButton.isUserInteractionEnabled = delegate.returnInteractionEnbabled()

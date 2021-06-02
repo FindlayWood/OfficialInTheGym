@@ -94,7 +94,7 @@ class PublicCreatedWorkoutsViewController: UIViewController, Storyboarded {
         let workouttomove = viewModel.selectedWorkout!
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let workoutView = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
-        workoutView.selectedWorkout = workouttomove
+        DisplayWorkoutViewController.selectedWorkout = workouttomove
         workoutView.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(workoutView, animated: true)
     }

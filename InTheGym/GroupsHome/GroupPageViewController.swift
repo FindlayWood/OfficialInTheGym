@@ -276,12 +276,12 @@ extension GroupPageViewController : TimelineTapProtocol {
         case is TimelineCreatedWorkoutModel:
             let p = post as! TimelineCreatedWorkoutModel
             workoutData = p.createdWorkout
-            displayWorkout.selectedWorkout = workoutData
+            DisplayWorkoutViewController.selectedWorkout = workoutData
             self.navigationController?.pushViewController(displayWorkout, animated: true)
         case is TimelineCompletedWorkoutModel:
             let p = post as! TimelineCompletedWorkoutModel
             workoutData = p.createdWorkout
-            displayWorkout.selectedWorkout = workoutData
+            DisplayWorkoutViewController.selectedWorkout = workoutData
             self.navigationController?.pushViewController(displayWorkout, animated: true)
         default:
             break

@@ -90,8 +90,4 @@ class OriginalCreatedWorkoutTableViewCell: UITableViewCell, DiscussionCellConfig
         self.delegate.workoutTapped(on: self)
     }
     
-    @IBAction func replyTapped(_ sender:UIButton){
-        self.delegate.replyButtonTapped()
-    }
-    
 }

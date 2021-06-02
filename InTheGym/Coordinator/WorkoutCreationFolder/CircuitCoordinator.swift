@@ -25,27 +25,42 @@ class CircuitCoordinator: Coordinator {
 }
 
 extension CircuitCoordinator: CircuitFlow {
-    func addExercise() {
+    
+    func addExercise(_ circuit: exercise) {
         let vc = BodyTypeViewController.instantiate()
         vc.coordinator = self
+        vc.newExercise = circuit
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func bodyTypeSelected(_ exercise: exercise) {
+        let vc = ExerciseViewController.instantiate()
+        vc.coordinator = self
+        vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func setsSelected() {
-        
+    func exerciseSelected(_ exercise: exercise) {
+        let vc = ExerciseSetsViewController.instantiate()
+        vc.coordinator = self
+        vc.newExercise = exercise
+        navigationController.pushViewController(vc, animated: true)
     }
     
-    func bodyTypeSelected(_ type: bodyType) {
-        print(type)
+    func setsSelected(_ exercise: exercise) {
+        let vc = NewRepsViewController.instantiate()
+        vc.coordinator = self
+        vc.newExercise = exercise
+        navigationController.pushViewController(vc, animated: true)
     }
     
-    func exerciseSelected() {
-        
+    func repsSelected(_ exercise: exercise) {
+        CreateCircuitViewController.circuitExercises.append(exercise)
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for controller in viewControllers {
+            if controller.isKind(of: CreateCircuitViewController.self) {
+                navigationController.popToViewController(controller, animated: true)
+                break
+            }
+        }
     }
-    
-    func repsSelected() {
-        
-    }
-    
-    
 }

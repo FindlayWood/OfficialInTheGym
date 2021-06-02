@@ -48,6 +48,26 @@ class FirebaseAuthManager: AuthManagerService {
             }
         }
     }
+    
+    func checkForCurrentUser(completion: @escaping (Result<User, checkingForUserError>) -> Void) {
+        if let currentUser = Auth.auth().currentUser {
+            currentUser.reload { error in
+                if error != nil {
+                    completion(.failure(.reloadError))
+                } else {
+                    switch currentUser.isEmailVerified {
+                    case true:
+                        completion(.success(currentUser))
+                    case false:
+                        completion(.failure(.notVerified(currentUser)))
+                    }
+                }
+            }
+        } else {
+            completion(.failure(.noUser))
+        }
+        
+    }
 }
 
 protocol AuthManagerService {

@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class MakePostViewController: UIViewController, Storyboarded {
+class MakePostViewController: UIViewController, Storyboarded, UITextViewDelegate {
     
     @IBOutlet weak var text:UITextView!
     

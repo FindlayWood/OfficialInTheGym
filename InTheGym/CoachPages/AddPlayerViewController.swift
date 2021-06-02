@@ -152,7 +152,9 @@ class AddPlayerViewController: UIViewController, Storyboarded {
         FirebaseAPI.shared().uploadActivity(with: .RequestSent(user.username!))
         let notification = NotificationNewRequest(from: self.userID, to: user.uid!)
         let uploadNotification = NotificationManager(delegate: notification)
-        uploadNotification.upload()
+        uploadNotification.upload { _ in
+            
+        }
         // posts
 //        let actData = ["time":ServerValue.timestamp(),
 //                       "type":"Request Sent",

@@ -8,8 +8,18 @@
 
 import UIKit
 
+protocol LiveWorkoutAddMethods {
+    func addExercise()
+    func addSet(_ cell: UITableViewCell)
+}
+
 class DisplayPlusCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var plusButton:UIButton!
+    var delegate: LiveWorkoutAddMethods!
+    var parentCell: UITableViewCell!
     
+    @IBOutlet weak var plusButton:UIButton!
+    @IBAction func addSet(_ sender: UIButton){
+        delegate.addSet(parentCell)
+    }
 }

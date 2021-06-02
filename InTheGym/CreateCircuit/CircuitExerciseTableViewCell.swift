@@ -13,17 +13,19 @@ class CircuitExerciseTableViewCell: UITableViewCell {
     @IBOutlet weak var exerciseName:UILabel!
     @IBOutlet weak var setsAndRepsLabel:UILabel!
 
-    func setup(with circuitModel:circuitExercise){
+    func setup(with circuitModel:exercise){
         self.exerciseName.text = circuitModel.exercise
-        self.setsAndRepsLabel.text = "\(circuitModel.sets ?? 0) X \(circuitModel.reps ?? 0)"
+        guard let set = circuitModel.sets else {
+            return
+        }
+        setsAndRepsLabel.text = "\(set) SETS"
+        
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.layer.cornerRadius = 10
-        self.layer.masksToBounds = true
-        self.backgroundColor = .red
+        layer.cornerRadius = 10
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -9,7 +9,11 @@
 import UIKit
 import Firebase
 
-class ExerciseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
+class ExerciseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, Storyboarded {
+    
+    weak var coordinator: CreationDelegate?
+    var newExercise: exercise?
+    var bodyTypeEnum: bodyType?
     
     var fromLiveWorkout:Bool!
     let userID = Auth.auth().currentUser!.uid
@@ -59,6 +63,17 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
             pageNumberLabel.text = "2 of 2"
         }else{
             pageNumberLabel.text = "2 of 6"
+        }
+        
+        switch coordinator{
+        case is RegularWorkoutCoordinator:
+            pageNumberLabel.text = "2 of 6"
+        case is CircuitCoordinator:
+            pageNumberLabel.text = "2 of 4"
+        case is LiveWorkoutCoordinator:
+            pageNumberLabel.text = "2 of 2"
+        default:
+             break
         }
         
     }
@@ -131,8 +146,11 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
             self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
 
         }else{
-            let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-            let SVC = StoryBoard.instantiateViewController(withIdentifier: "ExerciseSetsViewController") as! ExerciseSetsViewController
+            guard let newExercise = newExercise else {return}
+            newExercise.exercise = globalExercise
+            coordinator?.exerciseSelected(newExercise)
+//            let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+//            let SVC = StoryBoard.instantiateViewController(withIdentifier: "ExerciseSetsViewController") as! ExerciseSetsViewController
             
 
             
@@ -142,10 +160,10 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
 //                SVC.exercise = exerciseList[indexPath.row]
 //            }
 
-            SVC.type = globalType
-            SVC.exercise = globalExercise
-            
-            self.navigationController?.pushViewController(SVC, animated: true)
+//            SVC.type = globalType
+//            SVC.exercise = globalExercise
+//
+//            self.navigationController?.pushViewController(SVC, animated: true)
         }
         
         
@@ -153,7 +171,10 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
     
     func loadExercises(bodyType: String){
         exerciseList.removeAll()
-        DBRef.child(bodyType).observe(.childAdded) { (snapshot) in
+        guard let type = newExercise?.type?.rawValue else {
+            return
+        }
+        DBRef.child(type).observe(.childAdded) { (snapshot) in
             if let snap = snapshot.value as? String{
                 self.exerciseList.append(snap)
                 self.tableview.reloadData()

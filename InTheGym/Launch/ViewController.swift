@@ -17,6 +17,8 @@ class ViewController: UIViewController, Storyboarded {
     
     weak var coordinator: MainCoordinator?
     
+    let firstView = FirstScreenView()
+    
     @IBOutlet var middleLabel:UILabel!
     
     @IBOutlet var circleView: UIView!
@@ -32,15 +34,19 @@ class ViewController: UIViewController, Storyboarded {
     let selection = UISelectionFeedbackGenerator()
 
     override func viewDidLoad() {
-        
         selection.prepare()
         
-        let arcCenter = CGPoint(x: view.bounds.size.width / 2, y: circleView.bounds.size.height)
+        firstView.signUpButton.addTarget(self, action: #selector(signUp), for: .touchUpInside)
+        firstView.loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
         
-        let circlePath = UIBezierPath(arcCenter: arcCenter, radius: circleView.bounds.size.height, startAngle: 0.0, endAngle: .pi, clockwise: false)
-        let circleShape = CAShapeLayer()
-        circleShape.path = circlePath.cgPath
-        circleView.layer.mask = circleShape
+        
+        
+//        let arcCenter = CGPoint(x: view.bounds.size.width / 2, y: circleView.bounds.size.height)
+//        
+//        let circlePath = UIBezierPath(arcCenter: arcCenter, radius: circleView.bounds.size.height, startAngle: 0.0, endAngle: .pi, clockwise: false)
+//        let circleShape = CAShapeLayer()
+//        circleShape.path = circlePath.cgPath
+//        circleView.layer.mask = circleShape
         
         //check for internet connection
         monitor.pathUpdateHandler = { path in
@@ -123,6 +129,11 @@ class ViewController: UIViewController, Storyboarded {
         }
     }
     
+    override func loadView() {
+        view = firstView
+    }
+    
+    
     // function when either button is tapped to navigate to the correct page
     @IBAction func tapped(_ sender:UIButton){
         sender.pulsate()
@@ -131,12 +142,12 @@ class ViewController: UIViewController, Storyboarded {
         selection.selectionChanged()
     }
     
-    @IBAction func login(_ sender: UIButton) {
+    @objc func login(_ sender: UIButton) {
         selection.selectionChanged()
         coordinator?.login()
     }
     
-    @IBAction func signUp(_ sender: UIButton) {
+    @objc func signUp(_ sender: UIButton) {
         selection.selectionChanged()
         coordinator?.signUpStepOne()
     }
@@ -165,3 +176,9 @@ class ViewController: UIViewController, Storyboarded {
 
 }
 
+
+enum checkingForUserError: Error {
+    case noUser
+    case reloadError
+    case notVerified(User)
+}

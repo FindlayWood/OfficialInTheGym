@@ -21,7 +21,7 @@ class AddWorkoutSelectionViewController: UIViewController, Storyboarded {
     
     @IBAction func liveAddWorkout(_ sender:UIButton){
         
- 
+        coordinator?.addLiveWorkout()
         
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
 //        let workoutPage = storyboard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController

@@ -13,14 +13,14 @@ import Firebase
 
 class CreateCircuitViewController: UIViewController, Storyboarded {
     
-    weak var coordinator: CircuitFlow?
+    weak var coordinator: CircuitCoordinator?
     
     @IBOutlet weak var titleField:UITextField!
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var completeButton:UIButton!
     
 
-    var circuitExercises : [circuitExercise] = []
+    static var circuitExercises = [exercise]()
     var adapter : CreateCircuitAdapter!
     var delegate = AddWorkoutHomeViewController.self
     
@@ -43,6 +43,7 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
     
     override func viewWillAppear(_ animated: Bool) {
         initUI()
+        tableview.reloadData()
     }
     
     func initUI(){
@@ -60,12 +61,12 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
         let emptyBool : Bool? = titleField.text?.trimmingCharacters(in: .whitespaces).isEmpty
         if emptyBool == true || emptyBool == nil {
             showError()
-        } else if circuitExercises.count == 0 {
+        } else if CreateCircuitViewController.circuitExercises.count == 0 {
             let alert = SCLAlertView()
             alert.showError("Add an Exercise", subTitle: "You must have at least one exercise to add a circuit.", closeButtonTitle: "Ok")
         } else {
             var objectExercises : [[String:AnyObject]] = []
-            for ex in self.circuitExercises{
+            for ex in CreateCircuitViewController.circuitExercises{
                 objectExercises.append(ex.toObject())
             }
             
@@ -91,14 +92,16 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
     
     @IBAction func addExercise(_ sender:UIButton){
         // go to add page
-        if self.circuitExercises.count > 4 {
+        if CreateCircuitViewController.circuitExercises.count > 4 {
             let alert = SCLAlertView()
             alert.showError("Too Many Exercises!", subTitle: "A circuit can have a maximum of 5 exercises.")
         } else {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let nextVC = storyboard.instantiateViewController(withIdentifier: "CircuitExerciseViewController") as! CircuitExerciseViewController
-            nextVC.delegate = self
-            self.navigationController?.pushViewController(nextVC, animated: true)
+            guard let newCircuitExercise = exercise() else {return}
+            coordinator?.addExercise(newCircuitExercise)
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            let nextVC = storyboard.instantiateViewController(withIdentifier: "CircuitExerciseViewController") as! CircuitExerciseViewController
+//            nextVC.delegate = self
+//            self.navigationController?.pushViewController(nextVC, animated: true)
         }
 
     }
@@ -112,18 +115,19 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
 }
 
 extension CreateCircuitViewController: CreateCircuitDelegate{
-    func getData(at indexPath: IndexPath) -> circuitExercise {
-        return circuitExercises[indexPath.section]
+    
+    func getData(at indexPath: IndexPath) -> exercise {
+        return CreateCircuitViewController.circuitExercises[indexPath.section]
     }
     
     func retreiveNumberOfItems() -> Int {
-        return circuitExercises.count
+        return CreateCircuitViewController.circuitExercises.count
     }
 }
 
 extension CreateCircuitViewController : AddingCircuitExerciseDelegate {
     func addedNewCircuitExercise(with circuitModel: circuitExercise) {
-        circuitExercises.append(circuitModel)
+        //CreateCircuitViewController.circuitExercises.append(circuitModel)
         self.tableview.reloadData()
     }
 }

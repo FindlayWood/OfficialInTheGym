@@ -430,7 +430,9 @@ class DiscussionViewController: UIViewController, UITableViewDelegate, UITableVi
                 likesRef.child(postID!).setValue(true)
                 let notification = NotificationLikedPost(from: self.userID!, to: posterID!, postID: postID!)
                 let uploadNotification = NotificationManager(delegate: notification)
-                uploadNotification.upload()
+                uploadNotification.upload { _ in
+                    
+                }
    
             }
         }

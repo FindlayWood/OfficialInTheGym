@@ -11,23 +11,24 @@ import Firebase
 import UIKit
 
 
-class workout: WorkoutDelegate, Completeable{
+class workout: Completeable {
+    
     var title: String!
     var creatorID: String!
     var liveWorkout: Bool!
     var fromDiscover: Bool!
     var workoutID: String?
-    var savedID:String!
-    var createdBy:String?
-    var completed:Bool!
-    var exercises:[WorkoutType]?
-    var numberOfDownloads:Int?
-    var numberOfCompletes:Int?
-    var score:Int?
-    var startTime:TimeInterval?
-    var timeToComplete:String?
-    var workload:Int?
-    var assigned:Bool?
+    var savedID: String!
+    var createdBy: String!
+    var completed: Bool!
+    var exercises: [WorkoutType]?
+    var numberOfDownloads: Int?
+    var numberOfCompletes: Int?
+    var score: Int?
+    var startTime: TimeInterval?
+    var timeToComplete: String?
+    var workload: Int?
+    var assigned: Bool!
     
     init?(snapshot:DataSnapshot){
         guard let snap = snapshot.value as? [String:AnyObject] else {
@@ -40,7 +41,7 @@ class workout: WorkoutDelegate, Completeable{
         self.workoutID = snapshot.key
         self.savedID = snap["savedID"] as? String
         self.createdBy = snap["createdBy"] as? String
-        self.completed = snap["completed"] as? Bool
+        self.completed = snap["completed"] as? Bool ?? false
         self.score = snap["score"] as? Int
         self.startTime = snap["startTime"] as? TimeInterval
         self.workload = snap["workload"] as? Int
@@ -61,7 +62,7 @@ class workout: WorkoutDelegate, Completeable{
     
     init?(object:[String:AnyObject]){
         self.createdBy = object["createdBy"] as? String
-        self.completed = object["completed"] as? Bool
+        self.completed = object["completed"] as? Bool ?? false
         if let data = object["exercises"] as? [[String:AnyObject]]{
             var tempEx : [WorkoutType] = []
             for item in data{
@@ -115,13 +116,15 @@ class workout: WorkoutDelegate, Completeable{
     
 }
 
-struct circuitExercise : Codable{
-    var exercise:String!
-    var reps:Int!
-    var sets:Int!
-    //var type:bodyType!
-    var weight:Double?
-    var completedSets:[Bool]!
+struct circuitExercise {
+    var exercise: String?
+    var reps: Int?
+    var sets: Int?
+    var type: bodyType?
+    var weight: Double?
+    var completedSets: [Bool]?
+    
+    init?(){}
     
     init?(item:[String:AnyObject]){
         self.exercise = item["exercise"] as? String
@@ -145,9 +148,9 @@ struct circuitExercise : Codable{
     }
 }
 
-class circuit : WorkoutType{
-    var exercise:String!
-    var exercises:[circuitExercise]?
+class circuit: WorkoutType{
+    var exercise:String?
+    var exercises:[exercise]?
     var circuitName:String!
     var createdBy:String!
     var creatorID:String!
@@ -170,8 +173,9 @@ class circuit : WorkoutType{
         self.integrated = item["integrated"] as? Bool
         self.newRPE.value = item["rpe"] as? Int
         if let data = item["exercises"] as? [[String:AnyObject]] {
-            self.exercises = data.map {(circuitExercise(item: $0)!)}
+            self.exercises = data.map {(InTheGym.exercise(exercises: $0)!)}
         }
+        
         
     }
     
@@ -202,12 +206,17 @@ class circuit : WorkoutType{
         var exerciseNames:[String] = []
         var circuitTableModels: [CircuitTableModel] = []
         var exerciseCompletions : [[Bool]] = []
-        for exercise in exercises!{
-            reps.append(exercise.reps)
-            sets.append(exercise.sets)
-            originalSets.append(exercise.sets)
-            exerciseNames.append(exercise.exercise)
-            exerciseCompletions.append(exercise.completedSets)
+        for (index, exercise) in exercises!.enumerated(){
+            if let repArray = exercise.repArray {
+                reps.append(repArray[index])
+            } else {
+                reps.append(exercise.reps!)
+            }
+            //reps.append(exercise.reps!)
+            sets.append(exercise.sets!)
+            originalSets.append(exercise.sets!)
+            exerciseNames.append(exercise.exercise!)
+            exerciseCompletions.append(exercise.completedSets!)
         }
         
         while sets.reduce(0,+) != 0 {
@@ -251,7 +260,17 @@ struct CircuitTableModel{
 }
 
 protocol WorkoutType {
-    var exercise:String! {get}
+    var exercise: String? {get set}
+    func toObject() -> [String:AnyObject]
+}
+
+protocol WorkoutAddable {
+    var exercise: String? {get set}
+    var reps: Int? {get set}
+    var repArray: [Int]? {get set}
+    var sets: Int? {get set}
+    var type: bodyType? {get set}
+    var completedSets: [Bool]? {get set}
     func toObject() -> [String:AnyObject]
 }
 
@@ -259,22 +278,30 @@ protocol WorkoutType {
 
 class exercise : WorkoutType{
     
-    var exercise:String!
-    var reps:String?
-    var sets:String?
-    var type:bodyType?
-    var weight:String?
-    var repArray:[String]?
-    var weightArray:[String]?
-    var completedSets:[Bool]?
-    var rpe:String?
-    var note:String?
+    var exercise: String?
+    var reps: Int?
+    var repString: String?
+    var sets: Int?
+    var setString: String?
+    var type: bodyType?
+    var weight: String?
+    var repStringArray: [String]?
+    var repArray: [Int]?
+    var weightArray: [String]?
+    var completedSets: [Bool]?
+    var rpe: String?
+    var note: String?
+    
+    init?(){}
     
     init?(exercises: [String:AnyObject]){
         self.exercise = exercises["exercise"] as? String
-        self.reps = exercises["reps"] as? String
-        self.repArray = exercises["reps"] as? [String]
-        self.sets = exercises["sets"] as? String
+        self.reps = exercises["reps"] as? Int
+        self.repArray = exercises["reps"] as? [Int]
+        self.repString = exercises["reps"] as? String
+        self.repStringArray = exercises["reps"] as? [String]
+        self.sets = exercises["sets"] as? Int
+        self.setString = exercises["sets"] as? String
         self.type = TransformWorkout.stringToBodyType(from: exercises["type"] as? String ?? "UB")
         self.weight = exercises["weight"] as? String
         self.weightArray = exercises["weight"] as? [String]
@@ -285,7 +312,6 @@ class exercise : WorkoutType{
     
     func toObject() -> [String:AnyObject]{
         var object = ["exercise": exercise!,
-                      "sets": sets!,
                       "type": TransformWorkout.bodyTypeToString(from: type!),
                       "completedSets": completedSets!,] as [String : AnyObject]
         
@@ -303,11 +329,26 @@ class exercise : WorkoutType{
             object["note"] = note! as AnyObject
         }
         
-        if let reps = reps{
+        if let reps = reps {
             object["reps"] = reps as AnyObject
         }
         if let repArray = repArray{
             object["reps"] = repArray as AnyObject
+        }
+        if let repString = repString {
+            object["reps"] = repString as AnyObject
+        }
+        
+        if let repStringArray = repStringArray {
+            object["reps"] = repStringArray as AnyObject
+        }
+        
+        if let set = sets {
+            object["sets"] = set as AnyObject
+        }
+        
+        if let set = setString {
+            object["sets"] = set as AnyObject
         }
         
         
@@ -316,15 +357,15 @@ class exercise : WorkoutType{
     
 }
 
-enum bodyType{
-        case UB
-        case LB
-        case CO
-        case CA
+enum bodyType: String{
+        case UB = "Upper Body"
+        case LB = "Lower Body"
+        case CO = "Core"
+        case CA = "Cardio"
     }
 
 
-struct liveWorkout : WorkoutDelegate, Completeable {
+class liveWorkout : Completeable {
     
     var title: String!
     var creatorID: String!
@@ -332,31 +373,60 @@ struct liveWorkout : WorkoutDelegate, Completeable {
     var exercises: [WorkoutType]?
     var completed: Bool!
     var liveWorkout : Bool!
-    var createdBy:String!
-    var score:Int?
-    var startTime:TimeInterval!
-    var timeToComplete:String?
-    var workload:Int?
+    var createdBy: String!
+    var score: Int?
+    var startTime: TimeInterval?
+    var timeToComplete: String?
+    var workload: Int?
     var fromDiscover:Bool!
     var workoutID: String?
     var assigned: Bool!
     
+    init?(snapshot: DataSnapshot) {
+        guard let snap = snapshot.value as? [String:AnyObject] else {
+            return
+        }
+        self.title = snap["title"] as? String
+        self.creatorID = snap["creatorID"] as? String
+        self.liveWorkout = true
+        self.fromDiscover = snap["fromDiscover"] as? Bool ?? false
+        self.workoutID = snapshot.key
+        self.createdBy = snap["createdBy"] as? String
+        self.completed = snap["completed"] as? Bool ?? false
+        self.score = snap["score"] as? Int
+        self.startTime = snap["startTime"] as? TimeInterval
+        self.workload = snap["workload"] as? Int
+        self.assigned = false
+        if let data = snap["exercises"] as? [[String:AnyObject]]{
+            var tempEx : [WorkoutType] = []
+            for item in data{
+                if let _ = item["circuit"] as? Bool{
+                    tempEx.append(circuit(item: item)!)
+                } else {
+                    tempEx.append(exercise(exercises: item)!)
+                }
+            }
+            self.exercises = tempEx
+        }
+    }
+    
     init?(data : [String:AnyObject]){
         self.title = data["title"] as? String
         self.creatorID = data["creatorID"] as? String
-        self.completed = false
+        self.workoutID = data["workoutID"] as? String
+        self.completed = data["completed"] as? Bool ?? false
         self.liveWorkout = true
         self.createdBy = data["createdBy"] as? String
         self.startTime = data["startTime"] as? TimeInterval
         self.fromDiscover = false
         self.assigned = false
+        self.exercises = [WorkoutType]()
     }
     
     func toObject() -> [String : AnyObject] {
         var object = ["title":title!,
                       "creatorID":creatorID!,
                       "createdBy":createdBy!,
-                      "savedID":savedID!,
                       "completed":completed!,
                       "liveWorkout":true,
                       "fromDiscover":false,
@@ -377,6 +447,7 @@ struct liveWorkout : WorkoutDelegate, Completeable {
 
 struct discoverWorkout : WorkoutDelegate {
     
+    var assigned: Bool?
     var title: String!
     var creatorID: String!
     var savedID:String!
@@ -402,7 +473,7 @@ struct discoverWorkout : WorkoutDelegate {
         self.createdBy = snap["createdBy"] as? String
         self.savedID = snapshot.key
         self.timeToComplete = snap["timeToComplete"] as? String
-        self.completed = snap["completed"] as? Bool
+        self.completed = snap["completed"] as? Bool ?? false
         self.liveWorkout = snap["liveWorkout"] as? Bool ?? false
         self.fromDiscover = true
         self.numberOfDownloads = snap["NumberOfDownloads"] as? Int
@@ -421,7 +492,7 @@ struct discoverWorkout : WorkoutDelegate {
         self.createdBy = object["createdBy"] as? String
         self.savedID = object["savedID"] as? String
         self.timeToComplete = object["timeToComplete"] as? String
-        self.completed = object["completed"] as? Bool
+        self.completed = object["completed"] as? Bool ?? false
         self.liveWorkout = object["liveWorkout"] as? Bool ?? false
         self.fromDiscover = true
         self.numberOfDownloads = object["NumberOfDownloads"] as? Int

@@ -160,7 +160,9 @@ class RequestsViewModel{
         FirebaseAPI.shared().uploadActivity(with: .RequestAccepted(ViewController.username!, user.uid!))
         let notification = NotificationAcceptedRequest(from: self.userID, to: user.uid!)
         let uploadNotification = NotificationManager(delegate: notification)
-        uploadNotification.upload()
+        uploadNotification.upload { _ in
+            
+        }
     }
     
     func declinedRequest(from user:Users, at index:IndexPath){

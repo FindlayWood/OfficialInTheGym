@@ -50,7 +50,7 @@ class WorkoutCompletedViewModel {
     
     
     // MARK: - Discover Stats
-    func updateDiscoverStats(for workout: workout, with workoutRPE:Int, and time: Int){
+    func updateDiscoverStats(for workout: Completeable, with workoutRPE:Int, and time: Int){
         let completedRef = Database.database().reference().child("SavedWorkouts").child(workout.savedID)
         
         completedRef.runTransactionBlock { (currentData) -> TransactionResult in
@@ -76,7 +76,7 @@ class WorkoutCompletedViewModel {
     }
     
     // MARK: - Update self stats
-    func updateSelfScores(for workout: workout, with rpe:Int) {
+    func updateSelfScores(for workout: Completeable, with rpe:Int) {
         let scoreInfo = [workout.title!:rpe]
         let scoresRef = Database.database().reference().child("Scores")
         scoresRef.child(userID).childByAutoId().setValue(scoreInfo) { (error, snapshot) in
@@ -104,7 +104,7 @@ class WorkoutCompletedViewModel {
         }
     }
     
-    func updateWorkload(with workout:workout, workload:Int, endTime : Double, time: Int){
+    func updateWorkload(with workout: Completeable, workload:Int, endTime : Double, time: Int){
         
         
         let workloadData = ["timeToComplete": time,
@@ -117,7 +117,7 @@ class WorkoutCompletedViewModel {
     }
     
     // MARK: - Update Coach stats
-    func updateCoachScores(for workout: workout, with rpe:Int, to coach: String){
+    func updateCoachScores(for workout: WorkoutDelegate, with rpe:Int, to coach: String){
         let scoreInfo = [workout.title!:rpe]
         let scoresRef = Database.database().reference().child("Scores")
         scoresRef.child(coach).childByAutoId().setValue(scoreInfo) { (error, snapshot) in
@@ -127,7 +127,7 @@ class WorkoutCompletedViewModel {
         }
     }
     
-    func uploadActivityToCoaches(for workout: workout, with rpe:Int){
+    func uploadActivityToCoaches(for workout: WorkoutDelegate, with rpe:Int){
         
         LoadFollowers.returnCoaches(for: userID) { (coaches) in
             let actData = ["time":ServerValue.timestamp(),
@@ -147,7 +147,7 @@ class WorkoutCompletedViewModel {
     
     
     // MARK: - Post
-    func uploadPost(with workout: workout, privacy isPrivate: Bool){
+    func uploadPost(with workout: Completeable, privacy isPrivate: Bool){
         
         let postRef = Database.database().reference().child("Posts").childByAutoId()
         let postSelfReferences = Database.database().reference().child("PostSelfReferences").child(self.userID)
@@ -197,12 +197,12 @@ class WorkoutCompletedViewModel {
     }
     
     // MARK: - Complete Workout
-    func completeWorkout(for workout:workout, with time:Int){
+    func completeWorkout(for workout: Completeable, with time:Int){
         let ref = Database.database().reference().child("Workouts").child(userID).child(workout.workoutID!)
         ref.runTransactionBlock { (currentData) -> TransactionResult in
             if var workoutData = currentData.value as? [String:AnyObject] {
                 workoutData["completed"] = true as AnyObject
-                workoutData["score"] = workout.score?.description as AnyObject
+                workoutData["score"] = workout.score!.description as AnyObject
                 workoutData["timeToComplete"] = time as AnyObject
                 workoutData["workload"] = workout.workload as AnyObject
                 currentData.value = workoutData

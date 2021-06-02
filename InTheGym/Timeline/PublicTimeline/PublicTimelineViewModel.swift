@@ -213,7 +213,9 @@ class PublicTimelineViewModel {
             }
             let notification = NotificationFollowed(from: self.userID, to: self.user.uid!)
             let uploadNotification = NotificationManager(delegate: notification)
-            uploadNotification.upload()
+            uploadNotification.upload { _ in
+                
+            }
         }
     }
     
@@ -248,7 +250,9 @@ class PublicTimelineViewModel {
         if self.userID != posterID{
             let notification = NotificationLikedPost(from: self.userID, to: posterID, postID: postID)
             let uploadNotification = NotificationManager(delegate: notification)
-            uploadNotification.upload()
+            uploadNotification.upload { _ in
+                
+            }
         }
 
     }

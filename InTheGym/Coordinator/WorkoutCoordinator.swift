@@ -9,6 +9,15 @@
 import Foundation
 import UIKit
 
+protocol WorkoutCoordinatorFlow: WorkoutDisplayCoordinator {
+    func showUser(with user: Users)
+    func showCircuit()
+}
+
+protocol WorkoutDisplayCoordinator: Coordinator {
+    func showCompletedPage()
+}
+
 /// Child Coordinator to handle the flow when a workout is displayed
 class WorkoutCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
@@ -24,7 +33,7 @@ class WorkoutCoordinator: NSObject, Coordinator {
     func start() {
         let vc = DisplayWorkoutViewController.instantiate()
         vc.coordinator = self
-        vc.selectedWorkout = workout
+        DisplayWorkoutViewController.selectedWorkout = workout
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
@@ -42,7 +51,7 @@ class WorkoutCoordinator: NSObject, Coordinator {
 
 
 //MARK: - Flow Methods
-extension WorkoutCoordinator {
+extension WorkoutCoordinator: WorkoutCoordinatorFlow {
     func showCircuit() {
         let vc = DisplayCircuitViewController.instantiate()
         navigationController.pushViewController(vc, animated: true)

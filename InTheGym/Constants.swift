@@ -11,7 +11,7 @@ import UIKit
 
 class Constants {
     
-    var appVersion = "4.1.2"
+    var appVersion = "4.2"
     
     static var bannedUsernames = ["Admin", "admin", "InTheGym", "OfficialInTheGym", "inthegym", "INTHEGYM"]
     
@@ -39,5 +39,7 @@ class Constants {
     static let instagramLink = "https://instagram.com/inthegym_official"
     
     static let firstPostID = "-MYv7A7Im-M3O9VYJKs"
+    
+    static let screenSize = UIScreen.main.bounds
     
 }

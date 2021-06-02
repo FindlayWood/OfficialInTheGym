@@ -13,6 +13,8 @@ protocol WorkoutsFlow {
     func showWorkout(workout: WorkoutDelegate)
     func addNewWorkout()
     func regularWorkout()
+    func addLiveWorkout()
+    func startLiveWorkout(_ model: liveWorkout)
 }
 
 class WorkoutsCoordinator: NSObject, Coordinator {
@@ -58,6 +60,18 @@ extension WorkoutsCoordinator: WorkoutsFlow {
     
     func regularWorkout() {
         let child = RegularWorkoutCoordinator(navigationController: navigationController)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
+    func addLiveWorkout() {
+        let vc = PreLiveWorkoutViewController.instantiate()
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func startLiveWorkout(_ model: liveWorkout) {
+        let child = LiveWorkoutCoordinator(navigationController: navigationController, model: model)
         childCoordinators.append(child)
         child.start()
     }

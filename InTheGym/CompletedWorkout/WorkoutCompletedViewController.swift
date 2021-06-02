@@ -20,7 +20,7 @@ class WorkoutCompletedViewController: UIViewController, Storyboarded {
     
     let haptic = UINotificationFeedbackGenerator()
     
-    var workout : workout!
+    var workout : Completeable!
     
     var secondsToComplete : Int!
     var timeString : String!

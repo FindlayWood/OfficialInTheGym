@@ -16,7 +16,7 @@ import EmptyDataSet_Swift
 
 class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITableViewDelegate, EmptyDataSetSource, EmptyDataSetDelegate, Storyboarded {
     
-    weak var coordinator: CreationDelegate?
+    weak var coordinator: RegularWorkoutCoordinator?
     
     //outlets to text field and tableview
     @IBOutlet weak var titleField:UITextField!
@@ -196,9 +196,10 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     }
     
     @IBAction func addExercise(_ sender: UIButton) {
-        //coordinator?.addExercise()
-        let vc = BodyTypeViewController.instantiate()
-        navigationController?.pushViewController(vc, animated: true)
+        guard let newExercise = exercise() else { return }
+        coordinator?.addExercise(newExercise)
+//        let vc = BodyTypeViewController.instantiate()
+//        navigationController?.pushViewController(vc, animated: true)
     }
     
     func shadowView(to view:UIView){

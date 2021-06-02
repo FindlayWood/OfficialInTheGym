@@ -9,7 +9,10 @@
 import Foundation
 import UIKit
 
+
 class SavedWorkoutBottomView: UIView {
+    
+    private var originPoint: CGPoint?
     
     var parentView:UIView!
     var newHeightAnchor:NSLayoutConstraint?
@@ -91,6 +94,7 @@ class SavedWorkoutBottomView: UIView {
         super.init(frame: CGRect.zero)
         tableview.delegate = self
         tableview.dataSource = self
+        self.originPoint = frame.origin
         setup()
     }
     
@@ -107,6 +111,9 @@ class SavedWorkoutBottomView: UIView {
         self.bottomAnchor.constraint(equalTo: self.parentView.bottomAnchor).isActive = true
         self.leadingAnchor.constraint(equalTo: self.parentView.leadingAnchor).isActive = true
         self.trailingAnchor.constraint(equalTo: self.parentView.trailingAnchor).isActive = true
+        
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureAction(sender:)))
+        addGestureRecognizer(panGesture)
         
         let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(more))
         swipeUpGesture.direction = .up
@@ -146,6 +153,37 @@ class SavedWorkoutBottomView: UIView {
         tableview.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         
 
+    }
+    
+    private func snapToState(_ state: bottomViewState) {
+        switch state {
+        case .normal:
+            print("snap to normal")
+        case .expanded:
+            print("snap to expanded")
+        }
+    }
+    
+    private func showTableView() {
+        tableviewTopAnchor?.isActive = false
+        tableviewTopAnchor = tableview.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: 20)
+        tableviewTopAnchor?.isActive = true
+        layoutIfNeeded()
+    }
+    
+    private func hideTableView() {
+        tableviewTopAnchor?.isActive = false
+        tableviewTopAnchor = tableview.topAnchor.constraint(equalTo: self.bottomAnchor)
+        tableviewTopAnchor?.isActive = true
+        layoutIfNeeded()
+    }
+    
+    @objc func panGestureAction(sender: UIPanGestureRecognizer) {
+        let translation = sender.translation(in: self)
+        
+        // not allowing the user to drag downwards
+        guard translation.y <= 0 else {return}
+        
     }
     
     @objc func more(){

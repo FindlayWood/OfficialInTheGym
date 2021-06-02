@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-extension UIViewController: UITextFieldDelegate, UITextViewDelegate {
+extension UIViewController: UITextFieldDelegate {
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false

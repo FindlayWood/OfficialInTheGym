@@ -153,7 +153,9 @@ class GroupPageViewModel {
         if self.userID != posterID{
             let notification = NotificationGroupLikedPost(from: self.userID, to: posterID, postID: postID, groupID: groupID)
             let uploadNotification = NotificationManager(delegate: notification)
-            uploadNotification.upload()
+            uploadNotification.upload { _ in
+                
+            }
         }
 
     }

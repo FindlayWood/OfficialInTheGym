@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class FeedbackViewController: UIViewController {
+class FeedbackViewController: UIViewController, UITextViewDelegate {
     
     //outlet to text field for sending feedback
     @IBOutlet var feedback:UITextView!

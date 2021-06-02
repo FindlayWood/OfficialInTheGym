@@ -126,7 +126,9 @@ class CreatedWorkoutUploadViewModel {
                         }
                         let notification = NotificationNewWorkout(from: self.userID, to: memberID, workoutID: workout.workoutID!)
                         let uploadNotification = NotificationManager(delegate: notification)
-                        uploadNotification.upload()
+                        uploadNotification.upload { _ in
+                            
+                        }
                         // upload to each member
                     }
                 }
@@ -146,7 +148,9 @@ class CreatedWorkoutUploadViewModel {
             }
             let notification = NotificationNewWorkout(from: self.userID, to: createdFor!, workoutID: workout.workoutID!)
             let uploadNotification = NotificationManager(delegate: notification)
-            uploadNotification.upload()
+            uploadNotification.upload { _ in
+                
+            }
             uploadedWorkout?()
  
         } else {

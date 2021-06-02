@@ -13,6 +13,7 @@ class DiscussionViewModel{
     
     var reloadTableViewClosure: (() -> ())?
     var updateLoadingStatusClosure: (() -> ())?
+    var replyAddedClosure: (() -> ())?
     
     let userID = Auth.auth().currentUser!.uid
     let postReplyRef : DatabaseReference!
@@ -109,7 +110,9 @@ class DiscussionViewModel{
         if self.userID != posterID{
             let notification = NotificationLikedPost(from: self.userID, to: posterID, postID: postID)
             let uploadNotification = NotificationManager(delegate: notification)
-            uploadNotification.upload()
+            uploadNotification.upload { _ in
+                
+            }
         }
 
     }
@@ -125,5 +128,23 @@ class DiscussionViewModel{
             }
         }
     }
+}
+
+//MARK: - Adding Comments
+extension DiscussionViewModel {
     
+    func addReply(_ reply: String) {
+        FirebasePostAPI.shared.postReply(to: self.originalPost, with: reply) { result in
+            switch result {
+            case .success(_):
+                self.replyAddedClosure?()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func addGroupReply(_ reply: String) {
+        print("adding group reply \(reply)")
+    }
 }

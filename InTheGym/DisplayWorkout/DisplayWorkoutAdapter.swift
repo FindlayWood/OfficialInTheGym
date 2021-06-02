@@ -25,10 +25,11 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if delegate.isLive() && indexPath.section == delegate.retreiveNumberOfItems(){
+        if delegate.isLive() && indexPath.section + 1 == delegate.retreiveNumberOfSections(){
             
             // here will go the plus cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "DisplayPlusTableView", for: indexPath) as! DisplayPlusTableViewCell
+            cell.delegate = self.delegate
             return cell
             
         }else{
@@ -39,23 +40,6 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
                 cell.setup(with: rowModel)
             }
             return cell
-            
-            
-            
-            // here will go the normal cell
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "DisplayWorkoutCell", for: indexPath) as! DisplayWorkoutTableViewCell
-//
-//            cell.exercise = delegate.getData(at: indexPath)
-//            cell.isLive = delegate.isLive()
-//            cell.collection.reloadData()
-//            cell.collection.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-//            cell.collection.scrollToItem(at: IndexPath(item: 0, section: 0), at: .left, animated: false)
-//            cell.delegate = self.delegate as NSObject as? WorkoutTableCellTapDelegate
-//            cell.cellDelegate = self.delegate
-//            cell.rpeButton.isUserInteractionEnabled = delegate.returnInteractionEnbabled()
-//            cell.noteButton.isUserInteractionEnabled = true
-//
-//            return cell
         }
     }
     

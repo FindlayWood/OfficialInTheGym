@@ -10,7 +10,9 @@ import UIKit
 import Firebase
 import SCLAlertView
 
-class PreLiveWorkoutViewController: UIViewController {
+class PreLiveWorkoutViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator: WorkoutsCoordinator?
     
     @IBOutlet weak var titlefield:UITextField!
     
@@ -43,23 +45,30 @@ class PreLiveWorkoutViewController: UIViewController {
                                "startTime":Date.timeIntervalSinceReferenceDate,
                                "liveWorkout": true,
                                "creatorID":self.userID,
+                               "workoutID":workoutID,
                                "fromDiscover":false,
-                               "assigned":false] as [String : Any]
+                               "assigned":false] as [String : AnyObject]
             workoutRef.setValue(workoutData)
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let workoutPage = storyboard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
-            workoutPage.liveAdd = true
-            workoutPage.fromDiscover = false
-            workoutPage.workoutID = workoutID
-            workoutPage.titleString = workoutTitle
-            workoutPage.playerID = self.userID
-            workoutPage.username = ViewController.username
-            workoutPage.creatorUsername = ViewController.username
-            workoutPage.creatorID = self.userID
-            workoutPage.hidesBottomBarWhenPushed = true
-            WorkoutDetailViewController.exercises.removeAll()
-            titlefield.text = ""
-            navigationController?.pushViewController(workoutPage, animated: true)
+            guard let workoutModel = liveWorkout(data: workoutData) else {return}
+            coordinator?.startLiveWorkout(workoutModel)
+//            let vc = DisplayWorkoutViewController.instantiate()
+//            vc.selectedWorkout = workoutModel
+//            vc.hidesBottomBarWhenPushed = true
+//            navigationController?.pushViewController(vc, animated: true)
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            let workoutPage = storyboard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
+//            workoutPage.liveAdd = true
+//            workoutPage.fromDiscover = false
+//            workoutPage.workoutID = workoutID
+//            workoutPage.titleString = workoutTitle
+//            workoutPage.playerID = self.userID
+//            workoutPage.username = ViewController.username
+//            workoutPage.creatorUsername = ViewController.username
+//            workoutPage.creatorID = self.userID
+//            workoutPage.hidesBottomBarWhenPushed = true
+//            WorkoutDetailViewController.exercises.removeAll()
+//            titlefield.text = ""
+//            navigationController?.pushViewController(workoutPage, animated: true)
         }
         
     }

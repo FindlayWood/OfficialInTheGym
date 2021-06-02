@@ -222,7 +222,7 @@ class ViewWorkoutViewController: UIViewController, UITableViewDelegate, UITableV
         let ref = Database.database().reference().child("Workouts").child(self.playerID).child(workoutID)
         ref.observeSingleEvent(of: .value) { (snapshot) in
             let workoutToDisplay = workout(snapshot: snapshot)
-            DisplayVC.selectedWorkout = workoutToDisplay
+            DisplayWorkoutViewController.selectedWorkout = workoutToDisplay
             self.navigationController?.pushViewController(DisplayVC, animated: true)
         }
     }

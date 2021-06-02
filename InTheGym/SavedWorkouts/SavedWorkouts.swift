@@ -13,21 +13,21 @@ import Firebase
 protocol savedWorkoutDelegate: WorkoutDelegate {
     var title:String! { get }
     var exercises:[WorkoutType]? { get set}
-    var createdBy:String? { get }
     var isPrivate:Bool? { get }
 }
 
-struct publicSavedWorkout : savedWorkoutDelegate{
+struct publicSavedWorkout : savedWorkoutDelegate {
+    
     var title: String!
     var creatorID: String!
-    var completed: Bool!
+    var completed: Bool
     var liveWorkout: Bool!
     var fromDiscover: Bool!
     var isPrivate: Bool?
     var workoutID: String?
     var savedID:String!
     var exercises:[WorkoutType]?
-    var createdBy:String?
+    var createdBy: String!
     var views:Int?
     var completes:Int?
     var downloads:Int?
@@ -86,20 +86,22 @@ struct publicSavedWorkout : savedWorkoutDelegate{
     
 }
 
-struct privateSavedWorkout : savedWorkoutDelegate{
+struct privateSavedWorkout : savedWorkoutDelegate {
+    
     var title: String!
     var creatorID: String!
-    var completed: Bool!
+    var completed: Bool
     var liveWorkout: Bool!
     var fromDiscover: Bool!
     var workoutID: String?
     var savedID:String!
     var exercises: [WorkoutType]?
-    var createdBy: String?
+    var createdBy: String!
     var isPrivate: Bool?
     var completes: Int?
     var totalTime: Int?
-    var totalScore:Int?
+    var totalScore: Int?
+    var assigned: Bool!
     
     
     

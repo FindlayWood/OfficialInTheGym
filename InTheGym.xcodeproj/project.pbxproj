@@ -23,17 +23,28 @@
 		7416CCC2264EC9690043B1C2 /* RegularWorkoutCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416CCC1264EC9690043B1C2 /* RegularWorkoutCoordinator.swift */; };
 		7416CCC5264ED2230043B1C2 /* LiveWorkoutCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416CCC4264ED2230043B1C2 /* LiveWorkoutCoordinator.swift */; };
 		7416CCC7264ED2A40043B1C2 /* CircuitCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416CCC6264ED2A40043B1C2 /* CircuitCoordinator.swift */; };
+		7416CCC92653F8F70043B1C2 /* SetsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416CCC82653F8F70043B1C2 /* SetsCell.swift */; };
+		7416CCCB265467DE0043B1C2 /* RepsTopCollectionAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416CCCA265467DE0043B1C2 /* RepsTopCollectionAdapter.swift */; };
+		7416CCCD265468E10043B1C2 /* RepsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416CCCC265468E10043B1C2 /* RepsCell.swift */; };
+		7416CCCF26546F200043B1C2 /* RepsBottomCollectionAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416CCCE26546F200043B1C2 /* RepsBottomCollectionAdapter.swift */; };
+		7416CCD12655897B0043B1C2 /* RepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416CCD02655897B0043B1C2 /* RepsView.swift */; };
+		7416CCD3265817540043B1C2 /* FirebaseLiveWorkoutUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416CCD2265817540043B1C2 /* FirebaseLiveWorkoutUpdater.swift */; };
+		7416CCD6265C04560043B1C2 /* FirstScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416CCD5265C04560043B1C2 /* FirstScreenView.swift */; };
 		74172204245B41230013EAC8 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74172203245B41230013EAC8 /* FeedbackViewController.swift */; };
 		74172206245B413B0013EAC8 /* AppInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74172205245B413B0013EAC8 /* AppInfoViewController.swift */; };
 		741B21FA2635A3F700B1F5B3 /* TimelineEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741B21F92635A3F700B1F5B3 /* TimelineEndpoints.swift */; };
 		741B22022636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741B22012636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift */; };
 		741B22072637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741B22062637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift */; };
 		741E07D72630E18E008B93C9 /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741E07D62630E18E008B93C9 /* ContactUsViewController.swift */; };
+		741E45D2265D53FA00519F82 /* WorkoutBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741E45D1265D53FA00519F82 /* WorkoutBottomView.swift */; };
+		741E45D4265EB4AA00519F82 /* BottomViewPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741E45D3265EB4AA00519F82 /* BottomViewPresentationController.swift */; };
 		741E628E263C503000D51BC7 /* AppInformationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741E628C263C503000D51BC7 /* AppInformationTableViewCell.swift */; };
 		741E628F263C503000D51BC7 /* AppInformationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 741E628D263C503000D51BC7 /* AppInformationTableViewCell.xib */; };
 		741E62B5263C63D700D51BC7 /* AppInformationTwoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741E62B3263C63D700D51BC7 /* AppInformationTwoTableViewCell.swift */; };
 		741E62B6263C63D700D51BC7 /* AppInformationTwoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 741E62B4263C63D700D51BC7 /* AppInformationTwoTableViewCell.xib */; };
 		741E6E26264E9710001778A2 /* FollowingAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741E6E25264E9710001778A2 /* FollowingAPIService.swift */; };
+		741FB1B426603C350039EB29 /* FlashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1B326603C350039EB29 /* FlashView.swift */; };
+		741FB1B62666A5520039EB29 /* FirebasePostAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1B52666A5520039EB29 /* FirebasePostAPI.swift */; };
 		74220899256FFE2C00B42563 /* LaunchPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74220898256FFE2C00B42563 /* LaunchPageViewController.swift */; };
 		74221B3B2642D86800D05527 /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74221B3A2642D86800D05527 /* TabBarCoordinator.swift */; };
 		74221B3D2642D9ED00D05527 /* TimelineCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74221B3C2642D9ED00D05527 /* TimelineCoordinator.swift */; };
@@ -353,17 +364,28 @@
 		7416CCC1264EC9690043B1C2 /* RegularWorkoutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegularWorkoutCoordinator.swift; sourceTree = "<group>"; };
 		7416CCC4264ED2230043B1C2 /* LiveWorkoutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWorkoutCoordinator.swift; sourceTree = "<group>"; };
 		7416CCC6264ED2A40043B1C2 /* CircuitCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircuitCoordinator.swift; sourceTree = "<group>"; };
+		7416CCC82653F8F70043B1C2 /* SetsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsCell.swift; sourceTree = "<group>"; };
+		7416CCCA265467DE0043B1C2 /* RepsTopCollectionAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsTopCollectionAdapter.swift; sourceTree = "<group>"; };
+		7416CCCC265468E10043B1C2 /* RepsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsCell.swift; sourceTree = "<group>"; };
+		7416CCCE26546F200043B1C2 /* RepsBottomCollectionAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsBottomCollectionAdapter.swift; sourceTree = "<group>"; };
+		7416CCD02655897B0043B1C2 /* RepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepsView.swift; sourceTree = "<group>"; };
+		7416CCD2265817540043B1C2 /* FirebaseLiveWorkoutUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLiveWorkoutUpdater.swift; sourceTree = "<group>"; };
+		7416CCD5265C04560043B1C2 /* FirstScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstScreenView.swift; sourceTree = "<group>"; };
 		74172203245B41230013EAC8 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		74172205245B413B0013EAC8 /* AppInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
 		741B21F92635A3F700B1F5B3 /* TimelineEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineEndpoints.swift; sourceTree = "<group>"; };
 		741B22012636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCreatedWorkoutsViewModel.swift; sourceTree = "<group>"; };
 		741B22062637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCreatedWorkoutsViewController.swift; sourceTree = "<group>"; };
 		741E07D62630E18E008B93C9 /* ContactUsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
+		741E45D1265D53FA00519F82 /* WorkoutBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutBottomView.swift; sourceTree = "<group>"; };
+		741E45D3265EB4AA00519F82 /* BottomViewPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomViewPresentationController.swift; sourceTree = "<group>"; };
 		741E628C263C503000D51BC7 /* AppInformationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInformationTableViewCell.swift; sourceTree = "<group>"; };
 		741E628D263C503000D51BC7 /* AppInformationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AppInformationTableViewCell.xib; sourceTree = "<group>"; };
 		741E62B3263C63D700D51BC7 /* AppInformationTwoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInformationTwoTableViewCell.swift; sourceTree = "<group>"; };
 		741E62B4263C63D700D51BC7 /* AppInformationTwoTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AppInformationTwoTableViewCell.xib; sourceTree = "<group>"; };
 		741E6E25264E9710001778A2 /* FollowingAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingAPIService.swift; sourceTree = "<group>"; };
+		741FB1B326603C350039EB29 /* FlashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashView.swift; sourceTree = "<group>"; };
+		741FB1B52666A5520039EB29 /* FirebasePostAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebasePostAPI.swift; sourceTree = "<group>"; };
 		74220898256FFE2C00B42563 /* LaunchPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchPageViewController.swift; sourceTree = "<group>"; };
 		74221B3A2642D86800D05527 /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
 		74221B3C2642D9ED00D05527 /* TimelineCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineCoordinator.swift; sourceTree = "<group>"; };
@@ -744,6 +766,18 @@
 			path = WorkoutCreationFolder;
 			sourceTree = "<group>";
 		};
+		7416CCD4265C04310043B1C2 /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				74220898256FFE2C00B42563 /* LaunchPageViewController.swift */,
+				745D0E7922A17E26007670E3 /* LoginViewController.swift */,
+				745DA4E02562FADE00FDA053 /* PlayerOrCoachViewController.swift */,
+				7479A90A229F2B4C00D39E2E /* ViewController.swift */,
+				7416CCD5265C04560043B1C2 /* FirstScreenView.swift */,
+			);
+			path = Launch;
+			sourceTree = "<group>";
+		};
 		74226E1926373FDA0074E616 /* CreateCircuit */ = {
 			isa = PBXGroup;
 			children = (
@@ -886,6 +920,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				7416CCD4265C04310043B1C2 /* Launch */,
 				7459BD622641F6370005C530 /* Coordinator */,
 				7459BD5F2641A8CA0005C530 /* Utilities */,
 				74EC438F263A0EDB00D81E5B /* DisplayCircuit */,
@@ -914,16 +949,12 @@
 				74F546F425ED4D0300C1A6A9 /* Messages */,
 				7445503A256C613600E4E4CC /* InTheGym.entitlements */,
 				7479A908229F2B4C00D39E2E /* AppDelegate.swift */,
-				74220898256FFE2C00B42563 /* LaunchPageViewController.swift */,
-				7479A90A229F2B4C00D39E2E /* ViewController.swift */,
 				7479A90C229F2B4C00D39E2E /* Main.storyboard */,
 				7479A912229F2B4D00D39E2E /* Assets.xcassets */,
 				7479A914229F2B4D00D39E2E /* LaunchScreen.storyboard */,
 				7479A917229F2B4D00D39E2E /* Info.plist */,
 				745D0E7722A007A3007670E3 /* GoogleService-Info.plist */,
 				7479A90F229F2B4C00D39E2E /* InTheGym.xcdatamodeld */,
-				745D0E7922A17E26007670E3 /* LoginViewController.swift */,
-				745DA4E02562FADE00FDA053 /* PlayerOrCoachViewController.swift */,
 				74163A4722E4A7AF005A7D2E /* ActivityTableViewCell.swift */,
 				74163A4522E39523005A7D2E /* PlayerTableViewCell.swift */,
 				74DC1C8625127122007156A0 /* Exercise */,
@@ -1075,6 +1106,8 @@
 				74221B4826443CDB00D05527 /* FirebaseAuthManager.swift */,
 				74B16ED926482D17006C3B89 /* LikesAPIService.swift */,
 				741E6E25264E9710001778A2 /* FollowingAPIService.swift */,
+				7416CCD2265817540043B1C2 /* FirebaseLiveWorkoutUpdater.swift */,
+				741FB1B52666A5520039EB29 /* FirebasePostAPI.swift */,
 			);
 			path = DatabaseManager;
 			sourceTree = "<group>";
@@ -1217,6 +1250,9 @@
 				74D31D2525F987DF0024CC05 /* DiscoverWorkoutBottomView.swift */,
 				74F78B982631BF5600C21077 /* YourWorkoutBottomView.swift */,
 				7459BD5D26418B340005C530 /* PresentingView.swift */,
+				741E45D1265D53FA00519F82 /* WorkoutBottomView.swift */,
+				741E45D3265EB4AA00519F82 /* BottomViewPresentationController.swift */,
+				741FB1B326603C350039EB29 /* FlashView.swift */,
 			);
 			path = WorkoutBottomViews;
 			sourceTree = "<group>";
@@ -1276,6 +1312,11 @@
 				74C57A282531197E00078C42 /* NewRepsViewController.swift */,
 				7459947C253DE5F800FBDC00 /* NewWeightViewController.swift */,
 				74DC1C872512751B007156A0 /* NoteViewController.swift */,
+				7416CCC82653F8F70043B1C2 /* SetsCell.swift */,
+				7416CCCA265467DE0043B1C2 /* RepsTopCollectionAdapter.swift */,
+				7416CCCC265468E10043B1C2 /* RepsCell.swift */,
+				7416CCCE26546F200043B1C2 /* RepsBottomCollectionAdapter.swift */,
+				7416CCD02655897B0043B1C2 /* RepsView.swift */,
 			);
 			path = Exercise;
 			sourceTree = "<group>";
@@ -1662,6 +1703,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7416CCD6265C04560043B1C2 /* FirstScreenView.swift in Sources */,
 				74D31F2325FF87B20024CC05 /* NotificationReplied.swift in Sources */,
 				7480EBA425F3EDC000E4E768 /* DisplayWorkoutAdapter.swift in Sources */,
 				74EC439E263A0F1900D81E5B /* DisplayCircuitAdapter.swift in Sources */,
@@ -1670,11 +1712,13 @@
 				74DC1C882512751B007156A0 /* NoteViewController.swift in Sources */,
 				7459BD642641F6490005C530 /* Storyboarded.swift in Sources */,
 				745DA4DC2562AE2300FDA053 /* WorkloadDisplayViewController.swift in Sources */,
+				7416CCCF26546F200043B1C2 /* RepsBottomCollectionAdapter.swift in Sources */,
 				747B673425FFAE11000AD6B7 /* TableCellDisplayModel.swift in Sources */,
 				747C074F2612433500E9F1E2 /* FirebaseAPI.swift in Sources */,
 				74C89C9B261D18A5009F3C72 /* GroupPageViewModel.swift in Sources */,
 				74BDA835246C479F00DFAEEF /* PlayerInfoCell.swift in Sources */,
 				748E3C4025BC5DEA004D6D4A /* DiscussionTableViewCell.swift in Sources */,
+				741FB1B426603C350039EB29 /* FlashView.swift in Sources */,
 				74C89C93261D15E0009F3C72 /* GroupPageViewController.swift in Sources */,
 				7492264422D2624D00EAD386 /* Exercise.swift in Sources */,
 				7466A8D125F0338600F4050F /* SavedWorkoutsProtocol.swift in Sources */,
@@ -1685,6 +1729,7 @@
 				7413A066255D743E009C7F97 /* AlertTopView.swift in Sources */,
 				7439E03F260CFA0000C91C0C /* DiscussionViewModel.swift in Sources */,
 				74226E3A26383C8E0074E616 /* CircuitTableViewCell.swift in Sources */,
+				7416CCD12655897B0043B1C2 /* RepsView.swift in Sources */,
 				74226E282637417C0074E616 /* CreateCircuitProtocol.swift in Sources */,
 				746062712528C35D005B1480 /* COACHESViewController.swift in Sources */,
 				741B22022636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift in Sources */,
@@ -1716,8 +1761,10 @@
 				7480EBBC25F5071500E4E768 /* DisplayWorkoutCollectionViewCell.swift in Sources */,
 				74D1EF93258D529800A719BC /* Posts.swift in Sources */,
 				744B9F75261E0167002574D7 /* MyGroupsAdapter.swift in Sources */,
+				7416CCD3265817540043B1C2 /* FirebaseLiveWorkoutUpdater.swift in Sources */,
 				746061E225264147005B1480 /* NewInfoViewController.swift in Sources */,
 				74F546FB25ED60EC00C1A6A9 /* FirstTimeMessages.swift in Sources */,
+				741FB1B62666A5520039EB29 /* FirebasePostAPI.swift in Sources */,
 				74D31E9025FC14930024CC05 /* FollowersViewModel.swift in Sources */,
 				74EC43442639A33500D81E5B /* CircuitUploadViewController.swift in Sources */,
 				74F45CC1260A9CB700AF16DF /* PublicTimelineViewController.swift in Sources */,
@@ -1730,6 +1777,7 @@
 				744C9CC725F2B276004B03DF /* DisplayWorkoutViewController.swift in Sources */,
 				74172206245B413B0013EAC8 /* AppInfoViewController.swift in Sources */,
 				744F001A261FA40C00B7BBDE /* CreatedWorkoutUploadViewController.swift in Sources */,
+				7416CCCD265468E10043B1C2 /* RepsCell.swift in Sources */,
 				744C9CCC25F2B28B004B03DF /* DisplayWorkoutViewModel.swift in Sources */,
 				744F0022261FA42100B7BBDE /* CreatedWorkoutUploadViewModel.swift in Sources */,
 				74F45CC9260A9D0400AF16DF /* PublicTimelineViewModel.swift in Sources */,
@@ -1740,6 +1788,7 @@
 				74221B472644288A00D05527 /* UserProfileCoordinator.swift in Sources */,
 				74226E34263786430074E616 /* CircuitExerciseViewController.swift in Sources */,
 				74FCFA3F2614EEA50064699F /* MyProfileProtocol.swift in Sources */,
+				741E45D4265EB4AA00519F82 /* BottomViewPresentationController.swift in Sources */,
 				747C07972613CF9C00E9F1E2 /* ImageAPIService.swift in Sources */,
 				7433F0E72627B6EF0014034B /* DiscoverPageViewModel.swift in Sources */,
 				74EC4391263A0EF400D81E5B /* DisplayCircuitViewController.swift in Sources */,
@@ -1783,6 +1832,7 @@
 				74FDB98225A4981B00CC18EF /* DiscoverPageCollectionViewCell.swift in Sources */,
 				7466A82525EEEA7800F4050F /* LoadFollowers.swift in Sources */,
 				7425D4182545AE8000567DAB /* Constants.swift in Sources */,
+				7416CCC92653F8F70043B1C2 /* SetsCell.swift in Sources */,
 				74A1EC3C260D03BA00943745 /* DiscussionModels.swift in Sources */,
 				747B67A12600F1DC000AD6B7 /* TimelineCompletedWorkoutTableViewCell.swift in Sources */,
 				7466A84F25EFCCE900F4050F /* PlayerMyInfoViewModel.swift in Sources */,
@@ -1798,6 +1848,7 @@
 				747B682826025934000AD6B7 /* CommentSectionViewModel.swift in Sources */,
 				744F0027261FA43500B7BBDE /* CreatedWorkoutUploadAdapter.swift in Sources */,
 				7480EBDA25F51F2E00E4E768 /* DisplayPlusTableViewCell.swift in Sources */,
+				7416CCCB265467DE0043B1C2 /* RepsTopCollectionAdapter.swift in Sources */,
 				740E549A25F25C73005D3A8C /* PrivateSavedWorkoutTableViewCell.swift in Sources */,
 				7480EBD525F51F0A00E4E768 /* DisplayPlusCollectionViewCell.swift in Sources */,
 				747B677526001FC9000AD6B7 /* PlayerTimelineViewModel.swift in Sources */,
@@ -1856,6 +1907,7 @@
 				74F5469425EA810800C1A6A9 /* TransformPost.swift in Sources */,
 				74B16EDA26482D17006C3B89 /* LikesAPIService.swift in Sources */,
 				74CCBAC8261617C100A20A94 /* CreatedWorkoutsViewModel.swift in Sources */,
+				741E45D2265D53FA00519F82 /* WorkoutBottomView.swift in Sources */,
 				744B9F70261E0157002574D7 /* MyGroupViewModel.swift in Sources */,
 				744B9F4B261E013F002574D7 /* MyGroupsViewController.swift in Sources */,
 				74C89C8C261B67D8009F3C72 /* WorkoutPrivacyCollectionViewCell.swift in Sources */,
@@ -2160,7 +2212,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.1.2;
+				MARKETING_VERSION = 4.2;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -2336,7 +2388,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.1.2;
+				MARKETING_VERSION = 4.2;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 
-protocol DisplayWorkoutProtocol: WorkoutTableCellTapDelegate {
+protocol DisplayWorkoutProtocol: WorkoutTableCellTapDelegate, LiveWorkoutAddMethods {
     func getData(at: IndexPath) -> WorkoutType
     func isLive() -> Bool
     func itemSelected(at: IndexPath)
@@ -18,9 +18,6 @@ protocol DisplayWorkoutProtocol: WorkoutTableCellTapDelegate {
     func retreiveNumberOfSections() -> Int
     func returnInteractionEnbabled() -> Bool
     func returnAlreadySaved(saved:Bool)
-//    func noteButtonTapped(on tableviewcell:UITableViewCell)
-//    func rpeButtonTappped(on tableviewcell:UITableViewCell, sender:UIButton, collection:UICollectionView)
-//    func completedCell(on tableviewcell:UITableViewCell, on item:Int, sender:UIButton, with cell:UICollectionViewCell)
 }
 
 protocol workoutCellConfigurable {

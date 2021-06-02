@@ -245,21 +245,32 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let live = self.rowsToDisplay[indexPath.section]["liveWorkout"] as? Bool
         if live == true{
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let workoutPage = storyboard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
-            workoutPage.liveAdd = true
-            workoutPage.fromDiscover = false
-            workoutPage.workoutID = rowsToDisplayIDs[indexPath.section]
-            workoutPage.titleString = rowsToDisplay[indexPath.section]["title"] as? String ?? "ERROR"
-            workoutPage.playerID = self.userID!
-            workoutPage.username = ViewController.username
-            workoutPage.creatorUsername = ViewController.username
-            workoutPage.creatorID = self.userID!
-            if let exercises = rowsToDisplay[indexPath.section]["exercises"] as? [[String:AnyObject]] {
-                WorkoutDetailViewController.exercises = exercises
+            
+            let workoutID = rowsToDisplayIDs[indexPath.section]
+            let ref = Database.database().reference().child("Workouts").child(self.userID!).child(workoutID)
+            ref.observeSingleEvent(of: .value) { (snapshot) in
+                let workoutToDisplay: liveWorkout = liveWorkout(snapshot: snapshot)!
+//                DisplayVC.selectedWorkout = workoutToDisplay
+//                DisplayVC.hidesBottomBarWhenPushed = true
+//                self.navigationController?.pushViewController(DisplayVC, animated: true)
+                self.coordinator?.startLiveWorkout(workoutToDisplay)
             }
-            workoutPage.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(workoutPage, animated: true)
+            
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            let workoutPage = storyboard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
+//            workoutPage.liveAdd = true
+//            workoutPage.fromDiscover = false
+//            workoutPage.workoutID = rowsToDisplayIDs[indexPath.section]
+//            workoutPage.titleString = rowsToDisplay[indexPath.section]["title"] as? String ?? "ERROR"
+//            workoutPage.playerID = self.userID!
+//            workoutPage.username = ViewController.username
+//            workoutPage.creatorUsername = ViewController.username
+//            workoutPage.creatorID = self.userID!
+//            if let exercises = rowsToDisplay[indexPath.section]["exercises"] as? [[String:AnyObject]] {
+//                WorkoutDetailViewController.exercises = exercises
+//            }
+//            workoutPage.hidesBottomBarWhenPushed = true
+//            navigationController?.pushViewController(workoutPage, animated: true)
 
         } else {
             //let StoryBoard = UIStoryboard(name: "Main", bundle: nil)

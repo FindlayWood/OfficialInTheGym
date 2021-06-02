@@ -10,6 +10,7 @@ import Foundation
 import Firebase
 
 struct PublicCreatedWorkout: CreatedWorkoutDelegate {
+    
     var title: String!
     var creatorID: String!
     var completed: Bool!
@@ -19,12 +20,13 @@ struct PublicCreatedWorkout: CreatedWorkoutDelegate {
     var workoutID: String?
     var savedID:String!
     var exercises:[WorkoutType]?
-    var createdBy:String?
-    var views:Int?
-    var completes:Int?
-    var downloads:Int?
-    var totalTime:Int?
-    var totalScore:Int?
+    var createdBy: String!
+    var views: Int?
+    var completes: Int?
+    var downloads: Int?
+    var totalTime: Int?
+    var totalScore: Int?
+    var assigned: Bool!
     
     
     init?( snapshot: DataSnapshot) {
@@ -78,7 +80,8 @@ struct PublicCreatedWorkout: CreatedWorkoutDelegate {
     
 }
 
-struct PrivateCreatedWorkout: CreatedWorkoutDelegate { 
+struct PrivateCreatedWorkout: CreatedWorkoutDelegate {
+    
     var title: String!
     var creatorID: String!
     var completed: Bool!
@@ -87,11 +90,12 @@ struct PrivateCreatedWorkout: CreatedWorkoutDelegate {
     var workoutID: String?
     var savedID:String!
     var exercises: [WorkoutType]?
-    var createdBy: String?
+    var createdBy: String!
     var isPrivate: Bool?
     var completes: Int?
     var totalTime: Int?
-    var totalScore:Int?
+    var totalScore: Int?
+    var assinged: Bool!
     
     
     

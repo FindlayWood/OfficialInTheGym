@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class ReplyViewController: UIViewController, Storyboarded {
+class ReplyViewController: UIViewController, Storyboarded, UITextViewDelegate {
     
     @IBOutlet weak var message:UITextView!
     @IBOutlet weak var replyButton:UIButton!
@@ -105,7 +105,9 @@ class ReplyViewController: UIViewController, Storyboarded {
                 if self.userID != posterID{
                     let notification = NotificationReplied(from: self.userID, to: posterID, postID: postID)
                     let uploadNotification = NotificationManager(delegate: notification)
-                    uploadNotification.upload()
+                    uploadNotification.upload { _ in
+                        
+                    }
                     
                 }
             }
@@ -137,7 +139,9 @@ class ReplyViewController: UIViewController, Storyboarded {
         if self.userID != posterID{
             let notification = NotificationGroupReplied(from: self.userID, to: posterID, postID: postID, groupID: groupID)
             let uploadNotification = NotificationManager(delegate: notification)
-            uploadNotification.upload()
+            uploadNotification.upload { _ in
+                
+            }
         }
     }
     

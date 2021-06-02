@@ -20,8 +20,14 @@ class DisplayWorkoutCollectionViewCell: UICollectionViewCell {
     var model : CollectionCellModel! {
         didSet{
             self.setLabels.text = "Set \(model.set!)"
-            if model.reps != nil{
-                self.repsLabel.text = model.reps! + " reps"
+            if let rep = model.reps {
+                if rep == 0 {
+                    repsLabel.text = "MAX reps"
+                } else {
+                    self.repsLabel.text = rep.description + " reps"
+                }
+            } else {
+                self.repsLabel.text = ""
             }
             self.weightLabel.text = model.weight
             if model.completed == true {

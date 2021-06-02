@@ -12,7 +12,7 @@
 import UIKit
 import Firebase
 
-class EditProfileViewController: UIViewController, Storyboarded {
+class EditProfileViewController: UIViewController, Storyboarded, UITextViewDelegate {
     
     @IBOutlet weak var profilePhoto:UIImageView!
     @IBOutlet weak var profileBIO:UITextView!

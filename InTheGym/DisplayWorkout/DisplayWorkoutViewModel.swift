@@ -33,7 +33,7 @@ class DisplayWorkoutViewModel: NSObject{
     
     // MARK: - Properties
     
-    var selectedWorkout : WorkoutDelegate?
+    var selectedWorkout: WorkoutDelegate?
     
     
     // the bottom view to be displayed
@@ -45,7 +45,8 @@ class DisplayWorkoutViewModel: NSObject{
     
     // A property containing the number ot items, it will be used by the view controller to render items on the screen using a
     var numberOfItems: Int {
-        return (selectedWorkout?.exercises!.count)!
+        guard let exercises = selectedWorkout?.exercises else {return 0}
+        return exercises.count
     }
     
     // MARK: -Setup
@@ -67,11 +68,20 @@ class DisplayWorkoutViewModel: NSObject{
     }
     
     func isLive() -> Bool {
-        if selectedWorkout?.liveWorkout ?? false && !(selectedWorkout?.completed ?? false) {
-            return true
+        if let completableWorkout = selectedWorkout as? Completeable {
+            if completableWorkout.liveWorkout ?? false && !(completableWorkout.completed) {
+                return true
+            } else {
+                return false
+            }
         } else {
             return false
         }
+//        if selectedWorkout?.liveWorkout ?? false && !(selectedWorkout?.completed ?? false) {
+//            return true
+//        } else {
+//            return false
+//        }
     }
     
     func updateCompletedSet(at indexPath: IndexPath){

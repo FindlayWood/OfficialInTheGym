@@ -225,21 +225,33 @@ extension PublicTimelineViewController: PublicTimelineProtocol, TimelineTapProto
     func itemSelected(at: IndexPath) {
         let post = viewModel.getData(at: at)
         if post is TimelinePostModel || post is TimelineCreatedWorkoutModel || post is TimelineCompletedWorkoutModel{
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let discussionVC = storyboard.instantiateViewController(withIdentifier: "DiscussionViewViewController") as! DiscussionViewViewController
-            discussionVC.hidesBottomBarWhenPushed = true
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            let discussionVC = storyboard.instantiateViewController(withIdentifier: "DiscussionViewViewController") as! DiscussionViewViewController
+//            discussionVC.hidesBottomBarWhenPushed = true
+//            switch post {
+//            case is TimelinePostModel:
+//                discussionVC.originalPost = DiscussionPost(model: post as! TimelinePostModel)
+//            case is TimelineCreatedWorkoutModel:
+//                discussionVC.originalPost = DiscussionCreatedWorkout(model: post as! TimelineCreatedWorkoutModel)
+//            case is TimelineCompletedWorkoutModel:
+//                discussionVC.originalPost = DiscussionCompletedWorkout(model: post as! TimelineCompletedWorkoutModel)
+//            default:
+//                break
+//            }
+            var discussionPost: PostProtocol!
             switch post {
             case is TimelinePostModel:
-                discussionVC.originalPost = DiscussionPost(model: post as! TimelinePostModel)
+                discussionPost = DiscussionPost(model: post as! TimelinePostModel)
             case is TimelineCreatedWorkoutModel:
-                discussionVC.originalPost = DiscussionCreatedWorkout(model: post as! TimelineCreatedWorkoutModel)
+                discussionPost = DiscussionCreatedWorkout(model: post as! TimelineCreatedWorkoutModel)
             case is TimelineCompletedWorkoutModel:
-                discussionVC.originalPost = DiscussionCompletedWorkout(model: post as! TimelineCompletedWorkoutModel)
+                discussionPost = DiscussionCompletedWorkout(model: post as! TimelineCompletedWorkoutModel)
             default:
                 break
             }
+            coordinator?.showDiscussion(with: discussionPost, isGroup: false)
             
-            self.navigationController?.pushViewController(discussionVC, animated: true)
+            //self.navigationController?.pushViewController(discussionVC, animated: true)
         }
     }
     
@@ -281,13 +293,15 @@ extension PublicTimelineViewController: PublicTimelineProtocol, TimelineTapProto
         case is TimelineCreatedWorkoutModel:
             let p = post as! TimelineCreatedWorkoutModel
             workoutData = p.createdWorkout
-            displayWorkout.selectedWorkout = workoutData
-            self.navigationController?.pushViewController(displayWorkout, animated: true)
+            coordinator?.showWorkout(workout: workoutData)
+//            DisplayWorkoutViewController.selectedWorkout = workoutData
+//            self.navigationController?.pushViewController(displayWorkout, animated: true)
         case is TimelineCompletedWorkoutModel:
             let p = post as! TimelineCompletedWorkoutModel
             workoutData = p.createdWorkout
-            displayWorkout.selectedWorkout = workoutData
-            self.navigationController?.pushViewController(displayWorkout, animated: true)
+            coordinator?.showWorkout(workout: workoutData)
+//            DisplayWorkoutViewController.selectedWorkout = workoutData
+//            self.navigationController?.pushViewController(displayWorkout, animated: true)
         default:
             break
         }
