@@ -1,0 +1,60 @@
+//
+//  AMRAPCell.swift
+//  InTheGym
+//
+//  Created by Findlay Wood on 04/06/2021.
+//  Copyright © 2021 FindlayWood. All rights reserved.
+//
+
+import UIKit
+
+class AMRAPCell: UITableViewCell {
+    
+    var exerciseName: UILabel = {
+       let label = UILabel()
+        label.font = Constants.font
+        label.textColor = Constants.darkColour
+        label.textAlignment = .left
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.3
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var repLabel: UILabel = {
+       let label = UILabel()
+        label.textColor = Constants.darkColour
+        label.font = Constants.font
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setup()
+        backgroundColor = Constants.offWhiteColour
+        layer.cornerRadius = 10
+        self.selectionStyle = .none
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+
+    private func setup() {
+        addSubview(exerciseName)
+        addSubview(repLabel)
+        constrain()
+    }
+    
+    private func constrain() {
+        NSLayoutConstraint.activate([exerciseName.centerYAnchor.constraint(equalTo: centerYAnchor),
+                                     repLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+        
+                                     exerciseName.leadingAnchor.constraint(equalTo: leadingAnchor,constant: 20),
+                                     repLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+        
+                                     exerciseName.trailingAnchor.constraint(equalTo: repLabel.leadingAnchor, constant: -5)])
+    }
+}

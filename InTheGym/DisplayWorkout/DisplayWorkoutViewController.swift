@@ -47,6 +47,7 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
         tableview.register(UINib(nibName: "DisplayWorkout", bundle: nil), forCellReuseIdentifier: "DisplayWorkoutCell")
         tableview.register(UINib(nibName: "DisplayPlusTableView", bundle: nil), forCellReuseIdentifier: "DisplayPlusTableView")
         tableview.register(UINib(nibName: "DisplayWorkoutCircuitTableViewCell", bundle: nil), forCellReuseIdentifier: "DisplayWorkoutCircuitTableViewCell")
+        tableview.register(DisplayAMRAPCell.self, forCellReuseIdentifier: "DisplayAMRAPCell")
         
         flashView = FlashView(frame: view.frame)
         bottomViewFrame = CGRect(x: 0, y: Constants.screenSize.height - Constants.screenSize.height * 0.15, width: Constants.screenSize.width, height: Constants.screenSize.height * 0.15)
@@ -274,7 +275,7 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
                 if let score = exercise.newRPE.value{
                     scores.append(score)
                 }
-            } else {
+            } else if exercise is exercise {
                 let exercise = exercise as! exercise
                 if let RPEscore = exercise.rpe {
                     scores.append(Int(RPEscore)!)
@@ -342,6 +343,12 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
             nextVC.workout = DisplayWorkoutViewController.selectedWorkout
             nextVC.exercisePosition = at.section
             self.navigationController?.pushViewController(nextVC, animated: true)
+        } else if viewModel.selectedWorkout?.exercises![at.section] is AMRAP {
+            guard let coordinator = coordinator as? WorkoutCoordinatorFlow,
+                  let amrap = viewModel.selectedWorkout?.exercises?[at.section] as? AMRAP,
+                  let workout = DisplayWorkoutViewController.selectedWorkout as? workout
+            else {return}
+            coordinator.showAMRAP(with: amrap, at: at.section, on: workout)
         }
     }
     

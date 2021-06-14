@@ -12,6 +12,8 @@ import UIKit
 protocol WorkoutCoordinatorFlow: WorkoutDisplayCoordinator {
     func showUser(with user: Users)
     func showCircuit()
+    func showAMRAP(with model: AMRAP, at position: Int, on workout: workout)
+    
 }
 
 protocol WorkoutDisplayCoordinator: Coordinator {
@@ -46,7 +48,6 @@ class WorkoutCoordinator: NSObject, Coordinator {
             }
         }
     }
-    
 }
 
 
@@ -55,6 +56,16 @@ extension WorkoutCoordinator: WorkoutCoordinatorFlow {
     func showCircuit() {
         let vc = DisplayCircuitViewController.instantiate()
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showAMRAP(with model: AMRAP, at position: Int, on workout: workout) {
+        if #available(iOS 13.0, *) {
+            let vc = DisplayAMRAPViewController()
+            vc.amrap = model
+            vc.amrapPosition = position
+            vc.workout = workout
+            navigationController.pushViewController(vc, animated: true)
+        }
     }
     
     func showCompletedPage() {

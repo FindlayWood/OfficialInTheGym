@@ -89,6 +89,8 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
             return "DisplayWorkoutCell"
         case is circuit:
             return "DisplayWorkoutCircuitTableViewCell"
+        case is AMRAP:
+            return "DisplayAMRAPCell"
         default:
             return "Unexpected row model type \(rowModel)"
         }

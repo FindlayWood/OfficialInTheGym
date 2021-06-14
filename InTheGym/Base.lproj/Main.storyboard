@@ -6091,6 +6091,31 @@
                                     <action selector="circuitTapped:" destination="s7l-eY-Ty5" eventType="touchUpInside" id="NWi-Eb-1kL"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JCs-sZ-CYN" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
+                                <rect key="frame" x="20" y="549" width="374" height="80"/>
+                                <color key="backgroundColor" name="lightColour"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="yKr-nW-rX2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
+                                <state key="normal" title="AMRAP">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="amrapTapped:" destination="s7l-eY-Ty5" eventType="touchUpInside" id="zC4-zb-4eY"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="sSF-5i-bcF"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -6098,15 +6123,18 @@
                             <constraint firstItem="dnm-zg-13i" firstAttribute="bottom" secondItem="sSF-5i-bcF" secondAttribute="bottom" id="3Us-it-8hM"/>
                             <constraint firstItem="cvE-OC-qwp" firstAttribute="top" secondItem="sSF-5i-bcF" secondAttribute="top" constant="30" id="6QT-04-KTP"/>
                             <constraint firstItem="og0-F6-ofO" firstAttribute="top" secondItem="brK-Tg-rQq" secondAttribute="bottom" constant="15" id="CJy-AB-Sx1"/>
+                            <constraint firstItem="JCs-sZ-CYN" firstAttribute="leading" secondItem="sSF-5i-bcF" secondAttribute="leading" constant="20" id="CvR-D1-DSI"/>
                             <constraint firstItem="sSF-5i-bcF" firstAttribute="trailing" secondItem="FRH-18-Hn6" secondAttribute="trailing" constant="20" id="GXC-LU-AJi"/>
                             <constraint firstItem="ng0-nK-RwM" firstAttribute="top" secondItem="og0-F6-ofO" secondAttribute="bottom" constant="15" id="HxI-Jq-EkC"/>
                             <constraint firstItem="sSF-5i-bcF" firstAttribute="trailing" secondItem="ng0-nK-RwM" secondAttribute="trailing" constant="20" id="Kk3-Xg-qRl"/>
                             <constraint firstItem="FRH-18-Hn6" firstAttribute="top" secondItem="cvE-OC-qwp" secondAttribute="bottom" constant="15" id="Rms-U2-hhj"/>
                             <constraint firstItem="sSF-5i-bcF" firstAttribute="trailing" secondItem="brK-Tg-rQq" secondAttribute="trailing" constant="20" id="S6K-sh-x9s"/>
                             <constraint firstItem="dnm-zg-13i" firstAttribute="centerX" secondItem="sSF-5i-bcF" secondAttribute="centerX" id="XVF-Np-KbN"/>
+                            <constraint firstItem="JCs-sZ-CYN" firstAttribute="top" secondItem="ng0-nK-RwM" secondAttribute="bottom" constant="15" id="aep-Qf-o5U"/>
                             <constraint firstItem="ng0-nK-RwM" firstAttribute="leading" secondItem="sSF-5i-bcF" secondAttribute="leading" constant="20" id="bUc-16-Cmb"/>
                             <constraint firstItem="og0-F6-ofO" firstAttribute="leading" secondItem="sSF-5i-bcF" secondAttribute="leading" constant="20" id="gsg-mb-hrK"/>
                             <constraint firstItem="brK-Tg-rQq" firstAttribute="top" secondItem="FRH-18-Hn6" secondAttribute="bottom" constant="15" id="luj-8J-1mH"/>
+                            <constraint firstItem="sSF-5i-bcF" firstAttribute="trailing" secondItem="JCs-sZ-CYN" secondAttribute="trailing" constant="20" id="ng3-B5-5PM"/>
                             <constraint firstItem="sSF-5i-bcF" firstAttribute="trailing" secondItem="og0-F6-ofO" secondAttribute="trailing" constant="20" id="x87-ic-ipg"/>
                             <constraint firstItem="sSF-5i-bcF" firstAttribute="trailing" secondItem="cvE-OC-qwp" secondAttribute="trailing" constant="20" id="xB4-vp-zst"/>
                             <constraint firstItem="cvE-OC-qwp" firstAttribute="leading" secondItem="sSF-5i-bcF" secondAttribute="leading" constant="20" id="xfx-j3-p01"/>
@@ -6116,6 +6144,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="psx-RB-fwo"/>
                     <connections>
+                        <outlet property="amrapButton" destination="JCs-sZ-CYN" id="6ub-Hv-v1K"/>
                         <outlet property="circuitButton" destination="ng0-nK-RwM" id="c8i-3N-iF5"/>
                         <outlet property="pageNumberLabel" destination="dnm-zg-13i" id="uNc-aa-Ea4"/>
                     </connections>
@@ -8159,6 +8188,9 @@
         </designable>
         <designable name="FRH-18-Hn6">
             <size key="intrinsicContentSize" width="161" height="48"/>
+        </designable>
+        <designable name="JCs-sZ-CYN">
+            <size key="intrinsicContentSize" width="105" height="48"/>
         </designable>
         <designable name="JFg-l4-KXs">
             <size key="intrinsicContentSize" width="91" height="42"/>

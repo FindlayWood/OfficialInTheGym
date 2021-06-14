@@ -59,14 +59,12 @@ class NewRepsViewController: UIViewController, Storyboarded {
         case is LiveWorkoutCoordinator:
             repView.topCollection.isHidden = true
             repView.pageNumberLabel.text = "1 of 2"
+        case is AMRAPCoordinator:
+            repView.topCollection.isHidden = true
+            repView.pageNumberLabel.text = "3 of 3"
         default:
             break
         }
-//        if fromLiveWorkout == true{
-//            pageNumberLabel.text = "1 0f 2"
-//        }else{
-//            pageNumberLabel.text = "4 of 6"
-//        }
         
         view.addSubview(repView)
         repView.translatesAutoresizingMaskIntoConstraints = false
@@ -231,6 +229,8 @@ extension NewRepsViewController{
         guard let newExercise = newExercise else {return}
         if coordinator is LiveWorkoutCoordinator {
             newExercise.repArray?.append(repCounter)
+        } else if coordinator is AMRAPCoordinator {
+            newExercise.reps = repCounter
         } else {
             newExercise.repArray = repIntArray
         }

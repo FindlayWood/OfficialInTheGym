@@ -21,16 +21,17 @@ class LaunchPageViewController: UIViewController, Storyboarded {
     fileprivate func checkForUser() {
         
         FirebaseAuthManager.shared.checkForCurrentUser { result in
-            self.spinner.stopAnimating()
             switch result {
             case .success(let user):
                 let uid = user.uid
                 UserIDToUser.transform(userID: uid) { userObject in
+                    self.spinner.stopAnimating()
                     ViewController.admin = userObject.admin
                     ViewController.username = userObject.username
                     self.coordinator?.coordinateToTabBar()
                 }
             case .failure(let error):
+                self.spinner.stopAnimating()
                 switch error{
                 case .noUser:
                     print("no user")

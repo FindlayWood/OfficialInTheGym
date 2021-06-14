@@ -11,6 +11,7 @@
 
 import UIKit
 import Firebase
+import Photos
 
 class EditProfileViewController: UIViewController, Storyboarded, UITextViewDelegate {
     
@@ -85,6 +86,23 @@ class EditProfileViewController: UIViewController, Storyboarded, UITextViewDeleg
     }
     
     @IBAction func changeProfilePhoto(_ sender:UIButton){
+//        let authorised = PHPhotoLibrary.authorizationStatus()
+//        if authorised == .notDetermined {
+//            print("no no no")
+//        }
+//        PHPhotoLibrary.requestAuthorization { status in
+//            switch status {
+//            case .authorized:
+//                print("auth")
+//            case .denied:
+//                print("denied")
+//            default:
+//                break
+//            }
+//        }
+//        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+//            print("allowed access")
+//        }
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.allowsEditing = true

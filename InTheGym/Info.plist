@@ -24,8 +24,6 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>"INTHEGYM" would like to access your photo library.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -45,5 +43,9 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>INTHEGYM would like access to your media library.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>INTHEGYM would like access to your photo library.</string>
 </dict>
 </plist>

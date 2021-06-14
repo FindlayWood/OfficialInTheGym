@@ -19,17 +19,18 @@ class BodyTypeViewController: UIViewController, Storyboarded {
     var fromLiveWorkout:Bool!
     var workoutID:String!
     @IBOutlet weak var circuitButton:UIButton!
+    @IBOutlet weak var amrapButton: UIButton!
     
     @IBOutlet weak var pageNumberLabel:UILabel!
     
     @IBAction func buttonTapped(_ sender:UIButton){
         sender.pulsate()
-        let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-        let SVC = StoryBoard.instantiateViewController(withIdentifier: "ExerciseViewController") as! ExerciseViewController
-        SVC.fromLiveWorkout = self.fromLiveWorkout
-        SVC.exerciseType = sender.titleLabel!.text as! String
-        SVC.workoutID = self.workoutID
-        guard var newExercise = newExercise else {return}
+//        let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+//        let SVC = StoryBoard.instantiateViewController(withIdentifier: "ExerciseViewController") as! ExerciseViewController
+//        SVC.fromLiveWorkout = self.fromLiveWorkout
+//        SVC.exerciseType = sender.titleLabel!.text as! String
+//        SVC.workoutID = self.workoutID
+        guard let newExercise = newExercise else {return}
         switch sender.titleLabel?.text{
         case "Upper Body":
             newExercise.type = .UB
@@ -47,16 +48,16 @@ class BodyTypeViewController: UIViewController, Storyboarded {
             newExercise.type = .UB
             coordinator?.bodyTypeSelected(newExercise)
         }
-        
-        //self.navigationController?.pushViewController(SVC, animated: true)
     }
     
     @IBAction func circuitTapped(_ sender:UIButton) {
         let coordinator = coordinator as? RegularWorkoutFlow
         coordinator?.addCircuit()
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let nextVC = storyboard.instantiateViewController(withIdentifier: "CreateCircuitViewController") as! CreateCircuitViewController
-//        self.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    @IBAction func amrapTapped(_ sender: UIButton) {
+        let coordinator = coordinator as? RegularWorkoutFlow
+        coordinator?.addAMRAP()
     }
 
     override func viewDidLoad() {
@@ -77,9 +78,15 @@ class BodyTypeViewController: UIViewController, Storyboarded {
         case is CircuitCoordinator:
             pageNumberLabel.text = "1 of 4"
             self.circuitButton.isHidden = true
+            self.amrapButton.isHidden = true
         case is LiveWorkoutCoordinator:
             pageNumberLabel.text = "1 of 2"
             self.circuitButton.isHidden = true
+            self.amrapButton.isHidden = true
+        case is AMRAPCoordinator:
+            pageNumberLabel.text = "1 of 3"
+            self.circuitButton.isHidden = true
+            self.amrapButton.isHidden = true
         default:
              break
         }

@@ -42,4 +42,6 @@ class Constants {
     
     static let screenSize = UIScreen.main.bounds
     
+    static let font = UIFont(name: "Menlo-Bold", size: 25)
+    
 }

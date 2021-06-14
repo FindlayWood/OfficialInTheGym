@@ -49,10 +49,9 @@ class ReplyTableViewCell: UITableViewCell, DiscussionCellConfigurable {
         self.message.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        profileImage.setImage(nil, for: .normal)
     }
     
     @IBAction func userTapped(_ sender:UIButton){

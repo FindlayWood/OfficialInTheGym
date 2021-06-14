@@ -18,6 +18,7 @@ protocol CreationDelegate: AnyObject {
 protocol RegularWorkoutFlow: RegularDelegate {
     func addExercise(_ exercise: exercise)
     func addCircuit()
+    func addAMRAP()
     func noteAdded(_ exercise: exercise)
 }
 
@@ -30,8 +31,8 @@ protocol CircuitFlow: CircuitDelegate {
     func addExercise(_ circuit: exercise)
 }
 
-protocol AmrapFlow: CreationDelegate {
-    
+protocol AMRAPFlow: CreationDelegate {
+    func addExercise(_ exercise: exercise)
 }
 
 protocol RegularAndCircuitFlow: AnyObject {
@@ -67,11 +68,19 @@ class RegularWorkoutCoordinator: NSObject, Coordinator {
 }
 
 extension RegularWorkoutCoordinator: RegularWorkoutFlow {
+    
     func addCircuit() {
         let child = CircuitCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
         child.start()
     }
+    
+    func addAMRAP() {
+        let child = AMRAPCoordinator(navigationController: navigationController)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
     func addExercise(_ exercise: exercise) {
         let vc = BodyTypeViewController.instantiate()
         vc.coordinator = self

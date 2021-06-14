@@ -45,7 +45,7 @@ class DiscussionViewViewController: UIViewController, Storyboarded {
         text.delegate = self
         text.textContainer.maximumNumberOfLines = 0
         text.textContainer.lineBreakMode = .byWordWrapping
-        text.font = .systemFont(ofSize: 16, weight: .medium)
+        text.font = .systemFont(ofSize: 16, weight: .semibold)
         text.textContainerInset = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         text.sizeToFit()
         text.layer.cornerRadius = 18
@@ -368,7 +368,7 @@ extension DiscussionViewViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == placeholderColour {
             textView.text = nil
-            textView.textColor = .black
+            textView.textColor = .darkGray
         }
         
         if retreiveNumberOfItems() != 0 {
