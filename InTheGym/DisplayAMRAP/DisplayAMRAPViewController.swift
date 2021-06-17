@@ -32,6 +32,7 @@ class DisplayAMRAPViewController: UIViewController {
         view.backgroundColor = Constants.lightColour
         addStartButton()
         setup()
+        initViewModel()
     }
 
     override func viewDidLayoutSubviews() {
@@ -73,6 +74,25 @@ class DisplayAMRAPViewController: UIViewController {
             navigationItem.rightBarButtonItem?.isEnabled = false
             flashView.frame = view.frame
             displayView.addSubview(flashView)
+        }
+    }
+    
+    func initViewModel() {
+        viewModel.updateTimeLabelHandler = { [weak self] newValue in
+            guard let self = self else {return}
+            self.displayView.timeLabel.text = newValue
+        }
+        viewModel.updateRoundsLabelHandler = { [weak self] newValue in
+            guard let self = self else {return}
+            self.displayView.roundsLabel.text = newValue
+        }
+        viewModel.updateExercisesLabelHandler = { [weak self] newValue in
+            guard let self = self else {return}
+            self.displayView.exerciseLabel.text = newValue
+        }
+        viewModel.updateTimeLabelToRedHandler = { [weak self] in
+            guard let self = self else {return}
+            self.displayView.timeLabel.textColor = .red
         }
     }
 }

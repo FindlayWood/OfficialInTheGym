@@ -11,6 +11,11 @@ import Foundation
 @available(iOS 13.0, *)
 class DisplayAMRAPViewModel {
     
+    var updateTimeLabelHandler: ((String)->())?
+    var updateRoundsLabelHandler: ((String)->())?
+    var updateExercisesLabelHandler: ((String)->())?
+    var updateTimeLabelToRedHandler: (()->())?
+    
     var APIService: AMRAPFirebaseAPIService!
     var amrap: AMRAP!
     var display: DisplayAMRAPView!

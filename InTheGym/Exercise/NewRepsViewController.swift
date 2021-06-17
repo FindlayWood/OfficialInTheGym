@@ -11,7 +11,7 @@
 import UIKit
 import SCLAlertView
 
-enum repsSelected {
+enum setSelected {
     case allSelected
     case singleSelected(Int)
 }
@@ -32,7 +32,7 @@ class NewRepsViewController: UIViewController, Storyboarded {
     
     private var repCounter: Int = 1
     
-    private var selectedState: repsSelected = .allSelected
+    private var selectedState: setSelected = .allSelected
     private var topSelectedIndex: Int? = nil
     
     private var topAdapter: RepsTopCollectionAdapter!

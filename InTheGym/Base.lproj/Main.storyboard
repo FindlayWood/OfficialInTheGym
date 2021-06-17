@@ -5380,355 +5380,9 @@
                     <view key="view" contentMode="scaleToFill" id="jNN-GP-S66">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WEIGHT" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aYj-wF-hdN">
-                                <rect key="frame" x="144" y="44" width="126.5" height="41"/>
-                                <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="35"/>
-                                <color key="textColor" name="darkColour"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pZ7-iD-CC5">
-                                <rect key="frame" x="20" y="141" width="374" height="1"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="gTO-YN-YXf"/>
-                                </constraints>
-                            </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ec5-FY-7Ni">
-                                <rect key="frame" x="10" y="267" width="394" height="100"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RUO-6s-ClW" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="91" height="100"/>
-                                        <color key="backgroundColor" name="darkColour"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="L7T-KP-2u4"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="25"/>
-                                        <state key="normal" title="kg">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="1"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="buttonPressed:" destination="ink-vX-hlk" eventType="touchUpInside" id="GHL-My-M7Q"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="18F-Nc-BVU" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                        <rect key="frame" x="101" y="0.0" width="91" height="100"/>
-                                        <color key="backgroundColor" name="darkColour"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="6Qx-z7-2ZS"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="25"/>
-                                        <state key="normal" title="lbs">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="1"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="buttonPressed:" destination="ink-vX-hlk" eventType="touchUpInside" id="OfN-dP-ALR"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s5J-MX-FcQ" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                        <rect key="frame" x="202" y="0.0" width="91" height="100"/>
-                                        <color key="backgroundColor" name="darkColour"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="lxx-xb-P9S"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="25"/>
-                                        <state key="normal" title="%">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="1"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="buttonPressed:" destination="ink-vX-hlk" eventType="touchUpInside" id="unJ-7D-OX6"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ra6-E2-ikW" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                        <rect key="frame" x="303" y="0.0" width="91" height="100"/>
-                                        <color key="backgroundColor" name="darkColour"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="VkC-Rv-hFH"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="25"/>
-                                        <color key="tintColor" red="0.1190358423" green="0.2244237083" blue="0.53935993019999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" title="MAX">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <state key="selected">
-                                            <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="1"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="buttonPressed:" destination="ink-vX-hlk" eventType="touchUpInside" id="8vI-er-KHe"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                            </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zHK-1v-M3r">
-                                <rect key="frame" x="55" y="157" width="304" height="100"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="SQt-Y2-j3d">
-                                        <rect key="frame" x="5" y="5" width="294" height="90"/>
-                                        <subviews>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cxb-E4-bLm">
-                                                <rect key="frame" x="0.0" y="0.0" width="147" height="90"/>
-                                                <color key="backgroundColor" name="darkColour"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="90" id="rQt-qb-ME9"/>
-                                                </constraints>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="43"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                            </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TGZ-W3-IKc">
-                                                <rect key="frame" x="147" y="0.0" width="147" height="90"/>
-                                                <color key="backgroundColor" name="darkColour"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="90" id="ahq-b1-j0h"/>
-                                                </constraints>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="43"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                            </textField>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="SQt-Y2-j3d" secondAttribute="bottom" constant="5" id="YHE-6O-giQ"/>
-                                    <constraint firstItem="SQt-Y2-j3d" firstAttribute="top" secondItem="zHK-1v-M3r" secondAttribute="top" constant="5" id="ell-H4-Clj"/>
-                                    <constraint firstAttribute="trailing" secondItem="SQt-Y2-j3d" secondAttribute="trailing" constant="5" id="gpv-nO-H5P"/>
-                                    <constraint firstItem="SQt-Y2-j3d" firstAttribute="leading" secondItem="zHK-1v-M3r" secondAttribute="leading" constant="5" id="jAd-9Z-q04"/>
-                                </constraints>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nYw-lB-PPG" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                <rect key="frame" x="25" y="487" width="364" height="42"/>
-                                <color key="backgroundColor" name="darkColour"/>
-                                <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="25"/>
-                                <state key="normal" title=" NEXT ">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="21"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                        <real key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="nextPressed:" destination="ink-vX-hlk" eventType="touchUpInside" id="VS1-pi-qDs"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5 of 6" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jkO-4f-z0R">
-                                <rect key="frame" x="171" y="838.5" width="72.5" height="23.5"/>
-                                <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="20"/>
-                                <color key="textColor" name="darkColour"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4p-eg-2PV">
-                                <rect key="frame" x="176.5" y="788.5" width="61" height="42"/>
-                                <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="25"/>
-                                <state key="normal" title="SKIP">
-                                    <color key="titleColor" name="darkColour"/>
-                                </state>
-                                <connections>
-                                    <action selector="skipPressed:" destination="ink-vX-hlk" eventType="touchUpInside" id="42a-fj-FYT"/>
-                                </connections>
-                            </button>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="M9o-NM-DOe">
-                                <rect key="frame" x="10" y="377" width="394" height="100"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zCZ-6p-57T" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="91" height="100"/>
-                                        <color key="backgroundColor" name="darkColour"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="pGK-Je-Bu7"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="25"/>
-                                        <state key="normal" title="km">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="1"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="buttonPressed:" destination="ink-vX-hlk" eventType="touchUpInside" id="Ycc-IE-FRQ"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Ru-KC-gBm" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                        <rect key="frame" x="101" y="0.0" width="91" height="100"/>
-                                        <color key="backgroundColor" name="darkColour"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="hIz-VX-WB2"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="25"/>
-                                        <state key="normal" title="miles">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="1"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="buttonPressed:" destination="ink-vX-hlk" eventType="touchUpInside" id="aMB-ZY-tQr"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7th-nC-XLF" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                        <rect key="frame" x="202" y="0.0" width="91" height="100"/>
-                                        <color key="backgroundColor" name="darkColour"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="nTl-Zx-h3f"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="25"/>
-                                        <state key="normal" title="mins">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="1"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="buttonPressed:" destination="ink-vX-hlk" eventType="touchUpInside" id="GCG-gN-ofc"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D5s-hy-F2X" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                        <rect key="frame" x="303" y="0.0" width="91" height="100"/>
-                                        <color key="backgroundColor" name="darkColour"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="5Hv-et-3R5"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="25"/>
-                                        <color key="tintColor" red="0.0" green="0.36927653020000001" blue="0.79988895940000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" title="secs">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <state key="selected">
-                                            <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="1"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="buttonPressed:" destination="ink-vX-hlk" eventType="touchUpInside" id="Z9O-eG-IAW"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                            </stackView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="l1i-bi-keR"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="l1i-bi-keR" firstAttribute="trailing" secondItem="ec5-FY-7Ni" secondAttribute="trailing" constant="10" id="2kg-B2-96z"/>
-                            <constraint firstItem="nYw-lB-PPG" firstAttribute="leading" secondItem="l1i-bi-keR" secondAttribute="leading" constant="25" id="2kp-DO-mb0"/>
-                            <constraint firstItem="jkO-4f-z0R" firstAttribute="top" secondItem="c4p-eg-2PV" secondAttribute="bottom" constant="8" id="9fW-3f-Jwe"/>
-                            <constraint firstItem="ec5-FY-7Ni" firstAttribute="top" secondItem="zHK-1v-M3r" secondAttribute="bottom" constant="10" id="GB2-WK-j8e"/>
-                            <constraint firstItem="l1i-bi-keR" firstAttribute="trailing" secondItem="M9o-NM-DOe" secondAttribute="trailing" constant="10" id="HMs-oM-feh"/>
-                            <constraint firstItem="jkO-4f-z0R" firstAttribute="centerX" secondItem="l1i-bi-keR" secondAttribute="centerX" id="LZp-mV-lq0"/>
-                            <constraint firstItem="pZ7-iD-CC5" firstAttribute="leading" secondItem="jNN-GP-S66" secondAttribute="leadingMargin" id="MEG-kz-Xp7"/>
-                            <constraint firstItem="ec5-FY-7Ni" firstAttribute="leading" secondItem="l1i-bi-keR" secondAttribute="leading" constant="10" id="MMi-5t-j8f"/>
-                            <constraint firstItem="pZ7-iD-CC5" firstAttribute="top" secondItem="aYj-wF-hdN" secondAttribute="bottom" constant="56" id="YgR-27-Zi2"/>
-                            <constraint firstItem="M9o-NM-DOe" firstAttribute="top" secondItem="ec5-FY-7Ni" secondAttribute="bottom" constant="10" id="Zim-U3-f1u"/>
-                            <constraint firstItem="l1i-bi-keR" firstAttribute="bottom" secondItem="jkO-4f-z0R" secondAttribute="bottom" id="g5B-4h-xBh"/>
-                            <constraint firstItem="zHK-1v-M3r" firstAttribute="top" secondItem="pZ7-iD-CC5" secondAttribute="bottom" constant="15" id="hMp-po-UJB"/>
-                            <constraint firstItem="l1i-bi-keR" firstAttribute="trailing" secondItem="nYw-lB-PPG" secondAttribute="trailing" constant="25" id="i0Y-W0-Xrn"/>
-                            <constraint firstItem="pZ7-iD-CC5" firstAttribute="trailing" secondItem="jNN-GP-S66" secondAttribute="trailingMargin" id="jAo-3A-Gre"/>
-                            <constraint firstItem="aYj-wF-hdN" firstAttribute="top" secondItem="l1i-bi-keR" secondAttribute="top" id="k4X-zO-yRD"/>
-                            <constraint firstItem="M9o-NM-DOe" firstAttribute="leading" secondItem="l1i-bi-keR" secondAttribute="leading" constant="10" id="m05-hh-Mqr"/>
-                            <constraint firstItem="nYw-lB-PPG" firstAttribute="top" secondItem="M9o-NM-DOe" secondAttribute="bottom" constant="10" id="nON-u5-NE6"/>
-                            <constraint firstItem="zHK-1v-M3r" firstAttribute="leading" secondItem="l1i-bi-keR" secondAttribute="leading" constant="55" id="sp1-WG-7XU"/>
-                            <constraint firstItem="c4p-eg-2PV" firstAttribute="centerX" secondItem="l1i-bi-keR" secondAttribute="centerX" id="tfE-NE-Uht"/>
-                            <constraint firstItem="l1i-bi-keR" firstAttribute="trailing" secondItem="zHK-1v-M3r" secondAttribute="trailing" constant="55" id="ysf-Ba-DG0"/>
-                            <constraint firstItem="nYw-lB-PPG" firstAttribute="centerX" secondItem="l1i-bi-keR" secondAttribute="centerX" id="zRu-kt-hLR"/>
-                            <constraint firstItem="aYj-wF-hdN" firstAttribute="centerX" secondItem="l1i-bi-keR" secondAttribute="centerX" id="zma-A7-xbq"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="kgButton" destination="RUO-6s-ClW" id="VjO-ct-6nb"/>
-                        <outlet property="kmButton" destination="zCZ-6p-57T" id="mIh-bQ-ZKk"/>
-                        <outlet property="lbsButton" destination="18F-Nc-BVU" id="kLx-dM-cLf"/>
-                        <outlet property="maxButton" destination="ra6-E2-ikW" id="e8v-8R-U7p"/>
-                        <outlet property="measurement" destination="TGZ-W3-IKc" id="rxS-WX-R5y"/>
-                        <outlet property="milesButton" destination="0Ru-KC-gBm" id="afN-tv-ZRc"/>
-                        <outlet property="minsButton" destination="7th-nC-XLF" id="53H-vR-d56"/>
-                        <outlet property="nextButton" destination="nYw-lB-PPG" id="DSa-9J-Dxp"/>
-                        <outlet property="pageNumberLabel" destination="jkO-4f-z0R" id="SDG-MO-f6e"/>
-                        <outlet property="percentButton" destination="s5J-MX-FcQ" id="bpr-Ni-s73"/>
-                        <outlet property="secsButton" destination="D5s-hy-F2X" id="JFD-uj-kIr"/>
-                        <outlet property="text" destination="cxb-E4-bLm" id="qRP-Gt-Qjf"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O3q-pL-BcB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -8132,14 +7786,8 @@
         <designable name="0BJ-qr-Cgf">
             <size key="intrinsicContentSize" width="148" height="42"/>
         </designable>
-        <designable name="0Ru-KC-gBm">
-            <size key="intrinsicContentSize" width="76" height="42"/>
-        </designable>
         <designable name="0Zx-Yq-W5S">
             <size key="intrinsicContentSize" width="45" height="36"/>
-        </designable>
-        <designable name="18F-Nc-BVU">
-            <size key="intrinsicContentSize" width="46" height="42"/>
         </designable>
         <designable name="1Qk-0D-YJs">
             <size key="intrinsicContentSize" width="170" height="42"/>
@@ -8159,9 +7807,6 @@
         <designable name="7Bb-fj-3s0">
             <size key="intrinsicContentSize" width="95" height="42"/>
         </designable>
-        <designable name="7th-nC-XLF">
-            <size key="intrinsicContentSize" width="61" height="42"/>
-        </designable>
         <designable name="8Eo-cy-Wbj">
             <size key="intrinsicContentSize" width="61" height="36"/>
         </designable>
@@ -8173,9 +7818,6 @@
         </designable>
         <designable name="9xg-2J-BvV">
             <size key="intrinsicContentSize" width="134" height="34"/>
-        </designable>
-        <designable name="D5s-hy-F2X">
-            <size key="intrinsicContentSize" width="61" height="42"/>
         </designable>
         <designable name="DYj-gg-2OT">
             <size key="intrinsicContentSize" width="48" height="25.5"/>
@@ -8200,9 +7842,6 @@
         </designable>
         <designable name="NFV-6f-h4J">
             <size key="intrinsicContentSize" width="171" height="46"/>
-        </designable>
-        <designable name="RUO-6s-ClW">
-            <size key="intrinsicContentSize" width="31" height="42"/>
         </designable>
         <designable name="Rlc-5I-9zw">
             <size key="intrinsicContentSize" width="109" height="54"/>
@@ -8258,9 +7897,6 @@
         <designable name="mOw-wC-taw">
             <size key="intrinsicContentSize" width="49" height="44"/>
         </designable>
-        <designable name="nYw-lB-PPG">
-            <size key="intrinsicContentSize" width="91" height="42"/>
-        </designable>
         <designable name="ng0-nK-RwM">
             <size key="intrinsicContentSize" width="90" height="48"/>
         </designable>
@@ -8273,14 +7909,8 @@
         <designable name="oq7-Z8-Atf">
             <size key="intrinsicContentSize" width="131" height="44"/>
         </designable>
-        <designable name="ra6-E2-ikW">
-            <size key="intrinsicContentSize" width="46" height="42"/>
-        </designable>
         <designable name="rrL-Ym-l4D">
             <size key="intrinsicContentSize" width="168.5" height="26"/>
-        </designable>
-        <designable name="s5J-MX-FcQ">
-            <size key="intrinsicContentSize" width="30" height="42"/>
         </designable>
         <designable name="tr4-6C-l3c">
             <size key="intrinsicContentSize" width="127" height="47"/>
@@ -8302,9 +7932,6 @@
         </designable>
         <designable name="yjU-aN-d2x">
             <size key="intrinsicContentSize" width="120" height="36"/>
-        </designable>
-        <designable name="zCZ-6p-57T">
-            <size key="intrinsicContentSize" width="31" height="42"/>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>

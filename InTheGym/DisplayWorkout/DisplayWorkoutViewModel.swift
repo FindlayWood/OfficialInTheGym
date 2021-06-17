@@ -91,6 +91,16 @@ class DisplayWorkoutViewModel: NSObject{
         selectedWorkoutExercises.completedSets![indexPath.item] = true
         //self.selectedWorkout?.exercises![indexPath.section].completedSets![indexPath.item] = true
         ref.child("\(indexPath.item)").setValue(true)
+        
+        let type = getData(at: indexPath)
+        guard let exercise = type as? exercise else {return}
+        guard let name = exercise.exercise,
+              let reps = exercise.repArray?[indexPath.item],
+              let weight = exercise.weightArray?[indexPath.item]
+        else {
+            return
+        }
+        FirebaseAPIWorkoutManager.shared.updateExerciseStats(name: name, reps: reps, weight: weight)
     }
     
     func updateRPE(at indexPath: IndexPath, with rpe:Int){
@@ -101,6 +111,11 @@ class DisplayWorkoutViewModel: NSObject{
         //self.selectedWorkout?.exercises![indexPath.section].rpe = rpe.description
         let ref = Database.database().reference().child("Workouts").child(self.userId!).child((selectedWorkout?.workoutID!)!).child("exercises").child("\(indexPath.section)")
         ref.child("rpe").setValue(rpe.description)
+        
+        let type = getData(at: indexPath)
+        guard let exercise = type as? exercise else {return}
+        guard let name = exercise.exercise else {return}
+        FirebaseAPIWorkoutManager.shared.completeExercise(name: name, with: rpe)
     }
     
     // MARK: - Setup functions
