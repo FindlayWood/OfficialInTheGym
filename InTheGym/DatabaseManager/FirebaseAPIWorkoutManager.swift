@@ -25,8 +25,33 @@ class FirebaseAPIWorkoutManager {
     private let rpeStatString = "totalRPE"
     private let completionStatString = "numberOfCompletions"
     
+    func checkForExerciseStats(name: String, reps: Int, weight: String?) {
+        guard let userID = Auth.auth().currentUser?.uid else {return}
+        let path = "ExerciseStats/\(userID)/\(name)"
+        let ref = baseRef.child(path)
+        ref.observeSingleEvent(of: .value) { snapshot in
+            if snapshot.exists() {
+                self.updateExerciseStats(name: name, reps: reps, weight: weight)
+            } else {
+                self.addExerciseStats(name: name, reps: reps, weight: weight)
+            }
+        }
+    }
+    func checkForCompletionStats(name: String, rpe: Int) {
+        guard let userID = Auth.auth().currentUser?.uid else {return}
+        let path = "ExerciseStats/\(userID)/\(name)"
+        let ref = baseRef.child(path)
+        ref.observeSingleEvent(of: .value) { snapshot in
+            if snapshot.exists() {
+                self.completeExercise(name: name, with: rpe)
+            } else {
+                self.addCompletionStats(name: name, rpe: rpe)
+            }
+        }
+    }
     
-    func updateExerciseStats(name: String, reps: Int, weight: String?) {
+    
+    private func updateExerciseStats(name: String, reps: Int, weight: String?) {
         guard let userID = Auth.auth().currentUser?.uid else {return}
         let path = "ExerciseStats/\(userID)/\(name)"
         let ref = baseRef.child(path)
@@ -52,27 +77,29 @@ class FirebaseAPIWorkoutManager {
                 }
                 currentData.value = stats
                 return TransactionResult.success(withValue: currentData)
-            } else {
-                let newMutableData = MutableData()
-                var newData = newMutableData.value as! [String: AnyObject]
-                newData[self.repStatString] = reps as AnyObject
-                newData[self.setStatString] = 1 as AnyObject
-                if let weightString = weight {
-                    let weightNumber = self.getWeight(from: self.poundsOrKilograms(from: weightString) ?? .kg(0.0))
-                    newData[self.totalWeightStatString] = weightNumber as AnyObject
-                    newData[self.maxWeightStatString] = weightNumber as AnyObject
-                 }
-                newMutableData.value = newData
-                return TransactionResult.success(withValue: newMutableData)
             }
+            return TransactionResult.success(withValue: currentData)
         } andCompletionBlock: { error, committed, snapshot in
             if let error = error {
                 print(error.localizedDescription)
             }
         }
-
     }
-    func completeExercise(name: String, with rpe: Int) {
+    private func addExerciseStats( name: String, reps: Int, weight: String?) {
+        guard let userID = Auth.auth().currentUser?.uid else {return}
+        let path = "ExerciseStats/\(userID)/\(name)"
+        let ref = baseRef.child(path)
+        var newData = [String: AnyObject]()
+        newData[self.repStatString] = reps as AnyObject
+        newData[self.setStatString] = 1 as AnyObject
+        if let weightString = weight {
+            let weightNumber = self.getWeight(from: self.poundsOrKilograms(from: weightString) ?? .kg(0.0))
+            newData[self.totalWeightStatString] = weightNumber as AnyObject
+            newData[self.maxWeightStatString] = weightNumber as AnyObject
+         }
+        ref.setValue(newData)
+    }
+    private func completeExercise(name: String, with rpe: Int) {
         guard let userID = Auth.auth().currentUser?.uid else {return}
         let path = "ExerciseStats/\(userID)/\(name)"
         let ref = baseRef.child(path)
@@ -87,20 +114,23 @@ class FirebaseAPIWorkoutManager {
                 stats[self.completionStatString] = completions as AnyObject
                 currentData.value = stats
                 return TransactionResult.success(withValue: currentData)
-            } else {
-                let newMutableData = MutableData()
-                var newData = newMutableData.value as! [String: AnyObject]
-                newData[self.rpeStatString] = rpe as AnyObject
-                newData[self.completionStatString] = 1 as AnyObject
-                newMutableData.value = newData
-                return TransactionResult.success(withValue: newMutableData)
             }
+            return TransactionResult.success(withValue: currentData)
         } andCompletionBlock: { error, committed, snapshot in
             if let error = error {
                 print(error.localizedDescription)
             }
         }
-
+    }
+    private func addCompletionStats(name: String, rpe: Int) {
+        guard let userID = Auth.auth().currentUser?.uid else {return}
+        let path = "ExerciseStats/\(userID)/\(name)"
+        let ref = baseRef.child(path)
+        var newData = [String: AnyObject]()
+        newData[self.rpeStatString] = rpe as AnyObject
+        newData[self.completionStatString] = 1 as AnyObject
+        ref.setValue(newData)
+        
     }
     
     private func convertToKG(from pounds: Double) -> Double {

@@ -107,7 +107,7 @@ class NewWeightViewController: UIViewController, Storyboarded {
         coordinator?.weightSelected(newExercise)
     }
     
-    @IBAction func skipPressed(_ sender:UIButton) {
+    @objc func skipPressed(_ sender: UIButton) {
         
         guard let newExercise = newExercise else {return}
         if coordinator is LiveWorkoutCoordinator {

@@ -57,9 +57,11 @@ class AMRAP: WorkoutType {
     func toObject() -> [String : AnyObject] {
         var object = ["exercise": exercise!,
                       "timeLimit": timeLimit!,
-                      "amrap": amrap,
-                      "completed": completed] as [String:AnyObject]
+                      "amrap": amrap] as [String:AnyObject]
         
+        if let completedBool = completed.value {
+            object["completed"] = completedBool as AnyObject
+        }
         if let rounds = roundsCompleted.value {
             object["roundsCompleted"] = rounds as AnyObject
         }

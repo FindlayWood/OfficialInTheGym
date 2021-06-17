@@ -100,7 +100,7 @@ class DisplayWorkoutViewModel: NSObject{
         else {
             return
         }
-        FirebaseAPIWorkoutManager.shared.updateExerciseStats(name: name, reps: reps, weight: weight)
+        FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: name, reps: reps, weight: weight)
     }
     
     func updateRPE(at indexPath: IndexPath, with rpe:Int){
@@ -115,7 +115,7 @@ class DisplayWorkoutViewModel: NSObject{
         let type = getData(at: indexPath)
         guard let exercise = type as? exercise else {return}
         guard let name = exercise.exercise else {return}
-        FirebaseAPIWorkoutManager.shared.completeExercise(name: name, with: rpe)
+        FirebaseAPIWorkoutManager.shared.checkForCompletionStats(name: name, rpe: rpe)
     }
     
     // MARK: - Setup functions
