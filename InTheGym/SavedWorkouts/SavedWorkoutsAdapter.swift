@@ -57,7 +57,9 @@ extension SavedWorkoutsAdapter : UITableViewDataSource, UITableViewDelegate, Emp
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return UIView()
+        let view = UIView()
+        view.backgroundColor = Constants.lightColour
+        return view
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

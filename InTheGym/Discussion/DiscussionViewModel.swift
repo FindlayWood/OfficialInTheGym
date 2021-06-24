@@ -49,7 +49,14 @@ class DiscussionViewModel{
         
         
         handle = postReplyRef.observe(.childAdded) { (snapshot) in
-            tempReplies.append(DiscussionReply(snapshot: snapshot)!)
+            if let snap = snapshot.value as? [String: AnyObject] {
+                if (snap["attachedWorkoutSavedID"] as? String) != nil {
+                    tempReplies.append(DiscussionReplyPlusWorkout(snapshot: snapshot)!)
+                } else {
+                    tempReplies.append(DiscussionReply(snapshot: snapshot)!)
+                }
+            }
+            //tempReplies.append(DiscussionReply(snapshot: snapshot)!)
             if initialLoad == false {
                 self.replies = tempReplies
             }
@@ -133,8 +140,10 @@ class DiscussionViewModel{
 //MARK: - Adding Comments
 extension DiscussionViewModel {
     
-    func addReply(_ reply: String) {
-        FirebasePostAPI.shared.postReply(to: self.originalPost, with: reply) { result in
+    func addReply(_ reply: String, attachment: savedWorkoutDelegate?) {
+        
+        FirebasePostAPI.shared.postReply(to: self.originalPost, with: reply, and: attachment) { [weak self] result in
+            guard let self = self else {return}
             switch result {
             case .success(_):
                 self.replyAddedClosure?()
@@ -144,7 +153,17 @@ extension DiscussionViewModel {
         }
     }
     
-    func addGroupReply(_ reply: String) {
-        print("adding group reply \(reply)")
+    func addGroupReply(_ reply: String, attachment: savedWorkoutDelegate?, groupID: String) {
+        
+        FirebasePostAPI.shared.postGroupReply(to: self.originalPost, with: reply, and: attachment, group: groupID) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(_):
+                self.replyAddedClosure?()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
     }
 }

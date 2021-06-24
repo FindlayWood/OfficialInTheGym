@@ -166,3 +166,42 @@ struct DiscussionReply:PostProtocol{
         return [:]
     }
 }
+
+struct DiscussionReplyPlusWorkout: PostProtocol {
+    var username: String?
+    var time: TimeInterval?
+    var message: String?
+    var attachedWorkoutSavedID: String?
+    var attachedWorkoutTitle: String?
+    var attachedWorkoutCreator: String?
+    var attachedWorkoutCreatorID: String?
+    var attachedWorkoutExerciseCount: Int?
+    var posterID: String?
+    var postID: String?
+    var likeCount: Int?
+    var replyCount: Int?
+    var isPrivate: Bool?
+
+    init?(snapshot: DataSnapshot) {
+        guard let snap = snapshot.value as? [String:AnyObject] else{
+            return
+        }
+        self.username = snap["username"] as? String
+        self.time = snap["time"] as? TimeInterval
+        self.message = snap["message"] as? String
+        self.attachedWorkoutSavedID = snap["attachedWorkoutSavedID"] as? String
+        self.attachedWorkoutTitle = snap["attachedWorkoutTitle"] as? String
+        self.attachedWorkoutCreator = snap["attachedWorkoutCreator"] as? String
+        self.attachedWorkoutCreatorID = snap["attachedWorkoutCreatorID"] as? String
+        self.attachedWorkoutExerciseCount = snap["attachedWorkoutExerciseCount"] as? Int
+        self.posterID = snap["posterID"] as? String
+        self.postID = snapshot.key
+        self.isPrivate = false
+    }
+    
+    func toObject() -> [String : AnyObject] {
+        return [:]
+    }
+    
+    
+}

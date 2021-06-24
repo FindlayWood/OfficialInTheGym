@@ -40,7 +40,7 @@ extension DiscussionAdapter: UITableViewDelegate, UITableViewDataSource{
             rowModel = delegate.getData(at: indexPath)
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier(for: rowModel), for: indexPath)
-        if var cell = cell as? DiscussionCellConfigurable{
+        if var cell = cell as? DiscussionCellConfigurable {
             cell.setup(rowViewModel: rowModel)
             cell.delegate = self.delegate as? DiscussionTapProtocol
         }
@@ -76,6 +76,8 @@ extension DiscussionAdapter: UITableViewDelegate, UITableViewDataSource{
             return OriginalCompletedWorkoutTableViewCell.cellIdentifier()
         case is DiscussionReply:
             return ReplyTableViewCell.cellIdentifier()
+        case is DiscussionReplyPlusWorkout:
+            return DiscussionReplyAttachedWorkout.cellIdentifier()
         default:
             return "error with row \(rowModel)"
         }

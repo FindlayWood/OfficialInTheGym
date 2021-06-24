@@ -16,6 +16,7 @@ enum PostReplyError: Error {
 }
 
 class FirebasePostAPI {
+    typealias escapingResult = Result<Bool,PostReplyError>
     
     static let shared = FirebasePostAPI()
     
@@ -27,7 +28,7 @@ class FirebasePostAPI {
     ///   - post: this is the post that the comment/reply is being added to
     ///   - message: this is the context of the reply - just a string
     ///   - completion: this is the completion block to return true or an error
-    func postReply(to post: PostProtocol, with message: String, completion: @escaping (Result<Bool,PostReplyError>) -> Void) {
+    func postReply(to post: PostProtocol, with message: String, and attachment: savedWorkoutDelegate?, completion: @escaping (Result<Bool,PostReplyError>) -> Void) {
         guard let userID = Auth.auth().currentUser?.uid,
               let username = ViewController.username,
               let postID = post.postID
@@ -35,10 +36,17 @@ class FirebasePostAPI {
             completion(.failure(.failedToPost))
             return
         }
-        let replyData = ["time": ServerValue.timestamp(),
+        var replyData = ["time": ServerValue.timestamp(),
                          "posterID": userID,
                          "message": message,
                          "username": username] as [String: AnyObject]
+        if let attachedWorkout = attachment {
+            replyData["attachedWorkoutSavedID"] = attachedWorkout.workoutID as AnyObject
+            replyData["attachedWorkoutCreator"] = attachedWorkout.createdBy as AnyObject
+            replyData["attachedWorkoutCreatorID"] = attachedWorkout.creatorID as AnyObject
+            replyData["attachedWorkoutExerciseCount"] = attachedWorkout.exercises?.count as AnyObject
+            replyData["attachedWorkoutTitle"] = attachedWorkout.title as AnyObject
+        }
         let replyRef = Database.database().reference().child("PostReplies").child(postID)
         replyRef.childByAutoId().setValue(replyData) { error, snapshot in
             if let error = error {
@@ -46,6 +54,36 @@ class FirebasePostAPI {
                 completion(.failure(.failedToPost))
             } else {
                 self.updateReplyCount(on: post, completion: completion)
+            }
+        }
+    }
+    
+    func postGroupReply(to post: PostProtocol, with message: String, and attachment: savedWorkoutDelegate?, group groupID: String, completion: @escaping (escapingResult) -> Void) {
+        guard let userID = Auth.auth().currentUser?.uid,
+              let username = ViewController.username,
+              let postID = post.postID
+        else {
+            completion(.failure(.failedToPost))
+            return
+        }
+        var replyData = ["time": ServerValue.timestamp(),
+                         "posterID": userID,
+                         "message": message,
+                         "username": username] as [String: AnyObject]
+        if let attachedWorkout = attachment {
+            replyData["attachedWorkoutSavedID"] = attachedWorkout.workoutID as AnyObject
+            replyData["attachedWorkoutCreator"] = attachedWorkout.createdBy as AnyObject
+            replyData["attachedWorkoutCreatorID"] = attachedWorkout.creatorID as AnyObject
+            replyData["attachedWorkoutExerciseCount"] = attachedWorkout.exercises?.count as AnyObject
+            replyData["attachedWorkoutTitle"] = attachedWorkout.title as AnyObject
+        }
+        let replyRef = Database.database().reference().child("PostReplies").child(postID)
+        replyRef.childByAutoId().setValue(replyData) { error, snapshot in
+            if let error = error {
+                print(error.localizedDescription)
+                completion(.failure(.failedToPost))
+            } else {
+                self.updateGroupReplyCount(on: post, group: groupID, completion: completion)
             }
         }
     }
@@ -62,6 +100,32 @@ class FirebasePostAPI {
             return
         }
         let replyCountRef = Database.database().reference().child("Posts").child(postID)
+        
+        replyCountRef.runTransactionBlock { (currentData) -> TransactionResult in
+            if var post = currentData.value as? [String:AnyObject]{
+                var replies = post["replyCount"] as? Int ?? 0
+                replies += 1
+                post["replyCount"] = replies as AnyObject
+                currentData.value = post
+                return TransactionResult.success(withValue: currentData)
+            }
+            return TransactionResult.success(withValue: currentData)
+        } andCompletionBlock: { (error, committed, snapshot) in
+            if let error = error{
+                print(error.localizedDescription)
+            } else {
+                self.sendNotification(on: post, completion: completion)
+            }
+        }
+    }
+    
+    private func updateGroupReplyCount(on post: PostProtocol, group groupID: String, completion: @escaping (escapingResult) -> Void) {
+        guard let postID = post.postID
+        else {
+            completion(.failure(.failedToUpdateCount))
+            return
+        }
+        let replyCountRef = Database.database().reference().child("GroupPosts").child(groupID).child(postID)
         
         replyCountRef.runTransactionBlock { (currentData) -> TransactionResult in
             if var post = currentData.value as? [String:AnyObject]{
