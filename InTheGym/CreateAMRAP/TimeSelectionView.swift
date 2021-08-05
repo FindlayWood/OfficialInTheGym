@@ -79,7 +79,6 @@ class TimeSelectionView: UIView {
             self.flashview.removeFromSuperview()
             self.removeFromSuperview()
         }
-
     }
 }
 

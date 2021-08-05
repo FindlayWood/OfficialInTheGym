@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -53,9 +53,16 @@
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tmw-OW-cfC">
+                        <rect key="frame" x="130" y="104.5" width="60.5" height="23.5"/>
+                        <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="20"/>
+                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="2Wo-LS-pCi" secondAttribute="trailing" constant="16" id="7vE-hy-OxD"/>
+                    <constraint firstItem="Tmw-OW-cfC" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="ALr-2V-UXI"/>
                     <constraint firstItem="2Wo-LS-pCi" firstAttribute="top" secondItem="aXB-BL-sLZ" secondAttribute="bottom" constant="3.5" id="BBK-uH-jDC"/>
                     <constraint firstItem="dnj-Md-fj9" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="BJ0-gY-HrV"/>
                     <constraint firstItem="LUX-QR-QJ2" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="If2-TM-UaR"/>
@@ -63,10 +70,11 @@
                     <constraint firstItem="2Wo-LS-pCi" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="ShC-PB-dFP"/>
                     <constraint firstItem="2UM-Gd-1vt" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="Vfb-tr-u9U"/>
                     <constraint firstItem="2UM-Gd-1vt" firstAttribute="top" secondItem="2Wo-LS-pCi" secondAttribute="bottom" constant="17" id="ax4-bH-EHq"/>
+                    <constraint firstItem="Tmw-OW-cfC" firstAttribute="top" secondItem="dnj-Md-fj9" secondAttribute="bottom" constant="7.5" id="cLh-22-h7z"/>
                     <constraint firstItem="aXB-BL-sLZ" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="dY3-cr-qGF"/>
                     <constraint firstItem="LUX-QR-QJ2" firstAttribute="top" secondItem="2Wo-LS-pCi" secondAttribute="bottom" constant="17" id="jPU-hb-xap"/>
                     <constraint firstItem="aXB-BL-sLZ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="m3r-kS-OJ8"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="dnj-Md-fj9" secondAttribute="bottom" constant="31" id="t4V-h2-9cx"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Tmw-OW-cfC" secondAttribute="bottom" id="u1e-Dv-H0P"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -75,6 +83,7 @@
                 <outlet property="exerciseName" destination="aXB-BL-sLZ" id="cIn-Ft-7F1"/>
                 <outlet property="exerciseReps" destination="dnj-Md-fj9" id="eua-lx-rbD"/>
                 <outlet property="exerciseSet" destination="2UM-Gd-1vt" id="Z0I-jY-hht"/>
+                <outlet property="weight" destination="Tmw-OW-cfC" id="TCa-QZ-dY2"/>
             </connections>
             <point key="canvasLocation" x="137.68115942028987" y="127.56696428571428"/>
         </tableViewCell>

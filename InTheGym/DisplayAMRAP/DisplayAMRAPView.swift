@@ -23,6 +23,13 @@ class DisplayAMRAPView: UIView {
         return label
     }()
     
+    var helpIcon: UIButton = {
+       let button = UIButton()
+        button.setImage(UIImage(named: "help-button"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     lazy var collection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
         collection.backgroundColor = Constants.lightColour
@@ -101,6 +108,7 @@ class DisplayAMRAPView: UIView {
     
     private func setup() {
         addSubview(timeLabel)
+        addSubview(helpIcon)
         addSubview(collection)
         addSubview(roundsView)
         roundsView.addSubview(roundsNumberLabel)
@@ -114,6 +122,11 @@ class DisplayAMRAPView: UIView {
     private func constrain() {
         NSLayoutConstraint.activate([timeLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      timeLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+                                     
+                                     helpIcon.centerYAnchor.constraint(equalTo: timeLabel.centerYAnchor),
+                                     helpIcon.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+                                     helpIcon.heightAnchor.constraint(equalToConstant: 50),
+                                     helpIcon.widthAnchor.constraint(equalToConstant: 50),
                                      
                                      collection.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 10),
                                      collection.leadingAnchor.constraint(equalTo: leadingAnchor),

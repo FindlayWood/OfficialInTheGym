@@ -14,7 +14,7 @@ import Firebase
 
 class NewWeightViewController: UIViewController, Storyboarded {
     
-    weak var coordinator: RegularAndLiveFlow?
+    weak var coordinator: CreationDelegate?
     var newExercise: exercise?
     var selectedIndexInt: Int? = nil
     var selectedState: setSelected = .allSelected
@@ -33,6 +33,8 @@ class NewWeightViewController: UIViewController, Storyboarded {
         display.kgButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         display.lbsButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         display.percentageButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        display.bodyweightButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        display.bodyWeightPercentButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         display.maxButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         display.kmButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         display.milesButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
@@ -45,17 +47,37 @@ class NewWeightViewController: UIViewController, Storyboarded {
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
-        display.updateButton.isHidden = false
-        display.weightMeasurementField.text = sender.titleLabel?.text
-        if sender == display.maxButton {
-            display.numberTextfield.text = ""
-            display.numberTextfield.isUserInteractionEnabled = false
-            display.maxButton.isSelected = true
+        
+        if coordinator is LiveWorkoutCoordinator || coordinator is AMRAPCoordinator {
+            display.nextButton.isHidden = false
+            display.weightMeasurementField.text = sender.titleLabel?.text
+            if sender == display.maxButton || sender == display.bodyweightButton {
+                display.numberTextfield.text = ""
+                display.numberTextfield.isUserInteractionEnabled = false
+                display.maxButton.isSelected = true
+            } else {
+                display.numberTextfield.isUserInteractionEnabled = true
+                display.maxButton.isSelected = false
+                display.numberTextfield.becomeFirstResponder()
+            }
+            
         } else {
-            display.numberTextfield.isUserInteractionEnabled = true
-            display.maxButton.isSelected = false
-            display.numberTextfield.becomeFirstResponder()
+            display.updateButton.isHidden = false
+            display.weightMeasurementField.text = sender.titleLabel?.text
+            if sender == display.maxButton || sender == display.bodyweightButton {
+                display.numberTextfield.text = ""
+                display.numberTextfield.isUserInteractionEnabled = false
+                display.maxButton.isSelected = true
+            } else {
+                display.numberTextfield.isUserInteractionEnabled = true
+                display.maxButton.isSelected = false
+                display.numberTextfield.becomeFirstResponder()
+            }
+            
         }
+        
+        
+
     }
     @objc func updatePressed(_ sender: UIButton) {
         guard let number = display.numberTextfield.text,
@@ -101,6 +123,22 @@ class NewWeightViewController: UIViewController, Storyboarded {
                     newExercise.weightArray?.append(newWeight)
                 }
             }
+        } else if coordinator is AMRAPCoordinator {
+            if display.maxButton.isSelected {
+                newExercise.weight = "MAX"
+            } else {
+                guard let number = display.numberTextfield.text,
+                      let measurement = display.weightMeasurementField.text
+                else {
+                    return
+                }
+                if number.isEmpty || measurement.isEmpty {
+                    showEmptyAlert()
+                } else {
+                    let newWeight = number + measurement
+                    newExercise.weight = newWeight
+                }
+            }
         } else {
             newExercise.weightArray = WeightArray
         }
@@ -138,6 +176,10 @@ class NewWeightViewController: UIViewController, Storyboarded {
             display.pageNumberLabel.text = "5 of 6"
         case is LiveWorkoutCoordinator:
             display.pageNumberLabel.text = "2 of 2"
+        case is AMRAPCoordinator:
+            display.pageNumberLabel.text = "4 of 4"
+        case is CircuitCoordinator:
+            display.pageNumberLabel.text = "5 of 5"
         default:
             break
         }
@@ -165,11 +207,7 @@ class NewWeightViewController: UIViewController, Storyboarded {
             kWindowWidth: screenWidth - 40, showCircularIcon: true
         )
         let alert = SCLAlertView(appearance: appearance)
-//        alert.addButton("Continue Anyway") {
-//            print("continuing to next page with no weight...")
-//            self.skipPressed(UIButton())
-//        }
-        alert.showError("Enter a Weight!", subTitle: "You have not entered a number for the weight for this exercise. To enter a weight tap on the left side of the big dark blue box. You can continue without entering a weight if you would like. Continue with no weight?", closeButtonTitle: "OK")
+        alert.showError("Enter a Weight!", subTitle: "You have not entered a number for the weight. To enter a number tap on the left side of the big dark blue box. You can continue without entering a weight by pressing the SKIP button near the bottom of the screen.", closeButtonTitle: "OK")
     }
     
  
@@ -179,7 +217,7 @@ extension NewWeightViewController: WeightAdapterProtocol {
     func getData(at indexPath: Int) -> WeightModel {
         guard let exercise = newExercise else {return WeightModel(rep: 0, weight: "", index: 0)}
         let rep = exercise.repArray?[indexPath] ?? 0
-        let weight = WeightArray[indexPath]
+        let weight = exercise.weightArray?[indexPath] ?? WeightArray[indexPath]
         return WeightModel(rep: rep, weight: weight, index: indexPath + 1)
     }
     
@@ -188,25 +226,27 @@ extension NewWeightViewController: WeightAdapterProtocol {
     }
     
     func itemSelected(at indexPath: Int) {
-        switch selectedState {
-        case .allSelected:
-            selectedState = .singleSelected(indexPath)
-            selectedIndexInt = indexPath
-            display.updateButton.setTitle("UPDATE SET \(indexPath + 1)", for: .normal)
-            display.topCollection.scrollToItem(at: IndexPath(item: indexPath, section: 0), at: .centeredHorizontally, animated: true)
-        case .singleSelected(let index):
-            if index == indexPath {
-                selectedState = .allSelected
-                selectedIndexInt = nil
-                display.updateButton.setTitle("UPDATE ALL SETS", for: .normal)
-            } else {
+        if !(coordinator is LiveWorkoutCoordinator) {
+            switch selectedState {
+            case .allSelected:
                 selectedState = .singleSelected(indexPath)
                 selectedIndexInt = indexPath
                 display.updateButton.setTitle("UPDATE SET \(indexPath + 1)", for: .normal)
                 display.topCollection.scrollToItem(at: IndexPath(item: indexPath, section: 0), at: .centeredHorizontally, animated: true)
+            case .singleSelected(let index):
+                if index == indexPath {
+                    selectedState = .allSelected
+                    selectedIndexInt = nil
+                    display.updateButton.setTitle("UPDATE ALL SETS", for: .normal)
+                } else {
+                    selectedState = .singleSelected(indexPath)
+                    selectedIndexInt = indexPath
+                    display.updateButton.setTitle("UPDATE SET \(indexPath + 1)", for: .normal)
+                    display.topCollection.scrollToItem(at: IndexPath(item: indexPath, section: 0), at: .centeredHorizontally, animated: true)
+                }
             }
+            display.topCollection.reloadData()
         }
-        display.topCollection.reloadData()
     }
     
     func selectedIndex() -> Int? {

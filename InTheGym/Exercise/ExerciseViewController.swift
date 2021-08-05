@@ -69,11 +69,11 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
         case is RegularWorkoutCoordinator:
             pageNumberLabel.text = "2 of 6"
         case is CircuitCoordinator:
-            pageNumberLabel.text = "2 of 4"
+            pageNumberLabel.text = "2 of 5"
         case is LiveWorkoutCoordinator:
             pageNumberLabel.text = "2 of 2"
         case is AMRAPCoordinator:
-            pageNumberLabel.text = "2 of 3"
+            pageNumberLabel.text = "2 of 4"
         default:
              break
         }

@@ -105,7 +105,7 @@ class ExerciseSetsViewController: UIViewController, Storyboarded {
         case is RegularWorkoutCoordinator:
             pageNumberLabel.text = "3 of 6"
         case is CircuitCoordinator:
-            pageNumberLabel.text = "3 of 4"
+            pageNumberLabel.text = "3 of 5"
         default:
              break
         }

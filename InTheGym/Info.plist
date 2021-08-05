@@ -47,5 +47,9 @@
 	<string>INTHEGYM would like access to your media library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>INTHEGYM would like access to your photo library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>INTHEGYM would like to access the camera to record clips.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>INTHEGYM would like to access the microphone to add sound to your clips.</string>
 </dict>
 </plist>

@@ -35,7 +35,7 @@ class WorkoutBottomView: UIView {
         }
     }
     
-    private let tableContents = ["View Creator Profile"]
+    private let tableContents = ["View Creator Profile", "View Workout Stats"]
     
     lazy var bottomView: UIView = {
         let view = UIView(frame: normalFrame)

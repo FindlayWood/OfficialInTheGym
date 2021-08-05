@@ -11,6 +11,7 @@ import UIKit
 
 protocol WorkoutCoordinatorFlow: WorkoutDisplayCoordinator {
     func showUser(with user: Users)
+    func showWorkoutStats(with savedWorkoutID: String)
     func showCircuit()
     func showAMRAP(with model: AMRAP, at position: Int, on workout: workout)
     
@@ -77,6 +78,12 @@ extension WorkoutCoordinator: WorkoutCoordinatorFlow {
         let child = UserProfileCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(child)
         child.start()
+    }
+    
+    func showWorkoutStats(with savedWorkoutID: String) {
+        let vc = DisplayWorkoutStatsViewController()
+        vc.savedWorkoutID = savedWorkoutID
+        navigationController.pushViewController(vc, animated: true)
     }
 }
 

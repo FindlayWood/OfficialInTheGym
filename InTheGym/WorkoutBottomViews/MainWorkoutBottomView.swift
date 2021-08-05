@@ -9,14 +9,14 @@
 import Foundation
 import UIKit
 
-class MainWorkoutBottomView:UIView{
+class MainWorkoutBottomView: UIView {
     
-    var parentView:UIView!
-    var newHeightAnchor:NSLayoutConstraint?
+    var parentView: UIView!
+    var newHeightAnchor: NSLayoutConstraint?
     var flashLabel = UILabel()
     var flashView = UIView()
     var bottomViewSetUpClosure: (() -> ())?
-    var workout:WorkoutDelegate?
+    var workout: WorkoutDelegate?
 
     init(workout: WorkoutDelegate, parent:UIView) {
         self.workout = workout

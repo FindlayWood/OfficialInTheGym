@@ -4412,112 +4412,9 @@
                     <view key="view" contentMode="scaleToFill" id="fLm-Kg-Zmg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="m94-Cu-6g6" customClass="SkyFloatingLabelTextField" customModule="SkyFloatingLabelTextField">
-                                <rect key="frame" x="20" y="44" width="374" height="50"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="h1f-Kx-Sng"/>
-                                </constraints>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="textColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="lineHeight">
-                                        <real key="value" value="2"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="selectedLineHeight">
-                                        <real key="value" value="4"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Circuit Title"/>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="selectedTitle" value="Circuit Title"/>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="selectedTitleColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="selectedLineColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="placeholderColor">
-                                        <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="titleColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="title" value="Circuit Title"/>
-                                </userDefinedRuntimeAttributes>
-                            </textField>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dJO-6d-luS">
-                                <rect key="frame" x="20" y="102" width="374" height="707"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oq7-Z8-Atf" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                <rect key="frame" x="20" y="817" width="374" height="45"/>
-                                <color key="backgroundColor" name="darkColour"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="EhJ-i4-WMG"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="27"/>
-                                <state key="normal" title="Complete">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="24"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                        <real key="value" value="2"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="buttonPulsate:" destination="hf5-Hs-MG9" eventType="touchUpInside" id="yzR-1O-c0e"/>
-                                    <action selector="completePressed:" destination="5tu-Q5-DOB" eventType="touchUpInside" id="vBl-in-7Xk"/>
-                                    <action selector="savePressed:" destination="hf5-Hs-MG9" eventType="touchUpInside" id="Qva-mw-GUv"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I1N-5h-LdZ">
-                                <rect key="frame" x="294" y="709" width="100" height="100"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="dPb-eD-mA0"/>
-                                    <constraint firstAttribute="height" constant="100" id="xc5-4t-8aW"/>
-                                </constraints>
-                                <state key="normal" image="bluePlus3"/>
-                                <connections>
-                                    <action selector="addExercise:" destination="5tu-Q5-DOB" eventType="touchUpInside" id="2OJ-Uh-QrK"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="gtM-jF-8Dh"/>
                         <color key="backgroundColor" name="lightColour"/>
-                        <constraints>
-                            <constraint firstItem="gtM-jF-8Dh" firstAttribute="trailing" secondItem="dJO-6d-luS" secondAttribute="trailing" constant="20" id="1sj-s3-pyW"/>
-                            <constraint firstItem="dJO-6d-luS" firstAttribute="top" secondItem="m94-Cu-6g6" secondAttribute="bottom" constant="8" symbolic="YES" id="56s-E1-5Ac"/>
-                            <constraint firstItem="gtM-jF-8Dh" firstAttribute="trailing" secondItem="oq7-Z8-Atf" secondAttribute="trailing" constant="20" id="Ed0-Xi-PJT"/>
-                            <constraint firstItem="oq7-Z8-Atf" firstAttribute="top" secondItem="dJO-6d-luS" secondAttribute="bottom" constant="8" symbolic="YES" id="PL4-Xu-WYj"/>
-                            <constraint firstItem="m94-Cu-6g6" firstAttribute="top" secondItem="gtM-jF-8Dh" secondAttribute="top" id="bKv-3j-SjT"/>
-                            <constraint firstItem="oq7-Z8-Atf" firstAttribute="top" secondItem="I1N-5h-LdZ" secondAttribute="bottom" constant="8" symbolic="YES" id="gfQ-LN-vVT"/>
-                            <constraint firstItem="oq7-Z8-Atf" firstAttribute="bottom" secondItem="gtM-jF-8Dh" secondAttribute="bottom" id="h3e-Z8-VUO"/>
-                            <constraint firstItem="gtM-jF-8Dh" firstAttribute="trailing" secondItem="m94-Cu-6g6" secondAttribute="trailing" constant="20" id="hH1-tO-W7n"/>
-                            <constraint firstItem="m94-Cu-6g6" firstAttribute="leading" secondItem="gtM-jF-8Dh" secondAttribute="leading" constant="20" id="kHG-H0-Did"/>
-                            <constraint firstItem="oq7-Z8-Atf" firstAttribute="leading" secondItem="gtM-jF-8Dh" secondAttribute="leading" constant="20" id="mSD-ua-Owr"/>
-                            <constraint firstItem="gtM-jF-8Dh" firstAttribute="trailing" secondItem="I1N-5h-LdZ" secondAttribute="trailing" constant="20" id="xFa-U8-bKR"/>
-                            <constraint firstItem="dJO-6d-luS" firstAttribute="leading" secondItem="gtM-jF-8Dh" secondAttribute="leading" constant="20" id="ztq-TS-nAQ"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="completeButton" destination="oq7-Z8-Atf" id="Z5X-oC-Qgi"/>
-                        <outlet property="tableview" destination="dJO-6d-luS" id="RYH-9c-gfb"/>
-                        <outlet property="titleField" destination="m94-Cu-6g6" id="i4p-A1-zn8"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Exo-YF-eL0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -4589,7 +4486,6 @@
                                 <connections>
                                     <action selector="addPressed:" destination="1eE-vP-Rtw" eventType="touchUpInside" id="sfF-w9-Jpj"/>
                                     <action selector="buttonPulsate:" destination="hf5-Hs-MG9" eventType="touchUpInside" id="zVo-cy-6WO"/>
-                                    <action selector="completePressed:" destination="5tu-Q5-DOB" eventType="touchUpInside" id="qZd-cE-sl5"/>
                                     <action selector="savePressed:" destination="hf5-Hs-MG9" eventType="touchUpInside" id="yYV-Gi-wvy"/>
                                 </connections>
                             </button>
@@ -4647,7 +4543,6 @@
                                     <action selector="addPressed:" destination="jtl-30-jA5" eventType="touchUpInside" id="JT1-7y-ZvY"/>
                                     <action selector="addPressed:" destination="1eE-vP-Rtw" eventType="touchUpInside" id="miA-PS-WFj"/>
                                     <action selector="buttonPulsate:" destination="hf5-Hs-MG9" eventType="touchUpInside" id="js3-0h-Yf4"/>
-                                    <action selector="completePressed:" destination="5tu-Q5-DOB" eventType="touchUpInside" id="IRV-Yk-Ndz"/>
                                     <action selector="savePressed:" destination="hf5-Hs-MG9" eventType="touchUpInside" id="Xhw-27-qGh"/>
                                 </connections>
                             </button>
@@ -7471,55 +7366,9 @@
                     <view key="view" contentMode="scaleToFill" id="5Gb-2Y-6pc">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BhN-Bn-iCk">
-                                <rect key="frame" x="5" y="44" width="404" height="770"/>
-                                <color key="backgroundColor" name="lightColour"/>
-                            </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yjU-aN-d2x" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                <rect key="frame" x="20" y="822" width="374" height="40"/>
-                                <color key="backgroundColor" name="darkColour"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="g09-xx-ecX"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
-                                <state key="normal" title="COMPLETED">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="21"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                        <real key="value" value="2"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="completed:" destination="sti-LG-BKz" eventType="touchUpInside" id="j9I-Zn-My6"/>
-                                    <action selector="completedTapped:" destination="YXF-zd-V1w" eventType="touchUpInside" id="Jqp-ya-wri"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="zEi-ov-RVA"/>
                         <color key="backgroundColor" name="lightColour"/>
-                        <constraints>
-                            <constraint firstItem="BhN-Bn-iCk" firstAttribute="leading" secondItem="zEi-ov-RVA" secondAttribute="leading" constant="5" id="0Pv-Lb-9wo"/>
-                            <constraint firstItem="zEi-ov-RVA" firstAttribute="trailing" secondItem="BhN-Bn-iCk" secondAttribute="trailing" constant="5" id="8T5-Xe-t6q"/>
-                            <constraint firstItem="yjU-aN-d2x" firstAttribute="top" secondItem="BhN-Bn-iCk" secondAttribute="bottom" constant="8" symbolic="YES" id="LOz-xr-gB0"/>
-                            <constraint firstItem="yjU-aN-d2x" firstAttribute="bottom" secondItem="zEi-ov-RVA" secondAttribute="bottom" id="S1p-GR-OFU"/>
-                            <constraint firstItem="yjU-aN-d2x" firstAttribute="leading" secondItem="zEi-ov-RVA" secondAttribute="leading" constant="20" id="cS8-hH-ubl"/>
-                            <constraint firstItem="zEi-ov-RVA" firstAttribute="trailing" secondItem="yjU-aN-d2x" secondAttribute="trailing" constant="20" id="d9g-t6-UuU"/>
-                            <constraint firstItem="BhN-Bn-iCk" firstAttribute="top" secondItem="zEi-ov-RVA" secondAttribute="top" id="feF-iZ-aPh"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="completeButton" destination="yjU-aN-d2x" id="Qoq-iR-W6E"/>
-                        <outlet property="completeButtonBottomConstraint" destination="S1p-GR-OFU" id="9BG-qb-k78"/>
-                        <outlet property="tableview" destination="BhN-Bn-iCk" id="wCj-r7-FpG"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Tl-DZ-bEi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -7888,9 +7737,6 @@
         <designable name="kez-jD-vfi">
             <size key="intrinsicContentSize" width="140" height="34"/>
         </designable>
-        <designable name="m94-Cu-6g6">
-            <size key="intrinsicContentSize" width="127.5" height="34"/>
-        </designable>
         <designable name="mCH-em-kvR">
             <size key="intrinsicContentSize" width="120" height="36"/>
         </designable>
@@ -7905,9 +7751,6 @@
         </designable>
         <designable name="og0-F6-ofO">
             <size key="intrinsicContentSize" width="90" height="48"/>
-        </designable>
-        <designable name="oq7-Z8-Atf">
-            <size key="intrinsicContentSize" width="131" height="44"/>
         </designable>
         <designable name="rrL-Ym-l4D">
             <size key="intrinsicContentSize" width="168.5" height="26"/>
@@ -7929,9 +7772,6 @@
         </designable>
         <designable name="x8I-QA-DLN">
             <size key="intrinsicContentSize" width="111" height="44"/>
-        </designable>
-        <designable name="yjU-aN-d2x">
-            <size key="intrinsicContentSize" width="120" height="36"/>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>

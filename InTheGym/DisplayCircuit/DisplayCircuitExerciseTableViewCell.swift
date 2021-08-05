@@ -13,19 +13,21 @@ class DisplayCircuitExerciseTableViewCell: UITableViewCell {
     @IBOutlet weak var exerciseName:UILabel!
     @IBOutlet weak var exerciseSet:UILabel!
     @IBOutlet weak var exerciseReps:UILabel!
+    @IBOutlet weak var weight:UILabel!
     @IBOutlet weak var completedButton:UIButton!
     
     var delegate : DisplayCircuitProtocol!
     
     func setup(with rowModel:CircuitTableModel){
-        self.exerciseName.text = rowModel.exerciseName
+        exerciseName.text = rowModel.exerciseName
         let rep = rowModel.reps
         if rep == 0 {
             exerciseReps.text = "MAX"
         } else {
             self.exerciseReps.text = "\(rep) reps"
         }
-        self.exerciseSet.text = "Set \(rowModel.set.description)"
+        exerciseSet.text = "Set \(rowModel.set.description)"
+        weight.text = rowModel.weight
         if rowModel.completed{
             self.completedButton.setImage(UIImage(named: "tickRing"), for: .normal)
             self.completedButton.tintColor = Constants.lightColour

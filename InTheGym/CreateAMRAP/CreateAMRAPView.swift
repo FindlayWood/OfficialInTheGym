@@ -15,6 +15,10 @@ class CreateAMRAPView: UIView {
         let view = UIView()
         view.backgroundColor = Constants.offWhiteColour
         view.layer.cornerRadius = 10
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 0.0)
+        view.layer.shadowRadius = 6.0
+        view.layer.shadowOpacity = 1.0
         view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

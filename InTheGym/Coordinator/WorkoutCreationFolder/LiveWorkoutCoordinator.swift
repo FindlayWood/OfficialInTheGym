@@ -54,6 +54,13 @@ extension LiveWorkoutCoordinator: LiveDelegate {
         exercise.completedSets?.append(true)
         exercise.sets! += 1
         FirebaseLiveWorkoutUpdater.shared.update(DisplayWorkoutViewController.selectedWorkout)
+        let weight = exercise.weightArray?.last
+        if let name = exercise.exercise,
+           let reps = exercise.repArray?.last
+        {
+            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: name, reps: reps, weight: weight)
+        }
+        
         let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
         for controller in viewControllers {
             if controller.isKind(of: DisplayWorkoutViewController.self) {

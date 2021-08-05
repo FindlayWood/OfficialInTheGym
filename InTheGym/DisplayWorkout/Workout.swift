@@ -59,6 +59,7 @@ class Observable<T>{
 struct CircuitTableModel{
     var exerciseName:String
     var reps:Int
+    var weight:String
     var set:Int
     var overallSet:Int
     var completed:Bool

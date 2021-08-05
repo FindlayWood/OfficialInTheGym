@@ -19,5 +19,10 @@ extension Date{
         return String(format: formatter.string(from: self, to: Date())!)
     }
     
+    func getDayOfWeek() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        return dateFormatter.string(from: self)
+    }
     
 }

@@ -18,6 +18,11 @@ protocol DisplayWorkoutProtocol: WorkoutTableCellTapDelegate, LiveWorkoutAddMeth
     func retreiveNumberOfSections() -> Int
     func returnInteractionEnbabled() -> Bool
     func returnAlreadySaved(saved:Bool)
+    func returnNumberOfClips() -> Int
+    func getClipData(at: IndexPath) -> clipDataModel
+    func clipSelected(at indexPath: IndexPath)
+    func showClips()
+    func hideClips()
 }
 
 protocol workoutCellConfigurable {

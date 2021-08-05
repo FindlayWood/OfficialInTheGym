@@ -27,6 +27,7 @@ struct PublicCreatedWorkout: CreatedWorkoutDelegate {
     var totalTime: Int?
     var totalScore: Int?
     var assigned: Bool!
+    var clipData: [clipDataModel]?
     
     
     init?( snapshot: DataSnapshot) {
@@ -96,6 +97,7 @@ struct PrivateCreatedWorkout: CreatedWorkoutDelegate {
     var totalTime: Int?
     var totalScore: Int?
     var assinged: Bool!
+    var clipData: [clipDataModel]?
     
     
     

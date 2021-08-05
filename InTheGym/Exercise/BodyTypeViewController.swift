@@ -76,7 +76,7 @@ class BodyTypeViewController: UIViewController, Storyboarded {
         case is RegularWorkoutCoordinator:
             pageNumberLabel.text = "1 of 6"
         case is CircuitCoordinator:
-            pageNumberLabel.text = "1 of 4"
+            pageNumberLabel.text = "1 of 5"
             self.circuitButton.isHidden = true
             self.amrapButton.isHidden = true
         case is LiveWorkoutCoordinator:
@@ -84,7 +84,7 @@ class BodyTypeViewController: UIViewController, Storyboarded {
             self.circuitButton.isHidden = true
             self.amrapButton.isHidden = true
         case is AMRAPCoordinator:
-            pageNumberLabel.text = "1 of 3"
+            pageNumberLabel.text = "1 of 4"
             self.circuitButton.isHidden = true
             self.amrapButton.isHidden = true
         default:

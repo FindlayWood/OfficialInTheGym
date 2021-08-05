@@ -111,12 +111,14 @@ extension CreateAMRAPViewController: CreateAMRAPProtocol {
         UIView.animate(withDuration: 0.2) {
             self.timeSelectedView.frame = showFrame
             self.flashView.alpha = 0.4
+            self.amrapView.timeView.layer.shadowOpacity = 0
             self.flashView.isUserInteractionEnabled = true
         }
     }
     func timeSelected(newTime: Int) {
         amrapTime = newTime
         amrapView.timeNumberLabel.text = newTime.description + " mins"
+        amrapView.timeView.layer.shadowOpacity = 1.0
     }
     func getTime() -> Int {
         return amrapTime

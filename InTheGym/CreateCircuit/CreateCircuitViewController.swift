@@ -15,50 +15,56 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
     
     weak var coordinator: CircuitCoordinator?
     
-    @IBOutlet weak var titleField:UITextField!
-    @IBOutlet weak var tableview:UITableView!
-    @IBOutlet weak var completeButton:UIButton!
-    
+    var display = CreateCircuitView()
 
     static var circuitExercises = [exercise]()
-    var adapter : CreateCircuitAdapter!
+    var adapter: CreateCircuitAdapter!
     var delegate = AddWorkoutHomeViewController.self
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        adapter = CreateCircuitAdapter(delegate: self)
-        tableview.delegate = adapter
-        tableview.dataSource = adapter
-        tableview.emptyDataSetSource = adapter
-        tableview.emptyDataSetDelegate = adapter
-        tableview.register(UINib(nibName: "CircuitExerciseTableViewCell", bundle: nil), forCellReuseIdentifier: "CircuitExerciseTableViewCell")
-        tableview.tableFooterView = UIView()
-        tableview.rowHeight = UITableView.automaticDimension
-        tableview.estimatedRowHeight = 100
-        tableview.backgroundColor = Constants.lightColour
-        tableview.separatorInset = .zero
-        tableview.layoutMargins = .zero
+        view.backgroundColor = .white
+        let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(completePressed(_:)))
+        navigationItem.rightBarButtonItem = button
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        initDisplay()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        display.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top)
+        view.addSubview(display)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         initUI()
-        tableview.reloadData()
+        display.tableview.reloadData()
+        if CreateCircuitViewController.circuitExercises.count > 0 {
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        }
     }
-    
+    func initDisplay() {
+        adapter = CreateCircuitAdapter(delegate: self)
+        display.tableview.delegate = adapter
+        display.tableview.dataSource = adapter
+        display.tableview.emptyDataSetSource = adapter
+        display.tableview.emptyDataSetDelegate = adapter
+        display.tableview.backgroundColor = .white
+    }
     func initUI(){
         self.navigationItem.title = "Create a Circuit"
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        let textAttributes = [NSAttributedString.Key.foregroundColor: Constants.darkColour]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.tintColor = .white
-        titleField.delegate = self
+        self.navigationController?.navigationBar.tintColor = Constants.darkColour
+        display.titlefield.delegate = self
     }
     
     
     // MARK: - Actions
     @IBAction func completePressed(_ sender:UIButton){
-        let emptyBool : Bool? = titleField.text?.trimmingCharacters(in: .whitespaces).isEmpty
+        let emptyBool : Bool? = display.titlefield.text?.trimmingCharacters(in: .whitespaces).isEmpty
         if emptyBool == true || emptyBool == nil {
             showError()
         } else if CreateCircuitViewController.circuitExercises.count == 0 {
@@ -70,8 +76,8 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
                 objectExercises.append(ex.toObject())
             }
             
-            let circuitData = ["exercise": titleField.text!.trimTrailingWhiteSpaces(),
-                               "circuitName":titleField.text!.trimTrailingWhiteSpaces(),
+            let circuitData = ["exercise": display.titlefield.text!.trimTrailingWhiteSpaces(),
+                               "circuitName":display.titlefield.text!.trimTrailingWhiteSpaces(),
                                "createdBy":ViewController.username!,
                                "creatorID":Auth.auth().currentUser!.uid,
                                "integrated":true,
@@ -92,9 +98,9 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
     
     @IBAction func addExercise(_ sender:UIButton){
         // go to add page
-        if CreateCircuitViewController.circuitExercises.count > 4 {
+        if CreateCircuitViewController.circuitExercises.count > 2 {
             let alert = SCLAlertView()
-            alert.showError("Too Many Exercises!", subTitle: "A circuit can have a maximum of 5 exercises.")
+            alert.showError("Too Many Exercises!", subTitle: "A circuit can have a maximum of 3 exercises.")
         } else {
             guard let newCircuitExercise = exercise() else {return}
             coordinator?.addExercise(newCircuitExercise)
@@ -121,13 +127,17 @@ extension CreateCircuitViewController: CreateCircuitDelegate{
     }
     
     func retreiveNumberOfItems() -> Int {
-        return CreateCircuitViewController.circuitExercises.count
+        return CreateCircuitViewController.circuitExercises.count + 1
+    }
+    
+    func addNewExercise() {
+        addExercise(UIButton())
     }
 }
 
 extension CreateCircuitViewController : AddingCircuitExerciseDelegate {
     func addedNewCircuitExercise(with circuitModel: circuitExercise) {
         //CreateCircuitViewController.circuitExercises.append(circuitModel)
-        self.tableview.reloadData()
+        display.tableview.reloadData()
     }
 }

@@ -13,6 +13,7 @@ protocol CreationDelegate: AnyObject {
     func bodyTypeSelected(_ exercise: exercise)
     func exerciseSelected(_ exercise: exercise)
     func repsSelected(_ exercise: exercise)
+    func weightSelected(_ exercise: exercise)
 }
 
 protocol RegularWorkoutFlow: RegularDelegate {
@@ -43,8 +44,8 @@ protocol RegularAndLiveFlow: AnyObject {
     func weightSelected(_ exercise: exercise)
 }
 
-typealias RegularDelegate = CreationDelegate & RegularAndCircuitFlow & RegularAndLiveFlow
-typealias LiveDelegate = CreationDelegate & RegularAndLiveFlow & WorkoutDisplayCoordinator
+typealias RegularDelegate = CreationDelegate & RegularAndCircuitFlow
+typealias LiveDelegate = CreationDelegate & WorkoutDisplayCoordinator
 typealias CircuitDelegate = CreationDelegate & RegularAndCircuitFlow
 
 

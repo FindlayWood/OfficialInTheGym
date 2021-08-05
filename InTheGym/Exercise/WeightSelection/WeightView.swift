@@ -31,6 +31,9 @@ class WeightView: UIView {
         field.textAlignment = .right
         field.keyboardType = .decimalPad
         field.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        field.layer.cornerRadius = 10
+        field.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        field.clipsToBounds = true
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
@@ -41,6 +44,9 @@ class WeightView: UIView {
         field.textColor = fontColour
         field.backgroundColor = Constants.darkColour
         field.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        field.layer.cornerRadius = 10
+        field.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
+        field.clipsToBounds = true
         field.translatesAutoresizingMaskIntoConstraints = false
         field.isUserInteractionEnabled = false
         return field
@@ -59,7 +65,19 @@ class WeightView: UIView {
     }()
     var percentageButton: WeightButton = {
         let button = WeightButton()
-        button.setTitle("%", for: .normal)
+        button.setTitle("%max", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    var bodyweightButton: WeightButton = {
+        let button = WeightButton()
+        button.setTitle("bw", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    var bodyWeightPercentButton: WeightButton = {
+        let button = WeightButton()
+        button.setTitle("%bw", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -168,8 +186,10 @@ class WeightView: UIView {
         topStack.addArrangedSubview(kgButton)
         topStack.addArrangedSubview(lbsButton)
         topStack.addArrangedSubview(percentageButton)
-        topStack.addArrangedSubview(maxButton)
+        topStack.addArrangedSubview(bodyweightButton)
+        topStack.addArrangedSubview(bodyWeightPercentButton)
         
+        bottomStack.addArrangedSubview(maxButton)
         bottomStack.addArrangedSubview(kmButton)
         bottomStack.addArrangedSubview(milesButton)
         bottomStack.addArrangedSubview(minsButton)
@@ -192,11 +212,11 @@ class WeightView: UIView {
                                      topCollection.trailingAnchor.constraint(equalTo: trailingAnchor),
                                      topCollection.heightAnchor.constraint(equalToConstant: 130),
                                      
-                                     numberTextfield.topAnchor.constraint(equalTo: topCollection.bottomAnchor, constant: 20),
+                                     numberTextfield.topAnchor.constraint(equalTo: topCollection.bottomAnchor, constant: 10),
                                      numberTextfield.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 50),
                                      numberTextfield.trailingAnchor.constraint(equalTo: centerXAnchor),
                                      
-                                     weightMeasurementField.topAnchor.constraint(equalTo: topCollection.bottomAnchor, constant: 20),
+                                     weightMeasurementField.topAnchor.constraint(equalTo: topCollection.bottomAnchor, constant: 10),
                                      weightMeasurementField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -50),
                                      weightMeasurementField.leadingAnchor.constraint(equalTo: centerXAnchor),
                                      

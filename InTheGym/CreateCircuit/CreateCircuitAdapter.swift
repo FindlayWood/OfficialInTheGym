@@ -28,34 +28,31 @@ extension CreateCircuitAdapter: UITableViewDelegate, UITableViewDataSource, Empt
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let model = delegate.getData(at: indexPath)
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CircuitExerciseTableViewCell", for: indexPath) as! CircuitExerciseTableViewCell
-        cell.setup(with: model)
-        return cell
+        
+        if indexPath.section == delegate.retreiveNumberOfItems() - 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath) as! NewExerciseCell
+            return cell
+        } else {
+            let model = delegate.getData(at: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "circuitCell", for: indexPath) as! CircuitCell
+            cell.setup(with: model)
+            return cell
+        }
+
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == delegate.retreiveNumberOfItems() - 1 {
+            delegate.addNewExercise()
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0{
-            return 20
-        } else {
-            return 10
-        }
+        return 10
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0{
-            let label = UILabel()
-            label.text = "Circuit Exercises"
-            label.font = .boldSystemFont(ofSize: 20)
-            //label.font = .preferredFont(forTextStyle: UIFont.TextStyle(rawValue: "Menlo Bold"))
-            label.backgroundColor = Constants.lightColour
-            label.textAlignment = .center
-            label.textColor = .white
-            
-            return label
-        } else {
-            return UIView()
-        }
+        return UIView()
     }
     
     // emptydataset functions

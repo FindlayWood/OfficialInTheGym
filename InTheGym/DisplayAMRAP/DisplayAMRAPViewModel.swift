@@ -56,6 +56,8 @@ class DisplayAMRAPViewModel {
               let rounds = amrap.roundsCompleted.value
         else {return}
         if started && !completed {
+            let exercise = exercises[exercisesCompleted]
+            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise!, reps: exercise.reps!, weight: exercise.weight)
             exercisesCompleted += 1
             let nextPosition = IndexPath(item: exercisesCompleted % exercises.count, section: 0)
             display.collection.scrollToItem(at: nextPosition, at: .centeredHorizontally, animated: true)

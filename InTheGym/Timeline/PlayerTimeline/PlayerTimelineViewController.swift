@@ -216,7 +216,7 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
     func workoutTapped(on cell: UITableViewCell) {
         let index = self.tableview.indexPath(for: cell)!
         let post = viewModel.getData(at:index)
-        var workoutData : discoverWorkout!
+        var workoutData: discoverWorkout!
         switch post {
         case is TimelineCreatedWorkoutModel:
             let p = post as! TimelineCreatedWorkoutModel

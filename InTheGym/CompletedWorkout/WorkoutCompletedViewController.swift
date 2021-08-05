@@ -58,6 +58,7 @@ class WorkoutCompletedViewController: UIViewController, Storyboarded {
         collection.collectionViewLayout = layout
         
         haptic.prepare()
+        workoutRPE.keyboardType = .numberPad
         
         initUI()
         initViewModel()

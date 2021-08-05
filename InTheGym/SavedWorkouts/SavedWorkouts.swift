@@ -33,6 +33,7 @@ struct publicSavedWorkout : savedWorkoutDelegate {
     var downloads:Int?
     var totalTime:Int?
     var totalScore:Int?
+    var clipData: [clipDataModel]?
     
     
     init?( snapshot: DataSnapshot) {
@@ -102,6 +103,7 @@ struct privateSavedWorkout : savedWorkoutDelegate {
     var totalTime: Int?
     var totalScore: Int?
     var assigned: Bool!
+    var clipData: [clipDataModel]?
     
     
     

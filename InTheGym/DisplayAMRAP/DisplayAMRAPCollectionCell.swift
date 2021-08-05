@@ -38,6 +38,15 @@ class DisplayAMRAPCollectionCell: UICollectionViewCell {
         return label
     }()
     
+    var weightLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Menlo-Bold", size: 40)
+        label.textColor = Constants.darkColour
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     var bottomSeparatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
@@ -69,6 +78,7 @@ class DisplayAMRAPCollectionCell: UICollectionViewCell {
         addSubview(exerciseName)
         addSubview(topSeparatorView)
         addSubview(repLabel)
+        addSubview(weightLabel)
         addSubview(bottomSeparatorView)
         addSubview(checkButton)
         constrain()
@@ -78,6 +88,7 @@ class DisplayAMRAPCollectionCell: UICollectionViewCell {
     private func constrain() {
         NSLayoutConstraint.activate([exerciseName.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      repLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+                                     weightLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      checkButton.centerXAnchor.constraint(equalTo: centerXAnchor),
         
                                      exerciseName.topAnchor.constraint(equalTo: topAnchor, constant: 10),
@@ -88,6 +99,7 @@ class DisplayAMRAPCollectionCell: UICollectionViewCell {
                                      topSeparatorView.heightAnchor.constraint(equalToConstant: 1),
                                      
                                      repLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+                                     weightLabel.topAnchor.constraint(equalTo: repLabel.bottomAnchor, constant: 10),
                                      checkButton.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -10),
         
                                      bottomSeparatorView.bottomAnchor.constraint(equalTo: checkButton.topAnchor, constant: -5),
@@ -99,6 +111,9 @@ class DisplayAMRAPCollectionCell: UICollectionViewCell {
     func setup(with model: exercise) {
         exerciseName.text = model.exercise
         repLabel.text = model.reps?.description
+        if let attachedWeight = model.weight {
+            weightLabel.text = attachedWeight
+        }
     }
     @objc func complete() {
         delegate.exerciseCompleted()

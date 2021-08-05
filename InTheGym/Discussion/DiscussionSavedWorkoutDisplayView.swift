@@ -25,6 +25,15 @@ class DiscussionSavedWorkoutDisplayView: UIView {
         return SavedWorkoutsViewModel()
     }()
     
+    var label: UILabel = {
+        let label = UILabel()
+        label.text = "Attach a Workout"
+        label.font = Constants.font
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     var tableView: UITableView = {
         let view = UITableView()
         view.backgroundColor = .clear
@@ -50,15 +59,23 @@ class DiscussionSavedWorkoutDisplayView: UIView {
         tableView.emptyDataSetSource = adapter
         tableView.backgroundColor = .clear
         backgroundColor = Constants.lightColour
+        layer.cornerRadius = 10
+        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        clipsToBounds = true
+        addSubview(label)
         addSubview(tableView)
         constrainView()
         initViewModel()
     }
     private func constrainView() {
-        NSLayoutConstraint.activate([tableView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-                                     tableView.leadingAnchor.constraint(equalTo: leadingAnchor,constant: 5),
-                                     tableView.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -5),
-                                     tableView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        NSLayoutConstraint.activate([
+                                    label.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+                                    label.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
+                                    tableView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 5),
+                                    tableView.leadingAnchor.constraint(equalTo: leadingAnchor,constant: 5),
+                                    tableView.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -5),
+                                    tableView.bottomAnchor.constraint(equalTo: bottomAnchor)
         
         ])
     }

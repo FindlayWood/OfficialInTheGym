@@ -29,6 +29,8 @@ class WeightButton: UIButton {
         layer.shadowOpacity = 1.0
         
         titleLabel?.font = Constants.font
+        titleLabel?.adjustsFontSizeToFitWidth = true
+        titleLabel?.minimumScaleFactor = 0.5
         setTitleColor(.white, for: .normal)
         
         heightAnchor.constraint(equalToConstant: 90).isActive = true

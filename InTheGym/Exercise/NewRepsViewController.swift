@@ -61,7 +61,7 @@ class NewRepsViewController: UIViewController, Storyboarded {
             repView.pageNumberLabel.text = "1 of 2"
         case is AMRAPCoordinator:
             repView.topCollection.isHidden = true
-            repView.pageNumberLabel.text = "3 of 3"
+            repView.pageNumberLabel.text = "3 of 4"
         default:
             break
         }

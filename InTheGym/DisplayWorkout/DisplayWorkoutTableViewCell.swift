@@ -12,6 +12,7 @@ protocol WorkoutTableCellTapDelegate:NSObject {
     func noteButtonTapped(on tableviewcell:UITableViewCell)
     func rpeButtonTappped(on tableviewcell:UITableViewCell, sender:UIButton, collection:UICollectionView)
     func completedCell(on tableviewcell:UITableViewCell, on item:Int, sender:UIButton, with cell:UICollectionViewCell)
+    func clipButtonTapped(on tableviewcell: UITableViewCell)
 }
 
 class DisplayWorkoutTableViewCell: UITableViewCell, workoutCellConfigurable {
@@ -27,6 +28,7 @@ class DisplayWorkoutTableViewCell: UITableViewCell, workoutCellConfigurable {
     @IBOutlet var rpeButton:UIButton!
     @IBOutlet var noteButton:UIButton!
     @IBOutlet var collection:UICollectionView!
+    @IBOutlet weak var clipButton: UIButton!
     
     var delegate:DisplayWorkoutProtocol! {
         didSet{
@@ -116,6 +118,13 @@ class DisplayWorkoutTableViewCell: UITableViewCell, workoutCellConfigurable {
                 self.rpeButton.setTitle(score, for: .normal)
                 self.rpeButton.setTitleColor(Constants.rpeColors[Int(score)! - 1], for: .normal)
             }
+            if !delegate.returnInteractionEnbabled() {
+                self.clipButton.isHidden = true
+            } else {
+                if #available(iOS 13.0, *) {
+                    self.clipButton.setImage(UIImage(systemName: "camera.fill"), for: .normal)
+                }
+            }
         }
     }
     var isLive : Bool!
@@ -126,6 +135,10 @@ class DisplayWorkoutTableViewCell: UITableViewCell, workoutCellConfigurable {
     
     @IBAction func rpeButtonTapped(_ sender:UIButton){
         self.delegate.rpeButtonTappped(on: self, sender: sender, collection: self.collection)
+    }
+    
+    @IBAction func clipButtonTaped(_ sender: UIButton) {
+        self.delegate.clipButtonTapped(on: self)
     }
 
     override func awakeFromNib() {

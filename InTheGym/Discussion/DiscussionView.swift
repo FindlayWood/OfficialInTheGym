@@ -163,14 +163,14 @@ class DiscussionView: UIView {
                                      separatorView.heightAnchor.constraint(equalToConstant: 1),
                                      
                                      attachmentButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-                                     attachmentButton.widthAnchor.constraint(equalToConstant: 40),
-                                     attachmentButton.heightAnchor.constraint(equalToConstant: 40),
                                      attachmentButton.bottomAnchor.constraint(equalTo: replyView.bottomAnchor, constant: -5),
+                                     attachmentButton.widthAnchor.constraint(equalToConstant: 35),
+                                     attachmentButton.heightAnchor.constraint(equalToConstant: 35),
                                      
                                      attachmentLabel.heightAnchor.constraint(equalToConstant: 40),
                                      attachmentLabel.widthAnchor.constraint(equalTo: commentTextField.widthAnchor, constant: -18),
                                      
-                                     stackView.leadingAnchor.constraint(equalTo: attachmentButton.trailingAnchor, constant: 10),
+                                     stackView.leadingAnchor.constraint(equalTo: attachmentButton.trailingAnchor, constant: 5),
                                      stackView.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor, constant: -10),
                                      stackView.topAnchor.constraint(equalTo: replyView.topAnchor, constant: 5),
                                      stackView.bottomAnchor.constraint(equalTo: replyView.bottomAnchor, constant: -5),

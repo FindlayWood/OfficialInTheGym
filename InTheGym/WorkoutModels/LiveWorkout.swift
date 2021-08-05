@@ -25,6 +25,7 @@ class liveWorkout: Completeable {
     var fromDiscover:Bool!
     var workoutID: String?
     var assigned: Bool!
+    var clipData: [clipDataModel]?
     
     init?(snapshot: DataSnapshot) {
         guard let snap = snapshot.value as? [String:AnyObject] else {
@@ -52,6 +53,14 @@ class liveWorkout: Completeable {
             }
             self.exercises = tempEx
         }
+        if let clipData = snap["clipData"] as? [String: AnyObject] {
+            var tempClips: [clipDataModel] = []
+            for item in clipData {
+                let clip = item.value as! [String: AnyObject]
+                tempClips.insert(clipDataModel(data: clip)!, at: 0)
+            }
+            self.clipData = tempClips
+        }
     }
     
     init?(data: [String:AnyObject]){
@@ -65,6 +74,14 @@ class liveWorkout: Completeable {
         self.fromDiscover = false
         self.assigned = false
         self.exercises = [WorkoutType]()
+        if let clipData = data["clipData"] as? [String: AnyObject] {
+            var tempClips: [clipDataModel] = []
+            for item in clipData {
+                let clip = item.value as! [String: AnyObject]
+                tempClips.insert(clipDataModel(data: clip)!, at: 0)
+            }
+            self.clipData = tempClips
+        }
     }
     
     func toObject() -> [String : AnyObject] {
@@ -82,6 +99,9 @@ class liveWorkout: Completeable {
         }
         if let data = exercises{
             object["exercises"] = data.map { ($0.toObject())} as AnyObject
+        }
+        if let clips = clipData {
+            object["clipData"] = clips.map { ($0.toObject())} as AnyObject
         }
         return object
     } 

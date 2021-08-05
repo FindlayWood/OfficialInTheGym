@@ -9,7 +9,7 @@
 import Foundation
 
 
-class exercise: WorkoutType{
+class exercise: WorkoutType {
     
     var exercise: String?
     var reps: Int?
@@ -24,6 +24,7 @@ class exercise: WorkoutType{
     var completedSets: [Bool]?
     var rpe: String?
     var note: String?
+    var clipData: clipDataModel?
     
     init?(){}
     
@@ -41,6 +42,9 @@ class exercise: WorkoutType{
         self.completedSets = exercises["completedSets"] as? [Bool]
         self.rpe = exercises["rpe"] as? String
         self.note = exercises["note"] as? String
+        if let clipModelData = exercises["clipData"] as? [String: AnyObject] {
+            self.clipData = clipDataModel(data: clipModelData)
+        }
     }
     
     func toObject() -> [String:AnyObject]{
@@ -84,6 +88,9 @@ class exercise: WorkoutType{
         
         if let set = setString {
             object["sets"] = set as AnyObject
+        }
+        if let clipData = clipData {
+            object["clipData"] = clipData.toObject() as AnyObject
         }
         return object
     }

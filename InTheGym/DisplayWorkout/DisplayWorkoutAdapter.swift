@@ -14,6 +14,7 @@ class DisplayWorkoutAdapter:NSObject {
     
     var delegate : DisplayWorkoutProtocol
     
+    var lastContentOffset: CGFloat = 0
     
     init(delegate: DisplayWorkoutProtocol){
         self.delegate = delegate
@@ -35,7 +36,7 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
         }else{
             let rowModel = delegate.getData(at: indexPath)
             let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier(for: rowModel), for: indexPath)
-            if var cell = cell as? workoutCellConfigurable{
+            if var cell = cell as? workoutCellConfigurable {
                 cell.delegate = self.delegate
                 cell.setup(with: rowModel)
             }
@@ -71,6 +72,19 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
         delegate.itemSelected(at: indexPath)
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.lastContentOffset = scrollView.contentOffset.y
+    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if lastContentOffset + 100 < scrollView.contentOffset.y {
+            delegate.hideClips()
+        } else if lastContentOffset > scrollView.contentOffset.y {
+            delegate.showClips()
+        } else if scrollView.contentOffset.y == 0 {
+            delegate.showClips()
+        }
+    }
+    
     func noteButtonTapped(on tableviewcell: UITableViewCell) {
         delegate.noteButtonTapped(on: tableviewcell)
     }
@@ -81,6 +95,10 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
     
     func completedCell(on tableviewcell: UITableViewCell, on item: Int, sender: UIButton, with cell:UICollectionViewCell) {
         delegate.completedCell(on: tableviewcell, on: item, sender: sender, with: cell)
+    }
+    
+    func clipButtonTapped(on tableviewcell: UITableViewCell) {
+        delegate.clipButtonTapped(on: tableviewcell)
     }
     
     private func cellIdentifier(for rowModel: WorkoutType) -> String{
@@ -94,6 +112,22 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
         default:
             return "Unexpected row model type \(rowModel)"
         }
+    }
+}
+
+extension DisplayWorkoutAdapter: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return delegate.returnNumberOfClips()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! DisplayClipCell
+        let clipData = delegate.getClipData(at: indexPath)
+        cell.attachThumbnail(from: clipData.storageURL)
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate.clipSelected(at: indexPath)
     }
     
 }

@@ -18,18 +18,19 @@ class DisplayCircuitViewModel{
         self.workout = workout
         self.circuitPosition = position
     }
-    
-    
-    
-    
-    
-    
+
     // MARK: - Actions
     
     func completedExercise(at indexPath:IndexPath){
         let userID = Auth.auth().currentUser!.uid
         let ref = Database.database().reference().child("Workouts").child(userID).child(workout.workoutID!).child("exercises").child("\(circuitPosition!)").child("exercises").child("\(indexPath.section)").child("completedSets").child("\(indexPath.item)")
         ref.setValue(true)
+    }
+    
+    func updateStats(for exercise: CircuitTableModel) {
+        //TODO: update exercise stats
+        FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exerciseName, reps: exercise.reps, weight: exercise.weight)
+        
     }
     
     

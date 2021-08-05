@@ -154,10 +154,12 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let SVC = Storyboard.instantiateViewController(withIdentifier: "COACHESViewController") as! COACHESViewController
                 self.navigationController?.pushViewController(SVC, animated: true)
             case 1:
-                let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = Storyboard.instantiateViewController(withIdentifier: "PBsViewController") as! PBsViewController
-                SVC.username = ViewController.username
-                self.navigationController?.pushViewController(SVC, animated: true)
+                let vc = DisplayExerciseStatsViewController()
+                self.navigationController?.pushViewController(vc, animated: true)
+//                let Storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                let SVC = Storyboard.instantiateViewController(withIdentifier: "PBsViewController") as! PBsViewController
+//                SVC.username = ViewController.username
+//                self.navigationController?.pushViewController(SVC, animated: true)
             case 2:
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let SVC = storyboard.instantiateViewController(withIdentifier: "WorkloadDisplayViewController") as! WorkloadDisplayViewController

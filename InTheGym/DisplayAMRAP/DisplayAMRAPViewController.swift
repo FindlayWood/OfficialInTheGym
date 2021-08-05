@@ -19,6 +19,9 @@ class DisplayAMRAPViewController: UIViewController {
     var adapter: DisplayAMRAPAdapter!
     var APIService = AMRAPFirebaseAPIService.shared
     
+    var displayAllExercises = DisplayAMRAPShowAllExercisesView()
+    var allExercisesAdapter: DisplayAMRAPShowAllExercisesAdapter!
+    
     lazy var viewModel: DisplayAMRAPViewModel = {
         return DisplayAMRAPViewModel(APIService: APIService,
                                      amrap: amrap,
@@ -38,7 +41,8 @@ class DisplayAMRAPViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         displayView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom)
-        view.addSubview(displayView)
+        displayAllExercises.frame = displayView.frame.insetBy(dx: 20, dy: 40)
+        view.insertSubview(displayView, at: 0)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,6 +60,11 @@ class DisplayAMRAPViewController: UIViewController {
         adapter = DisplayAMRAPAdapter(delegate: self)
         displayView.collection.delegate = adapter
         displayView.collection.dataSource = adapter
+        
+        allExercisesAdapter = DisplayAMRAPShowAllExercisesAdapter(delegate: self)
+        displayAllExercises.tableview.dataSource = allExercisesAdapter
+        
+        displayView.helpIcon.addTarget(self, action: #selector(displayAllExercisesView), for: .touchUpInside)
         viewModel.setup()
     }
     
@@ -73,7 +82,8 @@ class DisplayAMRAPViewController: UIViewController {
         } else {
             navigationItem.rightBarButtonItem?.isEnabled = false
             flashView.frame = view.frame
-            displayView.addSubview(flashView)
+            view.addSubview(flashView)
+            //displayView.addSubview(flashView)
         }
     }
     
@@ -101,6 +111,9 @@ extension DisplayAMRAPViewController {
     @objc func startTimer() {
         viewModel.startTimer()
         navigationItem.rightBarButtonItem?.isEnabled = isStartButtonEnabled()
+    }
+    @objc func displayAllExercisesView() {
+        view.addSubview(displayAllExercises)
     }
     func isStartButtonEnabled() -> Bool {
         return viewModel.isStartButtonEnabled()

@@ -27,6 +27,7 @@ struct discoverWorkout: WorkoutDelegate {
     var totalScore:Int?
     var timeToComplete:String?
     var workoutID: String?
+    var clipData: [clipDataModel]?
     
     init?( snapshot: DataSnapshot){
         guard let snap = snapshot.value as? [String:AnyObject] else {
@@ -58,9 +59,17 @@ struct discoverWorkout: WorkoutDelegate {
             }
             self.exercises = tempEx
         }
+        if let clipData = snap["clipData"] as? [String: AnyObject] {
+            var tempClips: [clipDataModel] = []
+            for item in clipData {
+                let clip = item.value as! [String: AnyObject]
+                tempClips.insert(clipDataModel(data: clip)!, at: 0)
+            }
+            self.clipData = tempClips
+        }
     }
     
-    init?(object:[String:AnyObject]){
+    init?(object: [String:AnyObject]){
         self.title = object["title"] as? String
         self.creatorID = object["creatorID"] as? String
         self.createdBy = object["createdBy"] as? String
@@ -87,6 +96,14 @@ struct discoverWorkout: WorkoutDelegate {
             }
             self.exercises = tempEx
         }
+        if let clipData = object["clipData"] as? [String: AnyObject] {
+            var tempClips: [clipDataModel] = []
+            for item in clipData {
+                let clip = item.value as! [String: AnyObject]
+                tempClips.insert(clipDataModel(data: clip)!, at: 0)
+            }
+            self.clipData = tempClips
+        }
     }
     
     func toObject() -> [String : AnyObject] {
@@ -108,6 +125,9 @@ struct discoverWorkout: WorkoutDelegate {
         }
         if let data = exercises{
             object["exercises"] = data.map { ($0.toObject())} as AnyObject
+        }
+        if let clips = clipData {
+            object["clipData"] = clips.map { ($0.toObject())} as AnyObject
         }
         return object
     }

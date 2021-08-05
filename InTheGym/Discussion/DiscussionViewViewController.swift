@@ -214,13 +214,11 @@ extension DiscussionViewViewController: DiscussionTapProtocol {
             case is DiscussionCreatedWorkout:
                 let post = originalPost as! DiscussionCreatedWorkout
                 workoutData = post.createdWorkout
-                DisplayWorkoutViewController.selectedWorkout = workoutData
-                self.navigationController?.pushViewController(displayWorkout, animated: true)
+                self.coordinator?.showWorkout(with: workoutData)
             case is DiscussionCompletedWorkout:
                 let post = originalPost as! DiscussionCompletedWorkout
                 workoutData = post.completedWorkout
-                DisplayWorkoutViewController.selectedWorkout = workoutData
-                self.navigationController?.pushViewController(displayWorkout, animated: true)
+                self.coordinator?.showWorkout(with: workoutData)
             default:
                 break
             }
@@ -231,8 +229,7 @@ extension DiscussionViewViewController: DiscussionTapProtocol {
                 guard let self = self else {return}
                 switch result {
                 case .success(let workout):
-                    DisplayWorkoutViewController.selectedWorkout = workout
-                    self.navigationController?.pushViewController(displayWorkout, animated: true)
+                    self.coordinator?.showWorkout(with: workout)
                 case .failure(let error):
                     print(error.localizedDescription)
                 }

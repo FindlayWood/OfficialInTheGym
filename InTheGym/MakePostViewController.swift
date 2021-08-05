@@ -240,5 +240,12 @@ class MakePostViewController: UIViewController, Storyboarded, UITextViewDelegate
     override func viewWillAppear(_ animated: Bool) {
         //loadProfilePhoto()
     }
+    
+    @IBAction func showVideo(_ sender: UIButton) {
+        let vc = RecordClipViewController()
+        vc.modalTransitionStyle = .coverVertical
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
+    }
 
 }

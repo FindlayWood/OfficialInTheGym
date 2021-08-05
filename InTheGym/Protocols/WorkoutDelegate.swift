@@ -17,6 +17,7 @@ protocol WorkoutDelegate {
     var exercises: [WorkoutType]? {get set}
     var liveWorkout: Bool! {get set}
     var fromDiscover: Bool! {get set}
+    var clipData: [clipDataModel]? {get set}
     func toObject() -> [String:AnyObject]
     
 }

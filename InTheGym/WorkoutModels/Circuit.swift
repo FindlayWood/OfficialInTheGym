@@ -60,6 +60,7 @@ class circuit: WorkoutType {
     
     func integrate() -> [CircuitTableModel]{
         var reps: [Int] = []
+        var weights: [String] = []
         var sets: [Int] = []
         var originalSets: [Int] = []
         var exerciseNames:[String] = []
@@ -71,7 +72,9 @@ class circuit: WorkoutType {
             } else {
                 reps.append(exercise.reps!)
             }
-            //reps.append(exercise.reps!)
+            if let weightArray = exercise.weightArray {
+                weights.append(weightArray[index])
+            }
             sets.append(exercise.sets!)
             originalSets.append(exercise.sets!)
             exerciseNames.append(exercise.exercise!)
@@ -84,6 +87,7 @@ class circuit: WorkoutType {
                     let set = originalSets[i] - sets[i]
                     circuitTableModels.append(CircuitTableModel(exerciseName: exerciseNames[i],
                                                                 reps: reps[i],
+                                                                weight: weights[i],
                                                                 set: set + 1,
                                                                 overallSet: circuitTableModels.count + 1,
                                                                 completed: exerciseCompletions[i][set],

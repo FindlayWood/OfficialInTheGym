@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -107,6 +109,16 @@
                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ppc-X7-gvt">
+                        <rect key="frame" x="182" y="347" width="30.5" height="22"/>
+                        <color key="tintColor" name="darkColour"/>
+                        <state key="normal">
+                            <imageReference key="image" image="camera.fill" catalog="system" symbolScale="large"/>
+                        </state>
+                        <connections>
+                            <action selector="clipButtonTaped:" destination="jCb-Af-M33" eventType="touchUpInside" id="zsi-gB-oFN"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="Mx7-lH-4bS" firstAttribute="leading" secondItem="aqd-cg-cbv" secondAttribute="leading" id="3Zh-Q1-vV4"/>
@@ -121,6 +133,7 @@
                     <constraint firstItem="qYR-9f-T0d" firstAttribute="top" secondItem="h8q-mQ-1KD" secondAttribute="bottom" constant="6" id="MWe-fz-GQl"/>
                     <constraint firstItem="fbO-3D-wB5" firstAttribute="leading" secondItem="aqd-cg-cbv" secondAttribute="leadingMargin" id="Mgw-cD-BbK"/>
                     <constraint firstItem="kdx-mm-tCC" firstAttribute="top" secondItem="h8q-mQ-1KD" secondAttribute="bottom" constant="15" id="OpF-iS-tg9"/>
+                    <constraint firstItem="ppc-X7-gvt" firstAttribute="bottom" secondItem="aqd-cg-cbv" secondAttribute="bottomMargin" id="Qsa-Kh-J24"/>
                     <constraint firstItem="seN-XI-Rhl" firstAttribute="leading" secondItem="aqd-cg-cbv" secondAttribute="leadingMargin" id="TK7-Jr-Wwl"/>
                     <constraint firstItem="ooY-9a-JOV" firstAttribute="top" secondItem="kdx-mm-tCC" secondAttribute="bottom" constant="4" id="Vxx-6S-LhY"/>
                     <constraint firstItem="kdx-mm-tCC" firstAttribute="leading" secondItem="aqd-cg-cbv" secondAttribute="leadingMargin" id="WAJ-tW-gFe"/>
@@ -129,6 +142,7 @@
                     <constraint firstItem="seN-XI-Rhl" firstAttribute="top" secondItem="Mx7-lH-4bS" secondAttribute="bottom" constant="8" symbolic="YES" id="Z4l-vB-fL9"/>
                     <constraint firstItem="fbO-3D-wB5" firstAttribute="bottom" secondItem="aqd-cg-cbv" secondAttribute="bottomMargin" id="cco-fq-V2I"/>
                     <constraint firstItem="Oxm-NX-bOv" firstAttribute="top" secondItem="Mx7-lH-4bS" secondAttribute="bottom" constant="20" id="dNx-aF-KBr"/>
+                    <constraint firstItem="ppc-X7-gvt" firstAttribute="centerX" secondItem="aqd-cg-cbv" secondAttribute="centerX" id="e9f-Na-ZgA"/>
                     <constraint firstItem="Fm0-lD-bIU" firstAttribute="bottom" secondItem="aqd-cg-cbv" secondAttribute="bottomMargin" id="fd8-4X-SJz"/>
                     <constraint firstItem="ooY-9a-JOV" firstAttribute="leading" secondItem="aqd-cg-cbv" secondAttribute="leadingMargin" id="i0X-ee-vLk"/>
                     <constraint firstItem="CuW-Vh-884" firstAttribute="leading" secondItem="aqd-cg-cbv" secondAttribute="leadingMargin" id="kKu-y3-l5d"/>
@@ -142,6 +156,7 @@
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.92579563549999999" green="0.93496192889999996" blue="0.93496192889999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>
+                <outlet property="clipButton" destination="ppc-X7-gvt" id="3lf-en-Hdb"/>
                 <outlet property="collection" destination="Mx7-lH-4bS" id="rbg-Xb-hLS"/>
                 <outlet property="exerciseLabel" destination="h8q-mQ-1KD" id="kw4-pc-4ok"/>
                 <outlet property="infoButton" destination="Fm0-lD-bIU" id="N0m-5Q-M1R"/>
@@ -156,8 +171,12 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="camera.fill" catalog="system" width="128" height="94"/>
         <image name="doc.text.fill" catalog="system" width="115" height="128"/>
         <image name="info.circle" catalog="system" width="128" height="121"/>
+        <namedColor name="darkColour">
+            <color red="0.1120000034570694" green="0.28700000047683716" blue="0.43299999833106995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

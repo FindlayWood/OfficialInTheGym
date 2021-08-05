@@ -54,6 +54,13 @@ extension CircuitCoordinator: CircuitFlow {
     }
     
     func repsSelected(_ exercise: exercise) {
+        let vc = NewWeightViewController.instantiate()
+        vc.coordinator = self
+        vc.newExercise = exercise
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func weightSelected(_ exercise: exercise) {
         CreateCircuitViewController.circuitExercises.append(exercise)
         let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
         for controller in viewControllers {

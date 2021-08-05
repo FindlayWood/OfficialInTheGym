@@ -11,4 +11,5 @@ import Foundation
 protocol CreateCircuitDelegate {
     func getData(at indexPath:IndexPath) -> exercise
     func retreiveNumberOfItems() -> Int
+    func addNewExercise()
 }

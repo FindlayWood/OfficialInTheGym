@@ -67,6 +67,10 @@ class DisplayWorkoutViewModel: NSObject{
         return (selectedWorkout?.exercises![indexPath.section])!
     }
     
+    func getClipData(at indexPath: IndexPath) -> clipDataModel {
+        return (selectedWorkout?.clipData?[indexPath.item])!
+    }
+    
     func isLive() -> Bool {
         if let completableWorkout = selectedWorkout as? Completeable {
             if completableWorkout.liveWorkout ?? false && !(completableWorkout.completed) {
@@ -94,9 +98,9 @@ class DisplayWorkoutViewModel: NSObject{
         
         let type = getData(at: indexPath)
         guard let exercise = type as? exercise else {return}
+        let weight = exercise.weightArray?[indexPath.item]
         guard let name = exercise.exercise,
-              let reps = exercise.repArray?[indexPath.item],
-              let weight = exercise.weightArray?[indexPath.item]
+              let reps = exercise.repArray?[indexPath.item]
         else {
             return
         }
