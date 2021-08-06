@@ -40,7 +40,7 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
     override func viewWillAppear(_ animated: Bool) {
         initUI()
         display.tableview.reloadData()
-        if CreateCircuitViewController.circuitExercises.count > 0 {
+        if CreateCircuitViewController.circuitExercises.count > 0 && !(display.titlefield.text?.isEmpty ?? true) {
             navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
@@ -51,6 +51,7 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
         display.tableview.emptyDataSetSource = adapter
         display.tableview.emptyDataSetDelegate = adapter
         display.tableview.backgroundColor = .white
+        display.titlefield.delegate = self
     }
     func initUI(){
         self.navigationItem.title = "Create a Circuit"
@@ -58,7 +59,6 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
         let textAttributes = [NSAttributedString.Key.foregroundColor: Constants.darkColour]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = Constants.darkColour
-        display.titlefield.delegate = self
     }
     
     
@@ -93,6 +93,7 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
             DisplayTopView.displayTopView(with: "Added Circuit", on: self)
             let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
             self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+            CreateCircuitViewController.circuitExercises.removeAll()
         }
     }
     
@@ -104,10 +105,6 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
         } else {
             guard let newCircuitExercise = exercise() else {return}
             coordinator?.addExercise(newCircuitExercise)
-//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//            let nextVC = storyboard.instantiateViewController(withIdentifier: "CircuitExerciseViewController") as! CircuitExerciseViewController
-//            nextVC.delegate = self
-//            self.navigationController?.pushViewController(nextVC, animated: true)
         }
 
     }
@@ -137,7 +134,16 @@ extension CreateCircuitViewController: CreateCircuitDelegate{
 
 extension CreateCircuitViewController : AddingCircuitExerciseDelegate {
     func addedNewCircuitExercise(with circuitModel: circuitExercise) {
-        //CreateCircuitViewController.circuitExercises.append(circuitModel)
         display.tableview.reloadData()
+    }
+}
+
+extension CreateCircuitViewController {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let empty = textField.text?.isEmpty {
+            if !empty && CreateCircuitViewController.circuitExercises.count > 0 {
+                self.navigationItem.rightBarButtonItem?.isEnabled = true
+            }
+        }
     }
 }

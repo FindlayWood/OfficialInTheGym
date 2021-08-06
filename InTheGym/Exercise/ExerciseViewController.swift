@@ -85,7 +85,7 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         // if search bar is active
-        if isFiltering{
+        if isFiltering {
             return searchResults.count
         }else{
             return exerciseList.count
@@ -123,9 +123,9 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
             globalType = "UB"
         }
         
-        if searchController.isActive{
+        if isFiltering {
             globalExercise = searchResults[indexPath.row]
-        }else{
+        } else {
             globalExercise = exerciseList[indexPath.row]
         }
         

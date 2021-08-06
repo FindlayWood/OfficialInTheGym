@@ -31,9 +31,7 @@ class PreLiveWorkoutViewController: UIViewController, Storyboarded {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        titlefield.delegate = self
-        titlefield.tintColor = Constants.darkColour
-        titlefield.returnKeyType = .done
+        display.titleField.delegate = self
         navigationItem.title = "Live Workout Title"
         hideKeyboardWhenTappedAround()
         loadDisplay()

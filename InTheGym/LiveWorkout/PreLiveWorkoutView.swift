@@ -19,7 +19,7 @@ class PreLiveWorkoutView: UIView {
         field.textColor = .black
         field.placeholderColor = .lightGray
         field.selectedLineHeight = 4
-        field.lineHeight = 4
+        field.lineHeight = 2
         field.titleColor = .black
         field.lineColor = .lightGray
         field.title = "enter title"
@@ -27,6 +27,7 @@ class PreLiveWorkoutView: UIView {
         field.selectedTitleColor = Constants.darkColour
         field.selectedLineColor = Constants.darkColour
         field.placeholder = "enter workout title"
+        field.clearButtonMode = .whileEditing
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
@@ -42,6 +43,15 @@ class PreLiveWorkoutView: UIView {
         button.titleLabel?.font = .boldSystemFont(ofSize: 26)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    
+    var suggestionsLabel: UILabel = {
+        let label = UILabel()
+        label.font = Constants.font
+        label.textColor = .black
+        label.text = "Title Suggestions"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     var tableview: UITableView = {
@@ -62,6 +72,7 @@ class PreLiveWorkoutView: UIView {
         backgroundColor = .white
         addSubview(titleField)
         addSubview(continueButton)
+        addSubview(suggestionsLabel)
         addSubview(tableview)
         constrainView()
     }
@@ -75,10 +86,13 @@ class PreLiveWorkoutView: UIView {
                                      continueButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
                                      continueButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
                                      continueButton.heightAnchor.constraint(equalToConstant: 45),
+                                     
+                                     suggestionsLabel.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 20),
+                                     suggestionsLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
         
-                                     tableview.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 20),
-                                     tableview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
-                                     tableview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+                                     tableview.topAnchor.constraint(equalTo: suggestionsLabel.bottomAnchor, constant: 10),
+                                     tableview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+                                     tableview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
                                      tableview.bottomAnchor.constraint(equalTo: bottomAnchor)])
     }
 }

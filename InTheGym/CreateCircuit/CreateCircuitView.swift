@@ -19,7 +19,7 @@ class CreateCircuitView: UIView {
         field.textColor = .black
         field.placeholderColor = .lightGray
         field.selectedLineHeight = 4
-        field.lineHeight = 4
+        field.lineHeight = 2
         field.titleColor = .black
         field.lineColor = .lightGray
         field.title = "enter title"
@@ -27,6 +27,7 @@ class CreateCircuitView: UIView {
         field.selectedTitleColor = Constants.darkColour
         field.selectedLineColor = Constants.darkColour
         field.placeholder = "enter circuit title..."
+        field.clearButtonMode = .whileEditing
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
@@ -79,8 +80,8 @@ class CreateCircuitView: UIView {
                                      exerciseLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
         
                                      tableview.topAnchor.constraint(equalTo: exerciseLabel.bottomAnchor),
-                                     tableview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
-                                     tableview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+                                     tableview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+                                     tableview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
                                      tableview.bottomAnchor.constraint(equalTo: bottomAnchor)])
     }
 }

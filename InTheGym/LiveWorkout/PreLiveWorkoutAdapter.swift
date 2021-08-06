@@ -31,25 +31,4 @@ extension PreLiveWorkoutAdapter: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate.itemSelected(at: indexPath)
     }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 20
-        } else {
-            return 0
-        }
-    }
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            let label = UILabel()
-            label.text = "Title Suggestions"
-            label.font = Constants.font
-            label.backgroundColor = UIColor.white
-            label.textAlignment = .center
-            label.textColor = Constants.darkColour
-            return label
-        } else {
-            return UIView()
-        }
-    }
 }
