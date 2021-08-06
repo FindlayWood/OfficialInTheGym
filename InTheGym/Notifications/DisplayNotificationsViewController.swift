@@ -12,6 +12,8 @@ import EmptyDataSet_Swift
 
 class DisplayNotificationsViewController: UIViewController, Storyboarded {
     
+    weak var coordinator: NotificationsCoordinator?
+    
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     @IBOutlet weak var tableview:UITableView!
 
@@ -87,18 +89,21 @@ class DisplayNotificationsViewController: UIViewController, Storyboarded {
         viewModel.fetchData()
     }
     
-    func moveToPost(with post:PostProtocol){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let discussionVC = storyboard.instantiateViewController(withIdentifier: "DiscussionViewViewController") as! DiscussionViewViewController
-        discussionVC.originalPost = post
-        navigationController?.pushViewController(discussionVC, animated: true)
+    func moveToPost(with post: PostProtocol, group: groupModel?){
+        coordinator?.showDiscussion(with: post, group: group)
+        
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let discussionVC = storyboard.instantiateViewController(withIdentifier: "DiscussionViewViewController") as! DiscussionViewViewController
+//        discussionVC.originalPost = post
+//        navigationController?.pushViewController(discussionVC, animated: true)
     }
     
-    func moveToProfile(with user:Users){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let profileView = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
-        profileView.user = user
-        navigationController?.pushViewController(profileView, animated: true)
+    func moveToProfile(with user: Users){
+        coordinator?.showUser(user: user)
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let profileView = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
+//        profileView.user = user
+//        navigationController?.pushViewController(profileView, animated: true)
     }
     
 
@@ -131,7 +136,7 @@ extension DisplayNotificationsViewController: DisplayNotificationsProtocol{
                 default:
                     break
                 }
-                self.moveToPost(with: tempPost)   
+                self.moveToPost(with: tempPost, group: nil)
             }
         } else if notification.type == NotificationType.groupLikedPost || notification.type == NotificationType.groupReply {
             let postID = notification.postID!
@@ -152,7 +157,10 @@ extension DisplayNotificationsViewController: DisplayNotificationsProtocol{
                 default:
                     break
                 }
-                self.moveToPost(with: tempPost)
+                UserIDToUser.groupIdToGroupName(groupID: groupID) { [weak self] (groupModel) in
+                    guard let self = self else {return}
+                    self.moveToPost(with: tempPost, group: groupModel)
+                }
             }
         } else {
             let user = notification.from

@@ -11,13 +11,13 @@ import EmptyDataSet_Swift
 
 class PublicCreatedWorkoutsViewController: UIViewController, Storyboarded {
     
-    weak var coordinator: UserProfileCoordinator?
+    weak var coordinator: PublicCreatedWorkoutsCoordinator?
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     
-    var adapter : CreatedWorkoutsAdapter!
-    var user : Users!
+    var adapter: CreatedWorkoutsAdapter!
+    var user: Users!
     
     lazy var viewModel: PublicCreatedWorkoutsViewModel = {
         return PublicCreatedWorkoutsViewModel(for: user)
@@ -92,11 +92,13 @@ class PublicCreatedWorkoutsViewController: UIViewController, Storyboarded {
         // move to new views
         // move with this workout
         let workouttomove = viewModel.selectedWorkout!
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let workoutView = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
-        DisplayWorkoutViewController.selectedWorkout = workouttomove
-        workoutView.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(workoutView, animated: true)
+        coordinator?.showWorkout(workout: workouttomove)
+        
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let workoutView = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
+//        DisplayWorkoutViewController.selectedWorkout = workouttomove
+//        workoutView.hidesBottomBarWhenPushed = true
+//        navigationController?.pushViewController(workoutView, animated: true)
     }
 
 }

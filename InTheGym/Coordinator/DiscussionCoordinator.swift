@@ -15,19 +15,19 @@ class DiscussionCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     
     var post: PostProtocol
-    var isGroup: Bool
+    var group: groupModel?
     
-    init(navigationController: UINavigationController, post: PostProtocol, isGroup: Bool) {
+    init(navigationController: UINavigationController, post: PostProtocol, group: groupModel?) {
         self.navigationController = navigationController
         self.post = post
-        self.isGroup = isGroup
+        self.group = group
     }
     
     func start() {
         let vc = DiscussionViewViewController.instantiate()
         vc.coordinator = self
         vc.originalPost = post
-        vc.isGroup = isGroup
+        vc.group = group
         navigationController.pushViewController(vc, animated: true)
     }
     

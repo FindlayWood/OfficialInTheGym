@@ -208,10 +208,11 @@ class PublicTimelineViewController: UIViewController, Storyboarded {
     }
     
     @IBAction func showCreatedWorkouts(_ sender:UIButton){
-        let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let nextVC = Storyboard.instantiateViewController(withIdentifier: "PublicCreatedWorkoutsViewController") as! PublicCreatedWorkoutsViewController
-        nextVC.user = self.user
-        self.navigationController?.pushViewController(nextVC, animated: true)
+        coordinator?.showCreatedWorkouts(for: user)
+//        let Storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let nextVC = Storyboard.instantiateViewController(withIdentifier: "PublicCreatedWorkoutsViewController") as! PublicCreatedWorkoutsViewController
+//        nextVC.user = self.user
+//        self.navigationController?.pushViewController(nextVC, animated: true)
 //        coordinator?.showCreatedWorkouts(for: user)
     }
 
@@ -249,7 +250,7 @@ extension PublicTimelineViewController: PublicTimelineProtocol, TimelineTapProto
             default:
                 break
             }
-            coordinator?.showDiscussion(with: discussionPost, isGroup: false)
+            coordinator?.showDiscussion(with: discussionPost, group: nil)
             
             //self.navigationController?.pushViewController(discussionVC, animated: true)
         }

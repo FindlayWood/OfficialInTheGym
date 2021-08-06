@@ -42,9 +42,9 @@ class UserProfileCoordinator: NSObject, Coordinator {
 extension UserProfileCoordinator {
     
     func showCreatedWorkouts(for user: Users){
-        let vc = PublicCreatedWorkoutsViewController.instantiate()
-        vc.user = user
-        navigationController.pushViewController(vc, animated: true)
+        let child = PublicCreatedWorkoutsCoordinator(navigationController: navigationController, user: user)
+        childCoordinators.append(child)
+        child.start()
     }
 }
 
@@ -52,8 +52,8 @@ extension UserProfileCoordinator {
 //MARK: - Child Coordinators Methods
 extension UserProfileCoordinator {
     
-    func showDiscussion(with post: PostProtocol, isGroup: Bool) {
-        let child = DiscussionCoordinator(navigationController: navigationController, post: post, isGroup: isGroup)
+    func showDiscussion(with post: PostProtocol, group: groupModel?) {
+        let child = DiscussionCoordinator(navigationController: navigationController, post: post, group: group)
         childCoordinators.append(child)
         child.start()
     }
@@ -83,6 +83,10 @@ extension UserProfileCoordinator: UINavigationControllerDelegate {
         
         if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
             childDidFinish(WorkoutViewController.coordinator)
+        }
+        
+        if let createdWorkoutsViewController = fromViewController as? PublicCreatedWorkoutsViewController {
+            childDidFinish(createdWorkoutsViewController.coordinator)
         }
         
     }

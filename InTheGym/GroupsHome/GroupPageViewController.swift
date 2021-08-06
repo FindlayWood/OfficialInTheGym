@@ -10,7 +10,9 @@ import UIKit
 import SCLAlertView
 import EmptyDataSet_Swift
 
-class GroupPageViewController: UIViewController {
+class GroupPageViewController: UIViewController, Storyboarded {
+    
+    weak var coordinator: GroupHomeCoordinator?
     
     @IBOutlet weak var collection:UICollectionView!
     @IBOutlet weak var groupTitle:UILabel!
@@ -202,21 +204,18 @@ extension GroupPageViewController : GroupPageProtocol{
         // go to discussion page
         let post = viewModel.getPostData(at: indexPath)
         if post is TimelinePostModel || post is TimelineCreatedWorkoutModel || post is TimelineCompletedWorkoutModel{
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let discussionVC = storyboard.instantiateViewController(withIdentifier: "DiscussionViewViewController") as! DiscussionViewViewController
+            var discussionPost: PostProtocol!
             switch post {
             case is TimelinePostModel:
-                discussionVC.originalPost = DiscussionPost(model: post as! TimelinePostModel)
+                discussionPost = DiscussionPost(model: post as! TimelinePostModel)
             case is TimelineCreatedWorkoutModel:
-                discussionVC.originalPost = DiscussionCreatedWorkout(model: post as! TimelineCreatedWorkoutModel)
+                discussionPost = DiscussionCreatedWorkout(model: post as! TimelineCreatedWorkoutModel)
             case is TimelineCompletedWorkoutModel:
-                discussionVC.originalPost = DiscussionCompletedWorkout(model: post as! TimelineCompletedWorkoutModel)
+                discussionPost = DiscussionCompletedWorkout(model: post as! TimelineCompletedWorkoutModel)
             default:
                 break
             }
-            discussionVC.isGroup = true
-            discussionVC.groupID = group.groupID
-            self.navigationController?.pushViewController(discussionVC, animated: true)
+            coordinator?.showDiscussion(with: discussionPost, group: group)
         }
     }
     
@@ -224,11 +223,13 @@ extension GroupPageViewController : GroupPageProtocol{
         // go to user profile
         let member = getMemberData(at: indexPath)
         if !viewModel.isIDSelf(id: member.uid!) {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let publicTimeline = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
-            UserIDToUser.transform(userID: member.uid!) { (user) in
-                publicTimeline.user = user
-                self.navigationController?.pushViewController(publicTimeline, animated: true)
+            //let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            //let publicTimeline = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
+            UserIDToUser.transform(userID: member.uid!) { [weak self] (user) in
+                guard let self = self else {return}
+                self.coordinator?.showUser(user: user)
+                //publicTimeline.user = user
+                //self.navigationController?.pushViewController(publicTimeline, animated: true)
             }
         }
 
@@ -267,37 +268,57 @@ extension GroupPageViewController : TimelineTapProtocol {
     }
     
     func workoutTapped(on cell: UITableViewCell) {
+//        let index = self.tableview.indexPath(for: cell)!
+//        let post = viewModel.getPostData(at:index)
+//        var workoutData : discoverWorkout!
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let displayWorkout = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
+//        switch post {
+//        case is TimelineCreatedWorkoutModel:
+//            let p = post as! TimelineCreatedWorkoutModel
+//            workoutData = p.createdWorkout
+//            DisplayWorkoutViewController.selectedWorkout = workoutData
+//            self.navigationController?.pushViewController(displayWorkout, animated: true)
+//        case is TimelineCompletedWorkoutModel:
+//            let p = post as! TimelineCompletedWorkoutModel
+//            workoutData = p.createdWorkout
+//            DisplayWorkoutViewController.selectedWorkout = workoutData
+//            self.navigationController?.pushViewController(displayWorkout, animated: true)
+//        default:
+//            break
+//        }
+        
         let index = self.tableview.indexPath(for: cell)!
         let post = viewModel.getPostData(at:index)
-        var workoutData : discoverWorkout!
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let displayWorkout = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
+        var workoutData: discoverWorkout!
         switch post {
         case is TimelineCreatedWorkoutModel:
             let p = post as! TimelineCreatedWorkoutModel
             workoutData = p.createdWorkout
-            DisplayWorkoutViewController.selectedWorkout = workoutData
-            self.navigationController?.pushViewController(displayWorkout, animated: true)
+            coordinator?.showWorkouts(with: workoutData)
         case is TimelineCompletedWorkoutModel:
             let p = post as! TimelineCompletedWorkoutModel
             workoutData = p.createdWorkout
-            DisplayWorkoutViewController.selectedWorkout = workoutData
-            self.navigationController?.pushViewController(displayWorkout, animated: true)
+            coordinator?.showWorkouts(with: workoutData)
         default:
             break
         }
+
+        
     }
     
     func userTapped(on cell: UITableViewCell) {
         let index = self.tableview.indexPath(for: cell)!
         let post = viewModel.getPostData(at: index)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let publicTimeline = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
+        //let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        //let publicTimeline = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
         let posterID = post.posterID
         if posterID != viewModel.userID {
-            UserIDToUser.transform(userID: posterID!) { (user) in
-                publicTimeline.user = user
-                self.navigationController?.pushViewController(publicTimeline, animated: true)
+            UserIDToUser.transform(userID: posterID!) { [weak self] (user) in
+                guard let self = self else {return}
+                self.coordinator?.showUser(user: user)
+                //publicTimeline.user = user
+                //self.navigationController?.pushViewController(publicTimeline, animated: true)
             }
         }
     }

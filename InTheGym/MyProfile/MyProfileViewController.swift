@@ -225,7 +225,7 @@ extension MyProfileViewController: MyProfileProtocol, TimelineTapProtocol {
                 break
             }
             
-            self.coordinator?.showDiscussion(with: discussionPost, isGroup: false)
+            self.coordinator?.showDiscussion(with: discussionPost, group: nil)
             
             //self.navigationController?.pushViewController(discussionVC, animated: true)
         }

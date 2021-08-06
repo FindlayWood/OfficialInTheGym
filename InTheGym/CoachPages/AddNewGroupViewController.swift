@@ -11,7 +11,7 @@ import Firebase
 import EmptyDataSet_Swift
 import SCLAlertView
 
-class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EmptyDataSetSource, EmptyDataSetDelegate {
+class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EmptyDataSetSource, EmptyDataSetDelegate, Storyboarded {
 
     // outlet to tableview
     @IBOutlet weak var tableview:UITableView!

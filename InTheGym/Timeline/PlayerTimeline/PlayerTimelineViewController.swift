@@ -191,7 +191,7 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
             default:
                 break
             }
-            coordinator?.showDiscussion(with: discussionPost, isGroup: false)
+            coordinator?.showDiscussion(with: discussionPost, group: nil)
         }
     }
     

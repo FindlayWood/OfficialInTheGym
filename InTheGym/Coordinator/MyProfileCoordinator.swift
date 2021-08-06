@@ -52,13 +52,15 @@ class MyProfileCoordinator: NSObject, Coordinator {
 extension MyProfileCoordinator: MyProfileFlow {
     
     func showGroups() {
-        let vc = MyGroupsViewController.instantiate()
-        navigationController.pushViewController(vc, animated: true)
+        let child = GroupCoordinator(navigationController: navigationController)
+        childCoordinators.append(child)
+        child.start()
     }
     
     func showNotifications() {
-        let vc = DisplayNotificationsViewController.instantiate()
-        navigationController.pushViewController(vc, animated: true)
+        let child = NotificationsCoordinator(navigationController: navigationController)
+        childCoordinators.append(child)
+        child.start()
     }
     
     func showSavedWorkouts() {
@@ -68,8 +70,10 @@ extension MyProfileCoordinator: MyProfileFlow {
     }
     
     func showCreatedWorkouts() {
-        let vc = CreatedWorkoutsViewController.instantiate()
-        navigationController.pushViewController(vc, animated: true)
+        let child = CreatedWorkoutsCoordinator(navigationController: navigationController)
+        childCoordinators.append(child)
+        child.start()
+    
     }
     
     func showScores() {
@@ -117,8 +121,8 @@ extension MyProfileCoordinator: MyProfileFlow {
 //MARK: - Child Coordinators
 extension MyProfileCoordinator: TimelineFlow {
     
-    func showDiscussion(with post: PostProtocol, isGroup: Bool) {
-        let child = DiscussionCoordinator(navigationController: navigationController, post: post, isGroup: isGroup)
+    func showDiscussion(with post: PostProtocol, group: groupModel?) {
+        let child = DiscussionCoordinator(navigationController: navigationController, post: post, group: group)
         childCoordinators.append(child)
         child.start()
     }
@@ -159,6 +163,14 @@ extension MyProfileCoordinator: UINavigationControllerDelegate {
         
         if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
             childDidFinish(WorkoutViewController.coordinator)
+        }
+        
+        if let GroupViewController = fromViewController as? MyGroupsViewController {
+            childDidFinish(GroupViewController.coordinator)
+        }
+        
+        if let NotificationsController = fromViewController as? DisplayNotificationsViewController {
+            childDidFinish(NotificationsController.coordinator)
         }
     }
 }

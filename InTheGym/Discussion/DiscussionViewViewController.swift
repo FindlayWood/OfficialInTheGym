@@ -23,6 +23,8 @@ class DiscussionViewViewController: UIViewController, Storyboarded {
     var isGroup : Bool!
     var groupID : String!
     
+    var group: groupModel?
+    
     // pull to refresh the data on the screen
     var refreshControl : UIRefreshControl!
     
@@ -287,7 +289,7 @@ extension DiscussionViewViewController: DiscussionTapProtocol {
     
     @objc func sendPressed( _ sender: UIButton) {
         
-        if isGroup {
+        if let groupID = group?.groupID {
             viewModel.addGroupReply(display.commentTextField.text.trimTrailingWhiteSpaces(), attachment: display.attachedWorkout, groupID: groupID)
         } else {
             viewModel.addReply(display.commentTextField.text.trimTrailingWhiteSpaces(), attachment: display.attachedWorkout)
