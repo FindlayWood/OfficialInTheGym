@@ -20,6 +20,7 @@ class DisplayWorkoutView: UIView {
     
     lazy var clipCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
+        collection.showsHorizontalScrollIndicator = false
         collection.translatesAutoresizingMaskIntoConstraints = true
         return collection
     }()

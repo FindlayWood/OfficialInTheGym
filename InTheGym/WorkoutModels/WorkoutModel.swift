@@ -58,11 +58,12 @@ class workout: Completeable {
             }
             self.exercises = tempEx
         }
-        if let clipData = snap["clipData"] as? [String: AnyObject] {
+        if let clipData = snap["clipData"] as? [[String: AnyObject]] {
             var tempClips: [clipDataModel] = []
             for item in clipData {
-                let clip = item.value as! [String: AnyObject]
-                tempClips.insert(clipDataModel(data: clip)!, at: 0)
+                tempClips.append(clipDataModel(data: item)!)
+//                let clip = item.value as! [String: AnyObject]
+//                tempClips.insert(clipDataModel(data: clip)!, at: 0)
             }
             self.clipData = tempClips
         }
@@ -96,11 +97,12 @@ class workout: Completeable {
         self.savedID = object["savedID"] as? String
         self.assigned = object["assigned"] as? Bool ?? false
         self.workoutID = object["workoutID"] as? String
-        if let clipData = object["clipData"] as? [String: AnyObject] {
+        if let clipData = object["clipData"] as? [[String: AnyObject]] {
             var tempClips: [clipDataModel] = []
             for item in clipData {
-                let clip = item.value as! [String: AnyObject]
-                tempClips.insert(clipDataModel(data: clip)!, at: 0)
+                tempClips.append(clipDataModel(data: item)!)
+//                let clip = item.value as! [String: AnyObject]
+//                tempClips.insert(clipDataModel(data: clip)!, at: 0)
             }
             self.clipData = tempClips
         }
@@ -125,7 +127,7 @@ class workout: Completeable {
             objectToReturn["savedID"] = savedID as AnyObject
         }
         
-        if let data = exercises{
+        if let data = exercises {
             objectToReturn["exercises"] = data.map { ($0.toObject())} as AnyObject
         }
         if let clips = clipData {

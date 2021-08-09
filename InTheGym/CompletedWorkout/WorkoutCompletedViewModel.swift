@@ -172,6 +172,10 @@ class WorkoutCompletedViewModel {
             exerciseData["exercises"] = data.map { ($0.toObject())} as AnyObject
         }
         
+        if let clipData = workout.clipData {
+            exerciseData["clipData"] = clipData.map { ($0.toObject())} as AnyObject
+        }
+        
         let postData = ["type": "workout",
                         "posterID": self.userID,
                         "workoutID": workout.workoutID!,

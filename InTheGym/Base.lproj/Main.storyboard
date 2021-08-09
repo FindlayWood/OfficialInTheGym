@@ -762,85 +762,10 @@
                     <view key="view" contentMode="scaleToFill" id="sw7-dB-ZY3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="enter workout title..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nwW-hF-20z" customClass="SkyFloatingLabelTextField" customModule="SkyFloatingLabelTextField">
-                                <rect key="frame" x="20" y="44" width="374" height="45"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="T9Y-yB-fLt"/>
-                                </constraints>
-                                <color key="textColor" name="darkColour"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="textColor">
-                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="placeholderColor">
-                                        <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="titleColor">
-                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
-                                        <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="selectedTitleColor">
-                                        <color key="value" name="darkColour"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="selectedLineColor">
-                                        <color key="value" name="darkColour"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="lineHeight">
-                                        <real key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="selectedLineHeight">
-                                        <real key="value" value="4"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="selectedTitle" value="enter title"/>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="title" value="Workout Title"/>
-                                </userDefinedRuntimeAttributes>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x8I-QA-DLN" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                <rect key="frame" x="20" y="97" width="374" height="45"/>
-                                <color key="backgroundColor" name="lightColour"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="sfM-Ge-1px"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
-                                <state key="normal" title="Continue">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="23"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                        <real key="value" value="2"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" name="darkColour"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="continuePressed:" destination="ddN-ja-Yhl" eventType="touchUpInside" id="GF0-k3-X7n"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="kC2-Zr-nyP"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="nwW-hF-20z" firstAttribute="top" secondItem="kC2-Zr-nyP" secondAttribute="top" id="LYc-HW-RFb"/>
-                            <constraint firstItem="x8I-QA-DLN" firstAttribute="top" secondItem="nwW-hF-20z" secondAttribute="bottom" constant="8" symbolic="YES" id="MwO-UX-SD8"/>
-                            <constraint firstItem="kC2-Zr-nyP" firstAttribute="trailing" secondItem="x8I-QA-DLN" secondAttribute="trailing" constant="20" id="Njj-ez-qlp"/>
-                            <constraint firstItem="nwW-hF-20z" firstAttribute="leading" secondItem="kC2-Zr-nyP" secondAttribute="leading" constant="20" id="fGe-7Y-L7W"/>
-                            <constraint firstItem="x8I-QA-DLN" firstAttribute="leading" secondItem="kC2-Zr-nyP" secondAttribute="leading" constant="20" id="tYS-NO-gig"/>
-                            <constraint firstItem="kC2-Zr-nyP" firstAttribute="trailing" secondItem="nwW-hF-20z" secondAttribute="trailing" constant="20" id="vlG-IY-Zaz"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="UPd-n0-08O"/>
-                    <connections>
-                        <outlet property="titlefield" destination="nwW-hF-20z" id="X2q-r6-cxl"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AG4-gf-iwj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -7746,9 +7671,6 @@
         <designable name="ng0-nK-RwM">
             <size key="intrinsicContentSize" width="90" height="48"/>
         </designable>
-        <designable name="nwW-hF-20z">
-            <size key="intrinsicContentSize" width="158" height="34"/>
-        </designable>
         <designable name="og0-F6-ofO">
             <size key="intrinsicContentSize" width="90" height="48"/>
         </designable>
@@ -7769,9 +7691,6 @@
         </designable>
         <designable name="x2E-94-mXR">
             <size key="intrinsicContentSize" width="154" height="34"/>
-        </designable>
-        <designable name="x8I-QA-DLN">
-            <size key="intrinsicContentSize" width="111" height="44"/>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>

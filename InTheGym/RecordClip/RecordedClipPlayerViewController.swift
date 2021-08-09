@@ -27,7 +27,7 @@ class RecordedClipPlayerViewController: UIViewController {
     var paused: Bool = false
     
     var workoutID: String!
-    var exercisePosition: Int!
+    var clipNumber: Int!
     var exerciseName: String!
     
     weak var uploadingDelegate: clipUploadingProtocol!
@@ -99,7 +99,7 @@ class RecordedClipPlayerViewController: UIViewController {
         guard let currentVideoURL = ((player.currentItem?.asset) as? AVURLAsset)?.url else {return}
         let clipUploadData = clipUploadingData(workoutID: workoutID,
                                                exerciseName: exerciseName,
-                                               exercisePosition: exercisePosition,
+                                               clipNumber: clipNumber,
                                                videoURL: currentVideoURL,
                                                isPrivate: display.isPrivate)
         

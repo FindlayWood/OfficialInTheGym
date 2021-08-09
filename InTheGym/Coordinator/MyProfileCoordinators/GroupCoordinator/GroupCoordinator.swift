@@ -34,10 +34,23 @@ extension GroupCoordinator {
     }
     
     func addNewGroup(with delegate: MyGroupsProtocol) {
-        let vc = AddNewGroupViewController.instantiate()
-        vc.delegate = delegate
+        let vc = CreateNewGroupViewController()
+        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
+    
+    func addPlayersToNewGroup() {
+        let vc = GroupAddPlayersViewController()
+        vc.modalTransitionStyle = .coverVertical
+        vc.modalPresentationStyle = .fullScreen
+        navigationController.present(vc, animated: true, completion: nil)
+    }
+    
+//    func addNewGroup(with delegate: MyGroupsProtocol) {
+//        let vc = AddNewGroupViewController.instantiate()
+//        vc.delegate = delegate
+//        navigationController.pushViewController(vc, animated: true)
+//    }
 }
 //MARK: - Navigation Delegate Method
 extension GroupCoordinator: UINavigationControllerDelegate {

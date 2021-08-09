@@ -59,11 +59,12 @@ struct discoverWorkout: WorkoutDelegate {
             }
             self.exercises = tempEx
         }
-        if let clipData = snap["clipData"] as? [String: AnyObject] {
+        if let clipData = snap["clipData"] as? [[String: AnyObject]] {
             var tempClips: [clipDataModel] = []
             for item in clipData {
-                let clip = item.value as! [String: AnyObject]
-                tempClips.insert(clipDataModel(data: clip)!, at: 0)
+                tempClips.append(clipDataModel(data: item)!)
+//                let clip = item.value as! [String: AnyObject]
+//                tempClips.insert(clipDataModel(data: clip)!, at: 0)
             }
             self.clipData = tempClips
         }
@@ -96,11 +97,12 @@ struct discoverWorkout: WorkoutDelegate {
             }
             self.exercises = tempEx
         }
-        if let clipData = object["clipData"] as? [String: AnyObject] {
+        if let clipData = object["clipData"] as? [[String: AnyObject]] {
             var tempClips: [clipDataModel] = []
             for item in clipData {
-                let clip = item.value as! [String: AnyObject]
-                tempClips.insert(clipDataModel(data: clip)!, at: 0)
+                tempClips.append(clipDataModel(data: item)!)
+//                let clip = item.value as! [String: AnyObject]
+//                tempClips.insert(clipDataModel(data: clip)!, at: 0)
             }
             self.clipData = tempClips
         }

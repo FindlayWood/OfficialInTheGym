@@ -22,7 +22,7 @@ enum ClipUploadError: Error {
 struct clipUploadingData {
     var workoutID: String
     var exerciseName: String
-    var exercisePosition: Int
+    var clipNumber: Int
     var videoURL: URL
     var isPrivate: Bool
 }
@@ -55,26 +55,10 @@ class FirebaseVideoUploader {
                 progressCompletion: @escaping (Double) -> Void) {
         
         guard let userID = Auth.auth().currentUser?.uid else {return}
-        let clipID = uploadData.workoutID + uploadData.exercisePosition.description + UUID().uuidString
+        let clipID = uploadData.workoutID + uploadData.clipNumber.description + UUID().uuidString
         let storageRef = storage.child(userID).child(clipID)
         
         let uploadTask = storageRef.putFile(from: uploadData.videoURL, metadata: nil)
-        
-//        let uploadTask = storageRef.putFile(from: uploadData.videoURL, metadata: nil) { data, error in
-//            if let error = error {
-//                print(error.localizedDescription)
-//                completion(.failure(.storageUploadFail))
-//            } else {
-//                storageRef.downloadURL { downloadedURL, urlError in
-//                    if let error = urlError {
-//                        print(error.localizedDescription)
-//                        completion(.failure(.urlDownloadFail))
-//                    } else {
-//                        self.uploadClip(storageURL: downloadedURL!.absoluteString, uploadData: uploadData, completion: completion)
-//                    }
-//                }
-//            }
-//        }
         
         uploadTask.observe(.success) { snapshot in
             storageRef.downloadURL { [weak self] downloadedURL, error in
@@ -146,7 +130,7 @@ class FirebaseVideoUploader {
         let clipData = [storageURLString: storageURL,
                         clipKeyString: clipKey,
                         exerciseString: uploadData.exerciseName]
-        workoutRef.child(userID).child(uploadData.workoutID).child("clipData").childByAutoId().setValue(clipData) { [weak self] error, databaseReference in
+        workoutRef.child(userID).child(uploadData.workoutID).child("clipData").child(uploadData.clipNumber.description).setValue(clipData) { [weak self] error, databaseReference in
             guard let self = self else {return}
             if let error = error {
                 print(error.localizedDescription)

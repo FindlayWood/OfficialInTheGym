@@ -24,8 +24,6 @@ class PreLiveWorkoutViewController: UIViewController, Storyboarded {
         return PreLiveWorkoutViewModel(apiService: apiService)
     }()
     
-    @IBOutlet weak var titlefield:UITextField!
-    
     let userID = Auth.auth().currentUser!.uid
 
     override func viewDidLoad() {
@@ -51,33 +49,17 @@ class PreLiveWorkoutViewController: UIViewController, Storyboarded {
         display.continueButton.addTarget(self, action: #selector(continuePressed(_:)), for: .touchUpInside)
     }
     
-    @IBAction func continuePressed(_ sender:UIButton) {
-        if titlefield.text?.trimmingCharacters(in: .whitespaces) == "" {
+    @objc func continuePressed(_ sender: UIButton) {
+        if display.titleField.text?.trimmingCharacters(in: .whitespaces) == "" {
             let alert = SCLAlertView()
             alert.showError("Enter a title!", subTitle: "You must enter a title to begin the workout. The title can be anything you want.")
         } else {
-            guard let title = titlefield.text else {return}
+            guard let title = display.titleField.text else {return}
             viewModel.startLiveWorkout(with: title) { [weak self] liveWorkoutModel in
                 if let liveWorkout = liveWorkoutModel {
                     self?.coordinator?.startLiveWorkout(liveWorkout)
                 }
             }
-            
-//            let workoutRef = Database.database().reference().child("Workouts").child(self.userID).childByAutoId()
-//            let workoutID = workoutRef.key!
-//            let workoutTitle = titlefield.text!
-//            let workoutData = ["completed":false,
-//                               "createdBy":ViewController.username!,
-//                               "title":workoutTitle,
-//                               "startTime":Date.timeIntervalSinceReferenceDate,
-//                               "liveWorkout": true,
-//                               "creatorID":self.userID,
-//                               "workoutID":workoutID,
-//                               "fromDiscover":false,
-//                               "assigned":false] as [String : AnyObject]
-//            workoutRef.setValue(workoutData)
-//            guard let workoutModel = liveWorkout(data: workoutData) else {return}
-//            coordinator?.startLiveWorkout(workoutModel)
         }
         
     }

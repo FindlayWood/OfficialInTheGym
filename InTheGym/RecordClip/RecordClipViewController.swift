@@ -33,7 +33,7 @@ class RecordClipViewController: UIViewController {
     var countDownOn: Bool = false
     
     var workoutID: String!
-    var exercisePosition: Int!
+    var clipNumber: Int!
     var exerciseName: String!
     
     var addingDelegate: addedClipProtocol!
@@ -238,7 +238,7 @@ extension RecordClipViewController: AVCaptureFileOutputRecordingDelegate {
             vc.player = player
             vc.workoutID = workoutID
             vc.exerciseName = exerciseName
-            vc.exercisePosition = exercisePosition
+            vc.clipNumber = clipNumber
             vc.uploadingDelegate = self
             vc.addingDelegate = self.addingDelegate
             vc.modalTransitionStyle = .coverVertical

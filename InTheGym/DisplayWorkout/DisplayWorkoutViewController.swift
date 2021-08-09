@@ -41,7 +41,6 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
         display.tableview.tableFooterView = UIView()
         display.tableview.rowHeight = UITableView.automaticDimension
         display.tableview.estimatedRowHeight = 380
-        //tableview.rowHeight = 380
         display.tableview.register(UINib(nibName: "DisplayWorkout", bundle: nil), forCellReuseIdentifier: "DisplayWorkoutCell")
         display.tableview.register(UINib(nibName: "DisplayPlusTableView", bundle: nil), forCellReuseIdentifier: "DisplayPlusTableView")
         display.tableview.register(UINib(nibName: "DisplayWorkoutCircuitTableViewCell", bundle: nil), forCellReuseIdentifier: "DisplayWorkoutCircuitTableViewCell")
@@ -490,31 +489,17 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
         guard let index = display.tableview.indexPath(for: tableviewcell) else {return}
         let selectedWorkoutExercise = viewModel.selectedWorkout?.exercises![index.section] as! exercise
         
-        if let clipData = selectedWorkoutExercise.clipData {
-            guard let storageURL = clipData.storageURL else {return}
-            let vc = ViewClipViewController()
-            vc.storageURL = storageURL
-            vc.exerciseName = selectedWorkoutExercise.exercise
-            vc.creatorID = viewModel.selectedWorkout?.creatorID
-            vc.workoutID = viewModel.selectedWorkout?.workoutID
-            vc.modalTransitionStyle = .coverVertical
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true, completion: nil)
-            
-        } else {
-            let exerciseName = selectedWorkoutExercise.exercise
-            let exercisePosition = index.section
-            let workoutID = viewModel.selectedWorkout?.workoutID
-            let vc = RecordClipViewController()
-            vc.exerciseName = exerciseName
-            vc.exercisePosition = exercisePosition
-            vc.workoutID = workoutID
-            vc.addingDelegate = self
-            vc.modalTransitionStyle = .coverVertical
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true, completion: nil)
-            
-        }
+        let exerciseName = selectedWorkoutExercise.exercise
+        let clipNumber = viewModel.selectedWorkout?.clipData?.count ?? 0
+        let workoutID = viewModel.selectedWorkout?.workoutID
+        let vc = RecordClipViewController()
+        vc.exerciseName = exerciseName
+        vc.clipNumber = clipNumber
+        vc.workoutID = workoutID
+        vc.addingDelegate = self
+        vc.modalTransitionStyle = .coverVertical
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
     }
     func returnNumberOfClips() -> Int {
         return DisplayWorkoutViewController.selectedWorkout.clipData?.count ?? 0
