@@ -17,6 +17,7 @@ protocol CreateNewGroupProtocol {
 protocol GroupAddPlayersProtocol {
     func getPlayerData(at indexPath: IndexPath) -> Users
     func numberOfPlayers() -> Int
+    func checkIfPlayerSelected(_ player: Users) -> Bool
     func playerSelected(at indexPath: IndexPath)
 }
 

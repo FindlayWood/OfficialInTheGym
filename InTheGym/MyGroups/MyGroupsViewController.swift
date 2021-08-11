@@ -93,10 +93,11 @@ class MyGroupsViewController: UIViewController, Storyboarded {
     }
     
     @IBAction func addNewGroup(_ sender:UIButton){
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let addVC = storyboard.instantiateViewController(withIdentifier: "AddNewGroupViewController") as! AddNewGroupViewController
-        addVC.delegate = self
-        self.navigationController?.pushViewController(addVC, animated: true)
+        coordinator?.addNewGroup(with: self)
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let addVC = storyboard.instantiateViewController(withIdentifier: "AddNewGroupViewController") as! AddNewGroupViewController
+//        addVC.delegate = self
+//        self.navigationController?.pushViewController(addVC, animated: true)
     }
     
 
@@ -125,7 +126,7 @@ extension MyGroupsViewController: MyGroupsProtocol {
     }
     
     func addedNewGroup() {
-        viewModel.fetchData()
+        tableview.reloadData()
     }
     
     

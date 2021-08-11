@@ -21,7 +21,17 @@ extension GroupAddPlayersAdapter: UITableViewDelegate, UITableViewDataSource {
         return delegate.numberOfPlayers()
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: UserTableViewCell.cellID, for: indexPath) as! UserTableViewCell
+        let userData = delegate.getPlayerData(at: indexPath)
+        cell.configureCell(with: userData)
+        if delegate.checkIfPlayerSelected(delegate.getPlayerData(at: indexPath)) {
+            cell.accessoryType = .checkmark
+            cell.selected()
+        } else {
+            cell.accessoryType = .none
+            cell.notSelected()
+        }
+        return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate.playerSelected(at: indexPath)

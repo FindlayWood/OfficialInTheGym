@@ -33,13 +33,6 @@ class CreateNewGroupView: UIView {
         return field
     }()
     
-    var descriptionText: UITextView = {
-        let view = UITextView()
-        view.backgroundColor = Constants.offWhiteColour
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     var playerLabel: UILabel = {
         let label = UILabel()
         label.text = "PLAYERS"
@@ -52,6 +45,7 @@ class CreateNewGroupView: UIView {
     var tableview: UITableView = {
         let view = UITableView()
         view.tableFooterView = UIView()
+        view.register(UserTableViewCell.self, forCellReuseIdentifier: UserTableViewCell.cellID)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -75,9 +69,8 @@ class CreateNewGroupView: UIView {
     // MARK: - SetUps
 private extension CreateNewGroupView {
     func setUpUI() {
-        backgroundColor = .white
+        backgroundColor = Constants.offWhiteColour
         addSubview(groupNameField)
-        addSubview(descriptionText)
         addSubview(playerLabel)
         addSubview(tableview)
         constrainUI()
@@ -89,12 +82,7 @@ private extension CreateNewGroupView {
                                      groupNameField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
                                      groupNameField.heightAnchor.constraint(equalToConstant: 45),
         
-                                     descriptionText.topAnchor.constraint(equalTo: groupNameField.bottomAnchor, constant: 10),
-                                     descriptionText.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-                                     descriptionText.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-                                     descriptionText.heightAnchor.constraint(equalToConstant: 80),
-                                     
-                                     playerLabel.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: 10),
+                                     playerLabel.topAnchor.constraint(equalTo: groupNameField.bottomAnchor, constant: 10),
                                      playerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      
                                      tableview.topAnchor.constraint(equalTo: playerLabel.bottomAnchor, constant: 10),

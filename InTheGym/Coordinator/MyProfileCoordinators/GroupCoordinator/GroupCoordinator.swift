@@ -36,13 +36,16 @@ extension GroupCoordinator {
     func addNewGroup(with delegate: MyGroupsProtocol) {
         let vc = CreateNewGroupViewController()
         vc.coordinator = self
+        vc.delegate = delegate
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func addPlayersToNewGroup() {
+    func addPlayersToNewGroup(_ delegate: AddedPlayersProtocol, selectedPlayers: [Users]) {
         let vc = GroupAddPlayersViewController()
         vc.modalTransitionStyle = .coverVertical
-        vc.modalPresentationStyle = .fullScreen
+        vc.delegate = delegate
+        vc.alreadySelectedPlayers = selectedPlayers
         navigationController.present(vc, animated: true, completion: nil)
     }
     

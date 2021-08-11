@@ -12,9 +12,29 @@ import UIKit
 class GroupAddPlayersView: UIView {
     
     // MARK: - Subviews
+    var dismissButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Done", for: .normal)
+        button.setTitleColor(Constants.darkColour, for: .normal)
+        button.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 16)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    var playersLabel: UILabel = {
+        let label = UILabel()
+        label.font = Constants.font
+        label.textColor = Constants.darkColour
+        label.text = "Players"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     var tableview: UITableView = {
         let view = UITableView()
         view.tableFooterView = UIView()
+        view.register(UserTableViewCell.self, forCellReuseIdentifier: UserTableViewCell.cellID)
+        
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -41,8 +61,10 @@ class GroupAddPlayersView: UIView {
 //MARK: - SetUp
 private extension GroupAddPlayersView {
     func setUpUI() {
-        backgroundColor = .white
+        backgroundColor = Constants.offWhiteColour
         addSubview(loadingIndicator)
+        addSubview(dismissButton)
+        addSubview(playersLabel)
         addSubview(tableview)
         constrainUI()
     }
@@ -50,8 +72,14 @@ private extension GroupAddPlayersView {
     func constrainUI() {
         NSLayoutConstraint.activate([loadingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+                                     
+                                     playersLabel.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+                                     playersLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+                                     
+                                     dismissButton.centerYAnchor.constraint(equalTo: playersLabel.centerYAnchor),
+                                     dismissButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
         
-                                     tableview.topAnchor.constraint(equalTo: topAnchor),
+                                     tableview.topAnchor.constraint(equalTo: playersLabel.bottomAnchor, constant: 10),
                                      tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
                                      tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
                                      tableview.bottomAnchor.constraint(equalTo: bottomAnchor)])

@@ -18,17 +18,17 @@ class GroupAddPlayersViewController: UIViewController {
     
     var adapter: GroupAddPlayersAdapter!
     
+    var alreadySelectedPlayers: [Users] = []
+    
     lazy var viewModel: GroupAddPlayersViewModel = {
         return GroupAddPlayersViewModel(apiService: apiService)
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = Constants.offWhiteColour
         initDisplay()
         initViewModel()
-        let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(finished))
-        navigationItem.rightBarButtonItem = button
-        navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
     override func viewDidLayoutSubviews() {
@@ -66,12 +66,13 @@ class GroupAddPlayersViewController: UIViewController {
         viewModel.errorReturnedClosure = { returnedError in
             print(returnedError.localizedDescription)
         }
-        
+        viewModel.selectedPlayers = alreadySelectedPlayers
         viewModel.fetchPlayers()
     }
     
     @objc func finished() {
-        
+        delegate.newPlayersAdded(viewModel.selectedPlayers)
+        self.dismiss(animated: true, completion: nil)
     }
 
 }
@@ -82,6 +83,8 @@ extension GroupAddPlayersViewController {
         adapter = GroupAddPlayersAdapter(delegate: self)
         display.tableview.delegate = adapter
         display.tableview.dataSource = adapter
+        display.tableview.backgroundColor = Constants.offWhiteColour
+        display.dismissButton.addTarget(self, action: #selector(finished), for: .touchUpInside)
     }
 }
 
@@ -93,8 +96,20 @@ extension GroupAddPlayersViewController: GroupAddPlayersProtocol {
     func numberOfPlayers() -> Int {
         return viewModel.numberOfPlayers
     }
+    func checkIfPlayerSelected(_ player: Users) -> Bool {
+        return viewModel.checkIfPlayerSelected(player)
+    }
     func playerSelected(at indexPath: IndexPath) {
-        
+        let cell = display.tableview.cellForRow(at: indexPath)
+        if cell?.accessoryType == UITableViewCell.AccessoryType.none {
+            cell?.accessoryType = .checkmark
+            viewModel.playerSelected(at: indexPath)
+            display.tableview.reloadData()
+        } else {
+            cell?.accessoryType = .none
+            viewModel.playerDeselected(at: indexPath)
+            display.tableview.reloadData()
+        }
     }
 }
 

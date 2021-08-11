@@ -12,6 +12,8 @@ class CreateNewGroupViewModel {
     
     // MARK: - Closures
     var reloadTableViewClosure: (() -> ())?
+    var successfullCreationClosure: (() -> Void)?
+    var errorCreationClosure: (() -> Void)?
     
     // MARK: - Properties
     var addedPlayers: [Users] = [] {
@@ -24,10 +26,61 @@ class CreateNewGroupViewModel {
         return addedPlayers.count
     }
     
+    var apiService: FirebaseAPIGroupServiceProtocol
+    
+    var newGroup = NewGroupModel()
+    
+    var groupTitle: String {
+        return newGroup.title
+    }
+    var groupPlayers: [Users] {
+        return newGroup.players
+    }
+    var successfullCreation: Bool = false {
+        didSet {
+            successfullCreationClosure?()
+        }
+    }
+    var error: Bool = false {
+        didSet {
+            errorCreationClosure?()
+        }
+    }
+    
+    // MARK: - Initializer
+    init(apiService: FirebaseAPIGroupServiceProtocol) {
+        self.apiService = apiService
+    }
+    
+    // MARK: - API Methods
+    func createNewGroup() {
+        apiService.createGroup(with: newGroup) { [weak self] success in
+            guard let self = self else {return}
+            if success {
+                self.successfullCreation = true
+            } else {
+                self.error = true
+            }
+        }
+    }
+    
+    // MARK: - Delegate Methods
     func getData(at indexPath: IndexPath) -> Users {
-        return addedPlayers[indexPath.row]
+        return addedPlayers[indexPath.section]
     }
     func addNewPlayers(_ players: [Users]) {
-        addedPlayers.append(contentsOf: players)
+        addedPlayers = players
+        newGroup.players = players
     }
+    
+    // MARK: - Update Model Functions
+    func updateGroupTitle(with newTitle: String) {
+        newGroup.title = newTitle
+    }
+}
+
+struct NewGroupModel {
+    var title: String = ""
+    var description: String = ""
+    var players: [Users] = []
 }

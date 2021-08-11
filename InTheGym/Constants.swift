@@ -11,7 +11,7 @@ import UIKit
 
 class Constants {
     
-    var appVersion = "4.2"
+    var appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     
     static var bannedUsernames = ["Admin", "admin", "InTheGym", "OfficialInTheGym", "inthegym", "INTHEGYM"]
     

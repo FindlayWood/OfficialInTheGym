@@ -13,6 +13,9 @@
 		74028E1325E5610E005A1D21 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E1225E5610E005A1D21 /* EditProfileViewController.swift */; };
 		74028E5C25E693FB005A1D21 /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E5B25E693FB005A1D21 /* TopView.swift */; };
 		74028E6425E69B52005A1D21 /* TextFieldReturning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E6325E69B52005A1D21 /* TextFieldReturning.swift */; };
+		7403A5EE26C315D1000588CE /* FirebaseAPIGroupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5ED26C315D1000588CE /* FirebaseAPIGroupService.swift */; };
+		7403A5F426C4286E000588CE /* MockFirebaseAPIGroupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5F326C4286E000588CE /* MockFirebaseAPIGroupService.swift */; };
+		7403A5F826C42902000588CE /* CreateGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5F726C42902000588CE /* CreateGroupTests.swift */; };
 		74095A79257FE66500CF335A /* MakePostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74095A78257FE66500CF335A /* MakePostViewController.swift */; };
 		740E549A25F25C73005D3A8C /* PrivateSavedWorkoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740E549925F25C73005D3A8C /* PrivateSavedWorkoutTableViewCell.swift */; };
 		740E549F25F261C4005D3A8C /* PrivateSavedWorkoutCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 740E549E25F261C4005D3A8C /* PrivateSavedWorkoutCell.xib */; };
@@ -107,6 +110,7 @@
 		7429784826C15F860023365E /* GroupAddPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429784726C15F860023365E /* GroupAddPlayersViewModel.swift */; };
 		7429784A26C160270023365E /* FirebaseLoadingUsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429784926C160270023365E /* FirebaseLoadingUsersService.swift */; };
 		7429784C26C167FA0023365E /* GroupAddPlayersAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429784B26C167FA0023365E /* GroupAddPlayersAdapter.swift */; };
+		7429784E26C1DCBE0023365E /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429784D26C1DCBE0023365E /* UserTableViewCell.swift */; };
 		742CCDC02649CA630070D0A5 /* ProfilePhotoAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742CCDBF2649CA630070D0A5 /* ProfilePhotoAlert.swift */; };
 		74318F3C26B570F5009EDFAC /* PreLiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74318F3B26B570F5009EDFAC /* PreLiveWorkoutView.swift */; };
 		74318F3E26B572F1009EDFAC /* PreLiveWorkoutAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74318F3D26B572F1009EDFAC /* PreLiveWorkoutAdapter.swift */; };
@@ -441,6 +445,9 @@
 		74028E1225E5610E005A1D21 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		74028E5B25E693FB005A1D21 /* TopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
 		74028E6325E69B52005A1D21 /* TextFieldReturning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldReturning.swift; sourceTree = "<group>"; };
+		7403A5ED26C315D1000588CE /* FirebaseAPIGroupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAPIGroupService.swift; sourceTree = "<group>"; };
+		7403A5F326C4286E000588CE /* MockFirebaseAPIGroupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFirebaseAPIGroupService.swift; sourceTree = "<group>"; };
+		7403A5F726C42902000588CE /* CreateGroupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupTests.swift; sourceTree = "<group>"; };
 		74095A78257FE66500CF335A /* MakePostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakePostViewController.swift; sourceTree = "<group>"; };
 		740E549925F25C73005D3A8C /* PrivateSavedWorkoutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateSavedWorkoutTableViewCell.swift; sourceTree = "<group>"; };
 		740E549E25F261C4005D3A8C /* PrivateSavedWorkoutCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrivateSavedWorkoutCell.xib; sourceTree = "<group>"; };
@@ -535,6 +542,7 @@
 		7429784726C15F860023365E /* GroupAddPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupAddPlayersViewModel.swift; sourceTree = "<group>"; };
 		7429784926C160270023365E /* FirebaseLoadingUsersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLoadingUsersService.swift; sourceTree = "<group>"; };
 		7429784B26C167FA0023365E /* GroupAddPlayersAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupAddPlayersAdapter.swift; sourceTree = "<group>"; };
+		7429784D26C1DCBE0023365E /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		742CCDBF2649CA630070D0A5 /* ProfilePhotoAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePhotoAlert.swift; sourceTree = "<group>"; };
 		74318F3B26B570F5009EDFAC /* PreLiveWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreLiveWorkoutView.swift; sourceTree = "<group>"; };
 		74318F3D26B572F1009EDFAC /* PreLiveWorkoutAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreLiveWorkoutAdapter.swift; sourceTree = "<group>"; };
@@ -931,6 +939,14 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
+		7403A5F226C42852000588CE /* MockServices */ = {
+			isa = PBXGroup;
+			children = (
+				7403A5F326C4286E000588CE /* MockFirebaseAPIGroupService.swift */,
+			);
+			path = MockServices;
+			sourceTree = "<group>";
+		};
 		7416CCC3264ED1FD0043B1C2 /* WorkoutCreationFolder */ = {
 			isa = PBXGroup;
 			children = (
@@ -1140,6 +1156,7 @@
 			isa = PBXGroup;
 			children = (
 				7480EBB225F500B800E4E768 /* CellModels */,
+				7429784D26C1DCBE0023365E /* UserTableViewCell.swift */,
 			);
 			path = CellClasses;
 			sourceTree = "<group>";
@@ -1281,10 +1298,12 @@
 		7479A91F229F2B4D00D39E2E /* InTheGymTests */ = {
 			isa = PBXGroup;
 			children = (
+				7403A5F226C42852000588CE /* MockServices */,
 				7479A920229F2B4D00D39E2E /* InTheGymTests.swift */,
 				7479A922229F2B4D00D39E2E /* Info.plist */,
 				74F546C425EC129900C1A6A9 /* TestData.swift */,
 				74478E2226BECC5000D8178E /* ClipTests.swift */,
+				7403A5F726C42902000588CE /* CreateGroupTests.swift */,
 			);
 			path = InTheGymTests;
 			sourceTree = "<group>";
@@ -1387,6 +1406,7 @@
 				74FDB5AD26976DB8000649CC /* FirebaseVideoUploader.swift */,
 				746BFFAB26B304270010C465 /* ThumbnailGenerator.swift */,
 				7429784926C160270023365E /* FirebaseLoadingUsersService.swift */,
+				7403A5ED26C315D1000588CE /* FirebaseAPIGroupService.swift */,
 			);
 			path = DatabaseManager;
 			sourceTree = "<group>";
@@ -2229,6 +2249,7 @@
 				747B67862600E740000AD6B7 /* TimelineModels.swift in Sources */,
 				74C89C852619FA63009F3C72 /* WorkoutCompletedCollectionViewCell.swift in Sources */,
 				74D7F4FF262A5552006C3D5C /* StringExtension.swift in Sources */,
+				7403A5EE26C315D1000588CE /* FirebaseAPIGroupService.swift in Sources */,
 				74C89CA0261DE5AA009F3C72 /* GroupModel.swift in Sources */,
 				741FB1D6266BFE7F0039EB29 /* TimeSelectionView.swift in Sources */,
 				74AF6D64268682F3005C52A8 /* DisplayExerciseStatsProtocol.swift in Sources */,
@@ -2256,6 +2277,7 @@
 				747B673E25FFBEE8000AD6B7 /* DisplayNotificationsViewModel.swift in Sources */,
 				74FDB5AE26976DB8000649CC /* FirebaseVideoUploader.swift in Sources */,
 				74163A4422E37089005A7D2E /* ButtonExtension.swift in Sources */,
+				7429784E26C1DCBE0023365E /* UserTableViewCell.swift in Sources */,
 				742852812638D64000C890CA /* CircuitOptionsTableViewCell.swift in Sources */,
 				7471ACDF25D47CA50042C561 /* TimeLineTableViewCell.swift in Sources */,
 				7439E044260CFA1100C91C0C /* DiscussionAdapter.swift in Sources */,
@@ -2425,7 +2447,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7479A921229F2B4D00D39E2E /* InTheGymTests.swift in Sources */,
+				7403A5F426C4286E000588CE /* MockFirebaseAPIGroupService.swift in Sources */,
 				74F546C525EC129900C1A6A9 /* TestData.swift in Sources */,
+				7403A5F826C42902000588CE /* CreateGroupTests.swift in Sources */,
 				74478E2326BECC5000D8178E /* ClipTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2664,7 +2688,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2;
+				MARKETING_VERSION = 4.3;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -2840,7 +2864,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2;
+				MARKETING_VERSION = 4.3;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (

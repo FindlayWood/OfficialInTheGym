@@ -24,6 +24,8 @@ class GroupAddPlayersViewModel {
         }
     }
     
+    var selectedPlayers: [Users] = []
+    
     var isLoading: Bool = false {
         didSet {
             updateLoadingStatucClosure?()
@@ -68,6 +70,20 @@ extension GroupAddPlayersViewModel {
         return players[indexPath.row]
     }
     func playerSelected(at indexPath: IndexPath) {
-        
+        selectedPlayers.append(getData(at: indexPath))
+    }
+    func checkIfPlayerSelected(_ player: Users) -> Bool {
+        let userIDs = selectedPlayers.map { $0.uid }
+        if userIDs.contains(player.uid) {
+            return true
+        } else {
+            return false
+        }
+    }
+    func playerDeselected(at indexPath: IndexPath) {
+        let removedPlayerID = getData(at: indexPath).uid
+        let userIDs = selectedPlayers.map { $0.uid }
+        guard let removeIndex = userIDs.firstIndex(of: removedPlayerID) else {return}
+        selectedPlayers.remove(at: removeIndex)
     }
 }

@@ -24,6 +24,14 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>INTHEGYM would like access to your media library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>INTHEGYM would like to access the camera to record clips.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>INTHEGYM would like to access the microphone to add sound to your clips.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>INTHEGYM would like access to your photo library.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -43,13 +51,5 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>INTHEGYM would like access to your media library.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>INTHEGYM would like access to your photo library.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>INTHEGYM would like to access the camera to record clips.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>INTHEGYM would like to access the microphone to add sound to your clips.</string>
 </dict>
 </plist>
