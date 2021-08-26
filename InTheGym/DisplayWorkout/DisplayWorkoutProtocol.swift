@@ -23,6 +23,7 @@ protocol DisplayWorkoutProtocol: WorkoutTableCellTapDelegate, LiveWorkoutAddMeth
     func clipSelected(at indexPath: IndexPath)
     func showClips()
     func hideClips()
+    func setSelected(at frame: CGRect, with exercise: exercise, on cell: UITableViewCell, set: Int)
 }
 
 protocol workoutCellConfigurable {

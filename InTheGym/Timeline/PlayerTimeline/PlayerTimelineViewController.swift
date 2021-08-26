@@ -13,6 +13,8 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     
     var coordinator : NewsFeedFlow?
     
+    var display = PlayerTimelineView()
+    
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     
@@ -31,10 +33,13 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         super.viewDidLoad()
         
         showFirstMessage()
+        view.backgroundColor = .white
         
         adapter = PlayerTimelineAdapter(delegate: self)
-        tableview.delegate = adapter
-        tableview.dataSource = adapter
+        display.tableview.delegate = adapter
+        display.tableview.dataSource = adapter
+        display.tableview.backgroundColor = .darkColour
+        display.postButton.addTarget(self, action: #selector(makePostPressed(_:)), for: .touchUpInside)
         tableview.rowHeight = UITableView.automaticDimension
         tableview.estimatedRowHeight = 90
         tableview.backgroundColor = Constants.darkColour
@@ -54,6 +59,12 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         initRefreshControl()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        display.frame = getFullViewableFrame()
+        view.addSubview(display)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
@@ -66,7 +77,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         // Setup for reloadTableViewClosure
         viewModel.reloadTableViewClosure = { [weak self] () in
             DispatchQueue.main.async {
-                self?.tableview.reloadData()
+                self?.display.tableview.reloadData()
             }
         }
         
@@ -77,13 +88,13 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
                 if isLoading {
                     self?.activityIndicator.startAnimating()
                     UIView.animate(withDuration: 0.2, animations: {
-                        self?.tableview.alpha = 0.0
+                        self?.display.tableview.alpha = 0.0
                     })
                     
                 } else {
                     self?.activityIndicator.stopAnimating()
                     UIView.animate(withDuration: 0.2, animations: {
-                        self?.tableview.alpha = 1.0
+                        self?.display.tableview.alpha = 1.0
                     })
                 }
             }
@@ -96,9 +107,9 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         viewModel.tableViewReloadedClosure = { [weak self] () in
             let isRefreshing = self?.viewModel.isRefreshing ?? false
             if !isRefreshing {
-                self?.tableview.reloadData()
+                self?.display.tableview.reloadData()
                 self?.refreshControl.endRefreshing()
-                self?.tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+                self?.display.tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             }
         }
         
@@ -108,10 +119,10 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     
     func initNewPostButton(){
         newPostsButton = SeeNewPostsButton()
-        view.addSubview(newPostsButton)
+        display.addSubview(newPostsButton)
         newPostsButton.translatesAutoresizingMaskIntoConstraints = false
-        newPostsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        newPostsButtonTopAnchor = newPostsButton.topAnchor.constraint(equalTo: self.tableview.topAnchor, constant: 12)
+        newPostsButton.centerXAnchor.constraint(equalTo: display.centerXAnchor).isActive = true
+        newPostsButtonTopAnchor = newPostsButton.topAnchor.constraint(equalTo: self.display.tableview.topAnchor, constant: 12)
         newPostsButtonTopAnchor.isActive = true
         newPostsButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
         newPostsButton.widthAnchor.constraint(equalToConstant: newPostsButton.button.bounds.width).isActive = true
@@ -125,7 +136,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = .white
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-        self.tableview.refreshControl = refreshControl
+        self.display.tableview.refreshControl = refreshControl
     }
     
     @objc func handleRefresh(){
@@ -165,7 +176,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     // tap tab bar to scroll to top
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if tabBarController.selectedViewController === viewController {
-            self.tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+            self.display.tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
         }
         return true
     }
@@ -204,9 +215,9 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
     }
     
     func newPosts() {
-        self.tableview.beginUpdates()
-        self.tableview.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
-        self.tableview.endUpdates()
+        self.display.tableview.beginUpdates()
+        self.display.tableview.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
+        self.display.tableview.endUpdates()
     }
     
     func postFromSelf(post: TimelinePostModel) {
@@ -214,7 +225,7 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
     }
     
     func workoutTapped(on cell: UITableViewCell) {
-        let index = self.tableview.indexPath(for: cell)!
+        let index = self.display.tableview.indexPath(for: cell)!
         let post = viewModel.getData(at:index)
         var workoutData: discoverWorkout!
         switch post {
@@ -248,7 +259,7 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
 
         }
         
-        let index = self.tableview.indexPath(for: cell)!
+        let index = self.display.tableview.indexPath(for: cell)!
         let post = viewModel.getData(at: index)
         
         
@@ -273,7 +284,7 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
     }
     
     func userTapped(on cell: UITableViewCell) {
-        let index = self.tableview.indexPath(for: cell)!
+        let index = self.display.tableview.indexPath(for: cell)!
         let post = viewModel.getData(at: index)
         if post.posterID == viewModel.userID {
             if ViewController.admin{
@@ -286,6 +297,17 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
             UserIDToUser.transform(userID: posterID!) { (user) in
                 self.coordinator?.showUser(user: user)
             }
+        }
+    }
+    
+    func showTopView() {
+        if !display.isPostViewShowing {
+            display.showTopView()
+        }
+    }
+    func hideTopView() {
+        if display.isPostViewShowing {
+            display.hideTopView()
         }
     }
     

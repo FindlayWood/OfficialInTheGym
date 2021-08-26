@@ -139,7 +139,7 @@ extension RequestsViewController: buttonTapsRequestDelegate{
         alert.addButton("YES", backgroundColor: .green) {
             self.viewModel.acceptRequest(from: user, at: index)
         }
-        alert.showWarning("Accept Request", subTitle: "Are you sure you want to accept a request from \(user.username!).", closeButtonTitle: "NO")
+        alert.showWarning("Accept Request", subTitle: "Are you sure you want to accept a request from \(user.username).", closeButtonTitle: "NO")
     }
     
     func declineRequest(from user: Users, on: UITableViewCell) {
@@ -148,7 +148,7 @@ extension RequestsViewController: buttonTapsRequestDelegate{
         alert.addButton("YES", backgroundColor: .green) {
             self.viewModel.declinedRequest(from: user, at: index)
         }
-        alert.showWarning("Decline Request", subTitle: "Are you sure you want to decline a request from \(user.username!).", closeButtonTitle: "NO")
+        alert.showWarning("Decline Request", subTitle: "Are you sure you want to decline a request from \(user.username).", closeButtonTitle: "NO")
     }
     
     func userTapped(on user: Users) {

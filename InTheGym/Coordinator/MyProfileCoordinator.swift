@@ -33,6 +33,7 @@ class MyProfileCoordinator: NSObject, Coordinator {
     }
     
     func start() {
+        navigationController.delegate = self
         let vc = MyProfileViewController.instantiate()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
@@ -114,6 +115,15 @@ extension MyProfileCoordinator: MyProfileFlow {
         let vc = FollowersDisplayViewController.instantiate()
         vc.followers = followers
         navigationController.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: - Saved WorkoutFlow
+extension MyProfileCoordinator: SavedWorkoutsFlow {
+    func savedWorkoutSelected(_ selectedWorkout: savedWorkoutDelegate) {
+        let child = WorkoutCoordinator(navigationController: navigationController, workout: selectedWorkout)
+        childCoordinators.append(child)
+        child.start()
     }
 }
 

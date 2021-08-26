@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
     
 class clipDataModel {
     var storageURL: String!
@@ -17,13 +16,13 @@ class clipDataModel {
     private let storageString = "storageURL"
     private let keyString = "clipKey"
     private let exerciseString = "exerciseName"
-    
+
     init?(data: [String: AnyObject]) {
         self.storageURL = data[storageString] as? String
         self.clipKey = data[keyString] as? String
         self.exerciseName = data[exerciseString] as? String
     }
-    
+
     func toObject() -> [String: AnyObject] {
         let object = [storageString: storageURL,
                       keyString: clipKey,
@@ -32,5 +31,12 @@ class clipDataModel {
     }
 }
 
+struct mainClipModel: Codable {
+    var storageURL: String
+    var exerciseName: String
+    var time: TimeInterval
+    var workoutID: String
+    var userID: String
+}
 
 

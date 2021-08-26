@@ -7,18 +7,16 @@
 //
 
 import Foundation
-import Firebase
 
-// class for a user 
-class Users: NSObject, Codable {
-    var admin: Bool?
-    var email: String?
-    var username: String?
-    var firstName: String?
-    var lastName: String?
+/// users object containing all user profile info
+struct Users: Codable, Assignable {
+    var admin: Bool
+    var email: String
+    var username: String
+    var firstName: String
+    var lastName: String
     var numberOfCompletes: Int?
-    var uid: String?
+    var uid: String
     var profilePhotoURL: String?
     var profileBio: String?
-    
 }

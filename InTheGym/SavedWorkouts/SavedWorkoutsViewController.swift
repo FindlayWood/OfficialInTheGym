@@ -11,7 +11,7 @@ import EmptyDataSet_Swift
 
 class SavedWorkoutsViewController: UIViewController, Storyboarded {
     
-    weak var coordinator: MyProfileFlow?
+    weak var coordinator: SavedWorkoutsFlow?
     
     @IBOutlet weak var tableview:UITableView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
@@ -44,6 +44,7 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
             initViewModel()
         }
         initUI()
+        initViewModel()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -94,7 +95,7 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
         // move to new views
         // move with this workout
         let workouttomove = viewModel.selectedWorkout!
-        coordinator?.showWorkouts(with: workouttomove)
+        coordinator?.savedWorkoutSelected(workouttomove)
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
 //        let workoutView = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
 //        workoutView.selectedWorkout = workouttomove

@@ -10,7 +10,7 @@ import Foundation
 
 class CreateNewGroupViewModel {
     
-    // MARK: - Closures
+    // MARK: - Callbacks
     var reloadTableViewClosure: (() -> ())?
     var successfullCreationClosure: (() -> Void)?
     var errorCreationClosure: (() -> Void)?

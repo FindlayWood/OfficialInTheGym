@@ -12,6 +12,7 @@ import Firebase
 class FirebaseAuthManager: AuthManagerService {
     
     static let shared = FirebaseAuthManager()
+    static var currentlyLoggedInUser: Users!
     
     private init(){}
     

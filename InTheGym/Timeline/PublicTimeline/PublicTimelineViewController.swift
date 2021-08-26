@@ -90,9 +90,9 @@ class PublicTimelineViewController: UIViewController, Storyboarded {
     }
     
     func initUI(){
-        self.navigationItem.title = user.username!
+        self.navigationItem.title = user.username
         self.profileBio.text = user.profileBio
-        self.name.text = user.firstName! + " " + user.lastName!
+        self.name.text = user.firstName + " " + user.lastName
         self.accountType.isUserInteractionEnabled = true
         if user.admin == true{
             self.accountType.setImage(UIImage(named: "coach_icon"), for: .normal)
@@ -101,19 +101,16 @@ class PublicTimelineViewController: UIViewController, Storyboarded {
             self.accountType.setImage(UIImage(named: "player_icon"), for: .normal)
             self.accountTypeLabel.text = "Player"
         }
-        if let purl = user.profilePhotoURL{
-            ImageAPIService.shared.getImage(with: purl) { (image) in
-                if image != nil {
-                    self.profileImage.image = image
-                    self.profileImage.alpha = 1.0
-                } else {
-                    self.profileImage.alpha = 1.0
-                }
+        let userID = user.uid
+        ImageAPIService.shared.getProfileImage(for: userID) { [weak self] image in
+            guard let self = self else {return}
+            if image != nil {
+                self.profileImage.image = image
+                self.profileImage.alpha = 1.0
+            } else {
+                self.profileImage.alpha = 1.0
             }
-        } else {
-            self.profileImage.alpha = 1.0
-        }
-        
+        }        
     }
     
     func initViewModel(){

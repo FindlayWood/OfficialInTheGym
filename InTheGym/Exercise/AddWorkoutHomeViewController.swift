@@ -80,6 +80,9 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     var followers:[String] = []
     var coaches:[String] = []
     
+    /// assignee to be given the workout
+    var assignee: Assignable!
+    
     @IBAction func savePressed(_ sender:UIButton){
         
         if titleField.text == ""{
@@ -131,7 +134,12 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
             uploadPage.createdWorkout = createdWorkout
             uploadPage.stepCount = stepCount
 
-            self.navigationController?.pushViewController(uploadPage, animated: true)
+            let newUploadPage = UploadingWorkoutViewController()
+            let uploadable = UploadableWorkout(assignee: assignee, workout: createdWorkout!)
+            newUploadPage.workoutToUpload = uploadable
+            coordinator?.goToUploadPage(uploadable)
+            
+            //self.navigationController?.pushViewController(newUploadPage, animated: true)
             
         }
     }

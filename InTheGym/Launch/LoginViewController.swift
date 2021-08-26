@@ -43,6 +43,7 @@ class LoginViewController: UIViewController, Storyboarded {
                         switch user.isEmailVerified {
                         case true:
                             UserIDToUser.transform(userID: user.uid) { userModel in
+                                FirebaseAuthManager.currentlyLoggedInUser = userModel
                                 ViewController.username = userModel.username
                                 ViewController.admin = userModel.admin
                                 self.haptic.notificationOccurred(.success)

@@ -8,11 +8,13 @@
 
 import Foundation
 
-protocol PlayerTimelineProtocol: class {
+protocol PlayerTimelineProtocol: AnyObject {
     func getData(at:IndexPath) -> PostProtocol
     func itemSelected(at: IndexPath)
     func retreiveNumberOfItems() -> Int
     func retreiveNumberOfSections() -> Int
     func newPosts()
     func postFromSelf(post:TimelinePostModel)
+    func showTopView()
+    func hideTopView()
 }

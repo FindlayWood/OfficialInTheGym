@@ -21,6 +21,6 @@ protocol GroupAddPlayersProtocol {
     func playerSelected(at indexPath: IndexPath)
 }
 
-protocol AddedPlayersProtocol {
-    func newPlayersAdded(_ players: [Users])
+protocol SelectPlayersProtocol {
+    func playersSelected(_ players: [Users])
 }

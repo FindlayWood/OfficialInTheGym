@@ -12,20 +12,42 @@ import Firebase
 
 class ImageAPIService {
     
+    // MARK: - Shared Instance
     static var shared = ImageAPIService()
     
-    private var imageURLString : String!
-    
+    // MARK: Private Initializer
     private init(){}
     
+    // MARK: - Cache Properties
     let profileImageCache = NSCache<NSString,UIImage>()
-    let cache = NSCache<NSString,UIImage>()
-    
-    private func downloadFirebaseImage(for userID:String, completion: @escaping (UIImage?) -> ()) {
+    //let groupProfileImageCache = NSCache<NSString, UIImage>()
+ 
+}
+
+// MARK: - Public Functions
+extension ImageAPIService {
+    public func getProfileImage(for userID: String, completion: @escaping (UIImage?) -> ()) {
+        if let image = profileImageCache.object(forKey: userID as NSString) {
+            completion(image)
+        } else {
+            downloadFirebaseImage(for: userID, completion: completion)
+        }
+    }
+//    public func getGroupProfileImage(for groupID: String, completion: @escaping (UIImage?) -> Void) {
+//        if let image = groupProfileImageCache.object(forKey: groupID as NSString) {
+//            completion(image)
+//        } else {
+//            downloadGroupProfileImage(for: groupID, completion: completion)
+//        }
+//    }
+}
+
+// MARK: - Private Functions
+private extension ImageAPIService {
+    private func downloadFirebaseImage(for userID: String, completion: @escaping (UIImage?) -> ()) {
         let storage = Storage.storage().reference().child("ProfilePhotos/\(userID)")
         storage.getData(maxSize: 1 * 1024 * 1024) { (data, error) in
-            if let error = error {
-                print(error.localizedDescription)
+            if error != nil {
                 completion(nil)
                 return
             }
@@ -36,70 +58,19 @@ class ImageAPIService {
             }
         }
     }
-    
-    func getProfileImage(for userID:String, completion: @escaping (UIImage?) -> ()) {
-        if let image = profileImageCache.object(forKey: userID as NSString) {
-            completion(image)
-        } else {
-            downloadFirebaseImage(for: userID, completion: completion)
-        }
-    }
-    
-    
-    
-    private func downloadImage(with imageURL:URL, completion: @escaping (UIImage?) -> ()) {
-        let dataTask = URLSession.shared.dataTask(with: imageURL) { data, responseURL, error in
-            var downloadedImage:UIImage?
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            if let data = data {
-                downloadedImage = UIImage(data: data)
-            }
-
-            if downloadedImage != nil {
-                self.cache.setObject(downloadedImage!, forKey: imageURL.absoluteString as NSString)
-            }
-
-            DispatchQueue.main.async {
-                completion(downloadedImage)
-            }
-
-        }
-        dataTask.resume()
-
-
-//        DispatchQueue.global(qos: .background).async {
-//            let url = URL(string: imageURL)
-//            let data = NSData(contentsOf: url!)
-//            let image = UIImage(data: data! as Data)
-//
-//            if image != nil {
-//                self.cache.setObject(image!, forKey: url!.absoluteString as NSString)
+//    func downloadGroupProfileImage(for groupID: String, completion: @escaping (UIImage?) -> Void) {
+//        let storage = Storage.storage().reference().child("GroupProfilePhotos/\(groupID)")
+//        storage.getData(maxSize: 1 * 1024 * 1024) { (data, error) in
+//            if error != nil {
+//                completion(nil)
+//                return
 //            }
-//
-//
-//            DispatchQueue.main.async {
-//                if self.imageURLString == imageURL{
-//                    completion(image)
-//                }
-//
+//            if let data = data{
+//                let image = UIImage(data: data)
+//                completion(image)
+//                self.groupProfileImageCache.setObject(image!, forKey: groupID as NSString)
 //            }
 //        }
-    }
-
-    func getImage(with imageURL:String, completion: @escaping (UIImage?) -> ()) {
-        imageURLString = imageURL
-        let url = URL(string: imageURL)!
-        if let image = cache.object(forKey: url.absoluteString as NSString){
-            completion(image)
-        } else {
-            downloadImage(with: url, completion: completion)
-        }
-
-    }
-    
-    
+//    }
     
 }

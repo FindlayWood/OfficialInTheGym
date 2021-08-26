@@ -102,7 +102,7 @@ class GroupPageViewModel {
                 myGroup.enter()
                 UserIDToUser.transform(userID: (child as AnyObject).key) { (member) in
                     defer {myGroup.leave()}
-                    if member.uid! == self.groupLeader{
+                    if member.uid == self.groupLeader{
                         members.insert(member, at: 0)
                     } else {
                         members.append(member)

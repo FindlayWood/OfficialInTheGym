@@ -55,6 +55,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             do{
                 try Auth.auth().signOut()
                 FirebaseAPI.shared().dispose()
+                FirebaseAuthManager.currentlyLoggedInUser = nil
                 ViewController.admin = nil
                 ViewController.username = nil
                 PlayerTimelineViewModel.apiService.removeObserver(withHandle: PlayerTimelineViewModel.handle)

@@ -77,6 +77,13 @@ extension LiveWorkoutCoordinator: LiveDelegate {
         navigationController.pushViewController(vc, animated: true)
     }
     
+    func otherSelected(_ exercise: exercise) {
+        let vc = OtherExerciseViewController()
+        vc.newExercise = exercise
+        vc.coordinator = self
+        navigationController.present(vc, animated: true, completion: nil)
+    }
+    
     func exerciseSelected(_ exercise: exercise) {
         // pop back to where live workout is displayed
         // TODO: - decide where live workout will be displayed
@@ -84,6 +91,9 @@ extension LiveWorkoutCoordinator: LiveDelegate {
         exercise.sets = 0
         exercise.repArray = [Int]()
         exercise.weightArray = [String]()
+        exercise.time = [Int]()
+        exercise.distance = [String]()
+        exercise.restTime = [Int]()
         DisplayWorkoutViewController.selectedWorkout.exercises?.append(exercise)
         FirebaseLiveWorkoutUpdater.shared.update(DisplayWorkoutViewController.selectedWorkout)
         
@@ -103,6 +113,9 @@ extension LiveWorkoutCoordinator: LiveDelegate {
         navigationController.pushViewController(vc, animated: true)
     }
     
+    func upload() {
+        
+    }
     
     
     

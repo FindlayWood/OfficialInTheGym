@@ -32,7 +32,7 @@ class AddWorkoutSelectionViewController: UIViewController, Storyboarded {
     
     
     @IBAction func addWorkout(_ sender:UIButton){
-        coordinator?.regularWorkout()
+        coordinator?.regularWorkout(FirebaseAuthManager.currentlyLoggedInUser)
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
 //        let nextVC = storyboard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
 //        nextVC.playerBool = true
@@ -43,10 +43,11 @@ class AddWorkoutSelectionViewController: UIViewController, Storyboarded {
     
 
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.tintColor = Constants.lightColour
+        editNavBarColour(to: .lightColour)
+//        self.navigationController?.setNavigationBarHidden(false, animated: true)
+//        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
+//        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
+//        self.navigationController?.navigationBar.tintColor = Constants.lightColour
     }
 
 }

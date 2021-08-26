@@ -5590,6 +5590,31 @@
                                     <action selector="amrapTapped:" destination="s7l-eY-Ty5" eventType="touchUpInside" id="zC4-zb-4eY"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0PW-DA-6TL" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
+                                <rect key="frame" x="20" y="644" width="374" height="80"/>
+                                <color key="backgroundColor" name="lightColour"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="Oqx-nc-xOM"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
+                                <state key="normal" title="Other">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="otherTapped:" destination="s7l-eY-Ty5" eventType="touchUpInside" id="CKy-tg-eCf"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="sSF-5i-bcF"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -5608,7 +5633,10 @@
                             <constraint firstItem="ng0-nK-RwM" firstAttribute="leading" secondItem="sSF-5i-bcF" secondAttribute="leading" constant="20" id="bUc-16-Cmb"/>
                             <constraint firstItem="og0-F6-ofO" firstAttribute="leading" secondItem="sSF-5i-bcF" secondAttribute="leading" constant="20" id="gsg-mb-hrK"/>
                             <constraint firstItem="brK-Tg-rQq" firstAttribute="top" secondItem="FRH-18-Hn6" secondAttribute="bottom" constant="15" id="luj-8J-1mH"/>
+                            <constraint firstItem="sSF-5i-bcF" firstAttribute="trailing" secondItem="0PW-DA-6TL" secondAttribute="trailing" constant="20" id="mKk-u4-d25"/>
                             <constraint firstItem="sSF-5i-bcF" firstAttribute="trailing" secondItem="JCs-sZ-CYN" secondAttribute="trailing" constant="20" id="ng3-B5-5PM"/>
+                            <constraint firstItem="0PW-DA-6TL" firstAttribute="leading" secondItem="sSF-5i-bcF" secondAttribute="leading" constant="20" id="orj-dE-wTK"/>
+                            <constraint firstItem="0PW-DA-6TL" firstAttribute="top" secondItem="JCs-sZ-CYN" secondAttribute="bottom" constant="15" id="w98-mC-tU7"/>
                             <constraint firstItem="sSF-5i-bcF" firstAttribute="trailing" secondItem="og0-F6-ofO" secondAttribute="trailing" constant="20" id="x87-ic-ipg"/>
                             <constraint firstItem="sSF-5i-bcF" firstAttribute="trailing" secondItem="cvE-OC-qwp" secondAttribute="trailing" constant="20" id="xB4-vp-zst"/>
                             <constraint firstItem="cvE-OC-qwp" firstAttribute="leading" secondItem="sSF-5i-bcF" secondAttribute="leading" constant="20" id="xfx-j3-p01"/>
@@ -7559,6 +7587,9 @@
     <designables>
         <designable name="0BJ-qr-Cgf">
             <size key="intrinsicContentSize" width="148" height="42"/>
+        </designable>
+        <designable name="0PW-DA-6TL">
+            <size key="intrinsicContentSize" width="78" height="48"/>
         </designable>
         <designable name="0Zx-Yq-W5S">
             <size key="intrinsicContentSize" width="45" height="36"/>

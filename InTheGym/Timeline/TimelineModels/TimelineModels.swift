@@ -201,12 +201,12 @@ class TimelineActivityModel: PostProtocol {
 }
 
 protocol PostProtocol{
-    var username:String?{get}
-    var time:TimeInterval?{get}
-    var posterID:String?{get}
-    var postID:String?{get}
-    var likeCount:Int?{get set}
-    var replyCount:Int?{get set}
-    var isPrivate:Bool?{get set}
+    var username:String? {get}
+    var time:TimeInterval? {get}
+    var posterID:String? {get}
+    var postID:String? {get}
+    var likeCount:Int? {get set}
+    var replyCount:Int? {get set}
+    var isPrivate:Bool? {get set}
     func toObject() -> [String:AnyObject]
 }

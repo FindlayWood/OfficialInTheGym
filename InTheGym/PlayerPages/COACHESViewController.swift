@@ -50,7 +50,7 @@ class COACHESViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! PlayerInfoCell
         //cell.coachName.text = "Phil Jackson"
-        cell.coachName.text = coaches[indexPath.row].firstName! + " " + coaches[indexPath.row].lastName!
+        cell.coachName.text = coaches[indexPath.row].firstName + " " + coaches[indexPath.row].lastName
         cell.coachUsername.text = coaches[indexPath.row].username
         cell.coachEmail.text = coaches[indexPath.row].email
         cell.backgroundColor = #colorLiteral(red: 0.9364961361, green: 0.9364961361, blue: 0.9364961361, alpha: 1)

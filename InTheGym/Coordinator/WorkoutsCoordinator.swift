@@ -12,7 +12,7 @@ import UIKit
 protocol WorkoutsFlow {
     func showWorkout(workout: WorkoutDelegate)
     func addNewWorkout()
-    func regularWorkout()
+    func regularWorkout(_ assignee: Assignable)
     func addLiveWorkout()
     func startLiveWorkout(_ model: liveWorkout)
 }
@@ -58,8 +58,8 @@ extension WorkoutsCoordinator: WorkoutsFlow {
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func regularWorkout() {
-        let child = RegularWorkoutCoordinator(navigationController: navigationController)
+    func regularWorkout(_ assignee: Assignable) {
+        let child = RegularWorkoutCoordinator(navigationController: navigationController, assignTo: assignee)
         childCoordinators.append(child)
         child.start()
     }

@@ -30,6 +30,7 @@ class WeightView: UIView {
         field.tintColor = .white
         field.textAlignment = .right
         field.keyboardType = .decimalPad
+        field.addToolBar()
         field.heightAnchor.constraint(equalToConstant: 90).isActive = true
         field.layer.cornerRadius = 10
         field.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
@@ -45,6 +46,7 @@ class WeightView: UIView {
         field.backgroundColor = Constants.darkColour
         field.heightAnchor.constraint(equalToConstant: 90).isActive = true
         field.layer.cornerRadius = 10
+        field.addToolBar()
         field.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
         field.clipsToBounds = true
         field.translatesAutoresizingMaskIntoConstraints = false

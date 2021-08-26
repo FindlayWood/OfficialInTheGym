@@ -73,11 +73,11 @@ class GroupMembersViewController: UIViewController, UITableViewDelegate, UITable
         let selectedUserID = groupMembers[indexPath.row]
         
         UserIDToUser.transform(userID: selectedUserID) { (user) in
-            playerView.firstNameString = user.firstName!
-            playerView.lastNameString = user.lastName!
-            playerView.userNameString = user.username!
-            playerView.userEmailString = user.email!
-            playerView.workoutsCompletedInt = user.numberOfCompletes!
+            playerView.firstNameString = user.firstName
+            playerView.lastNameString = user.lastName
+            playerView.userNameString = user.username
+            playerView.userEmailString = user.email
+            playerView.workoutsCompletedInt = user.numberOfCompletes ?? 0
             playerView.playerID = user.uid
             self.navigationController?.pushViewController(playerView, animated: true)
         }

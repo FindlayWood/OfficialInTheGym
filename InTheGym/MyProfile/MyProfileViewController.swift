@@ -87,9 +87,9 @@ class MyProfileViewController: UIViewController, Storyboarded {
         }
 
         viewModel.returnUser { (user) in
-            self.name.text = user.firstName! + " " + user.lastName!
+            self.name.text = user.firstName + " " + user.lastName
             self.profileBio.text = user.profileBio
-            ImageAPIService.shared.getProfileImage(for: user.uid!) { (image) in
+            ImageAPIService.shared.getProfileImage(for: user.uid) { (image) in
                 if let image = image {
                     self.profileImage.image = image
                     self.profileImage.alpha = 1.0

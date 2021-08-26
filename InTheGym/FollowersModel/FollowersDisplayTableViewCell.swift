@@ -16,13 +16,13 @@ class FollowersDisplayTableViewCell: UITableViewCell {
 
     var user: Users?{
         didSet{
-            self.username.text = "@\(user!.username!)"
-            self.fullname.text = "\(user!.firstName!) \(user!.lastName!)"
-            if let purl = user!.profilePhotoURL{
-                ImageAPIService.shared.getImage(with: purl) { (image) in
-                    if image != nil {
-                        self.profileImage.image = image
-                    }
+            self.username.text = "@\(user!.username)"
+            self.fullname.text = "\(user!.firstName) \(user!.lastName)"
+            guard let userID = user?.uid else {return}
+            ImageAPIService.shared.getProfileImage(for: userID) { [weak self] image in
+                guard let self = self else {return}
+                if image != nil {
+                    self.profileImage.image = image
                 }
             }
         }

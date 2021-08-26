@@ -10,7 +10,7 @@ import UIKit
 
 class GroupAddPlayersViewController: UIViewController {
     
-    var delegate: AddedPlayersProtocol!
+    var delegate: SelectPlayersProtocol!
     
     var display = GroupAddPlayersView()
     
@@ -71,7 +71,7 @@ class GroupAddPlayersViewController: UIViewController {
     }
     
     @objc func finished() {
-        delegate.newPlayersAdded(viewModel.selectedPlayers)
+        delegate.playersSelected(viewModel.selectedPlayers)
         self.dismiss(animated: true, completion: nil)
     }
 

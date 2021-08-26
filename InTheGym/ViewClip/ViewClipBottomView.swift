@@ -119,9 +119,7 @@ class ViewClipBottomView: UIView {
     func setUsername(from userID: String) {
         UserIDToUser.transform(userID: userID) { [weak self] user in
             guard let self = self else {return}
-            if let username = user.username {
-                self.usernameButton.setTitle(username, for: .normal)
-            }
+            self.usernameButton.setTitle(user.username, for: .normal)
         }
     }
     

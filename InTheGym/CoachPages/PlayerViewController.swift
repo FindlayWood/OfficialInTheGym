@@ -14,6 +14,9 @@ import Firebase
 
 class PlayerViewController: UIViewController, Storyboarded {
     
+    // coordinator for navigation
+    weak var coordinator: CoachPlayerViewCoordinator?
+    
     // user model of player in view
     var player: Users!
     
@@ -70,14 +73,17 @@ class PlayerViewController: UIViewController, Storyboarded {
     
     //function for when the user taps add workout
     @IBAction func addWorkoutPressed(_ sender:UIButton){
+        
+        
         sender.pulsate()
-        let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-        let SVC = StoryBoard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
-        SVC.userName = player.username
-        SVC.uid = player.uid
-        SVC.playerBool = false
-        AddWorkoutHomeViewController.groupBool = false
-        self.navigationController?.pushViewController(SVC, animated: true)
+        coordinator?.addWorkout()
+//        let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+//        let SVC = StoryBoard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
+//        SVC.userName = player.username
+//        SVC.uid = player.uid
+//        SVC.playerBool = false
+//        AddWorkoutHomeViewController.groupBool = false
+//        self.navigationController?.pushViewController(SVC, animated: true)
     }
     
     //function for when the user taps view pbs
@@ -85,7 +91,7 @@ class PlayerViewController: UIViewController, Storyboarded {
         sender.pulsate()
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "PBsViewController") as! PBsViewController
-        SVC.username = player.username!
+        SVC.username = player.username
         self.navigationController?.pushViewController(SVC, animated: true)
     }
     
@@ -94,7 +100,7 @@ class PlayerViewController: UIViewController, Storyboarded {
         sender.pulsate()
         let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let SVC = StoryBoard.instantiateViewController(withIdentifier: "ViewWorkoutViewController") as! ViewWorkoutViewController
-        SVC.username = player.username!
+        SVC.username = player.username
         SVC.playerID = player.uid
         self.navigationController?.pushViewController(SVC, animated: true)
     }
@@ -127,7 +133,7 @@ class PlayerViewController: UIViewController, Storyboarded {
         pieChart.backgroundColor = Constants.lightColour
 
         
-        DBRef = Database.database().reference().child("Scores").child(player.uid!)
+        DBRef = Database.database().reference().child("Scores").child(player.uid)
         
         // setup the views
         topView.layer.cornerRadius = 20

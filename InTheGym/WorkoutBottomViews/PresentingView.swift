@@ -139,7 +139,7 @@ extension PresentingView: MyGroupsProtocol {
         print("tapped group at \(indexPath.section)")
         let group = viewModel.getGroup(at: indexPath)
         let alert = SCLAlertView()
-        alert.showSuccess("Share To Group", subTitle: "Would you like to share this workout to the group \(group.groupTitle ?? "ERROR")?", closeButtonTitle: "ok")
+        alert.showSuccess("Share To Group", subTitle: "Would you like to share this workout to the group \(group.username ?? "ERROR")?", closeButtonTitle: "ok")
         groupSelectedClosure?(group)
        
     }

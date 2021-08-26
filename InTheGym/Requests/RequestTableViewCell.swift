@@ -23,7 +23,7 @@ class RequestTableViewCell: UITableViewCell {
     func setup(with user:Users){
         self.name.text = user.username
         self.user = user
-        ImageAPIService.shared.getProfileImage(for: user.uid!) { (image) in
+        ImageAPIService.shared.getProfileImage(for: user.uid) { (image) in
             if let image = image {
                 self.profileImage.setImage(image, for: .normal)
             }

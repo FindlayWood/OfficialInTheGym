@@ -70,63 +70,63 @@ class ViewController: UIViewController, Storyboarded {
         super.viewDidLoad()
         // check if current user exists and log them in
         
-        if Auth.auth().currentUser != nil{
-            let userID = Auth.auth().currentUser?.uid
-            if let user = Auth.auth().currentUser{
-                
-                user.reload { (error) in
-                    switch user.isEmailVerified {
-                    case true:
-                        //self.perform(#selector(self.showAlert), with: nil, afterDelay: 10)
-                        self.DBref.child("users").child(userID!).child("admin").observeSingleEvent(of: .value) { (snapshot) in
-                            
-                            if snapshot.value as! Int == 1{
-                                self.performSegue(withIdentifier: "adminLoggedIn2", sender: self)
-                                ViewController.admin = true
-                            }
-                            else{
-                                self.performSegue(withIdentifier: "alreadyLoggedIn2", sender: self)
-                                ViewController.admin = false
-                            }
-                        }
-                    case false:
-                        let screenSize: CGRect = UIScreen.main.bounds
-                        let screenWidth = screenSize.width
-                        
-                        let appearance = SCLAlertView.SCLAppearance(
-                            kWindowWidth: screenWidth - 40 )
-                        
-                        let alertview = SCLAlertView(appearance: appearance)
-                        alertview.addButton("Resend Verification Email") {
-                            user.sendEmailVerification()
-                            self.showSuccess()
-                        }
-                        
-                        alertview.showWarning("Verify", subTitle: "You must verify your account from the email we sent you. Then we can log you in straight away.", closeButtonTitle: "OK")
-                        
-                        
-                    }
-                }
-               
-            }
-            
-
-            
-            /*self.DBref.child("users").child(userID!).child("admin").observeSingleEvent(of: .value) { (snapshot) in
-                
-                if snapshot.value as! Int == 1{
-                    self.performSegue(withIdentifier: "adminLoggedIn2", sender: self)
-                    ViewController.admin = true
-                    Flurry.logEvent("Coach Already logged in")
-                }
-                else{
-                    self.performSegue(withIdentifier: "alreadyLoggedIn2", sender: self)
-                    ViewController.admin = false
-                    Flurry.logEvent("Player already logged in")
-                }
-            }*/
-            
-        }
+//        if Auth.auth().currentUser != nil{
+//            let userID = Auth.auth().currentUser?.uid
+//            if let user = Auth.auth().currentUser{
+//                
+//                user.reload { (error) in
+//                    switch user.isEmailVerified {
+//                    case true:
+//                        //self.perform(#selector(self.showAlert), with: nil, afterDelay: 10)
+//                        self.DBref.child("users").child(userID!).child("admin").observeSingleEvent(of: .value) { (snapshot) in
+//                            
+//                            if snapshot.value as! Int == 1{
+//                                self.performSegue(withIdentifier: "adminLoggedIn2", sender: self)
+//                                ViewController.admin = true
+//                            }
+//                            else{
+//                                self.performSegue(withIdentifier: "alreadyLoggedIn2", sender: self)
+//                                ViewController.admin = false
+//                            }
+//                        }
+//                    case false:
+//                        let screenSize: CGRect = UIScreen.main.bounds
+//                        let screenWidth = screenSize.width
+//                        
+//                        let appearance = SCLAlertView.SCLAppearance(
+//                            kWindowWidth: screenWidth - 40 )
+//                        
+//                        let alertview = SCLAlertView(appearance: appearance)
+//                        alertview.addButton("Resend Verification Email") {
+//                            user.sendEmailVerification()
+//                            self.showSuccess()
+//                        }
+//                        
+//                        alertview.showWarning("Verify", subTitle: "You must verify your account from the email we sent you. Then we can log you in straight away.", closeButtonTitle: "OK")
+//                        
+//                        
+//                    }
+//                }
+//               
+//            }
+//            
+//
+//            
+//            /*self.DBref.child("users").child(userID!).child("admin").observeSingleEvent(of: .value) { (snapshot) in
+//                
+//                if snapshot.value as! Int == 1{
+//                    self.performSegue(withIdentifier: "adminLoggedIn2", sender: self)
+//                    ViewController.admin = true
+//                    Flurry.logEvent("Coach Already logged in")
+//                }
+//                else{
+//                    self.performSegue(withIdentifier: "alreadyLoggedIn2", sender: self)
+//                    ViewController.admin = false
+//                    Flurry.logEvent("Player already logged in")
+//                }
+//            }*/
+//            
+//        }
     }
     
     override func loadView() {

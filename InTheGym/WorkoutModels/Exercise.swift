@@ -24,6 +24,9 @@ class exercise: WorkoutType {
     var completedSets: [Bool]?
     var rpe: String?
     var note: String?
+    var time: [Int]?
+    var distance: [String]?
+    var restTime: [Int]?
     
     init?(){}
     
@@ -41,6 +44,9 @@ class exercise: WorkoutType {
         self.completedSets = exercises["completedSets"] as? [Bool]
         self.rpe = exercises["rpe"] as? String
         self.note = exercises["note"] as? String
+        self.time = exercises["time"] as? [Int]
+        self.distance = exercises["distance"] as? [String]
+        self.restTime = exercises["restTime"] as? [Int]
 
     }
     
@@ -85,6 +91,15 @@ class exercise: WorkoutType {
         
         if let set = setString {
             object["sets"] = set as AnyObject
+        }
+        if let time = time {
+            object["time"] = time as AnyObject
+        }
+        if let distance = distance {
+            object["time"] = distance as AnyObject
+        }
+        if let resTime = restTime {
+            object["time"] = resTime as AnyObject
         }
         return object
     }

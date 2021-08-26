@@ -45,6 +45,7 @@ struct publicSavedWorkout : savedWorkoutDelegate {
         self.fromDiscover = snap["fromDiscover"] as? Bool ?? false
         self.completed = false
         self.workoutID = snapshot.key
+        self.savedID = snapshot.key
         self.title = snap["title"] as? String
         self.createdBy = snap["createdBy"] as? String
         self.creatorID = snap["creatorID"] as? String
@@ -66,7 +67,8 @@ struct publicSavedWorkout : savedWorkoutDelegate {
                       "completed": false,
                       "liveWorkout": false,
                       "fromDiscover": fromDiscover!,
-                      "savedID" : workoutID!,
+                      "savedID" : savedID!,
+                      "workoutID": workoutID!,
                       "creatorID" : creatorID!,
                       "isPrivate": false,
                       "NumberOfCompletes": completes!,
@@ -116,6 +118,7 @@ struct privateSavedWorkout : savedWorkoutDelegate {
         self.fromDiscover = snap["fromDiscover"] as? Bool ?? false
         self.completed = false
         self.workoutID = snapshot.key
+        self.savedID = snapshot.key
         self.title = snap["title"] as? String
         self.createdBy = snap["createdBy"] as? String
         self.creatorID = snap["creatorID"] as? String
@@ -134,7 +137,8 @@ struct privateSavedWorkout : savedWorkoutDelegate {
                       "completed": false,
                       "liveWorkout": false,
                       "fromDiscover": fromDiscover!,
-                      "savedID" : workoutID!,
+                      "savedID" : savedID!,
+                      "workoutID": workoutID!,
                       "creatorID" : creatorID!,
                       "isPrivate": true] as [String:AnyObject]
         

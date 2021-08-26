@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import CodableFirebase
 import EmptyDataSet_Swift
 
 class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, EmptyDataSetSource, EmptyDataSetDelegate, Storyboarded  {
@@ -81,24 +82,24 @@ class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITab
         
         let cell = tableview.dequeueReusableCell(withIdentifier: "cell") as! SearchUsersTableViewCell
         //cell.profileImage.image = UIImage(named: "player_icon")
-        cell.fullName.text = searchResults[indexPath.row].firstName! + " " + searchResults[indexPath.row].lastName!
+        cell.fullName.text = searchResults[indexPath.row].firstName + " " + searchResults[indexPath.row].lastName
         cell.profileImage.layer.cornerRadius = cell.profileImage.bounds.width / 2.0
         cell.profileImage.layer.borderWidth = 1
         cell.profileImage.layer.borderColor = Constants.darkColour.cgColor
-        cell.username.text = "@" + searchResults[indexPath.row].username!
+        cell.username.text = "@" + searchResults[indexPath.row].username
         
-        let usersID = searchResults[indexPath.row].uid!
+        let usersID = searchResults[indexPath.row].uid
         ImageAPIService.shared.getProfileImage(for: usersID) { (image) in
             if let image = image {
                 cell.profileImage.image = image
             }
         }
-        
-        if let profileBio = searchResults[indexPath.row].profileBio{
-            cell.userBio.text = profileBio
-        }else{
-            cell.userBio.text = ""
-        }
+        cell.userBio.text = searchResults[indexPath.row].profileBio
+//        if let profileBio = searchResults[indexPath.row].profileBio {
+//            cell.userBio.text = profileBio
+//        }else{
+//            cell.userBio.text = ""
+//        }
  
         return cell
     }
@@ -133,9 +134,9 @@ class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITab
         // in our entries based on the title value.
         
         
-        searchResults = users.filter {($0.username?.lowercased().contains(searchText.lowercased()))!
-                                        || ($0.firstName?.lowercased().contains(searchText.lowercased()))!
-                                        || ($0.lastName?.lowercased().contains(searchText.lowercased()))!
+        searchResults = users.filter {($0.username.lowercased().contains(searchText.lowercased()))
+                                        || ($0.firstName.lowercased().contains(searchText.lowercased()))
+                                        || ($0.lastName.lowercased().contains(searchText.lowercased()))
         }
        }
 
@@ -154,22 +155,33 @@ class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITab
         var initialLoad = true
         let userReference = Database.database().reference().child("users")
         userReference.observe(.childAdded, with: { (snapshot) in
-            
-            if snapshot.key == self.userID!{
-                return
-            }else{
-                if let snap = snapshot.value as? [String:AnyObject]{
-                    let newUser = Users()
-                    newUser.username = snap["username"] as? String
-                    newUser.firstName = snap["firstName"] as? String ?? "no"
-                    newUser.lastName = snap["lastName"] as? String ?? "name"
-                    newUser.admin = snap["admin"] as? Bool ?? false
-                    newUser.uid = snapshot.key
-                    newUser.profilePhotoURL = snap["profilePhotoURL"] as? String
-                    newUser.profileBio = snap["profileBio"] as? String
-                    self.users.append(newUser)
+            guard let snap = snapshot.value as? [String:AnyObject] else {return}
+            if snapshot.key != FirebaseAuthManager.currentlyLoggedInUser.uid {
+                do {
+                    let user = try FirebaseDecoder().decode(Users.self, from: snap)
+                    self.users.append(user)
+                }
+                catch {
+                    print(error.localizedDescription)
                 }
             }
+
+            
+//            if snapshot.key == self.userID!{
+//                return
+//            }else{
+//                if let snap = snapshot.value as? [String:AnyObject]{
+//                    var newUser: Users!
+//                    newUser.username = snap["username"] as? String ?? "username"
+//                    newUser.firstName = snap["firstName"] as? String ?? "no"
+//                    newUser.lastName = snap["lastName"] as? String ?? "name"
+//                    newUser.admin = snap["admin"] as? Bool ?? false
+//                    newUser.uid = snapshot.key
+//                    newUser.profilePhotoURL = snap["profilePhotoURL"] as? String ?? "nil"
+//                    newUser.profileBio = snap["profileBio"] as? String ?? ""
+//                    self.users.append(newUser)
+//                }
+//            }
             
 
             

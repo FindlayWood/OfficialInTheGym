@@ -13,6 +13,8 @@ class PlayerTimelineAdapter:NSObject{
     
     var delegate:PlayerTimelineProtocol
     
+    var lastContentOffset: CGFloat = 0
+    
     init(delegate:PlayerTimelineProtocol){
         self.delegate = delegate
     }
@@ -36,6 +38,19 @@ extension PlayerTimelineAdapter: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.delegate.itemSelected(at: indexPath)
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.lastContentOffset = scrollView.contentOffset.y
+    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if lastContentOffset + 100 < scrollView.contentOffset.y {
+            delegate.hideTopView()
+        } else if lastContentOffset > scrollView.contentOffset.y {
+            delegate.showTopView()
+        } else if scrollView.contentOffset.y == 0 {
+            delegate.showTopView()
+        }
     }
     
     private func cellIdentifier(for rowModel:PostProtocol) -> String{

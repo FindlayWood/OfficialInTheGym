@@ -16,12 +16,12 @@ class MyGroupTableViewCell: UITableViewCell {
     @IBOutlet weak var leaderUsernameLabel:UILabel!
     
     func setup(with group:groupModel){
-        self.groupTitle.text = group.groupTitle
-        self.groupDescription.text = group.groupDescription
-        ImageAPIService.shared.getProfileImage(for: group.groupLeader!) { (image) in
+        self.groupTitle.text = group.username
+        self.groupDescription.text = group.description
+        ImageAPIService.shared.getProfileImage(for: group.leader!) { (image) in
             self.leaderProfileImage.image = image
         }
-        UserIDToUser.transform(userID: group.groupLeader!) { (leader) in
+        UserIDToUser.transform(userID: group.leader!) { (leader) in
             self.leaderUsernameLabel.text = leader.username
         }
     }

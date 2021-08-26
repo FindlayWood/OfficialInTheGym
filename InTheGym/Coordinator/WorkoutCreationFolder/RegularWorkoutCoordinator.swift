@@ -11,9 +11,11 @@ import UIKit
 
 protocol CreationDelegate: AnyObject {
     func bodyTypeSelected(_ exercise: exercise)
+    func otherSelected(_ exercise: exercise)
     func exerciseSelected(_ exercise: exercise)
     func repsSelected(_ exercise: exercise)
     func weightSelected(_ exercise: exercise)
+    func upload()
 }
 
 protocol RegularWorkoutFlow: RegularDelegate {
@@ -21,6 +23,7 @@ protocol RegularWorkoutFlow: RegularDelegate {
     func addCircuit()
     func addAMRAP()
     func noteAdded(_ exercise: exercise)
+    
 }
 
 protocol LiveWorkoutFlow: LiveDelegate {
@@ -52,9 +55,12 @@ typealias CircuitDelegate = CreationDelegate & RegularAndCircuitFlow
 class RegularWorkoutCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var childCoordinator: AddMoreToExerciseCoordinator!
+    var assignTo: Assignable
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, assignTo: Assignable) {
         self.navigationController = navigationController
+        self.assignTo = assignTo
     }
     
     func start() {
@@ -63,6 +69,7 @@ class RegularWorkoutCoordinator: NSObject, Coordinator {
         AddWorkoutHomeViewController.groupBool = false
         vc.coordinator = self
         vc.playerBool = true
+        vc.assignee = assignTo
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
@@ -96,6 +103,13 @@ extension RegularWorkoutCoordinator: RegularWorkoutFlow {
         navigationController.pushViewController(vc, animated: true)
     }
     
+    func otherSelected(_ exercise: exercise) {
+        let vc = OtherExerciseViewController()
+        vc.newExercise = exercise
+        vc.coordinator = self
+        navigationController.present(vc, animated: true, completion: nil)
+    }
+    
     func exerciseSelected(_ exercise: exercise) {
         let vc = ExerciseSetsViewController.instantiate()
         vc.coordinator = self
@@ -118,15 +132,19 @@ extension RegularWorkoutCoordinator: RegularWorkoutFlow {
     }
     
     func weightSelected(_ exercise: exercise) {
-        let vc = NoteViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
-        navigationController.pushViewController(vc, animated: true)
+        childCoordinator = AddMoreToExerciseCoordinator(navigationController: navigationController, exercise)
+        childCoordinators.append(childCoordinator)
+        childCoordinator.parentCoordinator = self
+        childCoordinator.start()
+        
+//        let vc = NoteViewController.instantiate()
+//        vc.coordinator = self
+//        vc.newExercise = exercise
+//        navigationController.pushViewController(vc, animated: true)
     }
     
     func noteAdded(_ exercise: exercise) {
         let object = exercise.toObject()
-        print(object)
         AddWorkoutHomeViewController.exercises.append(object)
         let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
         for controller in viewControllers {
@@ -135,6 +153,21 @@ extension RegularWorkoutCoordinator: RegularWorkoutFlow {
                 break
             }
         }
+    }
+    func upload() {
+        childDidFinish(childCoordinator)
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for controller in viewControllers {
+            if controller.isKind(of: AddWorkoutHomeViewController.self) {
+                navigationController.popToViewController(controller, animated: true)
+                break
+            }
+        }
+    }
+    func goToUploadPage(_ uploadable: UploadableWorkout) {
+        let child = UploadingCoordinator(navigationController: navigationController, workoutToUpload: uploadable)
+        childCoordinators.append(child)
+        child.start()
     }
 }
 

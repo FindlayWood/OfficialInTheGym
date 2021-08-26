@@ -13,13 +13,23 @@ protocol WorkoutDelegate {
     var creatorID: String! {get}
     var createdBy: String! {get}
     var savedID: String! {get}
-    var workoutID: String? {get}
+    var workoutID: String? {get set}
     var exercises: [WorkoutType]? {get set}
     var liveWorkout: Bool! {get set}
     var fromDiscover: Bool! {get set}
     var clipData: [clipDataModel]? {get set}
     func toObject() -> [String:AnyObject]
-    
+}
+extension WorkoutDelegate {
+    func convertToUploadWorkout() -> [String: AnyObject] {
+        var object = toObject()
+        object.removeValue(forKey: "Views")
+        object.removeValue(forKey: "NumberOfCompletes")
+        object.removeValue(forKey: "NumberOfDownloads")
+        object.removeValue(forKey: "TotalScore")
+        object.removeValue(forKey: "TotalTime")
+        return object
+    }
 }
 
 protocol Completeable: WorkoutDelegate {

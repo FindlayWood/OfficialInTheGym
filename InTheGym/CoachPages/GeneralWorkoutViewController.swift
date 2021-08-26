@@ -153,9 +153,9 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
                     myGroup.enter()
                     UserIDToUser.transform(userID: (child as AnyObject).key) { (user) in
                         tempPlayers.append(user)
-                        self.playersID.append(user.uid!)
-                        self.usernames.append(user.username!)
-                        self.allPlayers.append(user.username!)
+                        self.playersID.append(user.uid)
+                        self.usernames.append(user.username)
+                        self.allPlayers.append(user.username)
                         myGroup.leave()
                     }
                     myGroup.notify(queue: .main){

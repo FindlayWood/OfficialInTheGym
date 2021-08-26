@@ -12,8 +12,7 @@ import EmptyDataSet_Swift
 
 class SavedWorkoutsAdapter: NSObject {
     
-    var delegate : SavedWorkoutsProtocol
-    
+    var delegate: SavedWorkoutsProtocol
     
     init(delegate: SavedWorkoutsProtocol){
         self.delegate = delegate
@@ -52,13 +51,13 @@ extension SavedWorkoutsAdapter : UITableViewDataSource, UITableViewDelegate, Emp
         return 150
     }
     
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 10
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = Constants.lightColour
+        //view.backgroundColor = Constants.lightColour
         return view
     }
     

@@ -26,6 +26,7 @@ class LaunchPageViewController: UIViewController, Storyboarded {
                 let uid = user.uid
                 UserIDToUser.transform(userID: uid) { userObject in
                     self.spinner.stopAnimating()
+                    FirebaseAuthManager.currentlyLoggedInUser = userObject
                     ViewController.admin = userObject.admin
                     ViewController.username = userObject.username
                     self.coordinator?.coordinateToTabBar()

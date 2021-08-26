@@ -15,7 +15,7 @@ class GroupMemberCollectionViewCell: UICollectionViewCell {
 
     func setup(with member:Users){
         self.usernameLabel.text = member.username
-        ImageAPIService.shared.getProfileImage(for: member.uid!) { (image) in
+        ImageAPIService.shared.getProfileImage(for: member.uid) { (image) in
             if let image = image {
                 self.profileImage.image = image
             }

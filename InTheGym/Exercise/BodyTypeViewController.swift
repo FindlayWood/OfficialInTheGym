@@ -25,11 +25,6 @@ class BodyTypeViewController: UIViewController, Storyboarded {
     
     @IBAction func buttonTapped(_ sender:UIButton){
         sender.pulsate()
-//        let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-//        let SVC = StoryBoard.instantiateViewController(withIdentifier: "ExerciseViewController") as! ExerciseViewController
-//        SVC.fromLiveWorkout = self.fromLiveWorkout
-//        SVC.exerciseType = sender.titleLabel!.text as! String
-//        SVC.workoutID = self.workoutID
         guard let newExercise = newExercise else {return}
         switch sender.titleLabel?.text{
         case "Upper Body":
@@ -45,7 +40,7 @@ class BodyTypeViewController: UIViewController, Storyboarded {
             newExercise.type = .CA
             coordinator?.bodyTypeSelected(newExercise)
         default:
-            newExercise.type = .UB
+            newExercise.type = .CU
             coordinator?.bodyTypeSelected(newExercise)
         }
     }
@@ -58,6 +53,11 @@ class BodyTypeViewController: UIViewController, Storyboarded {
     @IBAction func amrapTapped(_ sender: UIButton) {
         let coordinator = coordinator as? RegularWorkoutFlow
         coordinator?.addAMRAP()
+    }
+    
+    @IBAction func otherTapped(_ sender: UIButton) {
+        guard let newExercise = newExercise else {return}
+        coordinator?.otherSelected(newExercise)
     }
 
     override func viewDidLoad() {

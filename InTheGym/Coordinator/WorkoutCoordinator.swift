@@ -14,6 +14,7 @@ protocol WorkoutCoordinatorFlow: WorkoutDisplayCoordinator {
     func showWorkoutStats(with savedWorkoutID: String)
     func showCircuit()
     func showAMRAP(with model: AMRAP, at position: Int, on workout: workout)
+    func displayNote(with note: String?, on workout: WorkoutDelegate, at index: Int)
     
 }
 
@@ -67,6 +68,14 @@ extension WorkoutCoordinator: WorkoutCoordinatorFlow {
             vc.workout = workout
             navigationController.pushViewController(vc, animated: true)
         }
+    }
+    
+    func displayNote(with note: String?, on workout: WorkoutDelegate, at index: Int) {
+        let vc = DisplayNoteViewController()
+        vc.currentNote = note
+        vc.currentWorkout = workout
+        vc.noteIndex = index
+        navigationController.present(vc, animated: true, completion: nil)
     }
     
     func showCompletedPage() {

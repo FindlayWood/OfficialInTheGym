@@ -232,7 +232,12 @@ extension DisplayWorkoutTableViewCell: UICollectionViewDelegate, UICollectionVie
             cell.completedButton.isUserInteractionEnabled = delegate.returnInteractionEnbabled()
             return cell
         }
-        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cellAttributes = collectionView.layoutAttributesForItem(at: indexPath)
+        let cellFrame = collectionView.convert(cellAttributes!.frame, to: collectionView.superview?.superview)
+        delegate.setSelected(at: cellFrame, with: exercise, on: self, set: indexPath.item + 1)
     }
     
 }

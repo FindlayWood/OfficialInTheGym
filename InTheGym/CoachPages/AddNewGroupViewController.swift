@@ -77,8 +77,8 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
     func loadPlayers(){
         LoadFollowers.returnPlayers(for: userID!) { (players) in
             for player in players{
-                self.playersID.append(player.uid!)
-                self.noPlayers.append(player.username!)
+                self.playersID.append(player.uid)
+                self.noPlayers.append(player.username)
             }
         }
     }

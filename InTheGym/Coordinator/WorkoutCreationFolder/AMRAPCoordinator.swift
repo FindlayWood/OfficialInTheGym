@@ -40,6 +40,13 @@ extension AMRAPCoordinator: AMRAPFlow {
         navigationController.pushViewController(vc, animated: true)
     }
     
+    func otherSelected(_ exercise: exercise) {
+        let vc = OtherExerciseViewController()
+        vc.newExercise = exercise
+        vc.coordinator = self
+        navigationController.present(vc, animated: true, completion: nil)
+    }
+    
     func exerciseSelected(_ exercise: exercise) {
         let vc = NewRepsViewController.instantiate()
         vc.coordinator = self
@@ -64,6 +71,8 @@ extension AMRAPCoordinator: AMRAPFlow {
             }
         }
     }
-    
+    func upload() {
+        
+    }
     
 }

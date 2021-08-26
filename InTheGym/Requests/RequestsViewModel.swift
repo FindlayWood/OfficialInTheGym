@@ -129,23 +129,23 @@ class RequestsViewModel{
         myGroup.enter()
         myGroup.enter()
         
-        let playerRequestRef = Database.database().reference().child("PlayerRequests").child(userID).child(user.uid!)
+        let playerRequestRef = Database.database().reference().child("PlayerRequests").child(userID).child(user.uid)
         playerRequestRef.setValue(nil)
         { (error:Error?, ref:DatabaseReference) in
             defer {myGroup.leave()}
             if let error = error{ print(error)}
         }
-        let coachRequestRef = Database.database().reference().child("CoachRequests").child(user.uid!).child(userID)
+        let coachRequestRef = Database.database().reference().child("CoachRequests").child(user.uid).child(userID)
         coachRequestRef.setValue(nil){ (error:Error?, ref:DatabaseReference) in
             defer {myGroup.leave()}
             if let error = error{ print(error)}
         }
-        let playerRef = Database.database().reference().child("CoachPlayers").child(user.uid!).child(userID)
+        let playerRef = Database.database().reference().child("CoachPlayers").child(user.uid).child(userID)
         playerRef.setValue(true){ (error:Error?, ref:DatabaseReference) in
             defer {myGroup.leave()}
             if let error = error{ print(error)}
         }
-        let coachRef = Database.database().reference().child("PlayerCoaches").child(userID).child(user.uid!)
+        let coachRef = Database.database().reference().child("PlayerCoaches").child(userID).child(user.uid)
         coachRef.setValue(true){ (error:Error?, ref:DatabaseReference) in
             defer {myGroup.leave()}
             if let error = error{ print(error)}
@@ -155,10 +155,10 @@ class RequestsViewModel{
             self.acceptedRequestClosure?()
         }
         
-        FirebaseAPI.shared().uploadActivity(with: .NewCoach(user.username!))
+        FirebaseAPI.shared().uploadActivity(with: .NewCoach(user.username))
         
-        FirebaseAPI.shared().uploadActivity(with: .RequestAccepted(ViewController.username!, user.uid!))
-        let notification = NotificationAcceptedRequest(from: self.userID, to: user.uid!)
+        FirebaseAPI.shared().uploadActivity(with: .RequestAccepted(ViewController.username!, user.uid))
+        let notification = NotificationAcceptedRequest(from: self.userID, to: user.uid)
         let uploadNotification = NotificationManager(delegate: notification)
         uploadNotification.upload { _ in
             
@@ -166,9 +166,9 @@ class RequestsViewModel{
     }
     
     func declinedRequest(from user:Users, at index:IndexPath){
-        let playerRequestRef = Database.database().reference().child("PlayerRequests").child(userID).child(user.uid!)
+        let playerRequestRef = Database.database().reference().child("PlayerRequests").child(userID).child(user.uid)
         playerRequestRef.setValue(nil)
-        let coachRequestRef = Database.database().reference().child("CoachRequests").child(user.uid!).child(userID)
+        let coachRequestRef = Database.database().reference().child("CoachRequests").child(user.uid).child(userID)
         coachRequestRef.setValue(nil)
         self.requests.remove(at: index.row)
         self.declineRequestClosure?()

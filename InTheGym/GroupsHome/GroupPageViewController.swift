@@ -27,7 +27,7 @@ class GroupPageViewController: UIViewController, Storyboarded {
     var adapter : GroupPageAdapter!
     
     lazy var viewModel : GroupPageViewModel = {
-        return GroupPageViewModel(groupID: group.groupID, groupLeader: group.groupLeader)
+        return GroupPageViewModel(groupID: group.uid, groupLeader: group.leader)
     }()
 
     override func viewDidLoad() {
@@ -76,8 +76,8 @@ class GroupPageViewController: UIViewController, Storyboarded {
     }
     
     func initUI(){
-        self.navigationItem.title = group.groupTitle
-        self.groupDescription.text = group.groupDescription
+        self.navigationItem.title = group.username
+        self.groupDescription.text = group.description
         let postButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(post))
         self.navigationItem.rightBarButtonItem = postButton
     }
@@ -140,8 +140,8 @@ class GroupPageViewController: UIViewController, Storyboarded {
             postVC.modalPresentationStyle = .fullScreen
             postVC.groupBool = true
             postVC.playerPost = false
-            postVC.groupName = group.groupTitle
-            postVC.groupID = group.groupID
+            postVC.groupName = group.username
+            postVC.groupID = group.uid
             postVC.delegate = self
             self.navigationController?.present(postVC, animated: true, completion: nil)
         }
@@ -162,8 +162,8 @@ class GroupPageViewController: UIViewController, Storyboarded {
             postVC.modalPresentationStyle = .fullScreen
             postVC.groupBool = true
             postVC.playerPost = false
-            postVC.groupName = self.group.groupTitle
-            postVC.groupID = self.group.groupID
+            postVC.groupName = self.group.username
+            postVC.groupID = self.group.uid
             postVC.delegate = self
             self.navigationController?.present(postVC, animated: true, completion: nil)
         }
@@ -172,12 +172,12 @@ class GroupPageViewController: UIViewController, Storyboarded {
             let postVC = storyboard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
             AddWorkoutHomeViewController.groupBool = true
             postVC.playerBool = false
-            postVC.groupID = self.group.groupID
+            postVC.groupID = self.group.uid
             let myGroup = DispatchGroup()
             var memberIDs = [String]()
             for member in self.viewModel.groupMembers{
                 myGroup.enter()
-                memberIDs.append(member.uid!)
+                memberIDs.append(member.uid)
                 myGroup.leave()
             }
             myGroup.notify(queue: .main){
@@ -222,10 +222,10 @@ extension GroupPageViewController : GroupPageProtocol{
     func memberSelected(at indexPath: IndexPath) {
         // go to user profile
         let member = getMemberData(at: indexPath)
-        if !viewModel.isIDSelf(id: member.uid!) {
+        if !viewModel.isIDSelf(id: member.uid) {
             //let storyboard = UIStoryboard(name: "Main", bundle: nil)
             //let publicTimeline = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
-            UserIDToUser.transform(userID: member.uid!) { [weak self] (user) in
+            UserIDToUser.transform(userID: member.uid) { [weak self] (user) in
                 guard let self = self else {return}
                 self.coordinator?.showUser(user: user)
                 //publicTimeline.user = user

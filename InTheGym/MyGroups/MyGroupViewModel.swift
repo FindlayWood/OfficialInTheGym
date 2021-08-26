@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import CodableFirebase
 
 class MyGroupViewModel:NSObject {
     
@@ -67,8 +68,16 @@ class MyGroupViewModel:NSObject {
         for group in references {
             myGroup.enter()
             ref.child(group).observeSingleEvent(of: .value) { (snapshot) in
-                tempGroups.append(groupModel(snapshot: snapshot)!)
-                myGroup.leave()
+                defer {myGroup.leave()}
+                guard let snap = snapshot.value as? [String: AnyObject] else {return}
+                do {
+                    let group = try FirebaseDecoder().decode(groupModel.self, from: snap)
+                    tempGroups.append(group)
+                } catch {
+                    print(error.localizedDescription)
+                }
+                //tempGroups.append(groupModel(snapshot: snapshot)!)
+                //myGroup.leave()
             }
         }
         
@@ -85,7 +94,7 @@ class MyGroupViewModel:NSObject {
     }
     
     // MARK: - Retreive functions
-    func getGroup(at indexPath:IndexPath) -> groupModel{
+    func getGroup(at indexPath:IndexPath) -> groupModel {
         return myGroups[indexPath.section]
     }
 }

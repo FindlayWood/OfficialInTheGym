@@ -82,11 +82,12 @@ protocol WorkoutAddable {
 }
 
 
-enum bodyType: String{
+enum bodyType: String, Codable {
         case UB = "Upper Body"
         case LB = "Lower Body"
         case CO = "Core"
         case CA = "Cardio"
+        case CU = "Custom"
     }
 
 

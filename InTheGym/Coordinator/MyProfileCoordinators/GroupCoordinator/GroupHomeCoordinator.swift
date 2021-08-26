@@ -21,10 +21,26 @@ class GroupHomeCoordinator: NSObject, Coordinator {
     
     func start() {
         navigationController.delegate = self
-        let vc = GroupPageViewController.instantiate()
+        let vc = GroupHomePageViewController()
         vc.coordinator = self
-        vc.group = group
+        vc.currentGroup = group
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: - Group Flow
+extension GroupHomeCoordinator {
+    func showMoreInfo(with info: MoreGroupInfoModel, _ delegate: GroupHomePageProtocol) {
+        let vc = MoreGroupInfoViewController()
+        vc.moreGroupInfo = info
+        vc.delegate = delegate
+        navigationController.present(vc, animated: true, completion: nil)
+    }
+    func goToGroupWorkouts(with info: groupModel) {
+        let child = GroupWorkoutsCoordinator(navigationController: navigationController, group: info)
+        childCoordinators.append(child)
+        child.start()
     }
 }
 
@@ -72,6 +88,9 @@ extension GroupHomeCoordinator: UINavigationControllerDelegate {
         
         if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
             childDidFinish(WorkoutViewController.coordinator)
+        }
+        if let GroupWorkoutController = fromViewController as? GroupWorkoutsViewController {
+            childDidFinish(GroupWorkoutController.coordinator)
         }
     }
 }

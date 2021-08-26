@@ -41,7 +41,7 @@ extension GroupCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func addPlayersToNewGroup(_ delegate: AddedPlayersProtocol, selectedPlayers: [Users]) {
+    func addPlayersToNewGroup(_ delegate: SelectPlayersProtocol, selectedPlayers: [Users]) {
         let vc = GroupAddPlayersViewController()
         vc.modalTransitionStyle = .coverVertical
         vc.delegate = delegate

@@ -17,13 +17,13 @@ class NotificationsTableViewCell: UITableViewCell {
     
     var notification: NotificationTableViewModel? {
         didSet{
-            self.message.text = (notification?.from?.username!)! + " "  + (notification?.message!)!
+            self.message.text = (notification?.from?.username)! + " "  + (notification?.message!)!
 
             let then = Date(timeIntervalSince1970: (notification?.time)! / 1000)
             
             self.timeLabel.text = "\(then.timeAgo()) ago"
             
-            ImageAPIService.shared.getProfileImage(for: notification!.from!.uid!) { (image) in
+            ImageAPIService.shared.getProfileImage(for: notification!.from!.uid) { (image) in
                 if let image = image {
                     self.profileImage.setImage(image, for: .normal)
                 }

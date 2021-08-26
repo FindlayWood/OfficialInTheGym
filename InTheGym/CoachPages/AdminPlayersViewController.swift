@@ -211,9 +211,9 @@ class AdminPlayersViewController: UIViewController, UITableViewDelegate, UITable
         switch segmentControl.selectedSegmentIndex{
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! PlayerTableViewCell
-            cell.name.text = self.players[indexPath.row].firstName! + " " +  self.players[indexPath.row].lastName!
-            cell.username.text = "@" + self.players[indexPath.row].username!
-            let playerID = self.players[indexPath.row].uid!
+            cell.name.text = self.players[indexPath.row].firstName + " " +  self.players[indexPath.row].lastName
+            cell.username.text = "@" + self.players[indexPath.row].username
+            let playerID = self.players[indexPath.row].uid
             ImageAPIService.shared.getProfileImage(for: playerID) { (image) in
                 if let image = image{
                     cell.profilePhoto.image = image

@@ -96,8 +96,8 @@ extension CreateNewGroupViewController: CreateNewGroupProtocol {
     }
 }
 
-extension CreateNewGroupViewController: AddedPlayersProtocol {
-    func newPlayersAdded(_ players: [Users]) {
+extension CreateNewGroupViewController: SelectPlayersProtocol {
+    func playersSelected(_ players: [Users]) {
         viewModel.addNewPlayers(players)
         if players.count == 0 {
             navigationItem.rightBarButtonItem?.isEnabled = false

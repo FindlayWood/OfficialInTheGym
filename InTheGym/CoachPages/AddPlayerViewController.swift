@@ -93,14 +93,14 @@ class AddPlayerViewController: UIViewController, Storyboarded {
             }else{
                 if let snap = snapshot.value as? [String:AnyObject]{
                     if snap["admin"] as? Bool == false{
-                        let newUser = Users()
-                        newUser.username = snap["username"] as? String
+                        var newUser: Users!
+                        newUser.username = snap["username"] as? String ?? "username"
                         newUser.firstName = snap["firstName"] as? String ?? "no"
                         newUser.lastName = snap["lastName"] as? String ?? "name"
                         newUser.admin = snap["admin"] as? Bool ?? false
                         newUser.uid = snapshot.key
-                        newUser.profilePhotoURL = snap["profilePhotoURL"] as? String
-                        newUser.profileBio = snap["profileBio"] as? String
+                        newUser.profilePhotoURL = snap["profilePhotoURL"] as? String ?? "nil"
+                        newUser.profileBio = snap["profileBio"] as? String ?? "nil"
                         self.users.append(newUser)
                     }
                 }
@@ -118,7 +118,7 @@ class AddPlayerViewController: UIViewController, Storyboarded {
     }
     
     func checkForPlayer(on user: Users, completion: @escaping (Bool) -> Void){
-        let playerRef = Database.database().reference().child("CoachPlayers").child(self.userID).child(user.uid!)
+        let playerRef = Database.database().reference().child("CoachPlayers").child(self.userID).child(user.uid)
         playerRef.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.exists(){
                 completion(false)
@@ -131,7 +131,7 @@ class AddPlayerViewController: UIViewController, Storyboarded {
     
     
     func checkForRequest(on user:Users, completion: @escaping (Bool) -> Void){
-        let requestsRef = Database.database().reference().child("CoachRequests").child(self.userID).child(user.uid!)
+        let requestsRef = Database.database().reference().child("CoachRequests").child(self.userID).child(user.uid)
         requestsRef.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.exists(){
                 completion(false)
@@ -144,13 +144,13 @@ class AddPlayerViewController: UIViewController, Storyboarded {
     
     func sendRequestToUser(user:Users){
         // requests
-        let playerRequestRef = Database.database().reference().child("PlayerRequests").child(user.uid!).child(self.userID)
-        let requestSentRef = Database.database().reference().child("CoachRequests").child(self.userID).child(user.uid!)
+        let playerRequestRef = Database.database().reference().child("PlayerRequests").child(user.uid).child(self.userID)
+        let requestSentRef = Database.database().reference().child("CoachRequests").child(self.userID).child(user.uid)
         requestSentRef.setValue(true)
         playerRequestRef.setValue(true)
 
-        FirebaseAPI.shared().uploadActivity(with: .RequestSent(user.username!))
-        let notification = NotificationNewRequest(from: self.userID, to: user.uid!)
+        FirebaseAPI.shared().uploadActivity(with: .RequestSent(user.username))
+        let notification = NotificationNewRequest(from: self.userID, to: user.uid)
         let uploadNotification = NotificationManager(delegate: notification)
         uploadNotification.upload { _ in
             
@@ -175,7 +175,7 @@ class AddPlayerViewController: UIViewController, Storyboarded {
 
         // show alert
         let alert = SCLAlertView()
-        alert.showSuccess("Added!", subTitle: "A request has been sent to \(user.username!). They will have to accept before you can assign them workouts, add them to groups and view their workout data.", closeButtonTitle: "ok", animationStyle: .bottomToTop)
+        alert.showSuccess("Added!", subTitle: "A request has been sent to \(user.username). They will have to accept before you can assign them workouts, add them to groups and view their workout data.", closeButtonTitle: "ok", animationStyle: .bottomToTop)
         playerfield.text = ""
         
     }

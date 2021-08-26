@@ -74,7 +74,10 @@ class TransformWorkout: NSObject {
             return "CO"
         case .CA:
             return "CA"
+        case .CU:
+            return "CU"
         }
+        
         
     }
     

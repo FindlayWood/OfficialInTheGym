@@ -289,7 +289,7 @@ extension DiscussionViewViewController: DiscussionTapProtocol {
     
     @objc func sendPressed( _ sender: UIButton) {
         
-        if let groupID = group?.groupID {
+        if let groupID = group?.uid {
             viewModel.addGroupReply(display.commentTextField.text.trimTrailingWhiteSpaces(), attachment: display.attachedWorkout, groupID: groupID)
         } else {
             viewModel.addReply(display.commentTextField.text.trimTrailingWhiteSpaces(), attachment: display.attachedWorkout)

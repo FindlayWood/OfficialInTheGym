@@ -299,7 +299,7 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
     }
     
 }
-extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
+extension DisplayWorkoutViewController: DisplayWorkoutProtocol {
     
     func getData(at: IndexPath) -> WorkoutType {
         return self.viewModel.getData(at: at)
@@ -455,8 +455,11 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
             coachText.text = note
         }
         
-        alert.showInfo("Exercise note", subTitle: "Notes for this exercise from your coach.", closeButtonTitle: "close")
+        //alert.showInfo("Exercise note", subTitle: "Notes for this exercise from your coach.", closeButtonTitle: "close")
         
+        let notee = selectedWorkoutExercises.note
+        guard let coordinator = coordinator as? WorkoutCoordinatorFlow else {return}
+        coordinator.displayNote(with: notee, on: viewModel.selectedWorkout!, at: index!.section)
     }
     
     func completedCell(on tableviewcell: UITableViewCell, on item: Int, sender: UIButton, with cell:UICollectionViewCell) {
@@ -482,6 +485,31 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol{
                 }
             }
 
+        }
+    }
+    
+    func setSelected(at frame: CGRect, with exercise: exercise, on cell: UITableViewCell, set: Int) {
+        guard let rowIndex = display.tableview.indexPath(for: cell) else {return}
+        let tableViewFrame = display.tableview.rect(forSection: rowIndex.section)
+        let test = display.tableview.convert(tableViewFrame, to: view)
+        let properFrame = CGRect(x: test.minX + frame.minX, y: test.minY + frame.minY + 25, width: frame.width, height: frame.height)
+        let beginningFrame = properFrame
+        let largeFrame = view.frame.insetBy(dx: 30, dy: 120)
+        let newView = DisplaySetMoreInfoView(frame: beginningFrame)
+        let flash = FlashView(frame: view.frame)
+        flash.alpha = 0.0
+        view.addSubview(flash)
+        view.addSubview(newView)
+        newView.flashview = flash
+        newView.initialFrame = beginningFrame
+        newView.configureView(with: exercise, set: set)
+        newView.layoutSubviews()
+        newView.beginSubViewAnimation()
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
+            newView.frame = largeFrame
+            flash.alpha = 0.4
+            flash.isUserInteractionEnabled = true
+            newView.layoutSubviews()
         }
     }
     

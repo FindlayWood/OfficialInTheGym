@@ -71,7 +71,7 @@ class CreatedWorkoutUploadViewModel {
         if groupBool == true {
             UserIDToUser.groupIdToGroupName(groupID: createdFor) { (group) in
                 let createdInsert = ["title":"Created For:",
-                                     "label":group.groupTitle] as [String:AnyObject]
+                                     "label":group.username] as [String:AnyObject]
                 tempData.insert(createdInsert, at: 0)
                 self.data = tempData
                 self.isLoading = false
@@ -80,7 +80,7 @@ class CreatedWorkoutUploadViewModel {
         } else {
             UserIDToUser.transform(userID: createdFor) { (user) in
                 let createdInsert = ["title":"Created For:",
-                                     "label":user.username!] as [String:AnyObject]
+                                     "label":user.username] as [String:AnyObject]
                 tempData.insert(createdInsert, at: 0)
                 self.data = tempData
                 self.isLoading = false

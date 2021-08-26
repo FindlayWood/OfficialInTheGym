@@ -75,7 +75,7 @@ class PublicTimelineViewModel {
     // Note: apiService has a default value in case this constructor is executed without passing parameters
     init(user: Users) {
         self.user = user
-        self.publicTimelineRef = Database.database().reference().child("PostSelfReferences").child(user.uid!)
+        self.publicTimelineRef = Database.database().reference().child("PostSelfReferences").child(user.uid)
     }
     
  
@@ -89,7 +89,7 @@ class PublicTimelineViewModel {
         myGroup.enter()
         myGroup.enter()
         
-        let followerRef = Database.database().reference().child("Followers").child(user.uid!)
+        let followerRef = Database.database().reference().child("Followers").child(user.uid)
         followerRef.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.exists(){
                 followers = Int(snapshot.childrenCount)
@@ -100,7 +100,7 @@ class PublicTimelineViewModel {
             }
         }
         
-        let followingRef = Database.database().reference().child("Following").child(user.uid!)
+        let followingRef = Database.database().reference().child("Following").child(user.uid)
         followingRef.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.exists(){
                 following = Int(snapshot.childrenCount)
@@ -121,7 +121,7 @@ class PublicTimelineViewModel {
     func isFollowing(){
         self.isLoading = true
         
-        let ref = Database.database().reference().child("Following").child(self.userID).child(user.uid!)
+        let ref = Database.database().reference().child("Following").child(self.userID).child(user.uid)
         ref.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.exists(){
                 self.following = true
@@ -137,7 +137,7 @@ class PublicTimelineViewModel {
     func fetchData(){
         
         
-        FirebaseAPI.shared().loadPublicTimelineReferences(for: user.uid!, isFollowing: self.following!) { [weak self] (result) in
+        FirebaseAPI.shared().loadPublicTimelineReferences(for: user.uid, isFollowing: self.following!) { [weak self] (result) in
             switch result{
             case .success(let posts):
                 self?.posts = posts
@@ -191,14 +191,14 @@ class PublicTimelineViewModel {
         let myGroup = DispatchGroup()
         myGroup.enter()
         myGroup.enter()
-        let ref = Database.database().reference().child("Following").child(self.userID).child(user.uid!)
+        let ref = Database.database().reference().child("Following").child(self.userID).child(user.uid)
         ref.setValue(true) { (returnedError, snapshot) in
             defer{myGroup.leave()}
             if let newError = returnedError {
                 error = newError
             }
         }
-        let otherRef = Database.database().reference().child("Followers").child(user.uid!).child(self.userID)
+        let otherRef = Database.database().reference().child("Followers").child(user.uid).child(self.userID)
         otherRef.setValue(true) { (returnedError, snapshot) in
             defer{myGroup.leave()}
             if let newError = returnedError{
@@ -211,7 +211,7 @@ class PublicTimelineViewModel {
             } else {
                 completion(.success(true))
             }
-            let notification = NotificationFollowed(from: self.userID, to: self.user.uid!)
+            let notification = NotificationFollowed(from: self.userID, to: self.user.uid)
             let uploadNotification = NotificationManager(delegate: notification)
             uploadNotification.upload { _ in
                 
