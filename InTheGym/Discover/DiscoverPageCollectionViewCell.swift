@@ -16,7 +16,7 @@ class DiscoverPageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var exerciseCount:UILabel!
     @IBOutlet weak var crownImage:UIImageView!
     @IBOutlet weak var wodMessage:UILabel!
-    @IBOutlet weak var downloadCount:UILabel!
+    //@IBOutlet weak var downloadCount:UILabel!
     @IBOutlet weak var viewCount:UILabel!
     @IBOutlet weak var averageTime:UILabel!
     @IBOutlet weak var averageScore:UILabel!
@@ -26,7 +26,7 @@ class DiscoverPageCollectionViewCell: UICollectionViewCell {
         self.title.text = workout.title
         self.exerciseCount.text = workout.exercises?.count.description
         self.viewCount.text = workout.views?.description
-        self.downloadCount.text = workout.numberOfDownloads?.description
+        //self.downloadCount.text = workout.numberOfDownloads?.description
     }
     
     override func awakeFromNib() {

@@ -37,7 +37,11 @@ extension GroupWorkoutsCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-
+    func showWorkout(_ workout: WorkoutDelegate) {
+        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
+        childCoordinators.append(child)
+        child.start()
+    }
 }
 
 

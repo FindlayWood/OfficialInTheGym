@@ -87,6 +87,13 @@ class DisplayWorkoutViewModel: NSObject{
 //            return false
 //        }
     }
+    func isCreatingNew() -> Bool {
+        if selectedWorkout is CreatingNewWorkout {
+            return true
+        } else {
+            return false
+        }
+    }
     
     func updateCompletedSet(at indexPath: IndexPath){
         // must update database

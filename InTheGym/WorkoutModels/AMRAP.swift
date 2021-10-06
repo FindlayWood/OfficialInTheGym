@@ -50,7 +50,6 @@ class AMRAP: WorkoutType {
         if let ex = snap["exercises"] as? [[String:AnyObject]]{
             self.exercises = ex.map { (InTheGym.exercise(exercises: $0)!)}
         }
-        
     }
     
     

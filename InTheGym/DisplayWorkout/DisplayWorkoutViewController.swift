@@ -44,7 +44,7 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
         display.tableview.register(UINib(nibName: "DisplayWorkout", bundle: nil), forCellReuseIdentifier: "DisplayWorkoutCell")
         display.tableview.register(UINib(nibName: "DisplayPlusTableView", bundle: nil), forCellReuseIdentifier: "DisplayPlusTableView")
         display.tableview.register(UINib(nibName: "DisplayWorkoutCircuitTableViewCell", bundle: nil), forCellReuseIdentifier: "DisplayWorkoutCircuitTableViewCell")
-        display.tableview.register(DisplayAMRAPCell.self, forCellReuseIdentifier: "DisplayAMRAPCell")
+        //display.tableview.register(DisplayAMRAPCell.self, forCellReuseIdentifier: "DisplayAMRAPCell")
         display.tableview.backgroundColor = Constants.lightColour
         if viewModel.selectedWorkout?.clipData != nil {
             display.showClipCollection()
@@ -59,6 +59,7 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
         initViewModel()
         initUI()
         initBottomView()
+        
     
     }
     
@@ -309,6 +310,10 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol {
         return self.viewModel.isLive()
     }
     
+    func isCreatingNew() -> Bool {
+        return viewModel.isCreatingNew()
+    }
+    
     func itemSelected(at: IndexPath) {
         if isLive() && at.section == viewModel.numberOfItems{
             // here have viewmodel method to send to next page
@@ -329,6 +334,12 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol {
                   let workout = DisplayWorkoutViewController.selectedWorkout as? workout
             else {return}
             coordinator.showAMRAP(with: amrap, at: at.section, on: workout)
+        } else if viewModel.selectedWorkout?.exercises![at.section] is EMOM {
+            guard let coordinator = coordinator as? WorkoutCoordinatorFlow,
+                  let emom = viewModel.selectedWorkout?.exercises?[at.section] as? EMOM,
+                  let workout = DisplayWorkoutViewController.selectedWorkout as? workout
+            else {return}
+            coordinator.showEMOM(emom, workout)
         }
     }
     
@@ -337,13 +348,17 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol {
     }
     
     func retreiveNumberOfSections() -> Int {
-        
-        switch isLive() {
-        case true:
+        if isLive() || isCreatingNew() {
             return viewModel.numberOfItems + 1
-        case false:
+        } else {
             return viewModel.numberOfItems
         }
+//        switch isLive() {
+//        case true:
+//            return viewModel.numberOfItems + 1
+//        case false:
+//            return viewModel.numberOfItems
+//        }
         
     }
     
@@ -489,28 +504,38 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol {
     }
     
     func setSelected(at frame: CGRect, with exercise: exercise, on cell: UITableViewCell, set: Int) {
-        guard let rowIndex = display.tableview.indexPath(for: cell) else {return}
-        let tableViewFrame = display.tableview.rect(forSection: rowIndex.section)
-        let test = display.tableview.convert(tableViewFrame, to: view)
-        let properFrame = CGRect(x: test.minX + frame.minX, y: test.minY + frame.minY + 25, width: frame.width, height: frame.height)
-        let beginningFrame = properFrame
-        let largeFrame = view.frame.insetBy(dx: 30, dy: 120)
-        let newView = DisplaySetMoreInfoView(frame: beginningFrame)
-        let flash = FlashView(frame: view.frame)
-        flash.alpha = 0.0
-        view.addSubview(flash)
-        view.addSubview(newView)
-        newView.flashview = flash
-        newView.initialFrame = beginningFrame
-        newView.configureView(with: exercise, set: set)
-        newView.layoutSubviews()
-        newView.beginSubViewAnimation()
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
-            newView.frame = largeFrame
-            flash.alpha = 0.4
-            flash.isUserInteractionEnabled = true
-            newView.layoutSubviews()
-        }
+//        guard let rowIndex = display.tableview.indexPath(for: cell) else {return}
+//        let tableViewFrame = display.tableview.rect(forSection: rowIndex.section)
+//        let test = display.tableview.convert(tableViewFrame, to: view)
+//        let properFrame = CGRect(x: test.minX + frame.minX, y: test.minY + frame.minY + 25, width: frame.width, height: frame.height)
+//        let beginningFrame = properFrame
+//        let largeFrame = view.frame.insetBy(dx: 20, dy: 80)
+//        let newView = DisplaySetMoreInfoView(frame: beginningFrame)
+//        let flash = FlashView(frame: view.frame)
+//        flash.alpha = 0.0
+//        view.addSubview(flash)
+//        view.addSubview(newView)
+//        newView.flashview = flash
+//        newView.initialFrame = beginningFrame
+//        newView.configureView(with: exercise, set: set)
+//        newView.layoutSubviews()
+//        newView.beginSubViewAnimation()
+//        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
+//            newView.frame = largeFrame
+//            flash.alpha = 0.4
+//            flash.isUserInteractionEnabled = true
+//            newView.layoutSubviews()
+//        } completion: { _ in
+//            newView.timeLabel.isHidden = false
+//            newView.distanceLabel.isHidden = false
+//            newView.closeButton.isHidden = false
+//        }
+        
+//        let vc = DisplaySetMoreInfoViewController()
+//        vc.initialFrame = beginningFrame
+//        navigationController?.modalPresentationStyle = .custom
+//        navigationController?.pushViewController(vc, animated: true)
+        
     }
     
     func clipButtonTapped(on tableviewcell: UITableViewCell) {
@@ -537,15 +562,15 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol {
     }
     func clipSelected(at indexPath: IndexPath) {
         print("show clip...")
-//        let clipData = viewModel.getClipData(at: indexPath)
-//        let vc = ViewClipViewController()
-//        vc.storageURL = clipData.storageURL
-//        vc.exerciseName = clipData.exerciseName
-//        vc.creatorID = viewModel.selectedWorkout?.creatorID
-//        vc.workoutID = viewModel.selectedWorkout?.workoutID
-//        vc.modalTransitionStyle = .coverVertical
-//        vc.modalPresentationStyle = .fullScreen
-//        self.present(vc, animated: true, completion: nil)
+        let clipData = viewModel.getClipData(at: indexPath)
+        let vc = ViewClipViewController()
+        vc.storageURL = clipData.storageURL
+        vc.exerciseName = clipData.exerciseName
+        vc.creatorID = viewModel.selectedWorkout?.creatorID
+        vc.workoutID = viewModel.selectedWorkout?.workoutID
+        vc.modalTransitionStyle = .coverVertical
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
     }
     
     func showClips() {
@@ -573,8 +598,14 @@ extension DisplayWorkoutViewController: LiveWorkoutAddMethods {
     
     func addExercise() {
         guard let newExercise = exercise() else {return}
-        let coordinator = coordinator as! LiveWorkoutCoordinator
-        coordinator.addExercise(newExercise)
+//        let coordinator = coordinator as! LiveWorkoutCoordinator
+//        coordinator.addExercise(newExercise)
+        if let coordinator = coordinator as? RegularWorkoutCoordinator {
+            coordinator.addExercise(newExercise)
+        }
+        if let coordinator = coordinator as? LiveWorkoutCoordinator {
+            coordinator.addExercise(newExercise)
+        }
     }
 }
 
@@ -635,3 +666,16 @@ extension DisplayWorkoutViewController: addedClipProtocol {
         }
     }
 }
+
+//extension DisplayWorkoutViewController: UINavigationControllerDelegate {
+//    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//        switch operation {
+//        case .push:
+//            return AnimationManager(animationDuration: 0.3, animationType: .present)
+//        case .pop:
+//            return AnimationManager(animationDuration: 0.3, animationType: .dismiss)
+//        default:
+//            return nil
+//        }
+//    }
+//}

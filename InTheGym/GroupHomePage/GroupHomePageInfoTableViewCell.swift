@@ -42,6 +42,36 @@ class GroupHomePageInfoTableViewCell: UITableViewCell {
         return view
     }()
     
+    var imageViewStack: UIStackView = {
+        let view = UIStackView()
+        //view.distribution = .equalSpacing
+        view.spacing = 40
+        view.distribution = .fillEqually
+        view.axis = .horizontal
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    var manageButton: UIButton = {
+       let button = UIButton()
+        button.setTitle("Manage Group", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
+        button.backgroundColor = .lightColour
+        button.layer.cornerRadius = 8
+        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    var mainStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 20
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
     // MARK: - Properties
     static let cellID = "groupCellID"
     var delegate: GroupHomePageProtocol!
@@ -60,18 +90,31 @@ class GroupHomePageInfoTableViewCell: UITableViewCell {
 private extension GroupHomePageInfoTableViewCell {
     func setupUI() {
         selectionStyle = .none
-        contentView.addSubview(membersView)
+        imageViewStack.addArrangedSubview(membersView)
+        imageViewStack.addArrangedSubview(workoutsView)
+        mainStack.addArrangedSubview(imageViewStack)
+        mainStack.addArrangedSubview(manageButton)
+        contentView.addSubview(mainStack)
+        //contentView.addSubview(imageViewStack)
+        //contentView.addSubview(membersView)
         //contentView.addSubview(separatorView)
-        contentView.addSubview(workoutsView)
+        //contentView.addSubview(workoutsView)
         let tap = UITapGestureRecognizer(target: self, action: #selector(workoutsTapped))
         workoutsView.addGestureRecognizer(tap)
+        manageButton.addTarget(self, action: #selector(manageGroupTapped(_:)), for: .touchUpInside)
         constrainView()
     }
     func constrainView() {
-        NSLayoutConstraint.activate([membersView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-                                     membersView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-                                     membersView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
-                                     membersView.trailingAnchor.constraint(equalTo: centerXAnchor, constant: -20),
+        NSLayoutConstraint.activate([
+            mainStack.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            mainStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            mainStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            mainStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
+            
+//                                    membersView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+//                                     membersView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+//                                     membersView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
+//                                     membersView.trailingAnchor.constraint(equalTo: centerXAnchor, constant: -20),
                                      
 //                                     separatorView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
 //                                     separatorView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
@@ -79,10 +122,10 @@ private extension GroupHomePageInfoTableViewCell {
 //                                     separatorView.centerXAnchor.constraint(equalTo: centerXAnchor),
 //                                     separatorView.heightAnchor.constraint(equalToConstant: 95),
                                      
-                                     workoutsView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-                                     workoutsView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-                                     workoutsView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
-                                     workoutsView.leadingAnchor.constraint(equalTo: centerXAnchor, constant: 20)
+//                                     workoutsView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+//                                     workoutsView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+//                                     workoutsView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
+//                                     workoutsView.leadingAnchor.constraint(equalTo: centerXAnchor, constant: 20)
         ])
     }
 }
@@ -91,6 +134,15 @@ private extension GroupHomePageInfoTableViewCell {
 private extension GroupHomePageInfoTableViewCell {
     @objc func workoutsTapped() {
         delegate.goToWorkouts()
+    }
+    @objc func manageGroupTapped(_ sender: UIButton) {
+        delegate.manageGroup()
+    }
+}
+
+extension GroupHomePageInfoTableViewCell {
+    public func configureForLeader(_ isLeader: Bool) {
+        manageButton.isHidden = !isLeader
     }
 }
 

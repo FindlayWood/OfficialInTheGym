@@ -27,10 +27,17 @@ class AMRAPCoordinator: Coordinator {
 extension AMRAPCoordinator: AMRAPFlow {
     
     func addExercise(_ exercise: exercise) {
-        let vc = BodyTypeViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
-        navigationController.pushViewController(vc, animated: true)
+        if #available(iOS 13, *) {
+            let vc = ExerciseSelectionViewController()
+            vc.coordinator = self
+            vc.newExercise = exercise
+            navigationController.pushViewController(vc, animated: true)
+        } else {
+            let vc = BodyTypeViewController.instantiate()
+            vc.coordinator = self
+            vc.newExercise = exercise
+            navigationController.pushViewController(vc, animated: true)
+        }
     }
     
     func bodyTypeSelected(_ exercise: exercise) {

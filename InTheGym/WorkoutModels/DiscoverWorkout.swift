@@ -53,6 +53,8 @@ struct discoverWorkout: WorkoutDelegate {
                     tempEx.append(circuit(item: item)!)
                 } else if let _ = item["amrap"] as? Bool {
                     tempEx.append(AMRAP(data: item)!)
+                } else if let _ = item["emom"] as? Bool {
+                    tempEx.append(EMOM(data: item)!)
                 } else {
                     tempEx.append(exercise(exercises: item)!)
                 }

@@ -99,7 +99,8 @@ extension GroupWorkoutsViewController: GroupWorkoutsProtocol {
     }
     
     func workoutSelected(at indexPath: IndexPath) {
-        
+        let workout = viewModel.getData(at: indexPath)
+        coordinator?.showWorkout(workout)
     }
 }
 

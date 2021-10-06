@@ -45,17 +45,20 @@ class DisplayClipCell: UICollectionViewCell {
                                      thumbnailImage.bottomAnchor.constraint(equalTo: bottomAnchor)])
     }
     
-    func attachThumbnail(from urlString: String) {
+    func attachThumbnail(from clipKey: String) {
         if #available(iOS 13.0, *) {
             thumbnailImage.image = UIImage(systemName: "play.fill")
             thumbnailImage.tintColor = Constants.darkColour
         }
-//        ThumbnailGenerator.shared.getImage(from: urlString) { [weak self] thumbnail in
-//            guard let self = self else {return}
-//            if let image = thumbnail {
-//                self.thumbnailImage.image = image
-//            }
-//        }
+        ThumbnailGenerator.shared.getImage(from: clipKey) { [weak self] thumbnail in
+            guard let self = self else {return}
+            if let image = thumbnail {
+                self.thumbnailImage.image = image
+            } else if #available(iOS 13.0, *) {
+                self.thumbnailImage.image = UIImage(systemName: "play.fill")
+                self.thumbnailImage.tintColor = Constants.darkColour
+            }
+        }
     }
     
     func getThumbnail(from url: URL, completion: @escaping (UIImage?) -> Void) {

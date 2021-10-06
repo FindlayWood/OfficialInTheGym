@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 import AVKit
 
 class ThumbnailGenerator {
@@ -17,17 +18,32 @@ class ThumbnailGenerator {
     
     let thumbnailCache = NSCache<NSString,UIImage>()
     
-    func getImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
+    func getImage(from clipID: String, completion: @escaping (UIImage?) -> Void) {
         DispatchQueue.global().async {
-            if let image = self.thumbnailCache.object(forKey: urlString as NSString) {
+            if let image = self.thumbnailCache.object(forKey: clipID as NSString) {
                 DispatchQueue.main.async {
                     completion(image)
                 }
             } else {
                 DispatchQueue.main.async {
-                    guard let url = URL(string: urlString) else {return}
-                    self.generateThumbnail(from: url, completion: completion)
+                    //guard let url = URL(string: urlString) else {return}
+                    self.downloadThumbnail(for: clipID, completion: completion)
                 }
+            }
+        }
+    }
+    
+    private func downloadThumbnail(for clipID: String, completion: @escaping (UIImage?) -> ()) {
+        let storage = Storage.storage().reference().child("clipThumbnails/\(clipID)")
+        storage.getData(maxSize: 1 * 1024 * 1024) { (data, error) in
+            if error != nil {
+                completion(nil)
+                return
+            }
+            if let data = data{
+                let image = UIImage(data: data)
+                completion(image)
+                self.thumbnailCache.setObject(image!, forKey: clipID as NSString)
             }
         }
     }

@@ -34,6 +34,8 @@ class RepsView: UIView {
         label.font = .systemFont(ofSize: 200, weight: .bold)
         label.textAlignment = .center
         label.text = "1"
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -64,6 +66,7 @@ class RepsView: UIView {
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.cornerRadius = 22.5
+        button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -108,12 +111,16 @@ class RepsView: UIView {
                                      
                                      minusButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -50),
                                      minusButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+                                     minusButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.2),
                                      
                                      repLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -50),
                                      repLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+                                     repLabel.leadingAnchor.constraint(equalTo: minusButton.trailingAnchor),
+                                     repLabel.trailingAnchor.constraint(equalTo: plusButton.leadingAnchor),
                                      
                                      plusButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -50),
                                      plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+                                     plusButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.2),
                                      
                                      bottomCollection.topAnchor.constraint(equalTo: repLabel.bottomAnchor, constant: 20),
                                      bottomCollection.leadingAnchor.constraint(equalTo: leadingAnchor),

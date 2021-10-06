@@ -19,15 +19,9 @@ extension AddMoreToExerciseAdapter: UICollectionViewDelegate, UICollectionViewDa
         return delegate.numberOfItems()
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if #available(iOS 13.0, *) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CardCollectionViewCell.reuseIdentifier, for: indexPath) as! CardCollectionViewCell
-            cell.configure(with: delegate.getData(at: indexPath), parent: delegate as! UIViewController)
-            cell.clipsToBounds = true
-            cell.layer.cornerRadius = 10
-            return cell
-        } else {
-            return UICollectionViewCell()
-        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddMoreCollectionCell.reuseID, for: indexPath) as! AddMoreCollectionCell
+        cell.configure(with: delegate.getData(at: indexPath))
+        return cell
 
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

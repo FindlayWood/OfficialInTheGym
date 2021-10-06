@@ -9,6 +9,10 @@
 import Foundation
 import Firebase
 
+protocol FirebaseCheckFollowingProtocol {
+    
+}
+
 class FirebaseCheckFollowing {
     
     static let shared = FirebaseCheckFollowing()

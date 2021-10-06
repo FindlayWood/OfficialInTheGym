@@ -42,6 +42,11 @@ extension GroupHomeCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    func createNewPost() {
+        let child = CreateNewPostCoordinator(navigationController: navigationController, assignee: group)
+        childCoordinators.append(child)
+        child.start()
+    }
 }
 
 //MARK: TimelineFlow Methods

@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import UIKit
 
 enum ClipUploadError: Error {
     case storageUploadFail
@@ -25,6 +26,7 @@ struct clipUploadingData {
     var clipNumber: Int
     var videoURL: URL
     var isPrivate: Bool
+    var thumbnail: UIImage?
 }
 
 struct clipSuccessData {
@@ -38,6 +40,7 @@ class FirebaseVideoUploader {
     static var shared = FirebaseVideoUploader()
     private init() {}
     let storage = Storage.storage().reference().child("Clips")
+    let storageThumbnail = Storage.storage().reference().child("clipThumbnail")
     let baseRef = Database.database().reference().child("Clips")
     let userRef = Database.database().reference().child("UserClips")
     let workoutRef = Database.database().reference().child("Workouts")
@@ -96,7 +99,6 @@ class FirebaseVideoUploader {
                 }
             }
         }
-        
     }
     
     private func uploadClip(storageURL: String, uploadData: clipUploadingData, completion: @escaping (escapingClip) -> Void) {
@@ -158,7 +160,8 @@ class FirebaseVideoUploader {
     private func uploadToExerciseClips(clipKey: String, storageURL: String, uploadData: clipUploadingData, completion: @escaping (escapingClip) -> Void) {
         let clipData = [storageURLString: storageURL,
                         clipKeyString: clipKey]
-        exerciseRef.child(uploadData.exerciseName).childByAutoId().setValue(clipData) { error, databaseReference in
+        exerciseRef.child(uploadData.exerciseName).childByAutoId().setValue(clipData) { [weak self] error, databaseReference in
+            guard let self = self else {return}
             if let error = error {
                 print(error.localizedDescription)
                 completion(.failure(.exerciseUploadFail))
@@ -166,7 +169,20 @@ class FirebaseVideoUploader {
                 let addingData = clipSuccessData(clipKey: clipKey,
                                                  storageURL: storageURL,
                                                  exerciseName: uploadData.exerciseName)
+                self.uploadThumbnail(clipKey: clipKey, uploadData: uploadData)
                 completion(.success(addingData))
+            }
+        }
+    }
+    
+    private func uploadThumbnail(clipKey: String, uploadData: clipUploadingData) {
+        guard let thumbnail = uploadData.thumbnail else {return}
+        guard let imageData = thumbnail.jpegData(compressionQuality: 0.4) else {return}
+        let storageRef = storageThumbnail.child(clipKey)
+        storageRef.putData(imageData, metadata: nil) { storage, error in
+            if let error = error {
+                print(error.localizedDescription as Any)
+                return
             }
         }
     }

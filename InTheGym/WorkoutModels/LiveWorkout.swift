@@ -47,6 +47,8 @@ class liveWorkout: Completeable {
             for item in data{
                 if let _ = item["circuit"] as? Bool{
                     tempEx.append(circuit(item: item)!)
+                } else if let _ = item["emom"] as? Bool {
+                    tempEx.append(EMOM(data: item)!)
                 } else {
                     tempEx.append(exercise(exercises: item)!)
                 }

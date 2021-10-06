@@ -36,10 +36,6 @@ class NewWeightViewController: UIViewController, Storyboarded {
         display.bodyweightButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         display.bodyWeightPercentButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         display.maxButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        display.kmButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        display.milesButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        display.minsButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        display.secondsButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         display.updateButton.addTarget(self, action: #selector(updatePressed(_:)), for: .touchUpInside)
         
         display.nextButton.addTarget(self, action: #selector(nextPressed(_:)), for: .touchUpInside)
@@ -49,7 +45,7 @@ class NewWeightViewController: UIViewController, Storyboarded {
     @objc func buttonTapped(_ sender: UIButton) {
         
         if coordinator is LiveWorkoutCoordinator || coordinator is AMRAPCoordinator {
-            display.nextButton.isHidden = false
+            //display.nextButton.isHidden = false
             display.weightMeasurementField.text = sender.titleLabel?.text
             if sender == display.maxButton || sender == display.bodyweightButton {
                 display.numberTextfield.text = ""
@@ -100,6 +96,7 @@ class NewWeightViewController: UIViewController, Storyboarded {
             display.weightMeasurementField.text = ""
             display.numberTextfield.text = ""
             display.nextButton.isHidden = false
+            navigationItem.rightBarButtonItem?.isEnabled = true
         }
 
     }
@@ -123,7 +120,7 @@ class NewWeightViewController: UIViewController, Storyboarded {
                     newExercise.weightArray?.append(newWeight)
                 }
             }
-        } else if coordinator is AMRAPCoordinator {
+        } else if coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator {
             if display.maxButton.isSelected {
                 newExercise.weight = "MAX"
             } else {
@@ -183,6 +180,8 @@ class NewWeightViewController: UIViewController, Storyboarded {
         default:
             break
         }
+        
+        initNavBar()
     }
     
     override func viewDidLayoutSubviews() {
@@ -197,6 +196,12 @@ class NewWeightViewController: UIViewController, Storyboarded {
         let textAttributes = [NSAttributedString.Key.foregroundColor: Constants.darkColour]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         navigationController?.navigationBar.tintColor = Constants.darkColour
+    }
+    
+    func initNavBar() {
+        let nextButton = UIBarButtonItem(title: "Next", style: .done, target: self, action: #selector(nextPressed(_:)))
+        navigationItem.rightBarButtonItem = nextButton
+        nextButton.isEnabled = false
     }
     
     func showEmptyAlert(){

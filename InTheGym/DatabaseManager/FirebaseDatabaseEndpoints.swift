@@ -12,7 +12,7 @@ protocol FirebaseDatabaseEndpoints {
     var path: String { get }
 }
 protocol SingleDatabaseEndpoint {
-    var path: String { get }
+    var path: String? { get }
 }
 protocol MultipleDatabaseEndpoint {
     var paths: [String:Any] { get }
@@ -22,4 +22,8 @@ protocol WorkoutEndpoint {
     var path: String { get }
     var workout: WorkoutDelegate { get }
     var service: FirebaseDatabaseWorkoutManagerService { get }
+}
+
+protocol PostEndpoint: SingleDatabaseEndpoint {
+    var post: CreateNewPostModel? { get }
 }

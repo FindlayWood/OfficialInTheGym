@@ -43,7 +43,7 @@ struct circuitExercise {
 }
 
 
-class Observable<T>{
+class Observable<T: Codable> {
     var value : T? {
         didSet{
             if let value = value{
@@ -83,11 +83,11 @@ protocol WorkoutAddable {
 
 
 enum bodyType: String, Codable {
-        case UB = "Upper Body"
-        case LB = "Lower Body"
-        case CO = "Core"
-        case CA = "Cardio"
-        case CU = "Custom"
+        case UB = "UB"
+        case LB = "LB"
+        case CO = "CO"
+        case CA = "CA"
+        case CU = "CU"
     }
 
 

@@ -10,6 +10,9 @@ import UIKit
 
 class NewExerciseCell: UITableViewCell {
     
+    // MARK: - Properties
+    static let cellID = "NewExerciseCellID"
+    
     var messageLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.font

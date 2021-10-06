@@ -10,7 +10,7 @@ import UIKit
 
 protocol GroupHomePageProtocol: TimelineTapProtocol {
     func getGroupInfo() -> groupModel
-    func getPostData(at indexPath: IndexPath) -> PostProtocol
+    func getPostData(at indexPath: IndexPath) -> post
     func numberOfPosts() -> Int
     func postSelected(at indexPath: IndexPath)
     func getGroupImage() -> UIImage?
@@ -21,5 +21,7 @@ protocol GroupHomePageProtocol: TimelineTapProtocol {
     func leaderLoaded() -> Bool
     func newInfoSaved(_ newInfo: MoreGroupInfoModel)
     func goToWorkouts()
+    func isCurrentUserLeader() -> Bool
+    func manageGroup()
 }
 

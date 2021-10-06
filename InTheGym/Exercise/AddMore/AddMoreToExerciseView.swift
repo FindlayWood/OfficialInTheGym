@@ -16,9 +16,7 @@ class AddMoreToExerciseView: UIView {
         layout.sectionInset = .init(top: 5, left: 10, bottom: 5, right: 10)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.backgroundColor = .offWhiteColour
-        if #available(iOS 13.0, *) {
-            view.register(CardCollectionViewCell.self, forCellWithReuseIdentifier: CardCollectionViewCell.reuseIdentifier)
-        }
+        view.register(AddMoreCollectionCell.self, forCellWithReuseIdentifier: AddMoreCollectionCell.reuseID)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

@@ -89,30 +89,6 @@ class WeightView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    var kmButton: WeightButton = {
-        let button = WeightButton()
-        button.setTitle("km", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    var milesButton: WeightButton = {
-        let button = WeightButton()
-        button.setTitle("miles", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    var minsButton: WeightButton = {
-        let button = WeightButton()
-        button.setTitle("mins", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    var secondsButton: WeightButton = {
-        let button = WeightButton()
-        button.setTitle("secs", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
     var updateButton: UIButton = {
         let button = UIButton()
         button.setTitle("UPDATE ALL SETS", for: .normal)
@@ -187,15 +163,11 @@ class WeightView: UIView {
         
         topStack.addArrangedSubview(kgButton)
         topStack.addArrangedSubview(lbsButton)
-        topStack.addArrangedSubview(percentageButton)
-        topStack.addArrangedSubview(bodyweightButton)
-        topStack.addArrangedSubview(bodyWeightPercentButton)
+        topStack.addArrangedSubview(maxButton)
         
-        bottomStack.addArrangedSubview(maxButton)
-        bottomStack.addArrangedSubview(kmButton)
-        bottomStack.addArrangedSubview(milesButton)
-        bottomStack.addArrangedSubview(minsButton)
-        bottomStack.addArrangedSubview(secondsButton)
+        bottomStack.addArrangedSubview(percentageButton)
+        bottomStack.addArrangedSubview(bodyweightButton)
+        bottomStack.addArrangedSubview(bodyWeightPercentButton)
         
         addSubview(topStack)
         addSubview(bottomStack)

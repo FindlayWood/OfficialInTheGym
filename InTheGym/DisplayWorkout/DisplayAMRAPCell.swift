@@ -10,9 +10,12 @@ import UIKit
 
 class DisplayAMRAPCell: UITableViewCell, workoutCellConfigurable {
     
+    // MARK: - Properties
     var delegate: DisplayWorkoutProtocol!
     var amrapModel: AMRAP!
+    static let cellID = "DisplayAMRAPCellID"
     
+    // MARK: - Subviews
     var amrapLabel: UILabel = {
        let label = UILabel()
         label.text = "AMRAP"

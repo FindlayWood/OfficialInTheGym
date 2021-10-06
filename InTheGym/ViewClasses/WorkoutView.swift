@@ -118,4 +118,9 @@ extension UIWorkoutView {
         creatorLabel.text = data.createdBy
         exerciseCountLabel.text = data.exercises?.count.description
     }
+    public func newConfigure(with attachment: attachedWorkout) {
+        titleLabel.text = attachment.title
+        creatorLabel.text = attachment.createdBy
+        exerciseCountLabel.text = attachment.exerciseCount.description
+    }
 }

@@ -80,6 +80,7 @@ class WorkoutTableViewCell: UITableViewCell {
 // MARK: - Setup
 private extension WorkoutTableViewCell {
     func setupUI() {
+        selectionStyle = .none
         backgroundColor = .offWhiteColour
         layer.cornerRadius = 10
         addSubview(titleLabel)

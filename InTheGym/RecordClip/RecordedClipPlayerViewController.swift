@@ -97,29 +97,58 @@ class RecordedClipPlayerViewController: UIViewController {
         player.pause()
         display.attemptingToSaveClip()
         guard let currentVideoURL = ((player.currentItem?.asset) as? AVURLAsset)?.url else {return}
-        let clipUploadData = clipUploadingData(workoutID: workoutID,
-                                               exerciseName: exerciseName,
-                                               clipNumber: clipNumber,
-                                               videoURL: currentVideoURL,
-                                               isPrivate: display.isPrivate)
-        
-        FirebaseVideoUploader.shared.upload(uploadData: clipUploadData) { [weak self] result in
+        player.currentItem?.asset.generateThumbnail(completion: { [weak self] thumbnail in
             guard let self = self else {return}
-            switch result {
-            case .failure(let uploadError):
-                print(uploadError.localizedDescription)
-                self.showUploadError()
-                self.display.setToRecord()
-            case .success(let addingData):
-                self.dismiss(animated: true, completion: nil)
-                self.removeFromFileManager()
-                self.uploadingDelegate.clipUploadedAndSaved()
-                self.addingDelegate.clipAdded(with: addingData)
+            let clipUploadData = clipUploadingData(workoutID: self.workoutID,
+                                                   exerciseName: self.exerciseName,
+                                                   clipNumber: self.clipNumber,
+                                                   videoURL: currentVideoURL,
+                                                   isPrivate: self.display.isPrivate,
+                                                   thumbnail: thumbnail)
+            
+            FirebaseVideoUploader.shared.upload(uploadData: clipUploadData) { [weak self] result in
+                guard let self = self else {return}
+                switch result {
+                case .failure(let uploadError):
+                    print(uploadError.localizedDescription)
+                    self.showUploadError()
+                    self.display.setToRecord()
+                case .success(let addingData):
+                    self.dismiss(animated: true, completion: nil)
+                    self.removeFromFileManager()
+                    self.uploadingDelegate.clipUploadedAndSaved()
+                    self.addingDelegate.clipAdded(with: addingData)
+                }
+            } progressCompletion: { [weak self] progress in
+                guard let self = self else {return}
+                self.display.updateProgressBar(to: progress)
             }
-        } progressCompletion: { [weak self] progress in
-            guard let self = self else {return}
-            self.display.updateProgressBar(to: progress)
-        }
+            
+            
+        })
+//        let clipUploadData = clipUploadingData(workoutID: workoutID,
+//                                               exerciseName: exerciseName,
+//                                               clipNumber: clipNumber,
+//                                               videoURL: currentVideoURL,
+//                                               isPrivate: display.isPrivate)
+//        
+//        FirebaseVideoUploader.shared.upload(uploadData: clipUploadData) { [weak self] result in
+//            guard let self = self else {return}
+//            switch result {
+//            case .failure(let uploadError):
+//                print(uploadError.localizedDescription)
+//                self.showUploadError()
+//                self.display.setToRecord()
+//            case .success(let addingData):
+//                self.dismiss(animated: true, completion: nil)
+//                self.removeFromFileManager()
+//                self.uploadingDelegate.clipUploadedAndSaved()
+//                self.addingDelegate.clipAdded(with: addingData)
+//            }
+//        } progressCompletion: { [weak self] progress in
+//            guard let self = self else {return}
+//            self.display.updateProgressBar(to: progress)
+//        }
     }
     
     func showUploadError() {

@@ -9,7 +9,7 @@
 import Foundation
 import Firebase
 
-class PlayerTimelineViewModel{
+class PlayerTimelineViewModel {
     
     // MARK: - Closures
         
@@ -93,12 +93,10 @@ class PlayerTimelineViewModel{
             for child in snapshot.children.allObjects as! [DataSnapshot] {
                 myGroup.enter()
                 guard let post = child.value as? [String: AnyObject] else {return}
-                if let posterID = post["posterID"] as? String, let username = post["username"] as? String {
-//                    let username = post["username"] as? String ?? "no username"
+                if let posterID = post["posterID"] as? String {
                     if posterID != FirebaseAuthManager.currentlyLoggedInUser.uid {
                         FirebaseCheckFollowing.shared.check(posterID) { following in
                             if following {
-                                print("following \(username), \(child.key)")
                                 switch post["type"] as! String{
                                 case "post":
                                     tempPosts.append(TimelinePostModel(snapshot: child)!)
@@ -111,12 +109,10 @@ class PlayerTimelineViewModel{
                                 }
                                 myGroup.leave()
                             } else {
-                                print("not following \(username), \(child.key)")
                                 myGroup.leave()
                             }
                         }
                     } else {
-                        print("my post \(child.key)")
                         switch post["type"] as! String{
                         case "post":
                             tempPosts.append(TimelinePostModel(snapshot: child)!)

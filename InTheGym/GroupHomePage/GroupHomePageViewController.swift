@@ -16,12 +16,10 @@ class GroupHomePageViewController: UIViewController {
 
     var adapter: GroupHomePageAdapter!
     
-    var apiService = FirebaseAPIGroupService.shared
-    
     var currentGroup: groupModel!
     
     lazy var viewModel: GroupHomePageViewModel = {
-        return GroupHomePageViewModel(apiService: apiService)
+        return GroupHomePageViewModel()
     }()
     
     override func viewDidLoad() {
@@ -91,20 +89,33 @@ class GroupHomePageViewController: UIViewController {
         viewModel.groupLeaderLoadedClosure = { [weak self] in
             guard let self = self else {return}
             DispatchQueue.main.async {
-                let indexPath = IndexPath(row: 1, section: 0)
-                self.display.tableview.reloadRows(at: [indexPath], with: .none)
+                //let indexPath = IndexPath(row: 1, section: 0)
+                let sections = IndexSet.init(integer: 0)
+                //self.display.tableview.reloadRows(at: [indexPath], with: .none)
+                self.display.tableview.reloadSections(sections, with: .none)
             }
             
         }
         
-        viewModel.loadPosts(from: currentGroup.uid)
+        viewModel.tappedUserReturnedClosure = { [weak self] (tappedUser) in
+            guard let self = self else {return}
+            self.coordinator?.showUser(user: tappedUser)
+        }
+        
+        viewModel.tappedWorkoutClosure = { [weak self] tappedWorkout in
+            guard let self = self else {return}
+            self.coordinator?.showWorkouts(with: tappedWorkout)
+        }
+        
+        viewModel.currentGroup = currentGroup
+        //viewModel.loadPosts(from: currentGroup.uid)
+        viewModel.newLoadPosts(from: currentGroup.uid)
         viewModel.loadMembers(from: currentGroup.uid)
         viewModel.loadHeaderImage(from: currentGroup.uid)
         viewModel.loadGroupLeader(from: currentGroup.leader)
     }
     
     @objc func moreButtonTapped() {
-        print("go to more")
         let info = MoreGroupInfoModel(leader: getGroupLeader(),
                                       headerImage: getGroupImage(),
                                       description: currentGroup.description,
@@ -112,6 +123,9 @@ class GroupHomePageViewController: UIViewController {
                                       groupID: currentGroup.uid,
                                       leaderID: currentGroup.leader)
         coordinator?.showMoreInfo(with: info, self)
+    }
+    @objc func postButtonTapped() {
+        coordinator?.createNewPost()
     }
 }
 
@@ -135,9 +149,13 @@ extension GroupHomePageViewController {
         self.navigationController?.navigationBar.tintColor = UIColor.white
     }
     func addNavBarButton() {
-        let barImage = viewModel.getBarImage()
-        let barButton = UIBarButtonItem(image: barImage, style: .plain, target: self, action: #selector(moreButtonTapped))
-        navigationItem.rightBarButtonItem = barButton
+        //let barImage = viewModel.getBarImage()
+        //let barButton = UIBarButtonItem(image: barImage, style: .plain, target: self, action: #selector(moreButtonTapped))
+        if #available(iOS 13.0, *) {
+            let postButton = UIBarButtonItem(image: UIImage(systemName: "pencil.circle.fill"), style: .plain, target: self, action: #selector(postButtonTapped))
+            navigationItem.rightBarButtonItems = [postButton]
+        }
+        
     }
 }
 
@@ -147,7 +165,7 @@ extension GroupHomePageViewController: GroupHomePageProtocol {
         return currentGroup
     }
     
-    func getPostData(at indexPath: IndexPath) -> PostProtocol {
+    func getPostData(at indexPath: IndexPath) -> post {
         return viewModel.getPostData(at: indexPath)
     }
     
@@ -156,21 +174,21 @@ extension GroupHomePageViewController: GroupHomePageProtocol {
     }
     
     func postSelected(at indexPath: IndexPath) {
-        let post = viewModel.getPostData(at: indexPath)
-        if post is TimelinePostModel || post is TimelineCreatedWorkoutModel || post is TimelineCompletedWorkoutModel{
-            var discussionPost: PostProtocol!
-            switch post {
-            case is TimelinePostModel:
-                discussionPost = DiscussionPost(model: post as! TimelinePostModel)
-            case is TimelineCreatedWorkoutModel:
-                discussionPost = DiscussionCreatedWorkout(model: post as! TimelineCreatedWorkoutModel)
-            case is TimelineCompletedWorkoutModel:
-                discussionPost = DiscussionCompletedWorkout(model: post as! TimelineCompletedWorkoutModel)
-            default:
-                break
-            }
-            coordinator?.showDiscussion(with: discussionPost, group: currentGroup)
-        }
+//        let post = viewModel.getPostData(at: indexPath)
+//        if post is TimelinePostModel || post is TimelineCreatedWorkoutModel || post is TimelineCompletedWorkoutModel{
+//            var discussionPost: PostProtocol!
+//            switch post {
+//            case is TimelinePostModel:
+//                discussionPost = DiscussionPost(model: post as! TimelinePostModel)
+//            case is TimelineCreatedWorkoutModel:
+//                discussionPost = DiscussionCreatedWorkout(model: post as! TimelineCreatedWorkoutModel)
+//            case is TimelineCompletedWorkoutModel:
+//                discussionPost = DiscussionCompletedWorkout(model: post as! TimelineCompletedWorkoutModel)
+//            default:
+//                break
+//            }
+//            coordinator?.showDiscussion(with: discussionPost, group: currentGroup)
+//        }
     }
     func getGroupImage() -> UIImage? {
         return viewModel.headerImage
@@ -199,54 +217,42 @@ extension GroupHomePageViewController: GroupHomePageProtocol {
     func goToWorkouts() {
         coordinator?.goToGroupWorkouts(with: currentGroup)
     }
+    func isCurrentUserLeader() -> Bool {
+        return viewModel.isCurrentUserLeader()
+    }
+    func manageGroup() {
+        moreButtonTapped()
+    }
 }
 
 // MARK: - Timeline Protocol Conformation
 extension GroupHomePageViewController: TimelineTapProtocol {
     func likeButtonTapped(on cell: UITableViewCell, sender: UIButton, label: UILabel) {
-        let index = display.tableview.indexPath(for: cell)!
-        let post = viewModel.getPostData(at: index)
-        viewModel.likePost(from: currentGroup.uid, on: post)
-        let likeCount = Int(label.text!)! + 1
-        label.text = likeCount.description
-        if #available(iOS 13.0, *) {
-            UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
-                sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
-            } completion: { _ in
-                sender.isUserInteractionEnabled = false
-            }
-        }
-        let selection = UISelectionFeedbackGenerator()
-        selection.prepare()
-        selection.selectionChanged()
+        guard let index = display.tableview.indexPath(for: cell) else {return}
+        guard let cell = cell as? PostTableViewCell else {return}
+        cell.postLikedTransition()
+        viewModel.likePost(at: index)
+//        let post = viewModel.getPostData(at: index)
+//        viewModel.likePost(from: currentGroup.uid, on: post)
+//        let likeCount = Int(label.text!)! + 1
+//        label.text = likeCount.description
+//        if #available(iOS 13.0, *) {
+//            UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
+//                sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+//            } completion: { _ in
+//                sender.isUserInteractionEnabled = false
+//            }
+//        }
+//        let selection = UISelectionFeedbackGenerator()
+//        selection.prepare()
+//        selection.selectionChanged()
     }
     func userTapped(on cell: UITableViewCell) {
-        let index = display.tableview.indexPath(for: cell)!
-        let post = viewModel.getPostData(at: index)
-        let posterID = post.posterID
-        UserIDToUser.transform(userID: posterID!) { [weak self] (user) in
-            guard let self = self else {return}
-            // TODO: fix this!
-            if user.username != ViewController.username {
-                self.coordinator?.showUser(user: user)
-            }
-        }
+        guard let index = display.tableview.indexPath(for: cell) else {return}
+        viewModel.userTapped(at: index)
     }
     func workoutTapped(on cell: UITableViewCell) {
-        let index = display.tableview.indexPath(for: cell)!
-        let post = viewModel.getPostData(at:index)
-        var workoutData: discoverWorkout!
-        switch post {
-        case is TimelineCreatedWorkoutModel:
-            let p = post as! TimelineCreatedWorkoutModel
-            workoutData = p.createdWorkout
-            coordinator?.showWorkouts(with: workoutData)
-        case is TimelineCompletedWorkoutModel:
-            let p = post as! TimelineCompletedWorkoutModel
-            workoutData = p.createdWorkout
-            coordinator?.showWorkouts(with: workoutData)
-        default:
-            break
-        }
+        guard let index = display.tableview.indexPath(for: cell) else {return}
+        viewModel.workoutTapped(at: index)
     }
 }

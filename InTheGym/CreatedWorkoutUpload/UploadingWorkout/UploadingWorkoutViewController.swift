@@ -86,7 +86,9 @@ extension UploadingWorkoutViewController {
     }
     @objc func showAssignee() {
         if workoutToUpload.assignee is Users {
-            coordinator?.showUser(user: workoutToUpload.assignee as! Users)
+            if workoutToUpload.assignee.uid != FirebaseAuthManager.currentlyLoggedInUser.uid {
+                coordinator?.showUser(user: workoutToUpload.assignee as! Users)
+            }
         }
     }
     @objc func uploadWorkout() {

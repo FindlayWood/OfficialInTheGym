@@ -11,9 +11,9 @@ import UIKit
 class PlayerTimelineView: UIView {
     
     // MARK: - Properties
-    private let topViewFrame = CGRect(x: 0, y: 0, width: Constants.screenSize.width, height: 50)
+    private let topViewFrame = CGRect(x: 0, y: 0, width: Constants.screenSize.width, height: 30)
     
-    private let showPostViewFrame = CGRect(x: 0, y: 50, width: Constants.screenSize.width, height: 50)
+    private let showPostViewFrame = CGRect(x: 0, y: 30, width: Constants.screenSize.width, height: 50)
     private let hidePostViewFrame = CGRect(x: 0, y: 50, width: Constants.screenSize.width, height: 0)
     
     private var tableviewTopAnchor: NSLayoutConstraint!
@@ -78,13 +78,14 @@ class PlayerTimelineView: UIView {
         let button = UIButton()
         button.setTitle("Create a new post...", for: .normal)
         button.setTitleColor(.lightGray, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
+        button.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        button.contentHorizontalAlignment = .left
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     var spacerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .offWhiteColour
+        view.backgroundColor = .darkColour
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -119,9 +120,9 @@ class PlayerTimelineView: UIView {
 private extension PlayerTimelineView {
     func setupUI() {
         backgroundColor = .white
-        topView.addSubview(iconImageView)
+        //topView.addSubview(iconImageView)
         topView.addSubview(iconLabel)
-        topView.addSubview(notifButton)
+        //topView.addSubview(notifButton)
         postView.addSubview(profileImageView)
         postView.addSubview(postButton)
         postView.addSubview(spacerView)
@@ -135,24 +136,25 @@ private extension PlayerTimelineView {
     func constrainUI() {
         topView.frame = topViewFrame
         postView.frame = showPostViewFrame
-        tableviewTopAnchor = tableview.topAnchor.constraint(equalTo: topAnchor, constant: 100)
+        tableviewTopAnchor = tableview.topAnchor.constraint(equalTo: topAnchor, constant: 80)
         NSLayoutConstraint.activate([tableviewTopAnchor,
                                      tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
                                      tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
                                      tableview.bottomAnchor.constraint(equalTo: bottomAnchor),
                                      
-                                     iconImageView.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 5),
-                                     iconImageView.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
-                                     iconLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 5),
-                                     iconLabel.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
-                                     notifButton.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -10),
-                                     notifButton.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
+//                                     iconImageView.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 5),
+//                                     iconImageView.topAnchor.constraint(equalTo: topView.topAnchor),
+                                     iconLabel.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 5),
+                                     iconLabel.topAnchor.constraint(equalTo: topView.topAnchor),
+//                                     notifButton.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -10),
+//                                     notifButton.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
                                      
                                      profileImageView.leadingAnchor.constraint(equalTo: postView.leadingAnchor, constant: 20),
                                      profileImageView.centerYAnchor.constraint(equalTo: postView.centerYAnchor),
                                      
                                      postButton.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 5),
                                      postButton.centerYAnchor.constraint(equalTo: postView.centerYAnchor),
+                                     postButton.trailingAnchor.constraint(equalTo: postView.trailingAnchor),
                                      
                                      spacerView.leadingAnchor.constraint(equalTo: postView.leadingAnchor),
                                      spacerView.bottomAnchor.constraint(equalTo: postView.bottomAnchor),
@@ -174,7 +176,7 @@ private extension PlayerTimelineView {
 extension PlayerTimelineView {
     public func showTopView() {
         isPostViewShowing = true
-        tableviewTopAnchor.constant = 100
+        tableviewTopAnchor.constant = 80
         UIView.animate(withDuration: 0.3) { [weak self] in
             guard let self = self else {return}
             self.postView.frame = self.showPostViewFrame
@@ -183,7 +185,7 @@ extension PlayerTimelineView {
     }
     public func hideTopView() {
         isPostViewShowing = false
-        tableviewTopAnchor.constant = 50
+        tableviewTopAnchor.constant = 30
         UIView.animate(withDuration: 0.3) { [weak self] in
             guard let self = self else {return}
             self.postView.frame = self.hidePostViewFrame

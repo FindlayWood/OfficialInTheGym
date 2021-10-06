@@ -8,7 +8,7 @@
 
 import Foundation
     
-class clipDataModel {
+class clipDataModel: Codable {
     var storageURL: String!
     var clipKey: String!
     var exerciseName: String!

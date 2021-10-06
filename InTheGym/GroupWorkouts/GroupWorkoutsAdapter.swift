@@ -28,6 +28,9 @@ extension GroupWorkoutsAdapter: UITableViewDataSource, UITableViewDelegate {
         cell.configure(with: delegate.getData(at: indexPath))
         return cell
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate.workoutSelected(at: indexPath)
+    }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 10
     }

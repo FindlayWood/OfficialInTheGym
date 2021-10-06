@@ -9,7 +9,7 @@
 import Foundation
 
 protocol AddMoreToExerciseProtocol {
-    func getData(at indexPath: IndexPath) -> SwiftUICardContent
+    func getData(at indexPath: IndexPath) -> AddMoreCellModel
     func numberOfItems() -> Int
     func itemSelected(at indexPath: IndexPath)
 }

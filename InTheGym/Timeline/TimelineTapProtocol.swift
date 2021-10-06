@@ -11,7 +11,7 @@ import UIKit
 import Firebase
 
 
-protocol TimelineTapProtocol {
+protocol TimelineTapProtocol: AnyObject {
     func likeButtonTapped(on cell:UITableViewCell, sender: UIButton, label:UILabel)
     func workoutTapped(on cell:UITableViewCell)
     func userTapped(on cell:UITableViewCell)

@@ -19,6 +19,7 @@ class GroupHomePageView: UIView {
         view.register(GroupHomePageInfoTableViewCell.self, forCellReuseIdentifier: GroupHomePageInfoTableViewCell.cellID)
         view.register(LoadingTableViewCell.self, forCellReuseIdentifier: LoadingTableViewCell.cellID)
         view.register(UserTableViewCell.self, forCellReuseIdentifier: UserTableViewCell.cellID)
+        view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
         view.register(UINib(nibName: "TimelinePostTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelinePostTableViewCell")
         view.register(UINib(nibName: "TimelineCreatedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCreatedWorkoutTableViewCell")
         view.register(UINib(nibName: "TimelineCompletedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCompletedTableViewCell")

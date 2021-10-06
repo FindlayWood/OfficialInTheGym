@@ -30,21 +30,32 @@ class AddMoreToExerciseCoordinator: NSObject, Coordinator {
 }
 
 extension AddMoreToExerciseCoordinator {
-    func timeSelected() {
+    func timeSelected(_ cellModel: AddMoreCellModel) {
         let vc = AddMoreTimeViewController()
         vc.coordinator = self
+        vc.cellModel = cellModel
         navigationController.pushViewController(vc, animated: true)
     }
-    func distanceSelected() {
+    func distanceSelected(_ cellModel: AddMoreCellModel) {
         let vc = AddMoreDistanceViewController()
+        vc.coordinator = self
+        vc.cellModel = cellModel
         navigationController.pushViewController(vc, animated: true)
     }
-    func restTimeSelected() {
+    func restTimeSelected(_ cellModel: AddMoreCellModel) {
         let vc = AddMoreRestTimeViewController()
+        vc.coordinator = self
+        vc.cellModel = cellModel
         navigationController.pushViewController(vc, animated: true)
     }
-    func noteSelected() {
-        
+    func noteSelected(_ cellModel: AddMoreCellModel) {
+        let vc = AddMoreNoteViewController()
+        if newExercise.note != nil {
+            vc.currentNote = newExercise.note
+        }
+        vc.cellModel = cellModel
+        vc.coordinator = self
+        navigationController.present(vc, animated: true)
     }
     func timeAdded(_ timeInSeconds: Int) {
         if parentCoordinator is RegularWorkoutCoordinator {
@@ -86,6 +97,7 @@ extension AddMoreToExerciseCoordinator {
     func addNewExercise() {
         let object = newExercise.toObject()
         AddWorkoutHomeViewController.exercises.append(object)
+        //DisplayWorkoutViewController.selectedWorkout.exercises?.append(newExercise)
         parentCoordinator?.upload()
     }
     

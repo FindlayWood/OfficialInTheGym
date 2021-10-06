@@ -39,6 +39,9 @@ class DisplayWorkoutCollectionViewCell: UICollectionViewCell {
                 self.completedButton.isUserInteractionEnabled = true
                 self.backgroundColor = Constants.lightColour
             }
+            if model.time != nil || model.restTime != nil || model.distance != nil {
+                self.layer.borderWidth = 4
+            }
         }
     }
     

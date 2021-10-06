@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import CodableFirebase
 import SCLAlertView
 
 class AddPlayerViewController: UIViewController, Storyboarded {
@@ -88,20 +89,27 @@ class AddPlayerViewController: UIViewController, Storyboarded {
         let userReference = Database.database().reference().child("users")
         userReference.observe(.childAdded, with: { (snapshot) in
             
-            if snapshot.key == self.userID{
+            if snapshot.key == self.userID {
                 return
-            }else{
-                if let snap = snapshot.value as? [String:AnyObject]{
-                    if snap["admin"] as? Bool == false{
-                        var newUser: Users!
-                        newUser.username = snap["username"] as? String ?? "username"
-                        newUser.firstName = snap["firstName"] as? String ?? "no"
-                        newUser.lastName = snap["lastName"] as? String ?? "name"
-                        newUser.admin = snap["admin"] as? Bool ?? false
-                        newUser.uid = snapshot.key
-                        newUser.profilePhotoURL = snap["profilePhotoURL"] as? String ?? "nil"
-                        newUser.profileBio = snap["profileBio"] as? String ?? "nil"
-                        self.users.append(newUser)
+            } else {
+                if let snap = snapshot.value as? [String:AnyObject] {
+                    if snap["admin"] as? Bool == false {
+                        do {
+                            let user = try FirebaseDecoder().decode(Users.self, from: snap)
+                            self.users.append(user)
+                        }
+                        catch {
+                            print(error.localizedDescription)
+                        }
+//                        var newUser: Users!
+//                        newUser.username = snap["username"] as? String ?? "username"
+//                        newUser.firstName = snap["firstName"] as? String ?? "no"
+//                        newUser.lastName = snap["lastName"] as? String ?? "name"
+//                        newUser.admin = snap["admin"] as? Bool ?? false
+//                        newUser.uid = snapshot.key
+//                        newUser.profilePhotoURL = snap["profilePhotoURL"] as? String ?? "nil"
+//                        newUser.profileBio = snap["profileBio"] as? String ?? "nil"
+//                        self.users.append(newUser)
                     }
                 }
             }

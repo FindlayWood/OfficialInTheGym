@@ -10,18 +10,22 @@ import Foundation
 import Firebase
 import CodableFirebase
 
-protocol FirebaseAPIGroupServiceProtocol {
+protocol FirebaseAPIGroupServiceProtocol: FirebaseTimelineServiceProtocol {
     func createGroup(with data: NewGroupModel, completion: @escaping (Bool) -> Void)
     func loadMembers(from group: MoreGroupInfoModel, completion: @escaping (Result<[Users], Error>) -> Void)
     func loadLeader(from group: MoreGroupInfoModel, completion: @escaping (Result<Users, Error>) -> Void)
     func saveNewGroupInfo(from group: MoreGroupInfoModel, completion: @escaping (Bool) -> Void)
     func fetchGroupWorkouts(from groupID: String, completion: @escaping (Result<[GroupWorkoutModel], Error>) -> Void)
+    func loadGroupMemberCount(from groupID: String, completion: @escaping (Result<Int, Error>) -> Void)
+    //func likePost(from endPoint: LikePostEndpoint, completion: @escaping (Result<Void, Error>) -> Void)
+    //func loadGroupPosts(from endpoint: PostEndpoints, completion: @escaping (Result<[post],Error>) -> Void)
+    func returnTappedWorkout(from attachedWorkout: attachedWorkout, completion: @escaping (Result<WorkoutDelegate,Error>) -> Void)
 }
 
 class FirebaseAPIGroupService: FirebaseAPIGroupServiceProtocol {
     static let shared = FirebaseAPIGroupService()
     private init() {}
-    private var baseRef: DatabaseReference = Database.database().reference()
+    internal var baseRef: DatabaseReference = Database.database().reference()
     
     
     // MARK: - Create Group
@@ -63,57 +67,57 @@ class FirebaseAPIGroupService: FirebaseAPIGroupServiceProtocol {
         }
     }
     
-    // MARK: - Load Posts
-    func loadPosts(from groupID: String, completion: @escaping (Result<[PostProtocol], Error>) -> Void) {
-        let path = "GroupPosts/\(groupID)"
-        //var handle: DatabaseHandle!
-        let groupPostRef = baseRef.child(path)
-        var tempPosts: [PostProtocol] = []
-        groupPostRef.observe(.childAdded, with: { snapshot in
-            guard let snap = snapshot.value as? [String: AnyObject] else {return}
-            switch snap["type"] as! String{
-            case "post":
-                tempPosts.insert(TimelinePostModel(snapshot: snapshot)!, at: 0)
-            case "createdNewWorkout":
-                tempPosts.insert(TimelineCreatedWorkoutModel(snapshot: snapshot)!, at: 0)
-            case "workout":
-                tempPosts.insert(TimelineCompletedWorkoutModel(snapshot: snapshot)!, at: 0)
-            default:
-                break
-            }
-            
-        }, withCancel: { error in
-            completion(.failure(error))
-        })
-        
-        groupPostRef.observeSingleEvent(of: .value) { (_) in
-            completion(.success(tempPosts))
-        }
-    }
+//    // MARK: - Load Posts
+//    func loadPosts(from groupID: String, completion: @escaping (Result<[PostProtocol], Error>) -> Void) {
+//        let path = "GroupPosts/\(groupID)"
+//        //var handle: DatabaseHandle!
+//        let groupPostRef = baseRef.child(path)
+//        var tempPosts: [PostProtocol] = []
+//        groupPostRef.observe(.childAdded, with: { snapshot in
+//            guard let snap = snapshot.value as? [String: AnyObject] else {return}
+//            switch snap["type"] as! String{
+//            case "post":
+//                tempPosts.insert(TimelinePostModel(snapshot: snapshot)!, at: 0)
+//            case "createdNewWorkout":
+//                tempPosts.insert(TimelineCreatedWorkoutModel(snapshot: snapshot)!, at: 0)
+//            case "workout":
+//                tempPosts.insert(TimelineCompletedWorkoutModel(snapshot: snapshot)!, at: 0)
+//            default:
+//                break
+//            }
+//
+//        }, withCancel: { error in
+//            completion(.failure(error))
+//        })
+//
+//        groupPostRef.observeSingleEvent(of: .value) { (_) in
+//            completion(.success(tempPosts))
+//        }
+//    }
     
-    // MARK: - Trying the updated version of posts
-    func loadPostsUpdated(from groupID: String, completion: @escaping (Result<[post], Error>) -> Void) {
-        let path = "GroupPosts/\(groupID)"
-        let groupPostRef  = baseRef.child(path)
-        var tempPosts = [post]()
-        groupPostRef.observe(.childAdded) { snapshot in
-            guard let snap = snapshot.value as? [String:AnyObject] else {return}
-            do {
-                let post = try FirebaseDecoder().decode(post.self, from: snap)
-                tempPosts.append(post)
-            }
-            catch {
-                print(error.localizedDescription)
-            }
-        } withCancel: { error in
-            completion(.failure(error))
-        }
-        
-        groupPostRef.observeSingleEvent(of: .value) { _ in
-            completion(.success(tempPosts))
-        }
-
-    }
+//    // MARK: - Trying the updated version of posts
+//    func loadPostsUpdated(from groupID: String, completion: @escaping (Result<[post], Error>) -> Void) {
+//        let path = "GroupPosts/\(groupID)"
+//        let groupPostRef  = baseRef.child(path)
+//        var tempPosts = [post]()
+//        groupPostRef.observe(.childAdded) { snapshot in
+//            guard let snap = snapshot.value as? [String:AnyObject] else {return}
+//            do {
+//                let post = try FirebaseDecoder().decode(post.self, from: snap)
+//                tempPosts.append(post)
+//            }
+//            catch {
+//                print(error.localizedDescription)
+//            }
+//        } withCancel: { error in
+//            completion(.failure(error))
+//        }
+//
+//        groupPostRef.observeSingleEvent(of: .value) { _ in
+//            completion(.success(tempPosts))
+//        }
+//
+//    }
     
     func loadGroupMemberCount(from groupID: String, completion: @escaping (Result<Int, Error>) -> Void) {
         let path = "GroupMembers/\(groupID)"
@@ -226,56 +230,56 @@ class FirebaseAPIGroupService: FirebaseAPIGroupServiceProtocol {
         }
     }
     
-    // MARK: Like Group Posts
-    func likeGroupPost(from groupID: String, post: PostProtocol, completion: @escaping (Bool) -> Void) {
-        /// transaction block to update likecount
-        guard let postID = post.postID else {
-            completion(false)
-            return
-        }
-        let transactionPath = "GroupPosts/\(groupID)/\(postID)"
-        let postRef = baseRef.child(transactionPath)
-        postRef.runTransactionBlock { (currentData) -> TransactionResult in
-            if var post = currentData.value as? [String:AnyObject]{
-                var likeCount = post["likeCount"] as? Int ?? 0
-                likeCount += 1
-                post["likeCount"] = likeCount as AnyObject
-                currentData.value = post
-                return TransactionResult.success(withValue: currentData)
-            }
-            return TransactionResult.success(withValue: currentData)
-        } andCompletionBlock: { (error, committed, snapshot) in
-            if let error = error{
-                print(error.localizedDescription)
-                completion(false)
-            } else {
-                self.updateLikes(from: postID, completion: completion)
-                self.sendNotification(from: post, on: groupID)
-            }
-        }
-        
-    }
-    func updateLikes(from postID: String, completion: @escaping (Bool) -> Void) {
-        /// multi path update - post likes / likes
-        guard let userID = Auth.auth().currentUser?.uid else {
-            completion(false)
-            return
-        }
-        let postLikePath = "PostLikes/\(postID)/\(userID)"
-        let likesPath = "Likes/\(userID)/\(postID)"
-        
-        let updatedPaths = [postLikePath: true,
-                            likesPath: true]
-        baseRef.updateChildValues(updatedPaths) { error, ref in
-            if error != nil {
-                completion(false)
-            } else {
-                LikesAPIService.shared.LikedPostsCache.removeObject(forKey: postID as NSString)
-                LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: postID as NSString)
-                completion(true)
-            }
-        }
-    }
+//    // MARK: Like Group Posts
+//    func likeGroupPost(from groupID: String, post: PostProtocol, completion: @escaping (Bool) -> Void) {
+//        /// transaction block to update likecount
+//        guard let postID = post.postID else {
+//            completion(false)
+//            return
+//        }
+//        let transactionPath = "GroupPosts/\(groupID)/\(postID)"
+//        let postRef = baseRef.child(transactionPath)
+//        postRef.runTransactionBlock { (currentData) -> TransactionResult in
+//            if var post = currentData.value as? [String:AnyObject]{
+//                var likeCount = post["likeCount"] as? Int ?? 0
+//                likeCount += 1
+//                post["likeCount"] = likeCount as AnyObject
+//                currentData.value = post
+//                return TransactionResult.success(withValue: currentData)
+//            }
+//            return TransactionResult.success(withValue: currentData)
+//        } andCompletionBlock: { (error, committed, snapshot) in
+//            if let error = error{
+//                print(error.localizedDescription)
+//                completion(false)
+//            } else {
+//                self.updateLikes(from: postID, completion: completion)
+//                self.sendNotification(from: post, on: groupID)
+//            }
+//        }
+//
+//    }
+//    func updateLikes(from postID: String, completion: @escaping (Bool) -> Void) {
+//        /// multi path update - post likes / likes
+//        guard let userID = Auth.auth().currentUser?.uid else {
+//            completion(false)
+//            return
+//        }
+//        let postLikePath = "PostLikes/\(postID)/\(userID)"
+//        let likesPath = "Likes/\(userID)/\(postID)"
+//
+//        let updatedPaths = [postLikePath: true,
+//                            likesPath: true]
+//        baseRef.updateChildValues(updatedPaths) { error, ref in
+//            if error != nil {
+//                completion(false)
+//            } else {
+//                LikesAPIService.shared.LikedPostsCache.removeObject(forKey: postID as NSString)
+//                LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: postID as NSString)
+//                completion(true)
+//            }
+//        }
+//    }
     func sendNotification(from post: PostProtocol, on groupID: String) {
         guard let userID = Auth.auth().currentUser?.uid,
               let postID = post.postID,
@@ -291,21 +295,21 @@ class FirebaseAPIGroupService: FirebaseAPIGroupServiceProtocol {
             }
         }
     }
-    func isLiked(from groupID: String, postID: String, completion: @escaping (Bool) -> Void) {
-        guard let userID = Auth.auth().currentUser?.uid else {
-            completion(false)
-            return
-        }
-        let path = "PostLikes/\(postID)/\(userID)"
-        let likedRef = baseRef.child(path)
-        likedRef.observeSingleEvent(of: .value) { (snapshot) in
-            if snapshot.exists(){
-                completion(true)
-            } else {
-                completion(false)
-            }
-        }
-    }
+//    func isLiked(from groupID: String, postID: String, completion: @escaping (Bool) -> Void) {
+//        guard let userID = Auth.auth().currentUser?.uid else {
+//            completion(false)
+//            return
+//        }
+//        let path = "PostLikes/\(postID)/\(userID)"
+//        let likedRef = baseRef.child(path)
+//        likedRef.observeSingleEvent(of: .value) { (snapshot) in
+//            if snapshot.exists(){
+//                completion(true)
+//            } else {
+//                completion(false)
+//            }
+//        }
+//    }
     
     // MARK: Group Workouts
     func fetchGroupWorkouts(from groupID: String, completion: @escaping (Result<[GroupWorkoutModel], Error>) -> Void) {
@@ -323,6 +327,79 @@ class FirebaseAPIGroupService: FirebaseAPIGroupServiceProtocol {
             completion(.success(workouts))
         } withCancel: { error in
             completion(.failure(error))
+        }
+    }
+    
+    func loadPosts(from endpoint: PostEndpoint, completion: @escaping (Result<[post], Error>) -> Void) {
+        print("part of timeline...")
+        guard let path = endpoint.path
+        else {
+            completion(.failure(NSError(domain: "Nil Info", code: 0, userInfo: nil)))
+            return
+        }
+        var tempPosts: [post] = []
+        let myGroup = DispatchGroup()
+        let databaseReference = Database.database().reference().child(path)
+        databaseReference.observeSingleEvent(of: .value) { snapshot in
+            for child in snapshot.children.allObjects as! [DataSnapshot] {
+                myGroup.enter()
+                guard let postObject = child.value as? [String: AnyObject] else {return}
+                do {
+                    let postData = try FirebaseDecoder().decode(post.self, from: postObject)
+                    tempPosts.append(postData)
+                    myGroup.leave()
+                }
+                catch {
+                    myGroup.leave()
+                }
+            }
+            myGroup.notify(queue: .main) {
+                completion(.success(tempPosts))
+            }
+        }
+    }
+//    func likePost(from endPoint: LikePostEndpoint, completion: @escaping (Result<Void, Error>) -> Void) {
+//        baseRef.updateChildValues(endPoint.paths) { error, ref in
+//            if let error = error {
+//                completion(.failure(error))
+//            } else {
+//                completion(.success(()))
+//            }
+//        }
+//    }
+//    func loadGroupPosts(from endpoint: PostEndpoints, completion: @escaping (Result<[post], Error>) -> Void) {
+//        guard let path = endpoint.path else {
+//            completion(.failure(NSError(domain: "", code: -1, userInfo: nil)))
+//            return
+//        }
+//        let myGroup = DispatchGroup()
+//        var tempPosts = [post]()
+//        baseRef.child(path).observeSingleEvent(of: .value) { snapshot in
+//            for child in snapshot.children.allObjects as! [DataSnapshot] {
+//                myGroup.enter()
+//                guard let postObject = child.value as? [String: AnyObject] else {return}
+//                do {
+//                    let postData = try FirebaseDecoder().decode(post.self, from: postObject)
+//                    tempPosts.append(postData)
+//                    myGroup.leave()
+//                }
+//                catch {
+//                    myGroup.leave()
+//                }
+//            }
+//            myGroup.notify(queue: .main) {
+//                completion(.success(tempPosts))
+//            }
+//        }
+//    }
+    
+    func returnTappedWorkout(from attachedWorkout: attachedWorkout, completion: @escaping (Result<WorkoutDelegate,Error>) -> Void) {
+        baseRef.child("SavedWorkouts").child(attachedWorkout.storageID).observeSingleEvent(of: .value) { snapshot in
+            guard let savedWorkout = discoverWorkout(snapshot: snapshot) else {
+                completion(.failure(NSError(domain: "", code: -1, userInfo: nil)))
+                return
+            }
+            completion(.success(savedWorkout))
         }
     }
 }

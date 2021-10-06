@@ -22,4 +22,7 @@ struct CollectionCellModel{
     var reps: Int?
     var repArray: [String]?
     var parentTableViewCell: UITableViewCell?
+    var time: Int?
+    var distance: String?
+    var restTime: Int?
 }

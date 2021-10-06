@@ -12,8 +12,10 @@ import UIKit
 @available(iOS 13.0, *)
 class DisplayAMRAPView: UIView {
     
+    // MARK: - Properties
     private let collectionHeight = Constants.screenSize.height * 0.55
     
+    // MARK: - Subviews
     var timeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo-Bold", size: 80)
@@ -21,6 +23,12 @@ class DisplayAMRAPView: UIView {
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    var timeProgressView: CircularProgressView = {
+        let view = CircularProgressView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     var helpIcon: UIButton = {
@@ -108,20 +116,33 @@ class DisplayAMRAPView: UIView {
     
     private func setup() {
         addSubview(timeLabel)
+        
         addSubview(helpIcon)
         addSubview(collection)
         addSubview(roundsView)
+        
         roundsView.addSubview(roundsNumberLabel)
         roundsView.addSubview(roundsLabel)
+        
         addSubview(exerciseView)
+        addSubview(timeProgressView)
         exerciseView.addSubview(exerciseNumberLabel)
         exerciseView.addSubview(exerciseLabel)
         constrain()
+        timeProgressView.progress = 0.3
+        timeProgressView.timeRemaining = 60
     }
     
     private func constrain() {
         NSLayoutConstraint.activate([timeLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      timeLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+                                     
+                                     timeProgressView.topAnchor.constraint(equalTo: topAnchor),
+                                     timeProgressView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4),
+                                     timeProgressView.centerXAnchor.constraint(equalTo: centerXAnchor),
+                                     //timeProgressView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+                                     //timeProgressView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+                                     timeProgressView.heightAnchor.constraint(equalTo: timeProgressView.widthAnchor),
                                      
                                      helpIcon.centerYAnchor.constraint(equalTo: timeLabel.centerYAnchor),
                                      helpIcon.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),

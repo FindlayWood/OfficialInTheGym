@@ -65,7 +65,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     // height of the top view
     @IBOutlet var TopViewHeight: NSLayoutConstraint!
     // the upload button
-    @IBOutlet weak var uploadButton:UIButton!
+    //@IBOutlet weak var uploadButton:UIButton!
     
     // variables to check if group or single.
     static var groupBool:Bool!
@@ -192,15 +192,24 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
         shadowView(to: bottomView)
         
         // upload button
-        uploadButton.layer.shadowColor = UIColor.black.cgColor
-        uploadButton.layer.shadowOffset = CGSize(width: 0, height: 5.0)
-        uploadButton.layer.shadowRadius = 5.0
-        uploadButton.layer.shadowOpacity = 0.7
-        uploadButton.layer.masksToBounds = false
+//        uploadButton.layer.shadowColor = UIColor.black.cgColor
+//        uploadButton.layer.shadowOffset = CGSize(width: 0, height: 5.0)
+//        uploadButton.layer.shadowRadius = 5.0
+//        uploadButton.layer.shadowOpacity = 0.7
+//        uploadButton.layer.masksToBounds = false
         
         loadFollowers()
         
         
+    }
+    
+    func initNavBar() {
+        let uploadButton = UIBarButtonItem(title: "Upload", style: .done, target: self, action: #selector(savePressed(_:)))
+        navigationItem.rightBarButtonItem = uploadButton
+        navigationItem.rightBarButtonItem?.isEnabled = isNavBarEnabled()
+    }
+    func isNavBarEnabled() -> Bool {
+        return AddWorkoutHomeViewController.exercises.count > 0 && titleField.text != ""
     }
     
     @IBAction func addExercise(_ sender: UIButton) {
@@ -276,6 +285,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        initNavBar()
         loadNumberOfWorkouts()
         tableview.reloadData()
         navigationController?.setNavigationBarHidden(false, animated: true)
@@ -284,4 +294,12 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
         navigationController?.navigationBar.tintColor = Constants.lightColour
     }
 
+}
+
+extension AddWorkoutHomeViewController {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string).trimTrailingWhiteSpaces()
+        navigationItem.rightBarButtonItem?.isEnabled = (newString != "") && (AddWorkoutHomeViewController.exercises.count > 0)
+        return true
+    }
 }

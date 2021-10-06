@@ -22,6 +22,7 @@ protocol RegularWorkoutFlow: RegularDelegate {
     func addExercise(_ exercise: exercise)
     func addCircuit()
     func addAMRAP()
+    func addEMOM()
     func noteAdded(_ exercise: exercise)
     
 }
@@ -36,6 +37,10 @@ protocol CircuitFlow: CircuitDelegate {
 }
 
 protocol AMRAPFlow: CreationDelegate {
+    func addExercise(_ exercise: exercise)
+}
+
+protocol EMOMFlow: CreationDelegate {
     func addExercise(_ exercise: exercise)
 }
 
@@ -65,6 +70,13 @@ class RegularWorkoutCoordinator: NSObject, Coordinator {
     
     func start() {
         navigationController.delegate = self
+//        let vc = DisplayWorkoutViewController.instantiate()
+//        let newWorkout = CreatingNewWorkout()
+//        newWorkout.title = "New Workout Title"
+//        newWorkout.exercises = [WorkoutType]()
+//        DisplayWorkoutViewController.selectedWorkout = newWorkout
+//        vc.coordinator = self
+//        navigationController.pushViewController(vc, animated: true)
         let vc = AddWorkoutHomeViewController.instantiate()
         AddWorkoutHomeViewController.groupBool = false
         vc.coordinator = self
@@ -89,11 +101,22 @@ extension RegularWorkoutCoordinator: RegularWorkoutFlow {
         child.start()
     }
     
+    func addEMOM() {
+        let child = EMOMCoordinator(navigationController: navigationController)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
     func addExercise(_ exercise: exercise) {
-        let vc = BodyTypeViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
-        navigationController.pushViewController(vc, animated: true)
+        if #available(iOS 13, *) {
+            let vc = ExerciseSelectionViewController()
+            vc.coordinator = self
+            vc.newExercise = exercise
+            navigationController.pushViewController(vc, animated: true)
+        }
+        //vc.coordinator = self
+        //vc.newExercise = exercise
+        
     }
     
     func bodyTypeSelected(_ exercise: exercise) {
@@ -162,12 +185,22 @@ extension RegularWorkoutCoordinator: RegularWorkoutFlow {
                 navigationController.popToViewController(controller, animated: true)
                 break
             }
+//            if controller.isKind(of: DisplayWorkoutViewController.self) {
+//                navigationController.popToViewController(controller, animated: true)
+//                break
+//            }
         }
     }
     func goToUploadPage(_ uploadable: UploadableWorkout) {
         let child = UploadingCoordinator(navigationController: navigationController, workoutToUpload: uploadable)
         childCoordinators.append(child)
         child.start()
+    }
+}
+
+extension RegularWorkoutCoordinator: WorkoutDisplayCoordinator {
+    func showCompletedPage() {
+        
     }
 }
 

@@ -79,6 +79,7 @@ class NewRepsViewController: UIViewController, Storyboarded {
         repView.minusButton.addTarget(self, action: #selector(minus), for: .touchUpInside)
         repView.plusButton.addTarget(self, action: #selector(plus), for: .touchUpInside)
         repView.nextButton.addTarget(self, action: #selector(nextPressed), for: .touchUpInside)
+        initNavBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -94,6 +95,10 @@ class NewRepsViewController: UIViewController, Storyboarded {
                                      repView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                                      repView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                                      repView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)])
+    }
+    func initNavBar() {
+        let nextButton = UIBarButtonItem(title: "Next", style: .done, target: self, action: #selector(nextPressed))
+        navigationItem.rightBarButtonItem = nextButton
     }
     
     func generateTopLayout() -> UICollectionViewFlowLayout {
@@ -229,7 +234,7 @@ extension NewRepsViewController{
         guard let newExercise = newExercise else {return}
         if coordinator is LiveWorkoutCoordinator {
             newExercise.repArray?.append(repCounter)
-        } else if coordinator is AMRAPCoordinator {
+        } else if coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator {
             newExercise.reps = repCounter
         } else {
             newExercise.repArray = repIntArray

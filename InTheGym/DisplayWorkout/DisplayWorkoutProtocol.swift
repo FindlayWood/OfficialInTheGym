@@ -13,6 +13,7 @@ import UIKit
 protocol DisplayWorkoutProtocol: WorkoutTableCellTapDelegate, LiveWorkoutAddMethods {
     func getData(at: IndexPath) -> WorkoutType
     func isLive() -> Bool
+    func isCreatingNew() -> Bool
     func itemSelected(at: IndexPath)
     func retreiveNumberOfItems() -> Int
     func retreiveNumberOfSections() -> Int

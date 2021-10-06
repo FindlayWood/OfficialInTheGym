@@ -43,6 +43,8 @@ class MainWorkoutBottomView: UIView {
         
         self.backgroundColor = .white
         self.layer.cornerRadius = 20
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        self.clipsToBounds = true
         //self.layer.borderWidth = 2
         //self.layer.borderColor = UIColor.black.cgColor
         self.translatesAutoresizingMaskIntoConstraints = false

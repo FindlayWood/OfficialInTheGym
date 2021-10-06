@@ -18,11 +18,17 @@ class GroupHomePageViewModel {
     var reloadHeaderImageClosure: (() -> ())?
     var updateNavigationTitleImage: (() -> ())?
     var groupLeaderLoadedClosure: (() -> ())?
+    var errorLikingPostClosure: (() -> ())?
+        // user actions callbacks
+    var tappedUserReturnedClosure: ((Users) -> ())?
+    var tappedWorkoutClosure: ((WorkoutDelegate) -> ())?
     
     // MARK: - Properties
-    var apiService: FirebaseAPIGroupService
+    var apiService: FirebaseAPIGroupServiceProtocol
     
-    var posts: [PostProtocol] = [] {
+    var currentGroup: groupModel!
+    
+    var posts: [post] = [] {
         didSet {
             reloadPostsTableViewClosure?()
         }
@@ -72,25 +78,34 @@ class GroupHomePageViewModel {
     var membersLoadedSuccessfully: Bool = false
     var groupLeaderLoadedSuccessfully: Bool = false
     
+    // MARK: - Errors
+    var likingPostError: Error? {
+        didSet {
+            errorLikingPostClosure?()
+        }
+    }
+    
     
     // MARK: - Initializer
-    init(apiService: FirebaseAPIGroupService) {
+    init(apiService: FirebaseAPIGroupServiceProtocol = FirebaseAPIGroupService.shared) {
         self.apiService = apiService
     }
     
     // MARK: - Fetching Functions
-    func loadPosts(from groupID: String) {
-        apiService.loadPosts(from: groupID) { [weak self] result in
+    func newLoadPosts(from groupID: String) {
+        let endpoint = PostEndpoints.getGroupPosts(groupID: groupID)
+        apiService.loadPosts(from: endpoint) { [weak self] result in
             guard let self = self else {return}
             switch result {
-            case .success(let returnedPosts):
+            case .success(let loadedPosts):
+                self.posts = loadedPosts.sorted(by: { $0.time > $1.time })
                 self.postsLoadedSuccessfully = true
-                self.posts = returnedPosts
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
     }
+        
     func loadMembers(from groupID: String) {
         apiService.loadGroupMemberCount(from: groupID) { [weak self] result in
             guard let self = self else {return}
@@ -121,7 +136,7 @@ class GroupHomePageViewModel {
         }
     }
     
-    func getPostData(at indexPath: IndexPath) -> PostProtocol {
+    func getPostData(at indexPath: IndexPath) -> post {
         return posts[indexPath.row]
     }
     func getGroupImage(with groupID: String) -> UIImage? {
@@ -134,19 +149,71 @@ class GroupHomePageViewModel {
             return UIImage(named: "more_icon")!
         }
     }
+    func isCurrentUserLeader() -> Bool {
+        if groupLeaderLoadedSuccessfully {
+            return groupLeader.uid == FirebaseAuthManager.currentlyLoggedInUser.uid
+        } else {
+            return false
+        }
+    }
     
     // MARK: - Actions
-    func likePost(from groupID: String, on post:PostProtocol) {
-        guard let postID = post.postID else {return}
         
-        apiService.isLiked(from: groupID, postID: postID) { [weak self] liked in
+    func likePost(at indexPath: IndexPath) {
+        let likedPost = getPostData(at: indexPath)
+        let likeEndPoint = LikePostEndpoint.likePost(post: likedPost)
+        likedPost.likeCount += 1
+        apiService.likePost(from: likeEndPoint) { [weak self] result in
             guard let self = self else {return}
-            if !liked {
-                self.apiService.likeGroupPost(from: groupID, post: post) { _ in
-                        
-                }
+            switch result {
+            case .success(()):
+                LikesAPIService.shared.LikedPostsCache.removeObject(forKey: likedPost.id as NSString)
+                LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: likedPost.id as NSString)
+                self.sendLikeNotification(for: likedPost)
+            case .failure(let error):
+                print(error.localizedDescription)
+                self.likingPostError = error
             }
         }
-
+    }
+    
+    func userTapped(at indexPath: IndexPath) {
+        let tappedPost = getPostData(at: indexPath)
+        let posterID = tappedPost.posterID
+        UserIDToUser.transform(userID: posterID) { [weak self] user in
+            guard let self = self else {return}
+            if user.uid != FirebaseAuthManager.currentlyLoggedInUser.uid {
+                self.tappedUserReturnedClosure?(user)
+            }
+        }
+    }
+    
+    func workoutTapped(at indexPath: IndexPath) {
+        let tappedPost = getPostData(at: indexPath)
+        guard let attachedWorkout = tappedPost.attachedWorkout else {return}
+        apiService.returnTappedWorkout(from: attachedWorkout) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(let returnedWorkout):
+                self.tappedWorkoutClosure?(returnedWorkout)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    // MARK: - Send Notifications
+    func sendLikeNotification(for post: post) {
+        let groupID = currentGroup.uid
+        let posterID = post.posterID
+        let postID = post.id
+        if posterID != FirebaseAuthManager.currentlyLoggedInUser.uid {
+            let notification = NotificationGroupLikedPost(from: FirebaseAuthManager.currentlyLoggedInUser.uid, to: posterID, postID: postID, groupID: groupID)
+            let uploadNotification = NotificationManager(delegate: notification)
+            uploadNotification.upload { _ in
+                
+            }
+        }
     }
 }
+

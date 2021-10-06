@@ -185,7 +185,7 @@ extension DisplayWorkoutTableViewCell: UICollectionViewDelegate, UICollectionVie
             setInt = Int(setString) ?? 0
         }
         //let setInt = Int(self.exercise.setString!)!
-        if delegate.isLive() == true {
+        if delegate.isLive() || delegate.isCreatingNew() {
             return setInt + 1
         }else{
             return setInt
@@ -197,7 +197,7 @@ extension DisplayWorkoutTableViewCell: UICollectionViewDelegate, UICollectionVie
         
         let set = exercise.sets ?? 0
         
-        if delegate.isLive() && indexPath.item == set {
+        if (delegate.isLive() || delegate.isCreatingNew()) && indexPath.item == set {
             
             // here will go the plus cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DisplayPlusCollection", for: indexPath) as! DisplayPlusCollectionViewCell
@@ -225,6 +225,15 @@ extension DisplayWorkoutTableViewCell: UICollectionViewDelegate, UICollectionVie
                 cellModel.weight = weight
             } else if let weightArray = self.exercise.weightArray{
                 cellModel.weight = weightArray[indexPath.item]
+            }
+            if let time = self.exercise.time {
+                cellModel.time = time[indexPath.item]
+            }
+            if let restTime = self.exercise.restTime {
+                cellModel.restTime = restTime[indexPath.item]
+            }
+            if let distance = self.exercise.distance {
+                cellModel.distance = distance[indexPath.item]
             }
             cellModel.weightArray = self.exercise.weightArray
             cell.model = cellModel

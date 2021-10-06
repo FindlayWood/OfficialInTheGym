@@ -26,7 +26,7 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if delegate.isLive() && indexPath.section + 1 == delegate.retreiveNumberOfSections(){
+        if (delegate.isLive() || delegate.isCreatingNew()) && indexPath.section + 1 == delegate.retreiveNumberOfSections(){
             
             // here will go the plus cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "DisplayPlusTableView", for: indexPath) as! DisplayPlusTableViewCell
@@ -108,7 +108,9 @@ extension DisplayWorkoutAdapter: UITableViewDataSource, UITableViewDelegate, Wor
         case is circuit:
             return "DisplayWorkoutCircuitTableViewCell"
         case is AMRAP:
-            return "DisplayAMRAPCell"
+            return DisplayAMRAPCell.cellID
+        case is EMOM:
+            return DisplayEMOMCell.cellID
         default:
             return "Unexpected row model type \(rowModel)"
         }
@@ -123,7 +125,7 @@ extension DisplayWorkoutAdapter: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! DisplayClipCell
         let clipData = delegate.getClipData(at: indexPath)
-        cell.attachThumbnail(from: clipData.storageURL)
+        cell.attachThumbnail(from: clipData.clipKey)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

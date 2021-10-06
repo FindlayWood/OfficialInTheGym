@@ -56,7 +56,7 @@ extension DiscoverPageAdapter : UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.section == 0{
-            return CGSize(width: width-10, height: height/5)
+            return CGSize(width: width-10, height: width/2.5)
         }else{
             return CGSize(width: width/2-10, height: width/2.5)
         }

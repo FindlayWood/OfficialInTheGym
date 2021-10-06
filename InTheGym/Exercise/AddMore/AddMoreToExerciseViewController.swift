@@ -8,7 +8,6 @@
 
 import UIKit
 
-@available(iOS 13.0, *)
 class AddMoreToExerciseViewController: UIViewController {
     
     weak var coordinator: AddMoreToExerciseCoordinator?
@@ -42,7 +41,7 @@ class AddMoreToExerciseViewController: UIViewController {
         navigationItem.title = "Add More"
     }
     func initBarButton() {
-        let barButton = UIBarButtonItem(title: "Add", style: .done, target: self, action: #selector(continuePressed))
+        let barButton = UIBarButtonItem(title: "Finish", style: .done, target: self, action: #selector(continuePressed))
         navigationItem.rightBarButtonItem = barButton
     }
     func initDisplay() {
@@ -52,9 +51,8 @@ class AddMoreToExerciseViewController: UIViewController {
     }
 }
 
-@available(iOS 13.0, *)
 extension AddMoreToExerciseViewController: AddMoreToExerciseProtocol {
-    func getData(at indexPath: IndexPath) -> SwiftUICardContent {
+    func getData(at indexPath: IndexPath) -> AddMoreCellModel {
         return viewModel.getData(at: indexPath)
     }
     
@@ -65,18 +63,19 @@ extension AddMoreToExerciseViewController: AddMoreToExerciseProtocol {
     func itemSelected(at indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            coordinator?.timeSelected()
+            coordinator?.timeSelected(viewModel.getData(at: indexPath))
         case 1:
-            coordinator?.distanceSelected()
+            coordinator?.distanceSelected(viewModel.getData(at: indexPath))
         case 2:
-            coordinator?.restTimeSelected()
+            coordinator?.restTimeSelected(viewModel.getData(at: indexPath))
+        case 3:
+            coordinator?.noteSelected(viewModel.getData(at: indexPath))
         default:
             break
         }
     }  
 }
 
-@available(iOS 13.0, *)
 extension AddMoreToExerciseViewController {
     @objc func continuePressed() {
         coordinator?.addNewExercise()

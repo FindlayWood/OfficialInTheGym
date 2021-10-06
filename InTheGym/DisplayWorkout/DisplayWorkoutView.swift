@@ -30,6 +30,8 @@ class DisplayWorkoutView: UIView {
         view.tableFooterView = UIView()
         view.rowHeight = UITableView.automaticDimension
         view.estimatedRowHeight = 380
+        view.register(DisplayEMOMCell.self, forCellReuseIdentifier: DisplayEMOMCell.cellID)
+        view.register(DisplayAMRAPCell.self, forCellReuseIdentifier: DisplayAMRAPCell.cellID)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Date{
+extension Date {
     
     func timeAgo() -> String {
         let formatter = DateComponentsFormatter()

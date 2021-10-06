@@ -27,10 +27,17 @@ class CircuitCoordinator: Coordinator {
 extension CircuitCoordinator: CircuitFlow {
     
     func addExercise(_ circuit: exercise) {
-        let vc = BodyTypeViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = circuit
-        navigationController.pushViewController(vc, animated: true)
+        if #available(iOS 13, *) {
+            let vc = ExerciseSelectionViewController()
+            vc.coordinator = self
+            vc.newExercise = circuit
+            navigationController.pushViewController(vc, animated: true)
+        } else {
+            let vc = BodyTypeViewController.instantiate()
+            vc.coordinator = self
+            vc.newExercise = circuit
+            navigationController.pushViewController(vc, animated: true)
+        }
     }
     func bodyTypeSelected(_ exercise: exercise) {
         let vc = ExerciseViewController.instantiate()

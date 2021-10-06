@@ -15,19 +15,20 @@ enum PostTypes: String, Codable {
     case attachedClip = "attachedClip"
 }
 
-struct post: Codable {
-    var postID: String
+class post: Codable, AutoIDable {
+    //var postID: String
     var username: String
     var posterID: String
     var time: TimeInterval
     var text: String
-    var postType: PostTypes
+    //var postType: PostTypes
     var attachedWorkout: attachedWorkout?
     var attachedPhoto: attachedPhoto?
     var attachedClip: attachedClip?
     var likeCount: Int
     var replyCount: Int
     var isPrivate: Bool
+    var id : String 
 }
 
 struct attachedClip: Codable {
@@ -41,6 +42,7 @@ struct attachedWorkout: Codable {
     var exerciseCount: Int
     var storageID: String
     var postedWorkoutType: postedWorkoutType
+    
 }
 
 struct attachedPhoto: Codable {

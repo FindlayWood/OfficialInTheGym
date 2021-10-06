@@ -8,23 +8,18 @@
 
 import Foundation
 
-@available(iOS 13.0, *)
 class AddMoreToExerciseViewModel {
     
-    struct item: CardCollectionViewCell.Content {
-        var imageName: String
-        var title: String
-    }
-    let data: [item] = [item.init(imageName: "clock_icon", title: "Time"),
-                        item.init(imageName: "distance_icon", title: "Distance"),
-                        item.init(imageName: "restTime_icon", title: "Rest Time"),
-                        item.init(imageName: "note_icon", title: "Note")]
+    let data: [AddMoreCellModel] = [.init(title: "Time", imageName: "clock_icon", value: Observable<String>()),
+                                    .init(title: "Distance", imageName: "distance_icon", value: Observable<String>()),
+                                    .init(title: "Rest Time", imageName: "restTime_icon", value: Observable<String>()),
+                                    .init(title: "Note", imageName: "note_icon", value: Observable<String>())]
     
     var numberOfItems: Int {
         return data.count
     }
     
-    func getData(at indexPath: IndexPath) -> SwiftUICardContent {
+    func getData(at indexPath: IndexPath) -> AddMoreCellModel {
         return data[indexPath.row]
     }
 }

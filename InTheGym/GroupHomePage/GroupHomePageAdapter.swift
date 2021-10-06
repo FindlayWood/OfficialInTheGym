@@ -53,18 +53,15 @@ extension GroupHomePageAdapter: UITableViewDelegate, UITableViewDataSource {
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: GroupHomePageInfoTableViewCell.cellID, for: indexPath) as! GroupHomePageInfoTableViewCell
                 cell.delegate = delegate
-//                cell.membersView.configure(with: delegate.numberOfMembers(), and: "Members")
-//                cell.workoutsView.configure(with: 0, and: "Workouts")
+                cell.configureForLeader(delegate.isCurrentUserLeader())
                 return cell
             }
         } else {
             if delegate.postsLoaded() {
                 let rowModel = delegate.getPostData(at: indexPath)
-                let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier(for: rowModel), for: indexPath)
-                if var cell = cell as? CellConfiguarable{
-                    cell.setup(rowViewModel: rowModel)
-                    cell.delegate = self.delegate
-                }
+                let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
+                cell.configure(with: rowModel)
+                cell.delegate = delegate
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: LoadingTableViewCell.cellID, for: indexPath) as! LoadingTableViewCell
@@ -80,7 +77,13 @@ extension GroupHomePageAdapter: UITableViewDelegate, UITableViewDataSource {
                 return 60
             }
         } else if indexPath == IndexPath(row: 2, section: 0) {
-            return 100
+            if delegate.isCurrentUserLeader() {
+                return 160
+            } else {
+                return 110
+            }
+            //return 160
+            //return UITableView.automaticDimension
         } else if indexPath.section == 1 {
             if delegate.postsLoaded() {
                 return UITableView.automaticDimension

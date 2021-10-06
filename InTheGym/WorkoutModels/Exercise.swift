@@ -9,7 +9,7 @@
 import Foundation
 
 
-class exercise: WorkoutType {
+class exercise: WorkoutType, Codable {
     
     var exercise: String?
     var reps: Int?

@@ -31,6 +31,8 @@ class ExerciseSetsViewController: UIViewController, Storyboarded {
         label.text = "1"
         label.textColor = Constants.darkColour
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
         label.font = .systemFont(ofSize: 200, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -67,6 +69,7 @@ class ExerciseSetsViewController: UIViewController, Storyboarded {
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.cornerRadius = 22.5
+        button.isHidden = true
         button.addTarget(self, action: #selector(nextPressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -109,7 +112,7 @@ class ExerciseSetsViewController: UIViewController, Storyboarded {
         default:
              break
         }
-
+        initNavBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -124,12 +127,16 @@ class ExerciseSetsViewController: UIViewController, Storyboarded {
         
         NSLayoutConstraint.activate([setLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                      setLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
+                                     setLabel.leadingAnchor.constraint(equalTo: minusButton.trailingAnchor),
+                                     setLabel.trailingAnchor.constraint(equalTo: plusButton.leadingAnchor),
                                      
                                      minusButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
                                      minusButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+                                     minusButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.2),
                                      
                                      plusButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
                                      plusButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+                                     plusButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.2),
         
                                      collection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                                      collection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -145,7 +152,10 @@ class ExerciseSetsViewController: UIViewController, Storyboarded {
                                      pageNumberLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
+    func initNavBar() {
+        let nextButton = UIBarButtonItem(title: "Next", style: .done, target: self, action: #selector(nextPressed))
+        navigationItem.rightBarButtonItem = nextButton
+    }
     
     func generateLayout() -> UICollectionViewFlowLayout {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()

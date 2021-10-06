@@ -28,6 +28,8 @@ class WorkoutBottomView: UIView {
     private let maxHeight = Constants.screenSize.height * 0.8
     private let minHeight = Constants.screenSize.height * 0.1
     
+    private let buttonHeight = Constants.screenSize.height * 0.05
+    
     var flashview: FlashView! {
         didSet {
             let tap = UITapGestureRecognizer(target: self, action: #selector(flashViewTapped))
@@ -56,13 +58,15 @@ class WorkoutBottomView: UIView {
         return view
     }()
     
-    var mainButton: UIButton = {
+    lazy var mainButton: UIButton = {
        let button = UIButton()
         button.backgroundColor = Constants.darkColour
         button.setTitle("Save Workout", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 25)
-        button.layer.cornerRadius = 22
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        button.titleLabel?.minimumScaleFactor = 0.3
+        button.layer.cornerRadius = buttonHeight / 2
         button.titleLabel?.textAlignment = .center
         button.isUserInteractionEnabled = true
         button.layer.shadowColor = UIColor.darkGray.cgColor

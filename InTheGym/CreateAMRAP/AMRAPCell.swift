@@ -10,6 +10,9 @@ import UIKit
 
 class AMRAPCell: UITableViewCell {
     
+    // MARK: - Properties
+    static let cellID = "AMRAPCellID"
+    
     var exerciseName: UILabel = {
        let label = UILabel()
         label.font = Constants.font

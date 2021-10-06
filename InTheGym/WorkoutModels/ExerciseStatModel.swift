@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ExerciseStatsModel {
+struct ExerciseStatsModel: Codable {
     
     var totalNumberOfRepsCompleted: Int
     var totalNumberOfSetsCompleted: Int
