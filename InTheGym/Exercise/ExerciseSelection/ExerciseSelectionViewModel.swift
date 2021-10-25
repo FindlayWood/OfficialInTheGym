@@ -59,6 +59,16 @@ class ExerciseSelectionViewModel {
         }
     }
     
+    func filterExercises(with searchText: String) {
+        if searchText.count > 0 {
+            for n in 0...exercises.count - 1 {
+                searchedText[n] = exercises[n].filter {$0.lowercased().contains(searchText.lowercased().trimTrailingWhiteSpaces())}
+            }
+            isFiltering = true
+        } else {
+            isFiltering = false
+        }
+    }
     
     
 }

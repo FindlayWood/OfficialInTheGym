@@ -11,9 +11,11 @@ import UIKit
 class EMOMCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    weak var parentDelegate: EmomParentDelegate?
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, parentDelegate: EmomParentDelegate) {
         self.navigationController = navigationController
+        self.parentDelegate = parentDelegate
     }
     
     func start() {
@@ -23,7 +25,15 @@ class EMOMCoordinator: NSObject, Coordinator {
     }
 }
 
-extension EMOMCoordinator: EMOMFlow {
+extension EMOMCoordinator {
+    func competedEMOM(emomModel: EMOM) {
+        parentDelegate?.finishedCreatingEMOM(emomModel: emomModel)
+    }
+}
+
+// MARK: - Creation Flow
+extension EMOMCoordinator: CreationFlow {
+    
     func addExercise(_ exercise: exercise) {
         if #available(iOS 13, *) {
             let vc = ExerciseSelectionViewController()
@@ -36,13 +46,6 @@ extension EMOMCoordinator: EMOMFlow {
             vc.newExercise = exercise
             navigationController.pushViewController(vc, animated: true)
         }
-    }
-    
-    func bodyTypeSelected(_ exercise: exercise) {
-        let vc = ExerciseViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
-        navigationController.pushViewController(vc, animated: true)
     }
     
     func otherSelected(_ exercise: exercise) {
@@ -60,10 +63,18 @@ extension EMOMCoordinator: EMOMFlow {
     }
     
     func repsSelected(_ exercise: exercise) {
-        let vc = NewWeightViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
-        navigationController.pushViewController(vc, animated: true)
+//        let vc = NewWeightViewController.instantiate()
+//        vc.coordinator = self
+//        vc.newExercise = exercise
+//        navigationController.pushViewController(vc, animated: true)
+        CreateEMOMViewController.exercises.append(exercise)
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for controller in viewControllers {
+            if controller.isKind(of: CreateEMOMViewController.self) {
+                navigationController.popToViewController(controller, animated: true)
+                break
+            }
+        }
     }
     
     func weightSelected(_ exercise: exercise) {
@@ -75,19 +86,13 @@ extension EMOMCoordinator: EMOMFlow {
                 break
             }
         }
-//        CreateAMRAPViewController.exercises.append(exercise)
-//        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
-//        for controller in viewControllers {
-//            if controller.isKind(of: CreateAMRAPViewController.self) {
-//                navigationController.popToViewController(controller, animated: true)
-//                break
-//            }
-//        }
     }
-    func upload() {
-        
+    func completeExercise() {
+        // not implemented
+    
     }
 }
+
 
 extension EMOMCoordinator {
     func showTimePicker(with delegate: TimeSelectionParentDelegate, time: Int) {

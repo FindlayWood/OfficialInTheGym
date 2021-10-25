@@ -56,7 +56,7 @@ class DisplayEMOMCell: UITableViewCell, workoutCellConfigurable {
     
     func setup(with rowModel: WorkoutType) {
         guard let emomModel = rowModel as? EMOM else {return}
-        exerciseLabel.text = emomModel.exercise?.count.description ?? "0" + " exercises"
+        exerciseLabel.text = emomModel.timeLimit?.convertToTime()
     }
 }
 

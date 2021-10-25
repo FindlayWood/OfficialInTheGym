@@ -29,6 +29,22 @@ class DisplayEMOMView: UIView {
         return view
     }()
     
+    var initialMainTime: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Menlo-Bold", size: 20)
+        label.textColor = .lightColour
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var initialMinuteTime: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Menlo-Bold", size: 20)
+        label.textColor = .lightColour
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -47,6 +63,8 @@ private extension DisplayEMOMView {
         addSubview(fullTimePrgoressView)
         addSubview(minuteProgressView)
         addSubview(exerciseView)
+        addSubview(initialMainTime)
+        addSubview(initialMinuteTime)
         constrainUI()
     }
     func constrainUI() {
@@ -61,10 +79,16 @@ private extension DisplayEMOMView {
             minuteProgressView.centerXAnchor.constraint(equalTo: centerXAnchor),
             minuteProgressView.heightAnchor.constraint(equalTo: minuteProgressView.widthAnchor),
             
-            exerciseView.topAnchor.constraint(equalTo: centerYAnchor),
+            exerciseView.topAnchor.constraint(equalTo: minuteProgressView.bottomAnchor, constant: 20),
             exerciseView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             exerciseView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            exerciseView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
+            exerciseView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
+            
+            initialMainTime.centerXAnchor.constraint(equalTo: fullTimePrgoressView.centerXAnchor),
+            initialMainTime.centerYAnchor.constraint(equalTo: fullTimePrgoressView.centerYAnchor),
+            
+            initialMinuteTime.centerXAnchor.constraint(equalTo: minuteProgressView.centerXAnchor),
+            initialMinuteTime.centerYAnchor.constraint(equalTo: minuteProgressView.centerYAnchor)
             
         ])
     }

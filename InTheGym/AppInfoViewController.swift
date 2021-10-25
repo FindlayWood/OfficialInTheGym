@@ -153,7 +153,7 @@ class AppInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 LikesAPIService.shared.LikedPostsCache.removeAllObjects()
                 ViewController.admin = nil
                 ViewController.username = nil
-                PlayerTimelineViewModel.apiService.removeObserver(withHandle: PlayerTimelineViewModel.handle)
+                //PlayerTimelineViewModel.apiService.removeObserver(withHandle: PlayerTimelineViewModel.handle)
                 
         
 

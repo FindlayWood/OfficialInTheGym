@@ -15,6 +15,7 @@ class DisplayAMRAPViewModel {
     var updateRoundsLabelHandler: ((String)->())?
     var updateExercisesLabelHandler: ((String)->())?
     var updateTimeLabelToRedHandler: (()->())?
+    var timerCompleted: (()->())?
     
     var APIService: AMRAPFirebaseAPIService!
     var amrap: AMRAP!
@@ -57,10 +58,12 @@ class DisplayAMRAPViewModel {
         else {return}
         if started && !completed {
             let exercise = exercises[exercisesCompleted]
-            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise!, reps: exercise.reps!, weight: exercise.weight)
+            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise!, reps: exercise.reps!, weight: nil)
             exercisesCompleted += 1
-            let nextPosition = IndexPath(item: exercisesCompleted % exercises.count, section: 0)
-            display.collection.scrollToItem(at: nextPosition, at: .centeredHorizontally, animated: true)
+            let exercisePosition = exercisesCompleted % exercises.count
+            display.amrapExerciseView.configure(with: exercises[exercisePosition])
+            //let nextPosition = IndexPath(item: exercisesCompleted % exercises.count, section: 0)
+            //display.collection.scrollToItem(at: nextPosition, at: .centeredHorizontally, animated: true)
             amrap.exercisesCompleted = exercisesCompleted
             APIService.uploadExercisesCompleted(at: amrapPosition, on: workout)
             if exercisesCompleted % exercises.count == 0 {
@@ -144,6 +147,7 @@ class DisplayAMRAPViewModel {
             APIService.completeAMRAP(at: amrapPosition, on: workout)
             amrap.completed.value = true
             timer.invalidate()
+            timerCompleted?()
         }
         
     }

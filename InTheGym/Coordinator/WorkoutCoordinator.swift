@@ -16,7 +16,6 @@ protocol WorkoutCoordinatorFlow: WorkoutDisplayCoordinator {
     func showAMRAP(with model: AMRAP, at position: Int, on workout: workout)
     func showEMOM(_ emom: EMOM, _ workout: workout)
     func displayNote(with note: String?, on workout: WorkoutDelegate, at index: Int)
-    
 }
 
 protocol WorkoutDisplayCoordinator: Coordinator {

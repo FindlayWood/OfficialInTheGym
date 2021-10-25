@@ -12,7 +12,7 @@ class AddMoreToExerciseCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var newExercise: exercise
-    weak var parentCoordinator: CreationDelegate?
+    weak var parentCoordinator: CreationFlow?
     init(navigationController: UINavigationController, _ exercise: exercise) {
         self.navigationController = navigationController
         self.newExercise = exercise
@@ -98,7 +98,7 @@ extension AddMoreToExerciseCoordinator {
         let object = newExercise.toObject()
         AddWorkoutHomeViewController.exercises.append(object)
         //DisplayWorkoutViewController.selectedWorkout.exercises?.append(newExercise)
-        parentCoordinator?.upload()
+        parentCoordinator?.completeExercise()
     }
     
 }

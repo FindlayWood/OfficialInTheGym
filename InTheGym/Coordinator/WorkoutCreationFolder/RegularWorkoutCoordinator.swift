@@ -9,38 +9,33 @@
 import Foundation
 import UIKit
 
-protocol CreationDelegate: AnyObject {
-    func bodyTypeSelected(_ exercise: exercise)
-    func otherSelected(_ exercise: exercise)
+protocol CreationFlow: AnyObject {
+    func addExercise(_ exercise: exercise)
     func exerciseSelected(_ exercise: exercise)
+    func otherSelected(_ exercise: exercise)
     func repsSelected(_ exercise: exercise)
     func weightSelected(_ exercise: exercise)
-    func upload()
+    func completeExercise()
 }
 
-protocol RegularWorkoutFlow: RegularDelegate {
-    func addExercise(_ exercise: exercise)
-    func addCircuit()
-    func addAMRAP()
-    func addEMOM()
-    func noteAdded(_ exercise: exercise)
-    
+protocol RegularCreationFlow: CreationFlow {
+    func goToUploadPage(with uploadable: UploadableWorkout)
 }
 
-protocol LiveWorkoutFlow: LiveDelegate {
-    func addExercise(_ exercise: exercise)
+protocol LiveWorkoutDisplayFlow: AnyObject {
+    func liveWorkoutCompleted()
     func addSet(_ exercise: exercise)
 }
 
-protocol CircuitFlow: CircuitDelegate {
+protocol CircuitFlow: AnyObject {
     func addExercise(_ circuit: exercise)
 }
 
-protocol AMRAPFlow: CreationDelegate {
+protocol AMRAPFlow: AnyObject {
     func addExercise(_ exercise: exercise)
 }
 
-protocol EMOMFlow: CreationDelegate {
+protocol EMOMFlow: AnyObject {
     func addExercise(_ exercise: exercise)
 }
 
@@ -49,12 +44,21 @@ protocol RegularAndCircuitFlow: AnyObject {
 }
 
 protocol RegularAndLiveFlow: AnyObject {
-    func weightSelected(_ exercise: exercise)
+    func circuitSelected()
+    func amrapSelected()
+    func emomSelected()
 }
 
-typealias RegularDelegate = CreationDelegate & RegularAndCircuitFlow
-typealias LiveDelegate = CreationDelegate & WorkoutDisplayCoordinator
-typealias CircuitDelegate = CreationDelegate & RegularAndCircuitFlow
+protocol EmomParentDelegate: AnyObject {
+    func finishedCreatingEMOM(emomModel: EMOM)
+}
+protocol AmrapParentDelegate: AnyObject {
+    func finishedCreatingAMRAP(amrapModel: AMRAP)
+}
+protocol CircuitParentDelegate: AnyObject {
+    func finishedCreatingCircuit(circuitModel: circuit)
+}
+
 
 
 class RegularWorkoutCoordinator: NSObject, Coordinator {
@@ -70,13 +74,6 @@ class RegularWorkoutCoordinator: NSObject, Coordinator {
     
     func start() {
         navigationController.delegate = self
-//        let vc = DisplayWorkoutViewController.instantiate()
-//        let newWorkout = CreatingNewWorkout()
-//        newWorkout.title = "New Workout Title"
-//        newWorkout.exercises = [WorkoutType]()
-//        DisplayWorkoutViewController.selectedWorkout = newWorkout
-//        vc.coordinator = self
-//        navigationController.pushViewController(vc, animated: true)
         let vc = AddWorkoutHomeViewController.instantiate()
         AddWorkoutHomeViewController.groupBool = false
         vc.coordinator = self
@@ -87,25 +84,18 @@ class RegularWorkoutCoordinator: NSObject, Coordinator {
     }
 }
 
-extension RegularWorkoutCoordinator: RegularWorkoutFlow {
+// MARK: - Regular Creation Flow
+extension RegularWorkoutCoordinator: RegularCreationFlow {
     
-    func addCircuit() {
-        let child = CircuitCoordinator(navigationController: navigationController)
+    func goToUploadPage(with uploadable: UploadableWorkout) {
+        let child = UploadingCoordinator(navigationController: navigationController, workoutToUpload: uploadable)
         childCoordinators.append(child)
         child.start()
     }
-    
-    func addAMRAP() {
-        let child = AMRAPCoordinator(navigationController: navigationController)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
-    func addEMOM() {
-        let child = EMOMCoordinator(navigationController: navigationController)
-        childCoordinators.append(child)
-        child.start()
-    }
+}
+
+// MARK: - Creation Flow
+extension RegularWorkoutCoordinator: CreationFlow {
     
     func addExercise(_ exercise: exercise) {
         if #available(iOS 13, *) {
@@ -114,13 +104,10 @@ extension RegularWorkoutCoordinator: RegularWorkoutFlow {
             vc.newExercise = exercise
             navigationController.pushViewController(vc, animated: true)
         }
-        //vc.coordinator = self
-        //vc.newExercise = exercise
-        
     }
     
-    func bodyTypeSelected(_ exercise: exercise) {
-        let vc = ExerciseViewController.instantiate()
+    func exerciseSelected(_ exercise: exercise) {
+        let vc = ExerciseSetsViewController.instantiate()
         vc.coordinator = self
         vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
@@ -131,20 +118,6 @@ extension RegularWorkoutCoordinator: RegularWorkoutFlow {
         vc.newExercise = exercise
         vc.coordinator = self
         navigationController.present(vc, animated: true, completion: nil)
-    }
-    
-    func exerciseSelected(_ exercise: exercise) {
-        let vc = ExerciseSetsViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func setsSelected(_ exercise: exercise) {
-        let vc = NewRepsViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
-        navigationController.pushViewController(vc, animated: true)
     }
     
     func repsSelected(_ exercise: exercise) {
@@ -159,25 +132,9 @@ extension RegularWorkoutCoordinator: RegularWorkoutFlow {
         childCoordinators.append(childCoordinator)
         childCoordinator.parentCoordinator = self
         childCoordinator.start()
-        
-//        let vc = NoteViewController.instantiate()
-//        vc.coordinator = self
-//        vc.newExercise = exercise
-//        navigationController.pushViewController(vc, animated: true)
     }
     
-    func noteAdded(_ exercise: exercise) {
-        let object = exercise.toObject()
-        AddWorkoutHomeViewController.exercises.append(object)
-        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
-        for controller in viewControllers {
-            if controller.isKind(of: AddWorkoutHomeViewController.self) {
-                navigationController.popToViewController(controller, animated: true)
-                break
-            }
-        }
-    }
-    func upload() {
+    func completeExercise() {
         childDidFinish(childCoordinator)
         let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
         for controller in viewControllers {
@@ -185,22 +142,84 @@ extension RegularWorkoutCoordinator: RegularWorkoutFlow {
                 navigationController.popToViewController(controller, animated: true)
                 break
             }
-//            if controller.isKind(of: DisplayWorkoutViewController.self) {
-//                navigationController.popToViewController(controller, animated: true)
-//                break
-//            }
         }
     }
-    func goToUploadPage(_ uploadable: UploadableWorkout) {
-        let child = UploadingCoordinator(navigationController: navigationController, workoutToUpload: uploadable)
+    
+}
+
+// MARK: - Regular and Live Flow
+extension RegularWorkoutCoordinator: RegularAndLiveFlow {
+    func circuitSelected() {
+        let child = CircuitCoordinator(navigationController: navigationController, parentDelegte: self)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
+    func amrapSelected() {
+        let child = AMRAPCoordinator(navigationController: navigationController, parentDelegate: self)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
+    func emomSelected() {
+        let child = EMOMCoordinator(navigationController: navigationController, parentDelegate: self)
         childCoordinators.append(child)
         child.start()
     }
 }
 
-extension RegularWorkoutCoordinator: WorkoutDisplayCoordinator {
-    func showCompletedPage() {
-        
+// MARK: - Regular and Circuit Flow
+extension RegularWorkoutCoordinator: RegularAndCircuitFlow {
+    func setsSelected(_ exercise: exercise) {
+        let vc = NewRepsViewController.instantiate()
+        vc.coordinator = self
+        vc.newExercise = exercise
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: - EMOM Creation Delegate
+extension RegularWorkoutCoordinator: EmomParentDelegate {
+    func finishedCreatingEMOM(emomModel: EMOM) {
+        let emomObject = emomModel.toObject()
+        AddWorkoutHomeViewController.exercises.append(emomObject)
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for controller in viewControllers {
+            if controller.isKind(of: AddWorkoutHomeViewController.self) {
+                navigationController.popToViewController(controller, animated: true)
+                break
+            }
+        }        
+    }
+}
+
+// MARK: - AMRAP Creation Delegate
+extension RegularWorkoutCoordinator: AmrapParentDelegate {
+    func finishedCreatingAMRAP(amrapModel: AMRAP) {
+        let amrapObject = amrapModel.toObject()
+        AddWorkoutHomeViewController.exercises.append(amrapObject)
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for controller in viewControllers {
+            if controller.isKind(of: AddWorkoutHomeViewController.self) {
+                navigationController.popToViewController(controller, animated: true)
+                break
+            }
+        }
+    }
+}
+
+// MARK: - Circuit Creation Flow
+extension RegularWorkoutCoordinator: CircuitParentDelegate {
+    func finishedCreatingCircuit(circuitModel: circuit) {
+        let circuitObject = circuitModel.toObject()
+        AddWorkoutHomeViewController.exercises.append(circuitObject)
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for controller in viewControllers {
+            if controller.isKind(of: AddWorkoutHomeViewController.self) {
+                navigationController.popToViewController(controller, animated: true)
+                break
+            }
+        }        
     }
 }
 

@@ -11,7 +11,7 @@ import UIKit
 @available(iOS 13, *)
 class ExerciseSelectionViewController: UIViewController {
     
-    weak var coordinator: CreationDelegate?
+    weak var coordinator: CreationFlow?
     
     var newExercise: exercise?
     
@@ -34,6 +34,11 @@ class ExerciseSelectionViewController: UIViewController {
         super.viewDidLayoutSubviews()
         display.frame = getFullViewableFrame()
         view.addSubview(display)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        editNavBarColour(to: .darkColour)
     }
     
     func initViewModel() {
@@ -64,7 +69,7 @@ class ExerciseSelectionViewController: UIViewController {
         display.collectionView.delegate = adapter
         display.collectionView.dataSource = adapter
         display.searchBar.delegate = self
-        if coordinator is CircuitCoordinator || coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator {
+        if coordinator is CircuitCoordinator || coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator  {
             display.hideStack()
         }
     }
@@ -89,16 +94,16 @@ class ExerciseSelectionViewController: UIViewController {
     }
     
     @objc func circuitTapped() {
-        let coordinator = coordinator as? RegularWorkoutFlow
-        coordinator?.addCircuit()
+        let coordinator = coordinator as? RegularAndLiveFlow
+        coordinator?.circuitSelected()
     }
     @objc func amrapTapped() {
-        let coordinator = coordinator as? RegularWorkoutFlow
-        coordinator?.addAMRAP()
+        let coordinator = coordinator as? RegularAndLiveFlow
+        coordinator?.amrapSelected()
     }
     @objc func emomTapped() {
-        let coordinator = coordinator as? RegularWorkoutFlow
-        coordinator?.addEMOM()
+        let coordinator = coordinator as? RegularAndLiveFlow
+        coordinator?.emomSelected()
     }
 }
 
@@ -118,34 +123,36 @@ extension ExerciseSelectionViewController: ExerciseSelectionProtocol {
         }
     }
     func itemSelected(at indexPath: IndexPath) {
-        if indexPath.section == 4 {
-            let coordinator = coordinator as? RegularWorkoutFlow
-            coordinator?.addCircuit()
-        } else if indexPath.section == 5 {
-            let coordinator = coordinator as? RegularWorkoutFlow
-            coordinator?.addAMRAP()
-        } else if indexPath.section == 6 {
-            let coordinator = coordinator as? RegularWorkoutFlow
-            coordinator?.addEMOM()
-        } else {
-            guard let newExercise = newExercise else {return}
-            newExercise.exercise = viewModel.getData(at: indexPath)
-            newExercise.type = viewModel.getBodyType(from: indexPath)
-            coordinator?.exerciseSelected(newExercise)
-        }
+        guard let newExercise = newExercise else {return}
+        newExercise.exercise = viewModel.getData(at: indexPath)
+        newExercise.type = viewModel.getBodyType(from: indexPath)
+        coordinator?.exerciseSelected(newExercise)
+//        if indexPath.section == 4 {
+//            let coordinator = coordinator as? RegularWorkoutFlow
+//            coordinator?.addCircuit()
+//        } else if indexPath.section == 5 {
+//            let coordinator = coordinator as? RegularWorkoutFlow
+//            coordinator?.addAMRAP()
+//        } else if indexPath.section == 6 {
+//            let coordinator = coordinator as? RegularWorkoutFlow
+//            coordinator?.addEMOM()
+//        } else {
+//            guard let newExercise = newExercise else {return}
+//            newExercise.exercise = viewModel.getData(at: indexPath)
+//            newExercise.type = viewModel.getBodyType(from: indexPath)
+//            coordinator?.exerciseSelected(newExercise)
+//        }
     }
 }
 
 @available(iOS 13, *)
 extension ExerciseSelectionViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.count > 0 {
-            for n in 0...viewModel.exercises.count - 1 {
-                viewModel.searchedText[n] = viewModel.exercises[n].filter {$0.lowercased().contains(searchText.lowercased().trimTrailingWhiteSpaces())}
-            }
-            viewModel.isFiltering = true
-        } else {
-            viewModel.isFiltering = false
+        viewModel.filterExercises(with: searchText)
+    }
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        if coordinator is RegularWorkoutCoordinator || coordinator is LiveWorkoutCoordinator {
+            display.searchBegins()
         }
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -153,5 +160,8 @@ extension ExerciseSelectionViewController: UISearchBarDelegate {
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         display.searchBar.resignFirstResponder()
+        if coordinator is RegularWorkoutCoordinator || coordinator is LiveWorkoutCoordinator {
+            display.searchEnded()
+        }
     }
 }

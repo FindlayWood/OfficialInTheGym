@@ -60,6 +60,7 @@ class DisplayWorkoutViewController: UIViewController, Storyboarded {
         initUI()
         initBottomView()
         
+        
     
     }
     

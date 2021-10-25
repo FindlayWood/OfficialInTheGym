@@ -55,6 +55,12 @@
 		741B21FA2635A3F700B1F5B3 /* TimelineEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741B21F92635A3F700B1F5B3 /* TimelineEndpoints.swift */; };
 		741B22022636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741B22012636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift */; };
 		741B22072637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741B22062637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift */; };
+		741BA39D2715EB0700E99C6E /* AMRAPExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741BA39C2715EB0700E99C6E /* AMRAPExerciseView.swift */; };
+		741BA3A0271B13ED00E99C6E /* JumpMeasuringView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741BA39F271B13ED00E99C6E /* JumpMeasuringView.swift */; };
+		741BA3A2271B169700E99C6E /* JumpMeasuringViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741BA3A1271B169700E99C6E /* JumpMeasuringViewController.swift */; };
+		741BA3A4271B197100E99C6E /* ReplayJumpMeasureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741BA3A3271B197100E99C6E /* ReplayJumpMeasureViewController.swift */; };
+		741BA3A6271B198A00E99C6E /* ReplayJumpMeasureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741BA3A5271B198A00E99C6E /* ReplayJumpMeasureView.swift */; };
+		741BA3A8271EF97600E99C6E /* JumpMeasureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741BA3A7271EF97600E99C6E /* JumpMeasureViewModel.swift */; };
 		741E07D72630E18E008B93C9 /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741E07D62630E18E008B93C9 /* ContactUsViewController.swift */; };
 		741E45D2265D53FA00519F82 /* WorkoutBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741E45D1265D53FA00519F82 /* WorkoutBottomView.swift */; };
 		741E45D4265EB4AA00519F82 /* BottomViewPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741E45D3265EB4AA00519F82 /* BottomViewPresentationController.swift */; };
@@ -620,6 +626,12 @@
 		741B21F92635A3F700B1F5B3 /* TimelineEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineEndpoints.swift; sourceTree = "<group>"; };
 		741B22012636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCreatedWorkoutsViewModel.swift; sourceTree = "<group>"; };
 		741B22062637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCreatedWorkoutsViewController.swift; sourceTree = "<group>"; };
+		741BA39C2715EB0700E99C6E /* AMRAPExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMRAPExerciseView.swift; sourceTree = "<group>"; };
+		741BA39F271B13ED00E99C6E /* JumpMeasuringView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpMeasuringView.swift; sourceTree = "<group>"; };
+		741BA3A1271B169700E99C6E /* JumpMeasuringViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpMeasuringViewController.swift; sourceTree = "<group>"; };
+		741BA3A3271B197100E99C6E /* ReplayJumpMeasureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplayJumpMeasureViewController.swift; sourceTree = "<group>"; };
+		741BA3A5271B198A00E99C6E /* ReplayJumpMeasureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplayJumpMeasureView.swift; sourceTree = "<group>"; };
+		741BA3A7271EF97600E99C6E /* JumpMeasureViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpMeasureViewModel.swift; sourceTree = "<group>"; };
 		741E07D62630E18E008B93C9 /* ContactUsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
 		741E45D1265D53FA00519F82 /* WorkoutBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutBottomView.swift; sourceTree = "<group>"; };
 		741E45D3265EB4AA00519F82 /* BottomViewPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomViewPresentationController.swift; sourceTree = "<group>"; };
@@ -1261,6 +1273,7 @@
 				7444D0C326D3E5110009C7A6 /* UIAssignableView.swift */,
 				744D563B26F8F61200D3E1FA /* CircularProgressView.swift */,
 				74EEA755270CAADC00911A77 /* EMOMExerciseView.swift */,
+				741BA39C2715EB0700E99C6E /* AMRAPExerciseView.swift */,
 			);
 			path = ViewClasses;
 			sourceTree = "<group>";
@@ -1289,6 +1302,18 @@
 				7416CCD5265C04560043B1C2 /* FirstScreenView.swift */,
 			);
 			path = Launch;
+			sourceTree = "<group>";
+		};
+		741BA39E271B13D100E99C6E /* JumpMeasuringVideo */ = {
+			isa = PBXGroup;
+			children = (
+				741BA3A1271B169700E99C6E /* JumpMeasuringViewController.swift */,
+				741BA39F271B13ED00E99C6E /* JumpMeasuringView.swift */,
+				741BA3A3271B197100E99C6E /* ReplayJumpMeasureViewController.swift */,
+				741BA3A5271B198A00E99C6E /* ReplayJumpMeasureView.swift */,
+				741BA3A7271EF97600E99C6E /* JumpMeasureViewModel.swift */,
+			);
+			path = JumpMeasuringVideo;
 			sourceTree = "<group>";
 		};
 		741FB1B72667DE9B0039EB29 /* WorkoutModels */ = {
@@ -1731,6 +1756,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				741BA39E271B13D100E99C6E /* JumpMeasuringVideo */,
 				744D563D26F9167700D3E1FA /* DisplayEMOM */,
 				744D562C26F2AB9100D3E1FA /* CreateEMOM */,
 				74F2CCE926E3C95300D7AD79 /* AnimatingController */,
@@ -2758,6 +2784,7 @@
 				741B22022636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift in Sources */,
 				74221B452642F61900D05527 /* MyProfileCoordinator.swift in Sources */,
 				7459BD5E26418B340005C530 /* PresentingView.swift in Sources */,
+				741BA3A8271EF97600E99C6E /* JumpMeasureViewModel.swift in Sources */,
 				7444D08A26D0615E0009C7A6 /* DisplayNoteViewController.swift in Sources */,
 				74C57A292531197E00078C42 /* NewRepsViewController.swift in Sources */,
 				74EEA758270DD3B700911A77 /* AVAsset+Extension.swift in Sources */,
@@ -2809,6 +2836,7 @@
 				7444D0E526D705E20009C7A6 /* PostEndpoints.swift in Sources */,
 				746061E225264147005B1480 /* NewInfoViewController.swift in Sources */,
 				74F546FB25ED60EC00C1A6A9 /* FirstTimeMessages.swift in Sources */,
+				741BA3A4271B197100E99C6E /* ReplayJumpMeasureViewController.swift in Sources */,
 				74AF6D6826868D2B005C52A8 /* ExerciseStatsSectionCell.swift in Sources */,
 				7431030F26FA3FFE00F7121B /* TimeSelectionPickerCoordinator.swift in Sources */,
 				741FB1B62666A5520039EB29 /* FirebasePostAPI.swift in Sources */,
@@ -2829,6 +2857,7 @@
 				7486C20B2678D215008A1E21 /* WeightView.swift in Sources */,
 				741FB1BB2667DEBB0039EB29 /* Circuit.swift in Sources */,
 				7492264E22D7873300EAD386 /* TableViewCell.swift in Sources */,
+				741BA3A6271B198A00E99C6E /* ReplayJumpMeasureView.swift in Sources */,
 				74FDB5B726A77F04000649CC /* ClipModels.swift in Sources */,
 				74318F4426B80DF7009EDFAC /* CreateCircuitView.swift in Sources */,
 				74318F3E26B572F1009EDFAC /* PreLiveWorkoutAdapter.swift in Sources */,
@@ -3111,10 +3140,12 @@
 				74FDB97D25A4978A00CC18EF /* DiscoverPageViewController.swift in Sources */,
 				74EC43A9263AD6D100D81E5B /* DisplayCircuitExerciseTableViewCell.swift in Sources */,
 				74CCBAC0261617AF00A20A94 /* CreatedWorkoutsViewController.swift in Sources */,
+				741BA39D2715EB0700E99C6E /* AMRAPExerciseView.swift in Sources */,
 				7444D0CB26D4011C0009C7A6 /* CoachPlayerViewCoordinator.swift in Sources */,
 				74226E142637157A0074E616 /* PublicCreatedWorkoutTableViewCell.swift in Sources */,
 				747B687E2603EA8D000AD6B7 /* RequestsAdapter.swift in Sources */,
 				74D31F0C25FE47FB0024CC05 /* NotificationProtocol.swift in Sources */,
+				741BA3A2271B169700E99C6E /* JumpMeasuringViewController.swift in Sources */,
 				74D31F1B25FE52960024CC05 /* NotificationFollowed.swift in Sources */,
 				7431030B26FA30EA00F7121B /* TimeSelectionAdapter.swift in Sources */,
 				7431030926FA30DC00F7121B /* TimeSelectionViewControllerView.swift in Sources */,
@@ -3142,6 +3173,7 @@
 				7429784A26C160270023365E /* FirebaseLoadingUsersService.swift in Sources */,
 				7466A8E025F147C100F4050F /* SavedWorkoutTableViewCell.swift in Sources */,
 				7444D0E226D6AB4B0009C7A6 /* PlayerTimelineView.swift in Sources */,
+				741BA3A0271B13ED00E99C6E /* JumpMeasuringView.swift in Sources */,
 				7444D0CD26D407C40009C7A6 /* UploadingCoordinator.swift in Sources */,
 				74D7F45226286C8C006C3D5C /* DiscoverPageAdapter.swift in Sources */,
 				741FB1E1266F9B840039EB29 /* DisplayAMRAPViewModel.swift in Sources */,

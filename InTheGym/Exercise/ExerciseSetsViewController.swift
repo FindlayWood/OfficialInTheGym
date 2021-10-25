@@ -16,6 +16,7 @@ import SCLAlertView
 class ExerciseSetsViewController: UIViewController, Storyboarded {
     
     weak var coordinator: RegularAndCircuitFlow?
+    
     var newExercise: exercise?
     
     //collection to display number options

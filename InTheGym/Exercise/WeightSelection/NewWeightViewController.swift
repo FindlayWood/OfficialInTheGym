@@ -14,7 +14,7 @@ import Firebase
 
 class NewWeightViewController: UIViewController, Storyboarded {
     
-    weak var coordinator: CreationDelegate?
+    weak var coordinator: CreationFlow?
     var newExercise: exercise?
     var selectedIndexInt: Int? = nil
     var selectedState: setSelected = .allSelected
@@ -45,15 +45,16 @@ class NewWeightViewController: UIViewController, Storyboarded {
     @objc func buttonTapped(_ sender: UIButton) {
         
         if coordinator is LiveWorkoutCoordinator || coordinator is AMRAPCoordinator {
+            navigationItem.rightBarButtonItem?.isEnabled = true
             //display.nextButton.isHidden = false
             display.weightMeasurementField.text = sender.titleLabel?.text
             if sender == display.maxButton || sender == display.bodyweightButton {
                 display.numberTextfield.text = ""
                 display.numberTextfield.isUserInteractionEnabled = false
-                display.maxButton.isSelected = true
+                //display.maxButton.isSelected = true
             } else {
                 display.numberTextfield.isUserInteractionEnabled = true
-                display.maxButton.isSelected = false
+                //display.maxButton.isSelected = false
                 display.numberTextfield.becomeFirstResponder()
             }
             
@@ -63,10 +64,10 @@ class NewWeightViewController: UIViewController, Storyboarded {
             if sender == display.maxButton || sender == display.bodyweightButton {
                 display.numberTextfield.text = ""
                 display.numberTextfield.isUserInteractionEnabled = false
-                display.maxButton.isSelected = true
+                //display.maxButton.isSelected = true
             } else {
                 display.numberTextfield.isUserInteractionEnabled = true
-                display.maxButton.isSelected = false
+                //display.maxButton.isSelected = false
                 display.numberTextfield.becomeFirstResponder()
             }
             
@@ -82,7 +83,7 @@ class NewWeightViewController: UIViewController, Storyboarded {
             showEmptyAlert()
             return
         }
-        if (number.isEmpty || measurement.isEmpty) && !display.maxButton.isSelected {
+        if (number.isEmpty || measurement.isEmpty) && !(measurement == "max" || measurement == "bw") {
             showEmptyAlert()
         } else {
             switch selectedState {
@@ -95,7 +96,7 @@ class NewWeightViewController: UIViewController, Storyboarded {
             sender.isHidden = true
             display.weightMeasurementField.text = ""
             display.numberTextfield.text = ""
-            display.nextButton.isHidden = false
+            //display.nextButton.isHidden = false
             navigationItem.rightBarButtonItem?.isEnabled = true
         }
 
@@ -103,32 +104,60 @@ class NewWeightViewController: UIViewController, Storyboarded {
     
     @IBAction func nextPressed(_ sender:UIButton){
         guard let newExercise = newExercise else {return}
+        guard let measurement = display.weightMeasurementField.text,
+              let number = display.numberTextfield.text
+        else {return}
         
         if coordinator is LiveWorkoutCoordinator {
-            if display.maxButton.isSelected {
-                newExercise.weightArray?.append("MAX")
-            } else {
-                guard let number = display.numberTextfield.text,
-                      let measurement = display.weightMeasurementField.text
-                else {
-                    return
+            if measurement == "max" || measurement == "bw" {
+                if newExercise.weightArray == nil {
+                    newExercise.weightArray = [measurement]
+                } else {
+                    newExercise.weightArray?.append(measurement)
                 }
-                if number.isEmpty || measurement.isEmpty {
+            } else {
+                if number.isEmpty {
                     showEmptyAlert()
                 } else {
                     let newWeight = number + measurement
-                    newExercise.weightArray?.append(newWeight)
+                    if newExercise.weightArray == nil {
+                        newExercise.weightArray = [newWeight]
+                    } else {
+                        newExercise.weightArray?.append(newWeight)
+                    }
                 }
             }
-        } else if coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator {
-            if display.maxButton.isSelected {
-                newExercise.weight = "MAX"
+        }
+            
+            
+//            if display.maxButton.isSelected {
+//                if newExercise.weightArray == nil {
+//                    newExercise.weightArray = ["MAX"]
+//                } else {
+//                    newExercise.weightArray?.append("MAX")
+//                }
+//            } else {
+//                guard let number = display.numberTextfield.text,
+//                      let measurement = display.weightMeasurementField.text
+//                else {
+//                    return
+//                }
+//                if number.isEmpty || measurement.isEmpty {
+//                    showEmptyAlert()
+//                } else {
+//                    let newWeight = number + measurement
+//                    if newExercise.weightArray == nil {
+//                        newExercise.weightArray = [newWeight]
+//                    } else {
+//                        newExercise.weightArray?.append(newWeight)
+//                    }
+//                }
+//            }
+//        }
+        else if coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator {
+            if measurement == "max" || measurement == "bw" {
+                newExercise.weight = measurement
             } else {
-                guard let number = display.numberTextfield.text,
-                      let measurement = display.weightMeasurementField.text
-                else {
-                    return
-                }
                 if number.isEmpty || measurement.isEmpty {
                     showEmptyAlert()
                 } else {
@@ -176,6 +205,8 @@ class NewWeightViewController: UIViewController, Storyboarded {
         case is AMRAPCoordinator:
             display.pageNumberLabel.text = "4 of 4"
         case is CircuitCoordinator:
+            display.pageNumberLabel.text = "5 of 5"
+        case is EMOMCoordinator:
             display.pageNumberLabel.text = "5 of 5"
         default:
             break

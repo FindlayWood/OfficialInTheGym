@@ -1,36 +1,33 @@
 //
-//  RecordClipView.swift
+//  JumpMeasuringView.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 30/06/2021.
+//  Created by Findlay Wood on 16/10/2021.
 //  Copyright © 2021 FindlayWood. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-enum videoLength: Double {
-    case long = 20
-    case short = 10
-}
-
-class RecordClipView: UIView {
+class JumpMeasuringView: UIView {
     
     // MARK: - Properties
+    var currentVideoLength: Int = 30
+    
+    var countDownNumber: Int = 10
+    var timer = Timer()
     
     // MARK: - Subviews
     var backButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .white
         if #available(iOS 13.0, *) {
-            button.setImage(UIImage(systemName: "chevron.backward.circle.fill"), for: .normal)
+            let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .bold, scale: .large)
+            let image = UIImage(systemName: "chevron.backward.circle.fill", withConfiguration: largeConfig)
+            button.setImage(image, for: .normal)
         } else {
             button.setTitle("X", for: .normal)
         }
-        button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.cornerRadius = 20
+        button.tintColor = .lightColour
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -68,14 +65,11 @@ class RecordClipView: UIView {
         return button
     }()
     
-    var maxVideoLength = 20
-    var minVideoLength = 10
-    var currentVideoLength: videoLength = .long
     
     var videoLengthButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
-        button.setTitle("20", for: .normal)
+        button.setTitle("30", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.black.cgColor
@@ -94,9 +88,6 @@ class RecordClipView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
-    var countDownNumber: Int = 10
-    var timer = Timer()
     
     lazy var countDownLabel: UILabel = {
         let label = UILabel()
@@ -132,10 +123,6 @@ class RecordClipView: UIView {
         stackView.addArrangedSubview(videoLengthButton)
         stackView.addArrangedSubview(flipCameraButton)
         addSubview(stackView)
-        //addSubview(backButton)
-        //addSubview(countDownButton)
-        //addSubview(videoLengthButton)
-        //addSubview(flipCameraButton)
         addSubview(recordButton)
         addSubview(countDownLabel)
         constrainView()
@@ -163,7 +150,8 @@ class RecordClipView: UIView {
             recordButton.heightAnchor.constraint(equalToConstant: 80),
             
             countDownLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            countDownLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+            countDownLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
         
         ])
     }
@@ -174,18 +162,10 @@ class RecordClipView: UIView {
         recordButton.alpha = 1
         recordButton.layer.borderColor = UIColor.red.cgColor
         stackView.isHidden = true
-//        backButton.isHidden = true
-//        countDownButton.isHidden = true
-//        videoLengthButton.isHidden = true
-//        flipCameraButton.isHidden = true
     }
     
     func setUICountdownOn() {
         stackView.isHidden = true
-//        backButton.isHidden = true
-//        countDownButton.isHidden = true
-//        videoLengthButton.isHidden = true
-//        flipCameraButton.isHidden = true
         recordButton.isHidden = true
     }
     
@@ -195,10 +175,6 @@ class RecordClipView: UIView {
         recordButton.alpha = 0.6
         recordButton.layer.borderColor = Constants.lightColour.cgColor
         stackView.isHidden = false
-//        backButton.isHidden = false
-//        countDownButton.isHidden = false
-//        videoLengthButton.isHidden = false
-//        flipCameraButton.isHidden = false
     }
     
     func toggleCountDownUI(isOn: Bool) {
@@ -223,16 +199,6 @@ class RecordClipView: UIView {
             countDownLabel.isHidden = true
             countDownNumber = 10
             countDownLabel.text = countDownNumber.description
-        }
-    }
-    
-    func changeVideoLength() {
-        if currentVideoLength == .long {
-            currentVideoLength = .short
-            videoLengthButton.setTitle(Int(currentVideoLength.rawValue).description, for: .normal)
-        } else {
-            currentVideoLength = .long
-            videoLengthButton.setTitle(Int(currentVideoLength.rawValue).description, for: .normal)
         }
     }
 }

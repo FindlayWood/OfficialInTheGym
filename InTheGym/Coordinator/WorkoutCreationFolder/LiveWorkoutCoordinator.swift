@@ -29,22 +29,49 @@ class LiveWorkoutCoordinator: Coordinator {
     }
 }
 
-extension LiveWorkoutCoordinator: LiveDelegate {
-    func showCompletedPage() {
-        let vc = WorkoutCompletedViewController.instantiate()
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
+// MARK: - Creation Flow
+extension LiveWorkoutCoordinator: CreationFlow {
     
     func addExercise(_ exercise: exercise) {
-        let vc = BodyTypeViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
-        navigationController.pushViewController(vc, animated: true)
+        if #available(iOS 13, *) {
+            let vc = ExerciseSelectionViewController()
+            vc.coordinator = self
+            vc.newExercise = exercise
+            navigationController.pushViewController(vc, animated: true)
+        }
     }
     
-    func addSet(_ exercise: exercise) {
-        let vc = NewRepsViewController.instantiate()
+    func exerciseSelected(_ exercise: exercise) {
+        // pop back to where live workout is displayed
+        // TODO: - decide where live workout will be displayed
+        exercise.completedSets = [Bool]()
+        exercise.sets = 0
+        exercise.repArray = [Int]()
+        exercise.weightArray = [String]()
+        //exercise.time = [Int]()
+        //exercise.distance = [String]()
+        //exercise.restTime = [Int]()
+        DisplayWorkoutViewController.selectedWorkout.exercises?.append(exercise)
+        FirebaseLiveWorkoutUpdater.shared.update(DisplayWorkoutViewController.selectedWorkout)
+        
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for controller in viewControllers {
+            if controller.isKind(of: DisplayWorkoutViewController.self) {
+                navigationController.popToViewController(controller, animated: true)
+                break
+            }
+        }
+    }
+    
+    func otherSelected(_ exercise: exercise) {
+        let vc = OtherExerciseViewController()
+        vc.newExercise = exercise
+        vc.coordinator = self
+        navigationController.present(vc, animated: true, completion: nil)
+    }
+    
+    func repsSelected(_ exercise: exercise) {
+        let vc = NewWeightViewController.instantiate()
         vc.coordinator = self
         vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
@@ -70,33 +97,56 @@ extension LiveWorkoutCoordinator: LiveDelegate {
         }
     }
     
-    func bodyTypeSelected(_ exercise: exercise) {
-        let vc = ExerciseViewController.instantiate()
+    func completeExercise() {
+        // not needed for live coordinator currently
+        // future proofing
+    }
+}
+
+// MARK: - Regular and Live Flow
+extension LiveWorkoutCoordinator: RegularAndLiveFlow {
+    func circuitSelected() {
+        let child = CircuitCoordinator(navigationController: navigationController, parentDelegte: self)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
+    func amrapSelected() {
+        let child = AMRAPCoordinator(navigationController: navigationController, parentDelegate: self)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
+    func emomSelected() {
+        let child = EMOMCoordinator(navigationController: navigationController, parentDelegate: self)
+        childCoordinators.append(child)
+        child.start()
+    }
+}
+
+// MARK: - Live Display Flow
+extension LiveWorkoutCoordinator: LiveWorkoutDisplayFlow {
+    
+    func liveWorkoutCompleted() {
+        // currently not used
+        // TODO: - implement properly
+        //let vc = WorkoutCompletedViewController.instantiate()
+        //navigationController.pushViewController(vc, animated: true)
+    }
+    func addSet(_ exercise: exercise) {
+        let vc = NewRepsViewController.instantiate()
         vc.coordinator = self
         vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
-    
-    func otherSelected(_ exercise: exercise) {
-        let vc = OtherExerciseViewController()
-        vc.newExercise = exercise
-        vc.coordinator = self
-        navigationController.present(vc, animated: true, completion: nil)
-    }
-    
-    func exerciseSelected(_ exercise: exercise) {
-        // pop back to where live workout is displayed
-        // TODO: - decide where live workout will be displayed
-        exercise.completedSets = [Bool]()
-        exercise.sets = 0
-        exercise.repArray = [Int]()
-        exercise.weightArray = [String]()
-        exercise.time = [Int]()
-        exercise.distance = [String]()
-        exercise.restTime = [Int]()
-        DisplayWorkoutViewController.selectedWorkout.exercises?.append(exercise)
+}
+
+// MARK: - EMOM Creation Delegate
+extension LiveWorkoutCoordinator: EmomParentDelegate {
+    func finishedCreatingEMOM(emomModel: EMOM) {
+        DisplayWorkoutViewController.selectedWorkout.exercises?.append(emomModel)
+        // line to update database
         FirebaseLiveWorkoutUpdater.shared.update(DisplayWorkoutViewController.selectedWorkout)
-        
         let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
         for controller in viewControllers {
             if controller.isKind(of: DisplayWorkoutViewController.self) {
@@ -105,19 +155,42 @@ extension LiveWorkoutCoordinator: LiveDelegate {
             }
         }
     }
-    
-    func repsSelected(_ exercise: exercise) {
-        let vc = NewWeightViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
-        navigationController.pushViewController(vc, animated: true)
+}
+
+// MARK: - AMRAP Creation Delegate
+extension LiveWorkoutCoordinator: AmrapParentDelegate {
+    func finishedCreatingAMRAP(amrapModel: AMRAP) {
+        DisplayWorkoutViewController.selectedWorkout.exercises?.append(amrapModel)
+        // line to update database
+        FirebaseLiveWorkoutUpdater.shared.update(DisplayWorkoutViewController.selectedWorkout)
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for controller in viewControllers {
+            if controller.isKind(of: DisplayWorkoutViewController.self) {
+                navigationController.popToViewController(controller, animated: true)
+                break
+            }
+        }
     }
-    
-    func upload() {
-        
+}
+
+// MARK: - Circuit Creation Flow
+extension LiveWorkoutCoordinator: CircuitParentDelegate {
+    func finishedCreatingCircuit(circuitModel: circuit) {
+        DisplayWorkoutViewController.selectedWorkout.exercises?.append(circuitModel)
+        // line to update database
+        FirebaseLiveWorkoutUpdater.shared.update(DisplayWorkoutViewController.selectedWorkout)
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for controller in viewControllers {
+            if controller.isKind(of: DisplayWorkoutViewController.self) {
+                navigationController.popToViewController(controller, animated: true)
+                break
+            }
+        }
     }
-    
-    
-    
-    
+}
+
+extension LiveWorkoutCoordinator: WorkoutDisplayCoordinator {
+    func showCompletedPage() {
+        // not implemented
+    }
 }

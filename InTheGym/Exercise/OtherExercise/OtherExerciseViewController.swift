@@ -10,7 +10,7 @@ import UIKit
 
 class OtherExerciseViewController: UIViewController {
     
-    weak var coordinator: CreationDelegate?
+    weak var coordinator: CreationFlow?
     
     var newExercise: exercise?
     

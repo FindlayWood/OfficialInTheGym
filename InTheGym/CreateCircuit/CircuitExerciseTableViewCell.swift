@@ -26,6 +26,7 @@ class CircuitExerciseTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         layer.cornerRadius = 10
+        selectionStyle = .none
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

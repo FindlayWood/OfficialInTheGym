@@ -88,11 +88,12 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
             
             //let newCircuit = circuit(item: circuitData)!
             
-
-            AddWorkoutHomeViewController.exercises.append(circuitData)
+            guard let circuitModel = circuit(item: circuitData) else {return}
+            coordinator?.completedCircuit(circuitModel: circuitModel)
+            //AddWorkoutHomeViewController.exercises.append(circuitData)
             DisplayTopView.displayTopView(with: "Added Circuit", on: self)
-            let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
-            self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+//            let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+//            self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
             CreateCircuitViewController.circuitExercises.removeAll()
         }
     }

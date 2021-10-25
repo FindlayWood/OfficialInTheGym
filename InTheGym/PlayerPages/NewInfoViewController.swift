@@ -15,7 +15,7 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tableview:UITableView!
     
     // array of tableview contents
-    var tableContents = ["Coaches", "PBs", "Workload", "Requests", "Settings"]
+    var tableContents = ["Coaches", "PBs", "Workload", "Requests", "Settings", "Measure Jump"]
     var tabQ = ["AccountType", "Username", "Email", "Workouts Complete"]
     var tabA = [String]()
     
@@ -121,6 +121,10 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                     cell.pic.image = UIImage(named: "settings_icon")
                     cell.QLabel.text = tableContents[indexPath.row]
                     cell.ALabel.text = ""
+                case 5:
+                    cell.pic.image = UIImage(named: "jump_icon")
+                    cell.QLabel.text = tableContents[indexPath.row]
+                    cell.ALabel.text = ""
                 default:
                     print("ouch")
                 }
@@ -176,6 +180,11 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
                 SVC.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(SVC, animated: true)
+            case 5:
+                let vc = JumpMeasuringViewController()
+                vc.hidesBottomBarWhenPushed = true
+                vc.modalPresentationStyle = .fullScreen
+                navigationController?.present(vc, animated: true)
             default:
                 print("ouch")
             }

@@ -136,6 +136,7 @@ extension DisplayCircuitViewController: DisplayCircuitProtocol {
         let exerciseSetIndex = exercises[index.section].set - 1
         let completedIndexPath = IndexPath(item: exerciseSetIndex, section: exerciseIndex)
         viewModel.completedExercise(at: completedIndexPath)
+        viewModel.updateStats(for: exercises[index.section])
         self.exercises[index.section].completed = true
         self.circuit.exercises![exerciseIndex].completedSets![exerciseSetIndex] = true
         UIView.animate(withDuration: 0.5) {

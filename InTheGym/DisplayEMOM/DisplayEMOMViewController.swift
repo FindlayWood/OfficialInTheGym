@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SCLAlertView
 
 class DisplayEMOMViewController: UIViewController {
     
@@ -71,6 +72,31 @@ class DisplayEMOMViewController: UIViewController {
             // TODO: - update display minute timer
         }
         
+        viewModel.mainTimerCompleted = { [weak self] in
+            guard let self = self else {return}
+            self.navigationItem.hidesBackButton = false
+            let alert = SCLAlertView()
+            let rpe = alert.addTextField()
+            rpe.placeholder = "enter rpe 1-10..."
+            rpe.keyboardType = .numberPad
+            rpe.becomeFirstResponder()
+            alert.addButton("Save") {
+                guard let score = rpe.text else {return}
+                print(score)
+            }
+            alert.showSuccess("RPE", subTitle: "Enter RPE for EMOM(1-10).",closeButtonTitle: "cancel")
+        }
+        
+        viewModel.minuteCompleted = { [weak self] in
+            guard let self = self else {return}
+            guard let numberOfExercises = self.emom.exercises?.count else {return}
+            guard let exercises = self.emom.exercises else {return}
+            self.exerciseIndex += 1
+            let position = self.exerciseIndex % numberOfExercises
+            self.display.exerciseView.configure(with: exercises[position])
+            self.completedMinute()
+        }
+        
         guard let fullTime = emom.timeLimit else {return}
         viewModel.mainTimerVariable = fullTime
 //        display.fullTimePrgoressView.progress = 1
@@ -86,12 +112,28 @@ class DisplayEMOMViewController: UIViewController {
         }
         guard let exerciseOne = emom.exercises?[exerciseIndex] else {return}
         display.exerciseView.configure(with: exerciseOne)
+        display.initialMainTime.text = emom.timeLimit?.convertToTime()
+        display.initialMinuteTime.text = 60.convertToTime()
     }
     
     @objc func startTimerPressed(_ sender: UIButton) {
+        navigationItem.hidesBackButton = true
         viewModel.startTimers()
+        display.initialMainTime.removeFromSuperview()
+        display.initialMinuteTime.removeFromSuperview()
         emom.started = true
         navigationItem.rightBarButtonItem?.isEnabled = false
     }
-    
+}
+
+extension DisplayEMOMViewController {
+    func completedMinute() {
+        UIView.animate(withDuration: 0.6) {
+            self.view.backgroundColor = .lightColour
+        } completion: { _ in
+            UIView.animate(withDuration: 0.6) {
+                self.view.backgroundColor = .white
+            }
+        }
+    }
 }

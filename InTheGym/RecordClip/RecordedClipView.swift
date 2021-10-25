@@ -14,7 +14,11 @@ class RecordedClipView: UIView {
     var backButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
-        button.setTitle("X", for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setImage(UIImage(systemName: "chevron.backward.circle.fill"), for: .normal)
+        } else {
+            button.setTitle("X", for: .normal)
+        }
         button.setTitleColor(.black, for: .normal)
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.black.cgColor

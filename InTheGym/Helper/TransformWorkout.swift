@@ -77,8 +77,6 @@ class TransformWorkout: NSObject {
         case .CU:
             return "CU"
         }
-        
-        
     }
     
     

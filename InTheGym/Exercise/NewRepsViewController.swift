@@ -18,7 +18,8 @@ enum setSelected {
 
 class NewRepsViewController: UIViewController, Storyboarded {
     
-    weak var coordinator: CreationDelegate?
+    weak var coordinator: CreationFlow?
+    
     var newExercise: exercise?
     
     var repView = RepsView()
@@ -233,7 +234,11 @@ extension NewRepsViewController{
     @objc func nextPressed() {
         guard let newExercise = newExercise else {return}
         if coordinator is LiveWorkoutCoordinator {
-            newExercise.repArray?.append(repCounter)
+            if newExercise.repArray == nil {
+                newExercise.repArray = [repCounter]
+            } else {
+                newExercise.repArray?.append(repCounter)
+            }
         } else if coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator {
             newExercise.reps = repCounter
         } else {

@@ -81,11 +81,12 @@ extension CreateAMRAPViewController {
         let amrapData = ["timeLimit": amrapTime,
                          "exercises": objectExercises] as [String:AnyObject]
         guard let amrapModel = AMRAP(data: amrapData) else {return}
-        let amrapObject = amrapModel.toObject()
-        AddWorkoutHomeViewController.exercises.append(amrapObject)
+        coordinator?.completedAMRAP(amrapModel: amrapModel)
+//        let amrapObject = amrapModel.toObject()
+//        AddWorkoutHomeViewController.exercises.append(amrapObject)
         DisplayTopView.displayTopView(with: "Added AMRAP", on: self)
-        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
-        self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+//        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+//        self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
         CreateAMRAPViewController.exercises.removeAll()
     }
 }

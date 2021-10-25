@@ -217,6 +217,9 @@ extension GroupHomePageViewController: GroupHomePageProtocol {
     func goToWorkouts() {
         coordinator?.goToGroupWorkouts(with: currentGroup)
     }
+    func showGroupMembers() {
+        
+    }
     func isCurrentUserLeader() -> Bool {
         return viewModel.isCurrentUserLeader()
     }

@@ -102,4 +102,6 @@ private extension CircularProgressView {
         let timeString = timeRemaining.convertToTime()
         textLayer?.string = timeString
     }
+
 }
+

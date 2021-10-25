@@ -13,7 +13,7 @@ import UIKit
 
 class BodyTypeViewController: UIViewController, Storyboarded {
     
-    weak var coordinator: CreationDelegate?
+    weak var coordinator: CreationFlow?
     var newExercise: exercise?
     
     var fromLiveWorkout:Bool!
@@ -23,42 +23,42 @@ class BodyTypeViewController: UIViewController, Storyboarded {
     
     @IBOutlet weak var pageNumberLabel:UILabel!
     
-    @IBAction func buttonTapped(_ sender:UIButton){
-        sender.pulsate()
-        guard let newExercise = newExercise else {return}
-        switch sender.titleLabel?.text{
-        case "Upper Body":
-            newExercise.type = .UB
-            coordinator?.bodyTypeSelected(newExercise)
-        case "Lower Body":
-            newExercise.type = .LB
-            coordinator?.bodyTypeSelected(newExercise)
-        case "Core":
-            newExercise.type = .CO
-            coordinator?.bodyTypeSelected(newExercise)
-        case "Cardio":
-            newExercise.type = .CA
-            coordinator?.bodyTypeSelected(newExercise)
-        default:
-            newExercise.type = .CU
-            coordinator?.bodyTypeSelected(newExercise)
-        }
-    }
+//    @IBAction func buttonTapped(_ sender:UIButton){
+//        sender.pulsate()
+//        guard let newExercise = newExercise else {return}
+//        switch sender.titleLabel?.text{
+//        case "Upper Body":
+//            newExercise.type = .UB
+//            coordinator?.bodyTypeSelected(newExercise)
+//        case "Lower Body":
+//            newExercise.type = .LB
+//            coordinator?.bodyTypeSelected(newExercise)
+//        case "Core":
+//            newExercise.type = .CO
+//            coordinator?.bodyTypeSelected(newExercise)
+//        case "Cardio":
+//            newExercise.type = .CA
+//            coordinator?.bodyTypeSelected(newExercise)
+//        default:
+//            newExercise.type = .CU
+//            coordinator?.bodyTypeSelected(newExercise)
+//        }
+//    }
     
-    @IBAction func circuitTapped(_ sender:UIButton) {
-        let coordinator = coordinator as? RegularWorkoutFlow
-        coordinator?.addCircuit()
-    }
-    
-    @IBAction func amrapTapped(_ sender: UIButton) {
-        let coordinator = coordinator as? RegularWorkoutFlow
-        coordinator?.addAMRAP()
-    }
-    
-    @IBAction func otherTapped(_ sender: UIButton) {
-        guard let newExercise = newExercise else {return}
-        coordinator?.otherSelected(newExercise)
-    }
+//    @IBAction func circuitTapped(_ sender:UIButton) {
+//        let coordinator = coordinator as? RegularWorkoutFlow
+//        coordinator?.addCircuit()
+//    }
+//    
+//    @IBAction func amrapTapped(_ sender: UIButton) {
+//        let coordinator = coordinator as? RegularWorkoutFlow
+//        coordinator?.addAMRAP()
+//    }
+//    
+//    @IBAction func otherTapped(_ sender: UIButton) {
+//        guard let newExercise = newExercise else {return}
+//        coordinator?.otherSelected(newExercise)
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

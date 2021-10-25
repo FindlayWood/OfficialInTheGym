@@ -12,9 +12,11 @@ import UIKit
 class CircuitCoordinator: Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    weak var parentDelegate: CircuitParentDelegate?
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, parentDelegte: CircuitParentDelegate) {
         self.navigationController = navigationController
+        self.parentDelegate = parentDelegte
     }
     
     func start() {
@@ -23,9 +25,15 @@ class CircuitCoordinator: Coordinator {
         navigationController.pushViewController(vc, animated: true)
     }
 }
+// MARK: - Parent Creation Flow
+extension CircuitCoordinator {
+    func completedCircuit(circuitModel: circuit) {
+        parentDelegate?.finishedCreatingCircuit(circuitModel: circuitModel)
+    }
+}
 
-extension CircuitCoordinator: CircuitFlow {
-    
+// MARK: - Creation Flow
+extension CircuitCoordinator: CreationFlow {
     func addExercise(_ circuit: exercise) {
         if #available(iOS 13, *) {
             let vc = ExerciseSelectionViewController()
@@ -38,12 +46,6 @@ extension CircuitCoordinator: CircuitFlow {
             vc.newExercise = circuit
             navigationController.pushViewController(vc, animated: true)
         }
-    }
-    func bodyTypeSelected(_ exercise: exercise) {
-        let vc = ExerciseViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
-        navigationController.pushViewController(vc, animated: true)
     }
     func otherSelected(_ exercise: exercise) {
         let vc = OtherExerciseViewController()
@@ -59,20 +61,12 @@ extension CircuitCoordinator: CircuitFlow {
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func setsSelected(_ exercise: exercise) {
-        let vc = NewRepsViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
     func repsSelected(_ exercise: exercise) {
         let vc = NewWeightViewController.instantiate()
         vc.coordinator = self
         vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
-    
     func weightSelected(_ exercise: exercise) {
         CreateCircuitViewController.circuitExercises.append(exercise)
         let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
@@ -83,7 +77,16 @@ extension CircuitCoordinator: CircuitFlow {
             }
         }
     }
-    func upload() {
-        
+    func completeExercise() {
+        // not implemented
+    }
+}
+
+extension CircuitCoordinator: RegularAndCircuitFlow {
+    func setsSelected(_ exercise: exercise) {
+        let vc = NewRepsViewController.instantiate()
+        vc.coordinator = self
+        vc.newExercise = exercise
+        navigationController.pushViewController(vc, animated: true)
     }
 }

@@ -15,21 +15,31 @@ class EMOMExerciseView: UIView {
     // MARK: - Subviews
     var exerciseLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Menlo-Bold", size: 70)
+        label.font = Constants.font
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.2
+        label.textColor = .black
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var dividerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    var repLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Menlo-Bold", size: 70)
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var repLabel: UILabel = {
-        let label = UILabel()
-        label.font = Constants.font
-        label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -48,19 +58,27 @@ private extension EMOMExerciseView {
         backgroundColor = .offWhiteColour
         layer.cornerRadius = 20
         addSubview(exerciseLabel)
+        addSubview(dividerView)
         addSubview(repLabel)
         constrainUI()
     }
     func constrainUI() {
         NSLayoutConstraint.activate([
             exerciseLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            exerciseLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            exerciseLabel.topAnchor.constraint(equalTo: topAnchor),
             exerciseLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
             exerciseLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+            exerciseLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.33),
             
+            dividerView.topAnchor.constraint(equalTo: exerciseLabel.bottomAnchor, constant: 5),
+            dividerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
+            dividerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+
             repLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            repLabel.topAnchor.constraint(equalTo: exerciseLabel.bottomAnchor, constant: 20),
-            repLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
+            //repLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            repLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 20),
+            repLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.5)
+            //repLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }
@@ -74,6 +92,6 @@ extension EMOMExerciseView {
             return
         }
         exerciseLabel.text = name
-        repLabel.text = rep.description + " reps"
+        repLabel.text = rep.description
     }
 }

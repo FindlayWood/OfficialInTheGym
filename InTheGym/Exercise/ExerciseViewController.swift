@@ -11,7 +11,7 @@ import Firebase
 
 class ExerciseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, Storyboarded {
     
-    weak var coordinator: CreationDelegate?
+    weak var coordinator: CreationFlow?
     var newExercise: exercise?
     var bodyTypeEnum: bodyType?
     

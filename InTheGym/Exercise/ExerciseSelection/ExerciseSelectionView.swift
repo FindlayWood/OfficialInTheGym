@@ -11,6 +11,9 @@ import UIKit
 @available(iOS 13, *)
 class ExerciseSelectionView: UIView {
     
+    //MARK: - Properties
+    var searchBarTopAnchor: NSLayoutConstraint!
+    
     // MARK: - Subviews
     
         // StackView Subviews
@@ -128,12 +131,14 @@ private extension ExerciseSelectionView {
         constrainUI()
     }
     func constrainUI() {
+        searchBarTopAnchor = searchBar.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: 5)
         NSLayoutConstraint.activate([
-            topStack.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            topStack.topAnchor.constraint(equalTo: topAnchor, constant: 5),
             topStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             topStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             
-            searchBar.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: 10),
+            searchBarTopAnchor,
+            //searchBar.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: 5),
             searchBar.leadingAnchor.constraint(equalTo: leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: trailingAnchor),
             searchBar.heightAnchor.constraint(equalToConstant: 50),
@@ -153,5 +158,26 @@ extension ExerciseSelectionView {
         circuitView.isHidden = true
         amrapView.isHidden = true
         emomView.isHidden = true
+    }
+    public func showStack() {
+        circuitView.isHidden = false
+        amrapView.isHidden = false
+        emomView.isHidden = false
+    }
+    public func searchBegins() {
+        UIView.animate(withDuration: 0.3) {
+            self.hideStack()
+            self.searchBarTopAnchor.isActive = false
+            self.searchBarTopAnchor = self.searchBar.topAnchor.constraint(equalTo: self.topAnchor)
+            self.searchBarTopAnchor.isActive = true
+        }
+    }
+    public func searchEnded() {
+        UIView.animate(withDuration: 0.3) {
+            self.showStack()
+            self.searchBarTopAnchor.isActive = false
+            self.searchBarTopAnchor = self.searchBar.topAnchor.constraint(equalTo: self.topStack.bottomAnchor, constant: 5)
+            self.searchBarTopAnchor.isActive = true
+        }
     }
 }

@@ -24,7 +24,7 @@ class ExerciseSelectionCell: UICollectionViewCell {
         label.font = .systemFont(ofSize: 25, weight: .bold)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
-        label.textColor = .darkColour
+        label.textColor = .black
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 3
         label.translatesAutoresizingMaskIntoConstraints = false

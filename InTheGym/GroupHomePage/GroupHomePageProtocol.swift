@@ -21,6 +21,7 @@ protocol GroupHomePageProtocol: TimelineTapProtocol {
     func leaderLoaded() -> Bool
     func newInfoSaved(_ newInfo: MoreGroupInfoModel)
     func goToWorkouts()
+    func showGroupMembers()
     func isCurrentUserLeader() -> Bool
     func manageGroup()
 }

@@ -13,6 +13,8 @@ class DisplayEMOMViewModel {
     var updateMainTimerClosure:((Int)->())?
     var updateMinuteTimerClosure:((Int)->())?
     var minuteTimerFinished:(()->())?
+    var mainTimerCompleted:(()->())?
+    var minuteCompleted:(()->())?
     
     // MARK: - Timers
     var mainTimer = Timer()
@@ -24,7 +26,7 @@ class DisplayEMOMViewModel {
     
     func startTimers() {
         mainTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateMainTimer), userInfo: nil, repeats: true)
-        minuteTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateMinuteTimer), userInfo: nil, repeats: true)
+        //minuteTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateMinuteTimer), userInfo: nil, repeats: true)
     }
     
     @objc func updateMainTimer() {
@@ -33,41 +35,30 @@ class DisplayEMOMViewModel {
             updateMainTimerClosure?(mainTimerVariable)
         } else {
             mainTimer.invalidate()
-            minuteTimer.invalidate()
+            //minuteTimer.invalidate()
+            mainTimerCompleted?()
         }
-    }
-    
-    @objc func updateMinuteTimer() {
+        
         if minuteTimerVariable > 0 {
             minuteTimerVariable -= 1
             updateMinuteTimerClosure?(minuteTimerVariable)
         } else if minuteTimerVariable == 0 {
             minuteTimerVariable = 59
             updateMinuteTimerClosure?(minuteTimerVariable)
+            minuteCompleted?()
         }
     }
     
-    // MARK: - Main Timer
-    func startMainTimer() {
-        let mainTimer = CustomTimer(seconds: mainTimerVariable)
-        mainTimer.startTimer {
-            //TODO: timer has ended
-        } timerInProgress: { [weak self] elapsedTime in
-            guard let self = self else {return}
-            self.updateMainTimerClosure?(elapsedTime)
-        }
-    }
-    
-    func startMinuteTimer() {
-        let minuteTimer = CustomTimer(seconds: 60)
-        minuteTimer.startTimer { [weak self] in
-            guard let self = self else {return}
-            self.minuteTimerFinished?()
-        } timerInProgress: { [weak self] elapsedTime in
-            guard let self = self else {return}
-            self.updateMinuteTimerClosure?(elapsedTime)
-        }
-    }
+//    @objc func updateMinuteTimer() {
+//        if minuteTimerVariable > 0 {
+//            minuteTimerVariable -= 1
+//            updateMinuteTimerClosure?(minuteTimerVariable)
+//        } else if minuteTimerVariable == 0 {
+//            minuteTimerVariable = 59
+//            updateMinuteTimerClosure?(minuteTimerVariable)
+//            minuteCompleted?()
+//        }
+//    }
     
     // MARK: - Starting EMOM
     func startEMOM() {

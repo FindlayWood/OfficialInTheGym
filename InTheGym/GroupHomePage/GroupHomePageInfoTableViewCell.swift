@@ -101,6 +101,8 @@ private extension GroupHomePageInfoTableViewCell {
         //contentView.addSubview(workoutsView)
         let tap = UITapGestureRecognizer(target: self, action: #selector(workoutsTapped))
         workoutsView.addGestureRecognizer(tap)
+        let memebersTap = UITapGestureRecognizer(target: self, action: #selector(membersTapped))
+        membersView.addGestureRecognizer(memebersTap)
         manageButton.addTarget(self, action: #selector(manageGroupTapped(_:)), for: .touchUpInside)
         constrainView()
     }
@@ -134,6 +136,9 @@ private extension GroupHomePageInfoTableViewCell {
 private extension GroupHomePageInfoTableViewCell {
     @objc func workoutsTapped() {
         delegate.goToWorkouts()
+    }
+    @objc func membersTapped(){
+        delegate.showGroupMembers()
     }
     @objc func manageGroupTapped(_ sender: UIButton) {
         delegate.manageGroup()

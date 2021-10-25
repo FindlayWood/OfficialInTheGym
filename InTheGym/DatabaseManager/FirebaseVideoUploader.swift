@@ -69,7 +69,7 @@ class FirebaseVideoUploader {
                 if error != nil {
                     completion(.failure(.urlDownloadFail))
                 } else {
-                    self.uploadClip(storageURL: downloadedURL!.absoluteString, uploadData: uploadData, completion: completion)
+                    self.uploadDataToDatabase(storageURL: downloadedURL!.absoluteString, uploadData: uploadData, completion: completion)
                 }
             }
         }
@@ -101,13 +101,24 @@ class FirebaseVideoUploader {
         }
     }
     
-    private func uploadClip(storageURL: String, uploadData: clipUploadingData, completion: @escaping (escapingClip) -> Void) {
-        let clipRef = baseRef.childByAutoId()
-        guard let clipKey = clipRef.key,
-              let userID = Auth.auth().currentUser?.uid
+    // this function uploads multi locations at once
+    private func uploadDataToDatabase(storageURL: String, uploadData: clipUploadingData, completion: @escaping (escapingClip) -> Void) {
+        guard let clipKey = baseRef.childByAutoId().key,
+              let userKey = userRef.childByAutoId().key,
+              let exerciseKey = exerciseRef.childByAutoId().key
         else {
+            completion(.failure(.unknown))
             return
         }
+        let userID = FirebaseAuthManager.currentlyLoggedInUser.uid
+        
+        // All Paths
+        let clipPath = "Clips/\(clipKey)"
+        let workoutPath = "Workouts/\(userID)/\(uploadData.workoutID)/clipData/\(uploadData.clipNumber)"
+        let userPath = "UserClips/\(userID)/\(userKey)"
+        let exercisePath = "ExerciseClips/\(uploadData.exerciseName)/\(exerciseKey)"
+        
+        
         
         let clipData = [storageURLString: storageURL,
                         "userID": userID,
@@ -116,64 +127,109 @@ class FirebaseVideoUploader {
                         "workoutID": uploadData.workoutID,
                         "isPrivate": uploadData.isPrivate] as [String : Any]
         
-        clipRef.setValue(clipData) { [weak self] error, databaseReference in
-            guard let self = self else {return}
+        let clipWorkoutData = [storageURLString: storageURL,
+                        clipKeyString: clipKey,
+                        exerciseString: uploadData.exerciseName]
+        
+        let clipUserData = [storageURLString: storageURL,
+                        clipKeyString: clipKey]
+        
+        let clipExerciseData = [storageURLString: storageURL,
+                        clipKeyString: clipKey]
+        
+        let updatedData = [clipPath: clipData,
+                           workoutPath: clipWorkoutData as [String : Any],
+                           userPath: clipUserData as [String : Any],
+                           exercisePath: clipExerciseData as [String : Any]
+        ] as [AnyHashable : [String : Any]]
+        
+        Database.database().reference().updateChildValues(updatedData) { error, ref in
             if let error = error {
                 print(error.localizedDescription)
                 completion(.failure(.clipUploadFail))
             } else {
-                self.uploadToWorkout(clipKey: clipKey, storageURL: storageURL, uploadData: uploadData, completion: completion)
-            }
-        }
-    }
-    
-    private func uploadToWorkout(clipKey: String, storageURL: String, uploadData: clipUploadingData, completion: @escaping (escapingClip) -> Void) {
-        guard let userID = Auth.auth().currentUser?.uid else {return}
-        let clipData = [storageURLString: storageURL,
-                        clipKeyString: clipKey,
-                        exerciseString: uploadData.exerciseName]
-        workoutRef.child(userID).child(uploadData.workoutID).child("clipData").child(uploadData.clipNumber.description).setValue(clipData) { [weak self] error, databaseReference in
-            guard let self = self else {return}
-            if let error = error {
-                print(error.localizedDescription)
-                completion(.failure(.workoutUploadFail))
-            } else {
-                self.uploadToUserClips(clipKey: clipKey, uploadData: uploadData, storageURL: storageURL, completion: completion)
-            }
-        }
-    }
-    
-    private func uploadToUserClips(clipKey: String, uploadData: clipUploadingData, storageURL: String, completion: @escaping (escapingClip) -> Void) {
-        guard let userID = Auth.auth().currentUser?.uid else {return}
-        let clipData = [storageURLString: storageURL,
-                        clipKeyString: clipKey]
-        userRef.child(userID).childByAutoId().setValue(clipData) { error, databaseReference in
-            if let error = error {
-                print(error.localizedDescription)
-                completion(.failure(.userClipUploadFail))
-            } else {
-                self.uploadToExerciseClips(clipKey: clipKey, storageURL: storageURL, uploadData: uploadData, completion: completion)
-            }
-        }
-    }
-    
-    private func uploadToExerciseClips(clipKey: String, storageURL: String, uploadData: clipUploadingData, completion: @escaping (escapingClip) -> Void) {
-        let clipData = [storageURLString: storageURL,
-                        clipKeyString: clipKey]
-        exerciseRef.child(uploadData.exerciseName).childByAutoId().setValue(clipData) { [weak self] error, databaseReference in
-            guard let self = self else {return}
-            if let error = error {
-                print(error.localizedDescription)
-                completion(.failure(.exerciseUploadFail))
-            } else {
                 let addingData = clipSuccessData(clipKey: clipKey,
                                                  storageURL: storageURL,
                                                  exerciseName: uploadData.exerciseName)
-                self.uploadThumbnail(clipKey: clipKey, uploadData: uploadData)
+
                 completion(.success(addingData))
             }
         }
     }
+    
+//    private func uploadClip(storageURL: String, uploadData: clipUploadingData, completion: @escaping (escapingClip) -> Void) {
+//        let clipRef = baseRef.childByAutoId()
+//        guard let clipKey = clipRef.key,
+//              let userID = Auth.auth().currentUser?.uid
+//        else {
+//            return
+//        }
+//        
+//        let clipData = [storageURLString: storageURL,
+//                        "userID": userID,
+//                        "exerciseName": uploadData.exerciseName,
+//                        "time": ServerValue.timestamp(),
+//                        "workoutID": uploadData.workoutID,
+//                        "isPrivate": uploadData.isPrivate] as [String : Any]
+//        
+//        clipRef.setValue(clipData) { [weak self] error, databaseReference in
+//            guard let self = self else {return}
+//            if let error = error {
+//                print(error.localizedDescription)
+//                completion(.failure(.clipUploadFail))
+//            } else {
+//                self.uploadToWorkout(clipKey: clipKey, storageURL: storageURL, uploadData: uploadData, completion: completion)
+//            }
+//        }
+//    }
+//    
+//    private func uploadToWorkout(clipKey: String, storageURL: String, uploadData: clipUploadingData, completion: @escaping (escapingClip) -> Void) {
+//        guard let userID = Auth.auth().currentUser?.uid else {return}
+//        let clipData = [storageURLString: storageURL,
+//                        clipKeyString: clipKey,
+//                        exerciseString: uploadData.exerciseName]
+//        workoutRef.child(userID).child(uploadData.workoutID).child("clipData").child(uploadData.clipNumber.description).setValue(clipData) { [weak self] error, databaseReference in
+//            guard let self = self else {return}
+//            if let error = error {
+//                print(error.localizedDescription)
+//                completion(.failure(.workoutUploadFail))
+//            } else {
+//                self.uploadToUserClips(clipKey: clipKey, uploadData: uploadData, storageURL: storageURL, completion: completion)
+//            }
+//        }
+//    }
+//    
+//    private func uploadToUserClips(clipKey: String, uploadData: clipUploadingData, storageURL: String, completion: @escaping (escapingClip) -> Void) {
+//        guard let userID = Auth.auth().currentUser?.uid else {return}
+//        let clipData = [storageURLString: storageURL,
+//                        clipKeyString: clipKey]
+//        userRef.child(userID).childByAutoId().setValue(clipData) { error, databaseReference in
+//            if let error = error {
+//                print(error.localizedDescription)
+//                completion(.failure(.userClipUploadFail))
+//            } else {
+//                self.uploadToExerciseClips(clipKey: clipKey, storageURL: storageURL, uploadData: uploadData, completion: completion)
+//            }
+//        }
+//    }
+//    
+//    private func uploadToExerciseClips(clipKey: String, storageURL: String, uploadData: clipUploadingData, completion: @escaping (escapingClip) -> Void) {
+//        let clipData = [storageURLString: storageURL,
+//                        clipKeyString: clipKey]
+//        exerciseRef.child(uploadData.exerciseName).childByAutoId().setValue(clipData) { [weak self] error, databaseReference in
+//            guard let self = self else {return}
+//            if let error = error {
+//                print(error.localizedDescription)
+//                completion(.failure(.exerciseUploadFail))
+//            } else {
+//                let addingData = clipSuccessData(clipKey: clipKey,
+//                                                 storageURL: storageURL,
+//                                                 exerciseName: uploadData.exerciseName)
+//                self.uploadThumbnail(clipKey: clipKey, uploadData: uploadData)
+//                completion(.success(addingData))
+//            }
+//        }
+//    }
     
     private func uploadThumbnail(clipKey: String, uploadData: clipUploadingData) {
         guard let thumbnail = uploadData.thumbnail else {return}

@@ -76,11 +76,13 @@ class CreateEMOMViewController: UIViewController {
         let emomData = ["timeLimit": emomTimeLimit,
                          "exercises": objectExercises] as [String:AnyObject]
         guard let emomModel = EMOM(data: emomData) else {return}
-        let emomObject = emomModel.toObject()
-        AddWorkoutHomeViewController.exercises.append(emomObject)
+        coordinator?.competedEMOM(emomModel: emomModel)
+        
+//        let emomObject = emomModel.toObject()
+//        AddWorkoutHomeViewController.exercises.append(emomObject)
         DisplayTopView.displayTopView(with: "Added EMOM", on: self)
-        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
-        self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+//        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+//        self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
         CreateEMOMViewController.exercises.removeAll()
         EMOMTime = 10
     }

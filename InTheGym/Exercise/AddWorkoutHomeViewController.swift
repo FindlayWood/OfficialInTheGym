@@ -137,7 +137,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
             let newUploadPage = UploadingWorkoutViewController()
             let uploadable = UploadableWorkout(assignee: assignee, workout: createdWorkout!)
             newUploadPage.workoutToUpload = uploadable
-            coordinator?.goToUploadPage(uploadable)
+            coordinator?.goToUploadPage(with: uploadable)
             
             //self.navigationController?.pushViewController(newUploadPage, animated: true)
             

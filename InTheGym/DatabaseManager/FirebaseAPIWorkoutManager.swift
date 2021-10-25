@@ -76,6 +76,7 @@ class FirebaseAPIWorkoutManager {
                     if weightNumber > maxWeight {
                         stats[self.maxWeightStatString] = weightNumber as AnyObject
                         stats[self.maxWeightDateStatString] = ServerValue.timestamp() as AnyObject
+                        self.updateMaxHistory(exercise: name, weight: weightNumber)
                     }
                    
                 }
@@ -89,6 +90,18 @@ class FirebaseAPIWorkoutManager {
             }
         }
     }
+    
+    // Update max history
+    private func updateMaxHistory(exercise: String, weight: Double) {
+        let userID = FirebaseAuthManager.currentlyLoggedInUser.uid
+        let currentTime = ServerValue.timestamp()
+        let path =  "ExerciseMaxHistory/\(userID)/\(exercise)"
+        let ref = baseRef.child(path).childByAutoId()
+        let data = ["time": currentTime,
+                    "weight": weight] as [String : Any]
+        ref.setValue(data)
+    }
+    
     private func addExerciseStats( name: String, reps: Int, weight: String?) {
         guard let userID = Auth.auth().currentUser?.uid else {return}
         let path = "ExerciseStats/\(userID)/\(name)"
