@@ -340,7 +340,7 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol {
                   let emom = viewModel.selectedWorkout?.exercises?[at.section] as? EMOM,
                   let workout = DisplayWorkoutViewController.selectedWorkout as? workout
             else {return}
-            coordinator.showEMOM(emom, workout)
+            coordinator.showEMOM(emom, workout, at.section)
         }
     }
     

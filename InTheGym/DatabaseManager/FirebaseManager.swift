@@ -22,10 +22,7 @@ class FirebaseManager: FirebaseManagerService {
     
     private var databaseReference: DatabaseReference!
     
-    
-    private init() {
-        databaseReference = Database.database().reference()
-    }
+    private init() {} ///private initializer for singleton
     
     ///upload a post from an endpoint
     func upload(from endpoint: PostEndpoint, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -37,10 +34,10 @@ class FirebaseManager: FirebaseManagerService {
         }
         databaseReference = Database.database().reference().child(path).childByAutoId()
         guard let postID = databaseReference.key else {return}
-        data.id = postID //set the post id to childbyautoid
-        data.username = FirebaseAuthManager.currentlyLoggedInUser.username //set the username to currently logged in username
-        data.posterID = FirebaseAuthManager.currentlyLoggedInUser.uid //set the userID to currently logged in userID
-        data.time = Date().timeIntervalSince1970 //set the time to current time
+        data.id = postID ///set the post id to childbyautoid
+        data.username = FirebaseAuthManager.currentlyLoggedInUser.username ///set the username to currently logged in username
+        data.posterID = FirebaseAuthManager.currentlyLoggedInUser.uid ///set the userID to currently logged in userID
+        data.time = Date().timeIntervalSince1970 ///set the time to current time
         
         do {
             let uploadObject = try FirebaseEncoder().encode(data)

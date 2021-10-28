@@ -33,6 +33,7 @@ class OtherExerciseView: UIView {
         field.placeholder = "enter exercise name"
         field.clearButtonMode = .never
         field.delegate = self
+        field.autocapitalizationType = .words
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()

@@ -158,6 +158,5 @@ class DisplayAMRAPCell: UITableViewCell, workoutCellConfigurable {
         amrapModel.roundsCompleted.valueChanged = nil
         completedLabel.isHidden = true
         roundsLabel.isHidden = true
-
     }
 }

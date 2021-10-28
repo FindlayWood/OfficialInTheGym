@@ -14,7 +14,7 @@ protocol WorkoutCoordinatorFlow: WorkoutDisplayCoordinator {
     func showWorkoutStats(with savedWorkoutID: String)
     func showCircuit()
     func showAMRAP(with model: AMRAP, at position: Int, on workout: workout)
-    func showEMOM(_ emom: EMOM, _ workout: workout)
+    func showEMOM(_ emom: EMOM, _ workout: workout, _ position: Int)
     func displayNote(with note: String?, on workout: WorkoutDelegate, at index: Int)
 }
 
@@ -95,10 +95,11 @@ extension WorkoutCoordinator: WorkoutCoordinatorFlow {
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func showEMOM(_ emom: EMOM, _ workout: workout) {
+    func showEMOM(_ emom: EMOM, _ workout: workout, _ position: Int) {
         let vc = DisplayEMOMViewController()
         vc.emom = emom
         vc.workout = workout
+        vc.position = position
         navigationController.pushViewController(vc, animated: true)
     }
 }

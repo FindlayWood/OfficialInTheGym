@@ -140,8 +140,16 @@ extension DisplayAMRAPViewController {
     }
     func showRPEAlert() {
         let alert = SCLAlertView()
-        let rpe = alert.addTextField("RPE")
-        
+        let rpe = alert.addTextField()
+        rpe.placeholder = "enter rpe 1-10..."
+        rpe.keyboardType = .numberPad
+        rpe.becomeFirstResponder()
+        alert.addButton("Save") {
+            guard let scoreString = rpe.text else {return}
+            guard let scoreInt = Int(scoreString) else {return}
+            self.viewModel.rpeScoreGiven(rpe: scoreInt)
+        }
+        alert.showSuccess("RPE", subTitle: "Enter RPE for AMRAP(1-10).",closeButtonTitle: "cancel")
     }
 }
 @available(iOS 13.0, *)

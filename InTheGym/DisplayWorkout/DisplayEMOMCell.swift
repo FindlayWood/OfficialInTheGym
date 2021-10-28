@@ -13,6 +13,7 @@ class DisplayEMOMCell: UITableViewCell, workoutCellConfigurable {
     
     // MARK: - Properties
     var delegate: DisplayWorkoutProtocol!
+    var emomModel: EMOM!
     
     static let cellID = "DisplayEMEMCellID"
     
@@ -34,10 +35,20 @@ class DisplayEMOMCell: UITableViewCell, workoutCellConfigurable {
         return view
     }()
     
-    var exerciseLabel: UILabel = {
+    var timeLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .regular)
         label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var completedLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.textAlignment = .right
+        label.text = "COMPLETED"
+        label.textColor = .green
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -55,8 +66,26 @@ class DisplayEMOMCell: UITableViewCell, workoutCellConfigurable {
     
     
     func setup(with rowModel: WorkoutType) {
-        guard let emomModel = rowModel as? EMOM else {return}
-        exerciseLabel.text = emomModel.timeLimit?.convertToTime()
+        emomModel = rowModel as? EMOM
+        timeLabel.text = emomModel.timeLimit?.convertToTime()
+        if let completed = emomModel.completed.value {
+            completedLabel.isHidden = !completed
+        }
+        
+        emomModel.completed.valueChanged = { [weak self] newValue in
+            guard let self = self else {return}
+            if newValue {
+                self.completedLabel.isHidden = false
+            } else {
+                self.completedLabel.isHidden = true
+            }
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        emomModel.completed.valueChanged = nil
+        completedLabel.isHidden = true
     }
 }
 
@@ -69,7 +98,8 @@ private extension DisplayEMOMCell {
         selectionStyle = .none
         addSubview(emomLabel)
         addSubview(separatorView)
-        addSubview(exerciseLabel)
+        addSubview(timeLabel)
+        addSubview(completedLabel)
         constrainUI()
     }
     
@@ -82,9 +112,12 @@ private extension DisplayEMOMCell {
             separatorView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
             separatorView.topAnchor.constraint(equalTo: emomLabel.bottomAnchor, constant: 10),
             
-            exerciseLabel.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 20),
-            exerciseLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            exerciseLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
+            timeLabel.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 20),
+            timeLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            timeLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            
+            completedLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            completedLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
         ])
     }
 }

@@ -11,12 +11,14 @@ import Foundation
 @available(iOS 13.0, *)
 class DisplayAMRAPViewModel {
     
+    // MARK: - Callbacks
     var updateTimeLabelHandler: ((String)->())?
     var updateRoundsLabelHandler: ((String)->())?
     var updateExercisesLabelHandler: ((String)->())?
     var updateTimeLabelToRedHandler: (()->())?
     var timerCompleted: (()->())?
     
+    // MARK: - Properties
     var APIService: AMRAPFirebaseAPIService!
     var amrap: AMRAP!
     var display: DisplayAMRAPView!
@@ -27,6 +29,7 @@ class DisplayAMRAPViewModel {
     var isTimerRunning = false
     var seconds: Int!
     
+    // MARK: - Initializer
     init(APIService: AMRAPFirebaseAPIService,
          amrap: AMRAP,
          display: DisplayAMRAPView,
@@ -176,5 +179,9 @@ class DisplayAMRAPViewModel {
     func amrapHasStarted() -> Bool {
         guard let started = amrap.started else {return false}
         return started
+    }
+    
+    func rpeScoreGiven(rpe: Int) {
+        
     }
 }

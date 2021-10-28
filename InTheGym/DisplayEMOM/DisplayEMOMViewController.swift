@@ -21,7 +21,9 @@ class DisplayEMOMViewController: UIViewController {
     
     var emom: EMOM!
     
-    var workout: workout! // workout containing the emom
+    var workout: workout! /// workout containing the emom
+    
+    var position: Int! /// the position of the emom in the workout
     
     var exerciseIndex: Int = 0
 
@@ -31,7 +33,6 @@ class DisplayEMOMViewController: UIViewController {
         initNavBar()
         initViewModel()
         initDisplay()
-        //display.updateFullTime()
     }
     
     override func viewDidLayoutSubviews() {
@@ -74,6 +75,7 @@ class DisplayEMOMViewController: UIViewController {
         
         viewModel.mainTimerCompleted = { [weak self] in
             guard let self = self else {return}
+            self.viewModel.emomCompleted()
             self.navigationItem.hidesBackButton = false
             let alert = SCLAlertView()
             let rpe = alert.addTextField()
@@ -82,7 +84,8 @@ class DisplayEMOMViewController: UIViewController {
             rpe.becomeFirstResponder()
             alert.addButton("Save") {
                 guard let score = rpe.text else {return}
-                print(score)
+                guard let scoreInt = Int(score) else {return}
+                self.viewModel.rpeScoreGiven(scoreInt)
             }
             alert.showSuccess("RPE", subTitle: "Enter RPE for EMOM(1-10).",closeButtonTitle: "cancel")
         }
@@ -91,18 +94,22 @@ class DisplayEMOMViewController: UIViewController {
             guard let self = self else {return}
             guard let numberOfExercises = self.emom.exercises?.count else {return}
             guard let exercises = self.emom.exercises else {return}
+            let completedPosition = self.exerciseIndex % numberOfExercises
+            if let exerciseName = exercises[completedPosition].exercise,
+               let exerciseReps = exercises[completedPosition].reps {
+                FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exerciseName, reps: exerciseReps, weight: nil)
+            }
             self.exerciseIndex += 1
             let position = self.exerciseIndex % numberOfExercises
             self.display.exerciseView.configure(with: exercises[position])
             self.completedMinute()
+            
         }
         
         guard let fullTime = emom.timeLimit else {return}
         viewModel.mainTimerVariable = fullTime
-//        display.fullTimePrgoressView.progress = 1
-//        display.fullTimePrgoressView.timeRemaining = fullTime
-//        display.minuteProgressView.progress = 1
-//        display.minuteProgressView.timeRemaining = 60
+        viewModel.workout = workout
+        viewModel.position = position
     }
     
     func initDisplay() {
@@ -122,6 +129,7 @@ class DisplayEMOMViewController: UIViewController {
         display.initialMainTime.removeFromSuperview()
         display.initialMinuteTime.removeFromSuperview()
         emom.started = true
+        viewModel.startEMOM()
         navigationItem.rightBarButtonItem?.isEnabled = false
     }
 }
@@ -129,10 +137,10 @@ class DisplayEMOMViewController: UIViewController {
 extension DisplayEMOMViewController {
     func completedMinute() {
         UIView.animate(withDuration: 0.6) {
-            self.view.backgroundColor = .lightColour
+            self.display.backgroundColor = .lightColour
         } completion: { _ in
             UIView.animate(withDuration: 0.6) {
-                self.view.backgroundColor = .white
+                self.display.backgroundColor = .white
             }
         }
     }

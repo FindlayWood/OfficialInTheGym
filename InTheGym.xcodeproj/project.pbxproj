@@ -14,8 +14,6 @@
 		74028E5C25E693FB005A1D21 /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E5B25E693FB005A1D21 /* TopView.swift */; };
 		74028E6425E69B52005A1D21 /* TextFieldReturning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E6325E69B52005A1D21 /* TextFieldReturning.swift */; };
 		7403A5EE26C315D1000588CE /* FirebaseAPIGroupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5ED26C315D1000588CE /* FirebaseAPIGroupService.swift */; };
-		7403A5F426C4286E000588CE /* MockFirebaseAPIGroupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5F326C4286E000588CE /* MockFirebaseAPIGroupService.swift */; };
-		7403A5F826C42902000588CE /* CreateGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5F726C42902000588CE /* CreateGroupTests.swift */; };
 		7403A5FA26C54F6B000588CE /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5F926C54F6B000588CE /* UIColor+Extension.swift */; };
 		7403A5FD26C558E9000588CE /* GroupHomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5FC26C558E9000588CE /* GroupHomePageViewController.swift */; };
 		7403A5FF26C558F9000588CE /* GroupHomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5FE26C558F9000588CE /* GroupHomePageViewModel.swift */; };
@@ -230,7 +228,6 @@
 		74478E1C26BDE58600D8178E /* PublicCreatedWorkoutsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74478E1B26BDE58600D8178E /* PublicCreatedWorkoutsCoordinator.swift */; };
 		74478E1E26BDEC1200D8178E /* CreatedWorkoutsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74478E1D26BDEC1200D8178E /* CreatedWorkoutsCoordinator.swift */; };
 		74478E2026BDF05600D8178E /* NotificationsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74478E1F26BDF05600D8178E /* NotificationsCoordinator.swift */; };
-		74478E2326BECC5000D8178E /* ClipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74478E2226BECC5000D8178E /* ClipTests.swift */; };
 		744B9F4B261E013F002574D7 /* MyGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B9F4A261E013F002574D7 /* MyGroupsViewController.swift */; };
 		744B9F70261E0157002574D7 /* MyGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B9F6F261E0157002574D7 /* MyGroupViewModel.swift */; };
 		744B9F75261E0167002574D7 /* MyGroupsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B9F74261E0167002574D7 /* MyGroupsAdapter.swift */; };
@@ -350,6 +347,10 @@
 		747C07582613634400E9F1E2 /* SeeNewPostsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747C07572613634400E9F1E2 /* SeeNewPostsButton.swift */; };
 		747C07972613CF9C00E9F1E2 /* ImageAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747C07962613CF9C00E9F1E2 /* ImageAPIService.swift */; };
 		747FAFBB2727365100E2966E /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FAFBA2727365100E2966E /* UserDefaults+Extension.swift */; };
+		747FAFBF272853F000E2966E /* DisplayEMOMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FAFBE272853F000E2966E /* DisplayEMOMTests.swift */; };
+		747FAFC1272856A300E2966E /* EndPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FAFC0272856A300E2966E /* EndPoints.swift */; };
+		747FAFC3272857A600E2966E /* EMOMFirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FAFC2272857A600E2966E /* EMOMFirebaseService.swift */; };
+		747FAFC527298E5B00E2966E /* MockFirebaseEMOMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FAFC427298E5B00E2966E /* MockFirebaseEMOMService.swift */; };
 		747FED3525659A2900080AC8 /* AddNewGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FED3425659A2900080AC8 /* AddNewGroupViewController.swift */; };
 		7480EBA425F3EDC000E4E768 /* DisplayWorkoutAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7480EBA325F3EDC000E4E768 /* DisplayWorkoutAdapter.swift */; };
 		7480EBA925F3EDF200E4E768 /* DisplayWorkoutProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7480EBA825F3EDF200E4E768 /* DisplayWorkoutProtocol.swift */; };
@@ -510,7 +511,6 @@
 		74F2CCEF26E58F2800D7AD79 /* LikePostEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2CCEE26E58F2800D7AD79 /* LikePostEndpoint.swift */; };
 		74F2CCF126E65E8B00D7AD79 /* CreatingNewWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2CCF026E65E8B00D7AD79 /* CreatingNewWorkout.swift */; };
 		74F2CCF326E78F9600D7AD79 /* MockFirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2CCF226E78F9600D7AD79 /* MockFirebaseManager.swift */; };
-		74F2CCF526E791CE00D7AD79 /* CreateNewPostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2CCF426E791CE00D7AD79 /* CreateNewPostTests.swift */; };
 		74F2CCF726E96B2F00D7AD79 /* FirebaseTimelineService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2CCF626E96B2F00D7AD79 /* FirebaseTimelineService.swift */; };
 		74F2CCF926EA640000D7AD79 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2CCF826EA640000D7AD79 /* UILabel+Extension.swift */; };
 		74F2CCFB26F0036900D7AD79 /* ProgramModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2CCFA26F0036900D7AD79 /* ProgramModel.swift */; };
@@ -524,7 +524,6 @@
 		74F5468F25E9911200C1A6A9 /* UserIDToUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F5468E25E9911200C1A6A9 /* UserIDToUser.swift */; };
 		74F5469425EA810800C1A6A9 /* TransformPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F5469325EA810800C1A6A9 /* TransformPost.swift */; };
 		74F5469925EB137400C1A6A9 /* TransformWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F5469825EB137400C1A6A9 /* TransformWorkout.swift */; };
-		74F546C525EC129900C1A6A9 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F546C425EC129900C1A6A9 /* TestData.swift */; };
 		74F546F625ED4D1700C1A6A9 /* SignUpMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F546F525ED4D1700C1A6A9 /* SignUpMessages.swift */; };
 		74F546FB25ED60EC00C1A6A9 /* FirstTimeMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F546FA25ED60EC00C1A6A9 /* FirstTimeMessages.swift */; };
 		74F5471325EE929900C1A6A9 /* SettingsMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F5471225EE929900C1A6A9 /* SettingsMessages.swift */; };
@@ -586,8 +585,6 @@
 		74028E5B25E693FB005A1D21 /* TopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
 		74028E6325E69B52005A1D21 /* TextFieldReturning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldReturning.swift; sourceTree = "<group>"; };
 		7403A5ED26C315D1000588CE /* FirebaseAPIGroupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAPIGroupService.swift; sourceTree = "<group>"; };
-		7403A5F326C4286E000588CE /* MockFirebaseAPIGroupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFirebaseAPIGroupService.swift; sourceTree = "<group>"; };
-		7403A5F726C42902000588CE /* CreateGroupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupTests.swift; sourceTree = "<group>"; };
 		7403A5F926C54F6B000588CE /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		7403A5FC26C558E9000588CE /* GroupHomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageViewController.swift; sourceTree = "<group>"; };
 		7403A5FE26C558F9000588CE /* GroupHomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageViewModel.swift; sourceTree = "<group>"; };
@@ -803,7 +800,6 @@
 		74478E1B26BDE58600D8178E /* PublicCreatedWorkoutsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCreatedWorkoutsCoordinator.swift; sourceTree = "<group>"; };
 		74478E1D26BDEC1200D8178E /* CreatedWorkoutsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedWorkoutsCoordinator.swift; sourceTree = "<group>"; };
 		74478E1F26BDF05600D8178E /* NotificationsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsCoordinator.swift; sourceTree = "<group>"; };
-		74478E2226BECC5000D8178E /* ClipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipTests.swift; sourceTree = "<group>"; };
 		744B9F4A261E013F002574D7 /* MyGroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsViewController.swift; sourceTree = "<group>"; };
 		744B9F6F261E0157002574D7 /* MyGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupViewModel.swift; sourceTree = "<group>"; };
 		744B9F74261E0167002574D7 /* MyGroupsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsAdapter.swift; sourceTree = "<group>"; };
@@ -929,6 +925,10 @@
 		747C07572613634400E9F1E2 /* SeeNewPostsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeNewPostsButton.swift; sourceTree = "<group>"; };
 		747C07962613CF9C00E9F1E2 /* ImageAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAPIService.swift; sourceTree = "<group>"; };
 		747FAFBA2727365100E2966E /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
+		747FAFBE272853F000E2966E /* DisplayEMOMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayEMOMTests.swift; sourceTree = "<group>"; };
+		747FAFC0272856A300E2966E /* EndPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoints.swift; sourceTree = "<group>"; };
+		747FAFC2272857A600E2966E /* EMOMFirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EMOMFirebaseService.swift; sourceTree = "<group>"; };
+		747FAFC427298E5B00E2966E /* MockFirebaseEMOMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFirebaseEMOMService.swift; sourceTree = "<group>"; };
 		747FED3425659A2900080AC8 /* AddNewGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewGroupViewController.swift; sourceTree = "<group>"; };
 		7480EBA325F3EDC000E4E768 /* DisplayWorkoutAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayWorkoutAdapter.swift; sourceTree = "<group>"; };
 		7480EBA825F3EDF200E4E768 /* DisplayWorkoutProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayWorkoutProtocol.swift; sourceTree = "<group>"; };
@@ -1089,7 +1089,6 @@
 		74F2CCEE26E58F2800D7AD79 /* LikePostEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePostEndpoint.swift; sourceTree = "<group>"; };
 		74F2CCF026E65E8B00D7AD79 /* CreatingNewWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatingNewWorkout.swift; sourceTree = "<group>"; };
 		74F2CCF226E78F9600D7AD79 /* MockFirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFirebaseManager.swift; sourceTree = "<group>"; };
-		74F2CCF426E791CE00D7AD79 /* CreateNewPostTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewPostTests.swift; sourceTree = "<group>"; };
 		74F2CCF626E96B2F00D7AD79 /* FirebaseTimelineService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseTimelineService.swift; sourceTree = "<group>"; };
 		74F2CCF826EA640000D7AD79 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		74F2CCFA26F0036900D7AD79 /* ProgramModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramModel.swift; sourceTree = "<group>"; };
@@ -1103,7 +1102,6 @@
 		74F5468E25E9911200C1A6A9 /* UserIDToUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIDToUser.swift; sourceTree = "<group>"; };
 		74F5469325EA810800C1A6A9 /* TransformPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformPost.swift; sourceTree = "<group>"; };
 		74F5469825EB137400C1A6A9 /* TransformWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformWorkout.swift; sourceTree = "<group>"; };
-		74F546C425EC129900C1A6A9 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		74F546F525ED4D1700C1A6A9 /* SignUpMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpMessages.swift; sourceTree = "<group>"; };
 		74F546FA25ED60EC00C1A6A9 /* FirstTimeMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeMessages.swift; sourceTree = "<group>"; };
 		74F5471225EE929900C1A6A9 /* SettingsMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMessages.swift; sourceTree = "<group>"; };
@@ -1235,8 +1233,8 @@
 		7403A5F226C42852000588CE /* MockServices */ = {
 			isa = PBXGroup;
 			children = (
-				7403A5F326C4286E000588CE /* MockFirebaseAPIGroupService.swift */,
 				74F2CCF226E78F9600D7AD79 /* MockFirebaseManager.swift */,
+				747FAFC427298E5B00E2966E /* MockFirebaseEMOMService.swift */,
 			);
 			path = MockServices;
 			sourceTree = "<group>";
@@ -1593,6 +1591,7 @@
 				7444D0E426D705E20009C7A6 /* PostEndpoints.swift */,
 				74F2CCCE26DFA21000D7AD79 /* GroupEndpoints.swift */,
 				74F2CCEE26E58F2800D7AD79 /* LikePostEndpoint.swift */,
+				747FAFC0272856A300E2966E /* EndPoints.swift */,
 			);
 			path = Endpoints;
 			sourceTree = "<group>";
@@ -1871,10 +1870,7 @@
 				7403A5F226C42852000588CE /* MockServices */,
 				7479A920229F2B4D00D39E2E /* InTheGymTests.swift */,
 				7479A922229F2B4D00D39E2E /* Info.plist */,
-				74F546C425EC129900C1A6A9 /* TestData.swift */,
-				74478E2226BECC5000D8178E /* ClipTests.swift */,
-				7403A5F726C42902000588CE /* CreateGroupTests.swift */,
-				74F2CCF426E791CE00D7AD79 /* CreateNewPostTests.swift */,
+				747FAFBE272853F000E2966E /* DisplayEMOMTests.swift */,
 			);
 			path = InTheGymTests;
 			sourceTree = "<group>";
@@ -1987,6 +1983,7 @@
 				7444D0E626D7BAAB0009C7A6 /* FirebaseCheckFollowing.swift */,
 				74F2CCCC26DE912E00D7AD79 /* FirebaseManager.swift */,
 				74F2CCF626E96B2F00D7AD79 /* FirebaseTimelineService.swift */,
+				747FAFC2272857A600E2966E /* EMOMFirebaseService.swift */,
 			);
 			path = DatabaseManager;
 			sourceTree = "<group>";
@@ -2868,6 +2865,7 @@
 				74FDB5AC268E2822000649CC /* RecordedClipView.swift in Sources */,
 				7403A61026C9B310000588CE /* MoreGroupInfoViewController.swift in Sources */,
 				7444D0B826D30B400009C7A6 /* UploadingWorkoutView.swift in Sources */,
+				747FAFC1272856A300E2966E /* EndPoints.swift in Sources */,
 				7444D06326CD41C60009C7A6 /* GroupWorkoutsAdapter.swift in Sources */,
 				744C9CC725F2B276004B03DF /* DisplayWorkoutViewController.swift in Sources */,
 				74172206245B413B0013EAC8 /* AppInfoViewController.swift in Sources */,
@@ -3025,6 +3023,7 @@
 				7480EBD525F51F0A00E4E768 /* DisplayPlusCollectionViewCell.swift in Sources */,
 				74478E1C26BDE58600D8178E /* PublicCreatedWorkoutsCoordinator.swift in Sources */,
 				747B677526001FC9000AD6B7 /* PlayerTimelineViewModel.swift in Sources */,
+				747FAFC3272857A600E2966E /* EMOMFirebaseService.swift in Sources */,
 				7429783C26C151C00023365E /* CreateNewGroupViewModel.swift in Sources */,
 				74D31E9A25FC17940024CC05 /* FollowersAdapter.swift in Sources */,
 				74F5471325EE929900C1A6A9 /* SettingsMessages.swift in Sources */,
@@ -3229,12 +3228,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7479A921229F2B4D00D39E2E /* InTheGymTests.swift in Sources */,
-				74F2CCF526E791CE00D7AD79 /* CreateNewPostTests.swift in Sources */,
-				7403A5F426C4286E000588CE /* MockFirebaseAPIGroupService.swift in Sources */,
-				74F546C525EC129900C1A6A9 /* TestData.swift in Sources */,
-				7403A5F826C42902000588CE /* CreateGroupTests.swift in Sources */,
+				747FAFBF272853F000E2966E /* DisplayEMOMTests.swift in Sources */,
+				747FAFC527298E5B00E2966E /* MockFirebaseEMOMService.swift in Sources */,
 				74F2CCF326E78F9600D7AD79 /* MockFirebaseManager.swift in Sources */,
-				74478E2326BECC5000D8178E /* ClipTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

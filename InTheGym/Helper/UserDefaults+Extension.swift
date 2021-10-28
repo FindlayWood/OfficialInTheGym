@@ -8,21 +8,32 @@
 
 import Foundation
 import Accessibility
+import UIKit
 
 extension UserDefaults {
     
-    public enum Keys: String {
+    enum Keys: String {
         case hasSeenIntroductionPage = "hasSeenIntroductionPage"
+        case currentUsername = "currentUsername"
     }
     
     @UserDefault(key: Keys.hasSeenIntroductionPage.rawValue, defaultValue: false)
     static var hasSeenIntroduction: Bool
+    
+    @UserDefault(key: Keys.currentUsername.rawValue, defaultValue: "")
+    static var currentUsername: String
+    
 }
 
 @propertyWrapper
 struct UserDefault<Value> {
     let key: String
     let defaultValue: Value
+    
+    init(key: String, defaultValue: Value) {
+        self.key = key
+        self.defaultValue = defaultValue
+    }
     
     var wrappedValue: Value {
         get {

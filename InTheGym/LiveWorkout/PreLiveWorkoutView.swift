@@ -28,6 +28,7 @@ class PreLiveWorkoutView: UIView {
         field.selectedLineColor = Constants.darkColour
         field.placeholder = "enter workout title"
         field.clearButtonMode = .whileEditing
+        field.autocapitalizationType = .words
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
