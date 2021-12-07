@@ -6,7 +6,7 @@ target 'InTheGym' do
   use_frameworks!
 
   # Pods for InTheGym
-	pod 'Firebase/Core', '7.2-M1'
+	pod 'Firebase/Core'
 	pod 'Firebase/Auth'
 	pod 'Firebase/Database'
 	pod 'Firebase/Firestore'

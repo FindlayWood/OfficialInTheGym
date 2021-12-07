@@ -71,5 +71,4 @@ class EMOM: WorkoutType {
         return object
     }
     
-    
 }

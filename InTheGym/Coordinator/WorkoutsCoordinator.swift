@@ -29,6 +29,9 @@ class WorkoutsCoordinator: NSObject, Coordinator {
     }
     
     func start() {
+//        let vc = DisplayingWorkoutsViewController()
+//        vc.coordinator = self
+//        navigationController.pushViewController(vc, animated: true)
         let vc = PlayerWorkoutViewController.instantiate()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)

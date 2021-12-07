@@ -118,4 +118,10 @@ extension WorkoutTableViewCell {
         creatorLabel.text = data.createdBy
         exerciseCountLabel.text = data.exercises?.count.description
     }
+    
+    public func configure(with data: WorkoutModel) {
+        titleLabel.text = data.title
+        creatorLabel.text = data.createdBy
+        exerciseCountLabel.text = data.exercises.count.description
+    }
 }

@@ -10,6 +10,7 @@
 
 import UIKit
 import Firebase
+import CodableFirebase
 import SCLAlertView
 import EmptyDataSet_Swift
 
@@ -18,6 +19,8 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     var coordinator: WorkoutsFlow?
     
     @IBOutlet weak var tableview:UITableView!
+    
+    var workoutModels: [WorkoutModel] = []
     
     var workouts:[[String:AnyObject]] = []
     var DBref:DatabaseReference!
@@ -93,8 +96,35 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         self.inProgressIDs.removeAll()
         self.notStartedWorkouts.removeAll()
         self.notStartedIDs.removeAll()
+        
+        DBref.observeSingleEvent(of: .value) { snapshot in
+            for child in snapshot.children.allObjects as! [DataSnapshot] {
+                guard let workoutObject = child.value as? [String:AnyObject] else {return}
+                do {
+                    let workoutData = try FirebaseDecoder().decode(WorkoutModel.self, from: workoutObject)
+                    self.workoutModels.insert(workoutData, at: 0)
+                }
+                catch {
+                    print(String(describing: error))
+                }
+            }
+            print(self.workoutModels.count)
+            print(self.workoutModels[0].title)
+        }
+        
+        
         handle = DBref.observe(.childAdded, with: { (snapshot) in
             if let snap = snapshot.value as? [String:AnyObject]{
+//                do {
+////                    let postData = try FirebaseDecoder().decode(post.self, from: postObject)
+//                    let workoutData = try FirebaseDecoder().decode(WorkoutModel.self, from: snap)
+//                    self.workoutModels.insert(workoutData, at: 0)
+//                    print("Number of workouts \(self.workoutModels.count)")
+//                    print(workoutData.title)
+//                }
+//                catch {
+//                    print(String(describing: error))
+//                }
                 
                 self.workouts.insert(snap, at: 0)
                 self.workoutIDs.insert(snapshot.key, at: 0)

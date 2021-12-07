@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CodableFirebase
 
 
 class exercise: WorkoutType, Codable {
@@ -104,3 +105,41 @@ class exercise: WorkoutType, Codable {
         return object
     }
 }
+
+enum ExerciseType: String, Codable {
+    case regularExercise = "regularExercise"
+    case emom = "emom"
+}
+
+
+struct ExerciseModel: Codable {
+    var exerciseType: ExerciseType?
+    var exercise: String
+    var reps: [Int]?
+    var weight: [String]?
+    var type: bodyType?
+    var completedSets: [Bool]?
+    var sets: Int?
+    var rpe: String?
+    ///variables for emom below
+    var exercises: [ExerciseModel]?
+    var started: Bool?
+    var startTime: TimeInterval?
+    var timeLimit: Int?
+    var completed: Bool?
+}
+
+//class EMOMModel: Codable {
+//    var exerciseType: ExerciseType = .emom
+//    var exercise: String? = "EMOM"
+//    var exercises: [ExerciseModel]
+//    var timeLimit: Int
+//    var completed: Bool
+//    //var completed: Observable<Bool> = Observable<Bool>()
+//    //var emom: Bool = true
+//    var rpe: Int?
+//    var started: Bool
+//    var startTime: TimeInterval?
+//}
+
+

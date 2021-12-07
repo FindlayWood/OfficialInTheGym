@@ -58,4 +58,9 @@ class MainCoordinator: Coordinator {
         coordinate(to: tabBar)
     }
     
+    func forgotPassword() {
+        let vc = ResetPasswordViewController()
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
 }

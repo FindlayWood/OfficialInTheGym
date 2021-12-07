@@ -11,6 +11,7 @@ import UIKit
 import Firebase
 import Network
 import SCLAlertView
+import SwiftUI
 
 
 class ViewController: UIViewController, Storyboarded {
@@ -18,6 +19,8 @@ class ViewController: UIViewController, Storyboarded {
     weak var coordinator: MainCoordinator?
     
     let firstView = FirstScreenView()
+    
+    let swiftUIView = LaunchScreenSwiftUI()
     
     @IBOutlet var middleLabel:UILabel!
     
@@ -68,6 +71,7 @@ class ViewController: UIViewController, Storyboarded {
         DBref = Database.database().reference()
         
         super.viewDidLoad()
+        
         // check if current user exists and log them in
         
 //        if Auth.auth().currentUser != nil{
@@ -131,8 +135,24 @@ class ViewController: UIViewController, Storyboarded {
     
     override func loadView() {
         view = firstView
+        //view = swiftUIView
+//        let childView = UIHostingController(rootView: swiftUIView)
+//        addChild(childView)
+//        childView.view.frame = view.frame
+//        view.addSubview(childView.view)
+//        childView.didMove(toParent: self)
+//        
+//        childView.rootView.signUpButtonCallBack = { [weak self] in
+//            guard let self = self else {return}
+//            self.coordinator?.signUpStepOne()
+//        }
+//        
+//        childView.rootView.loginButtonCallBack = { [weak self] in
+//            guard let self = self else {return}
+//            self.coordinator?.login()
+//        }
+        
     }
-    
     
     // function when either button is tapped to navigate to the correct page
     @IBAction func tapped(_ sender:UIButton){

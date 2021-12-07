@@ -45,11 +45,7 @@ class FirstScreenView: UIView {
     
     lazy var bottomView: UIView = {
        let view = UIView()
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .systemGray5
-        } else {
-            view.backgroundColor = .lightGray
-        }
+        view.backgroundColor = .systemGray5
         view.layer.cornerRadius = 10
         view.clipsToBounds = true
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -62,7 +58,7 @@ class FirstScreenView: UIView {
         button.setTitle("SIGN UP", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont(name: fontName, size: 25)
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 20
         button.backgroundColor = Constants.darkColour
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOffset = CGSize(width: 0, height: 0.0)
@@ -75,7 +71,7 @@ class FirstScreenView: UIView {
     lazy var loginMessage: UILabel = {
        let label = UILabel()
         label.text = loginString
-        label.font = UIFont(name: fontName, size: 15)
+        label.font = .systemFont(ofSize: 15)
         label.textAlignment = .left
         label.backgroundColor = .clear
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -85,12 +81,21 @@ class FirstScreenView: UIView {
     lazy var loginButton: UIButton = {
         let button = UIButton()
         button.setTitle("LOGIN", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.darkColour, for: .normal)
         button.titleLabel?.font = UIFont(name: fontName, size: 15)
-        button.backgroundColor = .darkGray
+//        button.backgroundColor = .darkGray
         button.layer.cornerRadius = 15
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    
+    var bottomStack: UIStackView = {
+        let stack = UIStackView()
+        stack.spacing = 10
+        stack.axis = .horizontal
+        stack.distribution = .fillProportionally
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
     
     override init(frame: CGRect) {
@@ -107,42 +112,57 @@ class FirstScreenView: UIView {
         addSubview(centerImage)
         addSubview(titleLabel)
         addSubview(sloganMessage)
-        addSubview(bottomView)
-        bottomView.addSubview(signUpButton)
-        bottomView.addSubview(loginMessage)
-        bottomView.addSubview(loginButton)
+        //addSubview(bottomView)
+        addSubview(signUpButton)
+        bottomStack.addArrangedSubview(loginMessage)
+        bottomStack.addArrangedSubview(loginButton)
+        addSubview(bottomStack)
+//        addSubview(loginMessage)
+//        addSubview(loginButton)
+//        bottomView.addSubview(signUpButton)
+//        bottomView.addSubview(loginMessage)
+//        bottomView.addSubview(loginButton)
         constrain()
     }
     
     private func constrain() {
-        NSLayoutConstraint.activate([titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+        NSLayoutConstraint.activate([
+                                     //titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
                                      titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-        
-                                     centerImage.bottomAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 10),
-                                     centerImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-                                     centerImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+                                     titleLabel.topAnchor.constraint(equalTo: centerImage.bottomAnchor),
+                                     
+                                     centerImage.topAnchor.constraint(equalTo: topAnchor, constant: Constants.screenSize.height * 0.1),
+                                     //centerImage.bottomAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 10),
+                                     centerImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+                                     centerImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
                                      centerImage.heightAnchor.constraint(equalTo: centerImage.widthAnchor),
         
                                      sloganMessage.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
                                      sloganMessage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
                                      sloganMessage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
                                      
-                                     bottomView.bottomAnchor.constraint(equalTo: bottomAnchor),
-                                     bottomView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.2),
-                                     bottomView.leadingAnchor.constraint(equalTo: leadingAnchor),
-                                     bottomView.trailingAnchor.constraint(equalTo: trailingAnchor),
+//                                     bottomView.bottomAnchor.constraint(equalTo: bottomAnchor),
+//                                     bottomView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.2),
+//                                     bottomView.leadingAnchor.constraint(equalTo: leadingAnchor),
+//                                     bottomView.trailingAnchor.constraint(equalTo: trailingAnchor),
                                      
-                                     signUpButton.topAnchor.constraint(equalTo: bottomView.topAnchor, constant: 10),
-                                     signUpButton.heightAnchor.constraint(equalToConstant: 50),
-                                     signUpButton.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 20),
-                                     signUpButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -20),
+                                     signUpButton.bottomAnchor.constraint(equalTo: bottomStack.topAnchor, constant: -20),
+                                     signUpButton.heightAnchor.constraint(equalToConstant: 60),
+                                     signUpButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+                                     signUpButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
                                      
-                                     loginButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -20),
-                                     loginButton.bottomAnchor.constraint(equalTo: bottomView.bottomAnchor, constant: -30),
+                                     bottomStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30),
+                                     bottomStack.centerXAnchor.constraint(equalTo: centerXAnchor),
+                                     //bottomStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+                                     //bottomStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+                                     
+//                                     loginButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+//                                     loginButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30),
                                      loginButton.heightAnchor.constraint(equalToConstant: 30),
         
-                                     loginMessage.trailingAnchor.constraint(equalTo: loginButton.leadingAnchor, constant: -10),
-                                     loginMessage.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 20),
-                                     loginMessage.centerYAnchor.constraint(equalTo: loginButton.centerYAnchor)])
+//                                     loginMessage.trailingAnchor.constraint(equalTo: loginButton.leadingAnchor, constant: -10),
+//                                     loginMessage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+//                                     loginMessage.centerYAnchor.constraint(equalTo: loginButton.centerYAnchor)
+        ])
     }
 }

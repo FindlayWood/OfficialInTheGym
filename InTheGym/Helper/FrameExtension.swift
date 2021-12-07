@@ -15,4 +15,7 @@ extension UIViewController {
     func getViewableFrameWithBottomSafeArea() -> CGRect {
         return CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom)
     }
+    func getFullScreenFrame() -> CGRect {
+        return CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+    }
 }

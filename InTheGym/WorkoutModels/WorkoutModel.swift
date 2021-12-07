@@ -141,3 +141,40 @@ class workout: Completeable {
     }
     
 }
+
+struct WorkoutModel: Codable, Hashable {
+    var title: String
+    var workoutID: String?
+    var creatorID: String
+    var createdBy: String
+    var completed: Bool
+    var score: String?
+    var startTime: TimeInterval?
+    var timeToComplete: Int?
+    var workload: Int?
+    var exercises: [ExerciseModel]
+    var liveWorkout: Bool?
+    
+    static func == (lhs: WorkoutModel, rhs: WorkoutModel) -> Bool {
+        lhs.workoutID == rhs.workoutID
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(workoutID)
+    }
+}
+
+extension WorkoutModel: FirebaseResource {
+    static var path: String {
+        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)"
+    }
+}
+
+/// A type that can be loaded and uploaded to and from Firebase
+/// A Firebase Resource REQUIRES Codable
+protocol FirebaseResource: Codable {
+    
+    /// The String that holds the path to the correct database reference in Firebase
+    static var path: String { get }
+}
+
