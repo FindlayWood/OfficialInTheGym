@@ -2249,7 +2249,7 @@
                                     <constraint firstAttribute="height" constant="45" id="k83-Bp-TOE"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="22"/>
-                                <state key="normal" title="CONTINUE">
+                                <state key="normal">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -2257,7 +2257,7 @@
                                         <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="22"/>
+                                        <real key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                         <real key="value" value="0.0"/>
@@ -7433,7 +7433,7 @@
             <size key="intrinsicContentSize" width="49" height="30"/>
         </designable>
         <designable name="6DN-hZ-vmB">
-            <size key="intrinsicContentSize" width="175" height="46.380859375"/>
+            <size key="intrinsicContentSize" width="87" height="25.5"/>
         </designable>
         <designable name="6uA-th-tCV">
             <size key="intrinsicContentSize" width="80" height="38"/>
@@ -7445,13 +7445,13 @@
             <size key="intrinsicContentSize" width="102" height="45"/>
         </designable>
         <designable name="9tH-JZ-dNG">
-            <size key="intrinsicContentSize" width="175" height="46.380859375"/>
+            <size key="intrinsicContentSize" width="90.5" height="25.5"/>
         </designable>
         <designable name="9xg-2J-BvV">
-            <size key="intrinsicContentSize" width="374" height="43.994140625"/>
+            <size key="intrinsicContentSize" width="134" height="34"/>
         </designable>
         <designable name="Ec4-Hr-l2P">
-            <size key="intrinsicContentSize" width="374" height="46.380859375"/>
+            <size key="intrinsicContentSize" width="90" height="25.5"/>
         </designable>
         <designable name="EjO-4l-1RP">
             <size key="intrinsicContentSize" width="50" height="42"/>
@@ -7466,7 +7466,7 @@
             <size key="intrinsicContentSize" width="91" height="42"/>
         </designable>
         <designable name="ND8-9f-WcF">
-            <size key="intrinsicContentSize" width="374" height="39.220703125"/>
+            <size key="intrinsicContentSize" width="260.5" height="34"/>
         </designable>
         <designable name="NFV-6f-h4J">
             <size key="intrinsicContentSize" width="170" height="46"/>
@@ -7493,13 +7493,13 @@
             <size key="intrinsicContentSize" width="73" height="36"/>
         </designable>
         <designable name="X1P-3o-QOc">
-            <size key="intrinsicContentSize" width="374" height="46.380859375"/>
+            <size key="intrinsicContentSize" width="48" height="25.5"/>
         </designable>
         <designable name="YYT-pf-4sR">
             <size key="intrinsicContentSize" width="159" height="38"/>
         </designable>
         <designable name="aLW-Oz-ZZK">
-            <size key="intrinsicContentSize" width="374" height="46.380859375"/>
+            <size key="intrinsicContentSize" width="87.5" height="24"/>
         </designable>
         <designable name="brK-Tg-rQq">
             <size key="intrinsicContentSize" width="66" height="48"/>
@@ -7508,13 +7508,13 @@
             <size key="intrinsicContentSize" width="161" height="48"/>
         </designable>
         <designable name="fuu-ks-QYN">
-            <size key="intrinsicContentSize" width="374" height="43.994140625"/>
+            <size key="intrinsicContentSize" width="173.5" height="34"/>
         </designable>
         <designable name="h36-4N-4qy">
-            <size key="intrinsicContentSize" width="106" height="38"/>
+            <size key="intrinsicContentSize" width="30" height="38"/>
         </designable>
         <designable name="kez-jD-vfi">
-            <size key="intrinsicContentSize" width="374" height="46.380859375"/>
+            <size key="intrinsicContentSize" width="140" height="34"/>
         </designable>
         <designable name="mCH-em-kvR">
             <size key="intrinsicContentSize" width="120" height="36"/>
@@ -7529,7 +7529,7 @@
             <size key="intrinsicContentSize" width="90" height="48"/>
         </designable>
         <designable name="rrL-Ym-l4D">
-            <size key="intrinsicContentSize" width="374" height="47.57421875"/>
+            <size key="intrinsicContentSize" width="168.5" height="26"/>
         </designable>
         <designable name="tr4-6C-l3c">
             <size key="intrinsicContentSize" width="127" height="47"/>
@@ -7538,13 +7538,13 @@
             <size key="intrinsicContentSize" width="51" height="36"/>
         </designable>
         <designable name="x2E-94-mXR">
-            <size key="intrinsicContentSize" width="374" height="43.994140625"/>
+            <size key="intrinsicContentSize" width="154" height="34"/>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="DlQ-Ta-vHz"/>
+        <segue reference="8ck-2H-QOt"/>
         <segue reference="bZ1-vr-FNa"/>
-        <segue reference="A69-XW-2yR"/>
+        <segue reference="eBs-2T-emV"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Set Workout" width="144" height="144"/>

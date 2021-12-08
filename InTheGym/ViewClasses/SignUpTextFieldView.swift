@@ -33,7 +33,7 @@ class SignUpTextFieldView: UIView {
         field.lineColor = .lightGray
         field.selectedTitleColor = .darkColour
         field.selectedLineColor = .darkColour
-        field.clearButtonMode = .whileEditing
+        field.clearButtonMode = .never
         field.autocapitalizationType = .none
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
@@ -42,7 +42,7 @@ class SignUpTextFieldView: UIView {
     lazy var promptLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15, weight: .semibold)
-        label.textColor = .red
+        label.textColor = .red.withAlphaComponent(0.8)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

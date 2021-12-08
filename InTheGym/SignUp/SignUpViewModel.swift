@@ -55,7 +55,7 @@ class SignUpViewModel {
     
     var SignUpSuccesfulClosure: ((String)->())?
     var SignUpFailedClosure: ((SignUpError)->())?
-    private var minimumPasswordLength = 6
+    private(set) var minimumPasswordLength = 6
     private var user = SignUpUserModel()
     
 //    var email: String {

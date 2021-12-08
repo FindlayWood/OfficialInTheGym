@@ -436,6 +436,8 @@
 		74B6F767275A526E00A72679 /* SignUpTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F766275A526D00A72679 /* SignUpTextFieldView.swift */; };
 		74B6F769275A5B7A00A72679 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F768275A5B7A00A72679 /* SignUpView.swift */; };
 		74B6F76B275A5BF700A72679 /* SkyFloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F76A275A5BF700A72679 /* SkyFloatingTextField.swift */; };
+		74B6F76D275FB81E00A72679 /* MockFirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F76C275FB81E00A72679 /* MockFirebaseAuthManager.swift */; };
+		74B6F76F275FB88800A72679 /* SignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F76E275FB88800A72679 /* SignUpTests.swift */; };
 		74B9A011273D8C87000AA2D6 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B9A010273D8C87000AA2D6 /* LoginViewModel.swift */; };
 		74BAB0E725642600009D35E8 /* LineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BAB0E625642600009D35E8 /* LineChart.swift */; };
 		74BDA835246C479F00DFAEEF /* PlayerInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BDA834246C479F00DFAEEF /* PlayerInfoCell.swift */; };
@@ -1024,6 +1026,8 @@
 		74B6F766275A526D00A72679 /* SignUpTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTextFieldView.swift; sourceTree = "<group>"; };
 		74B6F768275A5B7A00A72679 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		74B6F76A275A5BF700A72679 /* SkyFloatingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyFloatingTextField.swift; sourceTree = "<group>"; };
+		74B6F76C275FB81E00A72679 /* MockFirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFirebaseAuthManager.swift; sourceTree = "<group>"; };
+		74B6F76E275FB88800A72679 /* SignUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTests.swift; sourceTree = "<group>"; };
 		74B9A010273D8C87000AA2D6 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		74BAB0E625642600009D35E8 /* LineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChart.swift; sourceTree = "<group>"; };
 		74BDA834246C479F00DFAEEF /* PlayerInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerInfoCell.swift; sourceTree = "<group>"; };
@@ -1266,6 +1270,7 @@
 			children = (
 				74F2CCF226E78F9600D7AD79 /* MockFirebaseManager.swift */,
 				747FAFC427298E5B00E2966E /* MockFirebaseEMOMService.swift */,
+				74B6F76C275FB81E00A72679 /* MockFirebaseAuthManager.swift */,
 			);
 			path = MockServices;
 			sourceTree = "<group>";
@@ -1906,6 +1911,7 @@
 				7479A920229F2B4D00D39E2E /* InTheGymTests.swift */,
 				7479A922229F2B4D00D39E2E /* Info.plist */,
 				747FAFBE272853F000E2966E /* DisplayEMOMTests.swift */,
+				74B6F76E275FB88800A72679 /* SignUpTests.swift */,
 			);
 			path = InTheGymTests;
 			sourceTree = "<group>";
@@ -3312,6 +3318,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7479A921229F2B4D00D39E2E /* InTheGymTests.swift in Sources */,
+				74B6F76F275FB88800A72679 /* SignUpTests.swift in Sources */,
+				74B6F76D275FB81E00A72679 /* MockFirebaseAuthManager.swift in Sources */,
 				747FAFBF272853F000E2966E /* DisplayEMOMTests.swift in Sources */,
 				747FAFC527298E5B00E2966E /* MockFirebaseEMOMService.swift in Sources */,
 				74F2CCF326E78F9600D7AD79 /* MockFirebaseManager.swift in Sources */,

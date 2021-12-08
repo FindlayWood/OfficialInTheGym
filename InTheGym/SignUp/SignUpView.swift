@@ -27,22 +27,25 @@ class SignUpView: UIView {
     }()
     var emailField: SignUpTextFieldView = {
         let view = SignUpTextFieldView()
-        view.configure(isSecure: false, textFieldPlaceHolder: "Email", errorPrompt: "Invlaid Email")
+        view.configure(isSecure: false, textFieldPlaceHolder: "Email", errorPrompt: "Invalid Email")
         view.changeState(to: .notEnoughInfo)
+        view.textFieldView.textContentType = .emailAddress
+        view.textFieldView.keyboardType = .emailAddress
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     var usernameField: SignUpTextFieldView = {
         let view = SignUpTextFieldView()
-        view.configure(isSecure: false, textFieldPlaceHolder: "Username", errorPrompt: "InvalidUsername.")
+        view.configure(isSecure: false, textFieldPlaceHolder: "Username", errorPrompt: "This username is already taken.")
         view.changeState(to: .inValidInfo)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     var passwordField: SignUpTextFieldView = {
         let view = SignUpTextFieldView()
-        view.configure(isSecure: true, textFieldPlaceHolder: "Password", errorPrompt: "Invalid password.")
+        view.configure(isSecure: true, textFieldPlaceHolder: "Password", errorPrompt: "Passwords must be at least 6 characters long.")
         view.changeState(to: .valid)
+        view.textFieldView.textContentType = .password
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -66,6 +69,32 @@ class SignUpView: UIView {
         return stack
     }()
     
+    var pageNumberLabel: UILabel = {
+        let label = UILabel()
+        label.text = "2 of 2"
+        label.textColor = .darkColour
+        label.font = UIFont(name: "Menlo-Bold", size: 20)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var logoLabel: UILabel = {
+        let label = UILabel()
+        label.text = "INTHEGYM"
+        label.font = UIFont(name: "Menlo-BoldItalic", size: 15)
+        label.textColor = .darkColour
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var bottomStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [pageNumberLabel, logoLabel])
+        stack.axis = .vertical
+        stack.spacing = 5
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -82,6 +111,7 @@ private extension SignUpView {
     func setupUI() {
         backgroundColor = .white
         addSubview(stack)
+        addSubview(bottomStack)
         configureUI()
     }
     
@@ -89,7 +119,10 @@ private extension SignUpView {
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: topAnchor),
             stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            
+            bottomStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+            bottomStack.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
 }

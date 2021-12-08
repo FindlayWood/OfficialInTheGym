@@ -56,29 +56,29 @@ class PlayerOrCoachViewController: UIViewController, Storyboarded {
         contineButton.isHidden = true
         navigationItem.title = "ACCOUNT TYPE"
         text.text = "Choose your ACCOUNT type."
-        
+        setUpContinueButton()
     }
     
     @objc fileprivate func coachPressed(){
         text.text = SignUpMessages.coachMessage
         text.isHidden = false
-        contineButton.isHidden = false
         coachView.backgroundColor = Constants.darkColour
         playerView.backgroundColor = Constants.lightColour
         isAdmin = true
         self.selection.selectionChanged()
         self.contineButton.setTitle("CONTINUE AS COACH", for: .normal)
+        contineButton.isHidden = false
     }
     
     @objc fileprivate func playerPressed(){
         text.text = SignUpMessages.playerMessage
         text.isHidden = false
-        contineButton.isHidden = false
         playerView.backgroundColor = Constants.darkColour
         coachView.backgroundColor = Constants.lightColour
         isAdmin = false
         self.selection.selectionChanged()
         self.contineButton.setTitle("CONTINUE AS PLAYER", for: .normal)
+        contineButton.isHidden = false
     }
     
     @IBAction func continuePressed(_ sender:UIButton){
@@ -92,7 +92,13 @@ class PlayerOrCoachViewController: UIViewController, Storyboarded {
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.tintColor = Constants.darkColour
     }
-    
+}
 
-
+extension PlayerOrCoachViewController {
+    func setUpContinueButton() {
+        contineButton.layer.shadowColor = UIColor.black.cgColor
+        contineButton.layer.shadowOffset = CGSize(width: 0, height: 0.0)
+        contineButton.layer.shadowRadius = 6.0
+        contineButton.layer.shadowOpacity = 1.0
+    }
 }

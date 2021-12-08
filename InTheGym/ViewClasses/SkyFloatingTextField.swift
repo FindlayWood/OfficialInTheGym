@@ -27,8 +27,8 @@ class SkyFloatingTextField: UIView {
         field.lineColor = .lightGray
         field.selectedTitleColor = .darkColour
         field.selectedLineColor = .darkColour
-        field.clearButtonMode = .whileEditing
-        field.autocapitalizationType = .none
+        field.clearButtonMode = .never
+        field.autocapitalizationType = .words
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
