@@ -22,13 +22,15 @@ class GroupHomePageViewController: UIViewController {
         return GroupHomePageViewModel()
     }()
     
+    private lazy var dataSource = makeDataSorce()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .darkColour
         setUpDisplay()
         addNavBarButton()
         initViewModel()
-        
+        initTableView()
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -40,16 +42,17 @@ class GroupHomePageViewController: UIViewController {
         viewModel.reloadPostsTableViewClosure = { [weak self] in
             guard let self = self else {return}
             DispatchQueue.main.async {
-                let sections = IndexSet.init(integer: 1)
-                self.display.tableview.reloadSections(sections, with: .none)
+                self.tableUpdatePosts(with: self.viewModel.posts)
+                //let sections = IndexSet.init(integer: 1)
+                //self.display.tableview.reloadSections(sections, with: .none)
             }
         }
         
         viewModel.reloadMembersTableViewClosure = { [weak self] in
             guard let self = self else {return}
             DispatchQueue.main.async {
-                let sections = IndexSet.init(integer: 0)
-                self.display.tableview.reloadSections(sections, with: .none)
+                //let sections = IndexSet.init(integer: 0)
+                //self.display.tableview.reloadSections(sections, with: .none)
             }
         }
         viewModel.reloadHeaderImageClosure = { [weak self] in
@@ -89,10 +92,11 @@ class GroupHomePageViewController: UIViewController {
         viewModel.groupLeaderLoadedClosure = { [weak self] in
             guard let self = self else {return}
             DispatchQueue.main.async {
+                self.tableUpdate(with: [.leader(self.getGroupLeader())])
                 //let indexPath = IndexPath(row: 1, section: 0)
-                let sections = IndexSet.init(integer: 0)
+                //let sections = IndexSet.init(integer: 0)
                 //self.display.tableview.reloadRows(at: [indexPath], with: .none)
-                self.display.tableview.reloadSections(sections, with: .none)
+                //self.display.tableview.reloadSections(sections, with: .none)
             }
             
         }
@@ -115,6 +119,14 @@ class GroupHomePageViewController: UIViewController {
         viewModel.loadGroupLeader(from: currentGroup.leader)
     }
     
+    func initTableView() {
+        tableSetup()
+        let currentItems: [GroupItems] = [.name(currentGroup)]
+        tableUpdate(with: currentItems)
+        let infoItems: [GroupItems] = [.info(groupInfo())]
+        tableUpdate(with: infoItems)
+    }
+    
     @objc func moreButtonTapped() {
         let info = MoreGroupInfoModel(leader: getGroupLeader(),
                                       headerImage: getGroupImage(),
@@ -135,7 +147,7 @@ extension GroupHomePageViewController {
         adapter = .init(delegate: self)
         adapter.headerView = display.tableview.tableHeaderView as? StretchyTableHeaderView
         display.tableview.delegate = adapter
-        display.tableview.dataSource = adapter
+        display.tableview.dataSource = makeDataSorce()
         display.tableview.backgroundColor = .darkColour
     }
 }
@@ -258,4 +270,126 @@ extension GroupHomePageViewController: TimelineTapProtocol {
         guard let index = display.tableview.indexPath(for: cell) else {return}
         viewModel.workoutTapped(at: index)
     }
+}
+
+extension GroupHomePageViewController {
+    
+    enum GroupSections {
+        case groupName
+        case groupLeader
+        case groupInfo
+        case groupPosts
+    }
+    
+
+    
+    func makeDataSorce() -> UITableViewDiffableDataSource<GroupSections,GroupItems> {
+        return UITableViewDiffableDataSource(tableView: display.tableview) { tableView, indexPath, itemIdentifier in
+            switch itemIdentifier {
+            case .name(let model):
+                let cell = UITableViewCell()
+                cell.textLabel?.text = model.username
+                cell.textLabel?.font = Constants.font
+                cell.selectionStyle = .none
+                return cell
+            case .leader(let leader):
+                let cell = tableView.dequeueReusableCell(withIdentifier: UserTableViewCell.cellID, for: indexPath) as! UserTableViewCell
+                cell.configureCell(with: leader)
+                return cell
+            case .info(_):
+                let cell = tableView.dequeueReusableCell(withIdentifier: GroupHomePageInfoTableViewCell.cellID, for: indexPath) as! GroupHomePageInfoTableViewCell
+                cell.configureForLeader(self.isCurrentUserLeader())
+                cell.delegate = self
+                return cell
+            case .posts(let model):
+                let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
+                cell.configure(with: model)
+                cell.delegate = self
+                return cell
+            }
+        }
+    }
+    
+    func tableSetup() {
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.appendSections([.groupName, .groupLeader, .groupInfo, .groupPosts])
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    func tableUpdate(with items: [GroupItems]) {
+        var currentSnapshot = dataSource.snapshot()
+        for item in items {
+            switch item {
+            case .name(let groupModel):
+                currentSnapshot.appendItems([.name(groupModel)], toSection: .groupName)
+            case .leader(let users):
+                currentSnapshot.appendItems([.leader(users)], toSection: .groupLeader)
+            case .info(let groupInfo):
+                currentSnapshot.appendItems([.info(groupInfo)], toSection: .groupInfo)
+            case .posts(let post):
+                currentSnapshot.appendItems([.posts(post)], toSection: .groupPosts)
+            }
+        }
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    func tableUpdatePosts(with posts: [post]) {
+        var currentSnapshot = dataSource.snapshot()
+        for post in posts {
+            currentSnapshot.appendItems([.posts(post)], toSection: .groupPosts)
+        }
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+//
+//    func updateGroupName(with name: groupName) {
+//        var currentSnapshot = dataSource.snapshot()
+//
+//        currentSnapshot.appendSections([.groupName])
+//
+//        currentSnapshot.appendItems([name], toSection: .groupName)
+//        dataSource.apply(currentSnapshot, animatingDifferences: true)
+//    }
+//
+//    func updateGroupLeader(with leader: Users) {
+//        var currentSnapshot = dataSource.snapshot()
+//
+//        currentSnapshot.appendSections([.groupLeader])
+//        currentSnapshot.appendItems([leader], toSection: .groupLeader)
+//
+//        dataSource.apply(currentSnapshot, animatingDifferences: true)
+//    }
+}
+
+struct groupName: Hashable {
+    var name: String
+    var id: String = UUID().uuidString
+    
+    static func == (lhs: groupName, rhs: groupName) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+struct groupInfo: Hashable {
+    var id: String = UUID().uuidString
+    
+    static func == (lhs: groupInfo, rhs: groupInfo) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+struct groupEmptyPosts: Hashable {
+    var message: String = "No Posts in this group."
+}
+
+enum GroupItems: Hashable {
+    case name(groupModel)
+    case leader(Users)
+    case info(groupInfo)
+    case posts(post)
 }

@@ -15,7 +15,7 @@ enum PostTypes: String, Codable {
     case attachedClip = "attachedClip"
 }
 
-class post: Codable, AutoIDable {
+class post: Codable, Hashable, AutoIDable {
     //var postID: String
     var username: String
     var posterID: String
@@ -28,7 +28,14 @@ class post: Codable, AutoIDable {
     var likeCount: Int
     var replyCount: Int
     var isPrivate: Bool
-    var id : String 
+    var id: String
+    
+    static func == (lhs: post, rhs: post) -> Bool {
+        return lhs.id == rhs.id
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 
 struct attachedClip: Codable {

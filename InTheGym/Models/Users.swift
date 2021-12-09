@@ -9,7 +9,7 @@
 import Foundation
 
 /// users object containing all user profile info
-struct Users: Codable, Assignable {
+struct Users: Codable, Hashable, Assignable {
     var admin: Bool
     var email: String
     var username: String
@@ -19,4 +19,16 @@ struct Users: Codable, Assignable {
     var uid: String
     var profilePhotoURL: String?
     var profileBio: String?
+    
+    var id: String {
+        return uid
+    }
+    
+    static func == (lhs: Users, rhs: Users) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uid)
+    }
 }

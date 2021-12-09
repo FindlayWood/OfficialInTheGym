@@ -9,12 +9,20 @@
 import Foundation
 import Firebase
 
-struct groupModel: Codable, Assignable {
+struct groupModel: Codable, Hashable, Assignable {
     var uid: String
     var username: String
     var description: String!
     var groupMembers: [Users]?
     var leader: String!
+    
+    static func == (lhs: groupModel, rhs: groupModel) -> Bool {
+        lhs.uid == rhs.uid
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uid)
+    }
     
 //    init?(snapshot:DataSnapshot){
 //        guard let snap = snapshot.value as? [String:AnyObject] else {
