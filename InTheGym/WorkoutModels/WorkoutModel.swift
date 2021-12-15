@@ -168,6 +168,9 @@ extension WorkoutModel: FirebaseResource {
     static var path: String {
         return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)"
     }
+    var internalPath: String {
+        return "Workouts/\(workoutID)"
+    }
 }
 
 /// A type that can be loaded and uploaded to and from Firebase
@@ -175,6 +178,11 @@ extension WorkoutModel: FirebaseResource {
 protocol FirebaseResource: Codable {
     
     /// The String that holds the path to the correct database reference in Firebase
+    /// Must be static to allow access without creating instance
     static var path: String { get }
+    
+    /// The path to an instance of the model
+    /// This will usually include an id to point to specific database reference or specific list
+    var internalPath: String { get }
 }
 

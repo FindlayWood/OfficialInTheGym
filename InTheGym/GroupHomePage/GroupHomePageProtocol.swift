@@ -13,6 +13,7 @@ protocol GroupHomePageProtocol: TimelineTapProtocol {
     func getPostData(at indexPath: IndexPath) -> post
     func numberOfPosts() -> Int
     func postSelected(at indexPath: IndexPath)
+    func leaderSelected()
     func getGroupImage() -> UIImage?
     func numberOfMembers() -> Int
     func scrolledTo(headerInView: Bool)

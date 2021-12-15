@@ -37,6 +37,14 @@ class post: Codable, Hashable, AutoIDable {
         hasher.combine(id)
     }
 }
+extension post: FirebaseResource {
+    static var path: String {
+        return "Posts"
+    }
+    var internalPath: String {
+        return "Posts/\(id)"
+    }
+}
 
 struct attachedClip: Codable {
     var storageURL: String

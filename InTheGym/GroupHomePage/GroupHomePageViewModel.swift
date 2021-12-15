@@ -93,6 +93,8 @@ class GroupHomePageViewModel {
     
     // MARK: - Fetching Functions
     func newLoadPosts(from groupID: String) {
+        
+        
         let endpoint = PostEndpoints.getGroupPosts(groupID: groupID)
         apiService.loadPosts(from: endpoint) { [weak self] result in
             guard let self = self else {return}
@@ -143,11 +145,12 @@ class GroupHomePageViewModel {
         return nil
     }
     func getBarImage() -> UIImage {
-        if #available(iOS 13.0, *) {
-            return UIImage(systemName: "ellipsis")!
-        } else {
-            return UIImage(named: "more_icon")!
-        }
+        return UIImage(systemName: "ellipsis")!
+//        if #available(iOS 13.0, *) {
+//            return UIImage(systemName: "ellipsis")!
+//        } else {
+//            return UIImage(named: "more_icon")!
+//        }
     }
     func isCurrentUserLeader() -> Bool {
         if groupLeaderLoadedSuccessfully {

@@ -202,6 +202,9 @@ extension GroupHomePageViewController: GroupHomePageProtocol {
 //            coordinator?.showDiscussion(with: discussionPost, group: currentGroup)
 //        }
     }
+    func leaderSelected() {
+        self.coordinator?.showUser(user: viewModel.groupLeader)
+    }
     func getGroupImage() -> UIImage? {
         return viewModel.headerImage
     }

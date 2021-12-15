@@ -106,32 +106,44 @@ extension GroupHomePageAdapter: UITableViewDelegate {
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 3 {
+        if indexPath.section == 1 {
+            delegate.leaderSelected()
+        } else if indexPath.section == 3 {
             delegate.postSelected(at: indexPath)
         }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 3 {
+        if section == 1 {
+            return 15
+        } else if section == 3 {
             return 25
         } else {
             return 0
         }
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 3 {
+        if section == 1 {
+            let label = UILabel()
+            label.text = "Created By"
+            label.font = .boldSystemFont(ofSize: 12)
+            label.backgroundColor = .white
+            label.textAlignment = .center
+            label.textColor = .lightGray
+            return label
+        } else if section == 3 {
             let label = UILabel()
             label.text = "POSTS"
             label.font = .boldSystemFont(ofSize: 20)
             label.backgroundColor = .white
             label.textAlignment = .center
-            label.textColor = Constants.darkColour
+            label.textColor = .darkColour
             return label
         } else {
             return nil
         }
     }
-    
+        
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         headerView.scrollViewDidScroll(scrollView: scrollView)
         if lastContentOffset < scrollView.contentOffset.y {

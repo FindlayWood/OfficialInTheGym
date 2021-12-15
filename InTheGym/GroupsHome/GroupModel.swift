@@ -34,3 +34,12 @@ struct groupModel: Codable, Hashable, Assignable {
 //        self.groupLeader = snap["leader"] as? String
 //    }
 }
+
+extension groupModel: FirebaseResource {
+    static var path: String {
+        return "GroupPosts"
+    }
+    var internalPath: String {
+        return "GroupPosts/\(uid)"
+    }
+}
