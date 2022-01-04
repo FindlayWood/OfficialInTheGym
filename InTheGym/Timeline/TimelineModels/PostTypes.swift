@@ -15,7 +15,21 @@ enum PostTypes: String, Codable {
     case attachedClip = "attachedClip"
 }
 
-class post: Codable, Hashable, AutoIDable {
+protocol DisplayablePost {
+    var username: String { get }
+    var posterID: String { get }
+    var time: TimeInterval { get }
+    var text: String { get }
+    var attachedWorkout: attachedWorkout? { get }
+    var attachedPhoto: attachedPhoto? { get }
+    var attachedClip: attachedClip? { get }
+    var likeCount: Int { get set }
+    var replyCount: Int { get set }
+    var isPrivate: Bool { get }
+    var id: String { get }
+}
+
+class post: Codable, Hashable, AutoIDable, DisplayablePost {
     //var postID: String
     var username: String
     var posterID: String
@@ -43,6 +57,39 @@ extension post: FirebaseResource {
     }
     var internalPath: String {
         return "Posts/\(id)"
+    }
+}
+
+
+class GroupPost: Codable, Hashable, AutoIDable, DisplayablePost {
+    //var postID: String
+    var username: String
+    var posterID: String
+    var time: TimeInterval
+    var text: String
+    //var postType: PostTypes
+    var attachedWorkout: attachedWorkout?
+    var attachedPhoto: attachedPhoto?
+    var attachedClip: attachedClip?
+    var likeCount: Int
+    var replyCount: Int
+    var isPrivate: Bool
+    var id: String
+    var groupID: String
+    
+    static func == (lhs: GroupPost, rhs: GroupPost) -> Bool {
+        return lhs.id == rhs.id
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+extension GroupPost: FirebaseResource {
+    static var path: String {
+        return "GroupPosts"
+    }
+    var internalPath: String {
+        return "GroupPosts/\(groupID)/\(id)"
     }
 }
 

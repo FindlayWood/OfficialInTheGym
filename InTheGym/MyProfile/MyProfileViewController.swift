@@ -55,6 +55,7 @@ class MyProfileViewController: UIViewController, Storyboarded {
         tableview.backgroundColor = Constants.darkColour
         tableview.separatorInset = .zero
         tableview.layoutMargins = .zero
+        if #available(iOS 15.0, *) { tableview.sectionHeaderTopPadding = 0 }
         
         
         checkForNotifications()

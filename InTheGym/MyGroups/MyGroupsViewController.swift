@@ -7,54 +7,62 @@
 //
 
 import UIKit
+import Combine
 import EmptyDataSet_Swift
 
 class MyGroupsViewController: UIViewController, Storyboarded {
     
     weak var coordinator: GroupCoordinator?
     
+    var display = MyGroupsView()
+    
+    private lazy var dataSource = makeDataSource()
+    
+    var subscriptions = Set<AnyCancellable>()
+    
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     @IBOutlet weak var tableview:UITableView!
     
     
-    var adapter:MyGroupsAdapter!
+    var adapter: MyGroupsAdapter!
     
-    lazy var viewModel:MyGroupViewModel = {
-        return MyGroupViewModel()
-    }()
+    var viewModel = MyGroupViewModel()
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        display.frame = getFullViewableFrame()
+        view.addSubview(display)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        adapter = MyGroupsAdapter(delegate: self)
-        tableview.delegate = adapter
-        tableview.dataSource = adapter
-        tableview.emptyDataSetSource = adapter
-        tableview.emptyDataSetDelegate = adapter
-        tableview.rowHeight = UITableView.automaticDimension
-        tableview.estimatedRowHeight = 90
-        tableview.register(UINib(nibName: "MyGroupTableViewCell", bundle: nil), forCellReuseIdentifier: "MyGroupTableViewCell")
-        tableview.tableFooterView = UIView()
-        tableview.backgroundColor = Constants.lightColour
 
         initUI()
+        initDisplay()
+        initialTableSetUp()
         //initViewModel()
+        setupSubscribers()
+//        initialTableSetUp()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         if isMovingToParent{
-            initViewModel()
+            //initViewModel()
         }
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.tintColor = UIColor.white
+        editNavBarColour(to: .darkColour)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         if isMovingFromParent{
-            viewModel.removeObservers()
+            //viewModel.removeObservers()
         }
+    }
+    
+    func initDisplay() {
+        adapter = .init(delegate: self)
+        display.tableview.delegate = adapter
+        display.tableview.separatorStyle = .none
     }
     
     func initUI(){
@@ -64,44 +72,54 @@ class MyGroupsViewController: UIViewController, Storyboarded {
             self.navigationItem.rightBarButtonItem = addButton
         }
     }
-    
-    func initViewModel(){
-        
-        viewModel.updateLoadingStatusClosure = { [weak self] () in
-            let isLoading = self?.viewModel.isLoading ?? false
-            if isLoading{
-                self?.activityIndicator.startAnimating()
-                UIView.animate(withDuration: 0.2) {
-                    self?.tableview.alpha = 0.0
-                }
-            } else {
-                self?.activityIndicator.stopAnimating()
-                UIView.animate(withDuration: 0.2) {
-                    self?.tableview.alpha = 1.0
-                }
+    // MARK: - Combine Subscribers
+    func setupSubscribers() {
+        viewModel.groups
+            .dropFirst()
+            .sink { [weak self] myGroups in
+                guard let self = self else {return}
+                self.updateGroups(with: myGroups)
+                print("here are my groups...\(myGroups)")
             }
-        }
+            .store(in: &subscriptions)
         
-        viewModel.myGroupsLoaded = { [weak self] () in
-            DispatchQueue.main.async {
-                self?.tableview.reloadData()
-            }
-        }
-        
-        viewModel.fetchData()
-        
+        viewModel.fetchReferences()
     }
+    
     
     @IBAction func addNewGroup(_ sender:UIButton){
         coordinator?.addNewGroup(with: self)
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let addVC = storyboard.instantiateViewController(withIdentifier: "AddNewGroupViewController") as! AddNewGroupViewController
-//        addVC.delegate = self
-//        self.navigationController?.pushViewController(addVC, animated: true)
     }
     
 
 
+}
+
+// MARK: - Tableview Datasource
+extension MyGroupsViewController {
+    
+    func makeDataSource() -> UITableViewDiffableDataSource<MyGroupSection,groupModel> {
+        return UITableViewDiffableDataSource(tableView: display.tableview) { tableView, indexPath, itemIdentifier in
+            let cell = tableView.dequeueReusableCell(withIdentifier: MyGroupsTableViewCell.cellID, for: indexPath) as! MyGroupsTableViewCell
+            cell.configure(with: itemIdentifier)
+            return cell
+        }
+    }
+    
+    func initialTableSetUp() {
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.appendSections([.myGroups])
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    
+    func updateGroups(with groups: [groupModel]) {
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.appendItems(groups, toSection: .myGroups)
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+}
+enum MyGroupSection {
+    case myGroups
 }
 
 extension MyGroupsViewController: MyGroupsProtocol {
@@ -112,11 +130,6 @@ extension MyGroupsViewController: MyGroupsProtocol {
     
     func groupSelected(at indexPath: IndexPath) {
         // go to group page
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let groupPage = storyboard.instantiateViewController(withIdentifier: "GroupPageViewController") as! GroupPageViewController
-//        groupPage.group = viewModel.getGroup(at: indexPath)
-//        groupPage.hidesBottomBarWhenPushed = true
-//        self.navigationController?.pushViewController(groupPage, animated: true)
         let selectedGroup = viewModel.getGroup(at: indexPath)
         coordinator?.goToGroupHome(selectedGroup)
     }

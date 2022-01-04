@@ -117,7 +117,7 @@ class PresentingView : UIView {
             }
         }
         
-        viewModel.fetchData()
+        //viewModel.fetchData()
         
     }
     

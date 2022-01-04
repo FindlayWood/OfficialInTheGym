@@ -173,16 +173,4 @@ extension WorkoutModel: FirebaseResource {
     }
 }
 
-/// A type that can be loaded and uploaded to and from Firebase
-/// A Firebase Resource REQUIRES Codable
-protocol FirebaseResource: Codable {
-    
-    /// The String that holds the path to the correct database reference in Firebase
-    /// Must be static to allow access without creating instance
-    static var path: String { get }
-    
-    /// The path to an instance of the model
-    /// This will usually include an id to point to specific database reference or specific list
-    var internalPath: String { get }
-}
 

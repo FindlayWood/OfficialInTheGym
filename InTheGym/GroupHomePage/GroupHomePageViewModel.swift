@@ -28,7 +28,7 @@ class GroupHomePageViewModel {
     
     var currentGroup: groupModel!
     
-    var posts: [post] = [] {
+    var posts: [GroupPost] = [] {
         didSet {
             reloadPostsTableViewClosure?()
         }
@@ -92,20 +92,31 @@ class GroupHomePageViewModel {
     }
     
     // MARK: - Fetching Functions
-    func newLoadPosts(from groupID: String) {
+    func newLoadPosts(from groupModel: GroupPostsModel) {
         
-        
-        let endpoint = PostEndpoints.getGroupPosts(groupID: groupID)
-        apiService.loadPosts(from: endpoint) { [weak self] result in
+        FirebaseDatabaseManager.shared.fetchInstance(of: groupModel, returning: GroupPost.self) { [weak self] result in
             guard let self = self else {return}
             switch result {
-            case .success(let loadedPosts):
-                self.posts = loadedPosts.sorted(by: { $0.time > $1.time })
+            case .success(let posts):
+                self.posts = posts.sorted(by:  { $0.time > $1.time })
                 self.postsLoadedSuccessfully = true
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
+        
+        
+//        let endpoint = PostEndpoints.getGroupPosts(groupID: groupID)
+//        apiService.loadPosts(from: endpoint) { [weak self] result in
+//            guard let self = self else {return}
+//            switch result {
+//            case .success(let loadedPosts):
+//                self.posts = loadedPosts.sorted(by: { $0.time > $1.time })
+//                self.postsLoadedSuccessfully = true
+//            case .failure(let error):
+//                print(error.localizedDescription)
+//            }
+//        }
     }
         
     func loadMembers(from groupID: String) {
@@ -138,7 +149,7 @@ class GroupHomePageViewModel {
         }
     }
     
-    func getPostData(at indexPath: IndexPath) -> post {
+    func getPostData(at indexPath: IndexPath) -> GroupPost {
         return posts[indexPath.row]
     }
     func getGroupImage(with groupID: String) -> UIImage? {
@@ -163,21 +174,21 @@ class GroupHomePageViewModel {
     // MARK: - Actions
         
     func likePost(at indexPath: IndexPath) {
-        let likedPost = getPostData(at: indexPath)
-        let likeEndPoint = LikePostEndpoint.likePost(post: likedPost)
-        likedPost.likeCount += 1
-        apiService.likePost(from: likeEndPoint) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(()):
-                LikesAPIService.shared.LikedPostsCache.removeObject(forKey: likedPost.id as NSString)
-                LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: likedPost.id as NSString)
-                self.sendLikeNotification(for: likedPost)
-            case .failure(let error):
-                print(error.localizedDescription)
-                self.likingPostError = error
-            }
-        }
+//        let likedPost = getPostData(at: indexPath)
+//        let likeEndPoint = LikePostEndpoint.likePost(post: likedPost)
+//        likedPost.likeCount += 1
+//        apiService.likePost(from: likeEndPoint) { [weak self] result in
+//            guard let self = self else {return}
+//            switch result {
+//            case .success(()):
+//                LikesAPIService.shared.LikedPostsCache.removeObject(forKey: likedPost.id as NSString)
+//                LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: likedPost.id as NSString)
+//                self.sendLikeNotification(for: likedPost)
+//            case .failure(let error):
+//                print(error.localizedDescription)
+//                self.likingPostError = error
+//            }
+//        }
     }
     
     func userTapped(at indexPath: IndexPath) {

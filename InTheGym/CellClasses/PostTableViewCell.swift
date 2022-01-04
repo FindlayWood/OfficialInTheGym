@@ -203,7 +203,7 @@ private extension PostTableViewCell {
 }
 
 extension PostTableViewCell {
-    func configure(with post: post) {
+    func configure(with post: DisplayablePost) {
         usernameButton.setTitle(post.username, for: .normal)
         let then = Date(timeIntervalSince1970: (post.time))
         timeLabel.text = then.timeAgo() + " ago"

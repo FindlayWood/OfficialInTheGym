@@ -12,8 +12,8 @@ import EmptyDataSet_Swift
 
 class MyGroupsAdapter : NSObject {
     
-    var delegate:MyGroupsProtocol!
-    init(delegate:MyGroupsProtocol){
+    var delegate: MyGroupsProtocol
+    init(delegate: MyGroupsProtocol){
         self.delegate = delegate
     }
 }

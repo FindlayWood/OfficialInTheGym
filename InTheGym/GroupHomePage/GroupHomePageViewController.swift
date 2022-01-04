@@ -18,6 +18,8 @@ class GroupHomePageViewController: UIViewController {
     
     var currentGroup: groupModel!
     
+    private lazy var groupPostsModel = GroupPostsModel(groupID: currentGroup.uid)
+    
     lazy var viewModel: GroupHomePageViewModel = {
         return GroupHomePageViewModel()
     }()
@@ -31,6 +33,9 @@ class GroupHomePageViewController: UIViewController {
         addNavBarButton()
         initViewModel()
         initTableView()
+        if currentGroup.leader == FirebaseAuthManager.currentlyLoggedInUser.uid {
+            
+        }
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -113,7 +118,7 @@ class GroupHomePageViewController: UIViewController {
         
         viewModel.currentGroup = currentGroup
         //viewModel.loadPosts(from: currentGroup.uid)
-        viewModel.newLoadPosts(from: currentGroup.uid)
+        viewModel.newLoadPosts(from: groupPostsModel)
         viewModel.loadMembers(from: currentGroup.uid)
         viewModel.loadHeaderImage(from: currentGroup.uid)
         viewModel.loadGroupLeader(from: currentGroup.leader)
@@ -177,7 +182,7 @@ extension GroupHomePageViewController: GroupHomePageProtocol {
         return currentGroup
     }
     
-    func getPostData(at indexPath: IndexPath) -> post {
+    func getPostData(at indexPath: IndexPath) -> GroupPost {
         return viewModel.getPostData(at: indexPath)
     }
     
@@ -186,7 +191,8 @@ extension GroupHomePageViewController: GroupHomePageProtocol {
     }
     
     func postSelected(at indexPath: IndexPath) {
-//        let post = viewModel.getPostData(at: indexPath)
+        let post = viewModel.getPostData(at: indexPath)
+        coordinator?.goToCommentSection(with: post)
 //        if post is TimelinePostModel || post is TimelineCreatedWorkoutModel || post is TimelineCompletedWorkoutModel{
 //            var discussionPost: PostProtocol!
 //            switch post {
@@ -301,7 +307,7 @@ extension GroupHomePageViewController {
                 return cell
             case .info(_):
                 let cell = tableView.dequeueReusableCell(withIdentifier: GroupHomePageInfoTableViewCell.cellID, for: indexPath) as! GroupHomePageInfoTableViewCell
-                cell.configureForLeader(self.isCurrentUserLeader())
+                cell.configureForLeader(self.currentGroup.leader == FirebaseAuthManager.currentlyLoggedInUser.uid)
                 cell.delegate = self
                 return cell
             case .posts(let model):
@@ -334,7 +340,7 @@ extension GroupHomePageViewController {
         }
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
-    func tableUpdatePosts(with posts: [post]) {
+    func tableUpdatePosts(with posts: [GroupPost]) {
         var currentSnapshot = dataSource.snapshot()
         for post in posts {
             currentSnapshot.appendItems([.posts(post)], toSection: .groupPosts)
@@ -394,5 +400,5 @@ enum GroupItems: Hashable {
     case name(groupModel)
     case leader(Users)
     case info(groupInfo)
-    case posts(post)
+    case posts(GroupPost)
 }

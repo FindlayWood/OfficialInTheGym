@@ -57,11 +57,7 @@ extension DiscussionAdapter: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .systemGray5
-        } else {
-            view.backgroundColor = .lightGray
-        }
+        view.backgroundColor = .systemGray5
         return view
     }
     

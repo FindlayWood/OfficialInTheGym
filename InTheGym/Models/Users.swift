@@ -32,3 +32,12 @@ struct Users: Codable, Hashable, Assignable {
         hasher.combine(uid)
     }
 }
+/// Allows a user model to be decoded from Firebase
+extension Users: FirebaseResource {
+    static var path: String {
+        return "users"
+    }
+    var internalPath: String {
+        return "users/\(uid)"
+    }
+}

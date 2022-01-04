@@ -20,10 +20,13 @@ class GroupHomePageView: UIView {
         view.register(LoadingTableViewCell.self, forCellReuseIdentifier: LoadingTableViewCell.cellID)
         view.register(UserTableViewCell.self, forCellReuseIdentifier: UserTableViewCell.cellID)
         view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
-        view.register(UINib(nibName: "TimelinePostTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelinePostTableViewCell")
-        view.register(UINib(nibName: "TimelineCreatedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCreatedWorkoutTableViewCell")
-        view.register(UINib(nibName: "TimelineCompletedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCompletedTableViewCell")
-        view.register(UINib(nibName: "TimelineActivityTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineActivityTableViewCell")
+        if #available(iOS 15.0, *) {
+            view.sectionHeaderTopPadding = 0
+        }
+//        view.register(UINib(nibName: "TimelinePostTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelinePostTableViewCell")
+//        view.register(UINib(nibName: "TimelineCreatedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCreatedWorkoutTableViewCell")
+//        view.register(UINib(nibName: "TimelineCompletedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCompletedTableViewCell")
+//        view.register(UINib(nibName: "TimelineActivityTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineActivityTableViewCell")
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

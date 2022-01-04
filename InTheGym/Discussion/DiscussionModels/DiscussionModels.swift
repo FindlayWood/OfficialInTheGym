@@ -202,6 +202,18 @@ struct DiscussionReplyPlusWorkout: PostProtocol {
     func toObject() -> [String : AnyObject] {
         return [:]
     }
-    
-    
+}
+
+struct Comment: Codable, Hashable {
+    var id: String
+    var username: String
+    var time: TimeInterval
+    var message: String
+    var posterID: String
+    var postID: String
+}
+extension Comment: FirebaseInstance {
+    var internalPath: String {
+        return "PostReplies/\(postID)/\(id)"
+    }
 }

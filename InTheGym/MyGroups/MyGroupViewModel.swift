@@ -9,16 +9,18 @@
 import Foundation
 import Firebase
 import CodableFirebase
+import Combine
 
 class MyGroupViewModel:NSObject {
-    
-    //MARK: - Database Reference
-    var ref : DatabaseReference!
-    var handle : DatabaseHandle!
+
     
     // MARK: - Closures
     var updateLoadingStatusClosure:(()->())?
     var myGroupsLoaded:(()->())?
+    
+    // MARK: - Combine Publishers
+    var groups = CurrentValueSubject<[groupModel], Never>([])
+    var errorFetchingGroups = PassthroughSubject<Error, Never>()
     
     var isLoading: Bool = false {
         didSet{
@@ -36,65 +38,41 @@ class MyGroupViewModel:NSObject {
         return myGroups.count
     }
     
-    let userID = Auth.auth().currentUser!.uid
+    var apiService: FirebaseDatabaseManagerService
     
-    override init(){
-        self.ref = Database.database().reference().child("GroupsReferences").child(userID)
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
+        self.apiService = apiService
     }
     
-    func fetchData(){
-        self.isLoading = true
-        var groupReferences = [String]()
-        //let ref = Database.database().reference().child("GroupsReferences").child(userID)
-        handle = ref.observe(.childAdded) { (snapshot) in
-            groupReferences.append(snapshot.key)
-        }
-        ref.observeSingleEvent(of: .value) { (snapshot) in
-            if !snapshot.exists(){
-                self.isLoading = false
-            } else {
-                self.fetchGroups(with: groupReferences)
+    
+    func fetchReferences() {
+        FirebaseDatabaseManager.shared.fetchKeys(from: GroupKeysModel.self) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(let keys):
+                self.loadGroups(from: keys)
+            case .failure(let error):
+                self.errorFetchingGroups.send(error)
             }
         }
     }
     
-    func fetchGroups(with references:[String]){
-        
-        let ref = Database.database().reference().child("Groups")
-        let myGroup = DispatchGroup()
-        
-        var tempGroups = [groupModel]()
-        
-        for group in references {
-            myGroup.enter()
-            ref.child(group).observeSingleEvent(of: .value) { (snapshot) in
-                defer {myGroup.leave()}
-                guard let snap = snapshot.value as? [String: AnyObject] else {return}
-                do {
-                    let group = try FirebaseDecoder().decode(groupModel.self, from: snap)
-                    tempGroups.append(group)
-                } catch {
-                    print(error.localizedDescription)
-                }
-                //tempGroups.append(groupModel(snapshot: snapshot)!)
-                //myGroup.leave()
+    func loadGroups(from groupIDs: [String]) {
+        let groupModels = groupIDs.map { GroupKeysModel(id: $0) }
+        FirebaseDatabaseManager.shared.fetchRange(from: groupModels, returning: groupModel.self) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(let myGroups):
+                self.groups.send(myGroups)
+                self.myGroups = myGroups
+            case .failure(let error):
+                self.errorFetchingGroups.send(error)
             }
         }
-        
-        myGroup.notify(queue: .main){
-            self.myGroups = tempGroups
-            self.isLoading = false
-        }
-        
-    }
-    
-    //MARK: - Remove Observers
-    func removeObservers(){
-        self.ref.removeObserver(withHandle: handle)
     }
     
     // MARK: - Retreive functions
-    func getGroup(at indexPath:IndexPath) -> groupModel {
-        return myGroups[indexPath.section]
+    func getGroup(at indexPath: IndexPath) -> groupModel {
+        return myGroups[indexPath.row]
     }
 }

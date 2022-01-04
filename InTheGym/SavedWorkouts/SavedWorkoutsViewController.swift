@@ -34,6 +34,7 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
         tableview.tableFooterView = UIView()
         tableview.emptyDataSetDelegate = adapter
         tableview.emptyDataSetSource = adapter
+        if #available(iOS 15.0, *) { tableview.sectionHeaderTopPadding = 0 }
         
         //initUI()
         //initViewModel()

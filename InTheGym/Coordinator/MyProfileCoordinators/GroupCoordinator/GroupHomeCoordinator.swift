@@ -47,6 +47,11 @@ extension GroupHomeCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    func goToCommentSection(with mainPost: GroupPost) {
+        let vc = GroupCommentSectionViewController()
+        vc.mainPost = mainPost
+        navigationController.pushViewController(vc, animated: true)
+    }
 }
 
 //MARK: TimelineFlow Methods
