@@ -10,6 +10,11 @@ import Foundation
 import UIKit
 
 class UserTableViewCell: UITableViewCell {
+    
+    // MARK: - Properties
+    static let cellID = "UserTableViewCell"
+    private let imageDimension: CGFloat = 60
+    
     // MARK: - Subviews
     lazy var profileImage: UIImageView = {
         let view = UIImageView()
@@ -36,9 +41,7 @@ class UserTableViewCell: UITableViewCell {
         return label
     }()
     
-    // MARK: - Properties
-    static let cellID = "UserTableViewCell"
-    private let imageDimension: CGFloat = 60
+
     
     // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

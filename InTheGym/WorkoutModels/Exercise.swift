@@ -113,7 +113,6 @@ enum ExerciseType: String, Codable {
 
 
 struct ExerciseModel: Codable {
-    var exerciseType: ExerciseType?
     var exercise: String
     var reps: [Int]?
     var weight: [String]?
@@ -121,11 +120,6 @@ struct ExerciseModel: Codable {
     var completedSets: [Bool]?
     var sets: Int?
     var rpe: String?
-    ///variables for emom below
-    var exercises: [ExerciseModel]?
-    var started: Bool?
-    var startTime: TimeInterval?
-    var timeLimit: Int?
     var completed: Bool?
 }
 

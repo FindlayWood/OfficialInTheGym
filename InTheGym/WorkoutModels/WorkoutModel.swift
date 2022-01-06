@@ -152,7 +152,10 @@ struct WorkoutModel: Codable, Hashable {
     var startTime: TimeInterval?
     var timeToComplete: Int?
     var workload: Int?
-    var exercises: [ExerciseModel]
+    var exercises: [ExerciseModel]? 
+    var circuits: [CircuitModel]?
+    var emoms: [EMOMModel]?
+    var amraps: [AMRAPModel]?
     var liveWorkout: Bool?
     
     static func == (lhs: WorkoutModel, rhs: WorkoutModel) -> Bool {

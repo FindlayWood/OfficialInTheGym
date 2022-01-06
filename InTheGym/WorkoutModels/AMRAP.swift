@@ -82,3 +82,15 @@ class AMRAP: WorkoutType {
         return object
     }
 }
+
+struct AMRAPModel: Codable {
+    var workoutPosition: Int
+    var timeLimit: Int
+    var exercises: [ExerciseModel]
+    var completed: Bool
+    var roundsCompleted: Int
+    var exercisesCompleted: Int
+    var rpe: Int
+    var started: Bool
+    var startTime: TimeInterval
+}

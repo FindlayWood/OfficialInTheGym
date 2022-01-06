@@ -157,6 +157,9 @@
 		74318F4A26B9A072009EDFAC /* DisplayAMRAPShowAllExercisesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74318F4926B9A072009EDFAC /* DisplayAMRAPShowAllExercisesView.swift */; };
 		74318F4C26B9A6DB009EDFAC /* DisplayAMRAPShowAllExercisesAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74318F4B26B9A6DB009EDFAC /* DisplayAMRAPShowAllExercisesAdapter.swift */; };
 		74325D4C268212C400EEE3EC /* DiscussionReplyAttachedWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74325D4B268212C400EEE3EC /* DiscussionReplyAttachedWorkout.swift */; };
+		7433307F2785DDF9005A0C45 /* UsersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7433307E2785DDF9005A0C45 /* UsersListViewController.swift */; };
+		743330812785E540005A0C45 /* WorkoutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330802785E540005A0C45 /* WorkoutTableViewController.swift */; };
+		7433308527861010005A0C45 /* SavedWorkoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7433308427861010005A0C45 /* SavedWorkoutModel.swift */; };
 		7433F0E72627B6EF0014034B /* DiscoverPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7433F0E62627B6EF0014034B /* DiscoverPageViewModel.swift */; };
 		7439E03A260CF9E000C91C0C /* DiscussionViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7439E039260CF9E000C91C0C /* DiscussionViewViewController.swift */; };
 		7439E03F260CFA0000C91C0C /* DiscussionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7439E03E260CFA0000C91C0C /* DiscussionViewModel.swift */; };
@@ -752,6 +755,9 @@
 		74318F4926B9A072009EDFAC /* DisplayAMRAPShowAllExercisesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAMRAPShowAllExercisesView.swift; sourceTree = "<group>"; };
 		74318F4B26B9A6DB009EDFAC /* DisplayAMRAPShowAllExercisesAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAMRAPShowAllExercisesAdapter.swift; sourceTree = "<group>"; };
 		74325D4B268212C400EEE3EC /* DiscussionReplyAttachedWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionReplyAttachedWorkout.swift; sourceTree = "<group>"; };
+		7433307E2785DDF9005A0C45 /* UsersListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersListViewController.swift; sourceTree = "<group>"; };
+		743330802785E540005A0C45 /* WorkoutTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTableViewController.swift; sourceTree = "<group>"; };
+		7433308427861010005A0C45 /* SavedWorkoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWorkoutModel.swift; sourceTree = "<group>"; };
 		7433F0E62627B6EF0014034B /* DiscoverPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageViewModel.swift; sourceTree = "<group>"; };
 		7439E039260CF9E000C91C0C /* DiscussionViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewViewController.swift; sourceTree = "<group>"; };
 		7439E03E260CFA0000C91C0C /* DiscussionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewModel.swift; sourceTree = "<group>"; };
@@ -1249,6 +1255,7 @@
 				742FF36C277B880900AEE3D2 /* PostReplies.swift */,
 				742565A6277E3C3F00A7764D /* GroupPosts.swift */,
 				742565AC277FA7C700A7764D /* GroupKeysModel.swift */,
+				7433308427861010005A0C45 /* SavedWorkoutModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1499,6 +1506,15 @@
 				74F5468925E96DA900C1A6A9 /* UploadPostViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		7433307D2785DDDD005A0C45 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				7433307E2785DDF9005A0C45 /* UsersListViewController.swift */,
+				743330802785E540005A0C45 /* WorkoutTableViewController.swift */,
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		7439E038260CF9C000C91C0C /* Discussion */ = {
@@ -1854,6 +1870,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				7433307D2785DDDD005A0C45 /* ViewControllers */,
 				741BA39E271B13D100E99C6E /* JumpMeasuringVideo */,
 				744D563D26F9167700D3E1FA /* DisplayEMOM */,
 				744D562C26F2AB9100D3E1FA /* CreateEMOM */,
@@ -2892,6 +2909,7 @@
 				74D31F1125FE4ADD0024CC05 /* NotificationLikedPost.swift in Sources */,
 				7444D08E26D11CDE0009C7A6 /* UITextView+Extension.swift in Sources */,
 				74226E0726370E1A0074E616 /* CreatedWorkoutModels.swift in Sources */,
+				7433308527861010005A0C45 /* SavedWorkoutModel.swift in Sources */,
 				7413A066255D743E009C7F97 /* AlertTopView.swift in Sources */,
 				7439E03F260CFA0000C91C0C /* DiscussionViewModel.swift in Sources */,
 				741FB1D4266ABB130039EB29 /* AMRAPCell.swift in Sources */,
@@ -3164,6 +3182,7 @@
 				74D31E9A25FC17940024CC05 /* FollowersAdapter.swift in Sources */,
 				74F5471325EE929900C1A6A9 /* SettingsMessages.swift in Sources */,
 				7466A85A25EFD7C300F4050F /* ProfileViewProtocol.swift in Sources */,
+				7433307F2785DDF9005A0C45 /* UsersListViewController.swift in Sources */,
 				74FCFA2D2614E9E80064699F /* MyProfileViewController.swift in Sources */,
 				748E3C3625B89202004D6D4A /* PreLiveWorkoutViewController.swift in Sources */,
 				74B6F7652759212B00A72679 /* FirebaseDatabaseManager.swift in Sources */,
@@ -3203,6 +3222,7 @@
 				746BFFA826B204170010C465 /* DisplayClipCell.swift in Sources */,
 				7444D07C26CE98FB0009C7A6 /* UploadGroupWorkoutView.swift in Sources */,
 				74AF6D5C2686799A005C52A8 /* DisplayExerciseStatsModel.swift in Sources */,
+				743330812785E540005A0C45 /* WorkoutTableViewController.swift in Sources */,
 				74D31E8B25FC13060024CC05 /* FollowersDisplayViewController.swift in Sources */,
 				74536C2C25D6CF43007DCE22 /* Workout.swift in Sources */,
 				7416CCC5264ED2230043B1C2 /* LiveWorkoutCoordinator.swift in Sources */,

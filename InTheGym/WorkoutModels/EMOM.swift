@@ -72,3 +72,13 @@ class EMOM: WorkoutType {
     }
     
 }
+
+struct EMOMModel: Codable {
+    var workoutPosition: Int
+    var exercises: [ExerciseModel]
+    var timeLimit: Int
+    var completed: Bool
+    var rpe: Int
+    var started: Bool
+    var startTime: TimeInterval
+}

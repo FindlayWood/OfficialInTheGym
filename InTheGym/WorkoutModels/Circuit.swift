@@ -99,3 +99,16 @@ class circuit: WorkoutType {
         return circuitTableModels
     }
 }
+
+struct CircuitModel: Codable {
+    var workoutPosition: Int
+    var exercises: [ExerciseModel]
+    var completed: Bool
+    var circuitName: String
+    var createdBy: String
+    var creatorID: String
+    var savedID: String
+    var integrated: Bool
+    var startTime: TimeInterval
+    var rpe: Int
+}
