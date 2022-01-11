@@ -40,7 +40,7 @@ extension CreateAMRAPAdapter: UITableViewDelegate, UITableViewDataSource {
         
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == delegate.numberOfExercises() - 1 {
+        if indexPath.section == 1 {
             delegate.addNewExercise()
         }
     }

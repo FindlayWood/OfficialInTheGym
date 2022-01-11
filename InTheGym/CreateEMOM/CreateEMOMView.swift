@@ -71,6 +71,7 @@ class CreateEMOMView: UIView {
         tv.backgroundColor = .white
         tv.register(NewExerciseCell.self, forCellReuseIdentifier: NewExerciseCell.cellID)
         tv.register(AMRAPCell.self, forCellReuseIdentifier: AMRAPCell.cellID)
+        if #available(iOS 15.0, *) { tv.sectionHeaderTopPadding = 0 }
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
@@ -125,5 +126,12 @@ private extension CreateEMOMView {
                                      tableview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
                                      tableview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
                                      tableview.bottomAnchor.constraint(equalTo: bottomAnchor)])
+    }
+}
+
+// MARK: - Public configuration
+extension CreateEMOMView {
+    public func updateTime(with newTime: Int) {
+        timeNumberLabel.text = newTime.description + " mins"
     }
 }

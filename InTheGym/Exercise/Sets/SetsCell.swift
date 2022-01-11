@@ -10,6 +10,9 @@ import UIKit
 
 class SetsCell: UICollectionViewCell {
     
+    // MARK: - Properties
+    static var cellID = "SetsCellID"
+    
     lazy var numberLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear

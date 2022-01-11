@@ -11,9 +11,11 @@ import UIKit
 
 class RepsView: UIView {
     
+    // MARK: - Subviews
     lazy var topCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: generateTopLayout())
         collection.backgroundColor = .white
+        collection.register(RepsCell.self, forCellWithReuseIdentifier: RepsCell.cellID)
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
@@ -53,6 +55,7 @@ class RepsView: UIView {
     lazy var bottomCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: generateBottomLayout())
         collection.backgroundColor = .white
+        collection.register(SetsCell.self, forCellWithReuseIdentifier: SetsCell.cellID)
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
@@ -81,6 +84,7 @@ class RepsView: UIView {
         return label
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -92,7 +96,32 @@ class RepsView: UIView {
         fatalError()
     }
     
-    private func setupView() {
+    // MARK: - Layout Functions
+    func generateTopLayout() -> UICollectionViewFlowLayout {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 5
+        layout.minimumLineSpacing = 5
+        layout.itemSize = CGSize(width: 160, height: 120)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        layout.scrollDirection = .horizontal
+        return layout
+    }
+    
+    func generateBottomLayout() -> UICollectionViewFlowLayout {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 5
+        layout.minimumLineSpacing = 5
+        layout.itemSize = CGSize(width: 80, height: 80)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        layout.scrollDirection = .horizontal
+        return layout
+    }
+}
+
+// MARK: - Setup UI
+private extension RepsView {
+    func setupView() {
+        backgroundColor = .white
         addSubview(topCollection)
         addSubview(minusButton)
         addSubview(repLabel)
@@ -103,7 +132,7 @@ class RepsView: UIView {
         constrain()
     }
     
-    private func constrain() {
+    func constrain() {
         NSLayoutConstraint.activate([topCollection.topAnchor.constraint(equalTo: topAnchor),
                                      topCollection.leadingAnchor.constraint(equalTo: leadingAnchor),
                                      topCollection.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -135,25 +164,5 @@ class RepsView: UIView {
                                      pageNumberLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
                                      pageNumberLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
-    }
-    
-    func generateTopLayout() -> UICollectionViewFlowLayout {
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 5
-        layout.minimumLineSpacing = 5
-        layout.itemSize = CGSize(width: 160, height: 120)
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-        layout.scrollDirection = .horizontal
-        return layout
-    }
-    
-    func generateBottomLayout() -> UICollectionViewFlowLayout {
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 5
-        layout.minimumLineSpacing = 5
-        layout.itemSize = CGSize(width: 80, height: 80)
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-        layout.scrollDirection = .horizontal
-        return layout
     }
 }

@@ -7,7 +7,55 @@
 //
 
 import Foundation
+import Combine
 
 class CreateCircuitViewModel {
     
+    // MARK: - Publishers
+    @Published var circuitTitle: String = ""
+    @Published var validCircuit: Bool = false
+    var exercises = CurrentValueSubject<[ExerciseModel],Never>([])
+    
+    private var subscriptions = Set<AnyCancellable>()
+    
+    var workoutViewModel: WorkoutCreationViewModel!
+    
+    init() {
+        initSubscribers()
+    }
+    func initSubscribers() {
+        $circuitTitle
+            .map { newTitle in
+                return newTitle.count > 0
+            }
+            .sink { [unowned self] titleValid in
+                self.validCircuit = self.exercises.value.count > 0 && titleValid
+            }
+            .store(in: &subscriptions)
+    }
+    
+    func addCircuit() {
+        let newCircuit = CircuitModel(workoutPosition: 0,
+                                      exercises: exercises.value,
+                                      completed: false, circuitName: circuitTitle,
+                                      createdBy: FirebaseAuthManager.currentlyLoggedInUser.username,
+                                      creatorID: FirebaseAuthManager.currentlyLoggedInUser.uid,
+                                      integrated: true)
+        workoutViewModel.addCircuit(newCircuit)
+    }
+    
+}
+
+extension CreateCircuitViewModel: ExerciseAdding {
+    func addExercise(_ exercise: ExerciseModel) {
+        var currentExercises = exercises.value
+        currentExercises.append(exercise)
+        exercises.send(currentExercises)
+    }
+}
+
+extension CreateCircuitViewModel {
+    func updateTitle(with newTitle: String) {
+        self.circuitTitle = newTitle
+    }
 }

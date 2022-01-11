@@ -30,7 +30,7 @@ extension RepsTopCollectionAdapter: UICollectionViewDelegate, UICollectionViewDa
         return delegate.retreiveNumberOfItems()
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! RepsCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RepsCell.cellID, for: indexPath) as! RepsCell
         cell.setLabel.text = "SET \((indexPath.item + 1).description)"
         let rep = delegate.getData(at: indexPath)
         if rep == 0 {
@@ -40,7 +40,7 @@ extension RepsTopCollectionAdapter: UICollectionViewDelegate, UICollectionViewDa
         }
         
         if indexPath.item == delegate.selectedIndex() {
-            cell.backgroundColor = Constants.darkColour
+            cell.backgroundColor = .darkColour
         }
         return cell
     }

@@ -13,6 +13,8 @@ class ExerciseSelectionViewController: UIViewController {
     
     weak var coordinator: CreationFlow?
     
+    weak var newCoordinator: ExerciseSelectionFlow?
+    
     var newExercise: exercise?
     
     var display = ExerciseSelectionView()
@@ -20,7 +22,10 @@ class ExerciseSelectionViewController: UIViewController {
     var viewModel = ExerciseSelectionViewModel()
     
     var adapter: ExerciseSelectionAdapter!
+    
+    var workoutCreationViewModel: ExerciseAdding!
 
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -69,7 +74,7 @@ class ExerciseSelectionViewController: UIViewController {
         display.collectionView.delegate = adapter
         display.collectionView.dataSource = adapter
         display.searchBar.delegate = self
-        if coordinator is CircuitCoordinator || coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator  {
+        if newCoordinator is CircuitCreationCoordinator || newCoordinator is AmrapExerciseSelectionCoordinator  {
             display.hideStack()
         }
     }
@@ -93,17 +98,21 @@ class ExerciseSelectionViewController: UIViewController {
         display.emomView.addGestureRecognizer(emomTap)
     }
     
+    // MARK: - Actions
     @objc func circuitTapped() {
         let coordinator = coordinator as? RegularAndLiveFlow
         coordinator?.circuitSelected()
+        newCoordinator?.ciruit()
     }
     @objc func amrapTapped() {
         let coordinator = coordinator as? RegularAndLiveFlow
         coordinator?.amrapSelected()
+        newCoordinator?.amrap()
     }
     @objc func emomTapped() {
         let coordinator = coordinator as? RegularAndLiveFlow
         coordinator?.emomSelected()
+        newCoordinator?.emom()
     }
 }
 
@@ -123,10 +132,19 @@ extension ExerciseSelectionViewController: ExerciseSelectionProtocol {
         }
     }
     func itemSelected(at indexPath: IndexPath) {
-        guard let newExercise = newExercise else {return}
-        newExercise.exercise = viewModel.getData(at: indexPath)
-        newExercise.type = viewModel.getBodyType(from: indexPath)
-        coordinator?.exerciseSelected(newExercise)
+//        guard let newExercise = newExercise else {return}
+//        newExercise.exercise = viewModel.getData(at: indexPath)
+//        newExercise.type = viewModel.getBodyType(from: indexPath)
+//        coordinator?.exerciseSelected(newExercise)
+        let newE = ExerciseModel(workoutPosition: 0,
+                                 exercise: viewModel.getData(at: indexPath),
+                                 type: viewModel.getBodyType(from: indexPath),
+                                 completed: false)
+        let newViewModel = ExerciseCreationViewModel()
+        newViewModel.exercise = newE
+//        newViewModel.addingDelegate = workoutCreationViewModel
+        newCoordinator?.exercise(viewModel: newViewModel)
+        
 //        if indexPath.section == 4 {
 //            let coordinator = coordinator as? RegularWorkoutFlow
 //            coordinator?.addCircuit()
@@ -151,6 +169,9 @@ extension ExerciseSelectionViewController: UISearchBarDelegate {
         viewModel.filterExercises(with: searchText)
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        if newCoordinator is RegularExerciseSelectionCoordinator {
+            display.searchBegins()
+        }
         if coordinator is RegularWorkoutCoordinator || coordinator is LiveWorkoutCoordinator {
             display.searchBegins()
         }

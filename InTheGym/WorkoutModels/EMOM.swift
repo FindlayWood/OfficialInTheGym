@@ -73,12 +73,12 @@ class EMOM: WorkoutType {
     
 }
 
-struct EMOMModel: Codable {
+struct EMOMModel: ExerciseType, Codable, Hashable {
     var workoutPosition: Int
     var exercises: [ExerciseModel]
     var timeLimit: Int
     var completed: Bool
-    var rpe: Int
+    var rpe: Int?
     var started: Bool
-    var startTime: TimeInterval
+    var startTime: TimeInterval?
 }

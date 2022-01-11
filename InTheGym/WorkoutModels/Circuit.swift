@@ -100,15 +100,15 @@ class circuit: WorkoutType {
     }
 }
 
-struct CircuitModel: Codable {
+struct CircuitModel: ExerciseType, Codable, Hashable {
     var workoutPosition: Int
     var exercises: [ExerciseModel]
     var completed: Bool
     var circuitName: String
     var createdBy: String
     var creatorID: String
-    var savedID: String
+    var savedID: String?
     var integrated: Bool
-    var startTime: TimeInterval
-    var rpe: Int
+    var startTime: TimeInterval?
+    var rpe: Int?
 }

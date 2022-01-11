@@ -108,8 +108,6 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
                     print(String(describing: error))
                 }
             }
-            print(self.workoutModels.count)
-            print(self.workoutModels[0].title)
         }
         
         

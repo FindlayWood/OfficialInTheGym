@@ -13,6 +13,7 @@ class NewExerciseCell: UITableViewCell {
     // MARK: - Properties
     static let cellID = "NewExerciseCellID"
     
+    // MARK: - Subviews
     var messageLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.font
@@ -23,6 +24,7 @@ class NewExerciseCell: UITableViewCell {
         return label
     }()
 
+    // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setup()
@@ -31,8 +33,12 @@ class NewExerciseCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError()
     }
+}
+
+// MARK: - Setup UI
+private extension NewExerciseCell {
     
-    private func setup() {
+    func setup() {
         backgroundColor = Constants.darkColour
         addSubview(messageLabel)
         constrain()
@@ -40,7 +46,7 @@ class NewExerciseCell: UITableViewCell {
         selectionStyle = .none
     }
 
-    private func constrain() {
+    func constrain() {
         NSLayoutConstraint.activate([messageLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      messageLabel.centerYAnchor.constraint(equalTo: centerYAnchor)])
     }

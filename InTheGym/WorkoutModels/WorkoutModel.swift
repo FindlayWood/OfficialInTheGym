@@ -144,7 +144,7 @@ class workout: Completeable {
 
 struct WorkoutModel: Codable, Hashable {
     var title: String
-    var workoutID: String?
+    var workoutID: String
     var creatorID: String
     var createdBy: String
     var completed: Bool
@@ -152,11 +152,14 @@ struct WorkoutModel: Codable, Hashable {
     var startTime: TimeInterval?
     var timeToComplete: Int?
     var workload: Int?
-    var exercises: [ExerciseModel]? 
+    var exercises: [ExerciseModel]?
     var circuits: [CircuitModel]?
     var emoms: [EMOMModel]?
     var amraps: [AMRAPModel]?
     var liveWorkout: Bool?
+    var id: String {
+        return workoutID
+    }
     
     static func == (lhs: WorkoutModel, rhs: WorkoutModel) -> Bool {
         lhs.workoutID == rhs.workoutID

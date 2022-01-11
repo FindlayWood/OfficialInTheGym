@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7yC-lF-aSx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7yC-lF-aSx">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -5612,7 +5612,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="llv-aU-dgd">
-                                <rect key="frame" x="369" y="6" width="25" height="24"/>
+                                <rect key="frame" x="368" y="6" width="26" height="26"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal">
                                     <imageReference key="image" image="plus.circle.fill" catalog="system" symbolScale="large"/>
@@ -7433,7 +7433,7 @@
             <size key="intrinsicContentSize" width="49" height="30"/>
         </designable>
         <designable name="6DN-hZ-vmB">
-            <size key="intrinsicContentSize" width="87" height="25.5"/>
+            <size key="intrinsicContentSize" width="175" height="46.380859375"/>
         </designable>
         <designable name="6uA-th-tCV">
             <size key="intrinsicContentSize" width="80" height="38"/>
@@ -7445,13 +7445,13 @@
             <size key="intrinsicContentSize" width="102" height="45"/>
         </designable>
         <designable name="9tH-JZ-dNG">
-            <size key="intrinsicContentSize" width="90.5" height="25.5"/>
+            <size key="intrinsicContentSize" width="175" height="46.380859375"/>
         </designable>
         <designable name="9xg-2J-BvV">
-            <size key="intrinsicContentSize" width="134" height="34"/>
+            <size key="intrinsicContentSize" width="374" height="43.994140625"/>
         </designable>
         <designable name="Ec4-Hr-l2P">
-            <size key="intrinsicContentSize" width="90" height="25.5"/>
+            <size key="intrinsicContentSize" width="374" height="46.380859375"/>
         </designable>
         <designable name="EjO-4l-1RP">
             <size key="intrinsicContentSize" width="50" height="42"/>
@@ -7466,7 +7466,7 @@
             <size key="intrinsicContentSize" width="91" height="42"/>
         </designable>
         <designable name="ND8-9f-WcF">
-            <size key="intrinsicContentSize" width="260.5" height="34"/>
+            <size key="intrinsicContentSize" width="374" height="39.220703125"/>
         </designable>
         <designable name="NFV-6f-h4J">
             <size key="intrinsicContentSize" width="170" height="46"/>
@@ -7493,13 +7493,13 @@
             <size key="intrinsicContentSize" width="73" height="36"/>
         </designable>
         <designable name="X1P-3o-QOc">
-            <size key="intrinsicContentSize" width="48" height="25.5"/>
+            <size key="intrinsicContentSize" width="374" height="46.380859375"/>
         </designable>
         <designable name="YYT-pf-4sR">
             <size key="intrinsicContentSize" width="159" height="38"/>
         </designable>
         <designable name="aLW-Oz-ZZK">
-            <size key="intrinsicContentSize" width="87.5" height="24"/>
+            <size key="intrinsicContentSize" width="374" height="46.380859375"/>
         </designable>
         <designable name="brK-Tg-rQq">
             <size key="intrinsicContentSize" width="66" height="48"/>
@@ -7508,13 +7508,13 @@
             <size key="intrinsicContentSize" width="161" height="48"/>
         </designable>
         <designable name="fuu-ks-QYN">
-            <size key="intrinsicContentSize" width="173.5" height="34"/>
+            <size key="intrinsicContentSize" width="374" height="43.994140625"/>
         </designable>
         <designable name="h36-4N-4qy">
             <size key="intrinsicContentSize" width="30" height="38"/>
         </designable>
         <designable name="kez-jD-vfi">
-            <size key="intrinsicContentSize" width="140" height="34"/>
+            <size key="intrinsicContentSize" width="374" height="46.380859375"/>
         </designable>
         <designable name="mCH-em-kvR">
             <size key="intrinsicContentSize" width="120" height="36"/>
@@ -7529,7 +7529,7 @@
             <size key="intrinsicContentSize" width="90" height="48"/>
         </designable>
         <designable name="rrL-Ym-l4D">
-            <size key="intrinsicContentSize" width="168.5" height="26"/>
+            <size key="intrinsicContentSize" width="374" height="47.57421875"/>
         </designable>
         <designable name="tr4-6C-l3c">
             <size key="intrinsicContentSize" width="127" height="47"/>
@@ -7538,7 +7538,7 @@
             <size key="intrinsicContentSize" width="51" height="36"/>
         </designable>
         <designable name="x2E-94-mXR">
-            <size key="intrinsicContentSize" width="154" height="34"/>
+            <size key="intrinsicContentSize" width="374" height="43.994140625"/>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>

@@ -14,6 +14,9 @@ import Firebase
 
 class NewWeightViewController: UIViewController, Storyboarded {
     
+    weak var newCoordinator: WeightSelectionFlow?
+    weak var exerciseViewModel: ExerciseCreationViewModel?
+    
     weak var coordinator: CreationFlow?
     var newExercise: exercise?
     var selectedIndexInt: Int? = nil
@@ -23,8 +26,8 @@ class NewWeightViewController: UIViewController, Storyboarded {
     var adapter: WeightAdapter!
     
     lazy var WeightArray: [String] = {
-        guard let exercise = newExercise else {return []}
-        let array = Array(repeating: "", count: exercise.sets ?? 0)
+        //guard let exercise = newExercise else {return []}
+        let array = Array(repeating: "", count: exerciseViewModel?.exercise.sets ?? 0)
         return array
     }()
     
@@ -88,7 +91,11 @@ class NewWeightViewController: UIViewController, Storyboarded {
         } else {
             switch selectedState {
             case .allSelected:
-                WeightArray = WeightArray.map { _ in number + measurement}
+                if exerciseViewModel?.exercisekind == .amrap || exerciseViewModel?.exercisekind == .emom {
+                    WeightArray = [number + measurement]
+                } else {
+                    WeightArray = WeightArray.map { _ in number + measurement}
+                }
             case .singleSelected(let index):
                 WeightArray[index] = number + measurement
             }
@@ -103,46 +110,20 @@ class NewWeightViewController: UIViewController, Storyboarded {
     }
     
     @IBAction func nextPressed(_ sender:UIButton){
-        guard let newExercise = newExercise else {return}
-        guard let measurement = display.weightMeasurementField.text,
-              let number = display.numberTextfield.text
-        else {return}
-        
-        if coordinator is LiveWorkoutCoordinator {
-            if measurement == "max" || measurement == "bw" {
-                if newExercise.weightArray == nil {
-                    newExercise.weightArray = [measurement]
-                } else {
-                    newExercise.weightArray?.append(measurement)
-                }
-            } else {
-                if number.isEmpty {
-                    showEmptyAlert()
-                } else {
-                    let newWeight = number + measurement
-                    if newExercise.weightArray == nil {
-                        newExercise.weightArray = [newWeight]
-                    } else {
-                        newExercise.weightArray?.append(newWeight)
-                    }
-                }
-            }
-        }
-            
-            
-//            if display.maxButton.isSelected {
+//        guard let newExercise = newExercise else {return}
+//        guard let measurement = display.weightMeasurementField.text,
+//              let number = display.numberTextfield.text
+//        else {return}
+//        
+//        if coordinator is LiveWorkoutCoordinator {
+//            if measurement == "max" || measurement == "bw" {
 //                if newExercise.weightArray == nil {
-//                    newExercise.weightArray = ["MAX"]
+//                    newExercise.weightArray = [measurement]
 //                } else {
-//                    newExercise.weightArray?.append("MAX")
+//                    newExercise.weightArray?.append(measurement)
 //                }
 //            } else {
-//                guard let number = display.numberTextfield.text,
-//                      let measurement = display.weightMeasurementField.text
-//                else {
-//                    return
-//                }
-//                if number.isEmpty || measurement.isEmpty {
+//                if number.isEmpty {
 //                    showEmptyAlert()
 //                } else {
 //                    let newWeight = number + measurement
@@ -154,21 +135,50 @@ class NewWeightViewController: UIViewController, Storyboarded {
 //                }
 //            }
 //        }
-        else if coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator {
-            if measurement == "max" || measurement == "bw" {
-                newExercise.weight = measurement
-            } else {
-                if number.isEmpty || measurement.isEmpty {
-                    showEmptyAlert()
-                } else {
-                    let newWeight = number + measurement
-                    newExercise.weight = newWeight
-                }
-            }
-        } else {
-            newExercise.weightArray = WeightArray
-        }
-        coordinator?.weightSelected(newExercise)
+//            
+//            
+////            if display.maxButton.isSelected {
+////                if newExercise.weightArray == nil {
+////                    newExercise.weightArray = ["MAX"]
+////                } else {
+////                    newExercise.weightArray?.append("MAX")
+////                }
+////            } else {
+////                guard let number = display.numberTextfield.text,
+////                      let measurement = display.weightMeasurementField.text
+////                else {
+////                    return
+////                }
+////                if number.isEmpty || measurement.isEmpty {
+////                    showEmptyAlert()
+////                } else {
+////                    let newWeight = number + measurement
+////                    if newExercise.weightArray == nil {
+////                        newExercise.weightArray = [newWeight]
+////                    } else {
+////                        newExercise.weightArray?.append(newWeight)
+////                    }
+////                }
+////            }
+////        }
+//        else if coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator {
+//            if measurement == "max" || measurement == "bw" {
+//                newExercise.weight = measurement
+//            } else {
+//                if number.isEmpty || measurement.isEmpty {
+//                    showEmptyAlert()
+//                } else {
+//                    let newWeight = number + measurement
+//                    newExercise.weight = newWeight
+//                }
+//            }
+//        } else {
+//            newExercise.weightArray = WeightArray
+//        }
+//        coordinator?.weightSelected(newExercise)
+        
+        exerciseViewModel?.addWeight(WeightArray)
+        newCoordinator?.next()
     }
     
     @objc func skipPressed(_ sender: UIButton) {
@@ -181,20 +191,29 @@ class NewWeightViewController: UIViewController, Storyboarded {
             newExercise.weightArray = WeightArray
         }
         coordinator?.weightSelected(newExercise)
+        
+        exerciseViewModel?.addWeight(WeightArray)
+        newCoordinator?.next()
     }
     
     
     
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        hideKeyboardWhenTappedAround()
-        
+    fileprivate func initAdapter() {
         adapter = WeightAdapter(delegate: self)
         display.topCollection.delegate = adapter
         display.topCollection.dataSource = adapter
         display.topCollection.register(WeightCollectionCell.self, forCellWithReuseIdentifier: "cell")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.backgroundColor = .white
+        
+        hideKeyboardWhenTappedAround()
+        
+        initAdapter()
         setUp()
         
         switch coordinator{
@@ -217,16 +236,14 @@ class NewWeightViewController: UIViewController, Storyboarded {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        display.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom)
+        display.frame = getViewableFrameWithBottomSafeArea()
+//        display.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom)
         view.addSubview(display)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.title = "Weight"
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        let textAttributes = [NSAttributedString.Key.foregroundColor: Constants.darkColour]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        navigationController?.navigationBar.tintColor = Constants.darkColour
+        editNavBarColour(to: .darkColour)
     }
     
     func initNavBar() {
@@ -251,9 +268,12 @@ class NewWeightViewController: UIViewController, Storyboarded {
 
 extension NewWeightViewController: WeightAdapterProtocol {
     func getData(at indexPath: Int) -> WeightModel {
-        guard let exercise = newExercise else {return WeightModel(rep: 0, weight: "", index: 0)}
-        let rep = exercise.repArray?[indexPath] ?? 0
-        let weight = exercise.weightArray?[indexPath] ?? WeightArray[indexPath]
+//        guard let exercise = newExercise else {return WeightModel(rep: 0, weight: "", index: 0)}
+//        let rep = exercise.repArray?[indexPath] ?? 0
+//        let weight = exercise.weightArray?[indexPath] ?? WeightArray[indexPath]
+//        return WeightModel(rep: rep, weight: weight, index: indexPath + 1)
+        let rep = exerciseViewModel?.exercise.reps?[indexPath] ?? 0
+        let weight = exerciseViewModel?.exercise.weight?[indexPath] ?? WeightArray[indexPath]
         return WeightModel(rep: rep, weight: weight, index: indexPath + 1)
     }
     

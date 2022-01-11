@@ -30,19 +30,22 @@ extension CreateCircuitAdapter: UITableViewDelegate, UITableViewDataSource, Empt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == delegate.retreiveNumberOfItems() - 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "newCell", for: indexPath) as! NewExerciseCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: NewExerciseCell.cellID, for: indexPath) as! NewExerciseCell
             return cell
         } else {
             let model = delegate.getData(at: indexPath)
-            let cell = tableView.dequeueReusableCell(withIdentifier: "circuitCell", for: indexPath) as! CircuitCell
-            cell.setup(with: model)
+            let cell = tableView.dequeueReusableCell(withIdentifier: CircuitCell.cellID, for: indexPath) as! CircuitCell
+//            cell.setup(with: model)
             return cell
         }
 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == delegate.retreiveNumberOfItems() - 1 {
+//        if indexPath.section == delegate.retreiveNumberOfItems() - 1 {
+//            delegate.addNewExercise()
+//        }
+        if indexPath.section == 1 {
             delegate.addNewExercise()
         }
     }

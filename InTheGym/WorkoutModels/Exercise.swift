@@ -106,13 +106,14 @@ class exercise: WorkoutType, Codable {
     }
 }
 
-enum ExerciseType: String, Codable {
-    case regularExercise = "regularExercise"
-    case emom = "emom"
-}
+//enum ExerciseType: String, Codable {
+//    case regularExercise = "regularExercise"
+//    case emom = "emom"
+//}
 
 
-struct ExerciseModel: Codable {
+struct ExerciseModel: ExerciseType, Codable, Hashable {
+    var workoutPosition: Int
     var exercise: String
     var reps: [Int]?
     var weight: [String]?

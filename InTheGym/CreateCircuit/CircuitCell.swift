@@ -11,6 +11,10 @@ import UIKit
 
 class CircuitCell: UITableViewCell {
     
+    // MARK: - Properties
+    static let cellID = "CircuitCellID"
+    
+    // MARK: - Subviews
     var exerciseName: UILabel = {
        let label = UILabel()
         label.font = Constants.font
@@ -36,6 +40,7 @@ class CircuitCell: UITableViewCell {
          return label
     }()
     
+    // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpView()
@@ -43,7 +48,12 @@ class CircuitCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError()
     }
-    private func setUpView() {
+}
+
+// MARK: - Setup UI
+private extension CircuitCell {
+    
+    func setUpView() {
         backgroundColor = Constants.offWhiteColour
         layer.cornerRadius = 10
         addSubview(exerciseName)
@@ -51,7 +61,7 @@ class CircuitCell: UITableViewCell {
         addSubview(setsLabel)
         constrainView()
     }
-    private func constrainView() {
+    func constrainView() {
         NSLayoutConstraint.activate([exerciseName.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      exerciseName.topAnchor.constraint(equalTo: topAnchor, constant: 10),
         
@@ -64,9 +74,13 @@ class CircuitCell: UITableViewCell {
                                      setsLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      setsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)])
     }
-    func setup(with circuitModel:exercise){
-        exerciseName.text = circuitModel.exercise
-        guard let set = circuitModel.sets else {
+}
+
+// MARK: - Public Configuration
+extension CircuitCell {
+    public func setup(with exercise: ExerciseModel){
+        exerciseName.text = exercise.exercise
+        guard let set = exercise.sets else {
             return
         }
         setsLabel.text = "\(set) SETS"

@@ -83,14 +83,14 @@ class AMRAP: WorkoutType {
     }
 }
 
-struct AMRAPModel: Codable {
+struct AMRAPModel: ExerciseType, Codable, Hashable {
     var workoutPosition: Int
     var timeLimit: Int
     var exercises: [ExerciseModel]
     var completed: Bool
     var roundsCompleted: Int
     var exercisesCompleted: Int
-    var rpe: Int
+    var rpe: Int?
     var started: Bool
-    var startTime: TimeInterval
+    var startTime: TimeInterval?
 }

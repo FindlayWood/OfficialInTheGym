@@ -7,27 +7,52 @@
 //
 
 import Foundation
+import Combine
 
 class CreateEMOMViewModel {
     
     // MARK: - Properties
     var navigationTitle = "Create EMOM"
     
-    // MARK: - Callbacks
-    var reloadTableViewClosure: (()->())?
+    var emomTimeLimit: Int = 10
     
-    var exercises = [exercise]() {
-        didSet {
-            reloadTableViewClosure?()
-        }
+    var workoutViewModel: WorkoutCreationViewModel!
+    
+    // MARK: - Publishers
+    var exercises = CurrentValueSubject<[ExerciseModel],Never>([])
+    
+    // MARK: - Actions
+    func addEMOM() {
+        let newEmom = EMOMModel(workoutPosition: 0,
+                                exercises: exercises.value,
+                                timeLimit: emomTimeLimit,
+                                completed: false,
+                                started: false)
+        workoutViewModel.addEMOM(newEmom)
     }
     
-    var numberOfExercises: Int {
-        return exercises.count + 1
-    }
-    
-    
-    func getData(at indexPath: IndexPath) -> exercise {
-        return exercises[indexPath.section]
+//    // MARK: - Callbacks
+//    var reloadTableViewClosure: (()->())?
+//
+//    var exercises = [exercise]() {
+//        didSet {
+//            reloadTableViewClosure?()
+//        }
+//    }
+//
+//    var numberOfExercises: Int {
+//        return exercises.count + 1
+//    }
+//
+//
+//    func getData(at indexPath: IndexPath) -> exercise {
+//        return exercises[indexPath.section]
+//    }
+}
+extension CreateEMOMViewModel: ExerciseAdding {
+    func addExercise(_ exercise: ExerciseModel) {
+        var currentExercises = exercises.value
+        currentExercises.append(exercise)
+        exercises.send(currentExercises)
     }
 }

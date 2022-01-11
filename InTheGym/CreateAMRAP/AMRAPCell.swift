@@ -13,6 +13,7 @@ class AMRAPCell: UITableViewCell {
     // MARK: - Properties
     static let cellID = "AMRAPCellID"
     
+    // MARK: - Subviews
     var exerciseName: UILabel = {
        let label = UILabel()
         label.font = Constants.font
@@ -33,6 +34,7 @@ class AMRAPCell: UITableViewCell {
         return label
     }()
 
+    // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setup()
@@ -44,14 +46,18 @@ class AMRAPCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError()
     }
+}
 
-    private func setup() {
+// MARK: - Setup UI
+private extension AMRAPCell {
+    
+    func setup() {
         addSubview(exerciseName)
         addSubview(repLabel)
         constrain()
     }
     
-    private func constrain() {
+    func constrain() {
         NSLayoutConstraint.activate([exerciseName.centerYAnchor.constraint(equalTo: centerYAnchor),
                                      repLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
         
@@ -59,5 +65,13 @@ class AMRAPCell: UITableViewCell {
                                      repLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
         
                                      exerciseName.trailingAnchor.constraint(equalTo: repLabel.leadingAnchor, constant: -5)])
+    }
+}
+
+// MARK: - Public Configuration
+extension AMRAPCell {
+    public func configure(with exercise: ExerciseModel) {
+        exerciseName.text = exercise.exercise
+        repLabel.text = exercise.reps?.description
     }
 }

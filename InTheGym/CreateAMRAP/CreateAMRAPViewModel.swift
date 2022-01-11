@@ -2,25 +2,42 @@
 //  CreateAMRAPViewModel.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 03/06/2021.
-//  Copyright © 2021 FindlayWood. All rights reserved.
+//  Created by Findlay Wood on 10/01/2022.
+//  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import Foundation
+import Combine
 
 class CreateAMRAPViewModel {
     
-    var reloadTableViewClosure: (() -> ())?
+    // MARK: - Publishers
+    var exercises = CurrentValueSubject<[ExerciseModel],Never>([])
     
-    var exercises: [exercise] = [] {
-        didSet{
-            reloadTableViewClosure?()
-        }
+    // MARK: - Properties
+    var workoutViewModel: WorkoutCreationViewModel!
+
+    var timeLimit: Int = 10
+    
+    // MARK: - Actions
+    func addAMRAP() {
+        let newAMRAP = AMRAPModel(workoutPosition: 0,
+                                  timeLimit: timeLimit,
+                                  exercises: exercises.value, completed: false,
+                                  roundsCompleted: 0,
+                                  exercisesCompleted: 0,
+                                  started: false)
+        workoutViewModel.addAMRAP(newAMRAP)
     }
     
-    var numberOfExercises: Int {
-        return exercises.count
+}
+
+// MARK: - Conforming to Exercise Adding
+/// Allows exercises to be added to this amrap
+extension CreateAMRAPViewModel: ExerciseAdding {
+    func addExercise(_ exercise: ExerciseModel) {
+        var currentExercises = exercises.value
+        currentExercises.append(exercise)
+        exercises.send(currentExercises)
     }
-    
-    
 }

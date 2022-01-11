@@ -10,6 +10,10 @@ import UIKit
 
 class RepsCell: UICollectionViewCell {
     
+    // MARK: - Properties
+    static let cellID = "RepsCellID"
+    
+    // MARK: - Subviews
     lazy var setLabel: UILabel = {
        let label = UILabel()
         label.textColor = .white

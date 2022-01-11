@@ -26,7 +26,7 @@ extension RepsBottomCollectionAdapter: UICollectionViewDelegate, UICollectionVie
         return 100
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! SetsCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SetsCell.cellID, for: indexPath) as! SetsCell
         let selected = delegate.selectedIndex()
         if indexPath.item == 0 {
             cell.numberLabel.text = "M"

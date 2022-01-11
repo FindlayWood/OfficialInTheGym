@@ -167,7 +167,7 @@ extension WorkoutCollectionViewCell {
     public func configure(with model: WorkoutModel) {
         titleLabel.text = model.title
         creatorLabel.text = model.createdBy
-        exerciseCountLabel.text = model.exercises.count.description
+        exerciseCountLabel.text = model.exercises?.count.description
         if let time = model.timeToComplete {
             timeLabel.text = time.convertToWorkoutTime()
         } else {

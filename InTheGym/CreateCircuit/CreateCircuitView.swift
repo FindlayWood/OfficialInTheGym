@@ -12,6 +12,7 @@ import SkyFloatingLabelTextField
 
 class CreateCircuitView: UIView {
     
+    // MARK: - Subviews
     var titlefield: SkyFloatingLabelTextField = {
        let field = SkyFloatingLabelTextField()
         field.tintColor = Constants.darkColour
@@ -45,17 +46,19 @@ class CreateCircuitView: UIView {
     var tableview: UITableView = {
         let view = UITableView()
         view.tableFooterView = UIView()
-        view.register(CircuitCell.self, forCellReuseIdentifier: "circuitCell")
-        view.register(NewExerciseCell.self, forCellReuseIdentifier: "newCell")
+        view.register(CircuitCell.self, forCellReuseIdentifier: CircuitCell.cellID)
+        view.register(NewExerciseCell.self, forCellReuseIdentifier: NewExerciseCell.cellID)
         view.tableFooterView = UIView()
         view.rowHeight = UITableView.automaticDimension
         view.estimatedRowHeight = 100
         view.separatorInset = .zero
         view.layoutMargins = .zero
+        if #available(iOS 15.0, *) { view.sectionHeaderTopPadding = 0 }
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpView()
@@ -63,14 +66,19 @@ class CreateCircuitView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
-    private func setUpView() {
+}
+
+// MARK: - Setup UI
+private extension CreateCircuitView {
+    
+    func setUpView() {
         backgroundColor = .white
         addSubview(titlefield)
         addSubview(exerciseLabel)
         addSubview(tableview)
         constrainView()
     }
-    private func constrainView() {
+    func constrainView() {
         NSLayoutConstraint.activate([titlefield.topAnchor.constraint(equalTo: topAnchor, constant: 10),
                                      titlefield.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
                                      titlefield.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),

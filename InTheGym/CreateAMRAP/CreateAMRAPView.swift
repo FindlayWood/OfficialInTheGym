@@ -11,6 +11,7 @@ import UIKit
 
 class CreateAMRAPView: UIView {
     
+    // MARK: - Subviews
     var timeView: UIView = {
         let view = UIView()
         view.backgroundColor = Constants.offWhiteColour
@@ -69,10 +70,14 @@ class CreateAMRAPView: UIView {
         let tv = UITableView()
         tv.tableFooterView = UIView()
         tv.backgroundColor = .white
+        tv.register(AMRAPCell.self, forCellReuseIdentifier: AMRAPCell.cellID)
+        tv.register(NewExerciseCell.self, forCellReuseIdentifier: NewExerciseCell.cellID)
+        if #available(iOS 15.0, *) { tv.sectionHeaderTopPadding = 0 }
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -82,8 +87,12 @@ class CreateAMRAPView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    private func setup() {
+}
+
+// MARK: - Setup UI
+private extension CreateAMRAPView {
+    func setup() {
+        backgroundColor = .white
         addSubview(timeView)
         timeView.addSubview(timeLabel)
         timeView.addSubview(timeNumberLabel)
@@ -93,7 +102,7 @@ class CreateAMRAPView: UIView {
         constrain()
     }
     
-    private func constrain() {
+    func constrain() {
         NSLayoutConstraint.activate([timeLabel.topAnchor.constraint(equalTo: timeView.topAnchor, constant: 10),
                                      timeLabel.leadingAnchor.constraint(equalTo: timeView.leadingAnchor, constant: 10),
                                      
