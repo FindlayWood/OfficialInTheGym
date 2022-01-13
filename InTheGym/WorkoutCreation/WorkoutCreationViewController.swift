@@ -25,18 +25,13 @@ class WorkoutCreationViewController: UIViewController {
     
     var adapter: WorkoutCreationAdapter!
     
+    // MARK: - Store Subscriptions
     private var subscriptions = Set<AnyCancellable>()
     
-    // MARK: - Exercise Types
-//    var exerciseTypes: [ExerciseType] {
-//        let exercises: [ExerciseType] = exercises + circuits + emoms + amraps
-//        return exercises.sorted(by: { $0.workoutPosition > $1.workoutPosition })
-//    }
+    // MARK: - Assign To User
+    /// The user to assign this workout to - if nil then just adding to created workouts with save option
+    var assignTo: Users?
     
-//    var exercises = [ExerciseModel]()
-//    var circuits = [CircuitModel]()
-//    var emoms = [EMOMModel]()
-//    var amraps = [AMRAPModel]()
     
     // MARK: - View setup
     override func viewDidLayoutSubviews() {
@@ -59,6 +54,7 @@ class WorkoutCreationViewController: UIViewController {
         initialTableSetup()
         setUpActions()
         initNavBar()
+        initDisplay()
         setupSubscribers()
     }
     
@@ -71,13 +67,12 @@ class WorkoutCreationViewController: UIViewController {
     func initNavBar() {
         let uploadButton = UIBarButtonItem(title: "Upload", style: .done, target: self, action: #selector(uploadPressed(_:)))
         navigationItem.rightBarButtonItem = uploadButton
-        navigationItem.rightBarButtonItem?.isEnabled = isNavBarEnabled()
+        navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
-    func isNavBarEnabled() -> Bool {
-//        if exerciseTypes.count > 0 { return true }
-//        else { return false }
-        return false
+    func initDisplay() {
+        display.configure(with: assignTo)
+        display.workoutTitleField.delegate = self
     }
     
     func setUpActions() {
@@ -94,12 +89,44 @@ class WorkoutCreationViewController: UIViewController {
                 self.updateTable(with: exercises)
             }
             .store(in: &subscriptions)
+        
+        viewModel.$canUpload
+            .receive(on: RunLoop.main)
+            .sink { [weak self] valid in
+                guard let self = self else {return}
+                self.navigationItem.rightBarButtonItem?.isEnabled = valid
+            }
+            .store(in: &subscriptions)
+        
+        viewModel.successfullyUploadedWorkout
+            .sink { [weak self] success in
+                guard let self = self else {return}
+                if success {
+                    // TODO: - Reset page
+                    // TODO: - Display Top View
+                    self.displayTopMessage(with: "Uploaded Workout!")
+                    self.viewModel.reset()
+                }
+            }
+            .store(in: &subscriptions)
+        
+        viewModel.errorUploadingWorkout
+            .sink { [weak self] error in
+                guard let self = self else {return}
+                if error {
+                    // TODO: - Display Top Alert
+                    self.displayTopMessage(with: "Error! Please try again.")
+                }
+            }
+            .store(in: &subscriptions)
     }
 }
 // MARK: - Actions
 extension WorkoutCreationViewController {
     @objc func uploadPressed(_ sender: UIBarButtonItem) {
-        coordinator?.upload()
+        let options = WorkoutOptionsModel(isPrivate: display.privacyView.isPrivate, save: display.saveView.saving)
+        viewModel.upload(to: assignTo, with: options)
+//        coordinator?.upload()
     }
     @objc func plusButtonPressed(_ sender: UIButton) {
         coordinator?.plus(viewModel: viewModel, workoutPosition: viewModel.exercises.value.count)
@@ -159,7 +186,16 @@ extension WorkoutCreationViewController {
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
 }
-
+// MARK: - Textfield Delegation
+extension WorkoutCreationViewController {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string).trimTrailingWhiteSpaces()
+        if textField == display.workoutTitleField {
+            viewModel.updateTitle(with: newString)
+        }
+        return true
+    }
+}
 enum ExerciseRow: Hashable {
     case exercise(ExerciseModel)
     case circuit(CircuitModel)

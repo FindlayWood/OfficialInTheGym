@@ -186,6 +186,13 @@
 		743330BE278DB6EE005A0C45 /* AmrapCreationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330BD278DB6EE005A0C45 /* AmrapCreationCoordinator.swift */; };
 		743330C1278DD2BF005A0C45 /* EmomCreationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330C0278DD2BF005A0C45 /* EmomCreationCoordinator.swift */; };
 		743330C3278DDD23005A0C45 /* EmomExerciseSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330C2278DDD23005A0C45 /* EmomExerciseSelectionCoordinator.swift */; };
+		743330C5278F278B005A0C45 /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330C4278F278B005A0C45 /* PrivacyView.swift */; };
+		743330C7278F2CB0005A0C45 /* SaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330C6278F2CB0005A0C45 /* SaveView.swift */; };
+		743330C9278F39FD005A0C45 /* AssignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330C8278F39FD005A0C45 /* AssignView.swift */; };
+		743330CB278F657F005A0C45 /* WorkoutOptionsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330CA278F657F005A0C45 /* WorkoutOptionsModel.swift */; };
+		743330CD27906535005A0C45 /* FirebaseMultiUploadBoolean.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330CC27906535005A0C45 /* FirebaseMultiUploadBoolean.swift */; };
+		743330CF27909651005A0C45 /* MockFirebaseDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330CE27909651005A0C45 /* MockFirebaseDatabaseManager.swift */; };
+		743330D1279096D7005A0C45 /* WorkoutCreationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330D0279096D7005A0C45 /* WorkoutCreationTests.swift */; };
 		7433F0E72627B6EF0014034B /* DiscoverPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7433F0E62627B6EF0014034B /* DiscoverPageViewModel.swift */; };
 		7439E03A260CF9E000C91C0C /* DiscussionViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7439E039260CF9E000C91C0C /* DiscussionViewViewController.swift */; };
 		7439E03F260CFA0000C91C0C /* DiscussionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7439E03E260CFA0000C91C0C /* DiscussionViewModel.swift */; };
@@ -810,6 +817,13 @@
 		743330BD278DB6EE005A0C45 /* AmrapCreationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmrapCreationCoordinator.swift; sourceTree = "<group>"; };
 		743330C0278DD2BF005A0C45 /* EmomCreationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmomCreationCoordinator.swift; sourceTree = "<group>"; };
 		743330C2278DDD23005A0C45 /* EmomExerciseSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmomExerciseSelectionCoordinator.swift; sourceTree = "<group>"; };
+		743330C4278F278B005A0C45 /* PrivacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
+		743330C6278F2CB0005A0C45 /* SaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveView.swift; sourceTree = "<group>"; };
+		743330C8278F39FD005A0C45 /* AssignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignView.swift; sourceTree = "<group>"; };
+		743330CA278F657F005A0C45 /* WorkoutOptionsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutOptionsModel.swift; sourceTree = "<group>"; };
+		743330CC27906535005A0C45 /* FirebaseMultiUploadBoolean.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseMultiUploadBoolean.swift; sourceTree = "<group>"; };
+		743330CE27909651005A0C45 /* MockFirebaseDatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFirebaseDatabaseManager.swift; sourceTree = "<group>"; };
+		743330D0279096D7005A0C45 /* WorkoutCreationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCreationTests.swift; sourceTree = "<group>"; };
 		7433F0E62627B6EF0014034B /* DiscoverPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageViewModel.swift; sourceTree = "<group>"; };
 		7439E039260CF9E000C91C0C /* DiscussionViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewViewController.swift; sourceTree = "<group>"; };
 		7439E03E260CFA0000C91C0C /* DiscussionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewModel.swift; sourceTree = "<group>"; };
@@ -1308,6 +1322,8 @@
 				742565A6277E3C3F00A7764D /* GroupPosts.swift */,
 				742565AC277FA7C700A7764D /* GroupKeysModel.swift */,
 				7433308427861010005A0C45 /* SavedWorkoutModel.swift */,
+				743330CA278F657F005A0C45 /* WorkoutOptionsModel.swift */,
+				743330CC27906535005A0C45 /* FirebaseMultiUploadBoolean.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1359,6 +1375,7 @@
 				74F2CCF226E78F9600D7AD79 /* MockFirebaseManager.swift */,
 				747FAFC427298E5B00E2966E /* MockFirebaseEMOMService.swift */,
 				74B6F76C275FB81E00A72679 /* MockFirebaseAuthManager.swift */,
+				743330CE27909651005A0C45 /* MockFirebaseDatabaseManager.swift */,
 			);
 			path = MockServices;
 			sourceTree = "<group>";
@@ -1403,6 +1420,9 @@
 				74B6F76A275A5BF700A72679 /* SkyFloatingTextField.swift */,
 				743A0502276A885A0027B752 /* CommentView.swift */,
 				743A0506276B7E240027B752 /* UIProfileImageButton.swift */,
+				743330C4278F278B005A0C45 /* PrivacyView.swift */,
+				743330C6278F2CB0005A0C45 /* SaveView.swift */,
+				743330C8278F39FD005A0C45 /* AssignView.swift */,
 			);
 			path = ViewClasses;
 			sourceTree = "<group>";
@@ -2146,6 +2166,7 @@
 				7479A922229F2B4D00D39E2E /* Info.plist */,
 				747FAFBE272853F000E2966E /* DisplayEMOMTests.swift */,
 				74B6F76E275FB88800A72679 /* SignUpTests.swift */,
+				743330D0279096D7005A0C45 /* WorkoutCreationTests.swift */,
 			);
 			path = InTheGymTests;
 			sourceTree = "<group>";
@@ -3090,6 +3111,7 @@
 				74EEA758270DD3B700911A77 /* AVAsset+Extension.swift in Sources */,
 				74FCFA352614EE830064699F /* MyProfileViewModel.swift in Sources */,
 				74221B4926443CDB00D05527 /* FirebaseAuthManager.swift in Sources */,
+				743330CB278F657F005A0C45 /* WorkoutOptionsModel.swift in Sources */,
 				7444D07526CE96BF0009C7A6 /* WorkoutView.swift in Sources */,
 				7444D06126CD41BB0009C7A6 /* GroupWorkoutsProtocol.swift in Sources */,
 				74F2CCCB26DE86BC00D7AD79 /* AttachingClipCoordinator.swift in Sources */,
@@ -3168,6 +3190,7 @@
 				742565A9277F6B4D00A7764D /* MyGroupsTableViewCell.swift in Sources */,
 				74318F3E26B572F1009EDFAC /* PreLiveWorkoutAdapter.swift in Sources */,
 				747C06F2260FAD4800E9F1E2 /* DiscussionTapProtocol.swift in Sources */,
+				743330C5278F278B005A0C45 /* PrivacyView.swift in Sources */,
 				74FDB5AC268E2822000649CC /* RecordedClipView.swift in Sources */,
 				7403A61026C9B310000588CE /* MoreGroupInfoViewController.swift in Sources */,
 				7444D0B826D30B400009C7A6 /* UploadingWorkoutView.swift in Sources */,
@@ -3280,6 +3303,7 @@
 				74F5468A25E96DAA00C1A6A9 /* UploadPostViewModel.swift in Sources */,
 				74F78B9E2631D0EC00C21077 /* LaunchMessageController.swift in Sources */,
 				748B403D25236EBD00C947B6 /* ExerciseSetsViewController.swift in Sources */,
+				743330CD27906535005A0C45 /* FirebaseMultiUploadBoolean.swift in Sources */,
 				743A04FD276A87250027B752 /* CommentSectionViewController.swift in Sources */,
 				747B674825FFC071000AD6B7 /* DisplayNotificationsProtocol.swift in Sources */,
 				743330B5278B45A9005A0C45 /* EmomCreationTableViewCell.swift in Sources */,
@@ -3373,6 +3397,7 @@
 				7433308E278743CF005A0C45 /* ExerciseType.swift in Sources */,
 				7466A84A25EFCCC400F4050F /* PlayerMyInfoViewController.swift in Sources */,
 				7439E03A260CF9E000C91C0C /* DiscussionViewViewController.swift in Sources */,
+				743330C9278F39FD005A0C45 /* AssignView.swift in Sources */,
 				7492265222D8D0BA00EAD386 /* DetailTableViewCell.swift in Sources */,
 				749618E5260CFD66006430D9 /* OriginalPostTableViewCell.swift in Sources */,
 				744F002C261FA44600B7BBDE /* CreatedWorkoutUploadProtocol.swift in Sources */,
@@ -3388,6 +3413,7 @@
 				7444D0D426D431000009C7A6 /* PrivacyUploadCell.swift in Sources */,
 				7466A85525EFD78100F4050F /* ProfileViewAdapter.swift in Sources */,
 				74F2CCD826E1284100D7AD79 /* ExerciseSelectionHeader.swift in Sources */,
+				743330C7278F2CB0005A0C45 /* SaveView.swift in Sources */,
 				7444D0A126D143E40009C7A6 /* AddMoreDistanceViewController.swift in Sources */,
 				7492264622D3A9C100EAD386 /* PBsViewController.swift in Sources */,
 				7466A86525EFDB8B00F4050F /* ProfileCollectionViewCell.swift in Sources */,
@@ -3577,12 +3603,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				743330D1279096D7005A0C45 /* WorkoutCreationTests.swift in Sources */,
 				7479A921229F2B4D00D39E2E /* InTheGymTests.swift in Sources */,
 				74B6F76F275FB88800A72679 /* SignUpTests.swift in Sources */,
 				74B6F76D275FB81E00A72679 /* MockFirebaseAuthManager.swift in Sources */,
 				747FAFBF272853F000E2966E /* DisplayEMOMTests.swift in Sources */,
 				747FAFC527298E5B00E2966E /* MockFirebaseEMOMService.swift in Sources */,
 				74F2CCF326E78F9600D7AD79 /* MockFirebaseManager.swift in Sources */,
+				743330CF27909651005A0C45 /* MockFirebaseDatabaseManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

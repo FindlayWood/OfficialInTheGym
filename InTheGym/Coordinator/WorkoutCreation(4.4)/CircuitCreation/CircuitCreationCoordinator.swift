@@ -13,10 +13,12 @@ class CircuitCreationCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var workoutViewModel: WorkoutCreationViewModel
+    var workoutPosition: Int
     
-    init(navigationController: UINavigationController, workoutViewModel: WorkoutCreationViewModel) {
+    init(navigationController: UINavigationController, workoutViewModel: WorkoutCreationViewModel, workoutPosition: Int) {
         self.navigationController = navigationController
         self.workoutViewModel = workoutViewModel
+        self.workoutPosition = workoutPosition
     }
     
     func start() {
@@ -37,8 +39,9 @@ extension CircuitCreationCoordinator {
             }
         }
     }
-    func exercise(viewModel: CreateCircuitViewModel) {
-        let child = CircuitExerciseSelectionCoordinator(navigationController: navigationController, circuitViewModel: viewModel)
+    func exercise(viewModel: CreateCircuitViewModel, exercisePosition: Int) {
+        viewModel.workoutPosition = workoutPosition
+        let child = CircuitExerciseSelectionCoordinator(navigationController: navigationController, circuitViewModel: viewModel, workoutPosition: exercisePosition)
         childCoordinators.append(child)
         child.start()
     }

@@ -13,10 +13,12 @@ class EmomCreationCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var workoutViewModel: WorkoutCreationViewModel
+    var workoutPosition: Int
     
-    init(navigationController: UINavigationController, workoutViewModel: WorkoutCreationViewModel) {
+    init(navigationController: UINavigationController, workoutViewModel: WorkoutCreationViewModel, workoutPosition: Int) {
         self.navigationController = navigationController
         self.workoutViewModel = workoutViewModel
+        self.workoutPosition = workoutPosition
     }
     
     func start() {
@@ -37,8 +39,9 @@ extension EmomCreationCoordinator {
             }
         }
     }
-    func exercise(viewModel: CreateEMOMViewModel, workoutPosition: Int) {
-        let child = EmomExerciseSelectionCoordinator(navigationController: navigationController, emomViewModel: viewModel, workoutPosition: workoutPosition)
+    func exercise(viewModel: CreateEMOMViewModel, exercisePosition: Int) {
+        viewModel.workoutPosition = workoutPosition
+        let child = EmomExerciseSelectionCoordinator(navigationController: navigationController, emomViewModel: viewModel, workoutPosition: exercisePosition)
         childCoordinators.append(child)
         child.start()
     }

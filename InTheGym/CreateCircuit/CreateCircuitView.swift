@@ -28,7 +28,9 @@ class CreateCircuitView: UIView {
         field.selectedTitleColor = Constants.darkColour
         field.selectedLineColor = Constants.darkColour
         field.placeholder = "enter circuit title..."
-        field.clearButtonMode = .whileEditing
+        field.font = .systemFont(ofSize: 20, weight: .bold)
+        field.clearButtonMode = .never
+        field.autocapitalizationType = .words
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()

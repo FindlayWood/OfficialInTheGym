@@ -128,7 +128,7 @@ class CreateEMOMViewController: UIViewController {
     func addNewExercise() {
 //        guard let newEMOMExercise = exercise() else {return}
 //        coordinator?.addExercise(newEMOMExercise)
-        newCoordinator?.exercise(viewModel: viewModel, workoutPosition: viewModel.exercises.value.count)
+        newCoordinator?.exercise(viewModel: viewModel, exercisePosition: viewModel.exercises.value.count)
     }
 }
 

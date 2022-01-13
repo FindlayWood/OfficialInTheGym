@@ -91,7 +91,7 @@ class CreateAMRAPViewController: UIViewController {
 // MARK: - Actions
 extension CreateAMRAPViewController {
     @objc func addExercise() {
-        newCoordinator?.exercise(viewModel: viewModel)
+        newCoordinator?.exercise(viewModel: viewModel, exercisePosition: viewModel.exercises.value.count)
 //        if CreateAMRAPViewController.exercises.count < 10 {
 //            guard let newAMRAPExercise = exercise() else {return}
 //            coordinator?.addExercise(newAMRAPExercise)

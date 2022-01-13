@@ -15,16 +15,40 @@ protocol ExerciseAdding {
 
 class WorkoutCreationViewModel: ExerciseAdding {
     
-    // MARK: - Exercise Types
+    // MARK: - Publishers
     var exercises = CurrentValueSubject<[ExerciseType],Never>([])
+    @Published var canUpload: Bool = false
+    @Published var workoutTitle: String = ""
     
+    var successfullyUploadedWorkout = PassthroughSubject<Bool,Never>()
+    var errorUploadingWorkout = PassthroughSubject<Bool,Never>()
+    
+    // MARK: - Exercise Types
     var exerciseModels = [ExerciseModel]()
     var circuitModels = [CircuitModel]()
     var emomModels = [EMOMModel]()
     var amrapModels = [AMRAPModel]()
     
-    // MARK: - Publishers
-    @Published var workoutTitle: String = ""
+    // MARK: - Properties
+    var subscriptions = Set<AnyCancellable>()
+   
+    var apiService: FirebaseDatabaseManagerService
+    
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
+        self.apiService = apiService
+        setupPublishers()
+    }
+    
+    func setupPublishers() {
+        Publishers.CombineLatest($workoutTitle, exercises)
+            .map { workoutTitle, exercises in
+                return workoutTitle.count > 0 && exercises.count > 0
+            }
+            .sink { [unowned self] valid in
+                self.canUpload = valid
+            }
+            .store(in: &subscriptions)
+    }
     
     // MARK: - Adding Functions
     func addExercise(_ exercise: ExerciseModel) {
@@ -51,8 +75,83 @@ class WorkoutCreationViewModel: ExerciseAdding {
         exercises.send(currentExercises)
         amrapModels.append(amrap)
     }
+    
+    //MARK: - Actions
+    func upload(to user: Users?, with options: WorkoutOptionsModel) {
+        let newSavedWorkout = NewSavedWorkoutModel(savedID: UUID().uuidString,
+                                              views: 0,
+                                              downloads: 0,
+                                              completions: 0,
+                                              totalRPE: 0,
+                                              totalTime: 0,
+                                              createdBy: FirebaseAuthManager.currentlyLoggedInUser.username,
+                                              creatorID: FirebaseAuthManager.currentlyLoggedInUser.uid,
+                                              title: workoutTitle,
+                                              exercises: exerciseModels,
+                                              circuits: circuitModels,
+                                              amraps: amrapModels,
+                                              emoms: emomModels)
+        
+
+        
+        var multiUploadPoints = [FirebaseMultiUploadDataPoint]()
+        if let savedWorkoutJSON = newSavedWorkout.toFirebaseJSON() {
+            multiUploadPoints.append(savedWorkoutJSON)
+        }
+        
+
+
+        // TODO: - Upload New Workout to saved workouts
+        // TODO: - Upload keys to created workouts and saved workouts
+        let savedCreatorsRef = FirebaseMultiUploadDataPoint(value: true, path: "SavedWorkoutCreators/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(newSavedWorkout.savedID)")
+        multiUploadPoints.append(savedCreatorsRef)
+//        var keyPaths = ["SavedWorkoutCreators/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(newSavedWorkout.savedID)": true]
+        if options.save {
+//            keyPaths["SavedWorkoutReferences/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(newSavedWorkout.savedID)"] = true
+            let savedWorkoutsRef = FirebaseMultiUploadDataPoint(value: true, path: "SavedWorkoutReferences/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(newSavedWorkout.savedID)")
+            multiUploadPoints.append(savedWorkoutsRef)
+        }
+        
+        // TODO: - If assign != nil upload workout to user
+        if let assignTo = user {
+            // TODO: - Create New Workout
+            let newWorkout = WorkoutModel(savedModel: newSavedWorkout, assignTo: assignTo.uid, isPrivate: options.isPrivate)
+            if let newWorkoutJSON = newWorkout.toFirebaseJSON() {
+                multiUploadPoints.append(newWorkoutJSON)
+            }
+            
+        }
+        
+        apiService.multiLocationUpload(data: multiUploadPoints) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(()):
+                self.successfullyUploadedWorkout.send(true)
+            case .failure(_):
+                self.errorUploadingWorkout.send(true)
+            }
+        }
+        
+    }
+    
+    // MARK: - Updating Functions
+    func updateTitle(with newTitle: String) {
+        workoutTitle = newTitle
+    }
+    
+    // MARK: - Reset Function
+    func reset() {
+        exercises.send([])
+        exerciseModels.removeAll()
+        circuitModels.removeAll()
+        emomModels.removeAll()
+        amrapModels.removeAll()
+        updateTitle(with: "")
+    }
 }
 
+// MARK: - Exercise Creation View Model
+// TODO: - Move to own file
 class ExerciseCreationViewModel {
     var exercise: ExerciseModel!
     var addingDelegate: ExerciseAdding!

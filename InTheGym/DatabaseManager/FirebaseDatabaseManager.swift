@@ -11,8 +11,12 @@ import Firebase
 import CodableFirebase
 
 final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
-    func multiLocationUpload(data: [String : Any], path: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        
+    func multiLocationUpload(data: [FirebaseMultiUploadDataPoint], completion: @escaping (Result<Void, Error>) -> Void) {
+        var keyPaths = [String:Any]()
+        for datum in data {
+            keyPaths[datum.path] = datum.value
+        }
+        print(keyPaths)
     }
     
     func incrementingValue(by increment: Int, at path: String, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -94,7 +98,6 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         dispatchGroup.notify(queue: .main) {
             completion(.success(tempModels))
         }
-        //completion(.success(tempModels))
     }
     
     func fetchKeys<M: FirebaseModel>(from model: M.Type, completion: @escaping (Result<[String],Error>) -> Void) {
@@ -133,7 +136,7 @@ protocol FirebaseDatabaseManagerService {
     func fetch<Model: FirebaseModel>(_ model: Model.Type, completion: @escaping(Result<[Model],Error>) -> Void)
     func fetchInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
     func upload<Model: FirebaseInstance>(data: Model, autoID: Bool, completion: @escaping (Result<Void,Error>) -> Void)
-    func multiLocationUpload(data: [String:Any], path: String, completion: @escaping(Result<Void,Error>) -> Void)
+    func multiLocationUpload(data: [FirebaseMultiUploadDataPoint], completion: @escaping(Result<Void,Error>) -> Void)
     func incrementingValue(by increment: Int, at path: String, completion: @escaping(Result<Void,Error>) -> Void)
     func removingValue(at path: String, completion: @escaping(Result<Void,Error>) -> Void)
 }

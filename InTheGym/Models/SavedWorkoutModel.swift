@@ -8,15 +8,59 @@
 
 import Foundation
 
-class SavedWorkoutModel: Codable {
-    var id: String
-    var title: String
+// MARK: - Saved Workout Model
+/// This represents a saved workout
+/// A saved workout cannot be completed - only for viewing
+/// A saved workout may then be added to workouts
+class SavedWorkoutModel: Codable, Hashable {
+    var savedID: String
+    var views: Int
+    var downloads: Int
+    var completions: Int
+    var totalRPE: Int
+    var totalTime: Int
     var createdBy: String
     var creatorID: String
-    var isPrivate: Bool
-    var Views: Int
-    var NumberOfDownloads: Int
-    var NumberOfCompletes: Int
-    var TotalScore: Int
-    var TotalTime: Int
+    var title: String
+    var exercises: [ExerciseModel]?
+    var circuits: [CircuitModel]?
+    var amraps: [AMRAPModel]?
+    var emoms: [EMOMModel]?
+    
+    static func == (lhs: SavedWorkoutModel, rhs: SavedWorkoutModel) -> Bool {
+        return lhs.savedID == rhs.savedID
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(savedID)
+    }
+}
+extension SavedWorkoutModel: FirebaseResource {
+    static var path: String {
+        return "SavedWorkouts"
+    }
+    var internalPath: String {
+        return "SavedWorkouts/\(savedID)"
+    }
+}
+
+struct NewSavedWorkoutModel: Codable {
+    var savedID: String
+    var views: Int
+    var downloads: Int
+    var completions: Int
+    var totalRPE: Int
+    var totalTime: Int
+    var createdBy: String
+    var creatorID: String
+    var title: String
+    var exercises: [ExerciseModel]?
+    var circuits: [CircuitModel]?
+    var amraps: [AMRAPModel]?
+    var emoms: [EMOMModel]?
+}
+extension NewSavedWorkoutModel: FirebaseInstance {
+    var internalPath: String {
+        return "SavedWorkouts/\(savedID)"
+    }
 }

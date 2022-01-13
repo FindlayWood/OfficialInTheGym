@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CodableFirebase
 
 /// A type that can be loaded and uploaded to and from Firebase
 /// A Firebase Resource REQUIRES Codable
@@ -57,4 +58,18 @@ typealias FirebaseKeyReturn = FirebaseModel & FirebaseID
 /// When fetchingKeys function called the returning type must conform to FirebaseID
 protocol FirebaseID {
     var id: String { get set }
+}
+
+
+// MARK: - Firebase Instance Extension
+extension FirebaseInstance {
+    func toFirebaseJSON() -> FirebaseMultiUploadDataPoint? {
+        do {
+            let value = try FirebaseEncoder().encode(self)
+            return FirebaseMultiUploadDataPoint(value: value, path: self.internalPath)
+        }
+        catch {
+            return nil
+        }
+    }
 }

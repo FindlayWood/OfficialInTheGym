@@ -74,7 +74,7 @@ class ExerciseSelectionViewController: UIViewController {
         display.collectionView.delegate = adapter
         display.collectionView.dataSource = adapter
         display.searchBar.delegate = self
-        if newCoordinator is CircuitCreationCoordinator || newCoordinator is AmrapExerciseSelectionCoordinator  {
+        if newCoordinator is CircuitExerciseSelectionCoordinator || newCoordinator is AmrapExerciseSelectionCoordinator || newCoordinator is EmomExerciseSelectionCoordinator {
             display.hideStack()
         }
     }
@@ -181,6 +181,9 @@ extension ExerciseSelectionViewController: UISearchBarDelegate {
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         display.searchBar.resignFirstResponder()
+        if newCoordinator is RegularExerciseSelectionCoordinator {
+            display.searchEnded()
+        }
         if coordinator is RegularWorkoutCoordinator || coordinator is LiveWorkoutCoordinator {
             display.searchEnded()
         }

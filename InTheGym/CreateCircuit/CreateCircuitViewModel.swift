@@ -20,22 +20,33 @@ class CreateCircuitViewModel {
     
     var workoutViewModel: WorkoutCreationViewModel!
     
+    var workoutPosition: Int!
+    
     init() {
         initSubscribers()
     }
     func initSubscribers() {
-        $circuitTitle
-            .map { newTitle in
-                return newTitle.count > 0
-            }
-            .sink { [unowned self] titleValid in
-                self.validCircuit = self.exercises.value.count > 0 && titleValid
+//        $circuitTitle
+//            .map { newTitle in
+//                return newTitle.count > 0
+//            }
+//            .sink { [unowned self] titleValid in
+//                self.validCircuit = self.exercises.value.count > 0 && titleValid
+//            }
+//            .store(in: &subscriptions)
+        
+        Publishers.CombineLatest($circuitTitle, exercises)
+            .map({ circuitTitle, exercises in
+                return circuitTitle.count > 0 && exercises.count > 0
+            })
+            .sink { [unowned self] valid in
+                self.validCircuit = valid
             }
             .store(in: &subscriptions)
     }
     
     func addCircuit() {
-        let newCircuit = CircuitModel(workoutPosition: 0,
+        let newCircuit = CircuitModel(workoutPosition: workoutPosition,
                                       exercises: exercises.value,
                                       completed: false, circuitName: circuitTitle,
                                       createdBy: FirebaseAuthManager.currentlyLoggedInUser.username,

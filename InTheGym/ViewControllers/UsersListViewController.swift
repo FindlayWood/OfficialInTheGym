@@ -19,11 +19,14 @@ class UsersListViewController: UITableViewController {
     // MARK: - Properties
     var usersToDisplay: [Users]!
     
+    // MARK: - Data Source
     private lazy var dataSource = makeDataSource()
     
+    // MARK: - Publishers
     var selectedUser = PassthroughSubject<Users,Never>()
 
 
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UserTableViewCell.self, forCellReuseIdentifier: UserTableViewCell.cellID)
@@ -31,6 +34,7 @@ class UsersListViewController: UITableViewController {
         tableView.tableFooterView = UIView()
     }
     
+    // MARK: - Row Selection
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedUser.send(usersToDisplay[indexPath.row])
     }

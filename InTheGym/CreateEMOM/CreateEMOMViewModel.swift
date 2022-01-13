@@ -18,12 +18,14 @@ class CreateEMOMViewModel {
     
     var workoutViewModel: WorkoutCreationViewModel!
     
+    var workoutPosition: Int!
+    
     // MARK: - Publishers
     var exercises = CurrentValueSubject<[ExerciseModel],Never>([])
     
     // MARK: - Actions
     func addEMOM() {
-        let newEmom = EMOMModel(workoutPosition: 0,
+        let newEmom = EMOMModel(workoutPosition: workoutPosition,
                                 exercises: exercises.value,
                                 timeLimit: emomTimeLimit,
                                 completed: false,

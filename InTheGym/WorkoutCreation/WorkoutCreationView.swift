@@ -22,7 +22,14 @@ class WorkoutCreationView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+    var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.text = "Title:"
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     var workoutTitleField: SkyFloatingLabelTextField = {
         let field = SkyFloatingLabelTextField()
         field.tintColor = .white
@@ -33,19 +40,42 @@ class WorkoutCreationView: UIView {
         field.lineHeight = 2
         field.titleColor = .white
         field.lineColor = .white
-        field.title = "enter title"
-        field.selectedTitle = "Workout Title"
+        field.title = ""
+        field.selectedTitle = ""
         field.selectedTitleColor = .white
         field.selectedLineColor = .white
         field.placeholder = "enter workout title..."
         field.font = .systemFont(ofSize: 20, weight: .bold)
-        field.clearButtonMode = .whileEditing
+        field.clearButtonMode = .never
         field.autocapitalizationType = .words
         field.heightAnchor.constraint(equalToConstant: 45).isActive = true
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
 
+    var privacyView: PrivacyView = {
+        let view = PrivacyView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    var saveView: UISaveView = {
+        let view = UISaveView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    var assignView: AssignView = {
+        let view = AssignView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    lazy var middleStack: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [assignView, privacyView, saveView])
+        view.axis = .horizontal
+        view.distribution = .fillEqually
+        view.spacing = 4
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     var exercisesView: UIView = {
         let view = UIView()
         view.backgroundColor = .lightColour
@@ -111,10 +141,12 @@ private extension WorkoutCreationView {
     func setupUI() {
         backgroundColor = .white
         titleView.addSubview(workoutTitleField)
+        titleView.addSubview(titleLabel)
         exercisesView.addSubview(exercisesLabel)
         exercisesView.addSubview(exercisesTableView)
         exercisesView.addSubview(plusButton)
         addSubview(titleView)
+        addSubview(middleStack)
         addSubview(exercisesView)
         addSubview(emptyMessage)
         configureUI()
@@ -126,12 +158,21 @@ private extension WorkoutCreationView {
             titleView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             titleView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             
-            workoutTitleField.topAnchor.constraint(equalTo: titleView.topAnchor, constant: 8),
+            titleLabel.topAnchor.constraint(equalTo: titleView.topAnchor, constant: 8),
+            titleLabel.leadingAnchor.constraint(equalTo: titleView.leadingAnchor, constant: 8),
+            
+            workoutTitleField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: -4),
             workoutTitleField.leadingAnchor.constraint(equalTo: titleView.leadingAnchor, constant: 8),
             workoutTitleField.trailingAnchor.constraint(equalTo: titleView.trailingAnchor, constant: -8),
             workoutTitleField.bottomAnchor.constraint(equalTo: titleView.bottomAnchor, constant: -20),
             
-            exercisesView.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 8),
+            middleStack.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 8),
+            middleStack.leadingAnchor.constraint(equalTo: titleView.leadingAnchor),
+            middleStack.trailingAnchor.constraint(equalTo: titleView.trailingAnchor),
+            
+            saveView.heightAnchor.constraint(equalTo: privacyView.heightAnchor),
+            
+            exercisesView.topAnchor.constraint(equalTo: middleStack.bottomAnchor, constant: 8),
             exercisesView.leadingAnchor.constraint(equalTo: titleView.leadingAnchor),
             exercisesView.trailingAnchor.constraint(equalTo: titleView.trailingAnchor),
             exercisesView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -150,5 +191,16 @@ private extension WorkoutCreationView {
             emptyMessage.centerYAnchor.constraint(equalTo: exercisesTableView.centerYAnchor),
             emptyMessage.widthAnchor.constraint(equalTo: exercisesTableView.widthAnchor, constant: -20)
         ])
+    }
+}
+
+// MARK: - Public Configuration
+extension WorkoutCreationView {
+    public func configure(with user: Users?) {
+        if let user = user {
+            assignView.configure(with: user)
+        } else {
+            assignView.isHidden = true
+        }
     }
 }

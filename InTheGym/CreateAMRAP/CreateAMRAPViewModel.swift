@@ -16,12 +16,14 @@ class CreateAMRAPViewModel {
     
     // MARK: - Properties
     var workoutViewModel: WorkoutCreationViewModel!
+    
+    var workoutPosition: Int!
 
     var timeLimit: Int = 10
     
     // MARK: - Actions
     func addAMRAP() {
-        let newAMRAP = AMRAPModel(workoutPosition: 0,
+        let newAMRAP = AMRAPModel(workoutPosition: workoutPosition,
                                   timeLimit: timeLimit,
                                   exercises: exercises.value, completed: false,
                                   roundsCompleted: 0,

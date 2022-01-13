@@ -13,10 +13,12 @@ class AmrapExerciseSelectionCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var amrapViewModel: CreateAMRAPViewModel
+    var workoutPosition: Int
     
-    init(navigationController: UINavigationController, amrapViewModel: CreateAMRAPViewModel) {
+    init(navigationController: UINavigationController, amrapViewModel: CreateAMRAPViewModel, workoutPosition: Int) {
         self.navigationController = navigationController
         self.amrapViewModel = amrapViewModel
+        self.workoutPosition = workoutPosition
     }
     
     func start() {
@@ -43,6 +45,7 @@ extension AmrapExerciseSelectionCoordinator: ExerciseSelectionFlow {
     func exercise(viewModel: ExerciseCreationViewModel) {
         viewModel.exercisekind = .amrap
         viewModel.addingDelegate = amrapViewModel
+        viewModel.exercise.workoutPosition = workoutPosition
         let child = RepsSelectionCoordinator(navigationController: navigationController, exerciseViewModel: viewModel)
         childCoordinators.append(child)
         child.start()

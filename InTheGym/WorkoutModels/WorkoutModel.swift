@@ -142,13 +142,22 @@ class workout: Completeable {
     
 }
 
-struct WorkoutModel: Codable, Hashable {
+// MARK: - Workout Model
+/// Model representing a single workout
+/// Important Variables
+/// -----> assignedTo = the id of the user assigned this workout - could be self id or ither user id
+/// -----> savedID = the ID of where the workout is saved - all workouts are stored in the savedWorkouts ref
+/// -----> workoutID = the ID of this specific workout - different from savedID as you may do the same saved workout more than once
+class WorkoutModel: Codable, Hashable {
     var title: String
     var workoutID: String
+    var savedID: String
     var creatorID: String
     var createdBy: String
+    var assignedTo: String
+    var isPrivate: Bool
     var completed: Bool
-    var score: String?
+    var score: Int?
     var startTime: TimeInterval?
     var timeToComplete: Int?
     var workload: Int?
@@ -159,6 +168,21 @@ struct WorkoutModel: Codable, Hashable {
     var liveWorkout: Bool?
     var id: String {
         return workoutID
+    }
+    
+    init(savedModel: NewSavedWorkoutModel, assignTo: String, isPrivate: Bool) {
+        title = savedModel.title
+        workoutID = UUID().uuidString
+        savedID = savedModel.savedID
+        creatorID = savedModel.creatorID
+        createdBy = savedModel.createdBy
+        assignedTo = assignTo
+        self.isPrivate = isPrivate
+        completed = false
+        exercises = savedModel.exercises
+        circuits = savedModel.circuits
+        emoms = savedModel.emoms
+        amraps = savedModel.amraps
     }
     
     static func == (lhs: WorkoutModel, rhs: WorkoutModel) -> Bool {
@@ -175,8 +199,6 @@ extension WorkoutModel: FirebaseResource {
         return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)"
     }
     var internalPath: String {
-        return "Workouts/\(workoutID)"
+        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workoutID)"
     }
 }
-
-
