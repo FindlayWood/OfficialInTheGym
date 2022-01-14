@@ -6,6 +6,10 @@
 //  Copyright © 2021 FindlayWood. All rights reserved.
 //
 
+// MARK: - Workout Table View Cell
+/// The cell for a workout that can be completed
+/// Will only appear in a users personal workout page
+
 import Foundation
 import UIKit
 
@@ -128,6 +132,11 @@ extension WorkoutTableViewCell {
     public func configure(with data: SavedWorkoutModel) {
         titleLabel.text = data.title
         creatorLabel.text = data.createdBy
-        exerciseCountLabel.text = (data.exercises?.count + data.circuits?.count + data.emoms?.count ?? 0 + data.amraps?.count).description
+        var totalExerciseCount = 0
+        totalExerciseCount += data.exercises?.count ?? 0
+        totalExerciseCount += data.circuits?.count ?? 0
+        totalExerciseCount += data.emoms?.count ?? 0
+        totalExerciseCount += data.amraps?.count ?? 0
+        exerciseCountLabel.text = totalExerciseCount.description
     }
 }

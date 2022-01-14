@@ -30,6 +30,8 @@ class WorkoutCreationViewModel: ExerciseAdding {
     var amrapModels = [AMRAPModel]()
     
     // MARK: - Properties
+    var workoutList: WorkoutsList!
+    
     var subscriptions = Set<AnyCancellable>()
    
     var apiService: FirebaseDatabaseManagerService

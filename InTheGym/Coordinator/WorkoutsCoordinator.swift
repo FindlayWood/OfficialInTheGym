@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-protocol WorkoutsFlow {
+protocol WorkoutsFlow: AnyObject {
     func showWorkout(workout: WorkoutDelegate)
     func addNewWorkout()
     func regularWorkout(_ assignee: Assignable)
