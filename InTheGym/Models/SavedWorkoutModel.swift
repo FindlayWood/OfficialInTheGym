@@ -22,6 +22,7 @@ class SavedWorkoutModel: Codable, Hashable {
     var createdBy: String
     var creatorID: String
     var title: String
+    var isPrivate: Bool
     var exercises: [ExerciseModel]?
     var circuits: [CircuitModel]?
     var amraps: [AMRAPModel]?
@@ -35,6 +36,28 @@ class SavedWorkoutModel: Codable, Hashable {
         hasher.combine(savedID)
     }
 }
+
+// MARK: - Saved Model Functions
+extension SavedWorkoutModel {
+    func averageTime() -> String {
+        guard completions > 0 else { return 0.description }
+        return (totalTime / completions).convertToWorkoutTime()
+    }
+    func averageScore() -> Double {
+        guard completions > 0 else { return 0 }
+        return Double(totalRPE / completions).rounded(toPlaces: 1)
+    }
+    func totalExerciseCount() -> Int {
+        var totalExerciseCount = 0
+        totalExerciseCount += exercises?.count ?? 0
+        totalExerciseCount += circuits?.count ?? 0
+        totalExerciseCount += emoms?.count ?? 0
+        totalExerciseCount += amraps?.count ?? 0
+        return totalExerciseCount
+    }
+}
+
+// MARK: - Firebase Resource
 extension SavedWorkoutModel: FirebaseResource {
     static var path: String {
         return "SavedWorkouts"
@@ -44,6 +67,7 @@ extension SavedWorkoutModel: FirebaseResource {
     }
 }
 
+// MARK: - New Saved Workout Struct
 struct NewSavedWorkoutModel: Codable {
     var savedID: String
     var views: Int

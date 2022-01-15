@@ -46,7 +46,7 @@ class MyGroupViewModel:NSObject {
     
     
     func fetchReferences() {
-        FirebaseDatabaseManager.shared.fetchKeys(from: GroupKeysModel.self) { [weak self] result in
+        apiService.fetchKeys(from: GroupKeysModel.self) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(let keys):
@@ -59,7 +59,7 @@ class MyGroupViewModel:NSObject {
     
     func loadGroups(from groupIDs: [String]) {
         let groupModels = groupIDs.map { GroupKeysModel(id: $0) }
-        FirebaseDatabaseManager.shared.fetchRange(from: groupModels, returning: groupModel.self) { [weak self] result in
+        apiService.fetchRange(from: groupModels, returning: groupModel.self) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(let myGroups):
@@ -73,6 +73,8 @@ class MyGroupViewModel:NSObject {
     
     // MARK: - Retreive functions
     func getGroup(at indexPath: IndexPath) -> groupModel {
-        return myGroups[indexPath.row]
+//        return myGroups[indexPath.row]
+        let currentGroups = groups.value
+        return currentGroups[indexPath.row]
     }
 }

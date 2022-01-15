@@ -139,4 +139,6 @@ protocol FirebaseDatabaseManagerService {
     func multiLocationUpload(data: [FirebaseMultiUploadDataPoint], completion: @escaping(Result<Void,Error>) -> Void)
     func incrementingValue(by increment: Int, at path: String, completion: @escaping(Result<Void,Error>) -> Void)
     func removingValue(at path: String, completion: @escaping(Result<Void,Error>) -> Void)
+    func fetchKeys<M: FirebaseModel>(from model: M.Type, completion: @escaping (Result<[String],Error>) -> Void)
+    func fetchRange<M: FirebaseInstance, T: Decodable>(from models: [M], returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
 }

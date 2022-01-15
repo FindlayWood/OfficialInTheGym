@@ -7,52 +7,63 @@
 //
 
 import UIKit
-import EmptyDataSet_Swift
+import Combine
 
 class SavedWorkoutsViewController: UIViewController, Storyboarded {
     
+    // MARK: - Properties
     weak var coordinator: SavedWorkoutsFlow?
     
-    @IBOutlet weak var tableview:UITableView!
-    @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
+    var display = SavedWorkoutsView()
     
-    var adapter : SavedWorkoutsAdapter!
+//    @IBOutlet weak var tableview:UITableView!
+//    @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     
-    lazy var viewModel: SavedWorkoutsViewModel = {
-        return SavedWorkoutsViewModel()
-    }()
+//    var adapter : SavedWorkoutsAdapter!
+    
+    var viewModel = SavedWorkoutsViewModel()
+    
+    var subscriptions = Set<AnyCancellable>()
+    
+    var dataSource: SavedWorkoutsDataSource!
 
+
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-
-        adapter = SavedWorkoutsAdapter(delegate: self)
-        tableview.delegate = adapter
-        tableview.dataSource = adapter
-        tableview.register(UINib(nibName: "SavedWorkoutCell", bundle: nil), forCellReuseIdentifier: "SavedWorkoutCell")
-        tableview.register(UINib(nibName: "PrivateSavedWorkoutCell", bundle: nil), forCellReuseIdentifier: "PrivateSavedWorkoutCell")
-        tableview.tableFooterView = UIView()
-        tableview.emptyDataSetDelegate = adapter
-        tableview.emptyDataSetSource = adapter
-        if #available(iOS 15.0, *) { tableview.sectionHeaderTopPadding = 0 }
+        view.backgroundColor = .lightColour
+        initDataSource()
+        setupSubscriptions()
+//        adapter = SavedWorkoutsAdapter(delegate: self)
+//        tableview.delegate = adapter
+//        tableview.dataSource = adapter
+//        tableview.register(UINib(nibName: "SavedWorkoutCell", bundle: nil), forCellReuseIdentifier: "SavedWorkoutCell")
+//        tableview.register(UINib(nibName: "PrivateSavedWorkoutCell", bundle: nil), forCellReuseIdentifier: "PrivateSavedWorkoutCell")
+//        tableview.tableFooterView = UIView()
+//        tableview.emptyDataSetDelegate = adapter
+//        tableview.emptyDataSetSource = adapter
+//        if #available(iOS 15.0, *) { tableview.sectionHeaderTopPadding = 0 }
         
         //initUI()
         //initViewModel()
     }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        display.frame = getFullViewableFrame()
+        display.tableview.backgroundColor = .lightColour
+        view.addSubview(display)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
-        if isMovingToParent{
-            initViewModel()
-        }
-        initUI()
-        initViewModel()
+        editNavBarColour(to: .white)
+        navigationItem.title = "Saved Workouts"
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        if isMovingFromParent{
-            viewModel.removeObservers()
-        }
-    }
+//
+//    override func viewDidDisappear(_ animated: Bool) {
+//        if isMovingFromParent{
+//            viewModel.removeObservers()
+//        }
+//    }
     
     func initUI(){
         navigationItem.title = "Saved Workouts"
@@ -62,41 +73,63 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
         self.navigationController?.navigationBar.tintColor = .white
     }
     
-    func initViewModel() {
+    func initDataSource() {
+        dataSource = .init(tableView: display.tableview)
+    }
+    
+//    func initViewModel() {
+//
+//        // Setup for reloadTableViewClosure
+//        viewModel.reloadTableViewClosure = { [weak self] () in
+//            DispatchQueue.main.async {
+//                self?.tableview.reloadData()
+//            }
+//        }
+//
+//        // Setup for updateLoadingStatusClosure
+//        viewModel.updateLoadingStatusClosure = { [weak self] () in
+//            DispatchQueue.main.async {
+//                let isLoading = self?.viewModel.isLoading ?? false
+//                if isLoading {
+//                    self?.activityIndicator.startAnimating()
+//                    UIView.animate(withDuration: 0.2, animations: {
+//                        self?.tableview.alpha = 0.0
+//                    })
+//                } else {
+//                    self?.activityIndicator.stopAnimating()
+//                    UIView.animate(withDuration: 0.2, animations: {
+//                        self?.tableview.alpha = 1.0
+//                    })
+//                }
+//            }
+//        }
+//
+//        viewModel.fetchData()
+//    }
+    
+    // MARK: - Subscriptions
+    func setupSubscriptions() {
+        viewModel.savedWorkoutss
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
+            .store(in: &subscriptions)
         
-        // Setup for reloadTableViewClosure
-        viewModel.reloadTableViewClosure = { [weak self] () in
-            DispatchQueue.main.async {
-                self?.tableview.reloadData()
-            }
-        }
+        dataSource.workoutSelected
+            .sink { [weak self] in self?.selectedWorkout(at: $0) }
+            .store(in: &subscriptions)
         
-        // Setup for updateLoadingStatusClosure
-        viewModel.updateLoadingStatusClosure = { [weak self] () in
-            DispatchQueue.main.async {
-                let isLoading = self?.viewModel.isLoading ?? false
-                if isLoading {
-                    self?.activityIndicator.startAnimating()
-                    UIView.animate(withDuration: 0.2, animations: {
-                        self?.tableview.alpha = 0.0
-                    })
-                } else {
-                    self?.activityIndicator.stopAnimating()
-                    UIView.animate(withDuration: 0.2, animations: {
-                        self?.tableview.alpha = 1.0
-                    })
-                }
-            }
-        }
+        viewModel.fetchKeys()
+    }
+    
+    func selectedWorkout(at indexPath: IndexPath) {
         
-        viewModel.fetchData()
     }
     
     func moveToView(){
         // move to new views
         // move with this workout
-        let workouttomove = viewModel.selectedWorkout!
-        coordinator?.savedWorkoutSelected(workouttomove)
+//        let workouttomove = viewModel.selectedWorkout!
+//        coordinator?.savedWorkoutSelected(workouttomove)
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
 //        let workoutView = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
 //        workoutView.selectedWorkout = workouttomove
@@ -105,23 +138,23 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
     }
 
 }
-extension SavedWorkoutsViewController : SavedWorkoutsProtocol{
-    func getData(at: IndexPath) -> savedWorkoutDelegate {
-        return self.viewModel.getData(at: at)
-    }
-    
-    func itemSelected(at: IndexPath) {
-        viewModel.selectedWorkout = self.viewModel.getData(at: at)
-        self.moveToView()
-    }
-    
-    func retreiveNumberOfItems() -> Int {
-        return 1
-    }
-    
-    func retreiveNumberOfSections() -> Int {
-        return viewModel.numberOfItems
-    }
-    
-    
-}
+//extension SavedWorkoutsViewController : SavedWorkoutsProtocol{
+//    func getData(at: IndexPath) -> savedWorkoutDelegate {
+//        return self.viewModel.getData(at: at)
+//    }
+//
+//    func itemSelected(at: IndexPath) {
+//        viewModel.selectedWorkout = self.viewModel.getData(at: at)
+//        self.moveToView()
+//    }
+//
+//    func retreiveNumberOfItems() -> Int {
+//        return 1
+//    }
+//
+//    func retreiveNumberOfSections() -> Int {
+//        return viewModel.numberOfItems
+//    }
+//
+//
+//}

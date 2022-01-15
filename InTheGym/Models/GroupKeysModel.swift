@@ -8,7 +8,8 @@
 
 import Foundation
 
-// MARK: - Groups Model
+// MARK: - Group Keys Model
+/// Used to fetch group keys for current user then load groups from the key
 
 struct GroupKeysModel {
     var id: String

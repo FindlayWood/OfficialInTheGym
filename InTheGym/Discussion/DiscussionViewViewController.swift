@@ -13,7 +13,7 @@ class DiscussionViewViewController: UIViewController, Storyboarded {
     weak var coordinator : DiscussionCoordinator?
     
     var display = DiscussionView()
-    var savedWorkoutView = DiscussionSavedWorkoutDisplayView()
+//    var savedWorkoutView = DiscussionSavedWorkoutDisplayView()
     var flashView = FlashView()
     var bottomViewHeight = Constants.screenSize.height * 0.5
     
@@ -98,9 +98,9 @@ class DiscussionViewViewController: UIViewController, Storyboarded {
             
             display.bottomViewAnchor.constant = isKeyboardShowing ? -keyboardFrame!.height + tabBarHeight! : 0
             if isKeyboardShowing {
-                if savedWorkoutView.flashView != nil {
-                    savedWorkoutView.remove()
-                }
+//                if savedWorkoutView.flashView != nil {
+//                    savedWorkoutView.remove()
+//                }
             }
             
             UIView.animate(withDuration: 0) {
@@ -110,20 +110,20 @@ class DiscussionViewViewController: UIViewController, Storyboarded {
     }
     
     @objc func attachWorkoutTapped() {
-        display.commentTextField.resignFirstResponder()
-        savedWorkoutView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: bottomViewHeight)
-        flashView.frame = CGRect(x: 0, y: 0 - view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.bottom - display.replyView.frame.height)
-        flashView.alpha = 0
-        savedWorkoutView.flashView = flashView
-        display.addSubview(flashView)
-        display.addSubview(savedWorkoutView)
-        let yOffset = Constants.screenSize.height - bottomViewHeight - view.safeAreaInsets.top - view.safeAreaInsets.bottom - display.replyView.frame.height
-        let showFrame = CGRect(x: 0, y: yOffset, width: view.frame.width, height: bottomViewHeight)
-        UIView.animate(withDuration: 0.2) {
-            self.savedWorkoutView.frame = showFrame
-            self.flashView.alpha = 0.4
-            self.flashView.isUserInteractionEnabled = true
-        }
+//        display.commentTextField.resignFirstResponder()
+//        savedWorkoutView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: bottomViewHeight)
+//        flashView.frame = CGRect(x: 0, y: 0 - view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.bottom - display.replyView.frame.height)
+//        flashView.alpha = 0
+//        savedWorkoutView.flashView = flashView
+//        display.addSubview(flashView)
+//        display.addSubview(savedWorkoutView)
+//        let yOffset = Constants.screenSize.height - bottomViewHeight - view.safeAreaInsets.top - view.safeAreaInsets.bottom - display.replyView.frame.height
+//        let showFrame = CGRect(x: 0, y: yOffset, width: view.frame.width, height: bottomViewHeight)
+//        UIView.animate(withDuration: 0.2) {
+//            self.savedWorkoutView.frame = showFrame
+//            self.flashView.alpha = 0.4
+//            self.flashView.isUserInteractionEnabled = true
+//        }
     }
     
     @objc func removeAttachedWorkout() {
@@ -166,10 +166,10 @@ class DiscussionViewViewController: UIViewController, Storyboarded {
             }
         }
         
-        savedWorkoutView.savedWorkoutSelected = { [weak self] selectedWorkout in
-            guard let self = self else {return}
-            self.display.attachWorkout(selectedWorkout)
-        }
+//        savedWorkoutView.savedWorkoutSelected = { [weak self] selectedWorkout in
+//            guard let self = self else {return}
+//            self.display.attachWorkout(selectedWorkout)
+//        }
         
         viewModel.fetchData()
     }

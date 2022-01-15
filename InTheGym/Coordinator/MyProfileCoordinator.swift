@@ -65,7 +65,7 @@ extension MyProfileCoordinator: MyProfileFlow {
     }
     
     func showSavedWorkouts() {
-        let vc = SavedWorkoutsViewController.instantiate()
+        let vc = SavedWorkoutsViewController()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
