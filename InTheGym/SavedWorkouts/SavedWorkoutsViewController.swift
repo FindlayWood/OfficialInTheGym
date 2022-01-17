@@ -26,6 +26,7 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
     var subscriptions = Set<AnyCancellable>()
     
     var dataSource: SavedWorkoutsDataSource!
+    var collectionDataSource: SavedWorkoutsCollectionDataSource!
 
 
     // MARK: - View
@@ -75,6 +76,7 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
     
     func initDataSource() {
         dataSource = .init(tableView: display.tableview)
+        collectionDataSource = .init(collectionView: display.collectionView)
     }
     
 //    func initViewModel() {
@@ -111,10 +113,10 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
     func setupSubscriptions() {
         viewModel.savedWorkoutss
             .receive(on: RunLoop.main)
-            .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
+            .sink { [weak self] in self?.collectionDataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
         
-        dataSource.workoutSelected
+        collectionDataSource.workoutSelected
             .sink { [weak self] in self?.selectedWorkout(at: $0) }
             .store(in: &subscriptions)
         
@@ -122,7 +124,8 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
     }
     
     func selectedWorkout(at indexPath: IndexPath) {
-        
+        let workout = viewModel.workoutSelected(at: indexPath)
+        coordinator?.savedWorkoutSelected(workout)
     }
     
     func moveToView(){

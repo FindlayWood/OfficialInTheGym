@@ -1,27 +1,23 @@
 //
-//  SavedWorkoutTableViewCell.swift
+//  SavedWorkoutCollectionCell.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 14/01/2022.
+//  Created by Findlay Wood on 17/01/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
-
-import Foundation
-
-
 
 // MARK: - Workout Table View Cell
 /// The cell for a workout that can be completed
 /// Will only appear in a users personal workout page
-
+import Foundation
 import UIKit
 
-class SavedWorkoutTableViewCell: UITableViewCell {
+class SavedWorkoutCollectionCell: FullWidthCollectionViewCell {
     
     // MARK: - Properties
     var iconDimension: CGFloat = 30
     
-    static let cellID = "SavedWorkoutTableViewCellID"
+    static let reuseID = "SavedWorkoutCollectionCellreuseID"
     
     // MARK: - Subviews
         // LABELS
@@ -108,24 +104,19 @@ class SavedWorkoutTableViewCell: UITableViewCell {
     
     
     // MARK: - Initializer
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupUI()
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
     }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        contentView.frame = self.contentView.frame.insetBy(dx: 10, dy: 10)
-    }
 }
 
 // MARK: - Setup
-private extension SavedWorkoutTableViewCell {
+private extension SavedWorkoutCollectionCell {
     func setupUI() {
-        selectionStyle = .none
         backgroundColor = .offWhiteColour
         layer.cornerRadius = 10
         contentView.addSubview(titleLabel)
@@ -155,7 +146,6 @@ private extension SavedWorkoutTableViewCell {
             exerciseIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             exerciseIcon.centerYAnchor.constraint(equalTo: exerciseCountLabel.centerYAnchor),
             exerciseCountLabel.leadingAnchor.constraint(equalTo: exerciseIcon.trailingAnchor, constant: 5),
-//            exerciseCountLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
             
             averageTimeLabel.topAnchor.constraint(equalTo: exerciseCountLabel.bottomAnchor, constant: 10),
             clockIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
@@ -173,7 +163,7 @@ private extension SavedWorkoutTableViewCell {
 }
 
 // MARK: - Configure
-extension SavedWorkoutTableViewCell {
+extension SavedWorkoutCollectionCell {
     
     public func configure(with data: SavedWorkoutModel) {
         titleLabel.text = data.title
@@ -184,3 +174,4 @@ extension SavedWorkoutTableViewCell {
         privacyIcon.image = data.isPrivate ? UIImage(named: "locked_icon") : UIImage(named: "public_icon")
     }
 }
+

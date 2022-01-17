@@ -10,18 +10,25 @@ import Foundation
 import Combine
 
 class CommentSectionViewModel {
-    
-    var apiService: FirebaseDatabaseManagerService
-    
+    // MARK: - Publishers
     var comments = CurrentValueSubject<[Comment],Never>([])
     var errorFetchingComments = PassthroughSubject<Error,Never>()
     
     var uploadingNewComment = PassthroughSubject<Bool,Never>()
     
+    // MARK: - Properties
+    var apiService: FirebaseDatabaseManagerService
+    
+    var attachedWorkout: SavedWorkoutModel?
+    
+    var commentText: String = ""
+    
+    // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
     
+    // MARK: - Functions
     func loadGeneric<T: FirebaseInstance>(for postGeneric: T) {
         apiService.fetchInstance(of: postGeneric, returning: Comment.self) { [weak self] result in
             guard let self = self else {return}
@@ -46,15 +53,47 @@ class CommentSectionViewModel {
         }
     }
     
-//    func load(for post: post) {
-//        apiService.fetchInstance(of: post, to: Comment.self) { [weak self] result in
-//            guard let self = self else {return}
-//            switch result {
-//            case .success(let comments):
-//                self.comments.send(comments)
-//            case .failure(let error):
-//                self.errorFetchingComments.send(error)
-//            }
-//        }
-//    }
+    // MARK: - Actions
+    func sendPressed(_ mainPostID: String) {
+        let newComment = Comment(id: UUID().uuidString,
+                                 username: FirebaseAuthManager.currentlyLoggedInUser.username,
+                                 time: Date().timeIntervalSince1970,
+                                 message: commentText,
+                                 posterID: FirebaseAuthManager.currentlyLoggedInUser.uid,
+                                 postID: mainPostID)
+        
+        print(newComment)
+    }
+    
+    func updateCommentText(with text: String) {
+        commentText = text
+    }
+    
+    func likeCheck(_ id: String) {
+        let likeCheck = PostLikesModel(postID: id)
+        apiService.checkExistence(of: likeCheck) { [weak self] result in
+            switch result {
+            case .success(let liked):
+                if !liked {
+                    self?.like(id: id, increasing: true)
+                }
+            case .failure(let error):
+                self?.errorFetchingComments.send(error)
+            }
+        }
+    }
+    func like(id: String, increasing: Bool) {
+        let likeModels = LikeTransportLayer(postID: id).multiPoints(increasing: increasing)
+        apiService.multiLocationUpload(data: likeModels) { [weak self] result in
+            switch result {
+            case .success(()):
+                LikesAPIService.shared.LikedPostsCache.removeObject(forKey: id as NSString)
+                LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: id as NSString)
+                print("successfully liked")
+            case .failure(let error):
+                //TODO: - Show like error
+                print(error.localizedDescription)
+            }
+        }
+    }
 }

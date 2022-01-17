@@ -7,8 +7,13 @@
 //
 
 import UIKit
+import Combine
 
 class CommentView: UIView {
+    
+    // MARK: - Published
+    @Published var commentText: String = ""
+    var sendPressed = PassthroughSubject<Void,Never>()
 
     // MARK: - Properties
     var bottomViewAnchor: NSLayoutConstraint!
@@ -163,9 +168,9 @@ private extension CommentView {
 }
 
 extension CommentView {
-    public func attachWorkout(_ workout: savedWorkoutDelegate) {
+    public func attachWorkout(_ workout: SavedWorkoutModel) {
         replyType = .WorkoutAndText
-        attachmentLabel.setTitle(workout.title!, for: .normal)
+        attachmentLabel.setTitle(workout.title, for: .normal)
         attachmentLabel.isHidden = false
         removeAttachmentButton.isHidden = false
         //attachedWorkout = workout
@@ -182,7 +187,6 @@ extension CommentView {
         attachmentLabel.isHidden = true
         removeAttachmentButton.isHidden = true
         textViewDidChange(commentTextField)
-        
     }
 }
 
@@ -239,6 +243,12 @@ extension CommentView: UITextViewDelegate {
         textView.textContainerInset = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         textView.text = textView.text.trimTrailingWhiteSpaces()
         textViewDidChange(textView)
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let newString = (textView.text! as NSString).replacingCharacters(in: range, with: text).trimTrailingWhiteSpaces()
+        commentText = newString
+        return true
     }
 }
 

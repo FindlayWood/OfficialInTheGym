@@ -11,6 +11,8 @@ import Combine
 
 class CommentSectionViewController: UIViewController {
     
+    weak var coordinator: CommentSectionCoordinator?
+    
     var display = CommentSectionView()
     
     var viewModel = CommentSectionViewModel()

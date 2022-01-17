@@ -11,6 +11,9 @@ import Combine
 
 class GroupCommentSectionViewController: UIViewController {
     
+    // MARK: - Properties
+    weak var coordinator: CommentSectionCoordinator?
+    
     var display = CommentSectionView()
     
     var viewModel = CommentSectionViewModel()
@@ -21,10 +24,12 @@ class GroupCommentSectionViewController: UIViewController {
     
     private lazy var postReplyModel = PostReplies(postID: mainPost.id)
     
-    private lazy var dataSource = makeDataSource()
+//    private lazy var dataSource = makeDataSource()
     
     private var subscriptions = Set<AnyCancellable>()
 
+    private var dataSource: CommentSectionDataSource!
+    
     // MARK: - View Setup
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -37,9 +42,12 @@ class GroupCommentSectionViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         initTableView()
-        initialTableSetUp()
+//        initialTableSetUp()
+        dataSource = .init(tableView: display.tableview)
+        dataSource.initialSetup(with: mainPost)
         setupDisplayButtons()
         setUpSubscribers()
+        setupKeyBoardObservers()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,9 +56,14 @@ class GroupCommentSectionViewController: UIViewController {
         navigationItem.title = "Group Post"
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     // MARK: - Display Setup
     func initTableView() {
-        display.tableview.dataSource = dataSource
+//        display.tableview.dataSource = dataSource
         display.tableview.delegate = adapter
     }
     
@@ -67,8 +80,20 @@ class GroupCommentSectionViewController: UIViewController {
             .receive(on: RunLoop.main)
             .sink { [weak self] comments in
                 guard let self = self else {return}
-                self.updateComments(with: comments)
+                self.dataSource.updateComments(with: comments)
             }
+            .store(in: &subscriptions)
+        
+        dataSource.userSelected
+            .sink { [weak self] in self?.userSelected(at: $0) }
+            .store(in: &subscriptions)
+        
+        dataSource.workoutSelected
+            .sink { [weak self] in self?.workoutSelected(at: $0) }
+            .store(in: &subscriptions)
+        
+        dataSource.likeButtonTapped
+            .sink { [weak self] in self?.likeButtonTapped(at: $0) }
             .store(in: &subscriptions)
         
         viewModel.uploadingNewComment
@@ -78,68 +103,124 @@ class GroupCommentSectionViewController: UIViewController {
             }
             .store(in: &subscriptions)
         
+        display.commentView.$commentText
+            .sink { [weak self] in self?.viewModel.updateCommentText(with: $0) }
+            .store(in: &subscriptions)
+        
+        coordinator?.savedWorkoutSelected
+            .sink { [weak self] in
+                self?.viewModel.attachedWorkout = $0
+                self?.display.commentView.attachWorkout($0)
+            }
+            .store(in: &subscriptions)
+        
         viewModel.loadGeneric(for: postReplyModel)
     }
-
-}
-
-// MARK: - Tableview Datasource
-extension GroupCommentSectionViewController {
     
-    func makeDataSource() -> UITableViewDiffableDataSource<CommentSectionSections,GroupCommentItems> {
-        return UITableViewDiffableDataSource(tableView: display.tableview) { tableView, indexPath, itemIdentifier in
-            switch itemIdentifier {
-            case .mainPost(let post):
-                let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
-                cell.configure(with: post)
-                cell.delegate = self
-                return cell
-            case .comment(let comment):
-                let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.cellID, for: indexPath) as! CommentTableViewCell
-                cell.setup(with: comment)
-                return cell
+    // MARK: - Keyboard Observers
+    func setupKeyBoardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardObervers(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardObervers(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc func handleKeyboardObervers(notification: Notification) {
+
+        if let userInfo = notification.userInfo {
+
+            let isKeyboardShowing = notification.name == UIResponder.keyboardWillShowNotification
+            let isTabBarHidden = tabBarController?.tabBar.isHidden ?? true
+            
+            let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
+            let tabBarHeight = isTabBarHidden ? view.safeAreaInsets.bottom : self.tabBarController?.tabBar.frame.height
+            
+            display.bottomViewAnchor.constant = isKeyboardShowing ? -keyboardFrame!.height + tabBarHeight! : 0
+            if isKeyboardShowing {
+//                if savedWorkoutView.flashView != nil {
+//                    savedWorkoutView.remove()
+//                }
+            }
+            
+            UIView.animate(withDuration: 0) {
+                self.display.layoutIfNeeded()
             }
         }
     }
-    
-    func initialTableSetUp() {
-        var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendSections([.Post, .comments])
-        currentSnapshot.appendItems([.mainPost(mainPost)], toSection: .Post)
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+
+}
+// MARK: - Cell Tap Actions
+extension GroupCommentSectionViewController {
+    func userSelected(at indexPath: IndexPath) {
+        print("user selected...")
     }
-    
-    func updateComments(with comments: [Comment]) {
-        var currentSnapshot = dataSource.snapshot()
-        for comment in comments {
-            currentSnapshot.appendItems([.comment(comment)], toSection: .comments)
-        }
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    func workoutSelected(at indexPath: IndexPath) {
+        print("workout selected...")
+    }
+    func likeButtonTapped(at indexPath: IndexPath) {
+        viewModel.likeCheck(mainPost.id)
     }
 }
+
+// MARK: - Tableview Datasource
+//extension GroupCommentSectionViewController {
+//
+//    func makeDataSource() -> UITableViewDiffableDataSource<CommentSectionSections,GroupCommentItems> {
+//        return UITableViewDiffableDataSource(tableView: display.tableview) { tableView, indexPath, itemIdentifier in
+//            switch itemIdentifier {
+//            case .mainPost(let post):
+//                let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
+//                cell.configure(with: post)
+//                cell.delegate = self
+//                return cell
+//            case .comment(let comment):
+//                let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.cellID, for: indexPath) as! CommentTableViewCell
+//                cell.setup(with: comment)
+//                return cell
+//            }
+//        }
+//    }
+//
+//    func initialTableSetUp() {
+//        var currentSnapshot = dataSource.snapshot()
+//        currentSnapshot.appendSections([.Post, .comments])
+//        currentSnapshot.appendItems([.mainPost(mainPost)], toSection: .Post)
+//        dataSource.apply(currentSnapshot, animatingDifferences: true)
+//    }
+//
+//    func updateComments(with comments: [Comment]) {
+//        var currentSnapshot = dataSource.snapshot()
+//        for comment in comments {
+//            currentSnapshot.appendItems([.comment(comment)], toSection: .comments)
+//        }
+//        dataSource.apply(currentSnapshot, animatingDifferences: true)
+//    }
+//}
 
 // MARK: - Display Button Actions
 extension GroupCommentSectionViewController {
     
     @objc func sendPressed(_ sender: UIButton) {
-        let newID = UUID().uuidString
-        let newComment = Comment(id: newID,
-                                 username: FirebaseAuthManager.currentlyLoggedInUser.username,
-                                 time: Date().timeIntervalSince1970,
-                                 message: display.commentView.commentTextField.text.trimTrailingWhiteSpaces(),
-                                 posterID: FirebaseAuthManager.currentlyLoggedInUser.id,
-                                 postID: newID)
-        print(newComment)
+        viewModel.sendPressed(mainPost.id)
+//        let newID = UUID().uuidString
+//        let newComment = Comment(id: newID,
+//                                 username: FirebaseAuthManager.currentlyLoggedInUser.username,
+//                                 time: Date().timeIntervalSince1970,
+//                                 message: display.commentView.commentTextField.text.trimTrailingWhiteSpaces(),
+//                                 posterID: FirebaseAuthManager.currentlyLoggedInUser.id,
+//                                 postID: mainPost.id)
+//        print(newComment)
 //        viewModel.upload(newComment, autoID: false)
     }
     
     @objc func attachedWorkoutPressed(_ sender: UIButton) {
         display.commentView.commentTextField.resignFirstResponder()
         print("show saved workouts...")
+        coordinator?.attachWorkout()
     }
     
     @objc func removeAttachedWorkout(_ sender: UIButton) {
         display.removeAttachedWorkout()
+        viewModel.attachedWorkout = nil
     }
 }
 
@@ -154,6 +235,5 @@ extension GroupCommentSectionViewController: TimelineTapProtocol {
     }
     
     func userTapped(on cell: UITableViewCell) {
-        
     }
 }

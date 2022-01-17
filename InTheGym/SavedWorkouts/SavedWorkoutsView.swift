@@ -20,6 +20,13 @@ class SavedWorkoutsView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    lazy var collectionView: UICollectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
+        view.register(SavedWorkoutCollectionCell.self, forCellWithReuseIdentifier: SavedWorkoutCollectionCell.reuseID)
+        view.backgroundColor = .lightColour
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,17 +42,26 @@ class SavedWorkoutsView: UIView {
 private extension SavedWorkoutsView {
     func setupUI() {
         backgroundColor = .lightColour
-        addSubview(tableview)
+        addSubview(collectionView)
         configureUI()
     }
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            tableview.topAnchor.constraint(equalTo: topAnchor),
-            tableview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            tableview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            tableview.bottomAnchor.constraint(equalTo: bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
+    }
+    func generateCollectionLayout() -> UICollectionViewFlowLayout {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 5
+        layout.minimumLineSpacing = 10
+        layout.estimatedItemSize = CGSize(width: Constants.screenSize.width - 20, height: 160)
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 10, bottom: 0, right: 10)
+        layout.scrollDirection = .vertical
+        return layout
     }
 }

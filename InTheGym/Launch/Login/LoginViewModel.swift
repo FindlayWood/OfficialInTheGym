@@ -23,7 +23,6 @@ class LoginViewModel {
     
     var subscriptions = Set<AnyCancellable>()
     
-    //var userPublisher = CurrentValueSubject<Users?, Never>(nil)
     //MARK: - Action Related Publishers
     var loginButtonTapped = PassthroughSubject<LoginModel, loginError>()
     var userSuccessfullyLoggedIn = PassthroughSubject<Users, Never>()

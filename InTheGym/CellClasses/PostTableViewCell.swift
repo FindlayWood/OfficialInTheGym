@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import Combine
 
 class PostTableViewCell: UITableViewCell {
+    
+    // MARK: - Publishers
+    var actionPublisher = PassthroughSubject<PostAction,Never>()
     
     // MARK: - Properties
     static let cellID = "postCellID"
@@ -249,12 +253,15 @@ extension PostTableViewCell {
     }
     
     @objc func likeButtonTapped(_ sender: UIButton) {
+        actionPublisher.send(.likeButtonTapped)
         delegate?.likeButtonTapped(on: self, sender: sender, label: likeCountLabel)
     }
     @objc func workoutTapped(_ sender: UIView) {
+        actionPublisher.send(.workoutTapped)
         delegate?.workoutTapped(on: self)
     }
     @objc func userTapped(_ sender: UIButton) {
+        actionPublisher.send(.userTapped)
         delegate?.userTapped(on: self)
     }
     

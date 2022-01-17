@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SavedWorkoutsFlow: AnyObject {
-    func savedWorkoutSelected(_ selectedWorkout: savedWorkoutDelegate)
+    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel)
 }
 
 class GroupWorkoutsCoordinator: NSObject, Coordinator {

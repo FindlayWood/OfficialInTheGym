@@ -9,8 +9,8 @@
 import UIKit
 
 class CommentSectionView: UIView {
-    // MARK: - Properties
     
+    // MARK: - Properties
     var bottomViewAnchor: NSLayoutConstraint!
     var commentFieldHeightAnchor: NSLayoutConstraint!
     private let placeholder = "add a reply..."
