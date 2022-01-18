@@ -82,7 +82,7 @@ protocol WorkoutAddable {
 }
 
 
-enum bodyType: String, Codable {
+enum bodyType: String, Codable, Hashable {
         case UB = "UB"
         case LB = "LB"
         case CO = "CO"

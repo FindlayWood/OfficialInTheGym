@@ -60,7 +60,8 @@ class CommentSectionViewModel {
                                  time: Date().timeIntervalSince1970,
                                  message: commentText,
                                  posterID: FirebaseAuthManager.currentlyLoggedInUser.uid,
-                                 postID: mainPostID)
+                                 postID: mainPostID,
+                                 attachedWorkoutSavedID: attachedWorkout?.savedID)
         
         print(newComment)
     }
@@ -69,31 +70,34 @@ class CommentSectionViewModel {
         commentText = text
     }
     
-    func likeCheck(_ id: String) {
-        let likeCheck = PostLikesModel(postID: id)
+    func likeCheck(_ post: GroupPost) {
+        let likeCheck = PostLikesModel(postID: post.id)
         apiService.checkExistence(of: likeCheck) { [weak self] result in
             switch result {
             case .success(let liked):
                 if !liked {
-                    self?.like(id: id, increasing: true)
+                    self?.like(post: post)
                 }
             case .failure(let error):
                 self?.errorFetchingComments.send(error)
             }
         }
     }
-    func like(id: String, increasing: Bool) {
-        let likeModels = LikeTransportLayer(postID: id).multiPoints(increasing: increasing)
+    func like(post: GroupPost) {
+        let likeModels = LikeTransportLayer(postID: post.id).groupPostLike(post: post)
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
             case .success(()):
-                LikesAPIService.shared.LikedPostsCache.removeObject(forKey: id as NSString)
-                LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: id as NSString)
+                LikesAPIService.shared.LikedPostsCache.removeObject(forKey: post.id as NSString)
+                LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: post.id as NSString)
                 print("successfully liked")
             case .failure(let error):
                 //TODO: - Show like error
                 print(error.localizedDescription)
             }
         }
+    }
+    func sendNotifications() {
+        
     }
 }

@@ -50,7 +50,7 @@ struct NotificationGroupReplied: GroupNotificationDelegate {
         self.fromUserID = from
         self.toUserID = to
         self.postID = postID
-        self.type = .groupReply
+        self.type = .GroupReply
         self.groupID = groupID
         self.seen = false
     }

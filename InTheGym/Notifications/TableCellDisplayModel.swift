@@ -43,12 +43,12 @@ class NotificationTableViewModel{
             self.message = "replied to your group post."
             self.postID = snap["postID"] as? String
             self.groupID = snap["groupID"] as? String
-            self.type = .groupReply
+            self.type = .GroupReply
         case "groupLikedPost":
             self.message = "liked your group post."
             self.postID = snap["postID"] as? String
             self.groupID = snap["groupID"] as? String
-            self.type = .groupLikedPost
+            self.type = .GroupLikedPost
         case "NewRequest":
             self.message = "sent you a request."
             self.postID = nil

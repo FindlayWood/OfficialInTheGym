@@ -157,7 +157,8 @@ extension GroupCommentSectionViewController {
         print("workout selected...")
     }
     func likeButtonTapped(at indexPath: IndexPath) {
-        viewModel.likeCheck(mainPost.id)
+        viewModel.likeCheck(mainPost)
+        mainPost.likeCount += 1
     }
 }
 

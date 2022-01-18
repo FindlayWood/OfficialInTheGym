@@ -11,6 +11,7 @@ import UIKit
 
 class DisplayWorkoutView: UIView {
     
+    // MARK: - Properties
     private let showClipsFrame = CGRect(x: 5, y: 0, width: Constants.screenSize.width - 10, height: 100)
     private let hideClipsFrame = CGRect(x: 5, y: 0, width: Constants.screenSize.width - 10, height: 0)
     
@@ -18,6 +19,7 @@ class DisplayWorkoutView: UIView {
     
     var isClipShowing: Bool = false
     
+    // MARK: - Subviews
     lazy var clipCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
         collection.showsHorizontalScrollIndicator = false
@@ -45,6 +47,7 @@ class DisplayWorkoutView: UIView {
         return button
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpView()
@@ -52,13 +55,16 @@ class DisplayWorkoutView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
-    private func setUpView() {
+}
+// MARK: - Setup UI
+private extension DisplayWorkoutView {
+    func setUpView() {
         backgroundColor = Constants.lightColour
         addSubview(clipCollection)
         addSubview(tableview)
         constrainView()
     }
-    private func constrainView() {
+    func constrainView() {
         clipCollection.frame = hideClipsFrame
         tableviewTopAnchor = tableview.topAnchor.constraint(equalTo: topAnchor, constant: 0)
         NSLayoutConstraint.activate([
@@ -69,7 +75,20 @@ class DisplayWorkoutView: UIView {
         ])
         
     }
-    func showClipCollection() {
+    func generateCollectionLayout() -> UICollectionViewFlowLayout {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 5
+        layout.minimumLineSpacing = 5
+        layout.itemSize = CGSize(width: 80, height: 80)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        layout.scrollDirection = .horizontal
+        return layout
+    }
+}
+
+// MARK: - Public COnfiguration
+extension DisplayWorkoutView {
+    public func showClipCollection() {
         isClipShowing = true
         tableviewTopAnchor.constant = 100
         UIView.animate(withDuration: 0.3) { [weak self] in
@@ -78,7 +97,7 @@ class DisplayWorkoutView: UIView {
             self.layoutIfNeeded()
         }
     }
-    func hideClipCollection() {
+    public func hideClipCollection() {
         isClipShowing = false
         tableviewTopAnchor.constant = 0
         UIView.animate(withDuration: 0.3) { [weak self] in
@@ -86,14 +105,5 @@ class DisplayWorkoutView: UIView {
             self.clipCollection.frame = self.hideClipsFrame
             self.layoutIfNeeded()
         }
-    }
-    private func generateCollectionLayout() -> UICollectionViewFlowLayout {
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 5
-        layout.minimumLineSpacing = 5
-        layout.itemSize = CGSize(width: 80, height: 80)
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-        layout.scrollDirection = .horizontal
-        return layout
     }
 }

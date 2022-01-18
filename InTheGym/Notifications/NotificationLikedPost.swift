@@ -50,7 +50,7 @@ struct NotificationGroupLikedPost : GroupNotificationDelegate {
         self.fromUserID = from
         self.toUserID = to
         self.postID = postID
-        self.type = .groupLikedPost
+        self.type = .GroupLikedPost
         self.groupID = groupID
         self.seen = false
     }

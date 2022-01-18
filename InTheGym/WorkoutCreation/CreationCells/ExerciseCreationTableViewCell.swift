@@ -77,6 +77,6 @@ private extension ExerciseCreationTableViewCell {
 extension ExerciseCreationTableViewCell {
     public func configure(with exercise: ExerciseModel) {
         exerciseLabel.text = exercise.exercise
-        setsLabel.text = "\(exercise.sets?.description ?? "") Sets"
+        setsLabel.text = "\(exercise.sets.description ?? "") Sets"
     }
 }

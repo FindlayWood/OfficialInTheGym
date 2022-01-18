@@ -1,21 +1,19 @@
 //
-//  DisplayEMOMCell.swift
+//  MainWorkoutEMOMCollectionCell.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 17/09/2021.
-//  Copyright © 2021 FindlayWood. All rights reserved.
+//  Created by Findlay Wood on 18/01/2022.
+//  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
 /// this class creates the cell to be displayed for an EMOM
-class DisplayEMOMCell: UITableViewCell, workoutCellConfigurable {
+class MainWorkoutEMOMCollectionCell: UICollectionViewCell {
     
     // MARK: - Properties
-    var delegate: DisplayWorkoutProtocol!
-    var emomModel: EMOM!
-    
-    static let cellID = "DisplayEMEMCellID"
+    static let reuseID = "MainWorkoutEMOMCollectionCell"
     
     // MARK: - Subviews
     var emomLabel: UILabel = {
@@ -55,29 +53,27 @@ class DisplayEMOMCell: UITableViewCell, workoutCellConfigurable {
     
     
     // MARK: - Initializer
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupUI()
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
     }
-     
     override func prepareForReuse() {
         super.prepareForReuse()
-        emomModel.completed.valueChanged = nil
+        //emomModel.completed.valueChanged = nil
         completedLabel.isHidden = true
     }
 }
 
 // MARK: - Setup UI
-private extension DisplayEMOMCell {
+private extension MainWorkoutEMOMCollectionCell {
     func setupUI() {
         backgroundColor = .offWhiteColour
         layer.cornerRadius = 10
         layer.masksToBounds = true
-        selectionStyle = .none
         addSubview(emomLabel)
         addSubview(separatorView)
         addSubview(timeLabel)
@@ -105,22 +101,9 @@ private extension DisplayEMOMCell {
 }
 
 // MARK: - Public Configuration
-extension DisplayEMOMCell {
+extension MainWorkoutEMOMCollectionCell {
     
-    func setup(with rowModel: WorkoutType) {
-        emomModel = rowModel as? EMOM
-        timeLabel.text = emomModel.timeLimit?.convertToTime()
-        if let completed = emomModel.completed.value {
-            completedLabel.isHidden = !completed
-        }
-        
-        emomModel.completed.valueChanged = { [weak self] newValue in
-            guard let self = self else {return}
-            if newValue {
-                self.completedLabel.isHidden = false
-            } else {
-                self.completedLabel.isHidden = true
-            }
-        }
+    func configure(with model: EMOMModel) {
+        timeLabel.text = model.timeLimit.convertToTime()
     }
 }

@@ -80,10 +80,7 @@ private extension CircuitCell {
 extension CircuitCell {
     public func setup(with exercise: ExerciseModel){
         exerciseName.text = exercise.exercise
-        guard let set = exercise.sets else {
-            return
-        }
-        setsLabel.text = "\(set) SETS"
+        setsLabel.text = "\(exercise.sets) SETS"
         
     }
 }

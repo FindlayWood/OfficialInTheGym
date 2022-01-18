@@ -21,13 +21,13 @@ protocol GroupNotificationDelegate : NotificationDelegate {
     var groupID:String?{get}
 }
 
-enum NotificationType {
-    case LikedPost
-    case Reply
-    case Followed
-    case groupLikedPost
-    case groupReply
-    case NewRequest
-    case AcceptedRequest
-    case NewWorkout
+enum NotificationType: String, Codable {
+    case LikedPost = "LikedPost"
+    case Reply = "Reply"
+    case Followed = "Followed"
+    case GroupLikedPost = "GroupLikedPost"
+    case GroupReply = "GroupReply"
+    case NewRequest = "NewRequest"
+    case AcceptedRequest = "AcceptedRequest"
+    case NewWorkout = "NewWorkout"
 }

@@ -8,11 +8,9 @@
 
 import Foundation
 
-enum PostTypes: String, Codable {
-    case post = "post"
-    case attachedWorkout = "attachedWorkout"
-    case attachedPhoto = "attachedPhoto"
-    case attachedClip = "attachedClip"
+enum PostTypes {
+    case post(post)
+    case groupPost(GroupPost)
 }
 
 protocol DisplayablePost {
@@ -30,12 +28,11 @@ protocol DisplayablePost {
 }
 
 class post: Codable, Hashable, AutoIDable, DisplayablePost {
-    //var postID: String
+    
     var username: String
     var posterID: String
     var time: TimeInterval
     var text: String
-    //var postType: PostTypes
     var attachedWorkout: attachedWorkout?
     var attachedPhoto: attachedPhoto?
     var attachedClip: attachedClip?
@@ -62,12 +59,11 @@ extension post: FirebaseResource {
 
 
 class GroupPost: Codable, Hashable, AutoIDable, DisplayablePost {
-    //var postID: String
+    
     var username: String
     var posterID: String
     var time: TimeInterval
     var text: String
-    //var postType: PostTypes
     var attachedWorkout: attachedWorkout?
     var attachedPhoto: attachedPhoto?
     var attachedClip: attachedClip?

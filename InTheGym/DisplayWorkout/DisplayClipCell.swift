@@ -11,7 +11,10 @@ import UIKit
 import AVKit
 
 class DisplayClipCell: UICollectionViewCell {
+    // MARK: - Properties
+    static var reuseID = "DisplayClipCellReuseID"
     
+    // MARK: - Subviews
     var thumbnailImage: UIImageView = {
        let view = UIImageView()
         view.contentMode = .scaleAspectFill
@@ -20,6 +23,7 @@ class DisplayClipCell: UICollectionViewCell {
         return view
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpView()
@@ -28,7 +32,12 @@ class DisplayClipCell: UICollectionViewCell {
         fatalError()
     }
     
-    private func setUpView() {
+    override func prepareForReuse() {
+        thumbnailImage.image = nil
+    }
+}
+private extension DisplayClipCell {
+    func setUpView() {
         backgroundColor = .lightGray
         layer.cornerRadius = 40
         layer.borderWidth = 2
@@ -38,13 +47,14 @@ class DisplayClipCell: UICollectionViewCell {
         constrainView()
     }
     
-    private func constrainView() {
+    func constrainView() {
         NSLayoutConstraint.activate([thumbnailImage.leadingAnchor.constraint(equalTo: leadingAnchor),
                                      thumbnailImage.topAnchor.constraint(equalTo: topAnchor),
                                      thumbnailImage.trailingAnchor.constraint(equalTo: trailingAnchor),
                                      thumbnailImage.bottomAnchor.constraint(equalTo: bottomAnchor)])
     }
-    
+}
+extension DisplayClipCell {
     func attachThumbnail(from clipKey: String) {
         if #available(iOS 13.0, *) {
             thumbnailImage.image = UIImage(systemName: "play.fill")
@@ -81,9 +91,5 @@ class DisplayClipCell: UICollectionViewCell {
                 }
             }
         }
-    }
-    
-    override func prepareForReuse() {
-        thumbnailImage.image = nil
     }
 }

@@ -112,16 +112,45 @@ class exercise: WorkoutType, Codable {
 //}
 
 
-struct ExerciseModel: ExerciseType, Codable, Hashable {
+class ExerciseModel: ExerciseType, Codable, Hashable {
+    
+    var id: String = UUID().uuidString
     var workoutPosition: Int
     var exercise: String
-    var reps: [Int]?
-    var weight: [String]?
-    var type: bodyType?
-    var completedSets: [Bool]?
-    var sets: Int?
-    var rpe: String?
+    var reps: [Int]
+    var weight: [String]
+    var type: bodyType
+    var completedSets: [Bool]
+    var sets: Int
+    var rpe: Int?
     var completed: Bool?
+    
+    init(exercise: String, type: bodyType) {
+        self.workoutPosition = 0
+        self.exercise = exercise
+        self.reps = []
+        self.weight = []
+        self.type = type
+        self.completedSets = []
+        self.sets = 0
+        self.completed = false
+    }
+    
+    func getSets() -> [ExerciseSet] {
+        var setModels = [ExerciseSet]()
+        for i in 0..<sets {
+            setModels.append(ExerciseSet(set: i + 1, reps: reps[i], weight: weight[i], completed: completedSets[i]))
+        }
+        return setModels
+    }
+    
+    static func == (lhs: ExerciseModel, rhs: ExerciseModel) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 
 //class EMOMModel: Codable {

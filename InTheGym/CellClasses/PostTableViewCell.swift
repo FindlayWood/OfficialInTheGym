@@ -216,9 +216,7 @@ extension PostTableViewCell {
         likeCountLabel.text = post.likeCount.description
         if post.attachedClip == nil { clipImageView.isHidden = true }
         if post.attachedPhoto == nil { photoImageView.isHidden = true }
-        if let attachedWorkout = post.attachedWorkout {
-            workoutView.newConfigure(with: attachedWorkout)
-        } else {workoutView.isHidden = true}
+        if let attachedWorkout = post.attachedWorkout { workoutView.newConfigure(with: attachedWorkout) } else {workoutView.isHidden = true}
         ImageAPIService.shared.getProfileImage(for: post.posterID) { [weak self] image in
             guard let self = self else {return}
             if image != nil {
@@ -228,15 +226,11 @@ extension PostTableViewCell {
         LikesAPIService.shared.check(postID: post.id) { [weak self] liked in
             guard let self = self else {return}
             if liked {
-                if #available(iOS 13.0, *) {
-                    self.likeButton.setImage(UIImage(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-                    self.likeButton.isUserInteractionEnabled = false
-                }
+                self.likeButton.setImage(UIImage(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+                self.likeButton.isUserInteractionEnabled = false
             } else {
-                if #available(iOS 13.0, *) {
-                    self.likeButton.setImage(UIImage(systemName: "star", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-                    self.likeButton.isUserInteractionEnabled = true
-                }
+                self.likeButton.setImage(UIImage(systemName: "star", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+                self.likeButton.isUserInteractionEnabled = true
             }
         }
     }
@@ -254,6 +248,12 @@ extension PostTableViewCell {
     
     @objc func likeButtonTapped(_ sender: UIButton) {
         actionPublisher.send(.likeButtonTapped)
+        UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
+            sender.setImage(UIImage(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        } completion: { _ in
+            sender.isUserInteractionEnabled = false
+            self.likeCountLabel.increment()
+        }
         delegate?.likeButtonTapped(on: self, sender: sender, label: likeCountLabel)
     }
     @objc func workoutTapped(_ sender: UIView) {
@@ -266,6 +266,7 @@ extension PostTableViewCell {
     }
     
     func postLikedTransition() {
+        
         selection.prepare()
         selection.selectionChanged()
         UIView.animate(withDuration: 0.3, delay: 0, options: .transitionCrossDissolve) {

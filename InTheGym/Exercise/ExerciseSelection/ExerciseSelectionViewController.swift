@@ -136,10 +136,11 @@ extension ExerciseSelectionViewController: ExerciseSelectionProtocol {
 //        newExercise.exercise = viewModel.getData(at: indexPath)
 //        newExercise.type = viewModel.getBodyType(from: indexPath)
 //        coordinator?.exerciseSelected(newExercise)
-        let newE = ExerciseModel(workoutPosition: 0,
-                                 exercise: viewModel.getData(at: indexPath),
-                                 type: viewModel.getBodyType(from: indexPath),
-                                 completed: false)
+        let newE = ExerciseModel(exercise: viewModel.getData(at: indexPath), type: viewModel.getBodyType(from: indexPath))
+//        let newE = ExerciseModel(workoutPosition: 0,
+//                                 exercise: viewModel.getData(at: indexPath),
+//                                 type: viewModel.getBodyType(from: indexPath),
+//                                 completed: false)
         let newViewModel = ExerciseCreationViewModel()
         newViewModel.exercise = newE
 //        newViewModel.addingDelegate = workoutCreationViewModel

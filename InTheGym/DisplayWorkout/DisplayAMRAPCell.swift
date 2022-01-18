@@ -70,6 +70,7 @@ class DisplayAMRAPCell: UITableViewCell, workoutCellConfigurable {
         return label
     }()
 
+    // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setup()
@@ -78,8 +79,17 @@ class DisplayAMRAPCell: UITableViewCell, workoutCellConfigurable {
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    private func setup() {
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        amrapModel.completed.valueChanged = nil
+        amrapModel.roundsCompleted.valueChanged = nil
+        completedLabel.isHidden = true
+        roundsLabel.isHidden = true
+    }
+}
+// MARK: - Setup UI
+private extension DisplayAMRAPCell {
+    func setup() {
         backgroundColor = Constants.offWhiteColour
         layer.cornerRadius = 10
         layer.masksToBounds = true
@@ -93,7 +103,7 @@ class DisplayAMRAPCell: UITableViewCell, workoutCellConfigurable {
         constrain()
     }
     
-    private func constrain() {
+    func constrain() {
         NSLayoutConstraint.activate([amrapLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      exerciseLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      timeLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -115,6 +125,10 @@ class DisplayAMRAPCell: UITableViewCell, workoutCellConfigurable {
                                      roundsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
                                      roundsLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5)])
     }
+}
+
+// MARK: - Public Configuration
+extension DisplayAMRAPCell {
     
     func setup(with rowModel: WorkoutType) {
         amrapModel = rowModel as? AMRAP
@@ -150,13 +164,5 @@ class DisplayAMRAPCell: UITableViewCell, workoutCellConfigurable {
             }
             
         }
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        amrapModel.completed.valueChanged = nil
-        amrapModel.roundsCompleted.valueChanged = nil
-        completedLabel.isHidden = true
-        roundsLabel.isHidden = true
     }
 }

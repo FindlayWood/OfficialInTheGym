@@ -138,7 +138,7 @@ extension DisplayNotificationsViewController: DisplayNotificationsProtocol{
                 }
                 self.moveToPost(with: tempPost, group: nil)
             }
-        } else if notification.type == NotificationType.groupLikedPost || notification.type == NotificationType.groupReply {
+        } else if notification.type == NotificationType.GroupLikedPost || notification.type == NotificationType.GroupReply {
             let postID = notification.postID!
             let groupID = notification.groupID!
             let grouPostRef = Database.database().reference().child("GroupPosts").child(groupID).child(postID)

@@ -31,6 +31,14 @@ class clipDataModel: Codable {
     }
 }
 
+struct WorkoutClipModel: Codable, Hashable {
+    var storageURL: String
+    var clipKey: String
+    var exerciseName: String
+    
+    
+}
+
 struct mainClipModel: Codable {
     var storageURL: String
     var exerciseName: String
