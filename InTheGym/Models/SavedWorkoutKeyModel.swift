@@ -23,3 +23,14 @@ extension SavedWorkoutKeyModel: FirebaseResource {
         return "SavedWorkouts/\(id)"
     }
 }
+
+// MARK: - Saved Workout Reference Model
+/// used to check whether a user has saved this workout
+struct SavedWorkoutReferenceModel {
+    var id: String
+}
+extension SavedWorkoutReferenceModel: FirebaseInstance {
+    var internalPath: String {
+        return "SavedWorkoutReferences/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(id)"
+    }
+}

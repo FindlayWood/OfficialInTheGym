@@ -89,6 +89,7 @@ class WorkoutCreationViewModel: ExerciseAdding {
                                               createdBy: FirebaseAuthManager.currentlyLoggedInUser.username,
                                               creatorID: FirebaseAuthManager.currentlyLoggedInUser.uid,
                                               title: workoutTitle,
+                                              isPrivate: options.isPrivate,
                                               exercises: exerciseModels,
                                               circuits: circuitModels,
                                               amraps: amrapModels,
@@ -117,7 +118,7 @@ class WorkoutCreationViewModel: ExerciseAdding {
         // TODO: - If assign != nil upload workout to user
         if let assignTo = user {
             // TODO: - Create New Workout
-            let newWorkout = WorkoutModel(savedModel: newSavedWorkout, assignTo: assignTo.uid, isPrivate: options.isPrivate)
+            let newWorkout = WorkoutModel(newSavedModel: newSavedWorkout, assignTo: assignTo.uid)
             if let newWorkoutJSON = newWorkout.toFirebaseJSON() {
                 multiUploadPoints.append(newWorkoutJSON)
             }

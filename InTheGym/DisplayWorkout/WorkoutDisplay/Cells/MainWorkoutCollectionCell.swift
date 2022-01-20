@@ -129,6 +129,9 @@ extension MainWorkoutCollectionCell {
             completeButton.isUserInteractionEnabled = true
         }
     }
+    public func setUserInteraction(to enabled: Bool) {
+        self.completeButton.isUserInteractionEnabled = enabled
+    }
 }
 
 // MARK: - Actions

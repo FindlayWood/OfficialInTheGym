@@ -152,15 +152,15 @@ struct privateSavedWorkout : savedWorkoutDelegate {
     
 }
 
-struct SavedWorkoutReferenceModel{
-    var creatorID:String!
-    var workoutID:String!
-    
-    init?(snapshot:DataSnapshot){
-        guard let snap = snapshot.value as? [String:AnyObject] else {
-            return
-        }
-        self.creatorID = snap["creatorID"] as? String
-        self.workoutID = snap["workoutID"] as? String
-    }
-}
+//struct SavedWorkoutReferenceModel{
+//    var creatorID:String!
+//    var workoutID:String!
+//
+//    init?(snapshot:DataSnapshot){
+//        guard let snap = snapshot.value as? [String:AnyObject] else {
+//            return
+//        }
+//        self.creatorID = snap["creatorID"] as? String
+//        self.workoutID = snap["workoutID"] as? String
+//    }
+//}

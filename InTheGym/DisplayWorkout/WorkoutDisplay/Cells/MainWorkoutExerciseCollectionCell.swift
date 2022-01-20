@@ -20,6 +20,7 @@ class MainWorkoutExerciseCollectionCell: UICollectionViewCell {
     static var reuseID = "MainWorkoutExerciseCollectionCell"
     var dataSource: WorkoutCollectionDataSource!
     private var subscriptions = Set<AnyCancellable>()
+    var userInteraction: Bool!
     
     // MARK: - Subviews
     var exerciseNameButton: UIButton = {
@@ -220,7 +221,7 @@ extension MainWorkoutExerciseCollectionCell {
             rpeButton.setTitle(rpe.description, for: .normal)
             rpeButton.setTitleColor(Constants.rpeColors[rpe - 1], for: .normal)
         }
-        dataSource = .init(collectionView: collectionView)
+        dataSource = .init(collectionView: collectionView, isUserInteractionEnabled: userInteraction)
         dataSource.updateTable(with: model.getSets())
         dataSource.completeButtonTapped
             .sink { [weak self] in self?.actionPublisher.send(.completed($0)) }

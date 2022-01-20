@@ -26,10 +26,12 @@ class WorkoutExerciseCollectionDataSource: NSObject {
     var collectionView: UICollectionView
     private lazy var dataDource = makeDataSource()
     var lastContentOffset: CGFloat = 0
+    var isUserInteractionEnabled: Bool
     
     // MARK: - Initializer
-    init(collectionView: UICollectionView) {
+    init(collectionView: UICollectionView, isUserInteractionEnabled: Bool) {
         self.collectionView = collectionView
+        self.isUserInteractionEnabled = isUserInteractionEnabled
         super.init()
         self.collectionView.dataSource = makeDataSource()
         self.collectionView.delegate = self
@@ -42,6 +44,7 @@ class WorkoutExerciseCollectionDataSource: NSObject {
             switch itemIdentifier {
             case .exercise(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainWorkoutExerciseCollectionCell.reuseID, for: indexPath) as! MainWorkoutExerciseCollectionCell
+                cell.userInteraction = self.isUserInteractionEnabled
                 cell.configure(with: model)
                 self.actionSubscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
@@ -59,7 +62,6 @@ class WorkoutExerciseCollectionDataSource: NSObject {
                             self?.completeButtonTapped.send(fullIndex)
                         }
                     })
-                cell.layoutIfNeeded()
                 return cell
             case .circuit(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainWorkoutCircuitCollectionCell.reuseID, for: indexPath) as! MainWorkoutCircuitCollectionCell

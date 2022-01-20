@@ -78,6 +78,7 @@ struct NewSavedWorkoutModel: Codable {
     var createdBy: String
     var creatorID: String
     var title: String
+    var isPrivate: Bool
     var exercises: [ExerciseModel]?
     var circuits: [CircuitModel]?
     var amraps: [AMRAPModel]?

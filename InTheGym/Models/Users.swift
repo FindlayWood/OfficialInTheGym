@@ -41,3 +41,14 @@ extension Users: FirebaseResource {
         return "users/\(uid)"
     }
 }
+
+// MARK: - User Search Model
+/// allows a user to be returened from just an id
+struct UserSearchModel {
+    var uid: String
+}
+extension UserSearchModel: FirebaseInstance {
+    var internalPath: String {
+        return "users/\(uid)"
+    }
+}

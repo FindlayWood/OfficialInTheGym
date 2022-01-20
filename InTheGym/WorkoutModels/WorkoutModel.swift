@@ -170,14 +170,28 @@ class WorkoutModel: Codable, Hashable {
         return workoutID
     }
     
-    init(savedModel: NewSavedWorkoutModel, assignTo: String, isPrivate: Bool) {
+    init(newSavedModel: NewSavedWorkoutModel, assignTo: String) {
+        title = newSavedModel.title
+        workoutID = UUID().uuidString
+        savedID = newSavedModel.savedID
+        creatorID = newSavedModel.creatorID
+        createdBy = newSavedModel.createdBy
+        assignedTo = assignTo
+        isPrivate = newSavedModel.isPrivate
+        completed = false
+        exercises = newSavedModel.exercises
+        circuits = newSavedModel.circuits
+        emoms = newSavedModel.emoms
+        amraps = newSavedModel.amraps
+    }
+    init(savedModel: SavedWorkoutModel, assignTo: String) {
         title = savedModel.title
         workoutID = UUID().uuidString
         savedID = savedModel.savedID
         creatorID = savedModel.creatorID
         createdBy = savedModel.createdBy
         assignedTo = assignTo
-        self.isPrivate = isPrivate
+        isPrivate = savedModel.isPrivate
         completed = false
         exercises = savedModel.exercises
         circuits = savedModel.circuits
@@ -199,6 +213,6 @@ extension WorkoutModel: FirebaseResource {
         return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)"
     }
     var internalPath: String {
-        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workoutID)"
+        return "Workouts/\(assignedTo)/\(workoutID)"
     }
 }

@@ -76,6 +76,20 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         }
     }
     
+    func fetchSingleInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<T,Error>) -> Void) {
+        let DBRef = Database.database().reference().child(model.internalPath)
+        DBRef.observeSingleEvent(of: .value) { snapshot in
+            guard let object = snapshot.value as? [String: AnyObject] else {return}
+            do {
+                let data = try FirebaseDecoder().decode(returnType, from: object)
+                completion(.success(data))
+            }
+            catch {
+                print(String(describing: error))
+            }
+        }
+    }
+    
     func fetchRange<M: FirebaseInstance, T: Decodable>(from models: [M], returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
         var tempModels = [T]()
         let dispatchGroup = DispatchGroup()
@@ -146,6 +160,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
 protocol FirebaseDatabaseManagerService {
     func fetch<Model: FirebaseModel>(_ model: Model.Type, completion: @escaping(Result<[Model],Error>) -> Void)
     func fetchInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
+    func fetchSingleInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<T,Error>) -> Void)
     func upload<Model: FirebaseInstance>(data: Model, autoID: Bool, completion: @escaping (Result<Void,Error>) -> Void)
     func multiLocationUpload(data: [FirebaseMultiUploadDataPoint], completion: @escaping(Result<Void,Error>) -> Void)
     func incrementingValue(by increment: Int, at path: String, completion: @escaping(Result<Void,Error>) -> Void)
