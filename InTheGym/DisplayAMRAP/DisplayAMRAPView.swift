@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 
-@available(iOS 13.0, *)
 class DisplayAMRAPView: UIView {
     
     // MARK: - Properties
@@ -50,15 +49,6 @@ class DisplayAMRAPView: UIView {
         let view = AMRAPExerciseView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
-    }()
-    
-    lazy var collection: UICollectionView = {
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
-        collection.backgroundColor = Constants.lightColour
-        collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.register(DisplayAMRAPCollectionCell.self, forCellWithReuseIdentifier: "cell")
-        collection.isScrollEnabled = false
-        return collection
     }()
 
     var roundsView: UIView = {
@@ -118,6 +108,7 @@ class DisplayAMRAPView: UIView {
        return label
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -127,14 +118,16 @@ class DisplayAMRAPView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    private func setup() {
+}
+
+// MARK: - Setup UI
+private extension DisplayAMRAPView {
+    func setup() {
         //addSubview(timeLabel)
         addSubview(timeProgressView)
         addSubview(initialTimeLabel)
         
         addSubview(helpIcon)
-        //addSubview(collection)
         addSubview(amrapExerciseView)
         addSubview(roundsView)
         
@@ -148,9 +141,8 @@ class DisplayAMRAPView: UIView {
         constrain()
     }
     
-    private func constrain() {
-        NSLayoutConstraint.activate([//timeLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-                                     //timeLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+    func constrain() {
+        NSLayoutConstraint.activate([
                                      
             
                                      timeProgressView.topAnchor.constraint(equalTo: topAnchor),
@@ -166,12 +158,6 @@ class DisplayAMRAPView: UIView {
                                      helpIcon.heightAnchor.constraint(equalToConstant: 50),
                                      helpIcon.widthAnchor.constraint(equalToConstant: 50),
                                      
-                                     
-                                     
-//                                     collection.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 10),
-//                                     collection.leadingAnchor.constraint(equalTo: leadingAnchor),
-//                                     collection.trailingAnchor.constraint(equalTo: trailingAnchor),
-//                                     collection.heightAnchor.constraint(equalToConstant: collectionHeight),
                                      
                                      roundsView.trailingAnchor.constraint(equalTo: centerXAnchor, constant: -20),
                                      roundsView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
@@ -204,15 +190,5 @@ class DisplayAMRAPView: UIView {
                                      amrapExerciseView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
                                      amrapExerciseView.bottomAnchor.constraint(equalTo: roundsView.topAnchor, constant: -10)
         ])
-    }
-    
-    private func generateLayout() -> UICollectionViewFlowLayout {
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 5
-        layout.minimumLineSpacing = 5
-        layout.itemSize = CGSize(width: Constants.screenSize.width - 20, height: collectionHeight - 10)
-        layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        layout.scrollDirection = .horizontal
-        return layout
     }
 }

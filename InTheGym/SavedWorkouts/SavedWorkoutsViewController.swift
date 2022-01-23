@@ -16,10 +16,7 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
     
     var display = SavedWorkoutsView()
     
-//    @IBOutlet weak var tableview:UITableView!
-//    @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
-    
-//    var adapter : SavedWorkoutsAdapter!
+    var loadingScreen: LoadingScreenViewController!
     
     var viewModel = SavedWorkoutsViewModel()
     
@@ -35,18 +32,6 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
         view.backgroundColor = .lightColour
         initDataSource()
         setupSubscriptions()
-//        adapter = SavedWorkoutsAdapter(delegate: self)
-//        tableview.delegate = adapter
-//        tableview.dataSource = adapter
-//        tableview.register(UINib(nibName: "SavedWorkoutCell", bundle: nil), forCellReuseIdentifier: "SavedWorkoutCell")
-//        tableview.register(UINib(nibName: "PrivateSavedWorkoutCell", bundle: nil), forCellReuseIdentifier: "PrivateSavedWorkoutCell")
-//        tableview.tableFooterView = UIView()
-//        tableview.emptyDataSetDelegate = adapter
-//        tableview.emptyDataSetSource = adapter
-//        if #available(iOS 15.0, *) { tableview.sectionHeaderTopPadding = 0 }
-        
-        //initUI()
-        //initViewModel()
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -59,61 +44,17 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
         editNavBarColour(to: .white)
         navigationItem.title = "Saved Workouts"
     }
-//
-//    override func viewDidDisappear(_ animated: Bool) {
-//        if isMovingFromParent{
-//            viewModel.removeObservers()
-//        }
-//    }
-    
-    func initUI(){
-        navigationItem.title = "Saved Workouts"
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.tintColor = .white
-    }
     
     func initDataSource() {
         dataSource = .init(tableView: display.tableview)
         collectionDataSource = .init(collectionView: display.collectionView)
     }
     
-//    func initViewModel() {
-//
-//        // Setup for reloadTableViewClosure
-//        viewModel.reloadTableViewClosure = { [weak self] () in
-//            DispatchQueue.main.async {
-//                self?.tableview.reloadData()
-//            }
-//        }
-//
-//        // Setup for updateLoadingStatusClosure
-//        viewModel.updateLoadingStatusClosure = { [weak self] () in
-//            DispatchQueue.main.async {
-//                let isLoading = self?.viewModel.isLoading ?? false
-//                if isLoading {
-//                    self?.activityIndicator.startAnimating()
-//                    UIView.animate(withDuration: 0.2, animations: {
-//                        self?.tableview.alpha = 0.0
-//                    })
-//                } else {
-//                    self?.activityIndicator.stopAnimating()
-//                    UIView.animate(withDuration: 0.2, animations: {
-//                        self?.tableview.alpha = 1.0
-//                    })
-//                }
-//            }
-//        }
-//
-//        viewModel.fetchData()
-//    }
-    
     // MARK: - Subscriptions
     func setupSubscriptions() {
         viewModel.savedWorkoutss
             .receive(on: RunLoop.main)
-            .sink { [weak self] in self?.collectionDataSource.updateTable(with: $0) }
+            .sink { [weak self] in self?.collectionDataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
         
         collectionDataSource.workoutSelected
@@ -127,37 +68,4 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
         let workout = viewModel.workoutSelected(at: indexPath)
         coordinator?.savedWorkoutSelected(workout)
     }
-    
-    func moveToView(){
-        // move to new views
-        // move with this workout
-//        let workouttomove = viewModel.selectedWorkout!
-//        coordinator?.savedWorkoutSelected(workouttomove)
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let workoutView = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
-//        workoutView.selectedWorkout = workouttomove
-//        workoutView.hidesBottomBarWhenPushed = true
-//        navigationController?.pushViewController(workoutView, animated: true)
-    }
-
 }
-//extension SavedWorkoutsViewController : SavedWorkoutsProtocol{
-//    func getData(at: IndexPath) -> savedWorkoutDelegate {
-//        return self.viewModel.getData(at: at)
-//    }
-//
-//    func itemSelected(at: IndexPath) {
-//        viewModel.selectedWorkout = self.viewModel.getData(at: at)
-//        self.moveToView()
-//    }
-//
-//    func retreiveNumberOfItems() -> Int {
-//        return 1
-//    }
-//
-//    func retreiveNumberOfSections() -> Int {
-//        return viewModel.numberOfItems
-//    }
-//
-//
-//}

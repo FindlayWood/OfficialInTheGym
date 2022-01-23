@@ -9,6 +9,11 @@
 import Foundation
 
 class DisplayEMOMViewModel {
+    
+    // MARK: - Properties
+    var emomModel: EMOMModel!
+    var workoutModel: WorkoutModel!
+    
     // MARK: - Callbacks
         ///timer callbacks
     var updateMainTimerClosure:((Int)->())?

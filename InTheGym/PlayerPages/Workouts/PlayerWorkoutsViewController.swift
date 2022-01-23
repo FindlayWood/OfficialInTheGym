@@ -15,6 +15,7 @@ class PlayerWorkoutsViewController: UIViewController {
 
     // MARK: - Coordinator
     // TODO: - New Coordinator Needed
+    var coordinator: WorkoutsCoordinator?
     
     // MARK: - Display Property
     var display = PlayerWorkoutsView()
@@ -64,7 +65,8 @@ class PlayerWorkoutsViewController: UIViewController {
     
     // MARK: - Actions
     func workoutSelected(at indexPath: IndexPath) {
-        
+        let workout = viewModel.workoutSelected(at: indexPath)
+        coordinator?.show(workout)
     }
     
     @objc func plusButtonTapped(_ sender: UIButton) {

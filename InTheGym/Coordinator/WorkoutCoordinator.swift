@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-protocol WorkoutCoordinatorFlow: WorkoutDisplayCoordinator {
+protocol WorkoutCoordinatorFlow: WorkoutDisplayCoordinatorDelegate {
     func showUser(with user: Users)
     func showWorkoutStats(with savedWorkoutID: String)
     func showCircuit()
@@ -18,7 +18,7 @@ protocol WorkoutCoordinatorFlow: WorkoutDisplayCoordinator {
     func displayNote(with note: String?, on workout: WorkoutDelegate, at index: Int)
 }
 
-protocol WorkoutDisplayCoordinator: Coordinator {
+protocol WorkoutDisplayCoordinatorDelegate: Coordinator {
     func showCompletedPage()
 }
 

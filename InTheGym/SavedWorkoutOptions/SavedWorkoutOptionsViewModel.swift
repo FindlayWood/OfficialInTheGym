@@ -62,15 +62,28 @@ class SavedWorkoutOptionsViewModel {
     
     // MARK: - Upload Functions
     func addToSaved() {
-        apiService.upload(data: savedWorkout, autoID: false) { [weak self] result in
+        let refModel = SavedWorkoutReferenceModel(id: savedWorkout.savedID).toMultipUploadPoint()
+        let downloadsModel = savedWorkout.downloadUploadPoint()
+        let uploadPoints: [FirebaseMultiUploadDataPoint] = [refModel, downloadsModel]
+        apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(()):
-                print("successfully uploaded to saved")
+                print("successfully uploaded to saved and added a download")
             case .failure(let error):
                 self.errorFetchingUser.send(error)
             }
         }
+        
+//        apiService.upload(data: savedWorkout, autoID: false) { [weak self] result in
+//            guard let self = self else {return}
+//            switch result {
+//            case .success(()):
+//                print("successfully uploaded to saved")
+//            case .failure(let error):
+//                self.errorFetchingUser.send(error)
+//            }
+//        }
     }
     func addToWorkouts() {
         let workoutModel = WorkoutModel(savedModel: savedWorkout, assignTo: FirebaseAuthManager.currentlyLoggedInUser.uid)

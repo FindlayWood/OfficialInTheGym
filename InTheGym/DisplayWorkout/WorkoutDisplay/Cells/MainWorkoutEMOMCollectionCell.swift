@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 /// this class creates the cell to be displayed for an EMOM
-class MainWorkoutEMOMCollectionCell: UICollectionViewCell {
+class MainWorkoutEMOMCollectionCell: FullWidthCollectionViewCell {
     
     // MARK: - Properties
     static let reuseID = "MainWorkoutEMOMCollectionCell"
@@ -35,7 +35,7 @@ class MainWorkoutEMOMCollectionCell: UICollectionViewCell {
     
     var timeLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .regular)
+        label.font = UIFont(name: "Menlo", size: 20)
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -77,7 +77,7 @@ private extension MainWorkoutEMOMCollectionCell {
         addSubview(emomLabel)
         addSubview(separatorView)
         addSubview(timeLabel)
-        addSubview(completedLabel)
+//        addSubview(completedLabel)
         constrainUI()
     }
     
@@ -94,8 +94,8 @@ private extension MainWorkoutEMOMCollectionCell {
             timeLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             timeLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             
-            completedLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            completedLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+//            completedLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+//            completedLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
         ])
     }
 }
@@ -104,6 +104,6 @@ private extension MainWorkoutEMOMCollectionCell {
 extension MainWorkoutEMOMCollectionCell {
     
     func configure(with model: EMOMModel) {
-        timeLabel.text = model.timeLimit.convertToTime()
+        timeLabel.text = model.timeLimit.convertToWorkoutTime()
     }
 }

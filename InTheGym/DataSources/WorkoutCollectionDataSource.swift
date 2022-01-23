@@ -39,7 +39,7 @@ class WorkoutCollectionDataSource: NSObject {
                 .sink(receiveValue: { [weak self] in
                     self?.completeButtonTapped.send(indexPath)
                 })
-            cell.layoutIfNeeded()
+            //cell.layoutIfNeeded()
             return cell
         }
     }

@@ -9,10 +9,10 @@
 import Foundation
 import UIKit
 
-class MainWorkoutAMRAPCollectionCell: UICollectionViewCell {
+class MainWorkoutAMRAPCollectionCell: FullWidthCollectionViewCell {
     
     // MARK: - Properties
-    static let reuseID = "MainWorkoutEMOMCollectionCell"
+    static let reuseID = "MainWorkoutAMRAPCollectionCellreuseID"
     
     // MARK: - Subviews
     var amrapLabel: UILabel = {
@@ -89,14 +89,14 @@ class MainWorkoutAMRAPCollectionCell: UICollectionViewCell {
 // MARK: - Setup UI
 private extension MainWorkoutAMRAPCollectionCell {
     func setupUI() {
-        backgroundColor = Constants.offWhiteColour
+        backgroundColor = .offWhiteColour
         layer.cornerRadius = 10
         layer.masksToBounds = true
         addSubview(amrapLabel)
         addSubview(separatorView)
         addSubview(exerciseLabel)
         addSubview(timeLabel)
-        addSubview(completedLabel)
+//        addSubview(completedLabel)
         addSubview(roundsLabel)
         constrainUI()
     }
@@ -118,8 +118,8 @@ private extension MainWorkoutAMRAPCollectionCell {
             timeLabel.topAnchor.constraint(equalTo: exerciseLabel.bottomAnchor, constant: 10),
             timeLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             
-            completedLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            completedLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+//            completedLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+//            completedLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
             
             roundsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             roundsLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5)
@@ -131,7 +131,7 @@ private extension MainWorkoutAMRAPCollectionCell {
 extension MainWorkoutAMRAPCollectionCell {
     
     func configure(with model: AMRAPModel) {
-        exerciseLabel.text = model.exercises.count.description
-        timeLabel.text = model.timeLimit.convertToTime()
+        exerciseLabel.text = model.exercises.count.description + " exercises"
+        timeLabel.text = model.timeLimit.convertToWorkoutTime()
     }
 }

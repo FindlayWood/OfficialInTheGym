@@ -11,21 +11,28 @@ import Combine
 
 class DisplayingWorkoutsViewController: UIViewController {
     
-    weak var coordinator: WorkoutsCoordinator?
+    // MARK: - Coordinator
+    var coordinator: WorkoutsCoordinator?
     
+    // MARK: - Display Property
     var display = DisplayingWorkoutsView()
     
+    // MARK: - ViewModel
     var viewModel = DisplayingWorkoutsViewModel()
     
-    private lazy var dataSource = setupDataSource()
+    // MARK: - Data Source
+    private var dataSource: WorkoutsCollectionDataSource!
     
+    // MARK: - Subscriptions
     var subscriptions = Set<AnyCancellable>()
     
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightColour
-        display.collectionView.dataSource = dataSource
-        updateTable()
+        initDataSource()
+        setupSubscribers()
+        buttonActions()
     }
     
     override func viewDidLayoutSubviews() {
@@ -41,41 +48,39 @@ class DisplayingWorkoutsViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: true)
     }
-}
-
-extension DisplayingWorkoutsViewController {
-    func setupDataSource() -> UICollectionViewDiffableDataSource<Section, WorkoutModel> {
-        return UICollectionViewDiffableDataSource(collectionView: display.collectionView) { collectionView, indexPath, itemIdentifier in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WorkoutCollectionViewCell.reuseID, for: indexPath) as! WorkoutCollectionViewCell
-            cell.configure(with: itemIdentifier)
-            return cell
-        }
-        
-        
-//        return UICollectionViewDiffableDataSource(tableView: display.tableview) { tableView, indexPath, itemIdentifier in
-//            let cell = tableView.dequeueReusableCell(withIdentifier: WorkoutTableViewCell.cellID, for: indexPath) as! WorkoutTableViewCell
-//            cell.configure(with: itemIdentifier)
-//            return cell
-//        }
+    
+    // MARK: - Data Source Initializer
+    func initDataSource() {
+        dataSource = .init(collectionView: display.collectionView)
     }
     
-    func updateTable(animate: Bool = true) {
-        
-        var snapshot = NSDiffableDataSourceSnapshot<Section, WorkoutModel>()
-        snapshot.appendSections([.main])
-        
+    // MARK: - Button Actions
+    func buttonActions() {
+        display.plusButton.addTarget(self, action: #selector(plusButtonTapped(_:)), for: .touchUpInside)
+    }
+    
+    // MARK: - Subscribers
+    func setupSubscribers() {
         viewModel.workouts
-            .sink { _ in
-                print("no")
-            } receiveValue: { [weak self] newWorkouts in
-                guard let self = self else {return}
-                snapshot.appendItems(newWorkouts, toSection: .main)
-                self.dataSource.apply(snapshot, animatingDifferences: animate)
-            }
+            .dropFirst()
+            .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
+        
+        dataSource.workoutSelected
+            .sink { [weak self] in self?.workoutSelected(at: $0) }
+            .store(in: &subscriptions)
+        
+        viewModel.fetchWorkouts()
+    }
+    
+    // MARK: - Actions
+    func workoutSelected(at indexPath: IndexPath) {
+        let workout = viewModel.workoutSelected(at: indexPath)
+        coordinator?.show(workout)
+    }
+    
+    @objc func plusButtonTapped(_ sender: UIButton) {
+        coordinator?.addNewWorkout(FirebaseAuthManager.currentlyLoggedInUser)
     }
 }
 
-enum Section {
-    case main
-}

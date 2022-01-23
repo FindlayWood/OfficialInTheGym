@@ -14,6 +14,7 @@ class PlayerWorkoutsViewModel {
     // MARK: - Publisher
     var workouts = CurrentValueSubject<[WorkoutModel],Never>([])
     var errorFetching = PassthroughSubject<Error,Never>()
+    
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService
     

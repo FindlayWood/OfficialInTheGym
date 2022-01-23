@@ -53,7 +53,8 @@ class FirebaseAuthManager: AuthManagerService {
                                     username: user.username,
                                     firstName: user.firstName,
                                     lastName: user.lastName,
-                                    uid: newUserID)
+                                    uid: newUserID,
+                                    accountCreated: Date().timeIntervalSince1970)
                 self.addUserToDatabase(user: newUser, completion: completion)
             }
         }

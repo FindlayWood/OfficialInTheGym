@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 // MARK: - Saved Workout Model
 /// This represents a saved workout
@@ -21,12 +22,31 @@ class SavedWorkoutModel: Codable, Hashable {
     var totalTime: Int
     var createdBy: String
     var creatorID: String
+    var timeCreated: TimeInterval?
     var title: String
     var isPrivate: Bool
     var exercises: [ExerciseModel]?
     var circuits: [CircuitModel]?
     var amraps: [AMRAPModel]?
     var emoms: [EMOMModel]?
+    
+    init(title: String, isPrivate: Bool, exercises: [ExerciseModel], circuits: [CircuitModel], amraps: [AMRAPModel], emoms: [EMOMModel]) {
+        self.savedID = UUID().uuidString
+        self.views = 0
+        self.downloads = 0
+        self.completions = 0
+        self.totalRPE = 0
+        self.totalTime = 0
+        self.createdBy = FirebaseAuthManager.currentlyLoggedInUser.username
+        self.creatorID = FirebaseAuthManager.currentlyLoggedInUser.uid
+        self.timeCreated = Date().timeIntervalSince1970
+        self.title = title
+        self.isPrivate = isPrivate
+        self.exercises = exercises
+        self.circuits = circuits
+        self.amraps = amraps
+        self.emoms = emoms
+    }
     
     static func == (lhs: SavedWorkoutModel, rhs: SavedWorkoutModel) -> Bool {
         return lhs.savedID == rhs.savedID
@@ -56,6 +76,17 @@ extension SavedWorkoutModel {
         return totalExerciseCount
     }
 }
+// MARK: - Multi Upload Points
+extension SavedWorkoutModel {
+    func viewUploadPoint() -> FirebaseMultiUploadDataPoint {
+        return FirebaseMultiUploadDataPoint(value: ServerValue.increment(1),
+                                            path: "SavedWorkouts/\(savedID)/views")
+    }
+    func downloadUploadPoint() -> FirebaseMultiUploadDataPoint {
+        return FirebaseMultiUploadDataPoint(value: ServerValue.increment(1),
+                                            path: "SavedWorkouts/\(savedID)/downloads")
+    }
+}
 
 // MARK: - Firebase Resource
 extension SavedWorkoutModel: FirebaseResource {
@@ -83,9 +114,28 @@ struct NewSavedWorkoutModel: Codable {
     var circuits: [CircuitModel]?
     var amraps: [AMRAPModel]?
     var emoms: [EMOMModel]?
+    
+    init(title: String, isPrivate: Bool, exercises: [ExerciseModel], circuits: [CircuitModel], amraps: [AMRAPModel], emoms: [EMOMModel]) {
+        self.savedID = UUID().uuidString
+        self.views = 0
+        self.downloads = 0
+        self.completions = 0
+        self.totalRPE = 0
+        self.totalTime = 0
+        self.createdBy = FirebaseAuthManager.currentlyLoggedInUser.username
+        self.creatorID = FirebaseAuthManager.currentlyLoggedInUser.uid
+        self.title = title
+        self.isPrivate = isPrivate
+        self.exercises = exercises
+        self.circuits = circuits
+        self.amraps = amraps
+        self.emoms = emoms
+    }
 }
 extension NewSavedWorkoutModel: FirebaseInstance {
     var internalPath: String {
         return "SavedWorkouts/\(savedID)"
     }
 }
+
+

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class MainWorkoutCircuitCollectionCell: UICollectionViewCell {
+class MainWorkoutCircuitCollectionCell: FullWidthCollectionViewCell {
     
     // MARK: - Properties
     static let reuseID = "MainWorkoutCircuitCollectionCell"
@@ -20,6 +20,7 @@ class MainWorkoutCircuitCollectionCell: UICollectionViewCell {
         label.text = "Circuit"
         label.font = UIFont(name: "Menlo", size: 18)
         label.textColor = .black
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -36,6 +37,7 @@ class MainWorkoutCircuitCollectionCell: UICollectionViewCell {
         let label = UILabel()
         label.font = UIFont(name: "Menlo-Bold", size: 22)
         label.textColor = .black
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -43,9 +45,8 @@ class MainWorkoutCircuitCollectionCell: UICollectionViewCell {
     var exercisesLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo", size: 15)
-        label.textAlignment = .right
-        label.text = "COMPLETED"
-        label.textColor = .green
+        label.textAlignment = .center
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -64,6 +65,9 @@ class MainWorkoutCircuitCollectionCell: UICollectionViewCell {
 // MARK: - Configure
 private extension MainWorkoutCircuitCollectionCell {
     func setupUI() {
+        backgroundColor = .offWhiteColour
+        layer.cornerRadius = 10
+        layer.masksToBounds = true
         addSubview(circuitLabel)
         addSubview(separatorView)
         addSubview(titleLabel)
@@ -96,6 +100,6 @@ private extension MainWorkoutCircuitCollectionCell {
 extension MainWorkoutCircuitCollectionCell {
     public func configure(with model: CircuitModel) {
         titleLabel.text = model.circuitName
-        exercisesLabel.text = model.exercises.count.description
+        exercisesLabel.text = model.exercises.count.description + " exercises"
     }
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 
+// MARK: - Users Model
 /// users object containing all user profile info
 struct Users: Codable, Hashable, Assignable {
     var admin: Bool
@@ -19,6 +20,7 @@ struct Users: Codable, Hashable, Assignable {
     var uid: String
     var profilePhotoURL: String?
     var profileBio: String?
+    var accountCreated: TimeInterval?
     
     var id: String {
         return uid

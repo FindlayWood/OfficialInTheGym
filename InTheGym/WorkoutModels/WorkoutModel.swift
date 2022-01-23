@@ -146,12 +146,12 @@ class workout: Completeable {
 /// Model representing a single workout
 /// Important Variables
 /// -----> assignedTo = the id of the user assigned this workout - could be self id or ither user id
-/// -----> savedID = the ID of where the workout is saved - all workouts are stored in the savedWorkouts ref
+/// -----> savedID = the ID of where the workout is saved - all workouts are stored in the savedWorkouts ref - EXCEPT Live Workouts 
 /// -----> workoutID = the ID of this specific workout - different from savedID as you may do the same saved workout more than once
 class WorkoutModel: Codable, Hashable {
     var title: String
     var workoutID: String
-    var savedID: String
+    var savedID: String?
     var creatorID: String
     var createdBy: String
     var assignedTo: String

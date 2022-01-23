@@ -13,7 +13,7 @@ import Combine
 class WorkoutExerciseCollectionDataSource: NSObject {
     
     // MARK: - Publisher
-    var rowSelected = PassthroughSubject<IndexPath,Never>()
+    var rowSelected = PassthroughSubject<ExerciseRow,Never>()
     var completeButtonTapped = PassthroughSubject<IndexPath,Never>()
     var rpeButtonTapped = PassthroughSubject<IndexPath,Never>()
     var noteButtonTapped = PassthroughSubject<IndexPath,Never>()
@@ -45,6 +45,7 @@ class WorkoutExerciseCollectionDataSource: NSObject {
             case .exercise(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainWorkoutExerciseCollectionCell.reuseID, for: indexPath) as! MainWorkoutExerciseCollectionCell
                 cell.userInteraction = self.isUserInteractionEnabled
+                cell.setUserInteraction(to: self.isUserInteractionEnabled)
                 cell.configure(with: model)
                 self.actionSubscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
@@ -103,14 +104,15 @@ class WorkoutExerciseCollectionDataSource: NSObject {
                 break
             }
         }
-        dataDource.apply(currentSnapshot, animatingDifferences: true)
+        dataDource.apply(currentSnapshot, animatingDifferences: false)
     }
 }
 // MARK: - Delegate - Select Row
 extension WorkoutExerciseCollectionDataSource: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        rowSelected.send(indexPath)
+        guard let selected = dataDource.itemIdentifier(for: indexPath) else {return}
+        rowSelected.send(selected)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

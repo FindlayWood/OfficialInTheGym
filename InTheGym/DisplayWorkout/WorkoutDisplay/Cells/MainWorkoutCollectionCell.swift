@@ -62,16 +62,17 @@ class MainWorkoutCollectionCell: UICollectionViewCell {
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupUI()
         addActions()
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
     }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setupUI()
-    }
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        setupUI()
+//    }
     func setLayout() {
         layer.borderColor = UIColor.black.cgColor
         contentView.layer.cornerRadius = 10
@@ -95,7 +96,7 @@ class MainWorkoutCollectionCell: UICollectionViewCell {
 private extension MainWorkoutCollectionCell {
     func setupUI() {
         setLayout()
-        backgroundColor = .lightColour
+        //backgroundColor = .lightColour
         contentView.addSubview(labelStack)
         contentView.addSubview(completeButton)
         configureUI()
@@ -120,11 +121,11 @@ extension MainWorkoutCollectionCell {
         repsLabel.text = model.reps.description + " reps"
         weightLabel.text = model.weight
         if model.completed {
-            backgroundColor = .darkColour
+            self.backgroundColor = .darkColour
             completeButton.setImage(UIImage(named: "tickRing"), for: .normal)
             completeButton.isUserInteractionEnabled = false
         } else {
-            backgroundColor = .lightColour
+            self.backgroundColor = .lightColour
             completeButton.setImage(UIImage(named: "emptyRing"), for: .normal)
             completeButton.isUserInteractionEnabled = true
         }

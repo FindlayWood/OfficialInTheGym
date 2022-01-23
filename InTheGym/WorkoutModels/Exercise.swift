@@ -123,17 +123,15 @@ class ExerciseModel: ExerciseType, Codable, Hashable {
     var completedSets: [Bool]
     var sets: Int
     var rpe: Int?
-    var completed: Bool?
     
     init(exercise: String, type: bodyType) {
         self.workoutPosition = 0
         self.exercise = exercise
-        self.reps = []
-        self.weight = []
+        self.reps = [Int]()
+        self.weight = [String]()
         self.type = type
-        self.completedSets = []
+        self.completedSets = [Bool]()
         self.sets = 0
-        self.completed = false
     }
     
     func getSets() -> [ExerciseSet] {

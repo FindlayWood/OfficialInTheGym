@@ -39,14 +39,6 @@ class DisplayingWorkoutsView: UIView {
         return view
     }()
     
-    var tableview: UITableView = {
-        let view = UITableView()
-        view.backgroundColor = .lightColour
-        view.register(WorkoutTableViewCell.self, forCellReuseIdentifier: WorkoutTableViewCell.cellID)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -76,9 +68,9 @@ private extension DisplayingWorkoutsView {
             plusButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -0),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
@@ -87,9 +79,8 @@ private extension DisplayingWorkoutsView {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 5
         layout.minimumLineSpacing = 10
-        layout.itemSize = CGSize(width: Constants.screenSize.width - 20, height: 160)
-        //layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        layout.estimatedItemSize = CGSize(width: Constants.screenSize.width - 20, height: 160)
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 10, bottom: 0, right: 10)
         layout.scrollDirection = .vertical
         return layout
     }

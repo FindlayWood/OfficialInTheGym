@@ -30,6 +30,9 @@ class SavedWorkoutDisplayViewController: UIViewController {
         initDataSource()
         setupSubscriptions()
         initNavBarButton()
+        viewModel.addAView()
+        display.addBottomView()
+        display.bottomView.title = viewModel.savedWorkout.title
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -65,9 +68,8 @@ class SavedWorkoutDisplayViewController: UIViewController {
             }
             .store(in: &subscriptions)
         dataSource.rpeButtonTapped
-            .sink { index in
-                print("rpe tapped at \(index)")
-            }
+            .debounce(for: 0.3, scheduler: DispatchQueue.main)
+            .sink { [weak self] in self?.rpe(index: $0)}
             .store(in: &subscriptions)
         dataSource.showClipPublisher
             .debounce(for: 0.5, scheduler: RunLoop.main)
@@ -85,11 +87,27 @@ class SavedWorkoutDisplayViewController: UIViewController {
                 print("exercise tapped \(index)")
             }
             .store(in: &subscriptions)
+        
+        display.bottomView.readyToStartWorkout
+            .sink { [weak self] in
+                self?.display.bottomView.removeFromSuperview()
+                self?.display.flashView.removeFromSuperview()
+            }
+            .store(in: &subscriptions)
     }
     
     // MARK: - Actions
     @objc func showOptions() {
         coordinator?.showOptions(for: viewModel.savedWorkout)
+    }
+    // MARK: - RPE
+    func rpe(index: IndexPath) {
+        showRPEAlert(for: index) { [weak self] index, score in
+            guard let self = self else {return}
+            guard let cell = self.display.exerciseCollection.cellForItem(at: index) else {return}
+            cell.flash(with: score)
+            self.viewModel.updateRPE(at: index, to: score)
+        }
     }
 
 }

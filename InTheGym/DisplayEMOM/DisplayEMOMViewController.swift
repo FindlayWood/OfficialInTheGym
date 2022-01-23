@@ -92,13 +92,13 @@ class DisplayEMOMViewController: UIViewController {
         
         viewModel.minuteCompleted = { [weak self] in
             guard let self = self else {return}
-            guard let numberOfExercises = self.emom.exercises?.count else {return}
-            guard let exercises = self.emom.exercises else {return}
+            let numberOfExercises = self.viewModel.emomModel.exercises.count
+            let exercises = self.viewModel.emomModel.exercises
             let completedPosition = self.exerciseIndex % numberOfExercises
-            if let exerciseName = exercises[completedPosition].exercise,
-               let exerciseReps = exercises[completedPosition].reps {
-                FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exerciseName, reps: exerciseReps, weight: nil)
-            }
+            let exerciseName = exercises[completedPosition].exercise
+            let exerciseReps = exercises[completedPosition].reps[0]
+            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exerciseName, reps: exerciseReps, weight: nil)
+            
             self.exerciseIndex += 1
             let position = self.exerciseIndex % numberOfExercises
             self.display.exerciseView.configure(with: exercises[position])
@@ -106,20 +106,21 @@ class DisplayEMOMViewController: UIViewController {
             
         }
         
-        guard let fullTime = emom.timeLimit else {return}
+        let fullTime = viewModel.emomModel.timeLimit
         viewModel.mainTimerVariable = fullTime
         viewModel.workout = workout
         viewModel.position = position
     }
     
     func initDisplay() {
-        if emom.started ?? false {
-            // TODO: - Calculate start time
-            navigationItem.rightBarButtonItem?.isEnabled = false
-        }
-        guard let exerciseOne = emom.exercises?[exerciseIndex] else {return}
+//        if emom.started ?? false {
+//            // TODO: - Calculate start time
+//            navigationItem.rightBarButtonItem?.isEnabled = false
+//        }
+        navigationItem.rightBarButtonItem?.isEnabled = !viewModel.emomModel.completed
+        let exerciseOne = viewModel.emomModel.exercises[exerciseIndex]
         display.exerciseView.configure(with: exerciseOne)
-        display.initialMainTime.text = emom.timeLimit?.convertToTime()
+        display.initialMainTime.text = viewModel.emomModel.timeLimit.convertToTime()
         display.initialMinuteTime.text = 60.convertToTime()
     }
     

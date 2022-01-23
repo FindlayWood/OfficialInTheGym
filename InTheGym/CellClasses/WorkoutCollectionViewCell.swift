@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WorkoutCollectionViewCell: UICollectionViewCell {
+class WorkoutCollectionViewCell: FullWidthCollectionViewCell {
     
     // MARK: - Properties
     var iconDimension: CGFloat = 30
@@ -107,6 +107,10 @@ class WorkoutCollectionViewCell: UICollectionViewCell {
         super.init(coder: coder)
         setupUI()
     }
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        setupUI()
+//    }
 }
 // MARK: - Configure
 private extension WorkoutCollectionViewCell {
@@ -127,18 +131,12 @@ private extension WorkoutCollectionViewCell {
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            completedLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
-            completedLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            completedLabel.widthAnchor.constraint(equalToConstant: 112),
             
-            //titleLabel.widthAnchor.constraint(equalToConstant: Constants.screenSize.width - 30),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            titleLabel.trailingAnchor.constraint(equalTo: completedLabel.leadingAnchor, constant: -5),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
             
-            
-            
-            //creatorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
+            creatorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
             creatorIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             creatorIcon.centerYAnchor.constraint(equalTo: creatorLabel.centerYAnchor),
             creatorLabel.leadingAnchor.constraint(equalTo: creatorIcon.trailingAnchor, constant: 5),
@@ -148,17 +146,19 @@ private extension WorkoutCollectionViewCell {
             exerciseIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             exerciseIcon.centerYAnchor.constraint(equalTo: exerciseCountLabel.centerYAnchor),
             exerciseCountLabel.leadingAnchor.constraint(equalTo: exerciseIcon.trailingAnchor, constant: 5),
-            //exerciseCountLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             
             timeLabel.topAnchor.constraint(equalTo: exerciseCountLabel.bottomAnchor, constant: 10),
             clockIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             clockIcon.centerYAnchor.constraint(equalTo: timeLabel.centerYAnchor),
             timeLabel.leadingAnchor.constraint(equalTo: clockIcon.trailingAnchor, constant: 5),
-            timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            clockIcon.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            timeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             
             scoreLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            scoreLabel.centerYAnchor.constraint(equalTo: timeLabel.centerYAnchor)
+            scoreLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            
+            completedLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
+            completedLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            completedLabel.widthAnchor.constraint(equalToConstant: 112),
         ])
     }
 }

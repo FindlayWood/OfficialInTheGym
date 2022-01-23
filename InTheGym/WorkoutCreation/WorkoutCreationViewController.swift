@@ -28,9 +28,7 @@ class WorkoutCreationViewController: UIViewController {
     // MARK: - Store Subscriptions
     private var subscriptions = Set<AnyCancellable>()
     
-    // MARK: - Assign To User
-    /// The user to assign this workout to - if nil then just adding to created workouts with save option
-    var assignTo: Users?
+
     
     
     // MARK: - View setup
@@ -71,7 +69,7 @@ class WorkoutCreationViewController: UIViewController {
     }
     
     func initDisplay() {
-        display.configure(with: assignTo)
+        display.configure(with: viewModel.assignTo)
         display.workoutTitleField.delegate = self
     }
     
@@ -125,8 +123,7 @@ class WorkoutCreationViewController: UIViewController {
 extension WorkoutCreationViewController {
     @objc func uploadPressed(_ sender: UIBarButtonItem) {
         let options = WorkoutOptionsModel(isPrivate: display.privacyView.isPrivate, save: display.saveView.saving)
-        viewModel.upload(to: assignTo, with: options)
-//        coordinator?.upload()
+        viewModel.upload(with: options)
     }
     @objc func plusButtonPressed(_ sender: UIButton) {
         coordinator?.plus(viewModel: viewModel, workoutPosition: viewModel.exercises.value.count)

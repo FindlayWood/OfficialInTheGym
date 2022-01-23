@@ -32,6 +32,10 @@ class WorkoutCreationViewModel: ExerciseAdding {
     // MARK: - Properties
     var workoutList: WorkoutsList!
     
+    // MARK: - Assign To User
+    /// The user to assign this workout to - if nil then just adding to created workouts with save option
+    var assignTo: Users?
+    
     var subscriptions = Set<AnyCancellable>()
    
     var apiService: FirebaseDatabaseManagerService
@@ -79,21 +83,13 @@ class WorkoutCreationViewModel: ExerciseAdding {
     }
     
     //MARK: - Actions
-    func upload(to user: Users?, with options: WorkoutOptionsModel) {
-        let newSavedWorkout = NewSavedWorkoutModel(savedID: UUID().uuidString,
-                                              views: 0,
-                                              downloads: 0,
-                                              completions: 0,
-                                              totalRPE: 0,
-                                              totalTime: 0,
-                                              createdBy: FirebaseAuthManager.currentlyLoggedInUser.username,
-                                              creatorID: FirebaseAuthManager.currentlyLoggedInUser.uid,
-                                              title: workoutTitle,
-                                              isPrivate: options.isPrivate,
-                                              exercises: exerciseModels,
-                                              circuits: circuitModels,
-                                              amraps: amrapModels,
-                                              emoms: emomModels)
+    func upload(with options: WorkoutOptionsModel) {
+        let newSavedWorkout = SavedWorkoutModel(title: workoutTitle,
+                                                isPrivate: options.isPrivate,
+                                                exercises: exerciseModels,
+                                                circuits: circuitModels,
+                                                amraps: amrapModels,
+                                                emoms: emomModels)
         
 
         
@@ -116,9 +112,9 @@ class WorkoutCreationViewModel: ExerciseAdding {
         }
         
         // TODO: - If assign != nil upload workout to user
-        if let assignTo = user {
+        if let assignTo = assignTo {
             // TODO: - Create New Workout
-            let newWorkout = WorkoutModel(newSavedModel: newSavedWorkout, assignTo: assignTo.uid)
+            let newWorkout = WorkoutModel(savedModel: newSavedWorkout, assignTo: assignTo.uid)
             if let newWorkoutJSON = newWorkout.toFirebaseJSON() {
                 multiUploadPoints.append(newWorkoutJSON)
             }

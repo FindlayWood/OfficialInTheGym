@@ -118,11 +118,9 @@ private extension AMRAPExerciseView {
 
 // MARK: - Configure
 extension AMRAPExerciseView {
-    public func configure(with exercise: exercise) {
+    public func configure(with exercise: ExerciseModel) {
         exerciseLabel.text = exercise.exercise
-        repLabel.text = exercise.reps?.description
-        if let weight = exercise.weight {
-            weightLabel.text = weight
-        }
+        repLabel.text = exercise.reps[0].description
+        weightLabel.text = exercise.weight[0]
     }
 }

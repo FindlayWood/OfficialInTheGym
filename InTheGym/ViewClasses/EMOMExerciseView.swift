@@ -85,12 +85,9 @@ private extension EMOMExerciseView {
 
 // MARK: - Public Configuartion
 extension EMOMExerciseView {
-    func configure(with exercise: exercise) {
-        guard let name = exercise.exercise,
-              let rep = exercise.reps
-        else {
-            return
-        }
+    func configure(with exercise: ExerciseModel) {
+        let name = exercise.exercise
+        let rep = exercise.reps[0]
         exerciseLabel.text = name
         repLabel.text = rep.description
     }

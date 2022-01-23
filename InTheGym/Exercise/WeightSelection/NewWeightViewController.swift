@@ -268,12 +268,8 @@ class NewWeightViewController: UIViewController, Storyboarded {
 
 extension NewWeightViewController: WeightAdapterProtocol {
     func getData(at indexPath: Int) -> WeightModel {
-//        guard let exercise = newExercise else {return WeightModel(rep: 0, weight: "", index: 0)}
-//        let rep = exercise.repArray?[indexPath] ?? 0
-//        let weight = exercise.weightArray?[indexPath] ?? WeightArray[indexPath]
-//        return WeightModel(rep: rep, weight: weight, index: indexPath + 1)
         let rep = exerciseViewModel?.exercise.reps[indexPath] ?? 0
-        let weight = exerciseViewModel?.exercise.weight[indexPath] ?? WeightArray[indexPath]
+        let weight = WeightArray[indexPath]
         return WeightModel(rep: rep, weight: weight, index: indexPath + 1)
     }
     

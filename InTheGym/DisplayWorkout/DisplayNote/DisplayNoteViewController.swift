@@ -27,7 +27,7 @@ class DisplayNoteViewController: UIViewController {
         view.addSubview(display)
     }
     func initDisplay() {
-        display.cancelButton.addTarget(self, action: #selector(remove), for: .touchUpInside)
+        display.cancelButton.addTarget(self, action: #selector(removeNote), for: .touchUpInside)
         display.saveButton.addTarget(self, action: #selector(saveTapped(_:)), for: .touchUpInside)
         display.configureView(with: currentNote)
         display.note.delegate = self
@@ -40,7 +40,7 @@ class DisplayNoteViewController: UIViewController {
 
 // MARK: - Actions
 extension DisplayNoteViewController {
-    @objc func remove() {
+    @objc func removeNote() {
         self.dismiss(animated: true, completion: nil)
     }
     @objc func saveTapped(_ sender: UIButton) {

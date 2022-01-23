@@ -10,8 +10,7 @@ import Foundation
 
 // MARK: - Saved Workout Keys Model
 /// Used to fetch keys for saved workouts of current user
-///
-
+/// and to load single instances of saved workouts
 struct SavedWorkoutKeyModel {
     var id: String
 }
@@ -26,8 +25,13 @@ extension SavedWorkoutKeyModel: FirebaseResource {
 
 // MARK: - Saved Workout Reference Model
 /// used to check whether a user has saved this workout
+/// and to upload a new saved workout
 struct SavedWorkoutReferenceModel {
     var id: String
+    
+    func toMultipUploadPoint() -> FirebaseMultiUploadDataPoint {
+        return FirebaseMultiUploadDataPoint(value: true, path: internalPath)
+    }
 }
 extension SavedWorkoutReferenceModel: FirebaseInstance {
     var internalPath: String {

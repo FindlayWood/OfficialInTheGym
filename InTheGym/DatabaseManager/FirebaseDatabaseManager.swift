@@ -16,7 +16,14 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         for datum in data {
             keyPaths[datum.path] = datum.value
         }
-        print(keyPaths)
+        let dbref = Database.database().reference()
+        dbref.updateChildValues(keyPaths) { error, _ in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
     }
     
     func incrementingValue(by increment: Int, at path: String, completion: @escaping (Result<Void, Error>) -> Void) {

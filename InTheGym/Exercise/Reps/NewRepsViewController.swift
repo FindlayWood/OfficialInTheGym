@@ -234,6 +234,7 @@ extension NewRepsViewController{
 //        coordinator?.repsSelected(newExercise)
         if exerciseViewModel?.exercisekind == .amrap || exerciseViewModel?.exercisekind == .emom {
             exerciseViewModel?.addReps([repCounter])
+            exerciseViewModel?.addSets(1)
         } else {
             exerciseViewModel?.addReps(repIntArray)
         }

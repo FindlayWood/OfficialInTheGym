@@ -11,7 +11,7 @@ import SCLAlertView
 
 class DisplayWorkoutViewController: UIViewController, Storyboarded {
     
-    weak var coordinator: WorkoutDisplayCoordinator?
+    weak var coordinator: WorkoutDisplayCoordinatorDelegate?
     
     var flashView: FlashView!
     var bottomView: WorkoutBottomView!
@@ -403,7 +403,7 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol {
     }
     
     
-    
+    // MARK: - RPE
     func rpeButtonTappped(on tableviewcell: UITableViewCell, sender: UIButton, collection: UICollectionView) {
         let index = display.tableview.indexPath(for: tableviewcell)
         let alert = SCLAlertView()

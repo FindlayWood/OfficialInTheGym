@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Combine
 
-class MainWorkoutExerciseCollectionCell: UICollectionViewCell {
+class MainWorkoutExerciseCollectionCell: FullWidthCollectionViewCell {
     
     // MARK: - Publishers
     var completedAt = PassthroughSubject<IndexPath,Never>()
@@ -27,6 +27,8 @@ class MainWorkoutExerciseCollectionCell: UICollectionViewCell {
         let button = UIButton()
         button.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 29)
         button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        button.titleLabel?.minimumScaleFactor = 0.2
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -74,7 +76,7 @@ class MainWorkoutExerciseCollectionCell: UICollectionViewCell {
     
     var bottomSeparatorView: UIView = {
         let view = UIView()
-        view.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 1).isActive = true
         view.backgroundColor = .black
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -102,6 +104,7 @@ class MainWorkoutExerciseCollectionCell: UICollectionViewCell {
         button.setTitle("RPE", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         button.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 22)
+        button.addTarget(self, action: #selector(rpeTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -109,14 +112,10 @@ class MainWorkoutExerciseCollectionCell: UICollectionViewCell {
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupSubscriptions()
+        setupUI()
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupUI()
-    }
-    override func layoutSubviews() {
-        super.layoutSubviews()
         setupUI()
     }
     override func prepareForReuse() {
@@ -139,6 +138,9 @@ class MainWorkoutExerciseCollectionCell: UICollectionViewCell {
     func buttonActions(_ action: ExerciseAction) {
         actionPublisher.send(action)
     }
+    @objc func rpeTapped(_ sender: UIButton) {
+        actionPublisher.send(.rpeButton)
+    }
     
 }
 // MARK: - Configure
@@ -146,16 +148,17 @@ private extension MainWorkoutExerciseCollectionCell {
     func setupUI() {
         backgroundColor = .offWhiteColour
         layer.cornerRadius = 10
+        contentView.layer.cornerRadius = 10
         contentView.addSubview(exerciseNameButton)
         contentView.addSubview(topSeparatorView)
         contentView.addSubview(setsLabel)
         contentView.addSubview(repsLabel)
-        contentView.addSubview(bodyTypeLabel)
         contentView.addSubview(collectionView)
         contentView.addSubview(bottomSeparatorView)
         contentView.addSubview(noteButton)
         contentView.addSubview(clipButton)
         contentView.addSubview(rpeButton)
+        contentView.addSubview(bodyTypeLabel)
         configureUI()
     }
     
@@ -171,31 +174,31 @@ private extension MainWorkoutExerciseCollectionCell {
             
             setsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             setsLabel.topAnchor.constraint(equalTo: topSeparatorView.bottomAnchor, constant: 6),
-            setsLabel.heightAnchor.constraint(equalToConstant: 30),
-            
-            bodyTypeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            bodyTypeLabel.topAnchor.constraint(equalTo: topSeparatorView.bottomAnchor, constant: 6),
-            
+
             repsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             repsLabel.topAnchor.constraint(equalTo: setsLabel.bottomAnchor, constant: 4),
-            
+
             collectionView.topAnchor.constraint(equalTo: repsLabel.bottomAnchor, constant: 10),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
+
             bottomSeparatorView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 10),
             bottomSeparatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
             bottomSeparatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
-            
+
             noteButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             noteButton.topAnchor.constraint(equalTo: bottomSeparatorView.bottomAnchor, constant: 6),
-            noteButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
-            
-            clipButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            noteButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+
             clipButton.centerYAnchor.constraint(equalTo: noteButton.centerYAnchor),
-            
+            clipButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+
             rpeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            rpeButton.topAnchor.constraint(equalTo: bottomSeparatorView.bottomAnchor, constant: 6)
+            rpeButton.topAnchor.constraint(equalTo: bottomSeparatorView.bottomAnchor, constant: 6),
+            rpeButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+
+            bodyTypeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            bodyTypeLabel.topAnchor.constraint(equalTo: topSeparatorView.bottomAnchor, constant: 6),
             
         ])
     }
@@ -226,6 +229,10 @@ extension MainWorkoutExerciseCollectionCell {
         dataSource.completeButtonTapped
             .sink { [weak self] in self?.actionPublisher.send(.completed($0)) }
             .store(in: &subscriptions)
+    }
+    public func setUserInteraction(to enabled: Bool) {
+        self.rpeButton.isUserInteractionEnabled = enabled
+        self.clipButton.isUserInteractionEnabled = enabled
     }
 }
 

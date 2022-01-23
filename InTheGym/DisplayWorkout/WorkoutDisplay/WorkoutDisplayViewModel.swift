@@ -12,7 +12,7 @@ import Combine
 class WorkoutDisplayViewModel {
     
     // MARK: - Properties
-    var workout: SavedWorkoutModel!
+    var workout: WorkoutModel!
     
     lazy var exercises: [ExerciseType] = {
         var exercises = [ExerciseType]()
@@ -32,14 +32,55 @@ class WorkoutDisplayViewModel {
         return exercises.sorted(by: { $0.workoutPosition < $1.workoutPosition} )
     }
     
+    var apiService: FirebaseDatabaseManagerService
+    
+    // MARK: - Initializer
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
+        self.apiService = apiService
+    }
+    
+    // MARK: - Updating Functions
+    
+    func startWorkout() {
+        let time = Date().timeIntervalSince1970
+        workout.startTime = time
+        let startUpdateModel = StartWorkoutModel(workout: workout)
+        let uploadPoint = FirebaseMultiUploadDataPoint(value: time, path: startUpdateModel.internalPath)
+        
+    }
     func completeSet(at index: IndexPath) {
-        print(index)
-        if let exerciseIndex = workout.exercises?.firstIndex(where: {$0.workoutPosition == index.section }) {
-            print(exerciseIndex)
-            workout.exercises?[exerciseIndex].completedSets[index.item] = true
-        }
+        guard let exercise = exercises[index.section] as? ExerciseModel else {return}
+        exercise.completedSets[index.item] = true
+        let setUpdateModel = SetUpdateModel(workoutID: workout.workoutID, exercise: exercise, setNumber: index.item)
+        let uploadPoint = FirebaseMultiUploadDataPoint(value: true, path: setUpdateModel.internalPath)
+        
+//        if let exerciseIndex = workout.exercises?.firstIndex(where: {$0.workoutPosition == index.section }) {
+//            print(exerciseIndex)
+//            workout.exercises?[exerciseIndex].completedSets[index.item] = true
+//        }
         
 //        let exercise = exercises[index.item] as! ExerciseModel
 //        exercise.completedSets[index.section] = true
+    }
+    
+    func updateRPE(at index: IndexPath, to score: Int) {
+        guard let exercise = exercises[index.item] as? ExerciseModel else {return}
+        exercise.rpe = score
+        let rpeUpdateModel = RPEUpdateModel(workoutID: workout.workoutID, exercise: exercise)
+        let uploadPoint = FirebaseMultiUploadDataPoint(value: score, path: rpeUpdateModel.internalPath)
+        
+    }
+    
+    // MARK: - Retreive Function
+    func isInteractionEnabled() -> Bool {
+        if workout.startTime != nil && !workout.completed {
+            return true
+        } else {
+            return false
+        }
+    }
+    // MARK: - Actions
+    func completed() {
+        
     }
 }

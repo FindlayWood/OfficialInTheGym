@@ -10,6 +10,7 @@ import Foundation
 
 class SavedWorkoutDisplayViewModel {
     
+    // MARK: - Properties
     var savedWorkout: SavedWorkoutModel!
     
     lazy var exercises: [ExerciseType] = {
@@ -20,4 +21,41 @@ class SavedWorkoutDisplayViewModel {
         exercises.append(contentsOf: savedWorkout.emoms ?? [])
         return exercises.sorted(by: { $0.workoutPosition < $1.workoutPosition} )
     }()
+    
+    var apiService: FirebaseDatabaseManagerService
+    
+    // MARK: - Initializer
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
+        self.apiService = apiService
+    }
+    
+    func updateRPE(at index: IndexPath, to score: Int) {
+        guard let exercise = exercises[index.item] as? ExerciseModel else {return}
+        exercise.rpe = score
+        let rpeUpdateModel = RPEUpdateModel(workoutID: savedWorkout.savedID, exercise: exercise)
+        let uploadPoint = FirebaseMultiUploadDataPoint(value: score, path: rpeUpdateModel.internalPath)
+        apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
+            switch result {
+            case .success(()):
+                print("success")
+            case .failure(let error):
+                print("error")
+            }
+        }
+    }
+    
+    func addAView() {
+        if savedWorkout.creatorID != FirebaseAuthManager.currentlyLoggedInUser.uid {
+            let uploadPoints: [FirebaseMultiUploadDataPoint] = [savedWorkout.viewUploadPoint()]
+            apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
+                guard let self = self else {return}
+                switch result {
+                case .success(()):
+                    print("successfully uploaded to saved and added a download")
+                case .failure(let error):
+                    print(String(describing: error))
+                }
+            }
+        }
+    }
 }

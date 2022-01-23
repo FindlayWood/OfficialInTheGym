@@ -11,14 +11,16 @@ import UIKit
 class WorkoutCreationCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var assignTo: Users?
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, assignTo: Users?) {
         self.navigationController = navigationController
-    }
-    
+        self.assignTo = assignTo
+    }            
     func start() {
         let vc = WorkoutCreationViewController()
         vc.coordinator = self
+        vc.viewModel.assignTo = assignTo
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }

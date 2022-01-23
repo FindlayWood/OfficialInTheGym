@@ -189,7 +189,7 @@ extension LiveWorkoutCoordinator: CircuitParentDelegate {
     }
 }
 
-extension LiveWorkoutCoordinator: WorkoutDisplayCoordinator {
+extension LiveWorkoutCoordinator: WorkoutDisplayCoordinatorDelegate {
     func showCompletedPage() {
         // not implemented
     }
