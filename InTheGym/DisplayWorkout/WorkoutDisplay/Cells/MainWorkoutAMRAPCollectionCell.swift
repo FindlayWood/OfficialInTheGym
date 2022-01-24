@@ -132,6 +132,6 @@ extension MainWorkoutAMRAPCollectionCell {
     
     func configure(with model: AMRAPModel) {
         exerciseLabel.text = model.exercises.count.description + " exercises"
-        timeLabel.text = model.timeLimit.convertToWorkoutTime()
+        timeLabel.text = model.timeLimit.convertToTime()
     }
 }

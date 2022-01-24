@@ -12,7 +12,10 @@ class DisplayEMOMViewModel {
     
     // MARK: - Properties
     var emomModel: EMOMModel!
+    
     var workoutModel: WorkoutModel!
+    
+    var exerciseIndex: Int = 0
     
     // MARK: - Callbacks
         ///timer callbacks
@@ -23,6 +26,9 @@ class DisplayEMOMViewModel {
     var minuteCompleted:(()->())?
         ///database callbacks
     var rpeScoreUploaded:(()->())?
+    var connectionError:(()->())?
+    
+    var exerciseToShow:((ExerciseModel)->())?
     
     // MARK: - Testing Variables
     var successfullyStartedEMOM: Bool = false
@@ -44,10 +50,10 @@ class DisplayEMOMViewModel {
     var position: Int!
     
     // MARK: - API Service
-    var apiService: EMOMFirebaseServiceProtocol!
+    var apiService: FirebaseDatabaseManagerService
     
     // MARK: - Initializer
-    init(apiService: EMOMFirebaseServiceProtocol = EMOMFirebaseService.shared) {
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
     
@@ -66,7 +72,6 @@ class DisplayEMOMViewModel {
             mainTimer.invalidate()
             mainTimerCompleted?()
         }
-        
         if minuteTimerVariable > 0 {
             minuteTimerVariable -= 1
             updateMinuteTimerClosure?(minuteTimerVariable)
@@ -80,29 +85,47 @@ class DisplayEMOMViewModel {
     // MARK: - Starting EMOM
     func startEMOM() {
         // TODO: - Update Firebase started = true
+        startTimers()
+        emomModel.started = true
 
+    }
+    func completedMinute() {
+        let numberOfExercises = emomModel.exercises.count
+        let exercises = emomModel.exercises
+        let completedPosition = exerciseIndex % numberOfExercises
+        let exerciseName = exercises[completedPosition].exercise
+        let exerciseReps = exercises[completedPosition].reps[0]
+        exerciseIndex += 1
+        let position = exerciseIndex % numberOfExercises
+        exerciseToShow?(exercises[position])
     }
     func emomCompleted() {
         // TODO: - Update Firebase completed = true
-        apiService.completedEMOM(on: workout, at: position) { [weak self] result in
+        let uploadModel = EMOMUpdateModel(workout: workoutModel, emom: emomModel, type: .completed)
+        let uploadPoint = uploadModel.uploadModel()
+        apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(()):
-                self.successfullyCompletedEMOM = true
-            case .failure(let error):
-                self.errorCompleting = error
+                break
+            case .failure(_):
+                //TODO: - Show connection error message
+                break
             }
         }
     }
     func rpeScoreGiven(_ score: Int) {
         // TODO: - Update Firebase and return when completed
-        apiService.uploadRPEScore(on: workout, at: position, with: score) { [weak self] result in
+        let uploadModel = EMOMUpdateModel(workout: workoutModel, emom: emomModel, type: .rpe(score))
+        let uploadPoint = uploadModel.uploadModel()
+        apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(()):
-                self.successfullyUploadedRPEScore = true
-            case .failure(let error):
-                self.errorUploadingScore = error
+                break
+            case .failure(_):
+                // TODO: - Show Connection Error Message
+                break
             }
         }
     }

@@ -26,14 +26,15 @@ class DisplayAMRAPViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        addStartButton()
+        initNavBar()
         setup()
         initViewModel()
+        initDisplay()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
+        display.frame = getViewableFrameWithBottomSafeArea()
         displayAllExercises.frame = display.frame.insetBy(dx: 20, dy: 40)
         view.insertSubview(display, at: 0)
     }
@@ -49,15 +50,17 @@ class DisplayAMRAPViewController: UIViewController {
     func initNavBar() {
         let barButton = UIBarButtonItem(title: "Start", style: .done, target: self, action: #selector(startTimer))
         navigationItem.rightBarButtonItem = barButton
+        navigationItem.rightBarButtonItem?.isEnabled = viewModel.isStartButtonEnabled()
     }
     
     func initDisplay() {
-        navigationItem.rightBarButtonItem?.isEnabled = !viewModel.amrapModel.completed
-        let firstExercise = viewModel.amrapModel.exercises[0]
-        display.amrapExerciseView.configure(with: firstExercise)
+        display.amrapExerciseView.configure(with: viewModel.getCurrentExercise())
         let initialTime = viewModel.amrapModel.timeLimit
-        display.initialTimeLabel.text = (initialTime * 60).convertToTime()
+        display.initialTimeLabel.text = initialTime.convertToTime()
+        display.updateRounds(with: viewModel.amrapModel.roundsCompleted)
+        display.updateExercises(with: viewModel.amrapModel.exercisesCompleted)
         display.amrapExerciseView.doneButton.addTarget(self, action: #selector(doneButtonTapped(_:)), for: .touchUpInside)
+        display.amrapExerciseView.doneButton.isEnabled = viewModel.isDoneButtonEnabled()
     }
     
     func setup() {
@@ -69,32 +72,43 @@ class DisplayAMRAPViewController: UIViewController {
 
     }
     
+    // MARK: - Init View Model
     func initViewModel() {
         viewModel.updateTimeLabelHandler = { [weak self] newValue in
             guard let self = self else {return}
-            self.display.timeLabel.text = newValue
+            self.display.updateTimeLabel(with: newValue)
+            self.display.updateTimerProgress(with: CGFloat(self.viewModel.getProgress(for: newValue)))
         }
         viewModel.updateRoundsLabelHandler = { [weak self] newValue in
             guard let self = self else {return}
-            self.display.roundsLabel.text = newValue
+            self.display.updateRounds(with: newValue)
         }
         viewModel.updateExercisesLabelHandler = { [weak self] newValue in
             guard let self = self else {return}
-            self.display.exerciseLabel.text = newValue
+            self.display.updateExercises(with: newValue)
         }
-        viewModel.updateTimeLabelToRedHandler = { [weak self] in
+        viewModel.updateCurrentExercise = { [weak self] newValue in
             guard let self = self else {return}
-            self.display.timeLabel.textColor = .red
+            self.display.amrapExerciseView.configure(with: newValue)
         }
         viewModel.timerCompleted = { [weak self] in
             guard let self = self else {return}
             self.navigationItem.hidesBackButton = false
+            self.display.amrapExerciseView.doneButton.isEnabled = false
+            self.showRPEAMRAP(completion: self.viewModel.rpeScoreGiven(_:))
+        }
+        viewModel.connectionError = { [weak self] in
+            guard let self = self else {return}
+            self.displayTopMessage(with: "Connection Error!")
         }
     }
 }
 
+// MARK: - Actions
 extension DisplayAMRAPViewController {
     @objc func startTimer() {
+        display.initialTimeLabel.removeFromSuperview()
+        display.amrapExerciseView.doneButton.isEnabled = true
         viewModel.startTimer()
         navigationItem.rightBarButtonItem?.isEnabled = false
         navigationItem.hidesBackButton = true
@@ -103,19 +117,17 @@ extension DisplayAMRAPViewController {
         view.addSubview(displayAllExercises)
     }
     @objc func doneButtonTapped(_ sender: UIButton) {
-        exerciseCompleted()
+        viewModel.exerciseCompleted()
     }
 
 }
 
+// MARK: - Display All Exercises Delegate
 extension DisplayAMRAPViewController: DisplayAMRAPProtocol {
-    func getExercise(at indexPath: IndexPath) -> exercise {
+    func getExercise(at indexPath: IndexPath) -> ExerciseModel {
         return viewModel.getExercises(at: indexPath)
     }
     func numberOfExercises() -> Int {
         return viewModel.numberOfExercises()
-    }
-    func exerciseCompleted() {
-        viewModel.exerciseCompleted()
     }
 }

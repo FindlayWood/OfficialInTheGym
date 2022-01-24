@@ -8,7 +8,6 @@
 
 import Foundation
 
-@available(iOS 13.0, *)
 class DisplayAMRAPViewModel {
     
     // MARK: - Properties
@@ -16,11 +15,13 @@ class DisplayAMRAPViewModel {
     var workoutModel: WorkoutModel!
     
     // MARK: - Callbacks
-    var updateTimeLabelHandler: ((String)->())?
-    var updateRoundsLabelHandler: ((String)->())?
-    var updateExercisesLabelHandler: ((String)->())?
+    var updateTimeLabelHandler: ((Int)->())?
+    var updateRoundsLabelHandler: ((Int)->())?
+    var updateExercisesLabelHandler: ((Int)->())?
+    var updateCurrentExercise: ((ExerciseModel)->())?
     var updateTimeLabelToRedHandler: (()->())?
     var timerCompleted: (()->())?
+    var connectionError: (()->())?
     
     // MARK: - Properties
     
@@ -34,6 +35,103 @@ class DisplayAMRAPViewModel {
         self.apiService = apiService
     }
     
+
+    // MARK: - Start AMRAP
+    func start() {
+        // TODO: - Start the timer
+        amrapModel.started = true
+        startTimer()
+    }
+
+
+    // MARK: - Timer
+    func startTimer() {
+        seconds = amrapModel.timeLimit
+        updateTimeLabelHandler?(seconds)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+
+    }
+    @objc func updateTimer() {
+        if seconds > 0 {
+            seconds -= 1
+            updateTimeLabelHandler?(seconds)
+        } else {
+            timer.invalidate()
+            timerCompleted?()
+            amrapCompleted()
+        }
+    }
+    
+    // MARK: - Complete Exercise
+    func exerciseCompleted() {
+        amrapModel.exercisesCompleted += 1
+        updateExercisesLabelHandler?(amrapModel.exercisesCompleted)
+        updateCurrentExercise?(getCurrentExercise())
+        updateDataBase(with: .exercises)
+        if amrapModel.exercisesCompleted % amrapModel.exercises.count == 0 {
+            amrapModel.roundsCompleted += 1
+            updateRoundsLabelHandler?(amrapModel.roundsCompleted)
+            updateDataBase(with: .rounds)
+        }
+    }
+    // MARK: - AMRAP Completed
+    func amrapCompleted() {
+        amrapModel.completed = true
+        updateDataBase(with: .completed)
+    }
+    func rpeScoreGiven(_ score: Int) {
+        let updateModel = AMRAPUpdateModel(workout: workoutModel, amrap: amrapModel, type: .rpe(score))
+        let uploadPoint = updateModel.uploadModel()
+        apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(()):
+                break
+            case .failure(_):
+                self.connectionError?()
+            }
+        }
+    }
+    
+    // MARK: - API Database Updates
+    func updateDataBase(with type: AMRAPUpdateType) {
+        let updateModel = AMRAPUpdateModel(workout: workoutModel, amrap: amrapModel, type: type)
+        let uploadModel = updateModel.uploadModel()
+        apiService.multiLocationUpload(data: [uploadModel]) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(()): break
+            case .failure(_):
+                //TODO: - Show connection error message
+                break
+            }
+        }
+    }
+
+
+    // MARK: - Retreiving Functions
+    func getProgress(for newTime: Int) -> Double {
+        let fullTime = amrapModel.timeLimit
+        let progress = Double(Double(newTime) / Double(fullTime))
+        return progress
+    }
+    func getCurrentExercise() -> ExerciseModel {
+        return amrapModel.getCurrentExercise()
+    }
+    func isStartButtonEnabled() -> Bool {
+        if workoutModel.startTime != nil && !workoutModel.completed {
+            return true
+        } else {
+            return false
+        }
+    }
+    func isDoneButtonEnabled() -> Bool {
+        if amrapModel.started && !amrapModel.completed {
+            return true
+        } else {
+            return false
+        }
+    }
     func getExercises(at indexPath: IndexPath) -> ExerciseModel {
         let exercises = amrapModel.exercises
         let position = indexPath.item % exercises.count
@@ -42,66 +140,5 @@ class DisplayAMRAPViewModel {
     func numberOfExercises() -> Int {
         let exercises = amrapModel.exercises
         return exercises.count
-    }
-//    func exerciseCompleted() {
-//        guard let started = amrap.started,
-//              let completed = amrap.completed.value,
-//              var exercisesCompleted = amrap.exercisesCompleted,
-//              let exercises = amrap.exercises,
-//              let rounds = amrap.roundsCompleted.value
-//        else {return}
-//        if started && !completed {
-//            let exercise = exercises[exercisesCompleted]
-//            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise!, reps: exercise.reps!, weight: nil)
-//            exercisesCompleted += 1
-//            let exercisePosition = exercisesCompleted % exercises.count
-//            //display.amrapExerciseView.configure(with: exercises[exercisePosition])
-//            //let nextPosition = IndexPath(item: exercisesCompleted % exercises.count, section: 0)
-//            //display.collection.scrollToItem(at: nextPosition, at: .centeredHorizontally, animated: true)
-//            //amrap.exercisesCompleted = exercisesCompleted
-//            //APIService.uploadExercisesCompleted(at: amrapPosition, on: workout)
-//            if exercisesCompleted % exercises.count == 0 {
-//                amrapModel.roundsCompleted = rounds + 1
-//                //APIService.uploadRoundsCompleted(at: amrapPosition, on: workout)
-//            }
-//        }
-//    }
-
-
-    func startTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
-
-    }
-    @objc func updateTimer() {
-        if seconds < 6 {
-            //display.timeLabel.textColor = .red
-        } else {
-            //display.timeLabel.textColor = Constants.offWhiteColour
-        }
-        if seconds > 0 {
-            seconds -= 1
-            //display.timeLabel.text = "\(timeString(time: TimeInterval(seconds)))"
-        } else {
-            //APIService.completeAMRAP(at: amrapPosition, on: workout)
-            amrapModel.completed = true
-            timer.invalidate()
-            timerCompleted?()
-        }
-    }
-    // MARK: - Start
-    func start() {
-        // TODO: - Start the timer
-        startTimer()
-    }
-
-    func isWorkoutInProgress() -> Bool {
-        if workoutModel.startTime != nil && !workoutModel.completed {
-            return true
-        } else {
-            return false
-        }
-    }
-    func isWorkoutCompleted() -> Bool {
-        return workoutModel.completed
     }
 }

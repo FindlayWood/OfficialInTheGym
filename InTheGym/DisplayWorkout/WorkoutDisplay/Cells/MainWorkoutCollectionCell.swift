@@ -76,7 +76,7 @@ class MainWorkoutCollectionCell: UICollectionViewCell {
     func setLayout() {
         layer.borderColor = UIColor.black.cgColor
         contentView.layer.cornerRadius = 10
-        contentView.layer.borderWidth = 2
+        //contentView.layer.borderWidth = 2
         contentView.layer.borderColor = UIColor.black.cgColor
         contentView.layer.masksToBounds = true
 

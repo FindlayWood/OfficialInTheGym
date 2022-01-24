@@ -8,6 +8,8 @@
 
 import Foundation
 
+// MARK: - Time Conversion
+/// requires that self is in seconds
 extension Int {
     func convertToTime() -> String {
         let minutes = self / 60

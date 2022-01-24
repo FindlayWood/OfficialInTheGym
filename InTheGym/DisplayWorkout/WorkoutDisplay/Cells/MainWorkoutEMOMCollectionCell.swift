@@ -104,6 +104,6 @@ private extension MainWorkoutEMOMCollectionCell {
 extension MainWorkoutEMOMCollectionCell {
     
     func configure(with model: EMOMModel) {
-        timeLabel.text = model.timeLimit.convertToWorkoutTime()
+        timeLabel.text = model.timeLimit.convertToTime()
     }
 }

@@ -12,6 +12,7 @@ import UIKit
 
 extension UIViewController {
     
+    // MARK: - Display Top View 
     func displayTopMessage(with message: String) {
         let viewHeight = view.bounds.height * 0.07
         let screenWidth = view.bounds.width
@@ -21,31 +22,37 @@ extension UIViewController {
         let startingPoint = CGRect(x: (screenWidth * 0.1), y: -30 - viewHeight, width: viewWidth, height: viewHeight)
         let showingPoint = CGRect(x: (screenWidth * 0.1), y: margins!.top, width: viewWidth, height: viewHeight)
         
-        let label: UILabel = {
-            let label = UILabel()
-            label.font = .systemFont(ofSize: 20, weight: .bold)
-            label.textColor = .white
-            label.adjustsFontSizeToFitWidth = true
-            label.minimumScaleFactor = 0.25
-            label.text = message
-            label.textAlignment = .center
-            label.translatesAutoresizingMaskIntoConstraints = false
-            return label
-        }()
-        let topView: UIView = {
-            let view = UIView(frame: startingPoint)
-            view.backgroundColor = .darkColour
-            view.layer.borderWidth = 4.0
-            view.layer.borderColor = UIColor.white.cgColor
-            view.layer.cornerRadius = 20
+        let topView: UITopMessageView = {
+            let view = UITopMessageView()
+            view.configure(with: message)
             return view
         }()
         
-        topView.addSubview(label)
-        label.centerXAnchor.constraint(equalTo: topView.centerXAnchor).isActive = true
-        label.centerYAnchor.constraint(equalTo: topView.centerYAnchor).isActive = true
-        label.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 2).isActive = true
-        label.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -2).isActive = true
+//        let label: UILabel = {
+//            let label = UILabel()
+//            label.font = .systemFont(ofSize: 20, weight: .bold)
+//            label.textColor = .white
+//            label.adjustsFontSizeToFitWidth = true
+//            label.minimumScaleFactor = 0.25
+//            label.text = message
+//            label.textAlignment = .center
+//            label.translatesAutoresizingMaskIntoConstraints = false
+//            return label
+//        }()
+//        let topView: UIView = {
+//            let view = UIView(frame: startingPoint)
+//            view.backgroundColor = .darkColour
+//            view.layer.borderWidth = 4.0
+//            view.layer.borderColor = UIColor.white.cgColor
+//            view.layer.cornerRadius = 20
+//            return view
+//        }()
+//
+//        topView.addSubview(label)
+//        label.centerXAnchor.constraint(equalTo: topView.centerXAnchor).isActive = true
+//        label.centerYAnchor.constraint(equalTo: topView.centerYAnchor).isActive = true
+//        label.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 2).isActive = true
+//        label.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -2).isActive = true
         
         navigationController?.view.addSubview(topView)
         

@@ -93,7 +93,6 @@ private extension WorkoutDisplayView {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 5
         layout.minimumLineSpacing = 20
-        //layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.estimatedItemSize = CGSize(width: Constants.screenSize.width - 10, height: 360)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.scrollDirection = .vertical

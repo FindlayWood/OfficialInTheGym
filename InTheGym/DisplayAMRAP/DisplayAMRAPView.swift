@@ -26,8 +26,8 @@ class DisplayAMRAPView: UIView {
     
     var initialTimeLabel: UILabel = {
         let label = UILabel()
-        label.font = Constants.font
-        label.textColor = .darkColour
+        label.font = UIFont(name: "Menlo-Bold", size: 20)
+        label.textColor = .lightColour
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -53,7 +53,7 @@ class DisplayAMRAPView: UIView {
 
     var roundsView: UIView = {
         let view = UIView()
-        view.backgroundColor = Constants.offWhiteColour
+        view.backgroundColor = .offWhiteColour
         view.layer.cornerRadius = 10
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -62,7 +62,7 @@ class DisplayAMRAPView: UIView {
     var roundsNumberLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo-Bold", size: 40)
-        label.textColor = Constants.darkColour
+        label.textColor = .darkColour
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
        return label
@@ -73,7 +73,7 @@ class DisplayAMRAPView: UIView {
         label.text = "Rounds"
         label.font = Constants.font
         label.textAlignment = .center
-        label.textColor = Constants.darkColour
+        label.textColor = .darkColour
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -82,7 +82,7 @@ class DisplayAMRAPView: UIView {
     
     var exerciseView: UIView = {
         let view = UIView()
-        view.backgroundColor = Constants.offWhiteColour
+        view.backgroundColor = .offWhiteColour
         view.layer.cornerRadius = 10
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -91,7 +91,7 @@ class DisplayAMRAPView: UIView {
     var exerciseNumberLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo-Bold", size: 40)
-        label.textColor = Constants.darkColour
+        label.textColor = .darkColour
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -101,7 +101,7 @@ class DisplayAMRAPView: UIView {
         label.text = "Exercises"
         label.font = Constants.font
         label.textAlignment = .center
-        label.textColor = Constants.darkColour
+        label.textColor = .darkColour
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -129,15 +129,14 @@ private extension DisplayAMRAPView {
         
         addSubview(helpIcon)
         addSubview(amrapExerciseView)
-        addSubview(roundsView)
-        
+                
         roundsView.addSubview(roundsNumberLabel)
         roundsView.addSubview(roundsLabel)
+        addSubview(roundsView)
         
-        addSubview(exerciseView)
-        //addSubview(timeProgressView)
         exerciseView.addSubview(exerciseNumberLabel)
         exerciseView.addSubview(exerciseLabel)
+        addSubview(exerciseView)
         constrain()
     }
     
@@ -161,26 +160,26 @@ private extension DisplayAMRAPView {
                                      
                                      roundsView.trailingAnchor.constraint(equalTo: centerXAnchor, constant: -20),
                                      roundsView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
-                                     //roundsView.topAnchor.constraint(equalTo: amrapExerciseView.bottomAnchor, constant: 10),
                                      roundsView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.15),
                                      roundsView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
                                      
                                      roundsNumberLabel.centerXAnchor.constraint(equalTo: roundsView.centerXAnchor),
                                      roundsNumberLabel.centerYAnchor.constraint(equalTo: roundsView.centerYAnchor, constant: -20),
                                      
+                                     //roundsLabel.topAnchor.constraint(equalTo: roundsView.topAnchor),
                                      roundsLabel.bottomAnchor.constraint(equalTo: roundsView.bottomAnchor, constant: -5),
                                      roundsLabel.leadingAnchor.constraint(equalTo: roundsView.leadingAnchor),
                                      roundsLabel.trailingAnchor.constraint(equalTo: roundsView.trailingAnchor),
                                      
                                      exerciseView.leadingAnchor.constraint(equalTo: centerXAnchor, constant: 20),
                                      exerciseView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
-                                     //exerciseView.topAnchor.constraint(equalTo: amrapExerciseView.bottomAnchor, constant: 10),
                                      exerciseView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.15),
                                      exerciseView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
                                      
                                      exerciseNumberLabel.centerXAnchor.constraint(equalTo: exerciseView.centerXAnchor),
                                      exerciseNumberLabel.centerYAnchor.constraint(equalTo: exerciseView.centerYAnchor, constant: -20),
                                      
+                                     //exerciseLabel.topAnchor.constraint(equalTo: exerciseView.topAnchor),
                                      exerciseLabel.bottomAnchor.constraint(equalTo: exerciseView.bottomAnchor, constant: -5),
                                      exerciseLabel.leadingAnchor.constraint(equalTo: exerciseView.leadingAnchor),
                                      exerciseLabel.trailingAnchor.constraint(equalTo: exerciseView.trailingAnchor),
@@ -190,5 +189,21 @@ private extension DisplayAMRAPView {
                                      amrapExerciseView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
                                      amrapExerciseView.bottomAnchor.constraint(equalTo: roundsView.topAnchor, constant: -10)
         ])
+    }
+}
+// MARK: - Public Configurations
+extension DisplayAMRAPView {
+    public func updateTimeLabel(with newTime: Int) {
+        timeLabel.text = newTime.description
+        timeProgressView.timeRemaining = newTime
+    }
+    public func updateTimerProgress(with newProgress: CGFloat) {
+        timeProgressView.progress = newProgress
+    }
+    public func updateRounds(with newValue: Int) {
+        roundsNumberLabel.text = newValue.description
+    }
+    public func updateExercises(with newValue: Int) {
+        exerciseNumberLabel.text = newValue.description
     }
 }

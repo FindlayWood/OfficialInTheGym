@@ -33,6 +33,50 @@ extension UIViewController {
         alert.showSuccess("RPE", subTitle: "Enter RPE score for this exercise.", closeButtonTitle: "Cancel")
     }
     
+    func showRPEEMOM(completion: @escaping (Int) -> Void) {
+        let alert = SCLAlertView()
+        let rpe = alert.addTextField()
+        rpe.placeholder = "enter rpe 1-10..."
+        rpe.keyboardType = .numberPad
+        rpe.becomeFirstResponder()
+        alert.addButton("Save") {
+            guard let score = rpe.text else {
+                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
+                return}
+            guard let scoreInt = Int(score) else {
+                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
+                return}
+            if scoreInt > 0 && scoreInt < 11 {
+                completion(scoreInt)
+            } else {
+                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
+            }
+        }
+        alert.showSuccess("RPE", subTitle: "Enter RPE for EMOM(1-10).",closeButtonTitle: "cancel")
+    }
+    func showRPEAMRAP(completion: @escaping (Int) -> Void) {
+        let alert = SCLAlertView()
+        let rpe = alert.addTextField()
+        rpe.placeholder = "enter rpe 1-10..."
+        rpe.keyboardType = .numberPad
+        rpe.becomeFirstResponder()
+        alert.addButton("Save") {
+            guard let score = rpe.text else {
+                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
+                return}
+            guard let scoreInt = Int(score) else {
+                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
+                return}
+            if scoreInt > 0 && scoreInt < 11 {
+                completion(scoreInt)
+            } else {
+                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
+            }
+        }
+        alert.showSuccess("RPE", subTitle: "Enter RPE for AMRAP(1-10).",closeButtonTitle: "cancel")
+    }
+
+    
     func showError(title: String, subtitle: String) {
         let alert = SCLAlertView()
         alert.showError(title, subTitle: subtitle, closeButtonTitle: "Ok")

@@ -88,10 +88,8 @@
 		741FB1DC266EAF810039EB29 /* DisplayAMRAPCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1DB266EAF810039EB29 /* DisplayAMRAPCell.swift */; };
 		741FB1DF266F9B620039EB29 /* DisplayAMRAPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1DE266F9B620039EB29 /* DisplayAMRAPViewController.swift */; };
 		741FB1E1266F9B840039EB29 /* DisplayAMRAPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1E0266F9B840039EB29 /* DisplayAMRAPViewModel.swift */; };
-		741FB1E3266F9B900039EB29 /* DisplayAMRAPAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1E2266F9B900039EB29 /* DisplayAMRAPAdapter.swift */; };
 		741FB1E5266F9B9F0039EB29 /* DisplayAMRAPProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1E4266F9B9F0039EB29 /* DisplayAMRAPProtocol.swift */; };
 		741FB1E7266F9BAA0039EB29 /* DisplayAMRAPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1E6266F9BAA0039EB29 /* DisplayAMRAPView.swift */; };
-		741FB1E9266F9BC40039EB29 /* DisplayAMRAPCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1E8266F9BC40039EB29 /* DisplayAMRAPCollectionCell.swift */; };
 		741FB1EB2671568C0039EB29 /* AMRAPFirebaseAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1EA2671568C0039EB29 /* AMRAPFirebaseAPIService.swift */; };
 		74220899256FFE2C00B42563 /* LaunchPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74220898256FFE2C00B42563 /* LaunchPageViewController.swift */; };
 		74221B3B2642D86800D05527 /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74221B3A2642D86800D05527 /* TabBarCoordinator.swift */; };
@@ -119,6 +117,9 @@
 		74226E3B26383C8E0074E616 /* CircuitTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74226E3926383C8E0074E616 /* CircuitTableViewCell.xib */; };
 		7423B51D279B93BD007AA889 /* HorizontallyFlushCollectionFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7423B51C279B93BD007AA889 /* HorizontallyFlushCollectionFlowLayout.swift */; };
 		7423B51F279C2E54007AA889 /* ExerciseCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7423B51E279C2E54007AA889 /* ExerciseCollectionCell.swift */; };
+		7423B521279EF677007AA889 /* AMRAPUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7423B520279EF677007AA889 /* AMRAPUpdate.swift */; };
+		7423B526279F116E007AA889 /* EMOMUpdates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7423B525279F116D007AA889 /* EMOMUpdates.swift */; };
+		7423B528279F4F93007AA889 /* UITopMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7423B527279F4F93007AA889 /* UITopMessageView.swift */; };
 		742565A7277E3C3F00A7764D /* GroupPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742565A6277E3C3F00A7764D /* GroupPosts.swift */; };
 		742565A9277F6B4D00A7764D /* MyGroupsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742565A8277F6B4D00A7764D /* MyGroupsTableViewCell.swift */; };
 		742565AB277F9A9400A7764D /* MyGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742565AA277F9A9400A7764D /* MyGroupsView.swift */; };
@@ -767,10 +768,8 @@
 		741FB1DB266EAF810039EB29 /* DisplayAMRAPCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAMRAPCell.swift; sourceTree = "<group>"; };
 		741FB1DE266F9B620039EB29 /* DisplayAMRAPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAMRAPViewController.swift; sourceTree = "<group>"; };
 		741FB1E0266F9B840039EB29 /* DisplayAMRAPViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAMRAPViewModel.swift; sourceTree = "<group>"; };
-		741FB1E2266F9B900039EB29 /* DisplayAMRAPAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAMRAPAdapter.swift; sourceTree = "<group>"; };
 		741FB1E4266F9B9F0039EB29 /* DisplayAMRAPProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAMRAPProtocol.swift; sourceTree = "<group>"; };
 		741FB1E6266F9BAA0039EB29 /* DisplayAMRAPView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAMRAPView.swift; sourceTree = "<group>"; };
-		741FB1E8266F9BC40039EB29 /* DisplayAMRAPCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAMRAPCollectionCell.swift; sourceTree = "<group>"; };
 		741FB1EA2671568C0039EB29 /* AMRAPFirebaseAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMRAPFirebaseAPIService.swift; sourceTree = "<group>"; };
 		74220898256FFE2C00B42563 /* LaunchPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchPageViewController.swift; sourceTree = "<group>"; };
 		74221B3A2642D86800D05527 /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
@@ -798,6 +797,9 @@
 		74226E3926383C8E0074E616 /* CircuitTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CircuitTableViewCell.xib; sourceTree = "<group>"; };
 		7423B51C279B93BD007AA889 /* HorizontallyFlushCollectionFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontallyFlushCollectionFlowLayout.swift; sourceTree = "<group>"; };
 		7423B51E279C2E54007AA889 /* ExerciseCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCollectionCell.swift; sourceTree = "<group>"; };
+		7423B520279EF677007AA889 /* AMRAPUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMRAPUpdate.swift; sourceTree = "<group>"; };
+		7423B525279F116D007AA889 /* EMOMUpdates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EMOMUpdates.swift; sourceTree = "<group>"; };
+		7423B527279F4F93007AA889 /* UITopMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITopMessageView.swift; sourceTree = "<group>"; };
 		742565A6277E3C3F00A7764D /* GroupPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupPosts.swift; sourceTree = "<group>"; };
 		742565A8277F6B4D00A7764D /* MyGroupsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsTableViewCell.swift; sourceTree = "<group>"; };
 		742565AA277F9A9400A7764D /* MyGroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsView.swift; sourceTree = "<group>"; };
@@ -1531,6 +1533,7 @@
 				743330C8278F39FD005A0C45 /* AssignView.swift */,
 				744AED3527989DC6000D2D74 /* UIUserView.swift */,
 				744AED422799C24C000D2D74 /* UIWorkoutStartView.swift */,
+				7423B527279F4F93007AA889 /* UITopMessageView.swift */,
 			);
 			path = ViewClasses;
 			sourceTree = "<group>";
@@ -1613,10 +1616,8 @@
 			children = (
 				741FB1DE266F9B620039EB29 /* DisplayAMRAPViewController.swift */,
 				741FB1E0266F9B840039EB29 /* DisplayAMRAPViewModel.swift */,
-				741FB1E2266F9B900039EB29 /* DisplayAMRAPAdapter.swift */,
 				741FB1E4266F9B9F0039EB29 /* DisplayAMRAPProtocol.swift */,
 				741FB1E6266F9BAA0039EB29 /* DisplayAMRAPView.swift */,
-				741FB1E8266F9BC40039EB29 /* DisplayAMRAPCollectionCell.swift */,
 				74318F4926B9A072009EDFAC /* DisplayAMRAPShowAllExercisesView.swift */,
 				74318F4B26B9A6DB009EDFAC /* DisplayAMRAPShowAllExercisesAdapter.swift */,
 			);
@@ -1839,6 +1840,8 @@
 			children = (
 				743330EF279438F6005A0C45 /* PostActionEnum.swift */,
 				744AED31279860ED000D2D74 /* OptionsAction.swift */,
+				7423B520279EF677007AA889 /* AMRAPUpdate.swift */,
+				7423B525279F116D007AA889 /* EMOMUpdates.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -3284,7 +3287,6 @@
 				74F2CCD126DFAC0A00D7AD79 /* InTheGymProtocols.swift in Sources */,
 				7444D0C026D3C9BE0009C7A6 /* UploadingWorkoutViewModel.swift in Sources */,
 				7416CCCF26546F200043B1C2 /* RepsBottomCollectionAdapter.swift in Sources */,
-				741FB1E3266F9B900039EB29 /* DisplayAMRAPAdapter.swift in Sources */,
 				747B673425FFAE11000AD6B7 /* TableCellDisplayModel.swift in Sources */,
 				747C074F2612433500E9F1E2 /* FirebaseAPI.swift in Sources */,
 				74C89C9B261D18A5009F3C72 /* GroupPageViewModel.swift in Sources */,
@@ -3385,6 +3387,7 @@
 				746061E225264147005B1480 /* NewInfoViewController.swift in Sources */,
 				74F546FB25ED60EC00C1A6A9 /* FirstTimeMessages.swift in Sources */,
 				741BA3A4271B197100E99C6E /* ReplayJumpMeasureViewController.swift in Sources */,
+				7423B526279F116E007AA889 /* EMOMUpdates.swift in Sources */,
 				74AF6D6826868D2B005C52A8 /* ExerciseStatsSectionCell.swift in Sources */,
 				743330A827887F1F005A0C45 /* SetsSelectionCoordinator.swift in Sources */,
 				7431030F26FA3FFE00F7121B /* TimeSelectionPickerCoordinator.swift in Sources */,
@@ -3401,7 +3404,6 @@
 				7444D07326CE8F070009C7A6 /* AddGroupWorkoutCoordinator.swift in Sources */,
 				74F2CCE826E3817000D7AD79 /* AddMoreNoteView.swift in Sources */,
 				745B330325782FF100594019 /* CompletedWorkoutViewController.swift in Sources */,
-				741FB1E9266F9BC40039EB29 /* DisplayAMRAPCollectionCell.swift in Sources */,
 				74318F3C26B570F5009EDFAC /* PreLiveWorkoutView.swift in Sources */,
 				74EC438A2639B7CE00D81E5B /* DisplayWorkoutCircuitTableViewCell.swift in Sources */,
 				7444D0C426D3E5110009C7A6 /* UIAssignableView.swift in Sources */,
@@ -3693,6 +3695,7 @@
 				747B67A82600F4F3000AD6B7 /* TimelineActivityTableViewCell.swift in Sources */,
 				7444D0F226D8525F0009C7A6 /* CreateNewPostView.swift in Sources */,
 				7460620C25278D34005B1480 /* MYSCORESViewController.swift in Sources */,
+				7423B521279EF677007AA889 /* AMRAPUpdate.swift in Sources */,
 				74095A79257FE66500CF335A /* MakePostViewController.swift in Sources */,
 				743330EB279397D3005A0C45 /* CommentSectionCoordinator.swift in Sources */,
 				74D7F4DD2629CF6E006C3D5C /* SignUpUserModel.swift in Sources */,
@@ -3779,6 +3782,7 @@
 				7431030B26FA30EA00F7121B /* TimeSelectionAdapter.swift in Sources */,
 				74B6F6982751536E00A72679 /* DisplayWorkoutsView.swift in Sources */,
 				7431030926FA30DC00F7121B /* TimeSelectionViewControllerView.swift in Sources */,
+				7423B528279F4F93007AA889 /* UITopMessageView.swift in Sources */,
 				7459BD662641F82B0005C530 /* Coordinator.swift in Sources */,
 				74C89C7A2619F5C2009F3C72 /* WorkoutCompletedAdapter.swift in Sources */,
 				744D563F26F9168B00D3E1FA /* DisplayEMOMViewController.swift in Sources */,

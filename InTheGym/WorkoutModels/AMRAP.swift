@@ -83,7 +83,9 @@ class AMRAP: WorkoutType {
     }
 }
 
+// MARK: - AMRAP Model
 struct AMRAPModel: ExerciseType, Codable, Hashable {
+    var amrapPosition: Int
     var workoutPosition: Int
     var timeLimit: Int
     var exercises: [ExerciseModel]
@@ -93,4 +95,12 @@ struct AMRAPModel: ExerciseType, Codable, Hashable {
     var rpe: Int?
     var started: Bool
     var startTime: TimeInterval?
+    
+    func getCurrentExercise() -> ExerciseModel {
+        let exerciseCount = exercises.count
+        let currentIndex = exercisesCompleted % exerciseCount
+        return exercises[currentIndex]
+    }
 }
+
+

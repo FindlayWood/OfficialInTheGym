@@ -33,7 +33,7 @@ class AMRAPExerciseView: UIView {
     var repLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo-Bold", size: 100)
-        label.textColor = Constants.darkColour
+        label.textColor = .darkColour
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -42,7 +42,7 @@ class AMRAPExerciseView: UIView {
     var weightLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo-Bold", size: 40)
-        label.textColor = Constants.darkColour
+        label.textColor = .darkColour
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -61,6 +61,7 @@ class AMRAPExerciseView: UIView {
         button.titleLabel?.font = Constants.font
         button.setTitle("DONE", for: .normal)
         button.setTitleColor(.darkColour, for: .normal)
+        button.setTitleColor(.darkGray, for: .disabled)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

@@ -34,11 +34,22 @@ class EMOMExerciseView: UIView {
     
     var repLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Menlo-Bold", size: 70)
-        label.textColor = .black
+        label.font = UIFont(name: "Menlo-Bold", size: 100)
+        label.textColor = .darkColour
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    var weightLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Menlo-Bold", size: 40)
+        label.textColor = .darkColour
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     
     
     // MARK: - Initializer
@@ -60,6 +71,7 @@ private extension EMOMExerciseView {
         addSubview(exerciseLabel)
         addSubview(dividerView)
         addSubview(repLabel)
+        addSubview(weightLabel)
         constrainUI()
     }
     func constrainUI() {
@@ -68,7 +80,7 @@ private extension EMOMExerciseView {
             exerciseLabel.topAnchor.constraint(equalTo: topAnchor),
             exerciseLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
             exerciseLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
-            exerciseLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.33),
+            exerciseLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.2),
             
             dividerView.topAnchor.constraint(equalTo: exerciseLabel.bottomAnchor, constant: 5),
             dividerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
@@ -77,7 +89,9 @@ private extension EMOMExerciseView {
             repLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             //repLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             repLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 20),
-            repLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.5)
+            //repLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.5),
+            weightLabel.topAnchor.constraint(equalTo: repLabel.bottomAnchor, constant: 10),
+            weightLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             //repLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
@@ -88,7 +102,9 @@ extension EMOMExerciseView {
     func configure(with exercise: ExerciseModel) {
         let name = exercise.exercise
         let rep = exercise.reps[0]
+        let weight = exercise.weight[0]
         exerciseLabel.text = name
         repLabel.text = rep.description
+        weightLabel.text = weight
     }
 }

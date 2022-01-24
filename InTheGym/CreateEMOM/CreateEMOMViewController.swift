@@ -65,7 +65,7 @@ class CreateEMOMViewController: UIViewController {
         adapter = .init()
         display.tableview.delegate = adapter
         display.tableview.dataSource = makeDataSource()
-        display.timeNumberLabel.text = viewModel.emomTimeLimit.description + " mins"
+        display.timeNumberLabel.text = viewModel.emomTimeLimit.convertToWorkoutTime()
         let tap = UITapGestureRecognizer(target: self, action: #selector(changeTime))
         display.timeView.addGestureRecognizer(tap)
     }

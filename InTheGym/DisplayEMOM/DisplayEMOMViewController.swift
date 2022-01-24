@@ -11,6 +11,7 @@ import SCLAlertView
 
 class DisplayEMOMViewController: UIViewController {
     
+    // MARK: - Properties
     var mainTimer = Timer()
     
     var minuteTimer = Timer()
@@ -20,13 +21,8 @@ class DisplayEMOMViewController: UIViewController {
     var viewModel = DisplayEMOMViewModel()
     
     var emom: EMOM!
-    
-    var workout: workout! /// workout containing the emom
-    
-    var position: Int! /// the position of the emom in the workout
-    
-    var exerciseIndex: Int = 0
 
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -52,11 +48,12 @@ class DisplayEMOMViewController: UIViewController {
         navigationItem.rightBarButtonItem = barButton
     }
     
+    // MARK: - View Model
     func initViewModel() {
         
         viewModel.updateMainTimerClosure = { [weak self] (newTime) in
             guard let self = self else {return}
-            guard let fullTime = self.emom.timeLimit else {return}
+            let fullTime = self.viewModel.emomModel.timeLimit
             let progress = CGFloat(CGFloat(newTime) / CGFloat(fullTime))
             self.display.fullTimePrgoressView.progress = progress
             self.display.fullTimePrgoressView.timeRemaining = newTime
@@ -77,59 +74,46 @@ class DisplayEMOMViewController: UIViewController {
             guard let self = self else {return}
             self.viewModel.emomCompleted()
             self.navigationItem.hidesBackButton = false
-            let alert = SCLAlertView()
-            let rpe = alert.addTextField()
-            rpe.placeholder = "enter rpe 1-10..."
-            rpe.keyboardType = .numberPad
-            rpe.becomeFirstResponder()
-            alert.addButton("Save") {
-                guard let score = rpe.text else {return}
-                guard let scoreInt = Int(score) else {return}
-                self.viewModel.rpeScoreGiven(scoreInt)
-            }
-            alert.showSuccess("RPE", subTitle: "Enter RPE for EMOM(1-10).",closeButtonTitle: "cancel")
+            self.showRPEEMOM(completion: self.viewModel.rpeScoreGiven(_:))
         }
         
         viewModel.minuteCompleted = { [weak self] in
             guard let self = self else {return}
             let numberOfExercises = self.viewModel.emomModel.exercises.count
             let exercises = self.viewModel.emomModel.exercises
-            let completedPosition = self.exerciseIndex % numberOfExercises
+            let completedPosition = self.viewModel.exerciseIndex % numberOfExercises
             let exerciseName = exercises[completedPosition].exercise
             let exerciseReps = exercises[completedPosition].reps[0]
             FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exerciseName, reps: exerciseReps, weight: nil)
             
-            self.exerciseIndex += 1
-            let position = self.exerciseIndex % numberOfExercises
+            self.viewModel.exerciseIndex += 1
+            let position = self.viewModel.exerciseIndex % numberOfExercises
             self.display.exerciseView.configure(with: exercises[position])
             self.completedMinute()
-            
+        }
+        viewModel.connectionError = { [weak self] in
+            guard let self = self else {return}
+            self.displayTopMessage(with: "Connection Error!")
         }
         
         let fullTime = viewModel.emomModel.timeLimit
         viewModel.mainTimerVariable = fullTime
-        viewModel.workout = workout
-        viewModel.position = position
     }
     
     func initDisplay() {
-//        if emom.started ?? false {
-//            // TODO: - Calculate start time
-//            navigationItem.rightBarButtonItem?.isEnabled = false
-//        }
         navigationItem.rightBarButtonItem?.isEnabled = !viewModel.emomModel.completed
-        let exerciseOne = viewModel.emomModel.exercises[exerciseIndex]
+        let exerciseOne = viewModel.emomModel.exercises[viewModel.exerciseIndex]
         display.exerciseView.configure(with: exerciseOne)
         display.initialMainTime.text = viewModel.emomModel.timeLimit.convertToTime()
         display.initialMinuteTime.text = 60.convertToTime()
     }
     
+    // MARK: - Actions
     @objc func startTimerPressed(_ sender: UIButton) {
         navigationItem.hidesBackButton = true
         viewModel.startTimers()
         display.initialMainTime.removeFromSuperview()
         display.initialMinuteTime.removeFromSuperview()
-        emom.started = true
         viewModel.startEMOM()
         navigationItem.rightBarButtonItem?.isEnabled = false
     }

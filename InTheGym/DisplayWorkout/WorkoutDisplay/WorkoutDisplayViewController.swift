@@ -123,10 +123,11 @@ extension WorkoutDisplayViewController {
             print("circuit")
         case .emom(let eMOMModel):
             // TODO: - Coordinate to emom
-            coordinator?.showEMOM(eMOMModel)
+            coordinator?.showEMOM(eMOMModel, viewModel.workout)
             print("emom")
         case .amrap(let aMRAPModel):
             // TODO: - Coordinate to amrap
+            coordinator?.showAMRAP(aMRAPModel, viewModel.workout)
             print("amrap")
         }
     }

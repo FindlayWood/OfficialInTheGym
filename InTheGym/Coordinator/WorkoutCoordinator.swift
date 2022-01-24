@@ -61,13 +61,8 @@ extension WorkoutCoordinator: WorkoutCoordinatorFlow {
     }
     
     func showAMRAP(with model: AMRAP, at position: Int, on workout: workout) {
-        if #available(iOS 13.0, *) {
-            let vc = DisplayAMRAPViewController()
-            vc.amrap = model
-            vc.amrapPosition = position
-            vc.workout = workout
-            navigationController.pushViewController(vc, animated: true)
-        }
+        let vc = DisplayAMRAPViewController()
+        navigationController.pushViewController(vc, animated: true)
     }
     
     func displayNote(with note: String?, on workout: WorkoutDelegate, at index: Int) {

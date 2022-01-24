@@ -14,7 +14,7 @@ class CreateEMOMViewModel {
     // MARK: - Properties
     var navigationTitle = "Create EMOM"
     
-    var emomTimeLimit: Int = 10
+    var emomTimeLimit: Int = 600
     
     var workoutViewModel: WorkoutCreationViewModel!
     
@@ -25,7 +25,8 @@ class CreateEMOMViewModel {
     
     // MARK: - Actions
     func addEMOM() {
-        let newEmom = EMOMModel(workoutPosition: workoutPosition,
+        let newEmom = EMOMModel(emomPosition: workoutViewModel.emomModels.count,
+                                workoutPosition: workoutPosition,
                                 exercises: exercises.value,
                                 timeLimit: emomTimeLimit,
                                 completed: false,

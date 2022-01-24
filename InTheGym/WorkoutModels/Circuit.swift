@@ -101,6 +101,7 @@ class circuit: WorkoutType {
 }
 
 struct CircuitModel: ExerciseType, Codable, Hashable {
+    var circuitPosition: Int
     var workoutPosition: Int
     var exercises: [ExerciseModel]
     var completed: Bool

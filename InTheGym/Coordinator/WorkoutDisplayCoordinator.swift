@@ -32,15 +32,19 @@ extension WorkoutDisplayCoordinator {
     func complete(_ workout: WorkoutModel) {
         
     }
-    func showEMOM(_ emom: EMOMModel) {
+    func showEMOM(_ emom: EMOMModel, _ workout: WorkoutModel) {
         let vc = DisplayEMOMViewController()
         vc.viewModel.emomModel = emom
+        vc.viewModel.workoutModel = workout
         navigationController.pushViewController(vc, animated: true)
     }
     func showCircuit(_ circuit: CircuitModel) {
         
     }
-    func showAMRAP(_ amrap: AMRAPModel) {
-        
+    func showAMRAP(_ amrap: AMRAPModel, _ workout: WorkoutModel) {
+        let vc = DisplayAMRAPViewController()
+        vc.viewModel.amrapModel = amrap
+        vc.viewModel.workoutModel = workout
+        navigationController.pushViewController(vc, animated: true)
     }
 }

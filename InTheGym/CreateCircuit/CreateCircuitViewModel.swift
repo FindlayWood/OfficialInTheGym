@@ -46,7 +46,8 @@ class CreateCircuitViewModel {
     }
     
     func addCircuit() {
-        let newCircuit = CircuitModel(workoutPosition: workoutPosition,
+        let newCircuit = CircuitModel(circuitPosition: workoutViewModel.circuitModels.count,
+                                      workoutPosition: workoutPosition,
                                       exercises: exercises.value,
                                       completed: false, circuitName: circuitTitle,
                                       createdBy: FirebaseAuthManager.currentlyLoggedInUser.username,

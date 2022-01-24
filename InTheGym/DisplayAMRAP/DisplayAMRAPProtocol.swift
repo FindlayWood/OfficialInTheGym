@@ -9,7 +9,6 @@
 import Foundation
 
 protocol DisplayAMRAPProtocol {
-    func getExercise(at indexPath: IndexPath) -> exercise
+    func getExercise(at indexPath: IndexPath) -> ExerciseModel
     func numberOfExercises() -> Int
-    func exerciseCompleted()
 }
