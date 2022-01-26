@@ -58,7 +58,7 @@ class circuit: WorkoutType {
         return object
     }
     
-    func integrate() -> [CircuitTableModel]{
+    func integrate() -> [CircuitTableModel] {
         var reps: [Int] = []
         var weights: [String] = []
         var sets: [Int] = []
@@ -112,4 +112,24 @@ struct CircuitModel: ExerciseType, Codable, Hashable {
     var integrated: Bool
     var startTime: TimeInterval?
     var rpe: Int?
+    
+    func intergrate() -> [CircuitTableModel] {
+        var circuitModels = [CircuitTableModel]()
+        let originalSets = exercises.map { $0.sets }
+        var sets = exercises.map { $0.sets }
+        while sets.reduce(0, +) > 0 {
+            for i in 0..<sets.count {
+                let set = originalSets[i] - sets[i]
+                circuitModels.append(CircuitTableModel(exerciseName: exercises[i].exercise,
+                                                     reps: exercises[i].reps[set],
+                                                     weight: exercises[i].weight[set],
+                                                     set: set + 1,
+                                                     overallSet: circuitModels.count + 1,
+                                                     completed: exercises[i].completedSets[set],
+                                                     exerciseOrder: i))
+                sets[i] -= 1
+            }
+        }
+        return circuitModels
+    }
 }

@@ -40,12 +40,16 @@ extension MyProfileAdapter: UITableViewDelegate, UITableViewDataSource {
             
         } else {
             let rowModel = delegate.getData(at: indexPath)
-            let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier(for: rowModel), for: indexPath)
-            if var cell = cell as? CellConfiguarable{
-                cell.setup(rowViewModel: rowModel)
-                cell.delegate = self.delegate as? TimelineTapProtocol
-            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
+            cell.configure(with: rowModel)
             return cell
+            
+//            let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier(for: rowModel), for: indexPath)
+//            if var cell = cell as? CellConfiguarable{
+//                cell.setup(rowViewModel: rowModel)
+//                cell.delegate = self.delegate as? TimelineTapProtocol
+//            }
+//            return cell
             
             
         }

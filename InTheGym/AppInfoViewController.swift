@@ -150,7 +150,7 @@ class AppInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
             do{
                 try Auth.auth().signOut()
                 FirebaseAPI.shared().dispose()
-                LikesAPIService.shared.LikedPostsCache.removeAllObjects()
+                LikesAPIService.shared.LikedPostsCache.removeAll()
                 ViewController.admin = nil
                 ViewController.username = nil
                 //PlayerTimelineViewModel.apiService.removeObserver(withHandle: PlayerTimelineViewModel.handle)

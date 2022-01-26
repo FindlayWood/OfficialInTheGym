@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-protocol MyProfileProtocol: class {
-    func getData(at: IndexPath) -> PostProtocol
+protocol MyProfileProtocol: AnyObject {
+    func getData(at: IndexPath) -> post
     func getCollectionData() -> [[String:AnyObject]]
     func itemSelected(at: IndexPath)
     func collectionItemSelected(at: IndexPath)

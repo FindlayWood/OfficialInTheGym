@@ -11,6 +11,7 @@ import SCLAlertView
 
 class WorkoutCompletedViewController: UIViewController, Storyboarded {
     
+    // MARK: - Outlets
     @IBOutlet weak var collection:UICollectionView!
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     
@@ -18,6 +19,7 @@ class WorkoutCompletedViewController: UIViewController, Storyboarded {
     
     @IBOutlet weak var workoutRPE:UITextField!
     
+    // MARK: - Properties
     let haptic = UINotificationFeedbackGenerator()
     
     var workout : Completeable!
@@ -37,6 +39,7 @@ class WorkoutCompletedViewController: UIViewController, Storyboarded {
         return WorkoutCompletedViewModel(time: timeString, rpe: averageRPE)
     }()
 
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
 

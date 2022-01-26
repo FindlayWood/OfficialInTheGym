@@ -207,7 +207,16 @@ class WorkoutModel: Codable, Hashable {
         hasher.combine(workoutID)
     }
 }
-
+extension WorkoutModel {
+    func totalExerciseCount() -> Int {
+        var totalExerciseCount = 0
+        totalExerciseCount += exercises?.count ?? 0
+        totalExerciseCount += circuits?.count ?? 0
+        totalExerciseCount += emoms?.count ?? 0
+        totalExerciseCount += amraps?.count ?? 0
+        return totalExerciseCount
+    }
+}
 extension WorkoutModel: FirebaseResource {
     static var path: String {
         return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)"

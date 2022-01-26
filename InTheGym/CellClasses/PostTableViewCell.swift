@@ -129,6 +129,7 @@ class PostTableViewCell: UITableViewCell {
         return button
     }()
     
+    // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -139,6 +140,7 @@ class PostTableViewCell: UITableViewCell {
     }
 }
 
+// MARK: - Setup UI
 private extension PostTableViewCell {
     func setupUI() {
         selectionStyle = .none
@@ -206,6 +208,7 @@ private extension PostTableViewCell {
     }
 }
 
+// MARK: - Public Configuration
 extension PostTableViewCell {
     func configure(with post: DisplayablePost) {
         usernameButton.setTitle(post.username, for: .normal)
@@ -216,13 +219,37 @@ extension PostTableViewCell {
         likeCountLabel.text = post.likeCount.description
         if post.attachedClip == nil { clipImageView.isHidden = true }
         if post.attachedPhoto == nil { photoImageView.isHidden = true }
-        if let attachedWorkout = post.attachedWorkout { workoutView.newConfigure(with: attachedWorkout) } else {workoutView.isHidden = true}
-        ImageAPIService.shared.getProfileImage(for: post.posterID) { [weak self] image in
-            guard let self = self else {return}
-            if image != nil {
-                self.profileImageButton.setImage(image, for: .normal)
+//        if let attachedWorkout = post.attachedWorkout { workoutView.newConfigure(with: attachedWorkout) } else {workoutView.isHidden = true}
+        if let workoutID = post.workoutID {
+            let searchModel = WorkoutKeyModel(id: workoutID)
+            WorkoutLoader.shared.load(from: searchModel) { [weak self] result in
+                guard let self = self else {return}
+                guard let workout = try? result.get() else {return}
+                self.workoutView.configure(with: workout)
+            }
+        } 
+        if let savedWorkoutID = post.savedWorkoutID {
+            let searchModel = SavedWorkoutKeyModel(id: savedWorkoutID)
+            SavedWorkoutLoader.shared.load(from: searchModel) { [weak self] result in
+                guard let self = self else {return}
+                guard let workout = try? result.get() else {return}
+                self.workoutView.configure(with: workout)
             }
         }
+        if post.workoutID == nil && post.savedWorkoutID == nil {
+            workoutView.isHidden = true
+        }
+        let profileImageModel = ProfileImageDownloadModel(id: post.posterID)
+        ImageCache.shared.load(from: profileImageModel) { [weak self] result in
+            let image = try? result.get()
+            self?.profileImageButton.setImage(image, for: .normal)
+        }
+//        ImageAPIService.shared.getProfileImage(for: post.posterID) { [weak self] image in
+//            guard let self = self else {return}
+//            if image != nil {
+//                self.profileImageButton.setImage(image, for: .normal)
+//            }
+//        }
         LikesAPIService.shared.check(postID: post.id) { [weak self] liked in
             guard let self = self else {return}
             if liked {

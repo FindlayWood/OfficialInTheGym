@@ -88,8 +88,7 @@ class CommentSectionViewModel {
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
             case .success(()):
-                LikesAPIService.shared.LikedPostsCache.removeObject(forKey: post.id as NSString)
-                LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: post.id as NSString)
+                LikesAPIService.shared.LikedPostsCache[post.id] = true
                 print("successfully liked")
             case .failure(let error):
                 //TODO: - Show like error

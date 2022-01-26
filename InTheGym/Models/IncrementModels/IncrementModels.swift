@@ -84,3 +84,9 @@ extension EMOMUpdateModel: FirebaseInstance {
         return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workout.workoutID)/emoms/\(emom.emomPosition)/\(pathEnding())"
     }
 }
+
+// MARK: - Stats
+///Update Exercise Stats
+struct ExerciseStatsUpdateModel {
+    
+}

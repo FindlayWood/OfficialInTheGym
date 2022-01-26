@@ -120,6 +120,7 @@ extension WorkoutDisplayViewController {
             break
         case .circuit(let circuitModel):
             // TODO: - Coordinate to circuit
+            coordinator?.showCircuit(circuitModel, viewModel.workout)
             print("circuit")
         case .emom(let eMOMModel):
             // TODO: - Coordinate to emom

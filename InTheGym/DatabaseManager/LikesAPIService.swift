@@ -15,16 +15,12 @@ class LikesAPIService {
     
     private init(){}
     
-    let LikedPostsCache = NSCache<NSString, NSNumber>()
+    let LikedPostsCache = Cache<String, Bool>()
     
     func check(postID: String, completion: @escaping (Bool) -> Void) {
         
-        if let liked = LikedPostsCache.object(forKey: postID as NSString) {
-            if liked == 1 {
-                completion(true)
-            } else {
-                completion(false)
-            }
+        if let liked = LikedPostsCache[postID] {
+            completion(liked)
         } else {
             loadLike(postID: postID, completion: completion)
         }
@@ -34,13 +30,16 @@ class LikesAPIService {
         let userID = Auth.auth().currentUser!.uid
         let likeRef = Database.database().reference().child("PostLikes").child(postID).child(userID)
         likeRef.observeSingleEvent(of: .value) { (snapshot) in
-            if snapshot.exists(){
-                self.LikedPostsCache.setObject(1, forKey: postID as NSString)
-                completion(true)
-            }else{
-                self.LikedPostsCache.setObject(0, forKey: postID as NSString)
-                completion(false)
-            }
+            self.LikedPostsCache[postID] = snapshot.exists()
+            completion(snapshot.exists())
+            
+//            if snapshot.exists(){
+//                self.LikedPostsCache[postID] = true
+//                completion(true)
+//            }else{
+//                self.LikedPostsCache[postID] = false
+//                completion(false)
+//            }
         }
     }
 }

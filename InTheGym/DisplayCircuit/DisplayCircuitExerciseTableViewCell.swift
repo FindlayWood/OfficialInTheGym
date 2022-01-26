@@ -10,15 +10,15 @@ import UIKit
 
 class DisplayCircuitExerciseTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var exerciseName:UILabel!
-    @IBOutlet weak var exerciseSet:UILabel!
-    @IBOutlet weak var exerciseReps:UILabel!
-    @IBOutlet weak var weight:UILabel!
-    @IBOutlet weak var completedButton:UIButton!
+    @IBOutlet weak var exerciseName: UILabel!
+    @IBOutlet weak var exerciseSet: UILabel!
+    @IBOutlet weak var exerciseReps: UILabel!
+    @IBOutlet weak var weight: UILabel!
+    @IBOutlet weak var completedButton: UIButton!
     
-    var delegate : DisplayCircuitProtocol!
+    var delegate: DisplayCircuitProtocol!
     
-    func setup(with rowModel:CircuitTableModel){
+    func setup(with rowModel :CircuitTableModel) {
         exerciseName.text = rowModel.exerciseName
         let rep = rowModel.reps
         if rep == 0 {
@@ -39,7 +39,7 @@ class DisplayCircuitExerciseTableViewCell: UITableViewCell {
         }
     }
     
-    @IBAction func completeExercise(_ sender:UIButton){
+    @IBAction func completeExercise(_ sender: UIButton) {
         delegate.completedExercise(on: self)
         sender.setImage(UIImage(named: "tickRing"), for: .normal)
         sender.isUserInteractionEnabled = false

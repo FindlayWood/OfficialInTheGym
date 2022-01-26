@@ -8,9 +8,13 @@
 
 import Foundation
 import Firebase
+import Combine
 
 
 class MyProfileViewModel {
+    
+    // MARK: - Publishers
+    var postPublisher = CurrentValueSubject<[post],Never>([])
     
     // MARK: - Closures
         
@@ -80,8 +84,35 @@ class MyProfileViewModel {
                  "description":"View your notifications. Notifications include when another user likes or replies to one of your posts or when another user follows you."]
                 ] as [[String:AnyObject]]
     
+    var apiService: FirebaseDatabaseManagerService
+    
+    // MARK: - Initializer
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
+        self.apiService = apiService
+    }
+    
     
     // MARK: - Fetching functions
+    func fetchPostRefs() {
+        self.isLoading = true
+        apiService.fetchKeys(from: PostReferencesModel.self) { [weak self] result in
+            guard let postKeys = try? result.get() else {return}
+            self?.loadPosts(from: postKeys)
+        }
+    }
+    
+    func loadPosts(from keys: [String]) {
+        let models = keys.map { PostKeyModel(id: $0)}
+        PostLoader.shared.loadRange(from: models) { [weak self] result in
+            switch result {
+            case .success(let posts):
+                self?.postPublisher.send(posts)
+                self?.isLoading = false
+                self?.reloadTableViewClosure?()
+            }
+        }
+    }
+    
     func loading(){
         self.isLoading = true
         DatabaseEndpoints.getProfileTimeline.retreiveProfileTimeline { result in
@@ -215,15 +246,15 @@ class MyProfileViewModel {
         postLikesRef.setValue(true)
         let likesRef = Database.database().reference().child("Likes").child(self.userID).child(postID)
         likesRef.setValue(true)
-        LikesAPIService.shared.LikedPostsCache.removeObject(forKey: postID as NSString)
-        LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: postID as NSString)
+        LikesAPIService.shared.LikedPostsCache[postID] = true
         
 
     }
     
     // MARK: - Retieve Data
     
-    func getData( at indexPath: IndexPath ) -> PostProtocol {
+    func getData( at indexPath: IndexPath ) -> post {
+        let posts = postPublisher.value
         return posts[indexPath.row]
     }
     

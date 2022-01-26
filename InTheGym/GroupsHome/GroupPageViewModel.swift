@@ -146,8 +146,7 @@ class GroupPageViewModel {
         postLikesRef.setValue(true)
         let likesRef = Database.database().reference().child("Likes").child(self.userID).child(postID)
         likesRef.setValue(true)
-        LikesAPIService.shared.LikedPostsCache.removeObject(forKey: postID as NSString)
-        LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: postID as NSString)
+        LikesAPIService.shared.LikedPostsCache[postID] = true
         
         // notification
         if self.userID != posterID{

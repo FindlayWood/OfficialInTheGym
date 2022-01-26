@@ -8,6 +8,7 @@
 
 import UIKit
 import SCLAlertView
+import Combine
 
 class MyProfileViewController: UIViewController, Storyboarded {
     
@@ -34,7 +35,12 @@ class MyProfileViewController: UIViewController, Storyboarded {
     lazy var viewModel : MyProfileViewModel = {
         return MyProfileViewModel()
     }()
+    
+    var dataSource: PostsDataSource!
+    
+    var subscriptions = Set<AnyCancellable>()
 
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,6 +56,7 @@ class MyProfileViewController: UIViewController, Storyboarded {
         tableview.register(UINib(nibName: "TimelineCompletedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCompletedTableViewCell")
         tableview.register(UINib(nibName: "TimelineActivityTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineActivityTableViewCell")
         tableview.register(UINib(nibName: "MyProfileCollectionTableViewCell", bundle: nil), forCellReuseIdentifier: "MyProfileCollectionTableViewCell")
+        tableview.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
         tableview.tableFooterView = UIView()
         tableview.alpha = 0.0
         tableview.backgroundColor = Constants.darkColour
@@ -57,6 +64,8 @@ class MyProfileViewController: UIViewController, Storyboarded {
         tableview.layoutMargins = .zero
         if #available(iOS 15.0, *) { tableview.sectionHeaderTopPadding = 0 }
         
+        //dataSource = .init(tableView: tableview)
+        setupSubscriptions()
         
         checkForNotifications()
         initViewModel()
@@ -108,6 +117,7 @@ class MyProfileViewController: UIViewController, Storyboarded {
         }
     }
     
+    // MARK: - View Model
     func initViewModel(){
         
         viewModel.delegate = self
@@ -160,11 +170,22 @@ class MyProfileViewController: UIViewController, Storyboarded {
             }
         }
         
+        viewModel.fetchPostRefs()
         viewModel.followerCount()
         //viewModel.fetchData()
-        viewModel.loading()
+        //viewModel.loading()
     }
     
+    // MARK: - Subscriptions
+    func setupSubscriptions() {
+//        viewModel.postPublisher
+//            .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
+//            .store(in: &subscriptions)
+        
+        //viewModel.fetchPostRefs()
+    }
+    
+    // MARK: - Refresh Control
     func initRefreshControl(){
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = .white
@@ -201,7 +222,7 @@ class MyProfileViewController: UIViewController, Storyboarded {
 }
 
 extension MyProfileViewController: MyProfileProtocol, TimelineTapProtocol {
-    func getData(at: IndexPath) -> PostProtocol {
+    func getData(at: IndexPath) -> post {
         return viewModel.getData(at: at)
     }
     
@@ -211,25 +232,25 @@ extension MyProfileViewController: MyProfileProtocol, TimelineTapProtocol {
     
     func itemSelected(at: IndexPath) {
         let post = viewModel.getData(at: at)
-        if post is TimelinePostModel || post is TimelineCreatedWorkoutModel || post is TimelineCompletedWorkoutModel{
-            //let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            //let discussionVC = storyboard.instantiateViewController(withIdentifier: "DiscussionViewViewController") as! DiscussionViewViewController
-            var discussionPost: PostProtocol!
-            switch post {
-            case is TimelinePostModel:
-                discussionPost = DiscussionPost(model: post as! TimelinePostModel)
-            case is TimelineCreatedWorkoutModel:
-                discussionPost = DiscussionCreatedWorkout(model: post as! TimelineCreatedWorkoutModel)
-            case is TimelineCompletedWorkoutModel:
-                discussionPost = DiscussionCompletedWorkout(model: post as! TimelineCompletedWorkoutModel)
-            default:
-                break
-            }
-            
-            self.coordinator?.showDiscussion(with: discussionPost, group: nil)
-            
-            //self.navigationController?.pushViewController(discussionVC, animated: true)
-        }
+//        if post is TimelinePostModel || post is TimelineCreatedWorkoutModel || post is TimelineCompletedWorkoutModel{
+//            //let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            //let discussionVC = storyboard.instantiateViewController(withIdentifier: "DiscussionViewViewController") as! DiscussionViewViewController
+//            var discussionPost: PostProtocol!
+//            switch post {
+//            case is TimelinePostModel:
+//                discussionPost = DiscussionPost(model: post as! TimelinePostModel)
+//            case is TimelineCreatedWorkoutModel:
+//                discussionPost = DiscussionCreatedWorkout(model: post as! TimelineCreatedWorkoutModel)
+//            case is TimelineCompletedWorkoutModel:
+//                discussionPost = DiscussionCompletedWorkout(model: post as! TimelineCompletedWorkoutModel)
+//            default:
+//                break
+//            }
+//
+//            self.coordinator?.showDiscussion(with: discussionPost, group: nil)
+//
+//            //self.navigationController?.pushViewController(discussionVC, animated: true)
+//        }
     }
     
     func collectionItemSelected(at: IndexPath) {
@@ -307,14 +328,14 @@ extension MyProfileViewController: MyProfileProtocol, TimelineTapProtocol {
         let post = viewModel.getData(at: index)
         
         
-        viewModel.isLiked(on: post.postID!) { (result) in
+        viewModel.isLiked(on: post.id) { (result) in
             switch result {
             
             case .success(let liked):
                 if !liked {
                     // here is where we like the post
                     print("post is not liked - like it now")
-                    self.viewModel.likePost(on: post, with: index)
+                    //self.viewModel.likePost(on: post, with: index)
                     let likeCount = Int(label.text!)! + 1
                     label.text = likeCount.description
                     if #available(iOS 13.0, *) {

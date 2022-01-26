@@ -22,6 +22,9 @@ final class Cache<Key: Hashable, Value> {
     func removeValue(forKey key: Key) {
         wrapped.removeObject(forKey: WrappedKey(key))
     }
+    func removeAll(){
+        wrapped.removeAllObjects()
+    }
 }
 
 // MARK: - Wrapped Key

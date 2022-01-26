@@ -8,6 +8,7 @@
 
 import UIKit
 import SCLAlertView
+import Combine
 
 class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate, Storyboarded {
     
@@ -28,6 +29,8 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     lazy var viewModel: PlayerTimelineViewModel = {
         return PlayerTimelineViewModel()
     }()
+    var dataSource: PostsDataSource!
+    var subscriptions = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +40,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         
         adapter = PlayerTimelineAdapter(delegate: self)
         display.tableview.delegate = adapter
-        display.tableview.dataSource = adapter
+        //display.tableview.dataSource = adapter
         display.tableview.backgroundColor = .darkColour
         display.postButton.addTarget(self, action: #selector(makePostPressed(_:)), for: .touchUpInside)
         tableview.rowHeight = UITableView.automaticDimension
@@ -53,6 +56,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         
         self.tabBarController?.delegate = self
         
+        dataSource = .init(tableView: display.tableview)
         //checkForNotifications()
         initViewModel()
         initNewPostButton()
@@ -112,9 +116,15 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
                 self?.display.tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             }
         }
-        
-        viewModel.fetchData()
+        viewModel.fetchPosts()
+        //viewModel.fetchData()
         //viewModel.checkForNotifications()
+        
+        viewModel.postPublisher
+            .dropFirst()
+            .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
+            .store(in: &subscriptions)
+        
     }
     
     func initNewPostButton(){

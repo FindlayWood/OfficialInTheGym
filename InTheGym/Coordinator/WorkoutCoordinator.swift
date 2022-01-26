@@ -93,8 +93,8 @@ extension WorkoutCoordinator: WorkoutCoordinatorFlow {
     func showEMOM(_ emom: EMOM, _ workout: workout, _ position: Int) {
         let vc = DisplayEMOMViewController()
         vc.emom = emom
-        vc.workout = workout
-        vc.position = position
+        //vc.workout = workout
+        //vc.position = position
         navigationController.pushViewController(vc, animated: true)
     }
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import Combine
 
 class PlayerTimelineViewModel {
     
@@ -77,6 +78,76 @@ class PlayerTimelineViewModel {
     init(){
         PlayerTimelineViewModel.apiService = Database.database().reference().child("Timeline").child(userID)
     }
+    var postPublisher = CurrentValueSubject<[post],Never>([])
+    var subscriptions = Set<AnyCancellable>()
+    func fetchPosts() {
+        FirebaseDatabaseManager.shared.fetch(post.self) { [weak self] result in
+            guard let self = self else {return}
+            do {
+                let posts = try result.get()
+                self.filterPosts(posts)
+            } catch {
+                print(String(describing: error))
+            }
+        }
+    }
+    func filterPosts(_ posts: [post]) {
+        var postsToShow = [post]()
+        let dispatchGroup = DispatchGroup()
+        for post in posts {
+            dispatchGroup.enter()
+            if post.posterID == FirebaseAuthManager.currentlyLoggedInUser.uid {
+                postsToShow.append(post)
+                dispatchGroup.leave()
+            } else {
+                timeLineAlgorithm(post) { show in
+                    defer { dispatchGroup.leave() }
+                    if show { postsToShow.append(post)}
+                }
+            }
+        }
+        dispatchGroup.notify(queue: .main) {
+            postsToShow.sort(by: {$0.time > $1.time})
+            self.postPublisher.send(postsToShow)
+        }
+    }
+    
+    struct FollowingCheckModel: FirebaseInstance {
+        var id: String
+        var internalPath: String {
+            return "Following/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(id)"
+        }
+    }
+    
+    
+    func timeLineAlgorithm(_ post: post, completion: @escaping (Bool) -> Void) {
+        let followingModel = FollowingCheckModel(id: post.posterID)
+        FirebaseDatabaseManager.shared.checkExistence(of: followingModel) { result in
+            do {
+                let following = try result.get()
+                if following {
+                    completion(true)
+                } else if !post.isPrivate && post.likeCount > 10 {
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            } catch {
+                print(String(describing: error))
+                completion(false)
+            }
+
+        }
+    }
+    func setupSubscribers() {
+        
+
+            
+    }
+    
+    func check(_ post: post) {
+ 
+    }
  
     // MARK: - Fetching functions
     func fetchData(){
@@ -87,60 +158,62 @@ class PlayerTimelineViewModel {
         }
         let myGroup = DispatchGroup()
         var tempPosts = [PostProtocol]()
+        var newPosts = [post]()
         let ref = Database.database().reference().child("Posts").queryLimited(toLast: 1000)
         ref.observeSingleEvent(of: .value) { snapshot in
             print(snapshot.childrenCount)
-            for child in snapshot.children.allObjects as! [DataSnapshot] {
-                myGroup.enter()
-                guard let post = child.value as? [String: AnyObject] else {return}
-                if let posterID = post["posterID"] as? String {
-                    if posterID != FirebaseAuthManager.currentlyLoggedInUser.uid {
-                        FirebaseCheckFollowing.shared.check(posterID) { following in
-                            if following {
-                                switch post["type"] as! String{
-                                case "post":
-                                    tempPosts.append(TimelinePostModel(snapshot: child)!)
-                                case "createdNewWorkout":
-                                    tempPosts.append(TimelineCreatedWorkoutModel(snapshot: child)!)
-                                case "workout":
-                                    tempPosts.append(TimelineCompletedWorkoutModel(snapshot: child)!)
-                                default:
-                                    tempPosts.append(TimelineActivityModel(snapshot: child)!)
-                                }
-                                myGroup.leave()
-                            } else {
-                                myGroup.leave()
-                            }
-                        }
-                    } else {
-                        switch post["type"] as! String{
-                        case "post":
-                            tempPosts.append(TimelinePostModel(snapshot: child)!)
-                        case "createdNewWorkout":
-                            tempPosts.append(TimelineCreatedWorkoutModel(snapshot: child)!)
-                        case "workout":
-                            tempPosts.append(TimelineCompletedWorkoutModel(snapshot: child)!)
-                        default:
-                            tempPosts.append(TimelineActivityModel(snapshot: child)!)
-                        }
-                        myGroup.leave()
-                    }
-                } else {
-                    myGroup.leave()
-                    continue
-                }
-            }
-            myGroup.notify(queue: .main) {
-                self.posts = tempPosts.sorted(by: { $0.time! > $1.time! })
-                if !self.tableLoaded{
-                    self.isLoading = false
-                    self.tableLoaded = true
-                } else {
-                    self.isRefreshing = false
-                }
-
-            }
+//            for child in snapshot.children.allObjects as! [DataSnapshot] {
+//                myGroup.enter()
+//                guard let post = child.value as? [String: AnyObject] else {return}
+//                if let posterID = post["posterID"] as? String {
+//                    if posterID != FirebaseAuthManager.currentlyLoggedInUser.uid {
+//                        FirebaseCheckFollowing.shared.check(posterID) { following in
+//                            if following {
+//                                switch post["type"] as! String{
+//                                case "post":
+//                                    tempPosts.append(TimelinePostModel(snapshot: child)!)
+//                                case "createdNewWorkout":
+//                                    tempPosts.append(TimelineCreatedWorkoutModel(snapshot: child)!)
+//                                case "workout":
+//                                    tempPosts.append(TimelineCompletedWorkoutModel(snapshot: child)!)
+//                                default:
+//                                    tempPosts.append(TimelineActivityModel(snapshot: child)!)
+//                                }
+//                                myGroup.leave()
+//                            } else {
+//                                myGroup.leave()
+//                            }
+//                        }
+//                    } else {
+//                        switch post["type"] as! String{
+//                        case "post":
+//                            tempPosts.append(TimelinePostModel(snapshot: child)!)
+//                        case "createdNewWorkout":
+//                            tempPosts.append(TimelineCreatedWorkoutModel(snapshot: child)!)
+//                        case "workout":
+//                            tempPosts.append(TimelineCompletedWorkoutModel(snapshot: child)!)
+//                        default:
+//                            tempPosts.append(TimelineActivityModel(snapshot: child)!)
+//                        }
+//                        myGroup.leave()
+//                    }
+//                } else {
+//                    myGroup.leave()
+//                    continue
+//                }
+//            }
+//            myGroup.notify(queue: .main) {
+//                self.posts = tempPosts.sorted(by: { $0.time! > $1.time! })
+//                if !self.tableLoaded{
+//                    self.isLoading = false
+//                    self.tableLoaded = true
+//                } else {
+//                    self.isRefreshing = false
+//                }
+//
+//            }
         }
+        
 
         
 //        if !tableLoaded{
@@ -267,8 +340,7 @@ class PlayerTimelineViewModel {
         postLikesRef.setValue(true)
         let likesRef = Database.database().reference().child("Likes").child(self.userID).child(postID)
         likesRef.setValue(true)
-        LikesAPIService.shared.LikedPostsCache.removeObject(forKey: postID as NSString)
-        LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: postID as NSString)
+        LikesAPIService.shared.LikedPostsCache[postID] = true
         
         // notification
         if self.userID != posterID{

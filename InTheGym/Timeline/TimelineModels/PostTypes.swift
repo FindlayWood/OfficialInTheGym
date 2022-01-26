@@ -21,6 +21,8 @@ protocol DisplayablePost {
     var attachedWorkout: attachedWorkout? { get }
     var attachedPhoto: attachedPhoto? { get }
     var attachedClip: attachedClip? { get }
+    var workoutID: String? { get }
+    var savedWorkoutID: String? { get }
     var likeCount: Int { get set }
     var replyCount: Int { get set }
     var isPrivate: Bool { get }
@@ -36,6 +38,8 @@ class post: Codable, Hashable, AutoIDable, DisplayablePost {
     var attachedWorkout: attachedWorkout?
     var attachedPhoto: attachedPhoto?
     var attachedClip: attachedClip?
+    var workoutID: String?
+    var savedWorkoutID: String?
     var likeCount: Int
     var replyCount: Int
     var isPrivate: Bool
@@ -67,6 +71,8 @@ class GroupPost: Codable, Hashable, AutoIDable, DisplayablePost {
     var attachedWorkout: attachedWorkout?
     var attachedPhoto: attachedPhoto?
     var attachedClip: attachedClip?
+    var workoutID: String?
+    var savedWorkoutID: String?
     var likeCount: Int
     var replyCount: Int
     var isPrivate: Bool

@@ -21,20 +21,25 @@ class DisplayCircuitViewController: UIViewController, Storyboarded {
     
     var adapter : DisplayCircuitAdapter!
     
-    lazy var viewModel: DisplayCircuitViewModel = {
-        return DisplayCircuitViewModel(workout: self.workout, position: exercisePosition)
-    }()
+    var viewModel = DisplayCircuitViewModel()
+    
+    var display = DisplayCircuitView()
+        
 
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .lightColour
         adapter = DisplayCircuitAdapter(delegate: self)
-        tableview.delegate = adapter
-        tableview.dataSource = adapter
-        tableview.tableFooterView = UIView()
-        tableview.register(UINib(nibName: "DisplayCircuitExerciseTableViewCell", bundle: nil), forCellReuseIdentifier: "DisplayCircuitExerciseTableViewCell")
-        tableview.backgroundColor = Constants.lightColour
-        
+        display.tableview.delegate = adapter
+        display.tableview.dataSource = adapter
+        display.tableview.backgroundColor = Constants.lightColour
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        display.frame = getFullViewableFrame()
+        view.addSubview(display)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -42,14 +47,10 @@ class DisplayCircuitViewController: UIViewController, Storyboarded {
     }
     
     func initUI(){
-        self.navigationItem.title = circuit.exercise
-        if !isButtonInteractionEnabled() {
-            displayShadowView()
-        } else if !circuit.completed.value! {
-            let rightBarButton = UIBarButtonItem(title: "Completed", style: .done, target: self, action: #selector(completePressed(_:)))
-            self.navigationItem.rightBarButtonItem = rightBarButton
-        } 
-
+        navigationItem.title = viewModel.circuitModel.circuitName
+        let rightBarButton = UIBarButtonItem(title: "Completed", style: .done, target: self, action: #selector(completePressed(_:)))
+        navigationItem.rightBarButtonItem = rightBarButton
+        navigationItem.rightBarButtonItem?.isEnabled = viewModel.isInteractionEnabled()
     }
     
     func displayShadowView(){
@@ -60,7 +61,8 @@ class DisplayCircuitViewController: UIViewController, Storyboarded {
         flashView.isUserInteractionEnabled = false
     }
     
-    @IBAction func completePressed(_ sender:UIButton){
+    // MARK: - Actions
+    @objc func completePressed(_ sender: UIButton){
         if self.isButtonInteractionEnabled() {
             let alert = SCLAlertView()
             let rpe = alert.addTextField()
@@ -115,15 +117,15 @@ class DisplayCircuitViewController: UIViewController, Storyboarded {
     }
 }
 
-
+// MARK: - Protocol
 extension DisplayCircuitViewController: DisplayCircuitProtocol {
     
     func getData(at indexPath: IndexPath) -> CircuitTableModel {
-        return exercises[indexPath.section]
+        return viewModel.getModel(at: indexPath)
     }
     
     func retreiveNumberOfExercises() -> Int {
-        return exercises.count
+        return viewModel.retreiveNumberOfExercises()
     }
     
     func exerciseCompleted(at indexPath: IndexPath) {

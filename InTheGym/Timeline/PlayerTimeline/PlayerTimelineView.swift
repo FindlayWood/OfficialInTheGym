@@ -99,6 +99,7 @@ class PlayerTimelineView: UIView {
         view.register(UINib(nibName: "TimelineCreatedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCreatedWorkoutTableViewCell")
         view.register(UINib(nibName: "TimelineCompletedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCompletedTableViewCell")
         view.register(UINib(nibName: "TimelineActivityTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineActivityTableViewCell")
+        view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
         view.tableFooterView = UIView()
         view.separatorInset = .zero
         view.layoutMargins = .zero
