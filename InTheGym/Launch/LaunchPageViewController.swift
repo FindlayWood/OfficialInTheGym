@@ -24,13 +24,20 @@ class LaunchPageViewController: UIViewController, Storyboarded {
             switch result {
             case .success(let user):
                 let uid = user.uid
-                UserIDToUser.transform(userID: uid) { userObject in
-                    self.spinner.stopAnimating()
-                    FirebaseAuthManager.currentlyLoggedInUser = userObject
-                    ViewController.admin = userObject.admin
-                    ViewController.username = userObject.username
-                    self.coordinator?.coordinateToTabBar()
+                if uid == UserDefaults.currentUser.uid {
+                    print("matching")
+                } else {
+                    print("not matching")
+                    UserIDToUser.transform(userID: uid) { userObject in
+                        self.spinner.stopAnimating()
+                        UserDefaults.currentUser = userObject
+                        FirebaseAuthManager.currentlyLoggedInUser = userObject
+                        ViewController.admin = userObject.admin
+                        ViewController.username = userObject.username
+                        self.coordinator?.coordinateToTabBar()
+                    }
                 }
+
             case .failure(let error):
                 self.spinner.stopAnimating()
                 switch error{
@@ -85,6 +92,7 @@ class LaunchPageViewController: UIViewController, Storyboarded {
 //        }
     }
     
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         

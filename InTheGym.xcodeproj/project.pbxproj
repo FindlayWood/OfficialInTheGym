@@ -532,6 +532,10 @@
 		74B48DEC27A1FCBF00BBFC16 /* PostReferencesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B48DEB27A1FCBF00BBFC16 /* PostReferencesModel.swift */; };
 		74B48DEE27A1FE6A00BBFC16 /* PostLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B48DED27A1FE6A00BBFC16 /* PostLoader.swift */; };
 		74B48DF027A1FEB400BBFC16 /* PostKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B48DEF27A1FEB400BBFC16 /* PostKeyModel.swift */; };
+		74B48DF227A2D22600BBFC16 /* ThinkingTimeCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B48DF127A2D22600BBFC16 /* ThinkingTimeCheck.swift */; };
+		74B48DF427A2D98000BBFC16 /* ThinkingTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B48DF327A2D98000BBFC16 /* ThinkingTimeViewController.swift */; };
+		74B48DF727A2D99F00BBFC16 /* ThinkingTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B48DF627A2D99F00BBFC16 /* ThinkingTimeView.swift */; };
+		74B48DF927A2DCA300BBFC16 /* ThinkingTimeMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B48DF827A2DCA300BBFC16 /* ThinkingTimeMessages.swift */; };
 		74B6F68A2744242B00A72679 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F6892744242B00A72679 /* LoginView.swift */; };
 		74B6F68C2747E2E900A72679 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F68B2747E2E900A72679 /* UIViewController+Extension.swift */; };
 		74B6F68F274D588000A72679 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F68E274D588000A72679 /* ResetPasswordView.swift */; };
@@ -1231,6 +1235,10 @@
 		74B48DEB27A1FCBF00BBFC16 /* PostReferencesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReferencesModel.swift; sourceTree = "<group>"; };
 		74B48DED27A1FE6A00BBFC16 /* PostLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLoader.swift; sourceTree = "<group>"; };
 		74B48DEF27A1FEB400BBFC16 /* PostKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostKeyModel.swift; sourceTree = "<group>"; };
+		74B48DF127A2D22600BBFC16 /* ThinkingTimeCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingTimeCheck.swift; sourceTree = "<group>"; };
+		74B48DF327A2D98000BBFC16 /* ThinkingTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingTimeViewController.swift; sourceTree = "<group>"; };
+		74B48DF627A2D99F00BBFC16 /* ThinkingTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingTimeView.swift; sourceTree = "<group>"; };
+		74B48DF827A2DCA300BBFC16 /* ThinkingTimeMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingTimeMessages.swift; sourceTree = "<group>"; };
 		74B6F6892744242B00A72679 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		74B6F68B2747E2E900A72679 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		74B6F68E274D588000A72679 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
@@ -1455,6 +1463,7 @@
 				74B48DE927A1E14A00BBFC16 /* WorkoutKeyModel.swift */,
 				74B48DEB27A1FCBF00BBFC16 /* PostReferencesModel.swift */,
 				74B48DEF27A1FEB400BBFC16 /* PostKeyModel.swift */,
+				74B48DF127A2D22600BBFC16 /* ThinkingTimeCheck.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1723,6 +1732,7 @@
 		7433307D2785DDDD005A0C45 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				74B48DF527A2D98500BBFC16 /* ThinkingTime */,
 				7433307E2785DDF9005A0C45 /* UsersListViewController.swift */,
 				743330802785E540005A0C45 /* WorkoutTableViewController.swift */,
 				743330D22790F8D8005A0C45 /* GenericTableViewController.swift */,
@@ -2664,6 +2674,15 @@
 			path = StorageModels;
 			sourceTree = "<group>";
 		};
+		74B48DF527A2D98500BBFC16 /* ThinkingTime */ = {
+			isa = PBXGroup;
+			children = (
+				74B48DF327A2D98000BBFC16 /* ThinkingTimeViewController.swift */,
+				74B48DF627A2D99F00BBFC16 /* ThinkingTimeView.swift */,
+			);
+			path = ThinkingTime;
+			sourceTree = "<group>";
+		};
 		74B6F6882744241B00A72679 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -2964,6 +2983,7 @@
 				74F5471225EE929900C1A6A9 /* SettingsMessages.swift */,
 				74F78B9D2631D0EC00C21077 /* LaunchMessageController.swift */,
 				741FB1D9266E71960039EB29 /* StaticMessages.swift */,
+				74B48DF827A2DCA300BBFC16 /* ThinkingTimeMessages.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -3365,6 +3385,7 @@
 				743330C3278DDD23005A0C45 /* EmomExerciseSelectionCoordinator.swift in Sources */,
 				74226E282637417C0074E616 /* CreateCircuitProtocol.swift in Sources */,
 				74CA53A726BD9040002CE5C3 /* GroupCoordinator.swift in Sources */,
+				74B48DF727A2D99F00BBFC16 /* ThinkingTimeView.swift in Sources */,
 				7444D0D226D42FD20009C7A6 /* SavingUploadCell.swift in Sources */,
 				746062712528C35D005B1480 /* COACHESViewController.swift in Sources */,
 				741B22022636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift in Sources */,
@@ -3510,6 +3531,7 @@
 				74FCFA3F2614EEA50064699F /* MyProfileProtocol.swift in Sources */,
 				741FB1E5266F9B9F0039EB29 /* DisplayAMRAPProtocol.swift in Sources */,
 				7444D08C26D061690009C7A6 /* DisplayNoteView.swift in Sources */,
+				74B48DF427A2D98000BBFC16 /* ThinkingTimeViewController.swift in Sources */,
 				7444D0D026D42E260009C7A6 /* BaseUploadCell.swift in Sources */,
 				7444D06526CD41D20009C7A6 /* GroupWorkoutsView.swift in Sources */,
 				741E45D4265EB4AA00519F82 /* BottomViewPresentationController.swift in Sources */,
@@ -3524,6 +3546,7 @@
 				74B6F693274D5DAB00A72679 /* ResettingPasswordViewModel.swift in Sources */,
 				74F2CCF126E65E8B00D7AD79 /* CreatingNewWorkout.swift in Sources */,
 				744AED12279615CE000D2D74 /* Array+Extension.swift in Sources */,
+				74B48DF227A2D22600BBFC16 /* ThinkingTimeCheck.swift in Sources */,
 				741FB1C12667DF600039EB29 /* LiveWorkout.swift in Sources */,
 				74EC4391263A0EF400D81E5B /* DisplayCircuitViewController.swift in Sources */,
 				747B672E25FFAAFC000AD6B7 /* NotificationsTableViewCell.swift in Sources */,
@@ -3557,6 +3580,7 @@
 				7479AFA9253F844500E6A79C /* InsideCollectionViewCell.swift in Sources */,
 				7486C216267BF72B008A1E21 /* DiscussionView.swift in Sources */,
 				74318F4A26B9A072009EDFAC /* DisplayAMRAPShowAllExercisesView.swift in Sources */,
+				74B48DF927A2DCA300BBFC16 /* ThinkingTimeMessages.swift in Sources */,
 				7486C2092677BD75008A1E21 /* FirebaseAPIWorkoutManager.swift in Sources */,
 				74CCF8E3262DAB9100262345 /* NotificationAcceptedRequest.swift in Sources */,
 				74318F4026B5733F009EDFAC /* PreLiveWorkoutProtocol.swift in Sources */,

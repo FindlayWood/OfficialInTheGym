@@ -16,6 +16,7 @@ struct Users: Codable, Hashable, Assignable {
     var username: String
     var firstName: String
     var lastName: String
+    var premiumAccount: Bool?
     var numberOfCompletes: Int?
     var uid: String
     var profilePhotoURL: String?
@@ -53,4 +54,9 @@ extension UserSearchModel: FirebaseInstance {
     var internalPath: String {
         return "users/\(uid)"
     }
+}
+
+// MARK: - Nil User
+extension Users {
+    static let nilUser = Users(admin: false, email: "", username: "", firstName: "", lastName: "", uid: "")
 }

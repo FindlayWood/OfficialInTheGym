@@ -32,7 +32,7 @@ extension MyProfileAdapter: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == 0{
+        if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyProfileCollectionTableViewCell", for: indexPath) as! MyProfileCollectionTableViewCell
             cell.collectionData = delegate.getCollectionData()
             cell.delegate = self.delegate

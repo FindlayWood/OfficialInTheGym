@@ -65,6 +65,20 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
             completion(.success(tempModels))
         }
     }
+    func fetchSingleModel<Model: FirebaseModel>(_ model: Model.Type, completion: @escaping (Result<Model,Error>) -> Void) {
+        let DBRef = Database.database().reference().child(model.path)
+        DBRef.observeSingleEvent(of: .value) { snapshot in
+            guard let object = snapshot.value as? [String: AnyObject] else {return}
+            do {
+                let data = try FirebaseDecoder().decode(model, from: object)
+                completion(.success(data))
+            }
+            catch {
+                print(String(describing: error))
+                completion(.failure(error))
+            }
+        }
+    }
     func fetchInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
         var tempModels = [T]()
         let DBRef = Database.database().reference().child(model.internalPath)
@@ -93,6 +107,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
             }
             catch {
                 print(String(describing: error))
+                completion(.failure(error))
             }
         }
     }

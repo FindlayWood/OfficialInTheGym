@@ -43,7 +43,7 @@ class MyProfileViewModel {
     
     // A property containing the number ot items, it will be used by the view controller to render items on the screen using a
     var numberOfItems: Int {
-        return posts.count
+        return postPublisher.value.count
     }
     
     var isLoading: Bool = false {
@@ -109,6 +109,9 @@ class MyProfileViewModel {
                 self?.postPublisher.send(posts)
                 self?.isLoading = false
                 self?.reloadTableViewClosure?()
+            case .failure(_):
+                print("failed")
+                break
             }
         }
     }

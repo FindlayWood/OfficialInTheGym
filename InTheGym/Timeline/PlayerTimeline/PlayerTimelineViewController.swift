@@ -61,6 +61,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         initViewModel()
         initNewPostButton()
         initRefreshControl()
+        viewModel.checkForThinkingTime()
     }
     
     override func viewDidLayoutSubviews() {
@@ -125,6 +126,18 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
             .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
         
+        viewModel.thinkingTimeActivePublisher
+            .sink { [weak self] active in
+                guard let self = self else {return}
+                if active {
+                    let vc = ThinkingTimeViewController()
+                    vc.modalPresentationStyle = .fullScreen
+                    vc.modalTransitionStyle = .coverVertical
+                    self.navigationController?.present(vc, animated: true)
+                }
+            }
+            .store(in: &subscriptions)
+        
     }
     
     func initNewPostButton(){
@@ -151,12 +164,12 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     
     @objc func handleRefresh(){
         // go to viewmodel to refresh
-        viewModel.fetchData()
+        //viewModel.fetchData()
     }
     
     @objc func newPostsPressed(_ sender:UIButton){
         toggleNewPostsButton(hidden: true)
-        viewModel.fetchData()
+        //viewModel.fetchData()
     }
     
     func toggleNewPostsButton(hidden:Bool){
@@ -231,7 +244,7 @@ extension PlayerTimelineViewController: PlayerTimelineProtocol, TimelineTapProto
     }
     
     func postFromSelf(post: TimelinePostModel) {
-        self.viewModel.fetchData()
+        //self.viewModel.fetchData()
     }
     
     func workoutTapped(on cell: UITableViewCell) {

@@ -29,25 +29,30 @@ class PostLoader {
             completion(.success(cached))
         } else {
             apiService.fetchSingleInstance(of: searchModel, returning: post.self) { [weak self] result in
-                let user = try? result.get()
-                user.map { self?.cache[searchModel.id] = $0 }
-                completion(result)
+                guard let self = self else {return}
+                switch result {
+                case .success(let post):
+                    self.cache[post.id] = post
+                    completion(.success(post))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
     }
     
     // MARK: - Range Load
-    func loadRange(from searchModels: [PostKeyModel], completion: @escaping (Result<[post],Never>) -> Void) {
+    func loadRange(from searchModels: [PostKeyModel], completion: @escaping (Result<[post],Error>) -> Void) {
         var rangeOfPosts = [post]()
         let dispatchGroup = DispatchGroup()
         for model in searchModels {
             dispatchGroup.enter()
             load(from: model) { result in
-                do {
-                    let post = try result.get()
+                switch result {
+                case .success(let post):
                     rangeOfPosts.append(post)
                     dispatchGroup.leave()
-                } catch {
+                case .failure(_):
                     dispatchGroup.leave()
                 }
             }
@@ -55,5 +60,10 @@ class PostLoader {
         dispatchGroup.notify(queue: .main) {
             completion(.success(rangeOfPosts))
         }
+    }
+    
+    // MARK: - Add
+    func add(_ post: post) {
+        cache[post.id] = post
     }
 }
