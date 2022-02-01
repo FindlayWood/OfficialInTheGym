@@ -1,8 +1,8 @@
 //
-//  WorkoutExerciseCollectionDataSource.swift
+//  LiveWorkoutDataSource.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 18/01/2022.
+//  Created by Findlay Wood on 28/01/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Combine
 
-class WorkoutExerciseCollectionDataSource: NSObject {
+class LiveWorkoutDataSource: NSObject {
     
     // MARK: - Publisher
     var rowSelected = PassthroughSubject<ExerciseRow,Never>()
@@ -21,6 +21,8 @@ class WorkoutExerciseCollectionDataSource: NSObject {
     var exerciseButtonTapped = PassthroughSubject<IndexPath,Never>()
     var showClipPublisher = PassthroughSubject<Bool,Never>()
     var actionSubscriptions = [IndexPath: AnyCancellable]()
+    var plusExerciseButtonTapped = PassthroughSubject<Void,Never>()
+    var plusSetButtonTapped = PassthroughSubject<IndexPath,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
@@ -39,13 +41,13 @@ class WorkoutExerciseCollectionDataSource: NSObject {
     }
     
     // MARK: - Create Data Source
-    func makeDataSource() -> UICollectionViewDiffableDataSource<Int,ExerciseRow> {
+    func makeDataSource() -> UICollectionViewDiffableDataSource<LiveWorkoutSections,LiveWorkoutItems> {
         return UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             switch itemIdentifier {
             case .exercise(let model):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExerciseCollectionCell.reuseID, for: indexPath) as! ExerciseCollectionCell
-                cell.userInteraction = self.isUserInteractionEnabled
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LiveExerciseCollectionCell.reuseID, for: indexPath) as! LiveExerciseCollectionCell
                 cell.setUserInteraction(to: self.isUserInteractionEnabled)
+                cell.interactionEnabled = self.isUserInteractionEnabled
                 cell.configure(with: model)
                 self.actionSubscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
@@ -58,23 +60,17 @@ class WorkoutExerciseCollectionDataSource: NSObject {
                             self?.clipButtonTapped.send(indexPath)
                         case .exerciseButton:
                             self?.exerciseButtonTapped.send(indexPath)
-                        case .completed(let tappedIndex):
-                            let fullIndex = IndexPath(item: tappedIndex.item, section: indexPath.item)
-                            self?.completeButtonTapped.send(fullIndex)
+                        case .addSet:
+                            self?.plusSetButtonTapped.send(indexPath)
                         }
                     })
                 return cell
-            case .circuit(let model):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainWorkoutCircuitCollectionCell.reuseID, for: indexPath) as! MainWorkoutCircuitCollectionCell
-                cell.configure(with: model)
-                return cell
-            case .emom(let model):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainWorkoutEMOMCollectionCell.reuseID, for: indexPath) as! MainWorkoutEMOMCollectionCell
-                cell.configure(with: model)
-                return cell
-            case .amrap(let model):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainWorkoutAMRAPCollectionCell.reuseID, for: indexPath) as! MainWorkoutAMRAPCollectionCell
-                cell.configure(with: model)
+            case .plus:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LiveWorkoutPlusCollectionCell.reuseID, for: indexPath) as! LiveWorkoutPlusCollectionCell
+                self.actionSubscriptions[indexPath] = cell.plusTappedPublisher
+                    .sink(receiveValue: { [weak self] in
+                        self?.plusExerciseButtonTapped.send(())
+                    })
                 return cell
             }
         }
@@ -82,37 +78,27 @@ class WorkoutExerciseCollectionDataSource: NSObject {
     
     // MARK: - Initial Setup
     func initialSetup() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int,ExerciseRow>()
-        snapshot.appendSections([1])
+        var snapshot = NSDiffableDataSourceSnapshot<LiveWorkoutSections,LiveWorkoutItems>()
+        snapshot.appendSections([.exercise, .plus])
+        if isUserInteractionEnabled {
+            snapshot.appendItems([.plus], toSection: .plus)
+        }
         dataDource.apply(snapshot, animatingDifferences: false)
     }
     
     // MARK: - Update
-    func updateTable(with models: [ExerciseType]) {
+    func updateTable(with exercises: [ExerciseModel]) {
+        let items = exercises.map { LiveWorkoutItems.exercise($0) }
         var currentSnapshot = dataDource.snapshot()
-        for type in models {
-            switch type {
-            case is ExerciseModel:
-                currentSnapshot.appendItems([.exercise(type as! ExerciseModel)], toSection: 1)
-            case is CircuitModel:
-                currentSnapshot.appendItems([.circuit(type as! CircuitModel)], toSection: 1)
-            case is EMOMModel:
-                currentSnapshot.appendItems([.emom(type as! EMOMModel)], toSection: 1)
-            case is AMRAPModel:
-                currentSnapshot.appendItems([.amrap(type as! AMRAPModel)], toSection: 1)
-            default:
-                break
-            }
-        }
+        currentSnapshot.appendItems(items, toSection: .exercise)
         dataDource.apply(currentSnapshot, animatingDifferences: false)
     }
 }
 // MARK: - Delegate - Select Row
-extension WorkoutExerciseCollectionDataSource: UICollectionViewDelegate {
+extension LiveWorkoutDataSource: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let selected = dataDource.itemIdentifier(for: indexPath) else {return}
-        rowSelected.send(selected)
+        
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

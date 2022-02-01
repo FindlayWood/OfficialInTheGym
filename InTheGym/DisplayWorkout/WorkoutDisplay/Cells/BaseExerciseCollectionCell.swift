@@ -1,8 +1,8 @@
 //
-//  MainWorkoutExerciseCollectionCell.swift
+//  BaseExerciseCollectionCell.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 18/01/2022.
+//  Created by Findlay Wood on 28/01/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
@@ -10,17 +10,17 @@ import Foundation
 import UIKit
 import Combine
 
-class MainWorkoutExerciseCollectionCell: FullWidthCollectionViewCell {
+class BaseExerciseCollectionCell: FullWidthCollectionViewCell {
     
     // MARK: - Publishers
     var completedAt = PassthroughSubject<IndexPath,Never>()
-    var actionPublisher = PassthroughSubject<ExerciseAction,Never>()
+    //var actionPublisher = PassthroughSubject<ExerciseAction,Never>()
     
     // MARK: - Properties
-    static var reuseID = "MainWorkoutExerciseCollectionCell"
-    var dataSource: WorkoutCollectionDataSource!
-    private var subscriptions = Set<AnyCancellable>()
-    var userInteraction: Bool!
+    //static var reuseID = "MainWorkoutExerciseCollectionCell"
+    //var dataSource: WorkoutCollectionDataSource!
+    var subscriptions = Set<AnyCancellable>()
+
     
     // MARK: - Subviews
     var exerciseNameButton: UIButton = {
@@ -104,47 +104,14 @@ class MainWorkoutExerciseCollectionCell: FullWidthCollectionViewCell {
         button.setTitle("RPE", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         button.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 22)
-        button.addTarget(self, action: #selector(rpeTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
-    // MARK: - Initializer
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupUI()
-    }
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        rpeButton.setTitle("RPE", for: .normal)
-        rpeButton.setTitleColor( .systemBlue, for: .normal)
-        repsLabel.text = nil
-        subscriptions.removeAll()
-    }
-    
-    // MARK: - Subscriptions
-    func setupSubscriptions() {
-//        dataSource = .init(collectionView: collectionView)
-//        dataSource.completeButtonTapped
-//            .sink { [weak self] in self?.actionPublisher.send(.completed($0)) }
-//            .store(in: &subscriptions)
-    }
-    
-    // MARK: - Button Actions
-    func buttonActions(_ action: ExerciseAction) {
-        actionPublisher.send(action)
-    }
-    @objc func rpeTapped(_ sender: UIButton) {
-        actionPublisher.send(.rpeButton)
-    }
+
     
 }
 // MARK: - Configure
-private extension MainWorkoutExerciseCollectionCell {
+extension BaseExerciseCollectionCell {
     func setupUI() {
         backgroundColor = .offWhiteColour
         layer.cornerRadius = 10
@@ -214,26 +181,24 @@ private extension MainWorkoutExerciseCollectionCell {
 }
 
 // MARK: - Public Configuration
-extension MainWorkoutExerciseCollectionCell {
-    public func configure(with model: ExerciseModel) {
-        exerciseNameButton.setTitle(model.exercise, for: .normal)
-        setsLabel.text = model.sets.description + " SETS"
-        repsLabel.text = model.reps.repString()
-        bodyTypeLabel.text = model.type.rawValue
-        if let rpe = model.rpe {
-            rpeButton.setTitle(rpe.description, for: .normal)
-            rpeButton.setTitleColor(Constants.rpeColors[rpe - 1], for: .normal)
-        }
-        dataSource = .init(collectionView: collectionView, isUserInteractionEnabled: userInteraction)
-        dataSource.updateTable(with: model.getSets())
-        dataSource.completeButtonTapped
-            .sink { [weak self] in self?.actionPublisher.send(.completed($0)) }
-            .store(in: &subscriptions)
-    }
-    public func setUserInteraction(to enabled: Bool) {
-        self.rpeButton.isUserInteractionEnabled = enabled
-        self.clipButton.isUserInteractionEnabled = enabled
-    }
+extension BaseExerciseCollectionCell {
+//    public func configure(with model: ExerciseModel) {
+//        exerciseNameButton.setTitle(model.exercise, for: .normal)
+//        setsLabel.text = model.sets.description + " SETS"
+//        repsLabel.text = model.reps.repString()
+//        bodyTypeLabel.text = model.type.rawValue
+//        if let rpe = model.rpe {
+//            rpeButton.setTitle(rpe.description, for: .normal)
+//            rpeButton.setTitleColor(Constants.rpeColors[rpe - 1], for: .normal)
+//        }
+//        dataSource = .init(collectionView: collectionView, isUserInteractionEnabled: userInteraction)
+//        dataSource.updateTable(with: model.getSets())
+//        dataSource.completeButtonTapped
+//            .sink { [weak self] in self?.actionPublisher.send(.completed($0)) }
+//            .store(in: &subscriptions)
+//    }
+//    public func setUserInteraction(to enabled: Bool) {
+//        self.rpeButton.isUserInteractionEnabled = enabled
+//        self.clipButton.isUserInteractionEnabled = enabled
+//    }
 }
-
-

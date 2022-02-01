@@ -11,8 +11,9 @@ import UIKit
 import Combine
 
 class WorkoutsCollectionDataSource: NSObject {
+    
     // MARK: - Publisher
-    var workoutSelected = PassthroughSubject<IndexPath,Never>()
+    var workoutSelected = PassthroughSubject<WorkoutModel,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
@@ -55,6 +56,6 @@ extension WorkoutsCollectionDataSource: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let workout = dataDource.itemIdentifier(for: indexPath) else {return}
-        workoutSelected.send(indexPath)
+        workoutSelected.send(workout)
     }
 }

@@ -26,6 +26,9 @@ class LaunchPageViewController: UIViewController, Storyboarded {
                 let uid = user.uid
                 if uid == UserDefaults.currentUser.uid {
                     print("matching")
+                    FirebaseAuthManager.currentlyLoggedInUser = UserDefaults.currentUser
+                    self.spinner.stopAnimating()
+                    self.coordinator?.coordinateToTabBar()
                 } else {
                     print("not matching")
                     UserIDToUser.transform(userID: uid) { userObject in

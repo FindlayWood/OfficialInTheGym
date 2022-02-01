@@ -1,15 +1,15 @@
 //
-//  SavedWorkoutDisplayView.swift
+//  LiveWorkoutDisplayView.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 20/01/2022.
+//  Created by Findlay Wood on 28/01/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class SavedWorkoutDisplayView: UIView {
+class LiveWorkoutDisplayView: UIView {
     
     // MARK: - Properties
     
@@ -18,10 +18,8 @@ class SavedWorkoutDisplayView: UIView {
     lazy var exerciseCollection: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateExerciseCollectionLayout())
         view.backgroundColor = .lightColour
-        view.register(ExerciseCollectionCell.self, forCellWithReuseIdentifier: ExerciseCollectionCell.reuseID)
-        view.register(MainWorkoutCircuitCollectionCell.self, forCellWithReuseIdentifier: MainWorkoutCircuitCollectionCell.reuseID)
-        view.register(MainWorkoutAMRAPCollectionCell.self, forCellWithReuseIdentifier: MainWorkoutAMRAPCollectionCell.reuseID)
-        view.register(MainWorkoutEMOMCollectionCell.self, forCellWithReuseIdentifier: MainWorkoutEMOMCollectionCell.reuseID)
+        view.register(LiveExerciseCollectionCell.self, forCellWithReuseIdentifier: LiveExerciseCollectionCell.reuseID)
+        view.register(LiveWorkoutPlusCollectionCell.self, forCellWithReuseIdentifier: LiveWorkoutPlusCollectionCell.reuseID)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -38,7 +36,7 @@ class SavedWorkoutDisplayView: UIView {
     }
 }
 // MARK: - Setup UI
-private extension SavedWorkoutDisplayView {
+private extension LiveWorkoutDisplayView {
     func setupUI() {
         backgroundColor = .lightColour
         addSubview(exerciseCollection)

@@ -86,7 +86,6 @@ class WorkoutDisplayViewModel {
             case .failure(_): break
             }
         }
-        
     }
     
     // MARK: - Retreive Function

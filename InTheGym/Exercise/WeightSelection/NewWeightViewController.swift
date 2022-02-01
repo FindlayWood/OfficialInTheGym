@@ -27,8 +27,13 @@ class NewWeightViewController: UIViewController, Storyboarded {
     
     lazy var WeightArray: [String] = {
         //guard let exercise = newExercise else {return []}
-        let array = Array(repeating: "", count: exerciseViewModel?.exercise.sets ?? 0)
-        return array
+        guard let exerciseViewModel = exerciseViewModel else {return []}
+        if exerciseViewModel.exercise.weight.isEmpty {
+            let array = Array(repeating: "", count: exerciseViewModel.exercise.sets)
+            return array
+        } else {
+            return exerciseViewModel.exercise.weight
+        }
     }()
     
     
@@ -47,7 +52,7 @@ class NewWeightViewController: UIViewController, Storyboarded {
     
     @objc func buttonTapped(_ sender: UIButton) {
         
-        if coordinator is LiveWorkoutCoordinator || coordinator is AMRAPCoordinator {
+        if exerciseViewModel?.exercisekind == .live || coordinator is AMRAPCoordinator {
             navigationItem.rightBarButtonItem?.isEnabled = true
             //display.nextButton.isHidden = false
             display.weightMeasurementField.text = sender.titleLabel?.text
@@ -111,9 +116,9 @@ class NewWeightViewController: UIViewController, Storyboarded {
     
     @IBAction func nextPressed(_ sender:UIButton){
 //        guard let newExercise = newExercise else {return}
-//        guard let measurement = display.weightMeasurementField.text,
-//              let number = display.numberTextfield.text
-//        else {return}
+        guard let measurement = display.weightMeasurementField.text,
+              let number = display.numberTextfield.text
+        else {return}
 //        
 //        if coordinator is LiveWorkoutCoordinator {
 //            if measurement == "max" || measurement == "bw" {
@@ -177,7 +182,23 @@ class NewWeightViewController: UIViewController, Storyboarded {
 //        }
 //        coordinator?.weightSelected(newExercise)
         
-        exerciseViewModel?.addWeight(WeightArray)
+        switch exerciseViewModel?.exercisekind {
+        case .regular, .emom, .amrap, .circuit:
+            exerciseViewModel?.addWeight(WeightArray)
+        case .live:
+            if measurement == "max" || measurement == "bw" {
+                exerciseViewModel?.appendToWeight(measurement)
+            } else if number.isEmpty {
+                showEmptyAlert()
+            } else {
+                let newWeight = number + measurement
+                exerciseViewModel?.appendToWeight(newWeight)
+            }
+        case .none:
+            break
+        }
+        
+        //exerciseViewModel?.addWeight(WeightArray)
         newCoordinator?.next()
     }
     
@@ -231,6 +252,10 @@ class NewWeightViewController: UIViewController, Storyboarded {
             break
         }
         
+        if exerciseViewModel?.exercisekind == .live {
+            display.topCollection.isHidden = true
+        }
+        
         initNavBar()
     }
     
@@ -278,7 +303,7 @@ extension NewWeightViewController: WeightAdapterProtocol {
     }
     
     func itemSelected(at indexPath: Int) {
-        if !(coordinator is LiveWorkoutCoordinator) {
+        if !(exerciseViewModel?.exercisekind == .live) {
             switch selectedState {
             case .allSelected:
                 selectedState = .singleSelected(indexPath)

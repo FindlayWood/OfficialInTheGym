@@ -29,8 +29,9 @@ class EmomExerciseSelectionCoordinator: NSObject, Coordinator {
 }
 
 // MARK: - Exercise Selection Flow
-extension EmomExerciseSelectionCoordinator: ExerciseSelectionFlow {
-    func ciruit() {
+extension EmomExerciseSelectionCoordinator: RegularExerciseSelectionFlow {
+    
+    func circuit() {
             
     }
     

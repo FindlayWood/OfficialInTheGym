@@ -67,16 +67,19 @@ class DisplayingWorkoutsViewController: UIViewController {
             .store(in: &subscriptions)
         
         dataSource.workoutSelected
-            .sink { [weak self] in self?.workoutSelected(at: $0) }
+            .sink { [weak self] in self?.workoutSelected($0) }
             .store(in: &subscriptions)
         
         viewModel.fetchWorkouts()
     }
     
     // MARK: - Actions
-    func workoutSelected(at indexPath: IndexPath) {
-        let workout = viewModel.workoutSelected(at: indexPath)
-        coordinator?.show(workout)
+    func workoutSelected(_ workout: WorkoutModel) {
+        if workout.liveWorkout ?? false {
+            coordinator?.showLiveWorkout(workout)
+        } else {
+            coordinator?.show(workout)
+        }
     }
     
     @objc func plusButtonTapped(_ sender: UIButton) {

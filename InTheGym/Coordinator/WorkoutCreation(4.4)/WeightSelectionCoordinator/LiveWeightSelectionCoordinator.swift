@@ -12,13 +12,17 @@ import UIKit
 class LiveWeightSelectionCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var exerciseViewModel: ExerciseCreationViewModel
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, exerciseViewModel: ExerciseCreationViewModel) {
         self.navigationController = navigationController
+        self.exerciseViewModel = exerciseViewModel
     }
     
     func start() {
-        let vc = ExerciseSelectionViewController()
+        let vc = NewWeightViewController()
+        vc.exerciseViewModel = exerciseViewModel
+        vc.newCoordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
 }
@@ -26,6 +30,12 @@ class LiveWeightSelectionCoordinator: NSObject, Coordinator {
 // MARK: - Weight Selection Flow
 extension LiveWeightSelectionCoordinator: WeightSelectionFlow {
     func next() {
-        
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for controller in viewControllers {
+            if controller.isKind(of: LiveWorkoutDisplayViewController.self) {
+                navigationController.popToViewController(controller, animated: true)
+                break
+            }
+        }
     }
 }

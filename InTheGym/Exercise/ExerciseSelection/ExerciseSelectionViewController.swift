@@ -13,7 +13,7 @@ class ExerciseSelectionViewController: UIViewController {
     
     weak var coordinator: CreationFlow?
     
-    weak var newCoordinator: ExerciseSelectionFlow?
+    weak var newCoordinator: RegularExerciseSelectionFlow?
     
     var newExercise: exercise?
     
@@ -74,7 +74,7 @@ class ExerciseSelectionViewController: UIViewController {
         display.collectionView.delegate = adapter
         display.collectionView.dataSource = adapter
         display.searchBar.delegate = self
-        if newCoordinator is CircuitExerciseSelectionCoordinator || newCoordinator is AmrapExerciseSelectionCoordinator || newCoordinator is EmomExerciseSelectionCoordinator {
+        if newCoordinator is CircuitExerciseSelectionCoordinator || newCoordinator is AmrapExerciseSelectionCoordinator || newCoordinator is EmomExerciseSelectionCoordinator || newCoordinator is LiveExerciseSelectionCoordinator {
             display.hideStack()
         }
     }
@@ -102,7 +102,7 @@ class ExerciseSelectionViewController: UIViewController {
     @objc func circuitTapped() {
         let coordinator = coordinator as? RegularAndLiveFlow
         coordinator?.circuitSelected()
-        newCoordinator?.ciruit()
+        newCoordinator?.circuit()
     }
     @objc func amrapTapped() {
         let coordinator = coordinator as? RegularAndLiveFlow

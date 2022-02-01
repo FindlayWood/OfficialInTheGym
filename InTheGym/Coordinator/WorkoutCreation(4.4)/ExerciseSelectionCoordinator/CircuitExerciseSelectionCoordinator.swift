@@ -29,18 +29,19 @@ class CircuitExerciseSelectionCoordinator: NSObject, Coordinator {
 }
 
 // MARK: - Exercise Selection Flow
-extension CircuitExerciseSelectionCoordinator: ExerciseSelectionFlow {
-    func ciruit() {
-            
+extension CircuitExerciseSelectionCoordinator: RegularExerciseSelectionFlow {
+    func circuit() {
+        // NULL
     }
     
     func emom() {
-        
+        // NULL
     }
     
     func amrap() {
-        
+        // NULL
     }
+    
     
     func exercise(viewModel: ExerciseCreationViewModel) {
         viewModel.exercisekind = .circuit

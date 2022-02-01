@@ -31,8 +31,13 @@ class NewRepsViewController: UIViewController, Storyboarded {
     lazy var repIntArray: [Int] = {
         var array = [Int]()
         //guard let newExercise = newExercise else {return []}
-        array = Array(repeating: 1, count: exerciseViewModel?.exercise.sets ?? 0)
-        return array
+        guard let exerciseModel = exerciseViewModel else {return []}
+        if exerciseModel.exercise.reps.isEmpty {
+            array = Array(repeating: 1, count: exerciseViewModel?.exercise.sets ?? 0)
+            return array
+        } else {
+            return exerciseModel.exercise.reps
+        }
     }()
     
     private var repCounter: Int = 1
@@ -71,6 +76,10 @@ class NewRepsViewController: UIViewController, Storyboarded {
             display.pageNumberLabel.text = "3 of 4"
         default:
             break
+        }
+        
+        if exerciseViewModel?.exercisekind == .live {
+            display.topCollection.isHidden = true
         }
         
         initAdapter()
@@ -232,12 +241,25 @@ extension NewRepsViewController{
 //            newExercise.repArray = repIntArray
 //        }
 //        coordinator?.repsSelected(newExercise)
-        if exerciseViewModel?.exercisekind == .amrap || exerciseViewModel?.exercisekind == .emom {
+        switch exerciseViewModel?.exercisekind {
+        case .amrap, .emom:
             exerciseViewModel?.addReps([repCounter])
             exerciseViewModel?.addSets(1)
-        } else {
+        case .regular, .circuit:
             exerciseViewModel?.addReps(repIntArray)
+        case .live:
+            exerciseViewModel?.appendToReps(repCounter)
+        case .none:
+            break
         }
+//        if exerciseViewModel?.exercisekind == .amrap || exerciseViewModel?.exercisekind == .emom {
+//            exerciseViewModel?.addReps([repCounter])
+//            exerciseViewModel?.addSets(1)
+//        }
+//
+//        else {
+//            exerciseViewModel?.addReps(repIntArray)
+//        }
 //        exerciseViewModel?.addReps(repIntArray)
         newCoordinator?.next(viewModel: exerciseViewModel!)
     }

@@ -30,8 +30,9 @@ class RegularExerciseSelectionCoordinator: NSObject, Coordinator {
 }
 
 // MARK: - Exercise Selection Flow
-extension RegularExerciseSelectionCoordinator: ExerciseSelectionFlow {
-    func ciruit() {
+extension RegularExerciseSelectionCoordinator: RegularExerciseSelectionFlow {
+    
+    func circuit() {
         let child = CircuitCreationCoordinator(navigationController: navigationController, workoutViewModel: workoutCreationViewModel as! WorkoutCreationViewModel, workoutPosition: workoutPosition)
         childCoordinators.append(child)
         child.start()

@@ -29,8 +29,9 @@ class AmrapExerciseSelectionCoordinator: NSObject, Coordinator {
 }
 
 // MARK: - Exercise Selection Flow
-extension AmrapExerciseSelectionCoordinator: ExerciseSelectionFlow {
-    func ciruit() {
+extension AmrapExerciseSelectionCoordinator: RegularExerciseSelectionFlow {
+    
+    func circuit() {
             
     }
     

@@ -64,6 +64,9 @@ extension CreateCircuitViewModel: ExerciseAdding {
         currentExercises.append(exercise)
         exercises.send(currentExercises)
     }
+    func updatedExercise(_ exercise: ExerciseModel) {
+        // NULL
+    }
 }
 
 extension CreateCircuitViewModel {

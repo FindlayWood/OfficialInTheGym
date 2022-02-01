@@ -95,6 +95,11 @@ extension WorkoutsCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    func showLiveWorkout(_ workout: WorkoutModel) {
+        let child = LiveWorkoutDisplayCoordinator(navigationController: navigationController, workout: workout)
+        childCoordinators.append(child)
+        child.start()
+    }
 }
 
 

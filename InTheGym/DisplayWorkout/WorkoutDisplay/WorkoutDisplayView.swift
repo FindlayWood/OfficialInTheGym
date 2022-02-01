@@ -30,7 +30,7 @@ class WorkoutDisplayView: UIView {
     lazy var exerciseCollection: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateExerciseCollectionLayout())
         view.backgroundColor = .lightColour
-        view.register(MainWorkoutExerciseCollectionCell.self, forCellWithReuseIdentifier: MainWorkoutExerciseCollectionCell.reuseID)
+        view.register(ExerciseCollectionCell.self, forCellWithReuseIdentifier: ExerciseCollectionCell.reuseID)
         view.register(MainWorkoutCircuitCollectionCell.self, forCellWithReuseIdentifier: MainWorkoutCircuitCollectionCell.reuseID)
         view.register(MainWorkoutAMRAPCollectionCell.self, forCellWithReuseIdentifier: MainWorkoutAMRAPCollectionCell.reuseID)
         view.register(MainWorkoutEMOMCollectionCell.self, forCellWithReuseIdentifier: MainWorkoutEMOMCollectionCell.reuseID)

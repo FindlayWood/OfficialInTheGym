@@ -1,8 +1,8 @@
 //
-//  ExerciseCollectionCell.swift
+//  LiveExerciseCollectionCell.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 22/01/2022.
+//  Created by Findlay Wood on 28/01/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
@@ -10,16 +10,16 @@ import Foundation
 import UIKit
 import Combine
 
-final class ExerciseCollectionCell: BaseExerciseCollectionCell {
+final class LiveExerciseCollectionCell: BaseExerciseCollectionCell {
     
     // MARK: - Publishers
-    var actionPublisher = PassthroughSubject<ExerciseAction,Never>()
+    var actionPublisher = PassthroughSubject<LiveExerciseAction,Never>()
     
     // MARK: - Properties
-    static let reuseID = "ExerciseCollectionCellreuseID"
-    var dataSource: WorkoutCollectionDataSource!
-    var userInteraction: Bool!
+    static let reuseID = "LiveExerciseCollectionCellreuseID"
+    var dataSource: LiveWorkoutSetDataSource!
     //private var subscriptions = Set<AnyCancellable>()
+    var interactionEnabled: Bool!
     
     // MARK: - Button Actions
     func setupButtonActions() {
@@ -36,10 +36,12 @@ final class ExerciseCollectionCell: BaseExerciseCollectionCell {
     @objc func clipTapped(_ sender: UIButton) {
         actionPublisher.send(.clipButton)
     }
+    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        collectionView.register(LiveWorkoutPlusCollectionCell.self, forCellWithReuseIdentifier: LiveWorkoutPlusCollectionCell.reuseID)
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -55,7 +57,7 @@ final class ExerciseCollectionCell: BaseExerciseCollectionCell {
 }
 
 // MARK: - Public Configuration
-extension ExerciseCollectionCell {
+extension LiveExerciseCollectionCell {
     public func configure(with model: ExerciseModel) {
         exerciseNameButton.setTitle(model.exercise, for: .normal)
         setsLabel.text = model.sets.description + " SETS"
@@ -65,10 +67,12 @@ extension ExerciseCollectionCell {
             rpeButton.setTitle(rpe.description, for: .normal)
             rpeButton.setTitleColor(Constants.rpeColors[rpe - 1], for: .normal)
         }
-        dataSource = .init(collectionView: collectionView, isUserInteractionEnabled: userInteraction)
+        dataSource = .init(collectionView: collectionView, isUserInteractionEnabled: interactionEnabled)
         dataSource.updateTable(with: model.getSets())
-        dataSource.completeButtonTapped
-            .sink { [weak self] in self?.actionPublisher.send(.completed($0)) }
+        dataSource.plusButtonTapped
+            .sink { [weak self] in
+                self?.actionPublisher.send(.addSet)
+            }
             .store(in: &subscriptions)
     }
     public func setUserInteraction(to enabled: Bool) {

@@ -60,6 +60,13 @@ extension RegularWeightSelectionCoordinator: WeightSelectionFlow {
                     break
                 }
             }
+        case .live:
+            for controller in viewControllers {
+                if controller.isKind(of: LiveWorkoutDisplayViewController.self) {
+                    navigationController.popToViewController(controller, animated: true)
+                    break
+                }
+            }
         }
     }
 }

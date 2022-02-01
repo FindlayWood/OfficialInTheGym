@@ -9,8 +9,10 @@
 import Foundation
 
 protocol ExerciseSelectionFlow: AnyObject {
-    func ciruit()
+    func exercise(viewModel: ExerciseCreationViewModel)
+}
+protocol RegularExerciseSelectionFlow: ExerciseSelectionFlow {
+    func circuit()
     func emom()
     func amrap()
-    func exercise(viewModel: ExerciseCreationViewModel)
 }

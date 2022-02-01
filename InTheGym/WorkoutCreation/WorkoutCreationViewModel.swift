@@ -11,6 +11,7 @@ import Combine
 
 protocol ExerciseAdding {
     func addExercise(_ exercise: ExerciseModel)
+    func updatedExercise(_ exercise: ExerciseModel)
 }
 
 class WorkoutCreationViewModel: ExerciseAdding {
@@ -62,6 +63,9 @@ class WorkoutCreationViewModel: ExerciseAdding {
         currentExercises.append(exercise)
         exercises.send(currentExercises)
         exerciseModels.append(exercise)
+    }
+    func updatedExercise(_ exercise: ExerciseModel) {
+        // NULL
     }
     func addCircuit(_ circuit: CircuitModel) {
         var currentExercises = exercises.value
@@ -162,6 +166,7 @@ class ExerciseCreationViewModel {
         case circuit
         case emom
         case amrap
+        case live
     }
     
     func addSets(_ sets: Int) {
@@ -178,5 +183,14 @@ class ExerciseCreationViewModel {
     }
     func completeExercise() {
         addingDelegate.addExercise(exercise)
+    }
+    func appendToReps(_ reps: Int) {
+        exercise.reps.append(reps)
+        exercise.sets += 1
+        exercise.completedSets.append(true)
+    }
+    func appendToWeight(_ weight: String) {
+        exercise.weight.append(weight)
+        addingDelegate.updatedExercise(exercise)
     }
 }
