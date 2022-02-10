@@ -11,6 +11,9 @@ import Combine
 
 class WorkoutDisplayViewModel {
     
+    // MARK: - Publishers
+    var addedClipPublisher = PassthroughSubject<WorkoutClipModel,Never>()
+    
     // MARK: - Properties
     var workout: WorkoutModel!
     
@@ -30,6 +33,11 @@ class WorkoutDisplayViewModel {
         exercises.append(contentsOf: workout.amraps ?? [])
         exercises.append(contentsOf: workout.emoms ?? [])
         return exercises.sorted(by: { $0.workoutPosition < $1.workoutPosition} )
+    }
+    
+    func getClips() -> [WorkoutClipModel] {
+        guard let clips = workout.clipData else {return []}
+        return clips
     }
     
     var apiService: FirebaseDatabaseManagerService
@@ -98,6 +106,16 @@ class WorkoutDisplayViewModel {
     }
     // MARK: - Actions
     func completed() {
-        
+        let currentTime = Date().timeIntervalSince1970
+        guard let startTime = workout.startTime else {return}
+        let timeToComplete = currentTime - startTime
+        workout.timeToComplete = Int(timeToComplete)
+    }
+}
+
+// MARK: - Clip Protocol
+extension WorkoutDisplayViewModel: ClipAdding {
+    func addClip(_ model: WorkoutClipModel) {
+        addedClipPublisher.send(model)
     }
 }

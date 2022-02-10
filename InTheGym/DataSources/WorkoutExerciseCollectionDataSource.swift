@@ -17,7 +17,7 @@ class WorkoutExerciseCollectionDataSource: NSObject {
     var completeButtonTapped = PassthroughSubject<IndexPath,Never>()
     var rpeButtonTapped = PassthroughSubject<IndexPath,Never>()
     var noteButtonTapped = PassthroughSubject<IndexPath,Never>()
-    var clipButtonTapped = PassthroughSubject<IndexPath,Never>()
+    var clipButtonTapped = PassthroughSubject<ExerciseModel,Never>()
     var exerciseButtonTapped = PassthroughSubject<IndexPath,Never>()
     var showClipPublisher = PassthroughSubject<Bool,Never>()
     var actionSubscriptions = [IndexPath: AnyCancellable]()
@@ -55,7 +55,8 @@ class WorkoutExerciseCollectionDataSource: NSObject {
                         case .rpeButton:
                             self?.rpeButtonTapped.send(indexPath)
                         case .clipButton:
-                            self?.clipButtonTapped.send(indexPath)
+                            guard let exercise = self?.getExercise(at: indexPath) else {return}
+                            self?.clipButtonTapped.send(exercise)
                         case .exerciseButton:
                             self?.exerciseButtonTapped.send(indexPath)
                         case .completed(let tappedIndex):
@@ -105,6 +106,17 @@ class WorkoutExerciseCollectionDataSource: NSObject {
             }
         }
         dataDource.apply(currentSnapshot, animatingDifferences: false)
+    }
+    
+    // MARK: - Retreive
+    func getExercise(at indexPath: IndexPath) -> ExerciseModel? {
+        guard let exercise = dataDource.itemIdentifier(for: indexPath) else {return nil}
+        switch exercise {
+        case .exercise(let exerciseModel):
+            return exerciseModel
+        default:
+            return nil
+        }
     }
 }
 // MARK: - Delegate - Select Row

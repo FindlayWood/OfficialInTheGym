@@ -19,7 +19,7 @@ class FirebaseStorageManager {
     private init() {}
     
     // MARK: - Functions
-    func upload<T: FirebaseStorage>(model: T, completion: @escaping ((Result<Void,Error>) -> Void)) {
+    func dataUpload<T: FirebaseStorageData>(model: T, completion: @escaping ((Result<Void,Error>) -> Void)) {
         guard let data = model.data else {
             completion(.failure(NSError(domain: "nil data", code: 0, userInfo: nil)))
             return
@@ -45,6 +45,27 @@ class FirebaseStorageManager {
                 } else {
                     completion(.failure(NSError(domain: "Nil Image Data", code: 0, userInfo: nil)))
                 }
+            }
+        }
+    }
+    
+    func fileUpload<T: FirebaseStorageFile>(model: T, completion: @escaping ((Result<String,Error>) -> Void)) {
+        let storageRef = Storage.storage().reference().child(model.storagePath)
+        let uploadTask = storageRef.putFile(from: model.file, metadata: model.metaData)
+        
+        uploadTask.observe(.success) { snapshot in
+            storageRef.downloadURL { downloadedURL, error in
+                if let error = error {
+                    completion(.failure(error))
+                } else if let url = downloadedURL {
+                    completion(.success(url.absoluteString))
+                }
+            }
+        }
+        
+        uploadTask.observe(.failure) { snapshot in
+            if let error = snapshot.error {
+                completion(.failure(error))
             }
         }
     }

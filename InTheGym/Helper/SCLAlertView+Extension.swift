@@ -76,6 +76,27 @@ extension UIViewController {
         alert.showSuccess("RPE", subTitle: "Enter RPE for AMRAP(1-10).",closeButtonTitle: "cancel")
     }
 
+    func showWorkoutRPEAlert(completion: @escaping (Int) -> ()) {
+        let alert = SCLAlertView()
+        let textfield = alert.addTextField()
+        textfield.placeholder = "enter rpe from 1 to 10..."
+        textfield.keyboardType = .numberPad
+        textfield.becomeFirstResponder()
+        alert.addButton("SAVE") {
+            if let text = textfield.text {
+                if let textInt = Int(text) {
+                    if textInt > 0 && textInt < 11 {
+                        completion(textInt)
+                    } else {
+                        self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
+                    }
+                }
+            } else {
+                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
+            }
+        }
+        alert.showSuccess("RPE", subTitle: "Enter RPE score for this workout.", closeButtonTitle: "Cancel")
+    }
     
     func showError(title: String, subtitle: String) {
         let alert = SCLAlertView()

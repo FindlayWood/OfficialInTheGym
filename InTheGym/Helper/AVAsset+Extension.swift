@@ -33,3 +33,29 @@ extension AVAsset {
         }
     }
 }
+
+extension URL {
+    func generateThumbnail(completion: @escaping (UIImage?) -> Void) {
+        
+        let asset = AVAsset(url: self)
+        
+        DispatchQueue.global().async {
+            let avAssetImageGenerator = AVAssetImageGenerator(asset: asset)
+            avAssetImageGenerator.appliesPreferredTrackTransform = true
+            let thumbnailTime = CMTimeMake(value: 1, timescale: 1)
+            
+            do {
+                let cgThumbImage = try avAssetImageGenerator.copyCGImage(at: thumbnailTime, actualTime: nil)
+                let thumbImage = UIImage(cgImage: cgThumbImage)
+                DispatchQueue.main.async {
+                    completion(thumbImage)
+                }
+            } catch {
+                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+            }
+        }
+    }
+}

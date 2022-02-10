@@ -39,12 +39,26 @@ struct WorkoutClipModel: Codable, Hashable {
     
 }
 
-struct mainClipModel: Codable {
+struct ClipModel: Codable {
+    var id: String
     var storageURL: String
     var exerciseName: String
     var time: TimeInterval
     var workoutID: String
     var userID: String
+    var isPrivate: Bool
+}
+extension ClipModel: FirebaseResource {
+    var internalPath: String {
+        return "Clips/\(id)"
+    }
+    
+    static var path: String {
+        return "Clips"
+    }
 }
 
-
+struct KeyClipModel: Codable {
+    var clipKey: String
+    var storageURL: String
+}

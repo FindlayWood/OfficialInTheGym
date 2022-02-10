@@ -17,7 +17,7 @@ class LiveWorkoutDataSource: NSObject {
     var completeButtonTapped = PassthroughSubject<IndexPath,Never>()
     var rpeButtonTapped = PassthroughSubject<IndexPath,Never>()
     var noteButtonTapped = PassthroughSubject<IndexPath,Never>()
-    var clipButtonTapped = PassthroughSubject<IndexPath,Never>()
+    var clipButtonTapped = PassthroughSubject<ExerciseModel,Never>()
     var exerciseButtonTapped = PassthroughSubject<IndexPath,Never>()
     var showClipPublisher = PassthroughSubject<Bool,Never>()
     var actionSubscriptions = [IndexPath: AnyCancellable]()
@@ -57,7 +57,8 @@ class LiveWorkoutDataSource: NSObject {
                         case .rpeButton:
                             self?.rpeButtonTapped.send(indexPath)
                         case .clipButton:
-                            self?.clipButtonTapped.send(indexPath)
+                            guard let exercise = self?.getExercise(at: indexPath) else {return}
+                            self?.clipButtonTapped.send(exercise)
                         case .exerciseButton:
                             self?.exerciseButtonTapped.send(indexPath)
                         case .addSet:
@@ -92,6 +93,36 @@ class LiveWorkoutDataSource: NSObject {
         var currentSnapshot = dataDource.snapshot()
         currentSnapshot.appendItems(items, toSection: .exercise)
         dataDource.apply(currentSnapshot, animatingDifferences: false)
+    }
+    func addExercise(_ exercise: ExerciseModel) {
+        let item = LiveWorkoutItems.exercise(exercise)
+        var currentSnapshot = dataDource.snapshot()
+        currentSnapshot.appendItems([item], toSection: .exercise)
+        dataDource.apply(currentSnapshot, animatingDifferences: false)
+        scrollToBottom()
+    }
+    func update(for exercise: ExerciseModel) {
+        var currentSnapshot = dataDource.snapshot()
+        currentSnapshot.reloadItems([LiveWorkoutItems.exercise(exercise)])
+        dataDource.apply(currentSnapshot, animatingDifferences: false)
+    }
+    
+    // MARK: - Retreive
+    func getExercise(at indexPath: IndexPath) -> ExerciseModel? {
+        guard let exercise = dataDource.itemIdentifier(for: indexPath) else {return nil}
+        switch exercise {
+        case .exercise(let exerciseModel):
+            return exerciseModel
+        default:
+            return nil
+        }
+    }
+    
+    // MARK: - Collection View Positioning
+    func scrollToBottom() {
+        let item = collectionView.numberOfItems(inSection: 0) - 1
+        let lastItemIndex = IndexPath(item: item, section: 0)
+        self.collectionView.scrollToItem(at: lastItemIndex, at: .top, animated: true)
     }
 }
 // MARK: - Delegate - Select Row

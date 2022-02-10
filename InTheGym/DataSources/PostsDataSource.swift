@@ -13,10 +13,12 @@ import Combine
 class PostsDataSource: NSObject {
     // MARK: - Publisher
     var postSelcted = PassthroughSubject<post,Never>()
+    var scrollPublisher = PassthroughSubject<Bool,Never>()
     
     // MARK: - Properties
     var tableView: UITableView
     private lazy var dataSource = makeDataSource()
+    var lastContentOffset: CGFloat = 0
     
     // MARK: - Initializer
     init(tableView: UITableView) {
@@ -56,5 +58,22 @@ extension PostsDataSource: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let post = dataSource.itemIdentifier(for: indexPath) else {return}
         postSelcted.send(post)
+    }
+    
+    // MARK: - Check Scroll
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.lastContentOffset = scrollView.contentOffset.y
+    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if lastContentOffset + 100 < scrollView.contentOffset.y {
+            //delegate.hideTopView()
+            scrollPublisher.send(false)
+        } else if lastContentOffset > scrollView.contentOffset.y {
+            //delegate.showTopView()
+            scrollPublisher.send(true)
+        } else if scrollView.contentOffset.y == 0 {
+            //delegate.showTopView()
+            scrollPublisher.send(true)
+        }
     }
 }

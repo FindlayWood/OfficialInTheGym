@@ -138,6 +138,18 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
             }
             .store(in: &subscriptions)
         
+        dataSource.scrollPublisher
+            .debounce(for: 0.1, scheduler: RunLoop.main)
+            .sink { [weak self] show in
+                guard let self = self else {return}
+                if show {
+                    self.showTopView()
+                } else {
+                    self.hideTopView()
+                }
+            }
+            .store(in: &subscriptions)
+        
     }
     
     func initNewPostButton(){

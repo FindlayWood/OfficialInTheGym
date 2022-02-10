@@ -9,48 +9,53 @@
 import UIKit
 import AVFoundation
 import AVKit
+import Combine
 
 class RecordClipViewController: UIViewController {
     
+    // MARK: - Properties
     var display = RecordClipView()
     
-    var captureSession: AVCaptureSession!
-    
-    var backCamera: AVCaptureDevice!
-    var frontCamera: AVCaptureDevice!
-    
-    var audio: AVCaptureDevice!
-    
-    var backCameraInput: AVCaptureInput!
-    var frontCameraInput: AVCaptureInput!
+    weak var coordinator: ClipCoordinator?
     
     var videoPreviewLayer: AVCaptureVideoPreviewLayer!
     
-    var videoOutput: AVCaptureMovieFileOutput!
-    
-    var backCameraOn: Bool = true
-    
-    var countDownOn: Bool = false
-    
-    var workoutID: String!
-    var clipNumber: Int!
-    var exerciseName: String!
-    
     var addingDelegate: addedClipProtocol!
+    
+    var viewModel = RecordClipViewModel()
+    
+    private var subscriptions = Set<AnyCancellable>()
 
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setUpCaptureSession()
+        
+        view.backgroundColor = .black
+        
+        viewModel.setUpCaptureSession()
+        setUpPreviewLayer()
+        
         displaySetUp()
+        
+        setupSubscriptions()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        display.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top)
+        display.frame = getFullViewableFrame()
         view.addSubview(display)
     }
     
+    func setUpPreviewLayer() {
+        videoPreviewLayer = AVCaptureVideoPreviewLayer(session: viewModel.captureSession)
+        videoPreviewLayer.videoGravity = .resizeAspectFill
+        videoPreviewLayer.connection?.videoOrientation = .portrait
+        videoPreviewLayer.frame = self.view.frame
+        self.view.layer.insertSublayer(videoPreviewLayer, at: 0)
+    }
+
+    
+    // MARK: - Button Actions
     func displaySetUp() {
         display.backButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
         display.flipCameraButton.addTarget(self, action: #selector(flipCamera), for: .touchUpInside)
@@ -59,150 +64,96 @@ class RecordClipViewController: UIViewController {
         display.recordButton.addTarget(self, action: #selector(recordButtonTapped), for: .touchUpInside)
     }
     
-    func setUpCaptureSession() {
-        captureSession = AVCaptureSession()
-        captureSession.sessionPreset = .photo
-        captureSession.beginConfiguration()
-        if captureSession.canSetSessionPreset(.photo) {
-            captureSession.sessionPreset = .photo
-        }
-        captureSession.automaticallyConfiguresCaptureDeviceForWideColor = true
-        setUpDevices()
-        setUpPreviewLayer()
-        setUpVideoOutput()
-        captureSession.commitConfiguration()
-        captureSession.startRunning()
-    }
-
-    func setUpDevices() {
-        if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) {
-            backCamera = device
-        } else {
-            fatalError("no back camera")
-        }
-        if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) {
-            frontCamera = device
-        } else {
-            fatalError("no front camera")
-        }
-        
-        if let device = AVCaptureDevice.default(for: .audio) {
-            audio = device
-        } else {
-            fatalError("no audio")
-        }
-        
-        guard let backInput = try? AVCaptureDeviceInput(device: backCamera) else {
-            fatalError("could not create input device from back camera")
-        }
-        backCameraInput = backInput
-        if !captureSession.canAddInput(backCameraInput) {
-            fatalError("could not add back camera input to capture session")
-        }
-        
-        guard let frontInput = try? AVCaptureDeviceInput(device: frontCamera) else {
-            fatalError("could not create input device from front camera")
-        }
-        frontCameraInput = frontInput
-        if !captureSession.canAddInput(frontCameraInput) {
-            fatalError("could not add front camera input to capture session")
-        }
-        
-        guard let audioCaptureInput = try? AVCaptureDeviceInput(device: audio) else {
-            fatalError("could not create input device from microphone")
-        }
-        
-        if !captureSession.canAddInput(audioCaptureInput) {
-            fatalError("could not add audio to the capture session")
-        }
-        
-        captureSession.addInput(audioCaptureInput)
-        captureSession.addInput(backCameraInput)
+    // MARK: - Subscriptions
+    func setupSubscriptions() {
+        viewModel.outPutFilePublisher
+            .sink { [weak self] in self?.finishedRecording(with: $0) }
+            .store(in: &subscriptions)
     }
     
-    func setUpPreviewLayer() {
-        videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        videoPreviewLayer.videoGravity = .resizeAspectFill
-        videoPreviewLayer.connection?.videoOrientation = .portrait
-        videoPreviewLayer.frame = self.view.frame
-        self.view.layer.insertSublayer(videoPreviewLayer, at: 0)
+    func finishedRecording(with outputFileURL: URL) {
+        let clipStorageModel = ClipStorageModel(fileURL: outputFileURL)
+//        coordinator?.finishedRecording(clipStorageModel)
+        
+        let vc = RecordedClipPlayerViewController()
+        vc.viewModel.exerciseModel = viewModel.exerciseModel
+        vc.viewModel.workoutModel = viewModel.workoutModel
+        vc.viewModel.clipStorageModel = clipStorageModel
+        vc.viewModel.addDelegate = viewModel.addingDelegate
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: false)
     }
     
     func switchCameraInput() {
         display.flipCameraButton.isUserInteractionEnabled = false
-        captureSession.beginConfiguration()
-        if backCameraOn {
-            captureSession.removeInput(backCameraInput)
-            captureSession.addInput(frontCameraInput)
-            backCameraOn = false
+        viewModel.captureSession.beginConfiguration()
+        if viewModel.backCameraOn {
+            viewModel.captureSession.removeInput(viewModel.backCameraInput)
+            viewModel.captureSession.addInput(viewModel.frontCameraInput)
+            viewModel.backCameraOn = false
         } else {
-            captureSession.removeInput(frontCameraInput)
-            captureSession.addInput(backCameraInput)
-            backCameraOn = true
+            viewModel.captureSession.removeInput(viewModel.frontCameraInput)
+            viewModel.captureSession.addInput(viewModel.backCameraInput)
+            viewModel.backCameraOn = true
         }
         
         videoPreviewLayer.connection?.videoOrientation = .portrait
-        captureSession.commitConfiguration()
+        viewModel.captureSession.commitConfiguration()
         display.flipCameraButton.isUserInteractionEnabled = true
     }
     
-    func setUpVideoOutput() {
-        videoOutput = AVCaptureMovieFileOutput()
-        if captureSession.canAddOutput(videoOutput) {
-            captureSession.addOutput(videoOutput)
-        }
-    }
-    
     @objc func recordButtonTapped() {
-        if !videoOutput.isRecording {
+        if !viewModel.videoOutput.isRecording {
             //check if countdown is on
-            if countDownOn {
+            if viewModel.countDownOn {
                 display.setUICountdownOn()
                 display.startCountDown()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
                     // begin to record a video
                     guard let self = self else {return}
                     self.beginRecording()
-//                    let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-//                    let outputURL = path[0].appendingPathComponent("output").appendingPathExtension("mov")
-//                    try? FileManager.default.removeItem(at: outputURL)
-//                    self.videoOutput.startRecording(to: outputURL, recordingDelegate: self)
-//                    self.display.setUIRecording()
-//                    self.startVideoTimer(with: self.display.currentVideoLength)
+                    self.viewModel.beginRecording()
                 }
             } else {
                 beginRecording()
+                viewModel.beginRecording()
 //                // begin to record a video
-//                let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-//                let outputURL = path[0].appendingPathComponent("output").appendingPathExtension("mov")
-//                try? FileManager.default.removeItem(at: outputURL)
-//                videoOutput.startRecording(to: outputURL, recordingDelegate: self)
-//                display.setUIRecording()
-//                startVideoTimer(with: display.currentVideoLength)
             }
         } else {
             // stop recording video
-            videoOutput.stopRecording()
+            viewModel.videoOutput.stopRecording()
             display.setUIDefault()
         }
     }
     
     func beginRecording() {
         // begin to record a video
-        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let outputURL = path[0].appendingPathComponent("output").appendingPathExtension("mov")
-        try? FileManager.default.removeItem(at: outputURL)
-        videoOutput.startRecording(to: outputURL, recordingDelegate: self)
         display.setUIRecording()
         startVideoTimer(with: display.currentVideoLength)
     }
     
+    func startVideoTimer(with maxLength: videoLength) {
+        // 20 second time limit on videos
+        // TODO: add a display that shows how long recording is
+        DispatchQueue.main.asyncAfter(deadline: .now() + maxLength.rawValue) { [weak self] in
+            guard let self = self else {return}
+            if self.viewModel.videoOutput.isRecording {
+                self.viewModel.videoOutput.stopRecording()
+                self.display.setUIDefault()
+            }
+        }
+    }
+}
+
+// MARK: - Actions
+private extension RecordClipViewController {
+
     @objc func dismissView() {
         dismiss(animated: true, completion: nil)
     }
     @objc func toggleCountDown() {
-        countDownOn.toggle()
-        display.toggleCountDownUI(isOn: countDownOn)
+        viewModel.countDownOn.toggle()
+        display.toggleCountDownUI(isOn: viewModel.countDownOn)
     }
     @objc func changeVideoLength() {
         display.changeVideoLength()
@@ -211,42 +162,9 @@ class RecordClipViewController: UIViewController {
         //flip which camera is displaying
         switchCameraInput()
     }
-    
-    func startVideoTimer(with maxLength: videoLength) {
-        // 20 second time limit on videos
-        // TODO: add a display that shows how long recording is
-        DispatchQueue.main.asyncAfter(deadline: .now() + maxLength.rawValue) { [weak self] in
-            guard let self = self else {return}
-            if self.videoOutput.isRecording {
-                self.videoOutput.stopRecording()
-                self.display.setUIDefault()
-            }
-        }
-    }
-
 }
 
-// MARK: Camera recording output delegate
-extension RecordClipViewController: AVCaptureFileOutputRecordingDelegate {
-    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
-        if let error = error {
-            print(error)
-        } else {
-            // if no error then show video on custom avplayer vc
-            let player = AVPlayer(url: outputFileURL)
-            let vc = RecordedClipPlayerViewController()
-            vc.player = player
-            vc.workoutID = workoutID
-            vc.exerciseName = exerciseName
-            vc.clipNumber = clipNumber
-            vc.uploadingDelegate = self
-            vc.addingDelegate = self.addingDelegate
-            vc.modalTransitionStyle = .coverVertical
-            vc.modalPresentationStyle = .fullScreen
-            present(vc, animated: false, completion: nil)
-        }
-    }
-}
+// MARK: - Camera recording output delegate
 
 extension RecordClipViewController: clipUploadingProtocol {
     func clipUploadedAndSaved() {

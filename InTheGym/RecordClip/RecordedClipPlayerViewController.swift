@@ -10,16 +10,13 @@ import UIKit
 import AVKit
 import AVFoundation
 import SCLAlertView
+import Combine
 
-protocol clipUploadingProtocol: AnyObject {
-    func clipUploadedAndSaved()
-}
-protocol addedClipProtocol: AnyObject {
-    func clipAdded(with data: clipSuccessData)
-}
+
 
 class RecordedClipPlayerViewController: UIViewController {
     
+    // MARK: - Properties
     var player: AVPlayer!
     
     var display = RecordedClipView()
@@ -32,17 +29,24 @@ class RecordedClipPlayerViewController: UIViewController {
     
     weak var uploadingDelegate: clipUploadingProtocol!
     weak var addingDelegate: addedClipProtocol!
+    
+    var viewModel = RecordedClipPlayerViewModel()
 
+    private var subscriptions = Set<AnyCancellable>()
+    
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
 
         addObservers()
         addButtonActions()
+        setupSubscriptions()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        player = AVPlayer(url: viewModel.clipStorageModel.fileURL)
         let layer = AVPlayerLayer(player: player)
         layer.frame = view.bounds
         layer.videoGravity = .resizeAspectFill
@@ -55,7 +59,7 @@ class RecordedClipPlayerViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        display.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom)
+        display.frame = getViewableFrameWithBottomSafeArea()
         view.addSubview(display)
     }
     
@@ -79,76 +83,35 @@ class RecordedClipPlayerViewController: UIViewController {
     @objc func togglePause() {
         if paused {
             player.play()
+            viewModel.paused = false
             paused.toggle()
         } else {
             player.pause()
+            viewModel.paused = true
             paused.toggle()
         }
     }
     
+    func setupSubscriptions() {
+        viewModel.thumbnailGenerated
+            .sink { [weak self] thumbnail in
+                let view = UIImageView(frame: CGRect(x: 0, y: 0, width: 300, height: 500))
+                view.image = thumbnail
+                self?.view.addSubview(view)
+            }
+            .store(in: &subscriptions)
+    }
+    
     @objc func removeFromFileManager() {
+        viewModel.removeFromFileManager()
         dismiss(animated: true, completion: nil)
-        guard let currentVideoURL = ((player.currentItem?.asset) as? AVURLAsset)?.url else {return}
-        try? FileManager.default.removeItem(at: currentVideoURL)
     }
     
     //TODO: Save video to firebase
     @objc func saveVideoToFirebase() {
         player.pause()
         display.attemptingToSaveClip()
-        guard let currentVideoURL = ((player.currentItem?.asset) as? AVURLAsset)?.url else {return}
-        player.currentItem?.asset.generateThumbnail(completion: { [weak self] thumbnail in
-            guard let self = self else {return}
-            let clipUploadData = clipUploadingData(workoutID: self.workoutID,
-                                                   exerciseName: self.exerciseName,
-                                                   clipNumber: self.clipNumber,
-                                                   videoURL: currentVideoURL,
-                                                   isPrivate: self.display.isPrivate,
-                                                   thumbnail: thumbnail)
-            
-            FirebaseVideoUploader.shared.upload(uploadData: clipUploadData) { [weak self] result in
-                guard let self = self else {return}
-                switch result {
-                case .failure(let uploadError):
-                    print(uploadError.localizedDescription)
-                    self.showUploadError()
-                    self.display.setToRecord()
-                case .success(let addingData):
-                    self.dismiss(animated: true, completion: nil)
-                    self.removeFromFileManager()
-                    self.uploadingDelegate.clipUploadedAndSaved()
-                    self.addingDelegate.clipAdded(with: addingData)
-                }
-            } progressCompletion: { [weak self] progress in
-                guard let self = self else {return}
-                self.display.updateProgressBar(to: progress)
-            }
-            
-            
-        })
-//        let clipUploadData = clipUploadingData(workoutID: workoutID,
-//                                               exerciseName: exerciseName,
-//                                               clipNumber: clipNumber,
-//                                               videoURL: currentVideoURL,
-//                                               isPrivate: display.isPrivate)
-//        
-//        FirebaseVideoUploader.shared.upload(uploadData: clipUploadData) { [weak self] result in
-//            guard let self = self else {return}
-//            switch result {
-//            case .failure(let uploadError):
-//                print(uploadError.localizedDescription)
-//                self.showUploadError()
-//                self.display.setToRecord()
-//            case .success(let addingData):
-//                self.dismiss(animated: true, completion: nil)
-//                self.removeFromFileManager()
-//                self.uploadingDelegate.clipUploadedAndSaved()
-//                self.addingDelegate.clipAdded(with: addingData)
-//            }
-//        } progressCompletion: { [weak self] progress in
-//            guard let self = self else {return}
-//            self.display.updateProgressBar(to: progress)
-//        }
+        viewModel.uploadClipToStorage()
     }
     
     func showUploadError() {

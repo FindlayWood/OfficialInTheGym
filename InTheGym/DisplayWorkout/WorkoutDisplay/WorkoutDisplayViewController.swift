@@ -20,6 +20,8 @@ class WorkoutDisplayViewController: UIViewController {
     
     var dataSource: WorkoutExerciseCollectionDataSource!
     
+    var clipDataSource: ClipCollectionDataSource!
+    
     var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
@@ -54,6 +56,10 @@ class WorkoutDisplayViewController: UIViewController {
         dataSource = .init(collectionView: display.exerciseCollection, isUserInteractionEnabled: viewModel.isInteractionEnabled())
         dataSource.updateTable(with: viewModel.getAllExercises())
     }
+    func initClipDataSource() {
+        clipDataSource = .init(collectionView: display.clipCollection)
+        clipDataSource.updateTable(with: viewModel.getClips())
+    }
     
     // MARK: - Subscriptions
     func setupSubscriptions() {
@@ -71,14 +77,13 @@ class WorkoutDisplayViewController: UIViewController {
             .store(in: &subscriptions)
         dataSource.showClipPublisher
             .debounce(for: 0.5, scheduler: RunLoop.main)
-            .sink { show in
-                print("show clip \(show)")
+            .sink { [weak self] show in
+                guard let self = self else {return}
+                self.toggleClipCollection(showing: show, clips: self.viewModel.getClips())
             }
             .store(in: &subscriptions)
         dataSource.clipButtonTapped
-            .sink { index in
-                print("clip tapped \(index)")
-            }
+            .sink { [weak self] in self?.clipButton(at: $0) }
             .store(in: &subscriptions)
         dataSource.exerciseButtonTapped
             .sink { index in
@@ -97,6 +102,11 @@ class WorkoutDisplayViewController: UIViewController {
                 self?.initNavBar()
             }
             .store(in: &subscriptions)
+        
+        viewModel.addedClipPublisher
+            .sink { [weak self] in self?.clipDataSource.updateTable(with: [$0]) }
+            .store(in: &subscriptions)
+        
     }
     // MARK: - RPE
     func rpe(index: IndexPath) {
@@ -113,10 +123,11 @@ class WorkoutDisplayViewController: UIViewController {
 extension WorkoutDisplayViewController {
     @objc func completed(_ sender: UIBarButtonItem) {
         viewModel.completed()
+        coordinator?.complete(viewModel.workout)
     }
     func selectedRow(_ type: ExerciseRow) {
         switch type {
-        case .exercise(let exerciseModel):
+        case .exercise(_):
             break
         case .circuit(let circuitModel):
             // TODO: - Coordinate to circuit
@@ -131,5 +142,15 @@ extension WorkoutDisplayViewController {
             coordinator?.showAMRAP(aMRAPModel, viewModel.workout)
             print("amrap")
         }
+    }
+    func toggleClipCollection(showing: Bool, clips: [WorkoutClipModel]) {
+        if !clips.isEmpty && showing {
+            display.showClipCollection()
+        } else if !showing {
+            display.hideClipCollection()
+        }
+    }
+    func clipButton(at exercise: ExerciseModel) {
+        coordinator?.addClip(for: exercise, viewModel.workout, on: viewModel)
     }
 }

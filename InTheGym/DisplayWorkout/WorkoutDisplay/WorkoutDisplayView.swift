@@ -20,12 +20,13 @@ class WorkoutDisplayView: UIView {
     var isClipShowing: Bool = false
     
     // MARK: - Subviews
-//    lazy var clipCollection: UICollectionView = {
-//        let collection = UICollectionView(frame: .zero, collectionViewLayout: generateClipCollectionLayout())
-//        collection.showsHorizontalScrollIndicator = false
-//        collection.translatesAutoresizingMaskIntoConstraints = true
-//        return collection
-//    }()
+    lazy var clipCollection: UICollectionView = {
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: generateClipCollectionLayout())
+        collection.register(DisplayClipCell.self, forCellWithReuseIdentifier: DisplayClipCell.reuseID)
+        collection.showsHorizontalScrollIndicator = false
+        collection.translatesAutoresizingMaskIntoConstraints = true
+        return collection
+    }()
     
     lazy var exerciseCollection: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateExerciseCollectionLayout())
@@ -65,12 +66,12 @@ class WorkoutDisplayView: UIView {
 private extension WorkoutDisplayView {
     func setupUI() {
         backgroundColor = Constants.lightColour
-        //addSubview(clipCollection)
+        addSubview(clipCollection)
         addSubview(exerciseCollection)
         constrainUI()
     }
     func constrainUI() {
-        //clipCollection.frame = hideClipsFrame
+        clipCollection.frame = hideClipsFrame
         tableviewTopAnchor = exerciseCollection.topAnchor.constraint(equalTo: topAnchor, constant: 0)
         NSLayoutConstraint.activate([
                                      tableviewTopAnchor,
@@ -80,15 +81,15 @@ private extension WorkoutDisplayView {
         ])
         
     }
-//    func generateClipCollectionLayout() -> UICollectionViewFlowLayout {
-//        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-//        layout.minimumInteritemSpacing = 5
-//        layout.minimumLineSpacing = 5
-//        layout.itemSize = CGSize(width: 80, height: 80)
-//        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-//        layout.scrollDirection = .horizontal
-//        return layout
-//    }
+    func generateClipCollectionLayout() -> UICollectionViewFlowLayout {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 5
+        layout.minimumLineSpacing = 5
+        layout.itemSize = CGSize(width: 80, height: 80)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        layout.scrollDirection = .horizontal
+        return layout
+    }
     func generateExerciseCollectionLayout() -> UICollectionViewFlowLayout {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 5
@@ -102,24 +103,24 @@ private extension WorkoutDisplayView {
 
 // MARK: - Public Configuration
 extension WorkoutDisplayView {
-//    public func showClipCollection() {
-//        isClipShowing = true
-//        tableviewTopAnchor.constant = 100
-//        UIView.animate(withDuration: 0.3) { [weak self] in
-//            guard let self = self else {return}
-//            self.clipCollection.frame = self.showClipsFrame
-//            self.layoutIfNeeded()
-//        }
-//    }
-//    public func hideClipCollection() {
-//        isClipShowing = false
-//        tableviewTopAnchor.constant = 0
-//        UIView.animate(withDuration: 0.3) { [weak self] in
-//            guard let self = self else {return}
-//            self.clipCollection.frame = self.hideClipsFrame
-//            self.layoutIfNeeded()
-//        }
-//    }
+    public func showClipCollection() {
+        isClipShowing = true
+        tableviewTopAnchor.constant = 100
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else {return}
+            self.clipCollection.frame = self.showClipsFrame
+            self.layoutIfNeeded()
+        }
+    }
+    public func hideClipCollection() {
+        isClipShowing = false
+        tableviewTopAnchor.constant = 0
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else {return}
+            self.clipCollection.frame = self.hideClipsFrame
+            self.layoutIfNeeded()
+        }
+    }
     public func addBottomView() {
         addSubview(flashView)
         addSubview(bottomView)

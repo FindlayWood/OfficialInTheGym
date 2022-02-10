@@ -1,8 +1,8 @@
 //
-//  ProfileImageUploadModel.swift
+//  ClipThumbnailModel.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 26/01/2022.
+//  Created by Findlay Wood on 09/02/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
@@ -10,19 +10,19 @@ import Foundation
 import UIKit
 import FirebaseStorage
 
-// MARK: - Profile Image Upload Model
-///Takes the user/group ID and the image
+// MARK: - Clip Thumbnail Upload Model
+///Takes the clipID and the image
 ///Compresses the image ready for uploading and returns as Data
-///Sets the metaData contentType tp "image/jpg"
-///Storage path is "ProfilePhotos/CurrentUserID"
+///Sets the metaData contentType tp "clipThumbnail/jpg"
+///Storage path is "ClipThumbnails/id"
 ///
-struct ProfileImageUploadModel {
+struct ClipThumbnailModel {
     var id: String
     var image: UIImage
 }
-extension ProfileImageUploadModel: FirebaseStorageData {
+extension ClipThumbnailModel: FirebaseStorageData {
     var storagePath: String {
-        return "ProfilePhotos/\(id)"
+        return "ClipThumbnails/\(id)"
     }
     var data: Data? {
         let data = image.jpegData(compressionQuality: 0.4)
@@ -30,20 +30,20 @@ extension ProfileImageUploadModel: FirebaseStorageData {
     }
     var metaData: StorageMetadata {
         let metaData = StorageMetadata()
-        metaData.contentType = "image/jpg"
+        metaData.contentType = "clipThumbnail/jpg"
         return metaData
     }
 }
 
-// MARK: - Profile Image Download Model
-///Takes an id of user/group
+// MARK: - Clip Thumbnail Download Model
+///Takes an id of clip
 ///Provides path to storage reference
 ///Returns UIImage from Firebase Storage
-struct ProfileImageDownloadModel {
+struct ClipThumbnailDownloadModel {
     var id: String
 }
-extension ProfileImageDownloadModel: FirebaseStoragePath {
+extension ClipThumbnailDownloadModel: FirebaseStoragePath {
     var storagePath: String {
-        return "ProfilePhotos/\(id)"
+        return "ClipThumbnails/\(id)"
     }
 }

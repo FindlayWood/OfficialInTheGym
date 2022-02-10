@@ -20,6 +20,8 @@ class LiveWorkoutDisplayViewController: UIViewController {
     
     var dataSource: LiveWorkoutDataSource!
     
+    var clipDataSource: ClipCollectionDataSource!
+    
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
@@ -27,8 +29,10 @@ class LiveWorkoutDisplayViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .lightColour
         initDataSource()
+        initClipDataSource()
         setupSubscriptions()
         initNavBar()
+        toggleClipCollection(showing: true, clips: viewModel.getClips())
     }
     
     override func viewDidLayoutSubviews() {
@@ -40,7 +44,7 @@ class LiveWorkoutDisplayViewController: UIViewController {
         super.viewWillAppear(animated)
         editNavBarColour(to: .white)
         navigationItem.title = viewModel.workoutModel.title
-        viewModel.setupExercises()
+        //viewModel.setupExercises()
     }
     
     // MARK: - Nav Bar
@@ -53,6 +57,11 @@ class LiveWorkoutDisplayViewController: UIViewController {
     // MARK: - Data Source
     func initDataSource() {
         dataSource = .init(collectionView: display.exerciseCollection, isUserInteractionEnabled: viewModel.isInteractionEnabled())
+        dataSource.updateTable(with: viewModel.getInitialExercises())
+    }
+    func initClipDataSource() {
+        clipDataSource = .init(collectionView: display.clipCollection)
+        clipDataSource.updateTable(with: viewModel.getClips())
     }
 
     // MARK: - Subscriptions
@@ -72,16 +81,16 @@ class LiveWorkoutDisplayViewController: UIViewController {
             .sink { [weak self] in self?.rpe(index: $0)}
             .store(in: &subscriptions)
         dataSource.showClipPublisher
-            .debounce(for: 0.5, scheduler: RunLoop.main)
-            .sink { show in
-                print("show clip \(show)")
+            .debounce(for: 0.1, scheduler: RunLoop.main)
+            .sink { [weak self] show in
+                guard let self = self else {return}
+                self.toggleClipCollection(showing: show, clips: self.viewModel.getClips())
             }
             .store(in: &subscriptions)
         dataSource.clipButtonTapped
-            .sink { index in
-                print("clip tapped \(index)")
-            }
+            .sink { [weak self] in self?.clipButton(at: $0) }
             .store(in: &subscriptions)
+                
         dataSource.exerciseButtonTapped
             .sink { index in
                 print("exercise tapped \(index)")
@@ -91,13 +100,16 @@ class LiveWorkoutDisplayViewController: UIViewController {
             .sink { [weak self] in self?.addExercise() }
             .store(in: &subscriptions)
         dataSource.plusSetButtonTapped
+            .debounce(for: 0.2, scheduler: RunLoop.main)
             .sink { [weak self] in self?.addSet(at: $0) }
             .store(in: &subscriptions)
-        viewModel.exercises
-            .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
+        viewModel.addedExercise
+            .sink { [weak self] in self?.dataSource.addExercise($0) }
+            .store(in: &subscriptions)
+        viewModel.updatedExercise
+            .sink { [weak self] in self?.dataSource.update(for: $0) }
             .store(in: &subscriptions)
         
-        viewModel.setupExercises()
     }
     
     // MARK: - RPE
@@ -115,6 +127,7 @@ class LiveWorkoutDisplayViewController: UIViewController {
 extension LiveWorkoutDisplayViewController {
     @objc func completed(_ sender: UIBarButtonItem) {
         viewModel.completed()
+        coordinator?.complete(viewModel.workoutModel)
     }
     
     func addExercise() {
@@ -124,5 +137,15 @@ extension LiveWorkoutDisplayViewController {
     func addSet(at indexPath: IndexPath) {
         let exerciseViewModel = viewModel.getExerciseModel(at: indexPath)
         coordinator?.addSet(exerciseViewModel)
+    }
+    func toggleClipCollection(showing: Bool, clips: [WorkoutClipModel]) {
+        if !clips.isEmpty && showing {
+            display.showClipCollection()
+        } else if !showing {
+            display.hideClipCollection()
+        }
+    }
+    func clipButton(at exercise: ExerciseModel) {
+        coordinator?.addClip(for: exercise, viewModel.workoutModel, on: viewModel)
     }
 }

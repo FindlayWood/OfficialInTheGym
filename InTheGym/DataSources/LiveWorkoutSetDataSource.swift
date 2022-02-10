@@ -64,6 +64,6 @@ class LiveWorkoutSetDataSource: NSObject {
         let items = models.map { LiveWorkoutSetItems.exerciseSet($0) }
         var currentSnapshot = dataDource.snapshot()
         currentSnapshot.appendItems(items, toSection: .exercise)
-        dataDource.apply(currentSnapshot, animatingDifferences: true)
+        dataDource.apply(currentSnapshot, animatingDifferences: false)
     }
 }

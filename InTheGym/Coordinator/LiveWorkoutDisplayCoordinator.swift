@@ -30,7 +30,9 @@ class LiveWorkoutDisplayCoordinator: NSObject, Coordinator {
 // MARK: - Methods
 extension LiveWorkoutDisplayCoordinator {
     func complete(_ workout: WorkoutModel) {
-        
+        let vc = CompletedWorkoutPageViewController()
+        vc.viewModel.workout = workout
+        navigationController.pushViewController(vc, animated: true)
     }
     func showEMOM(_ emom: EMOMModel, _ workout: WorkoutModel) {
         let vc = DisplayEMOMViewController()
@@ -58,6 +60,11 @@ extension LiveWorkoutDisplayCoordinator {
     }
     func addSet(_ exerciseViewModel: ExerciseCreationViewModel) {
         let child = RepsSelectionCoordinator(navigationController: navigationController, exerciseViewModel: exerciseViewModel)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func addClip(for exercise: ExerciseModel, _ workout: WorkoutModel, on delegate: ClipAdding) {
+        let child = ClipCoordinator(navigationController: navigationController, workout: workout, exercise: exercise, addingDelegate: delegate)
         childCoordinators.append(child)
         child.start()
     }

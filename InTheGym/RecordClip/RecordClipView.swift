@@ -22,14 +22,11 @@ class RecordClipView: UIView {
     var backButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
-        if #available(iOS 13.0, *) {
-            button.setImage(UIImage(systemName: "chevron.backward.circle.fill"), for: .normal)
-        } else {
-            button.setTitle("X", for: .normal)
-        }
+        button.setImage(UIImage(systemName: "chevron.backward.circle.fill"), for: .normal)
         button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
+        button.tintColor = .darkColour
+//        button.layer.borderWidth = 2
+//        button.layer.borderColor = UIColor.black.cgColor
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -37,15 +34,12 @@ class RecordClipView: UIView {
     
     var countDownButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .red
-        if #available(iOS 13.0, *) {
-            button.setImage(UIImage(systemName: "timer"), for: .normal)
-        } else {
-            button.setTitle("C", for: .normal)
-        }
+        button.backgroundColor = .white
+        button.setImage(UIImage(systemName: "timer"), for: .normal)
         button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
+        button.tintColor = .darkColour
+//        button.layer.borderWidth = 2
+//        button.layer.borderColor = UIColor.black.cgColor
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -55,14 +49,11 @@ class RecordClipView: UIView {
     var flipCameraButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
-        if #available(iOS 13.0, *) {
-            button.setImage(UIImage(systemName: "arrow.triangle.2.circlepath.camera.fill"), for: .normal)
-        } else {
-            button.setTitle("F", for: .normal)
-        }
+        button.setImage(UIImage(systemName: "arrow.triangle.2.circlepath.camera.fill"), for: .normal)
         button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
+        button.tintColor = .darkColour
+//        button.layer.borderWidth = 2
+//        button.layer.borderColor = UIColor.black.cgColor
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -76,9 +67,10 @@ class RecordClipView: UIView {
         let button = UIButton()
         button.backgroundColor = .white
         button.setTitle("20", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
+        button.setTitleColor(.darkColour, for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 16)
+//        button.layer.borderWidth = 2
+//        button.layer.borderColor = UIColor.black.cgColor
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -89,7 +81,7 @@ class RecordClipView: UIView {
         button.backgroundColor = .white
         button.alpha = 0.6
         button.layer.borderWidth = 5
-        button.layer.borderColor = Constants.lightColour.cgColor
+        button.layer.borderColor = UIColor.lightColour.cgColor
         button.layer.cornerRadius = 40
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -118,6 +110,16 @@ class RecordClipView: UIView {
         return stack
     }()
     
+    var messageLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textAlignment = .center
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpView()
@@ -132,12 +134,9 @@ class RecordClipView: UIView {
         stackView.addArrangedSubview(videoLengthButton)
         stackView.addArrangedSubview(flipCameraButton)
         addSubview(stackView)
-        //addSubview(backButton)
-        //addSubview(countDownButton)
-        //addSubview(videoLengthButton)
-        //addSubview(flipCameraButton)
         addSubview(recordButton)
         addSubview(countDownLabel)
+        addSubview(messageLabel)
         constrainView()
     }
     func constrainView() {
@@ -157,6 +156,10 @@ class RecordClipView: UIView {
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             
+            messageLabel.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 8),
+            messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
             recordButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             recordButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40),
             recordButton.widthAnchor.constraint(equalToConstant: 80),
@@ -174,18 +177,10 @@ class RecordClipView: UIView {
         recordButton.alpha = 1
         recordButton.layer.borderColor = UIColor.red.cgColor
         stackView.isHidden = true
-//        backButton.isHidden = true
-//        countDownButton.isHidden = true
-//        videoLengthButton.isHidden = true
-//        flipCameraButton.isHidden = true
     }
     
     func setUICountdownOn() {
         stackView.isHidden = true
-//        backButton.isHidden = true
-//        countDownButton.isHidden = true
-//        videoLengthButton.isHidden = true
-//        flipCameraButton.isHidden = true
         recordButton.isHidden = true
     }
     
@@ -193,20 +188,17 @@ class RecordClipView: UIView {
         recordButton.isHidden = false
         recordButton.backgroundColor = .white
         recordButton.alpha = 0.6
-        recordButton.layer.borderColor = Constants.lightColour.cgColor
+        recordButton.layer.borderColor = UIColor.lightColour.cgColor
         stackView.isHidden = false
-//        backButton.isHidden = false
-//        countDownButton.isHidden = false
-//        videoLengthButton.isHidden = false
-//        flipCameraButton.isHidden = false
     }
     
     func toggleCountDownUI(isOn: Bool) {
         if isOn {
-            countDownButton.backgroundColor = .green
+            countDownButton.backgroundColor = .lightColour
         } else {
-            countDownButton.backgroundColor = .red
+            countDownButton.backgroundColor = .white
         }
+        showMessage(countdown: isOn)
     }
     
     func startCountDown() {
@@ -230,9 +222,35 @@ class RecordClipView: UIView {
         if currentVideoLength == .long {
             currentVideoLength = .short
             videoLengthButton.setTitle(Int(currentVideoLength.rawValue).description, for: .normal)
+            showMessage(maxVideoLength: false)
         } else {
             currentVideoLength = .long
             videoLengthButton.setTitle(Int(currentVideoLength.rawValue).description, for: .normal)
+            showMessage(maxVideoLength: true)
         }
     }
+    
+    func showMessage(countdown: Bool) {
+        if countdown {
+            messageLabel.text = "10s countdown is on."
+        } else {
+            messageLabel.text = "10s countdown is off."
+        }
+        messageLabel.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+            self?.messageLabel.isHidden = true
+        }
+    }
+    func showMessage(maxVideoLength: Bool) {
+        if maxVideoLength {
+            messageLabel.text = "Max Video Length set to 20s."
+        } else {
+            messageLabel.text = "Max Video Length set to 10s."
+        }
+        messageLabel.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+            self?.messageLabel.isHidden = true
+        }
+    }
+
 }

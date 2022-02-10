@@ -56,6 +56,15 @@ class PlayerTimelineView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    var messagesButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "paperplane", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        button.tintColor = .darkColour
+        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     var postView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -123,6 +132,7 @@ private extension PlayerTimelineView {
         backgroundColor = .white
         //topView.addSubview(iconImageView)
         topView.addSubview(iconLabel)
+        topView.addSubview(messagesButton)
         //topView.addSubview(notifButton)
         postView.addSubview(profileImageView)
         postView.addSubview(postButton)
@@ -147,6 +157,9 @@ private extension PlayerTimelineView {
 //                                     iconImageView.topAnchor.constraint(equalTo: topView.topAnchor),
                                      iconLabel.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 5),
                                      iconLabel.topAnchor.constraint(equalTo: topView.topAnchor),
+                                     
+                                     messagesButton.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -10),
+                                     messagesButton.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
 //                                     notifButton.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -10),
 //                                     notifButton.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
                                      

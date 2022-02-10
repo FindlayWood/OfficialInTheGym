@@ -11,6 +11,7 @@ import UIKit
 import AVKit
 
 class DisplayClipCell: UICollectionViewCell {
+    
     // MARK: - Properties
     static var reuseID = "DisplayClipCellReuseID"
     
@@ -54,6 +55,8 @@ private extension DisplayClipCell {
                                      thumbnailImage.bottomAnchor.constraint(equalTo: bottomAnchor)])
     }
 }
+
+// MARK: - Public Configuarion
 extension DisplayClipCell {
     func attachThumbnail(from clipKey: String) {
         if #available(iOS 13.0, *) {
@@ -91,5 +94,9 @@ extension DisplayClipCell {
                 }
             }
         }
+    }
+    public func configure(with model: WorkoutClipModel) {
+        thumbnailImage.image = UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+        thumbnailImage.tintColor = .darkColour
     }
 }

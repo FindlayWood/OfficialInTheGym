@@ -30,7 +30,9 @@ class WorkoutDisplayCoordinator: NSObject, Coordinator {
 // MARK: - Methods
 extension WorkoutDisplayCoordinator {
     func complete(_ workout: WorkoutModel) {
-        
+        let vc = CompletedWorkoutPageViewController()
+        vc.viewModel.workout = workout
+        navigationController.pushViewController(vc, animated: true)
     }
     func showEMOM(_ emom: EMOMModel, _ workout: WorkoutModel) {
         let vc = DisplayEMOMViewController()
@@ -49,5 +51,10 @@ extension WorkoutDisplayCoordinator {
         vc.viewModel.amrapModel = amrap
         vc.viewModel.workoutModel = workout
         navigationController.pushViewController(vc, animated: true)
+    }
+    func addClip(for exercise: ExerciseModel, _ workout: WorkoutModel, on delegate: ClipAdding) {
+        let child = ClipCoordinator(navigationController: navigationController, workout: workout, exercise: exercise, addingDelegate: delegate)
+        childCoordinators.append(child)
+        child.start()
     }
 }

@@ -18,10 +18,10 @@ protocol FirebaseStoragePath {
     var storagePath: String { get }
 }
 
-// MARK: - Firebase Storage Upload Protocol
+// MARK: - Firebase Storage Data Protocol
 ///Has data to be uploaded and metaData to be stored
 ///Requires FirebaseStoragePath for access to a storage path
-protocol FirebaseStorageUpload: FirebaseStoragePath {
+protocol FirebaseStorageData: FirebaseStoragePath {
     
     ///The data that is to be stored in Firebase Database
     ///Optional type as usually requires some kind of compression which returns an optional
@@ -32,8 +32,9 @@ protocol FirebaseStorageUpload: FirebaseStoragePath {
     var metaData: StorageMetadata { get }
 }
 
-// MARK: - TypeAlia
-typealias FirebaseStorage = FirebaseStoragePath & FirebaseStorageUpload
+// MARK: - TypeAlias
+typealias FirebaseData = FirebaseStoragePath & FirebaseStorageData
+typealias FirebaseFile = FirebaseStoragePath & FirebaseStorageFile
 
 // MARK: - Example
 ///Profile Image Example
@@ -60,3 +61,16 @@ typealias FirebaseStorage = FirebaseStoragePath & FirebaseStorageUpload
 //        return metaData
 //    }
 //}
+
+// MARK: - Firebase Storage File Protocol
+///Has a file to be uploaded and metaData to be stored
+///Requires FirebaseStoragePath for access to a storage path
+protocol FirebaseStorageFile: FirebaseStoragePath {
+    
+    ///The file that is to be stored in Firebase Storage
+    var file: URL { get }
+    
+    ///The metaData of the data stored
+    ///Information about the data stored
+    var metaData: StorageMetadata { get }
+}

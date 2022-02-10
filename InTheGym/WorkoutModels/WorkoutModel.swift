@@ -157,10 +157,12 @@ class WorkoutModel: Codable, Hashable {
     var assignedTo: String
     var isPrivate: Bool
     var completed: Bool
+    var clipData: [WorkoutClipModel]?
     var score: Int?
     var startTime: TimeInterval?
     var timeToComplete: Int?
     var workload: Int?
+    var summary: String?
     var exercises: [ExerciseModel]?
     var circuits: [CircuitModel]?
     var emoms: [EMOMModel]?
@@ -215,6 +217,20 @@ extension WorkoutModel {
         totalExerciseCount += emoms?.count ?? 0
         totalExerciseCount += amraps?.count ?? 0
         return totalExerciseCount
+    }
+    func averageRPE() -> Double {
+        guard let exercises = exercises else {return 0.0}
+        let scores = exercises.map( { $0.rpe ?? 0 })
+        let totalScore = scores.reduce(0, +)
+        let averageRPE = Double(totalScore) / Double(exercises.count)
+        return averageRPE.rounded(toPlaces: 1)
+    }
+    func getWorkload() -> Int {
+        guard let timeToComplete = timeToComplete,
+              let rpe = score
+        else {return 0}
+        let minutes = timeToComplete / 60
+        return minutes * rpe
     }
 }
 extension WorkoutModel: FirebaseResource {

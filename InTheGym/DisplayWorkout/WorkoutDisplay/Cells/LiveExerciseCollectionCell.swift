@@ -42,6 +42,7 @@ final class LiveExerciseCollectionCell: BaseExerciseCollectionCell {
         super.init(frame: frame)
         setupUI()
         collectionView.register(LiveWorkoutPlusCollectionCell.self, forCellWithReuseIdentifier: LiveWorkoutPlusCollectionCell.reuseID)
+        setupButtonActions()
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
