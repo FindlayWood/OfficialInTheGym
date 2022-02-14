@@ -34,7 +34,7 @@ class MyProfileCoordinator: NSObject, Coordinator {
     
     func start() {
         navigationController.delegate = self
-        let vc = MyProfileViewController.instantiate()
+        let vc = MyProfileViewController()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }

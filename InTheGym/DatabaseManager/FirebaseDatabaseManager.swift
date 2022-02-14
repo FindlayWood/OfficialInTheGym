@@ -167,6 +167,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         }
     }
     
+    // MARK: - Check Existence
     func checkExistence<Model:FirebaseInstance>(of model: Model, completion: @escaping(Result<Bool,Error>) -> Void) {
         let dbref = Database.database().reference().child(model.internalPath)
         dbref.observeSingleEvent(of: .value) { snapshot in
@@ -174,6 +175,18 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
                 completion(.success(true))
             } else {
                 completion(.success(false))
+            }
+        }
+    }
+    
+    // MARK: - Child Count
+    func childCount<Model:FirebaseInstance>(of model: Model, completion: @escaping (Result<Int,Error>) -> Void) {
+        let dbref = Database.database().reference().child(model.internalPath)
+        dbref.observeSingleEvent(of: .value) { snapshot in
+            if snapshot.exists() {
+                completion(.success(Int(snapshot.childrenCount)))
+            } else {
+                completion(.success(0))
             }
         }
     }
@@ -190,4 +203,5 @@ protocol FirebaseDatabaseManagerService {
     func fetchKeys<M: FirebaseModel>(from model: M.Type, completion: @escaping (Result<[String],Error>) -> Void)
     func fetchRange<M: FirebaseInstance, T: Decodable>(from models: [M], returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
     func checkExistence<Model:FirebaseInstance>(of model: Model, completion: @escaping(Result<Bool,Error>) -> Void)
+    func childCount<Model:FirebaseInstance>(of model: Model, completion: @escaping (Result<Int,Error>) -> Void)
 }

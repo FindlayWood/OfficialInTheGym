@@ -547,9 +547,9 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol {
         let clipNumber = viewModel.selectedWorkout?.clipData?.count ?? 0
         let workoutID = viewModel.selectedWorkout?.workoutID
         let vc = RecordClipViewController()
-        vc.exerciseName = exerciseName
-        vc.clipNumber = clipNumber
-        vc.workoutID = workoutID
+//        vc.exerciseName = exerciseName
+//        vc.clipNumber = clipNumber
+//        vc.workoutID = workoutID
         vc.addingDelegate = self
         vc.modalTransitionStyle = .coverVertical
         vc.modalPresentationStyle = .fullScreen

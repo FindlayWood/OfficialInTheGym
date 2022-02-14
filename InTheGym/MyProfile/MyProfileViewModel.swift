@@ -15,6 +15,9 @@ class MyProfileViewModel {
     
     // MARK: - Publishers
     var postPublisher = CurrentValueSubject<[post],Never>([])
+    var followerCountPublisher = CurrentValueSubject<Int,Never>(0)
+    var followingCountPublisher = CurrentValueSubject<Int,Never>(0)
+    
     
     // MARK: - Closures
         
@@ -26,6 +29,8 @@ class MyProfileViewModel {
     var showTopViewClosure: (() -> ())?
     
     // MARK: - Properties
+    
+    var currentProfileModel: UserProfileModel = UserProfileModel(user: UserDefaults.currentUser)
     
     // We defined the FakeAPIServiceProtocol in the FakeAPIService.swift file.
     // We also defined a class and make it conform to that protocol.
@@ -111,6 +116,32 @@ class MyProfileViewModel {
                 self?.reloadTableViewClosure?()
             case .failure(_):
                 print("failed")
+                break
+            }
+        }
+    }
+    
+    // MARK: - Fetch Follower Count
+    func getFollowerCount() {
+        let followerModel = FollowersModel()
+        apiService.childCount(of: followerModel) { [weak self] result in
+            switch result {
+            case .success(let count):
+                print("Followers = \(count)")
+                self?.currentProfileModel.followers = count
+                self?.followerCountPublisher.send(count)
+            case .failure(_):
+                break
+            }
+        }
+        let followingModel = FollowingModel()
+        apiService.childCount(of: followingModel) { [weak self] result in
+            switch result {
+            case .success(let count):
+                print("Following = \(count)")
+                self?.currentProfileModel.following = count
+                self?.followingCountPublisher.send(count)
+            case .failure(_):
                 break
             }
         }
