@@ -46,7 +46,8 @@ class MyGroupViewModel:NSObject {
     
     
     func fetchReferences() {
-        apiService.fetchKeys(from: GroupKeysModel.self) { [weak self] result in
+        let referencesModel = GroupReferencesModel(id: UserDefaults.currentUser.uid)
+        apiService.fetchKeys(from: referencesModel) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(let keys):

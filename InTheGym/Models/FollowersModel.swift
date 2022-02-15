@@ -10,14 +10,24 @@ import Foundation
 
 // MARK: - Struct Followers Model
 struct FollowersModel: FirebaseInstance {
+    var id: String
     var internalPath: String {
-        return "Followers/\(UserDefaults.currentUser.uid)"
+        return "Followers/\(id)"
     }
 }
 
 // MARK: - Following Model
 struct FollowingModel: FirebaseInstance {
+    var id: String
     var internalPath: String {
-        return "Following/\(UserDefaults.currentUser.uid)"
+        return "Following/\(id)"
+    }
+}
+
+// MARK: - Check Following Model
+struct CheckFollowingModel: FirebaseInstance {
+    var id: String
+    var internalPath: String {
+        return "Following/\(UserDefaults.currentUser.uid)/\(id)"
     }
 }

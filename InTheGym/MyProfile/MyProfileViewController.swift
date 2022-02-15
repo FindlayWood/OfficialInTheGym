@@ -227,7 +227,7 @@ class MyProfileViewController: UIViewController, Storyboarded {
             .sink { [weak self] in self?.display.setFollowerCount(to: $0)}
             .store(in: &subscriptions)
         
-        viewModel.followerCountPublisher
+        viewModel.followingCountPublisher
             .dropFirst()
             .sink { [weak self] in self?.display.setFollowingCount(to: $0)}
             .store(in: &subscriptions)

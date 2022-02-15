@@ -64,7 +64,7 @@ class COACHESViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let profile = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
-        profile.user = coaches[indexPath.row]
+        profile.viewModel.user = coaches[indexPath.row]
         self.navigationController?.pushViewController(profile, animated: true)
     }
     

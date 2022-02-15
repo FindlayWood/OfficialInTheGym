@@ -29,7 +29,8 @@ class SavedWorkoutsViewModel:NSObject {
     
     // MARK: - Fetching functions
     func fetchKeys() {
-        apiService.fetchKeys(from: SavedWorkoutKeyModel.self) { [weak self] result in
+        let referencesModel = SavedWorkoutsReferences(id: UserDefaults.currentUser.uid)
+        apiService.fetchKeys(from: referencesModel) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(let keys):

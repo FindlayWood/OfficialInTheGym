@@ -107,7 +107,7 @@ class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITab
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let nextVC = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
-        nextVC.user = searchResults[indexPath.row]
+        nextVC.viewModel.user = searchResults[indexPath.row]
         self.navigationController?.pushViewController(nextVC, animated: true)
         
     }

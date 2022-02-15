@@ -30,7 +30,7 @@ class PostsDataSource: NSObject {
     }
     
     // MARK: - Create Data Source
-    func makeDataSource() -> UITableViewDiffableDataSource<Int,post> {
+    func makeDataSource() -> UITableViewDiffableDataSource<SingleSection,post> {
         return UITableViewDiffableDataSource(tableView: self.tableView) { tableView, indexPath, itemIdentifier in
             let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
             cell.configure(with: itemIdentifier)
@@ -40,15 +40,15 @@ class PostsDataSource: NSObject {
     
     // MARK: - Initial Setup
     func initialSetup() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int,post>()
-        snapshot.appendSections([1])
+        var snapshot = NSDiffableDataSourceSnapshot<SingleSection,post>()
+        snapshot.appendSections([.main])
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     // MARK: - Update
     func updateTable(with models: [post]) {
         var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendItems(models, toSection: 1)
+        currentSnapshot.appendItems(models, toSection: .main)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
 }

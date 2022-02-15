@@ -38,3 +38,17 @@ extension SavedWorkoutReferenceModel: FirebaseInstance {
         return "SavedWorkoutReferences/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(id)"
     }
 }
+
+// MARK: - Saved Workout References
+/// Used to return the saved workouts of given user
+/// Initialize with user id
+struct SavedWorkoutsReferences {
+    
+    /// the id of user to search
+    var id: String
+}
+extension SavedWorkoutsReferences: FirebaseInstance {
+    var internalPath: String {
+        return "SavedWorkoutReferences/\(id)"
+    }
+}

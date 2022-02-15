@@ -12,7 +12,7 @@ import Combine
 class GroupCommentSectionViewController: UIViewController {
     
     // MARK: - Properties
-    weak var coordinator: CommentSectionCoordinator?
+    weak var coordinator: GroupCommentSectionCoordinator?
     
     var display = CommentSectionView()
     
@@ -20,9 +20,9 @@ class GroupCommentSectionViewController: UIViewController {
     
     var adapter = CommentSectionAdapter()
     
-    var mainPost: GroupPost!
+//    var mainPost: GroupPost!
     
-    private lazy var postReplyModel = PostReplies(postID: mainPost.id)
+//    private lazy var postReplyModel = PostReplies(postID: mainPost.id)
     
 //    private lazy var dataSource = makeDataSource()
     
@@ -43,8 +43,7 @@ class GroupCommentSectionViewController: UIViewController {
         view.backgroundColor = .white
         initTableView()
 //        initialTableSetUp()
-        dataSource = .init(tableView: display.tableview)
-        dataSource.initialSetup(with: mainPost)
+        setupDataSource()
         setupDisplayButtons()
         setUpSubscribers()
         setupKeyBoardObservers()
@@ -59,6 +58,11 @@ class GroupCommentSectionViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
+    }
+    // MARK: - Setup Data Source
+    func setupDataSource() {
+        dataSource = .init(tableView: display.tableview)
+        dataSource.initialGroupSetup(with: viewModel.mainGroupPost)
     }
     
     // MARK: - Display Setup
@@ -85,7 +89,7 @@ class GroupCommentSectionViewController: UIViewController {
             .store(in: &subscriptions)
         
         dataSource.userSelected
-            .sink { [weak self] in self?.userSelected(at: $0) }
+            .sink { [weak self] in self?.userSelected($0) }
             .store(in: &subscriptions)
         
         dataSource.workoutSelected
@@ -114,7 +118,7 @@ class GroupCommentSectionViewController: UIViewController {
             }
             .store(in: &subscriptions)
         
-        viewModel.loadGeneric(for: postReplyModel)
+        viewModel.loadGeneric(for: viewModel.groupPostReplyModel)
     }
     
     // MARK: - Keyboard Observers
@@ -150,15 +154,15 @@ class GroupCommentSectionViewController: UIViewController {
 }
 // MARK: - Cell Tap Actions
 extension GroupCommentSectionViewController {
-    func userSelected(at indexPath: IndexPath) {
-        print("user selected...")
+    func userSelected(_ user: Users) {
+        coordinator?.showUser(user)
     }
     func workoutSelected(at indexPath: IndexPath) {
         print("workout selected...")
     }
     func likeButtonTapped(at indexPath: IndexPath) {
-        viewModel.likeCheck(mainPost)
-        mainPost.likeCount += 1
+        viewModel.groupLikeCheck(viewModel.mainGroupPost)
+        viewModel.mainGroupPost.likeCount += 1
     }
 }
 
@@ -201,7 +205,7 @@ extension GroupCommentSectionViewController {
 extension GroupCommentSectionViewController {
     
     @objc func sendPressed(_ sender: UIButton) {
-        viewModel.sendPressed(mainPost.id)
+        viewModel.sendPressed(viewModel.mainGroupPost.id)
 //        let newID = UUID().uuidString
 //        let newComment = Comment(id: newID,
 //                                 username: FirebaseAuthManager.currentlyLoggedInUser.username,

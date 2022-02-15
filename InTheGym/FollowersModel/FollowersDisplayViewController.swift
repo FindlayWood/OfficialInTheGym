@@ -81,7 +81,7 @@ class FollowersDisplayViewController: UIViewController, Storyboarded {
     func moveToPublicProfile(with user:Users){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let publicProfile = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
-        publicProfile.user = user
+        publicProfile.viewModel.user = user
         self.navigationController?.pushViewController(publicProfile, animated: true)
     }
     

@@ -7,9 +7,14 @@
 //
 
 import Foundation
-
-struct PostReferencesModel: FirebaseModel {
-    static var path: String {
-        return "PostSelfReferences/\(FirebaseAuthManager.currentlyLoggedInUser.uid)"
+// MARK: - Post References Model
+///Model used to fetch all post keys for given user
+///id is the user id of posts to load
+struct PostReferencesModel {
+    var id: String
+}
+extension PostReferencesModel: FirebaseInstance {
+    var internalPath: String {
+        return "PostSelfReferences/\(id)"
     }
 }

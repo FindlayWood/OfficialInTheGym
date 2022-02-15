@@ -100,7 +100,8 @@ class MyProfileViewModel {
     // MARK: - Fetching functions
     func fetchPostRefs() {
         self.isLoading = true
-        apiService.fetchKeys(from: PostReferencesModel.self) { [weak self] result in
+        let postRefModel = PostReferencesModel(id: UserDefaults.currentUser.uid)
+        apiService.fetchKeys(from: postRefModel) { [weak self] result in
             guard let postKeys = try? result.get() else {return}
             self?.loadPosts(from: postKeys)
         }
@@ -123,7 +124,7 @@ class MyProfileViewModel {
     
     // MARK: - Fetch Follower Count
     func getFollowerCount() {
-        let followerModel = FollowersModel()
+        let followerModel = FollowersModel(id: UserDefaults.currentUser.uid)
         apiService.childCount(of: followerModel) { [weak self] result in
             switch result {
             case .success(let count):
@@ -134,7 +135,7 @@ class MyProfileViewModel {
                 break
             }
         }
-        let followingModel = FollowingModel()
+        let followingModel = FollowingModel(id: UserDefaults.currentUser.uid)
         apiService.childCount(of: followingModel) { [weak self] result in
             switch result {
             case .success(let count):

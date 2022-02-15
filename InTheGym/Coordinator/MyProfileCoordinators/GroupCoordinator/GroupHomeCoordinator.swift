@@ -48,7 +48,7 @@ extension GroupHomeCoordinator {
         child.start()
     }
     func goToCommentSection(with mainPost: GroupPost) {
-        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: mainPost)
+        let child = GroupCommentSectionCoordinator(navigationController: navigationController, mainPost: mainPost)
         childCoordinators.append(child)
         child.start()
 //        let vc = GroupCommentSectionViewController()

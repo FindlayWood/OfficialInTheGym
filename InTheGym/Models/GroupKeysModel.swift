@@ -22,3 +22,17 @@ extension GroupKeysModel: FirebaseResource {
         return "Groups/\(id)"
     }
 }
+
+// MARK: - Group References Model
+/// Fetch group references for given user
+/// Initialize with a user id
+struct GroupReferencesModel {
+    
+    /// the id of the user to search groups
+    var id: String
+}
+extension GroupReferencesModel: FirebaseInstance {
+    var internalPath: String {
+        return "GroupsReferences/\(id)"
+    }
+}

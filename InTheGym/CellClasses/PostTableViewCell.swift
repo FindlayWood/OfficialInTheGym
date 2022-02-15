@@ -21,6 +21,7 @@ class PostTableViewCell: UITableViewCell {
     
     let selection = UISelectionFeedbackGenerator()
 
+    var posterID: String!
     
     // MARK: - Subviews
     var profileImageButton: UIButton = {
@@ -211,6 +212,7 @@ private extension PostTableViewCell {
 // MARK: - Public Configuration
 extension PostTableViewCell {
     func configure(with post: DisplayablePost) {
+        posterID = post.posterID
         usernameButton.setTitle(post.username, for: .normal)
         let then = Date(timeIntervalSince1970: (post.time))
         timeLabel.text = then.timeAgo() + " ago"
@@ -288,8 +290,17 @@ extension PostTableViewCell {
         delegate?.workoutTapped(on: self)
     }
     @objc func userTapped(_ sender: UIButton) {
-        actionPublisher.send(.userTapped)
-        delegate?.userTapped(on: self)
+        let userModel = UserSearchModel(uid: posterID)
+        UsersLoader.shared.load(from: userModel) { [weak self] result in
+            switch result {
+            case .success(let user):
+                self?.actionPublisher.send(.userTapped(user))
+            case .failure(_):
+                break
+            }
+        }
+//        actionPublisher.send(.userTapped)
+//        delegate?.userTapped(on: self)
     }
     
     func postLikedTransition() {

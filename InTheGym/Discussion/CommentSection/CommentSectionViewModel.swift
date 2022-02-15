@@ -23,6 +23,14 @@ class CommentSectionViewModel {
     
     var commentText: String = ""
     
+    var mainPost: post!
+    
+    var mainGroupPost: GroupPost!
+    
+    lazy var mainPostReplyModel = PostReplies(postID: mainPost.id)
+    
+    lazy var groupPostReplyModel = PostReplies(postID: mainGroupPost.id)
+    
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
@@ -70,20 +78,37 @@ class CommentSectionViewModel {
         commentText = text
     }
     
-    func likeCheck(_ post: GroupPost) {
+    // MARK: - Like Check
+    func likeCheck(_ post: post) {
         let likeCheck = PostLikesModel(postID: post.id)
         apiService.checkExistence(of: likeCheck) { [weak self] result in
             switch result {
             case .success(let liked):
                 if !liked {
-                    self?.like(post: post)
+                    self?.like(post)
                 }
             case .failure(let error):
                 self?.errorFetchingComments.send(error)
             }
         }
     }
-    func like(post: GroupPost) {
+    
+    func groupLikeCheck(_ post: GroupPost) {
+        let likeCheck = PostLikesModel(postID: post.id)
+        apiService.checkExistence(of: likeCheck) { [weak self] result in
+            switch result {
+            case .success(let liked):
+                if !liked {
+                    self?.groupLike(post)
+                }
+            case .failure(let error):
+                self?.errorFetchingComments.send(error)
+            }
+        }
+    }
+    
+    // MARK: - Like Group Post
+    func groupLike(_ post: GroupPost) {
         let likeModels = LikeTransportLayer(postID: post.id).groupPostLike(post: post)
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
@@ -96,6 +121,21 @@ class CommentSectionViewModel {
             }
         }
     }
+    // MARK: - Like Post
+    func like(_ post: post) {
+        let likeModels = LikeTransportLayer(postID: post.id).postLike(post: post)
+        apiService.multiLocationUpload(data: likeModels) { [weak self] result in
+            switch result {
+            case .success(()):
+                LikesAPIService.shared.LikedPostsCache[post.id] = true
+                print("successfully liked")
+            case .failure(let error):
+                //TODO: - Show like error
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     func sendNotifications() {
         
     }

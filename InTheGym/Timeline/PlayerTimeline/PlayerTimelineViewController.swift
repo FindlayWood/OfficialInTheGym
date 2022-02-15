@@ -150,6 +150,14 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
             }
             .store(in: &subscriptions)
         
+        dataSource.postSelcted
+            .sink { [weak self] in self?.showCommentSection(for: $0) }
+            .store(in: &subscriptions)
+        
+    }
+    
+    func showCommentSection(for post: post) {
+        coordinator?.showCommentSection(for: post)
     }
     
     func initNewPostButton(){

@@ -20,6 +20,7 @@ enum CommentItems: Hashable {
 }
 
 enum GroupCommentItems: Hashable {
-    case mainPost(GroupPost)
+    case mainPost(post)
+    case mainGroupPost(GroupPost)
     case comment(Comment)
 }

@@ -163,6 +163,8 @@
 		742C1C7027B6B09B00DD1BB0 /* OptionsCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1C6F27B6B09B00DD1BB0 /* OptionsCollectionCell.swift */; };
 		742C1C7227BAAEBD00DD1BB0 /* FollowersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1C7127BAAEBD00DD1BB0 /* FollowersModel.swift */; };
 		742C1C7427BAB81A00DD1BB0 /* UserProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1C7327BAB81A00DD1BB0 /* UserProfileModel.swift */; };
+		742C1C7627BAEA5000DD1BB0 /* GroupCommentSectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1C7527BAEA5000DD1BB0 /* GroupCommentSectionCoordinator.swift */; };
+		742C1C7827BAFC6200DD1BB0 /* PublicTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1C7727BAFC6200DD1BB0 /* PublicTimelineView.swift */; };
 		742CCDC02649CA630070D0A5 /* ProfilePhotoAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742CCDBF2649CA630070D0A5 /* ProfilePhotoAlert.swift */; };
 		742FF36B277B812F00AEE3D2 /* CommentSectionItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FF36A277B812F00AEE3D2 /* CommentSectionItems.swift */; };
 		742FF36D277B880900AEE3D2 /* PostReplies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FF36C277B880900AEE3D2 /* PostReplies.swift */; };
@@ -898,6 +900,8 @@
 		742C1C6F27B6B09B00DD1BB0 /* OptionsCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsCollectionCell.swift; sourceTree = "<group>"; };
 		742C1C7127BAAEBD00DD1BB0 /* FollowersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersModel.swift; sourceTree = "<group>"; };
 		742C1C7327BAB81A00DD1BB0 /* UserProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileModel.swift; sourceTree = "<group>"; };
+		742C1C7527BAEA5000DD1BB0 /* GroupCommentSectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCommentSectionCoordinator.swift; sourceTree = "<group>"; };
+		742C1C7727BAFC6200DD1BB0 /* PublicTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicTimelineView.swift; sourceTree = "<group>"; };
 		742CCDBF2649CA630070D0A5 /* ProfilePhotoAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePhotoAlert.swift; sourceTree = "<group>"; };
 		742FF36A277B812F00AEE3D2 /* CommentSectionItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentSectionItems.swift; sourceTree = "<group>"; };
 		742FF36C277B880900AEE3D2 /* PostReplies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReplies.swift; sourceTree = "<group>"; };
@@ -2347,6 +2351,7 @@
 				744AED4F279B022C000D2D74 /* WorkoutDisplayCoordinator.swift */,
 				74B48E1027A4625500BBFC16 /* LiveWorkoutDisplayCoordinator.swift */,
 				742C1C5427B4001C00DD1BB0 /* ClipCoordinator.swift */,
+				742C1C7527BAEA5000DD1BB0 /* GroupCommentSectionCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -3119,6 +3124,7 @@
 				74F45CC8260A9D0400AF16DF /* PublicTimelineViewModel.swift */,
 				74F45CCD260A9D5400AF16DF /* PublicTimelineAdapter.swift */,
 				74F45CD2260A9DBC00AF16DF /* PublicTimelineProtocol.swift */,
+				742C1C7727BAFC6200DD1BB0 /* PublicTimelineView.swift */,
 			);
 			path = PublicTimeline;
 			sourceTree = "<group>";
@@ -3795,6 +3801,7 @@
 				74F5468A25E96DAA00C1A6A9 /* UploadPostViewModel.swift in Sources */,
 				74F78B9E2631D0EC00C21077 /* LaunchMessageController.swift in Sources */,
 				748B403D25236EBD00C947B6 /* ExerciseSetsViewController.swift in Sources */,
+				742C1C7827BAFC6200DD1BB0 /* PublicTimelineView.swift in Sources */,
 				743330CD27906535005A0C45 /* FirebaseMultiUploadBoolean.swift in Sources */,
 				743A04FD276A87250027B752 /* CommentSectionViewController.swift in Sources */,
 				747B674825FFC071000AD6B7 /* DisplayNotificationsProtocol.swift in Sources */,
@@ -4101,6 +4108,7 @@
 				74AF6D6A268A325E005C52A8 /* DisplayExerciseStatsView.swift in Sources */,
 				741FB1CE266848B80039EB29 /* CreateAMRAPAdapter.swift in Sources */,
 				7492263C22D2255000EAD386 /* ExerciseViewController.swift in Sources */,
+				742C1C7627BAEA5000DD1BB0 /* GroupCommentSectionCoordinator.swift in Sources */,
 				74AF6D6D268B6D23005C52A8 /* RecordClipViewController.swift in Sources */,
 				7433308A2787402D005A0C45 /* WorkoutCreationView.swift in Sources */,
 				7416CCC2264EC9690043B1C2 /* RegularWorkoutCoordinator.swift in Sources */,

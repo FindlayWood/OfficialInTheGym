@@ -18,6 +18,7 @@ protocol TimelineFlow: AnyObject {
 
 protocol NewsFeedFlow: TimelineFlow {
     func makePost(groupPost: Bool, delegate: PlayerTimelineProtocol)
+    func showCommentSection(for post: post)
 }
 
 class TimelineCoordinator: NSObject, Coordinator {
@@ -60,6 +61,12 @@ extension TimelineCoordinator: NewsFeedFlow {
         vc.modalTransitionStyle = .coverVertical
         vc.modalPresentationStyle = .fullScreen
         navigationController.present(vc, animated: true, completion: nil)
+    }
+    
+    func showCommentSection(for post: post) {
+        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post)
+        childCoordinators.append(child)
+        child.start()
     }
 }
 
@@ -110,6 +117,10 @@ extension TimelineCoordinator: UINavigationControllerDelegate {
         
         if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
             childDidFinish(WorkoutViewController.coordinator)
+        }
+        
+        if let CommentSectionViewController = fromViewController as? CommentSectionViewController {
+            childDidFinish(CommentSectionViewController.coordinator)
         }
     }
 }

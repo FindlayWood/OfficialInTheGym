@@ -105,7 +105,7 @@ class RequestsViewController: UIViewController {
     func moveToProfile(with user: Users){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let profileView = storyboard.instantiateViewController(withIdentifier: "PublicTimelineViewController") as! PublicTimelineViewController
-        profileView.user = user
+        profileView.viewModel.user = user
         self.navigationController?.pushViewController(profileView, animated: true)
     }
 

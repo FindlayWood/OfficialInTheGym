@@ -136,9 +136,10 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         }
     }
     
-    func fetchKeys<M: FirebaseModel>(from model: M.Type, completion: @escaping (Result<[String],Error>) -> Void) {
+    // MARK: - Fetch Keys
+    func fetchKeys<M: FirebaseInstance>(from model: M, completion: @escaping (Result<[String],Error>) -> Void) {
         var tempKeys = [String]()
-        let dbref = Database.database().reference().child(M.path)
+        let dbref = Database.database().reference().child(model.internalPath)
         dbref.observeSingleEvent(of: .value) { snapshot in
             for child in snapshot.children.allObjects as! [DataSnapshot] {
                 tempKeys.insert(child.key, at: 0)
@@ -200,7 +201,7 @@ protocol FirebaseDatabaseManagerService {
     func multiLocationUpload(data: [FirebaseMultiUploadDataPoint], completion: @escaping(Result<Void,Error>) -> Void)
     func incrementingValue(by increment: Int, at path: String, completion: @escaping(Result<Void,Error>) -> Void)
     func removingValue(at path: String, completion: @escaping(Result<Void,Error>) -> Void)
-    func fetchKeys<M: FirebaseModel>(from model: M.Type, completion: @escaping (Result<[String],Error>) -> Void)
+    func fetchKeys<M: FirebaseInstance>(from model: M, completion: @escaping (Result<[String],Error>) -> Void)
     func fetchRange<M: FirebaseInstance, T: Decodable>(from models: [M], returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
     func checkExistence<Model:FirebaseInstance>(of model: Model, completion: @escaping(Result<Bool,Error>) -> Void)
     func childCount<Model:FirebaseInstance>(of model: Model, completion: @escaping (Result<Int,Error>) -> Void)
