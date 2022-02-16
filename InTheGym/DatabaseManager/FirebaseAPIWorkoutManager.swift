@@ -25,6 +25,7 @@ class FirebaseAPIWorkoutManager {
     private let maxWeightDateStatString = "maxWeightDate"
     private let rpeStatString = "totalRPE"
     private let completionStatString = "numberOfCompletions"
+    private let exerciseNameString = "exerciseName"
     
 
 //MARK: Workout & Exercise Stats Methods
@@ -109,6 +110,7 @@ class FirebaseAPIWorkoutManager {
         var newData = [String: AnyObject]()
         newData[self.repStatString] = reps as AnyObject
         newData[self.setStatString] = 1 as AnyObject
+        newData[self.exerciseNameString] = name as AnyObject
         if let weightString = weight {
             let weightNumber = self.getWeight(from: self.poundsOrKilograms(from: weightString) ?? .kg(0.0))
             newData[self.totalWeightStatString] = weightNumber as AnyObject

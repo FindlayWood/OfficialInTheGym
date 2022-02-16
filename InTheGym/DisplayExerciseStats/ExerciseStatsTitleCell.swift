@@ -11,39 +11,52 @@ import UIKit
 
 class ExerciseStatsTitleCell: UITableViewCell {
     
+    // MARK: - Properties
+    static let cellID = "ExerciseStatsTitleCellID"
+    
+    // MARK: - Subviews
     var titleLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.font
-        label.textColor = Constants.darkColour
+        label.textColor = .darkColour
         label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
+        label.minimumScaleFactor = 0.3
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
+    // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setUpView()
+        setupUI()
     }
     required init?(coder: NSCoder) {
-        fatalError()
+        super.init(coder: coder)
+        setupUI()
     }
-    private func setUpView() {
+}
+// MARK: - Setup UI
+private extension ExerciseStatsTitleCell {
+    func setupUI() {
+        selectionStyle = .none
         layer.cornerRadius = 10
-        backgroundColor = Constants.offWhiteColour
+        backgroundColor = .offWhiteColour
         addSubview(titleLabel)
-        constrainView()
+        constrainUI()
     }
-    private func constrainView() {
+    func constrainUI() {
         NSLayoutConstraint.activate([titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
                                      titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-                                     titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-                                     titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+                                     titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+                                     titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
                                      titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
                                      titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5)])
     }
-    func setUI(with title: String) {
-        titleLabel.text = title
+}
+// MARK: - Public Configuration
+extension ExerciseStatsTitleCell {
+    public func configure(with model: ExerciseStatsModel) {
+        titleLabel.text = model.exerciseName
     }
 }

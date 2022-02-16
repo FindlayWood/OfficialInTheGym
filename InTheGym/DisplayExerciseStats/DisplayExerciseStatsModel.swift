@@ -40,6 +40,20 @@ struct DisplayExerciseStatsModel {
             self.averageRPEScore = Double(totalRPEScore / numberOfCompletions)
         }
     }
+    func toObject() -> [String:AnyObject] {
+        var object = [String:AnyObject]()
+        object["exerciseName"] = exerciseName as AnyObject
+        object["maxWeight"] = maxWeight as AnyObject
+        if maxWeightDate != 0 {
+            object["maxWeightDate"] = maxWeightDate as AnyObject
+        }
+        object["numberOfCompletions"] = numberOfCompletions as AnyObject
+        object["numberOfRepsCompleted"] = numberOfReps as AnyObject
+        object["numberOfSetsCompleted"] = numberOfSets as AnyObject
+        object["totalRPE"] = totalRPEScore as AnyObject
+        object["totalWeight"] = totalWeight as AnyObject
+        return object
+    }
 }
 
 

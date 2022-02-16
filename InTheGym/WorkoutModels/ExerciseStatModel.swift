@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct ExerciseStatsModel: Codable {
-    
-    var totalNumberOfRepsCompleted: Int
-    var totalNumberOfSetsCompleted: Int
-    var totalWeightLifted: Double
-    var totalRPEScore: Int
-    var maxWeightLifted: Double //always stored in kg
-    var totalNumberOfCompletions: Int
-}
+//struct ExerciseStatsModel: Codable {
+//    
+//    var totalNumberOfRepsCompleted: Int
+//    var totalNumberOfSetsCompleted: Int
+//    var totalWeightLifted: Double
+//    var totalRPEScore: Int
+//    var maxWeightLifted: Double //always stored in kg
+//    var totalNumberOfCompletions: Int
+//}

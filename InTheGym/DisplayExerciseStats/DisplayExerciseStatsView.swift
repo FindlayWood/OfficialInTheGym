@@ -28,6 +28,8 @@ class DisplayExerciseStatsView: UIView {
     
     var tableview: UITableView = {
         let view = UITableView()
+        view.register(ExerciseStatsTitleCell.self, forCellReuseIdentifier: ExerciseStatsTitleCell.cellID)
+        view.register(ExerciseStatsSectionCell.self, forCellReuseIdentifier: "sectionCell")
         view.backgroundColor = .white
         view.tableFooterView = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false

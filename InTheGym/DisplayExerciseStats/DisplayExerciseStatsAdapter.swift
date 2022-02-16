@@ -32,8 +32,8 @@ extension DisplayExerciseStatsAdapter: UITableViewDataSource, UITableViewDelegat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "titleCell", for: indexPath) as! ExerciseStatsTitleCell
-            let title = delegate.getTitleCellData(at: indexPath)
-            cell.setUI(with: title)
+//            let title = delegate.getTitleCellData(at: indexPath)
+//            cell.setUI(with: title)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "sectionCell", for: indexPath) as! ExerciseStatsSectionCell
