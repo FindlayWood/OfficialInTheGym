@@ -10,7 +10,7 @@ import Foundation
 
 
 struct UploadClipModel {
-    var workout: WorkoutModel
+    var workout: WorkoutModel?
     var exercise: ExerciseModel
     var id: String = UUID().uuidString
     var storageURL: String
@@ -18,21 +18,26 @@ struct UploadClipModel {
     
     func getUploadPoints() -> [FirebaseMultiUploadDataPoint] {
         var uploadPoints = [FirebaseMultiUploadDataPoint]()
-        uploadPoints.append(FirebaseMultiUploadDataPoint(value: getWorkoutClipModel(), path: workoutPath))
         uploadPoints.append(FirebaseMultiUploadDataPoint(value: getClipModel(), path: clipPath))
         uploadPoints.append(FirebaseMultiUploadDataPoint(value: getKeyClipModel(), path: exerciseClipPath))
         uploadPoints.append(FirebaseMultiUploadDataPoint(value: getKeyClipModel(), path: userClipPath))
+        if workout != nil {
+            uploadPoints.append(FirebaseMultiUploadDataPoint(value: getWorkoutClipModel(), path: workoutPath))
+        }
         return uploadPoints
     }
     
     func getClipModel() -> ClipModel {
-        return ClipModel(id: id,
+        var model =  ClipModel(id: id,
                          storageURL: storageURL,
                          exerciseName: exercise.exercise,
                          time: Date().timeIntervalSince1970,
-                         workoutID: workout.workoutID,
                          userID: UserDefaults.currentUser.uid,
                          isPrivate: isPrivate)
+        if let workout = workout {
+            model.workoutID = workout.workoutID
+        }
+        return model
     }
     
     func getWorkoutClipModel() -> WorkoutClipModel {
@@ -48,6 +53,7 @@ struct UploadClipModel {
 // MARK: - Paths
 private extension UploadClipModel {
     var workoutPath: String {
+        guard let workout = workout else {return ""}
         return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.workoutID)/clipData/\(workout.clipData?.count ?? 0)"
     }
     var clipPath: String {

@@ -17,4 +17,12 @@ extension UIView {
         layer.shadowOpacity = 1.0
         layer.masksToBounds = false
     }
+    func addFullConstraint(to subview: UIView) {
+        NSLayoutConstraint.activate([
+            subview.topAnchor.constraint(equalTo: topAnchor),
+            subview.leadingAnchor.constraint(equalTo: leadingAnchor),
+            subview.trailingAnchor.constraint(equalTo: trailingAnchor),
+            subview.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
 }

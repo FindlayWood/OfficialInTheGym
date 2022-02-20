@@ -28,7 +28,7 @@ class RecordedClipPlayerViewModel {
     
     var isPrivate: Bool = false
     
-    var workoutModel: WorkoutModel!
+    var workoutModel: WorkoutModel?
     
     var exerciseModel: ExerciseModel!
     
@@ -92,7 +92,7 @@ class RecordedClipPlayerViewModel {
                 self?.generateThumbnail(with: clipUploadModel.id)
                 self?.removeFromFileManager()
                 self?.successPublisher.send(true)
-                self?.addDelegate.addClip(clipUploadModel.getWorkoutClipModel())
+                self?.addDelegate.addClip(clipUploadModel.getClipModel())
             case .failure(_):
                 // TODO: - Show Error
                 self?.successPublisher.send(false)

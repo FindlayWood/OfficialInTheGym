@@ -92,10 +92,9 @@ class LiveWorkoutDisplayViewController: UIViewController {
             .store(in: &subscriptions)
                 
         dataSource.exerciseButtonTapped
-            .sink { index in
-                print("exercise tapped \(index)")
-            }
+            .sink { [weak self] in self?.showDescriptions(for: $0) }
             .store(in: &subscriptions)
+        
         dataSource.plusExerciseButtonTapped
             .sink { [weak self] in self?.addExercise() }
             .store(in: &subscriptions)
@@ -147,5 +146,10 @@ extension LiveWorkoutDisplayViewController {
     }
     func clipButton(at exercise: ExerciseModel) {
         coordinator?.addClip(for: exercise, viewModel.workoutModel, on: viewModel)
+    }
+    func showDescriptions(for exercise: ExerciseModel) {
+        let vc = ExerciseDescriptionViewController()
+        vc.viewModel.exercise = exercise
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

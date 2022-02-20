@@ -32,7 +32,7 @@ class RecordClipViewModel: NSObject {
     
     var videoOutput: AVCaptureMovieFileOutput!
     
-    var workoutModel: WorkoutModel!
+    var workoutModel: WorkoutModel?
     
     var exerciseModel: ExerciseModel!
     

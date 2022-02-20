@@ -11,7 +11,7 @@ import Foundation
 // MARK: - User Profile Model
 class UserProfileModel: Hashable {
     static func == (lhs: UserProfileModel, rhs: UserProfileModel) -> Bool {
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
     }
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)

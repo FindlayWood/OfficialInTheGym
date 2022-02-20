@@ -115,7 +115,8 @@ class WorkoutDisplayViewModel {
 
 // MARK: - Clip Protocol
 extension WorkoutDisplayViewModel: ClipAdding {
-    func addClip(_ model: WorkoutClipModel) {
-        addedClipPublisher.send(model)
+    func addClip(_ model: ClipModel) {
+        let workoutClipModel = WorkoutClipModel(storageURL: model.storageURL, clipKey: model.id, exerciseName: model.exerciseName)
+        addedClipPublisher.send(workoutClipModel)
     }
 }

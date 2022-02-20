@@ -28,8 +28,6 @@ class WorkoutCreationViewController: UIViewController {
     // MARK: - Store Subscriptions
     private var subscriptions = Set<AnyCancellable>()
     
-
-    
     
     // MARK: - View setup
     override func viewDidLayoutSubviews() {

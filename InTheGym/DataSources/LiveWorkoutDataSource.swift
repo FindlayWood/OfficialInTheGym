@@ -18,7 +18,7 @@ class LiveWorkoutDataSource: NSObject {
     var rpeButtonTapped = PassthroughSubject<IndexPath,Never>()
     var noteButtonTapped = PassthroughSubject<IndexPath,Never>()
     var clipButtonTapped = PassthroughSubject<ExerciseModel,Never>()
-    var exerciseButtonTapped = PassthroughSubject<IndexPath,Never>()
+    var exerciseButtonTapped = PassthroughSubject<ExerciseModel,Never>()
     var showClipPublisher = PassthroughSubject<Bool,Never>()
     var actionSubscriptions = [IndexPath: AnyCancellable]()
     var plusExerciseButtonTapped = PassthroughSubject<Void,Never>()
@@ -60,7 +60,8 @@ class LiveWorkoutDataSource: NSObject {
                             guard let exercise = self?.getExercise(at: indexPath) else {return}
                             self?.clipButtonTapped.send(exercise)
                         case .exerciseButton:
-                            self?.exerciseButtonTapped.send(indexPath)
+                            guard let exercise = self?.getExercise(at: indexPath) else {return}
+                            self?.exerciseButtonTapped.send(exercise)
                         case .addSet:
                             self?.plusSetButtonTapped.send(indexPath)
                         }

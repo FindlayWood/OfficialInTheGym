@@ -128,6 +128,10 @@ class RecordClipViewController: UIViewController {
     
     func beginRecording() {
         // begin to record a video
+//        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+//        let outputURL = path[0].appendingPathComponent("output").appendingPathExtension("mov")
+//        try? FileManager.default.removeItem(at: outputURL)
+//        viewModel.videoOutput.startRecording(to: outputURL, recordingDelegate: self)
         display.setUIRecording()
         startVideoTimer(with: display.currentVideoLength)
     }

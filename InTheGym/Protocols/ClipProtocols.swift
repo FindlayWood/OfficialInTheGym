@@ -16,5 +16,5 @@ protocol addedClipProtocol: AnyObject {
 }
 
 protocol ClipAdding: AnyObject {
-    func addClip(_ model: WorkoutClipModel)
+    func addClip(_ model: ClipModel)
 }
