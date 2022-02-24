@@ -13,9 +13,11 @@ class WorkoutCreationCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     var assignTo: Users?
     
+    
     init(navigationController: UINavigationController, assignTo: Users?) {
         self.navigationController = navigationController
         self.assignTo = assignTo
+        
     }            
     func start() {
         let vc = WorkoutCreationViewController()

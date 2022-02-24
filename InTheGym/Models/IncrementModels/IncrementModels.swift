@@ -19,7 +19,7 @@ struct SavedWorkoutDownloadModel {
 }
 extension SavedWorkoutDownloadModel: FirebaseInstance {
     var internalPath: String {
-        return "SavedWorkouts/\(savedWorkout.savedID)/downloads"
+        return "SavedWorkouts/\(savedWorkout.id)/downloads"
     }
 }
 

@@ -191,6 +191,32 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
             }
         }
     }
+    
+    // MARK: - Time Ordered Upload
+    func uploadTimeOrderedModel<Model: FirebaseTimeOrderedModel>(model: Model, completion: @escaping (Result<Model,Error>) -> Void) {
+        print(Model.path)
+        let dbref = Database.database().reference().child(Model.path).childByAutoId()
+        let autoID = dbref.key
+        var uploadModel = model
+        uploadModel.id = autoID!
+//        print(uploadModel)
+        do {
+            let firebaseData = try FirebaseEncoder().encode(uploadModel)
+//            print(firebaseData)
+//            completion(.success(uploadModel))
+            dbref.setValue(firebaseData) { error, ref in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success((uploadModel)))
+                }
+            }
+        }
+        catch {
+            completion(.failure(error))
+        }
+
+    }
 }
 
 protocol FirebaseDatabaseManagerService {
@@ -205,4 +231,5 @@ protocol FirebaseDatabaseManagerService {
     func fetchRange<M: FirebaseInstance, T: Decodable>(from models: [M], returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
     func checkExistence<Model:FirebaseInstance>(of model: Model, completion: @escaping(Result<Bool,Error>) -> Void)
     func childCount<Model:FirebaseInstance>(of model: Model, completion: @escaping (Result<Int,Error>) -> Void)
+    func uploadTimeOrderedModel<Model: FirebaseTimeOrderedModel>(model: Model, completion: @escaping (Result<Model,Error>) -> Void)
 }

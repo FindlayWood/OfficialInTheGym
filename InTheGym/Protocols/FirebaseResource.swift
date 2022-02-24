@@ -51,15 +51,23 @@ protocol FirebaseModel: Codable {
 
 
 typealias FirebaseResource = FirebaseInstance & FirebaseModel
-typealias FirebaseKeyReturn = FirebaseModel & FirebaseID
+//typealias FirebaseKeyReturn = FirebaseModel & FirebaseID
 
-// MARK: - Firebase ID
-/// A type that has an id/key that needs to be retreived from Firebase
-/// When fetchingKeys function called the returning type must conform to FirebaseID
-protocol FirebaseID {
+//// MARK: - Firebase ID
+///// A type that has an id/key that needs to be retreived from Firebase
+///// When fetchingKeys function called the returning type must conform to FirebaseID
+//protocol FirebaseID {
+//    var id: String { get set }
+//}
+
+// MARK: - Time Orderd ID
+/// A type that has an id that needs to be time ordered
+/// The id will use Firebase's childByAutoID() function to create this id
+protocol TimeOrderedID: Codable {
     var id: String { get set }
 }
 
+typealias FirebaseTimeOrderedModel = FirebaseModel & TimeOrderedID
 
 // MARK: - Firebase Instance Extension
 extension FirebaseInstance {

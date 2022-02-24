@@ -31,4 +31,11 @@ extension Int {
         
         return timeString
     }
+    func allPreviousNumbers() -> [Int] {
+        var numbers = [Int]()
+        for x in 1...self {
+            numbers.append(x)
+        }
+        return numbers
+    }
 }

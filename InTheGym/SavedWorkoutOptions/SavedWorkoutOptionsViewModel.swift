@@ -48,7 +48,7 @@ class SavedWorkoutOptionsViewModel {
     
     // MARK: - Check Save
     func checkSaved() {
-        let refModel = SavedWorkoutReferenceModel(id: savedWorkout.savedID)
+        let refModel = SavedWorkoutReferenceModel(id: savedWorkout.id)
         apiService.checkExistence(of: refModel) { [weak self] result in
             guard let self = self else {return}
             switch result {
@@ -62,7 +62,7 @@ class SavedWorkoutOptionsViewModel {
     
     // MARK: - Upload Functions
     func addToSaved() {
-        let refModel = SavedWorkoutReferenceModel(id: savedWorkout.savedID).toMultipUploadPoint()
+        let refModel = SavedWorkoutReferenceModel(id: savedWorkout.id).toMultipUploadPoint()
         let downloadsModel = savedWorkout.downloadUploadPoint()
         let uploadPoints: [FirebaseMultiUploadDataPoint] = [refModel, downloadsModel]
         apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in

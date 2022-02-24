@@ -9,6 +9,7 @@
 import UIKit
 
 class PrivacyView: UIView {
+    
     // MARK: - Properties
     var isPrivate: Bool = false
     
@@ -27,7 +28,7 @@ class PrivacyView: UIView {
         button.setImage(UIImage(named: "public_icon"), for: .normal)
         button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -85,5 +86,13 @@ private extension PrivacyView {
         privacyButton.setImage(newButtonImage, for: .normal)
         bottomLabel.text = isPrivate ? "Private" : "Public"
     }
+}
 
+// MARK: - Public Configuration
+extension PrivacyView {
+    public func configure(with isPrivate: Bool) {
+        let newButtonImage = isPrivate ? UIImage(named: "locked_icon") : UIImage(named: "public_icon")
+        privacyButton.setImage(newButtonImage, for: .normal)
+        bottomLabel.text = isPrivate ? "Private" : "Public"
+    }
 }

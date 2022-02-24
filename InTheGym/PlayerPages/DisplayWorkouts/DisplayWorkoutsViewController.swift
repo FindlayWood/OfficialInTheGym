@@ -57,6 +57,7 @@ class DisplayingWorkoutsViewController: UIViewController {
     // MARK: - Button Actions
     func buttonActions() {
         display.plusButton.addTarget(self, action: #selector(plusButtonTapped(_:)), for: .touchUpInside)
+        display.programButton.addTarget(self, action: #selector(programButtonTapped(_:)), for: .touchUpInside)
     }
     
     // MARK: - Subscribers
@@ -83,7 +84,10 @@ class DisplayingWorkoutsViewController: UIViewController {
     }
     
     @objc func plusButtonTapped(_ sender: UIButton) {
-        coordinator?.addNewWorkout(FirebaseAuthManager.currentlyLoggedInUser)
+        coordinator?.addNewWorkout(UserDefaults.currentUser)
+    }
+    @objc func programButtonTapped(_ sender: UIButton) {
+        coordinator?.addProgram()
     }
 }
 

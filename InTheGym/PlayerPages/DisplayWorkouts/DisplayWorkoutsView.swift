@@ -30,6 +30,14 @@ class DisplayingWorkoutsView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    var programButton: UIButton = {
+        let button = UIButton()
+        let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
+        button.setImage(UIImage(systemName: "text.book.closed.fill", withConfiguration: configuration), for: .normal)
+        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
@@ -56,6 +64,7 @@ private extension DisplayingWorkoutsView {
         backgroundColor = .lightColour
         addSubview(titleLabel)
         addSubview(plusButton)
+        addSubview(programButton)
         addSubview(collectionView)
         configureUI()
     }
@@ -67,6 +76,9 @@ private extension DisplayingWorkoutsView {
             
             plusButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            
+            programButton.trailingAnchor.constraint(equalTo: plusButton.leadingAnchor, constant: -4),
+            programButton.topAnchor.constraint(equalTo: plusButton.topAnchor),
             
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),

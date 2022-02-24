@@ -24,6 +24,8 @@ class WorkoutCreationViewModel: ExerciseAdding {
     var successfullyUploadedWorkout = PassthroughSubject<Bool,Never>()
     var errorUploadingWorkout = PassthroughSubject<Bool,Never>()
     
+    var workoutListPublisher: WorkoutList!
+    
     // MARK: - Exercise Types
     var exerciseModels = [ExerciseModel]()
     var circuitModels = [CircuitModel]()
@@ -32,6 +34,10 @@ class WorkoutCreationViewModel: ExerciseAdding {
     
     // MARK: - Properties
     var workoutList: WorkoutsList!
+    
+    var isSaving: Bool = true
+    
+    var isPrivate: Bool = false
     
     // MARK: - Assign To User
     /// The user to assign this workout to - if nil then just adding to created workouts with save option
@@ -87,44 +93,43 @@ class WorkoutCreationViewModel: ExerciseAdding {
     }
     
     //MARK: - Actions
-    func upload(with options: WorkoutOptionsModel) {
+    func upload() {
         let newSavedWorkout = SavedWorkoutModel(title: workoutTitle,
-                                                isPrivate: options.isPrivate,
+                                                isPrivate: isPrivate,
                                                 exercises: exerciseModels,
                                                 circuits: circuitModels,
                                                 amraps: amrapModels,
                                                 emoms: emomModels)
         
-
-        
-        var multiUploadPoints = [FirebaseMultiUploadDataPoint]()
-        if let savedWorkoutJSON = newSavedWorkout.toFirebaseJSON() {
-            multiUploadPoints.append(savedWorkoutJSON)
+        apiService.uploadTimeOrderedModel(model: newSavedWorkout) { [weak self] result in
+            switch result {
+            case .success(let model):
+//                print(model)
+                self?.uploadDatabaseLocations(for: model)
+            case .failure(_):
+                break
+            }
         }
-        
+    }
+    
+    func uploadDatabaseLocations(for model: SavedWorkoutModel) {
+        var multiUploadPoints = [FirebaseMultiUploadDataPoint]()
 
-
-        // TODO: - Upload New Workout to saved workouts
-        // TODO: - Upload keys to created workouts and saved workouts
-        let savedCreatorsRef = FirebaseMultiUploadDataPoint(value: true, path: "SavedWorkoutCreators/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(newSavedWorkout.savedID)")
+        let savedCreatorsRef = FirebaseMultiUploadDataPoint(value: true, path: "SavedWorkoutCreators/\(UserDefaults.currentUser.uid)/\(model.id)")
         multiUploadPoints.append(savedCreatorsRef)
-//        var keyPaths = ["SavedWorkoutCreators/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(newSavedWorkout.savedID)": true]
-        if options.save {
-//            keyPaths["SavedWorkoutReferences/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(newSavedWorkout.savedID)"] = true
-            let savedWorkoutsRef = FirebaseMultiUploadDataPoint(value: true, path: "SavedWorkoutReferences/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(newSavedWorkout.savedID)")
+        
+        if isSaving {
+            let savedWorkoutsRef = FirebaseMultiUploadDataPoint(value: true, path: "SavedWorkoutReferences/\(UserDefaults.currentUser.uid)/\(model.id)")
             multiUploadPoints.append(savedWorkoutsRef)
         }
         
-        // TODO: - If assign != nil upload workout to user
         if let assignTo = assignTo {
-            // TODO: - Create New Workout
-            let newWorkout = WorkoutModel(savedModel: newSavedWorkout, assignTo: assignTo.uid)
+            let newWorkout = WorkoutModel(savedModel: model, assignTo: assignTo.uid)
             if let newWorkoutJSON = newWorkout.toFirebaseJSON() {
                 multiUploadPoints.append(newWorkoutJSON)
             }
-            
         }
-        
+
         apiService.multiLocationUpload(data: multiUploadPoints) { [weak self] result in
             guard let self = self else {return}
             switch result {
@@ -134,7 +139,6 @@ class WorkoutCreationViewModel: ExerciseAdding {
                 self.errorUploadingWorkout.send(true)
             }
         }
-        
     }
     
     // MARK: - Updating Functions

@@ -18,4 +18,7 @@ extension UIViewController {
     func getFullScreenFrame() -> CGRect {
         return CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
     }
+    func getFullScreenFromDisplay() -> CGRect {
+        return CGRect(x: 0, y: -view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height + view.safeAreaInsets.top)
+    }
 }

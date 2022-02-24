@@ -9,6 +9,7 @@
 import UIKit
 
 class UISaveView: UIView {
+    
     // MARK: - Properties
     var saving: Bool = true
     
@@ -28,7 +29,7 @@ class UISaveView: UIView {
         button.imageView?.contentMode = .scaleAspectFit
         button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -76,4 +77,12 @@ private extension UISaveView {
         savingButton.setImage(newButtonImage, for: .normal)
     }
 
+}
+
+// MARK: - Public Configuration
+extension UISaveView {
+    public func configure(with saving: Bool) {
+        let newButtonImage = saving ? UIImage(named: "Workout Completed") : UIImage(named: "Workout UnCompleted")
+        savingButton.setImage(newButtonImage, for: .normal)
+    }
 }

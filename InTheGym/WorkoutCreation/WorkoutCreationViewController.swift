@@ -73,6 +73,8 @@ class WorkoutCreationViewController: UIViewController {
     
     func setUpActions() {
         display.plusButton.addTarget(self, action: #selector(plusButtonPressed(_:)), for: .touchUpInside)
+        display.saveView.savingButton.addTarget(self, action: #selector(toggleSaving(_:)), for: .touchUpInside)
+        display.privacyView.privacyButton.addTarget(self, action: #selector(togglePrivacy(_:)), for: .touchUpInside)
     }
     
     //MARK: - Subscribers
@@ -120,11 +122,19 @@ class WorkoutCreationViewController: UIViewController {
 // MARK: - Actions
 extension WorkoutCreationViewController {
     @objc func uploadPressed(_ sender: UIBarButtonItem) {
-        let options = WorkoutOptionsModel(isPrivate: display.privacyView.isPrivate, save: display.saveView.saving)
-        viewModel.upload(with: options)
+//        let options = WorkoutOptionsModel(isPrivate: display.privacyView.isPrivate, save: display.saveView.saving)
+        viewModel.upload()
     }
     @objc func plusButtonPressed(_ sender: UIButton) {
         coordinator?.plus(viewModel: viewModel, workoutPosition: viewModel.exercises.value.count)
+    }
+    @objc func toggleSaving(_ sender: UIButton) {
+        viewModel.isSaving.toggle()
+        display.saveView.configure(with: viewModel.isSaving)
+    }
+    @objc func togglePrivacy(_ sender: UIButton) {
+        viewModel.isPrivate.toggle()
+        display.privacyView.configure(with: viewModel.isPrivate)
     }
 }
 

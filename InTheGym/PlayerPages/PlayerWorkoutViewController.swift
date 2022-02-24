@@ -84,7 +84,7 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
 //        let nextVC = storyboard.instantiateViewController(withIdentifier: "AddWorkoutSelectionViewController") as! AddWorkoutSelectionViewController
 //        navigationController?.pushViewController(nextVC, animated: true)
-        coordinator?.addNewWorkout(FirebaseAuthManager.currentlyLoggedInUser)
+        coordinator?.addNewWorkout(UserDefaults.currentUser)
     }
     
     func loadWorkouts(){

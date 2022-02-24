@@ -189,7 +189,7 @@ class WorkoutModel: Codable, Hashable {
     init(savedModel: SavedWorkoutModel, assignTo: String) {
         title = savedModel.title
         workoutID = UUID().uuidString
-        savedID = savedModel.savedID
+        savedID = savedModel.id
         creatorID = savedModel.creatorID
         createdBy = savedModel.createdBy
         assignedTo = assignTo

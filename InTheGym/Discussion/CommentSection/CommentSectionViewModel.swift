@@ -69,7 +69,7 @@ class CommentSectionViewModel {
                                  message: commentText,
                                  posterID: FirebaseAuthManager.currentlyLoggedInUser.uid,
                                  postID: mainPostID,
-                                 attachedWorkoutSavedID: attachedWorkout?.savedID)
+                                 attachedWorkoutSavedID: attachedWorkout?.id)
         
         print(newComment)
     }

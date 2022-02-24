@@ -13,6 +13,8 @@ class LoadingScreenViewController: UIViewController {
     let activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.style = .large
+        view.tintColor = .darkColour
+        view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

@@ -1,17 +1,17 @@
 //
-//  ExerciseSelectionHeader.swift
+//  ProgramCreationWorkoutsHeaderView.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 02/09/2021.
-//  Copyright © 2021 FindlayWood. All rights reserved.
+//  Created by Findlay Wood on 22/02/2022.
+//  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import UIKit
 
-class ExerciseSelectionHeader: UICollectionReusableView {
+class ProgramCreationWorkoutsHeaderView: UICollectionReusableView {
     
     // MARK: - Properties
-    static let reuseIdentifier = "headerViewIdentifier"
+    static let reuseID = "ProgramCreationWorkoutsHeaderViewreuseID"
     static let elementID = "headerElement"
     
     // MARK: - Subviews
@@ -35,7 +35,7 @@ class ExerciseSelectionHeader: UICollectionReusableView {
 }
 
 // MARK: - Setup UI
-private extension ExerciseSelectionHeader {
+private extension ProgramCreationWorkoutsHeaderView {
     func setupUI() {
         addSubview(label)
         backgroundColor = .white
@@ -50,23 +50,15 @@ private extension ExerciseSelectionHeader {
 }
 
 // MARK: - Public Configuration
-extension ExerciseSelectionHeader {
+extension ProgramCreationWorkoutsHeaderView {
     public func setup(section: Int) {
         switch section {
         case 0:
-            label.text = "Upper Body"
+            label.text = "Workouts"
         case 1:
-            label.text = "Lower Body"
-        case 2:
-            label.text = "Core"
-        case 3:
-            label.text = "Cardio"
-        case 4:
-            label.text = "Circuit"
-        case 5:
-            label.text = "AMRAP"
+            label.text = "Add New Workout"
         default:
-            label.text = "EMOM"
+            label.text = "Workouts"
         }
     }
 }

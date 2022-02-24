@@ -14,7 +14,7 @@ import Firebase
 /// A saved workout cannot be completed - only for viewing
 /// A saved workout may then be added to workouts
 class SavedWorkoutModel: Codable, Hashable {
-    var savedID: String
+    var id: String
     var views: Int
     var downloads: Int
     var completions: Int
@@ -31,7 +31,7 @@ class SavedWorkoutModel: Codable, Hashable {
     var emoms: [EMOMModel]?
     
     init(title: String, isPrivate: Bool, exercises: [ExerciseModel], circuits: [CircuitModel], amraps: [AMRAPModel], emoms: [EMOMModel]) {
-        self.savedID = UUID().uuidString
+        self.id = UUID().uuidString
         self.views = 0
         self.downloads = 0
         self.completions = 0
@@ -49,11 +49,11 @@ class SavedWorkoutModel: Codable, Hashable {
     }
     
     static func == (lhs: SavedWorkoutModel, rhs: SavedWorkoutModel) -> Bool {
-        return lhs.savedID == rhs.savedID
+        return lhs.id == rhs.id
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(savedID)
+        hasher.combine(id)
     }
 }
 
@@ -80,21 +80,23 @@ extension SavedWorkoutModel {
 extension SavedWorkoutModel {
     func viewUploadPoint() -> FirebaseMultiUploadDataPoint {
         return FirebaseMultiUploadDataPoint(value: ServerValue.increment(1),
-                                            path: "SavedWorkouts/\(savedID)/views")
+                                            path: "SavedWorkouts/\(id)/views")
     }
     func downloadUploadPoint() -> FirebaseMultiUploadDataPoint {
         return FirebaseMultiUploadDataPoint(value: ServerValue.increment(1),
-                                            path: "SavedWorkouts/\(savedID)/downloads")
+                                            path: "SavedWorkouts/\(id)/downloads")
     }
 }
 
 // MARK: - Firebase Resource
-extension SavedWorkoutModel: FirebaseResource {
+extension SavedWorkoutModel: FirebaseTimeOrderedModel {
     static var path: String {
         return "SavedWorkouts"
     }
-    var internalPath: String {
-        return "SavedWorkouts/\(savedID)"
+}
+extension SavedWorkoutModel: FirebaseInstance {
+    var internalPath: String { 
+        return "SavedWorkouts/\(id)"
     }
 }
 

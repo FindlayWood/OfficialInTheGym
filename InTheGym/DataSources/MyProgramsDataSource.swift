@@ -1,24 +1,27 @@
 //
-//  SavedWorkoutsCollectionDataSource.swift
+//  MyProgramsDataSource.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 17/01/2022.
+//  Created by Findlay Wood on 22/02/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
-
 
 import Foundation
 import UIKit
 import Combine
 
-class SavedWorkoutsCollectionDataSource: NSObject {
+class MyProgramsDataSource: NSObject {
     
     // MARK: - Publisher
     var workoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
+    var plusSelected = PassthroughSubject<Void,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
+    
     private lazy var dataSource = makeDataSource()
+    
+    private var subscriptions = [IndexPath: AnyCancellable]()
     
     // MARK: - Initializer
     init(collectionView: UICollectionView) {
@@ -30,33 +33,30 @@ class SavedWorkoutsCollectionDataSource: NSObject {
     }
     
     // MARK: - Create Data Source
-    func makeDataSource() -> UICollectionViewDiffableDataSource<SingleSection,SavedWorkoutModel> {
+    func makeDataSource() -> UICollectionViewDiffableDataSource<SingleSection,Int> {
         return UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SavedWorkoutCollectionCell.reuseID, for: indexPath) as! SavedWorkoutCollectionCell
-            cell.configure(with: itemIdentifier)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProgramCollectionCell.reuseID, for: indexPath) as! ProgramCollectionCell
             return cell
         }
     }
     
     // MARK: - Initial Setup
     func initialSetup() {
-        var snapshot = NSDiffableDataSourceSnapshot<SingleSection,SavedWorkoutModel>()
+        var snapshot = NSDiffableDataSourceSnapshot<SingleSection,Int>()
         snapshot.appendSections([.main])
+        snapshot.appendItems([1,2,3,4], toSection: .main)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     // MARK: - Update
-    func updateTable(with models: [SavedWorkoutModel]) {
-        var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendItems(models, toSection: .main)
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
-    }
+    
+
 }
 // MARK: - Delegate - Select Row
-extension SavedWorkoutsCollectionDataSource: UICollectionViewDelegate {
+extension MyProgramsDataSource: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let workout = dataSource.itemIdentifier(for: indexPath) else {return}
-        workoutSelected.send(workout)
+//        guard let model = dataSource.itemIdentifier(for: indexPath) else {return}
+        
     }
 }

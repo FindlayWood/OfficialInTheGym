@@ -66,6 +66,11 @@ extension WorkoutsCoordinator: WorkoutsFlow {
 //        vc.coordinator = self
 //        navigationController.pushViewController(vc, animated: true)
     }
+    func addProgram() {
+        let child = MyProgramsCoordinator(navigationController: navigationController)
+        childCoordinators.append(child)
+        child.start()
+    }
     
     func regularWorkout(_ assignee: Assignable) {
         let child = RegularWorkoutCoordinator(navigationController: navigationController, assignTo: assignee)

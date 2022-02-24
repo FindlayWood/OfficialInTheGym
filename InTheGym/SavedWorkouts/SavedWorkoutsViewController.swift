@@ -58,7 +58,7 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
             .store(in: &subscriptions)
         
         collectionDataSource.workoutSelected
-            .sink { [weak self] in self?.selectedWorkout(at: $0) }
+            .sink { [weak self] in self?.coordinator?.savedWorkoutSelected($0) }
             .store(in: &subscriptions)
         
         viewModel.fetchKeys()

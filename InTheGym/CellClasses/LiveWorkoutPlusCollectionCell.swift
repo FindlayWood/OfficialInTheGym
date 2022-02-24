@@ -24,6 +24,7 @@ final class LiveWorkoutPlusCollectionCell: FullWidthCollectionViewCell {
         button.setImage(UIImage(named: "Set Workout"), for: .normal)
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(plusTapped(_:)), for: .touchUpInside)
+        button.imageView?.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
