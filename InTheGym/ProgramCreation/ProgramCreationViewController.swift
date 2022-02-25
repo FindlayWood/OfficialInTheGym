@@ -30,17 +30,21 @@ class ProgramCreationViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        addChild(childVC)
-        view.addSubview(childVC.view)
-        childVC.view.frame = getFullViewableFrame()
-        childVC.didMove(toParent: self)
-        initDataSource()
+        addChildVC()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         editNavBarColour(to: .darkColour)
         navigationItem.title = "Program Creation"
+    }
+    
+    func addChildVC() {
+        addChild(childVC)
+        view.addSubview(childVC.view)
+        childVC.view.frame = getFullViewableFrame()
+        childVC.didMove(toParent: self)
+        initDataSource()
     }
     
     // MARK: - Nav Bar
@@ -53,7 +57,9 @@ class ProgramCreationViewController: UIViewController {
     // MARK: - Data Source
     func initDataSource() {
         childVC.weeksDataSource.setForCreation()
+        childVC.weeksDataSource.initLongPress()
         childVC.workoutsDataSource.setForCreation()
+        childVC.workoutsDataSource.initLongPress()
         
         childVC.weeksDataSource.numberSelected
             .sink { [weak self] in self?.viewModel.currentlySelectedWeek.send($0) }

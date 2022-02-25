@@ -13,8 +13,8 @@ import Combine
 class MyProgramsDataSource: NSObject {
     
     // MARK: - Publisher
-    var workoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
-    var plusSelected = PassthroughSubject<Void,Never>()
+    var savedProgramSelected = PassthroughSubject<SavedProgramModel,Never>()
+    var programSelected = PassthroughSubject<ProgramModel,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
@@ -77,7 +77,12 @@ class MyProgramsDataSource: NSObject {
 extension MyProgramsDataSource: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        guard let model = dataSource.itemIdentifier(for: indexPath) else {return}
-        
+        guard let model = dataSource.itemIdentifier(for: indexPath) else {return}
+        switch model {
+        case .program(let program):
+            programSelected.send(program)
+        case .savedProgram(let program):
+            savedProgramSelected.send(program)
+        }
     }
 }

@@ -16,6 +16,7 @@ class DescriptionsView: UIView {
     var tableview: UITableView = {
         let view = UITableView()
         view.register(DescriptionTableViewCell.self, forCellReuseIdentifier: DescriptionTableViewCell.cellID)
+        view.tableFooterView = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

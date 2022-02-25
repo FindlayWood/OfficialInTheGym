@@ -31,7 +31,7 @@ class NumberCircleDataSource: NSObject {
         self.collectionView.dataSource = makeDataSource()
         self.collectionView.delegate = self
         self.initialSetup()
-        self.initLongPress()
+//        self.initLongPress()
     }
     
     // MARK: - Create Data Source

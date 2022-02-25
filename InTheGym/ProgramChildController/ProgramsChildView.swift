@@ -34,6 +34,7 @@ class ProgramsChildView: UIView {
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateWorkoutCollectionLayout())
         view.register(SavedWorkoutCollectionCell.self, forCellWithReuseIdentifier: SavedWorkoutCollectionCell.reuseID)
+        view.register(WorkoutCollectionViewCell.self, forCellWithReuseIdentifier: WorkoutCollectionViewCell.reuseID)
         view.register(LiveWorkoutPlusCollectionCell.self, forCellWithReuseIdentifier: LiveWorkoutPlusCollectionCell.reuseID)
         view.register(ProgramCreationWorkoutsHeaderView.self, forSupplementaryViewOfKind: ProgramCreationWorkoutsHeaderView.elementID, withReuseIdentifier: ProgramCreationWorkoutsHeaderView.reuseID)
         view.backgroundColor = .lightColour

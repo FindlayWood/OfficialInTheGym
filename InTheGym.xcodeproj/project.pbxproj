@@ -211,6 +211,8 @@
 		742C1CDA27C7C2F400DD1BB0 /* ProgramCreationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1CD927C7C2F400DD1BB0 /* ProgramCreationDetailView.swift */; };
 		742C1CDC27C7C30600DD1BB0 /* ProgramCreationDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1CDB27C7C30600DD1BB0 /* ProgramCreationDetailViewModel.swift */; };
 		742C1CDE27C9077700DD1BB0 /* MyProgramsItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1CDD27C9077700DD1BB0 /* MyProgramsItems.swift */; };
+		742C1CE227C9336B00DD1BB0 /* SavedProgramDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1CE127C9336A00DD1BB0 /* SavedProgramDisplayViewController.swift */; };
+		742C1CE427C9337E00DD1BB0 /* SavedProgramDisplayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1CE327C9337E00DD1BB0 /* SavedProgramDisplayViewModel.swift */; };
 		742CCDC02649CA630070D0A5 /* ProfilePhotoAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742CCDBF2649CA630070D0A5 /* ProfilePhotoAlert.swift */; };
 		742FF36B277B812F00AEE3D2 /* CommentSectionItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FF36A277B812F00AEE3D2 /* CommentSectionItems.swift */; };
 		742FF36D277B880900AEE3D2 /* PostReplies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FF36C277B880900AEE3D2 /* PostReplies.swift */; };
@@ -993,6 +995,8 @@
 		742C1CD927C7C2F400DD1BB0 /* ProgramCreationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCreationDetailView.swift; sourceTree = "<group>"; };
 		742C1CDB27C7C30600DD1BB0 /* ProgramCreationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCreationDetailViewModel.swift; sourceTree = "<group>"; };
 		742C1CDD27C9077700DD1BB0 /* MyProgramsItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProgramsItems.swift; sourceTree = "<group>"; };
+		742C1CE127C9336A00DD1BB0 /* SavedProgramDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedProgramDisplayViewController.swift; sourceTree = "<group>"; };
+		742C1CE327C9337E00DD1BB0 /* SavedProgramDisplayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedProgramDisplayViewModel.swift; sourceTree = "<group>"; };
 		742CCDBF2649CA630070D0A5 /* ProfilePhotoAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePhotoAlert.swift; sourceTree = "<group>"; };
 		742FF36A277B812F00AEE3D2 /* CommentSectionItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentSectionItems.swift; sourceTree = "<group>"; };
 		742FF36C277B880900AEE3D2 /* PostReplies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReplies.swift; sourceTree = "<group>"; };
@@ -1995,6 +1999,23 @@
 			path = ProgramCreationDetail;
 			sourceTree = "<group>";
 		};
+		742C1CDF27C9334300DD1BB0 /* ProgramDisplay */ = {
+			isa = PBXGroup;
+			children = (
+				742C1CE027C9335400DD1BB0 /* SavedProgramDisplay */,
+			);
+			path = ProgramDisplay;
+			sourceTree = "<group>";
+		};
+		742C1CE027C9335400DD1BB0 /* SavedProgramDisplay */ = {
+			isa = PBXGroup;
+			children = (
+				742C1CE127C9336A00DD1BB0 /* SavedProgramDisplayViewController.swift */,
+				742C1CE327C9337E00DD1BB0 /* SavedProgramDisplayViewModel.swift */,
+			);
+			path = SavedProgramDisplay;
+			sourceTree = "<group>";
+		};
 		7431030526FA30B600F7121B /* TimeSelection */ = {
 			isa = PBXGroup;
 			children = (
@@ -2633,6 +2654,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				742C1CDF27C9334300DD1BB0 /* ProgramDisplay */,
 				742C1CD127C6769D00DD1BB0 /* ProgramChildController */,
 				742C1CC427C53F4900DD1BB0 /* MyPrograms */,
 				742C1CAC27C2A3D300DD1BB0 /* ProgramCreation */,
@@ -3752,6 +3774,7 @@
 				7444D08E26D11CDE0009C7A6 /* UITextView+Extension.swift in Sources */,
 				742C1CA927BEA77200DD1BB0 /* ExerciseClipsCollectionCell.swift in Sources */,
 				74226E0726370E1A0074E616 /* CreatedWorkoutModels.swift in Sources */,
+				742C1CE227C9336B00DD1BB0 /* SavedProgramDisplayViewController.swift in Sources */,
 				7433308527861010005A0C45 /* SavedWorkoutModel.swift in Sources */,
 				742C1CB227C2A40800DD1BB0 /* ProgramCreationView.swift in Sources */,
 				7413A066255D743E009C7F97 /* AlertTopView.swift in Sources */,
@@ -4179,6 +4202,7 @@
 				743330C7278F2CB0005A0C45 /* SaveView.swift in Sources */,
 				742C1CB027C2A3FB00DD1BB0 /* ProgramCreationViewModel.swift in Sources */,
 				742C1CDC27C7C30600DD1BB0 /* ProgramCreationDetailViewModel.swift in Sources */,
+				742C1CE427C9337E00DD1BB0 /* SavedProgramDisplayViewModel.swift in Sources */,
 				7444D0A126D143E40009C7A6 /* AddMoreDistanceViewController.swift in Sources */,
 				7492264622D3A9C100EAD386 /* PBsViewController.swift in Sources */,
 				7466A86525EFDB8B00F4050F /* ProfileCollectionViewCell.swift in Sources */,

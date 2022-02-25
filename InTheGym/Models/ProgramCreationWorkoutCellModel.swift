@@ -13,3 +13,7 @@ struct ProgramCreationWorkoutCellModel: Hashable {
     var id: String = UUID().uuidString
     var savedWorkout: SavedWorkoutModel
 }
+struct ProgramWorkoutCellModel: Hashable {
+    var id: String = UUID().uuidString
+    var workoutModel: WorkoutModel
+}

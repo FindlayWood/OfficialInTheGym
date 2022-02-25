@@ -55,6 +55,14 @@ class MyProgramsViewController: UIViewController {
     func initDataSource() {
         dataSource = .init(collectionView: display.collectionView)
 //        dataSource.updateTable(with: viewModel.currentProgram.value)
+        
+        dataSource.savedProgramSelected
+            .sink { [weak self] model in
+                let vc = SavedProgramDisplayViewController()
+                vc.viewModel.savedProgramModel = model
+                self?.navigationController?.pushViewController(vc, animated: true)
+            }
+            .store(in: &subscriptions)
     }
     
     // MARK: - Subscribers

@@ -31,16 +31,20 @@ class ProgramCreationWorkoutsDataSource: NSObject {
         self.collectionView.dataSource = makeDataSource()
         self.collectionView.delegate = self
         self.initialSetup()
-        self.initLongPress()
+//        self.initLongPress()
     }
     
     // MARK: - Create Data Source
     func makeDataSource() -> UICollectionViewDiffableDataSource<ProgramCreationWorkoutSections,ProgramCreationWorkoutItems> {
         return UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             switch itemIdentifier {
-            case .workout(let model):
+            case .creatingWorkout(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SavedWorkoutCollectionCell.reuseID, for: indexPath) as! SavedWorkoutCollectionCell
                 cell.configure(with: model.savedWorkout)
+                return cell
+            case .workout(let model):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WorkoutCollectionViewCell.reuseID, for: indexPath) as! WorkoutCollectionViewCell
+                cell.configure(with: model.workoutModel)
                 return cell
             case .plus:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LiveWorkoutPlusCollectionCell.reuseID, for: indexPath) as! LiveWorkoutPlusCollectionCell
@@ -70,16 +74,24 @@ class ProgramCreationWorkoutsDataSource: NSObject {
     
     // MARK: - Update
     func updateTable(with models: [ProgramCreationWorkoutCellModel]) {
-        let items = models.map { ProgramCreationWorkoutItems.workout($0) }
+        let items = models.map { ProgramCreationWorkoutItems.creatingWorkout($0) }
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.appendItems(items, toSection: .workouts)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    func updateTable(with models: [ProgramWorkoutCellModel]) {
+        let items = models.map { ProgramCreationWorkoutItems.workout($0)}
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.deleteAllItems()
+        currentSnapshot.appendSections([.workouts])
+        currentSnapshot.appendItems(items, toSection: .workouts)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Add
     func addWorkout(_ model: ProgramCreationWorkoutCellModel) {
         var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendItems([ProgramCreationWorkoutItems.workout(model)], toSection: .workouts)
+        currentSnapshot.appendItems([ProgramCreationWorkoutItems.creatingWorkout(model)], toSection: .workouts)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
     
@@ -106,10 +118,10 @@ class ProgramCreationWorkoutsDataSource: NSObject {
             if let indexPath = collectionView.indexPathForItem(at: touchPoint) {
                 guard let model = dataSource.itemIdentifier(for: indexPath) else { return }
                 switch model {
-                case .workout(_):
+                case .creatingWorkout(_):
                     self.removeItem(model)
                     self.removeItem.send(indexPath.item)
-                case .plus:
+                case .plus, .workout(_):
                     break
                 }
             }
@@ -129,10 +141,12 @@ extension ProgramCreationWorkoutsDataSource: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let model = dataSource.itemIdentifier(for: indexPath) else {return}
         switch model {
-        case .workout(let workout):
+        case .creatingWorkout(let workout):
             self.workoutSelected.send(workout.savedWorkout)
         case .plus:
             self.plusSelected.send(())
+        case .workout(_):
+            break
         }
     }
 }

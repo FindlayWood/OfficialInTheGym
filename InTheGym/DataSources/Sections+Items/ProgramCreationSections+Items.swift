@@ -14,7 +14,8 @@ enum ProgramCreationWorkoutSections {
 }
 
 enum ProgramCreationWorkoutItems: Hashable {
-    case workout(ProgramCreationWorkoutCellModel)
+    case creatingWorkout(ProgramCreationWorkoutCellModel)
+    case workout(ProgramWorkoutCellModel)
     case plus
 }
 

@@ -23,9 +23,8 @@ class CommentSectionView: UIView {
         let view = UITableView()
         view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
         view.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.cellID)
-        if #available(iOS 15.0, *) {
-            view.sectionHeaderTopPadding = 0
-        }
+        if #available(iOS 15.0, *) {view.sectionHeaderTopPadding = 0}
+        view.tableFooterView = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
