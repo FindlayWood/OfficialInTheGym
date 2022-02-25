@@ -106,4 +106,8 @@ class CustomisedSegmentControl: UIView {
         self.buttonTitles = buttonTitle
         updateView()
     }
+    
+    public func setIndex(to index: Int) {
+        self.buttonAction(buttons[index])
+    }
 }

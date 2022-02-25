@@ -121,5 +121,32 @@ private extension ProgramCollectionCell {
     }
 }
 
+// MARK: - Public Configuration
 extension ProgramCollectionCell {
+    public func configure(with model: ProgramModel) {
+        titleLabel.text = model.title
+        exerciseCountLabel.text = model.weeks.count.description + " Weeks"
+        if model.creatorID == UserDefaults.currentUser.uid {
+            creatorLabel.text = UserDefaults.currentUser.username
+        } else {
+            let searchModel = UserSearchModel(uid: model.creatorID)
+            UsersLoader.shared.load(from: searchModel) { [weak self] result in
+                guard let user = try? result.get() else {return}
+                self?.creatorLabel.text = user.username
+            }
+        }
+    }
+    public func configure(with model: SavedProgramModel) {
+        titleLabel.text = model.title
+        exerciseCountLabel.text = model.weeks.count.description + " Weeks"
+        if model.creatorID == UserDefaults.currentUser.uid {
+            creatorLabel.text = UserDefaults.currentUser.username
+        } else {
+            let searchModel = UserSearchModel(uid: model.creatorID)
+            UsersLoader.shared.load(from: searchModel) { [weak self] result in
+                guard let user = try? result.get() else {return}
+                self?.creatorLabel.text = user.username
+            }
+        }
+    }
 }

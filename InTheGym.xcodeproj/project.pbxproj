@@ -210,6 +210,7 @@
 		742C1CD827C7C2E300DD1BB0 /* ProgramCreationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1CD727C7C2E300DD1BB0 /* ProgramCreationDetailViewController.swift */; };
 		742C1CDA27C7C2F400DD1BB0 /* ProgramCreationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1CD927C7C2F400DD1BB0 /* ProgramCreationDetailView.swift */; };
 		742C1CDC27C7C30600DD1BB0 /* ProgramCreationDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1CDB27C7C30600DD1BB0 /* ProgramCreationDetailViewModel.swift */; };
+		742C1CDE27C9077700DD1BB0 /* MyProgramsItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1CDD27C9077700DD1BB0 /* MyProgramsItems.swift */; };
 		742CCDC02649CA630070D0A5 /* ProfilePhotoAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742CCDBF2649CA630070D0A5 /* ProfilePhotoAlert.swift */; };
 		742FF36B277B812F00AEE3D2 /* CommentSectionItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FF36A277B812F00AEE3D2 /* CommentSectionItems.swift */; };
 		742FF36D277B880900AEE3D2 /* PostReplies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FF36C277B880900AEE3D2 /* PostReplies.swift */; };
@@ -991,6 +992,7 @@
 		742C1CD727C7C2E300DD1BB0 /* ProgramCreationDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCreationDetailViewController.swift; sourceTree = "<group>"; };
 		742C1CD927C7C2F400DD1BB0 /* ProgramCreationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCreationDetailView.swift; sourceTree = "<group>"; };
 		742C1CDB27C7C30600DD1BB0 /* ProgramCreationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCreationDetailViewModel.swift; sourceTree = "<group>"; };
+		742C1CDD27C9077700DD1BB0 /* MyProgramsItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProgramsItems.swift; sourceTree = "<group>"; };
 		742CCDBF2649CA630070D0A5 /* ProfilePhotoAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePhotoAlert.swift; sourceTree = "<group>"; };
 		742FF36A277B812F00AEE3D2 /* CommentSectionItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentSectionItems.swift; sourceTree = "<group>"; };
 		742FF36C277B880900AEE3D2 /* PostReplies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReplies.swift; sourceTree = "<group>"; };
@@ -3024,6 +3026,7 @@
 				74B48DFD27A41E6700BBFC16 /* LiveWorkoutSections+Items.swift */,
 				742C1C6727B69EDD00DD1BB0 /* ProfileSections+Items.swift */,
 				742C1CBB27C3FE1800DD1BB0 /* ProgramCreationSections+Items.swift */,
+				742C1CDD27C9077700DD1BB0 /* MyProgramsItems.swift */,
 			);
 			path = "Sections+Items";
 			sourceTree = "<group>";
@@ -4262,6 +4265,7 @@
 				744B9F4B261E013F002574D7 /* MyGroupsViewController.swift in Sources */,
 				74C89C8C261B67D8009F3C72 /* WorkoutPrivacyCollectionViewCell.swift in Sources */,
 				742C1C4B27AD9BED00DD1BB0 /* ClipDataSource.swift in Sources */,
+				742C1CDE27C9077700DD1BB0 /* MyProgramsItems.swift in Sources */,
 				74478E2026BDF05600D8178E /* NotificationsCoordinator.swift in Sources */,
 				744AED20279701E2000D2D74 /* MainWorkoutEMOMCollectionCell.swift in Sources */,
 				74FDB98725A65C7700CC18EF /* SearchForUsersViewController.swift in Sources */,

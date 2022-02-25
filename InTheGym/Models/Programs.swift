@@ -11,13 +11,19 @@ import Foundation
 // MARK: - Program
 /// Program Model
 /// Programs contain array of weeks which contain array of workouts
-class ProgramModel: Codable {
+class ProgramModel: Codable, Hashable {
     var id: String
     var title: String
     var weeks: [ProgramWeekModel]
     var creatorID: String
     var isPrivate: Bool
 
+    static func == (lhs: ProgramModel, rhs: ProgramModel) -> Bool {
+        lhs.id == rhs.id
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 extension ProgramModel: FirebaseInstance {
     var internalPath: String {
@@ -29,7 +35,7 @@ extension ProgramModel: FirebaseInstance {
 // MARK: - Saved Programs
 /// Saved Programs Model
 /// Stored in the database for re use
-class SavedProgramModel: Codable {
+class SavedProgramModel: Codable, Hashable {
     var id: String
     var title: String
     var description: String
@@ -52,6 +58,13 @@ class SavedProgramModel: Codable {
         self.isPrivate = createdModel.isPrivate
         self.downloads = 0
         self.numberOfCompletions = 0
+    }
+    
+    static func == (lhs: SavedProgramModel, rhs: SavedProgramModel) -> Bool {
+        lhs.id == rhs.id
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 extension SavedProgramModel: FirebaseTimeOrderedModel {
@@ -109,5 +122,21 @@ struct MyProgramReferenceModel {
 extension MyProgramReferenceModel: FirebaseInstance {
     var internalPath: String {
         return "MyPrograms/\(UserDefaults.currentUser.uid)/\(id)"
+    }
+}
+// MARK: - My Programs Download Model
+struct MyProgramsDownloadModel: FirebaseInstance {
+    var internalPath: String {
+        return "MyPrograms/\(UserDefaults.currentUser.uid)"
+    }
+}
+
+// MARK: - Saved Program Download Model
+struct SavedProgramDownloadModel {
+    var id: String
+}
+extension SavedProgramDownloadModel: FirebaseInstance {
+    var internalPath: String {
+        return "SavedPrograms/\(id)"
     }
 }

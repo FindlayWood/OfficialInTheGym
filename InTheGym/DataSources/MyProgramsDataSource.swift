@@ -33,22 +33,43 @@ class MyProgramsDataSource: NSObject {
     }
     
     // MARK: - Create Data Source
-    func makeDataSource() -> UICollectionViewDiffableDataSource<SingleSection,Int> {
+    func makeDataSource() -> UICollectionViewDiffableDataSource<SingleSection,MyProgramsItems> {
         return UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProgramCollectionCell.reuseID, for: indexPath) as! ProgramCollectionCell
+            switch itemIdentifier {
+            case .program(let model):
+                cell.configure(with: model)
+            case .savedProgram(let model):
+                cell.configure(with: model)
+            }
             return cell
         }
     }
     
     // MARK: - Initial Setup
     func initialSetup() {
-        var snapshot = NSDiffableDataSourceSnapshot<SingleSection,Int>()
+        var snapshot = NSDiffableDataSourceSnapshot<SingleSection,MyProgramsItems>()
         snapshot.appendSections([.main])
-        snapshot.appendItems([1,2,3,4], toSection: .main)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     // MARK: - Update
+    func updateTable(with models: [ProgramModel]) {
+        let items = models.map { MyProgramsItems.program($0) }
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.deleteAllItems()
+        currentSnapshot.appendSections([.main])
+        currentSnapshot.appendItems(items, toSection: .main)
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    func updateTable(with models: [SavedProgramModel]) {
+        let items = models.map { MyProgramsItems.savedProgram($0) }
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.deleteAllItems()
+        currentSnapshot.appendSections([.main])
+        currentSnapshot.appendItems(items, toSection: .main)
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
     
 
 }

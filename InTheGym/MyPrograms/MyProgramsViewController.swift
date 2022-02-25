@@ -41,6 +41,9 @@ class MyProgramsViewController: UIViewController {
         super.viewWillAppear(animated)
         editNavBarColour(to: .darkColour)
         navigationItem.title = viewModel.navigationTitle
+        if !isMovingToParent {
+            viewModel.setSelectedIndex(to: 0)
+        }
     }
     
     // MARK: - Targets
@@ -51,13 +54,56 @@ class MyProgramsViewController: UIViewController {
     // MARK: - Data Source
     func initDataSource() {
         dataSource = .init(collectionView: display.collectionView)
+//        dataSource.updateTable(with: viewModel.currentProgram.value)
     }
     
     // MARK: - Subscribers
     func initSubscribers() {
         display.segmentControl.selectedIndex
+            .sink { [weak self] in self?.viewModel.setSelectedIndex(to: $0) }
+            .store(in: &subscriptions)
+        
+        viewModel.selectedIndex
             .sink { [weak self] in self?.display.setDisplay(to: $0) }
             .store(in: &subscriptions)
+        
+        viewModel.currentProgram
+            .sink { [weak self] models in
+                if self?.viewModel.selectedIndex.value == 0 {
+                    self?.dataSource.updateTable(with: models)
+                }
+            }
+            .store(in: &subscriptions)
+        
+        viewModel.savedPrograms
+            .sink { [weak self] models in
+                if self?.viewModel.selectedIndex.value == 1 {
+                    self?.dataSource.updateTable(with: models)
+                }
+            }
+            .store(in: &subscriptions)
+        
+        viewModel.completedPrograms
+            .sink { [weak self] models in
+                if self?.viewModel.selectedIndex.value == 2 {
+                    self?.dataSource.updateTable(with: models)
+                }
+            }
+            .store(in: &subscriptions)
+        
+        viewModel.modelsToShow
+            .sink { [weak self] type in
+                switch type {
+                case .program(let models):
+                    self?.dataSource.updateTable(with: models)
+                case .saved(let models):
+                    self?.dataSource.updateTable(with: models)
+                }
+            }
+            .store(in: &subscriptions)
+        
+        viewModel.fetchSavedPrograms()
+//        viewModel.modelsToShow.send(MyProgramsToShow.program(viewModel.currentProgram.value))
     }
 }
 
