@@ -72,7 +72,6 @@ class MyProfileViewController: UIViewController, Storyboarded {
         setupDataSource()
         setupSubscriptions()
         
-        checkForNotifications()
         initViewModel()
         initUI()
         initRefreshControl()
@@ -433,9 +432,6 @@ extension MyProfileViewController {
 }
 
 extension MyProfileViewController {
-    func checkForNotifications(){
-        NotificationCenter.default.addObserver(self, selector: #selector(removeIcon), name: .seenAllNotifications, object: nil)
-    }
     
     @objc func removeIcon(){
         self.tabBarController?.tabBar.items?[3].badgeValue = nil

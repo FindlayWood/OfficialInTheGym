@@ -16,6 +16,8 @@ class SavedProgramDisplayViewModel {
     // MARK: - Properties
     var savedProgramModel: SavedProgramModel!
     
+    var options: [Options] = [.assign, .review, .save, .delete]
+    
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     
     // MARK: - Initializer

@@ -12,7 +12,8 @@ import Combine
 class PostTableViewCell: UITableViewCell {
     
     // MARK: - Publishers
-    var actionPublisher = PassthroughSubject<PostAction,Never>()
+//    var actionPublisher = PassthroughSubject<PostAction,Never>()
+    var actionPublisher: PassthroughSubject<PostAction,Never> = PassthroughSubject<PostAction,Never>()
     
     // MARK: - Properties
     static let cellID = "postCellID"
@@ -61,6 +62,7 @@ class PostTableViewCell: UITableViewCell {
     // MARK: - Stack Subviews
     var workoutView: UIWorkoutView = {
         let view = UIWorkoutView()
+        view.isHidden = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -138,6 +140,12 @@ class PostTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        actionPublisher = PassthroughSubject<PostAction,Never>()
+        workoutView.isHidden = true
     }
 }
 
@@ -221,37 +229,20 @@ extension PostTableViewCell {
         likeCountLabel.text = post.likeCount.description
         if post.attachedClip == nil { clipImageView.isHidden = true }
         if post.attachedPhoto == nil { photoImageView.isHidden = true }
-//        if let attachedWorkout = post.attachedWorkout { workoutView.newConfigure(with: attachedWorkout) } else {workoutView.isHidden = true}
         if let workoutID = post.workoutID {
-            let searchModel = WorkoutKeyModel(id: workoutID)
-            WorkoutLoader.shared.load(from: searchModel) { [weak self] result in
-                guard let self = self else {return}
-                guard let workout = try? result.get() else {return}
-                self.workoutView.configure(with: workout)
-            }
+            workoutView.isHidden = false
+            workoutView.configure(with: workoutID)
         } 
         if let savedWorkoutID = post.savedWorkoutID {
-            let searchModel = SavedWorkoutKeyModel(id: savedWorkoutID)
-            SavedWorkoutLoader.shared.load(from: searchModel) { [weak self] result in
-                guard let self = self else {return}
-                guard let workout = try? result.get() else {return}
-                self.workoutView.configure(with: workout)
-            }
+            workoutView.isHidden = false
+            workoutView.configure(for: savedWorkoutID)
         }
-        if post.workoutID == nil && post.savedWorkoutID == nil {
-            workoutView.isHidden = true
-        }
+
         let profileImageModel = ProfileImageDownloadModel(id: post.posterID)
         ImageCache.shared.load(from: profileImageModel) { [weak self] result in
             let image = try? result.get()
             self?.profileImageButton.setImage(image, for: .normal)
         }
-//        ImageAPIService.shared.getProfileImage(for: post.posterID) { [weak self] image in
-//            guard let self = self else {return}
-//            if image != nil {
-//                self.profileImageButton.setImage(image, for: .normal)
-//            }
-//        }
         LikesAPIService.shared.check(postID: post.id) { [weak self] liked in
             guard let self = self else {return}
             if liked {
@@ -283,7 +274,7 @@ extension PostTableViewCell {
             sender.isUserInteractionEnabled = false
             self.likeCountLabel.increment()
         }
-        delegate?.likeButtonTapped(on: self, sender: sender, label: likeCountLabel)
+//        delegate?.likeButtonTapped(on: self, sender: sender, label: likeCountLabel)
     }
     @objc func workoutTapped(_ sender: UIView) {
         actionPublisher.send(.workoutTapped)

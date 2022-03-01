@@ -31,6 +31,8 @@ class CommentSectionViewModel {
     
     lazy var groupPostReplyModel = PostReplies(postID: mainGroupPost.id)
     
+    var listener: PostListener!
+    
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
@@ -128,7 +130,7 @@ class CommentSectionViewModel {
             switch result {
             case .success(()):
                 LikesAPIService.shared.LikedPostsCache[post.id] = true
-                print("successfully liked")
+                self?.listener.send(post)
             case .failure(let error):
                 //TODO: - Show like error
                 print(error.localizedDescription)

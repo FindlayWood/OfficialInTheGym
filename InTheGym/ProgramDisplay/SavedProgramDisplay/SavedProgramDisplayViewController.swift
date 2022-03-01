@@ -12,6 +12,8 @@ import Combine
 class SavedProgramDisplayViewController: UIViewController {
     
     // MARK: - Properties
+    weak var coordinator: SavedProgramDisplayCoordinator!
+    
     var viewModel = SavedProgramDisplayViewModel()
     
     var childVC = ProgramsChildViewController()
@@ -24,6 +26,7 @@ class SavedProgramDisplayViewController: UIViewController {
         view.backgroundColor = .white
         initNavBar()
 //        initViewModel()
+        initSubscriptions()
     }
     
     override func viewDidLayoutSubviews() {
@@ -47,7 +50,7 @@ class SavedProgramDisplayViewController: UIViewController {
     
     // MARK: - Nav Bar
     func initNavBar() {
-        let navButton = UIBarButtonItem(title: "Options", style: .done, target: self, action: #selector(nextPressed(_:)))
+        let navButton = UIBarButtonItem(title: "Options", style: .done, target: self, action: #selector(optionsPressed(_:)))
         navigationItem.rightBarButtonItem = navButton
     }
     
@@ -72,10 +75,18 @@ class SavedProgramDisplayViewController: UIViewController {
             }
             .store(in: &subscriptions)
     }
+    
+    func initSubscriptions() {
+        coordinator.optionSelected
+            .sink { [weak self] option in
+                print(option)
+            }
+            .store(in: &subscriptions)
+    }
 }
 // MARK: - Actions
 private extension SavedProgramDisplayViewController {
-    @objc func nextPressed(_ sender: UIBarButtonItem) {
-
+    @objc func optionsPressed(_ sender: UIBarButtonItem) {
+        coordinator?.showOptions(viewModel.options)
     }
 }

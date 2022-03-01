@@ -15,16 +15,19 @@ class CommentSectionCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     var mainPost: post
     var savedWorkoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
+    var listener: PostListener
     
-    init(navigationController: UINavigationController, mainPost: post) {
+    init(navigationController: UINavigationController, mainPost: post, listener: PostListener) {
         self.navigationController = navigationController
         self.mainPost = mainPost
+        self.listener = listener
     }
     
     func start() {
         let vc = CommentSectionViewController()
         vc.coordinator = self
         vc.viewModel.mainPost = mainPost
+        vc.viewModel.listener = listener
         navigationController.pushViewController(vc, animated: true)
     }
 }

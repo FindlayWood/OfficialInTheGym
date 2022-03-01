@@ -16,15 +16,11 @@ extension UserDefaults {
     
     enum Keys: String {
         case hasSeenIntroductionPage = "hasSeenIntroductionPage"
-        case currentUsername = "currentUsername"
         case currentUser = "currentUser"
     }
     
     @UserDefaultWrapper(key: Keys.hasSeenIntroductionPage.rawValue, defaultValue: false)
     static var hasSeenIntroduction: Bool
-    
-    @UserDefaultWrapper(key: Keys.currentUsername.rawValue, defaultValue: "")
-    static var currentUsername: String
     
     @UserDefaultWrapper(key: Keys.currentUser.rawValue, defaultValue: Users.nilUser)
     static var currentUser: Users

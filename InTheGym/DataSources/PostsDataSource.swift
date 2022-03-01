@@ -11,14 +11,25 @@ import UIKit
 import Combine
 
 class PostsDataSource: NSObject {
+    
     // MARK: - Publisher
     var postSelcted = PassthroughSubject<post,Never>()
     var scrollPublisher = PassthroughSubject<Bool,Never>()
     
+    var likeButtonTapped = PassthroughSubject<post,Never>()
+    
+    var userTapped = PassthroughSubject<Users,Never>()
+    
+    var workoutTapped = PassthroughSubject<post,Never>()
+    
     // MARK: - Properties
     var tableView: UITableView
+    
     private lazy var dataSource = makeDataSource()
+    
     var lastContentOffset: CGFloat = 0
+    
+    var actionSubscriptions = [IndexPath: AnyCancellable]()
     
     // MARK: - Initializer
     init(tableView: UITableView) {
@@ -34,6 +45,11 @@ class PostsDataSource: NSObject {
         return UITableViewDiffableDataSource(tableView: self.tableView) { tableView, indexPath, itemIdentifier in
             let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
             cell.configure(with: itemIdentifier)
+            self.actionSubscriptions.removeValue(forKey: indexPath)
+            self.actionSubscriptions[indexPath] = cell.actionPublisher
+                .sink(receiveValue: { [weak self] action in
+                    self?.actionPublisher(action: action, indexPath: indexPath)
+                })
             return cell
         }
     }
@@ -50,6 +66,33 @@ class PostsDataSource: NSObject {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.appendItems(models, toSection: .main)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    
+    // MARK: - Add
+    func addNewPost(_ newPost: post) {
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.appendItems([newPost], toSection: .main)
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    
+    // MARK: - Reload
+    func reloadPost(_ reloadPost: post) {
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.reloadItems([reloadPost])
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
+    }
+    
+    // MARK: - Actions
+    func actionPublisher(action: PostAction, indexPath: IndexPath) {
+        guard let post = dataSource.itemIdentifier(for: indexPath) else {return}
+        switch action {
+        case .likeButtonTapped:
+            likeButtonTapped.send(post)
+        case .workoutTapped:
+            workoutTapped.send(post)
+        case .userTapped(let user):
+            userTapped.send(user)
+        }
     }
 }
 // MARK: - Delegate - Select Row

@@ -18,7 +18,9 @@ protocol TimelineFlow: AnyObject {
 
 protocol NewsFeedFlow: TimelineFlow {
     func makePost(groupPost: Bool, delegate: PlayerTimelineProtocol)
-    func showCommentSection(for post: post)
+    func showCommentSection(for post: post, with listener: PostListener)
+    func showWorkout(_ model: WorkoutModel)
+    func showSavedWorkout(_ model: SavedWorkoutModel)
 }
 
 class TimelineCoordinator: NSObject, Coordinator {
@@ -35,7 +37,7 @@ class TimelineCoordinator: NSObject, Coordinator {
     
     func start() {
         navigationController.delegate = self
-        let playerTimeline = PlayerTimelineViewController.instantiate()
+        let playerTimeline = PlayerTimelineViewController()
         playerTimeline.coordinator = self
         navigationController.pushViewController(playerTimeline, animated: false)
     }
@@ -63,8 +65,18 @@ extension TimelineCoordinator: NewsFeedFlow {
         navigationController.present(vc, animated: true, completion: nil)
     }
     
-    func showCommentSection(for post: post) {
-        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post)
+    func showCommentSection(for post: post, with listener: PostListener) {
+        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func showWorkout(_ model: WorkoutModel) {
+        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: model)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func showSavedWorkout(_ model: SavedWorkoutModel) {
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
         childCoordinators.append(child)
         child.start()
     }

@@ -57,11 +57,7 @@ class MyProgramsViewController: UIViewController {
 //        dataSource.updateTable(with: viewModel.currentProgram.value)
         
         dataSource.savedProgramSelected
-            .sink { [weak self] model in
-                let vc = SavedProgramDisplayViewController()
-                vc.viewModel.savedProgramModel = model
-                self?.navigationController?.pushViewController(vc, animated: true)
-            }
+            .sink { [weak self] in self?.coordinator?.showSavedProgram($0) }
             .store(in: &subscriptions)
     }
     

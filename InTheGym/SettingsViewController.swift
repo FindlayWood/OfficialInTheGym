@@ -58,7 +58,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 FirebaseAuthManager.currentlyLoggedInUser = nil
                 ViewController.admin = nil
                 ViewController.username = nil
-                PlayerTimelineViewModel.apiService.removeObserver(withHandle: PlayerTimelineViewModel.handle)
+                UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
+//                PlayerTimelineViewModel.apiService.removeObserver(withHandle: PlayerTimelineViewModel.handle)
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let initial = storyboard.instantiateInitialViewController()
                 UIApplication.shared.keyWindow?.rootViewController = initial

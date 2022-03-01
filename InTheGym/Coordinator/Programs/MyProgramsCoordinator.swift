@@ -31,4 +31,9 @@ extension MyProgramsCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    func showSavedProgram(_ program: SavedProgramModel) {
+         let child = SavedProgramDisplayCoordinator(navigationController: navigationController, program: program)
+        childCoordinators.append(child)
+        child.start()
+    }
 }
