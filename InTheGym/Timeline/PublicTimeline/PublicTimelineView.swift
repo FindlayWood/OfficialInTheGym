@@ -58,6 +58,9 @@ class PublicTimelineView: UIView {
         let view = UITableView()
         view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
         if #available(iOS 15.0, *) { view.sectionHeaderTopPadding = 0 }
+        view.tableFooterView = UIView()
+        view.separatorInset = .zero
+        view.layoutMargins = .zero
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

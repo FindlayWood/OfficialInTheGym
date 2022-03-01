@@ -27,6 +27,7 @@ class PostTableViewCell: UITableViewCell {
     // MARK: - Subviews
     var profileImageButton: UIButton = {
         let button = UIButton()
+        button.backgroundColor = .lightGray
         button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.layer.cornerRadius = 25

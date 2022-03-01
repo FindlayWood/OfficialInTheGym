@@ -100,7 +100,6 @@ extension TimelineCoordinator: TimelineFlow {
     
     func showUser(user: Users) {
         let child = UserProfileCoordinator(navigationController: navigationController, user: user)
-        child.parentCoordinator = self
         childCoordinators.append(child)
         child.start()
         

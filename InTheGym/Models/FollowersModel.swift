@@ -9,6 +9,7 @@
 import Foundation
 
 // MARK: - Struct Followers Model
+/// Model to check follower count
 struct FollowersModel: FirebaseInstance {
     var id: String
     var internalPath: String {
@@ -17,6 +18,7 @@ struct FollowersModel: FirebaseInstance {
 }
 
 // MARK: - Following Model
+/// Model to check following count
 struct FollowingModel: FirebaseInstance {
     var id: String
     var internalPath: String {
@@ -29,5 +31,27 @@ struct CheckFollowingModel: FirebaseInstance {
     var id: String
     var internalPath: String {
         return "Following/\(UserDefaults.currentUser.uid)/\(id)"
+    }
+}
+
+// MARK: - Follow Model
+/// Model to use when a user follows another user
+struct FollowModel {
+    /// The id of the user to follow
+    var id: String
+    
+    func getUploadPoints() -> [FirebaseMultiUploadDataPoint] {
+        var points = [FirebaseMultiUploadDataPoint]()
+        points.append(FirebaseMultiUploadDataPoint(value: true, path: followingPath))
+        points.append(FirebaseMultiUploadDataPoint(value: true, path: followersPath))
+        return points
+    }
+}
+extension FollowModel {
+    var followingPath: String {
+        return "Following/\(UserDefaults.currentUser.uid)/\(id)"
+    }
+    var followersPath: String {
+        return "Followers/\(id)/\(UserDefaults.currentUser.uid)"
     }
 }

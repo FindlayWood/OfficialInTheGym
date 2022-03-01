@@ -10,7 +10,6 @@ import UIKit
 
 /// Child Coordinator to handle the flow when a user profile is shown
 class UserProfileCoordinator: NSObject, Coordinator {
-    weak var parentCoordinator: TimelineCoordinator?
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var userToShow: Users
@@ -43,6 +42,27 @@ extension UserProfileCoordinator {
     
     func showCreatedWorkouts(for user: Users){
         let child = PublicCreatedWorkoutsCoordinator(navigationController: navigationController, user: user)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
+    func showCommentSection(for post: post, with listener: PostListener) {
+        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func showWorkout(_ model: WorkoutModel) {
+        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: model)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func showSavedWorkout(_ model: SavedWorkoutModel) {
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func showUser(user: Users) {
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(child)
         child.start()
     }
