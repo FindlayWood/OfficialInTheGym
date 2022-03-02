@@ -13,7 +13,7 @@ class CreateNewGroupViewController: UIViewController {
     
     weak var coordinator: GroupCoordinator?
     
-    var delegate: MyGroupsProtocol!
+//    var delegate: MyGroupsProtocol!
     
     var display = CreateNewGroupView()
     
@@ -133,7 +133,7 @@ extension CreateNewGroupViewController {
         display.groupNameField.text = ""
         textFieldDidEndEditing(display.groupNameField)
         viewModel.addedPlayers.removeAll()
-        delegate.addedNewGroup()
+//        delegate.addedNewGroup()
         navigationController?.popViewController(animated: true)
     }
     func showError() {

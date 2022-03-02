@@ -12,29 +12,23 @@ import CodableFirebase
 import Combine
 
 class MyGroupViewModel:NSObject {
-
     
-    // MARK: - Closures
-    var updateLoadingStatusClosure:(()->())?
-    var myGroupsLoaded:(()->())?
-    
-    // MARK: - Combine Publishers
+    // MARK: - Publishers
     var groups = CurrentValueSubject<[GroupModel], Never>([])
+    
     var errorFetchingGroups = PassthroughSubject<Error, Never>()
     
-    var isLoading: Bool = false {
-        didSet{
-            updateLoadingStatusClosure?()
-        }
-    }
+    // MARK: - Properties
+    var navigationTitle = "My Groups"
     
     var apiService: FirebaseDatabaseManagerService
     
+    // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
     
-    
+    // MARK: - Fetch Functions
     func fetchReferences() {
         let referencesModel = GroupReferencesModel(id: UserDefaults.currentUser.uid)
         apiService.fetchKeys(from: referencesModel) { [weak self] result in
@@ -59,12 +53,5 @@ class MyGroupViewModel:NSObject {
                 self.errorFetchingGroups.send(error)
             }
         }
-    }
-    
-    // MARK: - Retreive functions
-    func getGroup(at indexPath: IndexPath) -> GroupModel {
-//        return myGroups[indexPath.row]
-        let currentGroups = groups.value
-        return currentGroups[indexPath.row]
     }
 }

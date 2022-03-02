@@ -59,6 +59,9 @@ class MyProfileView: UIView {
         view.register(ProfileOptionsCell.self, forCellReuseIdentifier: ProfileOptionsCell.cellID)
         view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
         if #available(iOS 15.0, *) { view.sectionHeaderTopPadding = 0 }
+        view.tableFooterView = UIView()
+        view.separatorInset = .zero
+        view.layoutMargins = .zero
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

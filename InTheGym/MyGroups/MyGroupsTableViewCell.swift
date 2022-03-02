@@ -126,9 +126,10 @@ private extension MyGroupsTableViewCell {
 extension MyGroupsTableViewCell {
     public func configure(with group: GroupModel) {
         groupNameLabel.text = group.username
-        UserIDToUser.transform(userID: group.leader) { [weak self] leader in
-            guard let self = self else {return}
-            self.createdByLabel.text = leader.username
+        let userSearchModel = UserSearchModel(uid: group.leader)
+        UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
+            guard let user = try? result.get() else {return}
+            self?.createdByLabel.text = user.username
         }
         ImageAPIService.shared.getProfileImage(for: group.uid) { [weak self] profileImage in
             if let image = profileImage {

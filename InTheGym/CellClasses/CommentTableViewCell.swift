@@ -85,6 +85,7 @@ class CommentTableViewCell: UITableViewCell {
 private extension CommentTableViewCell {
     func setupUI() {
         backgroundColor = .white
+        selectionStyle = .none
         contentView.addSubview(profileImageButton)
         contentView.addSubview(usernameButton)
         contentView.addSubview(timeLabel)

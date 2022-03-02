@@ -47,7 +47,7 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
     let userID = Auth.auth().currentUser?.uid
     
     // delegate to report back to mygroups
-    var delegate : MyGroupsProtocol!
+//    var delegate : MyGroupsProtocol!
     
     
     override func viewDidLoad() {
@@ -184,7 +184,7 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
             titleField.text = ""
             subTitleField.text = ""
             newGroup.removeAll()
-            self.delegate.addedNewGroup()
+//            self.delegate.addedNewGroup()
 
             
             navigationController?.popViewController(animated: true)

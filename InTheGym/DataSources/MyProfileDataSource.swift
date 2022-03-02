@@ -16,10 +16,18 @@ class MyProfileDataSource: NSObject {
     var postSelected = PassthroughSubject<post,Never>()
     var optionSelected = PassthroughSubject<ProfileOptions,Never>()
     
+    var userTapped = PassthroughSubject<post,Never>()
+    
+    var workoutTapped = PassthroughSubject<post,Never>()
+    
+    var likeButtonTapped = PassthroughSubject<post,Never>()
+    
     // MARK: - Properties
     var tableView: UITableView
     private lazy var dataSource = makeDataSource()
     var optionSubscriptions = Set<AnyCancellable>()
+    
+    var actionSubscriptions = [IndexPath: AnyCancellable]()
     
     // MARK: - Initializer
     init(tableView: UITableView) {
@@ -48,6 +56,10 @@ class MyProfileDataSource: NSObject {
             case .posts(let model):
                 let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
                 cell.configure(with: model)
+                self.actionSubscriptions[indexPath] = cell.actionPublisher
+                    .sink(receiveValue: { [weak self] action in
+                        self?.actionPublisher(action: action, indexPath: indexPath)
+                    })
                 return cell
             }
         }
@@ -69,6 +81,31 @@ class MyProfileDataSource: NSObject {
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
     
+    // MARK: - Reload
+    func reloadPost(_ reloadPost: post) {
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.reloadItems([ProfileItems.posts(reloadPost)])
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
+    }
+    
+    // MARK: - Actions
+    func actionPublisher(action: PostAction, indexPath: IndexPath) {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
+        switch item {
+        case .userInfo(_), .options:
+            break
+        case .posts(let post):
+            switch action {
+            case .likeButtonTapped:
+                likeButtonTapped.send(post)
+            case .workoutTapped:
+                workoutTapped.send(post)
+            case .userTapped:
+                userTapped.send(post)
+            }
+        }
+    }
+    
 //    func updateUser(with user: UserProfileModel) {
 //        var currentSnapshot = dataSource.snapshot()
 //        currentSnapshot.appendItems([ProfileItems.userInfo(user)], toSection: .mainInfo)
@@ -85,7 +122,13 @@ class MyProfileDataSource: NSObject {
 extension MyProfileDataSource: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-      
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
+        switch item {
+        case .posts(let post):
+            postSelected.send(post)
+        default:
+            break
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

@@ -25,7 +25,7 @@ class EditProfileViewController: UIViewController, Storyboarded, UITextViewDeleg
     
     var theImageToUpload:UIImage?
     
-    var delegate : MyProfileProtocol!
+//    var delegate : MyProfileProtocol!
     
     var photoChanged:Bool = false{
         didSet{
@@ -122,7 +122,7 @@ class EditProfileViewController: UIViewController, Storyboarded, UITextViewDeleg
                 } else {
                     //DisplayTopView.displayTopView(with: "Updated Profile", on: self)
                     self.bioChanged = false
-                    self.delegate.changedBio(to: bioText)
+//                    self.delegate.changedBio(to: bioText)
                 }
             }
 
@@ -149,7 +149,7 @@ class EditProfileViewController: UIViewController, Storyboarded, UITextViewDeleg
                     ImageAPIService.shared.profileImageCache.removeObject(forKey: self.userID! as NSString)
                     ImageAPIService.shared.profileImageCache.setObject(self.theImageToUpload!, forKey: self.userID! as NSString)
                     self.photoChanged = false
-                    self.delegate.changedProfilePhoto(to: self.theImageToUpload!)
+//                    self.delegate.changedProfilePhoto(to: self.theImageToUpload!)
                 }
                 
 //                storageProfileRef.downloadURL { (url, error) in

@@ -15,7 +15,6 @@ protocol MyProfileFlow: TimelineFlow {
     func showSavedWorkouts()
     func showCreatedWorkouts()
     func showScores()
-    func editProfile(profileImage: UIImage?, profileBIO: String, delegate: MyProfileProtocol)
     func showMoreInfo()
     func showFollowers(_ followers: Bool)
 }
@@ -50,7 +49,7 @@ class MyProfileCoordinator: NSObject, Coordinator {
 }
 
 //MARK: - Flow Methods
-extension MyProfileCoordinator: MyProfileFlow {
+extension MyProfileCoordinator {
     
     func showGroups() {
         let child = GroupCoordinator(navigationController: navigationController)
@@ -90,16 +89,6 @@ extension MyProfileCoordinator: MyProfileFlow {
         }
     }
     
-    func editProfile(profileImage: UIImage?, profileBIO: String, delegate: MyProfileProtocol) {
-        let vc = EditProfileViewController.instantiate()
-        vc.theImage = profileImage
-        vc.theText = profileBIO
-        vc.delegate = delegate
-        vc.modalTransitionStyle = .coverVertical
-        vc.modalPresentationStyle = .fullScreen
-        navigationController.present(vc, animated: true, completion: nil)
-    }
-    
     func showMoreInfo() {
         if ViewController.admin {
             let vc = CoachInfoViewController.instantiate()
@@ -115,6 +104,22 @@ extension MyProfileCoordinator: MyProfileFlow {
         let vc = FollowersDisplayViewController.instantiate()
         vc.followers = followers
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showWorkout(_ model: WorkoutModel) {
+        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: model)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func showSavedWorkout(_ model: SavedWorkoutModel) {
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func showCommentSection(post: post, with listener: PostListener) {
+        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener)
+        childCoordinators.append(child)
+        child.start()
     }
 }
 

@@ -33,13 +33,13 @@ extension GroupCoordinator {
         child.start()
     }
     
-    func addNewGroup(with delegate: MyGroupsProtocol) {
-        let vc = CreateNewGroupViewController()
-        vc.coordinator = self
-        vc.delegate = delegate
-        vc.hidesBottomBarWhenPushed = true
-        navigationController.pushViewController(vc, animated: true)
-    }
+//    func addNewGroup(with delegate: MyGroupsProtocol) {
+//        let vc = CreateNewGroupViewController()
+//        vc.coordinator = self
+//        vc.delegate = delegate
+//        vc.hidesBottomBarWhenPushed = true
+//        navigationController.pushViewController(vc, animated: true)
+//    }
     
     func addPlayersToNewGroup(_ delegate: SelectPlayersProtocol, selectedPlayers: [Users]) {
         let vc = GroupAddPlayersViewController()

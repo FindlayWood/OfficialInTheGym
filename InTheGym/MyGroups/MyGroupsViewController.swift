@@ -11,73 +11,63 @@ import Combine
 
 class MyGroupsViewController: UIViewController {
     
+    // MARK: - Properties
     weak var coordinator: GroupCoordinator?
     
     var display = MyGroupsView()
     
-    private lazy var dataSource = makeDataSource()
+    var dataSource: MyGroupsDataSource!
     
     private var subscriptions = Set<AnyCancellable>()
     
-    @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
-    @IBOutlet weak var tableview:UITableView!
-    
-    
-    var adapter: MyGroupsAdapter!
-    
     var viewModel = MyGroupViewModel()
+    
+    // MARK: - View
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        initNavBar()
+        initDisplay()
+        initDataSource()
+        initViewModel()
+    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         display.frame = getFullViewableFrame()
         view.addSubview(display)
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-
-        initUI()
-        initDisplay()
-        initialTableSetUp()
-        //initViewModel()
-        setupSubscribers()
-//        initialTableSetUp()
-    }
     
     override func viewWillAppear(_ animated: Bool) {
-        if isMovingToParent{
-            //initViewModel()
-        }
         editNavBarColour(to: .darkColour)
+        navigationItem.title = viewModel.navigationTitle
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        if isMovingFromParent{
-            //viewModel.removeObservers()
-        }
-    }
-    
+
     func initDisplay() {
-//        adapter = .init(delegate: self)
-//        display.tableview.delegate = adapter
         display.tableview.separatorStyle = .none
-        display.tableview.dataSource = dataSource
-        display.tableview.delegate = self
     }
     
-    func initUI(){
-        navigationItem.title = "My Groups"
-        if ViewController.admin {
+    func initNavBar(){
+        if UserDefaults.currentUser.admin {
             let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewGroup(_:)))
             self.navigationItem.rightBarButtonItem = addButton
         }
     }
-    // MARK: - Combine Subscribers
-    func setupSubscribers() {
+    
+    // MARK: - Data Source
+    func initDataSource() {
+        dataSource = .init(tableView: display.tableview)
+        
+        dataSource.groupSelected
+            .sink { [weak self] in self?.coordinator?.goToGroupHome($0)}
+            .store(in: &subscriptions)
+    }
+    
+    // MARK: - View Model
+    func initViewModel() {
         viewModel.groups
             .dropFirst()
-            .sink { [weak self] in self?.updateGroups(with: $0) }
+            .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
         
         viewModel.fetchReferences()
@@ -89,58 +79,4 @@ class MyGroupsViewController: UIViewController {
     }
 }
 
-// MARK: - Tableview Datasource
-extension MyGroupsViewController: UITableViewDelegate {
-    
-    func makeDataSource() -> UITableViewDiffableDataSource<MyGroupSection,GroupModel> {
-        return UITableViewDiffableDataSource(tableView: display.tableview) { tableView, indexPath, itemIdentifier in
-            let cell = tableView.dequeueReusableCell(withIdentifier: MyGroupsTableViewCell.cellID, for: indexPath) as! MyGroupsTableViewCell
-            cell.configure(with: itemIdentifier)
-            return cell
-        }
-    }
-    
-    func initialTableSetUp() {
-        var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendSections([.myGroups])
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
-    }
-    
-    func updateGroups(with groups: [GroupModel]) {
-        var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendItems(groups, toSection: .myGroups)
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let model = dataSource.itemIdentifier(for: indexPath) else {return}
-        coordinator?.goToGroupHome(model)
-    }
-    
-}
-enum MyGroupSection {
-    case myGroups
-}
-//
-//extension MyGroupsViewController: MyGroupsProtocol {
-//
-//    func getGroup(at indexPath: IndexPath) -> groupModel {
-//        return viewModel.getGroup(at: indexPath)
-//    }
-//
-//    func groupSelected(at indexPath: IndexPath) {
-//        // go to group page
-//        let selectedGroup = viewModel.getGroup(at: indexPath)
-//        coordinator?.goToGroupHome(selectedGroup)
-//    }
-//
-//    func retreiveNumberOfGroups() -> Int {
-//        return viewModel.numberOfGroups
-//    }
-//
-//    func addedNewGroup() {
-//        tableview.reloadData()
-//    }
-//
-//
-//}
+
