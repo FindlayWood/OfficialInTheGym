@@ -19,7 +19,7 @@ class GroupCoordinator: NSObject, Coordinator {
     
     func start() {
         navigationController.delegate = self
-        let vc = MyGroupsViewController.instantiate()
+        let vc = MyGroupsViewController()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
@@ -27,7 +27,7 @@ class GroupCoordinator: NSObject, Coordinator {
 //MARK: Flow Methods
 extension GroupCoordinator {
     
-    func goToGroupHome(_ group: groupModel) {
+    func goToGroupHome(_ group: GroupModel) {
         let child = GroupHomeCoordinator(navigationController: navigationController, group: group)
         childCoordinators.append(child)
         child.start()
@@ -65,10 +65,6 @@ extension GroupCoordinator: UINavigationControllerDelegate {
         
         if navigationController.viewControllers.contains(fromViewController){
             return
-        }
-        
-        if let GroupHomeViewController = fromViewController as? GroupPageViewController {
-            childDidFinish(GroupHomeViewController.coordinator)
         }
     }
 }

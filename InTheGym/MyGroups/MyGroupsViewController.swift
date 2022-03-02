@@ -8,9 +8,8 @@
 
 import UIKit
 import Combine
-import EmptyDataSet_Swift
 
-class MyGroupsViewController: UIViewController, Storyboarded {
+class MyGroupsViewController: UIViewController {
     
     weak var coordinator: GroupCoordinator?
     
@@ -18,7 +17,7 @@ class MyGroupsViewController: UIViewController, Storyboarded {
     
     private lazy var dataSource = makeDataSource()
     
-    var subscriptions = Set<AnyCancellable>()
+    private var subscriptions = Set<AnyCancellable>()
     
     @IBOutlet weak var activityIndicator:UIActivityIndicatorView!
     @IBOutlet weak var tableview:UITableView!
@@ -60,13 +59,15 @@ class MyGroupsViewController: UIViewController, Storyboarded {
     }
     
     func initDisplay() {
-        adapter = .init(delegate: self)
-        display.tableview.delegate = adapter
+//        adapter = .init(delegate: self)
+//        display.tableview.delegate = adapter
         display.tableview.separatorStyle = .none
+        display.tableview.dataSource = dataSource
+        display.tableview.delegate = self
     }
     
     func initUI(){
-        self.navigationItem.title = "My Groups"
+        navigationItem.title = "My Groups"
         if ViewController.admin {
             let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewGroup(_:)))
             self.navigationItem.rightBarButtonItem = addButton
@@ -76,29 +77,22 @@ class MyGroupsViewController: UIViewController, Storyboarded {
     func setupSubscribers() {
         viewModel.groups
             .dropFirst()
-            .sink { [weak self] myGroups in
-                guard let self = self else {return}
-                self.updateGroups(with: myGroups)
-                print("here are my groups...\(myGroups)")
-            }
+            .sink { [weak self] in self?.updateGroups(with: $0) }
             .store(in: &subscriptions)
         
         viewModel.fetchReferences()
     }
     
     
-    @IBAction func addNewGroup(_ sender:UIButton){
-        coordinator?.addNewGroup(with: self)
+    @IBAction func addNewGroup(_ sender: UIButton){
+//        coordinator?.addNewGroup(with: self)
     }
-    
-
-
 }
 
 // MARK: - Tableview Datasource
-extension MyGroupsViewController {
+extension MyGroupsViewController: UITableViewDelegate {
     
-    func makeDataSource() -> UITableViewDiffableDataSource<MyGroupSection,groupModel> {
+    func makeDataSource() -> UITableViewDiffableDataSource<MyGroupSection,GroupModel> {
         return UITableViewDiffableDataSource(tableView: display.tableview) { tableView, indexPath, itemIdentifier in
             let cell = tableView.dequeueReusableCell(withIdentifier: MyGroupsTableViewCell.cellID, for: indexPath) as! MyGroupsTableViewCell
             cell.configure(with: itemIdentifier)
@@ -112,35 +106,41 @@ extension MyGroupsViewController {
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
     
-    func updateGroups(with groups: [groupModel]) {
+    func updateGroups(with groups: [GroupModel]) {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.appendItems(groups, toSection: .myGroups)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let model = dataSource.itemIdentifier(for: indexPath) else {return}
+        coordinator?.goToGroupHome(model)
+    }
+    
 }
 enum MyGroupSection {
     case myGroups
 }
-
-extension MyGroupsViewController: MyGroupsProtocol {
-    
-    func getGroup(at indexPath: IndexPath) -> groupModel {
-        return viewModel.getGroup(at: indexPath)
-    }
-    
-    func groupSelected(at indexPath: IndexPath) {
-        // go to group page
-        let selectedGroup = viewModel.getGroup(at: indexPath)
-        coordinator?.goToGroupHome(selectedGroup)
-    }
-    
-    func retreiveNumberOfGroups() -> Int {
-        return viewModel.numberOfGroups
-    }
-    
-    func addedNewGroup() {
-        tableview.reloadData()
-    }
-    
-    
-}
+//
+//extension MyGroupsViewController: MyGroupsProtocol {
+//
+//    func getGroup(at indexPath: IndexPath) -> groupModel {
+//        return viewModel.getGroup(at: indexPath)
+//    }
+//
+//    func groupSelected(at indexPath: IndexPath) {
+//        // go to group page
+//        let selectedGroup = viewModel.getGroup(at: indexPath)
+//        coordinator?.goToGroupHome(selectedGroup)
+//    }
+//
+//    func retreiveNumberOfGroups() -> Int {
+//        return viewModel.numberOfGroups
+//    }
+//
+//    func addedNewGroup() {
+//        tableview.reloadData()
+//    }
+//
+//
+//}

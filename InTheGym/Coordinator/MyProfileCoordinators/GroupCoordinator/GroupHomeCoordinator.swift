@@ -12,9 +12,9 @@ import UIKit
 class GroupHomeCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
-    var group: groupModel
+    var group: GroupModel
     
-    init(navigationController: UINavigationController, group: groupModel) {
+    init(navigationController: UINavigationController, group: GroupModel) {
         self.navigationController = navigationController
         self.group = group
     }
@@ -37,15 +37,15 @@ extension GroupHomeCoordinator {
         vc.delegate = delegate
         navigationController.present(vc, animated: true, completion: nil)
     }
-    func goToGroupWorkouts(with info: groupModel) {
+    func goToGroupWorkouts(with info: GroupModel) {
         let child = GroupWorkoutsCoordinator(navigationController: navigationController, group: info)
         childCoordinators.append(child)
         child.start()
     }
     func createNewPost() {
-        let child = CreateNewPostCoordinator(navigationController: navigationController, assignee: group)
-        childCoordinators.append(child)
-        child.start()
+//        let child = CreateNewPostCoordinator(navigationController: navigationController, assignee: group)
+//        childCoordinators.append(child)
+//        child.start()
     }
     func goToCommentSection(with mainPost: GroupPost) {
         let child = GroupCommentSectionCoordinator(navigationController: navigationController, mainPost: mainPost)
@@ -59,12 +59,6 @@ extension GroupHomeCoordinator {
 
 //MARK: TimelineFlow Methods
 extension GroupHomeCoordinator: TimelineFlow {
-    
-    func showDiscussion(with post: PostProtocol, group: groupModel?) {
-        let child = DiscussionCoordinator(navigationController: navigationController, post: post, group: group)
-        childCoordinators.append(child)
-        child.start()
-    }
     
     func showWorkouts(with workout: WorkoutDelegate) {
         let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
@@ -93,10 +87,6 @@ extension GroupHomeCoordinator: UINavigationControllerDelegate {
         
         if let PublicViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(PublicViewController.coordinator)
-        }
-        
-        if let DiscussionViewController = fromViewController as? DiscussionViewViewController {
-            childDidFinish(DiscussionViewController.coordinator)
         }
         
         if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {

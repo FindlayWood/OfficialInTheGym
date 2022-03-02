@@ -89,15 +89,6 @@ class DisplayNotificationsViewController: UIViewController, Storyboarded {
         viewModel.fetchData()
     }
     
-    func moveToPost(with post: PostProtocol, group: groupModel?){
-        coordinator?.showDiscussion(with: post, group: group)
-        
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let discussionVC = storyboard.instantiateViewController(withIdentifier: "DiscussionViewViewController") as! DiscussionViewViewController
-//        discussionVC.originalPost = post
-//        navigationController?.pushViewController(discussionVC, animated: true)
-    }
-    
     func moveToProfile(with user: Users){
         coordinator?.showUser(user: user)
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -116,56 +107,7 @@ extension DisplayNotificationsViewController: DisplayNotificationsProtocol{
     }
     
     func itemSelected(at: IndexPath) {
-        let notification = viewModel.getData(at: at)
-        if notification.type == NotificationType.LikedPost || notification.type == NotificationType.Reply{
-            let postID = notification.postID
-            let postRef = Database.database().reference().child("Posts").child(postID!)
-            postRef.observeSingleEvent(of: .value) { (snapshot) in
-                guard let snap = snapshot.value as? [String:AnyObject] else {
-                    return
-                }
-                
-                var tempPost:PostProtocol!
-                switch snap["type"] as! String {
-                case "post":
-                    tempPost = DiscussionPost(snapshot: snapshot)
-                case "createdNewWorkout":
-                    tempPost = DiscussionCreatedWorkout(snapshot: snapshot)
-                case "workout":
-                    tempPost = DiscussionCompletedWorkout(snapshot: snapshot)
-                default:
-                    break
-                }
-                self.moveToPost(with: tempPost, group: nil)
-            }
-        } else if notification.type == NotificationType.GroupLikedPost || notification.type == NotificationType.GroupReply {
-            let postID = notification.postID!
-            let groupID = notification.groupID!
-            let grouPostRef = Database.database().reference().child("GroupPosts").child(groupID).child(postID)
-            grouPostRef.observeSingleEvent(of: .value) { (snapshot) in
-                guard let snap = snapshot.value as? [String:AnyObject] else {
-                    return
-                }
-                var tempPost:PostProtocol!
-                switch snap["type"] as! String {
-                case "post":
-                    tempPost = DiscussionPost(snapshot: snapshot)
-                case "createdNewWorkout":
-                    tempPost = DiscussionCreatedWorkout(snapshot: snapshot)
-                case "workout":
-                    tempPost = DiscussionCompletedWorkout(snapshot: snapshot)
-                default:
-                    break
-                }
-                UserIDToUser.groupIdToGroupName(groupID: groupID) { [weak self] (groupModel) in
-                    guard let self = self else {return}
-                    self.moveToPost(with: tempPost, group: groupModel)
-                }
-            }
-        } else {
-            let user = notification.from
-            moveToProfile(with: user!)
-        }
+
 
     }
     

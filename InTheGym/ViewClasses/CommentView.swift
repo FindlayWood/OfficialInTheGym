@@ -257,3 +257,8 @@ extension CommentView: UITextViewDelegate {
     }
 }
 
+
+enum replyType {
+    case Text
+    case WorkoutAndText
+}

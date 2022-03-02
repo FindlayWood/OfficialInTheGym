@@ -138,12 +138,6 @@ extension MyProfileCoordinator: SavedWorkoutsFlow {
 //MARK: - Child Coordinators
 extension MyProfileCoordinator: TimelineFlow {
     
-    func showDiscussion(with post: PostProtocol, group: groupModel?) {
-        let child = DiscussionCoordinator(navigationController: navigationController, post: post, group: group)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
     func showWorkouts(with workout: WorkoutDelegate) {
         let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
         childCoordinators.append(child)
@@ -173,11 +167,7 @@ extension MyProfileCoordinator: UINavigationControllerDelegate {
         if let UserViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(UserViewController.coordinator)
         }
-        
-        if let DiscusionViewController = fromViewController as? DiscussionViewViewController {
-            childDidFinish(DiscusionViewController.coordinator)
-        }
-        
+
         if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
             childDidFinish(WorkoutViewController.coordinator)
         }

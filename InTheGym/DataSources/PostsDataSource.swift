@@ -18,7 +18,7 @@ class PostsDataSource: NSObject {
     
     var likeButtonTapped = PassthroughSubject<post,Never>()
     
-    var userTapped = PassthroughSubject<Users,Never>()
+    var userTapped = PassthroughSubject<post,Never>()
     
     var workoutTapped = PassthroughSubject<post,Never>()
     
@@ -90,8 +90,8 @@ class PostsDataSource: NSObject {
             likeButtonTapped.send(post)
         case .workoutTapped:
             workoutTapped.send(post)
-        case .userTapped(let user):
-            userTapped.send(user)
+        case .userTapped:
+            userTapped.send(post)
         }
     }
 }

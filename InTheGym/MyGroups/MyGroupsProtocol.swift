@@ -9,7 +9,7 @@
 import Foundation
 
 protocol MyGroupsProtocol {
-    func getGroup(at indexPath:IndexPath) -> groupModel
+    func getGroup(at indexPath:IndexPath) -> GroupModel
     func groupSelected(at indexPath:IndexPath)
     func retreiveNumberOfGroups() -> Int
     func addedNewGroup()

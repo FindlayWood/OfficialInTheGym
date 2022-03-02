@@ -124,7 +124,7 @@ private extension MyGroupsTableViewCell {
 
 // MARK: - Public Configuration
 extension MyGroupsTableViewCell {
-    public func configure(with group: groupModel) {
+    public func configure(with group: GroupModel) {
         groupNameLabel.text = group.username
         UserIDToUser.transform(userID: group.leader) { [weak self] leader in
             guard let self = self else {return}

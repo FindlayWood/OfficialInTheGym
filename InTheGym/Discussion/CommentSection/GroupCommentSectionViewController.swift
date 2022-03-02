@@ -53,17 +53,27 @@ class GroupCommentSectionViewController: UIViewController {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
     }
+    
+    // MARK: - Loading Nav Bar
+    func initLoadingNavBar(_ show: Bool) {
+        display.setInteraction(to: !show)
+        if show {
+            let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+            activityIndicator.startAnimating()
+            let barButton = UIBarButtonItem(customView: activityIndicator)
+            navigationItem.rightBarButtonItem = barButton
+        } else {
+            navigationItem.rightBarButtonItem = nil
+        }
+    }
+    
     // MARK: - Setup Data Source
     func initDataSource() {
         dataSource = .init(tableView: display.tableview)
         dataSource.initialGroupSetup(with: viewModel.mainGroupPost)
         
-        dataSource.userTapped
-            .sink { [weak self] user in
-                if user.uid != UserDefaults.currentUser.uid {
-                    self?.coordinator?.showUser(user)
-                }
-            }
+        dataSource.groupUserButtonTapped
+            .sink { [weak self] in self?.viewModel.getUser(from: $0) }
             .store(in: &subscriptions)
         
         dataSource.groupPostWorkoutButtonTapped
@@ -85,6 +95,10 @@ class GroupCommentSectionViewController: UIViewController {
             .sink { [weak self] in self?.coordinator?.showSavedWorkout($0) }
             .store(in: &subscriptions)
         
+        viewModel.userSelected
+            .sink { [weak self] in self?.coordinator?.showUser($0) }
+            .store(in: &subscriptions)
+        
         viewModel.comments
             .receive(on: RunLoop.main)
             .sink { [weak self] comments in
@@ -93,12 +107,15 @@ class GroupCommentSectionViewController: UIViewController {
             }
             .store(in: &subscriptions)
         
-//        viewModel.uploadingNewComment
-//            .sink { [weak self] success in
-//                guard let self = self else {return}
-//
-//            }
-//            .store(in: &subscriptions)
+        viewModel.uploadingNewComment
+            .sink { [weak self] comment in
+                guard let self = self else {return}
+                self.dataSource.addComment(comment)
+                self.display.resetView()
+                self.viewModel.attachedWorkout = nil
+                self.dataSource.reloadMain()
+            }
+            .store(in: &subscriptions)
         
         display.commentView.$commentText
             .sink { [weak self] in self?.viewModel.updateCommentText(with: $0) }
@@ -109,6 +126,10 @@ class GroupCommentSectionViewController: UIViewController {
                 self?.viewModel.attachedWorkout = $0
                 self?.display.commentView.attachWorkout($0)
             }
+            .store(in: &subscriptions)
+        
+        viewModel.isLoading
+            .sink { [weak self] in self?.initLoadingNavBar($0)}
             .store(in: &subscriptions)
         
         viewModel.loadGeneric(for: viewModel.groupPostReplyModel)
@@ -179,7 +200,6 @@ extension GroupCommentSectionViewController {
     
     @objc func sendPressed(_ sender: UIButton) {
         viewModel.groupSendPressed()
-
     }
     
     @objc func attachedWorkoutPressed(_ sender: UIButton) {

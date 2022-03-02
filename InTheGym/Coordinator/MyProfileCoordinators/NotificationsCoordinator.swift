@@ -27,11 +27,7 @@ class NotificationsCoordinator: NSObject, Coordinator {
 //MARK: TimelineFlow Methods
 extension NotificationsCoordinator {
     
-    func showDiscussion(with post: PostProtocol, group: groupModel?) {
-        let child = DiscussionCoordinator(navigationController: navigationController, post: post, group: group)
-        childCoordinators.append(child)
-        child.start()
-    }
+ 
     
     func showUser(user: Users) {
         let child = UserProfileCoordinator(navigationController: navigationController, user: user)
@@ -54,10 +50,6 @@ extension NotificationsCoordinator: UINavigationControllerDelegate {
         
         if let PublicViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(PublicViewController.coordinator)
-        }
-        
-        if let DiscussionViewController = fromViewController as? DiscussionViewViewController {
-            childDidFinish(DiscussionViewController.coordinator)
         }
     }
 }

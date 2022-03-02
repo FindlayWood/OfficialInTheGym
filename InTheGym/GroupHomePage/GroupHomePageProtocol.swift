@@ -9,7 +9,7 @@
 import UIKit
 
 protocol GroupHomePageProtocol: TimelineTapProtocol {
-    func getGroupInfo() -> groupModel
+    func getGroupInfo() -> GroupModel
     func getPostData(at indexPath: IndexPath) -> GroupPost
     func numberOfPosts() -> Int
     func postSelected(at indexPath: IndexPath)

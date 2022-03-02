@@ -14,7 +14,7 @@ import CodableFirebase
 class UserIDToUser:NSObject{
     
     
-    static func transform(userID:String, completion: @escaping(Users)->()) {
+    static func transform(userID: String, completion: @escaping(Users)->()) {
 //        let user = Users()
 //        user.uid = userID
         let userRef = Database.database().reference().child("users").child(userID)
@@ -42,12 +42,12 @@ class UserIDToUser:NSObject{
         
     }
     
-    static func groupIdToGroupName(groupID:String, completion: @escaping (groupModel) -> ()) {
+    static func groupIdToGroupName(groupID: String, completion: @escaping (GroupModel) -> ()) {
         let groupRef = Database.database().reference().child("Groups").child(groupID)
         groupRef.observeSingleEvent(of: .value) { (snapshot) in
             guard let snap = snapshot.value as? [String:AnyObject] else {return}
             do {
-                let group = try FirebaseDecoder().decode(groupModel.self, from: snap)
+                let group = try FirebaseDecoder().decode(GroupModel.self, from: snap)
                 completion(group)
             }
             catch {

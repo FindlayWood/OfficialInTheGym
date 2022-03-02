@@ -19,23 +19,13 @@ class MyGroupViewModel:NSObject {
     var myGroupsLoaded:(()->())?
     
     // MARK: - Combine Publishers
-    var groups = CurrentValueSubject<[groupModel], Never>([])
+    var groups = CurrentValueSubject<[GroupModel], Never>([])
     var errorFetchingGroups = PassthroughSubject<Error, Never>()
     
     var isLoading: Bool = false {
         didSet{
             updateLoadingStatusClosure?()
         }
-    }
-    
-    private var myGroups: [groupModel] = [] {
-        didSet{
-            myGroupsLoaded?()
-        }
-    }
-    
-    var numberOfGroups : Int {
-        return myGroups.count
     }
     
     var apiService: FirebaseDatabaseManagerService
@@ -60,12 +50,11 @@ class MyGroupViewModel:NSObject {
     
     func loadGroups(from groupIDs: [String]) {
         let groupModels = groupIDs.map { GroupKeysModel(id: $0) }
-        apiService.fetchRange(from: groupModels, returning: groupModel.self) { [weak self] result in
+        apiService.fetchRange(from: groupModels, returning: GroupModel.self) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(let myGroups):
                 self.groups.send(myGroups)
-                self.myGroups = myGroups
             case .failure(let error):
                 self.errorFetchingGroups.send(error)
             }
@@ -73,7 +62,7 @@ class MyGroupViewModel:NSObject {
     }
     
     // MARK: - Retreive functions
-    func getGroup(at indexPath: IndexPath) -> groupModel {
+    func getGroup(at indexPath: IndexPath) -> GroupModel {
 //        return myGroups[indexPath.row]
         let currentGroups = groups.value
         return currentGroups[indexPath.row]

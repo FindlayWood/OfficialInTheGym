@@ -58,11 +58,7 @@ class PublicTimelineViewController: UIViewController {
         dataSource = .init(tableView: display.tableview)
         
         dataSource.userTapped
-            .sink { [weak self] user in
-                if user.uid != UserDefaults.currentUser.uid {
-                    self?.coordinator?.showUser(user: user)
-                }
-            }
+            .sink { [weak self] in self?.viewModel.getUser(from: $0) }
             .store(in: &subscriptions)
         
         dataSource.workoutTapped
@@ -108,6 +104,10 @@ class PublicTimelineViewController: UIViewController {
         
         viewModel.savedWorkoutSelected
             .sink { [weak self] in self?.coordinator?.showSavedWorkout($0) }
+            .store(in: &subscriptions)
+        
+        viewModel.userSelected
+            .sink { [weak self] in self?.coordinator?.showUser(user: $0)}
             .store(in: &subscriptions)
 
         viewModel.reloadListener

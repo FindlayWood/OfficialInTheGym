@@ -25,6 +25,8 @@ class CommentSectionView: UIView {
         view.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.cellID)
         if #available(iOS 15.0, *) {view.sectionHeaderTopPadding = 0}
         view.tableFooterView = UIView()
+        view.separatorInset = .zero
+        view.layoutMargins = .zero
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -83,6 +85,15 @@ extension CommentSectionView {
         commentView.commentTextField.isUserInteractionEnabled = allowed
         commentView.sendButton.isEnabled = allowed
         commentView.sendButton.setTitleColor(allowed ? .lightColour : .lightGray, for: .normal)
+    }
+    public func resetView() {
+        commentView.commentTextField.resignFirstResponder()
+        commentView.commentTextField.text = ""
+//        commentView.textViewDidChange(commentView.commentTextField)
+        commentView.textViewDidEndEditing(commentView.commentTextField)
+        commentView.removeAttachedWorkout()
+        commentView.sendButton.isEnabled = false
+        commentView.sendButton.setTitleColor(.lightGray, for: .normal)
     }
 }
     

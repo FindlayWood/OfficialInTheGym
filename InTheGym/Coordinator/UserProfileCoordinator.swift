@@ -72,12 +72,6 @@ extension UserProfileCoordinator {
 //MARK: - Child Coordinators Methods
 extension UserProfileCoordinator {
     
-    func showDiscussion(with post: PostProtocol, group: groupModel?) {
-        let child = DiscussionCoordinator(navigationController: navigationController, post: post, group: group)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
     func showWorkout(workout: WorkoutDelegate) {
         let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
         childCoordinators.append(child)
@@ -95,10 +89,6 @@ extension UserProfileCoordinator: UINavigationControllerDelegate {
         
         if navigationController.viewControllers.contains(fromViewController){
             return
-        }
-        
-        if let DiscusionViewController = fromViewController as? DiscussionViewViewController {
-            childDidFinish(DiscusionViewController.coordinator)
         }
         
         if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {

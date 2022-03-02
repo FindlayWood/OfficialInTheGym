@@ -16,7 +16,7 @@ class GroupHomePageViewController: UIViewController {
 
     var adapter: GroupHomePageAdapter!
     
-    var currentGroup: groupModel!
+    var currentGroup: GroupModel!
     
     private lazy var groupPostsModel = GroupPostsModel(groupID: currentGroup.uid)
     
@@ -178,7 +178,7 @@ extension GroupHomePageViewController {
 
 // MARK: - Protocol Conformation
 extension GroupHomePageViewController: GroupHomePageProtocol {
-    func getGroupInfo() -> groupModel {
+    func getGroupInfo() -> GroupModel {
         return currentGroup
     }
     
@@ -232,7 +232,7 @@ extension GroupHomePageViewController: GroupHomePageProtocol {
     func newInfoSaved(_ newInfo: MoreGroupInfoModel) {
         viewModel.headerImage = newInfo.headerImage
         currentGroup.username = newInfo.groupName
-        currentGroup.description = newInfo.description
+        currentGroup.description = newInfo.description!
         display.tableview.reloadData()
     }
     func goToWorkouts() {
@@ -397,7 +397,7 @@ struct groupEmptyPosts: Hashable {
 }
 
 enum GroupItems: Hashable {
-    case name(groupModel)
+    case name(GroupModel)
     case leader(Users)
     case info(groupInfo)
     case posts(GroupPost)

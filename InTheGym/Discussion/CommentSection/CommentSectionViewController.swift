@@ -28,6 +28,7 @@ class CommentSectionViewController: UIViewController {
         super.viewDidLayoutSubviews()
         display.frame = getViewableFrameWithBottomSafeArea()
         display.commentView.textViewDidChange(display.commentView.commentTextField)
+        display.tableview.separatorStyle = .none
         view.addSubview(display)
     }
     
@@ -67,11 +68,11 @@ class CommentSectionViewController: UIViewController {
         dataSource.initialSetup(with: viewModel.mainPost)
         
         dataSource.userTapped
-            .sink { [weak self] user in
-                if user.uid != UserDefaults.currentUser.uid {
-                    self?.coordinator?.showUser(user)
-                }
-            }
+            .sink { [weak self] in self?.viewModel.getUser(from: $0) }
+            .store(in: &subscriptions)
+        
+        dataSource.commentUserTapped
+            .sink { [weak self] in self?.viewModel.getUser(from: $0)}
             .store(in: &subscriptions)
         
         dataSource.workoutTapped
@@ -93,12 +94,19 @@ class CommentSectionViewController: UIViewController {
             .sink { [weak self] in self?.coordinator?.showSavedWorkout($0) }
             .store(in: &subscriptions)
         
-//        viewModel.uploadingNewComment
-//            .sink { [weak self] success in
-//                guard let self = self else {return}
-//                
-//            }
-//            .store(in: &subscriptions)
+        viewModel.userSelected
+            .sink { [weak self] in self?.coordinator?.showUser($0)}
+            .store(in: &subscriptions)
+        
+        viewModel.uploadingNewComment
+            .sink { [weak self] comment in
+                guard let self = self else {return}
+                self.dataSource.addComment(comment)
+                self.display.resetView()
+                self.viewModel.attachedWorkout = nil
+                self.dataSource.reloadMain()
+            }
+            .store(in: &subscriptions)
         
         display.commentView.$commentText
             .sink { [weak self] in self?.viewModel.updateCommentText(with: $0) }
@@ -135,6 +143,7 @@ class CommentSectionViewController: UIViewController {
         display.commentView.removeAttachmentButton.addTarget(self, action: #selector(removeAttachedWorkout(_:)), for: .touchUpInside)
         display.commentView.attachmentButton.addTarget(self, action: #selector(attachedWorkoutPressed(_:)), for: .touchUpInside)
     }
+    
 
     
     // MARK: - Keyboard Observers

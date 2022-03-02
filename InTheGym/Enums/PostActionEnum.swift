@@ -9,7 +9,7 @@
 import Foundation
 
 enum PostAction {
-    case userTapped(Users)
+    case userTapped
     case workoutTapped
     case likeButtonTapped
 }

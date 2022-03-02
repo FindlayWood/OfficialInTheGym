@@ -21,3 +21,16 @@ extension GroupPostsModel: FirebaseInstance {
         return "GroupPosts/\(groupID)"
     }
 }
+
+struct GroupModel: Assignable, Codable, Hashable {
+    var uid: String
+    var description: String
+    var leader: String
+    var title: String
+    var username: String
+}
+extension GroupModel: FirebaseInstance {
+    var internalPath: String {
+        return "Groups/\(uid)"
+    }
+}

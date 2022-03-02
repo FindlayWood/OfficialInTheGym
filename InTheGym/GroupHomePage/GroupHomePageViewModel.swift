@@ -26,7 +26,7 @@ class GroupHomePageViewModel {
     // MARK: - Properties
     var apiService: FirebaseAPIGroupServiceProtocol
     
-    var currentGroup: groupModel!
+    var currentGroup: GroupModel!
     
     var posts: [GroupPost] = [] {
         didSet {

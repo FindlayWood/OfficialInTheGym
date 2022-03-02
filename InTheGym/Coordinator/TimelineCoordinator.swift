@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 protocol TimelineFlow: AnyObject {
-    func showDiscussion(with post: PostProtocol, group: groupModel?)
     func showWorkouts(with workout: WorkoutDelegate)
     func showUser(user: Users)
 }
@@ -86,11 +85,7 @@ extension TimelineCoordinator: NewsFeedFlow {
 //MARK: - Child Coordinators
 extension TimelineCoordinator: TimelineFlow {
     
-    func showDiscussion(with post: PostProtocol, group: groupModel?) {
-        let child = DiscussionCoordinator(navigationController: navigationController, post: post, group: group)
-        childCoordinators.append(child)
-        child.start()
-    }
+
     
     func showWorkouts(with workout: WorkoutDelegate) {
         let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
@@ -120,10 +115,6 @@ extension TimelineCoordinator: UINavigationControllerDelegate {
         
         if let PublicViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(PublicViewController.coordinator)
-        }
-        
-        if let DiscussionViewController = fromViewController as? DiscussionViewViewController {
-            childDidFinish(DiscussionViewController.coordinator)
         }
         
         if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {

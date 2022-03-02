@@ -50,7 +50,7 @@ class MakePostViewController: UIViewController, Storyboarded, UITextViewDelegate
     let haptic = UINotificationFeedbackGenerator()
     
     // delegate to report back to group
-    var delegate : GroupPageProtocol!
+//    var delegate : GroupPageProtocol!
     
     // delegate to report back to timeline
     var timelineDelegate : PlayerTimelineProtocol!
@@ -146,7 +146,7 @@ class MakePostViewController: UIViewController, Storyboarded, UITextViewDelegate
                 print(error.localizedDescription)
             } else {
                 self.text.text = ""
-                self.delegate.madeAPost()
+//                self.delegate.madeAPost()
                 self.dismiss(animated: true, completion: nil)
             }
         }

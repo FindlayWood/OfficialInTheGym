@@ -7,14 +7,21 @@
 //
 
 import UIKit
+import Combine
 
 class CommentTableViewCell: UITableViewCell {
+    
+    // MARK: - Publishers
+    var actionPublisher = PassthroughSubject<PostAction,Never>()
+    
     // MARK: - Properties
     static let cellID: String = "CommentTableViewCellID"
     
     // MARK: - Subviews
     var profileImageButton: UIProfileImageButton = {
         let view = UIProfileImageButton()
+        view.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 40).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -45,6 +52,20 @@ class CommentTableViewCell: UITableViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    var workoutView: UIWorkoutView = {
+        let view = UIWorkoutView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    lazy var stackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [messageTextView, workoutView])
+        stack.axis = .vertical
+        stack.spacing = 8
+        stack.distribution = .fillProportionally
+        stack.alignment = .leading
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
     
     // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -67,14 +88,15 @@ private extension CommentTableViewCell {
         contentView.addSubview(profileImageButton)
         contentView.addSubview(usernameButton)
         contentView.addSubview(timeLabel)
-        contentView.addSubview(messageTextView)
+        contentView.addSubview(stackView)
         configureUI()
+        initTargets()
     }
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            profileImageButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            profileImageButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            profileImageButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            profileImageButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             
             usernameButton.leadingAnchor.constraint(equalTo: profileImageButton.trailingAnchor, constant: 8),
             usernameButton.topAnchor.constraint(equalTo: profileImageButton.topAnchor),
@@ -84,11 +106,24 @@ private extension CommentTableViewCell {
             timeLabel.centerYAnchor.constraint(equalTo: usernameButton.centerYAnchor),
             timeLabel.heightAnchor.constraint(equalToConstant: 12),
             
-            messageTextView.leadingAnchor.constraint(equalTo: usernameButton.leadingAnchor),
-            messageTextView.topAnchor.constraint(equalTo: usernameButton.bottomAnchor, constant: 8),
-            messageTextView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -5),
-            messageTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
+            stackView.leadingAnchor.constraint(equalTo: usernameButton.leadingAnchor),
+            stackView.topAnchor.constraint(equalTo: usernameButton.bottomAnchor, constant: 8),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            
+            messageTextView.trailingAnchor.constraint(lessThanOrEqualTo: stackView.trailingAnchor),
+            workoutView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor)
+            
+
         ])
+    }
+    // MARK: - Targets
+    func initTargets() {
+        profileImageButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
+        usernameButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
+    }
+    @objc func userTapped(_ sender: UIButton) {
+        actionPublisher.send(.userTapped)
     }
 }
 
@@ -97,8 +132,14 @@ extension CommentTableViewCell {
     public func setup(with comment: Comment) {
         profileImageButton.set(for: comment.posterID)
         usernameButton.setTitle(comment.username, for: .normal)
-        timeLabel.text = (Date(timeIntervalSince1970: (comment.time) / 1000)).timeAgo()
+        timeLabel.text = (Date(timeIntervalSince1970: (comment.time))).timeAgo()
         messageTextView.text = comment.message
+        if let workoutID = comment.attachedWorkoutSavedID {
+            workoutView.configure(for: workoutID)
+            workoutView.isHidden = false
+        } else {
+            workoutView.isHidden = true
+        }
     }
 }
 

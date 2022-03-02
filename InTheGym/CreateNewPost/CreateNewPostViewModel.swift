@@ -62,7 +62,7 @@ class CreateNewPostViewModel {
         case is Users:
             let endpoint = PostEndpoints.post(postModel: newPostModel)
             post(to: endpoint)
-        case is groupModel:
+        case is GroupModel:
             let endpoint = PostEndpoints.postToGroup(groupID: assignee.uid, postModel: newPostModel)
             post(to: endpoint)
         default:

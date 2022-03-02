@@ -14,13 +14,17 @@ class CommentSectionDataSource: NSObject {
     // MARK: - Publisher
     var likeButtonTapped = PassthroughSubject<post,Never>()
     
-    var userTapped = PassthroughSubject<Users,Never>()
+    var userTapped = PassthroughSubject<post,Never>()
     
     var workoutTapped = PassthroughSubject<post,Never>()
     
     var groupPostLikeButtonTapped = PassthroughSubject<GroupPost,Never>()
     
     var groupPostWorkoutButtonTapped = PassthroughSubject<GroupPost,Never>()
+    
+    var groupUserButtonTapped = PassthroughSubject<GroupPost,Never>()
+    
+    var commentUserTapped = PassthroughSubject<Comment,Never>()
     
     var subscriptions = [IndexPath: AnyCancellable]()
     
@@ -60,6 +64,10 @@ class CommentSectionDataSource: NSObject {
             case .comment(let comment):
                 let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.cellID, for: indexPath) as! CommentTableViewCell
                 cell.setup(with: comment)
+                self.subscriptions[indexPath] = cell.actionPublisher
+                    .sink(receiveValue: { [weak self] action in
+                        self?.actionPublisher(action: action, indexPath: indexPath)
+                    })
                 return cell
             }
         }
@@ -88,6 +96,20 @@ class CommentSectionDataSource: NSObject {
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
     
+    // MARK: - Add
+    func addComment(_ comment: Comment) {
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.appendItems([GroupCommentItems.comment(comment)], toSection: .comments)
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    
+    // MARK: - Reload Main Post
+    func reloadMain() {
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.reloadSections([.Post])
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
+    }
+    
     // MARK: - Actions
     func actionPublisher(action: PostAction, indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
@@ -98,8 +120,8 @@ class CommentSectionDataSource: NSObject {
                 likeButtonTapped.send(post)
             case .workoutTapped:
                 workoutTapped.send(post)
-            case .userTapped(let user):
-                userTapped.send(user)
+            case .userTapped:
+                userTapped.send(post)
             }
         case .mainGroupPost(let groupPost):
             switch action {
@@ -107,13 +129,17 @@ class CommentSectionDataSource: NSObject {
                 groupPostLikeButtonTapped.send(groupPost)
             case .workoutTapped:
                 groupPostWorkoutButtonTapped.send(groupPost)
-            case .userTapped(let user):
-                userTapped.send(user)
+            case .userTapped:
+                groupUserButtonTapped.send(groupPost)
             }
-        case .comment(_):
-            break
+        case .comment(let comment):
+            switch action {
+            case .userTapped:
+                commentUserTapped.send(comment)
+            default:
+                break
+            }
         }
-
     }
 }
 

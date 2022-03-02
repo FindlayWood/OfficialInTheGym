@@ -14,7 +14,9 @@ class CommentSectionViewModel {
     var comments = CurrentValueSubject<[Comment],Never>([])
     var errorFetchingComments = PassthroughSubject<Error,Never>()
     
-    var uploadingNewComment = PassthroughSubject<Bool,Never>()
+    var uploadingNewComment = PassthroughSubject<Comment,Never>()
+    
+    var errorUploadingComment = PassthroughSubject<Void,Never>()
     
     var errorLiking = PassthroughSubject<Void,Never>()
     
@@ -41,6 +43,8 @@ class CommentSectionViewModel {
     
     var savedWorkoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
     
+    var userSelected = PassthroughSubject<Users,Never>()
+    
     var isLoading = CurrentValueSubject<Bool,Never>(false)
     
     // MARK: - Initializer
@@ -54,7 +58,8 @@ class CommentSectionViewModel {
         apiService.fetchInstance(of: postGeneric, returning: Comment.self) { [weak self] result in
             guard let self = self else {return}
             switch result {
-            case .success(let comments):
+            case .success(var comments):
+                comments.sort { $0.time > $1.time }
                 self.comments.send(comments)
                 self.isLoading.send(false)
             case .failure(let error):
@@ -74,26 +79,49 @@ class CommentSectionViewModel {
                                  posterID: UserDefaults.currentUser.uid,
                                  postID: mainPost.id,
                                  attachedWorkoutSavedID: attachedWorkout?.id)
-        
+ 
         let uploadModel = UploadCommentModel(comment: newComment)
         let points = uploadModel.uploadPoints()
         apiService.multiLocationUpload(data: points) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(()):
-                self.uploadingNewComment.send(true)
                 self.isLoading.send(false)
                 self.mainPost.replyCount += 1
+                self.uploadingNewComment.send(newComment)
                 self.listener.send(self.mainPost)
             case .failure(_):
-                self.uploadingNewComment.send(false)
+                self.errorUploadingComment.send(())
                 self.isLoading.send(false)
             }
         }
     }
     
     func groupSendPressed() {
+        self.isLoading.send(true)
+        let newComment = Comment(id: UUID().uuidString,
+                                 username: UserDefaults.currentUser.username,
+                                 time: Date().timeIntervalSince1970,
+                                 message: commentText,
+                                 posterID: UserDefaults.currentUser.uid,
+                                 postID: mainGroupPost.id,
+                                 attachedWorkoutSavedID: attachedWorkout?.id)
         
+        let uploadModel = UploadGroupCommentModel(comment: newComment, groupID: mainGroupPost.groupID)
+        let points = uploadModel.uploadPoints()
+        apiService.multiLocationUpload(data: points) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(()):
+                self.uploadingNewComment.send(newComment)
+                self.isLoading.send(false)
+                self.mainGroupPost.replyCount += 1
+                self.groupListener.send(self.mainGroupPost)
+            case .failure(_):
+                self.errorUploadingComment.send(())
+                self.isLoading.send(false)
+            }
+        }
     }
     
     func updateCommentText(with text: String) {
@@ -191,6 +219,34 @@ class CommentSectionViewModel {
             SavedWorkoutLoader.shared.load(from: keyModel) { [weak self] result in
                 guard let workout = try? result.get() else {return}
                 self?.savedWorkoutSelected.send(workout)
+            }
+        }
+    }
+    
+    func getUser(from tappedPost: post) {
+        let userSearchModel = UserSearchModel(uid: tappedPost.posterID)
+        UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
+            guard let user = try? result.get() else {return}
+            if user != UserDefaults.currentUser {
+                self?.userSelected.send(user)
+            }
+        }
+    }
+    func getUser(from tappedPost: GroupPost) {
+        let userSearchModel = UserSearchModel(uid: tappedPost.posterID)
+        UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
+            guard let user = try? result.get() else {return}
+            if user != UserDefaults.currentUser {
+                self?.userSelected.send(user)
+            }
+        }
+    }
+    func getUser(from tappedPost: Comment) {
+        let userSearchModel = UserSearchModel(uid: tappedPost.posterID)
+        UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
+            guard let user = try? result.get() else {return}
+            if user != UserDefaults.currentUser {
+                self?.userSelected.send(user)
             }
         }
     }

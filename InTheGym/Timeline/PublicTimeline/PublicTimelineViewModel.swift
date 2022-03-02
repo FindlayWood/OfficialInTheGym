@@ -26,6 +26,8 @@ class PublicTimelineViewModel {
     
     var savedWorkoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
     
+    var userSelected = PassthroughSubject<Users,Never>()
+    
     var reloadListener = PassthroughSubject<post,Never>()
     
     var followSuccess = PassthroughSubject<Bool,Never>()
@@ -152,6 +154,16 @@ class PublicTimelineViewModel {
             SavedWorkoutLoader.shared.load(from: keyModel) { [weak self] result in
                 guard let workout = try? result.get() else {return}
                 self?.savedWorkoutSelected.send(workout)
+            }
+        }
+    }
+    
+    func getUser(from tappedPost: post) {
+        let userSearchModel = UserSearchModel(uid: tappedPost.posterID)
+        UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
+            guard let user = try? result.get() else {return}
+            if user != UserDefaults.currentUser {
+                self?.userSelected.send(user)
             }
         }
     }

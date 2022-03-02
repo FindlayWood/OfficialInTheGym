@@ -12,7 +12,7 @@ import SCLAlertView
 
 class PresentingView : UIView {
     
-    var groupSelectedClosure:((groupModel)->Void)?
+    var groupSelectedClosure:((GroupModel)->Void)?
     
     lazy var viewModel : MyGroupViewModel = {
         return MyGroupViewModel()
@@ -131,7 +131,7 @@ class PresentingView : UIView {
 
   //MARK: - Conforming to MyGroupProtocol
 extension PresentingView: MyGroupsProtocol {
-    func getGroup(at indexPath: IndexPath) -> groupModel {
+    func getGroup(at indexPath: IndexPath) -> GroupModel {
         return viewModel.getGroup(at: indexPath)
     }
     
@@ -145,7 +145,7 @@ extension PresentingView: MyGroupsProtocol {
     }
     
     func retreiveNumberOfGroups() -> Int {
-        return viewModel.numberOfGroups
+        return 0
     }
     
     func addedNewGroup() {

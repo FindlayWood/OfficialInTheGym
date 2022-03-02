@@ -19,7 +19,7 @@ class GroupWorkoutsViewController: UIViewController {
 
     var apiService = FirebaseAPIGroupService.shared
     
-    var currentGroup: groupModel!
+    var currentGroup: GroupModel!
     
     lazy var viewModel: GroupWorkoutsViewModel = {
         return GroupWorkoutsViewModel(apiService: apiService)

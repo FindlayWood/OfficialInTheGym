@@ -11,8 +11,8 @@ import UIKit
 class AddGroupWorkoutCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
-    var group: groupModel
-    init(navigationController: UINavigationController, group: groupModel) {
+    var group: GroupModel
+    init(navigationController: UINavigationController, group: GroupModel) {
         self.navigationController = navigationController
         self.group = group
     }

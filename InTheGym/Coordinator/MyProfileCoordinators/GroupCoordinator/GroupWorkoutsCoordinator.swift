@@ -15,9 +15,9 @@ protocol SavedWorkoutsFlow: AnyObject {
 class GroupWorkoutsCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
-    var group: groupModel
+    var group: GroupModel
     
-    init(navigationController: UINavigationController, group: groupModel) {
+    init(navigationController: UINavigationController, group: GroupModel) {
         self.navigationController = navigationController
         self.group = group
     }

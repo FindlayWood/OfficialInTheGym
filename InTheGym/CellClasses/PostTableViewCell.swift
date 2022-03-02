@@ -282,17 +282,7 @@ extension PostTableViewCell {
         delegate?.workoutTapped(on: self)
     }
     @objc func userTapped(_ sender: UIButton) {
-        let userModel = UserSearchModel(uid: posterID)
-        UsersLoader.shared.load(from: userModel) { [weak self] result in
-            switch result {
-            case .success(let user):
-                self?.actionPublisher.send(.userTapped(user))
-            case .failure(_):
-                break
-            }
-        }
-//        actionPublisher.send(.userTapped)
-//        delegate?.userTapped(on: self)
+        actionPublisher.send(.userTapped)
     }
     
     func postLikedTransition() {
