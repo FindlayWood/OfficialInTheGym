@@ -12,9 +12,16 @@ import Combine
 
 class CommentSectionDataSource: NSObject {
     // MARK: - Publisher
-    var userSelected = PassthroughSubject<Users,Never>()
-    var workoutSelected = PassthroughSubject<IndexPath,Never>()
-    var likeButtonTapped = PassthroughSubject<IndexPath,Never>()
+    var likeButtonTapped = PassthroughSubject<post,Never>()
+    
+    var userTapped = PassthroughSubject<Users,Never>()
+    
+    var workoutTapped = PassthroughSubject<post,Never>()
+    
+    var groupPostLikeButtonTapped = PassthroughSubject<GroupPost,Never>()
+    
+    var groupPostWorkoutButtonTapped = PassthroughSubject<GroupPost,Never>()
+    
     var subscriptions = [IndexPath: AnyCancellable]()
     
     // MARK: - Properties
@@ -26,7 +33,7 @@ class CommentSectionDataSource: NSObject {
         self.tableView = tableView
         super.init()
         self.tableView.dataSource = makeDataSource()
-//        self.tableView.delegate = self
+        self.tableView.delegate = self
 //        self.initialSetup()
     }
     
@@ -39,30 +46,15 @@ class CommentSectionDataSource: NSObject {
                 cell.configure(with: post)
                 self.subscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
-                        switch action {
-                        case .userTapped(let user):
-                            self?.userSelected.send(user)
-                        case .workoutTapped:
-                            self?.workoutSelected.send(indexPath)
-                        case .likeButtonTapped:
-                            self?.likeButtonTapped.send(indexPath)
-                        }
+                        self?.actionPublisher(action: action, indexPath: indexPath)
                     })
                 return cell
             case .mainGroupPost(let post):
                 let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
                 cell.configure(with: post)
-//                cell.delegate = self
                 self.subscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
-                        switch action {
-                        case .userTapped(let user):
-                            self?.userSelected.send(user)
-                        case .workoutTapped:
-                            self?.workoutSelected.send(indexPath)
-                        case .likeButtonTapped:
-                            self?.likeButtonTapped.send(indexPath)
-                        }
+                        self?.actionPublisher(action: action, indexPath: indexPath)
                     })
                 return cell
             case .comment(let comment):
@@ -93,10 +85,45 @@ class CommentSectionDataSource: NSObject {
         var currentSnapshot = dataSource.snapshot()
         let items = comments.map { GroupCommentItems.comment($0) }
         currentSnapshot.appendItems(items, toSection: .comments)
-//        for comment in comments {
-//            currentSnapshot.appendItems([.comment(comment)], toSection: .comments)
-//        }
         dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    
+    // MARK: - Actions
+    func actionPublisher(action: PostAction, indexPath: IndexPath) {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
+        switch item {
+        case .mainPost(let post):
+            switch action {
+            case .likeButtonTapped:
+                likeButtonTapped.send(post)
+            case .workoutTapped:
+                workoutTapped.send(post)
+            case .userTapped(let user):
+                userTapped.send(user)
+            }
+        case .mainGroupPost(let groupPost):
+            switch action {
+            case .likeButtonTapped:
+                groupPostLikeButtonTapped.send(groupPost)
+            case .workoutTapped:
+                groupPostWorkoutButtonTapped.send(groupPost)
+            case .userTapped(let user):
+                userTapped.send(user)
+            }
+        case .comment(_):
+            break
+        }
+
     }
 }
 
+extension CommentSectionDataSource: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 5
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = .systemGray5
+        return view
+    }
+}

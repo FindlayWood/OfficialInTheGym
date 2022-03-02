@@ -31,7 +31,8 @@ class CommentView: UIView {
     // MARK: - Subviews
     var attachmentButton: UIButton = {
        let button = UIButton()
-        button.setImage(UIImage(named: "benchpress_icon"), for: .normal)
+        button.setImage(UIImage(systemName: "paperclip", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        button.imageView?.tintColor = .darkColour
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -84,6 +85,7 @@ class CommentView: UIView {
     var sendButton: UIButton = {
         let button = UIButton()
         button.setTitle("Send", for: .normal)
+        button.setTitleColor(.lightGray, for: .disabled)
         button.setTitleColor(.lightGray, for: .normal)
         button.isUserInteractionEnabled = false
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
@@ -100,7 +102,7 @@ class CommentView: UIView {
     }()
     
     lazy var stackView: UIStackView = {
-       let stack = UIStackView(arrangedSubviews: [attachmentLabel,commentTextField])
+       let stack = UIStackView(arrangedSubviews: [attachmentLabel, commentTextField])
         stack.axis = .vertical
         stack.alignment = .center
         stack.spacing = stackViewSpacing
@@ -167,6 +169,7 @@ private extension CommentView {
     }
 }
 
+// MARK: - Public Attachments
 extension CommentView {
     public func attachWorkout(_ workout: SavedWorkoutModel) {
         replyType = .WorkoutAndText
@@ -213,9 +216,11 @@ extension CommentView: UITextViewDelegate {
         }
         
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || textView.text == placeholder  {
+//            sendButton.isEnabled = false
             sendButton.setTitleColor(.lightGray, for: .normal)
             sendButton.isUserInteractionEnabled = false
         } else {
+//            sendButton.isEnabled = true
             sendButton.setTitleColor(Constants.lightColour, for: .normal)
             sendButton.isUserInteractionEnabled = true
         }

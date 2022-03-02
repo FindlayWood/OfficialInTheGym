@@ -204,6 +204,7 @@ struct DiscussionReplyPlusWorkout: PostProtocol {
     }
 }
 
+// MARK: - Comment
 struct Comment: Codable, Hashable {
     var id: String
     var username: String
@@ -216,5 +217,24 @@ struct Comment: Codable, Hashable {
 extension Comment: FirebaseInstance {
     var internalPath: String {
         return "PostReplies/\(postID)/\(id)"
+    }
+}
+
+struct UploadCommentModel {
+    var comment: Comment
+    
+    func uploadPoints() -> [FirebaseMultiUploadDataPoint] {
+        var points = [FirebaseMultiUploadDataPoint]()
+        points.append(FirebaseMultiUploadDataPoint(value: ServerValue.increment(1), path: replyCountPath))
+        if let commentPoint = comment.toFirebaseJSON() {
+            points.append(commentPoint)
+        }
+        return points
+    }
+}
+
+extension UploadCommentModel {
+    var replyCountPath: String {
+        return "Posts/\(comment.postID)/replyCount"
     }
 }

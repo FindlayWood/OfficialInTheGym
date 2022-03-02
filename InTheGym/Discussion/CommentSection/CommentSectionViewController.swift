@@ -21,13 +21,6 @@ class CommentSectionViewController: UIViewController {
     
     var dataSource: CommentSectionDataSource!
     
-    
-//    var mainPost: post!
-    
-//    private lazy var postReplyModel = PostReplies(postID: mainPost.id)
-    
-//    private lazy var dataSource = makeDataSource()
-    
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
@@ -43,10 +36,10 @@ class CommentSectionViewController: UIViewController {
         view.backgroundColor = .white
         initTableView()
 //        initialTableSetUp()
-        setupDataSource()
-        setUpSubscribers()
+        initDataSource()
+        initViewModel()
         setupKeyBoardObservers()
-        setupDisplayButtons()
+        initTargets()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,44 +48,57 @@ class CommentSectionViewController: UIViewController {
         navigationItem.title = "\(viewModel.mainPost.username)'s post"
     }
     
+    // MARK: - Loading Nav Bar
+    func initLoadingNavBar(_ show: Bool) {
+        display.setInteraction(to: !show)
+        if show {
+            let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+            activityIndicator.startAnimating()
+            let barButton = UIBarButtonItem(customView: activityIndicator)
+            navigationItem.rightBarButtonItem = barButton
+        } else {
+            navigationItem.rightBarButtonItem = nil
+        }
+    }
+    
     // MARK: - Data Source
-    func setupDataSource() {
+    func initDataSource() {
         dataSource = .init(tableView: display.tableview)
         dataSource.initialSetup(with: viewModel.mainPost)
-    }
-    
-    func initTableView() {
-//        display.tableview.dataSource = dataSource
-        display.tableview.delegate = adapter
-    }
-    
-    func setupDisplayButtons() {
-        display.commentView.sendButton.addTarget(self, action: #selector(sendPressed(_:)), for: .touchUpInside)
-        display.commentView.removeAttachmentButton.addTarget(self, action: #selector(removeAttachedWorkout(_:)), for: .touchUpInside)
-        display.commentView.attachmentButton.addTarget(self, action: #selector(attachedWorkoutPressed(_:)), for: .touchUpInside)
-    }
-    
-    // MARK: - Setup Subscribers
-    func setUpSubscribers() {
         
-        dataSource.userSelected
-            .sink { [weak self] in self?.userSelected($0) }
+        dataSource.userTapped
+            .sink { [weak self] user in
+                if user.uid != UserDefaults.currentUser.uid {
+                    self?.coordinator?.showUser(user)
+                }
+            }
             .store(in: &subscriptions)
         
-        dataSource.workoutSelected
-            .sink { [weak self] in self?.workoutSelected(at: $0) }
+        dataSource.workoutTapped
+            .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
             .store(in: &subscriptions)
         
         dataSource.likeButtonTapped
-            .sink { [weak self] in self?.likeButtonTapped(at: $0) }
+            .sink { [weak self] in self?.viewModel.likeCheck($0) }
+            .store(in: &subscriptions)
+    }
+    
+    // MARK: - View Model
+    func initViewModel() {
+        viewModel.workoutSelected
+            .sink { [weak self] in self?.coordinator?.showWorkout($0) }
             .store(in: &subscriptions)
         
-        viewModel.uploadingNewComment
-            .sink { [weak self] success in
-                guard let self = self else {return}
-                
-            }
+        viewModel.savedWorkoutSelected
+            .sink { [weak self] in self?.coordinator?.showSavedWorkout($0) }
             .store(in: &subscriptions)
+        
+//        viewModel.uploadingNewComment
+//            .sink { [weak self] success in
+//                guard let self = self else {return}
+//                
+//            }
+//            .store(in: &subscriptions)
         
         display.commentView.$commentText
             .sink { [weak self] in self?.viewModel.updateCommentText(with: $0) }
@@ -111,9 +117,25 @@ class CommentSectionViewController: UIViewController {
             .sink { [weak self] in self?.dataSource.updateComments(with: $0) }
             .store(in: &subscriptions)
         
+        viewModel.isLoading
+            .sink { [weak self] in self?.initLoadingNavBar($0)}
+            .store(in: &subscriptions)
+        
         viewModel.loadGeneric(for: viewModel.mainPostReplyModel)
-//        viewModel.load(for: mainPost)
     }
+    
+    func initTableView() {
+//        display.tableview.dataSource = dataSource
+//        display.tableview.delegate = adapter
+    }
+    
+    // MARK: - Targets
+    func initTargets() {
+        display.commentView.sendButton.addTarget(self, action: #selector(sendPressed(_:)), for: .touchUpInside)
+        display.commentView.removeAttachmentButton.addTarget(self, action: #selector(removeAttachedWorkout(_:)), for: .touchUpInside)
+        display.commentView.attachmentButton.addTarget(self, action: #selector(attachedWorkoutPressed(_:)), for: .touchUpInside)
+    }
+
     
     // MARK: - Keyboard Observers
     func setupKeyBoardObservers() {
@@ -150,20 +172,13 @@ extension CommentSectionViewController {
     func userSelected(_ user: Users) {
         coordinator?.showUser(user)
     }
-    func workoutSelected(at indexPath: IndexPath) {
-        print("workout selected...")
-    }
-    func likeButtonTapped(at indexPath: IndexPath) {
-        viewModel.likeCheck(viewModel.mainPost)
-        viewModel.mainPost.likeCount += 1
-    }
 }
 
 // MARK: - Display Button Actions
 extension CommentSectionViewController {
     
     @objc func sendPressed(_ sender: UIButton) {
-        viewModel.sendPressed(viewModel.mainPost.id)
+        viewModel.sendPressed()
     }
     
     @objc func attachedWorkoutPressed(_ sender: UIButton) {
@@ -176,18 +191,4 @@ extension CommentSectionViewController {
         viewModel.attachedWorkout = nil
     }
 }
-//
-//// MARK: - Timeline Tap Protocol
-//extension CommentSectionViewController: TimelineTapProtocol {
-//    func likeButtonTapped(on cell: UITableViewCell, sender: UIButton, label: UILabel) {
-//
-//    }
-//
-//    func workoutTapped(on cell: UITableViewCell) {
-//
-//    }
-//
-//    func userTapped(on cell: UITableViewCell) {
-//
-//    }
-//}
+

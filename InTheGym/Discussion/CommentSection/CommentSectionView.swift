@@ -78,6 +78,12 @@ extension CommentSectionView {
     public func removeAttachedWorkout() {
         commentView.removeAttachedWorkout()
     }
+    public func setInteraction(to allowed: Bool) {
+        commentView.attachmentButton.isUserInteractionEnabled = allowed
+        commentView.commentTextField.isUserInteractionEnabled = allowed
+        commentView.sendButton.isEnabled = allowed
+        commentView.sendButton.setTitleColor(allowed ? .lightColour : .lightGray, for: .normal)
+    }
 }
     
 

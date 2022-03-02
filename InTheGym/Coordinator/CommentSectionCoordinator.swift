@@ -39,7 +39,14 @@ extension CommentSectionCoordinator {
         child.start()
     }
     func showWorkout(_ workout: WorkoutModel) {
-        
+        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: workout)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func showSavedWorkout(_ model: SavedWorkoutModel) {
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
+        childCoordinators.append(child)
+        child.start()
     }
     func attachWorkout() {
         let vc = SavedWorkoutsViewController()
