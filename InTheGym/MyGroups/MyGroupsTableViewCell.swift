@@ -9,6 +9,7 @@
 import UIKit
 
 class MyGroupsTableViewCell: UITableViewCell {
+    
     // MARK: - Properties
     static var cellID: String = "MyGroupsTableViewCellID"
     

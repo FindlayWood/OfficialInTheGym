@@ -45,7 +45,6 @@ class PostsDataSource: NSObject {
         return UITableViewDiffableDataSource(tableView: self.tableView) { tableView, indexPath, itemIdentifier in
             let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
             cell.configure(with: itemIdentifier)
-            self.actionSubscriptions.removeValue(forKey: indexPath)
             self.actionSubscriptions[indexPath] = cell.actionPublisher
                 .sink(receiveValue: { [weak self] action in
                     self?.actionPublisher(action: action, indexPath: indexPath)

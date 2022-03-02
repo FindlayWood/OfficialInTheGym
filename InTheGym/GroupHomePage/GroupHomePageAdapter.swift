@@ -69,16 +69,16 @@ extension GroupHomePageAdapter: UITableViewDelegate {
 //            }
 //        }
 //    }
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 2 {
-            if delegate.isCurrentUserLeader() {
-                return 160
-            } else {
-                return 110
-            }
-        } else {
-            return UITableView.automaticDimension
-        }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        if indexPath.section == 2 {
+//            if delegate.isCurrentUserLeader() {
+//                return 160
+//            } else {
+//                return 110
+//            }
+//        } else {
+//            return UITableView.automaticDimension
+//        }
 //        if indexPath == IndexPath(row: 1, section: 0) {
 //            if delegate.leaderLoaded() {
 //                return 80
@@ -102,7 +102,7 @@ extension GroupHomePageAdapter: UITableViewDelegate {
 //        } else {
 //            return UITableView.automaticDimension
 //        }
-    }
+//    }
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

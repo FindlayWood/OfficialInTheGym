@@ -23,7 +23,7 @@ class GroupHomeCoordinator: NSObject, Coordinator {
         navigationController.delegate = self
         let vc = GroupHomePageViewController()
         vc.coordinator = self
-        vc.currentGroup = group
+        vc.viewModel.currentGroup = group
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }

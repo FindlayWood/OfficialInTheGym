@@ -8,16 +8,12 @@
 
 import UIKit
 
-protocol GroupHomePageProtocol: TimelineTapProtocol {
+protocol GroupHomePageProtocol {
     func getGroupInfo() -> GroupModel
-    func getPostData(at indexPath: IndexPath) -> GroupPost
-    func numberOfPosts() -> Int
     func postSelected(at indexPath: IndexPath)
     func leaderSelected()
     func getGroupImage() -> UIImage?
-    func numberOfMembers() -> Int
     func scrolledTo(headerInView: Bool)
-    func postsLoaded() -> Bool
     func getGroupLeader() -> Users
     func leaderLoaded() -> Bool
     func newInfoSaved(_ newInfo: MoreGroupInfoModel)

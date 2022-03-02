@@ -7,65 +7,92 @@
 //
 
 import UIKit
+import Combine
 
 class GroupHomePageViewController: UIViewController {
     
+    // MARK: - Properties
     weak var coordinator: GroupHomeCoordinator?
     
     var display = GroupHomePageView()
 
     var adapter: GroupHomePageAdapter!
     
-    var currentGroup: GroupModel!
+//    var currentGroup: GroupModel!
     
-    private lazy var groupPostsModel = GroupPostsModel(groupID: currentGroup.uid)
+//    private lazy var groupPostsModel = GroupPostsModel(groupID: currentGroup.uid)
     
-    lazy var viewModel: GroupHomePageViewModel = {
-        return GroupHomePageViewModel()
-    }()
+    var viewModel = GroupHomePageViewModel()
     
-    private lazy var dataSource = makeDataSorce()
+    var dataSource: GroupHomePageDataSource!
     
+    private var subscriptions = Set<AnyCancellable>()
+    
+//    private lazy var dataSource = makeDataSorce()
+    
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .darkColour
         setUpDisplay()
         addNavBarButton()
+        initDataSource()
         initViewModel()
         initTableView()
-        if currentGroup.leader == FirebaseAuthManager.currentlyLoggedInUser.uid {
-            
-        }
+ 
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        display.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top)
+//        display.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top)
+        display.frame = getFullViewableFrame()
         view.addSubview(display)
     }
     
-    func initViewModel() {
-        viewModel.reloadPostsTableViewClosure = { [weak self] in
-            guard let self = self else {return}
-            DispatchQueue.main.async {
-                self.tableUpdatePosts(with: self.viewModel.posts)
-                //let sections = IndexSet.init(integer: 1)
-                //self.display.tableview.reloadSections(sections, with: .none)
-            }
-        }
+    // MARK: - Data Source
+    func initDataSource() {
+        dataSource = .init(tableView: display.tableview)
         
-        viewModel.reloadMembersTableViewClosure = { [weak self] in
-            guard let self = self else {return}
-            DispatchQueue.main.async {
-                //let sections = IndexSet.init(integer: 0)
-                //self.display.tableview.reloadSections(sections, with: .none)
-            }
-        }
-        viewModel.reloadHeaderImageClosure = { [weak self] in
-            guard let self = self else {return}
-            DispatchQueue.main.async {
-                self.display.headerView.imageView.image = self.viewModel.headerImage
-            }
-        }
+        dataSource.tableUpdate(with: [GroupItems.name(viewModel.currentGroup), GroupItems.info(viewModel.currentGroup.leader)])
+    }
+    
+    // MARK: - View Model
+    func initViewModel() {
+        
+        viewModel.postsPublisher
+            .sink { [weak self] in self?.dataSource.tableUpdatePosts(with: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.leaderPublisher
+            .dropFirst()
+            .sink { [weak self] in self?.dataSource.updateLeader($0)}
+            .store(in: &subscriptions)
+        
+        viewModel.headerImagePublisher
+            .sink { [weak self] in self?.display.headerView.imageView.image = $0}
+            .store(in: &subscriptions)
+        
+//        viewModel.reloadPostsTableViewClosure = { [weak self] in
+//            guard let self = self else {return}
+//            DispatchQueue.main.async {
+//                self.tableUpdatePosts(with: self.viewModel.posts)
+//                //let sections = IndexSet.init(integer: 1)
+//                //self.display.tableview.reloadSections(sections, with: .none)
+//            }
+//        }
+        
+//        viewModel.reloadMembersTableViewClosure = { [weak self] in
+//            guard let self = self else {return}
+//            DispatchQueue.main.async {
+//                //let sections = IndexSet.init(integer: 0)
+//                //self.display.tableview.reloadSections(sections, with: .none)
+//            }
+//        }
+//        viewModel.reloadHeaderImageClosure = { [weak self] in
+//            guard let self = self else {return}
+//            DispatchQueue.main.async {
+//                self.display.headerView.imageView.image = self.viewModel.headerImage
+//            }
+//        }
         viewModel.updateNavigationTitleImage = { [weak self] in
             guard let self = self else {return}
             let titleImageShowing = self.viewModel.headerImageInView
@@ -79,7 +106,7 @@ class GroupHomePageViewController: UIViewController {
                     imageView.layer.cornerRadius = 15
                     imageView.clipsToBounds = true
                     imageView.layer.masksToBounds = false
-                    imageView.image = self.viewModel.headerImage
+                    imageView.image = self.viewModel.headerImagePublisher.value
                     imageView.alpha = 0.0
                     barView.addSubview(imageView)
                     self.navigationItem.titleView = barView
@@ -94,17 +121,17 @@ class GroupHomePageViewController: UIViewController {
                 }
             }
         }
-        viewModel.groupLeaderLoadedClosure = { [weak self] in
-            guard let self = self else {return}
-            DispatchQueue.main.async {
-                self.tableUpdate(with: [.leader(self.getGroupLeader())])
-                //let indexPath = IndexPath(row: 1, section: 0)
-                //let sections = IndexSet.init(integer: 0)
-                //self.display.tableview.reloadRows(at: [indexPath], with: .none)
-                //self.display.tableview.reloadSections(sections, with: .none)
-            }
-            
-        }
+//        viewModel.groupLeaderLoadedClosure = { [weak self] in
+//            guard let self = self else {return}
+//            DispatchQueue.main.async {
+//                self.tableUpdate(with: [.leader(self.getGroupLeader())])
+//                //let indexPath = IndexPath(row: 1, section: 0)
+//                //let sections = IndexSet.init(integer: 0)
+//                //self.display.tableview.reloadRows(at: [indexPath], with: .none)
+//                //self.display.tableview.reloadSections(sections, with: .none)
+//            }
+//
+//        }
         
         viewModel.tappedUserReturnedClosure = { [weak self] (tappedUser) in
             guard let self = self else {return}
@@ -116,30 +143,30 @@ class GroupHomePageViewController: UIViewController {
             self.coordinator?.showWorkouts(with: tappedWorkout)
         }
         
-        viewModel.currentGroup = currentGroup
+//        viewModel.currentGroup = currentGroup
         //viewModel.loadPosts(from: currentGroup.uid)
-        viewModel.newLoadPosts(from: groupPostsModel)
-        viewModel.loadMembers(from: currentGroup.uid)
-        viewModel.loadHeaderImage(from: currentGroup.uid)
-        viewModel.loadGroupLeader(from: currentGroup.leader)
+        viewModel.loadPosts()
+//        viewModel.loadMembers(from: currentGroup.uid)
+        viewModel.loadHeaderImage()
+        viewModel.loadGroupLeader()
     }
     
     func initTableView() {
-        tableSetup()
-        let currentItems: [GroupItems] = [.name(currentGroup)]
-        tableUpdate(with: currentItems)
-        let infoItems: [GroupItems] = [.info(groupInfo())]
-        tableUpdate(with: infoItems)
+//        tableSetup()
+//        let currentItems: [GroupItems] = [.name(currentGroup)]
+//        tableUpdate(with: currentItems)
+//        let infoItems: [GroupItems] = [.info(groupInfo())]
+//        tableUpdate(with: infoItems)
     }
     
     @objc func moreButtonTapped() {
-        let info = MoreGroupInfoModel(leader: getGroupLeader(),
-                                      headerImage: getGroupImage(),
-                                      description: currentGroup.description,
-                                      groupName: currentGroup.username,
-                                      groupID: currentGroup.uid,
-                                      leaderID: currentGroup.leader)
-        coordinator?.showMoreInfo(with: info, self)
+//        let info = MoreGroupInfoModel(leader: getGroupLeader(),
+//                                      headerImage: getGroupImage(),
+//                                      description: currentGroup.description,
+//                                      groupName: currentGroup.username,
+//                                      groupID: currentGroup.uid,
+//                                      leaderID: currentGroup.leader)
+//        coordinator?.showMoreInfo(with: info, self)
     }
     @objc func postButtonTapped() {
         coordinator?.createNewPost()
@@ -152,7 +179,7 @@ extension GroupHomePageViewController {
         adapter = .init(delegate: self)
         adapter.headerView = display.tableview.tableHeaderView as? StretchyTableHeaderView
         display.tableview.delegate = adapter
-        display.tableview.dataSource = makeDataSorce()
+//        display.tableview.dataSource = makeDataSorce()
         display.tableview.backgroundColor = .darkColour
     }
 }
@@ -179,17 +206,9 @@ extension GroupHomePageViewController {
 // MARK: - Protocol Conformation
 extension GroupHomePageViewController: GroupHomePageProtocol {
     func getGroupInfo() -> GroupModel {
-        return currentGroup
+        return viewModel.currentGroup
     }
-    
-    func getPostData(at indexPath: IndexPath) -> GroupPost {
-        return viewModel.getPostData(at: indexPath)
-    }
-    
-    func numberOfPosts() -> Int {
-        return viewModel.numberOfPosts
-    }
-    
+
     func postSelected(at indexPath: IndexPath) {
         let post = viewModel.getPostData(at: indexPath)
         coordinator?.goToCommentSection(with: post)
@@ -231,15 +250,15 @@ extension GroupHomePageViewController: GroupHomePageProtocol {
     }
     func newInfoSaved(_ newInfo: MoreGroupInfoModel) {
         viewModel.headerImage = newInfo.headerImage
-        currentGroup.username = newInfo.groupName
-        currentGroup.description = newInfo.description!
+        viewModel.currentGroup.username = newInfo.groupName
+        viewModel.currentGroup.description = newInfo.description!
         display.tableview.reloadData()
     }
     func goToWorkouts() {
-        coordinator?.goToGroupWorkouts(with: currentGroup)
+        coordinator?.goToGroupWorkouts(with: viewModel.currentGroup)
     }
     func showGroupMembers() {
-        
+
     }
     func isCurrentUserLeader() -> Bool {
         return viewModel.isCurrentUserLeader()
@@ -250,103 +269,103 @@ extension GroupHomePageViewController: GroupHomePageProtocol {
 }
 
 // MARK: - Timeline Protocol Conformation
-extension GroupHomePageViewController: TimelineTapProtocol {
-    func likeButtonTapped(on cell: UITableViewCell, sender: UIButton, label: UILabel) {
-        guard let index = display.tableview.indexPath(for: cell) else {return}
-        guard let cell = cell as? PostTableViewCell else {return}
-        cell.postLikedTransition()
-        viewModel.likePost(at: index)
-//        let post = viewModel.getPostData(at: index)
-//        viewModel.likePost(from: currentGroup.uid, on: post)
-//        let likeCount = Int(label.text!)! + 1
-//        label.text = likeCount.description
-//        if #available(iOS 13.0, *) {
-//            UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
-//                sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
-//            } completion: { _ in
-//                sender.isUserInteractionEnabled = false
-//            }
-//        }
-//        let selection = UISelectionFeedbackGenerator()
-//        selection.prepare()
-//        selection.selectionChanged()
-    }
-    func userTapped(on cell: UITableViewCell) {
-        guard let index = display.tableview.indexPath(for: cell) else {return}
-        viewModel.userTapped(at: index)
-    }
-    func workoutTapped(on cell: UITableViewCell) {
-        guard let index = display.tableview.indexPath(for: cell) else {return}
-        viewModel.workoutTapped(at: index)
-    }
-}
+//extension GroupHomePageViewController: TimelineTapProtocol {
+//    func likeButtonTapped(on cell: UITableViewCell, sender: UIButton, label: UILabel) {
+//        guard let index = display.tableview.indexPath(for: cell) else {return}
+//        guard let cell = cell as? PostTableViewCell else {return}
+//        cell.postLikedTransition()
+//        viewModel.likePost(at: index)
+////        let post = viewModel.getPostData(at: index)
+////        viewModel.likePost(from: currentGroup.uid, on: post)
+////        let likeCount = Int(label.text!)! + 1
+////        label.text = likeCount.description
+////        if #available(iOS 13.0, *) {
+////            UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
+////                sender.setImage(UIImage(systemName: "star.fill"), for: .normal)
+////            } completion: { _ in
+////                sender.isUserInteractionEnabled = false
+////            }
+////        }
+////        let selection = UISelectionFeedbackGenerator()
+////        selection.prepare()
+////        selection.selectionChanged()
+//    }
+//    func userTapped(on cell: UITableViewCell) {
+//        guard let index = display.tableview.indexPath(for: cell) else {return}
+//        viewModel.userTapped(at: index)
+//    }
+//    func workoutTapped(on cell: UITableViewCell) {
+//        guard let index = display.tableview.indexPath(for: cell) else {return}
+//        viewModel.workoutTapped(at: index)
+//    }
+//}
 
 extension GroupHomePageViewController {
     
-    enum GroupSections {
-        case groupName
-        case groupLeader
-        case groupInfo
-        case groupPosts
-    }
+//    enum GroupSections {
+//        case groupName
+//        case groupLeader
+//        case groupInfo
+//        case groupPosts
+//    }
     
 
     
-    func makeDataSorce() -> UITableViewDiffableDataSource<GroupSections,GroupItems> {
-        return UITableViewDiffableDataSource(tableView: display.tableview) { tableView, indexPath, itemIdentifier in
-            switch itemIdentifier {
-            case .name(let model):
-                let cell = UITableViewCell()
-                cell.textLabel?.text = model.username
-                cell.textLabel?.font = Constants.font
-                cell.selectionStyle = .none
-                return cell
-            case .leader(let leader):
-                let cell = tableView.dequeueReusableCell(withIdentifier: UserTableViewCell.cellID, for: indexPath) as! UserTableViewCell
-                cell.configureCell(with: leader)
-                return cell
-            case .info(_):
-                let cell = tableView.dequeueReusableCell(withIdentifier: GroupHomePageInfoTableViewCell.cellID, for: indexPath) as! GroupHomePageInfoTableViewCell
-                cell.configureForLeader(self.currentGroup.leader == FirebaseAuthManager.currentlyLoggedInUser.uid)
-                cell.delegate = self
-                return cell
-            case .posts(let model):
-                let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
-                cell.configure(with: model)
-                cell.delegate = self
-                return cell
-            }
-        }
-    }
-    
-    func tableSetup() {
-        var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendSections([.groupName, .groupLeader, .groupInfo, .groupPosts])
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
-    }
-    func tableUpdate(with items: [GroupItems]) {
-        var currentSnapshot = dataSource.snapshot()
-        for item in items {
-            switch item {
-            case .name(let groupModel):
-                currentSnapshot.appendItems([.name(groupModel)], toSection: .groupName)
-            case .leader(let users):
-                currentSnapshot.appendItems([.leader(users)], toSection: .groupLeader)
-            case .info(let groupInfo):
-                currentSnapshot.appendItems([.info(groupInfo)], toSection: .groupInfo)
-            case .posts(let post):
-                currentSnapshot.appendItems([.posts(post)], toSection: .groupPosts)
-            }
-        }
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
-    }
-    func tableUpdatePosts(with posts: [GroupPost]) {
-        var currentSnapshot = dataSource.snapshot()
-        for post in posts {
-            currentSnapshot.appendItems([.posts(post)], toSection: .groupPosts)
-        }
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
-    }
+//    func makeDataSorce() -> UITableViewDiffableDataSource<GroupSections,GroupItems> {
+//        return UITableViewDiffableDataSource(tableView: display.tableview) { tableView, indexPath, itemIdentifier in
+//            switch itemIdentifier {
+//            case .name(let model):
+//                let cell = UITableViewCell()
+//                cell.textLabel?.text = model.username
+//                cell.textLabel?.font = Constants.font
+//                cell.selectionStyle = .none
+//                return cell
+//            case .leader(let leader):
+//                let cell = tableView.dequeueReusableCell(withIdentifier: UserTableViewCell.cellID, for: indexPath) as! UserTableViewCell
+//                cell.configureCell(with: leader)
+//                return cell
+//            case .info(_):
+//                let cell = tableView.dequeueReusableCell(withIdentifier: GroupHomePageInfoTableViewCell.cellID, for: indexPath) as! GroupHomePageInfoTableViewCell
+//                cell.configureForLeader(self.currentGroup.leader == FirebaseAuthManager.currentlyLoggedInUser.uid)
+//                cell.delegate = self
+//                return cell
+//            case .posts(let model):
+//                let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
+//                cell.configure(with: model)
+//                cell.delegate = self
+//                return cell
+//            }
+//        }
+//    }
+//
+//    func tableSetup() {
+//        var currentSnapshot = dataSource.snapshot()
+//        currentSnapshot.appendSections([.groupName, .groupLeader, .groupInfo, .groupPosts])
+//        dataSource.apply(currentSnapshot, animatingDifferences: true)
+//    }
+//    func tableUpdate(with items: [GroupItems]) {
+//        var currentSnapshot = dataSource.snapshot()
+//        for item in items {
+//            switch item {
+//            case .name(let groupModel):
+//                currentSnapshot.appendItems([.name(groupModel)], toSection: .groupName)
+//            case .leader(let users):
+//                currentSnapshot.appendItems([.leader(users)], toSection: .groupLeader)
+//            case .info(let groupInfo):
+//                currentSnapshot.appendItems([.info(groupInfo)], toSection: .groupInfo)
+//            case .posts(let post):
+//                currentSnapshot.appendItems([.posts(post)], toSection: .groupPosts)
+//            }
+//        }
+//        dataSource.apply(currentSnapshot, animatingDifferences: true)
+//    }
+//    func tableUpdatePosts(with posts: [GroupPost]) {
+//        var currentSnapshot = dataSource.snapshot()
+//        for post in posts {
+//            currentSnapshot.appendItems([.posts(post)], toSection: .groupPosts)
+//        }
+//        dataSource.apply(currentSnapshot, animatingDifferences: true)
+//    }
 //
 //    func updateGroupName(with name: groupName) {
 //        var currentSnapshot = dataSource.snapshot()
@@ -396,9 +415,4 @@ struct groupEmptyPosts: Hashable {
     var message: String = "No Posts in this group."
 }
 
-enum GroupItems: Hashable {
-    case name(GroupModel)
-    case leader(Users)
-    case info(groupInfo)
-    case posts(GroupPost)
-}
+

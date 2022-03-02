@@ -12,7 +12,7 @@ import Combine
 class CommentTableViewCell: UITableViewCell {
     
     // MARK: - Publishers
-    var actionPublisher = PassthroughSubject<PostAction,Never>()
+    var actionPublisher: PassthroughSubject<PostAction,Never> = PassthroughSubject<PostAction,Never>()
     
     // MARK: - Properties
     static let cellID: String = "CommentTableViewCellID"
@@ -79,6 +79,7 @@ class CommentTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         profileImageButton.reset()
+        actionPublisher = PassthroughSubject<PostAction,Never>()
     }
 }
 // MARK: - Configure

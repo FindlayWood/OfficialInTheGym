@@ -32,20 +32,23 @@ class GroupHomePageInfoTableViewCell: UITableViewCell {
     var membersView: UIImageLabelView = {
         let view = UIImageLabelView()
         view.configureView(image: UIImage(named: "groups_icon")!, label: "Members")
+        view.heightAnchor.constraint(equalToConstant: 90).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     var workoutsView: UIImageLabelView = {
         let view = UIImageLabelView()
         view.configureView(image: UIImage(named: "benchpress_icon")!, label: "Workouts")
+        view.heightAnchor.constraint(equalToConstant: 90).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    var imageViewStack: UIStackView = {
-        let view = UIStackView()
+    lazy var imageViewStack: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [membersView, workoutsView])
         //view.distribution = .equalSpacing
-        view.spacing = 40
+        view.alignment = .fill
+        view.spacing = 32
         view.distribution = .fillEqually
         view.axis = .horizontal
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -64,10 +67,12 @@ class GroupHomePageInfoTableViewCell: UITableViewCell {
         return button
     }()
     
-    var mainStack: UIStackView = {
-        let stack = UIStackView()
+    lazy var mainStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [imageViewStack, manageButton])
         stack.axis = .vertical
-        stack.spacing = 20
+        stack.spacing = 16
+        stack.alignment = .fill
+        stack.distribution = .fillProportionally
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -90,10 +95,10 @@ class GroupHomePageInfoTableViewCell: UITableViewCell {
 private extension GroupHomePageInfoTableViewCell {
     func setupUI() {
         selectionStyle = .none
-        imageViewStack.addArrangedSubview(membersView)
-        imageViewStack.addArrangedSubview(workoutsView)
-        mainStack.addArrangedSubview(imageViewStack)
-        mainStack.addArrangedSubview(manageButton)
+//        imageViewStack.addArrangedSubview(membersView)
+//        imageViewStack.addArrangedSubview(workoutsView)
+//        mainStack.addArrangedSubview(imageViewStack)
+//        mainStack.addArrangedSubview(manageButton)
         contentView.addSubview(mainStack)
         //contentView.addSubview(imageViewStack)
         //contentView.addSubview(membersView)
@@ -108,10 +113,10 @@ private extension GroupHomePageInfoTableViewCell {
     }
     func constrainView() {
         NSLayoutConstraint.activate([
-            mainStack.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            mainStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            mainStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            mainStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
+            mainStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            mainStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            mainStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            mainStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
             
 //                                    membersView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
 //                                     membersView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
@@ -146,8 +151,8 @@ private extension GroupHomePageInfoTableViewCell {
 }
 
 extension GroupHomePageInfoTableViewCell {
-    public func configureForLeader(_ isLeader: Bool) {
-        manageButton.isHidden = !isLeader
+    public func configureForLeader(_ leaderID: String) {
+        manageButton.isHidden = !(leaderID == UserDefaults.currentUser.uid)
     }
 }
 
