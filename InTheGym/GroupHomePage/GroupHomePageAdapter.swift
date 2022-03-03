@@ -105,13 +105,13 @@ extension GroupHomePageAdapter: UITableViewDelegate {
 //    }
 
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 {
-            delegate.leaderSelected()
-        } else if indexPath.section == 3 {
-            delegate.postSelected(at: indexPath)
-        }
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        if indexPath.section == 1 {
+//            delegate.leaderSelected()
+//        } else if indexPath.section == 3 {
+//            delegate.postSelected(at: indexPath)
+//        }
+//    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {

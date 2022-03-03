@@ -13,23 +13,34 @@ import Combine
 class GroupHomePageDataSource: NSObject {
     
     // MARK: - Publisher
+    var postSelected = PassthroughSubject<GroupPost,Never>()
+    var leaderSelected = PassthroughSubject<Users,Never>()
+    var scrolledToHeaderInView = PassthroughSubject<Bool,Never>()
+    
     var likeButtonTapped = PassthroughSubject<GroupPost,Never>()
     var workoutTapped = PassthroughSubject<GroupPost,Never>()
     var userTapped = PassthroughSubject<GroupPost,Never>()
+    
+    var infoCellActionPublisher = PassthroughSubject<GroupInfoCellAction,Never>()
     
     // MARK: - Properties
     var tableView: UITableView
     
     private lazy var dataSource = makeDataSource()
     
-    var actionSubscriptions = [IndexPath: AnyCancellable]()
+    private var actionSubscriptions = [IndexPath: AnyCancellable]()
+    
+    private var subscriptions = Set<AnyCancellable>()
+    
+    var lastContentOffset: CGFloat = 150
+    var headerView: StretchyTableHeaderView!
     
     // MARK: - Initializer
     init(tableView: UITableView) {
         self.tableView = tableView
         super.init()
         self.tableView.dataSource = makeDataSource()
-//        self.tableView.delegate = self
+        self.tableView.delegate = self
         self.initialSetup()
     }
     
@@ -50,12 +61,13 @@ class GroupHomePageDataSource: NSObject {
             case .info(let leaderID):
                 let cell = tableView.dequeueReusableCell(withIdentifier: GroupHomePageInfoTableViewCell.cellID, for: indexPath) as! GroupHomePageInfoTableViewCell
                 cell.configureForLeader(leaderID)
-//                cell.delegate = self
+                cell.actionPublisher
+                    .sink { [weak self] in self?.infoCellActionPublisher.send($0)}
+                    .store(in: &self.subscriptions)
                 return cell
             case .posts(let model):
                 let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
                 cell.configure(with: model)
-//                cell.delegate = self
                 self.actionSubscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
                         self?.actionPublisher(action: action, indexPath: indexPath)
@@ -129,5 +141,58 @@ class GroupHomePageDataSource: NSObject {
 // MARK: - Delegate - Select Row
 extension GroupHomePageDataSource: UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
+        switch item {
+        case .posts(let post):
+            postSelected.send(post)
+        case .leader(let leader):
+            leaderSelected.send(leader)
+        default:
+            break
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 1 {
+            return 15
+        } else if section == 3 {
+            return 25
+        } else {
+            return 0
+        }
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 1 {
+            let label = UILabel()
+            label.text = "Created By"
+            label.font = .boldSystemFont(ofSize: 12)
+            label.backgroundColor = .white
+            label.textAlignment = .center
+            label.textColor = .lightGray
+            return label
+        } else if section == 3 {
+            let label = UILabel()
+            label.text = "POSTS"
+            label.font = .boldSystemFont(ofSize: 20)
+            label.backgroundColor = .white
+            label.textAlignment = .center
+            label.textColor = .darkColour
+            return label
+        } else {
+            return nil
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        headerView.scrollViewDidScroll(scrollView: scrollView)
+        if lastContentOffset < scrollView.contentOffset.y {
+//            delegate.scrolledTo(headerInView: false)
+            scrolledToHeaderInView.send(false)
+        } else if lastContentOffset > scrollView.contentOffset.y {
+//            delegate.scrolledTo(headerInView: true)
+            scrolledToHeaderInView.send(true)
+        }
+    }
 
 }

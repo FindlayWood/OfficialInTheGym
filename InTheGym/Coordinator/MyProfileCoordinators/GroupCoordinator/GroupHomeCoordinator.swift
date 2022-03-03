@@ -31,10 +31,9 @@ class GroupHomeCoordinator: NSObject, Coordinator {
 
 // MARK: - Group Flow
 extension GroupHomeCoordinator {
-    func showMoreInfo(with info: MoreGroupInfoModel, _ delegate: GroupHomePageProtocol) {
+    func showMoreInfo(with info: MoreGroupInfoModel) {
         let vc = MoreGroupInfoViewController()
         vc.moreGroupInfo = info
-        vc.delegate = delegate
         navigationController.present(vc, animated: true, completion: nil)
     }
     func goToGroupWorkouts(with info: GroupModel) {
@@ -55,23 +54,41 @@ extension GroupHomeCoordinator {
 //        vc.mainPost = mainPost
 //        navigationController.pushViewController(vc, animated: true)
     }
-}
-
-//MARK: TimelineFlow Methods
-extension GroupHomeCoordinator: TimelineFlow {
-    
-    func showWorkouts(with workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
-        childCoordinators.append(child)
-        child.start()
-    }
     
     func showUser(user: Users) {
         let child = UserProfileCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(child)
         child.start()
     }
+    
+    func showWorkout(_ model: WorkoutModel) {
+        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: model)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
+    func showSavedWorkout(_ model: SavedWorkoutModel) {
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
+        childCoordinators.append(child)
+        child.start()
+    }
 }
+
+//MARK: TimelineFlow Methods
+//extension GroupHomeCoordinator: TimelineFlow {
+//
+//    func showWorkouts(with workout: WorkoutDelegate) {
+//        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
+//        childCoordinators.append(child)
+//        child.start()
+//    }
+//
+//    func showUser(user: Users) {
+//        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+//        childCoordinators.append(child)
+//        child.start()
+//    }
+//}
 
 //MARK: - Navigation Delegate Method
 extension GroupHomeCoordinator: UINavigationControllerDelegate {

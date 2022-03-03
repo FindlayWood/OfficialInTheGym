@@ -29,6 +29,7 @@ class GroupCommentSectionViewController: UIViewController {
         super.viewDidLayoutSubviews()
         display.frame = getViewableFrameWithBottomSafeArea()
         display.commentView.textViewDidChange(display.commentView.commentTextField)
+        display.tableview.separatorStyle = .none
         view.addSubview(display)
     }
     
@@ -138,7 +139,8 @@ class GroupCommentSectionViewController: UIViewController {
     // MARK: - Display Setup
     func initTableView() {
 //        display.tableview.dataSource = dataSource
-        display.tableview.delegate = adapter
+//        display.tableview.delegate = adapter
+        
     }
     
     // MARK: - Targets

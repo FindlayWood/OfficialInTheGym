@@ -19,90 +19,34 @@ class GroupHomePageViewModel {
     var leaderErrorPublisher = PassthroughSubject<Error,Never>()
     var headerImagePublisher = CurrentValueSubject<UIImage?,Never>(nil)
     
-    // MARK: - Callbacks
-    var reloadPostsTableViewClosure: (() -> ())?
-    var reloadMembersTableViewClosure: (() -> ())?
-    var updateLoadingStatusClosure: (() -> ())?
-    var reloadHeaderImageClosure: (() -> ())?
-    var updateNavigationTitleImage: (() -> ())?
-    var groupLeaderLoadedClosure: (() -> ())?
-    var errorLikingPostClosure: (() -> ())?
-        // user actions callbacks
-    var tappedUserReturnedClosure: ((Users) -> ())?
-    var tappedWorkoutClosure: ((WorkoutDelegate) -> ())?
+    var workoutSelected = PassthroughSubject<WorkoutModel,Never>()
+    var savedWorkoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
+    var userSelected = PassthroughSubject<Users,Never>()
+
+    var errorLiking = PassthroughSubject<Void,Never>()
+    
+    weak var groupListener: GroupPostListener?
     
     // MARK: - Properties
-    var apiService: FirebaseAPIGroupServiceProtocol
+    var apiService: FirebaseDatabaseManagerService
     
     var currentGroup: GroupModel!
-    
-    var posts: [GroupPost] = [] {
-        didSet {
-            reloadPostsTableViewClosure?()
-        }
-    }
-    
-    var numberOfPosts: Int {
-        return posts.count
-    }
-    
-    var members: [Users] = [] {
-        didSet {
-            reloadMembersTableViewClosure?()
-        }
-    }
-    var numberOfMembers: Int = 0 {
-        didSet {
-            reloadMembersTableViewClosure?()
-        }
-    }
-    
-    var isLoading: Bool = false {
-        didSet {
-            updateLoadingStatusClosure?()
-        }
-    }
-    
-    var headerImage: UIImage? {
-        didSet {
-            reloadHeaderImageClosure?()
-        }
-    }
-    
-    var headerImageInView: Bool = true {
-        didSet {
-            if headerImageInView != oldValue {
-                updateNavigationTitleImage?()
-            }
-        }
-    }
-    var groupLeader: Users! {
-        didSet {
-            groupLeaderLoadedClosure?()
-        }
-    }
     
     var postsLoadedSuccessfully: Bool = false
     var membersLoadedSuccessfully: Bool = false
     var groupLeaderLoadedSuccessfully: Bool = false
     
-    // MARK: - Errors
-    var likingPostError: Error? {
-        didSet {
-            errorLikingPostClosure?()
-        }
-    }
     
     
     // MARK: - Initializer
-    init(apiService: FirebaseAPIGroupServiceProtocol = FirebaseAPIGroupService.shared) {
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
     
     // MARK: - Fetching Functions
     func loadPosts() {
         let groupPostsModel = GroupPostsModel(groupID: currentGroup.uid)
-        FirebaseDatabaseManager.shared.fetchInstance(of: groupPostsModel, returning: GroupPost.self) { [weak self] result in
+        apiService.fetchInstance(of: groupPostsModel, returning: GroupPost.self) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(var posts):
@@ -114,45 +58,13 @@ class GroupHomePageViewModel {
                 self.errorLoadingPosts.send(error)
             }
         }
-        
-        
-//        let endpoint = PostEndpoints.getGroupPosts(groupID: groupID)
-//        apiService.loadPosts(from: endpoint) { [weak self] result in
-//            guard let self = self else {return}
-//            switch result {
-//            case .success(let loadedPosts):
-//                self.posts = loadedPosts.sorted(by: { $0.time > $1.time })
-//                self.postsLoadedSuccessfully = true
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//            }
-//        }
     }
-        
-//    func loadMembers(from groupID: String) {
-//        apiService.loadGroupMemberCount(from: groupID) { [weak self] result in
-//            guard let self = self else {return}
-//            switch result {
-//            case .success(let returnedMemberCount):
-//                self.numberOfMembers = returnedMemberCount
-//                self.membersLoadedSuccessfully = true
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//            }
-//        }
-//    }
     
     func loadHeaderImage() {
         ImageCache.shared.load(from: ProfileImageDownloadModel(id: currentGroup.uid)) { [weak self] result in
             guard let image = try? result.get() else {return}
             self?.headerImagePublisher.send(image)
         }
-//        ImageAPIService.shared.getProfileImage(for: groupID) { [weak self] image in
-//            guard let self = self else {return}
-//            if let headerImage = image {
-//                self.headerImage = headerImage
-//            }
-//        }
     }
     
     func loadGroupLeader() {
@@ -165,89 +77,87 @@ class GroupHomePageViewModel {
                 self?.leaderErrorPublisher.send(error)
             }
         }
-//        UserIDToUser.transform(userID: userID) { [weak self] leader in
-//            guard let self = self else {return}
-//            self.groupLeader = leader
-//            self.groupLeaderLoadedSuccessfully = true
-//        }
     }
-    
-    func getPostData(at indexPath: IndexPath) -> GroupPost {
-        return posts[indexPath.row]
-    }
-    func getGroupImage(with groupID: String) -> UIImage? {
-        return nil
-    }
+
+
     func getBarImage() -> UIImage {
         return UIImage(systemName: "ellipsis")!
-//        if #available(iOS 13.0, *) {
-//            return UIImage(systemName: "ellipsis")!
-//        } else {
-//            return UIImage(named: "more_icon")!
-//        }
     }
+    
     func isCurrentUserLeader() -> Bool {
         let leader = leaderPublisher.value
         return leader == UserDefaults.currentUser
     }
     
+    func getGroupInfo() -> MoreGroupInfoModel {
+        let info = MoreGroupInfoModel(leader: leaderPublisher.value,
+                                      headerImage: headerImagePublisher.value,
+                                      description: currentGroup.description,
+                                      groupName: currentGroup.username,
+                                      groupID: currentGroup.uid,
+                                      leaderID: currentGroup.leader)
+        return info
+    }
+    
     // MARK: - Actions
-        
-//    func likePost(at indexPath: IndexPath) {
-////        let likedPost = getPostData(at: indexPath)
-////        let likeEndPoint = LikePostEndpoint.likePost(post: likedPost)
-////        likedPost.likeCount += 1
-////        apiService.likePost(from: likeEndPoint) { [weak self] result in
-////            guard let self = self else {return}
-////            switch result {
-////            case .success(()):
-////                LikesAPIService.shared.LikedPostsCache.removeObject(forKey: likedPost.id as NSString)
-////                LikesAPIService.shared.LikedPostsCache.setObject(1, forKey: likedPost.id as NSString)
-////                self.sendLikeNotification(for: likedPost)
-////            case .failure(let error):
-////                print(error.localizedDescription)
-////                self.likingPostError = error
-////            }
-////        }
-//    }
-//
-//    func userTapped(at indexPath: IndexPath) {
-//        let tappedPost = getPostData(at: indexPath)
-//        let posterID = tappedPost.posterID
-//        UserIDToUser.transform(userID: posterID) { [weak self] user in
-//            guard let self = self else {return}
-//            if user.uid != FirebaseAuthManager.currentlyLoggedInUser.uid {
-//                self.tappedUserReturnedClosure?(user)
-//            }
-//        }
-//    }
-//
-//    func workoutTapped(at indexPath: IndexPath) {
-//        let tappedPost = getPostData(at: indexPath)
-//        guard let attachedWorkout = tappedPost.attachedWorkout else {return}
-//        apiService.returnTappedWorkout(from: attachedWorkout) { [weak self] result in
-//            guard let self = self else {return}
-//            switch result {
-//            case .success(let returnedWorkout):
-//                self.tappedWorkoutClosure?(returnedWorkout)
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//            }
-//        }
-//    }
+
     
     // MARK: - Send Notifications
-//    func sendLikeNotification(for post: post) {
-//        let groupID = currentGroup.uid
-//        let posterID = post.posterID
-//        let postID = post.id
-//        if posterID != FirebaseAuthManager.currentlyLoggedInUser.uid {
-//            let notification = NotificationGroupLikedPost(from: FirebaseAuthManager.currentlyLoggedInUser.uid, to: posterID, postID: postID, groupID: groupID)
-//            let uploadNotification = NotificationManager(delegate: notification)
-//            uploadNotification.upload { _ in
-//
-//            }
-//        }
-//    }
+    
+    // MARK: - Retreive Functions
+    func getWorkout(from tappedPost: GroupPost) {
+        if let workoutID = tappedPost.workoutID {
+            let keyModel = WorkoutKeyModel(id: workoutID)
+            WorkoutLoader.shared.load(from: keyModel) { [weak self] result in
+                guard let workout = try? result.get() else {return}
+                self?.workoutSelected.send(workout)
+            }
+        }
+        else if let savedWorkoutID = tappedPost.savedWorkoutID {
+            let keyModel = SavedWorkoutKeyModel(id: savedWorkoutID)
+            SavedWorkoutLoader.shared.load(from: keyModel) { [weak self] result in
+                guard let workout = try? result.get() else {return}
+                self?.savedWorkoutSelected.send(workout)
+            }
+        }
+    }
+    
+    func getUser(from tappedPost: GroupPost) {
+        let userSearchModel = UserSearchModel(uid: tappedPost.posterID)
+        UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
+            guard let user = try? result.get() else {return}
+            if user != UserDefaults.currentUser {
+                self?.userSelected.send(user)
+            }
+        }
+    }
+    
+    // MARK: - Like
+    func groupLikeCheck(_ post: GroupPost) {
+        let likeCheck = PostLikesModel(postID: post.id)
+        apiService.checkExistence(of: likeCheck) { [weak self] result in
+            switch result {
+            case .success(let liked):
+                if !liked {
+                    self?.groupLike(post)
+                }
+            case .failure(_):
+                self?.errorLiking.send(())
+            }
+        }
+    }
+    func groupLike(_ post: GroupPost) {
+        let likeModels = LikeTransportLayer(postID: post.id).groupPostLike(post: post)
+        apiService.multiLocationUpload(data: likeModels) { [weak self] result in
+            switch result {
+            case .success(()):
+                LikesAPIService.shared.LikedPostsCache[post.id] = true
+                self?.groupListener?.send(post)
+            case .failure(_):
+                self?.errorLiking.send(())
+            }
+        }
+    }
+
 }
 

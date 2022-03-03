@@ -510,7 +510,6 @@
 		747B687E2603EA8D000AD6B7 /* RequestsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747B687D2603EA8D000AD6B7 /* RequestsAdapter.swift */; };
 		747B68832603EE11000AD6B7 /* RequestsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747B68822603EE11000AD6B7 /* RequestsProtocol.swift */; };
 		747B68A82603F2E2000AD6B7 /* RequestsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 747B68A72603F2E2000AD6B7 /* RequestsTableViewCell.xib */; };
-		747C074F2612433500E9F1E2 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747C074E2612433500E9F1E2 /* FirebaseAPI.swift */; };
 		747C07582613634400E9F1E2 /* SeeNewPostsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747C07572613634400E9F1E2 /* SeeNewPostsButton.swift */; };
 		747C07972613CF9C00E9F1E2 /* ImageAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747C07962613CF9C00E9F1E2 /* ImageAPIService.swift */; };
 		747FAFBB2727365100E2966E /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FAFBA2727365100E2966E /* UserDefaults+Extension.swift */; };
@@ -667,6 +666,8 @@
 		74D7F4FF262A5552006C3D5C /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D7F4FE262A5552006C3D5C /* StringExtension.swift */; };
 		74DB061B2303017B00C4A19C /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DB061A2303017B00C4A19C /* ResetPasswordViewController.swift */; };
 		74DC1C882512751B007156A0 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DC1C872512751B007156A0 /* NoteViewController.swift */; };
+		74DE6D6D27D0F474009FB44A /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6D6C27D0F474009FB44A /* FirebaseAPI.swift */; };
+		74DE6D6F27D0F7E1009FB44A /* GroupInfoCellAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6D6E27D0F7E1009FB44A /* GroupInfoCellAction.swift */; };
 		74E51D0C25AF615E002054D6 /* DiscoverPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E51D0B25AF615E002054D6 /* DiscoverPosts.swift */; };
 		74EC43442639A33500D81E5B /* CircuitUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EC43432639A33500D81E5B /* CircuitUploadViewController.swift */; };
 		74EC438A2639B7CE00D81E5B /* DisplayWorkoutCircuitTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EC43882639B7CE00D81E5B /* DisplayWorkoutCircuitTableViewCell.swift */; };
@@ -1271,7 +1272,6 @@
 		747B687D2603EA8D000AD6B7 /* RequestsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsAdapter.swift; sourceTree = "<group>"; };
 		747B68822603EE11000AD6B7 /* RequestsProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsProtocol.swift; sourceTree = "<group>"; };
 		747B68A72603F2E2000AD6B7 /* RequestsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RequestsTableViewCell.xib; sourceTree = "<group>"; };
-		747C074E2612433500E9F1E2 /* FirebaseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FirebaseAPI.swift; path = InTheGym/Discussion/FirebaseAPI.swift; sourceTree = SOURCE_ROOT; };
 		747C07572613634400E9F1E2 /* SeeNewPostsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeNewPostsButton.swift; sourceTree = "<group>"; };
 		747C07962613CF9C00E9F1E2 /* ImageAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAPIService.swift; sourceTree = "<group>"; };
 		747FAFBA2727365100E2966E /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
@@ -1428,6 +1428,8 @@
 		74D7F4FE262A5552006C3D5C /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		74DB061A2303017B00C4A19C /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		74DC1C872512751B007156A0 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
+		74DE6D6C27D0F474009FB44A /* FirebaseAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FirebaseAPI.swift; path = InTheGym/DatabaseManager/FirebaseAPI.swift; sourceTree = SOURCE_ROOT; };
+		74DE6D6E27D0F7E1009FB44A /* GroupInfoCellAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupInfoCellAction.swift; sourceTree = "<group>"; };
 		74E51D0B25AF615E002054D6 /* DiscoverPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPosts.swift; sourceTree = "<group>"; };
 		74EC43432639A33500D81E5B /* CircuitUploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircuitUploadViewController.swift; sourceTree = "<group>"; };
 		74EC43882639B7CE00D81E5B /* DisplayWorkoutCircuitTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayWorkoutCircuitTableViewCell.swift; sourceTree = "<group>"; };
@@ -2162,6 +2164,7 @@
 				742C1C6B27B6A82700DD1BB0 /* ProfileOptions.swift */,
 				742C1C9D27BE80DB00DD1BB0 /* DescriptionAction.swift */,
 				744B52C027CA8E7E00B9D45B /* OptionsEnum.swift */,
+				74DE6D6E27D0F7E1009FB44A /* GroupInfoCellAction.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -2799,8 +2802,8 @@
 			children = (
 				744AED4A279A2D5E000D2D74 /* Cache */,
 				7444D0E326D705D30009C7A6 /* Endpoints */,
-				747C074E2612433500E9F1E2 /* FirebaseAPI.swift */,
 				747C07962613CF9C00E9F1E2 /* ImageAPIService.swift */,
+				74DE6D6C27D0F474009FB44A /* FirebaseAPI.swift */,
 				741B21F92635A3F700B1F5B3 /* TimelineEndpoints.swift */,
 				74221B4826443CDB00D05527 /* FirebaseAuthManager.swift */,
 				74B16ED926482D17006C3B89 /* LikesAPIService.swift */,
@@ -3643,7 +3646,6 @@
 				7444D0C026D3C9BE0009C7A6 /* UploadingWorkoutViewModel.swift in Sources */,
 				7416CCCF26546F200043B1C2 /* RepsBottomCollectionAdapter.swift in Sources */,
 				747B673425FFAE11000AD6B7 /* TableCellDisplayModel.swift in Sources */,
-				747C074F2612433500E9F1E2 /* FirebaseAPI.swift in Sources */,
 				742C1C7227BAAEBD00DD1BB0 /* FollowersModel.swift in Sources */,
 				74BDA835246C479F00DFAEEF /* PlayerInfoCell.swift in Sources */,
 				742C1C5F27B5737300DD1BB0 /* UINameUsernameSubView.swift in Sources */,
@@ -3827,6 +3829,7 @@
 				74F45CC9260A9D0400AF16DF /* PublicTimelineViewModel.swift in Sources */,
 				742C1C5727B41E9D00DD1BB0 /* ClipThumbnailModel.swift in Sources */,
 				74F2CCEF26E58F2800D7AD79 /* LikePostEndpoint.swift in Sources */,
+				74DE6D6D27D0F474009FB44A /* FirebaseAPI.swift in Sources */,
 				74B48DE827A1E0F400BBFC16 /* WorkoutLoader.swift in Sources */,
 				7444D07E26CEB80F0009C7A6 /* UIImageLabelView.swift in Sources */,
 				74EC43A3263A0F2500D81E5B /* DisplayCircuitProtocol.swift in Sources */,
@@ -3846,6 +3849,7 @@
 				741FB1E5266F9B9F0039EB29 /* DisplayAMRAPProtocol.swift in Sources */,
 				7444D08C26D061690009C7A6 /* DisplayNoteView.swift in Sources */,
 				744B52CA27CD0A8A00B9D45B /* SavedProgramDisplayCoordinator.swift in Sources */,
+				74DE6D6F27D0F7E1009FB44A /* GroupInfoCellAction.swift in Sources */,
 				74B48DF427A2D98000BBFC16 /* ThinkingTimeViewController.swift in Sources */,
 				7444D0D026D42E260009C7A6 /* BaseUploadCell.swift in Sources */,
 				7444D06526CD41D20009C7A6 /* GroupWorkoutsView.swift in Sources */,
