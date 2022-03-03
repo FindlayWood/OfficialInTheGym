@@ -34,3 +34,21 @@ extension GroupModel: FirebaseInstance {
         return "Groups/\(uid)"
     }
 }
+
+struct GroupMembersModel {
+    var id: String
+}
+extension GroupMembersModel: FirebaseInstance {
+    var internalPath: String {
+        return "GroupMembers/\(id)"
+    }
+}
+
+struct GroupWorkoutKeys {
+    var id: String
+}
+extension GroupWorkoutKeys: FirebaseInstance {
+    var internalPath: String {
+        return "GroupWorkouts/\(id)"
+    }
+}

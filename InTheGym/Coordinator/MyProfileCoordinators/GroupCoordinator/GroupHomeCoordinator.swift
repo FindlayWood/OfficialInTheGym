@@ -72,6 +72,13 @@ extension GroupHomeCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    
+    func showMembers(_ group: GroupModel) {
+        let vc = GroupMembersViewController()
+        vc.coordinator = self
+        vc.viewModel.group = group
+        navigationController.pushViewController(vc, animated: true)
+    }
 }
 
 //MARK: TimelineFlow Methods

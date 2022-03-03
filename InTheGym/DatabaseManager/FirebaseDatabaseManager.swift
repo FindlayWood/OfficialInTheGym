@@ -119,15 +119,14 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         for model in models {
             dispatchGroup.enter()
             dbref.child(model.internalPath).observeSingleEvent(of: .value) { snapshot in
+                defer { dispatchGroup.leave() }
                 guard let object = snapshot.value as? [String: AnyObject] else {return}
                 do {
                     let data = try FirebaseDecoder().decode(returnType, from: object)
                     tempModels.insert(data, at: 0)
-                    dispatchGroup.leave()
                 }
                 catch {
                     print(String(describing: error))
-                    dispatchGroup.leave()
                 }
             }
         }

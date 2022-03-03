@@ -24,7 +24,7 @@ class GroupWorkoutsCoordinator: NSObject, Coordinator {
     
     func start() {
         let vc = GroupWorkoutsViewController()
-        vc.currentGroup = group
+        vc.viewModel.group = group
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
@@ -37,8 +37,8 @@ extension GroupWorkoutsCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func showWorkout(_ workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
+    func showSavedWorkout(_ workout: SavedWorkoutModel) {
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: workout)
         childCoordinators.append(child)
         child.start()
     }

@@ -7,52 +7,52 @@
 //
 
 import Foundation
+import Combine
 
-class GroupWorkoutsViewModel {
+final class GroupWorkoutsViewModel {
     
-    // MARK: - Callbacks
-    var reloadTableViewCallback: (() -> ())?
-    var updateLoadingStatusCallback: (() -> ())?
+    // MARK: - Publishers
+    var workoutPublisher = CurrentValueSubject<[SavedWorkoutModel],Never>([])
+    var errorFetchWorkouts = PassthroughSubject<Error,Never>()
+    
     
     // MARK: - Properties
-    var groupWorkouts: [GroupWorkoutModel] = [] {
-        didSet {
-            reloadTableViewCallback?()
-            groupWorkoutsLoadedSuccessfully = true
-        }
-    }
-    var numberOfWorkouts: Int {
-        return groupWorkouts.count
-    }
-    var isLoading: Bool = false {
-        didSet {
-            updateLoadingStatusCallback?()
-        }
-    }
+    var group: GroupModel!
+    
+    var navigationTitle = "Group Workouts"
+    
     var groupWorkoutsLoadedSuccessfully: Bool = false
-    var apiService: FirebaseAPIGroupServiceProtocol
+    
+    var apiService: FirebaseDatabaseManagerService
+    
     // MARK: - Initializer
-    init(apiService: FirebaseAPIGroupServiceProtocol) {
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
     //MARK: - Fetching Functions
-    func fetchWorkouts(from groupID: String) {
-        isLoading = true
-        apiService.fetchGroupWorkouts(from: groupID) { [weak self] result in
-            guard let self = self else {return}
+    func fetchWorkouts() {
+        let fetchKeysModel = GroupWorkoutKeys(id: group.uid)
+        apiService.fetchKeys(from: fetchKeysModel) { [weak self] result in
+            switch result {
+            case .success(let keys):
+                self?.loadWorkouts(from: keys)
+            case .failure(let error):
+                self?.errorFetchWorkouts.send(error)
+            }
+        }
+    }
+    private func loadWorkouts(from keys: [String]) {
+        let models = keys.map { SavedWorkoutKeyModel(id: $0)}
+        apiService.fetchRange(from: models, returning: SavedWorkoutModel.self) { [weak self] result in
             switch result {
             case .success(let workouts):
-                self.groupWorkouts = workouts
-                self.isLoading = false
+                self?.workoutPublisher.send(workouts)
             case .failure(let error):
-                print(error.localizedDescription)
-                self.isLoading = false
+                self?.errorFetchWorkouts.send(error)
             }
         }
     }
     
     // MARK: - Returning Functions
-    func getData(at indexPath: IndexPath) -> GroupWorkoutModel {
-        return groupWorkouts[indexPath.section]
-    }
+
 }

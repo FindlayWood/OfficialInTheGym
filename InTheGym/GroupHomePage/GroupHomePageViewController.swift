@@ -158,7 +158,7 @@ class GroupHomePageViewController: UIViewController {
     func infoCellAction(_ action: GroupInfoCellAction) {
         switch action {
         case .members:
-            break
+            coordinator?.showMembers(viewModel.currentGroup)
         case .workouts:
             coordinator?.goToGroupWorkouts(with: viewModel.currentGroup)
         case .manage:

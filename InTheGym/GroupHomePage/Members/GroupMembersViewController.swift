@@ -1,31 +1,30 @@
 //
-//  GroupWorkoutsViewController.swift
+//  GroupMembersViewController.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 18/08/2021.
-//  Copyright © 2021 FindlayWood. All rights reserved.
+//  Created by Findlay Wood on 03/03/2022.
+//  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import UIKit
 import Combine
 
-class GroupWorkoutsViewController: UIViewController {
+class GroupMembersViewController: UIViewController {
     
     // MARK: - Properties
-    weak var coordinator: GroupWorkoutsCoordinator?
+    weak var coordinator: GroupHomeCoordinator?
     
-    var viewModel = GroupWorkoutsViewModel()
+    var childVC = UsersChildViewController()
     
-    var childVC = SavedWorkoutsChildViewController()
+    var viewModel = GroupMembersViewModel()
     
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightColour
+        view.backgroundColor = .white
 //        initViewModel()
-        initNavBar()
     }
     
     override func viewDidLayoutSubviews() {
@@ -34,8 +33,9 @@ class GroupWorkoutsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        editNavBarColour(to: .white)
+        super.viewWillAppear(animated)
         navigationItem.title = viewModel.navigationTitle
+        editNavBarColour(to: .darkColour)
     }
     
     // MARK: - Child VC
@@ -47,37 +47,24 @@ class GroupWorkoutsViewController: UIViewController {
         initDataSource()
     }
     
-    // MARK: - Nav Bar
-    func initNavBar() {
-        let barButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewWorkout))
-        navigationItem.rightBarButtonItems = [barButton]
-    }
-    
     // MARK: - Data Source
     func initDataSource() {
         
-        childVC.dataSource.workoutSelected
-            .sink {[weak self] in  self?.coordinator?.showSavedWorkout($0)}
+        childVC.dataSource.userSelected
+            .sink { [weak self] in self?.coordinator?.showUser(user: $0)}
             .store(in: &subscriptions)
         
         initViewModel()
     }
     
-    // MARK: - View Model
+     // MARK: - View Model
     func initViewModel() {
-
-        viewModel.workoutPublisher
+        
+        viewModel.membersPublisher
             .sink { [weak self] in self?.childVC.dataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
         
-        viewModel.fetchWorkouts()
+        viewModel.fetchMembers()
     }
-    
-}
 
-// MARK: - Actions
-private extension GroupWorkoutsViewController {
-    @objc func addNewWorkout() {
-        coordinator?.addNewWorkout()
-    }
 }

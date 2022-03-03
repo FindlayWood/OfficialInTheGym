@@ -129,11 +129,11 @@ class GeneralWorkoutViewController: UIViewController, UITableViewDelegate, UITab
 
         if indexPath.section == 0{
             print(allPlayers)
-            membersPage.groupMembers = self.playersID
+//            membersPage.groupMembers = self.playersID
         }else if indexPath.section == createdGroups.count + 1{
             print("do nothing")
         }else{
-            membersPage.groupMembers = createdGroups[indexPath.section - 1]["players"] as! [String]
+//            membersPage.groupMembers = createdGroups[indexPath.section - 1]["players"] as! [String]
             print(createdGroups[indexPath.section - 1]["players"] as! [String])
         }
         
