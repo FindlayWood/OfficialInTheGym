@@ -21,7 +21,7 @@ class UsersChildViewController: UIViewController {
     // MARK: - Properties
     var display = UsersChildView()
     
-    var dataSource: UsersDataSource!
+    lazy var dataSource: UsersDataSource = UsersDataSource(tableView: display.tableview)
     
     private var subscriptions = Set<AnyCancellable>()
 
@@ -40,7 +40,7 @@ class UsersChildViewController: UIViewController {
     
     // MARK: - Data Source
     func initDataSource() {
-        dataSource = .init(tableView: display.tableview)
+//        dataSource = .init(tableView: display.tableview)
         
         dataSource.userSelected
             .sink { [weak self] in self?.userSelected.send($0)}

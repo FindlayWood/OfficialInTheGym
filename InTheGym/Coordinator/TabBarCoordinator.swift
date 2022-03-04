@@ -89,7 +89,7 @@ class TabBarCoordinator: Coordinator {
         coordinate(to: timeLineCoord)
         coordinate(to: discoverCoord)
         coordinate(to: myProfileCoord)
-        if FirebaseAuthManager.currentlyLoggedInUser.admin{
+        if FirebaseAuthManager.currentlyLoggedInUser.admin {
             coordinate(to: playerCoord)
         } else {
             coordinate(to: workoutsCoord)

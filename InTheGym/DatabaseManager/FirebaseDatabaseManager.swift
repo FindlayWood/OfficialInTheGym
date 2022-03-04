@@ -214,7 +214,30 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         catch {
             completion(.failure(error))
         }
-
+    }
+    
+    func searchQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<T,Error>) -> Void) {
+        let dbref = Database.database().reference().child(model.internalPath).queryOrdered(byChild: model.orderedBy).queryEqual(toValue: model.equalTo)
+        dbref.observeSingleEvent(of: .value) { snapshot in
+            if snapshot.exists() {
+                for child in snapshot.children.allObjects as! [DataSnapshot] {
+                    if let object = child.value as? [String: AnyObject] {
+                        do {
+                            let data = try FirebaseDecoder().decode(returning, from: object)
+                            completion(.success(data))
+                        }
+                        catch {
+                            print(String(describing: error))
+                            completion(.failure(error))
+                        }
+                    } else {
+                        completion(.failure(NSError(domain: "No Object", code: 0, userInfo: nil)))
+                    }
+                }
+            } else {
+                completion(.failure(NSError(domain: "No Snapshot", code: -1, userInfo: nil)))
+            }
+        }
     }
 }
 
@@ -231,4 +254,5 @@ protocol FirebaseDatabaseManagerService {
     func checkExistence<Model:FirebaseInstance>(of model: Model, completion: @escaping(Result<Bool,Error>) -> Void)
     func childCount<Model:FirebaseInstance>(of model: Model, completion: @escaping (Result<Int,Error>) -> Void)
     func uploadTimeOrderedModel<Model: FirebaseTimeOrderedModel>(model: Model, completion: @escaping (Result<Model,Error>) -> Void)
+    func searchQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<T,Error>) -> Void)
 }

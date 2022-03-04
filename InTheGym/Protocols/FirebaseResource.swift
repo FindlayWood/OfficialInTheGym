@@ -81,3 +81,17 @@ extension FirebaseInstance {
         }
     }
 }
+
+
+// MARK: - Firebase Query Model
+/// A type that has a query to search in the Firebase Database
+/// It has an orderdedByChild string value and an equalTo string value
+/// This type also requires Firebase Instance to have an internal path
+protocol FirebaseQueryModel: FirebaseInstance {
+    
+    /// The string value to order the query by
+    var orderedBy: String { get }
+    
+    /// The string value to search in the query
+    var equalTo: String { get }
+}

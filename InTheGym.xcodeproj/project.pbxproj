@@ -671,6 +671,10 @@
 		74DE6D7C27D1158B009FB44A /* GroupMembersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6D7B27D1158B009FB44A /* GroupMembersViewModel.swift */; };
 		74DE6D7F27D11E39009FB44A /* SavedWorkoutsChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6D7E27D11E39009FB44A /* SavedWorkoutsChildViewController.swift */; };
 		74DE6D8127D11E48009FB44A /* SavedWorkoutsChildView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6D8027D11E47009FB44A /* SavedWorkoutsChildView.swift */; };
+		74DE6D8327D2473A009FB44A /* AdminPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6D8227D24739009FB44A /* AdminPlayersViewModel.swift */; };
+		74DE6D8627D2496D009FB44A /* AdminPlayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6D8527D2496D009FB44A /* AdminPlayersView.swift */; };
+		74DE6D8827D24BAC009FB44A /* CoachPlayersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6D8727D24BAC009FB44A /* CoachPlayersModel.swift */; };
+		74DE6D8B27D25FC3009FB44A /* AddPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6D8A27D25FC3009FB44A /* AddPlayerViewModel.swift */; };
 		74E51D0C25AF615E002054D6 /* DiscoverPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E51D0B25AF615E002054D6 /* DiscoverPosts.swift */; };
 		74EC43442639A33500D81E5B /* CircuitUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EC43432639A33500D81E5B /* CircuitUploadViewController.swift */; };
 		74EC438A2639B7CE00D81E5B /* DisplayWorkoutCircuitTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EC43882639B7CE00D81E5B /* DisplayWorkoutCircuitTableViewCell.swift */; };
@@ -1436,6 +1440,10 @@
 		74DE6D7B27D1158B009FB44A /* GroupMembersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMembersViewModel.swift; sourceTree = "<group>"; };
 		74DE6D7E27D11E39009FB44A /* SavedWorkoutsChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWorkoutsChildViewController.swift; sourceTree = "<group>"; };
 		74DE6D8027D11E47009FB44A /* SavedWorkoutsChildView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWorkoutsChildView.swift; sourceTree = "<group>"; };
+		74DE6D8227D24739009FB44A /* AdminPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminPlayersViewModel.swift; sourceTree = "<group>"; };
+		74DE6D8527D2496D009FB44A /* AdminPlayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminPlayersView.swift; sourceTree = "<group>"; };
+		74DE6D8727D24BAC009FB44A /* CoachPlayersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachPlayersModel.swift; sourceTree = "<group>"; };
+		74DE6D8A27D25FC3009FB44A /* AddPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerViewModel.swift; sourceTree = "<group>"; };
 		74E51D0B25AF615E002054D6 /* DiscoverPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPosts.swift; sourceTree = "<group>"; };
 		74EC43432639A33500D81E5B /* CircuitUploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircuitUploadViewController.swift; sourceTree = "<group>"; };
 		74EC43882639B7CE00D81E5B /* DisplayWorkoutCircuitTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayWorkoutCircuitTableViewCell.swift; sourceTree = "<group>"; };
@@ -1598,6 +1606,7 @@
 				742C1C9727BD91D500DD1BB0 /* DescriptionModel.swift */,
 				742C1CAA27C27C2600DD1BB0 /* Programs.swift */,
 				742C1CC027C512C600DD1BB0 /* ProgramCreationWorkoutCellModel.swift */,
+				74DE6D8727D24BAC009FB44A /* CoachPlayersModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -3174,9 +3183,9 @@
 		74DC1C8925181679007156A0 /* CoachPages */ = {
 			isa = PBXGroup;
 			children = (
-				743B1E7E22EF49CF0046006C /* AdminPlayersViewController.swift */,
+				74DE6D8927D25FA6009FB44A /* AddPlayer */,
+				74DE6D8427D24951009FB44A /* Players */,
 				7492263722CE3B0E00EAD386 /* PlayerViewController.swift */,
-				7492263122C8D1DF00EAD386 /* AddPlayerViewController.swift */,
 				74F6E57A24002CAD00233438 /* GeneralWorkoutViewController.swift */,
 				74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */,
 				747FED3425659A2900080AC8 /* AddNewGroupViewController.swift */,
@@ -3234,6 +3243,25 @@
 				74DE6D8027D11E47009FB44A /* SavedWorkoutsChildView.swift */,
 			);
 			path = SavedWorkouts;
+			sourceTree = "<group>";
+		};
+		74DE6D8427D24951009FB44A /* Players */ = {
+			isa = PBXGroup;
+			children = (
+				743B1E7E22EF49CF0046006C /* AdminPlayersViewController.swift */,
+				74DE6D8227D24739009FB44A /* AdminPlayersViewModel.swift */,
+				74DE6D8527D2496D009FB44A /* AdminPlayersView.swift */,
+			);
+			path = Players;
+			sourceTree = "<group>";
+		};
+		74DE6D8927D25FA6009FB44A /* AddPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				7492263122C8D1DF00EAD386 /* AddPlayerViewController.swift */,
+				74DE6D8A27D25FC3009FB44A /* AddPlayerViewModel.swift */,
+			);
+			path = AddPlayer;
 			sourceTree = "<group>";
 		};
 		74EC438F263A0EDB00D81E5B /* DisplayCircuit */ = {
@@ -3655,6 +3683,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				741FB1D2266849580039EB29 /* CreateAMRAPView.swift in Sources */,
+				74DE6D8627D2496D009FB44A /* AdminPlayersView.swift in Sources */,
 				744D564326F916B600D3E1FA /* DisplayEMOMViewModel.swift in Sources */,
 				7416CCD6265C04560043B1C2 /* FirstScreenView.swift in Sources */,
 				74F2CCE426E2883400D7AD79 /* AddMoreCellModel.swift in Sources */,
@@ -3670,6 +3699,7 @@
 				7429784626C15ECB0023365E /* GroupAddPlayersView.swift in Sources */,
 				74DE6D7227D10FC2009FB44A /* UsersChildViewController.swift in Sources */,
 				7492265822DA49E500EAD386 /* RequestTableViewCell.swift in Sources */,
+				74DE6D8B27D25FC3009FB44A /* AddPlayerViewModel.swift in Sources */,
 				74DC1C882512751B007156A0 /* NoteViewController.swift in Sources */,
 				74F2CCDC26E1315000D7AD79 /* ExerciseSelectionViewModel.swift in Sources */,
 				743A04F8276A5DD30027B752 /* SearchViewModel.swift in Sources */,
@@ -4135,6 +4165,7 @@
 				7444D0A326D144160009C7A6 /* AddMoreRestTimeViewController.swift in Sources */,
 				74226E0D2637148E0074E616 /* PrivateCreatedWorkoutTableViewCell.swift in Sources */,
 				74AF6D4F2684ED41005C52A8 /* DisplayWorkoutStatsViewModel.swift in Sources */,
+				74DE6D8827D24BAC009FB44A /* CoachPlayersModel.swift in Sources */,
 				746BFFA826B204170010C465 /* DisplayClipCell.swift in Sources */,
 				7444D07C26CE98FB0009C7A6 /* UploadGroupWorkoutView.swift in Sources */,
 				74AF6D5C2686799A005C52A8 /* DisplayExerciseStatsModel.swift in Sources */,
@@ -4343,6 +4374,7 @@
 				743A04FF276A87330027B752 /* CommentSectionView.swift in Sources */,
 				741FB1D0266849170039EB29 /* CreateAMRAPProtocol.swift in Sources */,
 				743330A62787B1F6005A0C45 /* CircuitCreationCoordinator.swift in Sources */,
+				74DE6D8327D2473A009FB44A /* AdminPlayersViewModel.swift in Sources */,
 				7444D0C226D3CB470009C7A6 /* NavBar+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

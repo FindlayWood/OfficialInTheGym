@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol PlayersFlow {
-    func addNewPlayer()
+    func addNewPlayer(_ currentPlayers: [Users])
     func showPlayerInMoreDetail(player: Users)
 }
 
@@ -26,27 +26,28 @@ class PlayersCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let vc = AdminPlayersViewController.instantiate()
+        let vc = AdminPlayersViewController()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
-    
-    func childDidFinish(_ child: Coordinator?) {
-        for (index, coordinator) in childCoordinators.enumerated() {
-            if coordinator === child {
-                childCoordinators.remove(at: index)
-                break
-            }
-        }
-    }
+//
+//    func childDidFinish(_ child: Coordinator?) {
+//        for (index, coordinator) in childCoordinators.enumerated() {
+//            if coordinator === child {
+//                childCoordinators.remove(at: index)
+//                break
+//            }
+//        }
+//    }
 }
 
 
 //MARK: - Flow Methods
 extension PlayersCoordinator: PlayersFlow {
     
-    func addNewPlayer() {
+    func addNewPlayer(_ currentPlayers: [Users]) {
         let vc = AddPlayerViewController.instantiate()
+        vc.viewModel.currentPlayers = currentPlayers
         vc.modalTransitionStyle = .coverVertical
         vc.modalPresentationStyle = .fullScreen
         navigationController.present(vc, animated: true, completion: nil)

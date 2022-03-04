@@ -5802,13 +5802,17 @@
                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="25"/>
                                 <state key="normal" title="Add">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleShadowColor" name="darkColour"/>
+                                </state>
+                                <state key="disabled">
+                                    <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="21"/>
+                                        <real key="value" value="8"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                        <real key="value" value="2"/>
+                                        <real key="value" value="0.0"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
                                         <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -5857,6 +5861,7 @@
                     <tabBarItem key="tabBarItem" title="ADDPLAYER" image="add player" id="yTT-sM-eg5"/>
                     <connections>
                         <outlet property="activityIndicator" destination="fGw-pH-Rv3" id="NZe-gB-wNc"/>
+                        <outlet property="addButton" destination="EjO-4l-1RP" id="B9h-Hi-F49"/>
                         <outlet property="playerfield" destination="fuu-ks-QYN" id="giZ-Ju-DYj"/>
                     </connections>
                 </viewController>

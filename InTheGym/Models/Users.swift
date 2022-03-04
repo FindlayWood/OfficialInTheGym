@@ -60,3 +60,38 @@ extension UserSearchModel: FirebaseInstance {
 extension Users {
     static let nilUser = Users(admin: false, email: "", username: "", firstName: "", lastName: "", uid: "")
 }
+
+
+// MARK: - Username Search Model
+struct UsernameSearchModel {
+    var equalTo: String
+}
+extension UsernameSearchModel: FirebaseQueryModel {
+    var orderedBy: String {
+        return "username"
+    }
+    var internalPath: String {
+        return "users"
+    }
+}
+
+// MARK: - Coach Request Model
+struct CoachRequestUploadModel {
+    var id: String
+}
+extension CoachRequestUploadModel: FirebaseInstance {
+    var internalPath: String {
+        return "CoachRequests/\(UserDefaults.currentUser.uid)/\(id)"
+    }
+}
+
+// MARK: - Player Request Model
+/// Model only used by coaches to send requests
+struct PlayerRequestUploadModel {
+    var id: String
+}
+extension PlayerRequestUploadModel: FirebaseInstance {
+    var internalPath: String {
+        return "PlayerRequests/\(id)/\(UserDefaults.currentUser.uid)"
+    }
+}
