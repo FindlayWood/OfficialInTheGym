@@ -11,6 +11,8 @@ import UIKit
 class PlayerDetailViewController: UIViewController {
     
     // MARK: - Properties
+    weak var coordinator: PlayerDetailCoordinator?
+    
     var display = PlayerDetailView()
     
     var viewModel = PlayerDetailViewModel()
@@ -24,6 +26,7 @@ class PlayerDetailViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         display.configure(with: viewModel.user)
+        initTargets()
     }
     
     override func viewDidLayoutSubviews() {
@@ -56,5 +59,24 @@ class PlayerDetailViewController: UIViewController {
         display.addSubview(workloadChildVC.view)
         workloadChildVC.view.frame = display.workloadContainerView.frame
         workloadChildVC.didMove(toParent: self)
+    }
+    
+    // MARK: - Targets
+    func initTargets() {
+        display.addWorkoutButton.addTarget(self, action: #selector(addWorkout(_:)), for: .touchUpInside)
+        display.viewWorkoutsButton.addTarget(self, action: #selector(viewWorkouts(_:)), for: .touchUpInside)
+        display.profileImageView.addTarget(self, action: #selector(showPublicProfile(_:)), for: .touchUpInside)
+    }
+    
+    // MARK: - Actions
+    @objc func addWorkout(_ sender: UIButton) {
+        coordinator?.addWorkout()
+    }
+    
+    @objc func viewWorkouts(_ sender: UIButton) {
+        coordinator?.viewWorkouts()
+    }
+    @objc func showPublicProfile(_ sender: UIButton) {
+        coordinator?.showPublicProfile()
     }
 }

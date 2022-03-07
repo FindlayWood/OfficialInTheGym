@@ -13,7 +13,7 @@ import Combine
 final class ExerciseCollectionCell: BaseExerciseCollectionCell {
     
     // MARK: - Publishers
-    var actionPublisher = PassthroughSubject<ExerciseAction,Never>()
+    var actionPublisher: PassthroughSubject<ExerciseAction,Never> = PassthroughSubject<ExerciseAction,Never>()
     
     // MARK: - Properties
     static let reuseID = "ExerciseCollectionCellreuseID"
@@ -51,6 +51,7 @@ final class ExerciseCollectionCell: BaseExerciseCollectionCell {
         rpeButton.setTitleColor( .systemBlue, for: .normal)
         repsLabel.text = nil
         subscriptions.removeAll()
+        actionPublisher = PassthroughSubject<ExerciseAction,Never>()
     }
 }
 

@@ -53,7 +53,8 @@ class WorkoutDisplayViewController: UIViewController {
     
     // MARK: - Data Source
     func initDataSource() {
-        dataSource = .init(collectionView: display.exerciseCollection, isUserInteractionEnabled: viewModel.isInteractionEnabled())
+        dataSource = .init(collectionView: display.exerciseCollection)
+        dataSource.isUserInteractionEnabled = viewModel.isInteractionEnabled()
         dataSource.updateTable(with: viewModel.getAllExercises())
     }
     func initClipDataSource() {

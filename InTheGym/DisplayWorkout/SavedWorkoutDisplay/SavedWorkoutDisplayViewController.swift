@@ -51,7 +51,7 @@ class SavedWorkoutDisplayViewController: UIViewController {
     }
     // MARK: - Data Source
     func initDataSource() {
-        dataSource = .init(collectionView: display.exerciseCollection, isUserInteractionEnabled: false)
+        dataSource = .init(collectionView: display.exerciseCollection)
         dataSource.updateTable(with: viewModel.exercises)
     }
     

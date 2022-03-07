@@ -26,12 +26,11 @@ class WorkoutExerciseCollectionDataSource: NSObject {
     var collectionView: UICollectionView
     private lazy var dataDource = makeDataSource()
     var lastContentOffset: CGFloat = 0
-    var isUserInteractionEnabled: Bool
+    var isUserInteractionEnabled: Bool = false
     
     // MARK: - Initializer
-    init(collectionView: UICollectionView, isUserInteractionEnabled: Bool) {
+    init(collectionView: UICollectionView) {
         self.collectionView = collectionView
-        self.isUserInteractionEnabled = isUserInteractionEnabled
         super.init()
         self.collectionView.dataSource = makeDataSource()
         self.collectionView.delegate = self
@@ -39,7 +38,7 @@ class WorkoutExerciseCollectionDataSource: NSObject {
     }
     
     // MARK: - Create Data Source
-    func makeDataSource() -> UICollectionViewDiffableDataSource<Int,ExerciseRow> {
+    func makeDataSource() -> UICollectionViewDiffableDataSource<SingleSection,ExerciseRow> {
         return UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             switch itemIdentifier {
             case .exercise(let model):
@@ -83,8 +82,8 @@ class WorkoutExerciseCollectionDataSource: NSObject {
     
     // MARK: - Initial Setup
     func initialSetup() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int,ExerciseRow>()
-        snapshot.appendSections([1])
+        var snapshot = NSDiffableDataSourceSnapshot<SingleSection,ExerciseRow>()
+        snapshot.appendSections([.main])
         dataDource.apply(snapshot, animatingDifferences: false)
     }
     
@@ -94,13 +93,13 @@ class WorkoutExerciseCollectionDataSource: NSObject {
         for type in models {
             switch type {
             case is ExerciseModel:
-                currentSnapshot.appendItems([.exercise(type as! ExerciseModel)], toSection: 1)
+                currentSnapshot.appendItems([.exercise(type as! ExerciseModel)], toSection: .main)
             case is CircuitModel:
-                currentSnapshot.appendItems([.circuit(type as! CircuitModel)], toSection: 1)
+                currentSnapshot.appendItems([.circuit(type as! CircuitModel)], toSection: .main)
             case is EMOMModel:
-                currentSnapshot.appendItems([.emom(type as! EMOMModel)], toSection: 1)
+                currentSnapshot.appendItems([.emom(type as! EMOMModel)], toSection: .main)
             case is AMRAPModel:
-                currentSnapshot.appendItems([.amrap(type as! AMRAPModel)], toSection: 1)
+                currentSnapshot.appendItems([.amrap(type as! AMRAPModel)], toSection: .main)
             default:
                 break
             }
@@ -117,6 +116,11 @@ class WorkoutExerciseCollectionDataSource: NSObject {
         default:
             return nil
         }
+    }
+    
+    // MARK: - Action
+    func action(action: ExerciseAction, indexPath: IndexPath) {
+        
     }
 }
 // MARK: - Delegate - Select Row

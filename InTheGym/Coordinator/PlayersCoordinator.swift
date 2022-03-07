@@ -54,10 +54,13 @@ extension PlayersCoordinator: PlayersFlow {
     }
     
     func showPlayerInMoreDetail(player: Users) {
-        let vc = PlayerDetailViewController()
-        vc.viewModel.user = player
-        vc.hidesBottomBarWhenPushed = true
-        navigationController.pushViewController(vc, animated: true)
+        let child = PlayerDetailCoordinator(navigationController: navigationController, player: player)
+        childCoordinators.append(child)
+        child.start()
+//        let vc = PlayerDetailViewController()
+//        vc.viewModel.user = player
+//        vc.hidesBottomBarWhenPushed = true
+//        navigationController.pushViewController(vc, animated: true)
         
 //        let child = CoachPlayerViewCoordinator(navigationController: navigationController, player: player)
 //        childCoordinators.append(child)
