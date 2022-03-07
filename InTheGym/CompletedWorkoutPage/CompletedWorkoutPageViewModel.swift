@@ -39,20 +39,20 @@ class CompletedWorkoutPageViewModel {
               let workload = workout.workload
         else {return}
         
-        let workloadModel = WorkloadModel(id: UUID().uuidString,
-                                          endTime: Date().timeIntervalSince1970,
-                                          rpe: score,
-                                          timeToComplete: time,
-                                          workload: workload,
-                                          workoutID: workout.workoutID)
-        apiService.upload(data: workloadModel, autoID: false) { [weak self] result in
-            switch result {
-            case .success(()):
-                break
-            case .failure(_):
-                // TODO: - Error
-                break
-            }
-        }
+//        let workloadModel = WorkloadModel(id: UUID().uuidString,
+//                                          endTime: Date().timeIntervalSince1970,
+//                                          rpe: score,
+//                                          timeToComplete: time,
+//                                          workload: workload,
+//                                          workoutID: workout.workoutID)
+//        apiService.upload(data: workloadModel, autoID: false) { [weak self] result in
+//            switch result {
+//            case .success(()):
+//                break
+//            case .failure(_):
+//                // TODO: - Error
+//                break
+//            }
+//        }
     }
 }

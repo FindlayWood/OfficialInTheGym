@@ -10,6 +10,34 @@ import Foundation
 @testable import InTheGym
 
 class MockFirebaseDatabaseManager: FirebaseDatabaseManagerService {
+    func fetchSingleInstance<M, T>(of model: M, returning returnType: T.Type, completion: @escaping (Result<T, Error>) -> Void) where M : FirebaseInstance, T : Decodable {
+        
+    }
+    
+    func fetchKeys<M>(from model: M, completion: @escaping (Result<[String], Error>) -> Void) where M : FirebaseInstance {
+        
+    }
+    
+    func fetchRange<M, T>(from models: [M], returning returnType: T.Type, completion: @escaping (Result<[T], Error>) -> Void) where M : FirebaseInstance, T : Decodable {
+        
+    }
+    
+    func checkExistence<Model>(of model: Model, completion: @escaping (Result<Bool, Error>) -> Void) where Model : FirebaseInstance {
+        
+    }
+    
+    func childCount<Model>(of model: Model, completion: @escaping (Result<Int, Error>) -> Void) where Model : FirebaseInstance {
+        
+    }
+    
+    func uploadTimeOrderedModel<Model>(model: Model, completion: @escaping (Result<Model, Error>) -> Void) where Model : FirebaseModel, Model : TimeOrderedID {
+        
+    }
+    
+    func searchQueryModel<Model, T>(model: Model, returning: T.Type, completion: @escaping (Result<T, Error>) -> Void) where Model : FirebaseQueryModel, T : Decodable {
+        
+    }
+    
     
     var completionResult: Result<Void,Error> = .success(())
     

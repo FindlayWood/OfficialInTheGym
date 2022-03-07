@@ -12,7 +12,7 @@ import XCTest
 class DisplayEMOMTests: XCTestCase {
 
     var sut: DisplayEMOMViewModel!
-    var mockService: MockFirebaseEMOMService!
+    var mockService: MockFirebaseDatabaseManager!
     
     override func setUp() {
         mockService = .init()

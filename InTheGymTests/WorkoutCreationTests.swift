@@ -42,7 +42,7 @@ class WorkoutCreationTests: XCTestCase {
     
     func testAddingExercise() {
         let exception = XCTestExpectation(description: "Waiting for publisher to emit values.")
-        let exampleExercise = ExerciseModel(workoutPosition: 0, exercise: "test", reps: [], weight: [], completedSets: [])
+        let exampleExercise = ExerciseModel(exercise: "test", type: .CU)
         
         sut.exercises
             .dropFirst()
@@ -60,7 +60,7 @@ class WorkoutCreationTests: XCTestCase {
     
     func testAddingCircuit() {
         let exception = XCTestExpectation(description: "Waiting for publisher to emit values.")
-        let exampleCircuit = CircuitModel(workoutPosition: 0, exercises: [], completed: false, circuitName: "", createdBy: "", creatorID: "", integrated: true)
+        let exampleCircuit = CircuitModel(circuitPosition: 0, workoutPosition: 0, exercises: [], completed: false, circuitName: "", createdBy: "", creatorID: "", integrated: true)
         
         sut.exercises
             .dropFirst()
@@ -78,7 +78,7 @@ class WorkoutCreationTests: XCTestCase {
     
     func testAddingAMRAP() {
         let exception = XCTestExpectation(description: "Waiting for publisher to emit values.")
-        let exampleAmrap = AMRAPModel(workoutPosition: 0, timeLimit: 0, exercises: [], completed: false, roundsCompleted: 0, exercisesCompleted: 0, started: false)
+        let exampleAmrap = AMRAPModel(amrapPosition: 0, workoutPosition: 0, timeLimit: 0, exercises: [], completed: false, roundsCompleted: 0, exercisesCompleted: 0, started: false)
         
         sut.exercises
             .dropFirst()
@@ -96,7 +96,7 @@ class WorkoutCreationTests: XCTestCase {
     
     func testAddingEMOM() {
         let exception = XCTestExpectation(description: "Waiting for publisher to emit values.")
-        let exampleEMOM = EMOMModel(workoutPosition: 0, exercises: [], timeLimit: 0, completed: false, started: false)
+        let exampleEMOM = EMOMModel(emomPosition: 0, workoutPosition: 0, exercises: [], timeLimit: 0, completed: false, started: false)
         
         sut.exercises
             .dropFirst()

@@ -16,6 +16,17 @@ extension Array where Element == Int {
         }
         return String(repString.dropLast())
     }
+    func average() -> Double {
+        let count = self.count
+        let total = self.reduce(0, +)
+        return Double(total) / Double(count)
+    }
+    func countOccurences() -> [Int:Int] {
+        let counter = self.reduce(into: [:]) { partialResult, number in
+            partialResult[number, default: 0] += 1
+        }
+        return counter
+    }
 }
 
 extension Array where Element == String {
