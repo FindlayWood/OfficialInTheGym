@@ -524,6 +524,9 @@
 		7480EBD025F5195D00E4E768 /* DisplayPlusCollection.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7480EBCF25F5195D00E4E768 /* DisplayPlusCollection.xib */; };
 		7480EBD525F51F0A00E4E768 /* DisplayPlusCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7480EBD425F51F0A00E4E768 /* DisplayPlusCollectionViewCell.swift */; };
 		7480EBDA25F51F2E00E4E768 /* DisplayPlusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7480EBD925F51F2E00E4E768 /* DisplayPlusTableViewCell.swift */; };
+		748613A827D69BC100D50506 /* SavedWorkoutBottomChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748613A727D69BC100D50506 /* SavedWorkoutBottomChildViewController.swift */; };
+		748613AA27D69BE300D50506 /* SavedWorkoutBottomChildView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748613A927D69BE300D50506 /* SavedWorkoutBottomChildView.swift */; };
+		748613AC27D69C5800D50506 /* SavedWorkoutBottomChildViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748613AB27D69C5800D50506 /* SavedWorkoutBottomChildViewModel.swift */; };
 		7486C2092677BD75008A1E21 /* FirebaseAPIWorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7486C2082677BD75008A1E21 /* FirebaseAPIWorkoutManager.swift */; };
 		7486C20B2678D215008A1E21 /* WeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7486C20A2678D215008A1E21 /* WeightView.swift */; };
 		7486C20D267A3DE5008A1E21 /* WeightCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7486C20C267A3DE5008A1E21 /* WeightCollectionCell.swift */; };
@@ -1316,6 +1319,9 @@
 		7480EBCF25F5195D00E4E768 /* DisplayPlusCollection.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DisplayPlusCollection.xib; sourceTree = "<group>"; };
 		7480EBD425F51F0A00E4E768 /* DisplayPlusCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPlusCollectionViewCell.swift; sourceTree = "<group>"; };
 		7480EBD925F51F2E00E4E768 /* DisplayPlusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPlusTableViewCell.swift; sourceTree = "<group>"; };
+		748613A727D69BC100D50506 /* SavedWorkoutBottomChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWorkoutBottomChildViewController.swift; sourceTree = "<group>"; };
+		748613A927D69BE300D50506 /* SavedWorkoutBottomChildView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWorkoutBottomChildView.swift; sourceTree = "<group>"; };
+		748613AB27D69C5800D50506 /* SavedWorkoutBottomChildViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWorkoutBottomChildViewModel.swift; sourceTree = "<group>"; };
 		7486C2082677BD75008A1E21 /* FirebaseAPIWorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAPIWorkoutManager.swift; sourceTree = "<group>"; };
 		7486C20A2678D215008A1E21 /* WeightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightView.swift; sourceTree = "<group>"; };
 		7486C20C267A3DE5008A1E21 /* WeightCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightCollectionCell.swift; sourceTree = "<group>"; };
@@ -2664,7 +2670,6 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
-				744B52C427CD040F00B9D45B /* OptionsChildVC */,
 				742C1CDF27C9334300DD1BB0 /* ProgramDisplay */,
 				742C1CD127C6769D00DD1BB0 /* ProgramChildController */,
 				742C1CC427C53F4900DD1BB0 /* MyPrograms */,
@@ -3260,6 +3265,7 @@
 		74DE6D7027D10FAC009FB44A /* ChildViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				744B52C427CD040F00B9D45B /* OptionsChildVC */,
 				74F18ADF27D668AE0043551F /* Workout */,
 				74DE6D9F27D58BF6009FB44A /* Workload */,
 				74DE6D8C27D39E30009FB44A /* ScorePieChart */,
@@ -3404,6 +3410,7 @@
 		74F18ADF27D668AE0043551F /* Workout */ = {
 			isa = PBXGroup;
 			children = (
+				74F18AE927D69B140043551F /* SavedWorkoutBottomViewController */,
 				74F18AE027D668BF0043551F /* WorkoutChildViewController.swift */,
 				74F18AE227D668D00043551F /* WorkoutChildView.swift */,
 			);
@@ -3417,6 +3424,16 @@
 				74F18AE727D66E750043551F /* CoachPlayerWorkoutViewModel.swift */,
 			);
 			path = PlayerWorkout;
+			sourceTree = "<group>";
+		};
+		74F18AE927D69B140043551F /* SavedWorkoutBottomViewController */ = {
+			isa = PBXGroup;
+			children = (
+				748613A727D69BC100D50506 /* SavedWorkoutBottomChildViewController.swift */,
+				748613A927D69BE300D50506 /* SavedWorkoutBottomChildView.swift */,
+				748613AB27D69C5800D50506 /* SavedWorkoutBottomChildViewModel.swift */,
+			);
+			path = SavedWorkoutBottomViewController;
 			sourceTree = "<group>";
 		};
 		74F2CCBE26DD55EE00D7AD79 /* PostingCoordinators */ = {
@@ -4128,6 +4145,7 @@
 				74221B412642F5FF00D05527 /* WorkoutsCoordinator.swift in Sources */,
 				74DE6D7527D10FF2009FB44A /* UsersChildView.swift in Sources */,
 				74D31D2125F974350024CC05 /* SavedWorkoutBottomView.swift in Sources */,
+				748613A827D69BC100D50506 /* SavedWorkoutBottomChildViewController.swift in Sources */,
 				7403A61826C9B345000588CE /* MoreGroupInfoView.swift in Sources */,
 				74B48DEA27A1E14A00BBFC16 /* WorkoutKeyModel.swift in Sources */,
 				74B48DE127A06E9A00BBFC16 /* FirebaseStorage.swift in Sources */,
@@ -4304,6 +4322,7 @@
 				7444D0D426D431000009C7A6 /* PrivacyUploadCell.swift in Sources */,
 				74F18AE127D668BF0043551F /* WorkoutChildViewController.swift in Sources */,
 				7466A85525EFD78100F4050F /* ProfileViewAdapter.swift in Sources */,
+				748613AA27D69BE300D50506 /* SavedWorkoutBottomChildView.swift in Sources */,
 				74F2CCD826E1284100D7AD79 /* ExerciseSelectionHeader.swift in Sources */,
 				743330C7278F2CB0005A0C45 /* SaveView.swift in Sources */,
 				74F18AD927D65C7D0043551F /* CoachPlayerWorkoutsViewModel.swift in Sources */,
@@ -4312,6 +4331,7 @@
 				742C1CE427C9337E00DD1BB0 /* SavedProgramDisplayViewModel.swift in Sources */,
 				74DE6D9027D39E52009FB44A /* ScoresPieChartView.swift in Sources */,
 				7444D0A126D143E40009C7A6 /* AddMoreDistanceViewController.swift in Sources */,
+				748613AC27D69C5800D50506 /* SavedWorkoutBottomChildViewModel.swift in Sources */,
 				7492264622D3A9C100EAD386 /* PBsViewController.swift in Sources */,
 				7466A86525EFDB8B00F4050F /* ProfileCollectionViewCell.swift in Sources */,
 				7444D0A326D144160009C7A6 /* AddMoreRestTimeViewController.swift in Sources */,

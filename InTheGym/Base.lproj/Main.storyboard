@@ -1402,6 +1402,36 @@
             </objects>
             <point key="canvasLocation" x="8274" y="-1584"/>
         </scene>
+        <!--Saved Workout Display View Controller-->
+        <scene sceneID="xVl-a5-ARC">
+            <objects>
+                <viewController storyboardIdentifier="SavedWorkoutDisplayViewController" id="KYg-JN-5SZ" customClass="SavedWorkoutDisplayViewController" customModule="InTheGym" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rIl-aq-mjG">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FUL-on-v41">
+                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="cZj-pV-ZXz"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="FUL-on-v41" firstAttribute="trailing" secondItem="cZj-pV-ZXz" secondAttribute="trailing" id="3e3-cS-8Hr"/>
+                            <constraint firstItem="FUL-on-v41" firstAttribute="leading" secondItem="cZj-pV-ZXz" secondAttribute="leading" id="6ip-YF-xMP"/>
+                            <constraint firstItem="FUL-on-v41" firstAttribute="top" secondItem="cZj-pV-ZXz" secondAttribute="top" id="Aus-mh-kxc"/>
+                            <constraint firstAttribute="bottom" secondItem="FUL-on-v41" secondAttribute="bottom" id="JWV-r6-UlT"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="containerView" destination="FUL-on-v41" id="au4-M2-bwi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xb9-w7-UCt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="9481.1594202898559" y="-2248.6607142857142"/>
+        </scene>
         <!--Reply View Controller-->
         <scene sceneID="96M-ek-MbD">
             <objects>

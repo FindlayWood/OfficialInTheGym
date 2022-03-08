@@ -20,6 +20,10 @@ class SavedWorkoutDisplayViewController: UIViewController {
     
     var dataSource: WorkoutExerciseCollectionDataSource!
     
+    var childVC = WorkoutChildViewController()
+    
+    var bottomViewChildVC = SavedWorkoutBottomChildViewController()
+    
     var subscriptions = Set<AnyCancellable>()
 
 
@@ -27,22 +31,46 @@ class SavedWorkoutDisplayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightColour
-        initDataSource()
-        setupSubscriptions()
         initNavBarButton()
         viewModel.addAView()
-        display.addBottomView()
-        display.bottomView.title = viewModel.savedWorkout.title
+//        setupSubscriptions()
+        initDataSource()
+        addBottomChildVC()
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
+        addChildVC()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         editNavBarColour(to: .white)
         navigationItem.title = viewModel.savedWorkout.title
+    }
+    
+    // MARK: - Child VC
+    func addChildVC() {
+        addChild(childVC)
+        view.insertSubview(childVC.view, belowSubview: bottomViewChildVC.view)
+//        view.addSubview(childVC.view)
+        childVC.view.frame = getFullViewableFrame()
+        childVC.didMove(toParent: self)
+//        initDataSource()
+    }
+    func addBottomChildVC() {
+        bottomViewChildVC.viewModel.savedWorkoutModel = viewModel.savedWorkout
+        addChild(bottomViewChildVC)
+        view.addSubview(bottomViewChildVC.view)
+        bottomViewChildVC.view.frame = bottomViewChildVC.viewModel.normalFrame
+        bottomViewChildVC.didMove(toParent: self)
+        
+        bottomViewChildVC.framePublisher
+            .sink { [weak self] in self?.bottomViewChildVC.view.frame = $0 }
+            .store(in: &subscriptions)
+        
+        bottomViewChildVC.snapPublisher
+            .sink { [weak self] in self?.snapBottomView(to: $0)}
+            .store(in: &subscriptions)
+        
     }
     // MARK: - Nav Bar Button
     func initNavBarButton() {
@@ -51,48 +79,30 @@ class SavedWorkoutDisplayViewController: UIViewController {
     }
     // MARK: - Data Source
     func initDataSource() {
-        dataSource = .init(collectionView: display.exerciseCollection)
-        dataSource.updateTable(with: viewModel.exercises)
+        childVC.dataSource.updateTable(with: viewModel.exercises)
+        
+        childVC.dataSource.exerciseButtonTapped
+            .sink { [weak self] in self?.coordinator?.showDescriptions($0)}
+            .store(in: &subscriptions)
+        
+        childVC.dataSource.amrapSelected
+            .sink { [weak self] in self?.coordinator?.showAMRAP($0)}
+            .store(in: &subscriptions)
+        
+        childVC.dataSource.circuitSelected
+            .sink { [weak self] in self?.coordinator?.showCircuit($0)}
+            .store(in: &subscriptions)
+        
+        childVC.dataSource.emomSelected
+            .sink { [weak self] in self?.coordinator?.showEMOM($0)}
+            .store(in: &subscriptions)
     }
     
     // MARK: - Subscriptions
     func setupSubscriptions() {
-        dataSource.completeButtonTapped
-            .sink { index in
-                print("complete button tapped at \(index)")
-            }
-            .store(in: &subscriptions)
-        dataSource.noteButtonTapped
-            .sink { index in
-                print("note tapped at \(index)")
-            }
-            .store(in: &subscriptions)
-        dataSource.rpeButtonTapped
-            .debounce(for: 0.3, scheduler: DispatchQueue.main)
-            .sink { [weak self] in self?.rpe(index: $0)}
-            .store(in: &subscriptions)
-        dataSource.showClipPublisher
-            .debounce(for: 0.5, scheduler: RunLoop.main)
-            .sink { show in
-                print("show clip \(show)")
-            }
-            .store(in: &subscriptions)
-        dataSource.clipButtonTapped
-            .sink { index in
-                print("clip tapped \(index)")
-            }
-            .store(in: &subscriptions)
+
         dataSource.exerciseButtonTapped
-            .sink { index in
-                print("exercise tapped \(index)")
-            }
-            .store(in: &subscriptions)
-        
-        display.bottomView.readyToStartWorkout
-            .sink { [weak self] in
-                self?.display.bottomView.removeFromSuperview()
-                self?.display.flashView.removeFromSuperview()
-            }
+            .sink { [weak self] in self?.coordinator?.showDescriptions($0)}
             .store(in: &subscriptions)
     }
     
@@ -100,6 +110,13 @@ class SavedWorkoutDisplayViewController: UIViewController {
     @objc func showOptions() {
         coordinator?.showOptions(for: viewModel.savedWorkout)
     }
+    
+    func snapBottomView(to newFrame: CGRect) {
+        UIView.animate(withDuration: 0.3) {
+            self.bottomViewChildVC.view.frame = newFrame
+        }
+    }
+
     // MARK: - RPE
     func rpe(index: IndexPath) {
         showRPEAlert(for: index) { [weak self] index, score in

@@ -13,7 +13,7 @@ struct FirebaseMultiUploadBoolean {
     var path: String
 }
 struct FirebaseMultiUploadDataPoint {
-    var value: Any
+    var value: Any?
     var path: String
 }
 

@@ -89,14 +89,14 @@ extension SavedWorkoutModel {
 }
 
 // MARK: - Firebase Resource
-extension SavedWorkoutModel: FirebaseTimeOrderedModel {
+extension SavedWorkoutModel: FirebaseModel {
     static var path: String {
         return "SavedWorkouts"
     }
 }
-extension SavedWorkoutModel: FirebaseInstance {
+extension SavedWorkoutModel: FirebaseTimeOrderedModel {
     var internalPath: String { 
-        return "SavedWorkouts/\(id)"
+        return "SavedWorkouts"
     }
 }
 

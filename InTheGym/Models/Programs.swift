@@ -67,14 +67,14 @@ class SavedProgramModel: Codable, Hashable {
         hasher.combine(id)
     }
 }
-extension SavedProgramModel: FirebaseTimeOrderedModel {
+extension SavedProgramModel: FirebaseModel {
     static var path: String {
         return "SavedPrograms"
     }
 }
-extension SavedProgramModel: FirebaseInstance {
+extension SavedProgramModel: FirebaseTimeOrderedModel {
     var internalPath: String {
-        return "SavedPrograms/\(id)"
+        return "SavedPrograms"
     }
 }
 

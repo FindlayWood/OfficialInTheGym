@@ -58,4 +58,7 @@ class SavedWorkoutDisplayViewModel {
             }
         }
     }
+    
+    // MARK: - Functions
+    
 }

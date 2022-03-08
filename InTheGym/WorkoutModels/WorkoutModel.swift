@@ -150,7 +150,7 @@ class workout: Completeable {
 /// -----> workoutID = the ID of this specific workout - different from savedID as you may do the same saved workout more than once
 class WorkoutModel: Codable, Hashable {
     var title: String
-    var workoutID: String
+    var id: String
     var savedID: String?
     var creatorID: String
     var createdBy: String
@@ -168,13 +168,13 @@ class WorkoutModel: Codable, Hashable {
     var emoms: [EMOMModel]?
     var amraps: [AMRAPModel]?
     var liveWorkout: Bool?
-    var id: String {
-        return workoutID
-    }
+//    var id: String {
+//        return workoutID
+//    }
     
     init(newSavedModel: NewSavedWorkoutModel, assignTo: String) {
         title = newSavedModel.title
-        workoutID = UUID().uuidString
+        id = UUID().uuidString
         savedID = newSavedModel.savedID
         creatorID = newSavedModel.creatorID
         createdBy = newSavedModel.createdBy
@@ -188,7 +188,7 @@ class WorkoutModel: Codable, Hashable {
     }
     init(savedModel: SavedWorkoutModel, assignTo: String) {
         title = savedModel.title
-        workoutID = UUID().uuidString
+        id = UUID().uuidString
         savedID = savedModel.id
         creatorID = savedModel.creatorID
         createdBy = savedModel.createdBy
@@ -202,11 +202,11 @@ class WorkoutModel: Codable, Hashable {
     }
     
     static func == (lhs: WorkoutModel, rhs: WorkoutModel) -> Bool {
-        lhs.workoutID == rhs.workoutID
+        lhs.id == rhs.id
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(workoutID)
+        hasher.combine(id)
     }
 }
 extension WorkoutModel {
@@ -233,11 +233,13 @@ extension WorkoutModel {
         return minutes * rpe
     }
 }
-extension WorkoutModel: FirebaseResource {
+extension WorkoutModel: FirebaseModel {
     static var path: String {
-        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)"
+        return "Workouts/\(UserDefaults.currentUser.uid)"
     }
+}
+extension WorkoutModel: FirebaseTimeOrderedModel {
     var internalPath: String {
-        return "Workouts/\(assignedTo)/\(workoutID)"
+        return "Workouts/\(assignedTo)"
     }
 }

@@ -16,7 +16,7 @@ struct ScoresModel {
     var score: Int
 }
 extension ScoresModel: FirebaseTimeOrderedModel {
-    static var path: String {
+    var internalPath: String {
         return "Scores/\(UserDefaults.currentUser.uid)"
     }
 }

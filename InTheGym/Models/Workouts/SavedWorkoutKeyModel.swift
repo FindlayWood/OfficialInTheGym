@@ -32,10 +32,13 @@ struct SavedWorkoutReferenceModel {
     func toMultipUploadPoint() -> FirebaseMultiUploadDataPoint {
         return FirebaseMultiUploadDataPoint(value: true, path: internalPath)
     }
+    func removeUploadPoint() -> FirebaseMultiUploadDataPoint {
+        return FirebaseMultiUploadDataPoint(value: nil, path: internalPath)
+    }
 }
 extension SavedWorkoutReferenceModel: FirebaseInstance {
     var internalPath: String {
-        return "SavedWorkoutReferences/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(id)"
+        return "SavedWorkoutReferences/\(UserDefaults.currentUser.uid)/\(id)"
     }
 }
 

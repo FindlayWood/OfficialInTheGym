@@ -33,7 +33,7 @@ extension SavedProgramDisplayCoordinator {
     func showOptions(_ options: [Options]) {
         let vc = OptionsChildViewController()
         vc.coordinator = self
-        vc.options = options
+//        vc.options = options
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = self
         navigationController.present(vc, animated: true, completion: nil)

@@ -12,7 +12,7 @@ class DisplayAMRAPViewModel {
     
     // MARK: - Properties
     var amrapModel: AMRAPModel!
-    var workoutModel: WorkoutModel!
+    var workoutModel: WorkoutModel?
     
     // MARK: - Callbacks
     var updateTimeLabelHandler: ((Int)->())?
@@ -80,6 +80,10 @@ class DisplayAMRAPViewModel {
         updateDataBase(with: .completed)
     }
     func rpeScoreGiven(_ score: Int) {
+        guard let workoutModel = workoutModel else {
+            return
+        }
+
         let updateModel = AMRAPUpdateModel(workout: workoutModel, amrap: amrapModel, type: .rpe(score))
         let uploadPoint = updateModel.uploadModel()
         apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
@@ -95,6 +99,10 @@ class DisplayAMRAPViewModel {
     
     // MARK: - API Database Updates
     func updateDataBase(with type: AMRAPUpdateType) {
+        guard let workoutModel = workoutModel else {
+            return
+        }
+
         let updateModel = AMRAPUpdateModel(workout: workoutModel, amrap: amrapModel, type: type)
         let uploadModel = updateModel.uploadModel()
         apiService.multiLocationUpload(data: [uploadModel]) { [weak self] result in
@@ -119,6 +127,10 @@ class DisplayAMRAPViewModel {
         return amrapModel.getCurrentExercise()
     }
     func isStartButtonEnabled() -> Bool {
+        guard let workoutModel = workoutModel else {
+            return false
+        }
+
         if workoutModel.startTime != nil && !workoutModel.completed {
             return true
         } else {

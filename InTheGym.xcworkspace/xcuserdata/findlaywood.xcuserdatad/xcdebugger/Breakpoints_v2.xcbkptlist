@@ -59,5 +59,53 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FB764D12-4DF1-4BB5-8190-1C4A5D4DC009"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "InTheGym/ViewControllers/ChildViewControllers/Workout/SavedWorkoutBottomViewController/SavedWorkoutBottomChildViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "initChildDataSource()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "FB764D12-4DF1-4BB5-8190-1C4A5D4DC009 - 29f289e611af9671"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "InTheGym.SavedWorkoutBottomChildViewController.initChildDataSource() -&gt; ()"
+                  moduleName = "InTheGym"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/findlaywood/Documents/Xcode%20work/InTheGym/InTheGym/ViewControllers/ChildViewControllers/Workout/SavedWorkoutBottomViewController/SavedWorkoutBottomChildViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "284">
+               </Location>
+               <Location
+                  uuid = "FB764D12-4DF1-4BB5-8190-1C4A5D4DC009 - aa63f51145df38c1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (InTheGym.Options) -&gt; () in InTheGym.SavedWorkoutBottomChildViewController.initChildDataSource() -&gt; ()"
+                  moduleName = "InTheGym"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/findlaywood/Documents/Xcode%20work/InTheGym/InTheGym/ViewControllers/ChildViewControllers/Workout/SavedWorkoutBottomViewController/SavedWorkoutBottomChildViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "32">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

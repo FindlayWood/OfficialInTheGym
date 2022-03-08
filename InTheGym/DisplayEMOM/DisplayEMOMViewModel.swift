@@ -13,7 +13,7 @@ class DisplayEMOMViewModel {
     // MARK: - Properties
     var emomModel: EMOMModel!
     
-    var workoutModel: WorkoutModel!
+    var workoutModel: WorkoutModel?
     
     var exerciseIndex: Int = 0
     
@@ -101,6 +101,10 @@ class DisplayEMOMViewModel {
     }
     func emomCompleted() {
         // TODO: - Update Firebase completed = true
+        guard let workoutModel = workoutModel else {
+            return
+        }
+
         let uploadModel = EMOMUpdateModel(workout: workoutModel, emom: emomModel, type: .completed)
         let uploadPoint = uploadModel.uploadModel()
         apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
@@ -116,6 +120,10 @@ class DisplayEMOMViewModel {
     }
     func rpeScoreGiven(_ score: Int) {
         // TODO: - Update Firebase and return when completed
+        guard let workoutModel = workoutModel else {
+            return
+        }
+
         let uploadModel = EMOMUpdateModel(workout: workoutModel, emom: emomModel, type: .rpe(score))
         let uploadPoint = uploadModel.uploadModel()
         apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in

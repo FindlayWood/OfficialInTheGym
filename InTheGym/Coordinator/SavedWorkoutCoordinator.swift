@@ -53,6 +53,29 @@ extension SavedWorkoutCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    
+    func showDescriptions(_ exercise: ExerciseModel) {
+        let vc = ExerciseDescriptionViewController()
+        vc.viewModel.exercise = exercise
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showEMOM(_ emom: EMOMModel) {
+        let vc = DisplayEMOMViewController()
+        vc.viewModel.emomModel = emom
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func showCircuit(_ circuit: CircuitModel) {
+        let vc = DisplayCircuitViewController()
+        vc.viewModel.circuitModel = circuit
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func showAMRAP(_ amrap: AMRAPModel) {
+        let vc = DisplayAMRAPViewController()
+        vc.viewModel.amrapModel = amrap
+        navigationController.pushViewController(vc, animated: true)
+    }
+
 }
 
 // MARK: - Custom Clip Picker

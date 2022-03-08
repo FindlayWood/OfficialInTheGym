@@ -13,6 +13,10 @@ enum Options: String {
     case save = "Save"
     case delete = "Delete"
     case review = "Review"
+    case addWorkout = "Add to Workouts"
+    case saveWorkout = "Save Workout"
+    case viewCreatorProfile = "View Creator Profile"
+    case viewWorkoutStats = "View Workout Stats"
     
     var image: UIImage {
         switch self {
@@ -24,6 +28,14 @@ enum Options: String {
             return UIImage(systemName: "trash")!
         case .review:
             return UIImage(systemName: "note.text")!
+        case .addWorkout:
+            return UIImage(systemName: "plus.circle.fill")!
+        case .saveWorkout:
+            return UIImage(systemName: "square.and.arrow.down")!
+        case .viewCreatorProfile:
+            return UIImage(systemName: "person.fill")!
+        case .viewWorkoutStats:
+            return UIImage(systemName: "chart.bar.fill")!
         }
     }
 }

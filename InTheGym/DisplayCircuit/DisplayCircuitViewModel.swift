@@ -14,7 +14,7 @@ class DisplayCircuitViewModel{
     // MARK: - Properties
     var circuitModel: CircuitModel!
     
-    var workoutModel: WorkoutModel!
+    var workoutModel: WorkoutModel?
     
     lazy var tableModels: [CircuitTableModel] = circuitModel.intergrate()
     
@@ -48,6 +48,10 @@ class DisplayCircuitViewModel{
 
     // MARK: - Retrieve Functions
     func isInteractionEnabled() -> Bool {
+        guard let workoutModel = workoutModel else {
+            return false
+        }
+
         if workoutModel.startTime != nil && !workoutModel.completed {
             return true
         } else {

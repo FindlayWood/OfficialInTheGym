@@ -17,6 +17,13 @@ extension UIView {
         layer.shadowOpacity = 1.0
         layer.masksToBounds = false
     }
+    func addViewTopShadow(with colour: UIColor) {
+        layer.shadowColor = colour.cgColor
+        layer.shadowOffset = CGSize(width: 0, height: -5.0)
+        layer.shadowRadius = 6.0
+        layer.shadowOpacity = 1.0
+        layer.masksToBounds = false
+    }
     func addFullConstraint(to subview: UIView) {
         NSLayoutConstraint.activate([
             subview.topAnchor.constraint(equalTo: topAnchor),

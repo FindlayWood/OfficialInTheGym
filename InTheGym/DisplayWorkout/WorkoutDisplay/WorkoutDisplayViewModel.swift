@@ -65,7 +65,7 @@ class WorkoutDisplayViewModel {
     func completeSet(at index: IndexPath) {
         guard let exercise = exercises[index.section] as? ExerciseModel else {return}
         exercise.completedSets[index.item] = true
-        let setUpdateModel = SetUpdateModel(workoutID: workout.workoutID, exercise: exercise, setNumber: index.item)
+        let setUpdateModel = SetUpdateModel(workoutID: workout.id, exercise: exercise, setNumber: index.item)
         let uploadPoint = FirebaseMultiUploadDataPoint(value: true, path: setUpdateModel.internalPath)
         apiService.multiLocationUpload(data: [uploadPoint]) { result in
             switch result {
@@ -86,7 +86,7 @@ class WorkoutDisplayViewModel {
     func updateRPE(at index: IndexPath, to score: Int) {
         guard let exercise = exercises[index.item] as? ExerciseModel else {return}
         exercise.rpe = score
-        let rpeUpdateModel = RPEUpdateModel(workoutID: workout.workoutID, exercise: exercise)
+        let rpeUpdateModel = RPEUpdateModel(workoutID: workout.id, exercise: exercise)
         let uploadPoint = FirebaseMultiUploadDataPoint(value: score, path: rpeUpdateModel.internalPath)
         apiService.multiLocationUpload(data: [uploadPoint]) { result in
             switch result {

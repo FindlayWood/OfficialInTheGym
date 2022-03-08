@@ -35,7 +35,7 @@ struct UploadClipModel {
                          userID: UserDefaults.currentUser.uid,
                          isPrivate: isPrivate)
         if let workout = workout {
-            model.workoutID = workout.workoutID
+            model.workoutID = workout.id
         }
         return model
     }
@@ -54,7 +54,7 @@ struct UploadClipModel {
 private extension UploadClipModel {
     var workoutPath: String {
         guard let workout = workout else {return ""}
-        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.workoutID)/clipData/\(workout.clipData?.count ?? 0)"
+        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.id)/clipData/\(workout.clipData?.count ?? 0)"
     }
     var clipPath: String {
         return "Clips/\(id)"

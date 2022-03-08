@@ -26,6 +26,7 @@ final class ExerciseCollectionCell: BaseExerciseCollectionCell {
         rpeButton.addTarget(self, action: #selector(rpeTapped(_:)), for: .touchUpInside)
         noteButton.addTarget(self, action: #selector(noteTapped(_:)), for: .touchUpInside)
         clipButton.addTarget(self, action: #selector(clipTapped(_:)), for: .touchUpInside)
+        exerciseNameButton.addTarget(self, action: #selector(exerciseTapped(_:)), for: .touchUpInside)
     }
     @objc func rpeTapped(_ sender: UIButton) {
         actionPublisher.send(.rpeButton)
@@ -36,10 +37,14 @@ final class ExerciseCollectionCell: BaseExerciseCollectionCell {
     @objc func clipTapped(_ sender: UIButton) {
         actionPublisher.send(.clipButton)
     }
+    @objc func exerciseTapped(_ sender: UIButton) {
+        actionPublisher.send(.exerciseButton)
+    }
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupButtonActions()
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)

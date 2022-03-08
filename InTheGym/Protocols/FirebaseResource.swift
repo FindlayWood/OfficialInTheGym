@@ -67,7 +67,7 @@ protocol TimeOrderedID: Codable {
     var id: String { get set }
 }
 
-typealias FirebaseTimeOrderedModel = FirebaseModel & TimeOrderedID
+typealias FirebaseTimeOrderedModel = FirebaseInstance & TimeOrderedID
 
 // MARK: - Firebase Instance Extension
 extension FirebaseInstance {

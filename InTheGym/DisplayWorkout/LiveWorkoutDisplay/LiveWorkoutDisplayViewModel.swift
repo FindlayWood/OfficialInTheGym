@@ -43,7 +43,7 @@ class LiveWorkoutDisplayViewModel {
         let currentExercises = exercises.value
         let exercise = currentExercises[index.item]
         exercise.rpe = score
-        let rpeUpdateModel = RPEUpdateModel(workoutID: workoutModel.workoutID, exercise: exercise)
+        let rpeUpdateModel = RPEUpdateModel(workoutID: workoutModel.id, exercise: exercise)
         let uploadPoint = FirebaseMultiUploadDataPoint(value: score, path: rpeUpdateModel.internalPath)
         apiService.multiLocationUpload(data: [uploadPoint]) { result in
             switch result {

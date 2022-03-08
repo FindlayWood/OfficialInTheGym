@@ -19,9 +19,9 @@ class OptionsChildViewController: UIViewController {
     
     var display = OptionsChildView()
     
-    var dataSource: OptionsCollectionDataSource!
+    lazy var dataSource: OptionsCollectionDataSource = OptionsCollectionDataSource(collectionView: display.collectionView)
     
-    var options: [Options]!
+//    var options: [Options]!
     
     private var subscriptions = Set<AnyCancellable>()
 
@@ -29,7 +29,7 @@ class OptionsChildViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initDataSource()
-        initSubscriptions()
+//        initSubscriptions()
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -39,8 +39,12 @@ class OptionsChildViewController: UIViewController {
     
     // MARK: - Data Source
     func initDataSource() {
-        dataSource = .init(collectionView: display.collectionView)
-        dataSource.updateTable(with: options)
+//        dataSource = .init(collectionView: display.collectionView)
+//        dataSource.updateTable(with: options)
+        dataSource.optionSelected
+            .sink { [weak self] in self?.coordinator?.optionSelected($0)}
+            .store(in: &subscriptions)
+        
     }
     
     // MARK: - Subscriptions

@@ -37,6 +37,6 @@ struct StartWorkoutModel {
 }
 extension StartWorkoutModel: FirebaseInstance {
     var internalPath: String {
-        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workout.workoutID)/startTime"
+        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workout.id)/startTime"
     }
 }

@@ -18,7 +18,7 @@ struct WorkloadModel {
     var workoutID: String
 }
 extension WorkloadModel: FirebaseTimeOrderedModel {
-    static var path: String {
+    var internalPath: String {
         return "Workloads/\(UserDefaults.currentUser.uid)"
     }
 }

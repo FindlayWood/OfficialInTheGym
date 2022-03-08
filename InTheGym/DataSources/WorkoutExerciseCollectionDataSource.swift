@@ -13,12 +13,16 @@ import Combine
 class WorkoutExerciseCollectionDataSource: NSObject {
     
     // MARK: - Publisher
+    var amrapSelected = PassthroughSubject<AMRAPModel,Never>()
+    var emomSelected = PassthroughSubject<EMOMModel,Never>()
+    var circuitSelected = PassthroughSubject<CircuitModel,Never>()
+    
     var rowSelected = PassthroughSubject<ExerciseRow,Never>()
     var completeButtonTapped = PassthroughSubject<IndexPath,Never>()
     var rpeButtonTapped = PassthroughSubject<IndexPath,Never>()
     var noteButtonTapped = PassthroughSubject<IndexPath,Never>()
     var clipButtonTapped = PassthroughSubject<ExerciseModel,Never>()
-    var exerciseButtonTapped = PassthroughSubject<IndexPath,Never>()
+    var exerciseButtonTapped = PassthroughSubject<ExerciseModel,Never>()
     var showClipPublisher = PassthroughSubject<Bool,Never>()
     var actionSubscriptions = [IndexPath: AnyCancellable]()
     
@@ -57,7 +61,8 @@ class WorkoutExerciseCollectionDataSource: NSObject {
                             guard let exercise = self?.getExercise(at: indexPath) else {return}
                             self?.clipButtonTapped.send(exercise)
                         case .exerciseButton:
-                            self?.exerciseButtonTapped.send(indexPath)
+                            guard let model = self?.getExercise(at: indexPath) else {return}
+                            self?.exerciseButtonTapped.send(model)
                         case .completed(let tappedIndex):
                             let fullIndex = IndexPath(item: tappedIndex.item, section: indexPath.item)
                             self?.completeButtonTapped.send(fullIndex)
@@ -127,8 +132,17 @@ class WorkoutExerciseCollectionDataSource: NSObject {
 extension WorkoutExerciseCollectionDataSource: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let selected = dataDource.itemIdentifier(for: indexPath) else {return}
-        rowSelected.send(selected)
+        guard let rowSelected = dataDource.itemIdentifier(for: indexPath) else {return}
+        switch rowSelected {
+        case .exercise(_):
+            break
+        case .amrap(let amrapModel):
+            amrapSelected.send(amrapModel)
+        case .circuit(let circuitModel):
+            circuitSelected.send(circuitModel)
+        case .emom(let emomModel):
+            emomSelected.send(emomModel)
+        }
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

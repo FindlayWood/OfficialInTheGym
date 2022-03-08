@@ -56,7 +56,7 @@ struct AMRAPUpdateModel {
 }
 extension AMRAPUpdateModel: FirebaseInstance {
     var internalPath: String {
-        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workout.workoutID)/amraps/\(amrap.amrapPosition)/\(pathEnding())"
+        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workout.id)/amraps/\(amrap.amrapPosition)/\(pathEnding())"
     }
 }
 
@@ -81,7 +81,7 @@ struct EMOMUpdateModel {
 }
 extension EMOMUpdateModel: FirebaseInstance {
     var internalPath: String {
-        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workout.workoutID)/emoms/\(emom.emomPosition)/\(pathEnding())"
+        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workout.id)/emoms/\(emom.emomPosition)/\(pathEnding())"
     }
 }
 

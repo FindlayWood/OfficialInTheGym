@@ -24,15 +24,15 @@ struct CompletedWorkoutUploadModel {
 
 extension CompletedWorkoutUploadModel {
     var completedPath: String {
-        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.workoutID)/completed"
+        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.id)/completed"
     }
     var workloadPath: String {
-        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.workoutID)/workload"
+        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.id)/workload"
     }
     var scorePath: String {
-        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.workoutID)/score"
+        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.id)/score"
     }
     var timePath: String {
-        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.workoutID)/timeToComplete"
+        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.id)/timeToComplete"
     }
 }

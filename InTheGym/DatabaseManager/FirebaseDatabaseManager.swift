@@ -11,6 +11,7 @@ import Firebase
 import CodableFirebase
 
 final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
+    
     func multiLocationUpload(data: [FirebaseMultiUploadDataPoint], completion: @escaping (Result<Void, Error>) -> Void) {
         var keyPaths = [String:Any]()
         for datum in data {
@@ -193,8 +194,8 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     
     // MARK: - Time Ordered Upload
     func uploadTimeOrderedModel<Model: FirebaseTimeOrderedModel>(model: Model, completion: @escaping (Result<Model,Error>) -> Void) {
-        print(Model.path)
-        let dbref = Database.database().reference().child(Model.path).childByAutoId()
+        print(model.internalPath)
+        let dbref = Database.database().reference().child(model.internalPath).childByAutoId()
         let autoID = dbref.key
         var uploadModel = model
         uploadModel.id = autoID!

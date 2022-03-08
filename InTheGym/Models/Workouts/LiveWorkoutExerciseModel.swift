@@ -32,6 +32,6 @@ struct LiveWorkoutExerciseModel {
 }
 extension LiveWorkoutExerciseModel {
     var basePath: String {
-        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.workoutID)/exercises/\(exercise.workoutPosition)"
+        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.id)/exercises/\(exercise.workoutPosition)"
     }
 }
