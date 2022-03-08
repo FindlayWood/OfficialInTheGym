@@ -15,11 +15,15 @@ class SavedWorkoutBottomChildViewModel {
     // MARK: - Publishers
     var optionsPublisher = PassthroughSubject<[Options],Never>()
     
+    var optionsRemovePublisher = PassthroughSubject<Options,Never>()
+    
     var savedWorkoutPublisher = PassthroughSubject<Bool,Never>()
     
     var addedWorkoutPublisher = PassthroughSubject<Bool,Never>()
     
     var removedSavedWorkoutPublisher = PassthroughSubject<Bool,Never>()
+    
+    var listListener: SavedWorkoutRemoveListener?
     
     // MARK: - Properties
     var savedWorkoutModel: SavedWorkoutModel!
@@ -124,11 +128,14 @@ class SavedWorkoutBottomChildViewModel {
         let savedRefModel = SavedWorkoutReferenceModel(id: savedWorkoutModel.id)
         let uploadPoint = [savedRefModel.removeUploadPoint()]
         apiService.multiLocationUpload(data: uploadPoint) { [weak self] result in
+            guard let self = self else {return}
             switch result {
             case .success(()):
-                self?.removedSavedWorkoutPublisher.send(true)
+                self.removedSavedWorkoutPublisher.send(true)
+                self.optionsRemovePublisher.send(.delete)
+                self.listListener?.send(self.savedWorkoutModel)
             case .failure(_):
-                self?.removedSavedWorkoutPublisher.send(false)
+                self.removedSavedWorkoutPublisher.send(false)
             }
         }
     }

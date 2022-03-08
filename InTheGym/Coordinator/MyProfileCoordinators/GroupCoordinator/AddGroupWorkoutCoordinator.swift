@@ -56,7 +56,7 @@ extension AddGroupWorkoutCoordinator {
 
 // MARK: - Saved Workout Flow
 extension AddGroupWorkoutCoordinator: SavedWorkoutsFlow {
-    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel) {
+    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
 //        navigationController.dismiss(animated: true, completion: nil)
 //        continueWith(savedWorkout: selectedWorkout)
     }

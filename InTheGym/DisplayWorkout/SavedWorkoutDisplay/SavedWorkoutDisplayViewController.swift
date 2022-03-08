@@ -58,6 +58,7 @@ class SavedWorkoutDisplayViewController: UIViewController {
     }
     func addBottomChildVC() {
         bottomViewChildVC.viewModel.savedWorkoutModel = viewModel.savedWorkout
+//        bottomViewChildVC.viewModel.listListener = viewModel.listListener
         addChild(bottomViewChildVC)
         view.addSubview(bottomViewChildVC.view)
         bottomViewChildVC.view.frame = bottomViewChildVC.viewModel.normalFrame

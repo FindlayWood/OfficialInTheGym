@@ -57,7 +57,7 @@ extension CommentSectionCoordinator {
     }
 }
 extension CommentSectionCoordinator: SavedWorkoutsFlow {
-    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel) {
+    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
         savedWorkoutSelected.send(selectedWorkout)
         navigationController.dismiss(animated: true)
     }

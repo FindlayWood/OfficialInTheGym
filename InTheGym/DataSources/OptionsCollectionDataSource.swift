@@ -52,6 +52,13 @@ final class OptionsCollectionDataSource: NSObject {
         currentSnapshot.appendItems(models, toSection: .main)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
+    
+    // MARK: - Remove
+    func remove(_ option: Options) {
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.deleteItems([option])
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
 }
 
 extension OptionsCollectionDataSource: UICollectionViewDelegate {

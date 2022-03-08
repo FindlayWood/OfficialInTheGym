@@ -15,6 +15,8 @@ class SavedWorkoutsViewModel:NSObject {
     var savedWorkoutss = CurrentValueSubject<[SavedWorkoutModel],Never>([])
     var errorFetchingWorkouts = PassthroughSubject<Error,Never>()
 
+    /// listen for removal of workout
+    var listRemoveListener = PassthroughSubject<SavedWorkoutModel,Never>()
     
     // MARK: - Properties
     

@@ -51,6 +51,13 @@ class SavedWorkoutsCollectionDataSource: NSObject {
         currentSnapshot.appendItems(models, toSection: .main)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
+    
+    // MARK: - Remove
+    func removeWorkout(_ model: SavedWorkoutModel) {
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.deleteItems([model])
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
 }
 // MARK: - Delegate - Select Row
 extension SavedWorkoutsCollectionDataSource: UICollectionViewDelegate {

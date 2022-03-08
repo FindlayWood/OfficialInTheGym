@@ -13,7 +13,7 @@ import CodableFirebase
 final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     
     func multiLocationUpload(data: [FirebaseMultiUploadDataPoint], completion: @escaping (Result<Void, Error>) -> Void) {
-        var keyPaths = [String:Any]()
+        var keyPaths = [String:Any?]()
         for datum in data {
             keyPaths[datum.path] = datum.value
         }

@@ -42,7 +42,7 @@ extension GroupCommentSectionCoordinator {
     }
     
     func showSavedWorkout(_ model: SavedWorkoutModel) {
-        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model, listener: nil)
         childCoordinators.append(child)
         child.start()
     }
@@ -56,7 +56,8 @@ extension GroupCommentSectionCoordinator {
     }
 }
 extension GroupCommentSectionCoordinator: SavedWorkoutsFlow {
-    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel) {
+    
+    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
         savedWorkoutSelected.send(selectedWorkout)
         navigationController.dismiss(animated: true)
     }

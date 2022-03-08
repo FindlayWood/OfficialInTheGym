@@ -69,7 +69,7 @@ extension CreateNewPostCoordinator: SavedWorkoutsFlow {
         modalNavigationController.present(vc, animated: true, completion: nil)
     }
     
-    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel) {
+    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
 //        savedCompletionHandle(selectedWorkout)
 //        guard let modalNavigationController = modalNavigationController else {return}
 //        modalNavigationController.dismiss(animated: true)

@@ -125,8 +125,8 @@ extension MyProfileCoordinator {
 
 // MARK: - Saved WorkoutFlow
 extension MyProfileCoordinator: SavedWorkoutsFlow {
-    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel) {
-        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: selectedWorkout)
+    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: selectedWorkout, listener: listener)
         childCoordinators.append(child)
         child.start()
 //        let vc = SavedWorkoutDisplayViewController()

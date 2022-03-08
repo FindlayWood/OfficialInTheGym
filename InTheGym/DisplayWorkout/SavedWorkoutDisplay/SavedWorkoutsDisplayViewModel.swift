@@ -7,8 +7,12 @@
 //
 
 import Foundation
+import Combine
 
 class SavedWorkoutDisplayViewModel {
+    
+    // MARK: - Publisher
+    var listListener: SavedWorkoutRemoveListener?
     
     // MARK: - Properties
     var savedWorkout: SavedWorkoutModel!

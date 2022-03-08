@@ -75,7 +75,7 @@ extension TimelineCoordinator: NewsFeedFlow {
         child.start()
     }
     func showSavedWorkout(_ model: SavedWorkoutModel) {
-        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model, listener: nil)
         childCoordinators.append(child)
         child.start()
     }

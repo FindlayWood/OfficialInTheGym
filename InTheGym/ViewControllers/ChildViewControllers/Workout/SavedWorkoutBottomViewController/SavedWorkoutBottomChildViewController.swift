@@ -61,7 +61,46 @@ class SavedWorkoutBottomChildViewController: UIViewController {
             .sink { [weak self] in self?.optionsChildVC.dataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
         
+        viewModel.optionsRemovePublisher
+            .sink { [weak self] in self?.optionsChildVC.dataSource.remove($0)}
+            .store(in: &subscriptions)
+        
+        viewModel.removedSavedWorkoutPublisher
+            .sink { [weak self] success in
+                if success {
+                    self?.showTopMessage("Removed from Saved Workouts.")
+                } else {
+                    self?.showTopMessage()
+                }
+            }
+            .store(in: &subscriptions)
+        
+        viewModel.addedWorkoutPublisher
+            .sink { [weak self] success in
+                if success {
+                    self?.showTopMessage("Added to Workouts.")
+                } else {
+                    self?.showTopMessage()
+                }
+            }
+            .store(in: &subscriptions)
+        
+        viewModel.savedWorkoutPublisher
+            .sink { [weak self] success in
+                if success {
+                    self?.showTopMessage("Added to Saved Workouts.")
+                } else {
+                    self?.showTopMessage()
+                }
+            }
+            .store(in: &subscriptions)
+        
         viewModel.isSaved()
+    }
+    
+    // MARK: - Actions
+    func showTopMessage(_ message: String = "Error. Please try again.") {
+        showTopAlert(with: message)
     }
     
     // MARK: - Pan Gesture

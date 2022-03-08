@@ -57,15 +57,22 @@ class SavedWorkoutsViewController: UIViewController, Storyboarded {
             .sink { [weak self] in self?.collectionDataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
         
+        viewModel.listRemoveListener
+            .sink { [weak self] in self?.collectionDataSource.removeWorkout($0)}
+            .store(in: &subscriptions)
+        
         collectionDataSource.workoutSelected
-            .sink { [weak self] in self?.coordinator?.savedWorkoutSelected($0) }
+            .sink { [weak self] workout in
+                guard let self = self else {return}
+                self.coordinator?.savedWorkoutSelected(workout, listener: self.viewModel.listRemoveListener)
+            }
             .store(in: &subscriptions)
         
         viewModel.fetchKeys()
     }
     
-    func selectedWorkout(at indexPath: IndexPath) {
-        let workout = viewModel.workoutSelected(at: indexPath)
-        coordinator?.savedWorkoutSelected(workout)
-    }
+//    func selectedWorkout(at indexPath: IndexPath) {
+//        let workout = viewModel.workoutSelected(at: indexPath)
+//        coordinator?.savedWorkoutSelected(workout, listener: <#SavedWorkoutRemoveListener?#>)
+//    }
 }

@@ -13,16 +13,19 @@ class SavedWorkoutCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var savedWorkoutModel: SavedWorkoutModel
+    var listener: SavedWorkoutRemoveListener?
     
-    init(navigationController: UINavigationController, savedWorkoutModel: SavedWorkoutModel) {
+    init(navigationController: UINavigationController, savedWorkoutModel: SavedWorkoutModel, listener: SavedWorkoutRemoveListener? = nil) {
         self.navigationController = navigationController
         self.savedWorkoutModel = savedWorkoutModel
+        self.listener = listener
     }
     
     func start() {
         let vc = SavedWorkoutDisplayViewController()
         vc.coordinator = self
         vc.viewModel.savedWorkout = savedWorkoutModel
+        vc.bottomViewChildVC.viewModel.listListener = listener
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
