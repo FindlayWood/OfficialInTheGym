@@ -32,7 +32,17 @@ extension WorkoutDisplayCoordinator {
     func complete(_ workout: WorkoutModel) {
         let vc = CompletedWorkoutPageViewController()
         vc.viewModel.workout = workout
+        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
+    }
+    func completedUpload() {
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for controller in viewControllers {
+            if controller.isKind(of: DisplayingWorkoutsViewController.self) {
+                navigationController.popToViewController(controller, animated: true)
+                break
+            }
+        }
     }
     func showEMOM(_ emom: EMOMModel, _ workout: WorkoutModel) {
         let vc = DisplayEMOMViewController()
@@ -56,5 +66,10 @@ extension WorkoutDisplayCoordinator {
         let child = ClipCoordinator(navigationController: navigationController, workout: workout, exercise: exercise, addingDelegate: delegate)
         childCoordinators.append(child)
         child.start()
+    }
+    func showDescriptions(_ exercise: ExerciseModel) {
+        let vc = ExerciseDescriptionViewController()
+        vc.viewModel.exercise = exercise
+        navigationController.pushViewController(vc, animated: true)
     }
 }

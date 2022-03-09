@@ -46,12 +46,24 @@ class WorkloadChildViewModel {
     }
     func getChartEntries(from models: [WorkloadModel]) {
         var chartEntries = [ChartDataEntry]()
-        let filteredModels = models.filter { $0.endTime.daysAgo() < 100 }
-        filteredModels.forEach { model in
-            chartEntries.append(ChartDataEntry(x: Double(100 - model.endTime.daysAgo()), y: Double(model.workload)))
+        let filteredModels = models.filter { $0.endTime.daysAgo() < 7 }
+        let occurences = getOccurences(filteredModels.map { $0.endTime.daysAgo() }, filteredModels.map { $0.workload })
+        for (key, value) in occurences {
+            chartEntries.append(ChartDataEntry(x: Double(7 - key), y: Double(value)))
         }
+//        filteredModels.forEach { model in
+//            chartEntries.append(ChartDataEntry(x: Double(7 - model.endTime.daysAgo()), y: Double(model.workload)))
+//        }
         chartEntries.sort { $0.x < $1.x }
         setChartData(with: chartEntries)
+    }
+    
+    func getOccurences(_ days: [Int], _ workloads: [Int]) -> [Int:Int] {
+        var occureneces = [Int:Int]()
+        for (index, value) in days.enumerated() {
+            occureneces[value, default: 0] += workloads[index]
+        }
+        return occureneces
     }
     
     func setChartData(with entries: [ChartDataEntry]) {

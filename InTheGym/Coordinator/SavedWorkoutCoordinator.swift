@@ -44,14 +44,14 @@ extension SavedWorkoutCoordinator {
     }
     
     func showWorkoutStats(with savedWorkoutID: String) {
-        navigationController.dismiss(animated: true)
+//        navigationController.dismiss(animated: true)
         let vc = DisplayWorkoutStatsViewController()
         vc.savedWorkoutID = savedWorkoutID
         navigationController.pushViewController(vc, animated: true)
     }
     
     func showUser(_ user: Users) {
-        navigationController.dismiss(animated: true)
+//        navigationController.dismiss(animated: true)
         let child = UserProfileCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(child)
         child.start()

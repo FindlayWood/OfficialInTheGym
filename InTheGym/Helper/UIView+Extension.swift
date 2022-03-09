@@ -24,12 +24,12 @@ extension UIView {
         layer.shadowOpacity = 1.0
         layer.masksToBounds = false
     }
-    func addFullConstraint(to subview: UIView) {
+    func addFullConstraint(to subview: UIView, withConstant constant: CGFloat = 0) {
         NSLayoutConstraint.activate([
-            subview.topAnchor.constraint(equalTo: topAnchor),
-            subview.leadingAnchor.constraint(equalTo: leadingAnchor),
-            subview.trailingAnchor.constraint(equalTo: trailingAnchor),
-            subview.bottomAnchor.constraint(equalTo: bottomAnchor)
+            subview.topAnchor.constraint(equalTo: topAnchor, constant: constant),
+            subview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: constant),
+            subview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -constant),
+            subview.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -constant)
         ])
     }
 }

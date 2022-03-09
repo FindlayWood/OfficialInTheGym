@@ -11,7 +11,7 @@ import Foundation
 extension TimeInterval {
     
     func daysAgo() -> Int {
-        let date = Date(timeIntervalSinceReferenceDate: self)
+        let date = Date(timeIntervalSince1970: self)
         let days = Calendar.current.dateComponents([.day], from: date, to: Date())
         return days.day ?? 0
     }

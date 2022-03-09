@@ -43,6 +43,9 @@ class DisplayingWorkoutsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        guard let selectedWorkout = viewModel.selectedWorkout else { return }
+        dataSource.reloadModel(selectedWorkout)
+        viewModel.selectedWorkout = nil
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -67,6 +70,10 @@ class DisplayingWorkoutsViewController: UIViewController {
             .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
         
+        viewModel.updateListener
+            .sink { [weak self] in self?.dataSource.reloadModel($0)}
+            .store(in: &subscriptions)
+        
         dataSource.workoutSelected
             .sink { [weak self] in self?.workoutSelected($0) }
             .store(in: &subscriptions)
@@ -76,6 +83,7 @@ class DisplayingWorkoutsViewController: UIViewController {
     
     // MARK: - Actions
     func workoutSelected(_ workout: WorkoutModel) {
+        viewModel.selectedWorkout = workout
         if workout.liveWorkout ?? false {
             coordinator?.showLiveWorkout(workout)
         } else {

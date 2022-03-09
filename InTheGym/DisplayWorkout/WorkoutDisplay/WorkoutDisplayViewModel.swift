@@ -49,24 +49,25 @@ class WorkoutDisplayViewModel {
     
     // MARK: - Updating Functions
     
-    func startWorkout() {
-        let time = Date().timeIntervalSince1970
-        workout.startTime = time
-        let startUpdateModel = StartWorkoutModel(workout: workout)
-        let uploadPoint = FirebaseMultiUploadDataPoint(value: time, path: startUpdateModel.internalPath)
-        apiService.multiLocationUpload(data: [uploadPoint]) { result in
-            switch result {
-            case .success(()): break
-            case .failure(_): break
-            }
-        }
-        
-    }
+//    func startWorkout() {
+//        let time = Date().timeIntervalSince1970
+//        workout.startTime = time
+//        let startUpdateModel = StartWorkoutModel(workout: workout)
+//        let uploadPoint = FirebaseMultiUploadDataPoint(value: time, path: startUpdateModel.internalPath)
+//        apiService.multiLocationUpload(data: [uploadPoint]) { result in
+//            switch result {
+//            case .success(()): break
+//            case .failure(_): break
+//            }
+//        }
+//
+//    }
     func completeSet(at index: IndexPath) {
         guard let exercise = exercises[index.section] as? ExerciseModel else {return}
         exercise.completedSets[index.item] = true
-        let setUpdateModel = SetUpdateModel(workoutID: workout.id, exercise: exercise, setNumber: index.item)
-        let uploadPoint = FirebaseMultiUploadDataPoint(value: true, path: setUpdateModel.internalPath)
+        let uploadPoint = workout.getSetUploadPoint(exercise, setNumber: index.item)
+//        let setUpdateModel = SetUpdateModel(workoutID: workout.id, exercise: exercise, setNumber: index.item)
+//        let uploadPoint = FirebaseMultiUploadDataPoint(value: true, path: setUpdateModel.internalPath)
         apiService.multiLocationUpload(data: [uploadPoint]) { result in
             switch result {
             case .success(()): break
@@ -86,14 +87,16 @@ class WorkoutDisplayViewModel {
     func updateRPE(at index: IndexPath, to score: Int) {
         guard let exercise = exercises[index.item] as? ExerciseModel else {return}
         exercise.rpe = score
-        let rpeUpdateModel = RPEUpdateModel(workoutID: workout.id, exercise: exercise)
-        let uploadPoint = FirebaseMultiUploadDataPoint(value: score, path: rpeUpdateModel.internalPath)
+        let uploadPoint = workout.getRPEUploadPoint(exercise)
+//        let rpeUpdateModel = RPEUpdateModel(workoutID: workout.id, exercise: exercise)
+//        let uploadPoint = FirebaseMultiUploadDataPoint(value: score, path: rpeUpdateModel.internalPath)
         apiService.multiLocationUpload(data: [uploadPoint]) { result in
             switch result {
             case .success(()): break
             case .failure(_): break
             }
         }
+        FirebaseAPIWorkoutManager.shared.checkForCompletionStats(name: exercise.exercise, rpe: score)
     }
     
     // MARK: - Retreive Function
@@ -103,6 +106,9 @@ class WorkoutDisplayViewModel {
         } else {
             return false
         }
+    }
+    func showBottomView() -> Bool {
+        workout.startTime == nil
     }
     // MARK: - Actions
     func completed() {

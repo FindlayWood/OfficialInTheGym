@@ -23,6 +23,10 @@ class SavedWorkoutBottomChildViewModel {
     
     var removedSavedWorkoutPublisher = PassthroughSubject<Bool,Never>()
     
+    var showUserPublisher = PassthroughSubject<Users,Never>()
+    
+    var showWorkoutStatsPublisher = PassthroughSubject<String,Never>()
+    
     var listListener: SavedWorkoutRemoveListener?
     
     // MARK: - Properties
@@ -73,9 +77,9 @@ class SavedWorkoutBottomChildViewModel {
         case .saveWorkout:
             addToSaved()
         case .viewCreatorProfile:
-            break
+            loadCreator()
         case .viewWorkoutStats:
-            break
+            showWorkoutStatsPublisher.send(savedWorkoutModel.id)
         default:
             break
         }
@@ -137,6 +141,15 @@ class SavedWorkoutBottomChildViewModel {
             case .failure(_):
                 self.removedSavedWorkoutPublisher.send(false)
             }
+        }
+    }
+    
+    // MARK: - Load Creator
+    func loadCreator() {
+        let userSearchModel = UserSearchModel(uid: savedWorkoutModel.creatorID)
+        UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
+            guard let user = try? result.get() else {return}
+            self?.showUserPublisher.send(user)
         }
     }
 }

@@ -72,6 +72,14 @@ class SavedWorkoutDisplayViewController: UIViewController {
             .sink { [weak self] in self?.snapBottomView(to: $0)}
             .store(in: &subscriptions)
         
+        bottomViewChildVC.showUserPublisher
+            .sink { [weak self] in self?.coordinator?.showUser($0)}
+            .store(in: &subscriptions)
+        
+        bottomViewChildVC.showWorkoutStatsPublisher
+            .sink { [weak self] in self?.coordinator?.showWorkoutStats(with: $0)}
+            .store(in: &subscriptions)
+        
     }
     // MARK: - Nav Bar Button
     func initNavBarButton() {

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 // MARK: - Completed Workout Upload Model
 struct CompletedWorkoutUploadModel {
@@ -18,6 +19,11 @@ struct CompletedWorkoutUploadModel {
         points.append(FirebaseMultiUploadDataPoint(value: workout.workload as Any, path: workloadPath))
         points.append(FirebaseMultiUploadDataPoint(value: workout.score as Any, path: scorePath))
         points.append(FirebaseMultiUploadDataPoint(value: workout.timeToComplete as Any, path: timePath))
+        if workout.savedID != nil {
+            points.append(FirebaseMultiUploadDataPoint(value: ServerValue.increment(NSNumber(value: workout.timeToComplete!)), path: savedTotalTimePath))
+            points.append(FirebaseMultiUploadDataPoint(value: ServerValue.increment(NSNumber(value: workout.score!)), path: savedTotalRPEPath))
+            points.append(FirebaseMultiUploadDataPoint(value: ServerValue.increment(1), path: savedCompletionsPath))
+        }
         return points
     }
 }
@@ -34,5 +40,17 @@ extension CompletedWorkoutUploadModel {
     }
     var timePath: String {
         return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.id)/timeToComplete"
+    }
+    var savedTotalTimePath: String {
+        guard let savedID = workout.savedID else {return ""}
+        return "SavedWorkouts/\(savedID)/totalTime"
+    }
+    var savedTotalRPEPath: String {
+        guard let savedID = workout.savedID else {return ""}
+        return "SavedWorkouts/\(savedID)/totalRPE"
+    }
+    var savedCompletionsPath: String {
+        guard let savedID = workout.savedID else {return ""}
+        return "SavedWorkouts/\(savedID)/completions"
     }
 }

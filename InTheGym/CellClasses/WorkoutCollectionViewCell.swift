@@ -170,6 +170,8 @@ extension WorkoutCollectionViewCell {
         exerciseCountLabel.text = model.exercises?.count.description
         if let time = model.timeToComplete {
             timeLabel.text = time.convertToWorkoutTime()
+            timeLabel.isHidden = false
+            clockIcon.isHidden = false
         } else {
             timeLabel.isHidden = true
             clockIcon.isHidden = true

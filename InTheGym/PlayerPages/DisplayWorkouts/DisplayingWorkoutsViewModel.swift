@@ -16,6 +16,10 @@ class DisplayingWorkoutsViewModel {
     var workouts = CurrentValueSubject<[WorkoutModel],Never>([])
     var errorFetching = PassthroughSubject<Error,Never>()
     
+    var selectedWorkout: WorkoutModel?
+    
+    var updateListener = WorkoutUpdatedListener()
+    
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService
     

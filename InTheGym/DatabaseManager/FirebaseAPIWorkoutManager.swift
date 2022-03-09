@@ -113,8 +113,11 @@ class FirebaseAPIWorkoutManager {
         newData[self.exerciseNameString] = name as AnyObject
         if let weightString = weight {
             let weightNumber = self.getWeight(from: self.poundsOrKilograms(from: weightString) ?? .kg(0.0))
-            newData[self.totalWeightStatString] = weightNumber as AnyObject
-            newData[self.maxWeightStatString] = weightNumber as AnyObject
+            if weightNumber > 0.0 {
+                newData[self.totalWeightStatString] = weightNumber as AnyObject
+                newData[self.maxWeightStatString] = weightNumber as AnyObject
+                self.updateMaxHistory(exercise: name, weight: weightNumber)
+            }
          }
         ref.setValue(newData)
     }

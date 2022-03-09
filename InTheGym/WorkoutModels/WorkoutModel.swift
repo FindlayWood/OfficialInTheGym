@@ -243,3 +243,14 @@ extension WorkoutModel: FirebaseTimeOrderedModel {
         return "Workouts/\(assignedTo)"
     }
 }
+extension WorkoutModel {
+    func getTimeUpdatePoint() -> FirebaseMultiUploadDataPoint {
+        return FirebaseMultiUploadDataPoint(value: startTime, path: "Workouts/\(UserDefaults.currentUser.uid)/\(id)/startTime")
+    }
+    func getRPEUploadPoint(_ exercise: ExerciseModel) -> FirebaseMultiUploadDataPoint {
+        FirebaseMultiUploadDataPoint(value: exercise.rpe, path: "Workouts/\(UserDefaults.currentUser.uid)/\(id)/exercises/\(exercise.workoutPosition)/rpe")
+    }
+    func getSetUploadPoint(_ exercise: ExerciseModel, setNumber: Int) -> FirebaseMultiUploadDataPoint {
+        FirebaseMultiUploadDataPoint(value: true, path: "Workouts/\(UserDefaults.currentUser.uid)/\(id)/exercises/\(exercise.workoutPosition)/completedSets/\(setNumber)")
+    }
+}

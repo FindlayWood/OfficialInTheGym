@@ -17,7 +17,7 @@ class WorkloadChildView: UIView {
         let view = LineChartView()
         view.animate(xAxisDuration: 1.0, yAxisDuration: 1.0, easingOption: .easeInOutSine)
         view.xAxis.axisMinimum = 0.0
-        view.xAxis.axisMaximum = 100
+        view.xAxis.axisMaximum = 7
         view.xAxis.labelPosition = XAxis.LabelPosition.bottom
         view.rightAxis.drawAxisLineEnabled = false
         view.noDataTextColor = .black

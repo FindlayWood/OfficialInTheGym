@@ -20,3 +20,6 @@ typealias GroupPostListener = PassthroughSubject<GroupPost,Never>
 
 /// Listen for saved workout being removed from list
 typealias SavedWorkoutRemoveListener = PassthroughSubject<SavedWorkoutModel,Never>
+
+
+typealias WorkoutUpdatedListener = PassthroughSubject<WorkoutModel,Never>

@@ -50,6 +50,13 @@ class WorkoutsCollectionDataSource: NSObject {
         currentSnapshot.appendItems(models, toSection: 1)
         dataDource.apply(currentSnapshot, animatingDifferences: true)
     }
+    
+    // MARK: - Reload
+    func reloadModel(_ model: WorkoutModel) {
+        var currentSnapshot = dataDource.snapshot()
+        currentSnapshot.reloadItems([model])
+        dataDource.apply(currentSnapshot, animatingDifferences: false)
+    }
 }
 // MARK: - Delegate - Select Row
 extension WorkoutsCollectionDataSource: UICollectionViewDelegate {
