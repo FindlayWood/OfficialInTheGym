@@ -232,7 +232,7 @@ extension PostTableViewCell {
         if post.attachedPhoto == nil { photoImageView.isHidden = true }
         if let workoutID = post.workoutID {
             workoutView.isHidden = false
-            workoutView.configure(with: workoutID)
+            workoutView.configure(with: workoutID, assignID: post.posterID)
         } 
         if let savedWorkoutID = post.savedWorkoutID {
             workoutView.isHidden = false

@@ -174,8 +174,8 @@ extension UIWorkoutView {
         creatorLabel.text = model.createdBy
         exerciseCountLabel.text = model.totalExerciseCount().description
     }
-    public func configure(with workoutID: String) {
-        let searchModel = WorkoutKeyModel(id: workoutID)
+    public func configure(with workoutID: String, assignID: String) {
+        let searchModel = WorkoutKeyModel(id: workoutID, assignID: assignID)
         WorkoutLoader.shared.load(from: searchModel) { [weak self] result in
             guard let self = self else {return}
             switch result {

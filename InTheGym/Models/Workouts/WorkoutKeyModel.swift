@@ -9,15 +9,18 @@
 import Foundation
 
 // MARK: - Workout Keys Model
-/// Used to fetch keys for  workouts of current user
-/// and to load single instances of  workouts
+/// Model to fetch single instance of workout
+/// Needs the workout id and assigned id
 struct WorkoutKeyModel {
     
     ///The id of the workout to load
     var id: String
+    
+    /// The id of assingee
+    var assignID: String
 }
 extension WorkoutKeyModel: FirebaseInstance {
     var internalPath: String {
-        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(id)"
+        return "Workouts/\(assignID)/\(id)"
     }
 }

@@ -143,7 +143,7 @@ class PublicTimelineViewModel {
     // MARK: - Retreive Functions
     func getWorkout(from tappedPost: post) {
         if let workoutID = tappedPost.workoutID {
-            let keyModel = WorkoutKeyModel(id: workoutID)
+            let keyModel = WorkoutKeyModel(id: workoutID, assignID: tappedPost.posterID)
             WorkoutLoader.shared.load(from: keyModel) { [weak self] result in
                 guard let workout = try? result.get() else {return}
                 self?.workoutSelected.send(workout)
