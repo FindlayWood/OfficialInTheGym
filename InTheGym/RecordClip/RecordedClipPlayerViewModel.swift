@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import UIKit
+import AVFoundation
 
 class RecordedClipPlayerViewModel {
     
@@ -130,5 +131,10 @@ class RecordedClipPlayerViewModel {
                 self?.successPublisher.send(false)
             }
         }
+    }
+    
+    func addToCache(_ id: String) {
+        let asset = AVAsset(url: clipStorageModel.fileURL)
+        ClipCache.shared.upload(asset, key: id)
     }
 }

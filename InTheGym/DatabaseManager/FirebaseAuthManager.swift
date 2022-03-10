@@ -115,6 +115,7 @@ class FirebaseAuthManager: AuthManagerService {
                     case true:
                         UserIDToUser.transform(userID: user.uid) { userModel in
                             FirebaseAuthManager.currentlyLoggedInUser = userModel
+                            UserDefaults.currentUser = userModel
                             ViewController.username = userModel.username /// depreciated
                             ViewController.admin = userModel.admin /// depreciated
                             completion(.success(userModel))

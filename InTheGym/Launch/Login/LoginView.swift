@@ -146,6 +146,7 @@ extension LoginView {
         loginButton.layer.shadowRadius = valid ? 6.0 : 0
         loginButton.layer.shadowOpacity = valid ? 1.0 : 0
         loginButton.backgroundColor = .darkColour.withAlphaComponent(valid ? 1.0 : 0.7)
+        loginButton.isEnabled = valid
     }
     
     public func setLoading(to loading: Bool) {

@@ -28,9 +28,13 @@ class WorkoutLoader {
             completion(.success(cached))
         } else {
             apiService.fetchSingleInstance(of: searchModel, returning: WorkoutModel.self) { [weak self] result in
-                let user = try? result.get()
-                user.map { self?.cache[searchModel.id] = $0 }
-                completion(result)
+                do {
+                    let user = try result.get()
+                    self?.cache[searchModel.id] = user
+                    completion(result)
+                } catch {
+                    completion(.failure(error))
+                }
             }
         }
     }

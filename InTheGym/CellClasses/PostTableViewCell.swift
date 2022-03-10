@@ -244,8 +244,10 @@ extension PostTableViewCell {
             let image = try? result.get()
             self?.profileImageButton.setImage(image, for: .normal)
         }
-        LikesAPIService.shared.check(postID: post.id) { [weak self] liked in
+        let likeModel = LikeSearchModel(postID: post.id)
+        LikeCache.shared.load(from: likeModel) { [weak self] result in
             guard let self = self else {return}
+            guard let liked = try? result.get() else {return}
             if liked {
                 self.likeButton.setImage(UIImage(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
                 self.likeButton.isUserInteractionEnabled = false
@@ -254,6 +256,17 @@ extension PostTableViewCell {
                 self.likeButton.isUserInteractionEnabled = true
             }
         }
+        
+//        LikesAPIService.shared.check(postID: post.id) { [weak self] liked in
+//            guard let self = self else {return}
+//            if liked {
+//                self.likeButton.setImage(UIImage(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+//                self.likeButton.isUserInteractionEnabled = false
+//            } else {
+//                self.likeButton.setImage(UIImage(systemName: "star", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+//                self.likeButton.isUserInteractionEnabled = true
+//            }
+//        }
     }
 }
 

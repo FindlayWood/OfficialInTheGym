@@ -51,7 +51,7 @@ class ViewClipViewController: UIViewController {
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        view.backgroundColor = .clear
 
 //        showLoading()
         addObservers()
@@ -104,6 +104,10 @@ class ViewClipViewController: UIViewController {
         viewModel.playerPublisher
             .compactMap { $0 }
             .sink { [weak self] in self?.setPlayer($0) }
+            .store(in: &subscriptions)
+        
+        viewModel.premiumAccountPublisher
+            .sink { [weak self] in self?.premiumAccountAlert() }
             .store(in: &subscriptions)
             
         viewModel.fetchClip()
@@ -160,6 +164,11 @@ class ViewClipViewController: UIViewController {
         guard let player = viewModel.playerPublisher.value else {return}
         player.pause()
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: - Alert
+    func premiumAccountAlert() {
+        print("need premium account")
     }
 
 

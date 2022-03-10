@@ -39,4 +39,10 @@ class ClipCache {
             completion(.success(asset))
         }
     }
+    func upload(_ asset: AVAsset, key: String) {
+        cache[key] = asset
+    }
+    func removeAll() {
+        cache.removeAll()
+    }
 }

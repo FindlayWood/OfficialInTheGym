@@ -21,10 +21,11 @@ class LoginViewModel {
     
     @Published var canLogin: Bool = false
     
+    @Published var isLoading: Bool = false
+    
     var subscriptions = Set<AnyCancellable>()
     
     //MARK: - Action Related Publishers
-    var loginButtonTapped = PassthroughSubject<LoginModel, loginError>()
     var userSuccessfullyLoggedIn = PassthroughSubject<Users, Never>()
     var errorWhenLogginIn = PassthroughSubject<loginError, Never>()
     var resendEmailVerificationReturned = PassthroughSubject<Bool,Never>()
@@ -69,99 +70,26 @@ class LoginViewModel {
                 self.canLogin = loginValid
             }
             .store(in: &subscriptions)
-        
-        // MARK: - Watching for login attempts
-        if #available(iOS 14.0, *) {
-            loginButtonTapped
-                .flatMap ({ [unowned self] newLoginModel -> AnyPublisher<Result<Users, loginError>, Never> in
-                    self.loginUser(with: newLoginModel)
-                        .map { result in
-                            switch result {
-                            case .success(let user):
-                                return .success(user)
-                            case .failure(let error):
-                                return .failure(error)
-                            }
-                        }
-                        .eraseToAnyPublisher()
-                })
-            //            .flatMap { [unowned self] newLoginModel -> AnyPublisher<Result<Users,loginError>, Never> in
-            //                self.loginUser(with: newLoginModel)
-            //                    .map { result in
-            //                        switch result {
-            //                        case .success(let user):
-            //                            return .success(user)
-            //                        case .failure(let error):
-            //                            return .failure(error)
-            //                        }
-            //
-            //                    }
-            ////                    .mapError { [unowned self] error -> loginError in
-            ////                        print("there was an error here...")
-            ////                        self.errorWhenLogginIn.send(error)
-            ////                        return error
-            ////                    }
-            //                    .eraseToAnyPublisher()
-            //            }
-                .sink { error in
-                    print(error)
-                } receiveValue: { [unowned self] newLoggedInUser in
-                    switch newLoggedInUser {
-                    case .success(let user):
-                        self.userSuccessfullyLoggedIn.send(user)
-                    case .failure(let error):
-                        self.errorWhenLogginIn.send(error)
-                    }
-                    //self.userSuccessfullyLoggedIn.send(newLoggedInUser)
-                }
-                .store(in: &subscriptions)
-        } else {
-            // Fallback on earlier versions
-        }
-
-
-        
+  
     }
     
     // MARK: - Login Function
-    func attemptToLogin() {
-        apiService.loginUser(with: loginModel) { result in
+    func login() {
+        isLoading = true
+        apiService.loginUser(with: loginModel) { [weak self] result in
             switch result {
             case .success(let user):
-                print("user loggen in \(user.username)")
+                self?.userSuccessfullyLoggedIn.send(user)
+                self?.isLoading = false
             case .failure(let error):
-                switch error {
-                case .invalidCredentials:
-                    print("invalid credentials")
-                case .emailNotVerified:
-                    print("email not verified")
-                case .unKnown:
-                    print("unknown")
-                }
+                self?.errorWhenLogginIn.send(error)
+                self?.isLoading = false
             }
         }
     }
-    
-    func loginUser(with model: LoginModel) -> AnyPublisher<Result<Users, loginError>, Never> {
-        Future { [unowned self] promise in
-            self.apiService.loginUser(with: model) { result in
-                switch result {
-                case .success(let user):
-                    print("promise successful")
-                    promise(.success(.success(user)))
-                case .failure(let error):
-                    promise(.success(.failure(error)))
-                }
-            }
-        }.eraseToAnyPublisher()
-    }
+
     
     // MARK: - Actions
-    func loginButtonAction() {
-        if canLogin {
-            loginButtonTapped.send(loginModel)
-        }
-    }
     
     func resendEmailVerification(to user: User) {
         apiService.resendEmailVerification(to: user) { [weak self] sent in

@@ -15,6 +15,7 @@ import Combine
 
 class LoginViewController: UIViewController, Storyboarded {
     
+    // MARK: - Properties
     weak var coordinator: MainCoordinator?
     
     var viewModel = LoginViewModel()
@@ -25,6 +26,7 @@ class LoginViewController: UIViewController, Storyboarded {
     
     var subscriptions = Set<AnyCancellable>()
 
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
@@ -36,41 +38,9 @@ class LoginViewController: UIViewController, Storyboarded {
         display.emailField.delegate = self
         display.passwordField.delegate = self
         
-        buttonActions()
-        
-        viewModel.userSuccessfullyLoggedIn
-            .sink { [weak self] loggedInUser in
-                guard let self = self else {return}
-                self.display.setLoading(to: false)
-                self.haptic.notificationOccurred(.success)
-                self.coordinator?.coordinateToTabBar()
-                self.navigationController?.popToRootViewController(animated: false)
-            }.store(in: &subscriptions)
-        
-        viewModel.errorWhenLogginIn
-            .sink { [weak self] error in
-                guard let self = self else {return}
-                self.showError(for: error)
-                self.display.setLoading(to: false)
-            }.store(in: &subscriptions)
+        initTargets()
+        initViewModel()
 
-        viewModel.$canLogin
-            .receive(on: DispatchQueue.main)
-            .map { return $0 }
-            .sink { [weak self] loginValid in
-                self?.display.loginButton.isEnabled = loginValid
-                self?.display.loginButtonValid(loginValid)
-            }.store(in: &subscriptions)
-        
-        viewModel.resendEmailVerificationReturned
-            .sink { [weak self] sent in
-                guard let self = self else {return}
-                if sent {
-                    self.displayTopMessage(with: "Sent email verification.")
-                } else {
-                    self.displayTopMessage(with: "Error. Try Again.")
-                }
-            }.store(in: &subscriptions)
     }
     
     override func viewDidLayoutSubviews() {
@@ -85,20 +55,55 @@ class LoginViewController: UIViewController, Storyboarded {
         editNavBarColour(to: .darkColour)
     }
     
-    func buttonActions() {
+    // MARK: - View Model
+    func initViewModel() {
+        viewModel.$isLoading
+            .sink { [weak self] in self?.display.setLoading(to: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.userSuccessfullyLoggedIn
+            .sink { [weak self] loggedInUser in
+                guard let self = self else {return}
+                self.haptic.notificationOccurred(.success)
+                self.coordinator?.coordinateToTabBar()
+                self.navigationController?.popToRootViewController(animated: false)
+            }.store(in: &subscriptions)
+        
+        viewModel.errorWhenLogginIn
+            .sink { [weak self] in self?.showError(for: $0) }
+            .store(in: &subscriptions)
+
+        viewModel.$canLogin
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.display.loginButtonValid($0) }
+            .store(in: &subscriptions)
+        
+        viewModel.resendEmailVerificationReturned
+            .sink { [weak self] sent in
+                guard let self = self else {return}
+                if sent {
+                    self.displayTopMessage(with: "Sent email verification.")
+                } else {
+                    self.displayTopMessage(with: "Error. Try Again.")
+                }
+            }.store(in: &subscriptions)
+    }
+    
+    // MARK: - Targets
+    func initTargets() {
         display.loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         display.forgotPasswordButton.addTarget(self, action: #selector(forgotPasswordButtonTapped), for: .touchUpInside)
     }
     
+    // MARK: - Actions
     @objc func loginButtonTapped() {
-        viewModel.loginButtonAction()
-        display.setLoading(to: true)
+        viewModel.login()
     }
     @objc func forgotPasswordButtonTapped() {
         coordinator?.forgotPassword()
     }
 
-    
+    // MARK: - Alerts
     func showError(for error: loginError) {
         switch error {
         case .emailNotVerified(let user):
@@ -114,8 +119,8 @@ class LoginViewController: UIViewController, Storyboarded {
     }
 }
 
+// MARK: - Textfield Delegate
 extension LoginViewController {
-    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
         if textField == display.emailField {

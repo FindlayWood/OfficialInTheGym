@@ -474,6 +474,8 @@
 		7479812327DA1F3B00CF3F9B /* ClipModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479812227DA1F3B00CF3F9B /* ClipModel.swift */; };
 		7479812727DA31DE00CF3F9B /* ClipCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479812627DA31DD00CF3F9B /* ClipCache.swift */; };
 		7479812927DA3AD400CF3F9B /* ViewClipViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479812827DA3AD400CF3F9B /* ViewClipViewModel.swift */; };
+		7479812B27DA6DC200CF3F9B /* LikeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479812A27DA6DC200CF3F9B /* LikeCache.swift */; };
+		7479812D27DA6E2900CF3F9B /* LikeSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479812C27DA6E2900CF3F9B /* LikeSearchModel.swift */; };
 		7479A909229F2B4C00D39E2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479A908229F2B4C00D39E2E /* AppDelegate.swift */; };
 		7479A90B229F2B4C00D39E2E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479A90A229F2B4C00D39E2E /* ViewController.swift */; };
 		7479A90E229F2B4C00D39E2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7479A90C229F2B4C00D39E2E /* Main.storyboard */; };
@@ -1269,6 +1271,8 @@
 		7479812227DA1F3B00CF3F9B /* ClipModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipModel.swift; sourceTree = "<group>"; };
 		7479812627DA31DD00CF3F9B /* ClipCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipCache.swift; sourceTree = "<group>"; };
 		7479812827DA3AD400CF3F9B /* ViewClipViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipViewModel.swift; sourceTree = "<group>"; };
+		7479812A27DA6DC200CF3F9B /* LikeCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeCache.swift; sourceTree = "<group>"; };
+		7479812C27DA6E2900CF3F9B /* LikeSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeSearchModel.swift; sourceTree = "<group>"; };
 		7479A905229F2B4C00D39E2E /* InTheGym.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InTheGym.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7479A908229F2B4C00D39E2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7479A90A229F2B4C00D39E2E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -1668,6 +1672,7 @@
 				742C1CAA27C27C2600DD1BB0 /* Programs.swift */,
 				742C1CC027C512C600DD1BB0 /* ProgramCreationWorkoutCellModel.swift */,
 				74DE6D8727D24BAC009FB44A /* CoachPlayersModel.swift */,
+				7479812C27DA6E2900CF3F9B /* LikeSearchModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2515,6 +2520,7 @@
 				74B48DE727A1E0F400BBFC16 /* WorkoutLoader.swift */,
 				74B48DED27A1FE6A00BBFC16 /* PostLoader.swift */,
 				7479812627DA31DD00CF3F9B /* ClipCache.swift */,
+				7479812A27DA6DC200CF3F9B /* LikeCache.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -4295,6 +4301,7 @@
 				742C1CD027C66DD000DD1BB0 /* MyProgramsCoordinator.swift in Sources */,
 				7444D0BE26D3C86F0009C7A6 /* UploadingWorkoutProtocol.swift in Sources */,
 				741FB1C32667DFE50039EB29 /* DiscoverWorkout.swift in Sources */,
+				7479812B27DA6DC200CF3F9B /* LikeCache.swift in Sources */,
 				74F2CCDE26E191CB00D7AD79 /* ExerciseSelectionProtocol.swift in Sources */,
 				744D562B26F29C7600D3E1FA /* EMOM.swift in Sources */,
 				7444D0C826D3F7D40009C7A6 /* UploadableWorkout.swift in Sources */,
@@ -4305,6 +4312,7 @@
 				7429783C26C151C00023365E /* CreateNewGroupViewModel.swift in Sources */,
 				74D31E9A25FC17940024CC05 /* FollowersAdapter.swift in Sources */,
 				74F5471325EE929900C1A6A9 /* SettingsMessages.swift in Sources */,
+				7479812D27DA6E2900CF3F9B /* LikeSearchModel.swift in Sources */,
 				74B48DF027A1FEB400BBFC16 /* PostKeyModel.swift in Sources */,
 				7466A85A25EFD7C300F4050F /* ProfileViewProtocol.swift in Sources */,
 				7433307F2785DDF9005A0C45 /* UsersListViewController.swift in Sources */,
