@@ -32,7 +32,7 @@ class RecordedClipPlayerViewModel {
     
     var exerciseModel: ExerciseModel!
     
-    var addDelegate: ClipAdding!
+    weak var addDelegate: ClipAdding?
     
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared, storageAPI: FirebaseStorageManager = FirebaseStorageManager.shared) {
@@ -83,20 +83,51 @@ class RecordedClipPlayerViewModel {
         }
     }
     
+    // MARK: - Database Model Upload
+    /// Upload the model to database with time ordered id
+    /// Return model with id and then upload details
     func uploadToDatabase(with storageURL: String) {
-        let clipUploadModel = UploadClipModel(workout: workoutModel, exercise: exerciseModel, storageURL: storageURL, isPrivate: isPrivate)
+        let clipModel = ClipModel(storageURL: storageURL, exerciseName: exerciseModel.exercise, workoutID: workoutModel?.id, isPrivate: isPrivate)
+        apiService.uploadTimeOrderedModel(model: clipModel) { [weak self] result in
+            switch result {
+            case .success(let model):
+                self?.uploadDatabaseDetails(from: model)
+            case .failure(_):
+                self?.errorPublisher.send(.failedDatabaseUpload)
+            }
+        }
+        
+//
+//        let clipUploadModel = UploadClipModel(workout: workoutModel, exercise: exerciseModel, storageURL: storageURL, isPrivate: isPrivate)
+//        let uploadPoints = clipUploadModel.getUploadPoints()
+//        apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
+//            switch result {
+//            case .success(()):
+//                self?.generateThumbnail(with: clipUploadModel.id)
+//                self?.removeFromFileManager()
+//                self?.successPublisher.send(true)
+//                self?.addDelegate.addClip(clipUploadModel.getClipModel())
+//            case .failure(_):
+//                // TODO: - Show Error
+//                self?.successPublisher.send(false)
+//                self?.errorPublisher.send(.failedDatabaseUpload)
+//            }
+//        }
+    }
+    
+    func uploadDatabaseDetails(from model: ClipModel) {
+        let clipUploadModel = UploadClipModel(workout: workoutModel, exercise: exerciseModel, id: model.id, storageURL: model.storageURL, isPrivate: model.isPrivate)
         let uploadPoints = clipUploadModel.getUploadPoints()
         apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
             switch result {
             case .success(()):
-                self?.generateThumbnail(with: clipUploadModel.id)
+                self?.generateThumbnail(with: model.id)
                 self?.removeFromFileManager()
                 self?.successPublisher.send(true)
-                self?.addDelegate.addClip(clipUploadModel.getClipModel())
+                self?.addDelegate?.addClip(model)
             case .failure(_):
-                // TODO: - Show Error
-                self?.successPublisher.send(false)
                 self?.errorPublisher.send(.failedDatabaseUpload)
+                self?.successPublisher.send(false)
             }
         }
     }

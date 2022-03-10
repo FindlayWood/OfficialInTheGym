@@ -50,6 +50,11 @@ class WorkoutDisplayViewController: UIViewController {
         navigationItem.title = viewModel.workout.title
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        toggleClipCollection(showing: true, clips: viewModel.getClips())
+    }
+    
     // MARK: - Add Child
     func addChildVC() {
         addChild(childVC)
@@ -89,6 +94,8 @@ class WorkoutDisplayViewController: UIViewController {
     func initDataSource() {
         childVC.dataSource.isUserInteractionEnabled = viewModel.isInteractionEnabled()
         childVC.dataSource.updateTable(with: viewModel.exercises)
+        
+        childVC.clipDataSource.updateTable(with: viewModel.getClips())
         
         childVC.dataSource.exerciseButtonTapped
             .sink { [weak self] in self?.coordinator?.showDescriptions($0)}

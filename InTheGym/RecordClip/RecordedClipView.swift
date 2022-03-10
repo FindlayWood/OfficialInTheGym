@@ -14,14 +14,9 @@ class RecordedClipView: UIView {
     var backButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
-        if #available(iOS 13.0, *) {
-            button.setImage(UIImage(systemName: "chevron.backward.circle.fill"), for: .normal)
-        } else {
-            button.setTitle("X", for: .normal)
-        }
+        button.setImage(UIImage(systemName: "chevron.backward.circle.fill"), for: .normal)
         button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
+        button.tintColor = .darkColour
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -40,13 +35,12 @@ class RecordedClipView: UIView {
     
     var saveButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = Constants.lightColour
+        button.backgroundColor = .darkColour.withAlphaComponent(0.5)
         button.setTitle("UPLOAD", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = Constants.font
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.cornerRadius = 20
+        button.layer.cornerRadius = 8
+        button.addViewShadow(with: .darkColour)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -54,7 +48,7 @@ class RecordedClipView: UIView {
     var savingIndicator: UIActivityIndicatorView = {
        let view = UIActivityIndicatorView()
         view.color = .white
-        view.style = .whiteLarge
+        view.style = .large
         view.hidesWhenStopped = true
         view.isHidden = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -70,6 +64,7 @@ class RecordedClipView: UIView {
         
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpView()
@@ -96,10 +91,13 @@ class RecordedClipView: UIView {
                                      privacyButton.topAnchor.constraint(equalTo: topAnchor),
                                      privacyButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
                                      
-                                     saveButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
+                                     saveButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
                                      saveButton.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      saveButton.heightAnchor.constraint(equalToConstant: 40),
-                                     saveButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5),
+                                     saveButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+                                     saveButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+                                     
+//                                     saveButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5),
                                      
                                      savingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      savingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),

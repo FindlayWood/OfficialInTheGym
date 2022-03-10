@@ -48,5 +48,6 @@ class CoachPlayerWorkoutViewController: UIViewController {
     // MARK: - Data Source
     func initDataSource() {
         childVC.dataSource.updateTable(with: viewModel.getAllExercises())
+        
     }
 }

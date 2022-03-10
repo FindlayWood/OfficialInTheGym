@@ -23,6 +23,7 @@ class WorkoutChildView: UIView {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: generateClipCollectionLayout())
         collection.register(DisplayClipCell.self, forCellWithReuseIdentifier: DisplayClipCell.reuseID)
         collection.showsHorizontalScrollIndicator = false
+        collection.backgroundColor = .lightColour
         collection.translatesAutoresizingMaskIntoConstraints = true
         return collection
     }()

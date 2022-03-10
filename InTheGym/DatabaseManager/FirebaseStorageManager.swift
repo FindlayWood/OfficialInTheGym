@@ -34,7 +34,7 @@ class FirebaseStorageManager {
         }
     }
     
-    func downloadImage(from model: ProfileImageDownloadModel, completion: @escaping ((Result<UIImage,Error>) -> Void)) {
+    func downloadImage(from model: FirebaseStoragePath, completion: @escaping ((Result<UIImage,Error>) -> Void)) {
         let storageRef = Storage.storage().reference().child(model.storagePath)
         storageRef.getData(maxSize: 1 * 720 * 720) { (data, error) in
             if let error = error {

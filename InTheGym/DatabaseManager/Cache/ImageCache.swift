@@ -37,4 +37,19 @@ class ImageCache {
             }
         }
     }
+    func loadThumbnail(from model: ClipThumbnailDownloadModel, completion: @escaping completionHandler) {
+        if let cached = cache[model.id] {
+            completion(.success(cached))
+        } else {
+            apiService.downloadImage(from: model) { [weak self] result in
+                do {
+                    let image = try result.get()
+                    self?.cache[model.id] = image
+                    completion(result)
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
 }

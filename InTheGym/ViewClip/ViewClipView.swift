@@ -11,13 +11,13 @@ import UIKit
 
 class ViewClipView: UIView {
     
+    // MARK: - Subviews
     var backButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
-        button.setTitle("X", for: .normal)
+        button.setImage(UIImage(systemName: "chevron.backward.circle.fill"), for: .normal)
         button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
+        button.tintColor = .darkColour
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -25,8 +25,10 @@ class ViewClipView: UIView {
     
     var loadingIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
-        view.style = .whiteLarge
+        view.style = .large
+        view.tintColor = .white
         view.backgroundColor = .black
+        view.hidesWhenStopped = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -99,15 +101,21 @@ class ViewClipView: UIView {
         return stack
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUpView()
+        setupUI()
     }
     required init?(coder: NSCoder) {
         fatalError()
     }
     
-    func setUpView() {
+}
+
+// MARK: - Setup UI
+private extension ViewClipView {
+    
+    func setupUI() {
         addSubview(backButton)
         addSubview(loadingIndicator)
         addSubview(progressBar)
@@ -162,12 +170,19 @@ class ViewClipView: UIView {
                                      
                                      ])
     }
-    
-    func removeLoadingIndicator() {
-        loadingIndicator.removeFromSuperview()
+}
+
+// MARK: - Public Configuration
+extension ViewClipView {
+    public func setLoading(to loading: Bool) {
+        if loading {
+            loadingIndicator.startAnimating()
+        } else {
+            loadingIndicator.stopAnimating()
+        }
     }
     
-    func updateProgressBar(currentTime: Double, videolength: Double) {
+    public func updateProgressBar(currentTime: Double, videolength: Double) {
         let progress = CGFloat((currentTime) / videolength)
         if progress == 0 {
             self.progressBar.frame = CGRect(x: 0, y: 0, width: 0, height: 5)

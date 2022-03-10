@@ -9,6 +9,7 @@
 import UIKit
 import AVKit
 import AVFoundation
+import Combine
 
 enum clipViewingState {
     case fullScreen
@@ -19,58 +20,75 @@ class ViewClipViewController: UIViewController {
     
     weak var coordinator: ViewClipFlow?
     
-    var player: AVPlayer!
+//    var player: AVPlayer!
     
-    var storageURL: String!
+//    var storageURL: String!
     
     var display = ViewClipView()
     
-    var informationView = ViewClipBottomView()
+//    var informationView = ViewClipBottomView()
     
-    var flashView = FlashView()
+//    var flashView = FlashView()
     
-    private var bottomViewHeight = Constants.screenSize.height * 0.2
+//    private var bottomViewHeight = Constants.screenSize.height * 0.2
     
     var paused: Bool = false
     
-    var exerciseName: String!
+//    var exerciseName: String!
     
-    var creatorID: String!
+//    var creatorID: String!
     
-    var workoutID: String!
+//    var workoutID: String!
+    
+    var viewModel = ViewClipViewModel()
+    
+    private var subscriptions = Set<AnyCancellable>()
     
     private lazy var originalFrame = view.bounds
     private lazy var disappearingFrame = CGRect(x: 0, y: Constants.screenSize.height, width: Constants.screenSize.width, height: view.frame.height)
     private lazy var originPoint = originalFrame.origin
 
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
 
-        showLoading()
+//        showLoading()
         addObservers()
-        addButtonActions()
+        initTargets()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        display.frame = getViewableFrameWithBottomSafeArea()
+//        display.exerciseName.text = exerciseName
+        view.addSubview(display)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        initViewModel()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        startVideo()
+        viewModel.playerPublisher
+            .compactMap { $0 }
+            .sink { [weak self] in self?.startPlayer($0) }
+            .store(in: &subscriptions)
         
-        guard let currentVideoLength = ((player.currentItem?.asset) as? AVURLAsset)?.duration.seconds else {return}
-        let currentTime = player.currentTime()
-        print(currentTime)
-        print(currentVideoLength)
+//        startVideo()
+//
+//        guard let currentVideoLength = ((player.currentItem?.asset) as? AVURLAsset)?.duration.seconds else {return}
+//        let currentTime = player.currentTime()
+//        print(currentTime)
+//        print(currentVideoLength)
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom)
-        display.exerciseName.text = exerciseName
-        view.addSubview(display)
-    }
-    
-    func addButtonActions() {
+
+    // MARK: - Targets
+    func initTargets() {
         display.backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         let tap = UITapGestureRecognizer(target: self, action: #selector(togglePause))
         display.addGestureRecognizer(tap)
@@ -78,33 +96,58 @@ class ViewClipViewController: UIViewController {
         display.addGestureRecognizer(pan)
         display.moreButton.addTarget(self, action: #selector(showInformation), for: .touchUpInside)
     }
+    
+    
+    // MARK: - View Model
+    func initViewModel() {
+        
+        viewModel.playerPublisher
+            .compactMap { $0 }
+            .sink { [weak self] in self?.setPlayer($0) }
+            .store(in: &subscriptions)
+            
+        viewModel.fetchClip()
+    }
+    
+    func setPlayer(_ player: AVPlayer) {
+        let layer = AVPlayerLayer(player: player)
+        layer.frame = view.bounds
+        layer.videoGravity = .resizeAspectFill
+        view.layer.addSublayer(layer)
+        display.setLoading(to: false)
+        addTimerObserver()
+    }
+    
+    func startPlayer(_ player: AVPlayer) {
+        if player.currentItem?.status == .readyToPlay {
+            player.play()
+        }
+    }
  
     func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(clipFinished), name: .AVPlayerItemDidPlayToEndTime, object: nil)
     }
     
-    func showLoading() {
-        display.loadingIndicator.startAnimating()
-    }
+//    func startVideo() {
+//        guard let playerURL = URL(string: storageURL) else {return}
+//        player = AVPlayer(url: playerURL)
+//
+//        let layer = AVPlayerLayer(player: player)
+//        layer.frame = view.bounds
+//        layer.videoGravity = .resizeAspectFill
+//        view.layer.addSublayer(layer)
+////        display.removeLoadingIndicator()
+//        player.play()
+//        addTimerObserver()
+//    }
     
-    func startVideo() {
-        guard let playerURL = URL(string: storageURL) else {return}
-        player = AVPlayer(url: playerURL)
-        
-        let layer = AVPlayerLayer(player: player)
-        layer.frame = view.bounds
-        layer.videoGravity = .resizeAspectFill
-        view.layer.addSublayer(layer)
-        display.removeLoadingIndicator()
-        player.play()
-        addTimerObserver()
-    }
-    
+    // MARK: - Actions
     @objc func clipFinished() {
         self.dismiss(animated: true, completion: nil)
     }
     
     @objc func togglePause() {
+        guard let player = viewModel.playerPublisher.value else {return}
         if paused {
             player.play()
             paused.toggle()
@@ -114,20 +157,23 @@ class ViewClipViewController: UIViewController {
         }
     }
     @objc func back() {
+        guard let player = viewModel.playerPublisher.value else {return}
         player.pause()
         self.dismiss(animated: true, completion: nil)
     }
 
 
+    // TODO: - Move to view model
     func addTimerObserver() {
+        guard let player = viewModel.playerPublisher.value else {return}
         let interval = CMTime(seconds: 0.1, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [weak self] time in
             guard let self = self else {return}
-            if self.player.currentItem?.status == .readyToPlay {
-                let currentTime = CMTimeGetSeconds(self.player.currentTime())
+            if player.currentItem?.status == .readyToPlay {
+                let currentTime = CMTimeGetSeconds(player.currentTime())
                 
                 let seconds = Double(currentTime)
-                guard let currentVideoLength = ((self.player.currentItem?.asset) as? AVURLAsset)?.duration.seconds else {return}
+                guard let currentVideoLength = ((player.currentItem?.asset) as? AVURLAsset)?.duration.seconds else {return}
                 self.display.updateProgressBar(currentTime: seconds, videolength: currentVideoLength)
             }
         }
@@ -168,23 +214,24 @@ class ViewClipViewController: UIViewController {
         }
     }
 
+    // TODO: - Remove
     @objc func showInformation() {
-        player.pause()
-        informationView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: bottomViewHeight)
-        flashView.frame = CGRect(x: 0, y: 0 - view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height)
-        flashView.alpha = 0
-        display.addSubview(flashView)
-        display.addSubview(informationView)
-        informationView.setProfileImage(from: creatorID)
-        informationView.setUsername(from: creatorID)
-        informationView.flashview = flashView
-        informationView.delegate = self
-        let showFrame = CGRect(x: 0, y: Constants.screenSize.height - bottomViewHeight - view.safeAreaInsets.top, width: view.frame.width, height: bottomViewHeight)
-        UIView.animate(withDuration: 0.4) {
-            self.flashView.alpha = 0.4
-            self.informationView.frame = showFrame
-            self.flashView.isUserInteractionEnabled = true
-        }
+//        player.pause()
+//        informationView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: bottomViewHeight)
+//        flashView.frame = CGRect(x: 0, y: 0 - view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height)
+//        flashView.alpha = 0
+//        display.addSubview(flashView)
+//        display.addSubview(informationView)
+//        informationView.setProfileImage(from: creatorID)
+//        informationView.setUsername(from: creatorID)
+//        informationView.flashview = flashView
+//        informationView.delegate = self
+//        let showFrame = CGRect(x: 0, y: Constants.screenSize.height - bottomViewHeight - view.safeAreaInsets.top, width: view.frame.width, height: bottomViewHeight)
+//        UIView.animate(withDuration: 0.4) {
+//            self.flashView.alpha = 0.4
+//            self.informationView.frame = showFrame
+//            self.flashView.isUserInteractionEnabled = true
+//        }
     }
 }
 
@@ -195,16 +242,16 @@ extension ViewClipViewController: ClipMoreDelegate {
     
     
     func tableViewTapped(at position: Int) {
-        switch position {
-        case 0:
-            UserIDToUser.transform(userID: creatorID) { [weak self] user in
-                guard let self = self else {return}
-                self.coordinator?.showClipCreator(with: user)
-            }
-        case 1:
-            break
-        default:
-            break
-        }
+//        switch position {
+//        case 0:
+//            UserIDToUser.transform(userID: creatorID) { [weak self] user in
+//                guard let self = self else {return}
+//                self.coordinator?.showClipCreator(with: user)
+//            }
+//        case 1:
+//            break
+//        default:
+//            break
+//        }
     }
 }

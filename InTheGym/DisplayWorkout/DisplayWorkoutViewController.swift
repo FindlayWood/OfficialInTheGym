@@ -565,10 +565,10 @@ extension DisplayWorkoutViewController: DisplayWorkoutProtocol {
         print("show clip...")
         let clipData = viewModel.getClipData(at: indexPath)
         let vc = ViewClipViewController()
-        vc.storageURL = clipData.storageURL
-        vc.exerciseName = clipData.exerciseName
-        vc.creatorID = viewModel.selectedWorkout?.creatorID
-        vc.workoutID = viewModel.selectedWorkout?.workoutID
+//        vc.storageURL = clipData.storageURL
+//        vc.exerciseName = clipData.exerciseName
+//        vc.creatorID = viewModel.selectedWorkout?.creatorID
+//        vc.workoutID = viewModel.selectedWorkout?.workoutID
         vc.modalTransitionStyle = .coverVertical
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true, completion: nil)

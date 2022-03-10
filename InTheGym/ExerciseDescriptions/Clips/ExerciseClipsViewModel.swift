@@ -14,6 +14,7 @@ class ExerciseClipsViewModel {
     // MARK: - Publishers
     var keyClipPublisher = CurrentValueSubject<[KeyClipModel],Never>([])
     var clipModelPublisher = CurrentValueSubject<[ClipModel],Never>([])
+    var addedClipPublisher = PassthroughSubject<ClipModel,Never>()
     
     // MARK: - Properties
     var exerciseModel: ExerciseModel!
@@ -54,6 +55,6 @@ class ExerciseClipsViewModel {
 // MARK: - Adding Protocol
 extension ExerciseClipsViewModel: ClipAdding {
     func addClip(_ model: ClipModel) {
-        
+        self.addedClipPublisher.send(model)
     }
 }

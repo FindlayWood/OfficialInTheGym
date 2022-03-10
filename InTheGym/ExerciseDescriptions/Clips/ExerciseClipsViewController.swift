@@ -42,6 +42,10 @@ class ExerciseClipsViewController: UIViewController {
     // MARK: - Data Source
     func initDataSource() {
         dataSource = .init(collectionView: display.collectionView)
+        
+        dataSource.clipSelected
+            .sink { [weak self] in self?.clipSelected($0)}
+            .store(in: &subscriptions)
     }
     
     // MARK: - View Model
@@ -52,6 +56,10 @@ class ExerciseClipsViewController: UIViewController {
                 models.filter { !($0.isPrivate) }
             }
             .sink { [weak self] in self?.dataSource.updateCollection(with: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.addedClipPublisher
+            .sink { [weak self] in self?.dataSource.updateCollection(with: [$0])}
             .store(in: &subscriptions)
         
         viewModel.fetchClipKeys()
@@ -67,6 +75,13 @@ extension ExerciseClipsViewController {
         vc.modalPresentationStyle = .fullScreen
         vc.modalTransitionStyle = .coverVertical
         navigationController?.present(vc, animated: true)
+    }
+    
+    func clipSelected(_ model: ClipModel) {
+        let keyModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
+        let vc = ViewClipViewController()
+        vc.viewModel.keyClipModel = keyModel
+        navigationController?.present(vc, animated: true, completion: nil)
     }
     
 }

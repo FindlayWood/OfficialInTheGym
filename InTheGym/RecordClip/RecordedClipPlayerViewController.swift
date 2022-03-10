@@ -63,6 +63,7 @@ class RecordedClipPlayerViewController: UIViewController {
         view.addSubview(display)
     }
     
+    // MARK: - Targets
     func addButtonActions() {
         display.backButton.addTarget(self, action: #selector(removeFromFileManager), for: .touchUpInside)
         display.saveButton.addTarget(self, action: #selector(saveVideoToFirebase), for: .touchUpInside)
@@ -71,6 +72,7 @@ class RecordedClipPlayerViewController: UIViewController {
         display.privacyButton.addTarget(self, action: #selector(togglePrivacy), for: .touchUpInside)
     }
  
+    // MARK: - Restart Observer
     func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(restartVideo), name: .AVPlayerItemDidPlayToEndTime, object: nil)
     }
@@ -93,6 +95,20 @@ class RecordedClipPlayerViewController: UIViewController {
     }
     
     func setupSubscriptions() {
+        
+        viewModel.successPublisher
+            .sink { [weak self] success in
+                if success {
+                    self?.dismiss(animated: true)
+                }
+            }
+            .store(in: &subscriptions)
+        
+        viewModel.errorPublisher
+            .filter { $0 == .failedDatabaseUpload }
+            .sink { [weak self] _ in self?.showUploadError()}
+            .store(in: &subscriptions)
+        
         viewModel.thumbnailGenerated
             .sink { [weak self] thumbnail in
                 let view = UIImageView(frame: CGRect(x: 0, y: 0, width: 300, height: 500))
@@ -121,5 +137,6 @@ class RecordedClipPlayerViewController: UIViewController {
     
     @objc func togglePrivacy() {
         display.togglePrivacy()
+        viewModel.isPrivate.toggle()
     }
 }

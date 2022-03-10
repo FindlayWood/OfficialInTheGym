@@ -471,6 +471,9 @@
 		746BFFAA26B2D7460010C465 /* DisplayWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BFFA926B2D7460010C465 /* DisplayWorkoutView.swift */; };
 		746BFFAC26B304270010C465 /* ThumbnailGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BFFAB26B304270010C465 /* ThumbnailGenerator.swift */; };
 		7471ACDA25D454310042C561 /* WorkoutCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7471ACD925D454310042C561 /* WorkoutCell.xib */; };
+		7479812327DA1F3B00CF3F9B /* ClipModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479812227DA1F3B00CF3F9B /* ClipModel.swift */; };
+		7479812727DA31DE00CF3F9B /* ClipCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479812627DA31DD00CF3F9B /* ClipCache.swift */; };
+		7479812927DA3AD400CF3F9B /* ViewClipViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479812827DA3AD400CF3F9B /* ViewClipViewModel.swift */; };
 		7479A909229F2B4C00D39E2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479A908229F2B4C00D39E2E /* AppDelegate.swift */; };
 		7479A90B229F2B4C00D39E2E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479A90A229F2B4C00D39E2E /* ViewController.swift */; };
 		7479A90E229F2B4C00D39E2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7479A90C229F2B4C00D39E2E /* Main.storyboard */; };
@@ -1263,6 +1266,9 @@
 		746BFFA926B2D7460010C465 /* DisplayWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayWorkoutView.swift; sourceTree = "<group>"; };
 		746BFFAB26B304270010C465 /* ThumbnailGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailGenerator.swift; sourceTree = "<group>"; };
 		7471ACD925D454310042C561 /* WorkoutCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WorkoutCell.xib; sourceTree = "<group>"; };
+		7479812227DA1F3B00CF3F9B /* ClipModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipModel.swift; sourceTree = "<group>"; };
+		7479812627DA31DD00CF3F9B /* ClipCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipCache.swift; sourceTree = "<group>"; };
+		7479812827DA3AD400CF3F9B /* ViewClipViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipViewModel.swift; sourceTree = "<group>"; };
 		7479A905229F2B4C00D39E2E /* InTheGym.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InTheGym.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7479A908229F2B4C00D39E2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7479A90A229F2B4C00D39E2E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -1959,6 +1965,7 @@
 			children = (
 				742C1C5227B2FB7200DD1BB0 /* UploadClipModel.swift */,
 				742C1CA427BEA15B00DD1BB0 /* ExerciseClipsModel.swift */,
+				7479812227DA1F3B00CF3F9B /* ClipModel.swift */,
 			);
 			path = Clips;
 			sourceTree = "<group>";
@@ -2507,6 +2514,7 @@
 				74B48DDC27A06D4700BBFC16 /* ImageCache.swift */,
 				74B48DE727A1E0F400BBFC16 /* WorkoutLoader.swift */,
 				74B48DED27A1FE6A00BBFC16 /* PostLoader.swift */,
+				7479812627DA31DD00CF3F9B /* ClipCache.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -3567,6 +3575,7 @@
 				74FDB5B426A756FE000649CC /* ViewClipView.swift */,
 				74FDB5B626A77F04000649CC /* ClipModels.swift */,
 				74FDB5B826B0C42D000649CC /* ViewClipBottomView.swift */,
+				7479812827DA3AD400CF3F9B /* ViewClipViewModel.swift */,
 			);
 			path = ViewClip;
 			sourceTree = "<group>";
@@ -4035,6 +4044,7 @@
 				743330B7278B4698005A0C45 /* AmrapCreationTableViewCell.swift in Sources */,
 				7444D07326CE8F070009C7A6 /* AddGroupWorkoutCoordinator.swift in Sources */,
 				74F2CCE826E3817000D7AD79 /* AddMoreNoteView.swift in Sources */,
+				7479812727DA31DE00CF3F9B /* ClipCache.swift in Sources */,
 				745B330325782FF100594019 /* CompletedWorkoutViewController.swift in Sources */,
 				74318F3C26B570F5009EDFAC /* PreLiveWorkoutView.swift in Sources */,
 				74EC438A2639B7CE00D81E5B /* DisplayWorkoutCircuitTableViewCell.swift in Sources */,
@@ -4133,6 +4143,7 @@
 				741FB1DA266E71960039EB29 /* StaticMessages.swift in Sources */,
 				74B48E0727A42FF800BBFC16 /* LiveWorkoutDisplayViewModel.swift in Sources */,
 				74B48E0227A4281C00BBFC16 /* LiveWorkoutSetDataSource.swift in Sources */,
+				7479812327DA1F3B00CF3F9B /* ClipModel.swift in Sources */,
 				7403A5FF26C558F9000588CE /* GroupHomePageViewModel.swift in Sources */,
 				7479A909229F2B4C00D39E2E /* AppDelegate.swift in Sources */,
 				742C1CA227BE9FE300DD1BB0 /* ExerciseClipsViewModel.swift in Sources */,
@@ -4345,6 +4356,7 @@
 				74F2CCD826E1284100D7AD79 /* ExerciseSelectionHeader.swift in Sources */,
 				743330C7278F2CB0005A0C45 /* SaveView.swift in Sources */,
 				74F18AD927D65C7D0043551F /* CoachPlayerWorkoutsViewModel.swift in Sources */,
+				7479812927DA3AD400CF3F9B /* ViewClipViewModel.swift in Sources */,
 				742C1CB027C2A3FB00DD1BB0 /* ProgramCreationViewModel.swift in Sources */,
 				742C1CDC27C7C30600DD1BB0 /* ProgramCreationDetailViewModel.swift in Sources */,
 				742C1CE427C9337E00DD1BB0 /* SavedProgramDisplayViewModel.swift in Sources */,

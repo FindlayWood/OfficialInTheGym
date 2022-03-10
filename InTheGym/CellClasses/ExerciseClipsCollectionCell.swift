@@ -71,10 +71,14 @@ extension ExerciseClipsCollectionCell {
     public func configure(with model: ClipModel) {
         let profileImageModel = ProfileImageDownloadModel(id: model.userID)
         ImageCache.shared.load(from: profileImageModel) { [weak self] result in
-            let image = try? result.get()
-            if let image = image {
-                self?.profileImageButton.setImage(image, for: .normal)
-            }
+            guard let image = try? result.get() else {return}
+            self?.profileImageButton.setImage(image, for: .normal)
+        }
+        
+        let thumbnailDownloadModel = ClipThumbnailDownloadModel(id: model.id)
+        ImageCache.shared.loadThumbnail(from: thumbnailDownloadModel) { [weak self] result in
+            guard let image = try? result.get() else {return}
+            self?.thumbnailImageView.image = image
         }
     }
 }
