@@ -52,6 +52,7 @@ class RequestTableViewCellViewModel: NSObject {
             case .success(_):
                 self.successfullyAccepted.send(self.cellModel)
                 self.isLoading = false
+                self.sendNotification()
             case .failure(let error):
                 self.errorPublisher.send(error)
                 self.isLoading = false
@@ -75,6 +76,18 @@ class RequestTableViewCellViewModel: NSObject {
             case .failure(let error):
                 self.errorPublisher.send(error)
                 self.isLoading = false
+            }
+        }
+    }
+    
+    // MARK: - Notification
+    func sendNotification() {
+        NotificationManager().send(.acceptedRequest(sendTo: cellModel.user.uid)) { [weak self] result in
+            switch result {
+            case .success(_):
+                print("send notif")
+            case .failure(_):
+                print("failed")
             }
         }
     }

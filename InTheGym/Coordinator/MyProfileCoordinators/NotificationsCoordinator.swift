@@ -18,7 +18,7 @@ class NotificationsCoordinator: NSObject, Coordinator {
     
     func start() {
         navigationController.delegate = self
-        let vc = DisplayNotificationsViewController.instantiate()
+        let vc = DisplayNotificationsViewController()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }

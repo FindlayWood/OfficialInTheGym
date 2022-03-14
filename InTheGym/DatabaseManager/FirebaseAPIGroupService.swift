@@ -288,11 +288,11 @@ class FirebaseAPIGroupService: FirebaseAPIGroupServiceProtocol {
             return
         }
         if userID != posterID{
-            let notification = NotificationGroupLikedPost(from: userID, to: posterID, postID: postID, groupID: groupID)
-            let uploadNotification = NotificationManager(delegate: notification)
-            uploadNotification.upload { _ in
-                
-            }
+//            let notification = NotificationGroupLikedPost(from: userID, to: posterID, postID: postID, groupID: groupID)
+//            let uploadNotification = NotificationManager(delegate: notification)
+//            uploadNotification.upload { _ in
+//                
+//            }
         }
     }
 //    func isLiked(from groupID: String, postID: String, completion: @escaping (Bool) -> Void) {

@@ -105,6 +105,7 @@ class AddPlayerViewModel {
             case .success(()):
                 self?.successfullySentRequest.send(true)
                 self?.isLoading = false
+                self?.sendNotification(to: user)
             case .failure(_):
                 self?.successfullySentRequest.send(false)
                 self?.isLoading = false
@@ -112,4 +113,9 @@ class AddPlayerViewModel {
         }
     }
     
+    private func sendNotification(to user: Users) {
+        NotificationManager().send(.sentRequest(sendTo: user.uid)) { [weak self] result in
+            print("doe")
+        }
+    }
 }

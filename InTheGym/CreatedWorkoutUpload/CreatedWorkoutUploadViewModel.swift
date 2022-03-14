@@ -124,11 +124,11 @@ class CreatedWorkoutUploadViewModel {
                             let ref = self.workoutRef.child(memberID).childByAutoId()
                             ref.setValue(createdWorkout)
                         }
-                        let notification = NotificationNewWorkout(from: self.userID, to: memberID, workoutID: workout.workoutID!)
-                        let uploadNotification = NotificationManager(delegate: notification)
-                        uploadNotification.upload { _ in
-                            
-                        }
+//                        let notification = NotificationNewWorkout(from: self.userID, to: memberID, workoutID: workout.workoutID!)
+//                        let uploadNotification = NotificationManager(delegate: notification)
+//                        uploadNotification.upload { _ in
+//
+//                        }
                         // upload to each member
                     }
                 }
@@ -146,11 +146,11 @@ class CreatedWorkoutUploadViewModel {
                 }
                 ref.setValue(createdWorkout)
             }
-            let notification = NotificationNewWorkout(from: self.userID, to: createdFor!, workoutID: workout.workoutID!)
-            let uploadNotification = NotificationManager(delegate: notification)
-            uploadNotification.upload { _ in
-                
-            }
+//            let notification = NotificationNewWorkout(from: self.userID, to: createdFor!, workoutID: workout.workoutID!)
+//            let uploadNotification = NotificationManager(delegate: notification)
+//            uploadNotification.upload { _ in
+//                
+//            }
             uploadedWorkout?()
  
         } else {

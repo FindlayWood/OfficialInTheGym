@@ -34,7 +34,7 @@ extension DisplayNotificationsAdapter: UITableViewDelegate, UITableViewDataSourc
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "NotificationsTableViewCell", for: indexPath) as! NotificationsTableViewCell
         
-        cell.notification = delegate.getData(at: indexPath)
+//        cell.notification = delegate.getData(at: indexPath)
         
         return cell
     }

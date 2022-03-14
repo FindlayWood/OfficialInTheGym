@@ -160,16 +160,16 @@ class FirebasePostAPI {
         }
         
         if userID != posterID{
-            let notification = NotificationReplied(from: userID, to: posterID, postID: postID)
-            let uploadNotification = NotificationManager(delegate: notification)
-            uploadNotification.upload { result in
-                switch result {
-                case .success(_):
-                    completion(.success(true))
-                case .failure(_):
-                    completion(.failure(.failedToSendNotification))
-                }
-            }
+//            let notification = NotificationReplied(from: userID, to: posterID, postID: postID)
+//            let uploadNotification = NotificationManager(delegate: notification)
+//            uploadNotification.upload { result in
+//                switch result {
+//                case .success(_):
+//                    completion(.success(true))
+//                case .failure(_):
+//                    completion(.failure(.failedToSendNotification))
+//                }
+//            }
         }
     }
     

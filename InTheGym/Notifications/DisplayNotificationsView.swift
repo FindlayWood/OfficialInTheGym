@@ -1,14 +1,14 @@
 //
-//  RequestsView.swift
+//  DisplayNotificationsView.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 11/03/2022.
+//  Created by Findlay Wood on 14/03/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import UIKit
 
-class RequestsView: UIView {
+class DisplayNotificationsView: UIView {
     
     // MARK: - Properties
     
@@ -16,9 +16,9 @@ class RequestsView: UIView {
     var tableview: UITableView = {
         let view = UITableView()
         view.tableFooterView = UIView()
-        view.register(RequestTableViewCell.self, forCellReuseIdentifier: RequestTableViewCell.cellID)
         view.separatorInset = .zero
         view.layoutMargins = .zero
+        view.register(NotificationsTableViewCell.self, forCellReuseIdentifier: NotificationsTableViewCell.cellID)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -35,8 +35,9 @@ class RequestsView: UIView {
     
 }
 // MARK: - Configure
-private extension RequestsView {
+private extension DisplayNotificationsView {
     func setupUI() {
+        backgroundColor = .white
         addSubview(tableview)
         configureUI()
     }

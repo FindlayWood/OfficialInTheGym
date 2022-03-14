@@ -67,9 +67,9 @@ struct LikeTransportLayer {
         uploadPoints.append(PostLikesModel(postID: postID).toMultiUploadPoint(with: true))
         uploadPoints.append(LikesModel(postID: postID).toMultiUploadPoint(with: true))
         uploadPoints.append(LikeCount(postID: postID).toMultiUploadPoint(increment: true))
-        if let notification = NotificationModel.createNotification(type: .GroupLikedPost, to: post.posterID, postID: post.id, groupID: post.groupID)?.toFirebaseJSON() {
-            uploadPoints.append(notification)
-        }
+//        if let notification = NotificationModel.createNotification(type: .GroupLikedPost, to: post.posterID, postID: post.id, groupID: post.groupID)?.toFirebaseJSON() {
+//            uploadPoints.append(notification)
+//        }
         return uploadPoints
     }
     func postLike(post: post) -> [FirebaseMultiUploadDataPoint] {
@@ -77,9 +77,9 @@ struct LikeTransportLayer {
         uploadPoints.append(PostLikesModel(postID: postID).toMultiUploadPoint(with: true))
         uploadPoints.append(LikesModel(postID: postID).toMultiUploadPoint(with: true))
         uploadPoints.append(LikeCount(postID: postID).toMultiUploadPoint(increment: true))
-        if let notification = NotificationModel.createNotification(type: .LikedPost, to: post.posterID, postID: post.id)?.toFirebaseJSON() {
-            uploadPoints.append(notification)
-        }
+//        if let notification = NotificationModel.createNotification(type: .LikedPost, to: post.posterID, postID: post.id)?.toFirebaseJSON() {
+//            uploadPoints.append(notification)
+//        }
         return uploadPoints
     }
 }
