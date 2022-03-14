@@ -35,9 +35,9 @@ class CommentSectionViewModel {
     
     lazy var groupPostReplyModel = PostReplies(postID: mainGroupPost.id)
     
-    var listener: PostListener!
+    var listener: PostListener?
     
-    var groupListener: GroupPostListener!
+    var groupListener: GroupPostListener?
     
     var workoutSelected = PassthroughSubject<WorkoutModel,Never>()
     
@@ -89,7 +89,7 @@ class CommentSectionViewModel {
                 self.isLoading.send(false)
                 self.mainPost.replyCount += 1
                 self.uploadingNewComment.send(newComment)
-                self.listener.send(self.mainPost)
+                self.listener?.send(self.mainPost)
             case .failure(_):
                 self.errorUploadingComment.send(())
                 self.isLoading.send(false)
@@ -116,7 +116,7 @@ class CommentSectionViewModel {
                 self.uploadingNewComment.send(newComment)
                 self.isLoading.send(false)
                 self.mainGroupPost.replyCount += 1
-                self.groupListener.send(self.mainGroupPost)
+                self.groupListener?.send(self.mainGroupPost)
             case .failure(_):
                 self.errorUploadingComment.send(())
                 self.isLoading.send(false)
@@ -164,7 +164,7 @@ class CommentSectionViewModel {
             switch result {
             case .success(()):
                 LikesAPIService.shared.LikedPostsCache[post.id] = true
-                self?.groupListener.send(post)
+                self?.groupListener?.send(post)
             case .failure(_):
                 self?.errorLiking.send(())
             }
@@ -177,7 +177,7 @@ class CommentSectionViewModel {
             switch result {
             case .success(()):
                 LikesAPIService.shared.LikedPostsCache[post.id] = true
-                self?.listener.send(post)
+                self?.listener?.send(post)
             case .failure(_):
                 self?.errorLiking.send(())
             }

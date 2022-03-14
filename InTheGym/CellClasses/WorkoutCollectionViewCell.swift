@@ -116,7 +116,10 @@ class WorkoutCollectionViewCell: FullWidthCollectionViewCell {
 private extension WorkoutCollectionViewCell {
     func setupUI() {
         backgroundColor = .offWhiteColour
+        addViewShadow(with: .black.withAlphaComponent(0.3))
         layer.cornerRadius = 10
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.white.cgColor
         contentView.addSubview(titleLabel)
         contentView.addSubview(completedLabel)
         contentView.addSubview(creatorLabel)

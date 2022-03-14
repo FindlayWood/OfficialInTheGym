@@ -11,6 +11,9 @@ import Combine
 
 class NotificationsDataSource: NSObject {
     
+    // MARK: - Publishers
+    var notificationSelected = PassthroughSubject<NotificationModel,Never>()
+    
     // MARK: - Properties
     var tableView: UITableView
     
@@ -53,5 +56,11 @@ class NotificationsDataSource: NSObject {
 
 // MARK: - Delegate
 extension NotificationsDataSource: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let notification = dataSource.itemIdentifier(for: indexPath) else {return}
+        notificationSelected.send(notification)
+    }
     
 }

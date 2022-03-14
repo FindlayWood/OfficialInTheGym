@@ -15,9 +15,9 @@ class DisplayingWorkoutsView: UIView {
     // MARK: - Subviews
     var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 30)
-        label.text = "WORKOUTS"
-        label.textColor = .white
+        label.font = UIFont(name: "Menlo-Bold", size: 25)
+        label.textColor = .darkColour
+        label.text = "MYWORKOUTS"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -26,7 +26,7 @@ class DisplayingWorkoutsView: UIView {
         let button = UIButton()
         let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
         button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: configuration), for: .normal)
-        button.tintColor = .white
+        button.tintColor = .darkColour
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -34,7 +34,7 @@ class DisplayingWorkoutsView: UIView {
         let button = UIButton()
         let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
         button.setImage(UIImage(systemName: "text.book.closed.fill", withConfiguration: configuration), for: .normal)
-        button.tintColor = .white
+        button.tintColor = .darkColour
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -42,7 +42,7 @@ class DisplayingWorkoutsView: UIView {
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
         view.register(WorkoutCollectionViewCell.self, forCellWithReuseIdentifier: WorkoutCollectionViewCell.reuseID)
-        view.backgroundColor = .lightColour
+        view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -61,7 +61,7 @@ class DisplayingWorkoutsView: UIView {
 // MARK: - Configure
 private extension DisplayingWorkoutsView {
     func setupUI() {
-        backgroundColor = .lightColour
+        backgroundColor = .white
         addSubview(titleLabel)
         addSubview(plusButton)
         addSubview(programButton)
@@ -71,7 +71,7 @@ private extension DisplayingWorkoutsView {
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             
             plusButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),

@@ -52,3 +52,15 @@ extension GroupWorkoutKeys: FirebaseInstance {
         return "GroupWorkouts/\(id)"
     }
 }
+
+// MARK: - Group Post Search Model
+/// Model to search and download specific group post
+struct GroupPostSearchModel {
+    var groupID: String
+    var postID: String
+}
+extension GroupPostSearchModel: FirebaseInstance {
+    var internalPath: String {
+        return "GroupPosts/\(groupID)/\(postID)"
+    }
+}

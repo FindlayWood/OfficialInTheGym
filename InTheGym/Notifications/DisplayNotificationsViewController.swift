@@ -48,6 +48,9 @@ class DisplayNotificationsViewController: UIViewController {
     func initDataSource() {
         dataSource = .init(tableView: display.tableview)
         
+        dataSource.notificationSelected
+            .sink { [weak self] in self?.viewModel.notificationSelected($0)}
+            .store(in: &subscriptions)
     }
     
     // MARK: - View Model
@@ -57,8 +60,30 @@ class DisplayNotificationsViewController: UIViewController {
             .sink { [weak self] in self?.dataSource.update(with: $0)}
             .store(in: &subscriptions)
         
+        viewModel.destinationPublisher
+            .sink { [weak self] in self?.coordinate(to: $0)}
+            .store(in: &subscriptions)
+        
         viewModel.fetchNotifications()
         
+    }
+    
+    // MARK: - Actions
+    func coordinate(to destination: NotificationDestination) {
+        switch destination {
+        case .post(let post):
+            coordinator?.showPost(post: post)
+        case .groupPost(let groupPost):
+            coordinator?.showGroupPost(post: groupPost)
+        case .user(let users):
+            coordinator?.showUser(user: users)
+        case .newRequest:
+            coordinator?.showRequests()
+        case .acceptedRequest(let users):
+            coordinator?.showPlayerDetail(player: users)
+        case .newWorkout:
+            break
+        }
     }
 }
 

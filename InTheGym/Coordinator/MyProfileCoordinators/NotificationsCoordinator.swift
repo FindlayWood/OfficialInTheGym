@@ -27,13 +27,36 @@ class NotificationsCoordinator: NSObject, Coordinator {
 //MARK: TimelineFlow Methods
 extension NotificationsCoordinator {
     
- 
     
     func showUser(user: Users) {
         let child = UserProfileCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(child)
         child.start()
     }
+    
+    func showPost(post: post) {
+        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: nil)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
+    func showGroupPost(post: GroupPost) {
+        let child = GroupCommentSectionCoordinator(navigationController: navigationController, mainPost: post)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
+    func showPlayerDetail(player: Users) {
+        let child = PlayerDetailCoordinator(navigationController: navigationController, player: player)
+        childCoordinators.append(child)
+        child.start()
+    }
+    
+    func showRequests() {
+        let vc = RequestsViewController()
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
 }
 
 //MARK: - Navigation Delegate Method

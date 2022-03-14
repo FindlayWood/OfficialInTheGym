@@ -29,7 +29,7 @@ class DisplayingWorkoutsViewController: UIViewController {
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightColour
+        view.backgroundColor = .white
         initDataSource()
         setupSubscribers()
         buttonActions()

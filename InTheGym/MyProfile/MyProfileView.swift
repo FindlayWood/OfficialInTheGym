@@ -93,7 +93,7 @@ private extension MyProfileView {
     func configureUI() {
         NSLayoutConstraint.activate([
             iconLabel.topAnchor.constraint(equalTo: topAnchor),
-            iconLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
+            iconLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             iconLabel.heightAnchor.constraint(equalToConstant: 30),
             
             profileImageView.topAnchor.constraint(equalTo: iconLabel.bottomAnchor, constant: 8),
