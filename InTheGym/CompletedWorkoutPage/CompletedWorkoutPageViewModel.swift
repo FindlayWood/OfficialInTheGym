@@ -86,4 +86,10 @@ class CompletedWorkoutPageViewModel {
             }
         }
     }
+    
+    func checkCompleted() {
+        if !(workout.completed) {
+            workout.timeToComplete = nil
+        }
+    }
 }

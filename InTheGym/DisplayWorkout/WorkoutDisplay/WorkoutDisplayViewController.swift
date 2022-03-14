@@ -90,6 +90,13 @@ class WorkoutDisplayViewController: UIViewController {
         navigationItem.rightBarButtonItem?.isEnabled = viewModel.isInteractionEnabled()
     }
     
+    // MARK: - View Model
+    func initViewModel() {
+        viewModel.addedClipPublisher
+            .sink { [weak self] in self?.childVC.clipDataSource.updateTable(with: [$0])}
+            .store(in: &subscriptions)
+    }
+    
     // MARK: - Data Source
     func initDataSource() {
         childVC.dataSource.isUserInteractionEnabled = viewModel.isInteractionEnabled()
@@ -141,6 +148,18 @@ class WorkoutDisplayViewController: UIViewController {
         childVC.dataSource.noteButtonTapped
             .sink { _ in print("note tapped") }
             .store(in: &subscriptions)
+        
+        childVC.dataSource.clipButtonTapped
+            .sink { [weak self] exercise in
+                guard let self = self else {return}
+                self.coordinator?.addClip(for: exercise, self.viewModel.workout, on: self.viewModel)
+            }
+            .store(in: &subscriptions)
+        
+        childVC.clipDataSource.clipSelected
+            .sink { [weak self] in self?.coordinator?.viewClip($0)}
+            .store(in: &subscriptions)
+        
     }
 
     func initClipDataSource() {

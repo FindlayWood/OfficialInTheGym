@@ -77,21 +77,53 @@ extension UsernameSearchModel: FirebaseQueryModel {
 
 // MARK: - Coach Request Model
 struct CoachRequestUploadModel {
-    var id: String
+    var playerID: String
+    var coachID: String
 }
 extension CoachRequestUploadModel: FirebaseInstance {
     var internalPath: String {
-        return "CoachRequests/\(UserDefaults.currentUser.uid)/\(id)"
+        return "CoachRequests/\(coachID)/\(playerID)"
     }
 }
 
 // MARK: - Player Request Model
 /// Model only used by coaches to send requests
 struct PlayerRequestUploadModel {
-    var id: String
+    var playerID: String
+    var coachID: String
 }
 extension PlayerRequestUploadModel: FirebaseInstance {
     var internalPath: String {
-        return "PlayerRequests/\(id)/\(UserDefaults.currentUser.uid)"
+        return "PlayerRequests/\(playerID)/\(coachID)"
+    }
+}
+
+// MARK: - Coach PLayers Model
+struct CoachPlayersModel {
+    var coachID: String
+    var playerID: String
+    
+    func getUploadPoint() -> FirebaseMultiUploadDataPoint {
+        FirebaseMultiUploadDataPoint(value: true, path: internalPath)
+    }
+}
+extension CoachPlayersModel: FirebaseInstance {
+    var internalPath: String {
+        return "CoachPlayers/\(coachID)/\(playerID)"
+    }
+}
+
+// MARK: - Player Coach Model
+struct PlayerCoachModel {
+    var playerID: String
+    var coachID: String
+    
+    func getUploadPoint() -> FirebaseMultiUploadDataPoint {
+        FirebaseMultiUploadDataPoint(value: true, path: internalPath)
+    }
+}
+extension PlayerCoachModel: FirebaseInstance {
+    var internalPath: String {
+        return "PlayerCoaches/\(playerID)/\(coachID)"
     }
 }

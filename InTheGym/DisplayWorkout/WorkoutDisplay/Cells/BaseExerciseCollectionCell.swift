@@ -13,7 +13,7 @@ import Combine
 class BaseExerciseCollectionCell: FullWidthCollectionViewCell {
     
     // MARK: - Publishers
-    var completedAt = PassthroughSubject<IndexPath,Never>()
+    var completedAt: PassthroughSubject<IndexPath,Never> = PassthroughSubject<IndexPath,Never>()
     //var actionPublisher = PassthroughSubject<ExerciseAction,Never>()
     
     // MARK: - Properties

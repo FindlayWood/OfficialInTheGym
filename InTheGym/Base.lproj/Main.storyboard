@@ -7069,10 +7069,6 @@
                             <constraint firstItem="C1k-sq-Ghf" firstAttribute="trailing" secondItem="B0V-TK-sYg" secondAttribute="trailing" constant="5" id="sVq-0n-ydq"/>
                         </constraints>
                     </view>
-                    <connections>
-                        <outlet property="activityIndicator" destination="7ts-G9-j1O" id="hWm-EY-yXa"/>
-                        <outlet property="tableview" destination="B0V-TK-sYg" id="3rf-ZK-Dqj"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z1m-vs-55J" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

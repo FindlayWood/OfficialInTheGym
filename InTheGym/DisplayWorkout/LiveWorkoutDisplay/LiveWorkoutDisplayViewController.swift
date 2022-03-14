@@ -32,7 +32,7 @@ class LiveWorkoutDisplayViewController: UIViewController {
         initClipDataSource()
         setupSubscriptions()
         initNavBar()
-        toggleClipCollection(showing: true, clips: viewModel.getClips())
+        initViewModel()
     }
     
     override func viewDidLayoutSubviews() {
@@ -46,6 +46,10 @@ class LiveWorkoutDisplayViewController: UIViewController {
         navigationItem.title = viewModel.workoutModel.title
         //viewModel.setupExercises()
     }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        toggleClipCollection(showing: true, clips: viewModel.getClips())
+    }
     
     // MARK: - Nav Bar
     func initNavBar() {
@@ -54,39 +58,55 @@ class LiveWorkoutDisplayViewController: UIViewController {
         navigationItem.rightBarButtonItem?.isEnabled = viewModel.isInteractionEnabled()
     }
     
+    // MARK: - View Model
+    func initViewModel() {
+        
+        viewModel.addedClipPublisher
+            .sink { [weak self] in self?.clipDataSource.updateTable(with: [$0])}
+            .store(in: &subscriptions)
+    }
+    
     // MARK: - Data Source
     func initDataSource() {
         dataSource = .init(collectionView: display.exerciseCollection, isUserInteractionEnabled: viewModel.isInteractionEnabled())
         dataSource.updateTable(with: viewModel.getInitialExercises())
+        
+        dataSource.clipButtonTapped
+            .sink {[weak self] exercise in
+                guard let self = self else {return}
+                self.coordinator?.addClip(for: exercise, self.viewModel.workoutModel, on: self.viewModel)
+            }
+            .store(in: &subscriptions)
     }
     func initClipDataSource() {
         clipDataSource = .init(collectionView: display.clipCollection)
         clipDataSource.updateTable(with: viewModel.getClips())
+        
+        clipDataSource.clipSelected
+            .sink { [weak self] in self?.coordinator?.viewClip($0)}
+            .store(in: &subscriptions)
     }
 
     // MARK: - Subscriptions
     func setupSubscriptions() {
-        dataSource.completeButtonTapped
-            .sink { index in
-                print("complete button tapped at \(index)")
-            }
-            .store(in: &subscriptions)
+
         dataSource.noteButtonTapped
             .sink { index in
                 print("note tapped at \(index)")
             }
             .store(in: &subscriptions)
+        
         dataSource.rpeButtonTapped
-            .debounce(for: 0.3, scheduler: DispatchQueue.main)
             .sink { [weak self] in self?.rpe(index: $0)}
             .store(in: &subscriptions)
+        
         dataSource.showClipPublisher
-            .debounce(for: 0.1, scheduler: RunLoop.main)
             .sink { [weak self] show in
                 guard let self = self else {return}
                 self.toggleClipCollection(showing: show, clips: self.viewModel.getClips())
             }
             .store(in: &subscriptions)
+        
         dataSource.clipButtonTapped
             .sink { [weak self] in self?.clipButton(at: $0) }
             .store(in: &subscriptions)
@@ -98,13 +118,15 @@ class LiveWorkoutDisplayViewController: UIViewController {
         dataSource.plusExerciseButtonTapped
             .sink { [weak self] in self?.addExercise() }
             .store(in: &subscriptions)
+        
         dataSource.plusSetButtonTapped
-            .debounce(for: 0.2, scheduler: RunLoop.main)
             .sink { [weak self] in self?.addSet(at: $0) }
             .store(in: &subscriptions)
+        
         viewModel.addedExercise
             .sink { [weak self] in self?.dataSource.addExercise($0) }
             .store(in: &subscriptions)
+        
         viewModel.updatedExercise
             .sink { [weak self] in self?.dataSource.update(for: $0) }
             .store(in: &subscriptions)

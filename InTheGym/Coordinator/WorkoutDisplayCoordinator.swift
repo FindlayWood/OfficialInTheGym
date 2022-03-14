@@ -72,4 +72,10 @@ extension WorkoutDisplayCoordinator {
         vc.viewModel.exercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
+    func viewClip(_ clipModel: WorkoutClipModel) {
+        let keyClipModel = KeyClipModel(clipKey: clipModel.clipKey, storageURL: clipModel.storageURL)
+        let vc = ViewClipViewController()
+        vc.viewModel.keyClipModel = keyClipModel
+        navigationController.present(vc, animated: true, completion: nil)
+    }
 }

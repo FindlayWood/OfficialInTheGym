@@ -38,6 +38,14 @@ class CompletedWorkoutPageViewController: UIViewController {
         navigationItem.title = "Summary"
         editNavBarColour(to: .darkColour )
     }
+    override func didMove(toParent parent: UIViewController?) {
+        super.didMove(toParent: parent)
+        if parent == nil {
+            viewModel.checkCompleted()
+        }
+    }
+    
+    // MARK: - Display
     func initDisplay() {
         display.configure(with: viewModel.workout)
         display.newView.scoreLabelButton.addTarget(self, action: #selector(addRPEScore), for: .touchUpInside)

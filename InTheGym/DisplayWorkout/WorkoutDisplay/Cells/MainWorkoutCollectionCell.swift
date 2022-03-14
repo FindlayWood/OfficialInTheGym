@@ -12,7 +12,7 @@ import Combine
 
 class MainWorkoutCollectionCell: UICollectionViewCell {
     // MARK: - Publisher
-    var completeButtonTapped = PassthroughSubject<Void,Never>()
+    var completeButtonTapped: PassthroughSubject<Void,Never> = PassthroughSubject<Void,Never>()
     
     // MARK: - Properties
     static var reuseID = "MainWorkoutCollectionCell"
@@ -68,6 +68,11 @@ class MainWorkoutCollectionCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        completeButtonTapped = PassthroughSubject<Void,Never>()
     }
 //    override func layoutSubviews() {
 //        super.layoutSubviews()

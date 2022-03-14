@@ -78,7 +78,7 @@ class AddPlayerViewModel {
     }
     
     private func checkForRequest(_ user: Users) {
-        let coachRequestModel = CoachRequestUploadModel(id: user.uid)
+        let coachRequestModel = CoachRequestUploadModel(playerID: user.uid, coachID: UserDefaults.currentUser.uid)
         apiService.checkExistence(of: coachRequestModel) { [weak self] result in
             switch result {
             case .success(let exists):
@@ -96,8 +96,8 @@ class AddPlayerViewModel {
     }
     
     private func sendRequest(to user: Users) {
-        let coachRequestModel = CoachRequestUploadModel(id: user.uid)
-        let playerRequestModel = PlayerRequestUploadModel(id: user.uid)
+        let coachRequestModel = CoachRequestUploadModel(playerID: user.uid, coachID: UserDefaults.currentUser.uid)
+        let playerRequestModel = PlayerRequestUploadModel(playerID: user.uid, coachID: UserDefaults.currentUser.uid)
         
         let uploadPoints: [FirebaseMultiUploadDataPoint] = [FirebaseMultiUploadDataPoint(value: true, path: coachRequestModel.internalPath), FirebaseMultiUploadDataPoint(value: true, path: playerRequestModel.internalPath)]
         apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in

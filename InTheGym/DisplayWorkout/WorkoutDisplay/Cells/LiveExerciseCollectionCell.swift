@@ -13,7 +13,7 @@ import Combine
 final class LiveExerciseCollectionCell: BaseExerciseCollectionCell {
     
     // MARK: - Publishers
-    var actionPublisher = PassthroughSubject<LiveExerciseAction,Never>()
+    var actionPublisher: PassthroughSubject<LiveExerciseAction,Never> = PassthroughSubject<LiveExerciseAction,Never>()
     
     // MARK: - Properties
     static let reuseID = "LiveExerciseCollectionCellreuseID"
@@ -58,6 +58,8 @@ final class LiveExerciseCollectionCell: BaseExerciseCollectionCell {
         rpeButton.setTitleColor( .systemBlue, for: .normal)
         repsLabel.text = nil
         subscriptions.removeAll()
+        actionPublisher = PassthroughSubject<LiveExerciseAction,Never>()
+        completedAt = PassthroughSubject<IndexPath,Never>()
     }
 }
 

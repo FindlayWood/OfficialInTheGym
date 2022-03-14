@@ -98,7 +98,7 @@ extension UIViewController {
         alert.showSuccess("RPE", subTitle: "Enter RPE score for this workout.", closeButtonTitle: "Cancel")
     }
     
-    func showError(title: String, subtitle: String) {
+    func showError(title: String = "Error!", subtitle: String = "There was an error. Please try again.") {
         let alert = SCLAlertView()
         alert.showError(title, subTitle: subtitle, closeButtonTitle: "Ok")
     }
