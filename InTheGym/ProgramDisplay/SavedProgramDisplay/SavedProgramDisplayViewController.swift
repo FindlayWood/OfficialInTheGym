@@ -64,6 +64,10 @@ class SavedProgramDisplayViewController: UIViewController {
             .sink { [weak self] in self?.viewModel.weekSelectedPublisher.send($0 - 1)}
             .store(in: &subscriptions)
         
+        childVC.weeksDataSource.numberSelected
+            .sink { [weak self] in self?.childVC.display.updateWeekLabel(to: $0)}
+            .store(in: &subscriptions)
+        
         initViewModel()
     }
     

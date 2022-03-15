@@ -8,9 +8,10 @@
 
 import UIKit
 
-@available(iOS 13, *)
+
 class ExerciseSelectionViewController: UIViewController {
     
+    //MARK: - Properties
     weak var coordinator: CreationFlow?
     
     weak var newCoordinator: RegularExerciseSelectionFlow?
@@ -46,6 +47,7 @@ class ExerciseSelectionViewController: UIViewController {
         editNavBarColour(to: .darkColour)
     }
     
+    // MARK: - View Model
     func initViewModel() {
         viewModel.reloadCollectionClosure = { [weak self] in
             guard let self = self else {return}

@@ -28,37 +28,39 @@ class DiscoverCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let vc = DiscoverPageViewController.instantiate()
+        navigationController.delegate = self
+        let vc = DiscoverPageViewController()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func childDidFinish(_ child: Coordinator?) {
-        for (index, coordinator) in childCoordinators.enumerated() {
-            if coordinator === child {
-                childCoordinators.remove(at: index)
-                break
-            }
-        }
-    }
 }
 
 
 //MARK: - Flow Methods
-extension DiscoverCoordinator: DiscoverFlow {
+extension DiscoverCoordinator {
     
-    func wodSelected(workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
+    func workoutSelected(_ model: SavedWorkoutModel) {
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
         childCoordinators.append(child)
         child.start()
     }
     
-    /// add child coordinator, push new navigation controller and have child coordinator take control of navigation
-    func workoutSelected(workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
-        childCoordinators.append(child)
-        child.start()
+    func exerciseSelected(_ model: DiscoverExerciseModel) {
+        let vc = ExerciseDescriptionViewController()
+        vc.viewModel.exercise = model
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
     }
+    
+    func programSelected(_ model: SavedProgramModel) {
+        
+    }
+    
+    func clipSelected(_ model: ClipModel) {
+        
+    }
+    
     
     func search() {
         let vc = SearchForUsersViewController.instantiate()

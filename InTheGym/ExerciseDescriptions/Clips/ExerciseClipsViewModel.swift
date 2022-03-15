@@ -17,7 +17,7 @@ class ExerciseClipsViewModel {
     var addedClipPublisher = PassthroughSubject<ClipModel,Never>()
     
     // MARK: - Properties
-    var exerciseModel: ExerciseModel!
+    var exerciseModel: DiscoverExerciseModel!
     
     var apiService: FirebaseDatabaseManagerService
     
@@ -28,7 +28,7 @@ class ExerciseClipsViewModel {
     
     // MARK: - Fetch Clips
     func fetchClipKeys() {
-        let exerciseClipModel = ExerciseClipsModel(exerciseName: exerciseModel.exercise)
+        let exerciseClipModel = ExerciseClipsModel(exerciseName: exerciseModel.exerciseName)
         apiService.fetchInstance(of: exerciseClipModel, returning: KeyClipModel.self) { [weak self] result in
             switch result {
             case .success(let models):

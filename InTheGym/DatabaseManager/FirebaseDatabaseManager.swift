@@ -240,6 +240,25 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
             }
         }
     }
+    
+    func fetchLimited<Model: FirebaseModel>(model: Model.Type, limit: Int, completion: @escaping (Result<[Model],Error>) -> Void) {
+        let dbref = Database.database().reference().child(model.path).queryLimited(toLast: UInt(limit))
+        var tempModels = [Model]()
+        dbref.observeSingleEvent(of: .value) { snapshot in
+            for child in snapshot.children.allObjects as! [DataSnapshot] {
+                guard let object = child.value as? [String: AnyObject] else {return}
+                do {
+                    let data = try FirebaseDecoder().decode(model, from: object)
+                    tempModels.insert(data, at: 0)
+                }
+                catch {
+                    print(String(describing: error))
+                }
+            }
+            completion(.success(tempModels))
+        }
+    }
+    
 }
 
 protocol FirebaseDatabaseManagerService {
@@ -256,4 +275,5 @@ protocol FirebaseDatabaseManagerService {
     func childCount<Model:FirebaseInstance>(of model: Model, completion: @escaping (Result<Int,Error>) -> Void)
     func uploadTimeOrderedModel<Model: FirebaseTimeOrderedModel>(model: Model, completion: @escaping (Result<Model,Error>) -> Void)
     func searchQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<T,Error>) -> Void)
-}
+    func fetchLimited<Model: FirebaseModel>(model: Model.Type, limit: Int, completion: @escaping (Result<[Model],Error>) -> Void)
+ }

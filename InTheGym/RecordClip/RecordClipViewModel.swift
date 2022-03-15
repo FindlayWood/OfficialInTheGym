@@ -34,7 +34,7 @@ class RecordClipViewModel: NSObject {
     
     var workoutModel: WorkoutModel?
     
-    var exerciseModel: ExerciseModel!
+    var exerciseModel: DiscoverExerciseModel!
     
     var addingDelegate: ClipAdding!
     

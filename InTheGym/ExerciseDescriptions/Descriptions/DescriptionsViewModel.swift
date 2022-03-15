@@ -15,7 +15,7 @@ class DescriptionsViewModel {
     var descriptionModels = CurrentValueSubject<[DescriptionModel],Never>([])
     
     // MARK: - Properties
-    var exerciseModel: ExerciseModel!
+    var exerciseModel: DiscoverExerciseModel!
     
     var apiService: FirebaseDatabaseManagerService
     
@@ -26,7 +26,7 @@ class DescriptionsViewModel {
     
     // MARK: - Fetch Models
     func fetchModels() {
-        let fetchModel = Descriptions(exercise: exerciseModel.exercise)
+        let fetchModel = Descriptions(exercise: exerciseModel.exerciseName)
         apiService.fetchInstance(of: fetchModel, returning: DescriptionModel.self) { [weak self] result in
             switch result {
             case .success(let models):

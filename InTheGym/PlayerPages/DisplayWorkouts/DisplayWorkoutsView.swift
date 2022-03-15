@@ -75,7 +75,7 @@ private extension DisplayingWorkoutsView {
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             
             plusButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-            plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             
             programButton.trailingAnchor.constraint(equalTo: plusButton.leadingAnchor, constant: -4),
             programButton.topAnchor.constraint(equalTo: plusButton.topAnchor),

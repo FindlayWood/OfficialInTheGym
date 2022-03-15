@@ -64,7 +64,7 @@ extension LiveWorkoutDisplayCoordinator {
         child.start()
     }
     func addClip(for exercise: ExerciseModel, _ workout: WorkoutModel, on delegate: ClipAdding) {
-        let child = ClipCoordinator(navigationController: navigationController, workout: workout, exercise: exercise, addingDelegate: delegate)
+        let child = ClipCoordinator(navigationController: navigationController, workout: workout, exercise: DiscoverExerciseModel(exerciseName: exercise.exercise), addingDelegate: delegate)
         childCoordinators.append(child)
         child.start()
     }

@@ -7,118 +7,79 @@
 //
 
 import UIKit
-import Firebase
 import SCLAlertView
+import Combine
 
-class DiscoverPageViewController: UIViewController, Storyboarded {
+class DiscoverPageViewController: UIViewController {
     
-    var coordinator: DiscoverFlow?
+    // MARK: - Properties
+    var coordinator: DiscoverCoordinator?
     
-    @IBOutlet weak var collection:UICollectionView!
-    @IBOutlet weak var ActivityIndicator:UIActivityIndicatorView!
+    var display = DiscoverPageView()
     
-    let width = UIScreen.main.bounds.width
-    let height = UIScreen.main.bounds.height
+    var viewModel = DiscoverPageViewModel()
     
-    var activityIndicator:UIActivityIndicatorView = UIActivityIndicatorView()
+    var dataSource: DiscoverPageDataSource!
     
-    var adapter : DiscoverPageAdapter!
-    
-    var refreshControl : UIRefreshControl!
-    
-    lazy var viewModel: DiscoverPageViewModel = {
-        return DiscoverPageViewModel()
-    }()
+    private var subscriptions = Set<AnyCancellable>()
 
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        showFirstMessage()
-        
-        adapter = DiscoverPageAdapter(delegate: self)
-        collection.delegate = adapter
-        collection.dataSource = adapter
-        
-        let layout : UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 5, bottom: 10, right: 5)
-        //layout.itemSize = CGSize(width: width/2-10, height: width/3)
-        layout.minimumInteritemSpacing = 5
-        layout.minimumLineSpacing = 10
-        collection.collectionViewLayout = layout
-        
-        view.addSubview(activityIndicator)
-        activityIndicator.frame = self.view.frame
-        activityIndicator.startAnimating()
-        activityIndicator.color = Constants.darkColour
-        self.collection.alpha = 0.0
-        
-        initRefreshControl()
+        view.backgroundColor = .white
+        initDataSource()
         initViewModel()
     }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        display.frame = getViewableFrameWithBottomSafeArea()
+        view.addSubview(display)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
-    func initRefreshControl(){
-        refreshControl = UIRefreshControl()
-        refreshControl.tintColor = .white
-        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-        self.collection.refreshControl = refreshControl
+    // MARK: - Data Source
+    func initDataSource() {
+        dataSource = .init(collectionView: display.collectionView)
+        
+        dataSource.itemSelected
+            .sink { [weak self] in self?.viewModel.itemSelected($0)}
+            .store(in: &subscriptions)
     }
-    
-    @objc func handleRefresh(){
-        viewModel.fetchWODKey()
-        viewModel.fetchWorkoutKeys()
-    }
-    
+
+    // MARK: - View Model
     func initViewModel(){
         
-        viewModel.updatewodLoadinsStatusClosure = { [unowned self] () in
-            let isWODLoading = self.viewModel.isWODLoading
-            if isWODLoading {
-                self.activityIndicator.startAnimating()
-                UIView.animate(withDuration: 0.2) {
-                    self.collection.alpha = 0.0
-                }
-            } else if !self.viewModel.isWorkoutsLoading {
-                self.ActivityIndicator.stopAnimating()
-                UIView.animate(withDuration: 0.2) {
-                    self.collection.alpha = 1.0
-                }
-                self.collection.refreshControl?.endRefreshing()
-            }
-        }
+        viewModel.workoutSelected
+            .sink { [weak self] in self?.coordinator?.workoutSelected($0)}
+            .store(in: &subscriptions)
         
-        viewModel.updateWorkoutsLoadingStatusClosure = { [unowned self] () in
-            let isLoading = self.viewModel.isWorkoutsLoading
-            if isLoading {
-                self.activityIndicator.startAnimating()
-                UIView.animate(withDuration: 0.2) {
-                    self.collection.alpha = 0.0
-                }
-            } else if !self.viewModel.isWODLoading {
-                self.activityIndicator.stopAnimating()
-                UIView.animate(withDuration: 0.2) {
-                    self.collection.alpha = 1.0
-                }
-                self.collection.refreshControl?.endRefreshing()
-            }
-        }
+        viewModel.exerciseSelected
+            .sink { [weak self] in self?.coordinator?.exerciseSelected($0)}
+            .store(in: &subscriptions)
+
+        viewModel.workoutModelsPublisher
+            .sink { [weak self] in self?.dataSource.updateWorkouts(with: $0)}
+            .store(in: &subscriptions)
         
-        viewModel.wodLoadedClosure = { [unowned self] () in
-            DispatchQueue.main.async {
-                self.collection.reloadData()
-            }
-        }
+        viewModel.exercisesPublisher
+            .sink { [weak self] in self?.dataSource.updateExercises(with: $0)}
+            .store(in: &subscriptions)
         
-        viewModel.tableViewReloadClosure = { [unowned self] () in
-            DispatchQueue.main.async {
-                self.collection.reloadData()
-            }
-        }
+        viewModel.clipsPublisher
+            .sink { [weak self] in self?.dataSource.updateClips(with: $0)}
+            .store(in: &subscriptions)
         
-        viewModel.fetchWODKey()
-        viewModel.fetchWorkoutKeys()
+        viewModel.programPublisher
+            .sink { [weak self] in self?.dataSource.updateProgram(with: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.loadWorkouts()
+        viewModel.loadExercises()
+        viewModel.loadClips()
+        viewModel.loadPrograms()
         
     }
     
@@ -129,48 +90,6 @@ extension DiscoverPageViewController {
     @IBAction func searchTapped(_ sender: UIButton) {
         coordinator?.search()
     }
-}
-
-
-//MARK: - Protocol Methods
-extension DiscoverPageViewController : DiscoverPageProtocol {
-    func getWorkout(at indexPath: IndexPath) -> discoverWorkout {
-        return viewModel.getWorkout(at: indexPath)
-    }
-    
-    func getWOD() -> discoverWorkout {
-        return viewModel.getWOD()
-    }
-    
-    func retreiveNumberOfWorkouts() -> Int {
-        return viewModel.numberOfWorkouts
-    }
-    
-    func retrieveWOD() -> Bool {
-        return viewModel.wodLoaded
-    }
-    
-    func workoutSelected(at indexPath: IndexPath) {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let displayWorkoutVC = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
-        var workout : discoverWorkout!
-        if indexPath.section == 0 {
-            workout = viewModel.getWOD()
-            coordinator?.wodSelected(workout: workout)
-//            displayWorkoutVC.selectedWorkout = workout
-//            displayWorkoutVC.hidesBottomBarWhenPushed = true
-//            self.navigationController?.pushViewController(displayWorkoutVC, animated: true)
-        } else {
-            workout = viewModel.getWorkout(at: indexPath)
-            coordinator?.workoutSelected(workout: workout)
-//            displayWorkoutVC.selectedWorkout = workout
-//            displayWorkoutVC.hidesBottomBarWhenPushed = true
-//            self.navigationController?.pushViewController(displayWorkoutVC, animated: true)
-        }
-        
-    }
-    
-    
 }
 
 

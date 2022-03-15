@@ -59,7 +59,7 @@ extension SavedWorkoutCoordinator {
     
     func showDescriptions(_ exercise: ExerciseModel) {
         let vc = ExerciseDescriptionViewController()
-        vc.viewModel.exercise = exercise
+        vc.viewModel.exercise = DiscoverExerciseModel(exerciseName: exercise.exercise)
         navigationController.pushViewController(vc, animated: true)
     }
     

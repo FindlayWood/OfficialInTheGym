@@ -14,10 +14,10 @@ class ClipCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     var modalNavigationController: UINavigationController?
     var workout: WorkoutModel
-    var exercise: ExerciseModel
+    var exercise: DiscoverExerciseModel
     var addingDelegate: ClipAdding
     
-    init(navigationController: UINavigationController, workout: WorkoutModel, exercise: ExerciseModel, addingDelegate: ClipAdding) {
+    init(navigationController: UINavigationController, workout: WorkoutModel, exercise: DiscoverExerciseModel, addingDelegate: ClipAdding) {
         self.navigationController = navigationController
         self.workout = workout
         self.exercise = exercise

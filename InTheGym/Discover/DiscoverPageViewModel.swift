@@ -7,123 +7,89 @@
 //
 
 import Foundation
-import Firebase
-import SCLAlertView
+import Combine
 
 class DiscoverPageViewModel {
     
-    // closures
-    var updatewodLoadinsStatusClosure:(()->())?
-    var updateWorkoutsLoadingStatusClosure:(()->())?
-    var tableViewReloadClosure:(()->())?
-    var wodLoadedClosure:(()->())?
+    // MARK: - Publishers
+    var workoutModelsPublisher = CurrentValueSubject<[SavedWorkoutModel],Never>([])
     
-    private var workouts : [discoverWorkout] =  [] {
-        didSet{
-            self.tableViewReloadClosure?()
+    var exercisesPublisher = CurrentValueSubject<[DiscoverExerciseModel],Never>([])
+    
+    var clipsPublisher = CurrentValueSubject<[ClipModel],Never>([])
+    
+    var programPublisher = CurrentValueSubject<[SavedProgramModel],Never>([])
+    
+    var errorPublisher = PassthroughSubject<Error,Never>()
+    
+    var workoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
+    
+    var exerciseSelected = PassthroughSubject<DiscoverExerciseModel,Never>()
+    
+    var programSelected = PassthroughSubject<SavedProgramModel,Never>()
+    
+    var clipSelected = PassthroughSubject<ClipModel,Never>()
+    
+    // MARK: - Properties
+    var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
+    
+    // MARK: - Initializer
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
+        self.apiService = apiService
+    }
+    
+    // MARK: - Functions
+    func loadWorkouts() {
+        apiService.fetchLimited(model: SavedWorkoutModel.self, limit: 10) { [weak self] result in
+            switch result {
+            case .success(let models):
+                self?.workoutModelsPublisher.send(models)
+            case .failure(let error):
+                self?.errorPublisher.send(error)
+            }
         }
     }
-    
-    private var workoutOfTheDay : discoverWorkout! {
-        didSet{
-            self.wodLoadedClosure?()
-            self.wodLoaded = true
+    func loadExercises() {
+        let exercises: [DiscoverExerciseModel] = [.init(exerciseName: "Bench Press"), .init(exerciseName: "Squats"),
+                                                  .init(exerciseName: "Pull Ups"), .init(exerciseName: "Press Ups"),
+                                                  .init(exerciseName: "Jumping Jacks"), .init(exerciseName: "Bicep Curls"),
+                                                  .init(exerciseName: "Deadlifts"), .init(exerciseName: "Eccentric Nordic Hamstring Curls")]
+        exercisesPublisher.send(exercises)
+    }
+    func loadClips() {
+        apiService.fetchLimited(model: ClipModel.self, limit: 10) { [weak self] result in
+            switch result {
+            case .success(let models):
+                self?.clipsPublisher.send(models)
+            case .failure(let error):
+                self?.errorPublisher.send(error)
+            }
         }
     }
-    
-    var numberOfWorkouts : Int {
-        return workouts.count
-    }
-    
-    var wodLoaded : Bool = false
-    
-    var isWODLoading : Bool = false {
-        didSet{
-            self.updatewodLoadinsStatusClosure?()
-        }
-    }
-    
-    var isWorkoutsLoading : Bool = false {
-        didSet{
-            self.updateWorkoutsLoadingStatusClosure?()
-        }
-    }
-    
-    
-    /// fetches the workout of the day key
-    func fetchWODKey(){
-        self.isWODLoading = true
-        let ref = Database.database().reference().child("Discover").child("WOD")
-        ref.observeSingleEvent(of: .value) { (snapshot) in
-            for child in snapshot.children {
-                let wodkey:String = (child as AnyObject).key
-                self.loadWOD(with: wodkey)
+    func loadPrograms() {
+        apiService.fetchLimited(model: SavedProgramModel.self, limit: 10) { [weak self] result in
+            switch result {
+            case .success(let models):
+                self?.programPublisher.send(models)
+            case .failure(let error):
+                self?.errorPublisher.send(error)
             }
         }
     }
     
-    
-    /// loads the workout of the day from the given key
-    /// - Parameter key: id of where the WOD is stored within discover workouts
-    func loadWOD(with key:String){
-        let ref = Database.database().reference().child("SavedWorkouts").child(key)
-        ref.observeSingleEvent(of: .value) { (snapshot) in
-            let wod = discoverWorkout(snapshot: snapshot)!
-            self.workoutOfTheDay = wod
-            self.isWODLoading = false
+    // MARK: - Actions
+    func itemSelected(_ item: DiscoverPageItems) {
+        switch item {
+        case .workout(let savedWorkoutModel):
+            workoutSelected.send(savedWorkoutModel)
+        case .exercise(let discoverExerciseModel):
+            exerciseSelected.send(discoverExerciseModel)
+        case .program(let savedProgramModel):
+            programSelected.send(savedProgramModel)
+        case .clip(let clipModel):
+            clipSelected.send(clipModel)
         }
     }
-    
-    
-    /// fetches the workouts to be displayed
-    func fetchWorkoutKeys(){
-        self.isWorkoutsLoading = true
-        var workoutKeys = [String]()
-        let ref = Database.database().reference().child("Discover").child("Workouts")
-        ref.observeSingleEvent(of: .value) { (snapshot) in
-            for child in snapshot.children{
-                workoutKeys.append((child as AnyObject).key)
-            }
-            self.loadWorkouts(with: workoutKeys)
-            
-        }
-//        ref.observeSingleEvent(of: .value) { (_) in
-//            self.loadWorkouts(with: workoutKeys)
-//        }
-    }
-    
-    
-    /// loads the workouts as discover workouts from keys
-    /// - Parameter keys: array of ids where the workouts are stored
-    func loadWorkouts(with keys:[String]){
-        var tempWorkouts = [discoverWorkout]()
-        let myGroup = DispatchGroup()
-        let ref = Database.database().reference().child("SavedWorkouts")
-        for key in keys{
-            myGroup.enter()
-            ref.child(key).observeSingleEvent(of: .value) { (snapshot) in
-                defer {myGroup.leave()}
-                let workout = discoverWorkout(snapshot: snapshot)!
-                tempWorkouts.insert(workout, at: 0)
-            }
-        }
-        myGroup.notify(queue: .main){
-            tempWorkouts.sort(by: { $0.numberOfDownloads! > $1.numberOfDownloads! })
-            self.workouts = tempWorkouts
-            self.isWorkoutsLoading = false
-        }
-    }
-    
-    
-    func getWorkout(at indexPath:IndexPath) -> discoverWorkout{
-        return workouts[indexPath.item]
-    }
-    
-    func getWOD() -> discoverWorkout {
-        return workoutOfTheDay
-    }
-    
-    
 }
 
 

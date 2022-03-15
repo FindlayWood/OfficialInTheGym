@@ -78,30 +78,36 @@ class ExerciseSelectionView: UIView {
     
     // MARK: - Collection View Layout
     let compositionalLayout: UICollectionViewCompositionalLayout = {
-        let mainItem = NSCollectionLayoutItem(
-          layoutSize: NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalHeight(1)))
+//        let mainItem = NSCollectionLayoutItem(
+//          layoutSize: NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1),
+//            heightDimension: .fractionalHeight(1)))
+//
+//        mainItem.contentInsets = NSDirectionalEdgeInsets(
+//          top: 2,
+//          leading: 2,
+//          bottom: 2,
+//          trailing: 2)
+//
+//        let nestedGroup = NSCollectionLayoutGroup.vertical(
+//          layoutSize: NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(0.5),
+//            heightDimension: .fractionalWidth(0.3)),
+//          subitems: [
+//            mainItem
+//          ]
+//        )
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/3))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8)
 
-        mainItem.contentInsets = NSDirectionalEdgeInsets(
-          top: 2,
-          leading: 2,
-          bottom: 2,
-          trailing: 2)
-        
-        let nestedGroup = NSCollectionLayoutGroup.vertical(
-          layoutSize: NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.5),
-            heightDimension: .fractionalWidth(0.3)),
-          subitems: [
-            mainItem
-          ]
-        )
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .fractionalWidth(1/2))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: 3)
 
-        let section = NSCollectionLayoutSection(group: nestedGroup)
+        let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
         section.boundarySupplementaryItems = [
-            .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(70)), elementKind: ExerciseSelectionHeader.elementID, alignment: .topLeading)
+            .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)), elementKind: ExerciseSelectionHeader.elementID, alignment: .topLeading)
         ]
 
         return UICollectionViewCompositionalLayout(section: section)

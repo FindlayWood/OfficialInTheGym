@@ -11,7 +11,7 @@ import Foundation
 
 struct UploadClipModel {
     var workout: WorkoutModel?
-    var exercise: ExerciseModel
+    var exercise: DiscoverExerciseModel
     var id: String
     var storageURL: String
     var isPrivate: Bool
@@ -29,7 +29,7 @@ struct UploadClipModel {
     func getWorkoutClipModel() -> WorkoutClipModel {
         return WorkoutClipModel(storageURL: storageURL,
                                 clipKey: id,
-                                exerciseName: exercise.exercise)
+                                exerciseName: exercise.exerciseName)
     }
     
     func getKeyClipModel() -> KeyClipModel {
@@ -45,7 +45,7 @@ private extension UploadClipModel {
         return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.id)/clipData/\(workout.clipData?.count ?? 0)"
     }
     var exerciseClipPath: String {
-        return "ExerciseClips/\(exercise.exercise)/\(id)"
+        return "ExerciseClips/\(exercise.exerciseName)/\(id)"
     }
     var userClipPath: String {
         return "UserClips/\(UserDefaults.currentUser.uid)/\(id)"

@@ -39,7 +39,7 @@ class ExerciseDescriptionViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.title = viewModel.exercise.exercise
+        navigationItem.title = viewModel.exercise.exerciseName
         editNavBarColour(to: .darkColour)
     }
     

@@ -63,13 +63,13 @@ extension WorkoutDisplayCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func addClip(for exercise: ExerciseModel, _ workout: WorkoutModel, on delegate: ClipAdding) {
-        let child = ClipCoordinator(navigationController: navigationController, workout: workout, exercise: exercise, addingDelegate: delegate)
+        let child = ClipCoordinator(navigationController: navigationController, workout: workout, exercise: DiscoverExerciseModel(exerciseName: exercise.exercise), addingDelegate: delegate)
         childCoordinators.append(child)
         child.start()
     }
     func showDescriptions(_ exercise: ExerciseModel) {
         let vc = ExerciseDescriptionViewController()
-        vc.viewModel.exercise = exercise
+        vc.viewModel.exercise = DiscoverExerciseModel(exerciseName: exercise.exercise)
         navigationController.pushViewController(vc, animated: true)
     }
     func viewClip(_ clipModel: WorkoutClipModel) {

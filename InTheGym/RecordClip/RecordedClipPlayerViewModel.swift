@@ -31,7 +31,7 @@ class RecordedClipPlayerViewModel {
     
     var workoutModel: WorkoutModel?
     
-    var exerciseModel: ExerciseModel!
+    var exerciseModel: DiscoverExerciseModel!
     
     weak var addDelegate: ClipAdding?
     
@@ -88,7 +88,7 @@ class RecordedClipPlayerViewModel {
     /// Upload the model to database with time ordered id
     /// Return model with id and then upload details
     func uploadToDatabase(with storageURL: String) {
-        let clipModel = ClipModel(storageURL: storageURL, exerciseName: exerciseModel.exercise, workoutID: workoutModel?.id, isPrivate: isPrivate)
+        let clipModel = ClipModel(storageURL: storageURL, exerciseName: exerciseModel.exerciseName, workoutID: workoutModel?.id, isPrivate: isPrivate)
         apiService.uploadTimeOrderedModel(model: clipModel) { [weak self] result in
             switch result {
             case .success(let model):

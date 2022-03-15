@@ -11,7 +11,7 @@ import Foundation
 class ExerciseDescriptionViewModel {
     
     // MARK: - Properties
-    var exercise: ExerciseModel!
+    var exercise: DiscoverExerciseModel!
     
     var selectedIndex: Int = 0
 }
