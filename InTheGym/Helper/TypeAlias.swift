@@ -23,3 +23,6 @@ typealias SavedWorkoutRemoveListener = PassthroughSubject<SavedWorkoutModel,Neve
 
 
 typealias WorkoutUpdatedListener = PassthroughSubject<WorkoutModel,Never>
+
+/// Listen for a new post being added
+typealias NewPostListener = PassthroughSubject<Postable,Never>

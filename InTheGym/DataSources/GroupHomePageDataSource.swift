@@ -111,9 +111,22 @@ class GroupHomePageDataSource: NSObject {
     
     // MARK: - Update Posts
     func tableUpdatePosts(with posts: [GroupPost]) {
+        let items = posts.map { GroupItems.posts($0) }
         var currentSnapshot = dataSource.snapshot()
-        for post in posts {
-            currentSnapshot.appendItems([.posts(post)], toSection: .groupPosts)
+        currentSnapshot.appendItems(items, toSection: .groupPosts)
+//        for post in posts {
+//            currentSnapshot.appendItems([.posts(post)], toSection: .groupPosts)
+//        }
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    
+    // MARK: - Add New Post
+    func addNewPost(_ newPost: GroupPost) {
+        var currentSnapshot = dataSource.snapshot()
+        if let firstPost = currentSnapshot.itemIdentifiers(inSection: .groupPosts).first {
+            currentSnapshot.insertItems([GroupItems.posts(newPost)], beforeItem: firstPost)
+        } else {
+            currentSnapshot.appendItems([GroupItems.posts(newPost)], toSection: .groupPosts)
         }
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }

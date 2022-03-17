@@ -17,6 +17,9 @@ class CreateNewPostView: UIView {
     let clipImage: UIImage = UIImage(named: "clip_icon")!
     let workoutImage: UIImage = UIImage(named: "benchpress_icon")!
     
+    private var privateImage = UIImage(named:"locked_icon")
+    private var publicImage = UIImage(named: "public_icon")
+    
     // MARK: - Subviews
     var cancelButton: UIButton = {
         let button = UIButton()
@@ -39,6 +42,18 @@ class CreateNewPostView: UIView {
         return button
     }()
         // MARK: - Text & Attachment Stack
+    var profileImage: UIImageView = {
+        let view = UIImageView()
+        view.backgroundColor = .lightGray
+        view.contentMode = .scaleAspectFill
+        view.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        view.layer.cornerRadius = 15
+        view.clipsToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     lazy var messageText: UITextView = {
         let view = UITextView()
         view.addToolBar()
@@ -125,8 +140,9 @@ class CreateNewPostView: UIView {
     }()
     
     
-    var privacyButton: UIButton = {
+    lazy var privacyButton: UIButton = {
         let button = UIButton()
+        button.setImage(publicImage, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -136,6 +152,15 @@ class CreateNewPostView: UIView {
         view.textColor = .darkGray
         view.isScrollEnabled = false
         view.isUserInteractionEnabled = false
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    var loadingIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.color = .white
+        view.hidesWhenStopped = true
+        view.isHidden = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -156,6 +181,7 @@ private extension CreateNewPostView {
     func setupUI() {
         addSubview(cancelButton)
         addSubview(postButton)
+        addSubview(profileImage)
         textStack.addArrangedSubview(messageText)
         textStack.addArrangedSubview(attachmentView)
         attachmentView.addSubview(removeAttachmentButton)
@@ -166,23 +192,29 @@ private extension CreateNewPostView {
         buttonStack.addArrangedSubview(clipButton)
         buttonStack.addArrangedSubview(workoutButton)
         addSubview(buttonStack)
+        addSubview(privacyButton)
+        addSubview(loadingIndicator)
         //messageText.delegate = self
         constrainUI()
+        setProfileImage()
         attachmentView.isHidden = true
         removeAttachmentButton.addTarget(self, action: #selector(removeAttachmentButtonTapped(_:)), for: .touchUpInside)
     }
     func constrainUI() {
         NSLayoutConstraint.activate([
-            cancelButton.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-            cancelButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            cancelButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            cancelButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             
-            postButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            postButton.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-            postButton.widthAnchor.constraint(equalToConstant: 70),
+            postButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            postButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            postButton.widthAnchor.constraint(equalToConstant: 72),
             
-            textStack.topAnchor.constraint(equalTo: postButton.bottomAnchor, constant: 10),
-            textStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            textStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            profileImage.topAnchor.constraint(equalTo: postButton.bottomAnchor, constant: 8),
+            profileImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            
+            textStack.topAnchor.constraint(equalTo: profileImage.topAnchor, constant: 0),
+            textStack.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 4),
+            textStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
             //messageText.topAnchor.constraint(equalTo: postButton.bottomAnchor, constant: 10),
             //messageText.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
@@ -205,8 +237,23 @@ private extension CreateNewPostView {
             buttonStack.centerXAnchor.constraint(equalTo: centerXAnchor),
             buttonStack.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 30),
             buttonStack.topAnchor.constraint(equalTo: newView.bottomAnchor, constant: 10),
-            buttonStack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -30)
+            buttonStack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -30),
+            
+            privacyButton.topAnchor.constraint(equalTo: buttonStack.bottomAnchor, constant: 16),
+            privacyButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
+            loadingIndicator.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            loadingIndicator.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            loadingIndicator.widthAnchor.constraint(equalToConstant: 30),
+            loadingIndicator.heightAnchor.constraint(equalToConstant: 30)
         ])
+    }
+    func setProfileImage() {
+        let imageSearchModel = ProfileImageDownloadModel(id: UserDefaults.currentUser.uid)
+        ImageCache.shared.load(from: imageSearchModel) { [weak self] result in
+            guard let image = try? result.get() else {return}
+            self?.profileImage.image = image
+        }
     }
 }
 
@@ -233,12 +280,12 @@ extension CreateNewPostView {
 
     }
     
-    func addWorkout(_ workout: WorkoutDelegate) {
-        attachmentView.isHidden = false
+    func addWorkout(_ model: SavedWorkoutModel) {
         removeAttachment()
+        attachmentView.isHidden = false
         let workoutView = UIWorkoutView()
         workoutView.translatesAutoresizingMaskIntoConstraints = false
-        workoutView.configure(with: workout)
+        workoutView.configure(with: model)
         attachmentView.insertSubview(workoutView, at: 0)
         workoutView.topAnchor.constraint(equalTo: attachmentView.topAnchor).isActive = true
         workoutView.widthAnchor.constraint(equalTo: attachmentView.widthAnchor, multiplier: 0.9).isActive = true
@@ -252,6 +299,7 @@ extension CreateNewPostView {
                 view.removeFromSuperview()
             }
         }
+        attachmentView.isHidden = true
     }
     
     @objc func removeAttachmentButtonTapped(_ sender: UIButton) {
@@ -259,4 +307,25 @@ extension CreateNewPostView {
         attachmentView.isHidden = true
     }
     
+    public func togglePrivacy(to isPrivate: Bool) {
+        privacyButton.setImage(isPrivate ? privateImage : publicImage, for: .normal)
+    }
+    
+    public func setLoading(to loading: Bool) {
+        if loading {
+            loadingIndicator.startAnimating()
+            postButton.isHidden = true
+            cancelButton.isHidden = true
+            messageText.isUserInteractionEnabled = false
+            workoutButton.isUserInteractionEnabled = false
+            privacyButton.isUserInteractionEnabled = false
+        } else {
+            loadingIndicator.stopAnimating()
+            postButton.isHidden = false
+            cancelButton.isHidden = false
+            messageText.isUserInteractionEnabled = true
+            workoutButton.isUserInteractionEnabled = true
+            privacyButton.isUserInteractionEnabled = true
+        }
+    }
 }

@@ -16,7 +16,7 @@ protocol TimelineFlow: AnyObject {
 
 
 protocol NewsFeedFlow: TimelineFlow {
-    func makePost(groupPost: Bool, delegate: PlayerTimelineProtocol)
+    func makePost(postable: Postable, listener: NewPostListener)
     func showCommentSection(for post: post, with listener: PostListener)
     func showWorkout(_ model: WorkoutModel)
     func showSavedWorkout(_ model: SavedWorkoutModel)
@@ -55,13 +55,10 @@ class TimelineCoordinator: NSObject, Coordinator {
 //MARK: - Flow Methods
 extension TimelineCoordinator: NewsFeedFlow {
     
-    func makePost(groupPost: Bool, delegate: PlayerTimelineProtocol) {
-        let vc = MakePostViewController.instantiate()
-        vc.groupBool = groupPost
-        vc.timelineDelegate = delegate
-        vc.modalTransitionStyle = .coverVertical
-        vc.modalPresentationStyle = .fullScreen
-        navigationController.present(vc, animated: true, completion: nil)
+    func makePost(postable: Postable, listener: NewPostListener) {
+        let child = CreateNewPostCoordinator(navigationController: navigationController, postable: postable, listener: listener)
+        childCoordinators.append(child)
+        child.start()
     }
     
     func showCommentSection(for post: post, with listener: PostListener) {

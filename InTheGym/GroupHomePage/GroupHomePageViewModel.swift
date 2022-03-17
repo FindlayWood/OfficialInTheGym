@@ -27,6 +27,8 @@ class GroupHomePageViewModel {
     
     weak var groupListener: GroupPostListener?
     
+    var newPostListner = NewPostListener()
+    
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService
     

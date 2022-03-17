@@ -13,12 +13,14 @@ class CreateNewPostCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     var modalNavigationController: UINavigationController?
     private var completion: (UIImage) -> Void = { _ in }
-    private var savedCompletionHandle: (savedWorkoutDelegate) -> Void = { _ in }
-    var assignee: Assignable
+    private var savedCompletionHandle: (SavedWorkoutModel) -> Void = { _ in }
+    var postable: Postable
+    var listener: NewPostListener?
     
-    init(navigationController: UINavigationController, assignee: Assignable) {
+    init(navigationController: UINavigationController, postable: Postable, listener: NewPostListener?) {
         self.navigationController = navigationController
-        self.assignee = assignee
+        self.postable = postable
+        self.listener = listener
     }
     
     func start() {
@@ -26,7 +28,8 @@ class CreateNewPostCoordinator: NSObject, Coordinator {
         let vc = CreateNewPostViewController()
         modalNavigationController?.setViewControllers([vc], animated: false)
         vc.coordinator = self
-        vc.assignee = assignee
+        vc.viewModel.postable = postable
+        vc.viewModel.listener = listener
         if let modalNavigationController = modalNavigationController {
             modalNavigationController.modalPresentationStyle = .fullScreen
             navigationController.present(modalNavigationController, animated: true, completion: nil)
@@ -54,25 +57,28 @@ extension CreateNewPostCoordinator {
     
     func showSavedWorkoutPicker() {
         guard let modalNavigationController = modalNavigationController else {return}
-        let vc = SavedWorkoutsViewController.instantiate()
+        let vc = SavedWorkoutsViewController()
         vc.coordinator = self
         modalNavigationController.present(vc, animated: true, completion: nil)
+    }
+    func posted() {
+        navigationController.dismiss(animated: true)
     }
 }
 
 extension CreateNewPostCoordinator: SavedWorkoutsFlow {
-    func showSavedWorkoutPicker(completion: @escaping (savedWorkoutDelegate) -> Void) {
+    func showSavedWorkoutPicker(completion: @escaping (SavedWorkoutModel) -> Void) {
         self.savedCompletionHandle = completion
         guard let modalNavigationController = modalNavigationController else {return}
-        let vc = SavedWorkoutsViewController.instantiate()
+        let vc = SavedWorkoutsViewController()
         vc.coordinator = self
         modalNavigationController.present(vc, animated: true, completion: nil)
     }
     
     func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
-//        savedCompletionHandle(selectedWorkout)
-//        guard let modalNavigationController = modalNavigationController else {return}
-//        modalNavigationController.dismiss(animated: true)
+        savedCompletionHandle(selectedWorkout)
+        guard let modalNavigationController = modalNavigationController else {return}
+        modalNavigationController.dismiss(animated: true)
     }
 }
 

@@ -27,6 +27,8 @@ class PlayerTimelineViewModel {
     var errorLikingPost = PassthroughSubject<Error,Never>()
     
     var reloadListener = PassthroughSubject<post,Never>()
+    
+    var newPostListener = NewPostListener()
 
     // MARK: - Properties
     

@@ -38,6 +38,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         
         initDataSource()
         initViewModel()
+        initTargets()
 //        initRefreshControl()
         
     }
@@ -126,6 +127,11 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
             .sink { [weak self] in self?.dataSource.reloadPost($0)}
             .store(in: &subscriptions)
         
+        viewModel.newPostListener
+            .compactMap { $0 as? post }
+            .sink { [weak self] in self?.dataSource.addNewPost($0) }
+            .store(in: &subscriptions)
+        
         viewModel.checkForThinkingTime()
         viewModel.fetchPosts()
         
@@ -151,6 +157,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     
     
     @objc func makePostPressed(_ sender: UIButton) {
+        coordinator?.makePost(postable: post(), listener: viewModel.newPostListener)
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
 //        let postVC = storyboard.instantiateViewController(withIdentifier: "MakePostViewController") as! MakePostViewController
 //        coordinator?.makePost(groupPost: false, delegate: self)

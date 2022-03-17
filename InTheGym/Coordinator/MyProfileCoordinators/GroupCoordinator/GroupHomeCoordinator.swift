@@ -41,10 +41,10 @@ extension GroupHomeCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func createNewPost() {
-//        let child = CreateNewPostCoordinator(navigationController: navigationController, assignee: group)
-//        childCoordinators.append(child)
-//        child.start()
+    func createNewPost(_ postable: Postable, listener: NewPostListener?) {
+        let child = CreateNewPostCoordinator(navigationController: navigationController, postable: postable, listener: listener)
+        childCoordinators.append(child)
+        child.start()
     }
     func goToCommentSection(with mainPost: GroupPost) {
         let child = GroupCommentSectionCoordinator(navigationController: navigationController, mainPost: mainPost)

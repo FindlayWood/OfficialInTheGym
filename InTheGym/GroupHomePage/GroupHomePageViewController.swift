@@ -122,6 +122,11 @@ class GroupHomePageViewController: UIViewController {
             .sink { [weak self] in self?.coordinator?.showUser(user: $0) }
             .store(in: &subscriptions)
         
+        viewModel.newPostListner
+            .compactMap { $0 as? GroupPost }
+            .sink { [weak self] in self?.dataSource.addNewPost($0)}
+            .store(in: &subscriptions)
+        
         viewModel.loadPosts()
         viewModel.loadHeaderImage()
         viewModel.loadGroupLeader()
@@ -176,7 +181,7 @@ class GroupHomePageViewController: UIViewController {
 //        coordinator?.showMoreInfo(with: info, self)
     }
     @objc func postButtonTapped() {
-        coordinator?.createNewPost()
+        coordinator?.createNewPost(GroupPost(groupID: viewModel.currentGroup.uid), listener: viewModel.newPostListner)
     }
 }
 

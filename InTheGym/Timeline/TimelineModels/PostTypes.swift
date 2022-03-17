@@ -29,8 +29,9 @@ protocol DisplayablePost {
     var id: String { get }
 }
 
-class post: Codable, Hashable, AutoIDable, DisplayablePost {
+class post: Codable, Hashable, AutoIDable, DisplayablePost, Postable {
     
+    var id: String
     var username: String
     var posterID: String
     var time: TimeInterval
@@ -43,7 +44,18 @@ class post: Codable, Hashable, AutoIDable, DisplayablePost {
     var likeCount: Int
     var replyCount: Int
     var isPrivate: Bool
-    var id: String
+    
+    init() {
+        self.id = UUID().uuidString
+        self.username = UserDefaults.currentUser.username
+        self.posterID = UserDefaults.currentUser.uid
+        self.time = Date().timeIntervalSince1970
+        self.text = ""
+        self.likeCount = 0
+        self.replyCount = 0
+        self.isPrivate = false
+    }
+    
     
     static func == (lhs: post, rhs: post) -> Bool {
         return lhs.id == rhs.id
@@ -52,18 +64,22 @@ class post: Codable, Hashable, AutoIDable, DisplayablePost {
         hasher.combine(id)
     }
 }
-extension post: FirebaseResource {
+extension post: FirebaseModel {
     static var path: String {
         return "Posts"
     }
+}
+
+extension post: FirebaseTimeOrderedModel {
     var internalPath: String {
-        return "Posts/\(id)"
+        return "Posts"
     }
 }
 
 
-class GroupPost: Codable, Hashable, AutoIDable, DisplayablePost {
+class GroupPost: Codable, Hashable, AutoIDable, DisplayablePost, Postable {
     
+    var id: String
     var username: String
     var posterID: String
     var time: TimeInterval
@@ -76,8 +92,20 @@ class GroupPost: Codable, Hashable, AutoIDable, DisplayablePost {
     var likeCount: Int
     var replyCount: Int
     var isPrivate: Bool
-    var id: String
     var groupID: String
+    
+    init(groupID: String) {
+        self.id = UUID().uuidString
+        self.username = UserDefaults.currentUser.username
+        self.posterID = UserDefaults.currentUser.uid
+        self.time = Date().timeIntervalSince1970
+        self.text = ""
+        self.likeCount = 0
+        self.replyCount = 0
+        self.isPrivate = false
+        self.groupID = groupID
+    }
+    
     
     static func == (lhs: GroupPost, rhs: GroupPost) -> Bool {
         return lhs.id == rhs.id
@@ -86,12 +114,15 @@ class GroupPost: Codable, Hashable, AutoIDable, DisplayablePost {
         hasher.combine(id)
     }
 }
-extension GroupPost: FirebaseResource {
+extension GroupPost: FirebaseModel {
     static var path: String {
         return "GroupPosts"
     }
+}
+
+extension GroupPost: FirebaseTimeOrderedModel {
     var internalPath: String {
-        return "GroupPosts/\(groupID)/\(id)"
+        return "GroupPosts/\(groupID)"
     }
 }
 

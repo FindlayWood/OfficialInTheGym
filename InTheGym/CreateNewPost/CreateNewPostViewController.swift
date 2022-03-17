@@ -7,19 +7,22 @@
 //
 
 import UIKit
+import Combine
 
 class CreateNewPostViewController: UIViewController {
     
+    // MARK: - Properties
     weak var coordinator: CreateNewPostCoordinator?
 
     var display = CreateNewPostView()
     
     var assignee: Assignable!
     
-    var viewModel: CreateNewPostViewModel = {
-        return CreateNewPostViewModel()
-    }()
+    var viewModel = CreateNewPostViewModel()
     
+    private var subscriptions = Set<AnyCancellable>()
+    
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightColour
@@ -45,19 +48,38 @@ class CreateNewPostViewController: UIViewController {
         display.clipButton.addTarget(self, action: #selector(clipTapped(_:)), for: .touchUpInside)
         display.postButton.addTarget(self, action: #selector(postTapped(_:)), for: .touchUpInside)
         display.workoutButton.addTarget(self, action: #selector(workoutTapped(_:)), for: .touchUpInside)
+        display.privacyButton.addTarget(self, action: #selector(togglePrivacy(_:)), for: .touchUpInside)
         display.messageText.delegate = self
+        if viewModel.postable is GroupPost { display.privacyButton.isHidden = true }
     }
+    
+    // MARK: - View Model
     func initViewModel() {
+        
+        viewModel.$canPost
+            .sink { [weak self] in self?.display.postButton.isEnabled = $0 }
+            .store(in: &subscriptions)
+        
+        viewModel.$isPrivate
+            .sink { [weak self] in self?.display.togglePrivacy(to: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.$isLoading
+            .sink { [weak self] in self?.display.setLoading(to: $0)}
+            .store(in: &subscriptions)
+        
         viewModel.succesfullyPostedClosure = { [weak self] in
             guard let self = self else {return}
             self.showTopAlert(with: "Successfully posted!")
             self.display.removeAttachment()
+            self.display.messageText.resignFirstResponder()
+            self.display.messageText.text = ""
+            self.coordinator?.posted()
         }
         viewModel.errorPostingClosure = { [weak self] in
             guard let self = self else {return}
             self.showTopAlert(with: "Error posting. Try again.")
         }
-        viewModel.assignee = assignee
     }
 }
 
@@ -82,6 +104,9 @@ extension CreateNewPostViewController {
             viewModel.updateAttachedWorkout(with: pickedSavedWorkout)
         })
     }
+    @objc func togglePrivacy(_ sender: UIButton) {
+        viewModel.isPrivate.toggle()
+    }
 }
 
 
@@ -92,13 +117,13 @@ extension CreateNewPostViewController: UITextViewDelegate {
             textView.textColor = UIColor.white
         }
     }
-    func textViewDidChange(_ textView: UITextView) {
-        if textView.text.trimTrailingWhiteSpaces() == "" {
-            display.postButton.isEnabled = false
-        } else {
-            display.postButton.isEnabled = true
-        }
-    }
+//    func textViewDidChange(_ textView: UITextView) {
+//        if textView.text.trimTrailingWhiteSpaces() == "" {
+//            display.postButton.isEnabled = false
+//        } else {
+//            display.postButton.isEnabled = true
+//        }
+//    }
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         viewModel.updateText(with: newText)

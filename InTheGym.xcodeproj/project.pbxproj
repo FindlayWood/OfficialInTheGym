@@ -2720,6 +2720,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				74EE4EB627E3AA5400051451 /* DescriptionUpload */,
 				742C1CDF27C9334300DD1BB0 /* ProgramDisplay */,
 				742C1CD127C6769D00DD1BB0 /* ProgramChildController */,
 				742C1CC427C53F4900DD1BB0 /* MyPrograms */,
@@ -3432,6 +3433,13 @@
 				74B48DD827A0299900BBFC16 /* DisplayCircuitView.swift */,
 			);
 			path = DisplayCircuit;
+			sourceTree = "<group>";
+		};
+		74EE4EB627E3AA5400051451 /* DescriptionUpload */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = DescriptionUpload;
 			sourceTree = "<group>";
 		};
 		74F18AD127D65C130043551F /* PlayerWorkouts */ = {

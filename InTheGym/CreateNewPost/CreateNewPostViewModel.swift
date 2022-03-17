@@ -7,13 +7,25 @@
 //
 
 import Foundation
+import Combine
 
 class CreateNewPostViewModel {
+    
+    // MARK: - Publishers
+    @Published var postText: String = ""
+    @Published var canPost: Bool = false
+    @Published var isPrivate: Bool = false
+    @Published var isLoading: Bool = false
     
     var succesfullyPostedClosure:(()->())?
     var errorPostingClosure:(()->())?
     
+    // MARK: - Properties
     private var newPostModel = CreateNewPostModel()
+    
+    var postable: Postable!
+    
+    weak var listener: NewPostListener?
     
     var postAttachedWorkout: attachedWorkout?
     var attachedPhoto: attachedPhoto?
@@ -21,7 +33,7 @@ class CreateNewPostViewModel {
     
     var assignee: Assignable!
     
-    var apiService: FirebaseManagerService!
+    var apiService: FirebaseDatabaseManagerService
     
     var successfullyPosted: Bool = false {
         didSet {
@@ -36,65 +48,71 @@ class CreateNewPostViewModel {
         }
     }
     
-    init(apiService: FirebaseManagerService = FirebaseManager.shared) {
+    private var subscriptions = Set<AnyCancellable>()
+    
+    // MARK: - Initializer
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
+        initSubscriptions()
+    }
+    
+    func initSubscriptions() {
+        
+        $postText
+            .dropFirst()
+            .sink { [unowned self] in self.postable.text = $0 }.store(in: &subscriptions)
+        
+        $postText
+            .map { return $0.count > 0 }
+            .sink { [unowned self] in self.canPost = $0 }
+            .store(in: &subscriptions)
+        
+        $isPrivate
+            .dropFirst()
+            .sink { [unowned self] in self.postable.isPrivate = $0 }
+            .store(in: &subscriptions)
+        
     }
     
     func postTapped() {
-        configureUploadMethod()
-//        //newPostModel.username = FirebaseAuthManager.currentlyLoggedInUser.username
-//        //newPostModel.posterID = FirebaseAuthManager.currentlyLoggedInUser.uid
-//        //newPostModel.time = Date().timeIntervalSince1970
-//        PostEndpoints.postToGroup(groupID: assignee.uid, postModel: newPostModel).upload { [weak self] result in
-//            guard let self = self else {return}
+        isLoading = true
+        postable.time = Date().timeIntervalSince1970
+        if let postModel = postable as? post {
+            post(postModel)
+        } else if let groupPost = postable as? GroupPost {
+            post(groupPost)
+        }
+    }
+    
+    func post<Model:Postable>(_ model: Model) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.isLoading = false
+            self.listener?.send(model)
+//            self.updateText(with: "")
+//            self.removeAllAttachments()
+            self.succesfullyPostedClosure?()
+        }
+//        apiService.uploadTimeOrderedModel(model: model) { [weak self] result in
 //            switch result {
-//            case .success(_):
-//                self.successfullyPosted = true
+//            case .success(let model):
+//                print(model)
+//                self?.successfullyPosted = true
+//                self?.isLoading = false
 //            case .failure(let error):
-//                print(error.localizedDescription)
-//                self.errorPosting = error
+//                self?.errorPosting = error
+//                self?.isLoading = false
 //            }
 //        }
     }
     
-    func configureUploadMethod() {
-        switch assignee {
-        case is Users:
-            let endpoint = PostEndpoints.post(postModel: newPostModel)
-            post(to: endpoint)
-        case is GroupModel:
-            let endpoint = PostEndpoints.postToGroup(groupID: assignee.uid, postModel: newPostModel)
-            post(to: endpoint)
-        default:
-            break
-        }
-    }
-    
-    func post(to endpoint: PostEndpoints) {
-        apiService.upload(from: endpoint) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(_):
-                self.successfullyPosted = true
-            case .failure(let error):
-                self.errorPosting = error
-            }
-        }
-    }
-    
-    
+    // MARK: - Actions
     func updateText(with newText: String) {
-        newPostModel.text = newText
+        postText = newText
     }
     
-    func updateAttachedWorkout(with workout: WorkoutDelegate) {
+    func updateAttachedWorkout(with model: SavedWorkoutModel) {
         removeAllAttachments()
-        let newWorkout = attachedWorkout(title: workout.title,
-                                         createdBy: workout.createdBy,
-                                         exerciseCount: workout.exercises?.count ?? 0,
-                                         storageID: workout.savedID,
-                                         postedWorkoutType: .saved)
-        newPostModel.attachedWorkout = newWorkout
+        postable.savedWorkoutID = model.id
     }
     
     func updateAttachedPhoto(with newPhoto: attachedPhoto) {
@@ -103,8 +121,6 @@ class CreateNewPostViewModel {
     }
     
     func removeAllAttachments() {
-        newPostModel.attachedWorkout = nil
-        newPostModel.attachedClip = nil
-        newPostModel.attachedPhoto = nil
+        postable.savedWorkoutID = nil
     }
 }

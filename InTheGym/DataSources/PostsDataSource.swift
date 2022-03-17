@@ -70,7 +70,11 @@ class PostsDataSource: NSObject {
     // MARK: - Add
     func addNewPost(_ newPost: post) {
         var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendItems([newPost], toSection: .main)
+        if let firstItem = currentSnapshot.itemIdentifiers.first {
+            currentSnapshot.insertItems([newPost], beforeItem: firstItem)
+        } else {
+            currentSnapshot.appendItems([newPost], toSection: .main)
+        }
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
     

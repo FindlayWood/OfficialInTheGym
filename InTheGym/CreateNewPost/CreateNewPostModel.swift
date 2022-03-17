@@ -8,6 +8,7 @@
 
 import Foundation
 
+// MARK: - Create New Post Model
 struct CreateNewPostModel: Encodable {
     var id: String = ""
     var username: String = ""
@@ -22,3 +23,24 @@ struct CreateNewPostModel: Encodable {
     var isPrivate: Bool = false
 }
 
+// MARK: - Postable
+/// Type that must conform to FirebaseTimeOrderedModel
+/// Type that has variables that can change within a created post
+protocol Postable: FirebaseTimeOrderedModel {
+    
+    /// text can be entered and changed by user
+    var text: String { get set }
+    
+    /// isPrivate variable can be changed by user
+    var isPrivate: Bool { get set }
+    
+    /// time variable is set when the user taps post
+    var time: TimeInterval { get set }
+    
+    /// user may choose to attach a workout
+    var workoutID: String? { get set }
+    
+    /// user may choose to attach saved workout
+    var savedWorkoutID: String? { get set }
+    
+}

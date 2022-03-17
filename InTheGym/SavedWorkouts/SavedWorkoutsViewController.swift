@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class SavedWorkoutsViewController: UIViewController, Storyboarded {
+class SavedWorkoutsViewController: UIViewController {
     
     // MARK: - Properties
     weak var coordinator: SavedWorkoutsFlow?

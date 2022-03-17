@@ -31,7 +31,7 @@ extension AddGroupWorkoutCoordinator {
         child.start()
     }
     func addSavedWorkout() {
-        let vc = SavedWorkoutsViewController.instantiate()
+        let vc = SavedWorkoutsViewController()
         vc.coordinator = self
         navigationController.present(vc, animated: true, completion: nil)
     }
