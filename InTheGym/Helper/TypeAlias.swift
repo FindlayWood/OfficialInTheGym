@@ -26,3 +26,6 @@ typealias WorkoutUpdatedListener = PassthroughSubject<WorkoutModel,Never>
 
 /// Listen for a new post being added
 typealias NewPostListener = PassthroughSubject<Postable,Never>
+
+/// Listen for a new description being added
+typealias NewDescriptionListener = PassthroughSubject<DescriptionModel,Never>

@@ -47,10 +47,13 @@ extension DiscoverCoordinator {
     }
     
     func exerciseSelected(_ model: DiscoverExerciseModel) {
-        let vc = ExerciseDescriptionViewController()
-        vc.viewModel.exercise = model
-        vc.hidesBottomBarWhenPushed = true
-        navigationController.pushViewController(vc, animated: true)
+        let child = ExerciseDescriptionCoordinator(navigationController: navigationController, exercise: model)
+        childCoordinators.append(child)
+        child.start()
+//        let vc = ExerciseDescriptionViewController()
+//        vc.viewModel.exercise = model
+//        vc.hidesBottomBarWhenPushed = true
+//        navigationController.pushViewController(vc, animated: true)
     }
     
     func programSelected(_ model: SavedProgramModel) {

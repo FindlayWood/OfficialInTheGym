@@ -83,6 +83,7 @@ class CreateNewPostViewController: UIViewController {
     }
 }
 
+// MARK: - Actions
 extension CreateNewPostViewController {
     @objc func cancelTapped(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -126,8 +127,10 @@ extension CreateNewPostViewController: UITextViewDelegate {
 //    }
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        viewModel.updateText(with: newText)
         let numberOfChars = newText.count
+        if numberOfChars < 500 {
+            viewModel.updateText(with: newText)
+        }
         return numberOfChars < 500
     }
     

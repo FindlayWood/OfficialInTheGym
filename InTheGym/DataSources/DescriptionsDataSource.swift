@@ -63,6 +63,17 @@ class DescriptionsDataSource: NSObject {
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
+    // MARK: - Add New
+    func addNew(_ model: DescriptionModel) {
+        var currentSnapshot = dataSource.snapshot()
+        if let firstItem = currentSnapshot.itemIdentifiers.first {
+            currentSnapshot.insertItems([model], beforeItem: firstItem)
+        } else {
+            currentSnapshot.appendItems([model], toSection: .main)
+        }
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    
     // MARK: - Reload Row
     func reloadRow(with model: DescriptionModel) {
 //        guard let model = dataSource.itemIdentifier(for: indexPath) else {return}

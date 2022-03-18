@@ -12,6 +12,8 @@ import Combine
 class DescriptionsViewController: UIViewController {
 
     // MARK: - Properties
+    weak var coordinator: ExerciseDescriptionCoordinator?
+    
     var display = DescriptionsView()
     
     var viewModel = DescriptionsViewModel()
@@ -51,6 +53,10 @@ class DescriptionsViewController: UIViewController {
             .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
         
+        viewModel.newDescriptionListener
+            .sink { [weak self] in self?.dataSource.addNew($0) }
+            .store(in: &subscriptions)
+        
         viewModel.fetchModels()
     }
 }
@@ -58,6 +64,13 @@ class DescriptionsViewController: UIViewController {
 // MARK: - Button Actions
 private extension DescriptionsViewController {
     @objc func plusButtonPressed(_ sender: UIButton) {
+        let descriptionModel = DescriptionModel(exercise: viewModel.exerciseModel.exerciseName, description: "")
+        coordinator?.addDescription(descriptionModel, listener: viewModel.newDescriptionListener)
         
+//        let vc = DescriptionUploadViewController()
+//        vc.viewModel.descriptionModel = descriptionModel
+//        vc.viewModel.listener = viewModel.newDescriptionListener
+//        vc.modalPresentationStyle = .fullScreen
+//        navigationController?.present(vc, animated: true)
     }
 }

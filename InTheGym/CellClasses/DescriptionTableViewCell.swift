@@ -16,7 +16,14 @@ class DescriptionTableViewCell: UITableViewCell {
     // MARK: - Properties
     static let cellID = "DescriptionTableViewCellID"
     
+    let notVoteImage = UIImage(systemName: "hand.thumbsup", withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+    let voteImage = UIImage(systemName: "hand.thumbsup.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+    
     var model: DescriptionModel!
+    
+    var viewModel = DescriptionsCellViewModel()
+    
+    private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - Subviews
     var profileImageButton: UIButton = {
@@ -54,34 +61,20 @@ class DescriptionTableViewCell: UITableViewCell {
     }()
     var upVoteButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "chevron.up", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        button.setImage(UIImage(systemName: "hand.thumbsup", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
         button.tintColor = .darkColour
+        button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     var voteLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .black
         label.text = "100"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
-    }()
-    var downVoteButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "chevron.down", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-        button.tintColor = .darkColour
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    lazy var voteStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [upVoteButton,voteLabel,downVoteButton])
-        stack.axis = .vertical
-        stack.alignment = .center
-        stack.distribution = .fillEqually
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
     }()
 
     
@@ -94,6 +87,12 @@ class DescriptionTableViewCell: UITableViewCell {
         super.init(coder: coder)
         setupUI()
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.upVoteButton.setImage(notVoteImage, for: .normal)
+        self.upVoteButton.isUserInteractionEnabled = true
+    }
 }
 
 // MARK: - Setup UI
@@ -103,7 +102,8 @@ private extension DescriptionTableViewCell {
         contentView.addSubview(usernameButton)
         contentView.addSubview(timeLabel)
         contentView.addSubview(descriptionText)
-        contentView.addSubview(voteStack)
+        contentView.addSubview(upVoteButton)
+        contentView.addSubview(voteLabel)
         constrainUI()
         initButtonActions()
     }
@@ -121,11 +121,14 @@ private extension DescriptionTableViewCell {
             descriptionText.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 15),
             descriptionText.leadingAnchor.constraint(equalTo: profileImageButton.trailingAnchor, constant: 10),
             
-            voteStack.topAnchor.constraint(equalTo: descriptionText.topAnchor),
-            voteStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            voteStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -8),
+            upVoteButton.topAnchor.constraint(equalTo: descriptionText.topAnchor),
+            upVoteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             
-            descriptionText.trailingAnchor.constraint(equalTo: voteStack.leadingAnchor, constant: -8),
+            voteLabel.topAnchor.constraint(equalTo: upVoteButton.bottomAnchor),
+            voteLabel.centerXAnchor.constraint(equalTo: upVoteButton.centerXAnchor),
+            voteLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -16),
+            
+            descriptionText.trailingAnchor.constraint(equalTo: upVoteButton.leadingAnchor, constant: -8),
             descriptionText.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -16)
             
         
@@ -133,19 +136,18 @@ private extension DescriptionTableViewCell {
     }
     func initButtonActions() {
         upVoteButton.addTarget(self, action: #selector(upVoteAction(_:)), for: .touchUpInside)
-        downVoteButton.addTarget(self, action: #selector(downVoteAction(_:)), for: .touchUpInside)
         profileImageButton.addTarget(self, action: #selector(userTappedAction(_:)), for: .touchUpInside)
         usernameButton.addTarget(self, action: #selector(userTappedAction(_:)), for: .touchUpInside)
     }
     @objc func upVoteAction(_ sender: UIButton) {
         model.vote += 1
         voteLabel.text = model.vote.description
-//        actionPublisher.send(.upVote)
-    }
-    @objc func downVoteAction(_ sender: UIButton) {
-        model.vote -= 1
-        voteLabel.text = model.vote.description
-//        actionPublisher.send(.downVote)
+        viewModel.vote()
+        UIView.animate(withDuration: 0.3) {
+            self.upVoteButton.setImage(self.voteImage, for: .normal)
+        } completion: { _ in
+            self.upVoteButton.isUserInteractionEnabled = false
+        }
     }
     @objc func userTappedAction(_ sender: UIButton) {
         actionPublisher.send(.userTapped)
@@ -155,6 +157,7 @@ private extension DescriptionTableViewCell {
 // MARK: - Public Configuration
 extension DescriptionTableViewCell {
     func configure(with model: DescriptionModel) {
+        viewModel.descriptionModel = model
         self.model = model
         usernameButton.setTitle(model.username, for: .normal)
         let then = Date(timeIntervalSince1970: (model.time))
@@ -170,5 +173,20 @@ extension DescriptionTableViewCell {
                 self?.profileImageButton.backgroundColor = .lightGray
             }
         }
+        
+        
+        viewModel.votedPublishers
+            .sink { [weak self] voted in
+                if voted {
+                    self?.upVoteButton.setImage(self?.voteImage, for: .normal)
+                    self?.upVoteButton.isUserInteractionEnabled = false
+                } else {
+                    self?.upVoteButton.setImage(self?.notVoteImage, for: .normal)
+                    self?.upVoteButton.isUserInteractionEnabled = true
+                }
+            }
+            .store(in: &subscriptions)
+        
+        viewModel.checkVote()
     }
 }

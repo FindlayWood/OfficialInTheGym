@@ -15,6 +15,8 @@ class DescriptionsViewModel {
     var descriptionModels = CurrentValueSubject<[DescriptionModel],Never>([])
     
     // MARK: - Properties
+    var newDescriptionListener = NewDescriptionListener()
+    
     var exerciseModel: DiscoverExerciseModel!
     
     var apiService: FirebaseDatabaseManagerService

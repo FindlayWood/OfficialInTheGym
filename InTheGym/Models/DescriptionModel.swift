@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 // MARK: - Description Model
 ///Model for exercise description
@@ -30,6 +31,21 @@ class DescriptionModel: Codable, Hashable {
         self.vote = 0
     }
     
+    func uploadPoints() -> [FirebaseMultiUploadDataPoint] {
+        guard let data = self.toFirebaseJSON() else {return []}
+        var points = [FirebaseMultiUploadDataPoint]()
+        points.append(data)
+        points.append(FirebaseMultiUploadDataPoint(value: true, path: myDescriptionsPath))
+        return points
+    }
+    
+    func votePoints() -> [FirebaseMultiUploadDataPoint] {
+        var points = [FirebaseMultiUploadDataPoint]()
+        points.append(FirebaseMultiUploadDataPoint(value: ServerValue.increment(1), path: votePath))
+        points.append(FirebaseMultiUploadDataPoint(value: true, path: myVotesDescriptionPath))
+        return points
+    }
+    
     static func == (lhs: DescriptionModel, rhs: DescriptionModel) -> Bool {
         lhs.id == rhs.id
     }
@@ -41,6 +57,15 @@ class DescriptionModel: Codable, Hashable {
 extension DescriptionModel: FirebaseInstance {
     var internalPath: String {
         return "ExerciseDescriptions/\(exercise)/\(id)"
+    }
+    var myDescriptionsPath: String {
+        return "MyDescriptions/\(UserDefaults.currentUser.uid)/\(exercise)/\(id)"
+    }
+    var votePath: String {
+        return "ExerciseDescriptions/\(exercise)/\(id)/vote"
+    }
+    var myVotesDescriptionPath: String {
+        return "MyDescriptionVotes/\(UserDefaults.currentUser.uid)/\(id)"
     }
 }
 
@@ -56,3 +81,14 @@ extension Descriptions: FirebaseInstance {
 }
 
 
+// MARK: - Vote Search Model
+/// Search if current user has voted for given description
+struct VoteSearchModel {
+    var descriptionID: String
+    var userID: String
+}
+extension VoteSearchModel: FirebaseInstance {
+    var internalPath: String {
+        return "MyDescriptionVotes/\(userID)/\(descriptionID)"
+    }
+}

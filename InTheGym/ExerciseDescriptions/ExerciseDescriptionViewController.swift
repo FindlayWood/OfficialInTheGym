@@ -12,6 +12,8 @@ import Combine
 class ExerciseDescriptionViewController: UIViewController {
 
     // MARK: - Properties
+    weak var coordinator: ExerciseDescriptionCoordinator?
+    
     var display = ExerciseDescriptionView()
     
     var viewModel = ExerciseDescriptionViewModel()
@@ -28,6 +30,7 @@ class ExerciseDescriptionViewController: UIViewController {
         view.backgroundColor = .white
         initSubscriptions()
         descriptionsVC.viewModel.exerciseModel = viewModel.exercise
+        descriptionsVC.coordinator = coordinator
         clipsVC.viewModel.exerciseModel = viewModel.exercise
     }
     
