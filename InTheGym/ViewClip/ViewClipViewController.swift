@@ -20,7 +20,7 @@ class ViewClipViewController: UIViewController {
     
     weak var coordinator: ViewClipFlow?
     
-//    var player: AVPlayer!
+    var player: AVPlayer?
     
 //    var storageURL: String!
     
@@ -51,8 +51,8 @@ class ViewClipViewController: UIViewController {
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clear
-
+//        view.backgroundColor = .clear
+        initViewModel()
 //        showLoading()
         addObservers()
         initTargets()
@@ -60,23 +60,28 @@ class ViewClipViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        display.frame = getViewableFrameWithBottomSafeArea()
+        display.frame = view.bounds
 //        display.exerciseName.text = exerciseName
         view.addSubview(display)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        initViewModel()
+        
+        let thumbnailDownloadModel = ClipThumbnailDownloadModel(id: viewModel.keyClipModel.clipKey)
+        ImageCache.shared.loadThumbnail(from: thumbnailDownloadModel) { [weak self] result in
+            let image = try? result.get()
+            self?.display.thumbnailImageView.image = image
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        viewModel.playerPublisher
-            .compactMap { $0 }
-            .sink { [weak self] in self?.startPlayer($0) }
-            .store(in: &subscriptions)
+//        viewModel.playerPublisher
+//            .compactMap { $0 }
+//            .sink { [weak self] in self?.startPlayer($0) }
+//            .store(in: &subscriptions)
         
 //        startVideo()
 //
@@ -101,9 +106,17 @@ class ViewClipViewController: UIViewController {
     // MARK: - View Model
     func initViewModel() {
         
+        viewModel.$isLoading
+            .sink { [weak self] in self?.display.setLoading(to: $0)}
+            .store(in: &subscriptions)
+        
         viewModel.playerPublisher
             .compactMap { $0 }
             .sink { [weak self] in self?.setPlayer($0) }
+            .store(in: &subscriptions)
+        
+        viewModel.assetPublisher
+            .sink { [weak self] in self?.setAsset($0)}
             .store(in: &subscriptions)
         
         viewModel.premiumAccountPublisher
@@ -113,16 +126,30 @@ class ViewClipViewController: UIViewController {
         viewModel.fetchClip()
     }
     
+    func setAsset(_ asset: AVAsset) {
+        player = .init(playerItem: .init(asset: asset))
+        player?.replaceCurrentItem(with: .init(asset: asset))
+        let layer = AVPlayerLayer(player: player)
+        layer.frame = view.bounds
+        layer.videoGravity = .resizeAspectFill
+        layer.backgroundColor = UIColor.green.cgColor
+        view.layer.addSublayer(layer)
+        player?.play()
+    }
+    
     func setPlayer(_ player: AVPlayer) {
         let layer = AVPlayerLayer(player: player)
         layer.frame = view.bounds
         layer.videoGravity = .resizeAspectFill
+        layer.backgroundColor = UIColor.red.cgColor
         view.layer.addSublayer(layer)
         display.setLoading(to: false)
+        player.play()
         addTimerObserver()
     }
     
     func startPlayer(_ player: AVPlayer) {
+        print(player.currentItem?.status)
         if player.currentItem?.status == .readyToPlay {
             player.play()
         }

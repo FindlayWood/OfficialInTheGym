@@ -49,19 +49,26 @@ final class ExerciseClipsCollectionCell: UICollectionViewCell {
 // MARK: - Configure
 private extension ExerciseClipsCollectionCell {
     func setupUI() {
+        contentView.clipsToBounds = true
         contentView.addSubview(thumbnailImageView)
         contentView.addSubview(profileImageButton)
         backgroundColor = .lightGray
         addViewShadow(with: .darkColour)
         layer.cornerRadius = 8
+        contentView.layer.cornerRadius = 8
         configureUI()
     }
     
     func configureUI() {
-        addFullConstraint(to: thumbnailImageView)
+//        addFullConstraint(to: thumbnailImageView)
         NSLayoutConstraint.activate([
-            profileImageButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            profileImageButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8)
+            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            
+            profileImageButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            profileImageButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8)
         ])
     }
 }
@@ -71,13 +78,13 @@ extension ExerciseClipsCollectionCell {
     public func configure(with model: ClipModel) {
         let profileImageModel = ProfileImageDownloadModel(id: model.userID)
         ImageCache.shared.load(from: profileImageModel) { [weak self] result in
-            guard let image = try? result.get() else {return}
+            let image = try? result.get()
             self?.profileImageButton.setImage(image, for: .normal)
         }
         
         let thumbnailDownloadModel = ClipThumbnailDownloadModel(id: model.id)
         ImageCache.shared.loadThumbnail(from: thumbnailDownloadModel) { [weak self] result in
-            guard let image = try? result.get() else {return}
+            let image = try? result.get()
             self?.thumbnailImageView.image = image
         }
     }

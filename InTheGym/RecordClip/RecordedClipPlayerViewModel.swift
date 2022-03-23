@@ -67,7 +67,9 @@ class RecordedClipPlayerViewModel {
             if let thumbnail = thumbnail {
                 let thumbnailModel = ClipThumbnailModel(id: id, image: thumbnail)
                 self.uploadThumbnail(thumbnailModel)
+                self.removeFromFileManager()
             } else {
+                self.removeFromFileManager()
                 self.errorPublisher.send(.failedGenerateThumnail)
             }
         }
@@ -123,7 +125,7 @@ class RecordedClipPlayerViewModel {
             switch result {
             case .success(()):
                 self?.generateThumbnail(with: model.id)
-                self?.removeFromFileManager()
+//                self?.removeFromFileManager()
                 self?.successPublisher.send(true)
                 self?.addDelegate?.addClip(model)
             case .failure(_):

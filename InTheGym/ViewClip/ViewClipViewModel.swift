@@ -15,6 +15,7 @@ class ViewClipViewModel {
     // MARK: - Publishers
     var errorPublisher = PassthroughSubject<Error,Never>()
     var playerPublisher = CurrentValueSubject<AVPlayer?,Never>(nil)
+    var assetPublisher = PassthroughSubject<AVAsset,Never>()
     var premiumAccountPublisher = PassthroughSubject<Void,Never>()
     
     @Published var isLoading: Bool = false
@@ -34,13 +35,16 @@ class ViewClipViewModel {
     // MARK: - Functions
     func fetchClip() {
         isLoading = true
-        if UserDefaults.currentUser.premiumAccount ?? false {
+//        if UserDefaults.currentUser.premiumAccount ?? true {
+        if true {
             ClipCache.shared.load(from: keyClipModel) { [weak self] result in
                 switch result {
                 case .success(let asset):
-                    let item = AVPlayerItem(asset: asset)
-                    let player = AVPlayer(playerItem: item)
-                    self?.playerPublisher.send(player)
+                    
+                    self?.assetPublisher.send(asset)
+//                    let item = AVPlayerItem(asset: asset)
+//                    let player = AVPlayer(playerItem: item)
+//                    self?.playerPublisher.send(player)
                     self?.isLoading = false
                 case .failure(let error):
                     self?.errorPublisher.send(error)

@@ -17,13 +17,13 @@ class SavedWorkoutsChildViewController: UIViewController {
     // MARK: - Properties
     var display = SavedWorkoutsChildView()
     
-    var dataSource: SavedWorkoutsCollectionDataSource!
+    lazy var dataSource = SavedWorkoutsCollectionDataSource(collectionView: display.collectionView)
     
     private var subscriptions = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightColour
+        view.backgroundColor = .white
         initDataSource()
     }
     override func viewDidLayoutSubviews() {
@@ -34,7 +34,7 @@ class SavedWorkoutsChildViewController: UIViewController {
     
     // MARK: - Data Source
     func initDataSource() {
-        dataSource = .init(collectionView: display.collectionView)
+//        dataSource = .init(collectionView: display.collectionView)
         
         dataSource.workoutSelected
             .sink { [weak self] in self?.workoutSelected.send($0)}

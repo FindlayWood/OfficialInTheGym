@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 class PlayerDetailViewController: UIViewController {
     
@@ -20,6 +21,10 @@ class PlayerDetailViewController: UIViewController {
     var scoreChildVC = ScoresPieChartChildViewController()
     
     var workloadChildVC = WorkloadChildViewController()
+    
+    var lastThreeScoresChildVC = LastThreeScoresViewController()
+    
+    private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
     override func viewDidLoad() {
@@ -27,6 +32,7 @@ class PlayerDetailViewController: UIViewController {
         view.backgroundColor = .white
         display.configure(with: viewModel.user)
         initTargets()
+        lastThreeSubscription()
     }
     
     override func viewDidLayoutSubviews() {
@@ -35,6 +41,7 @@ class PlayerDetailViewController: UIViewController {
         view.addSubview(display)
         initScoreChildVC()
         inintWorkloadChildVC()
+        initLastThreeChildVC()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,6 +66,19 @@ class PlayerDetailViewController: UIViewController {
         display.addSubview(workloadChildVC.view)
         workloadChildVC.view.frame = display.workloadContainerView.frame
         workloadChildVC.didMove(toParent: self)
+    }
+    
+    func initLastThreeChildVC() {
+        addChild(lastThreeScoresChildVC)
+        display.addSubview(lastThreeScoresChildVC.view)
+        lastThreeScoresChildVC.view.frame = display.lastThreeScoresContainerView.frame
+        lastThreeScoresChildVC.didMove(toParent: self)
+ 
+    }
+    func lastThreeSubscription() {
+        scoreChildVC.viewModel.lastThreePublisher
+            .sink { [weak self] in self?.lastThreeScoresChildVC.display.configure(with: $0)}
+            .store(in: &subscriptions)
     }
     
     // MARK: - Targets

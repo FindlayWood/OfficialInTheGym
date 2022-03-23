@@ -53,7 +53,6 @@ class ExerciseDescriptionViewController: UIViewController {
         } else {
             addToContainer(vc: clipsVC)
         }
-        
     }
     
     // MARK: - Container

@@ -715,6 +715,15 @@
 		74EE4EBE27E4C75600051451 /* ExerciseDescriptionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EBD27E4C75600051451 /* ExerciseDescriptionCoordinator.swift */; };
 		74EE4EC027E4FB3300051451 /* DescriptionsCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EBF27E4FB3300051451 /* DescriptionsCellViewModel.swift */; };
 		74EE4EC227E5112300051451 /* VoteCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EC127E5112300051451 /* VoteCache.swift */; };
+		74EE4EC527E536A100051451 /* LastThreeScoresViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EC427E536A100051451 /* LastThreeScoresViewController.swift */; };
+		74EE4EC727E536AE00051451 /* LastThreeScoresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EC627E536AE00051451 /* LastThreeScoresView.swift */; };
+		74EE4EC927E7A74C00051451 /* CustomUnderlineSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EC827E7A74C00051451 /* CustomUnderlineSegmentControl.swift */; };
+		74EE4ECC27E7AD9B00051451 /* PostsChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4ECB27E7AD9A00051451 /* PostsChildViewController.swift */; };
+		74EE4ECE27E7ADA900051451 /* PostsChildView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4ECD27E7ADA900051451 /* PostsChildView.swift */; };
+		74EE4ED127E8B5F100051451 /* MyClipsChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4ED027E8B5F100051451 /* MyClipsChildViewController.swift */; };
+		74EE4ED327E8B61000051451 /* MyClipsChildView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4ED227E8B61000051451 /* MyClipsChildView.swift */; };
+		74EE4ED527E8B95400051451 /* MyClipsChildViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4ED427E8B95400051451 /* MyClipsChildViewModel.swift */; };
+		74EE4ED727E8B9F700051451 /* UserClipsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4ED627E8B9F700051451 /* UserClipsModel.swift */; };
 		74EEA754270C992A00911A77 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EEA753270C992A00911A77 /* Int+Extension.swift */; };
 		74EEA756270CAADC00911A77 /* EMOMExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EEA755270CAADC00911A77 /* EMOMExerciseView.swift */; };
 		74EEA758270DD3B700911A77 /* AVAsset+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EEA757270DD3B700911A77 /* AVAsset+Extension.swift */; };
@@ -1523,6 +1532,15 @@
 		74EE4EBD27E4C75600051451 /* ExerciseDescriptionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDescriptionCoordinator.swift; sourceTree = "<group>"; };
 		74EE4EBF27E4FB3300051451 /* DescriptionsCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionsCellViewModel.swift; sourceTree = "<group>"; };
 		74EE4EC127E5112300051451 /* VoteCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteCache.swift; sourceTree = "<group>"; };
+		74EE4EC427E536A100051451 /* LastThreeScoresViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastThreeScoresViewController.swift; sourceTree = "<group>"; };
+		74EE4EC627E536AE00051451 /* LastThreeScoresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastThreeScoresView.swift; sourceTree = "<group>"; };
+		74EE4EC827E7A74C00051451 /* CustomUnderlineSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUnderlineSegmentControl.swift; sourceTree = "<group>"; };
+		74EE4ECB27E7AD9A00051451 /* PostsChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsChildViewController.swift; sourceTree = "<group>"; };
+		74EE4ECD27E7ADA900051451 /* PostsChildView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsChildView.swift; sourceTree = "<group>"; };
+		74EE4ED027E8B5F100051451 /* MyClipsChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClipsChildViewController.swift; sourceTree = "<group>"; };
+		74EE4ED227E8B61000051451 /* MyClipsChildView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClipsChildView.swift; sourceTree = "<group>"; };
+		74EE4ED427E8B95400051451 /* MyClipsChildViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClipsChildViewModel.swift; sourceTree = "<group>"; };
+		74EE4ED627E8B9F700051451 /* UserClipsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserClipsModel.swift; sourceTree = "<group>"; };
 		74EEA753270C992A00911A77 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		74EEA755270CAADC00911A77 /* EMOMExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EMOMExerciseView.swift; sourceTree = "<group>"; };
 		74EEA757270DD3B700911A77 /* AVAsset+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAsset+Extension.swift"; sourceTree = "<group>"; };
@@ -1802,6 +1820,7 @@
 				742C1C5E27B5737300DD1BB0 /* UINameUsernameSubView.swift */,
 				742C1C6027B574FB00DD1BB0 /* UIUserFollowerSubView.swift */,
 				742C1C8B27BD54D000DD1BB0 /* CustomSegmentControl.swift */,
+				74EE4EC827E7A74C00051451 /* CustomUnderlineSegmentControl.swift */,
 			);
 			path = ViewClasses;
 			sourceTree = "<group>";
@@ -1985,6 +2004,7 @@
 				742C1C5227B2FB7200DD1BB0 /* UploadClipModel.swift */,
 				742C1CA427BEA15B00DD1BB0 /* ExerciseClipsModel.swift */,
 				7479812227DA1F3B00CF3F9B /* ClipModel.swift */,
+				74EE4ED627E8B9F700051451 /* UserClipsModel.swift */,
 			);
 			path = Clips;
 			sourceTree = "<group>";
@@ -3322,6 +3342,9 @@
 		74DE6D7027D10FAC009FB44A /* ChildViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				74EE4ECF27E8B5D900051451 /* MyClipsChildVC */,
+				74EE4ECA27E7AD8800051451 /* PostsChildVC */,
+				74EE4EC327E5368B00051451 /* LastThreeScoresVC */,
 				744B52C427CD040F00B9D45B /* OptionsChildVC */,
 				74F18ADF27D668AE0043551F /* Workout */,
 				74DE6D9F27D58BF6009FB44A /* Workload */,
@@ -3458,6 +3481,34 @@
 				74EE4EBB27E3AADE00051451 /* DescriptionUploadView.swift */,
 			);
 			path = DescriptionUpload;
+			sourceTree = "<group>";
+		};
+		74EE4EC327E5368B00051451 /* LastThreeScoresVC */ = {
+			isa = PBXGroup;
+			children = (
+				74EE4EC427E536A100051451 /* LastThreeScoresViewController.swift */,
+				74EE4EC627E536AE00051451 /* LastThreeScoresView.swift */,
+			);
+			path = LastThreeScoresVC;
+			sourceTree = "<group>";
+		};
+		74EE4ECA27E7AD8800051451 /* PostsChildVC */ = {
+			isa = PBXGroup;
+			children = (
+				74EE4ECB27E7AD9A00051451 /* PostsChildViewController.swift */,
+				74EE4ECD27E7ADA900051451 /* PostsChildView.swift */,
+			);
+			path = PostsChildVC;
+			sourceTree = "<group>";
+		};
+		74EE4ECF27E8B5D900051451 /* MyClipsChildVC */ = {
+			isa = PBXGroup;
+			children = (
+				74EE4ED027E8B5F100051451 /* MyClipsChildViewController.swift */,
+				74EE4ED227E8B61000051451 /* MyClipsChildView.swift */,
+				74EE4ED427E8B95400051451 /* MyClipsChildViewModel.swift */,
+			);
+			path = MyClipsChildVC;
 			sourceTree = "<group>";
 		};
 		74F18AD127D65C130043551F /* PlayerWorkouts */ = {
@@ -3990,6 +4041,7 @@
 				7444D0DE26D68E850009C7A6 /* WorkoutEndoints.swift in Sources */,
 				7416CCD12655897B0043B1C2 /* RepsView.swift in Sources */,
 				74EE4EBC27E3AADE00051451 /* DescriptionUploadView.swift in Sources */,
+				74EE4ED727E8B9F700051451 /* UserClipsModel.swift in Sources */,
 				742C1CAE27C2A3EA00DD1BB0 /* ProgramCreationViewController.swift in Sources */,
 				742C1CD827C7C2E300DD1BB0 /* ProgramCreationDetailViewController.swift in Sources */,
 				743330D62790FB00005A0C45 /* PlayerWorkoutsViewController.swift in Sources */,
@@ -4023,6 +4075,7 @@
 				744B52C327CD021900B9D45B /* OptionsCollectionDataSource.swift in Sources */,
 				742C1CC327C518A700DD1BB0 /* ProgramCreationWorkoutsHeaderView.swift in Sources */,
 				745D0E7A22A17E26007670E3 /* LoginViewController.swift in Sources */,
+				74EE4EC727E536AE00051451 /* LastThreeScoresView.swift in Sources */,
 				7444D0A826D19C590009C7A6 /* UITextfield+Extension.swift in Sources */,
 				7423B51D279B93BD007AA889 /* HorizontallyFlushCollectionFlowLayout.swift in Sources */,
 				741FB1BF2667DF560039EB29 /* WorkoutModel.swift in Sources */,
@@ -4174,6 +4227,7 @@
 				7429783A26C151AF0023365E /* CreateNewGroupViewController.swift in Sources */,
 				74FDB5BC26B0C474000649CC /* ViewClipCoordinator.swift in Sources */,
 				742565A7277E3C3F00A7764D /* GroupPosts.swift in Sources */,
+				74EE4ED127E8B5F100051451 /* MyClipsChildViewController.swift in Sources */,
 				742C1CCE27C556A300DD1BB0 /* MyProgramsDataSource.swift in Sources */,
 				74B48E1827A9A06000BBFC16 /* CompletedWorkoutPageView.swift in Sources */,
 				74B6F693274D5DAB00A72679 /* ResettingPasswordViewModel.swift in Sources */,
@@ -4398,6 +4452,7 @@
 				742C1C5127B2D4EB00DD1BB0 /* ClipStorageModel.swift in Sources */,
 				7403A60126C55905000588CE /* GroupHomePageAdapter.swift in Sources */,
 				74F18AE327D668D00043551F /* WorkoutChildView.swift in Sources */,
+				74EE4EC527E536A100051451 /* LastThreeScoresViewController.swift in Sources */,
 				744D562E26F2ABF100D3E1FA /* CreateEMOMViewController.swift in Sources */,
 				74F2CCCD26DE912E00D7AD79 /* FirebaseManager.swift in Sources */,
 				746062072526843F005B1480 /* NewInfoTableViewCell.swift in Sources */,
@@ -4428,6 +4483,7 @@
 				74AF6D4F2684ED41005C52A8 /* DisplayWorkoutStatsViewModel.swift in Sources */,
 				74DE6D8827D24BAC009FB44A /* CoachPlayersModel.swift in Sources */,
 				746BFFA826B204170010C465 /* DisplayClipCell.swift in Sources */,
+				74EE4ED327E8B61000051451 /* MyClipsChildView.swift in Sources */,
 				74DE6DA327D58C1F009FB44A /* WorkloadChildViewModel.swift in Sources */,
 				74F18AE627D66D920043551F /* CoachPlayerWorkoutViewController.swift in Sources */,
 				7444D07C26CE98FB0009C7A6 /* UploadGroupWorkoutView.swift in Sources */,
@@ -4444,6 +4500,7 @@
 				74AF6D4D2684ED09005C52A8 /* DisplayWorkoutStatsViewController.swift in Sources */,
 				74B6F767275A526E00A72679 /* SignUpTextFieldView.swift in Sources */,
 				74478E1E26BDEC1200D8178E /* CreatedWorkoutsCoordinator.swift in Sources */,
+				74EE4EC927E7A74C00051451 /* CustomUnderlineSegmentControl.swift in Sources */,
 				7444D06B26CD549F0009C7A6 /* WorkoutTableViewCell.swift in Sources */,
 				742C1C9C27BD97A600DD1BB0 /* DescriptionsDataSource.swift in Sources */,
 				748E094825AB446900ABE9C9 /* TabBarSelectionImage.swift in Sources */,
@@ -4481,6 +4538,7 @@
 				74FDB5B926B0C42D000649CC /* ViewClipBottomView.swift in Sources */,
 				74220899256FFE2C00B42563 /* LaunchPageViewController.swift in Sources */,
 				7444D05D26CD419E0009C7A6 /* GroupWorkoutsViewController.swift in Sources */,
+				74EE4ECC27E7AD9B00051451 /* PostsChildViewController.swift in Sources */,
 				747B679A2600EE47000AD6B7 /* TimelineCreatedWorkoutTableViewCell.swift in Sources */,
 				742C1C4D27B2A34E00DD1BB0 /* RecordClipViewModel.swift in Sources */,
 				743330DC2791A9E2005A0C45 /* PlayerWorkoutsDataSource.swift in Sources */,
@@ -4626,6 +4684,7 @@
 				7459947D253DE5F800FBDC00 /* NewWeightViewController.swift in Sources */,
 				742C1C5927B4529100DD1BB0 /* ClipUploadError.swift in Sources */,
 				74B48DDF27A06E4400BBFC16 /* FirebaseStorageManager.swift in Sources */,
+				74EE4ED527E8B95400051451 /* MyClipsChildViewModel.swift in Sources */,
 				744AED4E279ADE2A000D2D74 /* CustomCache.swift in Sources */,
 				7444D09526D136890009C7A6 /* AddMoreToExerciseAdapter.swift in Sources */,
 				74C89C7F2619F61F009F3C72 /* WorkoutCompletedProtocol.swift in Sources */,
@@ -4641,6 +4700,7 @@
 				74443B9A22F1E18500DD18B3 /* SettingsViewController.swift in Sources */,
 				7444D07A26CE98E70009C7A6 /* UploadGroupWorkoutViewModel.swift in Sources */,
 				7429784026C151DB0023365E /* CreateNewGroupProtocol.swift in Sources */,
+				74EE4ECE27E7ADA900051451 /* PostsChildView.swift in Sources */,
 				7479814327DF9A3500CF3F9B /* DisplayNotificationsView.swift in Sources */,
 				742C1C5D27B571F800DD1BB0 /* MyProfileView.swift in Sources */,
 				7429784C26C167FA0023365E /* GroupAddPlayersAdapter.swift in Sources */,

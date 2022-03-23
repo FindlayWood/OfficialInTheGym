@@ -51,6 +51,11 @@ class PlayerDetailView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    var lastThreeScoresContainerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     var viewWorkoutsButton: UIButton = {
         let button = UIButton()
@@ -105,6 +110,7 @@ private extension PlayerDetailView {
 //        addSubview(nameUsernameView)
         addSubview(scoreContainerView)
         addSubview(workloadContainerView)
+        addSubview(lastThreeScoresContainerView)
         addSubview(buttonStack)
         configureUI()
     }
@@ -133,18 +139,23 @@ private extension PlayerDetailView {
 //            nameUsernameView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
             scoreContainerView.topAnchor.constraint(equalTo: userBackgroundView.bottomAnchor, constant: 16),
-            scoreContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+//            scoreContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
             scoreContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            scoreContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            scoreContainerView.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.2),
+            scoreContainerView.trailingAnchor.constraint(equalTo: centerXAnchor, constant: -8),
+            scoreContainerView.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.22),
             
-            workloadContainerView.topAnchor.constraint(equalTo: scoreContainerView.bottomAnchor, constant: 16),
-            workloadContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            workloadContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            workloadContainerView.topAnchor.constraint(equalTo: userBackgroundView.bottomAnchor, constant: 16),
+//            workloadContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            workloadContainerView.leadingAnchor.constraint(equalTo: centerXAnchor, constant: 8),
             workloadContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            workloadContainerView.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.2),
+            workloadContainerView.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.22),
             
-            buttonStack.topAnchor.constraint(equalTo: workloadContainerView.bottomAnchor, constant: 16),
+            lastThreeScoresContainerView.topAnchor.constraint(equalTo: scoreContainerView.bottomAnchor, constant: 16),
+            lastThreeScoresContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            lastThreeScoresContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            lastThreeScoresContainerView.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.12),
+            
+            buttonStack.topAnchor.constraint(equalTo: lastThreeScoresContainerView.bottomAnchor, constant: 16),
             buttonStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             buttonStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             buttonStack.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.15),

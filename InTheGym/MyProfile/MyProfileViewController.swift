@@ -22,6 +22,13 @@ class MyProfileViewController: UIViewController {
     var dataSource: MyProfileDataSource!
     
     var subscriptions = Set<AnyCancellable>()
+    
+    // MARK: - Child VC
+    var postsChildVC = PostsChildViewController()
+    
+    var clipsChildVC = MyClipsChildViewController()
+    
+    var workoutsChildVC = SavedWorkoutsChildViewController()
 
     // MARK: - View
     override func viewDidLoad() {
@@ -33,6 +40,7 @@ class MyProfileViewController: UIViewController {
         
         initViewModel()
         initUI()
+        initSubscriptions()
 //        initRefreshControl()
     }
     
@@ -44,11 +52,32 @@ class MyProfileViewController: UIViewController {
         display.frame = getViewableFrameWithBottomSafeArea()
         view.addSubview(display)
     }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        addToContainer(vc: postsChildVC)
+    }
 
     
     func initUI(){
         display.configure(with: UserDefaults.currentUser)
-
+        display.moreButton.addTarget(self, action: #selector(showMore(_:)), for: .touchUpInside)
+        display.notificationsButton.addTarget(self, action: #selector(showNotifications(_:)), for: .touchUpInside)
+        display.groupsButton.addTarget(self, action: #selector(showGroups(_:)), for: .touchUpInside)
+    }
+    
+    // MARK: - Add Child
+    func addToContainer(vc controller: UIViewController) {
+        addChild(controller)
+        display.addSubview(controller.view)
+        controller.view.frame = display.containerView.frame
+        controller.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        controller.didMove(toParent: self)
+    }
+    
+    func removeFromContainer(vc controller: UIViewController) {
+        controller.willMove(toParent: nil)
+        controller.view.removeFromSuperview()
+        controller.removeFromParent()
     }
     
     // MARK: - Data Source
@@ -98,7 +127,12 @@ class MyProfileViewController: UIViewController {
     func initViewModel(){
         
         viewModel.postPublisher
-            .sink { [weak self] in self?.dataSource.updatePosts(with: $0) }
+//            .sink { [weak self] in self?.dataSource.updatePosts(with: $0) }
+            .sink { [weak self] in self?.postsChildVC.dataSource.updateTable(with: $0) }
+            .store(in: &subscriptions)
+        
+        viewModel.savedWorkouts
+            .sink { [weak self] in self?.workoutsChildVC.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
         
         viewModel.followerCountPublisher
@@ -129,6 +163,7 @@ class MyProfileViewController: UIViewController {
         
         viewModel.fetchPostRefs()
         viewModel.getFollowerCount()
+        viewModel.fetchWorkoutKeys()
 
 
     }
@@ -137,6 +172,42 @@ class MyProfileViewController: UIViewController {
     func showCommentSection(for post: post) {
         coordinator?.showCommentSection(post: post, with: viewModel.reloadListener)
     }
+    
+    @objc func showMore(_ sender: UIButton) {
+        coordinator?.showMoreInfo()
+    }
+    @objc func showNotifications(_ sender: UIButton) {
+        coordinator?.showNotifications()
+    }
+    @objc func showGroups(_ sender: UIButton) {
+        coordinator?.showGroups()
+    }
+    
+    // MARK: - Subscriptions
+    func initSubscriptions() {
+        display.segmentControl.selectedIndex
+            .sink { [weak self] in self?.segmentChanged(to: $0) }
+            .store(in: &subscriptions)
+    }
+    
+    // MARK: - Switch Segment
+    func segmentChanged(to index: Int) {
+//        viewModel.selectedIndex = index
+        if index == 0 {
+            removeFromContainer(vc: clipsChildVC)
+            removeFromContainer(vc: workoutsChildVC)
+            addToContainer(vc: postsChildVC)
+        } else if index == 1  {
+            removeFromContainer(vc: postsChildVC)
+            removeFromContainer(vc: workoutsChildVC)
+            addToContainer(vc: clipsChildVC)
+        } else if index == 2 {
+            removeFromContainer(vc: postsChildVC)
+            removeFromContainer(vc: clipsChildVC)
+            addToContainer(vc: workoutsChildVC)
+        }
+    }
+    
 
     
 //    // MARK: - Refresh Control

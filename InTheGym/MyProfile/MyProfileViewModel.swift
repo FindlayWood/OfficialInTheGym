@@ -15,11 +15,15 @@ class MyProfileViewModel {
     // MARK: - Publishers
     var postPublisher = CurrentValueSubject<[post],Never>([])
     
+    var savedWorkouts = CurrentValueSubject<[SavedWorkoutModel],Never>([])
+    
     var followerCountPublisher = CurrentValueSubject<Int,Never>(0)
     
     var followingCountPublisher = CurrentValueSubject<Int,Never>(0)
     
     var errorLoadingPosts = PassthroughSubject<Void,Never>()
+    
+    var errorFetchingWorkouts = PassthroughSubject<Error,Never>()
     
     var workoutSelected = PassthroughSubject<WorkoutModel,Never>()
     
@@ -65,6 +69,33 @@ class MyProfileViewModel {
                 self?.postPublisher.send(posts)
             case .failure(_):
                 self?.errorLoadingPosts.send(())
+            }
+        }
+    }
+    
+    // MARK: - Fetching functions
+    func fetchWorkoutKeys() {
+        let referencesModel = SavedWorkoutsReferences(id: UserDefaults.currentUser.uid)
+        apiService.fetchKeys(from: referencesModel) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(let keys):
+                self.loadWorkouts(from: keys)
+            case .failure(let error):
+                self.errorFetchingWorkouts.send(error)
+            }
+        }
+    }
+    
+    func loadWorkouts(from keys: [String]) {
+        let savedKeysModel = keys.map { SavedWorkoutKeyModel(id: $0) }
+        apiService.fetchRange(from: savedKeysModel, returning: SavedWorkoutModel.self) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(let savedWorkoutModels):
+                self.savedWorkouts.send(savedWorkoutModels)
+            case .failure(let error):
+                self.errorFetchingWorkouts.send(error)
             }
         }
     }

@@ -22,6 +22,31 @@ class MyProfileView: UIView {
         return label
     }()
     
+    var moreButton: UIButton = {
+        let button = UIButton()
+        let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
+        button.setImage(UIImage(systemName: "ellipsis", withConfiguration: configuration), for: .normal)
+        button.tintColor = .darkColour
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    var notificationsButton: UIButton = {
+        let button = UIButton()
+        let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
+        button.setImage(UIImage(systemName: "bell.fill", withConfiguration: configuration), for: .normal)
+        button.tintColor = .darkColour
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    var groupsButton: UIButton = {
+        let button = UIButton()
+        let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
+        button.setImage(UIImage(systemName: "person.3.fill", withConfiguration: configuration), for: .normal)
+        button.tintColor = .darkColour
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     var profileImageView: UIButton = {
         let view = UIButton()
 //        view.contentMode = .scaleAspectFill
@@ -53,6 +78,12 @@ class MyProfileView: UIView {
         return label
     }()
     
+    var segmentControl: CustomUnderlineSegmentControl = {
+        let view = CustomUnderlineSegmentControl(frame: .zero, buttonTitles: ["Posts", "Clips", "Workouts"])
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     var tableview: UITableView = {
         let view = UITableView()
         view.register(ProfileInfoCell.self, forCellReuseIdentifier: ProfileInfoCell.cellID)
@@ -62,6 +93,12 @@ class MyProfileView: UIView {
         view.tableFooterView = UIView()
         view.separatorInset = .zero
         view.layoutMargins = .zero
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    var containerView: UIView = {
+        let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -82,11 +119,16 @@ private extension MyProfileView {
     func setupUI() {
         backgroundColor = .white
         addSubview(iconLabel)
+        addSubview(moreButton)
+        addSubview(notificationsButton)
+        addSubview(groupsButton)
         addSubview(profileImageView)
         addSubview(followerView)
         addSubview(nameUsernameView)
         addSubview(bioLabel)
-        addSubview(tableview)
+        addSubview(segmentControl)
+//        addSubview(tableview)
+        addSubview(containerView)
         configureUI()
     }
     
@@ -95,6 +137,15 @@ private extension MyProfileView {
             iconLabel.topAnchor.constraint(equalTo: topAnchor),
             iconLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             iconLabel.heightAnchor.constraint(equalToConstant: 30),
+            
+            moreButton.centerYAnchor.constraint(equalTo: iconLabel.centerYAnchor),
+            moreButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            
+            notificationsButton.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -12),
+            notificationsButton.topAnchor.constraint(equalTo: moreButton.topAnchor),
+            
+            groupsButton.trailingAnchor.constraint(equalTo: notificationsButton.leadingAnchor, constant: -12),
+            groupsButton.topAnchor.constraint(equalTo: moreButton.topAnchor),
             
             profileImageView.topAnchor.constraint(equalTo: iconLabel.bottomAnchor, constant: 8),
             profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
@@ -114,10 +165,20 @@ private extension MyProfileView {
             bioLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             bioLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             
-            tableview.topAnchor.constraint(equalTo: bioLabel.bottomAnchor),
-            tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
-            tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tableview.bottomAnchor.constraint(equalTo: bottomAnchor)
+            segmentControl.topAnchor.constraint(equalTo: bioLabel.bottomAnchor),
+            segmentControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+            segmentControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -0),
+            segmentControl.heightAnchor.constraint(equalToConstant: 30),
+            
+            containerView.topAnchor.constraint(equalTo: segmentControl.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            
+//            tableview.topAnchor.constraint(equalTo: segmentControl.bottomAnchor),
+//            tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
+//            tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
+//            tableview.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }

@@ -17,6 +17,7 @@ class ScoresPieChartViewModel {
     var chartDataPublisher = PassthroughSubject<PieChartData,Never>()
     var centerStringPublihser = PassthroughSubject<NSAttributedString,Never>()
     var errorPublisher = PassthroughSubject<Error,Never>()
+    var lastThreePublisher = PassthroughSubject<[Int],Never>()
     
     @Published var isLoading: Bool = false
     
@@ -41,11 +42,17 @@ class ScoresPieChartViewModel {
             switch result {
             case .success(let models):
                 self?.prepareChartData(from: models)
+                self?.lastThreeScores(models)
             case .failure(let error):
                 self?.errorPublisher.send(error)
                 self?.isLoading = false
             }
         }
+    }
+    
+    func lastThreeScores(_ models: [ScoresModel]) {
+        let numbers = models.map { $0.score }
+        lastThreePublisher.send(numbers.suffix(3))
     }
     
     func prepareChartData(from models: [ScoresModel]) {

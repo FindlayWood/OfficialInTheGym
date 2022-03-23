@@ -32,8 +32,8 @@ struct UploadClipModel {
                                 exerciseName: exercise.exerciseName)
     }
     
-    func getKeyClipModel() -> KeyClipModel {
-        return KeyClipModel(clipKey: id, storageURL: storageURL)
+    func getKeyClipModel() -> Any? {
+        return KeyClipModel(clipKey: id, storageURL: storageURL).toFirebaseJSON()?.value
     }
 }
 // MARK: - Time Ordered Conformation

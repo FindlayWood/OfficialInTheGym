@@ -12,6 +12,14 @@ import UIKit
 class ViewClipView: UIView {
     
     // MARK: - Subviews
+    var thumbnailImageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.backgroundColor = .lightGray
+        view.layer.cornerRadius = 8
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     var backButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
@@ -26,8 +34,7 @@ class ViewClipView: UIView {
     var loadingIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.style = .large
-        view.tintColor = .white
-        view.backgroundColor = .black
+        view.color = .white
         view.hidesWhenStopped = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -116,6 +123,7 @@ class ViewClipView: UIView {
 private extension ViewClipView {
     
     func setupUI() {
+        addSubview(thumbnailImageView)
         addSubview(backButton)
         addSubview(loadingIndicator)
         addSubview(progressBar)
@@ -138,37 +146,44 @@ private extension ViewClipView {
         constrainView()
     }
     func constrainView() {
-        NSLayoutConstraint.activate([backButton.widthAnchor.constraint(equalToConstant: 40),
-                                     backButton.heightAnchor.constraint(equalToConstant: 40),
-                                     backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-                                     backButton.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-                                     
-                                     exerciseName.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-                                     exerciseName.centerXAnchor.constraint(equalTo: centerXAnchor),
-                                     
-                                     loadingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
-                                     loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
-                                     
-                                     viewLabel.centerXAnchor.constraint(equalTo: viewsView.centerXAnchor),
-                                     viewLabel.centerYAnchor.constraint(equalTo: viewsView.centerYAnchor),
-                                     
-                                     moreButton.widthAnchor.constraint(equalToConstant: 60),
-                                     moreButton.heightAnchor.constraint(equalToConstant: 60),
-                                     
-                                     moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-                                     moreButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-                                     
-                                     viewsView.widthAnchor.constraint(equalToConstant: 60),
-                                     viewsView.heightAnchor.constraint(equalToConstant: 60),
-                                     
-                                     likeButton.widthAnchor.constraint(equalToConstant: 60),
-                                     likeButton.heightAnchor.constraint(equalToConstant: 60),
-                                     
-//                                     stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-//                                     stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-//                                     stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
-                                     
-                                     ])
+        NSLayoutConstraint.activate([
+            
+            thumbnailImageView.topAnchor.constraint(equalTo: topAnchor),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            thumbnailImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            thumbnailImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            backButton.widthAnchor.constraint(equalToConstant: 40),
+            backButton.heightAnchor.constraint(equalToConstant: 40),
+            backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            backButton.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            
+            exerciseName.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            exerciseName.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
+            loadingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            viewLabel.centerXAnchor.constraint(equalTo: viewsView.centerXAnchor),
+            viewLabel.centerYAnchor.constraint(equalTo: viewsView.centerYAnchor),
+            
+            moreButton.widthAnchor.constraint(equalToConstant: 60),
+            moreButton.heightAnchor.constraint(equalToConstant: 60),
+            
+            moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            moreButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            
+            viewsView.widthAnchor.constraint(equalToConstant: 60),
+            viewsView.heightAnchor.constraint(equalToConstant: 60),
+            
+            likeButton.widthAnchor.constraint(equalToConstant: 60),
+            likeButton.heightAnchor.constraint(equalToConstant: 60),
+            
+            //                                     stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            //                                     stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            //                                     stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
+            
+        ])
     }
 }
 
@@ -177,8 +192,10 @@ extension ViewClipView {
     public func setLoading(to loading: Bool) {
         if loading {
             loadingIndicator.startAnimating()
+            thumbnailImageView.isHidden = false
         } else {
             loadingIndicator.stopAnimating()
+            thumbnailImageView.isHidden = true
         }
     }
     

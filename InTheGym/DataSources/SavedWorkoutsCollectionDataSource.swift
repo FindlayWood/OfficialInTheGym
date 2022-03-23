@@ -49,7 +49,7 @@ class SavedWorkoutsCollectionDataSource: NSObject {
     func updateTable(with models: [SavedWorkoutModel]) {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.appendItems(models, toSection: .main)
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Remove

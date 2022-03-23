@@ -1,20 +1,20 @@
 //
-//  SavedWorkoutsChildView.swift
+//  MyClipsChildView.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 03/03/2022.
+//  Created by Findlay Wood on 21/03/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import UIKit
 
-class SavedWorkoutsChildView: UIView {
+class MyClipsChildView: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
-        view.register(SavedWorkoutCollectionCell.self, forCellWithReuseIdentifier: SavedWorkoutCollectionCell.reuseID)
+        view.register(ExerciseClipsCollectionCell.self, forCellWithReuseIdentifier: ExerciseClipsCollectionCell.reuseID)
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -32,23 +32,21 @@ class SavedWorkoutsChildView: UIView {
     
 }
 // MARK: - Configure
-private extension SavedWorkoutsChildView {
+private extension MyClipsChildView {
     func setupUI() {
-        backgroundColor = .white
         addSubview(collectionView)
+        backgroundColor = .white
         configureUI()
     }
     
     func configureUI() {
         addFullConstraint(to: collectionView)
-        
     }
     func generateCollectionLayout() -> UICollectionViewFlowLayout {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 5
-        layout.minimumLineSpacing = 10
-        layout.estimatedItemSize = CGSize(width: Constants.screenSize.width - 20, height: 160)
-        layout.sectionInset = UIEdgeInsets(top: 5, left: 10, bottom: 0, right: 10)
+        layout.minimumLineSpacing = 16
+        layout.itemSize = CGSize(width: Constants.screenSize.width / 2 - 16, height: Constants.screenSize.width / 2)
+        layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         layout.scrollDirection = .vertical
         return layout
     }

@@ -128,6 +128,7 @@ private extension SavedWorkoutCollectionCell {
         contentView.addSubview(exerciseIcon)
         contentView.addSubview(clockIcon)
         contentView.addSubview(privacyIcon)
+        addViewShadow(with: .darkColour)
         constrainUI()
     }
     func constrainUI() {

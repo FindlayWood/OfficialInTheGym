@@ -13,6 +13,15 @@ class ScoresPieChartView: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
+    var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.textColor = .white
+        label.text = "Scores"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     var pieChartView: PieChartView = {
         let view = PieChartView()
         view.legend.enabled = false
@@ -50,6 +59,7 @@ private extension ScoresPieChartView {
         layer.cornerRadius = 8
         addViewShadow(with: .darkColour)
         backgroundColor = .lightColour
+        addSubview(titleLabel)
         addSubview(pieChartView)
         addSubview(activitiyIndicator)
         configureUI()
@@ -57,7 +67,16 @@ private extension ScoresPieChartView {
     
     func configureUI() {
 //        pieChartView.frame = frame
-        addFullConstraint(to: pieChartView)
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
+            pieChartView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            pieChartView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            pieChartView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            pieChartView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+//        addFullConstraint(to: pieChartView)
         addFullConstraint(to: activitiyIndicator)
         
     }
