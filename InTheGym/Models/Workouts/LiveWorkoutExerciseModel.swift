@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CodableFirebase
 
 // MARK: - Live Workout Exercise Model
 struct LiveWorkoutExerciseModel {
@@ -16,18 +17,25 @@ struct LiveWorkoutExerciseModel {
     func updateSetModel() -> [FirebaseMultiUploadDataPoint] {
         var uploadPoints = [FirebaseMultiUploadDataPoint]()
         // reps
-        uploadPoints.append(FirebaseMultiUploadDataPoint(value: exercise.reps.last as Any, path: basePath + "/reps/\(exercise.sets - 1)"))
+        uploadPoints.append(FirebaseMultiUploadDataPoint(value: exercise.reps?.last as Any, path: basePath + "/reps/\(exercise.sets - 1)"))
         // sets
         uploadPoints.append(FirebaseMultiUploadDataPoint(value: exercise.sets, path: basePath + "/sets"))
         // completedSets
         uploadPoints.append(FirebaseMultiUploadDataPoint(value: true, path: basePath + "/completedSets/\(exercise.sets - 1)"))
         // weight
-        uploadPoints.append(FirebaseMultiUploadDataPoint(value: exercise.weight.last as Any, path: basePath + "/weight/\(exercise.sets - 1)"))
+        uploadPoints.append(FirebaseMultiUploadDataPoint(value: exercise.weight?.last as Any, path: basePath + "/weight/\(exercise.sets - 1)"))
         return uploadPoints
     }
     
-    func addExerciseModel() -> [FirebaseMultiUploadDataPoint] {
-        return [FirebaseMultiUploadDataPoint(value: exercise as Any, path: basePath)]
+    func addExerciseModel() -> [FirebaseMultiUploadDataPoint]? {
+        do {
+            let data = try FirebaseEncoder().encode(exercise)
+            return [FirebaseMultiUploadDataPoint(value: data as Any, path: basePath)]
+        }
+        catch {
+            return nil
+        }
+        
     }
 }
 extension LiveWorkoutExerciseModel {

@@ -123,6 +123,28 @@ extension MyProfileCoordinator {
     }
 }
 
+// MARK: - Show Clip
+extension MyProfileCoordinator {
+    func clipSelected(_  model: ClipModel) {
+        let keyModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
+        let vc = ViewClipViewController()
+        vc.viewModel.keyClipModel = keyModel
+        vc.modalPresentationStyle = .custom
+        vc.transitioningDelegate = self
+        navigationController.present(vc, animated: true)
+    }
+}
+
+// MARK: - Custom Clip Picker
+extension MyProfileCoordinator: UIViewControllerTransitioningDelegate {
+
+func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+    let controller = BottomViewPresentationController(presentedViewController: presented, presenting: presenting)
+    controller.viewHeightPrecentage = 1
+    return controller
+}
+}
+
 // MARK: - Saved WorkoutFlow
 extension MyProfileCoordinator: SavedWorkoutsFlow {
     func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {

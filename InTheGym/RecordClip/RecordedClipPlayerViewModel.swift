@@ -47,6 +47,7 @@ class RecordedClipPlayerViewModel {
     }
     
     
+    // MARK: - Storage
     func uploadClipToStorage() {
         storageAPI.fileUpload(model: clipStorageModel) { [weak self] result in
             guard let self = self else {return}
@@ -61,6 +62,7 @@ class RecordedClipPlayerViewModel {
         }
     }
     
+    // MARK: - Thumbnail
     func generateThumbnail(with id: String) {
         clipStorageModel.fileURL.generateThumbnail { [weak self] thumbnail in
             guard let self = self else {return}
@@ -118,6 +120,7 @@ class RecordedClipPlayerViewModel {
 //        }
     }
     
+    // MARK: - Database Details
     func uploadDatabaseDetails(from model: ClipModel) {
         let clipUploadModel = UploadClipModel(workout: workoutModel, exercise: exerciseModel, id: model.id, storageURL: model.storageURL, isPrivate: model.isPrivate)
         let uploadPoints = clipUploadModel.getUploadPoints()
@@ -128,6 +131,7 @@ class RecordedClipPlayerViewModel {
 //                self?.removeFromFileManager()
                 self?.successPublisher.send(true)
                 self?.addDelegate?.addClip(model)
+//                self?.addToCache(model.id)
             case .failure(_):
                 self?.errorPublisher.send(.failedDatabaseUpload)
                 self?.successPublisher.send(false)
@@ -135,6 +139,7 @@ class RecordedClipPlayerViewModel {
         }
     }
     
+    // MARK: - Cache
     func addToCache(_ id: String) {
         let asset = AVAsset(url: clipStorageModel.fileURL)
         ClipCache.shared.upload(asset, key: id)

@@ -15,6 +15,7 @@ class SavedWorkoutsCollectionDataSource: NSObject {
     
     // MARK: - Publisher
     var workoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
+    var scrollPublisher = PassthroughSubject<CGFloat,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
@@ -65,5 +66,9 @@ extension SavedWorkoutsCollectionDataSource: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let workout = dataSource.itemIdentifier(for: indexPath) else {return}
         workoutSelected.send(workout)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollPublisher.send(scrollView.contentOffset.y)
     }
 }

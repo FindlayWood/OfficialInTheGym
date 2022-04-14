@@ -49,9 +49,9 @@ class ExerciseDescriptionViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if viewModel.selectedIndex == 0 {
-            addToContainer(vc: descriptionsVC)
-        } else {
             addToContainer(vc: clipsVC)
+        } else {
+            addToContainer(vc: descriptionsVC)
         }
     }
     
@@ -81,11 +81,11 @@ class ExerciseDescriptionViewController: UIViewController {
     func segmentChanged(to index: Int) {
         viewModel.selectedIndex = index
         if index == 0 {
-            removeFromContainer(vc: clipsVC)
-            addToContainer(vc: descriptionsVC)
-        } else {
             removeFromContainer(vc: descriptionsVC)
             addToContainer(vc: clipsVC)
+        } else {
+            removeFromContainer(vc: clipsVC)
+            addToContainer(vc: descriptionsVC)
         }
     }
 }

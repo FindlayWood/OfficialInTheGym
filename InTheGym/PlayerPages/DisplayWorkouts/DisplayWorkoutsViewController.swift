@@ -26,6 +26,9 @@ class DisplayingWorkoutsViewController: UIViewController {
     // MARK: - Subscriptions
     var subscriptions = Set<AnyCancellable>()
     
+    // MARK: - Refresh Control
+    private let refreshControl = UIRefreshControl()
+    
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,10 +64,17 @@ class DisplayingWorkoutsViewController: UIViewController {
     func buttonActions() {
         display.plusButton.addTarget(self, action: #selector(plusButtonTapped(_:)), for: .touchUpInside)
         display.programButton.addTarget(self, action: #selector(programButtonTapped(_:)), for: .touchUpInside)
+        refreshControl.addTarget(self, action: #selector(didPullToRefresh(_:)), for: .valueChanged)
+        display.collectionView.refreshControl = refreshControl
     }
     
     // MARK: - Subscribers
     func setupSubscribers() {
+        
+        viewModel.$isLoading
+            .sink { [weak self] in self?.setLoading($0)}
+            .store(in: &subscriptions)
+        
         viewModel.workouts
             .dropFirst()
             .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
@@ -92,10 +102,21 @@ class DisplayingWorkoutsViewController: UIViewController {
     }
     
     @objc func plusButtonTapped(_ sender: UIButton) {
-        coordinator?.addNewWorkout(UserDefaults.currentUser)
+        coordinator?.plusPressed()
+//        coordinator?.addNewWorkout(UserDefaults.currentUser)
     }
     @objc func programButtonTapped(_ sender: UIButton) {
         coordinator?.addProgram()
+    }
+    
+    @objc func didPullToRefresh(_ sender: Any) {
+        viewModel.fetchWorkouts()
+    }
+    
+    func setLoading(_ loading: Bool) {
+        if !loading {
+            refreshControl.endRefreshing()
+        }
     }
 }
 

@@ -23,7 +23,7 @@ final class LiveWorkoutPlusCollectionCell: FullWidthCollectionViewCell {
         let button = UIButton()
         button.setImage(UIImage(named: "Set Workout"), for: .normal)
         button.backgroundColor = .clear
-        button.addTarget(self, action: #selector(plusTapped(_:)), for: .touchUpInside)
+//        button.addTarget(LiveWorkoutPlusCollectionCell.self, action: #selector(plusTapped(_:)), for: .touchUpInside)
         button.imageView?.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -43,6 +43,7 @@ final class LiveWorkoutPlusCollectionCell: FullWidthCollectionViewCell {
 // MARK: - Configure
 private extension LiveWorkoutPlusCollectionCell {
     func setupUI() {
+        plusButton.addTarget(self, action: #selector(plusTapped(_:)), for: .touchUpInside)
         contentView.addSubview(plusButton)
         backgroundColor = .clear
         configureUI()

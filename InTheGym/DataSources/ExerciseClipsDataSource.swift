@@ -14,6 +14,7 @@ class ExerciseClipsDataSource: NSObject {
     
     // MARK: - Publisher
     var clipSelected = PassthroughSubject<ClipModel,Never>()
+    var scrollPublisher = PassthroughSubject<CGFloat,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
@@ -66,6 +67,10 @@ extension ExerciseClipsDataSource: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let model = dataSource.itemIdentifier(for: indexPath) else {return}
         clipSelected.send(model)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollPublisher.send(scrollView.contentOffset.y)
     }
 
 }

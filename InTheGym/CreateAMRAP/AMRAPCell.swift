@@ -72,6 +72,6 @@ private extension AMRAPCell {
 extension AMRAPCell {
     public func configure(with exercise: ExerciseModel) {
         exerciseName.text = exercise.exercise
-        repLabel.text = exercise.reps.description
+        repLabel.text = exercise.reps?.description
     }
 }

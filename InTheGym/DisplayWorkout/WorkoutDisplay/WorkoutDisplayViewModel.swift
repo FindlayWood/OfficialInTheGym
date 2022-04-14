@@ -64,7 +64,7 @@ class WorkoutDisplayViewModel {
 //    }
     func completeSet(at index: IndexPath) {
         guard let exercise = exercises[index.section] as? ExerciseModel else {return}
-        exercise.completedSets[index.item] = true
+        exercise.completedSets?[index.item] = true
         let uploadPoint = workout.getSetUploadPoint(exercise, setNumber: index.item)
 //        let setUpdateModel = SetUpdateModel(workoutID: workout.id, exercise: exercise, setNumber: index.item)
 //        let uploadPoint = FirebaseMultiUploadDataPoint(value: true, path: setUpdateModel.internalPath)
@@ -74,7 +74,7 @@ class WorkoutDisplayViewModel {
             case .failure(_): break
             }
         }
-        FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise, reps: exercise.reps[index.item], weight: exercise.weight[index.item])
+        FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise, reps: exercise.reps?[index.item] ?? 0, weight: exercise.weight?[index.item] ?? "")
 //        if let exerciseIndex = workout.exercises?.firstIndex(where: {$0.workoutPosition == index.section }) {
 //            print(exerciseIndex)
 //            workout.exercises?[exerciseIndex].completedSets[index.item] = true

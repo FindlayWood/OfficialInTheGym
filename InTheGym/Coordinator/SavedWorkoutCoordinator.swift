@@ -58,9 +58,9 @@ extension SavedWorkoutCoordinator {
     }
     
     func showDescriptions(_ exercise: ExerciseModel) {
-        let vc = ExerciseDescriptionViewController()
-        vc.viewModel.exercise = DiscoverExerciseModel(exerciseName: exercise.exercise)
-        navigationController.pushViewController(vc, animated: true)
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise)
+        childCoordinators.append(child)
+        child.start()
     }
     
     func showEMOM(_ emom: EMOMModel) {

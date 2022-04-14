@@ -101,8 +101,8 @@ private extension EMOMExerciseView {
 extension EMOMExerciseView {
     func configure(with exercise: ExerciseModel) {
         let name = exercise.exercise
-        let rep = exercise.reps[0]
-        let weight = exercise.weight[0]
+        let rep = exercise.reps?[0] ?? 0
+        let weight = exercise.weight?[0] ?? ""
         exerciseLabel.text = name
         repLabel.text = rep.description
         weightLabel.text = weight

@@ -15,7 +15,7 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tableview:UITableView!
     
     // array of tableview contents
-    var tableContents = ["Coaches", "PBs", "Workload", "Requests", "Settings", "Measure Jump"]
+    var tableContents = ["Coaches", "PBs", "Workload", "Requests", "Settings", "Measure Jump", "Breath Work"]
     var tabQ = ["AccountType", "Username", "Email", "Workouts Complete"]
     var tabA = [String]()
     
@@ -125,6 +125,10 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                     cell.pic.image = UIImage(named: "jump_icon")
                     cell.QLabel.text = tableContents[indexPath.row]
                     cell.ALabel.text = ""
+                case 6:
+                    cell.pic.image = UIImage(named: "breath_icon")
+                    cell.QLabel.text = tableContents[indexPath.row]
+                    cell.ALabel.text = ""
                 default:
                     print("ouch")
                 }
@@ -185,6 +189,10 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 vc.hidesBottomBarWhenPushed = true
                 vc.modalPresentationStyle = .fullScreen
                 navigationController?.present(vc, animated: true)
+            case 6:
+                let vc = MethodSelectionViewController()
+                vc.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(vc, animated: true)
             default:
                 print("ouch")
             }

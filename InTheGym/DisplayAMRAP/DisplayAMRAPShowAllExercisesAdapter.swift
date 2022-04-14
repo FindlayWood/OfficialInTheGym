@@ -22,7 +22,7 @@ extension DisplayAMRAPShowAllExercisesAdapter: UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! AMRAPCell
         cell.exerciseName.text = delegate.getExercise(at: indexPath).exercise
-        cell.repLabel.text = delegate.getExercise(at: indexPath).reps[0].description
+        cell.repLabel.text = delegate.getExercise(at: indexPath).reps?[0].description
         return cell
     }
 }

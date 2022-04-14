@@ -32,12 +32,19 @@ class NewRepsViewController: UIViewController, Storyboarded {
         var array = [Int]()
         //guard let newExercise = newExercise else {return []}
         guard let exerciseModel = exerciseViewModel else {return []}
-        if exerciseModel.exercise.reps.isEmpty {
+        if let reps = exerciseModel.exercise.reps {
+            return reps
+        } else {
             array = Array(repeating: 1, count: exerciseViewModel?.exercise.sets ?? 0)
             return array
-        } else {
-            return exerciseModel.exercise.reps
         }
+        
+//        if exerciseModel.exercise.reps.isEmpty {
+//            array = Array(repeating: 1, count: exerciseViewModel?.exercise.sets ?? 0)
+//            return array
+//        } else {
+//            return exerciseModel.exercise.reps
+//        }
     }()
     
     private var repCounter: Int = 1

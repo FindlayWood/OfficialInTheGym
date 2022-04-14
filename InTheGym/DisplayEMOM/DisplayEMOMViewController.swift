@@ -83,8 +83,8 @@ class DisplayEMOMViewController: UIViewController {
             let exercises = self.viewModel.emomModel.exercises
             let completedPosition = self.viewModel.exerciseIndex % numberOfExercises
             let exerciseName = exercises[completedPosition].exercise
-            let exerciseReps = exercises[completedPosition].reps[0]
-            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exerciseName, reps: exerciseReps, weight: nil)
+            let exerciseReps = exercises[completedPosition].reps?[0]
+            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exerciseName, reps: exerciseReps ?? 0, weight: nil)
             
             self.viewModel.exerciseIndex += 1
             let position = self.viewModel.exerciseIndex % numberOfExercises

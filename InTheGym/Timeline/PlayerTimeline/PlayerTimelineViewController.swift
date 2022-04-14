@@ -74,17 +74,17 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
             .sink { [weak self] in self?.viewModel.likeCheck($0) }
             .store(in: &subscriptions)
         
-        dataSource.scrollPublisher
-            .debounce(for: 0.1, scheduler: RunLoop.main)
-            .sink { [weak self] show in
-                guard let self = self else {return}
-                if show {
-                    self.display.showTopView()
-                } else {
-                    self.display.hideTopView()
-                }
-            }
-            .store(in: &subscriptions)
+//        dataSource.scrollPublisher
+//            .debounce(for: 0.1, scheduler: RunLoop.main)
+//            .sink { [weak self] show in
+//                guard let self = self else {return}
+//                if show {
+//                    self.display.showTopView()
+//                } else {
+//                    self.display.hideTopView()
+//                }
+//            }
+//            .store(in: &subscriptions)
         
         dataSource.postSelcted
             .sink { [weak self] in self?.showCommentSection(for: $0) }

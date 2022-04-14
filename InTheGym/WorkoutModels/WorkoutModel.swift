@@ -201,6 +201,18 @@ class WorkoutModel: Codable, Hashable {
         amraps = savedModel.amraps
     }
     
+    init(liveModel: LiveWorkoutModel) {
+        title = liveModel.title
+        id = liveModel.id
+        creatorID = liveModel.creatorID
+        createdBy = liveModel.createdBy
+        assignedTo = liveModel.assignedTo
+        isPrivate = liveModel.isPrivate
+        completed = liveModel.completed
+        liveWorkout = liveModel.liveWorkout
+        startTime = Date().timeIntervalSince1970
+    }
+    
     static func == (lhs: WorkoutModel, rhs: WorkoutModel) -> Bool {
         lhs.id == rhs.id
     }

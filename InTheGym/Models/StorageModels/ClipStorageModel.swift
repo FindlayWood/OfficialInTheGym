@@ -27,7 +27,7 @@ extension ClipStorageModel: FirebaseStorageFile {
     
     var metaData: StorageMetadata {
         let metaData = StorageMetadata()
-        metaData.contentType = "clip.mov"
+        metaData.contentType = "video/quicktime"
         return metaData
     }
     

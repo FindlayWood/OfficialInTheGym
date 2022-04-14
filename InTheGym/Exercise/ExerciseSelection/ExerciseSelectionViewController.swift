@@ -118,7 +118,7 @@ class ExerciseSelectionViewController: UIViewController {
     }
 }
 
-@available(iOS 13, *)
+
 extension ExerciseSelectionViewController: ExerciseSelectionProtocol {
     func getData(at indexPath: IndexPath) -> String {
         return viewModel.getData(at: indexPath)
@@ -166,7 +166,6 @@ extension ExerciseSelectionViewController: ExerciseSelectionProtocol {
     }
 }
 
-@available(iOS 13, *)
 extension ExerciseSelectionViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.filterExercises(with: searchText)

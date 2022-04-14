@@ -30,7 +30,7 @@ extension ClipThumbnailModel: FirebaseStorageData {
     }
     var metaData: StorageMetadata {
         let metaData = StorageMetadata()
-        metaData.contentType = "clipThumbnail/jpg"
+        metaData.contentType = "image/jpeg"
         return metaData
     }
 }

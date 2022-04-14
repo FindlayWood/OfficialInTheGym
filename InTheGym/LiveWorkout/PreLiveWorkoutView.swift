@@ -12,6 +12,7 @@ import SkyFloatingLabelTextField
 
 class PreLiveWorkoutView: UIView {
     
+    // MARK: - Subviews
     var titleField: SkyFloatingLabelTextField = {
         let field = SkyFloatingLabelTextField()
         field.tintColor = Constants.darkColour
@@ -27,7 +28,7 @@ class PreLiveWorkoutView: UIView {
         field.selectedTitleColor = Constants.darkColour
         field.selectedLineColor = Constants.darkColour
         field.placeholder = "enter workout title"
-        field.clearButtonMode = .whileEditing
+        field.clearButtonMode = .never
         field.autocapitalizationType = .words
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
@@ -35,13 +36,14 @@ class PreLiveWorkoutView: UIView {
     
     var continueButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = Constants.lightColour
-        button.layer.borderWidth = 2.0
-        button.layer.borderColor = Constants.darkColour.cgColor
-        button.layer.cornerRadius = 23
+        button.backgroundColor = .darkColour
+//        button.layer.borderWidth = 2.0
+//        button.layer.borderColor = Constants.darkColour.cgColor
+        button.layer.cornerRadius = 8
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 26)
+        button.addViewShadow(with: .darkColour)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -62,38 +64,50 @@ class PreLiveWorkoutView: UIView {
         return view
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUpView()
+        setupUI()
     }
     required init?(coder: NSCoder) {
         fatalError()
     }
-    private func setUpView() {
+}
+
+// MARK: - Setup UI
+private extension PreLiveWorkoutView {
+    func setupUI() {
         backgroundColor = .white
         addSubview(titleField)
-        addSubview(continueButton)
+//        addSubview(continueButton)
         addSubview(suggestionsLabel)
         addSubview(tableview)
-        constrainView()
+        constrainUI()
     }
-    private func constrainView() {
-        NSLayoutConstraint.activate([titleField.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-                                     titleField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-                                     titleField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-                                     titleField.heightAnchor.constraint(equalToConstant: 45),
+    func constrainUI() {
+        NSLayoutConstraint.activate([titleField.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+                                     titleField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+                                     titleField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+                                     titleField.heightAnchor.constraint(equalToConstant: 48),
         
-                                     continueButton.topAnchor.constraint(equalTo: titleField.bottomAnchor, constant: 10),
-                                     continueButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-                                     continueButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-                                     continueButton.heightAnchor.constraint(equalToConstant: 45),
+//                                     continueButton.topAnchor.constraint(equalTo: titleField.bottomAnchor, constant: 10),
+//                                     continueButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+//                                     continueButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+//                                     continueButton.heightAnchor.constraint(equalToConstant: 45),
                                      
-                                     suggestionsLabel.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 20),
+                                     suggestionsLabel.topAnchor.constraint(equalTo: titleField.bottomAnchor, constant: 16),
                                      suggestionsLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
         
-                                     tableview.topAnchor.constraint(equalTo: suggestionsLabel.bottomAnchor, constant: 10),
-                                     tableview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-                                     tableview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+                                     tableview.topAnchor.constraint(equalTo: suggestionsLabel.bottomAnchor, constant: 8),
+                                     tableview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+                                     tableview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
                                      tableview.bottomAnchor.constraint(equalTo: bottomAnchor)])
+    }
+}
+
+// MARK: - Public Configuration
+extension PreLiveWorkoutView {
+    public func setInteraction(to allowed: Bool) {
+        titleField.isUserInteractionEnabled = allowed
     }
 }

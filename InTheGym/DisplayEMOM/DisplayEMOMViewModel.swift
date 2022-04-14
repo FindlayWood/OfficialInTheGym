@@ -94,7 +94,7 @@ class DisplayEMOMViewModel {
         let exercises = emomModel.exercises
         let completedPosition = exerciseIndex % numberOfExercises
         let exerciseName = exercises[completedPosition].exercise
-        let exerciseReps = exercises[completedPosition].reps[0]
+        let exerciseReps = exercises[completedPosition].reps?[0]
         exerciseIndex += 1
         let position = exerciseIndex % numberOfExercises
         exerciseToShow?(exercises[position])

@@ -35,8 +35,11 @@ struct WorkoutClipModel: Codable, Hashable {
     var storageURL: String
     var clipKey: String
     var exerciseName: String
-    
-    
+}
+extension WorkoutClipModel: FirebaseInstance {
+    var internalPath: String {
+        return "Clips/\(clipKey)"
+    }
 }
 
 

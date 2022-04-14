@@ -121,11 +121,11 @@ struct CircuitModel: ExerciseType, Codable, Hashable {
             for i in 0..<sets.count {
                 let set = originalSets[i] - sets[i]
                 circuitModels.append(CircuitTableModel(exerciseName: exercises[i].exercise,
-                                                     reps: exercises[i].reps[set],
-                                                     weight: exercises[i].weight[set],
+                                                       reps: exercises[i].reps?[set] ?? 0,
+                                                       weight: exercises[i].weight?[set] ?? "",
                                                      set: set + 1,
                                                      overallSet: circuitModels.count + 1,
-                                                     completed: exercises[i].completedSets[set],
+                                                       completed: exercises[i].completedSets?[set] ?? false,
                                                      exerciseOrder: i))
                 sets[i] -= 1
             }

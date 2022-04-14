@@ -39,6 +39,7 @@ class MyProfileViewController: UIViewController {
         initDataSource()
         
         initViewModel()
+        initChildPublishers()
         initUI()
         initSubscriptions()
 //        initRefreshControl()
@@ -59,7 +60,7 @@ class MyProfileViewController: UIViewController {
 
     
     func initUI(){
-        display.configure(with: UserDefaults.currentUser)
+        display.infoView.configure(with: UserDefaults.currentUser)
         display.moreButton.addTarget(self, action: #selector(showMore(_:)), for: .touchUpInside)
         display.notificationsButton.addTarget(self, action: #selector(showNotifications(_:)), for: .touchUpInside)
         display.groupsButton.addTarget(self, action: #selector(showGroups(_:)), for: .touchUpInside)
@@ -137,12 +138,12 @@ class MyProfileViewController: UIViewController {
         
         viewModel.followerCountPublisher
             .dropFirst()
-            .sink { [weak self] in self?.display.setFollowerCount(to: $0)}
+            .sink { [weak self] in self?.display.infoView.setFollowerCount(to: $0)}
             .store(in: &subscriptions)
         
         viewModel.followingCountPublisher
             .dropFirst()
-            .sink { [weak self] in self?.display.setFollowingCount(to: $0)}
+            .sink { [weak self] in self?.display.infoView.setFollowingCount(to: $0)}
             .store(in: &subscriptions)
         
         viewModel.workoutSelected
@@ -165,7 +166,66 @@ class MyProfileViewController: UIViewController {
         viewModel.getFollowerCount()
         viewModel.fetchWorkoutKeys()
 
-
+    }
+    
+    // MARK: - Child Publihsers
+    func initChildPublishers() {
+        
+        postsChildVC.dataSource.scrollPublisher
+            .sink { [weak self] offset in
+                guard let self = self else {return}
+                self.display.scroll(to: offset)
+                self.resizeFrame(for: self.postsChildVC)
+            }
+            .store(in: &subscriptions)
+        
+        clipsChildVC.dataSource.scrollPublisher
+            .sink { [weak self] offset in
+                guard let self = self else {return}
+                self.display.scroll(to: offset)
+                self.resizeFrame(for: self.clipsChildVC)
+            }
+            .store(in: &subscriptions)
+        
+        workoutsChildVC.dataSource.scrollPublisher
+            .sink { [weak self] offset in
+                guard let self = self else {return}
+                self.display.scroll(to: offset)
+                self.resizeFrame(for: self.workoutsChildVC)
+            }
+            .store(in: &subscriptions)
+        
+        postsChildVC.dataSource.postSelcted
+            .sink { [weak self] in self?.showCommentSection(for: $0)}
+            .store(in: &subscriptions)
+        
+        postsChildVC.dataSource.userTapped
+            .sink { [weak self]in self?.viewModel.getUser(from: $0) }
+            .store(in: &subscriptions)
+        
+        postsChildVC.dataSource.workoutTapped
+            .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
+            .store(in: &subscriptions)
+        
+        postsChildVC.dataSource.likeButtonTapped
+            .sink { [weak self] in self?.viewModel.likeCheck($0) }
+            .store(in: &subscriptions)
+    
+        workoutsChildVC.dataSource.workoutSelected
+            .sink { [weak self] in self?.coordinator?.showSavedWorkout($0)}
+            .store(in: &subscriptions)
+        
+        clipsChildVC.dataSource.clipSelected
+            .sink { [ weak self] in self?.coordinator?.clipSelected($0)}
+            .store(in: &subscriptions)
+        
+    }
+    
+    func resizeFrame(for controller: UIViewController) {
+        UIView.animate(withDuration: 0.3) {
+            controller.view.frame = self.display.containerView.frame
+            controller.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        }
     }
     
     // MARK: - Actions

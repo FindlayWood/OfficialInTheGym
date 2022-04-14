@@ -189,12 +189,30 @@ class ExerciseCreationViewModel {
         addingDelegate.addExercise(exercise)
     }
     func appendToReps(_ reps: Int) {
-        exercise.reps.append(reps)
+        if var currentReps = exercise.reps {
+            currentReps.append(reps)
+            exercise.reps = currentReps
+        } else {
+            exercise.reps = [reps]
+        }
+        
         exercise.sets += 1
-        exercise.completedSets.append(true)
+        if var currentSets = exercise.completedSets {
+            currentSets.append(true)
+            exercise.completedSets = currentSets
+        } else {
+            exercise.completedSets = [true]
+        }
+//        exercise.completedSets.append(true)
     }
     func appendToWeight(_ weight: String) {
-        exercise.weight.append(weight)
+        if var currentWeight = exercise.weight {
+            currentWeight.append(weight)
+            exercise.weight = currentWeight
+        } else {
+            exercise.weight = [weight]
+        }
+//        exercise.weight.append(weight)
         addingDelegate.updatedExercise(exercise)
     }
 }

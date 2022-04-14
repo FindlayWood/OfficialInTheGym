@@ -75,4 +75,13 @@ extension LiveWorkoutDisplayCoordinator {
         navigationController.present(vc, animated: true, completion: nil)
         
     }
+    func showDescriptions(for exercise: ExerciseModel) {
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise)
+        childCoordinators.append(child)
+        child.start()
+//        let vc = ExerciseDescriptionViewController()
+//        vc.viewModel.exercise = DiscoverExerciseModel(exerciseName: exercise.exercise)
+//        navigationController?.pushViewController(vc, animated: true)
+    }
+
 }

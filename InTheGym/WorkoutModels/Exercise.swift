@@ -117,10 +117,10 @@ class ExerciseModel: ExerciseType, Codable, Hashable {
     var id: String = UUID().uuidString
     var workoutPosition: Int
     var exercise: String
-    var reps: [Int]
-    var weight: [String]
+    var reps: [Int]?
+    var weight: [String]?
     var type: bodyType
-    var completedSets: [Bool]
+    var completedSets: [Bool]?
     var sets: Int
     var rpe: Int?
     
@@ -136,6 +136,7 @@ class ExerciseModel: ExerciseType, Codable, Hashable {
     
     func getSets() -> [ExerciseSet] {
         var setModels = [ExerciseSet]()
+        guard let reps = reps, let weight = weight, let completedSets = completedSets else {return setModels}
         for i in 0..<sets {
             setModels.append(ExerciseSet(set: i + 1, reps: reps[i], weight: weight[i], completed: completedSets[i]))
         }

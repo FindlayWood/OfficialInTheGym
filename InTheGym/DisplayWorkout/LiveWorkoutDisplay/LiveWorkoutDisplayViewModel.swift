@@ -71,7 +71,7 @@ class LiveWorkoutDisplayViewModel {
     
     func getExerciseCount() -> Int {
         let currentExercises = exercises.value
-        return currentExercises.count
+        return workoutModel.exercises?.count ?? 0
     }
     
     func getExerciseModel(at indexPath: IndexPath) -> ExerciseCreationViewModel {
@@ -91,22 +91,27 @@ extension LiveWorkoutDisplayViewModel: ExerciseAdding {
 //        var currentExercises = exercises.value
 //        currentExercises.append(exercise)
 //        exercises.send(currentExercises)
-        workoutModel.exercises?.append(exercise)
+//        workoutModel.exercises?.append(exercise)
+        if workoutModel.exercises == nil {
+            workoutModel.exercises = [exercise]
+        } else {
+            workoutModel.exercises?.append(exercise)
+        }
 //        exercises.value.append(exercise)
         addedExercise.send(exercise)
         // TODO: - Update Firebase
         let uploadModel = LiveWorkoutExerciseModel(workout: workoutModel, exercise: exercise)
-        let uploadPoint = uploadModel.addExerciseModel()
+        guard let uploadPoint = uploadModel.addExerciseModel() else {return}
         print(uploadPoint)
-//        apiService.multiLocationUpload(data: uploadPoint) { [weak self] result in
-//            switch result {
-//            case .success(()):
-//                break
-//            case .failure(_):
-//                // TODO: - Connection Error
-//                break
-//            }
-//        }
+        apiService.multiLocationUpload(data: uploadPoint) { [weak self] result in
+            switch result {
+            case .success(()):
+                break
+            case .failure(_):
+                // TODO: - Connection Error
+                break
+            }
+        }
     }
     func updatedExercise(_ exercise: ExerciseModel) {
         // TODO: - Update Firebase
@@ -114,15 +119,15 @@ extension LiveWorkoutDisplayViewModel: ExerciseAdding {
         let uploadModel = LiveWorkoutExerciseModel(workout: workoutModel, exercise: exercise)
         let uploadPoints = uploadModel.updateSetModel()
         print(uploadPoints)
-//        apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
-//            switch result {
-//            case .success(()):
-//                break
-//            case .failure(_):
-//                // TODO: - Connection error
-//                break
-//            }
-//        }
+        apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
+            switch result {
+            case .success(()):
+                break
+            case .failure(_):
+                // TODO: - Connection error
+                break
+            }
+        }
     }
 }
 
@@ -130,6 +135,11 @@ extension LiveWorkoutDisplayViewModel: ExerciseAdding {
 extension LiveWorkoutDisplayViewModel: ClipAdding {
     func addClip(_ model: ClipModel) {
         let workoutClipModel = WorkoutClipModel(storageURL: model.storageURL, clipKey: model.id, exerciseName: model.exerciseName)
+        if workoutModel.clipData != nil {
+            workoutModel.clipData?.append(workoutClipModel)
+        } else {
+            workoutModel.clipData = [workoutClipModel]
+        }
         addedClipPublisher.send(workoutClipModel)
     }
 }

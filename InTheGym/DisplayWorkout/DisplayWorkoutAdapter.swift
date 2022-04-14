@@ -125,7 +125,7 @@ extension DisplayWorkoutAdapter: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! DisplayClipCell
         let clipData = delegate.getClipData(at: indexPath)
-        cell.attachThumbnail(from: clipData.clipKey)
+//        cell.attachThumbnail(from: clipData.clipKey)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

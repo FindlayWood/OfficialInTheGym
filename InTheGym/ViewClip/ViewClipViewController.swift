@@ -60,14 +60,14 @@ class ViewClipViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        display.frame = view.bounds
+        display.frame = getFullViewableFrame()
 //        display.exerciseName.text = exerciseName
         view.addSubview(display)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+                
         let thumbnailDownloadModel = ClipThumbnailDownloadModel(id: viewModel.keyClipModel.clipKey)
         ImageCache.shared.loadThumbnail(from: thumbnailDownloadModel) { [weak self] result in
             let image = try? result.get()
@@ -127,6 +127,8 @@ class ViewClipViewController: UIViewController {
     }
     
     func setAsset(_ asset: AVAsset) {
+        let videoduration = asset.duration.seconds
+        print(videoduration)
         player = .init(playerItem: .init(asset: asset))
         player?.replaceCurrentItem(with: .init(asset: asset))
         let layer = AVPlayerLayer(player: player)
@@ -141,9 +143,10 @@ class ViewClipViewController: UIViewController {
         let layer = AVPlayerLayer(player: player)
         layer.frame = view.bounds
         layer.videoGravity = .resizeAspectFill
-        layer.backgroundColor = UIColor.red.cgColor
+        layer.backgroundColor = UIColor.lightGray.cgColor
         view.layer.addSublayer(layer)
-        display.setLoading(to: false)
+//        display.setLoading(to: false)
+//        startPlayer(player)
         player.play()
         addTimerObserver()
     }

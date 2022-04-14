@@ -26,10 +26,10 @@ struct UploadClipModel {
         return uploadPoints
     }
     
-    func getWorkoutClipModel() -> WorkoutClipModel {
+    func getWorkoutClipModel() -> Any? {
         return WorkoutClipModel(storageURL: storageURL,
                                 clipKey: id,
-                                exerciseName: exercise.exerciseName)
+                                exerciseName: exercise.exerciseName).toFirebaseJSON()?.value
     }
     
     func getKeyClipModel() -> Any? {

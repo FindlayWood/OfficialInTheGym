@@ -39,7 +39,8 @@ class MyClipsChildViewModel {
     func loadClips(from keys: [KeyClipModel]) {
         apiService.fetchRange(from: keys, returning: ClipModel.self) { [weak self] result in
             switch result {
-            case .success(let models):
+            case .success(var models):
+                models.sort { $0.time < $1.time }
                 self?.clipPublisher.send(models)
             case .failure(_):
                 break

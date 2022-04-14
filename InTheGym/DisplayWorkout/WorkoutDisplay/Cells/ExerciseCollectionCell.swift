@@ -65,7 +65,7 @@ extension ExerciseCollectionCell {
     public func configure(with model: ExerciseModel) {
         exerciseNameButton.setTitle(model.exercise, for: .normal)
         setsLabel.text = model.sets.description + " SETS"
-        repsLabel.text = model.reps.repString()
+        repsLabel.text = model.reps?.repString()
         bodyTypeLabel.text = model.type.rawValue
         if let rpe = model.rpe {
             rpeButton.setTitle(rpe.description, for: .normal)

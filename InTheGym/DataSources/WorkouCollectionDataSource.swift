@@ -25,11 +25,11 @@ class WorkoutsCollectionDataSource: NSObject {
         super.init()
         self.collectionView.dataSource = makeDataSource()
         self.collectionView.delegate = self
-        self.initialSetup()
+//        self.initialSetup()
     }
     
     // MARK: - Create Data Source
-    func makeDataSource() -> UICollectionViewDiffableDataSource<Int,WorkoutModel> {
+    func makeDataSource() -> UICollectionViewDiffableDataSource<SingleSection,WorkoutModel> {
         return UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WorkoutCollectionViewCell.reuseID, for: indexPath) as! WorkoutCollectionViewCell
             cell.configure(with: itemIdentifier)
@@ -39,16 +39,17 @@ class WorkoutsCollectionDataSource: NSObject {
     
     // MARK: - Initial Setup
     func initialSetup() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int,WorkoutModel>()
-        snapshot.appendSections([1])
+        var snapshot = NSDiffableDataSourceSnapshot<SingleSection,WorkoutModel>()
+        snapshot.appendSections([.main])
         dataDource.apply(snapshot, animatingDifferences: false)
     }
     
     // MARK: - Update
     func updateTable(with models: [WorkoutModel]) {
-        var currentSnapshot = dataDource.snapshot()
-        currentSnapshot.appendItems(models, toSection: 1)
-        dataDource.apply(currentSnapshot, animatingDifferences: true)
+        var currentSnapshot = NSDiffableDataSourceSnapshot<SingleSection,WorkoutModel>()
+        currentSnapshot.appendSections([.main])
+        currentSnapshot.appendItems(models, toSection: .main)
+        dataDource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Reload

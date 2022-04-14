@@ -14,7 +14,10 @@ class PostsDataSource: NSObject {
     
     // MARK: - Publisher
     var postSelcted = PassthroughSubject<post,Never>()
-    var scrollPublisher = PassthroughSubject<Bool,Never>()
+    
+    var scrollPublisher = PassthroughSubject<CGFloat,Never>()
+    
+    var draggedPublihser = PassthroughSubject<CGFloat,Never>()
     
     var likeButtonTapped = PassthroughSubject<post,Never>()
     
@@ -28,6 +31,8 @@ class PostsDataSource: NSObject {
     private lazy var dataSource = makeDataSource()
     
     var lastContentOffset: CGFloat = 0
+    
+    var lastGestureOffset: CGFloat = 0
     
     var actionSubscriptions = [IndexPath: AnyCancellable]()
     
@@ -111,15 +116,18 @@ extension PostsDataSource: UITableViewDelegate {
         self.lastContentOffset = scrollView.contentOffset.y
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if lastContentOffset + 100 < scrollView.contentOffset.y {
+        scrollPublisher.send(scrollView.contentOffset.y)
+        if lastContentOffset < scrollView.contentOffset.y {
             //delegate.hideTopView()
-            scrollPublisher.send(false)
+//            print("first one: \(lastContentOffset)")
+//            scrollPublisher.send(false)
         } else if lastContentOffset > scrollView.contentOffset.y {
+//            print("second one: \(lastContentOffset)")
             //delegate.showTopView()
-            scrollPublisher.send(true)
+//            scrollPublisher.send(true)
         } else if scrollView.contentOffset.y == 0 {
             //delegate.showTopView()
-            scrollPublisher.send(true)
+//            scrollPublisher.send(true)
         }
     }
 }

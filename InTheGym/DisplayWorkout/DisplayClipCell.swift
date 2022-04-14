@@ -58,45 +58,11 @@ private extension DisplayClipCell {
 
 // MARK: - Public Configuarion
 extension DisplayClipCell {
-    func attachThumbnail(from clipKey: String) {
-        if #available(iOS 13.0, *) {
-            thumbnailImage.image = UIImage(systemName: "play.fill")
-            thumbnailImage.tintColor = Constants.darkColour
+    func configure(with model: WorkoutClipModel) {
+        let thumbnailDownloadModel = ClipThumbnailDownloadModel(id: model.clipKey)
+        ImageCache.shared.loadThumbnail(from: thumbnailDownloadModel) { [weak self] result in
+            let image = try? result.get()
+            self?.thumbnailImage.image = image
         }
-        ThumbnailGenerator.shared.getImage(from: clipKey) { [weak self] thumbnail in
-            guard let self = self else {return}
-            if let image = thumbnail {
-                self.thumbnailImage.image = image
-            } else if #available(iOS 13.0, *) {
-                self.thumbnailImage.image = UIImage(systemName: "play.fill")
-                self.thumbnailImage.tintColor = Constants.darkColour
-            }
-        }
-    }
-    
-    func getThumbnail(from url: URL, completion: @escaping (UIImage?) -> Void) {
-        DispatchQueue.global().async {
-            let asset = AVAsset(url: url)
-            let avAssetImageGenerator = AVAssetImageGenerator(asset: asset)
-            avAssetImageGenerator.appliesPreferredTrackTransform = true
-            let thumbnailTime = CMTimeMake(value: 1, timescale: 1)
-            
-            do {
-                let cgThumbImage = try avAssetImageGenerator.copyCGImage(at: thumbnailTime, actualTime: nil)
-                let thumbImage = UIImage(cgImage: cgThumbImage)
-                DispatchQueue.main.async {
-                    completion(thumbImage)
-                }
-            } catch {
-                print(error.localizedDescription)
-                DispatchQueue.main.async {
-                    completion(nil)
-                }
-            }
-        }
-    }
-    public func configure(with model: WorkoutClipModel) {
-        thumbnailImage.image = UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large))
-        thumbnailImage.tintColor = .darkColour
     }
 }

@@ -14,7 +14,7 @@ class ExerciseDescriptionView: UIView {
     
     // MARK: - Subviews
     var segmentControl: CustomisedSegmentControl = {
-        let view = CustomisedSegmentControl(frame: .zero, buttonTitles: ["Descriptions", "Clips"])
+        let view = CustomisedSegmentControl(frame: .zero, buttonTitles: ["Clips", "Descriptions"])
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

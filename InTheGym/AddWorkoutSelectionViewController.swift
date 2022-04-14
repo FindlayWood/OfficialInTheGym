@@ -10,44 +10,33 @@ import UIKit
 
 class AddWorkoutSelectionViewController: UIViewController, Storyboarded {
     
+    // MARK: - Coordinator
     var coordinator: WorkoutsFlow?
+    
+    // MARK: - Outlets
+    @IBOutlet weak var liveAddButton: UIButton!
+    @IBOutlet weak var regularAddButton: UIButton!
 
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "Add a Workout"
-
+        navigationItem.title = "Add a Workout"
+        liveAddButton.addViewShadow(with: .darkColour)
+        regularAddButton.addViewShadow(with: .darkColour)
     }
     
-    @IBAction func liveAddWorkout(_ sender:UIButton){
-        
-        coordinator?.addLiveWorkout()
-        
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let workoutPage = storyboard.instantiateViewController(withIdentifier: "WorkoutDetailViewController") as! WorkoutDetailViewController
-//        workoutPage.liveAdd = true
-//        workoutPage.fromDiscover = false
-//        navigationController?.pushViewController(workoutPage, animated: true)
-    }
-    
-    
-    @IBAction func addWorkout(_ sender:UIButton){
-        coordinator?.regularWorkout(FirebaseAuthManager.currentlyLoggedInUser)
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let nextVC = storyboard.instantiateViewController(withIdentifier: "AddWorkoutHomeViewController") as! AddWorkoutHomeViewController
-//        nextVC.playerBool = true
-//        nextVC.hidesBottomBarWhenPushed = true
-//        AddWorkoutHomeViewController.groupBool = false
-//        navigationController?.pushViewController(nextVC, animated: true)
-    }
-    
-
     override func viewWillAppear(_ animated: Bool) {
-        editNavBarColour(to: .lightColour)
-//        self.navigationController?.setNavigationBarHidden(false, animated: true)
-//        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.lightColour]
-//        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-//        self.navigationController?.navigationBar.tintColor = Constants.lightColour
+        editNavBarColour(to: .darkColour)
     }
-
+    
+    // MARK: - Live Action
+    @IBAction func liveAddWorkout(_ sender:UIButton){
+        coordinator?.addLiveWorkout()
+    }
+    
+    // MARK: - Regular Action
+    @IBAction func addWorkout(_ sender:UIButton){
+        coordinator?.addNewWorkout(UserDefaults.currentUser)
+    }
 }

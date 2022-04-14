@@ -11,6 +11,9 @@ import Combine
 
 class ExerciseClipsViewController: UIViewController {
     
+    // MARK: - Coordinator
+    weak var coordinator: ClipSelectorFlow?
+    
     // MARK: - Properties
     var display = ExerciseClipsView()
     
@@ -44,7 +47,7 @@ class ExerciseClipsViewController: UIViewController {
         dataSource = .init(collectionView: display.collectionView)
         
         dataSource.clipSelected
-            .sink { [weak self] in self?.clipSelected($0)}
+            .sink { [weak self] in self?.clipSelected($0) }
             .store(in: &subscriptions)
     }
     
@@ -78,10 +81,12 @@ extension ExerciseClipsViewController {
     }
     
     func clipSelected(_ model: ClipModel) {
-        let keyModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
-        let vc = ViewClipViewController()
-        vc.viewModel.keyClipModel = keyModel
-        navigationController?.present(vc, animated: true, completion: nil)
+        coordinator?.clipSelected(model)
+//        let keyModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
+//        let vc = ViewClipViewController()
+//        vc.viewModel.keyClipModel = keyModel
+//        vc.modalPresentationStyle = .fullScreen
+//        navigationController?.present(vc, animated: true, completion: nil)
     }
     
 }

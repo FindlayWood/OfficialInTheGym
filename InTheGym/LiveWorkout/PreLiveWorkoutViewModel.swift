@@ -7,21 +7,75 @@
 //
 
 import Foundation
+import Combine
 
 class PreLiveWorkoutViewModel {
     
-    var apiService: FirebaseAPIWorkoutManager!
+    // MARK: - Publishers
+    @Published var title: String = ""
+    @Published var canContinue: Bool = false
+    @Published var isLoading: Bool = false
+    var workoutPublisher = PassthroughSubject<WorkoutModel,Never>()
+    
+    // MARK: - Properties
+    var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     
     private let separator = " - "
     
     var suggestions = ["Session", "Lower Session", "Upper Session", "Mixed Session", "Recovery Session"]
     
-    init(apiService: FirebaseAPIWorkoutManager) {
-        self.apiService = apiService
-    }
-    
     var numberOfItems: Int {
         return suggestions.count
+    }
+    
+    private var subscriptions = Set<AnyCancellable>()
+    
+    var navBarButtonTitle: String = "Continue"
+    
+    var navigationTitle: String = "Live Workout Title"
+    
+    // MARK: - Initializer
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
+        self.apiService = apiService
+        initSubscriptions()
+    }
+    
+    // MARK: - Actions
+    
+    func startLiveWorkout() {
+        isLoading = true
+        let newLiveWorkout = LiveWorkoutModel(id: UUID().uuidString,
+                                              title: title,
+                                              creatorID: UserDefaults.currentUser.uid,
+                                              createdBy: UserDefaults.currentUser.username,
+                                              assignedTo: UserDefaults.currentUser.uid,
+                                              isPrivate: false,
+                                              completed: false,
+                                              liveWorkout: true,
+                                              startTime: Date().timeIntervalSince1970)
+        
+        
+        apiService.uploadTimeOrderedModel(model: newLiveWorkout) { [weak self] result in
+            switch result {
+            case .success(let model):
+                let newWorkoutModel = WorkoutModel(liveModel: model)
+                self?.workoutPublisher.send(newWorkoutModel)
+                self?.isLoading = false
+            case .failure(let error):
+                print(error)
+                self?.isLoading = false
+            }
+        }
+    }
+    
+    // MARK: - Functions
+    
+    func initSubscriptions() {
+        
+        $title
+            .map { return $0.count > 0 }
+            .sink { [unowned self] in self.canContinue = $0 }
+            .store(in: &subscriptions)
     }
     
     func getData(at indexPath: IndexPath) -> String {
@@ -34,7 +88,8 @@ class PreLiveWorkoutViewModel {
         return date.getDayOfWeek()
     }
     
-    func startLiveWorkout(with title: String, completion: @escaping (liveWorkout?) -> Void) {
-        apiService.startLiveWorkout(with: title, completion: completion)
+    func updateTitle(with newTitle: String) {
+        self.title = newTitle
     }
+
 }

@@ -10,9 +10,21 @@ import Foundation
 import UIKit
 
 class MyProfileView: UIView {
+    
     // MARK: - Properties
+    private var infoViewTopAnchor: NSLayoutConstraint!
+
+    private var segementPos: segemntPosition = .bottom
     
     // MARK: - Subviews
+    var topBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.heightAnchor.constraint(equalToConstant: 38).isActive = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     var iconLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo-Bold", size: 25)
@@ -45,6 +57,12 @@ class MyProfileView: UIView {
         button.tintColor = .darkColour
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    
+    var infoView: UIProfileInfoView = {
+        let view = UIProfileInfoView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     var profileImageView: UIButton = {
@@ -117,15 +135,18 @@ class MyProfileView: UIView {
 // MARK: - Configure
 private extension MyProfileView {
     func setupUI() {
+        clipsToBounds = true
         backgroundColor = .white
+        addSubview(infoView)
+        addSubview(topBackgroundView)
         addSubview(iconLabel)
         addSubview(moreButton)
         addSubview(notificationsButton)
         addSubview(groupsButton)
-        addSubview(profileImageView)
-        addSubview(followerView)
-        addSubview(nameUsernameView)
-        addSubview(bioLabel)
+//        addSubview(profileImageView)
+//        addSubview(followerView)
+//        addSubview(nameUsernameView)
+//        addSubview(bioLabel)
         addSubview(segmentControl)
 //        addSubview(tableview)
         addSubview(containerView)
@@ -133,7 +154,13 @@ private extension MyProfileView {
     }
     
     func configureUI() {
+//        infoView.frame = CGRect(x: 0, y: 38, width: Constants.screenSize.width, height: 300)
+        infoViewTopAnchor = infoView.topAnchor.constraint(equalTo: iconLabel.bottomAnchor, constant: 8)
         NSLayoutConstraint.activate([
+            topBackgroundView.topAnchor.constraint(equalTo: topAnchor),
+            topBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            topBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
             iconLabel.topAnchor.constraint(equalTo: topAnchor),
             iconLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             iconLabel.heightAnchor.constraint(equalToConstant: 30),
@@ -147,25 +174,30 @@ private extension MyProfileView {
             groupsButton.trailingAnchor.constraint(equalTo: notificationsButton.leadingAnchor, constant: -12),
             groupsButton.topAnchor.constraint(equalTo: moreButton.topAnchor),
             
-            profileImageView.topAnchor.constraint(equalTo: iconLabel.bottomAnchor, constant: 8),
-            profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            infoViewTopAnchor,
+//            infoView.topAnchor.constraint(equalTo: iconLabel.bottomAnchor, constant: 8),
+            infoView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            infoView.trailingAnchor.constraint(equalTo: trailingAnchor),
             
-            profileImageView.heightAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.35),
-            profileImageView.widthAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.35),
+//            profileImageView.topAnchor.constraint(equalTo: iconLabel.bottomAnchor, constant: 8),
+//            profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+//
+//            profileImageView.heightAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.35),
+//            profileImageView.widthAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.35),
+//
+//            followerView.topAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+//            followerView.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 16),
+//            followerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+//
+//            nameUsernameView.bottomAnchor.constraint(equalTo: profileImageView.centerYAnchor),
+//            nameUsernameView.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 16),
+//            nameUsernameView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+//
+//            bioLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8),
+//            bioLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+//            bioLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             
-            followerView.topAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            followerView.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 16),
-            followerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            
-            nameUsernameView.bottomAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            nameUsernameView.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 16),
-            nameUsernameView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            
-            bioLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8),
-            bioLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            bioLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            
-            segmentControl.topAnchor.constraint(equalTo: bioLabel.bottomAnchor),
+            segmentControl.topAnchor.constraint(equalTo: infoView.bottomAnchor, constant: 4),
             segmentControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
             segmentControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -0),
             segmentControl.heightAnchor.constraint(equalToConstant: 30),
@@ -206,4 +238,30 @@ extension MyProfileView {
     public func setFollowingCount(to count: Int) {
         followerView.setFollowing(to: count)
     }
+    
+    func scroll(to offset: CGFloat) {
+        switch segementPos {
+        case .top:
+            if offset < 0 {
+                infoViewTopAnchor.constant = 8
+                segementPos = .bottom
+                UIView.animate(withDuration: 0.3) {
+                    self.layoutIfNeeded()
+                }
+            }
+        case .bottom:
+            if offset > 0 {
+                infoViewTopAnchor.constant = 8 - infoView.frame.height
+                segementPos = .top
+                UIView.animate(withDuration: 0.3) {
+                    self.layoutIfNeeded()
+                }
+            }
+        }
+    }
+}
+
+enum segemntPosition {
+    case top
+    case bottom
 }

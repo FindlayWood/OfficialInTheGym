@@ -28,12 +28,18 @@ class NewWeightViewController: UIViewController, Storyboarded {
     lazy var WeightArray: [String] = {
         //guard let exercise = newExercise else {return []}
         guard let exerciseViewModel = exerciseViewModel else {return []}
-        if exerciseViewModel.exercise.weight.isEmpty {
+        if let weight = exerciseViewModel.exercise.weight {
+            return weight
+        } else {
             let array = Array(repeating: "", count: exerciseViewModel.exercise.sets)
             return array
-        } else {
-            return exerciseViewModel.exercise.weight
         }
+//        if exerciseViewModel.exercise.weight.isEmpty {
+//            let array = Array(repeating: "", count: exerciseViewModel.exercise.sets)
+//            return array
+//        } else {
+//            return exerciseViewModel.exercise.weight
+//        }
     }()
     
     
@@ -293,7 +299,7 @@ class NewWeightViewController: UIViewController, Storyboarded {
 
 extension NewWeightViewController: WeightAdapterProtocol {
     func getData(at indexPath: Int) -> WeightModel {
-        let rep = exerciseViewModel?.exercise.reps[indexPath] ?? 0
+        let rep = exerciseViewModel?.exercise.reps?[indexPath] ?? 0
         let weight = WeightArray[indexPath]
         return WeightModel(rep: rep, weight: weight, index: indexPath + 1)
     }

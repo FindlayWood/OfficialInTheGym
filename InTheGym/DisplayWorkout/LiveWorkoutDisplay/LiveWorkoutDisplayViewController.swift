@@ -62,7 +62,11 @@ class LiveWorkoutDisplayViewController: UIViewController {
     func initViewModel() {
         
         viewModel.addedClipPublisher
-            .sink { [weak self] in self?.clipDataSource.updateTable(with: [$0])}
+            .sink { [weak self] newClip in
+                guard let self = self else {return}
+                self.clipDataSource.updateTable(with: [newClip])
+                self.toggleClipCollection(showing: true, clips: self.viewModel.getClips())
+            }
             .store(in: &subscriptions)
     }
     
@@ -112,7 +116,7 @@ class LiveWorkoutDisplayViewController: UIViewController {
             .store(in: &subscriptions)
                 
         dataSource.exerciseButtonTapped
-            .sink { [weak self] in self?.showDescriptions(for: $0) }
+            .sink { [weak self] in self?.coordinator?.showDescriptions(for: $0) }
             .store(in: &subscriptions)
         
         dataSource.plusExerciseButtonTapped
@@ -170,8 +174,9 @@ extension LiveWorkoutDisplayViewController {
         coordinator?.addClip(for: exercise, viewModel.workoutModel, on: viewModel)
     }
     func showDescriptions(for exercise: ExerciseModel) {
-        let vc = ExerciseDescriptionViewController()
-        vc.viewModel.exercise = DiscoverExerciseModel(exerciseName: exercise.exercise)
-        navigationController?.pushViewController(vc, animated: true)
+        coordinator?.showDescriptions(for: exercise)
+//        let vc = ExerciseDescriptionViewController()
+//        vc.viewModel.exercise = DiscoverExerciseModel(exerciseName: exercise.exercise)
+//        navigationController?.pushViewController(vc, animated: true)
     }
 }

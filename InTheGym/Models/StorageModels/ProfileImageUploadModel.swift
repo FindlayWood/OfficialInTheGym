@@ -30,7 +30,7 @@ extension ProfileImageUploadModel: FirebaseStorageData {
     }
     var metaData: StorageMetadata {
         let metaData = StorageMetadata()
-        metaData.contentType = "image/jpg"
+        metaData.contentType = "image/jpeg"
         return metaData
     }
 }

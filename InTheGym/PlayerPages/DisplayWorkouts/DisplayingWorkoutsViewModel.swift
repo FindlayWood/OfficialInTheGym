@@ -8,11 +8,11 @@
 
 import Foundation
 import Combine
-import CloudKit
 
 class DisplayingWorkoutsViewModel {
     
     // MARK: - Publisher
+    @Published var isLoading: Bool = false
     var workouts = CurrentValueSubject<[WorkoutModel],Never>([])
     var errorFetching = PassthroughSubject<Error,Never>()
     
@@ -30,13 +30,16 @@ class DisplayingWorkoutsViewModel {
     
     // MARK: - Fetch Function
     func fetchWorkouts() {
+        isLoading = true
         apiService.fetch(WorkoutModel.self) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(let models):
                 self.workouts.send(models)
+                self.isLoading = false
             case .failure(let error):
                 self.errorFetching.send(error)
+                self.isLoading = false
             }
         }
     }
