@@ -135,9 +135,13 @@ private extension UIWorkoutView {
             
             activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+//            activityIndicator.topAnchor.constraint(equalTo: topAnchor, constant: 32),
+//            activityIndicator.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -32),
             
             errorIcon.centerXAnchor.constraint(equalTo: centerXAnchor),
-            errorIcon.centerYAnchor.constraint(equalTo: centerYAnchor)
+            errorIcon.centerYAnchor.constraint(equalTo: centerYAnchor),
+//            errorIcon.topAnchor.constraint(equalTo: topAnchor, constant: 32),
+//            errorIcon.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -32)
         ])
     }
 }

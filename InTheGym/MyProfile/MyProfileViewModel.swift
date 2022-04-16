@@ -17,6 +17,8 @@ class MyProfileViewModel {
     
     var savedWorkouts = CurrentValueSubject<[SavedWorkoutModel],Never>([])
     
+    var clipPublisher = CurrentValueSubject<[ClipModel],Never>([])
+    
     var followerCountPublisher = CurrentValueSubject<Int,Never>(0)
     
     var followingCountPublisher = CurrentValueSubject<Int,Never>(0)
@@ -96,6 +98,30 @@ class MyProfileViewModel {
                 self.savedWorkouts.send(savedWorkoutModels)
             case .failure(let error):
                 self.errorFetchingWorkouts.send(error)
+            }
+        }
+    }
+    
+    // MARK: - Fetch Clips
+    func fetchClipKeys() {
+        let searchModel = UserClipsModel(id: UserDefaults.currentUser.uid)
+        apiService.fetchInstance(of: searchModel, returning: KeyClipModel.self) { [weak self] result in
+            switch result {
+            case .success(let models):
+                self?.loadClips(from: models)
+            case .failure(_):
+                break
+            }
+        }
+    }
+    func loadClips(from keys: [KeyClipModel]) {
+        apiService.fetchRange(from: keys, returning: ClipModel.self) { [weak self] result in
+            switch result {
+            case .success(var models):
+                models.sort { $0.time < $1.time }
+                self?.clipPublisher.send(models)
+            case .failure(_):
+                break
             }
         }
     }

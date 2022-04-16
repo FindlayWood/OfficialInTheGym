@@ -39,6 +39,19 @@ class UIProfileInfoView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    var followButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Follow", for: .normal)
+        button.backgroundColor = .darkColour
+        button.setTitleColor(.white, for: .normal)
+        button.addViewShadow(with: .darkColour)
+        button.layer.cornerRadius = 16
+        button.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        button.widthAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.3).isActive = true
+        button.isHidden = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     var bioLabel: UILabel = {
         let label = UILabel()
@@ -50,7 +63,7 @@ class UIProfileInfoView: UIView {
     }()
     
     lazy var stack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [profileImageView, nameUsernameView, followerView, bioLabel])
+        let stack = UIStackView(arrangedSubviews: [profileImageView, nameUsernameView, followerView, followButton, bioLabel])
         stack.axis = .vertical
         stack.alignment = .center
         stack.spacing = 8
@@ -98,10 +111,19 @@ extension UIProfileInfoView {
             }
         }
     }
+
     public func setFollowerCount(to count: Int) {
         followerView.setFollowers(to: count)
     }
     public func setFollowingCount(to count: Int) {
         followerView.setFollowing(to: count)
+    }
+    public func addFollowButton(_ following: Bool) {
+        followButton.isHidden = false
+        followButton.setTitle(following ? "Following" : "Follow", for: .normal)
+        followButton.backgroundColor = following ? .white : .darkColour
+        followButton.isUserInteractionEnabled = following ? false : true
+        followButton.layer.borderWidth = following ? 2 : 0
+        followButton.layer.borderColor = following ? UIColor.darkColour.cgColor : nil
     }
 }

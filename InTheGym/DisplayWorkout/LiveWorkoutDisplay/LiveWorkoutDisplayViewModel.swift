@@ -40,7 +40,7 @@ class LiveWorkoutDisplayViewModel {
     
     // MARK: - Actions
     func updateRPE(at index: IndexPath, to score: Int) {
-        let currentExercises = exercises.value
+        guard let currentExercises = workoutModel.exercises else {return}
         let exercise = currentExercises[index.item]
         exercise.rpe = score
         let rpeUpdateModel = RPEUpdateModel(workoutID: workoutModel.id, exercise: exercise)
@@ -70,7 +70,7 @@ class LiveWorkoutDisplayViewModel {
     }
     
     func getExerciseCount() -> Int {
-        let currentExercises = exercises.value
+        let currentExercises = workoutModel.exercises
         return workoutModel.exercises?.count ?? 0
     }
     

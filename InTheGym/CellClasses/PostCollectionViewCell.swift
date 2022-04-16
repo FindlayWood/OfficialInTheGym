@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class PostCollectionViewCell: UICollectionViewCell {
+class PostCollectionViewCell: FullWidthCollectionViewCell {
     
     // MARK: - Publishers
 //    var actionPublisher = PassthroughSubject<PostAction,Never>()
@@ -58,35 +58,11 @@ class PostCollectionViewCell: UICollectionViewCell {
     }()
     
     // MARK: - Stack Subviews
-    var workoutView: UIWorkoutView = {
-        let view = UIWorkoutView()
-        view.isHidden = true
+    var dataView: UIPostDataView = {
+        let view = UIPostDataView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    var photoImageView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        view.backgroundColor = .lightGray
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    var clipImageView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        view.backgroundColor = .lightGray
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    var stack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.distribution = .equalSpacing
-        stack.spacing = 10
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
-    
     var replyCountLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .regular)
@@ -102,9 +78,7 @@ class PostCollectionViewCell: UICollectionViewCell {
         view.backgroundColor = .clear
         view.heightAnchor.constraint(equalToConstant: 30).isActive = true
         view.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        if #available(iOS 13.0, *) {
-            view.image = UIImage(systemName: "arrow.turn.left.down")
-        }
+        view.image = UIImage(systemName: "arrow.turn.left.down")
         view.tintColor = .darkColour
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -143,7 +117,7 @@ class PostCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         actionPublisher = PassthroughSubject<PostAction,Never>()
-        workoutView.isHidden = true
+        dataView.workoutView.isHidden = true
     }
 }
 
@@ -155,10 +129,7 @@ private extension PostCollectionViewCell {
         contentView.addSubview(usernameButton)
         contentView.addSubview(timeLabel)
         contentView.addSubview(textView)
-        stack.addArrangedSubview(workoutView)
-        stack.addArrangedSubview(photoImageView)
-        stack.addArrangedSubview(clipImageView)
-        contentView.addSubview(stack)
+        contentView.addSubview(dataView)
         contentView.addSubview(replyImageView)
         contentView.addSubview(replyCountLabel)
         contentView.addSubview(likeButton)
@@ -174,42 +145,30 @@ private extension PostCollectionViewCell {
             usernameButton.leadingAnchor.constraint(equalTo: profileImageButton.trailingAnchor, constant: 10),
             usernameButton.topAnchor.constraint(equalTo: profileImageButton.topAnchor),
             
+            
             timeLabel.topAnchor.constraint(equalTo: usernameButton.bottomAnchor, constant: 1),
             timeLabel.leadingAnchor.constraint(equalTo: usernameButton.leadingAnchor, constant: 2),
-            
+
             textView.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 15),
             textView.leadingAnchor.constraint(equalTo: profileImageButton.trailingAnchor, constant: 10),
             textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             
-            stack.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 5),
-            stack.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: textView.trailingAnchor),
-            
-            workoutView.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            photoImageView.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            photoImageView.heightAnchor.constraint(equalTo: stack.widthAnchor),
-            clipImageView.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            clipImageView.heightAnchor.constraint(equalTo: stack.widthAnchor),
-            
-            
+            dataView.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 8),
+            dataView.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
+            dataView.trailingAnchor.constraint(equalTo: textView.trailingAnchor),
+
+            replyImageView.topAnchor.constraint(equalTo: dataView.bottomAnchor, constant: 16),
+            replyImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             replyImageView.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
             replyCountLabel.leadingAnchor.constraint(equalTo: replyImageView.trailingAnchor, constant: 5),
-            
+
             likeCountLabel.trailingAnchor.constraint(equalTo: textView.trailingAnchor),
             likeButton.trailingAnchor.constraint(equalTo: likeCountLabel.leadingAnchor, constant: -5),
-            
-            replyImageView.topAnchor.constraint(equalTo: stack.bottomAnchor, constant: 10),
-            replyCountLabel.topAnchor.constraint(equalTo: stack.bottomAnchor, constant: 10),
-            likeButton.topAnchor.constraint(equalTo: stack.bottomAnchor, constant: 10),
-            likeCountLabel.topAnchor.constraint(equalTo: stack.bottomAnchor, constant: 10),
-            
-            
-            replyImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-            replyCountLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-            likeButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-            likeCountLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-            
-        
+
+
+            replyCountLabel.topAnchor.constraint(equalTo: replyImageView.topAnchor),
+            likeButton.topAnchor.constraint(equalTo: dataView.bottomAnchor, constant: 16),
+            likeCountLabel.topAnchor.constraint(equalTo: likeButton.topAnchor),
         ])
     }
 }
@@ -224,15 +183,15 @@ extension PostCollectionViewCell {
         textView.text = post.text
         replyCountLabel.text = post.replyCount.description
         likeCountLabel.text = post.likeCount.description
-        if post.attachedClip == nil { clipImageView.isHidden = true }
-        if post.attachedPhoto == nil { photoImageView.isHidden = true }
+        if post.attachedClip == nil { dataView.clipImageView.isHidden = true }
+        if post.attachedPhoto == nil { dataView.photoImageView.isHidden = true }
         if let workoutID = post.workoutID {
-            workoutView.isHidden = false
-            workoutView.configure(with: workoutID, assignID: post.posterID)
+            dataView.workoutView.isHidden = false
+            dataView.workoutView.configure(with: workoutID, assignID: post.posterID)
         }
         if let savedWorkoutID = post.savedWorkoutID {
-            workoutView.isHidden = false
-            workoutView.configure(for: savedWorkoutID)
+            dataView.workoutView.isHidden = false
+            dataView.workoutView.configure(for: savedWorkoutID)
         }
 
         let profileImageModel = ProfileImageDownloadModel(id: post.posterID)
@@ -252,17 +211,6 @@ extension PostCollectionViewCell {
                 self.likeButton.isUserInteractionEnabled = true
             }
         }
-        
-//        LikesAPIService.shared.check(postID: post.id) { [weak self] liked in
-//            guard let self = self else {return}
-//            if liked {
-//                self.likeButton.setImage(UIImage(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-//                self.likeButton.isUserInteractionEnabled = false
-//            } else {
-//                self.likeButton.setImage(UIImage(systemName: "star", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-//                self.likeButton.isUserInteractionEnabled = true
-//            }
-//        }
     }
 }
 
@@ -273,7 +221,7 @@ extension PostCollectionViewCell {
         usernameButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
         profileImageButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
         let tap = UITapGestureRecognizer(target: self, action: #selector(workoutTapped(_:)))
-        workoutView.addGestureRecognizer(tap)
+        dataView.workoutView.addGestureRecognizer(tap)
     }
     
     @objc func likeButtonTapped(_ sender: UIButton) {
@@ -284,8 +232,8 @@ extension PostCollectionViewCell {
             sender.isUserInteractionEnabled = false
             self.likeCountLabel.increment()
         }
-//        delegate?.likeButtonTapped(on: self, sender: sender, label: likeCountLabel)
     }
+    
     @objc func workoutTapped(_ sender: UIView) {
         actionPublisher.send(.workoutTapped)
     }

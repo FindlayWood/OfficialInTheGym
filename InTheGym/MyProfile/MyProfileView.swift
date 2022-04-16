@@ -12,9 +12,12 @@ import UIKit
 class MyProfileView: UIView {
     
     // MARK: - Properties
-    private var infoViewTopAnchor: NSLayoutConstraint!
-
-    private var segementPos: segemntPosition = .bottom
+    
+    var selectedIndex: Int = 0 {
+        didSet {
+            collectionView.collectionViewLayout = generateLayout(with: selectedIndex)
+        }
+    }
     
     // MARK: - Subviews
     var topBackgroundView: UIView = {
@@ -59,67 +62,19 @@ class MyProfileView: UIView {
         return button
     }()
     
-    var infoView: UIProfileInfoView = {
-        let view = UIProfileInfoView()
+    lazy var collectionView: UICollectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: generateLayout(with: selectedIndex))
+        view.register(ProfileInfoCollectionViewCell.self, forCellWithReuseIdentifier: ProfileInfoCollectionViewCell.reuseID)
+        view.register(PostCollectionViewCell.self, forCellWithReuseIdentifier: PostCollectionViewCell.reuseID)
+        view.register(SavedWorkoutCollectionCell.self, forCellWithReuseIdentifier: SavedWorkoutCollectionCell.reuseID)
+        view.register(ExerciseClipsCollectionCell.self, forCellWithReuseIdentifier: ExerciseClipsCollectionCell.reuseID)
+        view.register(ProfileHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProfileHeaderView.reuseIdentifier)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    var profileImageView: UIButton = {
-        let view = UIButton()
-//        view.contentMode = .scaleAspectFill
-        view.backgroundColor = .clear
-        view.clipsToBounds = true
-        view.layer.cornerRadius = (Constants.screenSize.width * 0.35) / 2
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
     
-    var nameUsernameView: UINameUsernameSubView = {
-        let view = UINameUsernameSubView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    var followerView: UIUserFollowerSubView = {
-        let view = UIUserFollowerSubView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    var bioLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .darkGray
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    var segmentControl: CustomUnderlineSegmentControl = {
-        let view = CustomUnderlineSegmentControl(frame: .zero, buttonTitles: ["Posts", "Clips", "Workouts"])
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    var tableview: UITableView = {
-        let view = UITableView()
-        view.register(ProfileInfoCell.self, forCellReuseIdentifier: ProfileInfoCell.cellID)
-        view.register(ProfileOptionsCell.self, forCellReuseIdentifier: ProfileOptionsCell.cellID)
-        view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
-        if #available(iOS 15.0, *) { view.sectionHeaderTopPadding = 0 }
-        view.tableFooterView = UIView()
-        view.separatorInset = .zero
-        view.layoutMargins = .zero
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    var containerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -137,25 +92,16 @@ private extension MyProfileView {
     func setupUI() {
         clipsToBounds = true
         backgroundColor = .white
-        addSubview(infoView)
         addSubview(topBackgroundView)
         addSubview(iconLabel)
         addSubview(moreButton)
         addSubview(notificationsButton)
         addSubview(groupsButton)
-//        addSubview(profileImageView)
-//        addSubview(followerView)
-//        addSubview(nameUsernameView)
-//        addSubview(bioLabel)
-        addSubview(segmentControl)
-//        addSubview(tableview)
-        addSubview(containerView)
+        addSubview(collectionView)
         configureUI()
     }
     
     func configureUI() {
-//        infoView.frame = CGRect(x: 0, y: 38, width: Constants.screenSize.width, height: 300)
-        infoViewTopAnchor = infoView.topAnchor.constraint(equalTo: iconLabel.bottomAnchor, constant: 8)
         NSLayoutConstraint.activate([
             topBackgroundView.topAnchor.constraint(equalTo: topAnchor),
             topBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -174,94 +120,92 @@ private extension MyProfileView {
             groupsButton.trailingAnchor.constraint(equalTo: notificationsButton.leadingAnchor, constant: -12),
             groupsButton.topAnchor.constraint(equalTo: moreButton.topAnchor),
             
-            infoViewTopAnchor,
-//            infoView.topAnchor.constraint(equalTo: iconLabel.bottomAnchor, constant: 8),
-            infoView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            infoView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: topBackgroundView.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
             
-//            profileImageView.topAnchor.constraint(equalTo: iconLabel.bottomAnchor, constant: 8),
-//            profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-//
-//            profileImageView.heightAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.35),
-//            profileImageView.widthAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.35),
-//
-//            followerView.topAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-//            followerView.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 16),
-//            followerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-//
-//            nameUsernameView.bottomAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-//            nameUsernameView.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 16),
-//            nameUsernameView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-//
-//            bioLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8),
-//            bioLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-//            bioLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            
-            segmentControl.topAnchor.constraint(equalTo: infoView.bottomAnchor, constant: 4),
-            segmentControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
-            segmentControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -0),
-            segmentControl.heightAnchor.constraint(equalToConstant: 30),
-            
-            containerView.topAnchor.constraint(equalTo: segmentControl.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor)
-            
-//            tableview.topAnchor.constraint(equalTo: segmentControl.bottomAnchor),
-//            tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            tableview.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
-}
-
-// MARK: - Public Configuration
-extension MyProfileView {
-    public func configure(with user: Users) {
-        nameUsernameView.configure(with: user)
-        followerView.configure(admin: user.admin)
-        bioLabel.text = user.profileBio
-        let imageDownloader = ProfileImageDownloadModel(id: user.uid)
-        ImageCache.shared.load(from: imageDownloader) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(let image):
-                self.profileImageView.setImage(image, for: .normal)
-            case .failure(_):
-                self.profileImageView.backgroundColor = .lightGray
+    
+    func generateLayout(with selectedIndex: Int) -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+            
+            if sectionIndex == 0 {
+                return self.generateInfoViewLayout()
+            }
+            else {
+                switch selectedIndex {
+                case 0:
+                    return self.generatePostsLayout()
+                case 1:
+                    return self.generateClipsLayout()
+                case 2:
+                    return self.generateWorkoutsLayout()
+                default:
+                    return self.generatePostsLayout()
+                }
             }
         }
-    }
-    public func setFollowerCount(to count: Int) {
-        followerView.setFollowers(to: count)
-    }
-    public func setFollowingCount(to count: Int) {
-        followerView.setFollowing(to: count)
+        
+        return layout
     }
     
-    func scroll(to offset: CGFloat) {
-        switch segementPos {
-        case .top:
-            if offset < 0 {
-                infoViewTopAnchor.constant = 8
-                segementPos = .bottom
-                UIView.animate(withDuration: 0.3) {
-                    self.layoutIfNeeded()
-                }
-            }
-        case .bottom:
-            if offset > 0 {
-                infoViewTopAnchor.constant = 8 - infoView.frame.height
-                segementPos = .top
-                UIView.animate(withDuration: 0.3) {
-                    self.layoutIfNeeded()
-                }
-            }
-        }
+    func generateInfoViewLayout() -> NSCollectionLayoutSection {
+        let layoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(300))
+        let item = NSCollectionLayoutItem(layoutSize: layoutSize)
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: layoutSize, subitem: item, count: 1)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        return section
     }
-}
-
-enum segemntPosition {
-    case top
-    case bottom
+    
+    func generatePostsLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(275))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: itemSize, subitem: item, count: 1)
+        
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+        header.pinToVisibleBounds = true
+        section.boundarySupplementaryItems = [header]
+        
+        
+        return section
+    }
+    func generateClipsLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.5))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+        header.pinToVisibleBounds = true
+        section.boundarySupplementaryItems = [header]
+        
+        return section
+    }
+    func generateWorkoutsLayout() -> NSCollectionLayoutSection {
+        
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(160))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+        
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitem: item, count: 1)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+        header.pinToVisibleBounds = true
+        section.boundarySupplementaryItems = [header]
+        
+        return section
+    }
 }
