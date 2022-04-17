@@ -10,57 +10,23 @@ import Foundation
 import UIKit
 
 class PublicTimelineView: UIView {
+    
     // MARK: - Properties
+    var selectedIndex: Int = 0 {
+        didSet {
+            collectionView.collectionViewLayout = generateLayout(with: selectedIndex)
+        }
+    }
     
     // MARK: - Subviews
-    var profileImageView: UIButton = {
-        let view = UIButton()
-//        view.contentMode = .scaleAspectFill
-        view.backgroundColor = .clear
-        view.clipsToBounds = true
-        view.layer.cornerRadius = (Constants.screenSize.width * 0.35) / 2
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    var nameUsernameView: UINameUsernameSubView = {
-        let view = UINameUsernameSubView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    var followerView: UIUserFollowerSubView = {
-        let view = UIUserFollowerSubView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    var followButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Follow", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
-        button.backgroundColor = .lightColour
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    var bioLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .darkGray
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    var tableview: UITableView = {
-        let view = UITableView()
-        view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
-        if #available(iOS 15.0, *) { view.sectionHeaderTopPadding = 0 }
-        view.tableFooterView = UIView()
-        view.separatorInset = .zero
-        view.layoutMargins = .zero
+    lazy var collectionView: UICollectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: generateLayout(with: selectedIndex))
+        view.register(ProfileInfoCollectionViewCell.self, forCellWithReuseIdentifier: ProfileInfoCollectionViewCell.reuseID)
+        view.register(PostCollectionViewCell.self, forCellWithReuseIdentifier: PostCollectionViewCell.reuseID)
+        view.register(SavedWorkoutCollectionCell.self, forCellWithReuseIdentifier: SavedWorkoutCollectionCell.reuseID)
+        view.register(ExerciseClipsCollectionCell.self, forCellWithReuseIdentifier: ExerciseClipsCollectionCell.reuseID)
+        view.register(ProfileHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProfileHeaderView.reuseIdentifier)
+        view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -80,80 +46,103 @@ class PublicTimelineView: UIView {
 private extension PublicTimelineView {
     func setupUI() {
         backgroundColor = .white
-        addSubview(profileImageView)
-        addSubview(followerView)
-        addSubview(nameUsernameView)
-        addSubview(followButton)
-        addSubview(bioLabel)
-        addSubview(tableview)
+        addSubview(collectionView)
         configureUI()
     }
     
     func configureUI() {
         NSLayoutConstraint.activate([
             
-            profileImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            
-            profileImageView.heightAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.35),
-            profileImageView.widthAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.35),
-            
-            followerView.topAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            followerView.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 16),
-            followerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            
-            nameUsernameView.bottomAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            nameUsernameView.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 16),
-            nameUsernameView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            
-            followButton.topAnchor.constraint(equalTo: followerView.bottomAnchor, constant: 4),
-            followButton.leadingAnchor.constraint(equalTo: followerView.leadingAnchor),
-            followButton.trailingAnchor.constraint(equalTo: followerView.trailingAnchor),
-            followButton.heightAnchor.constraint(equalToConstant: 22),
-            
-            bioLabel.topAnchor.constraint(equalTo: followButton.bottomAnchor, constant: 8),
-            bioLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            bioLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            
-            tableview.topAnchor.constraint(equalTo: bioLabel.bottomAnchor),
-            tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
-            tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tableview.bottomAnchor.constraint(equalTo: bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+    }
+    func generateLayout(with selectedIndex: Int) -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+            
+            if sectionIndex == 0 {
+                return self.generateInfoViewLayout()
+            }
+            else {
+                switch selectedIndex {
+                case 0:
+                    return self.generatePostsLayout()
+                case 1:
+                    return self.generateClipsLayout()
+                case 2:
+                    return self.generateWorkoutsLayout()
+                default:
+                    return self.generatePostsLayout()
+                }
+            }
+        }
+        
+        return layout
+    }
+    func generateInfoViewLayout() -> NSCollectionLayoutSection {
+        let layoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(300))
+        let item = NSCollectionLayoutItem(layoutSize: layoutSize)
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: layoutSize, subitem: item, count: 1)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        return section
+    }
+    
+    func generatePostsLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(275))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: itemSize, subitem: item, count: 1)
+        
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+        header.pinToVisibleBounds = true
+        section.boundarySupplementaryItems = [header]
+        
+        
+        return section
+    }
+    func generateClipsLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.5))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+        header.pinToVisibleBounds = true
+        section.boundarySupplementaryItems = [header]
+        
+        return section
+    }
+    func generateWorkoutsLayout() -> NSCollectionLayoutSection {
+        
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(160))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+        
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitem: item, count: 1)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+        header.pinToVisibleBounds = true
+        section.boundarySupplementaryItems = [header]
+        
+        return section
     }
 }
 
 // MARK: - Public Configuration
 extension PublicTimelineView {
     public func configure(with user: Users) {
-        nameUsernameView.configure(with: user)
-        followerView.configure(admin: user.admin)
-        bioLabel.text = user.profileBio
-        let imageDownloader = ProfileImageDownloadModel(id: user.uid)
-        ImageCache.shared.load(from: imageDownloader) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(let image):
-                self.profileImageView.setImage(image, for: .normal)
-            case .failure(_):
-                self.profileImageView.backgroundColor = .lightGray
-            }
-        }
-    }
-    public func setFollowerCount(to count: Int) {
-        followerView.setFollowers(to: count)
-    }
-    public func setFollowingCount(to count: Int) {
-        followerView.setFollowing(to: count)
-    }
-    public func setFollowing(to following: Bool) {
-        if following {
-            followButton.setTitle("Following", for: .normal)
-            followButton.setTitleColor(.lightColour, for: .normal)
-            followButton.layer.borderWidth = 1
-            followButton.layer.borderColor = UIColor.lightColour.cgColor
-            followButton.backgroundColor = .white
-            followButton.isUserInteractionEnabled = false
-        }
+
     }
 }

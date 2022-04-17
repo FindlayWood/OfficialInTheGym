@@ -29,13 +29,18 @@ class ExerciseDiscoveryCoordinator: NSObject, Coordinator {
 extension ExerciseDiscoveryCoordinator: ClipSelectorFlow {
     
     // MARK: - Show Clip
-    func clipSelected(_  model: ClipModel) {
-        let keyModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
-        let vc = ViewClipViewController()
-        vc.viewModel.keyClipModel = keyModel
-        vc.modalPresentationStyle = .custom
-        vc.transitioningDelegate = self
-        navigationController.present(vc, animated: true)
+    func clipSelected(_  model: ClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC) {
+        let keyClipModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
+        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate)
+        childCoordinators.append(child)
+        child.start()
+        
+//        let keyModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
+//        let vc = ViewClipViewController()
+//        vc.viewModel.keyClipModel = keyModel
+//        vc.modalPresentationStyle = .custom
+//        vc.transitioningDelegate = self
+//        navigationController.present(vc, animated: true)
 //        navigationController.present(vc, animated: true, completion: nil)
     }
 }
@@ -53,5 +58,5 @@ extension ExerciseDiscoveryCoordinator: UIViewControllerTransitioningDelegate {
 
 // MARK: - Clip Selector Flow
 protocol ClipSelectorFlow: AnyObject {
-    func clipSelected(_ model: ClipModel)
+    func clipSelected(_ model: ClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC)
 }

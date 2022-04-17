@@ -10,7 +10,7 @@ import UIKit
 import SCLAlertView
 import Combine
 
-class DiscoverPageViewController: UIViewController {
+class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
     
     // MARK: - Properties
     var coordinator: DiscoverCoordinator?
@@ -22,6 +22,10 @@ class DiscoverPageViewController: UIViewController {
     var dataSource: DiscoverPageDataSource!
     
     private var subscriptions = Set<AnyCancellable>()
+    
+    // MARK: - Clip Animation Variables
+    var selectedCell: ClipCollectionCell?
+    var selectedCellImageViewSnapshot: UIView?
 
     // MARK: - View
     override func viewDidLoad() {
@@ -47,7 +51,15 @@ class DiscoverPageViewController: UIViewController {
         dataSource.itemSelected
             .sink { [weak self] in self?.viewModel.itemSelected($0)}
             .store(in: &subscriptions)
+        
+        dataSource.selectedClip
+            .sink { [weak self] selectedClip in
+                self?.selectedCell = selectedClip.selectedCell
+                self?.selectedCellImageViewSnapshot = selectedClip.snapshot
+            }
+            .store(in: &subscriptions)
     }
+    
 
     // MARK: - View Model
     func initViewModel(){
@@ -76,6 +88,10 @@ class DiscoverPageViewController: UIViewController {
             .sink { [weak self] in self?.dataSource.updateProgram(with: $0)}
             .store(in: &subscriptions)
         
+        viewModel.clipSelected
+            .sink { [weak self] in self?.clipSelected($0)}
+            .store(in: &subscriptions)
+        
         viewModel.loadWorkouts()
         viewModel.loadExercises()
         viewModel.loadClips()
@@ -89,6 +105,9 @@ class DiscoverPageViewController: UIViewController {
 extension DiscoverPageViewController {
     @IBAction func searchTapped(_ sender: UIButton) {
         coordinator?.search()
+    }
+    func clipSelected(_ model: ClipModel) {
+        coordinator?.clipSelected(model, fromViewControllerDelegate: self)
     }
 }
 

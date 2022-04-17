@@ -17,7 +17,8 @@ class ViewClipView: UIView {
         view.contentMode = .scaleAspectFill
         view.backgroundColor = .lightGray
         view.layer.cornerRadius = 8
-        view.translatesAutoresizingMaskIntoConstraints = false
+        view.clipsToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = true
         return view
     }()
     var backButton: UIButton = {
@@ -123,7 +124,7 @@ class ViewClipView: UIView {
 private extension ViewClipView {
     
     func setupUI() {
-        addSubview(thumbnailImageView)
+//        addSubview(thumbnailImageView)
         addSubview(backButton)
         addSubview(loadingIndicator)
         addSubview(progressBar)
@@ -148,10 +149,10 @@ private extension ViewClipView {
     func constrainView() {
         NSLayoutConstraint.activate([
             
-            thumbnailImageView.topAnchor.constraint(equalTo: topAnchor),
-            thumbnailImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            thumbnailImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            thumbnailImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+//            thumbnailImageView.topAnchor.constraint(equalTo: topAnchor),
+//            thumbnailImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+//            thumbnailImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+//            thumbnailImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
             backButton.widthAnchor.constraint(equalToConstant: 40),
             backButton.heightAnchor.constraint(equalToConstant: 40),
@@ -192,10 +193,14 @@ extension ViewClipView {
     public func setLoading(to loading: Bool) {
         if loading {
             loadingIndicator.startAnimating()
-            thumbnailImageView.isHidden = false
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.thumbnailImageView.isHidden = false
+            }
         } else {
             loadingIndicator.stopAnimating()
-            thumbnailImageView.isHidden = true
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.thumbnailImageView.isHidden = true
+            }
         }
     }
     

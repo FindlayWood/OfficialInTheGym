@@ -14,6 +14,7 @@ class ProfileDataSource: NSObject {
     // MARK: - Publisher
     @Published var selectedIndex: Int = 0
     var itemSelected = PassthroughSubject<ProfilePageItems,Never>()
+    var cellSelected = PassthroughSubject<SelectedClip,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
@@ -21,6 +22,8 @@ class ProfileDataSource: NSObject {
     private lazy var dataSource = makeDataSource()
     
     private var subscriptions = Set<AnyCancellable>()
+    
+    var publicProfile: Bool = false
     
     // MARK: - Initializer
     init(collectionView: UICollectionView) {
@@ -42,6 +45,9 @@ class ProfileDataSource: NSObject {
             case .profileInfo(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileInfoCollectionViewCell.reuseID, for: indexPath) as! ProfileInfoCollectionViewCell
                 cell.configure(with: model)
+                if self.publicProfile {
+                    cell.infoView.setFollowButton(to: .loading)
+                }
                 return cell
             case .post(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.reuseID, for: indexPath) as! PostCollectionViewCell
@@ -90,6 +96,13 @@ class ProfileDataSource: NSObject {
         currentSnapshot.appendItems([items], toSection: .UserInfo)
         dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
+    func updatePublicUserInfo(with user: Users) {
+        publicProfile = true
+        let items = ProfilePageItems.profileInfo(user)
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.appendItems([items], toSection: .UserInfo)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
+    }
     
     // MARK: - Update Posts
     func updatePosts(with models: [post]) {
@@ -133,7 +146,17 @@ class ProfileDataSource: NSObject {
 // MARK: - Delegate
 extension ProfileDataSource: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? ExerciseClipsCollectionCell {
+            let snapshot = cell.thumbnailImageView.snapshotView(afterScreenUpdates: false)
+            cellSelected.send(SelectedClip(selectedCell: cell, snapshot: snapshot))
+        }
         guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
         itemSelected.send(item)
     }
+}
+
+
+struct SelectedClip {
+    var selectedCell: ClipCollectionCell?
+    var snapshot: UIView?
 }

@@ -68,12 +68,17 @@ extension LiveWorkoutDisplayCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func viewClip(_ clipModel: WorkoutClipModel) {
+    func viewClip(_ clipModel: WorkoutClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC) {
         let keyClipModel = KeyClipModel(clipKey: clipModel.clipKey, storageURL: clipModel.storageURL)
-        let vc = ViewClipViewController()
-        vc.viewModel.keyClipModel = keyClipModel
-        navigationController.present(vc, animated: true, completion: nil)
+        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate)
+        childCoordinators.append(child)
+        child.start()
         
+//        let keyClipModel = KeyClipModel(clipKey: clipModel.clipKey, storageURL: clipModel.storageURL)
+//        let vc = ViewClipViewController()
+//        vc.viewModel.keyClipModel = keyClipModel
+//        navigationController.present(vc, animated: true, completion: nil)
+//
     }
     func showDescriptions(for exercise: ExerciseModel) {
         let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise)

@@ -41,7 +41,7 @@ class UIProfileInfoView: UIView {
     }()
     var followButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Follow", for: .normal)
+//        button.setTitle("Follow", for: .normal)
         button.backgroundColor = .darkColour
         button.setTitleColor(.white, for: .normal)
         button.addViewShadow(with: .darkColour)
@@ -58,8 +58,19 @@ class UIProfileInfoView: UIView {
         label.font = .systemFont(ofSize: 14, weight: .regular)
         label.textColor = .darkGray
         label.numberOfLines = 0
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    var loadingIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.hidesWhenStopped = true
+        view.color = .white
+        view.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        view.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     lazy var stack: UIStackView = {
@@ -118,12 +129,40 @@ extension UIProfileInfoView {
     public func setFollowingCount(to count: Int) {
         followerView.setFollowing(to: count)
     }
-    public func addFollowButton(_ following: Bool) {
-        followButton.isHidden = false
+    func addFollowButton(_ following: Bool) {
+        loadingIndicator.stopAnimating()
+        loadingIndicator.removeFromSuperview()
         followButton.setTitle(following ? "Following" : "Follow", for: .normal)
+        followButton.setTitleColor(following ? .darkColour : .white, for: .normal)
         followButton.backgroundColor = following ? .white : .darkColour
         followButton.isUserInteractionEnabled = following ? false : true
         followButton.layer.borderWidth = following ? 2 : 0
         followButton.layer.borderColor = following ? UIColor.darkColour.cgColor : nil
+        if !following { followButton.addViewShadow(with: .darkColour)}
     }
+    public func setFollowButton(to stage: FollowButtonStage) {
+        followButton.isHidden = false
+        switch stage {
+        case .loading:
+            setLoadingButton()
+        case .following:
+            addFollowButton(true)
+        case .follow:
+            addFollowButton(false)
+        }
+    }
+    func setLoadingButton() {
+        followButton.addSubview(loadingIndicator)
+        loadingIndicator.startAnimating()
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: followButton.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: followButton.centerYAnchor)
+        ])
+    }
+}
+
+enum FollowButtonStage {
+    case loading
+    case following
+    case follow
 }

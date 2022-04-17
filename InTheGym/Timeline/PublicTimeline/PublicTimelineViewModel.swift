@@ -14,6 +14,10 @@ class PublicTimelineViewModel {
     // MARK: - Publishers
     var postPublisher = CurrentValueSubject<[post],Never>([])
     
+    var savedWorkouts = CurrentValueSubject<[SavedWorkoutModel],Never>([])
+    
+    var clipPublisher = CurrentValueSubject<[ClipModel],Never>([])
+    
     var followerCountPublisher = CurrentValueSubject<Int,Never>(0)
     
     var followingCountPublisher = CurrentValueSubject<Int,Never>(0)
@@ -21,6 +25,8 @@ class PublicTimelineViewModel {
     var isFollowingPublisher = CurrentValueSubject<Bool,Never>(false)
     
     var errorLikingPost = PassthroughSubject<Error,Never>()
+    
+    var errorFetchingWorkouts = PassthroughSubject<Error,Never>()
     
     var workoutSelected = PassthroughSubject<WorkoutModel,Never>()
     
@@ -66,10 +72,59 @@ class PublicTimelineViewModel {
             switch result {
             case .success(let posts):
                 self?.postPublisher.send(posts)
-//                self?.isLoading = false
-//                self?.reloadTableViewClosure?()
             case .failure(_):
                 print("failed")
+                break
+            }
+        }
+    }
+    
+    // MARK: - Fetching functions
+    func fetchWorkoutKeys() {
+        let referencesModel = SavedWorkoutsReferences(id: user.uid)
+        apiService.fetchKeys(from: referencesModel) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(let keys):
+                self.loadWorkouts(from: keys)
+            case .failure(let error):
+                self.errorFetchingWorkouts.send(error)
+            }
+        }
+    }
+    
+    func loadWorkouts(from keys: [String]) {
+        let savedKeysModel = keys.map { SavedWorkoutKeyModel(id: $0) }
+        apiService.fetchRange(from: savedKeysModel, returning: SavedWorkoutModel.self) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(let savedWorkoutModels):
+                self.savedWorkouts.send(savedWorkoutModels)
+            case .failure(let error):
+                self.errorFetchingWorkouts.send(error)
+            }
+        }
+    }
+    
+    // MARK: - Fetch Clips
+    func fetchClipKeys() {
+        let searchModel = UserClipsModel(id: user.uid)
+        apiService.fetchInstance(of: searchModel, returning: KeyClipModel.self) { [weak self] result in
+            switch result {
+            case .success(let models):
+                self?.loadClips(from: models)
+            case .failure(_):
+                break
+            }
+        }
+    }
+    func loadClips(from keys: [KeyClipModel]) {
+        apiService.fetchRange(from: keys, returning: ClipModel.self) { [weak self] result in
+            switch result {
+            case .success(var models):
+                models.sort { $0.time < $1.time }
+                self?.clipPublisher.send(models)
+            case .failure(_):
                 break
             }
         }

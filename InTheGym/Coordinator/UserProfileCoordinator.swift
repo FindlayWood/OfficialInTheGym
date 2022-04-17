@@ -79,6 +79,28 @@ extension UserProfileCoordinator {
     }
 }
 
+// MARK: - Show Clip
+extension UserProfileCoordinator {
+    func clipSelected(_  model: ClipModel) {
+        let keyModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
+        let vc = ViewClipViewController()
+        vc.viewModel.keyClipModel = keyModel
+        vc.modalPresentationStyle = .custom
+        vc.transitioningDelegate = self
+        navigationController.present(vc, animated: true)
+    }
+}
+
+// MARK: - Custom Clip Picker
+extension UserProfileCoordinator: UIViewControllerTransitioningDelegate {
+
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        let controller = BottomViewPresentationController(presentedViewController: presented, presenting: presenting)
+        controller.viewHeightPrecentage = 1
+        return controller
+    }
+}
+
 
 //MARK: - Navigation Controller Delegate Methods
 extension UserProfileCoordinator: UINavigationControllerDelegate {

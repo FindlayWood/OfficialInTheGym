@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class ExerciseClipsViewController: UIViewController {
+class ExerciseClipsViewController: UIViewController, CustomAnimatingClipFromVC {
     
     // MARK: - Coordinator
     weak var coordinator: ClipSelectorFlow?
@@ -22,6 +22,10 @@ class ExerciseClipsViewController: UIViewController {
     var dataSource: ExerciseClipsDataSource!
     
     private var subscriptions = Set<AnyCancellable>()
+    
+    // MARK: - Clip Animation Variables
+    var selectedCell: ClipCollectionCell?
+    var selectedCellImageViewSnapshot: UIView?
     
     // MARK: - View
     override func viewDidLoad() {
@@ -48,6 +52,13 @@ class ExerciseClipsViewController: UIViewController {
         
         dataSource.clipSelected
             .sink { [weak self] in self?.clipSelected($0) }
+            .store(in: &subscriptions)
+        
+        dataSource.selectedCell
+            .sink { [weak self] selectedCell in
+                self?.selectedCell = selectedCell.selectedCell
+                self?.selectedCellImageViewSnapshot = selectedCell.snapshot
+            }
             .store(in: &subscriptions)
     }
     
@@ -81,7 +92,7 @@ extension ExerciseClipsViewController {
     }
     
     func clipSelected(_ model: ClipModel) {
-        coordinator?.clipSelected(model)
+        coordinator?.clipSelected(model, fromViewControllerDelegate: self)
 //        let keyModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
 //        let vc = ViewClipViewController()
 //        vc.viewModel.keyClipModel = keyModel

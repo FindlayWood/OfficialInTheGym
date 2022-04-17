@@ -10,7 +10,7 @@ import UIKit
 import SCLAlertView
 import Combine
 
-class MyProfileViewController: UIViewController {
+class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
     
     var coordinator: MyProfileCoordinator?
     
@@ -22,12 +22,16 @@ class MyProfileViewController: UIViewController {
     var dataSource: ProfileDataSource!
     
     var subscriptions = Set<AnyCancellable>()
+    
+    var selectedCell: ClipCollectionCell?
+    var selectedCellImageViewSnapshot: UIView?
 
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
+
         showFirstMessage()
         initDataSource()
         initViewModel()
@@ -63,16 +67,24 @@ class MyProfileViewController: UIViewController {
         
         dataSource.itemSelected
             .sink { [weak self] item in
+                guard let self = self else {return}
                 switch item {
                 case .post(let post):
-                    self?.showCommentSection(for: post)
+                    self.showCommentSection(for: post)
                 case .clip(let clip):
-                    self?.coordinator?.clipSelected(clip)
+                    self.coordinator?.clipSelected(clip, fromViewControllerDelegate: self)
                 case .workout(let workout):
-                    self?.coordinator?.showSavedWorkout(workout)
+                    self.coordinator?.showSavedWorkout(workout)
                 default:
                     break
                 }
+            }
+            .store(in: &subscriptions)
+        
+        dataSource.cellSelected
+            .sink { [weak self] selectedCellModel in
+                self?.selectedCell = selectedCellModel.selectedCell
+                self?.selectedCellImageViewSnapshot = selectedCellModel.snapshot
             }
             .store(in: &subscriptions)
         
@@ -180,3 +192,5 @@ extension MyProfileViewController {
         self.tabBarController?.tabBar.items?[3].badgeValue = nil
     }
 }
+
+

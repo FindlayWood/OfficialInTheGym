@@ -60,8 +60,11 @@ extension DiscoverCoordinator {
         
     }
     
-    func clipSelected(_ model: ClipModel) {
-        
+    func clipSelected(_ model: ClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC) {
+        let keyClipModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
+        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate)
+        childCoordinators.append(child)
+        child.start()
     }
     
     

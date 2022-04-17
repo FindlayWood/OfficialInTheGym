@@ -93,7 +93,7 @@ class RequestsDataSource: NSObject {
 // MARK: - Delegate
 extension RequestsDataSource: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        guard let user = dataSource.itemIdentifier(for: indexPath) else {return}
-//        userSelected.send(user)
+        guard let model = dataSource.itemIdentifier(for: indexPath) else {return}
+        userSelected.send(model.user)
     }
 }

@@ -20,7 +20,7 @@ class ViewClipViewModel: NSObject {
     
     var failedToPreparePublihser = PassthroughSubject<Void,Never>()
     
-    @Published var isLoading: Bool = false
+    @Published var isLoading: Bool = true
     
     // MARK: - Properties
     var keyClipModel: KeyClipModel!

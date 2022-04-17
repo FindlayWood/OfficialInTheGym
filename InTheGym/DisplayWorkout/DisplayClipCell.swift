@@ -10,13 +10,13 @@ import Foundation
 import UIKit
 import AVKit
 
-class DisplayClipCell: UICollectionViewCell {
+class DisplayClipCell: UICollectionViewCell, ClipCollectionCell {
     
     // MARK: - Properties
     static var reuseID = "DisplayClipCellReuseID"
     
     // MARK: - Subviews
-    var thumbnailImage: UIImageView = {
+    var thumbnailImageView: UIImageView = {
        let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.layer.masksToBounds = true
@@ -34,7 +34,7 @@ class DisplayClipCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
-        thumbnailImage.image = nil
+        thumbnailImageView.image = nil
     }
 }
 private extension DisplayClipCell {
@@ -44,15 +44,15 @@ private extension DisplayClipCell {
         layer.borderWidth = 2
         layer.borderColor = UIColor.black.cgColor
         layer.masksToBounds = true
-        addSubview(thumbnailImage)
+        addSubview(thumbnailImageView)
         constrainView()
     }
     
     func constrainView() {
-        NSLayoutConstraint.activate([thumbnailImage.leadingAnchor.constraint(equalTo: leadingAnchor),
-                                     thumbnailImage.topAnchor.constraint(equalTo: topAnchor),
-                                     thumbnailImage.trailingAnchor.constraint(equalTo: trailingAnchor),
-                                     thumbnailImage.bottomAnchor.constraint(equalTo: bottomAnchor)])
+        NSLayoutConstraint.activate([thumbnailImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                                     thumbnailImageView.topAnchor.constraint(equalTo: topAnchor),
+                                     thumbnailImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                                     thumbnailImageView.bottomAnchor.constraint(equalTo: bottomAnchor)])
     }
 }
 
@@ -62,7 +62,7 @@ extension DisplayClipCell {
         let thumbnailDownloadModel = ClipThumbnailDownloadModel(id: model.clipKey)
         ImageCache.shared.loadThumbnail(from: thumbnailDownloadModel) { [weak self] result in
             let image = try? result.get()
-            self?.thumbnailImage.image = image
+            self?.thumbnailImageView.image = image
         }
     }
 }

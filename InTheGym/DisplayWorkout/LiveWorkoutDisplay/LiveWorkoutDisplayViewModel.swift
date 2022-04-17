@@ -51,6 +51,7 @@ class LiveWorkoutDisplayViewModel {
             case .failure(_): break
             }
         }
+        FirebaseAPIWorkoutManager.shared.checkForCompletionStats(name: exercise.exercise, rpe: score)
     }
     
     func completed() {
@@ -70,7 +71,7 @@ class LiveWorkoutDisplayViewModel {
     }
     
     func getExerciseCount() -> Int {
-        let currentExercises = workoutModel.exercises
+//        let currentExercises = workoutModel.exercises
         return workoutModel.exercises?.count ?? 0
     }
     
@@ -88,22 +89,16 @@ class LiveWorkoutDisplayViewModel {
 // MARK: - Exercise Adding Protocol
 extension LiveWorkoutDisplayViewModel: ExerciseAdding {
     func addExercise(_ exercise: ExerciseModel) {
-//        var currentExercises = exercises.value
-//        currentExercises.append(exercise)
-//        exercises.send(currentExercises)
-//        workoutModel.exercises?.append(exercise)
         if workoutModel.exercises == nil {
             workoutModel.exercises = [exercise]
         } else {
             workoutModel.exercises?.append(exercise)
         }
-//        exercises.value.append(exercise)
         addedExercise.send(exercise)
         // TODO: - Update Firebase
         let uploadModel = LiveWorkoutExerciseModel(workout: workoutModel, exercise: exercise)
         guard let uploadPoint = uploadModel.addExerciseModel() else {return}
-        print(uploadPoint)
-        apiService.multiLocationUpload(data: uploadPoint) { [weak self] result in
+        apiService.multiLocationUpload(data: uploadPoint) { result in
             switch result {
             case .success(()):
                 break
@@ -118,8 +113,7 @@ extension LiveWorkoutDisplayViewModel: ExerciseAdding {
         updatedExercise.send(exercise)
         let uploadModel = LiveWorkoutExerciseModel(workout: workoutModel, exercise: exercise)
         let uploadPoints = uploadModel.updateSetModel()
-        print(uploadPoints)
-        apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
+        apiService.multiLocationUpload(data: uploadPoints) { result in
             switch result {
             case .success(()):
                 break
@@ -128,6 +122,7 @@ extension LiveWorkoutDisplayViewModel: ExerciseAdding {
                 break
             }
         }
+        FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise, reps: exercise.reps?.last ?? 0, weight: exercise.weight?.last ?? "")
     }
 }
 

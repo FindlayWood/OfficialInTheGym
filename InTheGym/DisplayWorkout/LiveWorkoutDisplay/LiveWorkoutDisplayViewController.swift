@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class LiveWorkoutDisplayViewController: UIViewController {
+class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC {
     
     // MARK: - Properties
     weak var coordinator: LiveWorkoutDisplayCoordinator?
@@ -23,6 +23,10 @@ class LiveWorkoutDisplayViewController: UIViewController {
     var clipDataSource: ClipCollectionDataSource!
     
     private var subscriptions = Set<AnyCancellable>()
+    
+    // MARK: - Clip Animation
+    var selectedCell: ClipCollectionCell?
+    var selectedCellImageViewSnapshot: UIView?
 
     // MARK: - View
     override func viewDidLoad() {
@@ -87,7 +91,14 @@ class LiveWorkoutDisplayViewController: UIViewController {
         clipDataSource.updateTable(with: viewModel.getClips())
         
         clipDataSource.clipSelected
-            .sink { [weak self] in self?.coordinator?.viewClip($0)}
+            .sink { [weak self] in self?.clipSelected($0)}
+            .store(in: &subscriptions)
+        
+        clipDataSource.selectedCell
+            .sink { [weak self] selectedCell in
+                self?.selectedCell = selectedCell.selectedCell
+                self?.selectedCellImageViewSnapshot = selectedCell.snapshot
+            }
             .store(in: &subscriptions)
     }
 
@@ -178,5 +189,8 @@ extension LiveWorkoutDisplayViewController {
 //        let vc = ExerciseDescriptionViewController()
 //        vc.viewModel.exercise = DiscoverExerciseModel(exerciseName: exercise.exercise)
 //        navigationController?.pushViewController(vc, animated: true)
+    }
+    func clipSelected(_ model: WorkoutClipModel) {
+        coordinator?.viewClip(model, fromViewControllerDelegate: self)
     }
 }

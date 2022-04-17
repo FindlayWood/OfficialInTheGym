@@ -19,7 +19,7 @@ class PublicTimelineViewController: UIViewController {
     
     var viewModel = PublicTimelineViewModel()
     
-    var dataSource: PostsDataSource!
+    var dataSource: ProfileDataSource!
     
     private var subscriptions = Set<AnyCancellable>()
     
@@ -29,19 +29,10 @@ class PublicTimelineViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        display.tableview.backgroundColor = .darkColour
-        display.configure(with: viewModel.user)
-//        initUI()
         initDataSource()
         initViewModel()
-        initTargets()
-//        initRefreshControl()
-
-//        self.topViewIndicator.hidesWhenStopped = true
-        
-//        selection.prepare()
-        
     }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         display.frame = getFullViewableFrame()
@@ -55,110 +46,91 @@ class PublicTimelineViewController: UIViewController {
     
     // MARK: - Data Source
     func initDataSource() {
-        dataSource = .init(tableView: display.tableview)
+        dataSource = .init(collectionView: display.collectionView)
         
-        dataSource.userTapped
-            .sink { [weak self] in self?.viewModel.getUser(from: $0) }
+        dataSource.updatePublicUserInfo(with: viewModel.user)
+        
+        dataSource.$selectedIndex
+            .sink { [weak self] in self?.newSegmentSelected($0) }
             .store(in: &subscriptions)
         
-        dataSource.workoutTapped
-            .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
-            .store(in: &subscriptions)
-        
-        dataSource.likeButtonTapped
-            .sink { [weak self] in self?.viewModel.likeCheck($0) }
-            .store(in: &subscriptions)
-        
-        dataSource.postSelcted
-            .sink { [weak self] in self?.showCommentSection($0) }
+        dataSource.itemSelected
+            .sink { [weak self] item in
+                switch item {
+                case .post(let post):
+                    self?.showCommentSection(for: post)
+                case .clip(let clip):
+                    self?.coordinator?.clipSelected(clip)
+                case .workout(let workout):
+                    self?.coordinator?.showSavedWorkout(workout)
+                default:
+                    break
+                }
+            }
             .store(in: &subscriptions)
     }
     
-//    func initUI(){
-//        navigationItem.title = viewModel.user.username
-//
-//    }
+
     
     // MARK: - View Model
     func initViewModel(){
         
         viewModel.postPublisher
-            .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
-            .store(in: &subscriptions)
-        
-        viewModel.followerCountPublisher
-            .sink { [weak self] in self?.display.setFollowerCount(to: $0)}
-            .store(in: &subscriptions)
-        
-        viewModel.followingCountPublisher
-            .sink { [weak self] in self?.display.setFollowingCount(to: $0)}
-            .store(in: &subscriptions)
-        
-        viewModel.isFollowingPublisher
-            .sink { [weak self] in self?.display.setFollowing(to: $0) }
-            .store(in: &subscriptions)
-        
-        viewModel.workoutSelected
-            .sink { [weak self] in self?.coordinator?.showWorkout($0) }
-            .store(in: &subscriptions)
-        
-        viewModel.savedWorkoutSelected
-            .sink { [weak self] in self?.coordinator?.showSavedWorkout($0) }
-            .store(in: &subscriptions)
-        
-        viewModel.userSelected
-            .sink { [weak self] in self?.coordinator?.showUser(user: $0)}
-            .store(in: &subscriptions)
-
-        viewModel.reloadListener
-            .sink { [weak self] in self?.dataSource.reloadPost($0)}
-            .store(in: &subscriptions)
-        
-        viewModel.followSuccess
-            .sink { [weak self] success in
-                self?.display.setFollowing(to: success)
-                if !success {
-                    self?.displayTopMessage(with: "Error. Try again.")
+            .sink { [weak self] posts in
+                if self?.display.selectedIndex == 0 {
+                    self?.dataSource.updatePosts(with: posts)
                 }
             }
             .store(in: &subscriptions)
+        
+        viewModel.clipPublisher
+            .sink { [weak self] clips in
+                if self?.display.selectedIndex == 1 {
+                    self?.dataSource.updateClips(with: clips)
+                }
+            }
+            .store(in: &subscriptions)
+        
+        viewModel.savedWorkouts
+            .sink { [weak self] workouts in
+                if self?.display.selectedIndex == 2 {
+                    self?.dataSource.updateWorkouts(with: workouts)
+                }
+            }
+            .store(in: &subscriptions)
+
         
         viewModel.fetchPosts()
         viewModel.getFollowerCount()
         viewModel.checkFollowing()
     }
-    
-//    func initRefreshControl(){
-//        refreshControl = UIRefreshControl()
-//        refreshControl.tintColor = .white
-//        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-////        self.tableview.refreshControl = refreshControl
-//    }
-//    
-//    @objc func handleRefresh(){
-//        viewModel.followerCount()
-//        viewModel.isFollowing()
-//    }
-    // MARK: - Targets
-    func initTargets() {
-        display.followButton.addTarget(self, action: #selector(follow(_:)), for: .touchUpInside)
-        display.followerView.accountTypeButton.addTarget(self, action: #selector(showCreatedWorkouts(_:)), for: .touchUpInside)
-    }
+
     
     // MARK: - Actions
-    
-    func showCommentSection(_ post: post) {
+    func newSegmentSelected(_ newIndex: Int) {
+        display.selectedIndex = newIndex
+        switch newIndex {
+        case 0:
+            dataSource.updatePosts(with: viewModel.postPublisher.value)
+        case 1:
+            dataSource.updateClips(with: viewModel.clipPublisher.value)
+            break
+        case 2:
+            dataSource.updateWorkouts(with: viewModel.savedWorkouts.value)
+        default:
+            break
+        }
+    }
+
+    func showCommentSection(for post: post) {
         coordinator?.showCommentSection(for: post, with: viewModel.reloadListener)
     }
-    
     @IBAction func follow(_ sender: UIButton) {
         viewModel.follow()
     }
-    
     @IBAction func showCreatedWorkouts(_ sender:UIButton){
         coordinator?.showCreatedWorkouts(for: viewModel.user)
 
     }
-
 }
 

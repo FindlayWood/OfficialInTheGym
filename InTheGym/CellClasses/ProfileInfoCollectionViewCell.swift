@@ -68,7 +68,18 @@ private extension ProfileInfoCollectionViewCell {
             .sink { [weak self] in self?.infoView.setFollowingCount(to: $0)}
             .store(in: &subscriptions)
         
+        viewModel.$isFollowing
+            .compactMap { $0 }
+            .sink { [weak self] following in
+                if following {
+                    self?.infoView.setFollowButton(to: .following)
+                } else {
+                    self?.infoView.setFollowButton(to: .follow)
+                }}
+            .store(in: &subscriptions)
+        
         viewModel.getFollowerCount()
+        viewModel.checkUserModel()
     }
 }
 

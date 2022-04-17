@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class ExerciseClipsCollectionCell: UICollectionViewCell {
+final class ExerciseClipsCollectionCell: UICollectionViewCell, ClipCollectionCell {
     
     // MARK: - Properties
     static let reuseID = "ExerciseClipsCollectionCellreuseID"

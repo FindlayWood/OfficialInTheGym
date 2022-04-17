@@ -14,6 +14,7 @@ class ClipCollectionDataSource: NSObject {
     
     // MARK: - Publisher
     var clipSelected = PassthroughSubject<WorkoutClipModel, Never>()
+    var selectedCell = PassthroughSubject<SelectedClip,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
@@ -55,7 +56,12 @@ class ClipCollectionDataSource: NSObject {
 // MARK: - Collection View Delegate
 extension ClipCollectionDataSource: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let clip = dataSource.itemIdentifier(for: indexPath) else {return}
+        guard
+            let clip = dataSource.itemIdentifier(for: indexPath),
+            let cell = collectionView.cellForItem(at: indexPath) as? ClipCollectionCell,
+            let snapshot = cell.thumbnailImageView.snapshotView(afterScreenUpdates: false)
+        else {return}
+        selectedCell.send(SelectedClip(selectedCell: cell, snapshot: snapshot))
         clipSelected.send(clip)
     }
 }

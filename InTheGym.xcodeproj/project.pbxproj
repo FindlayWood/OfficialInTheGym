@@ -32,6 +32,8 @@
 		7403A61826C9B345000588CE /* MoreGroupInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61726C9B345000588CE /* MoreGroupInfoView.swift */; };
 		7403A61B26C9B3B3000588CE /* UITableViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61A26C9B3B3000588CE /* UITableViewView.swift */; };
 		7403A61D26CAD989000588CE /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61C26CAD989000588CE /* TextViewTableViewCell.swift */; };
+		7403D05A280B6F9900268CEC /* ShowClipCustomTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403D059280B6F9900268CEC /* ShowClipCustomTransition.swift */; };
+		7403D05C280B7E6C00268CEC /* ClipProfileCustomCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403D05B280B7E6C00268CEC /* ClipProfileCustomCoordinator.swift */; };
 		74095A79257FE66500CF335A /* MakePostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74095A78257FE66500CF335A /* MakePostViewController.swift */; };
 		7413A066255D743E009C7F97 /* AlertTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7413A065255D743E009C7F97 /* AlertTopView.swift */; };
 		74163A4422E37089005A7D2E /* ButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74163A4322E37089005A7D2E /* ButtonExtension.swift */; };
@@ -863,6 +865,8 @@
 		7403A61726C9B345000588CE /* MoreGroupInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreGroupInfoView.swift; sourceTree = "<group>"; };
 		7403A61A26C9B3B3000588CE /* UITableViewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewView.swift; sourceTree = "<group>"; };
 		7403A61C26CAD989000588CE /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
+		7403D059280B6F9900268CEC /* ShowClipCustomTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowClipCustomTransition.swift; sourceTree = "<group>"; };
+		7403D05B280B7E6C00268CEC /* ClipProfileCustomCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipProfileCustomCoordinator.swift; sourceTree = "<group>"; };
 		74095A78257FE66500CF335A /* MakePostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakePostViewController.swift; sourceTree = "<group>"; };
 		7413A065255D743E009C7F97 /* AlertTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertTopView.swift; sourceTree = "<group>"; };
 		74163A4322E37089005A7D2E /* ButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonExtension.swift; sourceTree = "<group>"; };
@@ -1869,6 +1873,14 @@
 			path = ViewClasses;
 			sourceTree = "<group>";
 		};
+		7403D058280B6F7C00268CEC /* CustomTransitions */ = {
+			isa = PBXGroup;
+			children = (
+				7403D059280B6F9900268CEC /* ShowClipCustomTransition.swift */,
+			);
+			path = CustomTransitions;
+			sourceTree = "<group>";
+		};
 		7416CCC3264ED1FD0043B1C2 /* WorkoutCreationFolder */ = {
 			isa = PBXGroup;
 			children = (
@@ -2839,6 +2851,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				7403D058280B6F7C00268CEC /* CustomTransitions */,
 				743E92BB280779450029F447 /* Goals */,
 				743E92B32807359B0029F447 /* DataStructures */,
 				74EE4EE02804C51C00051451 /* Breathing */,
@@ -3799,6 +3812,7 @@
 			isa = PBXGroup;
 			children = (
 				74FDB5BB26B0C474000649CC /* ViewClipCoordinator.swift */,
+				7403D05B280B7E6C00268CEC /* ClipProfileCustomCoordinator.swift */,
 			);
 			path = ClipCoordinator;
 			sourceTree = "<group>";
@@ -4256,6 +4270,7 @@
 				74F45CC1260A9CB700AF16DF /* PublicTimelineViewController.swift in Sources */,
 				74D31EA025FC18950024CC05 /* FollowersDisplayTableViewCell.swift in Sources */,
 				743330B7278B4698005A0C45 /* AmrapCreationTableViewCell.swift in Sources */,
+				7403D05A280B6F9900268CEC /* ShowClipCustomTransition.swift in Sources */,
 				7444D07326CE8F070009C7A6 /* AddGroupWorkoutCoordinator.swift in Sources */,
 				74F2CCE826E3817000D7AD79 /* AddMoreNoteView.swift in Sources */,
 				7479812727DA31DE00CF3F9B /* ClipCache.swift in Sources */,
@@ -4343,6 +4358,7 @@
 				7403A60526C5591D000588CE /* GroupHomePageView.swift in Sources */,
 				743A0501276A873F0027B752 /* CommentSectionViewModel.swift in Sources */,
 				7429783A26C151AF0023365E /* CreateNewGroupViewController.swift in Sources */,
+				7403D05C280B7E6C00268CEC /* ClipProfileCustomCoordinator.swift in Sources */,
 				74FDB5BC26B0C474000649CC /* ViewClipCoordinator.swift in Sources */,
 				742565A7277E3C3F00A7764D /* GroupPosts.swift in Sources */,
 				74EE4ED127E8B5F100051451 /* MyClipsChildViewController.swift in Sources */,

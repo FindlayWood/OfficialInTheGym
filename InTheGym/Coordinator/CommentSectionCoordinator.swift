@@ -24,6 +24,7 @@ class CommentSectionCoordinator: NSObject, Coordinator {
     }
     
     func start() {
+        navigationController.delegate = self
         let vc = CommentSectionViewController()
         vc.coordinator = self
         vc.viewModel.mainPost = mainPost
@@ -70,4 +71,8 @@ extension CommentSectionCoordinator: UIViewControllerTransitioningDelegate {
         controller.viewHeightPrecentage = 0.8
         return controller
     }
+}
+
+extension CommentSectionCoordinator: UINavigationControllerDelegate {
+    
 }

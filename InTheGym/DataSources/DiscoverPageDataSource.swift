@@ -13,6 +13,7 @@ class DiscoverPageDataSource: NSObject {
     
     // MARK: - Publisher
     var itemSelected = PassthroughSubject<DiscoverPageItems,Never>()
+    var selectedClip = PassthroughSubject<SelectedClip,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
@@ -111,6 +112,10 @@ class DiscoverPageDataSource: NSObject {
 // MARK: - Delegate
 extension DiscoverPageDataSource: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? ExerciseClipsCollectionCell {
+            let snapshot = cell.thumbnailImageView.snapshotView(afterScreenUpdates: false)
+            self.selectedClip.send(SelectedClip(selectedCell: cell, snapshot: snapshot))
+        }
         guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
         itemSelected.send(item)
     }

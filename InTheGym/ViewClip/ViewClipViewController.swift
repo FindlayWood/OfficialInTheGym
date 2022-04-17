@@ -20,6 +20,8 @@ class ViewClipViewController: UIViewController {
     
     weak var coordinator: ViewClipFlow?
     
+    weak var newCoordinator: ClipProfileCustomCoordinator?
+    
     var player: AVPlayer?
     
 //    var storageURL: String!
@@ -56,6 +58,7 @@ class ViewClipViewController: UIViewController {
 //        showLoading()
         addObservers()
         initTargets()
+        addThumbnail()
     }
     
     override func viewDidLayoutSubviews() {
@@ -67,7 +70,7 @@ class ViewClipViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-                
+        
         let thumbnailDownloadModel = ClipThumbnailDownloadModel(id: viewModel.keyClipModel.clipKey)
         ImageCache.shared.loadThumbnail(from: thumbnailDownloadModel) { [weak self] result in
             let image = try? result.get()
@@ -89,6 +92,13 @@ class ViewClipViewController: UIViewController {
 //        let currentTime = player.currentTime()
 //        print(currentTime)
 //        print(currentVideoLength)
+    }
+    
+    func addThumbnail() {
+        print("view bounds are \(view.bounds)")
+        display.thumbnailImageView.frame = view.bounds
+        view.insertSubview(display.thumbnailImageView, at: 0)
+        print("thumbnail bounds are \(display.thumbnailImageView.bounds)")
     }
     
 
@@ -123,7 +133,7 @@ class ViewClipViewController: UIViewController {
             .sink { [weak self] in self?.premiumAccountAlert() }
             .store(in: &subscriptions)
             
-        viewModel.fetchClip()
+//        viewModel.fetchClip()
     }
     
     func setAsset(_ asset: AVAsset) {
@@ -177,7 +187,9 @@ class ViewClipViewController: UIViewController {
     
     // MARK: - Actions
     @objc func clipFinished() {
-        self.dismiss(animated: true, completion: nil)
+        display.thumbnailImageView.isHidden = false
+        newCoordinator?.dismissVC()
+//        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
     @objc func togglePause() {
@@ -193,7 +205,9 @@ class ViewClipViewController: UIViewController {
     @objc func back() {
         guard let player = viewModel.playerPublisher.value else {return}
         player.pause()
-        self.dismiss(animated: true, completion: nil)
+        display.thumbnailImageView.isHidden = false
+        newCoordinator?.dismissVC()
+//        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Alert
@@ -228,7 +242,7 @@ class ViewClipViewController: UIViewController {
         
         switch sender.state {
         case .ended:
-            if translation.y > Constants.screenSize.height / 2 || sender.velocity(in: display).y > 3000 {
+            if translation.y > Constants.screenSize.height * 0.1 || sender.velocity(in: display).y > 3000 {
                 snapToState(.dismissed)
             } else {
                 snapToState(.fullScreen)
@@ -245,11 +259,13 @@ class ViewClipViewController: UIViewController {
                 self.view.bounds = self.originalFrame
             }
         case .dismissed:
-            UIView.animate(withDuration: 0.6) {
-                self.view.frame = self.disappearingFrame
-            } completion: { _ in
-                self.dismiss(animated: true, completion: nil)
-            }
+            newCoordinator?.dismissVC()
+//            UIView.animate(withDuration: 0.6) {
+//                self.view.frame = self.disappearingFrame
+//            } completion: { _ in
+//                self.newCoordinator?.dismissVC()
+//                self.dismiss(animated: true, completion: nil)
+//            }
         }
     }
 

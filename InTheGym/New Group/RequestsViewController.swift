@@ -57,6 +57,10 @@ class RequestsViewController: UIViewController {
         dataSource.declineSelected
             .sink { [weak self] in self?.viewModel.removeRequest($0)}
             .store(in: &subscriptions)
+        
+        dataSource.userSelected
+            .sink { [weak self] in self?.userSelected($0)}
+            .store(in: &subscriptions)
     }
 
     
@@ -68,6 +72,16 @@ class RequestsViewController: UIViewController {
             .store(in: &subscriptions)
         
         viewModel.fetchRequests()
+    }
+}
+
+// MARK: - Actions
+private extension RequestsViewController {
+    func userSelected(_ user: Users) {
+        let vc = PublicTimelineViewController()
+        vc.viewModel.user = user
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
