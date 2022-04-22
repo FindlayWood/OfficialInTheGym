@@ -69,8 +69,19 @@ from which the height of a jump can be measured. This feature is also a very new
   Stack
 </h1>
   - Swift
+  - (https://developer.apple.com/swift/)
   - UIKit
   - Combine
   - SwiftUI
   - Firebase
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/39130967/164758730-543f0199-01ad-4156-b726-ca67d1db9a78.png" width="30" height="30">(https://developer.apple.com/swift/)
+  <img src="https://user-images.githubusercontent.com/39130967/164715673-7826de10-148e-4afa-9902-ce2f6e8f2ec2.png" width="30"     height="30">
+  <img src="https://user-images.githubusercontent.com/39130967/164715704-8859e5a5-8313-4832-b9e3-575b88c842f6.png" width="30"     height="30">
+  <img src="https://user-images.githubusercontent.com/39130967/164715693-91305407-0215-4bed-950c-772c1f73d0c9.png" width="30"     height="30">
+</p>
+
+
+<img width="50" alt="UIKit" src="https://user-images.githubusercontent.com/39130967/164758836-70854f98-2973-4e45-9945-f282b2e504ab.png">
+<img width="50" alt="Firebase" src="https://user-images.githubusercontent.com/39130967/164758868-fe995259-307e-41c6-8a2d-55a525209a93.png">
