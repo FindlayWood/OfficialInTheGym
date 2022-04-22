@@ -58,3 +58,5 @@ VERTICAL JUMP MEASURING
 
 InTheGym includes a vertical jump measuring feature. This allows the user to record a video in slow motion and then choose the take off frame and the landing frame
 from which the height of a jump can be measured. This feature is also a very new feature and is still being improved on.
+![Simulator Screen Shot - iPhone 13 Pro Max - 2022-04-22 at 00 12 09](https://user-images.githubusercontent.com/39130967/164714582-1c003763-056c-4fe3-b2a2-8f1c36478968.png)
+
