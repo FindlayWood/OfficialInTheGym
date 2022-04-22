@@ -22,9 +22,6 @@ InTheGym is an app that allows users to create and share workouts.
 </h2>
 - Swift
 - UIKit
-
-
-- UIKit
 - Small use of SwiftUI (Hosting controller for swiftUI integration)
 - Combine
 - MVVM
