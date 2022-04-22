@@ -1,4 +1,7 @@
-# InTheGym
+<p align="center">
+  # InTheGym
+</p>
+
 This repository contains all the files for the app InTheGym.
 
 InTheGym is an app that allows users to create and share workouts.
