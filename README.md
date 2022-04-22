@@ -81,6 +81,8 @@ from which the height of a jump can be measured. This feature is also a very new
 [<img width="50" alt="Firebase" src="https://user-images.githubusercontent.com/39130967/164758868-fe995259-307e-41c6-8a2d-55a525209a93.png">]
 </p>
 
-[<img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="30"/>](https://github.com/)
+[<img src="https://user-images.githubusercontent.com/39130967/164758730-543f0199-01ad-4156-b726-ca67d1db9a78.png" width="50"/>](https://developer.apple.com/swift)
+[<img src="https://user-images.githubusercontent.com/39130967/164758836-70854f98-2973-4e45-9945-f282b2e504ab.png" width="50"/>](https://developer.apple.com/swift)
+[<img src="https://user-images.githubusercontent.com/39130967/164758868-fe995259-307e-41c6-8a2d-55a525209a93.png" width="50"/>](https://developer.apple.com/swift)
 
 
