@@ -1,6 +1,6 @@
-<p align="center">
-  # InTheGym
-</p>
+<h1 align="center">
+  InTheGym
+</h1>
 
 This repository contains all the files for the app InTheGym.
 
