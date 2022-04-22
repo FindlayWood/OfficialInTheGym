@@ -20,12 +20,12 @@ InTheGym is an app that allows users to create and share workouts.
 <h2>
   Development
 </h2>
-Swift
-UIKit
-Small use of SwiftUI (Hosting controller for swiftUI integration)
-Combine
-MVVM
-Coordinator pattern for navigation
+- Swift
+- UIKit
+- Small use of SwiftUI (Hosting controller for swiftUI integration)
+- Combine
+- MVVM
+- Coordinator pattern for navigation
 
 InTheGym uses Firebase as a backend to store all the workout and exercise data, UIKit to create screens (with a very small amount of SwiftUI),
 MVVM (Model-View-ViewModel) design pattern, the coordinator pattern for app navigation and screen reuse and recently makes use of Combine to give
