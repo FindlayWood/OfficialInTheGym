@@ -73,9 +73,9 @@ from which the height of a jump can be measured. This feature is also a very new
 <h1>
   Stack
 </h1>
-- Swift
-- UIKit
-- Combine
-- SwiftUI
-- Firebase
+  - Swift
+  - UIKit
+  - Combine
+  - SwiftUI
+  - Firebase
 
