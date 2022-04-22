@@ -32,6 +32,9 @@ InTheGym uses Firebase as a backend to store all the workout and exercise data, 
 MVVM (Model-View-ViewModel) design pattern, the coordinator pattern for app navigation and screen reuse and recently makes use of Combine to give
 the app a more reactive feel.
 
+<h2>
+  Features
+</h2>
 
 SIGN UP
 
@@ -51,9 +54,9 @@ A player user can,
   - monitor workload data
   - monitor exercise stats
 
-
-WORKOUTS
-
+<h2>
+  WORKOUTS
+</h2>
 Workouts are created by choosing a list of exercises. For every exercise you must choose the number of sets, the number of reps and then you have the 
 option to choose a weight, a time, a distance, a rest time and a note. Instead of choosing a regular exercise you have the option to create a circuit,
 an AMRAP or an EMOM. A circuit allows the selection of multiple exercises to be completed in a group (like a superset), an AMRAP (as many rounds as possible)
@@ -66,15 +69,13 @@ EXERCISE STATS
 InTheGym records stats everytime a user completes an exercise. The amount of reps completed, the amount of sets completed, the total amount of weight lifted, 
 the max weight lifted for every exercise, the average weight lifted for every exercise and the average RPE of each exercise.
 
-CLIPS
-
-Clips are short videos of exercises. InTheGym allows the user to record up to 30 second video clips of specific exercises. These short videos are then stored in 
-the Firebase database. Clips are a very new feature and are still being improved on.
-
-VERTICAL JUMP MEASURING
-
-InTheGym includes a vertical jump measuring feature. This allows the user to record a video in slow motion and then choose the take off frame and the landing frame
-from which the height of a jump can be measured. This feature is also a very new feature and is still being improved on.
+<h2>
+  Premium Features
+</h2>
+  
+  - Clips - Record up to 16 second video clips
+  - Vertical Jump Height Measure
+  - Programs
 
 <h1>
   Stack
