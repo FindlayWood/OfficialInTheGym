@@ -10,8 +10,6 @@
   <img src="https://user-images.githubusercontent.com/39130967/164714582-1c003763-056c-4fe3-b2a2-8f1c36478968.png" width="115"     height="250">
 </p>
 
-This repository contains all the files for the app InTheGym.
-
 InTheGym is an app that allows users to create and share workouts.
 
 InTheGym uses Firebase as a backend to store all the workout and exercise data, UIKit to create screens (with a very small amount of SwiftUI),
@@ -47,13 +45,6 @@ allows the selection of exercises and a time limit which then allows the user to
 an EMOM (every minute on the minute) also allows a selction of exercises and a time limit which then allows the user to complete given exercises every minute
 until the time limit is reached. This allows for huge customisation when creating workouts.
 
-
-DISCOVER PAGE
-
-InTheGym includes a discover page which allows users to discover new workouts and new users. The discover page features popular workouts and a WOD (Workout of the Day)
-which is chosen by us. Users can browse the discover page and save workouts that they might want to complete and view the profiles of other users.
-
-
 EXERCISE STATS
 
 InTheGym records stats everytime a user completes an exercise. The amount of reps completed, the amount of sets completed, the total amount of weight lifted, 
@@ -63,7 +54,6 @@ CLIPS
 
 Clips are short videos of exercises. InTheGym allows the user to record up to 30 second video clips of specific exercises. These short videos are then stored in 
 the Firebase database. Clips are a very new feature and are still being improved on.
-
 
 VERTICAL JUMP MEASURING
 
