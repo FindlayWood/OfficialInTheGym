@@ -3,6 +3,10 @@ This repository contains all the files for the app InTheGym.
 
 InTheGym is an app that allows users to create and share workouts.
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/39130967/164714582-1c003763-056c-4fe3-b2a2-8f1c36478968.png" width="115"     height="250">
+</p>
+
 InTheGym uses Firebase as a backend to store all the workout and exercise data, UIKit to create screens (with a very small amount of SwiftUI),
 MVVM (Model-View-ViewModel) design pattern, the coordinator pattern for app navigation and screen reuse and recently makes use of Combine to give
 the app a more reactive feel.
@@ -58,5 +62,4 @@ VERTICAL JUMP MEASURING
 
 InTheGym includes a vertical jump measuring feature. This allows the user to record a video in slow motion and then choose the take off frame and the landing frame
 from which the height of a jump can be measured. This feature is also a very new feature and is still being improved on.
-![Simulator Screen Shot - iPhone 13 Pro Max - 2022-04-22 at 00 12 09](https://user-images.githubusercontent.com/39130967/164714582-1c003763-056c-4fe3-b2a2-8f1c36478968.png)
 
