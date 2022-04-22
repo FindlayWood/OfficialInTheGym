@@ -4,11 +4,11 @@ This repository contains all the files for the app InTheGym.
 InTheGym is an app that allows users to create and share workouts.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/39130967/164714582-1c003763-056c-4fe3-b2a2-8f1c36478968.png" width="115"     height="250">
+  <img src="https://user-images.githubusercontent.com/39130967/164715709-beb8dfeb-00a2-4740-baef-d94304763e0a.png" width="115"     height="250">
   <img src="https://user-images.githubusercontent.com/39130967/164715673-7826de10-148e-4afa-9902-ce2f6e8f2ec2.png" width="115"     height="250">
   <img src="https://user-images.githubusercontent.com/39130967/164715704-8859e5a5-8313-4832-b9e3-575b88c842f6.png" width="115"     height="250">
   <img src="https://user-images.githubusercontent.com/39130967/164715693-91305407-0215-4bed-950c-772c1f73d0c9.png" width="115"     height="250">
-  <img src="https://user-images.githubusercontent.com/39130967/164715709-beb8dfeb-00a2-4740-baef-d94304763e0a.png" width="115"     height="250">
+  <img src="https://user-images.githubusercontent.com/39130967/164714582-1c003763-056c-4fe3-b2a2-8f1c36478968.png" width="115"     height="250">
 </p>
 
 InTheGym uses Firebase as a backend to store all the workout and exercise data, UIKit to create screens (with a very small amount of SwiftUI),
