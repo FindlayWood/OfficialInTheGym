@@ -82,6 +82,7 @@ class LiveWorkoutDisplayViewModel {
         newViewModel.exercise = currentExercise
         newViewModel.exercisekind = .live
         newViewModel.addingDelegate = self
+        newViewModel.addCompletedSet()
         return newViewModel
     }
 }

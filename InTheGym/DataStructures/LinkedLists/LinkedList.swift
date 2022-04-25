@@ -22,6 +22,7 @@ struct LinkedList<T> {
     }
     
     // MARK: - Push
+    /// Add element to the fron of the list
     mutating func push(_ value: T) {
         head = Node(value: value, next: head)
         
@@ -31,6 +32,7 @@ struct LinkedList<T> {
     }
     
     // MARK: - Append
+    /// Add Element to the end of the list
     mutating func append(_ value: T) {
         let node = Node(value: value)
         
@@ -43,6 +45,7 @@ struct LinkedList<T> {
     }
     
     // MARK: - Node At
+    /// Return the element at the specified index
     func node(at index: Int) -> Node<T>? {
         var currentIndex = 0
         var currentNode = head
@@ -77,6 +80,7 @@ struct LinkedList<T> {
     }
     
     // MARK: - Remove Last
+    /// Remove and return the last element
     mutating func removeLast() -> T? {
         guard let head = head else { return nil }
         guard head.next != nil else { return pop() }
@@ -96,13 +100,12 @@ struct LinkedList<T> {
     }
     
     // MARK: - Reverse
+    /// Reverse the order of the list
     mutating func reverseList() {
         
         var previous: Node<T>?
         var next: Node<T>?
         var currentNode: Node<T>? = head
-        
-//        currentNode = head
         
         while currentNode != nil {
             next = currentNode?.next
@@ -110,6 +113,5 @@ struct LinkedList<T> {
             previous = currentNode
             currentNode = next
         }
-        
     }
 }

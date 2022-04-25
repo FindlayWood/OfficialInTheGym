@@ -10,6 +10,11 @@ import Foundation
 
 class AddMoreToExerciseViewModel {
     
+    // MARK: - Publishers
+    
+    // MARK: - Properties
+    var exerciseCreationViewModel: ExerciseCreationViewModel!
+    
     let data: [AddMoreCellModel] = [.init(title: "Time", imageName: "clock_icon", value: Observable<String>()),
                                     .init(title: "Distance", imageName: "distance_icon", value: Observable<String>()),
                                     .init(title: "Rest Time", imageName: "restTime_icon", value: Observable<String>()),
@@ -18,6 +23,10 @@ class AddMoreToExerciseViewModel {
     var numberOfItems: Int {
         return data.count
     }
+    
+    // MARK: - Actions
+    
+    // MARK: - Functions
     
     func getData(at indexPath: IndexPath) -> AddMoreCellModel {
         return data[indexPath.row]

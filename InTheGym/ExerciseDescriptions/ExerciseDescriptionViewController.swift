@@ -25,19 +25,16 @@ class ExerciseDescriptionViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         initSubscriptions()
         descriptionsVC.viewModel.exerciseModel = viewModel.exercise
         descriptionsVC.coordinator = coordinator
         clipsVC.viewModel.exerciseModel = viewModel.exercise
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
     }
     
     override func viewWillAppear(_ animated: Bool) {

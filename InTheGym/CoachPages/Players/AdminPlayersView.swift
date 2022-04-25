@@ -21,6 +21,14 @@ class AdminPlayersView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    var iconButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.font = UIFont(name: "Menlo-Bold", size: 25)
+        button.setTitleColor(.darkColour, for: .normal)
+        button.setTitle("PLAYERS", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     var plusButton: UIButton = {
         let button = UIButton()
         let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
@@ -44,6 +52,18 @@ class AdminPlayersView: UIView {
         return view
     }()
     
+    var coachMenu: UIMenu {
+        let menu = UIMenu(title: "Options", children: [
+            UIAction(title: "My Workouts") { action in
+                print("my workouts")
+            },
+            UIAction(title: "My Programs") { action in
+                print("My Pograms")
+            }
+        ])
+        return menu
+    }
+    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -59,7 +79,7 @@ class AdminPlayersView: UIView {
 private extension AdminPlayersView {
     func setupUI() {
         backgroundColor = .white
-        addSubview(iconLabel)
+        addSubview(iconButton)
         addSubview(plusButton)
         addSubview(activityIndicator)
         addSubview(containerView)
@@ -68,17 +88,17 @@ private extension AdminPlayersView {
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            iconLabel.topAnchor.constraint(equalTo: topAnchor),
-            iconLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            iconLabel.heightAnchor.constraint(equalToConstant: 32),
+            iconButton.topAnchor.constraint(equalTo: topAnchor),
+            iconButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            iconButton.heightAnchor.constraint(equalToConstant: 32),
             
-            plusButton.centerYAnchor.constraint(equalTo: iconLabel.centerYAnchor),
+            plusButton.centerYAnchor.constraint(equalTo: iconButton.centerYAnchor),
             plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
             activityIndicator.centerYAnchor.constraint(equalTo: plusButton.centerYAnchor),
             activityIndicator.trailingAnchor.constraint(equalTo: plusButton.trailingAnchor),
             
-            containerView.topAnchor.constraint(equalTo: iconLabel.bottomAnchor, constant: 16),
+            containerView.topAnchor.constraint(equalTo: iconButton.bottomAnchor, constant: 16),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor)

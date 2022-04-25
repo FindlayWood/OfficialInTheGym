@@ -49,5 +49,26 @@ class CoachPlayerWorkoutViewController: UIViewController {
     func initDataSource() {
         childVC.dataSource.updateTable(with: viewModel.getAllExercises())
         
+        childVC.dataSource.showClipPublisher
+            .sink { [weak self] show in
+                guard let self = self else {return}
+                self.toggleClipCollection(showing: show, clips: self.viewModel.getClips())
+            }
+            .store(in: &subscriptions)
+        
+        // TODO: Need Coordinator
+//        childVC.clipDataSource.clipSelected
+//            .sink { [weak self] in self?.coordinator?.viewClip($0)}
+//            .store(in: &subscriptions)
+    }
+}
+
+private extension CoachPlayerWorkoutViewController {
+    func toggleClipCollection(showing: Bool, clips: [WorkoutClipModel]) {
+        if !clips.isEmpty && showing {
+            childVC.display.showClipCollection()
+        } else if !showing {
+            childVC.display.hideClipCollection()
+        }
     }
 }

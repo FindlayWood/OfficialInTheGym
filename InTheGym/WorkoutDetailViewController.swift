@@ -540,9 +540,9 @@ class WorkoutDetailViewController: UIViewController, UITableViewDelegate, UITabl
         if liveAdd == true && indexPath.row == setInt{
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let repsVC = storyboard.instantiateViewController(withIdentifier: "NewRepsViewController") as! NewRepsViewController
-            repsVC.fromLiveWorkout = true
-            repsVC.whichExercise = collectionView.tag
-            repsVC.workoutID = self.workoutID
+//            repsVC.fromLiveWorkout = true
+//            repsVC.whichExercise = collectionView.tag
+//            repsVC.workoutID = self.workoutID
             navigationController?.pushViewController(repsVC, animated: true)
         }
 

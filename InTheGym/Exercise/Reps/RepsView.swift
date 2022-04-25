@@ -14,7 +14,7 @@ class RepsView: UIView {
     // MARK: - Subviews
     lazy var topCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: generateTopLayout())
-        collection.backgroundColor = .white
+        collection.backgroundColor = .secondarySystemBackground
         collection.register(RepsCell.self, forCellWithReuseIdentifier: RepsCell.cellID)
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
@@ -32,7 +32,7 @@ class RepsView: UIView {
     
     var repLabel: UILabel = {
        let label = UILabel()
-        label.textColor = Constants.darkColour
+        label.textColor = .darkColour
         label.font = .systemFont(ofSize: 200, weight: .bold)
         label.textAlignment = .center
         label.text = "1"
@@ -54,7 +54,7 @@ class RepsView: UIView {
     
     lazy var bottomCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: generateBottomLayout())
-        collection.backgroundColor = .white
+        collection.backgroundColor = .secondarySystemBackground
         collection.register(SetsCell.self, forCellWithReuseIdentifier: SetsCell.cellID)
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
@@ -86,8 +86,7 @@ class RepsView: UIView {
     
     // MARK: - Initializer
     override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .white
+        super.init(frame: UIScreen.main.bounds)
         setupView()
     }
     
@@ -99,20 +98,18 @@ class RepsView: UIView {
     // MARK: - Layout Functions
     func generateTopLayout() -> UICollectionViewFlowLayout {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 5
-        layout.minimumLineSpacing = 5
+        layout.minimumLineSpacing = 8
         layout.itemSize = CGSize(width: 160, height: 120)
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         layout.scrollDirection = .horizontal
         return layout
     }
     
     func generateBottomLayout() -> UICollectionViewFlowLayout {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 5
-        layout.minimumLineSpacing = 5
+        layout.minimumLineSpacing = 8
         layout.itemSize = CGSize(width: 80, height: 80)
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         layout.scrollDirection = .horizontal
         return layout
     }
@@ -121,7 +118,7 @@ class RepsView: UIView {
 // MARK: - Setup UI
 private extension RepsView {
     func setupView() {
-        backgroundColor = .white
+        backgroundColor = .secondarySystemBackground
         addSubview(topCollection)
         addSubview(minusButton)
         addSubview(repLabel)
@@ -133,7 +130,7 @@ private extension RepsView {
     }
     
     func constrain() {
-        NSLayoutConstraint.activate([topCollection.topAnchor.constraint(equalTo: topAnchor),
+        NSLayoutConstraint.activate([topCollection.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
                                      topCollection.leadingAnchor.constraint(equalTo: leadingAnchor),
                                      topCollection.trailingAnchor.constraint(equalTo: trailingAnchor),
                                      topCollection.heightAnchor.constraint(equalToConstant: 130),
@@ -161,8 +158,19 @@ private extension RepsView {
                                      nextButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
                                      nextButton.heightAnchor.constraint(equalToConstant: 45),
                                      
-                                     pageNumberLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+                                     pageNumberLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
                                      pageNumberLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
+    }
+}
+
+// MARK: - Public Configuration
+extension RepsView {
+    public func setNumber(to number: Int) {
+        if number == 0 {
+            repLabel.text = "M"
+        } else {
+            repLabel.text = number.description
+        }
     }
 }

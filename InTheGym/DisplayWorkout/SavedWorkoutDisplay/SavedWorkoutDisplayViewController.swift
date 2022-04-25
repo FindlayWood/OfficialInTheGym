@@ -31,7 +31,6 @@ class SavedWorkoutDisplayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightColour
-        initNavBarButton()
         viewModel.addAView()
 //        setupSubscriptions()
         initDataSource()
@@ -80,11 +79,13 @@ class SavedWorkoutDisplayViewController: UIViewController {
             .sink { [weak self] in self?.coordinator?.showWorkoutStats(with: $0)}
             .store(in: &subscriptions)
         
-    }
-    // MARK: - Nav Bar Button
-    func initNavBarButton() {
-        let barButton = UIBarButtonItem(title: "Options", style: .done, target: self, action: #selector(showOptions))
-        navigationItem.rightBarButtonItem = barButton
+        bottomViewChildVC.showAssignPublisher
+            .sink { [weak self] _ in
+                guard let self = self else {return}
+                self.coordinator?.showAssign(self.viewModel.savedWorkout)
+            }
+            .store(in: &subscriptions)
+        
     }
     // MARK: - Data Source
     func initDataSource() {

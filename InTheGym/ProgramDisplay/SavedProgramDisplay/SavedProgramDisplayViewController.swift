@@ -24,15 +24,16 @@ class SavedProgramDisplayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        addChildVC()
         initNavBar()
 //        initViewModel()
         initSubscriptions()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        addChildVC()
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        addChildVC()
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -43,7 +44,7 @@ class SavedProgramDisplayViewController: UIViewController {
     func addChildVC() {
         addChild(childVC)
         view.addSubview(childVC.view)
-        childVC.view.frame = getFullViewableFrame()
+        childVC.view.frame = view.bounds
         childVC.didMove(toParent: self)
         initDataSource()
     }
@@ -91,6 +92,6 @@ class SavedProgramDisplayViewController: UIViewController {
 // MARK: - Actions
 private extension SavedProgramDisplayViewController {
     @objc func optionsPressed(_ sender: UIBarButtonItem) {
-        coordinator?.showOptions(viewModel.options)
+        coordinator?.showOptions(viewModel.savedProgramModel)
     }
 }

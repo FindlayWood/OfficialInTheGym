@@ -11,9 +11,13 @@ import Combine
 
 class MyGroupsViewController: UIViewController {
     
+    // MARK: - Publisher
+    var selectedGroup = PassthroughSubject<GroupModel,Never>()
+    
     // MARK: - Properties
     weak var coordinator: GroupCoordinator?
     
+    // MARK: - Display
     var display = MyGroupsView()
     
     var dataSource: MyGroupsDataSource!
@@ -59,7 +63,10 @@ class MyGroupsViewController: UIViewController {
         dataSource = .init(tableView: display.tableview)
         
         dataSource.groupSelected
-            .sink { [weak self] in self?.coordinator?.goToGroupHome($0)}
+            .sink { [weak self] group in
+                self?.selectedGroup.send(group)
+                self?.coordinator?.goToGroupHome(group)
+            }
             .store(in: &subscriptions)
     }
     

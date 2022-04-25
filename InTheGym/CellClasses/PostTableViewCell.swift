@@ -24,6 +24,8 @@ class PostTableViewCell: UITableViewCell {
 
     var posterID: String!
     
+    var viewModel = PostCellViewModel()
+    
     // MARK: - Subviews
     var profileImageButton: UIButton = {
         let button = UIButton()
@@ -212,15 +214,17 @@ private extension PostTableViewCell {
             replyCountLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
             likeButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
             likeCountLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-            
-        
         ])
+    }
+    func initViewModel() {
+        
     }
 }
 
 // MARK: - Public Configuration
 extension PostTableViewCell {
     func configure(with post: DisplayablePost) {
+        viewModel.post = post
         posterID = post.posterID
         usernameButton.setTitle(post.username, for: .normal)
         let then = Date(timeIntervalSince1970: (post.time))
@@ -281,7 +285,10 @@ extension PostTableViewCell {
     }
     
     @objc func likeButtonTapped(_ sender: UIButton) {
-        actionPublisher.send(.likeButtonTapped)
+//        actionPublisher.send(.likeButtonTapped)
+        viewModel.likedPost()
+        selection.prepare()
+        selection.selectionChanged()
         UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
             sender.setImage(UIImage(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
         } completion: { _ in

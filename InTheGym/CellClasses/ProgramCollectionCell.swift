@@ -85,7 +85,7 @@ class ProgramCollectionCell: UICollectionViewCell {
 // MARK: - Configure
 private extension ProgramCollectionCell {
     func setupUI() {
-        backgroundColor = .offWhiteColour
+        backgroundColor = .thirdColour
         addViewShadow(with: .darkGray)
         layer.cornerRadius = 10
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]

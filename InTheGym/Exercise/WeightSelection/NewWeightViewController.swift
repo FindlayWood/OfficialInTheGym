@@ -10,266 +10,36 @@
 
 import UIKit
 import SCLAlertView
-import Firebase
+import Combine
 
-class NewWeightViewController: UIViewController, Storyboarded {
+class NewWeightViewController: UIViewController {
     
     weak var newCoordinator: WeightSelectionFlow?
+    
     weak var exerciseViewModel: ExerciseCreationViewModel?
     
-    weak var coordinator: CreationFlow?
-    var newExercise: exercise?
-    var selectedIndexInt: Int? = nil
-    var selectedState: setSelected = .allSelected
-    
     var display = WeightView()
-    var adapter: WeightAdapter!
     
-    lazy var WeightArray: [String] = {
-        //guard let exercise = newExercise else {return []}
-        guard let exerciseViewModel = exerciseViewModel else {return []}
-        if let weight = exerciseViewModel.exercise.weight {
-            return weight
-        } else {
-            let array = Array(repeating: "", count: exerciseViewModel.exercise.sets)
-            return array
-        }
-//        if exerciseViewModel.exercise.weight.isEmpty {
-//            let array = Array(repeating: "", count: exerciseViewModel.exercise.sets)
-//            return array
-//        } else {
-//            return exerciseViewModel.exercise.weight
-//        }
-    }()
+    var viewModel = WeightSelectionViewModel()
     
+    var setsDataSource: SetsDataSource!
     
-    func setUp() {
-        display.kgButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        display.lbsButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        display.percentageButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        display.bodyweightButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        display.bodyWeightPercentButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        display.maxButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        display.updateButton.addTarget(self, action: #selector(updatePressed(_:)), for: .touchUpInside)
-        
-        display.nextButton.addTarget(self, action: #selector(nextPressed(_:)), for: .touchUpInside)
-        display.skipButton.addTarget(self, action: #selector(skipPressed(_:)), for: .touchUpInside)
-    }
+    private var subscriptions = Set<AnyCancellable>()
     
-    @objc func buttonTapped(_ sender: UIButton) {
-        
-        if exerciseViewModel?.exercisekind == .live || coordinator is AMRAPCoordinator {
-            navigationItem.rightBarButtonItem?.isEnabled = true
-            //display.nextButton.isHidden = false
-            display.weightMeasurementField.text = sender.titleLabel?.text
-            if sender == display.maxButton || sender == display.bodyweightButton {
-                display.numberTextfield.text = ""
-                display.numberTextfield.isUserInteractionEnabled = false
-                //display.maxButton.isSelected = true
-            } else {
-                display.numberTextfield.isUserInteractionEnabled = true
-                //display.maxButton.isSelected = false
-                display.numberTextfield.becomeFirstResponder()
-            }
-            
-        } else {
-            display.updateButton.isHidden = false
-            display.weightMeasurementField.text = sender.titleLabel?.text
-            if sender == display.maxButton || sender == display.bodyweightButton {
-                display.numberTextfield.text = ""
-                display.numberTextfield.isUserInteractionEnabled = false
-                //display.maxButton.isSelected = true
-            } else {
-                display.numberTextfield.isUserInteractionEnabled = true
-                //display.maxButton.isSelected = false
-                display.numberTextfield.becomeFirstResponder()
-            }
-            
-        }
-        
-        
-
-    }
-    @objc func updatePressed(_ sender: UIButton) {
-        guard let number = display.numberTextfield.text,
-              let measurement = display.weightMeasurementField.text
-        else {
-            showEmptyAlert()
-            return
-        }
-        if (number.isEmpty || measurement.isEmpty) && !(measurement == "max" || measurement == "bw") {
-            showEmptyAlert()
-        } else {
-            switch selectedState {
-            case .allSelected:
-                if exerciseViewModel?.exercisekind == .amrap || exerciseViewModel?.exercisekind == .emom {
-                    WeightArray = [number + measurement]
-                } else {
-                    WeightArray = WeightArray.map { _ in number + measurement}
-                }
-            case .singleSelected(let index):
-                WeightArray[index] = number + measurement
-            }
-            display.topCollection.reloadData()
-            sender.isHidden = true
-            display.weightMeasurementField.text = ""
-            display.numberTextfield.text = ""
-            //display.nextButton.isHidden = false
-            navigationItem.rightBarButtonItem?.isEnabled = true
-        }
-
-    }
-    
-    @IBAction func nextPressed(_ sender:UIButton){
-//        guard let newExercise = newExercise else {return}
-        guard let measurement = display.weightMeasurementField.text,
-              let number = display.numberTextfield.text
-        else {return}
-//        
-//        if coordinator is LiveWorkoutCoordinator {
-//            if measurement == "max" || measurement == "bw" {
-//                if newExercise.weightArray == nil {
-//                    newExercise.weightArray = [measurement]
-//                } else {
-//                    newExercise.weightArray?.append(measurement)
-//                }
-//            } else {
-//                if number.isEmpty {
-//                    showEmptyAlert()
-//                } else {
-//                    let newWeight = number + measurement
-//                    if newExercise.weightArray == nil {
-//                        newExercise.weightArray = [newWeight]
-//                    } else {
-//                        newExercise.weightArray?.append(newWeight)
-//                    }
-//                }
-//            }
-//        }
-//            
-//            
-////            if display.maxButton.isSelected {
-////                if newExercise.weightArray == nil {
-////                    newExercise.weightArray = ["MAX"]
-////                } else {
-////                    newExercise.weightArray?.append("MAX")
-////                }
-////            } else {
-////                guard let number = display.numberTextfield.text,
-////                      let measurement = display.weightMeasurementField.text
-////                else {
-////                    return
-////                }
-////                if number.isEmpty || measurement.isEmpty {
-////                    showEmptyAlert()
-////                } else {
-////                    let newWeight = number + measurement
-////                    if newExercise.weightArray == nil {
-////                        newExercise.weightArray = [newWeight]
-////                    } else {
-////                        newExercise.weightArray?.append(newWeight)
-////                    }
-////                }
-////            }
-////        }
-//        else if coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator {
-//            if measurement == "max" || measurement == "bw" {
-//                newExercise.weight = measurement
-//            } else {
-//                if number.isEmpty || measurement.isEmpty {
-//                    showEmptyAlert()
-//                } else {
-//                    let newWeight = number + measurement
-//                    newExercise.weight = newWeight
-//                }
-//            }
-//        } else {
-//            newExercise.weightArray = WeightArray
-//        }
-//        coordinator?.weightSelected(newExercise)
-        
-        switch exerciseViewModel?.exercisekind {
-        case .regular, .emom, .amrap, .circuit:
-            exerciseViewModel?.addWeight(WeightArray)
-        case .live:
-            if measurement == "max" || measurement == "bw" {
-                exerciseViewModel?.appendToWeight(measurement)
-            } else if number.isEmpty {
-                showEmptyAlert()
-            } else {
-                let newWeight = number + measurement
-                exerciseViewModel?.appendToWeight(newWeight)
-            }
-        case .none:
-            break
-        }
-        
-        //exerciseViewModel?.addWeight(WeightArray)
-        newCoordinator?.next()
-    }
-    
-    @objc func skipPressed(_ sender: UIButton) {
-        
-        guard let newExercise = newExercise else {return}
-        if coordinator is LiveWorkoutCoordinator {
-            newExercise.weightArray?.append("")
-        } else {
-            WeightArray = WeightArray.map { _ in "" }
-            newExercise.weightArray = WeightArray
-        }
-        coordinator?.weightSelected(newExercise)
-        
-        exerciseViewModel?.addWeight(WeightArray)
-        newCoordinator?.next()
-    }
-    
-    
-    
-
-    fileprivate func initAdapter() {
-        adapter = WeightAdapter(delegate: self)
-        display.topCollection.delegate = adapter
-        display.topCollection.dataSource = adapter
-        display.topCollection.register(WeightCollectionCell.self, forCellWithReuseIdentifier: "cell")
+    // MARK: - View
+    override func loadView() {
+        view = display
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.backgroundColor = .white
         
         hideKeyboardWhenTappedAround()
         
-        initAdapter()
-        setUp()
-        
-        switch coordinator{
-        case is RegularWorkoutCoordinator:
-            display.pageNumberLabel.text = "5 of 6"
-        case is LiveWorkoutCoordinator:
-            display.pageNumberLabel.text = "2 of 2"
-        case is AMRAPCoordinator:
-            display.pageNumberLabel.text = "4 of 4"
-        case is CircuitCoordinator:
-            display.pageNumberLabel.text = "5 of 5"
-        case is EMOMCoordinator:
-            display.pageNumberLabel.text = "5 of 5"
-        default:
-            break
-        }
-        
-        if exerciseViewModel?.exercisekind == .live {
-            display.topCollection.isHidden = true
-        }
-        
+        initDataSource()
+        initViewModel()
+        initTargets()
         initNavBar()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getViewableFrameWithBottomSafeArea()
-//        display.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom)
-        view.addSubview(display)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -277,10 +47,59 @@ class NewWeightViewController: UIViewController, Storyboarded {
         editNavBarColour(to: .darkColour)
     }
     
+    // MARK: - Init Data Source
+    func initDataSource() {
+        setsDataSource = .init(collectionView: display.topCollection)
+        
+        setsDataSource.setSelected
+            .sink { [weak self] selectedSet in
+                self?.viewModel.selectedSet = selectedSet
+                self?.display.setUpdateButton(to: selectedSet)
+            }
+            .store(in: &subscriptions)
+    }
+    
+    // MARK: - Init View Model
+    func initViewModel() {
+        
+        viewModel.$setCellModels
+            .compactMap { $0 }
+            .sink { [weak self] in self?.setsDataSource.updateCollection(with: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.$isLiveWorkout
+            .sink { [weak self] isLive in
+                if isLive {
+                    self?.setsDataSource.isLive = true
+                    self?.setsDataSource.setSelected.send(self?.viewModel.cellCount)
+                }
+            }
+            .store(in: &subscriptions)
+        
+        guard let exerciseViewModel = exerciseViewModel else { return }
+        viewModel.getSetCellModels(from: exerciseViewModel)
+    }
+    
+    
+    // MARK: - Nav Bar
     func initNavBar() {
         let nextButton = UIBarButtonItem(title: "Next", style: .done, target: self, action: #selector(nextPressed(_:)))
         navigationItem.rightBarButtonItem = nextButton
-        nextButton.isEnabled = false
+        navigationItem.rightBarButtonItem?.isEnabled = false
+    }
+    
+    // MARK: - Init Targets
+    func initTargets() {
+        display.kgButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        display.lbsButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        display.percentageButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        display.bodyweightButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        display.bodyWeightPercentButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        display.maxButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        display.updateButton.addTarget(self, action: #selector(updatePressed(_:)), for: .touchUpInside)
+        
+        display.nextButton.addTarget(self, action: #selector(nextPressed(_:)), for: .touchUpInside)
+        display.skipButton.addTarget(self, action: #selector(skipPressed(_:)), for: .touchUpInside)
     }
     
     func showEmptyAlert(){
@@ -293,46 +112,38 @@ class NewWeightViewController: UIViewController, Storyboarded {
         let alert = SCLAlertView(appearance: appearance)
         alert.showError("Enter a Weight!", subTitle: "You have not entered a number for the weight. To enter a number tap on the left side of the big dark blue box. You can continue without entering a weight by pressing the SKIP button near the bottom of the screen.", closeButtonTitle: "OK")
     }
-    
- 
 }
 
-extension NewWeightViewController: WeightAdapterProtocol {
-    func getData(at indexPath: Int) -> WeightModel {
-        let rep = exerciseViewModel?.exercise.reps?[indexPath] ?? 0
-        let weight = WeightArray[indexPath]
-        return WeightModel(rep: rep, weight: weight, index: indexPath + 1)
-    }
-    
-    func numberOfItems() -> Int {
-        return WeightArray.count
-    }
-    
-    func itemSelected(at indexPath: Int) {
-        if !(exerciseViewModel?.exercisekind == .live) {
-            switch selectedState {
-            case .allSelected:
-                selectedState = .singleSelected(indexPath)
-                selectedIndexInt = indexPath
-                display.updateButton.setTitle("UPDATE SET \(indexPath + 1)", for: .normal)
-                display.topCollection.scrollToItem(at: IndexPath(item: indexPath, section: 0), at: .centeredHorizontally, animated: true)
-            case .singleSelected(let index):
-                if index == indexPath {
-                    selectedState = .allSelected
-                    selectedIndexInt = nil
-                    display.updateButton.setTitle("UPDATE ALL SETS", for: .normal)
-                } else {
-                    selectedState = .singleSelected(indexPath)
-                    selectedIndexInt = indexPath
-                    display.updateButton.setTitle("UPDATE SET \(indexPath + 1)", for: .normal)
-                    display.topCollection.scrollToItem(at: IndexPath(item: indexPath, section: 0), at: .centeredHorizontally, animated: true)
-                }
-            }
-            display.topCollection.reloadData()
+// MARK: - Actions
+private extension NewWeightViewController {
+    @objc func buttonPressed(_ sender: UIButton) {
+        display.resetButtons()
+        sender.backgroundColor = .darkColour
+        display.weightMeasurementField.text = sender.titleLabel?.text
+        display.updateButton.isHidden = false
+        if sender == display.maxButton || sender == display.bodyweightButton {
+            display.numberTextfield.isUserInteractionEnabled = false
+            display.numberTextfield.text = ""
+        } else {
+            display.numberTextfield.isUserInteractionEnabled = true
+            display.numberTextfield.becomeFirstResponder()
         }
     }
-    
-    func selectedIndex() -> Int? {
-        return selectedIndexInt
+    @objc func updatePressed(_ sender: UIButton) {
+        guard let weightString = display.weightMeasurementField.text else {return}
+        let numberString = display.numberTextfield.text ?? ""
+        let fullString = numberString + weightString
+        viewModel.weightUpdated(fullString)
+        navigationItem.rightBarButtonItem?.isEnabled = true
+    }
+    @objc func nextPressed(_ sender: UIButton) {
+        guard let weights = (viewModel.setCellModels?.map { $0.weightString }) else {return}
+        exerciseViewModel?.addWeight(weights)
+        newCoordinator?.next()
+    }
+    @objc func skipPressed(_ sender: UIButton) {
+        guard let weights = (viewModel.setCellModels?.map { $0.weightString }) else {return}
+        exerciseViewModel?.addWeight(weights)
+        newCoordinator?.next()
     }
 }

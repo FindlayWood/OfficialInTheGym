@@ -12,7 +12,7 @@ import Combine
 class MyProgramsViewModel {
     
     // MARK: - Publishers
-    var currentProgram = CurrentValueSubject<[ProgramModel],Never>([])
+    var currentProgram = CurrentValueSubject<CurrentProgramModel?,Never>(nil)
     var savedPrograms = CurrentValueSubject<[SavedProgramModel],Never>([])
     var completedPrograms = CurrentValueSubject<[ProgramModel],Never>([])
     @Published var isLoadingCurrentProgram: Bool = false
@@ -68,10 +68,8 @@ class MyProgramsViewModel {
         selectedIndex.send(index)
         switch index {
         case 0:
-            modelsToShow.send(MyProgramsToShow.program(currentProgram.value))
-        case 1:
             modelsToShow.send(MyProgramsToShow.saved(savedPrograms.value))
-        case 2:
+        case 1:
             modelsToShow.send(MyProgramsToShow.program(completedPrograms.value))
         default:
             break

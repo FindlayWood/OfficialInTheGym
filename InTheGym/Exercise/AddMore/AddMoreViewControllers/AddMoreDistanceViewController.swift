@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 class AddMoreDistanceViewController: UIViewController {
 
@@ -16,25 +17,28 @@ class AddMoreDistanceViewController: UIViewController {
     
     var cellModel: AddMoreCellModel!
     
+    var exerciseViewModel: ExerciseCreationViewModel!
+    
+    var setsDataSource: SetsDataSource!
+    
+    var viewModel = AddMoreViewModel()
+    
+    private var subscriptions = Set<AnyCancellable>()
+    
     let message = "Add a distance to complete each set for this exercise. Adding a distance will not be appropriate for every exercise."
 
+    // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         initDisplay()
         initBarButton()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkColour]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.tintColor = UIColor.darkColour
+        super.viewWillAppear(animated)
+        editNavBarColour(to: .darkColour)
         navigationItem.title = "Add Distance"
     }
     func initBarButton() {
@@ -48,34 +52,76 @@ class AddMoreDistanceViewController: UIViewController {
         display.buttoneOne.addTarget(self, action: #selector(metresPressed), for: .touchUpInside)
         display.buttoneTwo.addTarget(self, action: #selector(kmPressed), for: .touchUpInside)
         display.buttoneThree.addTarget(self, action: #selector(milesPressed), for: .touchUpInside)
+        display.updateButton.addTarget(self, action: #selector(updatePressed), for: .touchUpInside)
     }
+    // MARK: - Init Data Source
+    func initDataSource() {
+        setsDataSource = .init(collectionView: display.topCollection)
+        
+        setsDataSource.setSelected
+            .sink { [weak self] selectedSet in
+                self?.viewModel.selectedSet = selectedSet
+                self?.display.setUpdateButton(to: selectedSet)
+            }
+            .store(in: &subscriptions)
+    }
+    // MARK: - Init View Model
+    func iniViewModel() {
+        
+        viewModel.$setCellModels
+            .compactMap { $0 }
+            .sink { [weak self] in self?.setsDataSource.updateCollection(with: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.$isLiveWorkout
+            .sink { [weak self] isLive in
+                if isLive {
+                    self?.display.topCollection.isUserInteractionEnabled = false
+                    self?.setsDataSource.setSelected.send(self?.viewModel.cellCount)
+                }
+            }
+            .store(in: &subscriptions)
+    }
+
     func emptyCheck() -> Bool {
         return display.numberTextfield.text == "" || display.weightMeasurementField.text == ""
     }
 }
 
 extension AddMoreDistanceViewController {
+    @objc func updatePressed() {
+        guard let enteredDistance = display.numberTextfield.text,
+              let enteredMeasurement = display.weightMeasurementField.text
+        else {return}
+        let addedDistance = enteredDistance + enteredMeasurement
+        viewModel.distanceUpdated(addedDistance)
+    }
     @objc func addPressed() {
         guard let enteredDistance = display.numberTextfield.text,
               let enteredMeasurement = display.weightMeasurementField.text
         else {return}
         let addedDistance = enteredDistance + enteredMeasurement
-        cellModel.value.value = enteredDistance + enteredMeasurement
+        cellModel.value.value = "Added"
+        guard let distances = (viewModel.setCellModels?.map { $0.weightString }) else {return}
+        exerciseViewModel.addDistance(distances)
         coordinator?.distanceAdded(addedDistance)
     }
     @objc func metresPressed() {
         display.weightMeasurementField.text = "m"
         display.numberTextfield.becomeFirstResponder()
+        display.updateButton.isHidden = false
         navigationItem.rightBarButtonItem?.isEnabled = !emptyCheck()
     }
     @objc func kmPressed() {
         display.weightMeasurementField.text = "km"
         display.numberTextfield.becomeFirstResponder()
+        display.updateButton.isHidden = false
         navigationItem.rightBarButtonItem?.isEnabled = !emptyCheck()
     }
     @objc func milesPressed() {
         display.weightMeasurementField.text = "miles"
         display.numberTextfield.becomeFirstResponder()
+        display.updateButton.isHidden = false
         navigationItem.rightBarButtonItem?.isEnabled = !emptyCheck()
     }
 }

@@ -67,6 +67,7 @@ class DisplayExerciseStatsViewController: UIViewController {
         display.searchController.isActive = false
         let vc = ExerciseStatsDetailViewController()
         vc.viewModel.statsModel = model
+        vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }
     

@@ -46,7 +46,7 @@ class ProgramsChildView: UIView {
     
     // MARK: - Initializer
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        super.init(frame: UIScreen.main.bounds)
         setupUI()
     }
     required init?(coder: NSCoder) {
@@ -67,7 +67,7 @@ private extension ProgramsChildView {
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            weeksCollectionView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            weeksCollectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
             weeksCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             weeksCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             weeksCollectionView.heightAnchor.constraint(equalToConstant: 100),

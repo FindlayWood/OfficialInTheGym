@@ -88,6 +88,18 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
             }
             .store(in: &subscriptions)
         
+        dataSource.userTapped
+            .sink { [weak self]in self?.viewModel.getUser(from: $0) }
+            .store(in: &subscriptions)
+        
+        dataSource.workoutTapped
+            .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
+            .store(in: &subscriptions)
+        
+        dataSource.likeButtonTapped
+            .sink { [weak self] in self?.viewModel.likeCheck($0) }
+            .store(in: &subscriptions)
+        
     }
     
     // MARK: - View Model
@@ -115,6 +127,18 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
                     self?.dataSource.updateWorkouts(with: workouts)
                 }
             }
+            .store(in: &subscriptions)
+        
+        viewModel.workoutSelected
+            .sink { [weak self] in self?.coordinator?.showWorkout($0) }
+            .store(in: &subscriptions)
+        
+        viewModel.savedWorkoutSelected
+            .sink { [weak self] in self?.coordinator?.showSavedWorkout($0) }
+            .store(in: &subscriptions)
+        
+        viewModel.userSelected
+            .sink { [weak self] in self?.coordinator?.showUser(user: $0) }
             .store(in: &subscriptions)
         
         viewModel.fetchPostRefs()

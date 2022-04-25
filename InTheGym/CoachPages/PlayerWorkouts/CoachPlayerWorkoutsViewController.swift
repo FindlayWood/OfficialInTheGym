@@ -25,7 +25,7 @@ class CoachPlayerWorkoutsViewController: UIViewController {
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightColour
+        view.backgroundColor = .white
         initDataSource()
         initViewModel()
     }
@@ -37,7 +37,7 @@ class CoachPlayerWorkoutsViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        editNavBarColour(to: .white)
+        editNavBarColour(to: .darkColour)
         navigationItem.title = viewModel.navigationTitle
     }
     

@@ -176,14 +176,43 @@ class ExerciseCreationViewModel {
     func addSets(_ sets: Int) {
         exercise.sets = sets
         let completedArray = Array(repeating: false, count: sets)
+        let repArray = Array(repeating: 1, count: sets)
+        let weightArray = Array(repeating: " ", count: sets)
         exercise.completedSets = completedArray
+        exercise.reps = repArray
+        exercise.weight = weightArray
+    }
+    func addCompletedSet() {
+        exercise.sets += 1
+        if var completedArray = exercise.completedSets {
+            completedArray.append(true)
+            exercise.completedSets = completedArray
+        } else {
+            let completedArray = Array(repeating: true, count: exercise.sets)
+            exercise.completedSets = completedArray
+        }
+        if var repArray = exercise.reps {
+            repArray.append(1)
+            exercise.reps = repArray
+        } else {
+            let repArray = Array(repeating: 1, count: exercise.sets)
+            exercise.reps = repArray
+        }
+        if var weightArray = exercise.weight {
+            weightArray.append(" ")
+            exercise.weight = weightArray
+        } else {
+            let weightArray = Array(repeating: " ", count: exercise.sets)
+            exercise.weight = weightArray
+        }
+        
     }
     func addReps(_ reps: [Int]) {
         exercise.reps = reps
     }
     func addWeight(_ weight: [String]) {
         exercise.weight = weight
-        addingDelegate.addExercise(exercise)
+//        addingDelegate.addExercise(exercise)
     }
     func completeExercise() {
         addingDelegate.addExercise(exercise)
@@ -214,5 +243,27 @@ class ExerciseCreationViewModel {
         }
 //        exercise.weight.append(weight)
         addingDelegate.updatedExercise(exercise)
+    }
+    
+    func getSetCellModels() -> [SetCellModel] {
+        var models = [SetCellModel]()
+        guard let reps = exercise.reps else {return []}
+        for (index, rep) in reps.enumerated() {
+            let newModel = SetCellModel(setNumber: index + 1, repNumber: rep, weightString: "")
+            models.append(newModel)
+        }
+        return models
+    }
+    func addTime(_ seconds: [Int]) {
+        exercise.time = seconds
+    }
+    func addDistance(_ distance: [String]) {
+        exercise.distance = distance
+    }
+    func addRestTime(_ seconds: [Int]){
+        exercise.restTime = seconds
+    }
+    func addNote(_ note: String) {
+        exercise.note = note
     }
 }

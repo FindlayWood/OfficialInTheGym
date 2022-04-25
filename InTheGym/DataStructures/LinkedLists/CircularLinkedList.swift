@@ -30,4 +30,18 @@ struct CircularLinkedList<T> {
         tail = node
         node.next = head
     }
+    
+    // MARK: - Node At
+    /// Return the element at the specified index
+    func node(at index: Int) -> Node<T>? {
+        var currentIndex = 0
+        var currentNode = head
+        
+        while currentNode != nil && currentIndex < index {
+            currentNode = currentNode?.next
+            currentIndex += 1
+        }
+        
+        return currentNode
+    }
 }

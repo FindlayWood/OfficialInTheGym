@@ -30,6 +30,10 @@ class DisplayAMRAPViewModel {
     var seconds: Int!
     var apiService: FirebaseDatabaseManagerService
     
+    var exercises: CircularLinkedList<ExerciseModel> {
+        return CircularLinkedList(amrapModel.exercises)
+    }
+    
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService

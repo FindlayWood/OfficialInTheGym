@@ -27,6 +27,8 @@ class SavedWorkoutBottomChildViewModel {
     
     var showWorkoutStatsPublisher = PassthroughSubject<String,Never>()
     
+    var assignPublisher = PassthroughSubject<Void,Never>()
+    
     var listListener: SavedWorkoutRemoveListener?
     
     // MARK: - Properties
@@ -80,6 +82,8 @@ class SavedWorkoutBottomChildViewModel {
             loadCreator()
         case .viewWorkoutStats:
             showWorkoutStatsPublisher.send(savedWorkoutModel.id)
+        case .assign:
+            assignPublisher.send(())
         default:
             break
         }

@@ -8,6 +8,7 @@
 
 import UIKit
 import SCLAlertView
+import Combine
 
 
 class DisplayAMRAPViewController: UIViewController {
@@ -21,6 +22,8 @@ class DisplayAMRAPViewController: UIViewController {
     var allExercisesAdapter: DisplayAMRAPShowAllExercisesAdapter!
     
     var viewModel = DisplayAMRAPViewModel()
+    
+    private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
     override func viewDidLoad() {

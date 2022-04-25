@@ -10,6 +10,7 @@ import Foundation
 import Combine
 
 class SavedProgramDisplayViewModel {
+    
     // MARK: - Publishers
     var weekSelectedPublisher = CurrentValueSubject<Int,Never>(0)
     

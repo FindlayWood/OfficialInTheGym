@@ -12,7 +12,7 @@ import Combine
 class CustomisedSegmentControl: UIView {
     
     // MARK: - Publisher
-    var selectedIndex = PassthroughSubject<Int,Never>()
+    var selectedIndex = CurrentValueSubject<Int,Never>(0)
     
     // MARK: - Properties
     private  var buttonTitles: [String]!
@@ -57,8 +57,8 @@ class CustomisedSegmentControl: UIView {
             button.titleLabel?.font = .systemFont(ofSize: 18, weight: .medium)
             buttons.append(button)
         }
-        buttons[0].setTitleColor(selectedTextColour, for: .normal)
-        buttons[0].titleLabel?.font = .boldSystemFont(ofSize: 20)
+        buttons[selectedIndex.value].setTitleColor(selectedTextColour, for: .normal)
+        buttons[selectedIndex.value].titleLabel?.font = .boldSystemFont(ofSize: 20)
     }
     
     // MARK: - Target
@@ -82,6 +82,7 @@ class CustomisedSegmentControl: UIView {
     private func updateView() {
         createButton()
         configureSelectorView()
+        buttonAction(buttons[selectedIndex.value])
         configureStackView()
     }
     

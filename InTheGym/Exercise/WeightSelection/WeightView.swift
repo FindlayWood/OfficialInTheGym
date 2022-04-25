@@ -6,18 +6,20 @@
 //  Copyright © 2021 FindlayWood. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class WeightView: UIView {
     
+    // MARK: - Properties
     private let boldFont = "Menlo-Bold"
     private let fontSize: CGFloat = 43
     private let fontColour = UIColor.white
     
+    // MARK: - Subviews
     lazy var topCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: generateTopLayout())
-        collection.backgroundColor = .white
+        collection.register(RepsCell.self, forCellWithReuseIdentifier: RepsCell.cellID)
+        collection.backgroundColor = .secondarySystemBackground
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
@@ -26,7 +28,7 @@ class WeightView: UIView {
         let field = UITextField()
         field.font = UIFont(name: boldFont, size: fontSize)
         field.textColor = fontColour
-        field.backgroundColor = Constants.darkColour
+        field.backgroundColor = .darkColour
         field.tintColor = .white
         field.textAlignment = .right
         field.keyboardType = .decimalPad
@@ -43,7 +45,7 @@ class WeightView: UIView {
         let field = UITextField()
         field.font = UIFont(name: boldFont, size: fontSize)
         field.textColor = fontColour
-        field.backgroundColor = Constants.darkColour
+        field.backgroundColor = .darkColour
         field.heightAnchor.constraint(equalToConstant: 90).isActive = true
         field.layer.cornerRadius = 10
         field.addToolBar()
@@ -143,18 +145,21 @@ class WeightView: UIView {
         return label
     }()
     
-    
+    // MARK: - Initializer
     override init(frame: CGRect) {
-        super.init(frame: frame)
-        setUpView()
+        super.init(frame: UIScreen.main.bounds)
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
-        fatalError()
+        super.init(coder: coder)
+        setupUI()
     }
-    
-    private func setUpView() {
-        backgroundColor = .white
+}
+// MARK: - Setup UI
+private extension WeightView {
+    func setupUI() {
+        backgroundColor = .secondarySystemBackground
         updateButton.isHidden = true
         nextButton.isHidden = true
         addSubview(topCollection)
@@ -177,11 +182,11 @@ class WeightView: UIView {
         
         addSubview(skipButton)
         addSubview(pageNumberLabel)
-        constrain()
+        constrainUI()
     }
     
-    private func constrain() {
-        NSLayoutConstraint.activate([topCollection.topAnchor.constraint(equalTo: topAnchor),
+    func constrainUI() {
+        NSLayoutConstraint.activate([topCollection.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
                                      topCollection.leadingAnchor.constraint(equalTo: leadingAnchor),
                                      topCollection.trailingAnchor.constraint(equalTo: trailingAnchor),
                                      topCollection.heightAnchor.constraint(equalToConstant: 130),
@@ -210,7 +215,7 @@ class WeightView: UIView {
                                      nextButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
                                      nextButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
                                      
-                                     pageNumberLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+                                     pageNumberLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
                                      pageNumberLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      
                                      skipButton.bottomAnchor.constraint(equalTo: pageNumberLabel.topAnchor, constant: -5),
@@ -220,7 +225,7 @@ class WeightView: UIView {
         
     }
     
-    private func generateTopLayout() -> UICollectionViewFlowLayout {
+    func generateTopLayout() -> UICollectionViewFlowLayout {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 5
         layout.minimumLineSpacing = 5
@@ -228,5 +233,23 @@ class WeightView: UIView {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
         layout.scrollDirection = .horizontal
         return layout
+    }
+}
+// MARK: - Public Configuration
+extension WeightView {
+    public func setUpdateButton(to set: Int?) {
+        if let set = set {
+            updateButton.setTitle("Update Set \(set + 1)", for: .normal)
+        } else {
+            updateButton.setTitle("Update All Sets", for: .normal)
+        }
+    }
+    public func resetButtons() {
+        kgButton.backgroundColor = .lightColour
+        lbsButton.backgroundColor = .lightColour
+        maxButton.backgroundColor = .lightColour
+        percentageButton.backgroundColor = .lightColour
+        bodyweightButton.backgroundColor = .lightColour
+        bodyWeightPercentButton.backgroundColor = .lightColour
     }
 }

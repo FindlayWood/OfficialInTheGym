@@ -82,7 +82,6 @@ class ViewClipViewModel: NSObject {
             .sink { [weak self] newStatus in
                 switch newStatus {
                 case .readyToPlay:
-                    print("ready to play")
                     self?.playerPublisher.send(self?.player)
                     self?.isLoading = false
                 case .unknown:

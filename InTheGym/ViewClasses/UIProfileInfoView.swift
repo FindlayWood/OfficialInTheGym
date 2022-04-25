@@ -44,7 +44,7 @@ class UIProfileInfoView: UIView {
 //        button.setTitle("Follow", for: .normal)
         button.backgroundColor = .darkColour
         button.setTitleColor(.white, for: .normal)
-        button.addViewShadow(with: .darkColour)
+//        button.addViewShadow(with: .darkColour)
         button.layer.cornerRadius = 16
         button.heightAnchor.constraint(equalToConstant: 32).isActive = true
         button.widthAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.3).isActive = true
@@ -138,7 +138,7 @@ extension UIProfileInfoView {
         followButton.isUserInteractionEnabled = following ? false : true
         followButton.layer.borderWidth = following ? 2 : 0
         followButton.layer.borderColor = following ? UIColor.darkColour.cgColor : nil
-        if !following { followButton.addViewShadow(with: .darkColour)}
+//        if !following { followButton.addViewShadow(with: .darkColour)}
     }
     public func setFollowButton(to stage: FollowButtonStage) {
         followButton.isHidden = false

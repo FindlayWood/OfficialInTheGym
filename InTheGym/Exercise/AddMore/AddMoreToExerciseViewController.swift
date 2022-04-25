@@ -10,6 +10,7 @@ import UIKit
 
 class AddMoreToExerciseViewController: UIViewController {
     
+    // MARK: - Properties
     weak var coordinator: AddMoreToExerciseCoordinator?
     
     var display = AddMoreToExerciseView()
@@ -18,39 +19,35 @@ class AddMoreToExerciseViewController: UIViewController {
     
     var adapter: AddMoreToExerciseAdapter!
     
-    var viewModel: AddMoreToExerciseViewModel = {
-        return AddMoreToExerciseViewModel()
-    }()
+    var viewModel = AddMoreToExerciseViewModel()
     
+    // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         initDisplay()
         initBarButton()
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkColour]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.tintColor = UIColor.darkColour
+        editNavBarColour(to: .darkColour)
         navigationItem.title = "Add More"
     }
+    // MARK: - Nav Bar Button
     func initBarButton() {
         let barButton = UIBarButtonItem(title: "Finish", style: .done, target: self, action: #selector(continuePressed))
         navigationItem.rightBarButtonItem = barButton
     }
+    // MARK: - Init Display
     func initDisplay() {
         adapter = .init(delegate: self)
         display.collectionView.delegate = adapter
         display.collectionView.dataSource = adapter
     }
 }
-
+// MARK: - Collection View Delegate
 extension AddMoreToExerciseViewController: AddMoreToExerciseProtocol {
     func getData(at indexPath: IndexPath) -> AddMoreCellModel {
         return viewModel.getData(at: indexPath)
@@ -75,8 +72,8 @@ extension AddMoreToExerciseViewController: AddMoreToExerciseProtocol {
         }
     }  
 }
-
-extension AddMoreToExerciseViewController {
+// MARK: - Actions
+private extension AddMoreToExerciseViewController {
     @objc func continuePressed() {
         coordinator?.addNewExercise()
     }

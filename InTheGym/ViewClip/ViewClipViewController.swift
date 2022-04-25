@@ -95,10 +95,8 @@ class ViewClipViewController: UIViewController {
     }
     
     func addThumbnail() {
-        print("view bounds are \(view.bounds)")
         display.thumbnailImageView.frame = view.bounds
         view.insertSubview(display.thumbnailImageView, at: 0)
-        print("thumbnail bounds are \(display.thumbnailImageView.bounds)")
     }
     
 
@@ -133,7 +131,7 @@ class ViewClipViewController: UIViewController {
             .sink { [weak self] in self?.premiumAccountAlert() }
             .store(in: &subscriptions)
             
-//        viewModel.fetchClip()
+        viewModel.fetchClip()
     }
     
     func setAsset(_ asset: AVAsset) {
@@ -242,7 +240,7 @@ class ViewClipViewController: UIViewController {
         
         switch sender.state {
         case .ended:
-            if translation.y > Constants.screenSize.height * 0.1 || sender.velocity(in: display).y > 3000 {
+            if translation.y > 0 || sender.velocity(in: display).y > 3000 {
                 snapToState(.dismissed)
             } else {
                 snapToState(.fullScreen)
@@ -259,6 +257,8 @@ class ViewClipViewController: UIViewController {
                 self.view.bounds = self.originalFrame
             }
         case .dismissed:
+            guard let player = viewModel.playerPublisher.value else {return}
+            player.pause()
             newCoordinator?.dismissVC()
 //            UIView.animate(withDuration: 0.6) {
 //                self.view.frame = self.disappearingFrame

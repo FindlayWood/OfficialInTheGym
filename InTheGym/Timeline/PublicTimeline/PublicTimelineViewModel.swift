@@ -81,7 +81,7 @@ class PublicTimelineViewModel {
     
     // MARK: - Fetching functions
     func fetchWorkoutKeys() {
-        let referencesModel = SavedWorkoutsReferences(id: user.uid)
+        let referencesModel = SavedWorkoutCreatorKeyModel(id: user.uid)
         apiService.fetchKeys(from: referencesModel) { [weak self] result in
             guard let self = self else {return}
             switch result {
@@ -99,7 +99,8 @@ class PublicTimelineViewModel {
             guard let self = self else {return}
             switch result {
             case .success(let savedWorkoutModels):
-                self.savedWorkouts.send(savedWorkoutModels)
+                let models = savedWorkoutModels.filter { $0.isPrivate == false }
+                self.savedWorkouts.send(models)
             case .failure(let error):
                 self.errorFetchingWorkouts.send(error)
             }
@@ -118,7 +119,7 @@ class PublicTimelineViewModel {
             }
         }
     }
-    func loadClips(from keys: [KeyClipModel]) {
+    private func loadClips(from keys: [KeyClipModel]) {
         apiService.fetchRange(from: keys, returning: ClipModel.self) { [weak self] result in
             switch result {
             case .success(var models):
@@ -129,68 +130,33 @@ class PublicTimelineViewModel {
             }
         }
     }
- 
-    // MARK: - Fetch Follower Count
-    func getFollowerCount() {
-        let followerModel = FollowersModel(id: user.uid)
-        apiService.childCount(of: followerModel) { [weak self] result in
-            switch result {
-            case .success(let count):
-                self?.followerCountPublisher.send(count)
-            case .failure(_):
-                break
-            }
-        }
-        let followingModel = FollowingModel(id: user.uid)
-        apiService.childCount(of: followingModel) { [weak self] result in
-            switch result {
-            case .success(let count):
-                self?.followingCountPublisher.send(count)
-            case .failure(_):
-                break
-            }
-        }
-    }
-    
-    // MARK: - Check Following
-    func checkFollowing() {
-        let checkFollowingModel = CheckFollowingModel(id: user.uid)
-        apiService.checkExistence(of: checkFollowingModel) { [weak self] result in
-            switch result {
-            case .success(let exists):
-                self?.isFollowingPublisher.send(exists)
-            case .failure(_):
-                break
-            }
-        }
-    }
     
     // MARK: - Liking Posts
-    func likeCheck(_ post: post) {
-        let likeCheck = PostLikesModel(postID: post.id)
-        apiService.checkExistence(of: likeCheck) { [weak self] result in
-            switch result {
-            case .success(let liked):
-                if !liked {
-                    self?.like(post)
-                }
-            case .failure(let error):
-                self?.errorLikingPost.send(error)
-            }
-        }
-    }
-    
-    func like(_ post: post) {
-        let likeModels = LikeTransportLayer(postID: post.id).postLike(post: post)
-        apiService.multiLocationUpload(data: likeModels) { [weak self] result in
-            switch result {
-            case .success(()):
-                LikesAPIService.shared.LikedPostsCache[post.id] = true
-            case .failure(let error):
-                self?.errorLikingPost.send(error)
-            }
-        }
-    }
+//    func likeCheck(_ post: post) {
+//        let likeCheck = PostLikesModel(postID: post.id)
+//        apiService.checkExistence(of: likeCheck) { [weak self] result in
+//            switch result {
+//            case .success(let liked):
+//                if !liked {
+//                    self?.like(post)
+//                }
+//            case .failure(let error):
+//                self?.errorLikingPost.send(error)
+//            }
+//        }
+//    }
+//
+//    func like(_ post: post) {
+//        let likeModels = LikeTransportLayer(postID: post.id).postLike(post: post)
+//        apiService.multiLocationUpload(data: likeModels) { [weak self] result in
+//            switch result {
+//            case .success(()):
+//                LikesAPIService.shared.LikedPostsCache[post.id] = true
+//            case .failure(let error):
+//                self?.errorLikingPost.send(error)
+//            }
+//        }
+//    }
 
 
     
@@ -226,16 +192,16 @@ class PublicTimelineViewModel {
     
     
     // MARK: - Actions
-    func follow() {
-        let followModel = FollowModel(id: user.uid)
-        let points = followModel.getUploadPoints()
-        apiService.multiLocationUpload(data: points) { [weak self] result in
-            switch result {
-            case .success(()):
-                self?.followSuccess.send(true)
-            case .failure(_):
-                self?.followSuccess.send(false)
-            }
-        }
-    }
+//    func follow() {
+//        let followModel = FollowModel(id: user.uid)
+//        let points = followModel.getUploadPoints()
+//        apiService.multiLocationUpload(data: points) { [weak self] result in
+//            switch result {
+//            case .success(()):
+//                self?.followSuccess.send(true)
+//            case .failure(_):
+//                self?.followSuccess.send(false)
+//            }
+//        }
+//    }
 }

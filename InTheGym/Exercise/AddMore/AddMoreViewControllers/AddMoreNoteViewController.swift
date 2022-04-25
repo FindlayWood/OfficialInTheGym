@@ -16,6 +16,8 @@ class AddMoreNoteViewController: UIViewController {
     
     var display = DisplayNoteView()
     
+    var exerciseViewModel: ExerciseCreationViewModel!
+    
     var currentNote: String?
     
     var cellModel: AddMoreCellModel!
@@ -43,6 +45,7 @@ class AddMoreNoteViewController: UIViewController {
     @objc func saveTapped(_ sender: UIButton) {
         guard let noteText = display.note.text else {return}
         cellModel.value.value = "Added"
+        exerciseViewModel.addNote(noteText)
         coordinator?.noteAdded(noteText)
         dismiss(animated: true)
     }

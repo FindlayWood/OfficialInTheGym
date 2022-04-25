@@ -9,6 +9,7 @@
 //this is the new reps page. it is used instead of repviewcontroller
 
 import UIKit
+import Combine
 import SCLAlertView
 
 enum setSelected {
@@ -16,7 +17,7 @@ enum setSelected {
     case singleSelected(Int)
 }
 
-class NewRepsViewController: UIViewController, Storyboarded {
+class NewRepsViewController: UIViewController {
     
     weak var coordinator: CreationFlow?
     
@@ -28,68 +29,28 @@ class NewRepsViewController: UIViewController, Storyboarded {
     
     var display = RepsView()
     
-    lazy var repIntArray: [Int] = {
-        var array = [Int]()
-        //guard let newExercise = newExercise else {return []}
-        guard let exerciseModel = exerciseViewModel else {return []}
-        if let reps = exerciseModel.exercise.reps {
-            return reps
-        } else {
-            array = Array(repeating: 1, count: exerciseViewModel?.exercise.sets ?? 0)
-            return array
-        }
-        
-//        if exerciseModel.exercise.reps.isEmpty {
-//            array = Array(repeating: 1, count: exerciseViewModel?.exercise.sets ?? 0)
-//            return array
-//        } else {
-//            return exerciseModel.exercise.reps
-//        }
-    }()
+    var viewModel = RepSelectionViewModel()
+    
+    var dataSource: RepsDataSource!
+    
+    var setsDataSource: SetsDataSource!
+    
+    private var subscriptions = Set<AnyCancellable>()
     
     private var repCounter: Int = 1
     
-    private var selectedState: setSelected = .allSelected
-    private var topSelectedIndex: Int? = nil
-    
-    private var topAdapter: RepsTopCollectionAdapter!
-    private var bottomAdapter: RepsBottomCollectionAdapter!
-    
-    @IBOutlet weak var pageNumberLabel:UILabel!
-    
-    
-    var fromLiveWorkout:Bool!
-    var whichExercise:Int!
-    var workoutID:String!
-    
 
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
         
-        view.backgroundColor = .white
-        self.navigationItem.title = "Reps"
-  
-        switch coordinator{
-        case is CircuitCoordinator:
-            display.pageNumberLabel.text = "4 of 4"
-        case is RegularWorkoutCoordinator:
-            display.pageNumberLabel.text = "4 of 6"
-        case is LiveWorkoutCoordinator:
-            display.topCollection.isHidden = true
-            display.pageNumberLabel.text = "1 of 2"
-        case is AMRAPCoordinator:
-            display.topCollection.isHidden = true
-            display.pageNumberLabel.text = "3 of 4"
-        default:
-            break
-        }
-        
-        if exerciseViewModel?.exercisekind == .live {
-            display.topCollection.isHidden = true
-        }
-        
-        initAdapter()
+        initDataSource()
+        initViewModel()
         setupActions()
         initNavBar()
     }
@@ -97,104 +58,66 @@ class NewRepsViewController: UIViewController, Storyboarded {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         editNavBarColour(to: .lightColour)
+        navigationItem.title = "Reps"
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getViewableFrameWithBottomSafeArea()
-        view.addSubview(display)
-    }
+
+    // MARK: - Nav Bar
     func initNavBar() {
         let nextButton = UIBarButtonItem(title: "Next", style: .done, target: self, action: #selector(nextPressed))
         navigationItem.rightBarButtonItem = nextButton
     }
-    
+
+    // MARK: - Targets
     fileprivate func setupActions() {
         display.minusButton.addTarget(self, action: #selector(minus), for: .touchUpInside)
         display.plusButton.addTarget(self, action: #selector(plus), for: .touchUpInside)
         display.nextButton.addTarget(self, action: #selector(nextPressed), for: .touchUpInside)
     }
     
-    fileprivate func initAdapter() {
-        topAdapter = RepsTopCollectionAdapter(delegate: self)
-        bottomAdapter = RepsBottomCollectionAdapter(delegate: self)
-        display.topCollection.delegate = topAdapter
-        display.topCollection.dataSource = topAdapter
-        display.bottomCollection.delegate = bottomAdapter
-        display.bottomCollection.dataSource = bottomAdapter
-    }
-
-}
-
-extension NewRepsViewController: repsTopCollectionProtocol {
-    func getData(at index: IndexPath) -> Int {
-        return repIntArray[index.item]
-    }
-    func retreiveNumberOfItems() -> Int {
-        return repIntArray.count
-    }
-    func itemSelected(at indec: IndexPath) {
-        switch selectedState{
-        case .allSelected:
-            selectedState = .singleSelected(indec.item)
-            topSelectedIndex = indec.item
-            repCounter = repIntArray[indec.item]
-            if repCounter == 0 {
-                display.repLabel.text = "M"
-            } else {
-                display.repLabel.text = repCounter.description
-            }
-            display.bottomCollection.scrollToItem(at: IndexPath(item: repCounter, section: 0), at: .centeredHorizontally, animated: true)
-            display.bottomCollection.reloadData()
-        case .singleSelected(let selectedIndex):
-            if selectedIndex == indec.item {
-                selectedState = .allSelected
-                topSelectedIndex = nil
-            } else {
-                repCounter = repIntArray[indec.item]
-                if repCounter == 0 {
-                    display.repLabel.text = "M"
-                } else {
-                    display.repLabel.text = repCounter.description
-                }
-                selectedState = .singleSelected(indec.item)
-                topSelectedIndex = indec.item
-                display.bottomCollection.scrollToItem(at: IndexPath(item: repCounter, section: 0), at: .centeredHorizontally, animated: true)
-                display.bottomCollection.reloadData()
-            }
-        }
-        display.topCollection.scrollToItem(at: IndexPath(item: indec.item, section: 0), at: .centeredHorizontally, animated: true)
-        display.topCollection.reloadData()
-    }
-    func selectedIndex() -> Int? {
-        return topSelectedIndex
-    }
-}
-
-extension NewRepsViewController: repsbottomCollectionProtocol {
-    func selectedIndex() -> Int {
-        return repCounter
-    }
-    func bottomItemSelected(at index: IndexPath) {
-        if index.item == 0 {
-            display.repLabel.text = "M"
-            repCounter = index.item
-        } else {
-            repCounter = index.item
-            display.repLabel.text = repCounter.description
-        }
+    // MARK: - Data Source
+    func initDataSource() {
+        dataSource = .init(collectionView: display.bottomCollection)
+        setsDataSource = .init(collectionView: display.topCollection)
         
-        switch selectedState {
-        case .allSelected:
-            repIntArray = repIntArray.map { _ in repCounter }
-        case .singleSelected(let index):
-            repIntArray[index] = repCounter
-        }
-        display.bottomCollection.scrollToItem(at: IndexPath(item: index.item, section: 0), at: .centeredHorizontally, animated: true)
-        display.bottomCollection.reloadData()
-        display.topCollection.reloadData()
+        dataSource.repSelected
+            .sink { [weak self] rep in
+                self?.display.setNumber(to: rep)
+                self?.repCounter = rep
+                self?.viewModel.repSelected(rep)
+            }
+            .store(in: &subscriptions)
+        
+        setsDataSource.setSelected
+            .sink { [weak self] in self?.viewModel.selectedSet = $0 }
+            .store(in: &subscriptions)
+        
     }
+    
+    func initViewModel() {
+        
+        viewModel.$setCellModels
+            .compactMap{ $0 }
+            .sink { [weak self] in self?.setsDataSource.updateCollection(with: $0)}
+            .store(in: &subscriptions)
+        
+        guard let exerciseViewModel = exerciseViewModel else {return}
+        
+        viewModel.$isLiveWorkout
+            .sink { [weak self] isLive in
+                if isLive {
+                    self?.setsDataSource.isLive = true
+                    self?.setsDataSource.setSelected.send(self?.viewModel.cellCount)
+                }
+            }
+            .store(in: &subscriptions)
+
+        viewModel.getSetCellModels(from: exerciseViewModel)
+    }
+    
+
 }
+
 
 //MARK: - button methods
 extension NewRepsViewController{
@@ -203,14 +126,7 @@ extension NewRepsViewController{
         if repCounter < 99 {
             repCounter += 1
             display.repLabel.text = repCounter.description
-            switch selectedState{
-            case .allSelected:
-                repIntArray = repIntArray.map { _ in repCounter }
-            case .singleSelected(let index):
-                repIntArray[index] = repCounter
-            }
-            display.bottomCollection.scrollToItem(at: IndexPath(item: repCounter, section: 0), at: .centeredHorizontally, animated: true)
-            display.bottomCollection.reloadData()
+            dataSource.repSelected.send(repCounter)
             display.topCollection.reloadData()
         }
     }
@@ -219,18 +135,11 @@ extension NewRepsViewController{
         if repCounter == 1 {
             display.repLabel.text = "M"
             repCounter -= 1
-        }else if repCounter > 1 {
+        } else if repCounter > 1 {
             repCounter -= 1
             display.repLabel.text = repCounter.description
         }
-        switch selectedState {
-        case .allSelected:
-            repIntArray = repIntArray.map { _ in repCounter }
-        case .singleSelected(let index):
-            repIntArray[index] = repCounter
-        }
-        display.bottomCollection.scrollToItem(at: IndexPath(item: repCounter, section: 0), at: .centeredHorizontally, animated: true)
-        display.bottomCollection.reloadData()
+        dataSource.repSelected.send(repCounter)
         display.topCollection.reloadData()
     }
     
@@ -248,17 +157,19 @@ extension NewRepsViewController{
 //            newExercise.repArray = repIntArray
 //        }
 //        coordinator?.repsSelected(newExercise)
-        switch exerciseViewModel?.exercisekind {
-        case .amrap, .emom:
-            exerciseViewModel?.addReps([repCounter])
-            exerciseViewModel?.addSets(1)
-        case .regular, .circuit:
-            exerciseViewModel?.addReps(repIntArray)
-        case .live:
-            exerciseViewModel?.appendToReps(repCounter)
-        case .none:
-            break
-        }
+//        switch exerciseViewModel?.exercisekind {
+//        case .amrap, .emom:
+//            exerciseViewModel?.addReps([repCounter])
+//            exerciseViewModel?.addSets(1)
+//        case .regular, .circuit:
+//            exerciseViewModel?.addReps([])
+//        case .live:
+//            exerciseViewModel?.appendToReps(repCounter)
+//        case .none:
+//            break
+//        }
+        let reps = viewModel.setCellModels?.map { $0.repNumber }
+        exerciseViewModel?.exercise.reps = reps
 //        if exerciseViewModel?.exercisekind == .amrap || exerciseViewModel?.exercisekind == .emom {
 //            exerciseViewModel?.addReps([repCounter])
 //            exerciseViewModel?.addSets(1)

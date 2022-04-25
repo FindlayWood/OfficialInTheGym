@@ -9,20 +9,22 @@
 import UIKit
 
 class AddMoreToExerciseView: UIView {
-    
+    // MARK: - Subviews
     var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.sectionInset = .init(top: 5, left: 10, bottom: 5, right: 10)
+        layout.minimumInteritemSpacing = 8
+        layout.sectionInset = .init(top: 8, left: 8, bottom: 8, right: 8)
+        layout.itemSize = CGSize(width: Constants.screenSize.width / 2 - 16, height: Constants.screenSize.width / 2)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.backgroundColor = .offWhiteColour
+        view.backgroundColor = .secondarySystemBackground
         view.register(AddMoreCollectionCell.self, forCellWithReuseIdentifier: AddMoreCollectionCell.reuseID)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+    // MARK: - Initializer
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        super.init(frame: UIScreen.main.bounds)
         setupUI()
     }
     required init?(coder: NSCoder) {
@@ -30,6 +32,7 @@ class AddMoreToExerciseView: UIView {
         setupUI()
     }
 }
+// MARK: - Setup UI
 private extension AddMoreToExerciseView {
     func setupUI() {
         addSubview(collectionView)

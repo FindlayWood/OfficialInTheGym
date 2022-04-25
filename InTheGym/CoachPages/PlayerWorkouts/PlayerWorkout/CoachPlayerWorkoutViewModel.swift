@@ -33,4 +33,9 @@ class CoachPlayerWorkoutViewModel {
         exercises.append(contentsOf: workoutModel.emoms ?? [])
         return exercises.sorted(by: { $0.workoutPosition < $1.workoutPosition} )
     }
+    
+    func getClips() -> [WorkoutClipModel] {
+        guard let clips = workoutModel.clipData else {return []}
+        return clips
+    }
 }

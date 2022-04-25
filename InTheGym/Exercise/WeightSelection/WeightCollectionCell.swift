@@ -6,11 +6,14 @@
 //  Copyright © 2021 FindlayWood. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class WeightCollectionCell: UICollectionViewCell {
     
+    // MARK: - Properties
+    static let reuseID: String = "WeightCollectionCellreuseID"
+    
+    // MARK: - Subviews
     var setLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.font
@@ -36,16 +39,25 @@ class WeightCollectionCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUpCell()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
-        fatalError()
+        super.init(coder: coder)
+        setupUI()
     }
+    override func prepareForReuse() {
+        backgroundColor = Constants.lightColour
+    }
+}
+
+// MARK: - Setup UI
+private extension WeightCollectionCell {
     
-    private func setUpCell() {
+    func setupUI() {
         backgroundColor = Constants.lightColour
         layer.cornerRadius = 10
         layer.masksToBounds = true
@@ -54,10 +66,10 @@ class WeightCollectionCell: UICollectionViewCell {
         addSubview(setLabel)
         addSubview(repsLabel)
         addSubview(weightLabel)
-        constrainCell()
+        constrainUI()
     }
     
-    private func constrainCell() {
+    func constrainUI() {
         NSLayoutConstraint.activate([setLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      repsLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
                                      weightLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -66,6 +78,9 @@ class WeightCollectionCell: UICollectionViewCell {
                                      repsLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
                                      weightLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)])
     }
+}
+// MARK: - Public Configuration
+extension WeightCollectionCell {
     func updateWeightLabel(with newValue: String) {
         weightLabel.text = newValue
     }
@@ -73,8 +88,5 @@ class WeightCollectionCell: UICollectionViewCell {
         weightLabel.text = model.weight
         repsLabel.text = model.rep.description + " reps"
         setLabel.text = "SET " + model.index.description
-    }
-    override func prepareForReuse() {
-        backgroundColor = Constants.lightColour
     }
 }

@@ -16,6 +16,7 @@ class AddWorkoutSelectionViewController: UIViewController, Storyboarded {
     // MARK: - Outlets
     @IBOutlet weak var liveAddButton: UIButton!
     @IBOutlet weak var regularAddButton: UIButton!
+    @IBOutlet weak var savedWorkoutButton: UIButton!
 
     // MARK: - View
     override func viewDidLoad() {
@@ -24,6 +25,7 @@ class AddWorkoutSelectionViewController: UIViewController, Storyboarded {
         navigationItem.title = "Add a Workout"
         liveAddButton.addViewShadow(with: .darkColour)
         regularAddButton.addViewShadow(with: .darkColour)
+        savedWorkoutButton.addViewShadow(with: .darkColour)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,5 +40,10 @@ class AddWorkoutSelectionViewController: UIViewController, Storyboarded {
     // MARK: - Regular Action
     @IBAction func addWorkout(_ sender:UIButton){
         coordinator?.addNewWorkout(UserDefaults.currentUser)
+    }
+    
+    // MARK: - Saved Action
+    @IBAction func savedWorkout(_ sender: UIButton) {
+         coordinator?.addSavedWorkout()
     }
 }

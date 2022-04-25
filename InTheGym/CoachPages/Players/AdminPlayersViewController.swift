@@ -32,6 +32,7 @@ class AdminPlayersViewController: UIViewController {
         showFirstMessage()
         initDataSource()
         initTargets()
+//        initDisplay()
     }
     
     override func viewDidLayoutSubviews() {
@@ -55,6 +56,14 @@ class AdminPlayersViewController: UIViewController {
         display.addSubview(childVC.view)
         childVC.view.frame = display.containerView.frame
         childVC.didMove(toParent: self)
+    }
+    
+    // MARK: Display iOS 14
+    func initDisplay() {
+        if #available(iOS 14.0, *) {
+            display.iconButton.menu = display.coachMenu
+            display.iconButton.showsMenuAsPrimaryAction = true
+        }
     }
     
     // MARK: - Targets

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 class AddMoreRestTimeViewController: UIViewController {
     
@@ -16,25 +17,28 @@ class AddMoreRestTimeViewController: UIViewController {
     
     var cellModel: AddMoreCellModel!
     
+    var exerciseViewModel: ExerciseCreationViewModel!
+    
+    var setsDataSource: SetsDataSource!
+    
+    var viewModel = AddMoreViewModel()
+    
+    private var subscriptions = Set<AnyCancellable>()
+    
     let message = "Add a rest time for between each set for this exercise. Adding a rest time will not be appropriate for every exercise."
 
+    // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         initDisplay()
         initBarButton()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkColour]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.tintColor = UIColor.darkColour
+        super.viewWillAppear(animated)
+        editNavBarColour(to: .darkColour)
         navigationItem.title = "Add Rest Time"
     }
     func initBarButton() {
@@ -48,13 +52,53 @@ class AddMoreRestTimeViewController: UIViewController {
         display.setButtonTitlesTo("Seconds", "Minutes", nil, message)
         display.buttoneOne.addTarget(self, action: #selector(secondsPressed), for: .touchUpInside)
         display.buttoneTwo.addTarget(self, action: #selector(minutesPressed), for: .touchUpInside)
+        display.updateButton.addTarget(self, action: #selector(updatePressed), for: .touchUpInside)
     }
+    // MARK: - Init Data Source
+    func initDataSource() {
+        setsDataSource = .init(collectionView: display.topCollection)
+        
+        setsDataSource.setSelected
+            .sink { [weak self] selectedSet in
+                self?.viewModel.selectedSet = selectedSet
+                self?.display.setUpdateButton(to: selectedSet)
+            }
+            .store(in: &subscriptions)
+    }
+    // MARK: - Init View Model
+    func iniViewModel() {
+        
+        viewModel.$setCellModels
+            .compactMap { $0 }
+            .sink { [weak self] in self?.setsDataSource.updateCollection(with: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.$isLiveWorkout
+            .sink { [weak self] isLive in
+                if isLive {
+                    self?.display.topCollection.isUserInteractionEnabled = false
+                    self?.setsDataSource.setSelected.send(self?.viewModel.cellCount)
+                }
+            }
+            .store(in: &subscriptions)
+    }
+
     func emptyCheck() -> Bool {
         return display.numberTextfield.text == "" || display.weightMeasurementField.text == ""
     }
 }
 
 extension AddMoreRestTimeViewController {
+    @objc func updatePressed() {
+        guard let enteredTime = display.numberTextfield.text,
+              let enteredWeight = display.weightMeasurementField.text
+        else {return}
+        guard var timeInt = Int(enteredTime) else {return}
+        if display.weightMeasurementField.text == "mins" {
+            timeInt = timeInt * 60
+        }
+        viewModel.restTimeUpdated(timeInt.description)
+    }
     @objc func addPressed() {
         guard let enteredTime = display.numberTextfield.text,
               let enteredWeight = display.weightMeasurementField.text
@@ -63,17 +107,22 @@ extension AddMoreRestTimeViewController {
         if display.weightMeasurementField.text == "mins" {
             timeInt = timeInt * 60
         }
-        cellModel.value.value = enteredTime + enteredWeight
+        cellModel.value.value = "Added"
+        guard let times = (viewModel.setCellModels?.map { $0.weightString }) else {return}
+        let seconds = times.map { Int($0) ?? 0}
+        exerciseViewModel.addRestTime(seconds)
         coordinator?.restTimeAdded(timeInt)
     }
     @objc func secondsPressed() {
         display.weightMeasurementField.text = "secs"
         display.numberTextfield.becomeFirstResponder()
+        display.updateButton.isHidden = false
         navigationItem.rightBarButtonItem?.isEnabled = !emptyCheck()
     }
     @objc func minutesPressed() {
         display.weightMeasurementField.text = "mins"
         display.numberTextfield.becomeFirstResponder()
+        display.updateButton.isHidden = false
         navigationItem.rightBarButtonItem?.isEnabled = !emptyCheck()
     }
 }

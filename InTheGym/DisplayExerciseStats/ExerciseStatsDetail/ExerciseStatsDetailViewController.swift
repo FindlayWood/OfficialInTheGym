@@ -15,21 +15,24 @@ class ExerciseStatsDetailViewController: UIViewController {
 
     var viewModel = ExerciseStatsDetailViewModel()
     
+    var dataSource: ExerciseStatsDetailDataSource!
+    
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         display.configure(with: viewModel.statsModel)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
+//        initDataSource()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = viewModel.statsModel.exerciseName
         editNavBarColour(to: .darkColour)
+    }
+    // MARK: - Data Source
+    func initDataSource() {
+        dataSource = .init(collectionView: display.collectionView, model: viewModel.statsModel)
     }
 }

@@ -13,8 +13,13 @@ class MyProgramsView: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
+    var currentProgramView: UICurrentProgramView = {
+        let view = UICurrentProgramView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     var segmentControl: CustomisedSegmentControl = {
-        let view = CustomisedSegmentControl(frame: .zero, buttonTitles: ["Current", "Saved", "Completed"])
+        let view = CustomisedSegmentControl(frame: .zero, buttonTitles: ["Saved", "Completed"])
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -39,7 +44,7 @@ class MyProgramsView: UIView {
     
     // MARK: - Initializer
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        super.init(frame: UIScreen.main.bounds)
         setupUI()
     }
     required init?(coder: NSCoder) {
@@ -52,6 +57,7 @@ class MyProgramsView: UIView {
 private extension MyProgramsView {
     func setupUI() {
         backgroundColor = .white
+        addSubview(currentProgramView)
         addSubview(segmentControl)
         addSubview(collectionView)
         addSubview(plusButton)
@@ -61,7 +67,11 @@ private extension MyProgramsView {
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            segmentControl.topAnchor.constraint(equalTo: topAnchor),
+            currentProgramView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
+            currentProgramView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            currentProgramView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            
+            segmentControl.topAnchor.constraint(equalTo: currentProgramView.bottomAnchor, constant: 16),
             segmentControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             segmentControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             segmentControl.heightAnchor.constraint(equalToConstant: 50),
@@ -90,10 +100,10 @@ private extension MyProgramsView {
 // MARK: - Public Configuration
 extension MyProgramsView {
     public func setDisplay(to index: Int) {
-        if index == 0 || index == 2 {
-            plusButton.isHidden = true
-        } else {
+        if index == 0 {
             plusButton.isHidden = false
+        } else {
+            plusButton.isHidden = true
         }
     }
 }

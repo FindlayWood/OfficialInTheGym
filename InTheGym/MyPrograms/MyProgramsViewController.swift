@@ -23,18 +23,15 @@ class MyProgramsViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         initTargets()
         initDataSource()
         initSubscribers()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,7 +54,10 @@ class MyProgramsViewController: UIViewController {
 //        dataSource.updateTable(with: viewModel.currentProgram.value)
         
         dataSource.savedProgramSelected
-            .sink { [weak self] in self?.coordinator?.showSavedProgram($0) }
+            .sink { [weak self] model in
+                guard let self = self else {return}
+                self.coordinator?.showSavedProgram(model, listener: self.viewModel.currentProgram)
+            }
             .store(in: &subscriptions)
     }
     
@@ -72,6 +72,11 @@ class MyProgramsViewController: UIViewController {
             .store(in: &subscriptions)
         
         viewModel.currentProgram
+            .compactMap { $0 }
+            .sink { [weak self] in self?.display.currentProgramView.configure(with: $0) }
+            .store(in: &subscriptions)
+        
+        viewModel.savedPrograms
             .sink { [weak self] models in
                 if self?.viewModel.selectedIndex.value == 0 {
                     self?.dataSource.updateTable(with: models)
@@ -79,17 +84,9 @@ class MyProgramsViewController: UIViewController {
             }
             .store(in: &subscriptions)
         
-        viewModel.savedPrograms
-            .sink { [weak self] models in
-                if self?.viewModel.selectedIndex.value == 1 {
-                    self?.dataSource.updateTable(with: models)
-                }
-            }
-            .store(in: &subscriptions)
-        
         viewModel.completedPrograms
             .sink { [weak self] models in
-                if self?.viewModel.selectedIndex.value == 2 {
+                if self?.viewModel.selectedIndex.value == 1 {
                     self?.dataSource.updateTable(with: models)
                 }
             }

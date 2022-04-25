@@ -246,6 +246,7 @@ class CompletedInfoView: UIView {
         label.textColor = .darkColour
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.2
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -261,7 +262,7 @@ class CompletedInfoView: UIView {
     var label: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 22, weight: .semibold)
-        label.textColor = .darkGray
+        label.textColor = .secondaryLabel
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -280,7 +281,7 @@ class CompletedInfoView: UIView {
 // MARK: - Configure
 private extension CompletedInfoView {
     func setupUI() {
-        backgroundColor = .offWhiteColour
+        backgroundColor = .thirdColour
         layer.cornerRadius = 10
         addSubview(titleLabel)
         addSubview(imageView)

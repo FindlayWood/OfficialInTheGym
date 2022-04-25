@@ -28,7 +28,7 @@ class DescriptionsViewController: UIViewController {
         view.backgroundColor = .white
         initButtonActions()
         initDataSource()
-        initViewModel()
+//        initViewModel()
     }
     
     override func viewDidLayoutSubviews() {

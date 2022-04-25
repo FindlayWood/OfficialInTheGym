@@ -13,6 +13,11 @@ class SetsCell: UICollectionViewCell {
     // MARK: - Properties
     static var cellID = "SetsCellID"
     
+    static let setNumbers = [Int](0...20)
+    
+    static let repNumbers = [Int](0...100)
+    
+    // MARK: - Subviews
     lazy var numberLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
@@ -23,26 +28,33 @@ class SetsCell: UICollectionViewCell {
         return label
     }()
     
-    
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
-        fatalError()
+        super.init(coder: coder)
+        setupUI()
     }
-    
-    private func setupView() {
+    override func prepareForReuse() {
+        backgroundColor = .lightColour
+    }
+}
+
+// MARK: - Setup UI
+private extension SetsCell {
+    func setupUI() {
         addSubview(numberLabel)
         layer.cornerRadius = 40
         layer.borderWidth = 2.0
         layer.borderColor = UIColor.black.cgColor
-        backgroundColor = Constants.lightColour
-        constrain()
+        backgroundColor = .lightColour
+        constrainUI()
     }
     
-    private func constrain() {
+    func constrainUI() {
         NSLayoutConstraint.activate([numberLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
                                      numberLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
         
@@ -51,8 +63,15 @@ class SetsCell: UICollectionViewCell {
                                      numberLabel.topAnchor.constraint(equalTo: topAnchor),
                                      numberLabel.bottomAnchor.constraint(equalTo: bottomAnchor)])
     }
-    
-    override func prepareForReuse() {
-        backgroundColor = Constants.lightColour
+}
+
+// MARK: - Public Configuration
+extension SetsCell {
+    public func configure(with number: Int) {
+        if number == 0 {
+            numberLabel.text = "M"
+        } else {
+            numberLabel.text = number.description
+        }
     }
 }

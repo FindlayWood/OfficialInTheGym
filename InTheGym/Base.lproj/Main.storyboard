@@ -658,10 +658,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NFV-6f-h4J" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                <rect key="frame" x="20" y="54" width="374" height="65"/>
+                                <rect key="frame" x="20" y="54" width="374" height="48"/>
                                 <color key="backgroundColor" name="darkColour"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="65" id="8E7-is-rWx"/>
+                                    <constraint firstAttribute="height" constant="48" id="8E7-is-rWx"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
                                 <state key="normal" title="Live Workout">
@@ -683,7 +683,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="WT4-tg-fOg">
-                                <rect key="frame" x="20" y="127" width="374" height="65"/>
+                                <rect key="frame" x="20" y="110" width="374" height="65"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="ZDL-Za-uLe"/>
                                 </constraints>
@@ -693,10 +693,10 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9h-w6-FTJ" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
-                                <rect key="frame" x="20" y="232" width="374" height="65"/>
+                                <rect key="frame" x="20" y="215" width="374" height="48"/>
                                 <color key="backgroundColor" name="darkColour"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="65" id="u8z-E1-KO3"/>
+                                    <constraint firstAttribute="height" constant="48" id="u8z-E1-KO3"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
                                 <state key="normal" title="Add Workout">
@@ -718,7 +718,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="7Lx-hj-gao">
-                                <rect key="frame" x="20" y="305" width="374" height="85"/>
+                                <rect key="frame" x="20" y="271" width="374" height="85"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="85" id="edd-9J-hDE"/>
                                 </constraints>
@@ -727,11 +727,50 @@
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="isu-g2-ty5" customClass="RoundButton" customModule="InTheGym" customModuleProvider="target">
+                                <rect key="frame" x="20" y="396" width="374" height="48"/>
+                                <color key="backgroundColor" name="darkColour"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="O5P-LP-ISD"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                                <state key="normal" title="Saved Workout">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="savedWorkout:" destination="fxf-Hl-IKU" eventType="touchUpInside" id="cKz-a0-lma"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Une-jj-jqR">
+                                <rect key="frame" x="20" y="452" width="374" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="3V3-5M-QYs"/>
+                                </constraints>
+                                <string key="text">Saved Workout allows you to add a saved workout to your Saved Workouts list. This workout will not be added to your Workouts list when created but can be added in the future.</string>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="JwG-Tc-pbw"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Une-jj-jqR" firstAttribute="leading" secondItem="JwG-Tc-pbw" secondAttribute="leading" constant="20" id="0go-wg-fWa"/>
+                            <constraint firstItem="JwG-Tc-pbw" firstAttribute="trailing" secondItem="isu-g2-ty5" secondAttribute="trailing" constant="20" id="38E-Hh-Fem"/>
                             <constraint firstItem="JwG-Tc-pbw" firstAttribute="trailing" secondItem="U9h-w6-FTJ" secondAttribute="trailing" constant="20" id="CHV-Pt-Wwh"/>
+                            <constraint firstItem="isu-g2-ty5" firstAttribute="top" secondItem="7Lx-hj-gao" secondAttribute="bottom" constant="40" id="FZS-OQ-xeU"/>
+                            <constraint firstItem="Une-jj-jqR" firstAttribute="top" secondItem="isu-g2-ty5" secondAttribute="bottom" constant="8" symbolic="YES" id="KNS-ag-s4r"/>
                             <constraint firstItem="WT4-tg-fOg" firstAttribute="leading" secondItem="JwG-Tc-pbw" secondAttribute="leading" constant="20" id="Mfs-QJ-egi"/>
                             <constraint firstItem="JwG-Tc-pbw" firstAttribute="trailing" secondItem="WT4-tg-fOg" secondAttribute="trailing" constant="20" id="NS3-Fq-hrM"/>
                             <constraint firstItem="WT4-tg-fOg" firstAttribute="top" secondItem="NFV-6f-h4J" secondAttribute="bottom" constant="8" symbolic="YES" id="OXj-VB-zc3"/>
@@ -739,6 +778,8 @@
                             <constraint firstItem="NFV-6f-h4J" firstAttribute="top" secondItem="JwG-Tc-pbw" secondAttribute="top" constant="10" id="a3l-co-6Tr"/>
                             <constraint firstItem="U9h-w6-FTJ" firstAttribute="leading" secondItem="JwG-Tc-pbw" secondAttribute="leading" constant="20" id="bey-hR-Ub6"/>
                             <constraint firstItem="NFV-6f-h4J" firstAttribute="leading" secondItem="JwG-Tc-pbw" secondAttribute="leading" constant="20" id="f5C-tA-aCH"/>
+                            <constraint firstItem="JwG-Tc-pbw" firstAttribute="trailing" secondItem="Une-jj-jqR" secondAttribute="trailing" constant="20" id="flw-LK-1N0"/>
+                            <constraint firstItem="isu-g2-ty5" firstAttribute="leading" secondItem="JwG-Tc-pbw" secondAttribute="leading" constant="20" id="qBN-zH-IgW"/>
                             <constraint firstItem="7Lx-hj-gao" firstAttribute="leading" secondItem="JwG-Tc-pbw" secondAttribute="leading" constant="20" id="qsk-48-3AU"/>
                             <constraint firstItem="JwG-Tc-pbw" firstAttribute="trailing" secondItem="7Lx-hj-gao" secondAttribute="trailing" constant="20" id="se9-hD-Uak"/>
                             <constraint firstItem="7Lx-hj-gao" firstAttribute="top" secondItem="U9h-w6-FTJ" secondAttribute="bottom" constant="8" symbolic="YES" id="tj4-kj-lSz"/>
@@ -748,11 +789,12 @@
                     <connections>
                         <outlet property="liveAddButton" destination="NFV-6f-h4J" id="lNj-yo-2p8"/>
                         <outlet property="regularAddButton" destination="U9h-w6-FTJ" id="vx3-IS-Wz6"/>
+                        <outlet property="savedWorkoutButton" destination="isu-g2-ty5" id="m2t-mm-ud7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ALx-t5-Q3Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="971" y="-2531"/>
+            <point key="canvasLocation" x="969.56521739130437" y="-2531.25"/>
         </scene>
         <!--MYINFO-->
         <scene sceneID="gsM-zQ-ZfM">
@@ -7547,6 +7589,9 @@
         </designable>
         <designable name="h36-4N-4qy">
             <size key="intrinsicContentSize" width="30" height="38"/>
+        </designable>
+        <designable name="isu-g2-ty5">
+            <size key="intrinsicContentSize" width="199" height="46"/>
         </designable>
         <designable name="kez-jD-vfi">
             <size key="intrinsicContentSize" width="374" height="46.380859375"/>

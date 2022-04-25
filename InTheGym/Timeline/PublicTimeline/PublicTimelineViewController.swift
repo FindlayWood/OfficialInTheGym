@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class PublicTimelineViewController: UIViewController {
+class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC {
     
     // MARK: - Coordinator
     weak var coordinator: UserProfileCoordinator?
@@ -22,6 +22,9 @@ class PublicTimelineViewController: UIViewController {
     var dataSource: ProfileDataSource!
     
     private var subscriptions = Set<AnyCancellable>()
+    
+    var selectedCell: ClipCollectionCell?
+    var selectedCellImageViewSnapshot: UIView?
     
 
     // MARK: - View
@@ -54,20 +57,40 @@ class PublicTimelineViewController: UIViewController {
             .sink { [weak self] in self?.newSegmentSelected($0) }
             .store(in: &subscriptions)
         
+        dataSource.cellSelected
+            .sink { [weak self] selectedCellModel in
+                self?.selectedCell = selectedCellModel.selectedCell
+                self?.selectedCellImageViewSnapshot = selectedCellModel.snapshot
+            }
+            .store(in: &subscriptions)
+        
         dataSource.itemSelected
             .sink { [weak self] item in
+                guard let self = self else {return}
                 switch item {
                 case .post(let post):
-                    self?.showCommentSection(for: post)
+                    self.showCommentSection(for: post)
                 case .clip(let clip):
-                    self?.coordinator?.clipSelected(clip)
+                    self.coordinator?.clipSelected(clip, fromViewControllerDelegate: self)
                 case .workout(let workout):
-                    self?.coordinator?.showSavedWorkout(workout)
+                    self.coordinator?.showSavedWorkout(workout)
                 default:
                     break
                 }
             }
             .store(in: &subscriptions)
+        
+        dataSource.userTapped
+            .sink { [weak self]in self?.viewModel.getUser(from: $0) }
+            .store(in: &subscriptions)
+        
+        dataSource.workoutTapped
+            .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
+            .store(in: &subscriptions)
+        
+//        dataSource.likeButtonTapped
+//            .sink { [weak self] in self?.viewModel.likeCheck($0) }
+//            .store(in: &subscriptions)
     }
     
 
@@ -98,11 +121,23 @@ class PublicTimelineViewController: UIViewController {
                 }
             }
             .store(in: &subscriptions)
+        
+        viewModel.workoutSelected
+            .sink { [weak self] in self?.coordinator?.showWorkout($0) }
+            .store(in: &subscriptions)
+        
+        viewModel.savedWorkoutSelected
+            .sink { [weak self] in self?.coordinator?.showSavedWorkout($0) }
+            .store(in: &subscriptions)
+        
+        viewModel.userSelected
+            .sink { [weak self] in self?.coordinator?.showUser(user: $0) }
+            .store(in: &subscriptions)
 
         
         viewModel.fetchPosts()
-        viewModel.getFollowerCount()
-        viewModel.checkFollowing()
+        viewModel.fetchClipKeys()
+        viewModel.fetchWorkoutKeys()
     }
 
     
@@ -125,9 +160,7 @@ class PublicTimelineViewController: UIViewController {
     func showCommentSection(for post: post) {
         coordinator?.showCommentSection(for: post, with: viewModel.reloadListener)
     }
-    @IBAction func follow(_ sender: UIButton) {
-        viewModel.follow()
-    }
+
     @IBAction func showCreatedWorkouts(_ sender:UIButton){
         coordinator?.showCreatedWorkouts(for: viewModel.user)
 

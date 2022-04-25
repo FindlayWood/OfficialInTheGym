@@ -140,3 +140,30 @@ extension SavedProgramDownloadModel: FirebaseInstance {
         return "SavedPrograms/\(id)"
     }
 }
+
+
+// MARK: - Current Program Model
+struct CurrentProgramModel {
+    var id: String
+    var savedID: String
+    var title: String
+    var description: String
+    var weeks: [ProgramWeekModel]
+    var creatorID: String
+    var isPrivate: Bool
+    
+    init(_ savedProgramModel: SavedProgramModel) {
+        self.id = "CurrentProgram"
+        self.savedID = savedProgramModel.id
+        self.title = savedProgramModel.title
+        self.description = savedProgramModel.description
+        self.weeks = savedProgramModel.weeks
+        self.creatorID = savedProgramModel.creatorID
+        self.isPrivate = savedProgramModel.isPrivate
+    }
+}
+extension CurrentProgramModel: FirebaseInstance {
+    var internalPath: String {
+        return "CurrentProgram/\(UserDefaults.currentUser.uid)/\(id)"
+    }
+}

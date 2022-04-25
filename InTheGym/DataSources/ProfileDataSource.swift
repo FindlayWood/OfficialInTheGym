@@ -16,6 +16,12 @@ class ProfileDataSource: NSObject {
     var itemSelected = PassthroughSubject<ProfilePageItems,Never>()
     var cellSelected = PassthroughSubject<SelectedClip,Never>()
     
+    var likeButtonTapped = PassthroughSubject<post,Never>()
+    
+    var userTapped = PassthroughSubject<post,Never>()
+    
+    var workoutTapped = PassthroughSubject<post,Never>()
+    
     // MARK: - Properties
     var collectionView: UICollectionView
     
@@ -24,6 +30,8 @@ class ProfileDataSource: NSObject {
     private var subscriptions = Set<AnyCancellable>()
     
     var publicProfile: Bool = false
+    
+    var actionSubscriptions = [IndexPath: AnyCancellable]()
     
     // MARK: - Initializer
     init(collectionView: UICollectionView) {
@@ -52,6 +60,10 @@ class ProfileDataSource: NSObject {
             case .post(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.reuseID, for: indexPath) as! PostCollectionViewCell
                 cell.configure(with: model)
+                self.actionSubscriptions[indexPath] = cell.actionPublisher
+                    .sink(receiveValue: { [weak self] action in
+                        self?.actionPublisher(action: action, indexPath: indexPath)
+                    })
                 return cell
             case .clip(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExerciseClipsCollectionCell.reuseID, for: indexPath) as! ExerciseClipsCollectionCell
@@ -71,9 +83,7 @@ class ProfileDataSource: NSObject {
             let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProfileHeaderView.reuseIdentifier, for: indexPath) as? ProfileHeaderView
             view?.segmentControl.selectedIndex
                 .sink { [weak self] newIndex in
-                    
                     self?.selectedIndex = newIndex
-//                    self?.reloadSection()
                 }
                 .store(in: &self.subscriptions)
             return view
@@ -140,6 +150,29 @@ class ProfileDataSource: NSObject {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.deleteSections([.UserData])
         dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    
+    // MARK: - Actions
+    func actionPublisher(action: PostAction, indexPath: IndexPath) {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
+        switch item {
+        case .profileInfo(_):
+            break // may include follow button - but it may bi en cell VM
+        case .post(let post):
+            switch action {
+            case .likeButtonTapped:
+                likeButtonTapped.send(post)
+            case .workoutTapped:
+                workoutTapped.send(post)
+            case .userTapped:
+                userTapped.send(post)
+            }
+        case .workout(_):
+            break
+        case .clip(_):
+            break
+        }
+
     }
 }
 

@@ -123,6 +123,10 @@ class ExerciseModel: ExerciseType, Codable, Hashable {
     var completedSets: [Bool]?
     var sets: Int
     var rpe: Int?
+    var time: [Int]?
+    var distance: [String]?
+    var restTime: [Int]?
+    var note: String?
     
     init(exercise: String, type: bodyType) {
         self.workoutPosition = 0

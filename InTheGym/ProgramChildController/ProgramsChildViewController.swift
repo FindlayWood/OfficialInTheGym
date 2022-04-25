@@ -18,17 +18,20 @@ class ProgramsChildViewController: UIViewController {
     var workoutsDataSource: ProgramCreationWorkoutsDataSource!
 
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         initDataSource()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        display.frame = getFullViewableFrame()
+//        view.addSubview(display)
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

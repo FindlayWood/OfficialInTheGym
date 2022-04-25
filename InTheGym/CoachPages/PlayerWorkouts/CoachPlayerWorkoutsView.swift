@@ -15,7 +15,7 @@ class CoachPlayerWorkoutsView: UIView {
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
         view.register(WorkoutCollectionViewCell.self, forCellWithReuseIdentifier: WorkoutCollectionViewCell.reuseID)
-        view.backgroundColor = .lightColour
+        view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -55,9 +55,9 @@ private extension CoachPlayerWorkoutsView {
     func generateCollectionLayout() -> UICollectionViewFlowLayout {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
 //        layout.minimumInteritemSpacing = 5
-        layout.minimumLineSpacing = 8
-        layout.itemSize = CGSize(width: Constants.screenSize.width - 16, height: 160)
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        layout.minimumLineSpacing = 16
+        layout.estimatedItemSize = CGSize(width: Constants.screenSize.width - 16, height: 160)
+        layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         layout.scrollDirection = .vertical
         return layout
     }

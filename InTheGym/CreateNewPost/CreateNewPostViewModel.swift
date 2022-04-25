@@ -84,25 +84,25 @@ class CreateNewPostViewModel {
         }
     }
     
-    func post<Model:Postable>(_ model: Model) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            self.isLoading = false
-            self.listener?.send(model)
-//            self.updateText(with: "")
-//            self.removeAllAttachments()
-            self.succesfullyPostedClosure?()
-        }
-//        apiService.uploadTimeOrderedModel(model: model) { [weak self] result in
-//            switch result {
-//            case .success(let model):
-//                print(model)
-//                self?.successfullyPosted = true
-//                self?.isLoading = false
-//            case .failure(let error):
-//                self?.errorPosting = error
-//                self?.isLoading = false
-//            }
+    func post<Model>(_ model: Model) where Model: Postable {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//            self.isLoading = false
+//            self.listener?.send(model)
+////            self.updateText(with: "")
+////            self.removeAllAttachments()
+//            self.succesfullyPostedClosure?()
 //        }
+        apiService.uploadTimeOrderedModel(model: model) { [weak self] result in
+            switch result {
+            case .success(let model):
+                self?.successfullyPosted = true
+                self?.listener?.send(model)
+                self?.isLoading = false
+            case .failure(let error):
+                self?.errorPosting = error
+                self?.isLoading = false
+            }
+        }
     }
     
     // MARK: - Actions

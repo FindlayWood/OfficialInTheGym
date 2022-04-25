@@ -67,8 +67,8 @@ class AlertTopView: UIView {
 
 extension UIViewController {
     func showTopAlert(with message: String) {
-        let margins = self.navigationController?.view.safeAreaInsets
-        let showingFrame = CGRect(x: 5, y: margins!.top, width: UIScreen.main.bounds.width, height: 60)
+        let margins = self.view.safeAreaInsets
+        let showingFrame = CGRect(x: 5, y: margins.top, width: UIScreen.main.bounds.width, height: 60)
         let alert = AlertTopView(frame: showingFrame, message: message)
         self.view.addSubview(alert)
     }

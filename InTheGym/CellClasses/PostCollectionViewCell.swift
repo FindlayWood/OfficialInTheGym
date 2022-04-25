@@ -21,6 +21,8 @@ class PostCollectionViewCell: FullWidthCollectionViewCell {
 
     var posterID: String!
     
+    var viewModel = PostCellViewModel()
+    
     // MARK: - Subviews
     var profileImageButton: UIButton = {
         let button = UIButton()
@@ -176,6 +178,7 @@ private extension PostCollectionViewCell {
 // MARK: - Public Configuration
 extension PostCollectionViewCell {
     func configure(with post: DisplayablePost) {
+        viewModel.post = post
         posterID = post.posterID
         usernameButton.setTitle(post.username, for: .normal)
         let then = Date(timeIntervalSince1970: (post.time))
@@ -225,7 +228,8 @@ extension PostCollectionViewCell {
     }
     
     @objc func likeButtonTapped(_ sender: UIButton) {
-        actionPublisher.send(.likeButtonTapped)
+//        actionPublisher.send(.likeButtonTapped)
+        viewModel.likedPost()
         UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
             sender.setImage(UIImage(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
         } completion: { _ in
