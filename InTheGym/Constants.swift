@@ -46,4 +46,5 @@ class Constants {
     
     static let font = UIFont(name: "Menlo-Bold", size: 25)
     
+    static let defaultAccountCreatedDate = "2020"
 }

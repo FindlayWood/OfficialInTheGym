@@ -92,10 +92,12 @@ extension MyProfileCoordinator {
     func showMoreInfo() {
         if UserDefaults.currentUser.admin {
             let vc = CoachProfileMoreViewController()
+            vc.hidesBottomBarWhenPushed = true
             navigationController.pushViewController(vc, animated: true)
             
         } else {
             let vc = PlayerProfileMoreViewController()
+            vc.hidesBottomBarWhenPushed = true
             navigationController.pushViewController(vc, animated: true)
 //            let vc = NewInfoViewController.instantiate()
 //            navigationController.pushViewController(vc, animated: true)

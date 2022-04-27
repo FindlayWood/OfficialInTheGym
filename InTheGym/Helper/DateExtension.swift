@@ -24,5 +24,10 @@ extension Date {
         dateFormatter.dateFormat = "EEEE"
         return dateFormatter.string(from: self)
     }
+    func getYear() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy"
+        return formatter.string(from: self)
+    }
     
 }

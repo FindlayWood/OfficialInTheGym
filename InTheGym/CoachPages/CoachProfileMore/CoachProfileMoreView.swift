@@ -52,8 +52,15 @@ struct CoachProfileMoreView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                 }
-
-
+                HStack {
+                    Image(uiImage: UIImage(named: "hammer_icon")!)
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .cornerRadius(4)
+                    Text(viewModel.getAccountCreated())
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                }
             } header: {
                 VStack(alignment: .center) {
                     if let profileImage = viewModel.profileImage {

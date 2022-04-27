@@ -37,6 +37,13 @@ class PlayerProfileMoreViewModel: ObservableObject {
             self?.profileImage = image
         }
     }
+    func getAccountCreated() -> String {
+        if let timeCreated = UserDefaults.currentUser.accountCreated {
+            return Date(timeIntervalSince1970: timeCreated).getYear()
+        } else {
+            return Constants.defaultAccountCreatedDate
+        }
+    }
 }
 
 enum PlayerProfileMoreAction {
