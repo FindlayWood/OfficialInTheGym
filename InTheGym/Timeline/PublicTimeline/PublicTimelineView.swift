@@ -124,7 +124,7 @@ private extension PublicTimelineView {
     }
     func generateWorkoutsLayout() -> NSCollectionLayoutSection {
         
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(160))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(300))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
