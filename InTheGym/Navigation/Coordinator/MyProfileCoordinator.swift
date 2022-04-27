@@ -90,8 +90,8 @@ extension MyProfileCoordinator {
     }
     
     func showMoreInfo() {
-        if ViewController.admin {
-            let vc = CoachInfoViewController.instantiate()
+        if UserDefaults.currentUser.admin {
+            let vc = CoachProfileMoreViewController()
             navigationController.pushViewController(vc, animated: true)
             
         } else {
