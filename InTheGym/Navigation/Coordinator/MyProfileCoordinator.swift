@@ -95,8 +95,10 @@ extension MyProfileCoordinator {
             navigationController.pushViewController(vc, animated: true)
             
         } else {
-            let vc = NewInfoViewController.instantiate()
+            let vc = PlayerProfileMoreViewController()
             navigationController.pushViewController(vc, animated: true)
+//            let vc = NewInfoViewController.instantiate()
+//            navigationController.pushViewController(vc, animated: true)
         }
     }
     

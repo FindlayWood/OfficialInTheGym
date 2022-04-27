@@ -111,9 +111,10 @@ class OldSettingsViewController: UIViewController, UITableViewDelegate, UITableV
             navigationController?.pushViewController(SVC, animated: true)
             
         case 1:
-            let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-            let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
-            navigationController?.pushViewController(SVC, animated: true)
+            break
+//            let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+////            let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
+//            navigationController?.pushViewController(SVC, animated: true)
         
         case 2:
             UIApplication.shared.open(URL(string: Constants.instagramLink)!)

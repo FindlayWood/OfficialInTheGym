@@ -47,16 +47,15 @@ class SettingsViewController: UIViewController {
             .sink { [weak self] in self?.tapAction($0)}
             .store(in: &subscriptions)
     }
-    
-
 }
 // MARK: - Actions
 private extension SettingsViewController {
     func tapAction(_ action: SettingsAction) {
         switch action {
         case .about:
-            let vc = BestUseMessageViewController()
-            navigationController?.pushViewController(vc, animated: true)
+            let Storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let SVC = Storyboard.instantiateViewController(withIdentifier: "BestUseMessageViewController") as! BestUseMessageViewController
+            self.navigationController?.pushViewController(SVC, animated: true)
         case .icons:
             UIApplication.shared.open(URL(string: Constants.icons8Link)!)
         case .instagram:

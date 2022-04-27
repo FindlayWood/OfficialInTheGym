@@ -222,6 +222,7 @@
 		742C1CE227C9336B00DD1BB0 /* SavedProgramDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1CE127C9336A00DD1BB0 /* SavedProgramDisplayViewController.swift */; };
 		742C1CE427C9337E00DD1BB0 /* SavedProgramDisplayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1CE327C9337E00DD1BB0 /* SavedProgramDisplayViewModel.swift */; };
 		742CCDC02649CA630070D0A5 /* ProfilePhotoAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742CCDBF2649CA630070D0A5 /* ProfilePhotoAlert.swift */; };
+		742D8BEB2819752E003682A2 /* PlayerProfileMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742D8BEA2819752E003682A2 /* PlayerProfileMoreViewController.swift */; };
 		742FF36B277B812F00AEE3D2 /* CommentSectionItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FF36A277B812F00AEE3D2 /* CommentSectionItems.swift */; };
 		742FF36D277B880900AEE3D2 /* PostReplies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FF36C277B880900AEE3D2 /* PostReplies.swift */; };
 		742FF36F277B8A2700AEE3D2 /* FirebaseResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FF36E277B8A2700AEE3D2 /* FirebaseResource.swift */; };
@@ -495,6 +496,7 @@
 		746BFFA826B204170010C465 /* DisplayClipCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BFFA726B204170010C465 /* DisplayClipCell.swift */; };
 		746BFFAA26B2D7460010C465 /* DisplayWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BFFA926B2D7460010C465 /* DisplayWorkoutView.swift */; };
 		746BFFAC26B304270010C465 /* ThumbnailGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BFFAB26B304270010C465 /* ThumbnailGenerator.swift */; };
+		7470FD70281968DA003DB256 /* PlayerProfileMoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */; };
 		7471ACDA25D454310042C561 /* WorkoutCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7471ACD925D454310042C561 /* WorkoutCell.xib */; };
 		7472C87227DFF628004836B8 /* DiscoverPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87127DFF628004836B8 /* DiscoverPageView.swift */; };
 		7472C87427E0B4B7004836B8 /* DiscoverSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */; };
@@ -1078,6 +1080,7 @@
 		742C1CE127C9336A00DD1BB0 /* SavedProgramDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedProgramDisplayViewController.swift; sourceTree = "<group>"; };
 		742C1CE327C9337E00DD1BB0 /* SavedProgramDisplayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedProgramDisplayViewModel.swift; sourceTree = "<group>"; };
 		742CCDBF2649CA630070D0A5 /* ProfilePhotoAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePhotoAlert.swift; sourceTree = "<group>"; };
+		742D8BEA2819752E003682A2 /* PlayerProfileMoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreViewController.swift; sourceTree = "<group>"; };
 		742FF36A277B812F00AEE3D2 /* CommentSectionItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentSectionItems.swift; sourceTree = "<group>"; };
 		742FF36C277B880900AEE3D2 /* PostReplies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReplies.swift; sourceTree = "<group>"; };
 		742FF36E277B8A2700AEE3D2 /* FirebaseResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseResource.swift; sourceTree = "<group>"; };
@@ -1352,6 +1355,7 @@
 		746BFFA726B204170010C465 /* DisplayClipCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayClipCell.swift; sourceTree = "<group>"; };
 		746BFFA926B2D7460010C465 /* DisplayWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayWorkoutView.swift; sourceTree = "<group>"; };
 		746BFFAB26B304270010C465 /* ThumbnailGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailGenerator.swift; sourceTree = "<group>"; };
+		7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreViewModel.swift; sourceTree = "<group>"; };
 		7471ACD925D454310042C561 /* WorkoutCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WorkoutCell.xib; sourceTree = "<group>"; };
 		7472C87127DFF628004836B8 /* DiscoverPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageView.swift; sourceTree = "<group>"; };
 		7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSectionHeader.swift; sourceTree = "<group>"; };
@@ -3227,6 +3231,8 @@
 			isa = PBXGroup;
 			children = (
 				748915DD28121D74001A1EBE /* PlayerProfileMoreView.swift */,
+				7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */,
+				742D8BEA2819752E003682A2 /* PlayerProfileMoreViewController.swift */,
 			);
 			path = PlayerProfileMore;
 			sourceTree = "<group>";
@@ -4383,6 +4389,7 @@
 				7444D0F026D8524C0009C7A6 /* CreateNewPostViewModel.swift in Sources */,
 				74D7F4D82629CD74006C3D5C /* SignUpViewModel.swift in Sources */,
 				74318F4626B815FC009EDFAC /* CreateCircuitViewModel.swift in Sources */,
+				742D8BEB2819752E003682A2 /* PlayerProfileMoreViewController.swift in Sources */,
 				742C1C6E27B6AE4100DD1BB0 /* ProfileOptionsCell.swift in Sources */,
 				7480EBBC25F5071500E4E768 /* DisplayWorkoutCollectionViewCell.swift in Sources */,
 				744AED432799C24C000D2D74 /* UIWorkoutStartView.swift in Sources */,
@@ -4658,6 +4665,7 @@
 				742C1C6627B698B700DD1BB0 /* ProfileInfoCell.swift in Sources */,
 				74163A4422E37089005A7D2E /* ButtonExtension.swift in Sources */,
 				742C1C8327BD2CF300DD1BB0 /* ExerciseStatsDataSource.swift in Sources */,
+				7470FD70281968DA003DB256 /* PlayerProfileMoreViewModel.swift in Sources */,
 				74B6F691274D591900A72679 /* ResettingPasswordView.swift in Sources */,
 				742C1CC127C512C600DD1BB0 /* ProgramCreationWorkoutCellModel.swift in Sources */,
 				743330F227959925005A0C45 /* SavedWorkoutCollectionCell.swift in Sources */,
