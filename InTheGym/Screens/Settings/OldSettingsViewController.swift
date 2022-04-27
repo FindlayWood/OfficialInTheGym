@@ -11,8 +11,9 @@ import Firebase
 import FirebaseAuth
 import SCLAlertView
 import FirebaseStorage
+import SwiftUI
 
-class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class OldSettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // new look with tableview for 1.4
     @IBOutlet var tableview:UITableView!
@@ -25,22 +26,31 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     var DBRef : DatabaseReference!
     
+    let childContentView = SettingsView()
     
-
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
+        addChildView()
         
-        tableview.rowHeight = 80
-        tableview.isScrollEnabled = false
-        hideKeyboardWhenTappedAround()
-        
-        DBRef = Database.database().reference().child("users").child(userID!)
-        
-        tableview.backgroundColor = Constants.lightColour
-        self.navigationItem.title = "Settings"
+//        tableview.rowHeight = 80
+//        tableview.isScrollEnabled = false
+//        hideKeyboardWhenTappedAround()
+//
+//        DBRef = Database.database().reference().child("users").child(userID!)
+//
+//        tableview.backgroundColor = Constants.lightColour
+//        self.navigationItem.title = "Settings"
         
     }
-    
+    // MARK: - Swift UI Child View
+    func addChildView() {
+        let childView = UIHostingController(rootView: childContentView)
+        addChild(childView)
+        childView.view.frame = view.bounds
+        view.addSubview(childView.view)
+        childView.didMove(toParent: self)
+    }
 
     
     

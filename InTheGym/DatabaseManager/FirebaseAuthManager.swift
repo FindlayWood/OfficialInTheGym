@@ -23,6 +23,7 @@ protocol AuthManagerService {
     func loginUser(with loginModel: LoginModel, completion: @escaping (Result<Users, loginError>) -> Void)
     func resendEmailVerification(to user: User, completion: @escaping (Bool) -> Void)
     func sendResetPassword(to email: String, completion: @escaping (Bool) -> Void)
+    func logout(completion: @escaping (Bool) -> Void)
 }
 
 class FirebaseAuthManager: AuthManagerService {
@@ -176,6 +177,15 @@ class FirebaseAuthManager: AuthManagerService {
             completion(.failure(.noUser))
         }
         
+    }
+    // MARK: - Logout
+    func logout(completion: @escaping (Bool) -> Void) {
+        do {
+            try Auth.auth().signOut()
+            completion(true)
+        } catch {
+            completion(false)
+        }
     }
 }
 

@@ -155,8 +155,9 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                 SVC.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(SVC, animated: true)
             case 1:
-                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
+//                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+//                let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
+                let SVC = SettingsViewController()
                 SVC.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(SVC, animated: true)
             default:

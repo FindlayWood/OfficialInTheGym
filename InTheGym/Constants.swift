@@ -11,9 +11,9 @@ import UIKit
 
 class Constants {
     
-    var appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+    static let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     
-    static var bannedUsernames = ["Admin", "admin", "InTheGym", "OfficialInTheGym", "inthegym", "INTHEGYM"]
+    static let bannedUsernames = ["Admin", "admin", "InTheGym", "OfficialInTheGym", "inthegym", "INTHEGYM"]
     
     static let backgroundColour : UIColor = #colorLiteral(red: 0, green: 0.4616597415, blue: 1, alpha: 1)
     
@@ -37,6 +37,8 @@ class Constants {
     static let websiteString = "https://findlaywood1.wixsite.com/inthegym"
     
     static let instagramLink = "https://instagram.com/inthegym_official"
+    
+    static let icons8Link = "https://icons8.com"
     
     static let firstPostID = "-MYv7A7Im-M3O9VYJKs"
     

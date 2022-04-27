@@ -176,12 +176,14 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 SVC.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(SVC, animated: true)
             case 3:
-                let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = Storyboard.instantiateViewController(withIdentifier: "RequestsViewController") as! RequestsViewController
+//                let Storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                let SVC = Storyboard.instantiateViewController(withIdentifier: "RequestsViewController") as! RequestsViewController
+                let SVC = RequestsViewController()
                 self.navigationController?.pushViewController(SVC, animated: true)
             case 4:
-                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
+//                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+//                let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController
+                let SVC = SettingsViewController()
                 SVC.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(SVC, animated: true)
             case 5:

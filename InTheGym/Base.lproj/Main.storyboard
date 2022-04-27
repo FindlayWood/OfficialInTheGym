@@ -1326,25 +1326,9 @@
                     <view key="view" contentMode="scaleToFill" id="uoU-xx-xN8">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="98l-m8-vxj">
-                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
-                                <color key="backgroundColor" systemColor="systemGray5Color"/>
-                                <color key="separatorColor" systemColor="systemGray5Color"/>
-                            </tableView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Krt-PE-sZR"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="98l-m8-vxj" firstAttribute="leading" secondItem="Krt-PE-sZR" secondAttribute="leading" id="9Z0-hA-cNc"/>
-                            <constraint firstItem="98l-m8-vxj" firstAttribute="top" secondItem="Krt-PE-sZR" secondAttribute="top" id="ZKH-jf-dfY"/>
-                            <constraint firstAttribute="bottom" secondItem="98l-m8-vxj" secondAttribute="bottom" id="bE8-qv-PjU"/>
-                            <constraint firstItem="98l-m8-vxj" firstAttribute="trailing" secondItem="Krt-PE-sZR" secondAttribute="trailing" id="nME-UP-B1d"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="tableview" destination="98l-m8-vxj" id="ip1-TP-ErZ"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jok-P9-2ix" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

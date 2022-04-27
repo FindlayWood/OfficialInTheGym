@@ -102,4 +102,14 @@ extension UIViewController {
         let alert = SCLAlertView()
         alert.showError(title, subTitle: subtitle, closeButtonTitle: "Ok")
     }
+    func showSuccess(title: String = "Success!", subtitle: String = "Success.") {
+        let alert = SCLAlertView()
+        alert.showSuccess(title, subTitle: subtitle)
+    }
+    
+    func showButtonAlert(title: String, subtitle: String, buttonAction: @escaping () -> Void) {
+        let alert = SCLAlertView()
+        alert.addButton("Yes", action: buttonAction)
+        alert.showWarning(title, subTitle: subtitle, closeButtonTitle: "No", colorStyle: 0xe01212, colorTextButton: 0xfcfcfc)
+    }
 }
