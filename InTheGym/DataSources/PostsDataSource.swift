@@ -49,6 +49,7 @@ class PostsDataSource: NSObject {
     func makeDataSource() -> UITableViewDiffableDataSource<SingleSection,post> {
         return UITableViewDiffableDataSource(tableView: self.tableView) { tableView, indexPath, itemIdentifier in
             let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
+            cell.longDateFormat = false
             cell.configure(with: itemIdentifier)
             self.actionSubscriptions[indexPath] = cell.actionPublisher
                 .sink(receiveValue: { [weak self] action in

@@ -29,5 +29,23 @@ extension Date {
         formatter.dateFormat = "yyyy"
         return formatter.string(from: self)
     }
+    func getLongPostFormat() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm dd/MM/yyyy"
+        return formatter.string(from: self)
+    }
+    func getShortPostFormat() -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .short
+        formatter.allowedUnits = [.year, .month, .day, .hour, .minute, .second]
+        formatter.zeroFormattingBehavior = .dropAll
+        formatter.maximumUnitCount = 1
+        return String(format: formatter.string(from: self, to: Date())!)
+    }
+    func getWorkoutFormat() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        return formatter.string(from: self)
+    }
     
 }

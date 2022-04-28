@@ -47,6 +47,7 @@ class CommentSectionDataSource: NSObject {
             switch itemIdentifier {
             case .mainPost(let post):
                 let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
+                cell.longDateFormat = true
                 cell.configure(with: post)
                 self.subscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
@@ -55,6 +56,7 @@ class CommentSectionDataSource: NSObject {
                 return cell
             case .mainGroupPost(let post):
                 let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
+                cell.longDateFormat = true
                 cell.configure(with: post)
                 self.subscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
