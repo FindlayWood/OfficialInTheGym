@@ -452,6 +452,7 @@
 		744D563F26F9168B00D3E1FA /* DisplayEMOMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744D563E26F9168B00D3E1FA /* DisplayEMOMViewController.swift */; };
 		744D564126F9169900D3E1FA /* DisplayEMOMView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744D564026F9169900D3E1FA /* DisplayEMOMView.swift */; };
 		744D564326F916B600D3E1FA /* DisplayEMOMViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744D564226F916B600D3E1FA /* DisplayEMOMViewModel.swift */; };
+		744D84EC281AE5550043F183 /* WorkoutViewCompletedHStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744D84EB281AE5550043F183 /* WorkoutViewCompletedHStack.swift */; };
 		744F001A261FA40C00B7BBDE /* CreatedWorkoutUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744F0019261FA40C00B7BBDE /* CreatedWorkoutUploadViewController.swift */; };
 		744F0022261FA42100B7BBDE /* CreatedWorkoutUploadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744F0021261FA42100B7BBDE /* CreatedWorkoutUploadViewModel.swift */; };
 		744F0027261FA43500B7BBDE /* CreatedWorkoutUploadAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744F0026261FA43500B7BBDE /* CreatedWorkoutUploadAdapter.swift */; };
@@ -1314,6 +1315,7 @@
 		744D563E26F9168B00D3E1FA /* DisplayEMOMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayEMOMViewController.swift; sourceTree = "<group>"; };
 		744D564026F9169900D3E1FA /* DisplayEMOMView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayEMOMView.swift; sourceTree = "<group>"; };
 		744D564226F916B600D3E1FA /* DisplayEMOMViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayEMOMViewModel.swift; sourceTree = "<group>"; };
+		744D84EB281AE5550043F183 /* WorkoutViewCompletedHStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutViewCompletedHStack.swift; sourceTree = "<group>"; };
 		744F0019261FA40C00B7BBDE /* CreatedWorkoutUploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedWorkoutUploadViewController.swift; sourceTree = "<group>"; };
 		744F0021261FA42100B7BBDE /* CreatedWorkoutUploadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedWorkoutUploadViewModel.swift; sourceTree = "<group>"; };
 		744F0026261FA43500B7BBDE /* CreatedWorkoutUploadAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedWorkoutUploadAdapter.swift; sourceTree = "<group>"; };
@@ -1929,6 +1931,7 @@
 				7403D05F280CCB5500268CEC /* WorkoutViewHStack.swift */,
 				749222B9281048BE008C6CB1 /* UICurrentProgramView.swift */,
 				749222C02810B521008C6CB1 /* UIProgressView.swift */,
+				744D84EB281AE5550043F183 /* WorkoutViewCompletedHStack.swift */,
 			);
 			path = ViewClasses;
 			sourceTree = "<group>";
@@ -4480,6 +4483,7 @@
 				744AED2E27985E95000D2D74 /* SavedWorkoutOptionsViewModel.swift in Sources */,
 				744F001A261FA40C00B7BBDE /* CreatedWorkoutUploadViewController.swift in Sources */,
 				7416CCCD265468E10043B1C2 /* RepsCell.swift in Sources */,
+				744D84EC281AE5550043F183 /* WorkoutViewCompletedHStack.swift in Sources */,
 				743A0509276CFAB50027B752 /* CommentSectionAdapter.swift in Sources */,
 				74EE4EE32804C54200051451 /* HofBreathingViewController.swift in Sources */,
 				743A0503276A885A0027B752 /* CommentView.swift in Sources */,

@@ -35,16 +35,21 @@ class UIWorkoutView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    var completedLabel: UILabel = {
-        let label = UILabel()
-        label.text = " "
-        label.textColor = .lightColour
-        label.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.2
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    var completedStack: WorkoutViewCompletedHStack = {
+        let stack = WorkoutViewCompletedHStack()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
+//    var completedLabel: UILabel = {
+//        let label = UILabel()
+//        label.text = " "
+//        label.textColor = .lightColour
+//        label.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
+//        label.adjustsFontSizeToFitWidth = true
+//        label.minimumScaleFactor = 0.2
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        return label
+//    }()
     var hstack: WorkoutViewHStack = {
         let view = WorkoutViewHStack()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -93,7 +98,7 @@ class UIWorkoutView: UIView {
     }()
     
     lazy var mainStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [titleLabel,separatorView,completedLabel,hstack,label,userHStack,clipView])
+        let stack = UIStackView(arrangedSubviews: [titleLabel,separatorView,completedStack,hstack,label,userHStack,clipView])
         stack.axis = .vertical
         stack.alignment = .center
         stack.spacing = 16
@@ -275,17 +280,23 @@ extension UIWorkoutView {
             }
         }
         if model.completed {
-            completedLabel.textColor = #colorLiteral(red: 0.00234289733, green: 0.8251151509, blue: 0.003635218529, alpha: 1)
-            completedLabel.text = "COMPLETED"
+            completedStack.completedLabel.textColor = #colorLiteral(red: 0.00234289733, green: 0.8251151509, blue: 0.003635218529, alpha: 1)
+            completedStack.completedLabel.text = "COMPLETED"
+            if let time = model.startTime {
+                completedStack.dateLabel.text = Date(timeIntervalSince1970: time).getWorkoutFormat()
+            }
         } else if model.liveWorkout ?? false {
-            completedLabel.text = "LIVE"
-            completedLabel.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+            completedStack.completedLabel.text = "LIVE"
+            completedStack.completedLabel.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+            completedStack.dateLabel.isHidden = true
         } else if model.startTime != nil {
-            completedLabel.text = "IN PROGRESS"
-            completedLabel.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+            completedStack.completedLabel.text = "IN PROGRESS"
+            completedStack.completedLabel.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+            completedStack.dateLabel.isHidden = true
         } else {
-            completedLabel.textColor = #colorLiteral(red: 0.8643916561, green: 0.1293050488, blue: 0.007468156787, alpha: 1)
-            completedLabel.text = "NOT STARTED"
+            completedStack.completedLabel.textColor = #colorLiteral(red: 0.8643916561, green: 0.1293050488, blue: 0.007468156787, alpha: 1)
+            completedStack.completedLabel.text = "NOT STARTED"
+            completedStack.dateLabel.isHidden = true
         }
     }
     public func configure(with model: SavedWorkoutModel) {
@@ -296,7 +307,8 @@ extension UIWorkoutView {
 //        creatorIcon.isHidden = false
 //        exerciseIcon.isHidden = false
         errorIcon.isHidden = true
-        completedLabel.text = "Saved"
+        completedStack.completedLabel.text = "Saved"
+        completedStack.dateLabel.isHidden = true
         titleLabel.text = model.title
 //        creatorLabel.text = model.createdBy
         userView.configure(with: UserDefaults.currentUser)
