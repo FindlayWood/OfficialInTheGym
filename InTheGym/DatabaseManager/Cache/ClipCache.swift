@@ -15,7 +15,9 @@ class ClipCache {
     static let shared = ClipCache()
     
     // MARK: - Private Initializer
-    private init() {}
+    private init() {
+        cache.setLimit(to: 10)
+    }
     
     // MARK: - Firebase API Service
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
@@ -38,10 +40,6 @@ class ClipCache {
                 guard let asset = player.currentItem?.asset else {return}
                 self.cache[searchModel.clipKey] = asset
                 completion(.success(asset))
-//                DispatchQueue.main.async {
-//                    self.cache[searchModel.clipKey] = asset
-//                    completion(.success(asset))
-//                }
             }
         }
     }

@@ -10,20 +10,37 @@ import Foundation
 
 final class Cache<Key: Hashable, Value> {
     private let wrapped = NSCache<WrappedKey, Entry>()
+    private let dateProvider: () -> Date
+    private let entryLifetime: TimeInterval
+    
+    init(dateProvider: @escaping () -> Date = Date.init, entryLifetime: TimeInterval = 2 * 60 * 60) {
+        self.dateProvider = dateProvider
+        self.entryLifetime = entryLifetime
+    }
     
     func insert(_ value: Value, forKey key: Key) {
-        let entry = Entry(value)
+        let date = dateProvider().addingTimeInterval(entryLifetime)
+        let entry = Entry(value, expirationDate: date)
         wrapped.setObject(entry, forKey: WrappedKey(key))
     }
     func value(forKey key: Key) -> Value? {
-        let entry = wrapped.object(forKey: WrappedKey(key))
-        return entry?.value
+        guard let entry = wrapped.object(forKey: WrappedKey(key)) else {return nil}
+        
+        guard dateProvider() < entry.expirationDate else {
+            // remove expired data
+            removeValue(forKey: key)
+            return nil
+        }
+        return entry.value
     }
     func removeValue(forKey key: Key) {
         wrapped.removeObject(forKey: WrappedKey(key))
     }
     func removeAll(){
         wrapped.removeAllObjects()
+    }
+    func setLimit(to limit: Int) {
+        wrapped.countLimit = limit
     }
 }
 
@@ -53,9 +70,11 @@ private extension Cache {
 private extension Cache {
     final class Entry {
         let value: Value
+        let expirationDate: Date
         
-        init(_ value: Value) {
+        init(_ value: Value, expirationDate: Date) {
             self.value = value
+            self.expirationDate = expirationDate
         }
     }
 }
