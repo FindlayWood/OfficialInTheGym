@@ -51,54 +51,28 @@ class ViewClipViewController: UIViewController {
     private lazy var originPoint = originalFrame.origin
 
     // MARK: - View
-    override func viewDidLoad() {
-        super.viewDidLoad()
-//        view.backgroundColor = .clear
-        initViewModel()
-//        showLoading()
-        addObservers()
-        initTargets()
-        addThumbnail()
+    override func loadView() {
+        view = display
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-//        display.exerciseName.text = exerciseName
-        view.addSubview(display)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initViewModel()
+        addObservers()
+        initTargets()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        // Download Thumbnail
         let thumbnailDownloadModel = ClipThumbnailDownloadModel(id: viewModel.keyClipModel.clipKey)
         ImageCache.shared.loadThumbnail(from: thumbnailDownloadModel) { [weak self] result in
             let image = try? result.get()
             self?.display.thumbnailImageView.image = image
         }
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-//        viewModel.playerPublisher
-//            .compactMap { $0 }
-//            .sink { [weak self] in self?.startPlayer($0) }
-//            .store(in: &subscriptions)
-        
-//        startVideo()
-//
-//        guard let currentVideoLength = ((player.currentItem?.asset) as? AVURLAsset)?.duration.seconds else {return}
-//        let currentTime = player.currentTime()
-//        print(currentTime)
-//        print(currentVideoLength)
-    }
-    
-    func addThumbnail() {
-        display.thumbnailImageView.frame = view.bounds
-        view.insertSubview(display.thumbnailImageView, at: 0)
-    }
-    
+
 
     // MARK: - Targets
     func initTargets() {
@@ -107,7 +81,6 @@ class ViewClipViewController: UIViewController {
         display.addGestureRecognizer(tap)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         display.addGestureRecognizer(pan)
-        display.moreButton.addTarget(self, action: #selector(showInformation), for: .touchUpInside)
     }
     
     
@@ -115,16 +88,14 @@ class ViewClipViewController: UIViewController {
     func initViewModel() {
         
         viewModel.$isLoading
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.display.setLoading(to: $0)}
             .store(in: &subscriptions)
         
         viewModel.playerPublisher
+            .receive(on: DispatchQueue.main)
             .compactMap { $0 }
             .sink { [weak self] in self?.setPlayer($0) }
-            .store(in: &subscriptions)
-        
-        viewModel.assetPublisher
-            .sink { [weak self] in self?.setAsset($0)}
             .store(in: &subscriptions)
         
         viewModel.premiumAccountPublisher
@@ -134,79 +105,21 @@ class ViewClipViewController: UIViewController {
         viewModel.fetchClip()
     }
     
-    func setAsset(_ asset: AVAsset) {
-        let videoduration = asset.duration.seconds
-        print(videoduration)
-        player = .init(playerItem: .init(asset: asset))
-        player?.replaceCurrentItem(with: .init(asset: asset))
-        let layer = AVPlayerLayer(player: player)
-        layer.frame = view.bounds
-        layer.videoGravity = .resizeAspectFill
-        layer.backgroundColor = UIColor.green.cgColor
-        view.layer.addSublayer(layer)
-        player?.play()
-    }
-    
     func setPlayer(_ player: AVPlayer) {
+        print(Thread.current)
         let layer = AVPlayerLayer(player: player)
         layer.frame = view.bounds
         layer.videoGravity = .resizeAspectFill
-        layer.backgroundColor = UIColor.lightGray.cgColor
-        view.layer.addSublayer(layer)
-//        display.setLoading(to: false)
-//        startPlayer(player)
+        layer.backgroundColor = UIColor.clear.cgColor
+        display.layer.insertSublayer(layer, at: 0)
         player.play()
         addTimerObserver()
-    }
-    
-    func startPlayer(_ player: AVPlayer) {
-        print(player.currentItem?.status)
-        if player.currentItem?.status == .readyToPlay {
-            player.play()
-        }
     }
  
     func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(clipFinished), name: .AVPlayerItemDidPlayToEndTime, object: nil)
     }
-    
-//    func startVideo() {
-//        guard let playerURL = URL(string: storageURL) else {return}
-//        player = AVPlayer(url: playerURL)
-//
-//        let layer = AVPlayerLayer(player: player)
-//        layer.frame = view.bounds
-//        layer.videoGravity = .resizeAspectFill
-//        view.layer.addSublayer(layer)
-////        display.removeLoadingIndicator()
-//        player.play()
-//        addTimerObserver()
-//    }
-    
-    // MARK: - Actions
-    @objc func clipFinished() {
-        display.thumbnailImageView.isHidden = false
-        newCoordinator?.dismissVC()
-//        self.navigationController?.dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func togglePause() {
-        guard let player = viewModel.playerPublisher.value else {return}
-        if paused {
-            player.play()
-            paused.toggle()
-        } else {
-            player.pause()
-            paused.toggle()
-        }
-    }
-    @objc func back() {
-        guard let player = viewModel.playerPublisher.value else {return}
-        player.pause()
-        display.thumbnailImageView.isHidden = false
-        newCoordinator?.dismissVC()
-//        self.navigationController?.dismiss(animated: true, completion: nil)
-    }
+
     
     // MARK: - Alert
     func premiumAccountAlert() {
@@ -260,53 +173,30 @@ class ViewClipViewController: UIViewController {
             guard let player = viewModel.playerPublisher.value else {return}
             player.pause()
             newCoordinator?.dismissVC()
-//            UIView.animate(withDuration: 0.6) {
-//                self.view.frame = self.disappearingFrame
-//            } completion: { _ in
-//                self.newCoordinator?.dismissVC()
-//                self.dismiss(animated: true, completion: nil)
-//            }
         }
     }
-
-    // TODO: - Remove
-    @objc func showInformation() {
-//        player.pause()
-//        informationView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: bottomViewHeight)
-//        flashView.frame = CGRect(x: 0, y: 0 - view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height)
-//        flashView.alpha = 0
-//        display.addSubview(flashView)
-//        display.addSubview(informationView)
-//        informationView.setProfileImage(from: creatorID)
-//        informationView.setUsername(from: creatorID)
-//        informationView.flashview = flashView
-//        informationView.delegate = self
-//        let showFrame = CGRect(x: 0, y: Constants.screenSize.height - bottomViewHeight - view.safeAreaInsets.top, width: view.frame.width, height: bottomViewHeight)
-//        UIView.animate(withDuration: 0.4) {
-//            self.flashView.alpha = 0.4
-//            self.informationView.frame = showFrame
-//            self.flashView.isUserInteractionEnabled = true
-//        }
-    }
 }
-
-extension ViewClipViewController: ClipMoreDelegate {
-    func userProfileTapped() {
-        print("user tapped")
+// MARK: - Actions
+private extension ViewClipViewController {
+    @objc func clipFinished() {
+        display.thumbnailImageView.isHidden = false
+        newCoordinator?.dismissVC()
     }
     
-    
-    func tableViewTapped(at position: Int) {
-//        switch position {
-//        case 0:
-//            UserIDToUser.transform(userID: creatorID) { [weak self] user in
-//                guard let self = self else {return}
-//                self.coordinator?.showClipCreator(with: user)
-//            }
-//        case 1:
-//            break
-//        default:
-//            break
-//        }
+    @objc func togglePause() {
+        guard let player = viewModel.playerPublisher.value else {return}
+        if paused {
+            player.play()
+            paused.toggle()
+        } else {
+            player.pause()
+            paused.toggle()
+        }
+    }
+    @objc func back() {
+        guard let player = viewModel.playerPublisher.value else {return}
+        player.pause()
+        display.thumbnailImageView.isHidden = false
+        newCoordinator?.dismissVC()
     }
 }

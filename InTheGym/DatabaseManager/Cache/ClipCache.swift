@@ -33,10 +33,16 @@ class ClipCache {
                 completion(.failure(NSError(domain: "Failed URL", code: 0, userInfo: nil)))
                 return
             }
-            let player = AVPlayer(url: url)
-            guard let asset = player.currentItem?.asset else {return}
-            cache[searchModel.clipKey] = asset
-            completion(.success(asset))
+            DispatchQueue.global(qos: .background).async {
+                let player = AVPlayer(url: url)
+                guard let asset = player.currentItem?.asset else {return}
+                self.cache[searchModel.clipKey] = asset
+                completion(.success(asset))
+//                DispatchQueue.main.async {
+//                    self.cache[searchModel.clipKey] = asset
+//                    completion(.success(asset))
+//                }
+            }
         }
     }
     func upload(_ asset: AVAsset, key: String) {

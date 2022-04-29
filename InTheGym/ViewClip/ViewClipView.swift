@@ -18,7 +18,7 @@ class ViewClipView: UIView {
         view.backgroundColor = .lightGray
         view.layer.cornerRadius = 8
         view.clipsToBounds = true
-        view.translatesAutoresizingMaskIntoConstraints = true
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     var backButton: UIButton = {
@@ -111,7 +111,7 @@ class ViewClipView: UIView {
     
     // MARK: - Initializer
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        super.init(frame: UIScreen.main.bounds)
         setupUI()
     }
     required init?(coder: NSCoder) {
@@ -124,7 +124,7 @@ class ViewClipView: UIView {
 private extension ViewClipView {
     
     func setupUI() {
-//        addSubview(thumbnailImageView)
+        addSubview(thumbnailImageView)
         addSubview(backButton)
         addSubview(loadingIndicator)
         addSubview(progressBar)
@@ -149,17 +149,17 @@ private extension ViewClipView {
     func constrainView() {
         NSLayoutConstraint.activate([
             
-//            thumbnailImageView.topAnchor.constraint(equalTo: topAnchor),
-//            thumbnailImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            thumbnailImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            thumbnailImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            thumbnailImageView.topAnchor.constraint(equalTo: topAnchor),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            thumbnailImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            thumbnailImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
             backButton.widthAnchor.constraint(equalToConstant: 40),
             backButton.heightAnchor.constraint(equalToConstant: 40),
             backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            backButton.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            backButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             
-            exerciseName.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            exerciseName.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             exerciseName.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             loadingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -199,7 +199,10 @@ extension ViewClipView {
         } else {
             loadingIndicator.stopAnimating()
             UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.thumbnailImageView.alpha = 0
+            } completion: { [weak self] _ in
                 self?.thumbnailImageView.isHidden = true
+                self?.thumbnailImageView.alpha = 1
             }
         }
     }
@@ -207,10 +210,10 @@ extension ViewClipView {
     public func updateProgressBar(currentTime: Double, videolength: Double) {
         let progress = CGFloat((currentTime) / videolength)
         if progress == 0 {
-            self.progressBar.frame = CGRect(x: 0, y: 0, width: 0, height: 5)
+            self.progressBar.frame = CGRect(x: 0, y: self.safeAreaInsets.top, width: 0, height: 5)
         } else {
             UIView.animate(withDuration: 0.25) {
-                self.progressBar.frame = CGRect(x: 0, y: 0, width: Constants.screenSize.width * progress, height: 5)
+                self.progressBar.frame = CGRect(x: 0, y: self.safeAreaInsets.top, width: Constants.screenSize.width * progress, height: 5)
             }
         }
     }

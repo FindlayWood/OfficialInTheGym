@@ -55,11 +55,6 @@ class ViewClipViewModel: NSObject {
                 switch result {
                 case .success(let asset):
                     self?.prepareToPlay(asset)
-//                    self?.assetPublisher.send(asset)
-//                    let item = AVPlayerItem(asset: asset)
-//                    let player = AVPlayer(playerItem: item)
-//                    self?.playerPublisher.send(player)
-//                    self?.isLoading = false
                 case .failure(let error):
                     self?.errorPublisher.send(error)
                     self?.isLoading = false
@@ -77,25 +72,28 @@ class ViewClipViewModel: NSObject {
         // Create player item with asset and array of asset keys to be automatically loaded
         let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: requiredAssetKeys)
         
-        // Use Combine to create publisher on player item status
-        playerItem.publisher(for: \.status, options: [.new, .old])
-            .sink { [weak self] newStatus in
-                switch newStatus {
-                case .readyToPlay:
-                    self?.playerPublisher.send(self?.player)
+        // Associate the player item with the player
+        player = AVPlayer(playerItem: playerItem)
+        
+        // Send player to publisher
+        playerPublisher.send(player)
+    
+        // Observe timeControlStatus
+        // When playing remove loading screen
+        player.publisher(for: \.timeControlStatus, options: [.new])
+            .sink { [weak self] newTimeControlStatus in
+                switch newTimeControlStatus {
+                case .playing:
+                    print("playing")
                     self?.isLoading = false
-                case .unknown:
-                    print("unknown")
-                case .failed:
-                    print("failed")
+                case .paused:
+                    print("paused")
+                case .waitingToPlayAtSpecifiedRate:
+                    print("waiting")
                 @unknown default:
                     break
                 }
             }
             .store(in: &subscriptions)
-        
-        // Associate the player item with the player
-        player = AVPlayer(playerItem: playerItem)
-        
     }
 }
