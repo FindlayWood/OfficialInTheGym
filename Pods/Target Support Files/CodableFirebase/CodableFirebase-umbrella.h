@@ -10,3 +10,7 @@
 #endif
 #endif
 
+
+FOUNDATION_EXPORT double CodableFirebaseVersionNumber;
+FOUNDATION_EXPORT const unsigned char CodableFirebaseVersionString[];
+
