@@ -113,7 +113,7 @@ class CoachScoresViewController: UIViewController, Storyboarded {
     }
     
     func updateChartData(){
-        let chartDataSet = PieChartDataSet(entries: numberOfScores, label: nil)
+        let chartDataSet = PieChartDataSet(entries: numberOfScores, label: "")
         
         let noZeroFormatter = NumberFormatter()
         noZeroFormatter.zeroSymbol = ""

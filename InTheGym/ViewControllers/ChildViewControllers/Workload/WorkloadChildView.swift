@@ -33,7 +33,7 @@ class WorkloadChildView: UIView {
         view.noDataTextColor = .black
         view.noDataText = "NO DATA"
         view.xAxis.drawGridLinesEnabled = false
-        view.chartDescription?.enabled = false
+        view.chartDescription.enabled = false
         view.legend.enabled = false
         view.leftAxis.drawGridLinesEnabled = false
         view.leftAxis.drawAxisLineEnabled = false

@@ -11,10 +11,9 @@
 import UIKit
 import Firebase
 import SCLAlertView
-import EmptyDataSet_Swift
 
 
-class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITableViewDelegate, EmptyDataSetSource, EmptyDataSetDelegate, Storyboarded {
+class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITableViewDelegate, Storyboarded {
     
     weak var coordinator: RegularWorkoutCoordinator?
     
@@ -162,9 +161,7 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
         self.tableview.layer.cornerRadius = 10
         
         self.navigationItem.title = "Add Workout"
-        
-        self.tableview.emptyDataSetSource = self
-        self.tableview.emptyDataSetDelegate = self
+
         self.tableview.tableFooterView = UIView()
 
         
@@ -248,17 +245,17 @@ class AddWorkoutHomeViewController: UIViewController, UITableViewDataSource,UITa
     }
     
     // emptydataset functions
-    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "Add an Exercise"
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
-        return NSAttributedString(string: str, attributes: attrs)
-    }
-    
-    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "Tap the button in the bottom right to add the first exercise."
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
-        return NSAttributedString(string: str, attributes: attrs)
-    }
+//    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+//        let str = "Add an Exercise"
+//        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
+//        return NSAttributedString(string: str, attributes: attrs)
+//    }
+//    
+//    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+//        let str = "Tap the button in the bottom right to add the first exercise."
+//        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
+//        return NSAttributedString(string: str, attributes: attrs)
+//    }
     
     func loadNumberOfWorkouts(){
         ActRef.child("users").child(userID).child("NumberOfWorkouts").observeSingleEvent(of: .value) { (snapshot) in

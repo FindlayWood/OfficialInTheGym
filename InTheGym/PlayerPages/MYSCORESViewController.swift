@@ -113,7 +113,7 @@ class MYSCORESViewController: UIViewController, Storyboarded {
     }
     
     func updateChartData(){
-        let chartDataSet = PieChartDataSet(entries: numberOfScores, label: nil)
+        let chartDataSet = PieChartDataSet(entries: numberOfScores, label: "")
         
         let noZeroFormatter = NumberFormatter()
         noZeroFormatter.zeroSymbol = ""
@@ -128,6 +128,7 @@ class MYSCORESViewController: UIViewController, Storyboarded {
     
         chartDataSet.drawValuesEnabled = true
         chartDataSet.valueFont = UIFont(name: "Menlo-Bold", size: 15)!
+//        chartDataSet.valueTextColor = .black
         chartDataSet.valueTextColor = .black
         
         pieChart.drawEntryLabelsEnabled = false

@@ -8,7 +8,6 @@
 
 import UIKit
 import Combine
-import EmptyDataSet_Swift
 
 class WorkoutCreationViewController: UIViewController {
 

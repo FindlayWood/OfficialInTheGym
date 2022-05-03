@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import EmptyDataSet_Swift
 
 class CreateCircuitAdapter:NSObject{
     var delegate:CreateCircuitDelegate!
@@ -17,7 +16,7 @@ class CreateCircuitAdapter:NSObject{
     }
 }
 
-extension CreateCircuitAdapter: UITableViewDelegate, UITableViewDataSource, EmptyDataSetSource, EmptyDataSetDelegate {
+extension CreateCircuitAdapter: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return delegate.retreiveNumberOfItems()
@@ -57,25 +56,5 @@ extension CreateCircuitAdapter: UITableViewDelegate, UITableViewDataSource, Empt
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return UIView()
     }
-    
-    // emptydataset functions
-    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "No Circuit Exercises"
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
-        return NSAttributedString(string: str, attributes: attrs)
-    }
-    
-    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "Add an exercise with the button in the bottom right."
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
-        return NSAttributedString(string: str, attributes: attrs)
-    }
-    
-    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
-        return UIImage(named: "hammer_icon")
-    }
-    
-    
-    
     
 }

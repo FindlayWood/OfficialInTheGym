@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2E0B74E34080B3DEFFA10976 /* Pods_InTheGymUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7BA6F01C0E3CC010381E1EF /* Pods_InTheGymUITests.framework */; };
-		5B1D2DD94804A2BB7DD51A7E /* Pods_InTheGymTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A08239D33217F84F578BDA /* Pods_InTheGymTests.framework */; };
-		5EF82244F3AF093425EE953B /* Pods_InTheGym.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FBD9C857C372390857E095F /* Pods_InTheGym.framework */; };
+		11A402E6FE947F608875BDFF /* Pods_InTheGym_InTheGymUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15620EFF8F6D09E3CA226CAA /* Pods_InTheGym_InTheGymUITests.framework */; };
+		2B191E1DF8837D2216EE8C92 /* Pods_InTheGym.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88854D72B76DD67041584EEE /* Pods_InTheGym.framework */; };
 		74028E0525E45C0F005A1D21 /* UserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74028E0425E45C0F005A1D21 /* UserCell.xib */; };
 		74028E1325E5610E005A1D21 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E1225E5610E005A1D21 /* EditProfileViewController.swift */; };
 		74028E5C25E693FB005A1D21 /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E5B25E693FB005A1D21 /* TopView.swift */; };
@@ -849,6 +848,7 @@
 		74FDB98225A4981B00CC18EF /* DiscoverPageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB98125A4981B00CC18EF /* DiscoverPageCollectionViewCell.swift */; };
 		74FDB98725A65C7700CC18EF /* SearchForUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB98625A65C7700CC18EF /* SearchForUsersViewController.swift */; };
 		74FDB98C25A7684800CC18EF /* SearchUsersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB98B25A7684800CC18EF /* SearchUsersTableViewCell.swift */; };
+		863AD63458BECD5CAB5D931D /* Pods_InTheGymTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A69394DE086E0FA0120D44 /* Pods_InTheGymTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -869,9 +869,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0293406AC7060BD7A748BA32 /* Pods-InTheGymUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymUITests.debug.xcconfig"; path = "Target Support Files/Pods-InTheGymUITests/Pods-InTheGymUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		2FBD9C857C372390857E095F /* Pods_InTheGym.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGym.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		664CE934E748AB4349B9B3C4 /* Pods-InTheGym.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGym.debug.xcconfig"; path = "Target Support Files/Pods-InTheGym/Pods-InTheGym.debug.xcconfig"; sourceTree = "<group>"; };
+		14B21401439A0C191625FFDD /* Pods-InTheGym-InTheGymUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGym-InTheGymUITests.release.xcconfig"; path = "Target Support Files/Pods-InTheGym-InTheGymUITests/Pods-InTheGym-InTheGymUITests.release.xcconfig"; sourceTree = "<group>"; };
+		15620EFF8F6D09E3CA226CAA /* Pods_InTheGym_InTheGymUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGym_InTheGymUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		49BE3D9144B0D0523D34DFD9 /* Pods-InTheGym.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGym.debug.xcconfig"; path = "Target Support Files/Pods-InTheGym/Pods-InTheGym.debug.xcconfig"; sourceTree = "<group>"; };
+		528144D59B04909721D07FDD /* Pods-InTheGym.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGym.release.xcconfig"; path = "Target Support Files/Pods-InTheGym/Pods-InTheGym.release.xcconfig"; sourceTree = "<group>"; };
+		5725FCE221E0A9898EFC2C57 /* Pods-InTheGymTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymTests.release.xcconfig"; path = "Target Support Files/Pods-InTheGymTests/Pods-InTheGymTests.release.xcconfig"; sourceTree = "<group>"; };
+		69A69394DE086E0FA0120D44 /* Pods_InTheGymTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGymTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		708BFDC61D3D98342F2AE3A4 /* Pods-InTheGymTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymTests.debug.xcconfig"; path = "Target Support Files/Pods-InTheGymTests/Pods-InTheGymTests.debug.xcconfig"; sourceTree = "<group>"; };
 		74028E0425E45C0F005A1D21 /* UserCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserCell.xib; sourceTree = "<group>"; };
 		74028E1225E5610E005A1D21 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		74028E5B25E693FB005A1D21 /* TopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
@@ -1718,12 +1722,8 @@
 		74FDB98125A4981B00CC18EF /* DiscoverPageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageCollectionViewCell.swift; sourceTree = "<group>"; };
 		74FDB98625A65C7700CC18EF /* SearchForUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForUsersViewController.swift; sourceTree = "<group>"; };
 		74FDB98B25A7684800CC18EF /* SearchUsersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersTableViewCell.swift; sourceTree = "<group>"; };
-		8046BC9A8637171D73704D34 /* Pods-InTheGymUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymUITests.release.xcconfig"; path = "Target Support Files/Pods-InTheGymUITests/Pods-InTheGymUITests.release.xcconfig"; sourceTree = "<group>"; };
-		9851206B4112896B0DA6C705 /* Pods-InTheGym.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGym.release.xcconfig"; path = "Target Support Files/Pods-InTheGym/Pods-InTheGym.release.xcconfig"; sourceTree = "<group>"; };
-		B7BA6F01C0E3CC010381E1EF /* Pods_InTheGymUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGymUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C5AAE0DFC0D6AA43960F2BAF /* Pods-InTheGymTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymTests.release.xcconfig"; path = "Target Support Files/Pods-InTheGymTests/Pods-InTheGymTests.release.xcconfig"; sourceTree = "<group>"; };
-		D4A08239D33217F84F578BDA /* Pods_InTheGymTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGymTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FE88152E44C7A69081B1FDA9 /* Pods-InTheGymTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGymTests.debug.xcconfig"; path = "Target Support Files/Pods-InTheGymTests/Pods-InTheGymTests.debug.xcconfig"; sourceTree = "<group>"; };
+		88854D72B76DD67041584EEE /* Pods_InTheGym.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InTheGym.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CCD4D27EE17416E6E420E5F /* Pods-InTheGym-InTheGymUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InTheGym-InTheGymUITests.debug.xcconfig"; path = "Target Support Files/Pods-InTheGym-InTheGymUITests/Pods-InTheGym-InTheGymUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1732,7 +1732,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				746061BD252547E9005B1480 /* AppTrackingTransparency.framework in Frameworks */,
-				5EF82244F3AF093425EE953B /* Pods_InTheGym.framework in Frameworks */,
+				2B191E1DF8837D2216EE8C92 /* Pods_InTheGym.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1740,7 +1740,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B1D2DD94804A2BB7DD51A7E /* Pods_InTheGymTests.framework in Frameworks */,
+				863AD63458BECD5CAB5D931D /* Pods_InTheGymTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1748,13 +1748,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E0B74E34080B3DEFFA10976 /* Pods_InTheGymUITests.framework in Frameworks */,
+				11A402E6FE947F608875BDFF /* Pods_InTheGym_InTheGymUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4DB8C0735990454EE2A235D3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				49BE3D9144B0D0523D34DFD9 /* Pods-InTheGym.debug.xcconfig */,
+				528144D59B04909721D07FDD /* Pods-InTheGym.release.xcconfig */,
+				9CCD4D27EE17416E6E420E5F /* Pods-InTheGym-InTheGymUITests.debug.xcconfig */,
+				14B21401439A0C191625FFDD /* Pods-InTheGym-InTheGymUITests.release.xcconfig */,
+				708BFDC61D3D98342F2AE3A4 /* Pods-InTheGymTests.debug.xcconfig */,
+				5725FCE221E0A9898EFC2C57 /* Pods-InTheGymTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		74028E0325E45BCE005A1D21 /* NIBS */ = {
 			isa = PBXGroup;
 			children = (
@@ -2933,8 +2946,8 @@
 				7479A91F229F2B4D00D39E2E /* InTheGymTests */,
 				7479A92A229F2B4D00D39E2E /* InTheGymUITests */,
 				7479A906229F2B4C00D39E2E /* Products */,
-				7A24691514823F63D6403175 /* Pods */,
 				D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */,
+				4DB8C0735990454EE2A235D3 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -3984,26 +3997,13 @@
 			path = ClipCoordinator;
 			sourceTree = "<group>";
 		};
-		7A24691514823F63D6403175 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				664CE934E748AB4349B9B3C4 /* Pods-InTheGym.debug.xcconfig */,
-				9851206B4112896B0DA6C705 /* Pods-InTheGym.release.xcconfig */,
-				FE88152E44C7A69081B1FDA9 /* Pods-InTheGymTests.debug.xcconfig */,
-				C5AAE0DFC0D6AA43960F2BAF /* Pods-InTheGymTests.release.xcconfig */,
-				0293406AC7060BD7A748BA32 /* Pods-InTheGymUITests.debug.xcconfig */,
-				8046BC9A8637171D73704D34 /* Pods-InTheGymUITests.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				746061BC252547E9005B1480 /* AppTrackingTransparency.framework */,
-				2FBD9C857C372390857E095F /* Pods_InTheGym.framework */,
-				D4A08239D33217F84F578BDA /* Pods_InTheGymTests.framework */,
-				B7BA6F01C0E3CC010381E1EF /* Pods_InTheGymUITests.framework */,
+				88854D72B76DD67041584EEE /* Pods_InTheGym.framework */,
+				15620EFF8F6D09E3CA226CAA /* Pods_InTheGym_InTheGymUITests.framework */,
+				69A69394DE086E0FA0120D44 /* Pods_InTheGymTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -4015,11 +4015,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7479A930229F2B4D00D39E2E /* Build configuration list for PBXNativeTarget "InTheGym" */;
 			buildPhases = (
-				EA573F885EEB592DDE9A41B7 /* [CP] Check Pods Manifest.lock */,
+				40BAEE2E66670BD8F5CE1EBB /* [CP] Check Pods Manifest.lock */,
 				7479A901229F2B4C00D39E2E /* Sources */,
 				7479A902229F2B4C00D39E2E /* Frameworks */,
 				7479A903229F2B4C00D39E2E /* Resources */,
-				F2583123937995E765E290CF /* [CP] Embed Pods Frameworks */,
+				4FCDFFEDBDCB7E2960E04CE0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -4034,7 +4034,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7479A933229F2B4D00D39E2E /* Build configuration list for PBXNativeTarget "InTheGymTests" */;
 			buildPhases = (
-				76ADAA0268B34C107C57DE7C /* [CP] Check Pods Manifest.lock */,
+				9027E5E02674980A37408978 /* [CP] Check Pods Manifest.lock */,
 				7479A918229F2B4D00D39E2E /* Sources */,
 				7479A919229F2B4D00D39E2E /* Frameworks */,
 				7479A91A229F2B4D00D39E2E /* Resources */,
@@ -4053,10 +4053,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7479A936229F2B4D00D39E2E /* Build configuration list for PBXNativeTarget "InTheGymUITests" */;
 			buildPhases = (
-				A37C79BB3C25E0F728239D41 /* [CP] Check Pods Manifest.lock */,
+				10DB104377C96542DDD4A34F /* [CP] Check Pods Manifest.lock */,
 				7479A923229F2B4D00D39E2E /* Sources */,
 				7479A924229F2B4D00D39E2E /* Frameworks */,
 				7479A925229F2B4D00D39E2E /* Resources */,
+				27383A8A5E483A2373A403FD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -4170,7 +4171,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		76ADAA0268B34C107C57DE7C /* [CP] Check Pods Manifest.lock */ = {
+		10DB104377C96542DDD4A34F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4185,36 +4186,31 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-InTheGymTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-InTheGym-InTheGymUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A37C79BB3C25E0F728239D41 /* [CP] Check Pods Manifest.lock */ = {
+		27383A8A5E483A2373A403FD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-InTheGym-InTheGymUITests/Pods-InTheGym-InTheGymUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-InTheGymUITests-checkManifestLockResult.txt",
+				"${PODS_ROOT}/Target Support Files/Pods-InTheGym-InTheGymUITests/Pods-InTheGym-InTheGymUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-InTheGym-InTheGymUITests/Pods-InTheGym-InTheGymUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EA573F885EEB592DDE9A41B7 /* [CP] Check Pods Manifest.lock */ = {
+		40BAEE2E66670BD8F5CE1EBB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4236,7 +4232,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F2583123937995E765E290CF /* [CP] Embed Pods Frameworks */ = {
+		4FCDFFEDBDCB7E2960E04CE0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4251,6 +4247,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-InTheGym/Pods-InTheGym-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9027E5E02674980A37408978 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-InTheGymTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -5235,8 +5253,9 @@
 		};
 		7479A931229F2B4D00D39E2E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 664CE934E748AB4349B9B3C4 /* Pods-InTheGym.debug.xcconfig */;
+			baseConfigurationReference = 49BE3D9144B0D0523D34DFD9 /* Pods-InTheGym.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = InTheGym/InTheGym.entitlements;
@@ -5333,8 +5352,6 @@
 					"-framework",
 					"\"FBLPromises\"",
 					"-framework",
-					"\"FirebaseAnalytics\"",
-					"-framework",
 					"\"FirebaseAuth\"",
 					"-framework",
 					"\"FirebaseCore\"",
@@ -5343,10 +5360,6 @@
 					"-framework",
 					"\"FirebaseDatabase\"",
 					"-framework",
-					"\"FirebaseFirestore\"",
-					"-framework",
-					"\"FirebaseInstallations\"",
-					"-framework",
 					"\"Foundation\"",
 					"-framework",
 					"\"GTMSessionFetcher\"",
@@ -5354,8 +5367,6 @@
 					"\"GoogleDataTransport\"",
 					"-framework",
 					"\"GoogleUtilities\"",
-					"-framework",
-					"\"IQKeyboardManagerSwift\"",
 					"-framework",
 					"\"MediaPlayer\"",
 					"-framework",
@@ -5379,17 +5390,9 @@
 					"-framework",
 					"\"WebKit\"",
 					"-framework",
-					"\"absl\"",
-					"-framework",
-					"\"grpc\"",
-					"-framework",
-					"\"grpcpp\"",
-					"-framework",
 					"\"leveldb\"",
 					"-framework",
 					"\"nanopb\"",
-					"-framework",
-					"\"openssl_grpc\"",
 					"-weak_framework",
 					"\"AdSupport\"",
 					"-weak_framework",
@@ -5412,8 +5415,9 @@
 		};
 		7479A932229F2B4D00D39E2E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9851206B4112896B0DA6C705 /* Pods-InTheGym.release.xcconfig */;
+			baseConfigurationReference = 528144D59B04909721D07FDD /* Pods-InTheGym.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = InTheGym/InTheGym.entitlements;
@@ -5510,8 +5514,6 @@
 					"-framework",
 					"\"FBLPromises\"",
 					"-framework",
-					"\"FirebaseAnalytics\"",
-					"-framework",
 					"\"FirebaseAuth\"",
 					"-framework",
 					"\"FirebaseCore\"",
@@ -5520,10 +5522,6 @@
 					"-framework",
 					"\"FirebaseDatabase\"",
 					"-framework",
-					"\"FirebaseFirestore\"",
-					"-framework",
-					"\"FirebaseInstallations\"",
-					"-framework",
 					"\"Foundation\"",
 					"-framework",
 					"\"GTMSessionFetcher\"",
@@ -5531,8 +5529,6 @@
 					"\"GoogleDataTransport\"",
 					"-framework",
 					"\"GoogleUtilities\"",
-					"-framework",
-					"\"IQKeyboardManagerSwift\"",
 					"-framework",
 					"\"MediaPlayer\"",
 					"-framework",
@@ -5556,17 +5552,9 @@
 					"-framework",
 					"\"WebKit\"",
 					"-framework",
-					"\"absl\"",
-					"-framework",
-					"\"grpc\"",
-					"-framework",
-					"\"grpcpp\"",
-					"-framework",
 					"\"leveldb\"",
 					"-framework",
 					"\"nanopb\"",
-					"-framework",
-					"\"openssl_grpc\"",
 					"-weak_framework",
 					"\"AdSupport\"",
 					"-weak_framework",
@@ -5588,7 +5576,7 @@
 		};
 		7479A934229F2B4D00D39E2E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FE88152E44C7A69081B1FDA9 /* Pods-InTheGymTests.debug.xcconfig */;
+			baseConfigurationReference = 708BFDC61D3D98342F2AE3A4 /* Pods-InTheGymTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -5610,7 +5598,7 @@
 		};
 		7479A935229F2B4D00D39E2E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C5AAE0DFC0D6AA43960F2BAF /* Pods-InTheGymTests.release.xcconfig */;
+			baseConfigurationReference = 5725FCE221E0A9898EFC2C57 /* Pods-InTheGymTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -5632,9 +5620,9 @@
 		};
 		7479A937229F2B4D00D39E2E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0293406AC7060BD7A748BA32 /* Pods-InTheGymUITests.debug.xcconfig */;
+			baseConfigurationReference = 9CCD4D27EE17416E6E420E5F /* Pods-InTheGym-InTheGymUITests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H6WZPTFL8D;
 				INFOPLIST_FILE = InTheGymUITests/Info.plist;
@@ -5653,9 +5641,9 @@
 		};
 		7479A938229F2B4D00D39E2E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8046BC9A8637171D73704D34 /* Pods-InTheGymUITests.release.xcconfig */;
+			baseConfigurationReference = 14B21401439A0C191625FFDD /* Pods-InTheGym-InTheGymUITests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H6WZPTFL8D;
 				INFOPLIST_FILE = InTheGymUITests/Info.plist;

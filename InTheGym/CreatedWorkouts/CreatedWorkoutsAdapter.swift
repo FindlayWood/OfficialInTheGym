@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import EmptyDataSet_Swift
 
 class CreatedWorkoutsAdapter: NSObject {
     
@@ -22,7 +21,7 @@ class CreatedWorkoutsAdapter: NSObject {
     
 }
 
-extension CreatedWorkoutsAdapter : UITableViewDataSource, UITableViewDelegate, EmptyDataSetSource, EmptyDataSetDelegate{
+extension CreatedWorkoutsAdapter : UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let workoutModel = delegate.getData(at: indexPath)
@@ -66,27 +65,27 @@ extension CreatedWorkoutsAdapter : UITableViewDataSource, UITableViewDelegate, E
     
     
     // emptydataset functions
-    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "No Created Workouts"
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
-        return NSAttributedString(string: str, attributes: attrs)
-    }
-    
-    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        var str : String = ""
-        switch delegate{
-        case is PublicCreatedWorkoutsViewController:
-            str = "This user has no Created Workouts to view."
-        case is CreatedWorkoutsViewController:
-            str = "All the workouts you create will appear here. It seems you haven't created any yet."
-        default:
-            break
-        }
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
-        return NSAttributedString(string: str, attributes: attrs)
-    }
-    
-    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
-        return UIImage(named: "hammer_icon")
-    }
+//    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+//        let str = "No Created Workouts"
+//        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
+//        return NSAttributedString(string: str, attributes: attrs)
+//    }
+//    
+//    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+//        var str : String = ""
+//        switch delegate{
+//        case is PublicCreatedWorkoutsViewController:
+//            str = "This user has no Created Workouts to view."
+//        case is CreatedWorkoutsViewController:
+//            str = "All the workouts you create will appear here. It seems you haven't created any yet."
+//        default:
+//            break
+//        }
+//        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
+//        return NSAttributedString(string: str, attributes: attrs)
+//    }
+//    
+//    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
+//        return UIImage(named: "hammer_icon")
+//    }
 }

@@ -74,7 +74,7 @@ class ScoresPieChartViewModel {
     }
     
     func setChartData(with entries: [PieChartDataEntry]) {
-        let chartDataSet = PieChartDataSet(entries: entries, label: nil)
+        let chartDataSet = PieChartDataSet(entries: entries, label: "")
         
         let noZeroFormatter = NumberFormatter()
         noZeroFormatter.zeroSymbol = ""

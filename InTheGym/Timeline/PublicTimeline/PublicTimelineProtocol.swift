@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Firebase
 
-protocol PublicTimelineProtocol: class {
+protocol PublicTimelineProtocol: AnyObject {
     func getData(at:IndexPath) -> PostProtocol
     func itemSelected(at: IndexPath)
     func retreiveNumberOfItems() -> Int

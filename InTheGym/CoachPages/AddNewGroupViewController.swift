@@ -8,10 +8,9 @@
 
 import UIKit
 import Firebase
-import EmptyDataSet_Swift
 import SCLAlertView
 
-class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EmptyDataSetSource, EmptyDataSetDelegate, Storyboarded {
+class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, Storyboarded {
 
     // outlet to tableview
     @IBOutlet weak var tableview:UITableView!
@@ -66,8 +65,6 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
         tableview.layer.borderWidth = 2
         tableview.layer.borderColor = UIColor.black.cgColor
         
-        tableview.emptyDataSetSource = self
-        tableview.emptyDataSetDelegate = self
         tableview.tableFooterView = UIView()
         subTableview.tableFooterView = UIView()
 
@@ -112,20 +109,6 @@ class AddNewGroupViewController: UIViewController, UITableViewDelegate, UITableV
             tableview.reloadData()
         }
     }
-    
-    // emptydataset functions
-    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "Add a Player"
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
-        return NSAttributedString(string: str, attributes: attrs)
-    }
-    
-    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "Tap the button in the bottom right to add players."
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
-        return NSAttributedString(string: str, attributes: attrs)
-    }
-    
     
     @IBAction func createPressed(_ sender:UIButton){
         if titleField.text == ""{

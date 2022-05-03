@@ -8,7 +8,6 @@
 
 import UIKit
 import SCLAlertView
-import EmptyDataSet_Swift
 import Firebase
 import Combine
 
@@ -60,8 +59,6 @@ class CreateCircuitViewController: UIViewController, Storyboarded {
         adapter = CreateCircuitAdapter(delegate: self)
         display.tableview.delegate = adapter
         display.tableview.dataSource = makeDataSource()
-//        display.tableview.emptyDataSetSource = adapter
-//        display.tableview.emptyDataSetDelegate = adapter
         display.tableview.backgroundColor = .white
         display.titlefield.delegate = self
     }

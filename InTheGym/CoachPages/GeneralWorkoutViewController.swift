@@ -9,7 +9,6 @@
 import UIKit
 import Firebase
 import SCLAlertView
-import EmptyDataSet_Swift
 
 //this class is for trying to let the coach create a workout that can be given to several players
 

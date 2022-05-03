@@ -12,9 +12,8 @@ import UIKit
 import Firebase
 import CodableFirebase
 import SCLAlertView
-import EmptyDataSet_Swift
 
-class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, EmptyDataSetSource, EmptyDataSetDelegate, Storyboarded {
+class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, Storyboarded {
     
     var coordinator: WorkoutsFlow?
     
@@ -63,8 +62,6 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
         
         self.tableview.rowHeight = 150
         self.tableview.backgroundColor = Constants.lightColour
-        tableview.emptyDataSetSource = self
-        tableview.emptyDataSetDelegate = self
         
         let userID = Auth.auth().currentUser?.uid
         
@@ -317,33 +314,33 @@ class PlayerWorkoutViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     // emptydataset functions
-    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "No Workouts"
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
-        return NSAttributedString(string: str, attributes: attrs)
-    }
-    
-    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        var stringToShow:String!
-        switch segment.selectedSegmentIndex {
-        case 0:
-            stringToShow = "No workouts. Add new workouts with the button in the top right"
-        case 1:
-            stringToShow = "No new workouts to start. Add new workouts with the button in the top right."
-        case 2:
-            stringToShow = "No workouts in progress. Add new workouts with the button in the top right"
-        case 3:
-            stringToShow = "No completed workouts. Add new workouts with the button in the top right."
-        default:
-            break
-        }
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
-        return NSAttributedString(string: stringToShow, attributes: attrs)
-    }
-    
-    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
-        return UIImage(named: "benchpress_icon")
-    }
+//    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+//        let str = "No Workouts"
+//        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
+//        return NSAttributedString(string: str, attributes: attrs)
+//    }
+//    
+//    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+//        var stringToShow:String!
+//        switch segment.selectedSegmentIndex {
+//        case 0:
+//            stringToShow = "No workouts. Add new workouts with the button in the top right"
+//        case 1:
+//            stringToShow = "No new workouts to start. Add new workouts with the button in the top right."
+//        case 2:
+//            stringToShow = "No workouts in progress. Add new workouts with the button in the top right"
+//        case 3:
+//            stringToShow = "No completed workouts. Add new workouts with the button in the top right."
+//        default:
+//            break
+//        }
+//        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
+//        return NSAttributedString(string: stringToShow, attributes: attrs)
+//    }
+//    
+//    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
+//        return UIImage(named: "benchpress_icon")
+//    }
     
     
     override func viewWillAppear(_ animated: Bool) {

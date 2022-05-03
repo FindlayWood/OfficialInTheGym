@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import EmptyDataSet_Swift
 
 class PublicCreatedWorkoutsViewController: UIViewController, Storyboarded {
     
@@ -33,8 +32,6 @@ class PublicCreatedWorkoutsViewController: UIViewController, Storyboarded {
         tableview.register(UINib(nibName: "PublicCreatedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "PublicCreatedWorkoutCell")
         tableview.tableFooterView = UIView()
         tableview.backgroundColor = Constants.lightColour
-        tableview.emptyDataSetSource = adapter
-        tableview.emptyDataSetDelegate = adapter
         
     }
     

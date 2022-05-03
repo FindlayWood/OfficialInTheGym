@@ -9,9 +9,8 @@
 import UIKit
 import Firebase
 import CodableFirebase
-import EmptyDataSet_Swift
 
-class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, EmptyDataSetSource, EmptyDataSetDelegate, Storyboarded  {
+class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, Storyboarded  {
 
     
     
@@ -55,8 +54,6 @@ class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITab
         // Place the search bar in the table view's header.
         self.tableview.tableHeaderView = searchController.searchBar
         
-        self.tableview.emptyDataSetSource = self
-        self.tableview.emptyDataSetDelegate = self
         self.tableview.tableFooterView = UIView()
         
         tableview.rowHeight = UITableView.automaticDimension
@@ -110,20 +107,6 @@ class SearchForUsersViewController: UIViewController, UITableViewDelegate, UITab
         nextVC.viewModel.user = searchResults[indexPath.row]
         self.navigationController?.pushViewController(nextVC, animated: true)
         
-    }
-    
-    
-    // emptydataset functions
-    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "Search for other Users"
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
-        return NSAttributedString(string: str, attributes: attrs)
-    }
-    
-    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "Tap the search bar above and begin typing to discover other users."
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
-        return NSAttributedString(string: str, attributes: attrs)
     }
     
     

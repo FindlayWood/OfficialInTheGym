@@ -7,11 +7,10 @@
 //
 
 import UIKit
-import EmptyDataSet_Swift
 import SCLAlertView
 import Firebase
 
-class COACHESViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EmptyDataSetSource, EmptyDataSetDelegate {
+class COACHESViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // array of coaches, atm just array of strings
     var coaches = [Users]()
@@ -35,8 +34,6 @@ class COACHESViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableview.dataSource = self
         tableview.rowHeight = 100
         tableview.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
-        tableview.emptyDataSetSource = self
-        tableview.emptyDataSetDelegate = self
         tableview.tableFooterView = UIView()
         self.navigationItem.title = "Coaches"
         loadCoaches()
@@ -96,17 +93,17 @@ class COACHESViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // emptydataset functions
-    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "No Coaches"
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
-        return NSAttributedString(string: str, attributes: attrs)
-    }
-    
-    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-        let str = "Tell your Coach your username and ask them to send you a request. Once you have accepted their request they will appear here."
-        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
-        return NSAttributedString(string: str, attributes: attrs)
-    }
+//    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+//        let str = "No Coaches"
+//        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline)]
+//        return NSAttributedString(string: str, attributes: attrs)
+//    }
+//
+//    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+//        let str = "Tell your Coach your username and ask them to send you a request. Once you have accepted their request they will appear here."
+//        let attrs = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
+//        return NSAttributedString(string: str, attributes: attrs)
+//    }
     
     
     

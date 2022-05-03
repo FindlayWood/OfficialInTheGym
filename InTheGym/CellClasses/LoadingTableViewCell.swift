@@ -14,7 +14,7 @@ class LoadingTableViewCell: UITableViewCell {
     var activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.hidesWhenStopped = false
-        view.style = .whiteLarge
+        view.style = .large
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
