@@ -1,4 +1,4 @@
-${PODS_ROOT}/Target Support Files/Pods-InTheGym/Pods-InTheGym-frameworks.sh
+${PODS_ROOT}/Target Support Files/Pods-InTheGym-InTheGymUITests/Pods-InTheGym-InTheGymUITests-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/Charts/Charts.framework
 ${BUILT_PRODUCTS_DIR}/CodableFirebase/CodableFirebase.framework
 ${BUILT_PRODUCTS_DIR}/FirebaseAuth/FirebaseAuth.framework
