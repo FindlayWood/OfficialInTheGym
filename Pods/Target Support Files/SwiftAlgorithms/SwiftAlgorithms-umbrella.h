@@ -10,3 +10,7 @@
 #endif
 #endif
 
+
+FOUNDATION_EXPORT double AlgorithmsVersionNumber;
+FOUNDATION_EXPORT const unsigned char AlgorithmsVersionString[];
+
