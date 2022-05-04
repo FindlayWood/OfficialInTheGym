@@ -16,24 +16,24 @@ class MyGroupsDataSource: NSObject {
     var groupSelected = PassthroughSubject<GroupModel,Never>()
     
     // MARK: - Properties
-    var tableView: UITableView
+    var collectionView: UICollectionView
     
     private lazy var dataSource = makeDataSource()
     
     // MARK: - Initializer
-    init(tableView: UITableView) {
-        self.tableView = tableView
+    init(collectionView: UICollectionView) {
+        self.collectionView = collectionView
         super.init()
-        self.tableView.dataSource = makeDataSource()
-        self.tableView.delegate = self
+        self.collectionView.dataSource = makeDataSource()
+        self.collectionView.delegate = self
         self.initialSetup()
     }
     
     // MARK: - Create Data Source
-    func makeDataSource() -> UITableViewDiffableDataSource<SingleSection,GroupModel> {
-        return UITableViewDiffableDataSource(tableView: self.tableView) { tableView, indexPath, itemIdentifier in
-            let cell = tableView.dequeueReusableCell(withIdentifier: MyGroupsTableViewCell.cellID) as! MyGroupsTableViewCell
-            cell.configure(with: itemIdentifier)
+    func makeDataSource() -> UICollectionViewDiffableDataSource<SingleSection,GroupModel> {
+        return UICollectionViewDiffableDataSource(collectionView: self.collectionView) { collectionView, indexPath, itemIdentifier in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyGroupsCollectionViewCell.reuseID, for: indexPath) as? MyGroupsCollectionViewCell
+            cell?.configure(with: itemIdentifier)
             return cell
         }
     }
@@ -60,7 +60,7 @@ class MyGroupsDataSource: NSObject {
     }
 }
 // MARK: - Delegate - Select Row
-extension MyGroupsDataSource: UITableViewDelegate {
+extension MyGroupsDataSource: UICollectionViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let group = dataSource.itemIdentifier(for: indexPath) else {return}
