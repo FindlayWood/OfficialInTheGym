@@ -100,10 +100,11 @@ extension AddMoreToExerciseCoordinator {
 //        newExercise.note = noteText
     }
     func addNewExercise() {
-        creationViewModel.addingDelegate.addExercise(creationViewModel.exercise)
+        
         let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
         switch creationViewModel.exercisekind {
         case .regular:
+            creationViewModel.addingDelegate.addExercise(creationViewModel.exercise)
             for controller in viewControllers {
                 if controller.isKind(of: WorkoutCreationViewController.self) {
                     navigationController.popToViewController(controller, animated: true)
@@ -111,6 +112,7 @@ extension AddMoreToExerciseCoordinator {
                 }
             }
         case .circuit:
+            creationViewModel.addingDelegate.addExercise(creationViewModel.exercise)
             for controller in viewControllers {
                 if controller.isKind(of: CreateCircuitViewController.self) {
                     navigationController.popToViewController(controller, animated: true)
@@ -118,6 +120,7 @@ extension AddMoreToExerciseCoordinator {
                 }
             }
         case .emom:
+            creationViewModel.addingDelegate.addExercise(creationViewModel.exercise)
             for controller in viewControllers {
                 if controller.isKind(of: CreateEMOMViewController.self) {
                     navigationController.popToViewController(controller, animated: true)
@@ -125,6 +128,7 @@ extension AddMoreToExerciseCoordinator {
                 }
             }
         case .amrap:
+            creationViewModel.addingDelegate.addExercise(creationViewModel.exercise)
             for controller in viewControllers {
                 if controller.isKind(of: CreateAMRAPViewController.self) {
                     navigationController.popToViewController(controller, animated: true)
@@ -132,6 +136,7 @@ extension AddMoreToExerciseCoordinator {
                 }
             }
         case .live:
+            creationViewModel.addingDelegate.updatedExercise(creationViewModel.exercise)
             for controller in viewControllers {
                 if controller.isKind(of: LiveWorkoutDisplayViewController.self) {
                     navigationController.popToViewController(controller, animated: true)

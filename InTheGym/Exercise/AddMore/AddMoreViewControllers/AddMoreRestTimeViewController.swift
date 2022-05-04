@@ -35,6 +35,8 @@ class AddMoreRestTimeViewController: UIViewController {
         super.viewDidLoad()
         initDisplay()
         initBarButton()
+        initDataSource()
+        initViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -66,7 +68,7 @@ class AddMoreRestTimeViewController: UIViewController {
             .store(in: &subscriptions)
     }
     // MARK: - Init View Model
-    func iniViewModel() {
+    func initViewModel() {
         
         viewModel.$setCellModels
             .compactMap { $0 }
@@ -81,6 +83,8 @@ class AddMoreRestTimeViewController: UIViewController {
                 }
             }
             .store(in: &subscriptions)
+        
+        viewModel.getRestTimeCellModels(from: exerciseViewModel)
     }
 
     func emptyCheck() -> Bool {
