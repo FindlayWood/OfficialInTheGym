@@ -23,10 +23,17 @@ class MyGroupsView: UIView {
         return view
     }()
     // TODO: - Collection View
+    lazy var collectionView: UICollectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
+        view.register(MyGroupsCollectionViewCell.self, forCellWithReuseIdentifier: MyGroupsCollectionViewCell.reuseID)
+        view.backgroundColor = .systemBackground
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     // MARK: - Initializer
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        super.init(frame: UIScreen.main.bounds)
         setupUI()
     }
     required init?(coder: NSCoder) {
@@ -38,17 +45,26 @@ class MyGroupsView: UIView {
 // MARK: - Configure
 private extension MyGroupsView {
     func setupUI() {
-        backgroundColor = .white
-        addSubview(tableview)
+        backgroundColor = .systemBackground
+        addSubview(collectionView)
         configureUI()
     }
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            tableview.topAnchor.constraint(equalTo: topAnchor),
-            tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
-            tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tableview.bottomAnchor.constraint(equalTo: bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+    func generateCollectionLayout() -> UICollectionViewFlowLayout {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 8
+        layout.minimumLineSpacing = 8
+        layout.itemSize = CGSize(width: (Constants.screenSize.width / 2) - 16 , height: 250)
+        layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        layout.scrollDirection = .vertical
+        return layout
     }
 }

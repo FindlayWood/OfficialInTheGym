@@ -61,10 +61,9 @@ class MyGroupsDataSource: NSObject {
 }
 // MARK: - Delegate - Select Row
 extension MyGroupsDataSource: UICollectionViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let group = dataSource.itemIdentifier(for: indexPath) else {return}
-        groupSelected.send(group)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let model = dataSource.itemIdentifier(for: indexPath) else {return}
+        groupSelected.send(model)
     }
 
 }

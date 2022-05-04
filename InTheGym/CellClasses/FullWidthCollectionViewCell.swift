@@ -10,8 +10,7 @@ import Foundation
 import UIKit
 
 // MARK: - Full Width Collection View Cell
-/// allows for an estimated height with a fixed width
-
+/// A collection view cell that allows for an estimated height with a fixed width
 class FullWidthCollectionViewCell: UICollectionViewCell {
     override func systemLayoutSizeFitting(
         _ targetSize: CGSize,

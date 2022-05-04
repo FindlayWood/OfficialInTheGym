@@ -11,46 +11,42 @@ import Combine
 
 class MyGroupsViewController: UIViewController {
     
-    // MARK: - Publisher
+    // - Publisher
     var selectedGroup = PassthroughSubject<GroupModel,Never>()
     
-    // MARK: - Properties
+    // - Properties
     weak var coordinator: GroupCoordinator?
     
-    // MARK: - Display
+    // - Display
     var display = MyGroupsView()
     
+    // - Data Source
     var dataSource: MyGroupsDataSource!
     
+    // - Subscriptions
     private var subscriptions = Set<AnyCancellable>()
     
+    // - View Model
     var viewModel = MyGroupViewModel()
     
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         initNavBar()
-        initDisplay()
         initDataSource()
         initViewModel()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         editNavBarColour(to: .darkColour)
         navigationItem.title = viewModel.navigationTitle
     }
-
-    func initDisplay() {
-        display.tableview.separatorStyle = .none
-    }
     
+    // MARK: - Nav Bar
     func initNavBar(){
         if UserDefaults.currentUser.admin {
             let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewGroup(_:)))
@@ -60,7 +56,7 @@ class MyGroupsViewController: UIViewController {
     
     // MARK: - Data Source
     func initDataSource() {
-        dataSource = .init(tableView: display.tableview)
+        dataSource = .init(collectionView: display.collectionView)
         
         dataSource.groupSelected
             .sink { [weak self] group in
@@ -79,11 +75,11 @@ class MyGroupsViewController: UIViewController {
         
         viewModel.fetchReferences()
     }
-    
-    
-    @IBAction func addNewGroup(_ sender: UIButton){
-//        coordinator?.addNewGroup(with: self)
+}
+// MARK: - Actions
+private extension MyGroupsViewController {
+    @objc func addNewGroup(_ sender: UIButton) {
+        
     }
 }
-
 
