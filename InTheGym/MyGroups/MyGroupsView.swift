@@ -22,6 +22,7 @@ class MyGroupsView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    // TODO: - Collection View
     
     // MARK: - Initializer
     override init(frame: CGRect) {
