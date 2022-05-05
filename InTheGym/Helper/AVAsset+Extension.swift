@@ -42,10 +42,10 @@ extension URL {
         DispatchQueue.global().async {
             let avAssetImageGenerator = AVAssetImageGenerator(asset: asset)
             avAssetImageGenerator.appliesPreferredTrackTransform = true
-            let thumbnailTime = CMTimeMake(value: 1, timescale: 1)
+//            let thumbnailTime = CMTimeMake(value: 1, timescale: 1) // redundant use - made time 1 second in
             
             do {
-                let cgThumbImage = try avAssetImageGenerator.copyCGImage(at: thumbnailTime, actualTime: nil)
+                let cgThumbImage = try avAssetImageGenerator.copyCGImage(at: .zero, actualTime: nil)
                 let thumbImage = UIImage(cgImage: cgThumbImage)
                 DispatchQueue.main.async {
                     completion(thumbImage)
