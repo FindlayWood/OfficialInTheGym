@@ -79,7 +79,7 @@ class MyGroupsViewController: UIViewController {
 // MARK: - Actions
 private extension MyGroupsViewController {
     @objc func addNewGroup(_ sender: UIButton) {
-        
+        coordinator?.addNewGroup()
     }
 }
 

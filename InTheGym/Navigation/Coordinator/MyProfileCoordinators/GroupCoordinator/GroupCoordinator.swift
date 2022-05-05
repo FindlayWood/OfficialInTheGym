@@ -33,6 +33,12 @@ extension GroupCoordinator {
         child.start()
     }
     
+    func addNewGroup() {
+        let vc = CreateNewGroupViewController()
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
 //    func addNewGroup(with delegate: MyGroupsProtocol) {
 //        let vc = CreateNewGroupViewController()
 //        vc.coordinator = self

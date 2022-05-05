@@ -8,12 +8,14 @@
 
 import UIKit
 import SCLAlertView
+import Combine
 
 class CreateNewGroupViewController: UIViewController {
     
     weak var coordinator: GroupCoordinator?
     
 //    var delegate: MyGroupsProtocol!
+    var dataSource: UsersDataSource!
     
     var display = CreateNewGroupView()
     
@@ -24,46 +26,40 @@ class CreateNewGroupViewController: UIViewController {
     lazy var viewModel: CreateNewGroupViewModel = {
         return CreateNewGroupViewModel(apiService: apiService)
     }()
+    
+    private var subscriptions = Set<AnyCancellable>()
 
+    // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Constants.offWhiteColour
+        view.backgroundColor = .secondarySystemBackground
         navigationItem.title = "Create New Group"
-        initDisplay()
+        initDataSource()
         initViewModel()
+        initDisplay()
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(createGroup))
         navigationItem.rightBarButtonItem = button
         navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height)
-        view.addSubview(display)
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        let textAttributes = [NSAttributedString.Key.foregroundColor:Constants.darkColour]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.tintColor = Constants.darkColour
+        super.viewWillAppear(animated)
+        editNavBarColour(to: .darkColour)
     }
 
     func initViewModel() {
-        viewModel.reloadTableViewClosure = { [weak self] in
-            guard let self = self else {return}
-            DispatchQueue.main.async {
-                self.display.tableview.reloadData()
-            }
-        }
-        viewModel.successfullCreationClosure = { [weak self] in
-            guard let self = self else {return}
-            self.showSuccess()
-        }
-        viewModel.errorCreationClosure = { [weak self] in
-            guard let self = self else {return}
-            self.showError()
-        }
+        viewModel.$selectedUsers
+            .compactMap {$0}
+            .sink { [weak self] in self?.dataSource.updateTable(with: $0)}
+            .store(in: &subscriptions)
+    }
+    
+    func initDataSource() {
+        dataSource = .init(tableView: display.tableview)
+        
     }
     
     @objc func createGroup() {
@@ -74,36 +70,8 @@ class CreateNewGroupViewController: UIViewController {
 // MARK: - Display Configuration
 extension CreateNewGroupViewController {
     func initDisplay() {
-        adapter = .init(delegate: self)
-        display.tableview.delegate = adapter
-        display.tableview.dataSource = adapter
-        display.tableview.backgroundColor = Constants.offWhiteColour
         display.groupNameField.delegate = self
-    }
-}
-
-// MARK: - Protocol Methods
-extension CreateNewGroupViewController: CreateNewGroupProtocol {
-    func getData(at indexPath: IndexPath) -> Users {
-        return viewModel.getData(at: indexPath)
-    }
-    func numberOfItems() -> Int {
-        return viewModel.numberOfItems + 1
-    }
-    func addPlayers() {
-        coordinator?.addPlayersToNewGroup(self, selectedPlayers: viewModel.addedPlayers)
-
-    }
-}
-
-extension CreateNewGroupViewController: SelectPlayersProtocol {
-    func playersSelected(_ players: [Users]) {
-        viewModel.addNewPlayers(players)
-        if players.count == 0 {
-            navigationItem.rightBarButtonItem?.isEnabled = false
-        } else {
-            textFieldDidEndEditing(display.groupNameField)
-        }
+        display.addPlayersButton.addTarget(self, action: #selector(addPlayers(_:)), for: .touchUpInside)
     }
 }
 
@@ -124,20 +92,12 @@ extension CreateNewGroupViewController {
         return true
     }
 }
-
-// MARK: - Alert Methods
-extension CreateNewGroupViewController {
-    func showSuccess() {
-        let alert = SCLAlertView()
-        alert.showSuccess("New Group", subTitle: "You created a new group, \(display.groupNameField.text ?? "group"), you can now set workouts for this group specifically.", closeButtonTitle: "Ok")
-        display.groupNameField.text = ""
-        textFieldDidEndEditing(display.groupNameField)
-        viewModel.addedPlayers.removeAll()
-//        delegate.addedNewGroup()
-        navigationController?.popViewController(animated: true)
-    }
-    func showError() {
-        let alert = SCLAlertView()
-        alert.showError("Error", subTitle: "There was an error trying to create your new group. Please try again shortly.", closeButtonTitle: "Ok")
+// MARK: - Actions
+private extension CreateNewGroupViewController {
+    @objc func addPlayers(_ sender: UIButton) {
+        let vc = UserSelectionViewController()
+        vc.viewModel.currentlySelectedUsers = Set(viewModel.selectedUsers)
+        viewModel.observeSelection(vc.viewModel.selectedUsers)
+        present(vc, animated: true)
     }
 }

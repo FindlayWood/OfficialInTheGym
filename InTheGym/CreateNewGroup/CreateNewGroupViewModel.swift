@@ -7,8 +7,12 @@
 //
 
 import Foundation
+import Combine
 
 class CreateNewGroupViewModel {
+    
+    // MARK: - Publishers
+    @Published var selectedUsers: [Users] = []
     
     // MARK: - Callbacks
     var reloadTableViewClosure: (() -> ())?
@@ -16,6 +20,8 @@ class CreateNewGroupViewModel {
     var errorCreationClosure: (() -> Void)?
     
     // MARK: - Properties
+    private var subscriptions = Set<AnyCancellable>()
+    
     var addedPlayers: [Users] = [] {
         didSet {
             reloadTableViewClosure?()
@@ -76,6 +82,12 @@ class CreateNewGroupViewModel {
     // MARK: - Update Model Functions
     func updateGroupTitle(with newTitle: String) {
         newGroup.title = newTitle
+    }
+    
+    func observeSelection(_ listener: PassthroughSubject<[Users],Never>) {
+        listener
+            .sink { [weak self] in self?.selectedUsers = $0}
+            .store(in: &subscriptions)
     }
 }
 
