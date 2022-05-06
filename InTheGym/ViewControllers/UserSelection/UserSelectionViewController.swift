@@ -53,6 +53,7 @@ class UserSelectionViewController: UIViewController {
         initDataSource()
         initViewModel()
         doneButton.addTarget(self, action: #selector(donePressed(_:)), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(cancelPressed(_:)), for: .touchUpInside)
     }
     
     // MARK: - Init Data Source
@@ -83,6 +84,9 @@ class UserSelectionViewController: UIViewController {
 private extension UserSelectionViewController {
     @objc func donePressed(_ sender: UIButton) {
         viewModel.done()
+        dismiss(animated: true)
+    }
+    @objc func cancelPressed(_ sender: UIButton) {
         dismiss(animated: true)
     }
 }

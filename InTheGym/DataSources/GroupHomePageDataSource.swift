@@ -51,7 +51,9 @@ class GroupHomePageDataSource: NSObject {
             case .name(let model):
                 let cell = UITableViewCell()
                 cell.textLabel?.text = model.username
-                cell.textLabel?.font = Constants.font
+                cell.textLabel?.font = .systemFont(ofSize: 25, weight: .bold)
+                cell.textLabel?.adjustsFontSizeToFitWidth = true
+                cell.textLabel?.minimumScaleFactor = 0.2
                 cell.selectionStyle = .none
                 return cell
             case .leader(let leader):
@@ -107,6 +109,15 @@ class GroupHomePageDataSource: NSObject {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.appendItems([GroupItems.leader(leader)], toSection: .groupLeader)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    
+    // MARK: - Update Name
+    func updateName(_ group: GroupModel) {
+        var currentSnapshot = dataSource.snapshot()
+        let currentName = currentSnapshot.itemIdentifiers(inSection: .groupName)
+        currentSnapshot.deleteItems(currentName)
+        currentSnapshot.appendItems([.name(group)], toSection: .groupName)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Update Posts

@@ -127,6 +127,14 @@ class GroupHomePageViewController: UIViewController {
             .sink { [weak self] in self?.dataSource.addNewPost($0)}
             .store(in: &subscriptions)
         
+        viewModel.updatedGroupListener
+            .sink { [weak self] (group, image) in
+                self?.dataSource.updateName(group)
+                self?.display.headerView.imageView.image = image
+                self?.viewModel.currentGroup = group
+            }
+            .store(in: &subscriptions)
+        
         viewModel.loadPosts()
         viewModel.loadHeaderImage()
         viewModel.loadGroupLeader()
@@ -167,7 +175,7 @@ class GroupHomePageViewController: UIViewController {
         case .workouts:
             coordinator?.goToGroupWorkouts(with: viewModel.currentGroup)
         case .manage:
-            coordinator?.showMoreInfo(with: viewModel.getGroupInfo())
+            coordinator?.showMoreInfo(with: viewModel.currentGroup, listener: viewModel.updatedGroupListener)
         }
     }
     

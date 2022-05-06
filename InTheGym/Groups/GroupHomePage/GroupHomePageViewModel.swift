@@ -29,6 +29,8 @@ class GroupHomePageViewModel {
     
     var newPostListner = NewPostListener()
     
+    var updatedGroupListener = PassthroughSubject<(GroupModel,UIImage?),Never>()
+    
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService
     
@@ -90,16 +92,16 @@ class GroupHomePageViewModel {
         let leader = leaderPublisher.value
         return leader == UserDefaults.currentUser
     }
-    
-    func getGroupInfo() -> MoreGroupInfoModel {
-        let info = MoreGroupInfoModel(leader: leaderPublisher.value,
-                                      headerImage: headerImagePublisher.value,
-                                      description: currentGroup.description,
-                                      groupName: currentGroup.username,
-                                      groupID: currentGroup.uid,
-                                      leaderID: currentGroup.leader)
-        return info
-    }
+//    
+//    func getGroupInfo() -> MoreGroupInfoModel {
+//        let info = MoreGroupInfoModel(leader: leaderPublisher.value,
+//                                      headerImage: headerImagePublisher.value,
+//                                      description: currentGroup.description,
+//                                      groupName: currentGroup.username,
+//                                      groupID: currentGroup.uid,
+//                                      leaderID: currentGroup.leader)
+//        return info
+//    }
     
     // MARK: - Actions
 

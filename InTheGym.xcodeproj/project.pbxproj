@@ -17,8 +17,6 @@
 		7403A5FA26C54F6B000588CE /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5F926C54F6B000588CE /* UIColor+Extension.swift */; };
 		7403A5FD26C558E9000588CE /* GroupHomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5FC26C558E9000588CE /* GroupHomePageViewController.swift */; };
 		7403A5FF26C558F9000588CE /* GroupHomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5FE26C558F9000588CE /* GroupHomePageViewModel.swift */; };
-		7403A60126C55905000588CE /* GroupHomePageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60026C55905000588CE /* GroupHomePageAdapter.swift */; };
-		7403A60326C55913000588CE /* GroupHomePageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60226C55913000588CE /* GroupHomePageProtocol.swift */; };
 		7403A60526C5591D000588CE /* GroupHomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60426C5591D000588CE /* GroupHomePageView.swift */; };
 		7403A60726C55949000588CE /* GroupHomePageInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60626C55949000588CE /* GroupHomePageInfoTableViewCell.swift */; };
 		7403A60926C56627000588CE /* GroupCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60826C56627000588CE /* GroupCellView.swift */; };
@@ -26,8 +24,6 @@
 		7403A60D26C6DDF6000588CE /* StretchyTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60C26C6DDF6000588CE /* StretchyTableHeaderView.swift */; };
 		7403A61026C9B310000588CE /* MoreGroupInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60F26C9B310000588CE /* MoreGroupInfoViewController.swift */; };
 		7403A61226C9B31D000588CE /* MoreGroupInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61126C9B31D000588CE /* MoreGroupInfoViewModel.swift */; };
-		7403A61426C9B32A000588CE /* MoreGroupInfoAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61326C9B32A000588CE /* MoreGroupInfoAdapter.swift */; };
-		7403A61626C9B337000588CE /* MoreGroupInfoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61526C9B337000588CE /* MoreGroupInfoProtocol.swift */; };
 		7403A61826C9B345000588CE /* MoreGroupInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61726C9B345000588CE /* MoreGroupInfoView.swift */; };
 		7403A61B26C9B3B3000588CE /* UITableViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61A26C9B3B3000588CE /* UITableViewView.swift */; };
 		7403A61D26CAD989000588CE /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61C26CAD989000588CE /* TextViewTableViewCell.swift */; };
@@ -883,8 +879,6 @@
 		7403A5F926C54F6B000588CE /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		7403A5FC26C558E9000588CE /* GroupHomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageViewController.swift; sourceTree = "<group>"; };
 		7403A5FE26C558F9000588CE /* GroupHomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageViewModel.swift; sourceTree = "<group>"; };
-		7403A60026C55905000588CE /* GroupHomePageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageAdapter.swift; sourceTree = "<group>"; };
-		7403A60226C55913000588CE /* GroupHomePageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageProtocol.swift; sourceTree = "<group>"; };
 		7403A60426C5591D000588CE /* GroupHomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageView.swift; sourceTree = "<group>"; };
 		7403A60626C55949000588CE /* GroupHomePageInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageInfoTableViewCell.swift; sourceTree = "<group>"; };
 		7403A60826C56627000588CE /* GroupCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCellView.swift; sourceTree = "<group>"; };
@@ -892,8 +886,6 @@
 		7403A60C26C6DDF6000588CE /* StretchyTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyTableHeaderView.swift; sourceTree = "<group>"; };
 		7403A60F26C9B310000588CE /* MoreGroupInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreGroupInfoViewController.swift; sourceTree = "<group>"; };
 		7403A61126C9B31D000588CE /* MoreGroupInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreGroupInfoViewModel.swift; sourceTree = "<group>"; };
-		7403A61326C9B32A000588CE /* MoreGroupInfoAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreGroupInfoAdapter.swift; sourceTree = "<group>"; };
-		7403A61526C9B337000588CE /* MoreGroupInfoProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreGroupInfoProtocol.swift; sourceTree = "<group>"; };
 		7403A61726C9B345000588CE /* MoreGroupInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreGroupInfoView.swift; sourceTree = "<group>"; };
 		7403A61A26C9B3B3000588CE /* UITableViewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewView.swift; sourceTree = "<group>"; };
 		7403A61C26CAD989000588CE /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
@@ -1891,8 +1883,6 @@
 				74DE6D7827D1144D009FB44A /* Members */,
 				7403A5FC26C558E9000588CE /* GroupHomePageViewController.swift */,
 				7403A5FE26C558F9000588CE /* GroupHomePageViewModel.swift */,
-				7403A60026C55905000588CE /* GroupHomePageAdapter.swift */,
-				7403A60226C55913000588CE /* GroupHomePageProtocol.swift */,
 				7403A60426C5591D000588CE /* GroupHomePageView.swift */,
 				7403A60626C55949000588CE /* GroupHomePageInfoTableViewCell.swift */,
 				7403A60826C56627000588CE /* GroupCellView.swift */,
@@ -1905,8 +1895,6 @@
 			children = (
 				7403A60F26C9B310000588CE /* MoreGroupInfoViewController.swift */,
 				7403A61126C9B31D000588CE /* MoreGroupInfoViewModel.swift */,
-				7403A61326C9B32A000588CE /* MoreGroupInfoAdapter.swift */,
-				7403A61526C9B337000588CE /* MoreGroupInfoProtocol.swift */,
 				7403A61726C9B345000588CE /* MoreGroupInfoView.swift */,
 			);
 			path = MoreGroupInfo;
@@ -2951,6 +2939,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				74DD9CFF28255823008B2C94 /* Groups */,
 				74B647B32816F72E00ADDB7A /* Navigation */,
 				74B647B22816F71E00ADDB7A /* Screens */,
 				7403D06B280E06BC00268CEC /* AssigningSelection */,
@@ -2979,9 +2968,6 @@
 				7444D07626CE98AC0009C7A6 /* UploadGroupWorkout */,
 				7444D05B26CD41780009C7A6 /* GroupWorkouts */,
 				7403A61926C9B3A9000588CE /* ViewClasses */,
-				7403A60E26C9B2F3000588CE /* MoreGroupInfo */,
-				7403A5FB26C558D5000588CE /* GroupHomePage */,
-				7429783826C151970023365E /* CreateNewGroup */,
 				74318F3A26B570E4009EDFAC /* LiveWorkout */,
 				74FDB5B126A756AF000649CC /* ViewClip */,
 				74AF6D6B268B6D0C005C52A8 /* RecordClip */,
@@ -3604,6 +3590,16 @@
 				7460620B25278D34005B1480 /* MYSCORESViewController.swift */,
 			);
 			path = PlayerPages;
+			sourceTree = "<group>";
+		};
+		74DD9CFF28255823008B2C94 /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				7429783826C151970023365E /* CreateNewGroup */,
+				7403A5FB26C558D5000588CE /* GroupHomePage */,
+				7403A60E26C9B2F3000588CE /* MoreGroupInfo */,
+			);
+			path = Groups;
 			sourceTree = "<group>";
 		};
 		74DE6D7027D10FAC009FB44A /* ChildViewControllers */ = {
@@ -4784,7 +4780,6 @@
 				74F2CCC026DD560300D7AD79 /* CreateNewPostCoordinator.swift in Sources */,
 				74DE6D7C27D1158B009FB44A /* GroupMembersViewModel.swift in Sources */,
 				74F5468525E948D900C1A6A9 /* LoadAllUsernames.swift in Sources */,
-				7403A61626C9B337000588CE /* MoreGroupInfoProtocol.swift in Sources */,
 				7460627B252D1C02005B1480 /* CoachScoresViewController.swift in Sources */,
 				7433308E278743CF005A0C45 /* ExerciseType.swift in Sources */,
 				74C126B82819B1D900C3B171 /* CoachProfileMoreViewModel.swift in Sources */,
@@ -4796,7 +4791,6 @@
 				74F8A62F2823FEFD008EB5E9 /* UserSelectionDataSource.swift in Sources */,
 				744F002C261FA44600B7BBDE /* CreatedWorkoutUploadProtocol.swift in Sources */,
 				742C1C5127B2D4EB00DD1BB0 /* ClipStorageModel.swift in Sources */,
-				7403A60126C55905000588CE /* GroupHomePageAdapter.swift in Sources */,
 				74F18AE327D668D00043551F /* WorkoutChildView.swift in Sources */,
 				74EE4EC527E536A100051451 /* LastThreeScoresViewController.swift in Sources */,
 				744D562E26F2ABF100D3E1FA /* CreateEMOMViewController.swift in Sources */,
@@ -4986,7 +4980,6 @@
 				74FCFA4B261541640064699F /* MyInfoTableViewCell.swift in Sources */,
 				74B6F68F274D588000A72679 /* ResetPasswordView.swift in Sources */,
 				7416CCC7264ED2A40043B1C2 /* CircuitCoordinator.swift in Sources */,
-				7403A60326C55913000588CE /* GroupHomePageProtocol.swift in Sources */,
 				743330F0279438F6005A0C45 /* PostActionEnum.swift in Sources */,
 				74B48DE427A1809700BBFC16 /* ProfileImageUploadModel.swift in Sources */,
 				74B6F769275A5B7A00A72679 /* SignUpView.swift in Sources */,
@@ -5013,7 +5006,6 @@
 				743B1E7F22EF49CF0046006C /* AdminPlayersViewController.swift in Sources */,
 				7444D09126D136600009C7A6 /* AddMoreToExerciseViewController.swift in Sources */,
 				747FED3525659A2900080AC8 /* AddNewGroupViewController.swift in Sources */,
-				7403A61426C9B32A000588CE /* MoreGroupInfoAdapter.swift in Sources */,
 				74F18ADE27D65F530043551F /* WorkoutSearchModel.swift in Sources */,
 				7444D06F26CD76060009C7A6 /* AddGroupWorkoutTypeViewController.swift in Sources */,
 				74CCBADD261685F100A20A94 /* WorkoutCompletedViewModel.swift in Sources */,
