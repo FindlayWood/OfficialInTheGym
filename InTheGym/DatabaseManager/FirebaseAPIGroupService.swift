@@ -11,7 +11,7 @@ import Firebase
 import CodableFirebase
 
 protocol FirebaseAPIGroupServiceProtocol: FirebaseTimelineServiceProtocol {
-    func createGroup(with data: NewGroupModel, completion: @escaping (Bool) -> Void)
+//    func createGroup(with data: NewGroupModel, completion: @escaping (Bool) -> Void)
     func loadMembers(from group: MoreGroupInfoModel, completion: @escaping (Result<[Users], Error>) -> Void)
     func loadLeader(from group: MoreGroupInfoModel, completion: @escaping (Result<Users, Error>) -> Void)
     func saveNewGroupInfo(from group: MoreGroupInfoModel, completion: @escaping (Bool) -> Void)
@@ -29,43 +29,43 @@ class FirebaseAPIGroupService: FirebaseAPIGroupServiceProtocol {
     
     
     // MARK: - Create Group
-    func createGroup(with data: NewGroupModel, completion: @escaping (Bool) -> Void) {
-        guard let userID = Auth.auth().currentUser?.uid else {return}
-
-        let groupRef = baseRef.child("Groups").childByAutoId()
-        let groupID = groupRef.key!
-        
-        let newGroupData = ["username": data.title,
-                            "description": data.description,
-                            "leader": userID,
-                            "uid": groupID] as [String: Any]
-        
-        var updatedGroupData: [String: Any] = [:]
-
-        
-        var membersData: [String: Bool] = [:]
-        membersData[userID] = true
-        updatedGroupData["GroupsReferences/\(userID)/\(groupID)"] = true
-        
-        for player in data.players {
-            let playerID = player.uid
-            membersData[playerID] = true
-            updatedGroupData["GroupsReferences/\(playerID)/\(groupID)"] = true
-        }
-        
-        updatedGroupData["Groups/\(groupID)"] = newGroupData
-        updatedGroupData["GroupMembers/\(groupID)"] = membersData
-        updatedGroupData["GroupsLeaderReferences/\(userID)/\(groupID)"] = true
-        
-        baseRef.updateChildValues(updatedGroupData) { error, ref in
-            if let error = error {
-                print(error.localizedDescription)
-                completion(false)
-            } else {
-                completion(true)
-            }
-        }
-    }
+//    func createGroup(with data: NewGroupModel, completion: @escaping (Bool) -> Void) {
+//        guard let userID = Auth.auth().currentUser?.uid else {return}
+//
+//        let groupRef = baseRef.child("Groups").childByAutoId()
+//        let groupID = groupRef.key!
+//        
+//        let newGroupData = ["username": data.title,
+//                            "description": data.description,
+//                            "leader": userID,
+//                            "uid": groupID] as [String: Any]
+//        
+//        var updatedGroupData: [String: Any] = [:]
+//
+//        
+//        var membersData: [String: Bool] = [:]
+//        membersData[userID] = true
+//        updatedGroupData["GroupsReferences/\(userID)/\(groupID)"] = true
+//        
+//        for player in data.players {
+//            let playerID = player.uid
+//            membersData[playerID] = true
+//            updatedGroupData["GroupsReferences/\(playerID)/\(groupID)"] = true
+//        }
+//        
+//        updatedGroupData["Groups/\(groupID)"] = newGroupData
+//        updatedGroupData["GroupMembers/\(groupID)"] = membersData
+//        updatedGroupData["GroupsLeaderReferences/\(userID)/\(groupID)"] = true
+//        
+//        baseRef.updateChildValues(updatedGroupData) { error, ref in
+//            if let error = error {
+//                print(error.localizedDescription)
+//                completion(false)
+//            } else {
+//                completion(true)
+//            }
+//        }
+//    }
     
 //    // MARK: - Load Posts
 //    func loadPosts(from groupID: String, completion: @escaping (Result<[PostProtocol], Error>) -> Void) {

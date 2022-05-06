@@ -25,9 +25,10 @@ class CreateNewGroupView: UIView {
         field.lineColor = .lightGray
         field.title = "enter group name"
         field.selectedTitle = "Group Name"
-        field.selectedTitleColor = Constants.darkColour
-        field.selectedLineColor = Constants.darkColour
+        field.selectedTitleColor = .darkColour
+        field.selectedLineColor = .darkColour
         field.placeholder = "enter group name"
+        field.autocapitalizationType = .words
         field.clearButtonMode = .whileEditing
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
@@ -53,6 +54,7 @@ class CreateNewGroupView: UIView {
         let view = UITableView()
         view.tableFooterView = UIView()
         view.register(UserTableViewCell.self, forCellReuseIdentifier: UserTableViewCell.cellID)
+        view.backgroundColor = .secondarySystemBackground
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -86,13 +88,13 @@ private extension CreateNewGroupView {
     func constrainUI() {
         NSLayoutConstraint.activate([
             
-            groupNameField.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
+            groupNameField.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 48),
             groupNameField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             groupNameField.heightAnchor.constraint(equalToConstant: 45),
             groupNameField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
 
             
-            playerLabel.topAnchor.constraint(equalTo: groupNameField.bottomAnchor, constant: 16),
+            playerLabel.topAnchor.constraint(equalTo: groupNameField.bottomAnchor, constant: 32),
             playerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             addPlayersButton.centerYAnchor.constraint(equalTo: playerLabel.centerYAnchor),

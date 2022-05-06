@@ -14,7 +14,6 @@ class CreateNewGroupViewController: UIViewController {
     
     weak var coordinator: GroupCoordinator?
     
-//    var delegate: MyGroupsProtocol!
     var dataSource: UsersDataSource!
     
     var display = CreateNewGroupView()
@@ -34,9 +33,7 @@ class CreateNewGroupViewController: UIViewController {
         initDataSource()
         initViewModel()
         initDisplay()
-        let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(createGroup))
-        navigationItem.rightBarButtonItem = button
-        navigationItem.rightBarButtonItem?.isEnabled = false
+        initNavBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -44,23 +41,30 @@ class CreateNewGroupViewController: UIViewController {
         editNavBarColour(to: .darkColour)
     }
     
+    // MARK: - Init Display
     func initDisplay() {
-        display.groupNameField.delegate = self
         display.addPlayersButton.addTarget(self, action: #selector(addPlayers(_:)), for: .touchUpInside)
-    
         display.groupNameField.textPublisher
             .sink { [weak self] in self?.viewModel.groupTitle = $0 }
             .store(in: &subscriptions)
-        
-//        display.groupNameField.publisher(for: \.text)
-//            .compactMap {$0}
-//            .sink { [weak self] in self?.viewModel.groupTitle = $0}
-//            .store(in: &subscriptions)
+    }
+    
+    func initNavBar() {
+        let barButton = UIBarButtonItem(title: "Upload", style: .done, target: self, action: #selector(createGroup))
+        navigationItem.rightBarButtonItem = barButton
+        navigationItem.rightBarButtonItem?.isEnabled = false
+    }
+    func initLoadingNavBar() {
+        let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        activityIndicator.startAnimating()
+        let barButton = UIBarButtonItem(customView: activityIndicator)
+        navigationItem.rightBarButtonItem = barButton
     }
 
+    // MARK: - Init View Model
     func initViewModel() {
-        viewModel.$selectedUsers
-            .compactMap {$0}
+        
+        viewModel.newUsersSelected
             .sink { [weak self] in self?.dataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
         
@@ -68,7 +72,16 @@ class CreateNewGroupViewController: UIViewController {
             .sink { [weak self] in self?.navigationItem.rightBarButtonItem?.isEnabled = $0 }
             .store(in: &subscriptions)
         
+        viewModel.createdNewGroup?
+            .sink { [weak self] newGroup in
+                self?.coordinator?.goToGroupHome(newGroup)
+                self?.display.groupNameField.text = ""
+            }
+            .store(in: &subscriptions)
         
+        viewModel.$isLoading
+            .sink { [weak self] in self?.setToLoading($0)}
+            .store(in: &subscriptions)
     }
     
     func initDataSource() {
@@ -83,9 +96,15 @@ class CreateNewGroupViewController: UIViewController {
 // MARK: - Actions
 private extension CreateNewGroupViewController {
     @objc func addPlayers(_ sender: UIButton) {
-        let vc = UserSelectionViewController()
-        vc.viewModel.currentlySelectedUsers = Set(viewModel.selectedUsers)
-        viewModel.observeSelection(vc.viewModel.selectedUsers)
-        present(vc, animated: true)
+        coordinator?.addUsers(viewModel.newUsersSelected.value, listener: viewModel.newUsersSelected)
+    }
+    func setToLoading(_ value: Bool) {
+        navigationItem.hidesBackButton = value
+        display.groupNameField.resignFirstResponder()
+        if value {
+            initLoadingNavBar()
+        } else {
+            initNavBar()
+        }
     }
 }

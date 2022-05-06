@@ -12,7 +12,7 @@ import Combine
 class UserSelectionViewModel {
     
     // MARK: - Publishers
-    var selectedUsers = PassthroughSubject<[Users],Never>()
+    weak var selectedUsers: CurrentValueSubject<[Users],Never>?
     
     // - All Users
     @Published var allUsers: [UserSelectionCellModel]!
@@ -37,7 +37,7 @@ class UserSelectionViewModel {
         currentlySelectedUsers.remove(user)
     }
     func done() {
-        selectedUsers.send(Array(currentlySelectedUsers))
+        selectedUsers?.send(Array(currentlySelectedUsers))
     }
     
     // MARK: - Functions

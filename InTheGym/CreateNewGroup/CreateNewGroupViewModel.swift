@@ -12,11 +12,15 @@ import Combine
 class CreateNewGroupViewModel {
     
     // MARK: - Publishers
-    @Published var selectedUsers: [Users] = []
+    @Published var isLoading: Bool = false
     @Published var groupTitle: String = ""
     @Published private var validTitle: Bool = false
     @Published private var validMembers: Bool = false
     @Published var canCreate: Bool = false
+    
+    var newUsersSelected = CurrentValueSubject<[Users],Never>([])
+    weak var createdNewGroup: PassthroughSubject<GroupModel,Never>?
+    var errorCreatingGroup = PassthroughSubject<Error,Never>()
     
     // MARK: - Properties
     private var subscriptions = Set<AnyCancellable>()
@@ -32,6 +36,7 @@ class CreateNewGroupViewModel {
     
     // MARK: - Actions
     func createNewGroup() {
+        isLoading = true
         let newGroup = GroupModel(uid: UUID().uuidString,
                                   description: "",
                                   leader: UserDefaults.currentUser.uid,
@@ -46,9 +51,12 @@ class CreateNewGroupViewModel {
         apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
             switch result {
             case .success(()):
-                print("hoooraaay!")
-            case .failure(_):
-                print("noooooooo")
+                self?.groupTitle = ""
+                self?.newUsersSelected.send([])
+                self?.createdNewGroup?.send(newGroup)
+                self?.isLoading = false
+            case .failure(let error):
+                self?.errorCreatingGroup.send(error)
             }
         }
     }
@@ -57,31 +65,29 @@ class CreateNewGroupViewModel {
     // MARK: - Functions
     func initSubscriptions() {
         
+        newUsersSelected
+            .map { $0.count > 0}
+            .sink { [weak self] in self?.validMembers = $0 }
+            .store(in: &subscriptions)
+        
         $groupTitle
             .map { $0.trimTrailingWhiteSpaces().count > 0}
             .sink { [weak self] in self?.validTitle = $0 }
             .store(in: &subscriptions)
         
-        $selectedUsers
-            .map { $0.count > 0 }
-            .sink { [weak self] in self?.validMembers = $0 }
-            .store(in: &subscriptions)
         
         Publishers.CombineLatest($validTitle, $validMembers)
             .map { $0 && $1 }
             .sink { [weak self] in self?.canCreate = $0 }
             .store(in: &subscriptions)
     }
-    func observeSelection(_ listener: PassthroughSubject<[Users],Never>) {
-        listener
-            .sink { [weak self] in self?.selectedUsers = $0}
-            .store(in: &subscriptions)
-    }
+
     func getPlayerUploadPoints(_ groupID: String) -> [FirebaseMultiUploadDataPoint] {
         var uploadPoints = [FirebaseMultiUploadDataPoint]()
-        selectedUsers.append(UserDefaults.currentUser)
-        for player in selectedUsers {
-            uploadPoints.append(FirebaseMultiUploadDataPoint(value: true, path: "GroupsReferences/\(player.uid)/\(groupID)"))
+        var users = newUsersSelected.value
+        users.append(UserDefaults.currentUser)
+        for user in users {
+            uploadPoints.append(FirebaseMultiUploadDataPoint(value: true, path: "GroupsReferences/\(user.uid)/\(groupID)"))
         }
         return uploadPoints
     }
@@ -90,15 +96,11 @@ class CreateNewGroupViewModel {
     }
     func getGroupMembers(_ groupID: String) -> [FirebaseMultiUploadDataPoint] {
         var uploadPoints = [FirebaseMultiUploadDataPoint]()
-        for player in selectedUsers {
-            uploadPoints.append(FirebaseMultiUploadDataPoint(value: true, path: "GroupMembers/\(groupID)/\(player.uid)"))
+        var users = newUsersSelected.value
+        users.append(UserDefaults.currentUser)
+        for user in users {
+            uploadPoints.append(FirebaseMultiUploadDataPoint(value: true, path: "GroupMembers/\(groupID)/\(user.uid)"))
         }
         return uploadPoints
     }
-}
-
-struct NewGroupModel {
-    var title: String = ""
-    var description: String = ""
-    var players: [Users] = []
 }

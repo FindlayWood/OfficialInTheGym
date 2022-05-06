@@ -15,6 +15,7 @@ class MyGroupViewModel:NSObject {
     
     // MARK: - Publishers
     var groups = CurrentValueSubject<[GroupModel], Never>([])
+    var newGroupCreated = PassthroughSubject<GroupModel,Never>()
     
     var errorFetchingGroups = PassthroughSubject<Error, Never>()
     
