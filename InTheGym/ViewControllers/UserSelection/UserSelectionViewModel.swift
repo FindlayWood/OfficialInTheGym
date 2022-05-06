@@ -41,8 +41,19 @@ class UserSelectionViewModel {
     }
     
     // MARK: - Functions
-    func loadUsers() {
-        let keys = ["LS8kpGDQmkScBHbfN9aBaz3lDzP2", "2amSPGcjkWazWWGjksruRbvl6cF3", "VWhta8sZ8EN0JUfdoyKVCgznijD3", "h5EjeDAeVbN3KgwVBe4dIcSYHqt2", "yULnDYa8vFOznhXh9beX7bLLbn53", "fZKSEr4e6yWdYqt0P6BXbnyg1pf2", "tmNRVFlUNVQTBuSEV3j2eb580fd2", "EIPmHvETuwZbpBFIW4RWu3lYBSZ2", "xANGtU2nEHhLfPKemXuJnmfQnMq1"]
+    func fetchUsers() {
+        let keyModel = CoachPlayersKeyModel()
+        apiService.fetchKeys(from: keyModel) { [weak self] result in
+            switch result {
+            case .success(let keys):
+                self?.loadUsers(from: keys)
+            case .failure(_):
+                break
+            }
+        }
+    }
+    func loadUsers(from keys: [String]) {
+//        let keys = ["LS8kpGDQmkScBHbfN9aBaz3lDzP2", "2amSPGcjkWazWWGjksruRbvl6cF3", "VWhta8sZ8EN0JUfdoyKVCgznijD3", "h5EjeDAeVbN3KgwVBe4dIcSYHqt2", "yULnDYa8vFOznhXh9beX7bLLbn53", "fZKSEr4e6yWdYqt0P6BXbnyg1pf2", "tmNRVFlUNVQTBuSEV3j2eb580fd2", "EIPmHvETuwZbpBFIW4RWu3lYBSZ2", "xANGtU2nEHhLfPKemXuJnmfQnMq1"]
         let models = keys.map { UserSearchModel(uid: $0)}
         apiService.fetchRange(from: models, returning: Users.self) { [weak self] result in
             guard let self = self else {return}

@@ -76,7 +76,7 @@ class UserSelectionViewController: UIViewController {
             .sink { [weak self] in self?.dataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
         
-        viewModel.loadUsers()
+        viewModel.fetchUsers()
     }
 }
 // MARK: - Actions
