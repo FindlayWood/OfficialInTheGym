@@ -2966,7 +2966,6 @@
 				74F2CCC626DE739200D7AD79 /* CustomPresentationControllers */,
 				7444D0EC26D852280009C7A6 /* CreateNewPost */,
 				7444D07626CE98AC0009C7A6 /* UploadGroupWorkout */,
-				7444D05B26CD41780009C7A6 /* GroupWorkouts */,
 				7403A61926C9B3A9000588CE /* ViewClasses */,
 				74318F3A26B570E4009EDFAC /* LiveWorkout */,
 				74FDB5B126A756AF000649CC /* ViewClip */,
@@ -3595,6 +3594,7 @@
 		74DD9CFF28255823008B2C94 /* Groups */ = {
 			isa = PBXGroup;
 			children = (
+				7444D05B26CD41780009C7A6 /* GroupWorkouts */,
 				7429783826C151970023365E /* CreateNewGroup */,
 				7403A5FB26C558D5000588CE /* GroupHomePage */,
 				7403A60E26C9B2F3000588CE /* MoreGroupInfo */,

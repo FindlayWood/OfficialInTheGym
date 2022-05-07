@@ -53,6 +53,26 @@ extension GroupWorkoutKeys: FirebaseInstance {
     }
 }
 
+/// Upload a saved workout to a group
+struct GroupWorkoutUploadModel {
+    
+    /// the id of the group
+    var groupID: String
+    
+    /// the id of the saved workout
+    var savedWorkoutID: String
+    
+    /// the upload point in firebase
+    var uploadPoint: FirebaseMultiUploadDataPoint {
+        FirebaseMultiUploadDataPoint(value: true, path: internalPath)
+    }
+}
+extension GroupWorkoutUploadModel: FirebaseInstance {
+    var internalPath: String {
+        return "GroupWorkouts/\(groupID)/\(savedWorkoutID)"
+    }
+}
+
 // MARK: - Group Post Search Model
 /// Model to search and download specific group post
 struct GroupPostSearchModel {

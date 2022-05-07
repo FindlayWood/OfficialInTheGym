@@ -12,6 +12,7 @@ import Combine
 final class GroupWorkoutsViewModel {
     
     // MARK: - Publishers
+    @Published var groupWorkouts: [SavedWorkoutModel] = []
     var workoutPublisher = CurrentValueSubject<[SavedWorkoutModel],Never>([])
     var errorFetchWorkouts = PassthroughSubject<Error,Never>()
     
@@ -46,13 +47,24 @@ final class GroupWorkoutsViewModel {
         apiService.fetchRange(from: models, returning: SavedWorkoutModel.self) { [weak self] result in
             switch result {
             case .success(let workouts):
-                self?.workoutPublisher.send(workouts)
+                self?.groupWorkouts = workouts
             case .failure(let error):
                 self?.errorFetchWorkouts.send(error)
             }
         }
     }
     
-    // MARK: - Returning Functions
+    // MARK: - Actions
+    func addNewSavedWorkout(_ model: SavedWorkoutModel) {
+        let uploadPoint = GroupWorkoutUploadModel(groupID: group.uid, savedWorkoutID: model.id).uploadPoint
+        apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
+            switch result {
+            case .success(()):
+                self?.groupWorkouts.append(model)
+            case .failure(let error):
+                self?.errorFetchWorkouts.send(error)
+            }
+        }
+    }
 
 }

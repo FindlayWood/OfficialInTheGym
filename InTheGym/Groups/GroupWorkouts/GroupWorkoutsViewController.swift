@@ -23,7 +23,7 @@ class GroupWorkoutsViewController: UIViewController {
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightColour
+        view.backgroundColor = .darkColour
 //        initViewModel()
         initNavBar()
     }
@@ -66,7 +66,7 @@ class GroupWorkoutsViewController: UIViewController {
     // MARK: - View Model
     func initViewModel() {
 
-        viewModel.workoutPublisher
+        viewModel.$groupWorkouts
             .sink { [weak self] in self?.childVC.dataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
         
@@ -78,6 +78,8 @@ class GroupWorkoutsViewController: UIViewController {
 // MARK: - Actions
 private extension GroupWorkoutsViewController {
     @objc func addNewWorkout() {
-        coordinator?.addNewWorkout()
+        coordinator?.showSavedWorkoutPicker(completion: { [weak self] newSavedWorkout in
+            self?.viewModel.addNewSavedWorkout(newSavedWorkout)
+        })
     }
 }
