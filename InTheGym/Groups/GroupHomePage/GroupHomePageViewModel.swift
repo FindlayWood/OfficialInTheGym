@@ -40,6 +40,8 @@ class GroupHomePageViewModel {
     var membersLoadedSuccessfully: Bool = false
     var groupLeaderLoadedSuccessfully: Bool = false
     
+    var showingNavBarImage: Bool = false
+    
     
     
     // MARK: - Initializer

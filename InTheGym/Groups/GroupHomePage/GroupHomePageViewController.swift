@@ -22,9 +22,10 @@ class GroupHomePageViewController: UIViewController {
     
     private var subscriptions = Set<AnyCancellable>()
     
-//    private lazy var dataSource = makeDataSorce()
-    
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .darkColour
@@ -34,15 +35,9 @@ class GroupHomePageViewController: UIViewController {
         initViewModel()
 
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
     override func viewWillAppear(_ animated: Bool) {
         editNavBarColour(to: .white)
     }
-    
     // MARK: - Display
     func initDisplay() {
         display.tableview.backgroundColor = .darkColour
@@ -50,8 +45,6 @@ class GroupHomePageViewController: UIViewController {
     
     // MARK: - Nav Bar
     func addNavBarButton() {
-        //let barImage = viewModel.getBarImage()
-        //let barButton = UIBarButtonItem(image: barImage, style: .plain, target: self, action: #selector(moreButtonTapped))
         let postButton = UIBarButtonItem(image: UIImage(systemName: "pencil.circle.fill"), style: .plain, target: self, action: #selector(postButtonTapped))
         navigationItem.rightBarButtonItems = [postButton]
         
@@ -144,29 +137,23 @@ class GroupHomePageViewController: UIViewController {
     
     // MARK: - Actions
     func initNavBarProfileImage(_ showingHeader: Bool) {
-        if !showingHeader {
+        if !showingHeader && !viewModel.showingNavBarImage {
             DispatchQueue.main.async {
-                let barView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-                barView.layer.cornerRadius = 15
-                barView.clipsToBounds = true
-                let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-                imageView.contentMode = .scaleAspectFill
-                imageView.layer.cornerRadius = 15
-                imageView.clipsToBounds = true
-                imageView.layer.masksToBounds = false
-                imageView.image = self.viewModel.headerImagePublisher.value
-                imageView.alpha = 0.0
-                barView.addSubview(imageView)
-                self.navigationItem.titleView = barView
-                UIView.animate(withDuration: 0.5) {
-                    imageView.alpha = 1.0
+                self.display.navBarView.image = self.viewModel.headerImagePublisher.value
+                self.display.barView.addSubview(self.display.navBarView)
+                self.navigationItem.titleView = self.display.barView
+                UIView.animate(withDuration: 0.3) {
+                    self.display.navBarView.alpha = 1.0
                 }
             }
-        } else {
+            viewModel.showingNavBarImage = true
+        } else if showingHeader {
             DispatchQueue.main.async {
                 self.navigationItem.title = nil
                 self.navigationItem.titleView = nil
+                self.display.navBarView.alpha = 0.0
             }
+            viewModel.showingNavBarImage = false
         }
     }
     
@@ -180,16 +167,7 @@ class GroupHomePageViewController: UIViewController {
             coordinator?.showMoreInfo(with: viewModel.currentGroup, listener: viewModel.updatedGroupListener)
         }
     }
-    
-    @objc func moreButtonTapped() {
-//        let info = MoreGroupInfoModel(leader: getGroupLeader(),
-//                                      headerImage: getGroupImage(),
-//                                      description: currentGroup.description,
-//                                      groupName: currentGroup.username,
-//                                      groupID: currentGroup.uid,
-//                                      leaderID: currentGroup.leader)
-//        coordinator?.showMoreInfo(with: info, self)
-    }
+
     @objc func postButtonTapped() {
         coordinator?.createNewPost(GroupPost(groupID: viewModel.currentGroup.uid), listener: viewModel.newPostListner)
     }
