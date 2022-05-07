@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 extension UITextView {
     func addToolBar() {
@@ -19,5 +20,20 @@ extension UITextView {
     }
     @objc func dismissKeyboard() {
         self.resignFirstResponder()
+    }
+    var textChangedPublisher: AnyPublisher<String,Never> {
+        NotificationCenter.default.publisher(for: UITextView.textDidChangeNotification, object: self)
+            .compactMap { ($0.object as? UITextView)?.text }
+            .eraseToAnyPublisher()
+    }
+    var textBeganPublisher: AnyPublisher<String,Never> {
+        NotificationCenter.default.publisher(for: UITextView.textDidBeginEditingNotification, object: self)
+            .compactMap { ($0.object as? UITextView)?.text }
+            .eraseToAnyPublisher()
+    }
+    var textEndedPublsiher: AnyPublisher<String,Never> {
+        NotificationCenter.default.publisher(for: UITextView.textDidEndEditingNotification, object: self)
+            .compactMap { ($0.object as? UITextView)?.text }
+            .eraseToAnyPublisher()
     }
 }

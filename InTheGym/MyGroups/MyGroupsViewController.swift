@@ -73,13 +73,17 @@ class MyGroupsViewController: UIViewController {
             .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
         
+        viewModel.newGroupCreated
+            .sink { [weak self] in self?.dataSource.addNewGroup($0)}
+            .store(in: &subscriptions)
+        
         viewModel.fetchReferences()
     }
 }
 // MARK: - Actions
 private extension MyGroupsViewController {
     @objc func addNewGroup(_ sender: UIButton) {
-        
+        coordinator?.addNewGroup(listener: viewModel.newGroupCreated)
     }
 }
 

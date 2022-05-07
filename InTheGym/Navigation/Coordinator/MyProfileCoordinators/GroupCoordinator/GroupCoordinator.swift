@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class GroupCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
@@ -33,27 +34,20 @@ extension GroupCoordinator {
         child.start()
     }
     
-//    func addNewGroup(with delegate: MyGroupsProtocol) {
-//        let vc = CreateNewGroupViewController()
-//        vc.coordinator = self
-//        vc.delegate = delegate
-//        vc.hidesBottomBarWhenPushed = true
-//        navigationController.pushViewController(vc, animated: true)
-//    }
-    
-    func addPlayersToNewGroup(_ delegate: SelectPlayersProtocol, selectedPlayers: [Users]) {
-        let vc = GroupAddPlayersViewController()
-        vc.modalTransitionStyle = .coverVertical
-        vc.delegate = delegate
-        vc.alreadySelectedPlayers = selectedPlayers
-        navigationController.present(vc, animated: true, completion: nil)
+    func addNewGroup(listener: PassthroughSubject<GroupModel,Never>) {
+        let vc = CreateNewGroupViewController()
+        vc.hidesBottomBarWhenPushed = true
+        vc.coordinator = self
+        vc.viewModel.createdNewGroup = listener
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func addUsers(_ currentUsers: [Users], listener: CurrentValueSubject<[Users],Never>) {
+        let vc = UserSelectionViewController()
+        vc.viewModel.currentlySelectedUsers = Set(currentUsers)
+        vc.viewModel.selectedUsers = listener
+        navigationController.present(vc, animated: true)
     }
     
-//    func addNewGroup(with delegate: MyGroupsProtocol) {
-//        let vc = AddNewGroupViewController.instantiate()
-//        vc.delegate = delegate
-//        navigationController.pushViewController(vc, animated: true)
-//    }
 }
 //MARK: - Navigation Delegate Method
 extension GroupCoordinator: UINavigationControllerDelegate {

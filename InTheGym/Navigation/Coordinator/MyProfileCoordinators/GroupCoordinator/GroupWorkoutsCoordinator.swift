@@ -17,6 +17,8 @@ class GroupWorkoutsCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     var group: GroupModel
     
+    private var savedCompletionHandle: ((SavedWorkoutModel) -> Void)?
+    
     init(navigationController: UINavigationController, group: GroupModel) {
         self.navigationController = navigationController
         self.group = group
@@ -43,5 +45,17 @@ extension GroupWorkoutsCoordinator {
         child.start()
     }
 }
-
+extension GroupWorkoutsCoordinator: SavedWorkoutsFlow {
+    func showSavedWorkoutPicker(completion: @escaping (SavedWorkoutModel) -> Void) {
+        self.savedCompletionHandle = completion
+        let vc = SavedWorkoutsViewController()
+        vc.coordinator = self
+        navigationController.present(vc, animated: true, completion: nil)
+    }
+    
+    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
+        savedCompletionHandle?(selectedWorkout)
+        navigationController.dismiss(animated: true)
+    }
+}
 

@@ -46,9 +46,10 @@ class UsersDataSource: NSObject {
     
     // MARK: - Update
     func updateTable(with users: [Users]) {
-        var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendItems(users, toSection: .main)
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+        var snapshot = NSDiffableDataSourceSnapshot<SingleSection,Users>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(users, toSection: .main)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     // MARK: - Add

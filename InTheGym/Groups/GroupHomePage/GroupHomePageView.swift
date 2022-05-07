@@ -32,11 +32,26 @@ class GroupHomePageView: UIView {
         view.imageView.backgroundColor = .lightGray
         return view
     }()
-
+    var barView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 15
+        return view
+    }()
+    var navBarView: UIImageView = {
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 15
+        imageView.clipsToBounds = true
+        imageView.layer.masksToBounds = false
+        imageView.alpha = 0.0
+        imageView.translatesAutoresizingMaskIntoConstraints = true
+        return imageView
+    }()
     
     // MARK: - Initializer
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        super.init(frame: UIScreen.main.bounds)
         setUpUI()
     }
     required init?(coder: NSCoder) {
@@ -51,7 +66,7 @@ private extension GroupHomePageView {
         constrainUI()
     }
     func constrainUI() {
-        NSLayoutConstraint.activate([tableview.topAnchor.constraint(equalTo: topAnchor),
+        NSLayoutConstraint.activate([tableview.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
                                      tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
                                      tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
                                      tableview.bottomAnchor.constraint(equalTo: bottomAnchor)])

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class GroupHomeCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
@@ -31,9 +32,10 @@ class GroupHomeCoordinator: NSObject, Coordinator {
 
 // MARK: - Group Flow
 extension GroupHomeCoordinator {
-    func showMoreInfo(with info: MoreGroupInfoModel) {
+    func showMoreInfo(with model: GroupModel, listener: PassthroughSubject<(GroupModel,UIImage?),Never>) {
         let vc = MoreGroupInfoViewController()
-        vc.moreGroupInfo = info
+        vc.viewModel.groupModel = model
+        vc.viewModel.updatedGroup = listener
         navigationController.present(vc, animated: true, completion: nil)
     }
     func goToGroupWorkouts(with info: GroupModel) {

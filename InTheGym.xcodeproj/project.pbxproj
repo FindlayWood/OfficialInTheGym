@@ -17,8 +17,6 @@
 		7403A5FA26C54F6B000588CE /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5F926C54F6B000588CE /* UIColor+Extension.swift */; };
 		7403A5FD26C558E9000588CE /* GroupHomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5FC26C558E9000588CE /* GroupHomePageViewController.swift */; };
 		7403A5FF26C558F9000588CE /* GroupHomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5FE26C558F9000588CE /* GroupHomePageViewModel.swift */; };
-		7403A60126C55905000588CE /* GroupHomePageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60026C55905000588CE /* GroupHomePageAdapter.swift */; };
-		7403A60326C55913000588CE /* GroupHomePageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60226C55913000588CE /* GroupHomePageProtocol.swift */; };
 		7403A60526C5591D000588CE /* GroupHomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60426C5591D000588CE /* GroupHomePageView.swift */; };
 		7403A60726C55949000588CE /* GroupHomePageInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60626C55949000588CE /* GroupHomePageInfoTableViewCell.swift */; };
 		7403A60926C56627000588CE /* GroupCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60826C56627000588CE /* GroupCellView.swift */; };
@@ -26,8 +24,6 @@
 		7403A60D26C6DDF6000588CE /* StretchyTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60C26C6DDF6000588CE /* StretchyTableHeaderView.swift */; };
 		7403A61026C9B310000588CE /* MoreGroupInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60F26C9B310000588CE /* MoreGroupInfoViewController.swift */; };
 		7403A61226C9B31D000588CE /* MoreGroupInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61126C9B31D000588CE /* MoreGroupInfoViewModel.swift */; };
-		7403A61426C9B32A000588CE /* MoreGroupInfoAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61326C9B32A000588CE /* MoreGroupInfoAdapter.swift */; };
-		7403A61626C9B337000588CE /* MoreGroupInfoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61526C9B337000588CE /* MoreGroupInfoProtocol.swift */; };
 		7403A61826C9B345000588CE /* MoreGroupInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61726C9B345000588CE /* MoreGroupInfoView.swift */; };
 		7403A61B26C9B3B3000588CE /* UITableViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61A26C9B3B3000588CE /* UITableViewView.swift */; };
 		7403A61D26CAD989000588CE /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61C26CAD989000588CE /* TextViewTableViewCell.swift */; };
@@ -138,14 +134,8 @@
 		742852822638D64000C890CA /* CircuitOptionsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 742852802638D64000C890CA /* CircuitOptionsTableViewCell.xib */; };
 		7429783A26C151AF0023365E /* CreateNewGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429783926C151AF0023365E /* CreateNewGroupViewController.swift */; };
 		7429783C26C151C00023365E /* CreateNewGroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429783B26C151C00023365E /* CreateNewGroupViewModel.swift */; };
-		7429783E26C151CF0023365E /* CreateNewGroupAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429783D26C151CF0023365E /* CreateNewGroupAdapter.swift */; };
-		7429784026C151DB0023365E /* CreateNewGroupProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429783F26C151DB0023365E /* CreateNewGroupProtocol.swift */; };
 		7429784226C151E60023365E /* CreateNewGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429784126C151E60023365E /* CreateNewGroupView.swift */; };
-		7429784426C15EBA0023365E /* GroupAddPlayersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429784326C15EBA0023365E /* GroupAddPlayersViewController.swift */; };
-		7429784626C15ECB0023365E /* GroupAddPlayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429784526C15ECB0023365E /* GroupAddPlayersView.swift */; };
-		7429784826C15F860023365E /* GroupAddPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429784726C15F860023365E /* GroupAddPlayersViewModel.swift */; };
 		7429784A26C160270023365E /* FirebaseLoadingUsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429784926C160270023365E /* FirebaseLoadingUsersService.swift */; };
-		7429784C26C167FA0023365E /* GroupAddPlayersAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429784B26C167FA0023365E /* GroupAddPlayersAdapter.swift */; };
 		7429784E26C1DCBE0023365E /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429784D26C1DCBE0023365E /* UserTableViewCell.swift */; };
 		742C1C4527AC1C7D00DD1BB0 /* CompletedWorkoutUploadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1C4427AC1C7D00DD1BB0 /* CompletedWorkoutUploadModel.swift */; };
 		742C1C4927AC43EC00DD1BB0 /* LiveWorkoutExerciseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742C1C4827AC43EC00DD1BB0 /* LiveWorkoutExerciseModel.swift */; };
@@ -831,6 +821,10 @@
 		74F6E57D24049FB100233438 /* GeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */; };
 		74F78B992631BF5600C21077 /* YourWorkoutBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F78B982631BF5600C21077 /* YourWorkoutBottomView.swift */; };
 		74F78B9E2631D0EC00C21077 /* LaunchMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F78B9D2631D0EC00C21077 /* LaunchMessageController.swift */; };
+		74F8A6282823F098008EB5E9 /* UserSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F8A6272823F098008EB5E9 /* UserSelectionViewController.swift */; };
+		74F8A62B2823F610008EB5E9 /* UserSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F8A62A2823F610008EB5E9 /* UserSelectionViewModel.swift */; };
+		74F8A62D2823FD48008EB5E9 /* UserSelectionCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F8A62C2823FD48008EB5E9 /* UserSelectionCellModel.swift */; };
+		74F8A62F2823FEFD008EB5E9 /* UserSelectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F8A62E2823FEFD008EB5E9 /* UserSelectionDataSource.swift */; };
 		74F9720128229EBB00633B23 /* MyGroupsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F9720028229EBB00633B23 /* MyGroupsCollectionViewCell.swift */; };
 		74FCFA2D2614E9E80064699F /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FCFA2C2614E9E80064699F /* MyProfileViewController.swift */; };
 		74FCFA352614EE830064699F /* MyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FCFA342614EE830064699F /* MyProfileViewModel.swift */; };
@@ -885,8 +879,6 @@
 		7403A5F926C54F6B000588CE /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		7403A5FC26C558E9000588CE /* GroupHomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageViewController.swift; sourceTree = "<group>"; };
 		7403A5FE26C558F9000588CE /* GroupHomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageViewModel.swift; sourceTree = "<group>"; };
-		7403A60026C55905000588CE /* GroupHomePageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageAdapter.swift; sourceTree = "<group>"; };
-		7403A60226C55913000588CE /* GroupHomePageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageProtocol.swift; sourceTree = "<group>"; };
 		7403A60426C5591D000588CE /* GroupHomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageView.swift; sourceTree = "<group>"; };
 		7403A60626C55949000588CE /* GroupHomePageInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomePageInfoTableViewCell.swift; sourceTree = "<group>"; };
 		7403A60826C56627000588CE /* GroupCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCellView.swift; sourceTree = "<group>"; };
@@ -894,8 +886,6 @@
 		7403A60C26C6DDF6000588CE /* StretchyTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyTableHeaderView.swift; sourceTree = "<group>"; };
 		7403A60F26C9B310000588CE /* MoreGroupInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreGroupInfoViewController.swift; sourceTree = "<group>"; };
 		7403A61126C9B31D000588CE /* MoreGroupInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreGroupInfoViewModel.swift; sourceTree = "<group>"; };
-		7403A61326C9B32A000588CE /* MoreGroupInfoAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreGroupInfoAdapter.swift; sourceTree = "<group>"; };
-		7403A61526C9B337000588CE /* MoreGroupInfoProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreGroupInfoProtocol.swift; sourceTree = "<group>"; };
 		7403A61726C9B345000588CE /* MoreGroupInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreGroupInfoView.swift; sourceTree = "<group>"; };
 		7403A61A26C9B3B3000588CE /* UITableViewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewView.swift; sourceTree = "<group>"; };
 		7403A61C26CAD989000588CE /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
@@ -1006,14 +996,8 @@
 		742852802638D64000C890CA /* CircuitOptionsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CircuitOptionsTableViewCell.xib; sourceTree = "<group>"; };
 		7429783926C151AF0023365E /* CreateNewGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewGroupViewController.swift; sourceTree = "<group>"; };
 		7429783B26C151C00023365E /* CreateNewGroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewGroupViewModel.swift; sourceTree = "<group>"; };
-		7429783D26C151CF0023365E /* CreateNewGroupAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewGroupAdapter.swift; sourceTree = "<group>"; };
-		7429783F26C151DB0023365E /* CreateNewGroupProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewGroupProtocol.swift; sourceTree = "<group>"; };
 		7429784126C151E60023365E /* CreateNewGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewGroupView.swift; sourceTree = "<group>"; };
-		7429784326C15EBA0023365E /* GroupAddPlayersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupAddPlayersViewController.swift; sourceTree = "<group>"; };
-		7429784526C15ECB0023365E /* GroupAddPlayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupAddPlayersView.swift; sourceTree = "<group>"; };
-		7429784726C15F860023365E /* GroupAddPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupAddPlayersViewModel.swift; sourceTree = "<group>"; };
 		7429784926C160270023365E /* FirebaseLoadingUsersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLoadingUsersService.swift; sourceTree = "<group>"; };
-		7429784B26C167FA0023365E /* GroupAddPlayersAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupAddPlayersAdapter.swift; sourceTree = "<group>"; };
 		7429784D26C1DCBE0023365E /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		742C1C4427AC1C7D00DD1BB0 /* CompletedWorkoutUploadModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedWorkoutUploadModel.swift; sourceTree = "<group>"; };
 		742C1C4827AC43EC00DD1BB0 /* LiveWorkoutExerciseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWorkoutExerciseModel.swift; sourceTree = "<group>"; };
@@ -1706,6 +1690,10 @@
 		74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTableViewCell.swift; sourceTree = "<group>"; };
 		74F78B982631BF5600C21077 /* YourWorkoutBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourWorkoutBottomView.swift; sourceTree = "<group>"; };
 		74F78B9D2631D0EC00C21077 /* LaunchMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchMessageController.swift; sourceTree = "<group>"; };
+		74F8A6272823F098008EB5E9 /* UserSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSelectionViewController.swift; sourceTree = "<group>"; };
+		74F8A62A2823F610008EB5E9 /* UserSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSelectionViewModel.swift; sourceTree = "<group>"; };
+		74F8A62C2823FD48008EB5E9 /* UserSelectionCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSelectionCellModel.swift; sourceTree = "<group>"; };
+		74F8A62E2823FEFD008EB5E9 /* UserSelectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSelectionDataSource.swift; sourceTree = "<group>"; };
 		74F9720028229EBB00633B23 /* MyGroupsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsCollectionViewCell.swift; sourceTree = "<group>"; };
 		74FCFA2C2614E9E80064699F /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		74FCFA342614EE830064699F /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
@@ -1895,8 +1883,6 @@
 				74DE6D7827D1144D009FB44A /* Members */,
 				7403A5FC26C558E9000588CE /* GroupHomePageViewController.swift */,
 				7403A5FE26C558F9000588CE /* GroupHomePageViewModel.swift */,
-				7403A60026C55905000588CE /* GroupHomePageAdapter.swift */,
-				7403A60226C55913000588CE /* GroupHomePageProtocol.swift */,
 				7403A60426C5591D000588CE /* GroupHomePageView.swift */,
 				7403A60626C55949000588CE /* GroupHomePageInfoTableViewCell.swift */,
 				7403A60826C56627000588CE /* GroupCellView.swift */,
@@ -1909,8 +1895,6 @@
 			children = (
 				7403A60F26C9B310000588CE /* MoreGroupInfoViewController.swift */,
 				7403A61126C9B31D000588CE /* MoreGroupInfoViewModel.swift */,
-				7403A61326C9B32A000588CE /* MoreGroupInfoAdapter.swift */,
-				7403A61526C9B337000588CE /* MoreGroupInfoProtocol.swift */,
 				7403A61726C9B345000588CE /* MoreGroupInfoView.swift */,
 			);
 			path = MoreGroupInfo;
@@ -2098,8 +2082,6 @@
 			children = (
 				7429783926C151AF0023365E /* CreateNewGroupViewController.swift */,
 				7429783B26C151C00023365E /* CreateNewGroupViewModel.swift */,
-				7429783D26C151CF0023365E /* CreateNewGroupAdapter.swift */,
-				7429783F26C151DB0023365E /* CreateNewGroupProtocol.swift */,
 				7429784126C151E60023365E /* CreateNewGroupView.swift */,
 			);
 			path = CreateNewGroup;
@@ -2285,6 +2267,7 @@
 		7433307D2785DDDD005A0C45 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				74F8A6292823F5F7008EB5E9 /* UserSelection */,
 				74DE6D7027D10FAC009FB44A /* ChildViewControllers */,
 				74B48DF527A2D98500BBFC16 /* ThinkingTime */,
 				7433307E2785DDF9005A0C45 /* UsersListViewController.swift */,
@@ -2448,6 +2431,7 @@
 				74B647A628135CA300ADDB7A /* ExerciseStatsDetailDataSource.swift */,
 				74B647AC2814415D00ADDB7A /* RepsDataSource.swift */,
 				74B647AE281468DC00ADDB7A /* SetsDataSource.swift */,
+				74F8A62E2823FEFD008EB5E9 /* UserSelectionDataSource.swift */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -2560,17 +2544,6 @@
 				7444D07B26CE98FB0009C7A6 /* UploadGroupWorkoutView.swift */,
 			);
 			path = UploadGroupWorkout;
-			sourceTree = "<group>";
-		};
-		7444D07F26CFEE3B0009C7A6 /* SelectingPlayers */ = {
-			isa = PBXGroup;
-			children = (
-				7429784326C15EBA0023365E /* GroupAddPlayersViewController.swift */,
-				7429784526C15ECB0023365E /* GroupAddPlayersView.swift */,
-				7429784726C15F860023365E /* GroupAddPlayersViewModel.swift */,
-				7429784B26C167FA0023365E /* GroupAddPlayersAdapter.swift */,
-			);
-			path = SelectingPlayers;
 			sourceTree = "<group>";
 		};
 		7444D08226D003060009C7A6 /* OtherExercise */ = {
@@ -2966,6 +2939,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				74DD9CFF28255823008B2C94 /* Groups */,
 				74B647B32816F72E00ADDB7A /* Navigation */,
 				74B647B22816F71E00ADDB7A /* Screens */,
 				7403D06B280E06BC00268CEC /* AssigningSelection */,
@@ -2992,12 +2966,7 @@
 				74F2CCC626DE739200D7AD79 /* CustomPresentationControllers */,
 				7444D0EC26D852280009C7A6 /* CreateNewPost */,
 				7444D07626CE98AC0009C7A6 /* UploadGroupWorkout */,
-				7444D05B26CD41780009C7A6 /* GroupWorkouts */,
 				7403A61926C9B3A9000588CE /* ViewClasses */,
-				7403A60E26C9B2F3000588CE /* MoreGroupInfo */,
-				7403A5FB26C558D5000588CE /* GroupHomePage */,
-				7444D07F26CFEE3B0009C7A6 /* SelectingPlayers */,
-				7429783826C151970023365E /* CreateNewGroup */,
 				74318F3A26B570E4009EDFAC /* LiveWorkout */,
 				74FDB5B126A756AF000649CC /* ViewClip */,
 				74AF6D6B268B6D0C005C52A8 /* RecordClip */,
@@ -3622,6 +3591,17 @@
 			path = PlayerPages;
 			sourceTree = "<group>";
 		};
+		74DD9CFF28255823008B2C94 /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				7444D05B26CD41780009C7A6 /* GroupWorkouts */,
+				7429783826C151970023365E /* CreateNewGroup */,
+				7403A5FB26C558D5000588CE /* GroupHomePage */,
+				7403A60E26C9B2F3000588CE /* MoreGroupInfo */,
+			);
+			path = Groups;
+			sourceTree = "<group>";
+		};
 		74DE6D7027D10FAC009FB44A /* ChildViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -3967,6 +3947,16 @@
 			path = Discover;
 			sourceTree = "<group>";
 		};
+		74F8A6292823F5F7008EB5E9 /* UserSelection */ = {
+			isa = PBXGroup;
+			children = (
+				74F8A6272823F098008EB5E9 /* UserSelectionViewController.swift */,
+				74F8A62A2823F610008EB5E9 /* UserSelectionViewModel.swift */,
+				74F8A62C2823FD48008EB5E9 /* UserSelectionCellModel.swift */,
+			);
+			path = UserSelection;
+			sourceTree = "<group>";
+		};
 		74FCFA2B2614E9CA0064699F /* MyProfile */ = {
 			isa = PBXGroup;
 			children = (
@@ -4295,7 +4285,6 @@
 				7492263E22D226F400EAD386 /* BodyTypeViewController.swift in Sources */,
 				744AED52279B08AB000D2D74 /* WorkouCollectionDataSource.swift in Sources */,
 				74F2CCE626E2E98700D7AD79 /* AddMoreNoteViewController.swift in Sources */,
-				7429784626C15ECB0023365E /* GroupAddPlayersView.swift in Sources */,
 				74DE6D7227D10FC2009FB44A /* UsersChildViewController.swift in Sources */,
 				7403D065280DD33800268CEC /* Stack.swift in Sources */,
 				7492265822DA49E500EAD386 /* RequestTableViewCell.swift in Sources */,
@@ -4440,7 +4429,6 @@
 				7416CCD3265817540043B1C2 /* FirebaseLiveWorkoutUpdater.swift in Sources */,
 				743E92BA2807432B0029F447 /* CircularLinkedList.swift in Sources */,
 				746BFFAA26B2D7460010C465 /* DisplayWorkoutView.swift in Sources */,
-				7429784426C15EBA0023365E /* GroupAddPlayersViewController.swift in Sources */,
 				7444D0E526D705E20009C7A6 /* PostEndpoints.swift in Sources */,
 				743A0507276B7E240027B752 /* UIProfileImageButton.swift in Sources */,
 				744AED242797119E000D2D74 /* WorkoutDisplayView.swift in Sources */,
@@ -4575,6 +4563,7 @@
 				7492265422D91C1900EAD386 /* RoundButtons.swift in Sources */,
 				7486C20D267A3DE5008A1E21 /* WeightCollectionCell.swift in Sources */,
 				74DE6D9A27D3D7E9009FB44A /* PlayerDetailViewController.swift in Sources */,
+				74F8A62B2823F610008EB5E9 /* UserSelectionViewModel.swift in Sources */,
 				741FB1DA266E71960039EB29 /* StaticMessages.swift in Sources */,
 				74B48E0727A42FF800BBFC16 /* LiveWorkoutDisplayViewModel.swift in Sources */,
 				74B48E0227A4281C00BBFC16 /* LiveWorkoutSetDataSource.swift in Sources */,
@@ -4645,6 +4634,7 @@
 				74D31D1C25F948850024CC05 /* MainWorkoutBottomView.swift in Sources */,
 				749222C12810B521008C6CB1 /* UIProgressView.swift in Sources */,
 				7492263A22CE6CD400EAD386 /* AddWorkoutHomeViewController.swift in Sources */,
+				74F8A62D2823FD48008EB5E9 /* UserSelectionCellModel.swift in Sources */,
 				74EEA754270C992A00911A77 /* Int+Extension.swift in Sources */,
 				742FF36D277B880900AEE3D2 /* PostReplies.swift in Sources */,
 				74F5468A25E96DAA00C1A6A9 /* UploadPostViewModel.swift in Sources */,
@@ -4722,6 +4712,7 @@
 				7479813627DB857300CF3F9B /* RequestsDataSource.swift in Sources */,
 				743A04FA276A5DE10027B752 /* SearchView.swift in Sources */,
 				744AED2927984408000D2D74 /* SavedWorkoutsDisplayViewModel.swift in Sources */,
+				74F8A6282823F098008EB5E9 /* UserSelectionViewController.swift in Sources */,
 				74AF6D62268682C4005C52A8 /* DisplayExerciseStatsAdapter.swift in Sources */,
 				744AED3E2799A617000D2D74 /* ExerciseUpdateModels.swift in Sources */,
 				74F18AE827D66E750043551F /* CoachPlayerWorkoutViewModel.swift in Sources */,
@@ -4789,7 +4780,6 @@
 				74F2CCC026DD560300D7AD79 /* CreateNewPostCoordinator.swift in Sources */,
 				74DE6D7C27D1158B009FB44A /* GroupMembersViewModel.swift in Sources */,
 				74F5468525E948D900C1A6A9 /* LoadAllUsernames.swift in Sources */,
-				7403A61626C9B337000588CE /* MoreGroupInfoProtocol.swift in Sources */,
 				7460627B252D1C02005B1480 /* CoachScoresViewController.swift in Sources */,
 				7433308E278743CF005A0C45 /* ExerciseType.swift in Sources */,
 				74C126B82819B1D900C3B171 /* CoachProfileMoreViewModel.swift in Sources */,
@@ -4798,9 +4788,9 @@
 				7466A84A25EFCCC400F4050F /* PlayerMyInfoViewController.swift in Sources */,
 				743330C9278F39FD005A0C45 /* AssignView.swift in Sources */,
 				7492265222D8D0BA00EAD386 /* DetailTableViewCell.swift in Sources */,
+				74F8A62F2823FEFD008EB5E9 /* UserSelectionDataSource.swift in Sources */,
 				744F002C261FA44600B7BBDE /* CreatedWorkoutUploadProtocol.swift in Sources */,
 				742C1C5127B2D4EB00DD1BB0 /* ClipStorageModel.swift in Sources */,
-				7403A60126C55905000588CE /* GroupHomePageAdapter.swift in Sources */,
 				74F18AE327D668D00043551F /* WorkoutChildView.swift in Sources */,
 				74EE4EC527E536A100051451 /* LastThreeScoresViewController.swift in Sources */,
 				744D562E26F2ABF100D3E1FA /* CreateEMOMViewController.swift in Sources */,
@@ -4858,7 +4848,6 @@
 				7444D06B26CD549F0009C7A6 /* WorkoutTableViewCell.swift in Sources */,
 				742C1C9C27BD97A600DD1BB0 /* DescriptionsDataSource.swift in Sources */,
 				748E094825AB446900ABE9C9 /* TabBarSelectionImage.swift in Sources */,
-				7429784826C15F860023365E /* GroupAddPlayersViewModel.swift in Sources */,
 				7444D0BC26D3C7620009C7A6 /* UploadingWorkoutAdapter.swift in Sources */,
 				744AED32279860ED000D2D74 /* OptionsAction.swift in Sources */,
 				74DE6D8E27D39E46009FB44A /* ScoresPieChartChildViewController.swift in Sources */,
@@ -4946,7 +4935,6 @@
 				742C1C8127BC0A3A00DD1BB0 /* ExerciseStatsModel.swift in Sources */,
 				744C9CC225F2B077004B03DF /* SavedWorkouts.swift in Sources */,
 				74B647B12814880E00ADDB7A /* RepSelectionViewModel.swift in Sources */,
-				7429783E26C151CF0023365E /* CreateNewGroupAdapter.swift in Sources */,
 				749222BF281062D6008C6CB1 /* SavedProgramOptionsDisplayViewModel.swift in Sources */,
 				744D563226F2AC1600D3E1FA /* CreateEMOMAdapter.swift in Sources */,
 				744AED412799B8A8000D2D74 /* IncrementModels.swift in Sources */,
@@ -4992,7 +4980,6 @@
 				74FCFA4B261541640064699F /* MyInfoTableViewCell.swift in Sources */,
 				74B6F68F274D588000A72679 /* ResetPasswordView.swift in Sources */,
 				7416CCC7264ED2A40043B1C2 /* CircuitCoordinator.swift in Sources */,
-				7403A60326C55913000588CE /* GroupHomePageProtocol.swift in Sources */,
 				743330F0279438F6005A0C45 /* PostActionEnum.swift in Sources */,
 				74B48DE427A1809700BBFC16 /* ProfileImageUploadModel.swift in Sources */,
 				74B6F769275A5B7A00A72679 /* SignUpView.swift in Sources */,
@@ -5019,7 +5006,6 @@
 				743B1E7F22EF49CF0046006C /* AdminPlayersViewController.swift in Sources */,
 				7444D09126D136600009C7A6 /* AddMoreToExerciseViewController.swift in Sources */,
 				747FED3525659A2900080AC8 /* AddNewGroupViewController.swift in Sources */,
-				7403A61426C9B32A000588CE /* MoreGroupInfoAdapter.swift in Sources */,
 				74F18ADE27D65F530043551F /* WorkoutSearchModel.swift in Sources */,
 				7444D06F26CD76060009C7A6 /* AddGroupWorkoutTypeViewController.swift in Sources */,
 				74CCBADD261685F100A20A94 /* WorkoutCompletedViewModel.swift in Sources */,
@@ -5064,12 +5050,10 @@
 				74B334ED27789B4D0073697F /* GroupCommentSectionViewController.swift in Sources */,
 				74443B9A22F1E18500DD18B3 /* OldSettingsViewController.swift in Sources */,
 				7444D07A26CE98E70009C7A6 /* UploadGroupWorkoutViewModel.swift in Sources */,
-				7429784026C151DB0023365E /* CreateNewGroupProtocol.swift in Sources */,
 				74EE4ECE27E7ADA900051451 /* PostsChildView.swift in Sources */,
 				74EE4ED92800695300051451 /* ExerciseDiscoveryCoordinator.swift in Sources */,
 				7479814327DF9A3500CF3F9B /* DisplayNotificationsView.swift in Sources */,
 				742C1C5D27B571F800DD1BB0 /* MyProfileView.swift in Sources */,
-				7429784C26C167FA0023365E /* GroupAddPlayersAdapter.swift in Sources */,
 				7444D0F426DD3DB20009C7A6 /* CreateNewPostModel.swift in Sources */,
 				74221B3D2642D9ED00D05527 /* TimelineCoordinator.swift in Sources */,
 				743A04FF276A87330027B752 /* CommentSectionView.swift in Sources */,

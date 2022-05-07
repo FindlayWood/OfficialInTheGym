@@ -11,10 +11,10 @@ import Firebase
 import CodableFirebase
 
 protocol FirebaseAPIGroupServiceProtocol: FirebaseTimelineServiceProtocol {
-    func createGroup(with data: NewGroupModel, completion: @escaping (Bool) -> Void)
-    func loadMembers(from group: MoreGroupInfoModel, completion: @escaping (Result<[Users], Error>) -> Void)
-    func loadLeader(from group: MoreGroupInfoModel, completion: @escaping (Result<Users, Error>) -> Void)
-    func saveNewGroupInfo(from group: MoreGroupInfoModel, completion: @escaping (Bool) -> Void)
+//    func createGroup(with data: NewGroupModel, completion: @escaping (Bool) -> Void)
+//    func loadMembers(from group: MoreGroupInfoModel, completion: @escaping (Result<[Users], Error>) -> Void)
+//    func loadLeader(from group: MoreGroupInfoModel, completion: @escaping (Result<Users, Error>) -> Void)
+//    func saveNewGroupInfo(from group: MoreGroupInfoModel, completion: @escaping (Bool) -> Void)
     func fetchGroupWorkouts(from groupID: String, completion: @escaping (Result<[GroupWorkoutModel], Error>) -> Void)
     func loadGroupMemberCount(from groupID: String, completion: @escaping (Result<Int, Error>) -> Void)
     //func likePost(from endPoint: LikePostEndpoint, completion: @escaping (Result<Void, Error>) -> Void)
@@ -29,43 +29,43 @@ class FirebaseAPIGroupService: FirebaseAPIGroupServiceProtocol {
     
     
     // MARK: - Create Group
-    func createGroup(with data: NewGroupModel, completion: @escaping (Bool) -> Void) {
-        guard let userID = Auth.auth().currentUser?.uid else {return}
-
-        let groupRef = baseRef.child("Groups").childByAutoId()
-        let groupID = groupRef.key!
-        
-        let newGroupData = ["username": data.title,
-                            "description": data.description,
-                            "leader": userID,
-                            "uid": groupID] as [String: Any]
-        
-        var updatedGroupData: [String: Any] = [:]
-
-        
-        var membersData: [String: Bool] = [:]
-        membersData[userID] = true
-        updatedGroupData["GroupsReferences/\(userID)/\(groupID)"] = true
-        
-        for player in data.players {
-            let playerID = player.uid
-            membersData[playerID] = true
-            updatedGroupData["GroupsReferences/\(playerID)/\(groupID)"] = true
-        }
-        
-        updatedGroupData["Groups/\(groupID)"] = newGroupData
-        updatedGroupData["GroupMembers/\(groupID)"] = membersData
-        updatedGroupData["GroupsLeaderReferences/\(userID)/\(groupID)"] = true
-        
-        baseRef.updateChildValues(updatedGroupData) { error, ref in
-            if let error = error {
-                print(error.localizedDescription)
-                completion(false)
-            } else {
-                completion(true)
-            }
-        }
-    }
+//    func createGroup(with data: NewGroupModel, completion: @escaping (Bool) -> Void) {
+//        guard let userID = Auth.auth().currentUser?.uid else {return}
+//
+//        let groupRef = baseRef.child("Groups").childByAutoId()
+//        let groupID = groupRef.key!
+//        
+//        let newGroupData = ["username": data.title,
+//                            "description": data.description,
+//                            "leader": userID,
+//                            "uid": groupID] as [String: Any]
+//        
+//        var updatedGroupData: [String: Any] = [:]
+//
+//        
+//        var membersData: [String: Bool] = [:]
+//        membersData[userID] = true
+//        updatedGroupData["GroupsReferences/\(userID)/\(groupID)"] = true
+//        
+//        for player in data.players {
+//            let playerID = player.uid
+//            membersData[playerID] = true
+//            updatedGroupData["GroupsReferences/\(playerID)/\(groupID)"] = true
+//        }
+//        
+//        updatedGroupData["Groups/\(groupID)"] = newGroupData
+//        updatedGroupData["GroupMembers/\(groupID)"] = membersData
+//        updatedGroupData["GroupsLeaderReferences/\(userID)/\(groupID)"] = true
+//        
+//        baseRef.updateChildValues(updatedGroupData) { error, ref in
+//            if let error = error {
+//                print(error.localizedDescription)
+//                completion(false)
+//            } else {
+//                completion(true)
+//            }
+//        }
+//    }
     
 //    // MARK: - Load Posts
 //    func loadPosts(from groupID: String, completion: @escaping (Result<[PostProtocol], Error>) -> Void) {
@@ -130,105 +130,105 @@ class FirebaseAPIGroupService: FirebaseAPIGroupServiceProtocol {
         }
     }
     
-    func loadMembers(from group: MoreGroupInfoModel, completion: @escaping (Result<[Users], Error>) -> Void) {
-        guard let groupID = group.groupID,
-              let leaderID = group.leaderID
-        else {
-            completion(.failure(NSError.init(domain: "GroupInfoError", code: 0, userInfo: nil)))
-            return
-        }
-        
-        let path = "GroupMembers/\(groupID)"
-        let groupMembersRef = baseRef.child(path)
-        
-        var members = [Users]()
-        let myGroup = DispatchGroup()
-        groupMembersRef.observeSingleEvent(of: .value) { (snapshot) in
-            for child in snapshot.children {
-                myGroup.enter()
-                UserIDToUser.transform(userID: (child as AnyObject).key) { (member) in
-                    defer {myGroup.leave()}
-                    if member.uid != leaderID {
-                        members.append(member)
-                    }
-                }
-            }
-            myGroup.notify(queue: .main) {
-                completion(.success(members))
-            }
-        }
-    }
+//    func loadMembers(from group: MoreGroupInfoModel, completion: @escaping (Result<[Users], Error>) -> Void) {
+//        guard let groupID = group.groupID,
+//              let leaderID = group.leaderID
+//        else {
+//            completion(.failure(NSError.init(domain: "GroupInfoError", code: 0, userInfo: nil)))
+//            return
+//        }
+//
+//        let path = "GroupMembers/\(groupID)"
+//        let groupMembersRef = baseRef.child(path)
+//
+//        var members = [Users]()
+//        let myGroup = DispatchGroup()
+//        groupMembersRef.observeSingleEvent(of: .value) { (snapshot) in
+//            for child in snapshot.children {
+//                myGroup.enter()
+//                UserIDToUser.transform(userID: (child as AnyObject).key) { (member) in
+//                    defer {myGroup.leave()}
+//                    if member.uid != leaderID {
+//                        members.append(member)
+//                    }
+//                }
+//            }
+//            myGroup.notify(queue: .main) {
+//                completion(.success(members))
+//            }
+//        }
+//    }
     
-    func loadLeader(from group: MoreGroupInfoModel, completion: @escaping (Result<Users, Error>) -> Void) {
-        guard let leaderID = group.leaderID
-        else {
-            completion(.failure(NSError(domain: "NoLeaderID", code: 0, userInfo: nil)))
-            return
-        }
-        UserIDToUser.transform(userID: leaderID) { leader in
-            completion(.success(leader))
-        }
-    }
+//    func loadLeader(from group: MoreGroupInfoModel, completion: @escaping (Result<Users, Error>) -> Void) {
+//        guard let leaderID = group.leaderID
+//        else {
+//            completion(.failure(NSError(domain: "NoLeaderID", code: 0, userInfo: nil)))
+//            return
+//        }
+//        UserIDToUser.transform(userID: leaderID) { leader in
+//            completion(.success(leader))
+//        }
+//    }
     
-    func saveNewGroupInfo(from group: MoreGroupInfoModel, completion: @escaping (Bool) -> Void) {
-        guard let name = group.groupName,
-              let description = group.description,
-              let groupID = group.groupID
-        else {
-            completion(false)
-            return
-        }
-        let basePath = "Groups/\(groupID)"
-        let groupUpdateRef = baseRef.child(basePath)
-        let titlePath = "title"
-        let descriptionPath = "description"
-        let updatedData = [titlePath: name,
-                           descriptionPath: description]
-        groupUpdateRef.updateChildValues(updatedData) { error, ref in
-            if let error = error {
-                print(error.localizedDescription)
-                completion(false)
-            } else {
-                if group.headerImage != nil {
-                    self.updateGroupImage(from: group, completion: completion)
-                } else {
-                    completion(true)
-                }
-            }
-        }
-    }
-    
-    func updateGroupImage(from group: MoreGroupInfoModel, completion: @escaping (Bool) -> Void) {
-        guard let newImage = group.headerImage,
-              let groupID = group.groupID
-        else {
-            completion(false)
-            return
-        }
-        
-        guard let imageData = newImage.jpegData(compressionQuality: 0.4) else {
-            completion(false)
-            return
-        }
-        
-        let storageRef = Storage.storage().reference()
-        let storageProfileRef = storageRef.child("ProfilePhotos").child(groupID)
-        
-        let metaData = StorageMetadata()
-        metaData.contentType = "image/jpg"
-        
-        storageProfileRef.putData(imageData, metadata: metaData) { (storage, error) in
-            if let error = error{
-                print(error.localizedDescription as Any)
-                completion(false)
-                return
-            } else {
-                ImageAPIService.shared.profileImageCache.removeObject(forKey: groupID as NSString)
-                ImageAPIService.shared.profileImageCache.setObject(newImage, forKey: groupID as NSString)
-                completion(true)
-            }
-        }
-    }
+//    func saveNewGroupInfo(from group: MoreGroupInfoModel, completion: @escaping (Bool) -> Void) {
+//        guard let name = group.groupName,
+//              let description = group.description,
+//              let groupID = group.groupID
+//        else {
+//            completion(false)
+//            return
+//        }
+//        let basePath = "Groups/\(groupID)"
+//        let groupUpdateRef = baseRef.child(basePath)
+//        let titlePath = "title"
+//        let descriptionPath = "description"
+//        let updatedData = [titlePath: name,
+//                           descriptionPath: description]
+//        groupUpdateRef.updateChildValues(updatedData) { error, ref in
+//            if let error = error {
+//                print(error.localizedDescription)
+//                completion(false)
+//            } else {
+//                if group.headerImage != nil {
+//                    self.updateGroupImage(from: group, completion: completion)
+//                } else {
+//                    completion(true)
+//                }
+//            }
+//        }
+//    }
+//    
+//    func updateGroupImage(from group: MoreGroupInfoModel, completion: @escaping (Bool) -> Void) {
+//        guard let newImage = group.headerImage,
+//              let groupID = group.groupID
+//        else {
+//            completion(false)
+//            return
+//        }
+//        
+//        guard let imageData = newImage.jpegData(compressionQuality: 0.4) else {
+//            completion(false)
+//            return
+//        }
+//        
+//        let storageRef = Storage.storage().reference()
+//        let storageProfileRef = storageRef.child("ProfilePhotos").child(groupID)
+//        
+//        let metaData = StorageMetadata()
+//        metaData.contentType = "image/jpg"
+//        
+//        storageProfileRef.putData(imageData, metadata: metaData) { (storage, error) in
+//            if let error = error{
+//                print(error.localizedDescription as Any)
+//                completion(false)
+//                return
+//            } else {
+//                ImageAPIService.shared.profileImageCache.removeObject(forKey: groupID as NSString)
+//                ImageAPIService.shared.profileImageCache.setObject(newImage, forKey: groupID as NSString)
+//                completion(true)
+//            }
+//        }
+//    }
     
 //    // MARK: Like Group Posts
 //    func likeGroupPost(from groupID: String, post: PostProtocol, completion: @escaping (Bool) -> Void) {

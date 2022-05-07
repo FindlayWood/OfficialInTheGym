@@ -41,12 +41,12 @@ extension AddGroupWorkoutCoordinator {
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
-    func selectPlayers(selectedPlayers: [Users], delegate: SelectPlayersProtocol) {
-        let vc = GroupAddPlayersViewController()
-        vc.alreadySelectedPlayers = selectedPlayers
-        vc.delegate = delegate
-        navigationController.present(vc, animated: true, completion: nil)
-    }
+//    func selectPlayers(selectedPlayers: [Users], delegate: SelectPlayersProtocol) {
+//        let vc = GroupAddPlayersViewController()
+//        vc.alreadySelectedPlayers = selectedPlayers
+//        vc.delegate = delegate
+//        navigationController.present(vc, animated: true, completion: nil)
+//    }
     func goToWorkout(_ selectedWorkout: WorkoutDelegate) {
         let child = WorkoutCoordinator(navigationController: navigationController, workout: selectedWorkout)
         childCoordinators.append(child)
