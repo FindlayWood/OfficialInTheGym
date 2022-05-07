@@ -130,7 +130,9 @@ class GroupHomePageViewController: UIViewController {
         viewModel.updatedGroupListener
             .sink { [weak self] (group, image) in
                 self?.dataSource.updateName(group)
-                self?.display.headerView.imageView.image = image
+                if let image = image {
+                    self?.display.headerView.imageView.image = image
+                }
                 self?.viewModel.currentGroup = group
             }
             .store(in: &subscriptions)
