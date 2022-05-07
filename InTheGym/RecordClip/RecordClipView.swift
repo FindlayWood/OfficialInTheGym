@@ -59,23 +59,6 @@ class RecordClipView: UIView {
         return button
     }()
     
-    var maxVideoLength = 20
-    var minVideoLength = 10
-    var currentVideoLength: videoLength = .long
-    
-    var videoLengthButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .white
-        button.setTitle("20", for: .normal)
-        button.setTitleColor(.darkColour, for: .normal)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 16)
-//        button.layer.borderWidth = 2
-//        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.cornerRadius = 20
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     var recordButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
@@ -131,7 +114,6 @@ class RecordClipView: UIView {
     func setUpView() {
         stackView.addArrangedSubview(backButton)
         stackView.addArrangedSubview(countDownButton)
-        stackView.addArrangedSubview(videoLengthButton)
         stackView.addArrangedSubview(flipCameraButton)
         addSubview(stackView)
         addSubview(recordButton)
@@ -147,8 +129,6 @@ class RecordClipView: UIView {
             countDownButton.widthAnchor.constraint(equalToConstant: 40),
             countDownButton.heightAnchor.constraint(equalToConstant: 40),
             
-            videoLengthButton.widthAnchor.constraint(equalToConstant: 40),
-            videoLengthButton.heightAnchor.constraint(equalToConstant: 40),
             flipCameraButton.widthAnchor.constraint(equalToConstant: 40),
             flipCameraButton.heightAnchor.constraint(equalToConstant: 40),
             
@@ -215,18 +195,6 @@ class RecordClipView: UIView {
             countDownLabel.isHidden = true
             countDownNumber = 10
             countDownLabel.text = countDownNumber.description
-        }
-    }
-    
-    func changeVideoLength() {
-        if currentVideoLength == .long {
-            currentVideoLength = .short
-            videoLengthButton.setTitle(Int(currentVideoLength.rawValue).description, for: .normal)
-            showMessage(maxVideoLength: false)
-        } else {
-            currentVideoLength = .long
-            videoLengthButton.setTitle(Int(currentVideoLength.rawValue).description, for: .normal)
-            showMessage(maxVideoLength: true)
         }
     }
     

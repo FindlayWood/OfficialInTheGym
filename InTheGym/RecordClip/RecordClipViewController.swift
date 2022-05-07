@@ -60,7 +60,6 @@ class RecordClipViewController: UIViewController {
         display.backButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
         display.flipCameraButton.addTarget(self, action: #selector(flipCamera), for: .touchUpInside)
         display.countDownButton.addTarget(self, action: #selector(toggleCountDown), for: .touchUpInside)
-        display.videoLengthButton.addTarget(self, action: #selector(changeVideoLength), for: .touchUpInside)
         display.recordButton.addTarget(self, action: #selector(recordButtonTapped), for: .touchUpInside)
     }
     
@@ -127,19 +126,13 @@ class RecordClipViewController: UIViewController {
     }
     
     func beginRecording() {
-        // begin to record a video
-//        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-//        let outputURL = path[0].appendingPathComponent("output").appendingPathExtension("mov")
-//        try? FileManager.default.removeItem(at: outputURL)
-//        viewModel.videoOutput.startRecording(to: outputURL, recordingDelegate: self)
         display.setUIRecording()
-        startVideoTimer(with: display.currentVideoLength)
+        startVideoTimer()
     }
     
-    func startVideoTimer(with maxLength: videoLength) {
-        // 20 second time limit on videos
+    func startVideoTimer() {
         // TODO: add a display that shows how long recording is
-        DispatchQueue.main.asyncAfter(deadline: .now() + maxLength.rawValue) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.maxVideoLength) { [weak self] in
             guard let self = self else {return}
             if self.viewModel.videoOutput.isRecording {
                 self.viewModel.videoOutput.stopRecording()
@@ -158,9 +151,6 @@ private extension RecordClipViewController {
     @objc func toggleCountDown() {
         viewModel.countDownOn.toggle()
         display.toggleCountDownUI(isOn: viewModel.countDownOn)
-    }
-    @objc func changeVideoLength() {
-        display.changeVideoLength()
     }
     @objc func flipCamera() {
         //flip which camera is displaying

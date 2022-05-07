@@ -38,6 +38,8 @@ class RecordClipViewModel: NSObject {
     
     var addingDelegate: ClipAdding!
     
+    let maxVideoLength: Double = 16
+    
     // MARK: - Methods
     func beginRecording() {
         let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -125,18 +127,6 @@ extension RecordClipViewModel: AVCaptureFileOutputRecordingDelegate {
             print(error)
         } else {
             outPutFilePublisher.send(outputFileURL)
-            // if no error then show video on custom avplayer vc
-//            let player = AVPlayer(url: outputFileURL)
-//            let vc = RecordedClipPlayerViewController()
-//            vc.player = player
-//            vc.workoutID = workoutID
-//            vc.exerciseName = exerciseName
-//            vc.clipNumber = clipNumber
-//            vc.uploadingDelegate = self
-//            vc.addingDelegate = self.addingDelegate
-//            vc.modalTransitionStyle = .coverVertical
-//            vc.modalPresentationStyle = .fullScreen
-//            present(vc, animated: false, completion: nil)
         }
     }
 }
