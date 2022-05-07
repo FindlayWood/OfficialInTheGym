@@ -18,3 +18,18 @@ extension PostReferencesModel: FirebaseInstance {
         return "PostSelfReferences/\(id)"
     }
 }
+
+struct UploadPostReferenceModel {
+    /// the id of the post
+    var id: String
+    
+    /// the upload point to upload to database
+    var uploadPoint: FirebaseMultiUploadDataPoint {
+        FirebaseMultiUploadDataPoint(value: true, path: internalPath)
+    }
+}
+extension UploadPostReferenceModel: FirebaseInstance {
+    var internalPath: String {
+        return "PostSelfReferences/\(UserDefaults.currentUser.uid)/\(id)"
+    }
+}
