@@ -12,7 +12,7 @@ import Combine
 class CompletedWorkoutPageViewController: UIViewController {
     
     // MARK: - Properties
-    weak var coordinator: WorkoutDisplayCoordinator?
+    weak var coordinator: CompletedWorkoutCoordinator?
     
     var display = CompletedWorkoutPageView()
     
@@ -73,7 +73,8 @@ class CompletedWorkoutPageViewController: UIViewController {
             .sink { [weak self] _ in self?.showTopAlert(with: "Error. Please try again.")}.store(in: &subscriptions)
         
         viewModel.completedUpload
-            .sink { [weak self] _ in self?.coordinator?.completedUpload()}.store(in: &subscriptions)
+            .sink { [weak self] _ in self?.completedUpload()}
+            .store(in: &subscriptions)
     }
 
 }
@@ -105,5 +106,9 @@ extension CompletedWorkoutPageViewController {
         } else {
             initNavBar()
         }
+    }
+    func completedUpload() {
+        self.display.newView.scoreLabelButton.isUserInteractionEnabled = false
+        coordinator?.completedUpload(viewModel.workout)
     }
 }

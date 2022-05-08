@@ -41,8 +41,6 @@ class CompletedWorkoutPageViewModel {
         apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
             switch result {
             case .success(()):
-//                self?.completedUpload.send(())
-//                self?.isLoading = false
                 self?.uploadWorkload()
                 self?.uploadScore()
             case .failure(let error):

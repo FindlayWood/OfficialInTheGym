@@ -53,6 +53,7 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         toggleClipCollection(showing: true, clips: viewModel.getClips())
+        navigationItem.rightBarButtonItem?.isEnabled = viewModel.isInteractionEnabled()
     }
     
     // MARK: - Nav Bar

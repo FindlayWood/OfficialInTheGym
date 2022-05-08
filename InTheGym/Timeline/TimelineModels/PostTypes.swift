@@ -55,6 +55,17 @@ class post: Codable, Hashable, AutoIDable, DisplayablePost, Postable {
         self.replyCount = 0
         self.isPrivate = false
     }
+    init(workoutID: String) {
+        self.id = UUID().uuidString
+        self.username = UserDefaults.currentUser.username
+        self.posterID = UserDefaults.currentUser.uid
+        self.time = Date().timeIntervalSince1970
+        self.workoutID = workoutID
+        self.text = ""
+        self.likeCount = 0
+        self.replyCount = 0
+        self.isPrivate = false
+    }
     
     
     static func == (lhs: post, rhs: post) -> Bool {

@@ -198,7 +198,7 @@ class WorkoutRPEScoreView: UIView {
 private extension WorkoutRPEScoreView {
     func setupUI() {
         layer.cornerRadius = 10
-        backgroundColor = .offWhiteColour
+        backgroundColor = .thirdColour
         addSubview(titleLabel)
         addSubview(scoreLabelButton)
         configureUI()

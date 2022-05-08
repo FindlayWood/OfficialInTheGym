@@ -17,6 +17,8 @@ class CreateNewPostViewModel {
     @Published var isPrivate: Bool = false
     @Published var isLoading: Bool = false
     
+    @Published var attachedWorkout: WorkoutModel?
+    
     var succesfullyPostedClosure:(()->())?
     var errorPostingClosure:(()->())?
     
@@ -72,6 +74,8 @@ class CreateNewPostViewModel {
             .sink { [unowned self] in self.postable.isPrivate = $0 }
             .store(in: &subscriptions)
         
+        attachedWorkout = attachedWorkout
+        
     }
     
     func postTapped() {
@@ -110,9 +114,13 @@ class CreateNewPostViewModel {
         postText = newText
     }
     
-    func updateAttachedWorkout(with model: SavedWorkoutModel) {
+    func updateAttachedSavedWorkout(with model: SavedWorkoutModel) {
         removeAllAttachments()
         postable.savedWorkoutID = model.id
+    }
+    func updateAttachedWorkout(with model: WorkoutModel) {
+        removeAllAttachments()
+        postable.workoutID = model.id
     }
     
     func updateAttachedPhoto(with newPhoto: attachedPhoto) {

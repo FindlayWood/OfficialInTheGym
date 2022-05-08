@@ -280,7 +280,19 @@ extension CreateNewPostView {
 
     }
     
-    func addWorkout(_ model: SavedWorkoutModel) {
+    func addWorkout(_ model: WorkoutModel) {
+        removeAttachment()
+        attachmentView.isHidden = false
+        let workoutView = UIWorkoutView()
+        workoutView.translatesAutoresizingMaskIntoConstraints = false
+        workoutView.configure(with: model)
+        attachmentView.insertSubview(workoutView, at: 0)
+        workoutView.topAnchor.constraint(equalTo: attachmentView.topAnchor).isActive = true
+        workoutView.widthAnchor.constraint(equalTo: attachmentView.widthAnchor, multiplier: 0.9).isActive = true
+        workoutView.centerXAnchor.constraint(equalTo: attachmentView.centerXAnchor).isActive = true
+        workoutView.bottomAnchor.constraint(equalTo: attachmentView.bottomAnchor, constant: -10).isActive = true
+    }
+    func addSavedWorkout(_ model: SavedWorkoutModel) {
         removeAttachment()
         attachmentView.isHidden = false
         let workoutView = UIWorkoutView()
