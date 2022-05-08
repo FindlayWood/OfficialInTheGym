@@ -47,6 +47,7 @@ class PlayerProfileMoreViewModel: ObservableObject {
 }
 
 enum PlayerProfileMoreAction {
+    case editProfile
     case myCoaches
     case requests
     case exerciseStats

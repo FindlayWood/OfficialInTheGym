@@ -22,21 +22,28 @@ class CoachProfileMoreViewController: UIViewController {
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .secondarySystemBackground
         addChildView()
         initViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         editNavBarColour(to: .darkColour)
-//        navigationItem.title = viewModel.navigationTitle
+        navigationItem.title = UserDefaults.currentUser.username
     }
     // MARK: - Swift UI Child View
     func addChildView() {
         childContentView = .init(viewModel: viewModel)
         let childView = UIHostingController(rootView: childContentView)
         addChild(childView)
-        childView.view.frame = view.bounds
         view.addSubview(childView.view)
         childView.didMove(toParent: self)
+        childView.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            childView.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            childView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            childView.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            childView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
     
     // MARK: - View Model
@@ -51,11 +58,10 @@ class CoachProfileMoreViewController: UIViewController {
 private extension CoachProfileMoreViewController {
     func actionHandler(_ action: CoachProfileMoreAction) {
         switch action {
+        case .editProfile:
+            break
         case .myPlayers:
             break
-//            let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-//            let SVC = Storyboard.instantiateViewController(withIdentifier: "COACHESViewController") as! COACHESViewController
-//            self.navigationController?.pushViewController(SVC, animated: true)
         case .requests:
             let vc = RequestsViewController()
             navigationController?.pushViewController(vc, animated: true)

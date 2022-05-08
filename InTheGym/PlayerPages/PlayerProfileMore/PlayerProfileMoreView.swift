@@ -61,36 +61,22 @@ struct PlayerProfileMoreView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                 }
-            } header: {
-                VStack(alignment: .center) {
-                    if let profileImage = viewModel.profileImage {
-                        Image(uiImage: profileImage)
+                Button {
+                    viewModel.action(.editProfile)
+                } label: {
+                    HStack(spacing: 16) {
+                        Image(uiImage: UIImage(named: "edit_icon")!)
                             .resizable()
-                            .frame(width: 80, height: 80)
-                            .cornerRadius(40)
-                            .clipShape(Circle())
-                    } else {
-                        Image("")
-                            .resizable()
-                            .frame(width: 80, height: 80)
-                            .cornerRadius(40)
-                            .clipShape(Circle())
-                        
+                            .frame(width: 30, height: 30)
+                            .cornerRadius(4)
+                        Text("Edit Profile")
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
                     }
-                    
-                    Button {
-                        
-                    } label: {
-                        Text("edit")
-                    }
-
-                    Text(UserDefaults.currentUser.profileBio ?? "Profile Bio")
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding()
                 }
-                .frame(maxWidth: .infinity)
+            } header: {
+                Text("My Account")
             }
-            
             Section {
                 Button {
                     viewModel.action(.myCoaches)
