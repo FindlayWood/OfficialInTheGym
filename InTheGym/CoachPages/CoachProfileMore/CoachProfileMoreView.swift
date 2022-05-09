@@ -191,6 +191,7 @@ struct CoachProfileMoreView: View {
         .onAppear {
             viewModel.getProfileImage()
         }
+        .edgesIgnoringSafeArea(.top)
     }
 }
 

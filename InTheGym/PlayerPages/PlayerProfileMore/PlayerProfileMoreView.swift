@@ -191,6 +191,7 @@ struct PlayerProfileMoreView: View {
         .onAppear {
             viewModel.getProfileImage()
         }
+        .edgesIgnoringSafeArea(.top)
     }
 }
 

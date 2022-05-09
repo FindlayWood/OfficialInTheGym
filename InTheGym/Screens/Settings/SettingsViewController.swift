@@ -13,7 +13,7 @@ import Combine
 class SettingsViewController: UIViewController {
     
     // MARK: - Properties
-    var childContentView = SettingsView()
+    var childContentView: SettingsView!
     
     var viewModel = SettingsViewModel()
     
@@ -22,6 +22,7 @@ class SettingsViewController: UIViewController {
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .secondarySystemBackground
         addChildView()
         initViewModel()
     }
@@ -29,16 +30,21 @@ class SettingsViewController: UIViewController {
         editNavBarColour(to: .darkColour)
         navigationItem.title = viewModel.navigationTitle
     }
-
-
+    
     // MARK: - Swift UI Child View
     func addChildView() {
-        childContentView.viewModel = viewModel
+        childContentView = .init(viewModel: viewModel)
         let childView = UIHostingController(rootView: childContentView)
         addChild(childView)
-        childView.view.frame = view.bounds
         view.addSubview(childView.view)
         childView.didMove(toParent: self)
+        childView.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            childView.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            childView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            childView.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            childView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
     
     // MARK: - View Model

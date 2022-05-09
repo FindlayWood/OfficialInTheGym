@@ -13,6 +13,8 @@ import Combine
 class PlayerProfileMoreViewController: UIViewController {
     
     // MARK: - Properties
+    weak var coordinator: PlayerProfileMoreCoordinator?
+    
     var childContentView: PlayerProfileMoreView!
     
     var viewModel = PlayerProfileMoreViewModel()
@@ -61,29 +63,19 @@ private extension PlayerProfileMoreViewController {
     func actionHandler(_ action: PlayerProfileMoreAction) {
         switch action {
         case .editProfile:
-            print("editing profile")
+            coordinator?.editProfile()
         case .myCoaches:
-            let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let SVC = Storyboard.instantiateViewController(withIdentifier: "COACHESViewController") as! COACHESViewController
-            self.navigationController?.pushViewController(SVC, animated: true)
+            coordinator?.myCoaches()
         case .requests:
-            let vc = RequestsViewController()
-            navigationController?.pushViewController(vc, animated: true)
+            coordinator?.myRequests()
         case .exerciseStats:
-            let vc = DisplayExerciseStatsViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
+            coordinator?.exerciseStats()
         case .measureJump:
-            let vc = JumpMeasuringViewController()
-            vc.hidesBottomBarWhenPushed = true
-            vc.modalPresentationStyle = .fullScreen
-            navigationController?.present(vc, animated: true)
+            coordinator?.jumpMeasure()
         case .breathWork:
-            let vc = MethodSelectionViewController()
-            vc.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(vc, animated: true)
+            coordinator?.breathWork()
         case .settings:
-            let vc = SettingsViewController()
-            navigationController?.pushViewController(vc, animated: true)
+            coordinator?.settings()
         }
     }
 }

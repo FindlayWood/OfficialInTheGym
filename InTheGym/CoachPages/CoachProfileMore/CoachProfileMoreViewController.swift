@@ -13,6 +13,8 @@ import Combine
 class CoachProfileMoreViewController: UIViewController {
     
     // MARK: - Properties
+    weak var coordinator: CoachProfileMoreCoordinator?
+    
     var childContentView: CoachProfileMoreView!
     
     var viewModel = CoachProfileMoreViewModel()
@@ -59,27 +61,19 @@ private extension CoachProfileMoreViewController {
     func actionHandler(_ action: CoachProfileMoreAction) {
         switch action {
         case .editProfile:
-            break
+            coordinator?.editProfile()
         case .myPlayers:
             break
         case .requests:
-            let vc = RequestsViewController()
-            navigationController?.pushViewController(vc, animated: true)
+            break
         case .exerciseStats:
-            let vc = DisplayExerciseStatsViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
+            coordinator?.exerciseStats()
         case .measureJump:
-            let vc = JumpMeasuringViewController()
-            vc.hidesBottomBarWhenPushed = true
-            vc.modalPresentationStyle = .fullScreen
-            navigationController?.present(vc, animated: true)
+            coordinator?.jumpMeasure()
         case .breathWork:
-            let vc = MethodSelectionViewController()
-            vc.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(vc, animated: true)
+            coordinator?.breathWork()
         case .settings:
-            let vc = SettingsViewController()
-            navigationController?.pushViewController(vc, animated: true)
+            coordinator?.settings()
         }
     }
 }

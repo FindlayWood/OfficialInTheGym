@@ -91,16 +91,13 @@ extension MyProfileCoordinator {
     
     func showMoreInfo() {
         if UserDefaults.currentUser.admin {
-            let vc = CoachProfileMoreViewController()
-            vc.hidesBottomBarWhenPushed = true
-            navigationController.pushViewController(vc, animated: true)
-            
+            let child = CoachProfileMoreCoordinator(navigationController: navigationController)
+            childCoordinators.append(child)
+            child.start()
         } else {
-            let vc = PlayerProfileMoreViewController()
-            vc.hidesBottomBarWhenPushed = true
-            navigationController.pushViewController(vc, animated: true)
-//            let vc = NewInfoViewController.instantiate()
-//            navigationController.pushViewController(vc, animated: true)
+            let child = PlayerProfileMoreCoordinator(navigationController: navigationController)
+            childCoordinators.append(child)
+            child.start()
         }
     }
     
