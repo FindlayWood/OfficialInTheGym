@@ -15,6 +15,13 @@ import Combine
 class PostCellViewModel {
     
     // MARK: - Publishers
+    @Published var isLiked: Bool = false
+    @Published var imageData: Data?
+    @Published var workoutModel: WorkoutModel?
+    @Published var savedWorkoutModel: SavedWorkoutModel?
+    
+    var errorWorkout = PassthroughSubject<Error,Never>()
+    
     var errorLikingPost = PassthroughSubject<Error,Never>()
     
     // MARK: - Properties
@@ -66,4 +73,50 @@ class PostCellViewModel {
 
     
     // MARK: - Functions
+    func checkLike() {
+        DispatchQueue.global(qos: .background).async {
+            let likeModel = LikeSearchModel(postID: self.post.id)
+            LikeCache.shared.load(from: likeModel) { [weak self] result in
+                guard let liked = try? result.get() else {return}
+                self?.isLiked = liked
+            }
+        }
+    }
+    func loadProfileImage() {
+        DispatchQueue.global(qos: .background).async {
+            let profileImageModel = ProfileImageDownloadModel(id: self.post.posterID)
+            ImageCache.shared.load(from: profileImageModel) { [weak self] result in
+                let imageData = try? result.get().pngData()
+                self?.imageData = imageData
+            }
+        }
+    }
+    func checkWorkout() {
+        guard let workoutID = post.workoutID else {return}
+        DispatchQueue.global(qos: .background).async {
+            let searchModel = WorkoutKeyModel(id: workoutID, assignID: self.post.posterID)
+            WorkoutLoader.shared.load(from: searchModel) { [weak self] result in
+                switch result {
+                case .success(let workoutModel):
+                    self?.workoutModel = workoutModel
+                case .failure(let error):
+                    self?.errorWorkout.send(error)
+                }
+            }
+        }
+    }
+    func checkSavedWorkout() {
+        guard let savedID = post.savedWorkoutID else {return}
+        DispatchQueue.global(qos: .background).async {
+            let searchModel = SavedWorkoutKeyModel(id: savedID)
+            SavedWorkoutLoader.shared.load(from: searchModel) { [weak self] result in
+                switch result {
+                case .success(let savedModel):
+                    self?.savedWorkoutModel = savedModel
+                case .failure(let error):
+                    self?.errorWorkout.send(error)
+                }
+            }
+        }
+    }
 }

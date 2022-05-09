@@ -12,13 +12,10 @@ import Combine
 class PostTableViewCell: UITableViewCell {
     
     // MARK: - Publishers
-//    var actionPublisher = PassthroughSubject<PostAction,Never>()
     var actionPublisher: PassthroughSubject<PostAction,Never> = PassthroughSubject<PostAction,Never>()
     
     // MARK: - Properties
     static let cellID = "postCellID"
-    
-    weak var delegate: TimelineTapProtocol?
     
     let selection = UISelectionFeedbackGenerator()
 
@@ -27,6 +24,8 @@ class PostTableViewCell: UITableViewCell {
     var viewModel = PostCellViewModel()
     
     var longDateFormat: Bool = false
+    
+    private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - Subviews
     var profileImageButton: UIButton = {
@@ -220,6 +219,54 @@ private extension PostTableViewCell {
     }
     func initViewModel() {
         
+        viewModel.$isLiked
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.setLiked(to: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.$imageData
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.setProfileImage(with: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.$workoutModel
+            .compactMap {$0}
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.workoutView.configure(with: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.$savedWorkoutModel
+            .compactMap {$0}
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.workoutView.configure(with: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.errorWorkout
+            .sink { [weak self] _ in self?.workoutView.setError()}
+            .store(in: &subscriptions)
+        
+        viewModel.checkLike()
+        viewModel.loadProfileImage()
+    }
+}
+
+private extension PostTableViewCell {
+    func setLiked(to liked: Bool) {
+        if liked {
+            self.likeButton.setImage(UIImage(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+            self.likeButton.isUserInteractionEnabled = false
+        } else {
+            self.likeButton.setImage(UIImage(systemName: "star", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+            self.likeButton.isUserInteractionEnabled = true
+        }
+    }
+    func setProfileImage(with data: Data?) {
+        if let data = data {
+            let image = UIImage(data: data)
+            profileImageButton.setImage(image, for: .normal)
+        } else {
+            profileImageButton.setImage(nil, for: .normal)
+        }
     }
 }
 
@@ -227,6 +274,7 @@ private extension PostTableViewCell {
 extension PostTableViewCell {
     func configure(with post: DisplayablePost) {
         viewModel.post = post
+        initViewModel()
         posterID = post.posterID
         usernameButton.setTitle(post.username, for: .normal)
         if longDateFormat {
@@ -243,41 +291,16 @@ extension PostTableViewCell {
         if post.attachedPhoto == nil { photoImageView.isHidden = true }
         if let workoutID = post.workoutID {
             workoutView.isHidden = false
-            workoutView.configure(with: workoutID, assignID: post.posterID)
+            workoutView.setLoading()
+            viewModel.checkWorkout()
+//            workoutView.configure(with: workoutID, assignID: post.posterID)
         } 
         if let savedWorkoutID = post.savedWorkoutID {
             workoutView.isHidden = false
-            workoutView.configure(for: savedWorkoutID)
+            workoutView.setLoading()
+            viewModel.checkSavedWorkout()
+//            workoutView.configure(for: savedWorkoutID)
         }
-
-        let profileImageModel = ProfileImageDownloadModel(id: post.posterID)
-        ImageCache.shared.load(from: profileImageModel) { [weak self] result in
-            let image = try? result.get()
-            self?.profileImageButton.setImage(image, for: .normal)
-        }
-        let likeModel = LikeSearchModel(postID: post.id)
-        LikeCache.shared.load(from: likeModel) { [weak self] result in
-            guard let self = self else {return}
-            guard let liked = try? result.get() else {return}
-            if liked {
-                self.likeButton.setImage(UIImage(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-                self.likeButton.isUserInteractionEnabled = false
-            } else {
-                self.likeButton.setImage(UIImage(systemName: "star", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-                self.likeButton.isUserInteractionEnabled = true
-            }
-        }
-        
-//        LikesAPIService.shared.check(postID: post.id) { [weak self] liked in
-//            guard let self = self else {return}
-//            if liked {
-//                self.likeButton.setImage(UIImage(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-//                self.likeButton.isUserInteractionEnabled = false
-//            } else {
-//                self.likeButton.setImage(UIImage(systemName: "star", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-//                self.likeButton.isUserInteractionEnabled = true
-//            }
-//        }
     }
 }
 
@@ -292,7 +315,6 @@ extension PostTableViewCell {
     }
     
     @objc func likeButtonTapped(_ sender: UIButton) {
-//        actionPublisher.send(.likeButtonTapped)
         viewModel.likedPost()
         selection.prepare()
         selection.selectionChanged()
@@ -302,27 +324,11 @@ extension PostTableViewCell {
             sender.isUserInteractionEnabled = false
             self.likeCountLabel.increment()
         }
-//        delegate?.likeButtonTapped(on: self, sender: sender, label: likeCountLabel)
     }
     @objc func workoutTapped(_ sender: UIView) {
         actionPublisher.send(.workoutTapped)
-        delegate?.workoutTapped(on: self)
     }
     @objc func userTapped(_ sender: UIButton) {
         actionPublisher.send(.userTapped)
-    }
-    
-    func postLikedTransition() {
-        
-        selection.prepare()
-        selection.selectionChanged()
-        UIView.animate(withDuration: 0.3, delay: 0, options: .transitionCrossDissolve) {
-            if #available(iOS 13.0, *) {
-                self.likeButton.setImage(UIImage(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-            }
-        }completion: { _ in
-            self.likeButton.isUserInteractionEnabled = false
-            self.likeCountLabel.increment()
-        }
     }
 }

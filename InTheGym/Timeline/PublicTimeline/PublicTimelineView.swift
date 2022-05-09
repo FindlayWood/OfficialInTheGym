@@ -31,6 +31,19 @@ class PublicTimelineView: UIView {
         return view
     }()
     
+    var tableview: UITableView = {
+        let view = UITableView()
+        view.register(ProfileInfoTableViewCell.self, forCellReuseIdentifier: ProfileInfoTableViewCell.cellID)
+        view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
+        if #available(iOS 15.0, *) { view.sectionHeaderTopPadding = 0 }
+        view.backgroundColor = .secondarySystemBackground
+        view.tableFooterView = UIView()
+        view.separatorInset = .zero
+        view.layoutMargins = .zero
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,17 +59,17 @@ class PublicTimelineView: UIView {
 private extension PublicTimelineView {
     func setupUI() {
         backgroundColor = .white
-        addSubview(collectionView)
+        addSubview(tableview)
         configureUI()
     }
     
     func configureUI() {
         NSLayoutConstraint.activate([
             
-            collectionView.topAnchor.constraint(equalTo: topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            tableview.topAnchor.constraint(equalTo: topAnchor),
+            tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
+            tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
+            tableview.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     func generateLayout(with selectedIndex: Int) -> UICollectionViewLayout {
