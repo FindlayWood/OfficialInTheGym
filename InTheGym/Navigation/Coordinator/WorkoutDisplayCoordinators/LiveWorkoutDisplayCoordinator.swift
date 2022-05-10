@@ -30,12 +30,6 @@ class LiveWorkoutDisplayCoordinator: NSObject, Coordinator {
 }
 // MARK: - Methods
 extension LiveWorkoutDisplayCoordinator {
-//    func complete(_ workout: WorkoutModel) {
-//        let vc = CompletedWorkoutPageViewController()
-//        vc.viewModel.workout = workout
-//        vc.coordinator = self
-//        navigationController.pushViewController(vc, animated: true)
-//    }
     func showEMOM(_ emom: EMOMModel, _ workout: WorkoutModel) {
         let vc = DisplayEMOMViewController()
         vc.viewModel.emomModel = emom
@@ -59,17 +53,11 @@ extension LiveWorkoutDisplayCoordinator {
         let child = LiveWorkoutExerciseCreationCoordinator(navigationController: navigationController, exercise: exercise, publisher: publisher)
         childCoordinators.append(child)
         child.start()
-//        let child = LiveExerciseSelectionCoordinator(navigationController: navigationController, creationViewModel: adding, workoutPosition: workoutPosition)
-//        childCoordinators.append(child)
-//        child.start()
     }
     func addSet(_ exercise: ExerciseModel, publisher: PassthroughSubject<ExerciseModel,Never>) {
         let child = LiveWorkoutSetCreationCoordinator(navigationController: navigationController, exercise: exercise, publisher: publisher)
         childCoordinators.append(child)
         child.start()
-//        let child = RepsSelectionCoordinator(navigationController: navigationController, exerciseViewModel: exerciseViewModel)
-//        childCoordinators.append(child)
-//        child.start()
     }
     func addClip(for exercise: ExerciseModel, _ workout: WorkoutModel, on delegate: ClipAdding) {
         let child = ClipCoordinator(navigationController: navigationController, workout: workout, exercise: DiscoverExerciseModel(exerciseName: exercise.exercise), addingDelegate: delegate)
@@ -81,20 +69,11 @@ extension LiveWorkoutDisplayCoordinator {
         let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate)
         childCoordinators.append(child)
         child.start()
-        
-//        let keyClipModel = KeyClipModel(clipKey: clipModel.clipKey, storageURL: clipModel.storageURL)
-//        let vc = ViewClipViewController()
-//        vc.viewModel.keyClipModel = keyClipModel
-//        navigationController.present(vc, animated: true, completion: nil)
-//
     }
     func showDescriptions(for exercise: ExerciseModel) {
         let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise)
         childCoordinators.append(child)
         child.start()
-//        let vc = ExerciseDescriptionViewController()
-//        vc.viewModel.exercise = DiscoverExerciseModel(exerciseName: exercise.exercise)
-//        navigationController?.pushViewController(vc, animated: true)
     }
 }
 extension LiveWorkoutDisplayCoordinator {
