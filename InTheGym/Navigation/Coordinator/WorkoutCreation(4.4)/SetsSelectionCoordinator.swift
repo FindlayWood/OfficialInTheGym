@@ -20,9 +20,9 @@ class SetsSelectionCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let vc = ExerciseSetsViewController()
-        vc.newCoordinator = self
-        vc.exerciseViewModel = exerciseViewModel
+        let vc = SetSelectionViewController()
+//        vc.newCoordinator = self
+//        vc.exerciseViewModel = exerciseViewModel
         navigationController.pushViewController(vc, animated: true)
     }
 }

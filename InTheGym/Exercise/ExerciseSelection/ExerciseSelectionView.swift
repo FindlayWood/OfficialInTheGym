@@ -8,7 +8,6 @@
 
 import UIKit
 
-@available(iOS 13, *)
 class ExerciseSelectionView: UIView {
     
     //MARK: - Properties
@@ -78,25 +77,6 @@ class ExerciseSelectionView: UIView {
     
     // MARK: - Collection View Layout
     let compositionalLayout: UICollectionViewCompositionalLayout = {
-//        let mainItem = NSCollectionLayoutItem(
-//          layoutSize: NSCollectionLayoutSize(
-//            widthDimension: .fractionalWidth(1),
-//            heightDimension: .fractionalHeight(1)))
-//
-//        mainItem.contentInsets = NSDirectionalEdgeInsets(
-//          top: 2,
-//          leading: 2,
-//          bottom: 2,
-//          trailing: 2)
-//
-//        let nestedGroup = NSCollectionLayoutGroup.vertical(
-//          layoutSize: NSCollectionLayoutSize(
-//            widthDimension: .fractionalWidth(0.5),
-//            heightDimension: .fractionalWidth(0.3)),
-//          subitems: [
-//            mainItem
-//          ]
-//        )
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/3))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8)
@@ -124,7 +104,6 @@ class ExerciseSelectionView: UIView {
 }
 
 // MARK: - Setup UI
-@available(iOS 13, *)
 private extension ExerciseSelectionView {
     func setupUI() {
         backgroundColor = .white
@@ -137,17 +116,16 @@ private extension ExerciseSelectionView {
         constrainUI()
     }
     func constrainUI() {
-        searchBarTopAnchor = searchBar.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: 5)
+        searchBarTopAnchor = searchBar.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: 8)
         NSLayoutConstraint.activate([
-            topStack.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-            topStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            topStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            topStack.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
+            topStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            topStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
             searchBarTopAnchor,
-            //searchBar.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: 5),
             searchBar.leadingAnchor.constraint(equalTo: leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: trailingAnchor),
-            searchBar.heightAnchor.constraint(equalToConstant: 50),
+            searchBar.heightAnchor.constraint(equalToConstant: 48),
             
             collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -158,7 +136,6 @@ private extension ExerciseSelectionView {
 }
 
 // MARK: - Configurations
-@available(iOS 13, *)
 extension ExerciseSelectionView {
     public func hideStack() {
         circuitView.isHidden = true

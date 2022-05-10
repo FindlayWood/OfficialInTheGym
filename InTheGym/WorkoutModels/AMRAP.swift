@@ -85,6 +85,7 @@ class AMRAP: WorkoutType {
 
 // MARK: - AMRAP Model
 struct AMRAPModel: ExerciseType, Codable, Hashable {
+    var id: String = UUID().uuidString
     var amrapPosition: Int
     var workoutPosition: Int
     var timeLimit: Int

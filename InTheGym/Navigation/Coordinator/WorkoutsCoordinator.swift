@@ -65,9 +65,13 @@ extension WorkoutsCoordinator: WorkoutsFlow {
     }
     
     func addNewWorkout(_ assignTo: Users?) {
-        let child = WorkoutCreationCoordinator(navigationController: navigationController, assignTo: assignTo)
+        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: assignTo)
         childCoordinators.append(child)
         child.start()
+        
+//        let child = WorkoutCreationCoordinator(navigationController: navigationController, assignTo: assignTo)
+//        childCoordinators.append(child)
+//        child.start()
 //        let vc = AddWorkoutSelectionViewController.instantiate()
 //        vc.coordinator = self
 //        navigationController.pushViewController(vc, animated: true)

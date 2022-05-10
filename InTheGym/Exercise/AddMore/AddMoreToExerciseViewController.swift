@@ -11,7 +11,8 @@ import UIKit
 class AddMoreToExerciseViewController: UIViewController {
     
     // MARK: - Properties
-    weak var coordinator: AddMoreToExerciseCoordinator?
+//    weak var coordinator: AddMoreToExerciseCoordinator?
+    weak var coordinator: FinishedExerciseCreationFlow?
     
     var display = AddMoreToExerciseView()
     
@@ -58,23 +59,24 @@ extension AddMoreToExerciseViewController: AddMoreToExerciseProtocol {
     }
     
     func itemSelected(at indexPath: IndexPath) {
-        switch indexPath.row {
-        case 0:
-            coordinator?.timeSelected(viewModel.getData(at: indexPath))
-        case 1:
-            coordinator?.distanceSelected(viewModel.getData(at: indexPath))
-        case 2:
-            coordinator?.restTimeSelected(viewModel.getData(at: indexPath))
-        case 3:
-            coordinator?.noteSelected(viewModel.getData(at: indexPath))
-        default:
-            break
-        }
+//        switch indexPath.row {
+//        case 0:
+//            coordinator?.timeSelected(viewModel.getData(at: indexPath))
+//        case 1:
+//            coordinator?.distanceSelected(viewModel.getData(at: indexPath))
+//        case 2:
+//            coordinator?.restTimeSelected(viewModel.getData(at: indexPath))
+//        case 3:
+//            coordinator?.noteSelected(viewModel.getData(at: indexPath))
+//        default:
+//            break
+//        }
     }  
 }
 // MARK: - Actions
 private extension AddMoreToExerciseViewController {
     @objc func continuePressed() {
-        coordinator?.addNewExercise()
+        coordinator?.finishedExercise(viewModel.exercise)
+//        coordinator?.addNewExercise()
     }
 }

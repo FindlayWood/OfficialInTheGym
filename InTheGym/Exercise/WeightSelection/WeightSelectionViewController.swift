@@ -12,11 +12,12 @@ import UIKit
 import SCLAlertView
 import Combine
 
-class NewWeightViewController: UIViewController {
+class WeightSelectionViewController: UIViewController {
     
-    weak var newCoordinator: WeightSelectionFlow?
+    weak var coordinator: WeightSelectionFlow?
+//    weak var newCoordinator: WeightSelectionFlow?
     
-    weak var exerciseViewModel: ExerciseCreationViewModel?
+//    weak var exerciseViewModel: ExerciseCreationViewModel?
     
     var display = WeightView()
     
@@ -76,8 +77,8 @@ class NewWeightViewController: UIViewController {
             }
             .store(in: &subscriptions)
         
-        guard let exerciseViewModel = exerciseViewModel else { return }
-        viewModel.getSetCellModels(from: exerciseViewModel)
+        viewModel.getSetCellModels()
+        viewModel.isLiveWorkout = coordinator is LiveWorkoutSetCreationCoordinator
     }
     
     
@@ -115,7 +116,7 @@ class NewWeightViewController: UIViewController {
 }
 
 // MARK: - Actions
-private extension NewWeightViewController {
+private extension WeightSelectionViewController {
     @objc func buttonPressed(_ sender: UIButton) {
         display.resetButtons()
         sender.backgroundColor = .darkColour
@@ -138,12 +139,14 @@ private extension NewWeightViewController {
     }
     @objc func nextPressed(_ sender: UIButton) {
         guard let weights = (viewModel.setCellModels?.map { $0.weightString }) else {return}
-        exerciseViewModel?.addWeight(weights)
-        newCoordinator?.next()
+        viewModel.exercise.weight = weights
+        coordinator?.weightSelected(viewModel.exercise)
+//        exerciseViewModel?.addWeight(weights)
+//        newCoordinator?.next()
     }
     @objc func skipPressed(_ sender: UIButton) {
         guard let weights = (viewModel.setCellModels?.map { $0.weightString }) else {return}
-        exerciseViewModel?.addWeight(weights)
-        newCoordinator?.next()
+//        exerciseViewModel?.addWeight(weights)
+//        newCoordinator?.next()
     }
 }

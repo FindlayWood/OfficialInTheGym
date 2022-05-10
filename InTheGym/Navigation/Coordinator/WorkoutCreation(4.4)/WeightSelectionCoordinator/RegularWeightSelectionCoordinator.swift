@@ -20,57 +20,57 @@ class RegularWeightSelectionCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let vc = NewWeightViewController()
-        vc.exerciseViewModel = exerciseViewModel
-        vc.newCoordinator = self
+        let vc = WeightSelectionViewController()
+//        vc.exerciseViewModel = exerciseViewModel
+//        vc.newCoordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
 }
 
 // MARK: - Weight Selection Flow
-extension RegularWeightSelectionCoordinator: WeightSelectionFlow {
-    func next() {
-        let child = AddMoreToExerciseCoordinator(navigationController: navigationController, creationViewModel: exerciseViewModel)
-        childCoordinators.append(child)
-        child.start()
-        
-//        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
-//        switch exerciseViewModel.exercisekind {
-//        case .regular:
-//            for controller in viewControllers {
-//                if controller.isKind(of: WorkoutCreationViewController.self) {
-//                    navigationController.popToViewController(controller, animated: true)
-//                    break
-//                }
-//            }
-//        case .circuit:
-//            for controller in viewControllers {
-//                if controller.isKind(of: CreateCircuitViewController.self) {
-//                    navigationController.popToViewController(controller, animated: true)
-//                    break
-//                }
-//            }
-//        case .emom:
-//            for controller in viewControllers {
-//                if controller.isKind(of: CreateEMOMViewController.self) {
-//                    navigationController.popToViewController(controller, animated: true)
-//                    break
-//                }
-//            }
-//        case .amrap:
-//            for controller in viewControllers {
-//                if controller.isKind(of: CreateAMRAPViewController.self) {
-//                    navigationController.popToViewController(controller, animated: true)
-//                    break
-//                }
-//            }
-//        case .live:
-//            for controller in viewControllers {
-//                if controller.isKind(of: LiveWorkoutDisplayViewController.self) {
-//                    navigationController.popToViewController(controller, animated: true)
-//                    break
-//                }
-//            }
-//        }
-    }
-}
+//extension RegularWeightSelectionCoordinator: WeightSelectionFlow {
+//    func next() {
+//        let child = AddMoreToExerciseCoordinator(navigationController: navigationController, creationViewModel: exerciseViewModel)
+//        childCoordinators.append(child)
+//        child.start()
+//        
+////        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+////        switch exerciseViewModel.exercisekind {
+////        case .regular:
+////            for controller in viewControllers {
+////                if controller.isKind(of: WorkoutCreationViewController.self) {
+////                    navigationController.popToViewController(controller, animated: true)
+////                    break
+////                }
+////            }
+////        case .circuit:
+////            for controller in viewControllers {
+////                if controller.isKind(of: CreateCircuitViewController.self) {
+////                    navigationController.popToViewController(controller, animated: true)
+////                    break
+////                }
+////            }
+////        case .emom:
+////            for controller in viewControllers {
+////                if controller.isKind(of: CreateEMOMViewController.self) {
+////                    navigationController.popToViewController(controller, animated: true)
+////                    break
+////                }
+////            }
+////        case .amrap:
+////            for controller in viewControllers {
+////                if controller.isKind(of: CreateAMRAPViewController.self) {
+////                    navigationController.popToViewController(controller, animated: true)
+////                    break
+////                }
+////            }
+////        case .live:
+////            for controller in viewControllers {
+////                if controller.isKind(of: LiveWorkoutDisplayViewController.self) {
+////                    navigationController.popToViewController(controller, animated: true)
+////                    break
+////                }
+////            }
+////        }
+//    }
+//}

@@ -20,22 +20,22 @@ class LiveWeightSelectionCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let vc = NewWeightViewController()
-        vc.exerciseViewModel = exerciseViewModel
-        vc.newCoordinator = self
+        let vc = WeightSelectionViewController()
+//        vc.exerciseViewModel = exerciseViewModel
+//        vc.newCoordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
 }
 
 // MARK: - Weight Selection Flow
-extension LiveWeightSelectionCoordinator: WeightSelectionFlow {
-    func next() {
-        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
-        for controller in viewControllers {
-            if controller.isKind(of: LiveWorkoutDisplayViewController.self) {
-                navigationController.popToViewController(controller, animated: true)
-                break
-            }
-        }
-    }
-}
+//extension LiveWeightSelectionCoordinator: WeightSelectionFlow {
+//    func next() {
+//        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+//        for controller in viewControllers {
+//            if controller.isKind(of: LiveWorkoutDisplayViewController.self) {
+//                navigationController.popToViewController(controller, animated: true)
+//                break
+//            }
+//        }
+//    }
+//}

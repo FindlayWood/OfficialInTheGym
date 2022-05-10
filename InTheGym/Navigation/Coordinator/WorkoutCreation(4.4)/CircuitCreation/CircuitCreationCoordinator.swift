@@ -6,46 +6,108 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import Combine
 
 class CircuitCreationCoordinator: NSObject, Coordinator {
+    
+    var exerciseAddedPublisher: PassthroughSubject<ExerciseModel,Never>?
+    
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
-    var workoutViewModel: WorkoutCreationViewModel
-    var workoutPosition: Int
+    var publisher: PassthroughSubject<CircuitModel,Never>?
     
-    init(navigationController: UINavigationController, workoutViewModel: WorkoutCreationViewModel, workoutPosition: Int) {
+    init(navigationController: UINavigationController, publisher: PassthroughSubject<CircuitModel,Never>?) {
         self.navigationController = navigationController
-        self.workoutViewModel = workoutViewModel
-        self.workoutPosition = workoutPosition
+        self.publisher = publisher
     }
     
     func start() {
         let vc = CreateCircuitViewController()
-        vc.newCoordinator = self
-        vc.viewModel.workoutViewModel = workoutViewModel
+        vc.coordinator = self
+        vc.viewModel.completedPublisher = publisher
         navigationController.pushViewController(vc, animated: true)
     }
 }
-
 extension CircuitCreationCoordinator {
-    func upload() {
-        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
-        for controller in viewControllers {
-            if controller.isKind(of: WorkoutCreationViewController.self) {
-                navigationController.popToViewController(controller, animated: true)
+    func addNewExercise(_ exercise: ExerciseModel) {
+        let vc = ExerciseSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+// exercise selection
+extension CircuitCreationCoordinator: ExerciseSelectionFlow {
+    func exerciseSelected(_ exercise: ExerciseModel) {
+        let vc = SetSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func addCircuit() {
+        
+    }
+    func addAmrap() {
+        
+    }
+    func addEmom() {
+        
+    }
+}
+// Set Selection
+extension CircuitCreationCoordinator: SetSelectionFlow {
+    func setSelected(_ exercise: ExerciseModel) {
+        let vc = RepSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+// reps selection
+extension CircuitCreationCoordinator: RepSelectionFlow {
+    func repsSelected(_ exercise: ExerciseModel) {
+        let vc = WeightSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+// weight selection
+extension CircuitCreationCoordinator: WeightSelectionFlow {
+    func weightSelected(_ exercise: ExerciseModel) {
+        let vc = AddMoreToExerciseViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+// finish
+extension CircuitCreationCoordinator: FinishedExerciseCreationFlow {
+    func finishedExercise(_ exercise: ExerciseModel) {
+        exerciseAddedPublisher?.send(exercise)
+        let viewControllers = navigationController.viewControllers
+        for viewController in viewControllers {
+            if viewController.isKind(of: CreateCircuitViewController.self) {
+                navigationController.popToViewController(viewController, animated: true)
                 break
             }
         }
     }
-    func exercise(viewModel: CreateCircuitViewModel, exercisePosition: Int) {
-        viewModel.workoutPosition = workoutPosition
-        let child = CircuitExerciseSelectionCoordinator(navigationController: navigationController, circuitViewModel: viewModel, workoutPosition: exercisePosition)
-        childCoordinators.append(child)
-        child.start()
+}
+// completed circuit
+extension CircuitCreationCoordinator {
+    func completedCircuit() {
+        let viewController = navigationController.viewControllers
+        for viewController in viewController {
+            if viewController.isKind(of: WorkoutCreationViewController.self) {
+                navigationController.popToViewController(viewController, animated: true)
+                break
+            }
+        }
     }
 }
+
 
 //MARK: - Navigation Delegate Method
 extension CircuitCreationCoordinator: UINavigationControllerDelegate {

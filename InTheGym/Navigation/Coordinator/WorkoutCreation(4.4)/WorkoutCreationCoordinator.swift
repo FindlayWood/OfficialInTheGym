@@ -21,7 +21,7 @@ class WorkoutCreationCoordinator: NSObject, Coordinator {
     }            
     func start() {
         let vc = WorkoutCreationViewController()
-        vc.coordinator = self
+//        vc.coordinator = self
         vc.viewModel.assignTo = assignTo
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)

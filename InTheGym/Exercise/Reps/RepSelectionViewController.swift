@@ -17,15 +17,15 @@ enum setSelected {
     case singleSelected(Int)
 }
 
-class NewRepsViewController: UIViewController {
+class RepSelectionViewController: UIViewController {
     
-    weak var coordinator: CreationFlow?
+    weak var coordinator: RepSelectionFlow?
     
-    weak var newCoordinator: RepsSelectionCoordinator?
+//    weak var newCoordinator: RepsSelectionCoordinator?
     
-    weak var exerciseViewModel: ExerciseCreationViewModel?
+//    weak var exerciseViewModel: ExerciseCreationViewModel?
     
-    var newExercise: exercise?
+//    var newExercise: exercise?
     
     var display = RepsView()
     
@@ -47,7 +47,7 @@ class NewRepsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = .secondarySystemBackground
         
         initDataSource()
         initViewModel()
@@ -57,7 +57,7 @@ class NewRepsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        editNavBarColour(to: .lightColour)
+        editNavBarColour(to: .darkColour)
         navigationItem.title = "Reps"
     }
     
@@ -66,6 +66,10 @@ class NewRepsViewController: UIViewController {
     func initNavBar() {
         let nextButton = UIBarButtonItem(title: "Next", style: .done, target: self, action: #selector(nextPressed))
         navigationItem.rightBarButtonItem = nextButton
+    }
+    // MARK: - Init Display
+    func initDisplay() {
+        
     }
 
     // MARK: - Targets
@@ -91,7 +95,6 @@ class NewRepsViewController: UIViewController {
         setsDataSource.setSelected
             .sink { [weak self] in self?.viewModel.selectedSet = $0 }
             .store(in: &subscriptions)
-        
     }
     
     func initViewModel() {
@@ -100,8 +103,6 @@ class NewRepsViewController: UIViewController {
             .compactMap{ $0 }
             .sink { [weak self] in self?.setsDataSource.updateCollection(with: $0)}
             .store(in: &subscriptions)
-        
-        guard let exerciseViewModel = exerciseViewModel else {return}
         
         viewModel.$isLiveWorkout
             .sink { [weak self] isLive in
@@ -112,7 +113,8 @@ class NewRepsViewController: UIViewController {
             }
             .store(in: &subscriptions)
 
-        viewModel.getSetCellModels(from: exerciseViewModel)
+        viewModel.getSetCellModels()
+        viewModel.isLiveWorkout = coordinator is LiveWorkoutSetCreationCoordinator
     }
     
 
@@ -120,7 +122,7 @@ class NewRepsViewController: UIViewController {
 
 
 //MARK: - button methods
-extension NewRepsViewController{
+extension RepSelectionViewController{
     
     @objc func plus() {
         if repCounter < 99 {
@@ -144,41 +146,8 @@ extension NewRepsViewController{
     }
     
     @objc func nextPressed() {
-//        guard let newExercise = newExercise else {return}
-//        if coordinator is LiveWorkoutCoordinator {
-//            if newExercise.repArray == nil {
-//                newExercise.repArray = [repCounter]
-//            } else {
-//                newExercise.repArray?.append(repCounter)
-//            }
-//        } else if coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator {
-//            newExercise.reps = repCounter
-//        } else {
-//            newExercise.repArray = repIntArray
-//        }
-//        coordinator?.repsSelected(newExercise)
-//        switch exerciseViewModel?.exercisekind {
-//        case .amrap, .emom:
-//            exerciseViewModel?.addReps([repCounter])
-//            exerciseViewModel?.addSets(1)
-//        case .regular, .circuit:
-//            exerciseViewModel?.addReps([])
-//        case .live:
-//            exerciseViewModel?.appendToReps(repCounter)
-//        case .none:
-//            break
-//        }
         let reps = viewModel.setCellModels?.map { $0.repNumber }
-        exerciseViewModel?.exercise.reps = reps
-//        if exerciseViewModel?.exercisekind == .amrap || exerciseViewModel?.exercisekind == .emom {
-//            exerciseViewModel?.addReps([repCounter])
-//            exerciseViewModel?.addSets(1)
-//        }
-//
-//        else {
-//            exerciseViewModel?.addReps(repIntArray)
-//        }
-//        exerciseViewModel?.addReps(repIntArray)
-        newCoordinator?.next(viewModel: exerciseViewModel!)
+        viewModel.exercise.reps = reps
+        coordinator?.repsSelected(viewModel.exercise)
     }
 }

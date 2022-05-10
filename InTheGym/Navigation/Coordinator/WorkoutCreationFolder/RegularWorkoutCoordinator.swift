@@ -100,16 +100,16 @@ extension RegularWorkoutCoordinator: CreationFlow {
     func addExercise(_ exercise: exercise) {
         if #available(iOS 13, *) {
             let vc = ExerciseSelectionViewController()
-            vc.coordinator = self
-            vc.newExercise = exercise
+//            vc.coordinator = self
+//            vc.newExercise = exercise
             navigationController.pushViewController(vc, animated: true)
         }
     }
     
     func exerciseSelected(_ exercise: exercise) {
-        let vc = ExerciseSetsViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
+        let vc = SetSelectionViewController()
+//        vc.coordinator = self
+//        vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
     
@@ -121,7 +121,7 @@ extension RegularWorkoutCoordinator: CreationFlow {
     }
     
     func repsSelected(_ exercise: exercise) {
-        let vc = NewWeightViewController()
+        let vc = WeightSelectionViewController()
         navigationController.pushViewController(vc, animated: true)
     }
     
@@ -169,9 +169,9 @@ extension RegularWorkoutCoordinator: RegularAndLiveFlow {
 // MARK: - Regular and Circuit Flow
 extension RegularWorkoutCoordinator: RegularAndCircuitFlow {
     func setsSelected(_ exercise: exercise) {
-        let vc = NewRepsViewController()
-        vc.coordinator = self
-        vc.newExercise = exercise
+        let vc = RepSelectionViewController()
+//        vc.coordinator = self
+//        vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
 }

@@ -23,34 +23,34 @@ class EmomExerciseSelectionCoordinator: NSObject, Coordinator {
     
     func start() {
         let vc = ExerciseSelectionViewController()
-        vc.newCoordinator = self
+//        vc.newCoordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
 }
 
 // MARK: - Exercise Selection Flow
-extension EmomExerciseSelectionCoordinator: RegularExerciseSelectionFlow {
-    
-    func circuit() {
-            
-    }
-    
-    func emom() {
-        
-    }
-    
-    func amrap() {
-        
-    }
-    
-    func exercise(viewModel: ExerciseCreationViewModel) {
-        viewModel.exercisekind = .emom
-        viewModel.addingDelegate = emomViewModel
-        viewModel.exercise.workoutPosition = workoutPosition
-        let child = RepsSelectionCoordinator(navigationController: navigationController, exerciseViewModel: viewModel)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
-    
-}
+//extension EmomExerciseSelectionCoordinator: RegularExerciseSelectionFlow {
+//    
+//    func circuit() {
+//            
+//    }
+//    
+//    func emom() {
+//        
+//    }
+//    
+//    func amrap() {
+//        
+//    }
+//    
+//    func exercise(viewModel: ExerciseCreationViewModel) {
+//        viewModel.exercisekind = .emom
+//        viewModel.addingDelegate = emomViewModel
+//        viewModel.exercise.workoutPosition = workoutPosition
+//        let child = RepsSelectionCoordinator(navigationController: navigationController, exerciseViewModel: viewModel)
+//        childCoordinators.append(child)
+//        child.start()
+//    }
+//    
+//    
+//}

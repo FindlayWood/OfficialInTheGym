@@ -73,6 +73,8 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
                 self.toggleClipCollection(showing: true, clips: self.viewModel.getClips())
             }
             .store(in: &subscriptions)
+        
+        viewModel.initSubscriptions()
     }
     
     // MARK: - Data Source
@@ -144,7 +146,7 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
             .store(in: &subscriptions)
         
         viewModel.updatedExercise
-            .sink { [weak self] in self?.dataSource.update(for: $0) }
+            .sink { [weak self] in self?.dataSource.update(for: $0)}
             .store(in: &subscriptions)
         
     }
@@ -168,12 +170,13 @@ extension LiveWorkoutDisplayViewController {
     }
     
     func addExercise() {
-        coordinator?.addExercise(viewModel, workoutPosition: viewModel.getExerciseCount())
+        let newExercise = ExerciseModel(workoutPosition: viewModel.getExerciseCount())
+        coordinator?.addExercise(newExercise, publisher: viewModel.addedExercise)
     }
     
     func addSet(at indexPath: IndexPath) {
-        let exerciseViewModel = viewModel.getExerciseModel(at: indexPath)
-        coordinator?.addSet(exerciseViewModel)
+        let exercise = viewModel.getExercise(at: indexPath)
+        coordinator?.addSet(exercise, publisher: viewModel.updatedExercise)
     }
     func toggleClipCollection(showing: Bool, clips: [WorkoutClipModel]) {
         if !clips.isEmpty && showing {

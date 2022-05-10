@@ -23,34 +23,34 @@ class CircuitExerciseSelectionCoordinator: NSObject, Coordinator {
     
     func start() {
         let vc = ExerciseSelectionViewController()
-        vc.newCoordinator = self
+//        vc.newCoordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
 }
 
 // MARK: - Exercise Selection Flow
-extension CircuitExerciseSelectionCoordinator: RegularExerciseSelectionFlow {
-    func circuit() {
-        // NULL
-    }
-    
-    func emom() {
-        // NULL
-    }
-    
-    func amrap() {
-        // NULL
-    }
-    
-    
-    func exercise(viewModel: ExerciseCreationViewModel) {
-        viewModel.exercisekind = .circuit
-        viewModel.addingDelegate = circuitViewModel
-        viewModel.exercise.workoutPosition = workoutPosition
-        let child = SetsSelectionCoordinator(navigationController: navigationController, exerciseViewModel: viewModel)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
-    
-}
+//extension CircuitExerciseSelectionCoordinator: RegularExerciseSelectionFlow {
+//    func circuit() {
+//        // NULL
+//    }
+//    
+//    func emom() {
+//        // NULL
+//    }
+//    
+//    func amrap() {
+//        // NULL
+//    }
+//    
+//    
+//    func exercise(viewModel: ExerciseCreationViewModel) {
+//        viewModel.exercisekind = .circuit
+//        viewModel.addingDelegate = circuitViewModel
+//        viewModel.exercise.workoutPosition = workoutPosition
+//        let child = SetsSelectionCoordinator(navigationController: navigationController, exerciseViewModel: viewModel)
+//        childCoordinators.append(child)
+//        child.start()
+//    }
+//    
+//    
+//}

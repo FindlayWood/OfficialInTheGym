@@ -21,7 +21,7 @@ class AddMoreToExerciseCoordinator: NSObject, Coordinator {
     func start() {
         let vc = AddMoreToExerciseViewController()
         vc.viewModel.exerciseCreationViewModel = creationViewModel
-        vc.coordinator = self
+//        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
 }

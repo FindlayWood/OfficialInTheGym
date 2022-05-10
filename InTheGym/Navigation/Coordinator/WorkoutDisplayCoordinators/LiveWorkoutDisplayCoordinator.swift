@@ -6,8 +6,8 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import Combine
 
 class LiveWorkoutDisplayCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
@@ -55,15 +55,21 @@ extension LiveWorkoutDisplayCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func addExercise(_ adding: ExerciseAdding, workoutPosition: Int) {
-        let child = LiveExerciseSelectionCoordinator(navigationController: navigationController, creationViewModel: adding, workoutPosition: workoutPosition)
+    func addExercise(_ exercise: ExerciseModel, publisher: PassthroughSubject<ExerciseModel,Never>) {
+        let child = LiveWorkoutExerciseCreationCoordinator(navigationController: navigationController, exercise: exercise, publisher: publisher)
         childCoordinators.append(child)
         child.start()
+//        let child = LiveExerciseSelectionCoordinator(navigationController: navigationController, creationViewModel: adding, workoutPosition: workoutPosition)
+//        childCoordinators.append(child)
+//        child.start()
     }
-    func addSet(_ exerciseViewModel: ExerciseCreationViewModel) {
-        let child = RepsSelectionCoordinator(navigationController: navigationController, exerciseViewModel: exerciseViewModel)
+    func addSet(_ exercise: ExerciseModel, publisher: PassthroughSubject<ExerciseModel,Never>) {
+        let child = LiveWorkoutSetCreationCoordinator(navigationController: navigationController, exercise: exercise, publisher: publisher)
         childCoordinators.append(child)
         child.start()
+//        let child = RepsSelectionCoordinator(navigationController: navigationController, exerciseViewModel: exerciseViewModel)
+//        childCoordinators.append(child)
+//        child.start()
     }
     func addClip(for exercise: ExerciseModel, _ workout: WorkoutModel, on delegate: ClipAdding) {
         let child = ClipCoordinator(navigationController: navigationController, workout: workout, exercise: DiscoverExerciseModel(exerciseName: exercise.exercise), addingDelegate: delegate)

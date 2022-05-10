@@ -24,37 +24,37 @@ class LiveExerciseSelectionCoordinator: NSObject, Coordinator {
     func start() {
         let vc = ExerciseSelectionViewController()
         vc.workoutCreationViewModel = workoutCreationViewModel
-        vc.newCoordinator = self
+//        vc.newCoordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
 }
 
 // MARK: - Exercise Selection Flow
-extension LiveExerciseSelectionCoordinator: RegularExerciseSelectionFlow {
-    func circuit() {
-        
-    }
-    
-    func emom() {
-    
-    }
-    
-    func amrap() {
-        
-    }
-    
-    
-    func exercise(viewModel: ExerciseCreationViewModel) {        
-        //viewModel.exercisekind = .live
-        viewModel.exercise.workoutPosition = workoutPosition
-        viewModel.addingDelegate = workoutCreationViewModel
-        viewModel.addingDelegate.addExercise(viewModel.exercise)
-        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
-        for controller in viewControllers {
-            if controller.isKind(of: LiveWorkoutDisplayViewController.self) {
-                navigationController.popToViewController(controller, animated: true)
-                break
-            }
-        }
-    }
-}
+//extension LiveExerciseSelectionCoordinator: RegularExerciseSelectionFlow {
+//    func circuit() {
+//        
+//    }
+//    
+//    func emom() {
+//    
+//    }
+//    
+//    func amrap() {
+//        
+//    }
+//    
+//    
+//    func exercise(viewModel: ExerciseCreationViewModel) {        
+//        //viewModel.exercisekind = .live
+//        viewModel.exercise.workoutPosition = workoutPosition
+//        viewModel.addingDelegate = workoutCreationViewModel
+//        viewModel.addingDelegate.addExercise(viewModel.exercise)
+//        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+//        for controller in viewControllers {
+//            if controller.isKind(of: LiveWorkoutDisplayViewController.self) {
+//                navigationController.popToViewController(controller, animated: true)
+//                break
+//            }
+//        }
+//    }
+//}

@@ -24,41 +24,41 @@ class RegularExerciseSelectionCoordinator: NSObject, Coordinator {
     func start() {
         let vc = ExerciseSelectionViewController()
         vc.workoutCreationViewModel = workoutCreationViewModel
-        vc.newCoordinator = self
+//        vc.newCoordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
 }
 
 // MARK: - Exercise Selection Flow
-extension RegularExerciseSelectionCoordinator: RegularExerciseSelectionFlow {
-    
-    func circuit() {
-        let child = CircuitCreationCoordinator(navigationController: navigationController, workoutViewModel: workoutCreationViewModel as! WorkoutCreationViewModel, workoutPosition: workoutPosition)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
-    func emom() {
-        let child = EmomCreationCoordinator(navigationController: navigationController, workoutViewModel: workoutCreationViewModel as! WorkoutCreationViewModel, workoutPosition: workoutPosition)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
-    func amrap() {
-        let child = AmrapCreationCoordinator(navigationController: navigationController, workoutViewModel: workoutCreationViewModel as! WorkoutCreationViewModel, workoutPosition: workoutPosition)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
-    func exercise(viewModel: ExerciseCreationViewModel) {
-        viewModel.workoutPosition = workoutPosition
-        viewModel.exercise.workoutPosition = workoutPosition
-        viewModel.addingDelegate = workoutCreationViewModel
-        let child = SetsSelectionCoordinator(navigationController: navigationController, exerciseViewModel: viewModel)
-        childCoordinators.append(child)
-        child.start()
-    }
-}
+//extension RegularExerciseSelectionCoordinator: RegularExerciseSelectionFlow {
+//    
+//    func circuit() {
+//        let child = CircuitCreationCoordinator(navigationController: navigationController, workoutViewModel: workoutCreationViewModel as! WorkoutCreationViewModel, workoutPosition: workoutPosition)
+//        childCoordinators.append(child)
+//        child.start()
+//    }
+//    
+//    func emom() {
+//        let child = EmomCreationCoordinator(navigationController: navigationController, workoutViewModel: workoutCreationViewModel as! WorkoutCreationViewModel, workoutPosition: workoutPosition)
+//        childCoordinators.append(child)
+//        child.start()
+//    }
+//    
+//    func amrap() {
+//        let child = AmrapCreationCoordinator(navigationController: navigationController, workoutViewModel: workoutCreationViewModel as! WorkoutCreationViewModel, workoutPosition: workoutPosition)
+//        childCoordinators.append(child)
+//        child.start()
+//    }
+//    
+//    func exercise(viewModel: ExerciseCreationViewModel) {
+//        viewModel.workoutPosition = workoutPosition
+//        viewModel.exercise.workoutPosition = workoutPosition
+//        viewModel.addingDelegate = workoutCreationViewModel
+//        let child = SetsSelectionCoordinator(navigationController: navigationController, exerciseViewModel: viewModel)
+//        childCoordinators.append(child)
+//        child.start()
+//    }
+//}
 
 //MARK: - Navigation Delegate Method
 extension RegularExerciseSelectionCoordinator: UINavigationControllerDelegate {
@@ -73,15 +73,15 @@ extension RegularExerciseSelectionCoordinator: UINavigationControllerDelegate {
         }
         
         if let CircuitViewController = fromViewController as? CreateCircuitViewController {
-            childDidFinish(CircuitViewController.newCoordinator)
+            childDidFinish(CircuitViewController.coordinator)
         }
         
         if let AmrapViewController = fromViewController as? CreateAMRAPViewController {
-            childDidFinish(AmrapViewController.newCoordinator)
+            childDidFinish(AmrapViewController.coordinator)
         }
         
-        if let SetsViewController = fromViewController as? ExerciseSetsViewController {
-            childDidFinish(SetsViewController.newCoordinator)
-        }
+//        if let SetsViewController = fromViewController as? SetSelectionViewController {
+//            childDidFinish(SetsViewController.coordinator)
+//        }
     }
 }

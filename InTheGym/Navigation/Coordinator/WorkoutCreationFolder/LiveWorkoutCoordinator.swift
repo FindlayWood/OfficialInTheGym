@@ -35,8 +35,8 @@ extension LiveWorkoutCoordinator: CreationFlow {
     func addExercise(_ exercise: exercise) {
         if #available(iOS 13, *) {
             let vc = ExerciseSelectionViewController()
-            vc.coordinator = self
-            vc.newExercise = exercise
+//            vc.coordinator = self
+//            vc.newExercise = exercise
             navigationController.pushViewController(vc, animated: true)
         }
     }
@@ -71,7 +71,7 @@ extension LiveWorkoutCoordinator: CreationFlow {
     }
     
     func repsSelected(_ exercise: exercise) {
-        let vc = NewWeightViewController()
+        let vc = WeightSelectionViewController()
         navigationController.pushViewController(vc, animated: true)
     }
     
@@ -132,9 +132,9 @@ extension LiveWorkoutCoordinator: LiveWorkoutDisplayFlow {
         //navigationController.pushViewController(vc, animated: true)
     }
     func addSet(_ exercise: exercise) {
-        let vc = NewRepsViewController()
-        vc.coordinator = self
-        vc.newExercise = exercise
+        let vc = RepSelectionViewController()
+//        vc.coordinator = self
+//        vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
 }

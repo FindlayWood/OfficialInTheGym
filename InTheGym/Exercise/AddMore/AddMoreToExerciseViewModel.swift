@@ -13,6 +13,8 @@ class AddMoreToExerciseViewModel {
     // MARK: - Publishers
     
     // MARK: - Properties
+    var exercise: ExerciseModel!
+    
     var exerciseCreationViewModel: ExerciseCreationViewModel!
     
     let data: [AddMoreCellModel] = [.init(title: "Time", imageName: "clock_icon", value: Observable<String>()),

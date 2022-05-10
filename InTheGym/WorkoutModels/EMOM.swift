@@ -74,6 +74,7 @@ class EMOM: WorkoutType {
 }
 
 struct EMOMModel: ExerciseType, Codable, Hashable {
+    var id: String = UUID().uuidString
     var emomPosition: Int
     var workoutPosition: Int
     var exercises: [ExerciseModel]

@@ -20,9 +20,9 @@ class RepsSelectionCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let vc = NewRepsViewController()
-        vc.newCoordinator = self
-        vc.exerciseViewModel = exerciseViewModel
+        let vc = RepSelectionViewController()
+//        vc.newCoordinator = self
+//        vc.exerciseViewModel = exerciseViewModel
         navigationController.pushViewController(vc, animated: true)
     }
 }

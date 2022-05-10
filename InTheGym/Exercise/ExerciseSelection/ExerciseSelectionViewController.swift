@@ -12,9 +12,7 @@ import UIKit
 class ExerciseSelectionViewController: UIViewController {
     
     //MARK: - Properties
-    weak var coordinator: CreationFlow?
-    
-    weak var newCoordinator: RegularExerciseSelectionFlow?
+    weak var coordinator: ExerciseSelectionFlow?
     
     var newExercise: exercise?
     
@@ -27,19 +25,16 @@ class ExerciseSelectionViewController: UIViewController {
     var workoutCreationViewModel: ExerciseAdding!
 
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         initViewModel()
         initDisplay()
         initNavBar()
         initViewTaps()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,7 +71,7 @@ class ExerciseSelectionViewController: UIViewController {
         display.collectionView.delegate = adapter
         display.collectionView.dataSource = adapter
         display.searchBar.delegate = self
-        if newCoordinator is CircuitExerciseSelectionCoordinator || newCoordinator is AmrapExerciseSelectionCoordinator || newCoordinator is EmomExerciseSelectionCoordinator || newCoordinator is LiveExerciseSelectionCoordinator {
+        if coordinator is CircuitCreationCoordinator || coordinator is LiveWorkoutExerciseCreationCoordinator || coordinator is AMRAPCreationCoordinator || coordinator is EmomCreationCoordinator {
             display.hideStack()
         }
     }
@@ -87,8 +82,8 @@ class ExerciseSelectionViewController: UIViewController {
     }
     
     @objc func otherTapped(_ sender: UIBarButtonItem) {
-        guard let newExercise = newExercise else {return}
-        coordinator?.otherSelected(newExercise)
+//        guard let newExercise = newExercise else {return}
+//        coordinator?.otherSelected(newExercise)
     }
     
     func initViewTaps() {
@@ -102,19 +97,13 @@ class ExerciseSelectionViewController: UIViewController {
     
     // MARK: - Actions
     @objc func circuitTapped() {
-        let coordinator = coordinator as? RegularAndLiveFlow
-        coordinator?.circuitSelected()
-        newCoordinator?.circuit()
+        coordinator?.addCircuit()
     }
     @objc func amrapTapped() {
-        let coordinator = coordinator as? RegularAndLiveFlow
-        coordinator?.amrapSelected()
-        newCoordinator?.amrap()
+        coordinator?.addAmrap()
     }
     @objc func emomTapped() {
-        let coordinator = coordinator as? RegularAndLiveFlow
-        coordinator?.emomSelected()
-        newCoordinator?.emom()
+        coordinator?.addEmom()
     }
 }
 
@@ -134,35 +123,15 @@ extension ExerciseSelectionViewController: ExerciseSelectionProtocol {
         }
     }
     func itemSelected(at indexPath: IndexPath) {
-//        guard let newExercise = newExercise else {return}
-//        newExercise.exercise = viewModel.getData(at: indexPath)
-//        newExercise.type = viewModel.getBodyType(from: indexPath)
-//        coordinator?.exerciseSelected(newExercise)
-        let newE = ExerciseModel(exercise: viewModel.getData(at: indexPath), type: viewModel.getBodyType(from: indexPath))
-//        let newE = ExerciseModel(workoutPosition: 0,
-//                                 exercise: viewModel.getData(at: indexPath),
-//                                 type: viewModel.getBodyType(from: indexPath),
-//                                 completed: false)
-        let newViewModel = ExerciseCreationViewModel()
-        newViewModel.exercise = newE
-//        newViewModel.addingDelegate = workoutCreationViewModel
-        newCoordinator?.exercise(viewModel: newViewModel)
         
-//        if indexPath.section == 4 {
-//            let coordinator = coordinator as? RegularWorkoutFlow
-//            coordinator?.addCircuit()
-//        } else if indexPath.section == 5 {
-//            let coordinator = coordinator as? RegularWorkoutFlow
-//            coordinator?.addAMRAP()
-//        } else if indexPath.section == 6 {
-//            let coordinator = coordinator as? RegularWorkoutFlow
-//            coordinator?.addEMOM()
-//        } else {
-//            guard let newExercise = newExercise else {return}
-//            newExercise.exercise = viewModel.getData(at: indexPath)
-//            newExercise.type = viewModel.getBodyType(from: indexPath)
-//            coordinator?.exerciseSelected(newExercise)
-//        }
+        let exercise = viewModel.getData(at: indexPath)
+        let type = viewModel.getBodyType(from: indexPath)
+        viewModel.exercise.exercise = exercise
+        viewModel.exercise.type = type
+        coordinator?.exerciseSelected(viewModel.exercise)
+        
+        
+
     }
 }
 
@@ -171,10 +140,7 @@ extension ExerciseSelectionViewController: UISearchBarDelegate {
         viewModel.filterExercises(with: searchText)
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        if newCoordinator is RegularExerciseSelectionCoordinator {
-            display.searchBegins()
-        }
-        if coordinator is RegularWorkoutCoordinator || coordinator is LiveWorkoutCoordinator {
+        if coordinator is RegularWorkoutCreationCoordinator || coordinator is LiveWorkoutExerciseCreationCoordinator {
             display.searchBegins()
         }
     }
@@ -183,10 +149,7 @@ extension ExerciseSelectionViewController: UISearchBarDelegate {
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         display.searchBar.resignFirstResponder()
-        if newCoordinator is RegularExerciseSelectionCoordinator {
-            display.searchEnded()
-        }
-        if coordinator is RegularWorkoutCoordinator || coordinator is LiveWorkoutCoordinator {
+        if coordinator is RegularWorkoutCreationCoordinator || coordinator is LiveWorkoutExerciseCreationCoordinator {
             display.searchEnded()
         }
     }

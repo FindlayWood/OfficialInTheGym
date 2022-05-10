@@ -14,28 +14,19 @@ class CreateCircuitViewModel {
     // MARK: - Publishers
     @Published var circuitTitle: String = ""
     @Published var validCircuit: Bool = false
-    var exercises = CurrentValueSubject<[ExerciseModel],Never>([])
+    @Published var exercises: [ExerciseModel] = []
+    
+    var completedPublisher: PassthroughSubject<CircuitModel,Never>?
+    
+    var addedExercisePublisher = PassthroughSubject<ExerciseModel,Never>()
     
     private var subscriptions = Set<AnyCancellable>()
     
-    var workoutViewModel: WorkoutCreationViewModel!
-    
-    var workoutPosition: Int!
-    
-    init() {
-        initSubscribers()
-    }
+    let navigationTitle: String = "Create Circuit"
+
     func initSubscribers() {
-//        $circuitTitle
-//            .map { newTitle in
-//                return newTitle.count > 0
-//            }
-//            .sink { [unowned self] titleValid in
-//                self.validCircuit = self.exercises.value.count > 0 && titleValid
-//            }
-//            .store(in: &subscriptions)
         
-        Publishers.CombineLatest($circuitTitle, exercises)
+        Publishers.CombineLatest($circuitTitle, $exercises)
             .map({ circuitTitle, exercises in
                 return circuitTitle.count > 0 && exercises.count > 0
             })
@@ -43,29 +34,30 @@ class CreateCircuitViewModel {
                 self.validCircuit = valid
             }
             .store(in: &subscriptions)
+        
+        addedExercisePublisher
+            .sink { [weak self] in self?.addExercise($0)}
+            .store(in: &subscriptions)
     }
     
     func addCircuit() {
-        let newCircuit = CircuitModel(circuitPosition: workoutViewModel.circuitModels.count,
-                                      workoutPosition: workoutPosition,
-                                      exercises: exercises.value,
-                                      completed: false, circuitName: circuitTitle,
-                                      createdBy: FirebaseAuthManager.currentlyLoggedInUser.username,
-                                      creatorID: FirebaseAuthManager.currentlyLoggedInUser.uid,
+        let newCircuit = CircuitModel(circuitPosition: 0,
+                                      workoutPosition: 0,
+                                      exercises: exercises,
+                                      completed: false,
+                                      circuitName: circuitTitle,
+                                      createdBy: UserDefaults.currentUser.username,
+                                      creatorID: UserDefaults.currentUser.uid,
                                       integrated: true)
-        workoutViewModel.addCircuit(newCircuit)
+        
+        completedPublisher?.send(newCircuit)
     }
     
 }
 
-extension CreateCircuitViewModel: ExerciseAdding {
+extension CreateCircuitViewModel {
     func addExercise(_ exercise: ExerciseModel) {
-        var currentExercises = exercises.value
-        currentExercises.append(exercise)
-        exercises.send(currentExercises)
-    }
-    func updatedExercise(_ exercise: ExerciseModel) {
-        // NULL
+        exercises.append(exercise)
     }
 }
 

@@ -25,7 +25,7 @@ class RepsView: UIView {
         button.setTitle("-", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 120, weight: .bold)
         button.backgroundColor = .clear
-        button.setTitleColor(Constants.darkColour, for: .normal)
+        button.setTitleColor(.darkColour, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -47,7 +47,7 @@ class RepsView: UIView {
         button.setTitle("+", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 120, weight: .bold)
         button.backgroundColor = .clear
-        button.setTitleColor(Constants.darkColour, for: .normal)
+        button.setTitleColor(.darkColour, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

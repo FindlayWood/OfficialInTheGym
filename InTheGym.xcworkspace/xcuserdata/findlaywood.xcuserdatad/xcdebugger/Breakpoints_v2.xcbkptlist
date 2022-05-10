@@ -7,81 +7,97 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "AA699105-9DCB-42E4-9C42-D4FD645928C1"
+            uuid = "248CC58D-4959-4A43-B6D1-F266681A891D"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "InTheGym/Navigation/Coordinator/WorkoutDisplayCoordinator.swift"
+            filePath = "InTheGym/CellClasses/PostTableViewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "completedUpload(_:)"
+            startingLineNumber = "241"
+            endingLineNumber = "241"
+            landmarkName = "initViewModel()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "248CC58D-4959-4A43-B6D1-F266681A891D - 6aad40b05c721c71"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "InTheGym.PostTableViewCell.initViewModel() -&gt; ()"
+                  moduleName = "InTheGym"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/findlaywood/Documents/Xcode%20work/InTheGym/InTheGym/CellClasses/PostTableViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "241"
+                  endingLineNumber = "241"
+                  offsetFromSymbolStart = "3152">
+               </Location>
+               <Location
+                  uuid = "248CC58D-4959-4A43-B6D1-F266681A891D - 77418b0ff9888350"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #6 (InTheGym.SavedWorkoutModel) -&gt; () in InTheGym.PostTableViewCell.initViewModel() -&gt; ()"
+                  moduleName = "InTheGym"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/findlaywood/Documents/Xcode%20work/InTheGym/InTheGym/CellClasses/PostTableViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "241"
+                  endingLineNumber = "241"
+                  offsetFromSymbolStart = "36">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "687638BE-F1F3-4E26-80FF-FCC973D310E1"
+            uuid = "25E87EB3-9E83-4B88-A53E-33E4A906895B"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "InTheGym/Navigation/Coordinator/LiveWorkoutDisplayCoordinator.swift"
+            filePath = "InTheGym/CellClasses/PostTableViewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
-            landmarkName = "completedUpload(_:)"
+            startingLineNumber = "245"
+            endingLineNumber = "245"
+            landmarkName = "initViewModel()"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A4025FB7-59D3-4EBD-ADA6-346C62712046"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "InTheGym/Navigation/Coordinator/LiveWorkoutDisplayCoordinator.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
-            landmarkName = "postWorkout(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "CE781EC6-4037-490C-BE15-144EC3CCC272"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "InTheGym/Navigation/Coordinator/LiveWorkoutDisplayCoordinator.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
-            landmarkName = "completedUpload(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "7C85A11E-765C-4983-BDFC-E41DD582BC93"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "InTheGym/Navigation/Coordinator/LiveWorkoutDisplayCoordinator.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
-            landmarkName = "dismiss()"
-            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "25E87EB3-9E83-4B88-A53E-33E4A906895B - 6aad40b05c721df5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "InTheGym.PostTableViewCell.initViewModel() -&gt; ()"
+                  moduleName = "InTheGym"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/findlaywood/Documents/Xcode%20work/InTheGym/InTheGym/CellClasses/PostTableViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "245"
+                  endingLineNumber = "245"
+                  offsetFromSymbolStart = "3544">
+               </Location>
+               <Location
+                  uuid = "25E87EB3-9E83-4B88-A53E-33E4A906895B - 4a449c969447921b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #7 (Swift.Error) -&gt; () in InTheGym.PostTableViewCell.initViewModel() -&gt; ()"
+                  moduleName = "InTheGym"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/findlaywood/Documents/Xcode%20work/InTheGym/InTheGym/CellClasses/PostTableViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "245"
+                  endingLineNumber = "245"
+                  offsetFromSymbolStart = "32">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
