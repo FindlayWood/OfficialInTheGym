@@ -12,7 +12,6 @@ import UIKit
 protocol WorkoutsFlow: AnyObject {
     func showWorkout(workout: WorkoutDelegate)
     func addNewWorkout(_ assignTo: Users?)
-    func regularWorkout(_ assignee: Assignable)
     func addLiveWorkout()
     func startLiveWorkout(_ model: liveWorkout)
     func addSavedWorkout()
@@ -30,15 +29,9 @@ class WorkoutsCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-//        let vc = PlayerWorkoutsViewController()
-//        vc.coordinator = self
-//        navigationController.pushViewController(vc, animated: true)
         let vc = DisplayingWorkoutsViewController()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
-//        let vc = PlayerWorkoutViewController.instantiate()
-//        vc.coordinator = self
-//        navigationController.pushViewController(vc, animated: true)
     }
     
     func childDidFinish(_ child: Coordinator?) {
@@ -68,25 +61,13 @@ extension WorkoutsCoordinator: WorkoutsFlow {
         let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: assignTo)
         childCoordinators.append(child)
         child.start()
-        
-//        let child = WorkoutCreationCoordinator(navigationController: navigationController, assignTo: assignTo)
-//        childCoordinators.append(child)
-//        child.start()
-//        let vc = AddWorkoutSelectionViewController.instantiate()
-//        vc.coordinator = self
-//        navigationController.pushViewController(vc, animated: true)
     }
     func addProgram() {
         let child = MyProgramsCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
         child.start()
     }
-    
-    func regularWorkout(_ assignee: Assignable) {
-        let child = RegularWorkoutCoordinator(navigationController: navigationController, assignTo: assignee)
-        childCoordinators.append(child)
-        child.start()
-    }
+
     
     func addLiveWorkout() {
         let vc = PreLiveWorkoutViewController.instantiate()
@@ -101,7 +82,7 @@ extension WorkoutsCoordinator: WorkoutsFlow {
     }
     
     func addSavedWorkout() {
-        let child = WorkoutCreationCoordinator(navigationController: navigationController, assignTo: nil)
+        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: nil)
         childCoordinators.append(child)
         child.start()
     }
