@@ -35,17 +35,8 @@ extension CircuitCoordinator {
 // MARK: - Creation Flow
 extension CircuitCoordinator: CreationFlow {
     func addExercise(_ circuit: exercise) {
-        if #available(iOS 13, *) {
-            let vc = ExerciseSelectionViewController()
-//            vc.coordinator = self
-//            vc.newExercise = circuit
-            navigationController.pushViewController(vc, animated: true)
-        } else {
-            let vc = BodyTypeViewController.instantiate()
-            vc.coordinator = self
-            vc.newExercise = circuit
-            navigationController.pushViewController(vc, animated: true)
-        }
+        let vc = ExerciseSelectionViewController()
+        navigationController.pushViewController(vc, animated: true)
     }
     func otherSelected(_ exercise: exercise) {
         let vc = OtherExerciseViewController()
@@ -56,8 +47,6 @@ extension CircuitCoordinator: CreationFlow {
     
     func exerciseSelected(_ exercise: exercise) {
         let vc = SetSelectionViewController()
-//        vc.coordinator = self
-//        vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
     

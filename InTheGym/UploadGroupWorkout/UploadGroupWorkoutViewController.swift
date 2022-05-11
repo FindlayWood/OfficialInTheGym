@@ -9,8 +9,6 @@
 import UIKit
 
 class UploadGroupWorkoutViewController: UIViewController {
-
-    weak var coordinator: AddGroupWorkoutCoordinator?
     
     var display = UploadGroupWorkoutView()
     
@@ -63,7 +61,7 @@ extension UploadGroupWorkoutViewController {
         viewModel.uploadWorkout()
     }
     @objc func showWorkout() {
-        coordinator?.goToWorkout(workoutToUpload.workout)
+        
     }
 }
  

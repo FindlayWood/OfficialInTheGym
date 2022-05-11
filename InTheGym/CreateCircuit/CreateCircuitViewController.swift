@@ -24,11 +24,6 @@ class CreateCircuitViewController: UIViewController {
     var subscriptions = Set<AnyCancellable>()
     
     private lazy var dataSource = makeDataSource()
-
-//    static var circuitExercises = [exercise]()
-//    var adapter: CreateCircuitAdapter!
-    var delegate = AddWorkoutHomeViewController.self
-    
     
     // MARK: - View
     override func loadView() {

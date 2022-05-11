@@ -10,10 +10,8 @@ import Foundation
 import UIKit
 
 protocol WorkoutsFlow: AnyObject {
-    func showWorkout(workout: WorkoutDelegate)
     func addNewWorkout(_ assignTo: Users?)
     func addLiveWorkout()
-    func startLiveWorkout(_ model: liveWorkout)
     func addSavedWorkout()
 }
 
@@ -46,11 +44,7 @@ class WorkoutsCoordinator: NSObject, Coordinator {
 
 //MARK: - Flow Methods
 extension WorkoutsCoordinator: WorkoutsFlow {
-    func showWorkout(workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
-        childCoordinators.append(child)
-        child.start()
-    }
+
     func plusPressed() {
         let vc = AddWorkoutSelectionViewController.instantiate()
         vc.coordinator = self
@@ -73,12 +67,6 @@ extension WorkoutsCoordinator: WorkoutsFlow {
         let vc = PreLiveWorkoutViewController.instantiate()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func startLiveWorkout(_ model: liveWorkout) {
-        let child = LiveWorkoutCoordinator(navigationController: navigationController, model: model)
-        childCoordinators.append(child)
-        child.start()
     }
     
     func addSavedWorkout() {
@@ -119,10 +107,6 @@ extension WorkoutsCoordinator: UINavigationControllerDelegate {
         
         if let PublicViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(PublicViewController.coordinator)
-        }
-        
-        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
-            childDidFinish(WorkoutViewController.coordinator)
         }
     }
 }

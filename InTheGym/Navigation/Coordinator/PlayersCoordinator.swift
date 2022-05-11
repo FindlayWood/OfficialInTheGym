@@ -88,13 +88,5 @@ extension PlayersCoordinator: UINavigationControllerDelegate {
         if let PublicViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(PublicViewController.coordinator)
         }
-        
-        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
-            childDidFinish(WorkoutViewController.coordinator)
-        }
-        
-        if let PlayerViewController = fromViewController as? PlayerViewController {
-            childDidFinish(PlayerViewController.coordinator)
-        }
     }
 }

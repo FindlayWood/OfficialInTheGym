@@ -13,7 +13,7 @@ import Combine
 class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate, Storyboarded {
     
     // MARK: - Properties
-    var coordinator: NewsFeedFlow?
+    var coordinator: TimelineCoordinator?
     
     var display = PlayerTimelineView()
     

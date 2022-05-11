@@ -53,7 +53,7 @@ class TimelineCoordinator: NSObject, Coordinator {
 
 
 //MARK: - Flow Methods
-extension TimelineCoordinator: NewsFeedFlow {
+extension TimelineCoordinator {
     
     func makePost(postable: Postable, listener: NewPostListener) {
         let child = CreateNewPostCoordinator(navigationController: navigationController, postable: postable, listener: listener)
@@ -76,25 +76,10 @@ extension TimelineCoordinator: NewsFeedFlow {
         childCoordinators.append(child)
         child.start()
     }
-}
-
-
-//MARK: - Child Coordinators
-extension TimelineCoordinator: TimelineFlow {
-    
-
-    
-    func showWorkouts(with workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
     func showUser(user: Users) {
         let child = UserProfileCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(child)
         child.start()
-        
     }
 }
 
@@ -113,11 +98,6 @@ extension TimelineCoordinator: UINavigationControllerDelegate {
         if let PublicViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(PublicViewController.coordinator)
         }
-        
-        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
-            childDidFinish(WorkoutViewController.coordinator)
-        }
-        
         if let CommentSectionViewController = fromViewController as? CommentSectionViewController {
             childDidFinish(CommentSectionViewController.coordinator)
         }

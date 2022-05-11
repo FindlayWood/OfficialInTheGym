@@ -89,13 +89,5 @@ extension DiscoverCoordinator: UINavigationControllerDelegate {
         if let PublicViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(PublicViewController.coordinator)
         }
-        
-//        if let DiscussionViewController = fromViewController as? DiscussionViewViewController {
-//            childDidFinish(DiscussionViewController.coordinator)
-//        }
-        
-        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
-            childDidFinish(WorkoutViewController.coordinator)
-        }
     }
 }

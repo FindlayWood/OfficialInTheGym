@@ -35,17 +35,8 @@ extension EMOMCoordinator {
 extension EMOMCoordinator: CreationFlow {
     
     func addExercise(_ exercise: exercise) {
-        if #available(iOS 13, *) {
-            let vc = ExerciseSelectionViewController()
-//            vc.coordinator = self
-//            vc.newExercise = exercise
-            navigationController.pushViewController(vc, animated: true)
-        } else {
-            let vc = BodyTypeViewController.instantiate()
-            vc.coordinator = self
-            vc.newExercise = exercise
-            navigationController.pushViewController(vc, animated: true)
-        }
+        let vc = ExerciseSelectionViewController()
+        navigationController.pushViewController(vc, animated: true)
     }
     
     func otherSelected(_ exercise: exercise) {

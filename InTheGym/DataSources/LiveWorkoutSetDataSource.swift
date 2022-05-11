@@ -14,6 +14,7 @@ class LiveWorkoutSetDataSource: NSObject {
     // MARK: - Publisher
     var subscriptions = [IndexPath: AnyCancellable]()
     var plusButtonTapped = PassthroughSubject<Void,Never>()
+    var setSelected = PassthroughSubject<SelectedSetCell,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
@@ -26,6 +27,7 @@ class LiveWorkoutSetDataSource: NSObject {
         self.isUserInteractionEnabled = isUserInteractionEnabled
         super.init()
         self.collectionView.dataSource = makeDataSource()
+        self.collectionView.delegate = self
         self.initialSetup()
     }
     
@@ -66,4 +68,18 @@ class LiveWorkoutSetDataSource: NSObject {
         currentSnapshot.appendItems(items, toSection: .exercise)
         dataDource.apply(currentSnapshot, animatingDifferences: false)
     }
+}
+// MARK: - CollectionView Delegate
+extension LiveWorkoutSetDataSource: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) {
+            let snapshot = cell.snapshotView(afterScreenUpdates: false)
+            setSelected.send(SelectedSetCell(cell: cell, snapshot: snapshot))
+        }
+    }
+}
+
+struct SelectedSetCell {
+    var cell: UICollectionViewCell
+    var snapshot: UIView?
 }

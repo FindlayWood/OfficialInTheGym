@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC {
+class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC, AnimatingSingleSet {
     
     // MARK: - Properties
     weak var coordinator: LiveWorkoutDisplayCoordinator?
@@ -27,6 +27,10 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
     // MARK: - Clip Animation
     var selectedCell: ClipCollectionCell?
     var selectedCellImageViewSnapshot: UIView?
+    
+    // MARK: - Set Animation
+    var selectedSetCell: UICollectionViewCell?
+    var selectedSetCellImageViewSnapshot: UIView?
 
     // MARK: - View
     override func viewDidLoad() {
@@ -107,6 +111,14 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
 
     // MARK: - Subscriptions
     func setupSubscriptions() {
+        
+        dataSource.setSelected
+            .sink { [weak self] setCellModel in
+                self?.selectedSetCell = setCellModel.cell
+                self?.selectedSetCellImageViewSnapshot = setCellModel.snapshot
+                self?.showSingleSet()
+            }
+            .store(in: &subscriptions)
 
         dataSource.noteButtonTapped
             .sink { index in
@@ -196,5 +208,8 @@ extension LiveWorkoutDisplayViewController {
     }
     func clipSelected(_ model: WorkoutClipModel) {
         coordinator?.viewClip(model, fromViewControllerDelegate: self)
+    }
+    func showSingleSet() {
+        coordinator?.showSingleSet(fromViewControllerDelegate: self)
     }
 }

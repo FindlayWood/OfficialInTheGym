@@ -114,10 +114,6 @@ extension GroupHomeCoordinator: UINavigationControllerDelegate {
         if let PublicViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(PublicViewController.coordinator)
         }
-        
-        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
-            childDidFinish(WorkoutViewController.coordinator)
-        }
         if let GroupWorkoutController = fromViewController as? GroupWorkoutsViewController {
             childDidFinish(GroupWorkoutController.coordinator)
         }

@@ -51,6 +51,10 @@ class MyProfileCoordinator: NSObject, Coordinator {
 //MARK: - Flow Methods
 extension MyProfileCoordinator {
     
+    func showUser(user user: Users) {
+        
+    }
+    
     func showGroups() {
         let child = GroupCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
@@ -99,8 +103,6 @@ extension MyProfileCoordinator {
             let vc = PlayerProfileMoreViewController()
             vc.hidesBottomBarWhenPushed = true
             navigationController.pushViewController(vc, animated: true)
-//            let vc = NewInfoViewController.instantiate()
-//            navigationController.pushViewController(vc, animated: true)
         }
     }
     
@@ -134,14 +136,6 @@ extension MyProfileCoordinator {
         let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate)
         childCoordinators.append(child)
         child.start()
-        
-//        let keyModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
-//        let vc = ViewClipViewController()
-//        vc.viewModel.keyClipModel = keyModel
-//        vc.modalPresentationStyle = .custom
-//        vc.hidesBottomBarWhenPushed = true
-////        vc.transitioningDelegate = self
-//        navigationController.pushViewController(vc, animated: true)
     }
 }
 
@@ -159,30 +153,6 @@ extension MyProfileCoordinator: UIViewControllerTransitioningDelegate {
 extension MyProfileCoordinator: SavedWorkoutsFlow {
     func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
         let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: selectedWorkout, listener: listener)
-        childCoordinators.append(child)
-        child.start()
-//        let vc = SavedWorkoutDisplayViewController()
-//        vc.viewModel.savedWorkout = selectedWorkout
-//        vc.hidesBottomBarWhenPushed = true
-//        navigationController.pushViewController(vc, animated: true)
-//        let child = WorkoutCoordinator(navigationController: navigationController, workout: selectedWorkout)
-//        childCoordinators.append(child)
-//        child.start()
-    }
-}
-
-
-//MARK: - Child Coordinators
-extension MyProfileCoordinator: TimelineFlow {
-    
-    func showWorkouts(with workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
-    func showUser(user: Users) {
-        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(child)
         child.start()
     }
@@ -203,10 +173,6 @@ extension MyProfileCoordinator: UINavigationControllerDelegate {
         
         if let UserViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(UserViewController.coordinator)
-        }
-
-        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
-            childDidFinish(WorkoutViewController.coordinator)
         }
         
         if let GroupViewController = fromViewController as? MyGroupsViewController {

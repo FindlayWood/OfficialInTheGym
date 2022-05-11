@@ -89,14 +89,6 @@ class CreatedWorkoutsViewController: UIViewController, Storyboarded {
     func moveToView(){
         // move to new views
         // move with this workout
-        let workouttomove = viewModel.selectedWorkout!
-        coordinator?.showWorkout(workout: workouttomove)
-        
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let workoutView = storyboard.instantiateViewController(withIdentifier: "DisplayWorkoutViewController") as! DisplayWorkoutViewController
-//        DisplayWorkoutViewController.selectedWorkout = workouttomove
-//        workoutView.hidesBottomBarWhenPushed = true
-//        navigationController?.pushViewController(workoutView, animated: true)
     }
 
 }
