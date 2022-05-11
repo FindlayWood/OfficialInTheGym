@@ -83,8 +83,11 @@ extension AddMoreToExerciseViewController: AddMoreToExerciseProtocol {
             vc.viewModel.isLive = coordinator is LiveWorkoutSetCreationCoordinator
             navigationController?.pushViewController(vc, animated: true)
         case 3:
-//            coordinator?.noteSelected(viewModel.getData(at: indexPath))
-            break
+            let vc = AddMoreNoteViewController()
+            vc.viewModel.exercise = viewModel.exercise
+            vc.cellModel = viewModel.getData(at: indexPath)
+            vc.viewModel.noteUpdatedPublisher = viewModel.noteUpdatedPublisher
+            navigationController?.present(vc, animated: true)
         default:
             break
         }

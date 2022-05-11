@@ -18,6 +18,7 @@ class AddMoreViewModel {
     var timeUpdatedPublisher: PassthroughSubject<[Int]?,Never>?
     var distanceUpdatedPublisher: PassthroughSubject<[String]?,Never>?
     var restTimeUpdatedPublisher: PassthroughSubject<[Int]?,Never>?
+    var noteUpdatedPublisher: PassthroughSubject<String,Never>?
     
     // MARK: - Properties
     var selectedSet: Int? = nil
@@ -71,7 +72,9 @@ class AddMoreViewModel {
         let times = setCellModels?.map { Int($0.weightString) ?? 0 }
         restTimeUpdatedPublisher?.send(times)
     }
-    
+    func noteAdded(_ note: String) {
+        noteUpdatedPublisher?.send(note)
+    }
     // MARK: - Functions
     func getTimeCellModels() {
         var models = [SetCellModel]()

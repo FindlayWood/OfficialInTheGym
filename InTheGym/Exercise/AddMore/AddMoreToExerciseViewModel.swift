@@ -15,6 +15,7 @@ class AddMoreToExerciseViewModel {
     var timeUpdatedPublisher = PassthroughSubject<[Int]?,Never>()
     var distanceUpdatedPublisher = PassthroughSubject<[String]?,Never>()
     var restTimeUpdatedPublisher = PassthroughSubject<[Int]?,Never>()
+    var noteUpdatedPublisher = PassthroughSubject<String,Never>()
     
     
     // MARK: - Properties
@@ -45,6 +46,9 @@ class AddMoreToExerciseViewModel {
             .store(in: &subscriptions)
         restTimeUpdatedPublisher
             .sink { [weak self] in self?.exercise.restTime = $0}
+            .store(in: &subscriptions)
+        noteUpdatedPublisher
+            .sink { [weak self] in self?.exercise.note = $0}
             .store(in: &subscriptions)
     }
     

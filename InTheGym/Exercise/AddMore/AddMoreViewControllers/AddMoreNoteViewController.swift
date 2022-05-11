@@ -22,20 +22,19 @@ class AddMoreNoteViewController: UIViewController {
     
     var cellModel: AddMoreCellModel!
     
+    var viewModel = AddMoreViewModel()
+    
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 
         initDisplay()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
-    
     func initDisplay() {
-        display.note.text = currentNote
+        display.note.text = viewModel.exercise.note
         display.note.delegate = self
         display.note.isUserInteractionEnabled = true
         display.saveButton.addTarget(self, action: #selector(saveTapped(_:)), for: .touchUpInside)
@@ -45,8 +44,7 @@ class AddMoreNoteViewController: UIViewController {
     @objc func saveTapped(_ sender: UIButton) {
         guard let noteText = display.note.text else {return}
         cellModel.value.value = "Added"
-        exerciseViewModel.addNote(noteText)
-        coordinator?.noteAdded(noteText)
+        viewModel.noteAdded(noteText)
         dismiss(animated: true)
     }
     @objc func cancelTapped(_ sender: UIButton) {
