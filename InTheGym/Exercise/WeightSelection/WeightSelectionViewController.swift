@@ -141,12 +141,8 @@ private extension WeightSelectionViewController {
         guard let weights = (viewModel.setCellModels?.map { $0.weightString }) else {return}
         viewModel.exercise.weight = weights
         coordinator?.weightSelected(viewModel.exercise)
-//        exerciseViewModel?.addWeight(weights)
-//        newCoordinator?.next()
     }
     @objc func skipPressed(_ sender: UIButton) {
-        guard let weights = (viewModel.setCellModels?.map { $0.weightString }) else {return}
-//        exerciseViewModel?.addWeight(weights)
-//        newCoordinator?.next()
+        coordinator?.weightSelected(viewModel.exercise)
     }
 }
