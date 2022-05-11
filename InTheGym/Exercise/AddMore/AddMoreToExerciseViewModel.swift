@@ -7,10 +7,15 @@
 //
 
 import Foundation
+import Combine
 
 class AddMoreToExerciseViewModel {
     
     // MARK: - Publishers
+    var timeUpdatedPublisher = PassthroughSubject<[Int]?,Never>()
+    var distanceUpdatedPublisher = PassthroughSubject<[String]?,Never>()
+    var restTimeUpdatedPublisher = PassthroughSubject<[Int]?,Never>()
+    
     
     // MARK: - Properties
     var exercise: ExerciseModel!
@@ -26,9 +31,22 @@ class AddMoreToExerciseViewModel {
         return data.count
     }
     
+    private var subscriptions = Set<AnyCancellable>()
+    
     // MARK: - Actions
     
     // MARK: - Functions
+    func observePublishers() {
+        timeUpdatedPublisher
+            .sink { [weak self] in self?.exercise.time = $0}
+            .store(in: &subscriptions)
+        distanceUpdatedPublisher
+            .sink { [weak self] in self?.exercise.distance = $0}
+            .store(in: &subscriptions)
+        restTimeUpdatedPublisher
+            .sink { [weak self] in self?.exercise.restTime = $0}
+            .store(in: &subscriptions)
+    }
     
     func getData(at indexPath: IndexPath) -> AddMoreCellModel {
         return data[indexPath.row]

@@ -17,8 +17,6 @@ class AddMoreDistanceViewController: UIViewController {
     
     var cellModel: AddMoreCellModel!
     
-    var exerciseViewModel: ExerciseCreationViewModel!
-    
     var setsDataSource: SetsDataSource!
     
     var viewModel = AddMoreViewModel()
@@ -84,7 +82,7 @@ class AddMoreDistanceViewController: UIViewController {
             }
             .store(in: &subscriptions)
         
-        viewModel.getDistanceCellModels(from: exerciseViewModel)
+        viewModel.getDistanceCellModels()
     }
 
     func emptyCheck() -> Bool {
@@ -101,14 +99,9 @@ extension AddMoreDistanceViewController {
         viewModel.distanceUpdated(addedDistance)
     }
     @objc func addPressed() {
-        guard let enteredDistance = display.numberTextfield.text,
-              let enteredMeasurement = display.weightMeasurementField.text
-        else {return}
-        let addedDistance = enteredDistance + enteredMeasurement
         cellModel.value.value = "Added"
-        guard let distances = (viewModel.setCellModels?.map { $0.weightString }) else {return}
-        exerciseViewModel.addDistance(distances)
-        coordinator?.distanceAdded(addedDistance)
+        viewModel.distanceAdded()
+        navigationController?.popViewController(animated: true)
     }
     @objc func metresPressed() {
         display.weightMeasurementField.text = "m"
