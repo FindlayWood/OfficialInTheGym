@@ -29,7 +29,7 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
     var selectedCellImageViewSnapshot: UIView?
     
     // MARK: - Set Animation
-    var selectedSetCell: UICollectionViewCell?
+    var selectedSetCell: MainWorkoutCollectionCell?
     var selectedSetCellImageViewSnapshot: UIView?
 
     // MARK: - View

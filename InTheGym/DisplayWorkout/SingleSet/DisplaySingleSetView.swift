@@ -16,11 +16,10 @@ class DisplaySingleSetView: UIView {
     // MARK: - Subviews
     var setLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Menlo-Bold", size: 66)
+        label.font = UIFont(name: "Menlo-Bold", size: 40)
         label.textColor = .white
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.33
         label.textAlignment = .center
+        label.text = "Set 1"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -153,6 +152,7 @@ private extension DisplaySingleSetView {
     func setupUI() {
         backgroundColor = .clear
         addSubview(backgroundView)
+        addSubview(setLabel)
         addSubview(dismissButton)
         constrainUI()
     }
@@ -162,6 +162,9 @@ private extension DisplaySingleSetView {
             backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             backgroundView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            
+            setLabel.topAnchor.constraint(equalTo: backgroundView.topAnchor, constant: 16),
+            setLabel.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
             
             dismissButton.topAnchor.constraint(equalTo: backgroundView.topAnchor, constant: 8),
             dismissButton.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 8)
