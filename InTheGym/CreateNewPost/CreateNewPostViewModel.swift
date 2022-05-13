@@ -95,13 +95,32 @@ class CreateNewPostViewModel {
         apiService.uploadTimeOrderedModel(model: model) { [weak self] result in
             switch result {
             case .success(let model):
-                self?.successfullyPosted = true
-                self?.listener?.send(model)
-                self?.isLoading = false
+                self?.reference(model)
             case .failure(let error):
                 self?.errorPosting = error
                 self?.isLoading = false
             }
+        }
+    }
+    
+    func reference(_ model: Postable) {
+        if model is post {
+            let uploadPoint = UploadPostReferenceModel(id: model.id).uploadPoint
+            apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
+                switch result {
+                case .success(()):
+                    self?.successfullyPosted = true
+                    self?.listener?.send(model)
+                    self?.isLoading = false
+                case .failure(let error):
+                    self?.errorPosting = error
+                    self?.isLoading = false
+                }
+            }
+        } else {
+            self.successfullyPosted = true
+            self.listener?.send(model)
+            self.isLoading = false
         }
     }
     

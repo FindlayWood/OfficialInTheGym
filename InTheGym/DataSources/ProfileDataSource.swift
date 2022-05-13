@@ -60,6 +60,7 @@ class ProfileDataSource: NSObject {
             case .post(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.reuseID, for: indexPath) as! PostCollectionViewCell
                 cell.configure(with: model)
+                cell.longDateFormat = false
                 self.actionSubscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
                         self?.actionPublisher(action: action, indexPath: indexPath)

@@ -23,6 +23,8 @@ class PostCollectionViewCell: FullWidthCollectionViewCell {
     
     var viewModel = PostCellViewModel()
     
+    var longDateFormat: Bool = false
+    
     // MARK: - Subviews
     var profileImageButton: UIButton = {
         let button = UIButton()
@@ -181,8 +183,13 @@ extension PostCollectionViewCell {
         viewModel.post = post
         posterID = post.posterID
         usernameButton.setTitle(post.username, for: .normal)
-        let then = Date(timeIntervalSince1970: (post.time))
-        timeLabel.text = then.timeAgo() + " ago"
+        if longDateFormat {
+            let time = Date(timeIntervalSince1970: post.time)
+            timeLabel.text = time.getLongPostFormat()
+        } else {
+            let time = Date(timeIntervalSince1970: (post.time))
+            timeLabel.text = time.getShortPostFormat() + " ago"
+        }
         textView.text = post.text
         replyCountLabel.text = post.replyCount.description
         likeCountLabel.text = post.likeCount.description
