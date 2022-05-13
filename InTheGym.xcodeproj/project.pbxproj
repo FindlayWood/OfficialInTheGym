@@ -2848,7 +2848,6 @@
 				741BA39E271B13D100E99C6E /* JumpMeasuringVideo */,
 				744D563D26F9167700D3E1FA /* DisplayEMOM */,
 				744D562C26F2AB9100D3E1FA /* CreateEMOM */,
-				74F2CCE926E3C95300D7AD79 /* AnimatingController */,
 				74F2CCC726DE745E00D7AD79 /* AttachingClip */,
 				74F2CCC626DE739200D7AD79 /* CustomPresentationControllers */,
 				7444D0EC26D852280009C7A6 /* CreateNewPost */,
@@ -3772,13 +3771,6 @@
 				74F2CCDF26E1927C00D7AD79 /* ExerciseSelectionAdapter.swift */,
 			);
 			path = ExerciseSelection;
-			sourceTree = "<group>";
-		};
-		74F2CCE926E3C95300D7AD79 /* AnimatingController */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = AnimatingController;
 			sourceTree = "<group>";
 		};
 		74F45CBF260A9C9900AF16DF /* PublicTimeline */ = {
