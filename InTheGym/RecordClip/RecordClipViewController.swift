@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import AVKit
 import Combine
+import AudioToolbox
 
 class RecordClipViewController: UIViewController {
     
@@ -74,6 +75,9 @@ class RecordClipViewController: UIViewController {
             .sink { [weak self] newTime in
                 if newTime > 0 {
                     self?.display.setCountDown(to: newTime)
+                    if newTime < 4 {
+                        self?.playSound()
+                    }
                 } else {
                     self?.display.setUIRecording()
                     self?.viewModel.countDownTimer.cancel()
@@ -83,6 +87,10 @@ class RecordClipViewController: UIViewController {
             .store(in: &subscriptions)
     }
     
+    func playSound() {
+        AudioServicesPlaySystemSound(SystemSoundID(1117))
+    }
+    
     func startRecording() {
         viewModel.beginRecording()
         viewModel.startRecordingTimer()
@@ -90,6 +98,8 @@ class RecordClipViewController: UIViewController {
     }
     
     func finishedRecording(with outputFileURL: URL) {
+        AudioServicesPlaySystemSound(SystemSoundID(1118))
+        display.setUIDefault()
         let clipStorageModel = ClipStorageModel(fileURL: outputFileURL)
         
         let vc = RecordedClipPlayerViewController()
@@ -123,6 +133,7 @@ class RecordClipViewController: UIViewController {
         if !viewModel.videoOutput.isRecording {
             //check if countdown is on
             if viewModel.countDownOn {
+                playSound()
                 display.setUICountdownOn()
                 viewModel.startCountDown()
             } else {
@@ -130,6 +141,7 @@ class RecordClipViewController: UIViewController {
             }
         } else {
             // stop recording video
+            AudioServicesPlaySystemSound(SystemSoundID(1118))
             viewModel.videoOutput.stopRecording()
             display.setUIDefault()
         }
