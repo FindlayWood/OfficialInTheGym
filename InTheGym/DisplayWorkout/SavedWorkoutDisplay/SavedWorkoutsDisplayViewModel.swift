@@ -35,7 +35,7 @@ class SavedWorkoutDisplayViewModel {
     
     func updateRPE(at index: IndexPath, to score: Int) {
         guard let exercise = exercises[index.item] as? ExerciseModel else {return}
-        exercise.rpe = score
+//        exercise.rpe = score
         let rpeUpdateModel = RPEUpdateModel(workoutID: savedWorkout.id, exercise: exercise)
         let uploadPoint = FirebaseMultiUploadDataPoint(value: score, path: rpeUpdateModel.internalPath)
         apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in

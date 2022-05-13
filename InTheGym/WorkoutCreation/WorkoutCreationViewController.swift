@@ -15,30 +15,20 @@ class WorkoutCreationViewController: UIViewController {
     var display = WorkoutCreationView()
     
     // MARK: - Coordinator
-    weak var coordinator: WorkoutCreationCoordinator?
+    weak var coordinator: RegularWorkoutCreationCoordinator?
     
     // MARK: - Properties
     private lazy var dataSource = makeDataSource()
     
     var viewModel = WorkoutCreationViewModel()
     
-    var adapter: WorkoutCreationAdapter!
-    
     // MARK: - Store Subscriptions
     private var subscriptions = Set<AnyCancellable>()
     
     
     // MARK: - View setup
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getViewableFrameWithBottomSafeArea()
-        view.addSubview(display)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        editNavBarColour(to: .darkColour)
-        navigationItem.title = "Create Workout"
+    override func loadView() {
+        view = display
     }
     
     override func viewDidLoad() {
@@ -52,11 +42,14 @@ class WorkoutCreationViewController: UIViewController {
         initDisplay()
         setupSubscribers()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        editNavBarColour(to: .darkColour)
+        navigationItem.title = "Create Workout"
+    }
     
     func initAdapter() {
-        adapter = .init()
         display.exercisesTableView.separatorStyle = .singleLine
-        //display.exercisesTableView.emptyDataSetSource = adapter
     }
     
     func initNavBar() {
@@ -78,21 +71,21 @@ class WorkoutCreationViewController: UIViewController {
     
     //MARK: - Subscribers
     func setupSubscribers() {
-        viewModel.exercises
+        
+        coordinator?.completedExercise = viewModel.addedExercisePublisher
+        coordinator?.completedCircuit = viewModel.addedCircuitPublisher
+        coordinator?.completedAmrap = viewModel.addedAmrapPublisher
+        coordinator?.completedEMOM = viewModel.addedEmomPublisher
+        
+        viewModel.$exercises
             .dropFirst()
             .receive(on: RunLoop.main)
-            .sink { [weak self] exercises in
-                guard let self = self else {return}
-                self.updateTable(with: exercises)
-            }
+            .sink { [weak self] in self?.updateTable(with: $0) }
             .store(in: &subscriptions)
         
         viewModel.$canUpload
             .receive(on: RunLoop.main)
-            .sink { [weak self] valid in
-                guard let self = self else {return}
-                self.navigationItem.rightBarButtonItem?.isEnabled = valid
-            }
+            .sink { [weak self] in self?.navigationItem.rightBarButtonItem?.isEnabled = $0 }
             .store(in: &subscriptions)
         
         viewModel.successfullyUploadedWorkout
@@ -121,11 +114,11 @@ class WorkoutCreationViewController: UIViewController {
 // MARK: - Actions
 extension WorkoutCreationViewController {
     @objc func uploadPressed(_ sender: UIBarButtonItem) {
-//        let options = WorkoutOptionsModel(isPrivate: display.privacyView.isPrivate, save: display.saveView.saving)
         viewModel.upload()
     }
     @objc func plusButtonPressed(_ sender: UIButton) {
-        coordinator?.plus(viewModel: viewModel, workoutPosition: viewModel.exercises.value.count)
+        let newExercise = ExerciseModel(workoutPosition: viewModel.exercises.count)
+        coordinator?.addNewExercise(newExercise)
     }
     @objc func toggleSaving(_ sender: UIButton) {
         viewModel.isSaving.toggle()
@@ -139,7 +132,7 @@ extension WorkoutCreationViewController {
 
 // MARK: - TableViewDataSource
 extension WorkoutCreationViewController {
-    func makeDataSource() -> UITableViewDiffableDataSource<Int,ExerciseRow> {
+    func makeDataSource() -> UITableViewDiffableDataSource<SingleSection,ExerciseRow> {
         return UITableViewDiffableDataSource(tableView: display.exercisesTableView) { tableView, indexPath, itemIdentifier in
             switch itemIdentifier {
             case .exercise(let model):
@@ -162,8 +155,8 @@ extension WorkoutCreationViewController {
         }
     }
     func initialTableSetup() {
-        var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendSections([0])
+        var currentSnapshot = NSDiffableDataSourceSnapshot<SingleSection,ExerciseRow>()
+        currentSnapshot.appendSections([.main])
         dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     func updateTable(with exercises: [ExerciseType]) {
@@ -172,22 +165,23 @@ extension WorkoutCreationViewController {
         } else {
             display.emptyMessage.isHidden = true
         }
-        var currentSnapshot = dataSource.snapshot()
+        var currentSnapshot = NSDiffableDataSourceSnapshot<SingleSection,ExerciseRow>()
+        currentSnapshot.appendSections([.main])
         for type in exercises {
             switch type {
             case is ExerciseModel:
-                currentSnapshot.appendItems([.exercise(type as! ExerciseModel)], toSection: 0)
+                currentSnapshot.appendItems([.exercise(type as! ExerciseModel)], toSection: .main)
             case is CircuitModel:
-                currentSnapshot.appendItems([.circuit(type as! CircuitModel)], toSection: 0)
+                currentSnapshot.appendItems([.circuit(type as! CircuitModel)], toSection: .main)
             case is EMOMModel:
-                currentSnapshot.appendItems([.emom(type as! EMOMModel)], toSection: 0)
+                currentSnapshot.appendItems([.emom(type as! EMOMModel)], toSection: .main)
             case is AMRAPModel:
-                currentSnapshot.appendItems([.amrap(type as! AMRAPModel)], toSection: 0)
+                currentSnapshot.appendItems([.amrap(type as! AMRAPModel)], toSection: .main)
             default:
                 break
             }
         }
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
 }
 // MARK: - Textfield Delegation

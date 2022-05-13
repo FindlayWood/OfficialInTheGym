@@ -92,7 +92,7 @@ class CreateEMOMView: UIView {
 private extension CreateEMOMView {
     
     private func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .secondarySystemBackground
         addSubview(timeView)
         timeView.addSubview(timeLabel)
         timeView.addSubview(timeNumberLabel)
@@ -115,7 +115,7 @@ private extension CreateEMOMView {
                                      timeMessage.trailingAnchor.constraint(equalTo: timeView.trailingAnchor, constant: -10),
                                      timeMessage.bottomAnchor.constraint(equalTo: timeView.bottomAnchor, constant: -10),
                                         
-                                     timeView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+                                     timeView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
                                      timeView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
                                      timeView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
                                      

@@ -12,7 +12,6 @@ import Combine
 class DescriptionUploadViewController: UIViewController {
     
     // MARK: - Properties
-    weak var coordinator: ExerciseDescriptionCoordinator?
     
     var display = DescriptionUploadView()
     

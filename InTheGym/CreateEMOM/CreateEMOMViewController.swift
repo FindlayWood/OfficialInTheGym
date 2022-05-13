@@ -12,58 +12,39 @@ import Combine
 class CreateEMOMViewController: UIViewController {
     
     // MARK: - Coordination
-    weak var coordinator: EMOMCoordinator?
-    
-    weak var newCoordinator: EmomCreationCoordinator?
+    weak var coordinator: EmomCreationCoordinator?
     
     var display = CreateEMOMView()
-    
-    var adapter: CreateEMOMAdapter!
     
     var viewModel = CreateEMOMViewModel()
     
     // MARK: - Properties
-    static var exercises = [exercise]()
-    
-//    var EMOMTime: Int = 10 {
-//        didSet {
-//            display.timeNumberLabel.text = EMOMTime.description + " mins"
-//        }
-//    }
     
     private lazy var dataSource = makeDataSource()
     
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .secondarySystemBackground
         initDisplay()
         initNavBar()
         setupSubscriptions()
         initialTableSetup()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         editNavBarColour(to: .darkColour)
         navigationItem.title = viewModel.navigationTitle
-//        display.tableview.reloadData()
-//        if CreateEMOMViewController.exercises.count > 0 {
-//            navigationItem.rightBarButtonItem?.isEnabled = true
-//        }
     }
     
     func initDisplay() {
-        adapter = .init()
-        display.tableview.delegate = adapter
+        display.tableview.delegate = self
         display.tableview.dataSource = makeDataSource()
         display.timeNumberLabel.text = viewModel.emomTimeLimit.convertToWorkoutTime()
         let tap = UITapGestureRecognizer(target: self, action: #selector(changeTime))
@@ -78,83 +59,41 @@ class CreateEMOMViewController: UIViewController {
     
     // MARK: - Subscriptions
     func setupSubscriptions() {
-        viewModel.exercises
+        coordinator?.exerciseAddedPublisher = viewModel.exerciseAddedPublisher
+        
+        viewModel.$exercises
             .dropFirst()
             .receive(on: RunLoop.main)
-            .sink { [weak self] exercises in
-                guard let self = self else {return}
-                self.updateTable(with: exercises)
-                self.navigationItem.rightBarButtonItem?.isEnabled = exercises.count > 0
-            }
+            .sink { [weak self] in self?.updateTable(with: $0) }
             .store(in: &subscriptions)
         
-        adapter.rowTapped
-            .receive(on: RunLoop.main)
-            .sink { [weak self] indexPath in
-                guard let self = self else {return}
-                if indexPath.section == 1 {
-                    self.addNewExercise()
-                }
-            }
+        viewModel.$validEmom
+            .sink { [weak self] in self?.navigationItem.rightBarButtonItem?.isEnabled = $0 }
             .store(in: &subscriptions)
+        
+        viewModel.$emomTimeLimit
+            .sink { [weak self] in self?.display.updateTime(with: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.initSubscribers()
     }
     
     // MARK: - Actions
     @objc func finished() {
-//        var objectExercises = [[String:AnyObject]]()
-//        for ex in CreateEMOMViewController.exercises {
-//            objectExercises.append(ex.toObject())
-//        }
-//        let emomTimeLimit = EMOMTime * 60
-//        let emomData = ["timeLimit": emomTimeLimit,
-//                         "exercises": objectExercises] as [String:AnyObject]
-//        guard let emomModel = EMOM(data: emomData) else {return}
-//        coordinator?.competedEMOM(emomModel: emomModel)
-//
-////        let emomObject = emomModel.toObject()
-////        AddWorkoutHomeViewController.exercises.append(emomObject)
-//        DisplayTopView.displayTopView(with: "Added EMOM", on: self)
-////        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
-////        self.navigationController?.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
-//        CreateEMOMViewController.exercises.removeAll()
-//        EMOMTime = 10
         viewModel.addEMOM()
-        newCoordinator?.upload()
+        coordinator?.completedEmom()
+
     }
     
     @objc func changeTime() {
-        newCoordinator?.showTimePicker(with: self, time: viewModel.emomTimeLimit)
-    }
-    func addNewExercise() {
-//        guard let newEMOMExercise = exercise() else {return}
-//        coordinator?.addExercise(newEMOMExercise)
-        newCoordinator?.exercise(viewModel: viewModel, exercisePosition: viewModel.exercises.value.count)
+        coordinator?.showTimePicker(with: self, time: viewModel.emomTimeLimit)
     }
 }
-
-//extension CreateEMOMViewController: CreateEMOMProtocol {
-//    func numberOfExercises() -> Int {
-//        return CreateEMOMViewController.exercises.count + 1
-//        //return viewModel.numberOfExercises
-//    }
-//
-//    func getData(at indexPath: IndexPath) -> exercise {
-//        return CreateEMOMViewController.exercises[indexPath.section]
-//        //return viewModel.getData(at: indexPath)
-//    }
-//
-//    func addNewExercise() {
-////        guard let newEMOMExercise = exercise() else {return}
-////        coordinator?.addExercise(newEMOMExercise)
-//        newCoordinator?.exercise(viewModel: viewModel, workoutPosition: viewModel.exercises.value.count)
-//    }
-//}
 
 // MARK: - Time Selection
 extension CreateEMOMViewController: TimeSelectionParentDelegate {
     func timeSelected(newTime: Int) {
         viewModel.emomTimeLimit = newTime
-        display.updateTime(with: newTime)
     }
 }
 
@@ -185,5 +124,22 @@ extension CreateEMOMViewController {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.appendItems(exerciseItems, toSection: .exercises)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+}
+
+extension CreateEMOMViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
+        switch item {
+        case .adding:
+            var newExercise = ExerciseModel(workoutPosition: viewModel.exercises.count)
+            newExercise.sets = 1
+            newExercise.reps = [1]
+            newExercise.weight = [" "]
+            newExercise.completedSets = [false]
+            coordinator?.addNewExercise(newExercise)
+        default:
+            break
+        }
     }
 }

@@ -12,7 +12,7 @@ import Combine
 class LiveWorkoutDisplayViewModel {
     
     // MARK: - Publishers
-    var exercises = CurrentValueSubject<[ExerciseModel],Never>([])
+    @Published var exercises: [ExerciseModel] = []
     var addedExercise = PassthroughSubject<ExerciseModel,Never>()
     var updatedExercise = PassthroughSubject<ExerciseModel,Never>()
     
@@ -22,6 +22,8 @@ class LiveWorkoutDisplayViewModel {
     var workoutModel: WorkoutModel!
     
     var apiService: FirebaseDatabaseManagerService
+    
+    private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
@@ -37,11 +39,21 @@ class LiveWorkoutDisplayViewModel {
         guard let clips = workoutModel.clipData else {return []}
         return clips
     }
+    func initSubscriptions() {
+        
+        addedExercise
+            .sink { [weak self] in self?.addExercise($0)}
+            .store(in: &subscriptions)
+        
+        updatedExercise
+            .sink { [weak self] in self?.updatedExercise($0)}
+            .store(in: &subscriptions)
+    }
     
     // MARK: - Actions
     func updateRPE(at index: IndexPath, to score: Int) {
         guard let currentExercises = workoutModel.exercises else {return}
-        let exercise = currentExercises[index.item]
+        var exercise = currentExercises[index.item]
         exercise.rpe = score
         let rpeUpdateModel = RPEUpdateModel(workoutID: workoutModel.id, exercise: exercise)
         let uploadPoint = FirebaseMultiUploadDataPoint(value: score, path: rpeUpdateModel.internalPath)
@@ -75,6 +87,16 @@ class LiveWorkoutDisplayViewModel {
         return workoutModel.exercises?.count ?? 0
     }
     
+    func getExercise(at indexPath: IndexPath) -> ExerciseModel {
+        guard let currentExercises = workoutModel.exercises else {return ExerciseModel(workoutPosition: 0)}
+        var currentExercise = currentExercises[indexPath.item]
+        currentExercise.sets += 1
+        currentExercise.reps?.append(1)
+        currentExercise.weight?.append(" ")
+        currentExercise.completedSets?.append(true)
+        return currentExercise
+    }
+    
     func getExerciseModel(at indexPath: IndexPath) -> ExerciseCreationViewModel {
         guard let currentExercises = workoutModel.exercises else {return ExerciseCreationViewModel()}
         let currentExercise = currentExercises[indexPath.item]
@@ -95,7 +117,7 @@ extension LiveWorkoutDisplayViewModel: ExerciseAdding {
         } else {
             workoutModel.exercises?.append(exercise)
         }
-        addedExercise.send(exercise)
+//        addedExercise.send(exercise)
         // TODO: - Update Firebase
         let uploadModel = LiveWorkoutExerciseModel(workout: workoutModel, exercise: exercise)
         guard let uploadPoint = uploadModel.addExerciseModel() else {return}
@@ -111,9 +133,9 @@ extension LiveWorkoutDisplayViewModel: ExerciseAdding {
     }
     func updatedExercise(_ exercise: ExerciseModel) {
         // TODO: - Update Firebase
-        updatedExercise.send(exercise)
+        workoutModel.exercises?[exercise.workoutPosition] = exercise
         let uploadModel = LiveWorkoutExerciseModel(workout: workoutModel, exercise: exercise)
-        let uploadPoints = uploadModel.updateSetModel()
+        guard let uploadPoints = uploadModel.addExerciseModel() else {return}
         apiService.multiLocationUpload(data: uploadPoints) { result in
             switch result {
             case .success(()):

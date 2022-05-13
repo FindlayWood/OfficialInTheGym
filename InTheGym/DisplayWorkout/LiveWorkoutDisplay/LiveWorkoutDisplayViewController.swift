@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC {
+class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC, AnimatingSingleSet {
     
     // MARK: - Properties
     weak var coordinator: LiveWorkoutDisplayCoordinator?
@@ -27,8 +27,15 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
     // MARK: - Clip Animation
     var selectedCell: ClipCollectionCell?
     var selectedCellImageViewSnapshot: UIView?
+    
+    // MARK: - Set Animation
+    var selectedSetCell: MainWorkoutCollectionCell?
+    var selectedSetCellImageViewSnapshot: UIView?
 
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightColour
@@ -38,21 +45,15 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
         initNavBar()
         initViewModel()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         editNavBarColour(to: .white)
         navigationItem.title = viewModel.workoutModel.title
-        //viewModel.setupExercises()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         toggleClipCollection(showing: true, clips: viewModel.getClips())
+        navigationItem.rightBarButtonItem?.isEnabled = viewModel.isInteractionEnabled()
     }
     
     // MARK: - Nav Bar
@@ -72,6 +73,8 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
                 self.toggleClipCollection(showing: true, clips: self.viewModel.getClips())
             }
             .store(in: &subscriptions)
+        
+        viewModel.initSubscriptions()
     }
     
     // MARK: - Data Source
@@ -104,6 +107,14 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
 
     // MARK: - Subscriptions
     func setupSubscriptions() {
+        
+        dataSource.setSelected
+            .sink { [weak self] setCellModel in
+                self?.selectedSetCell = setCellModel.cell
+                self?.selectedSetCellImageViewSnapshot = setCellModel.snapshot
+                self?.showSingleSet(setCellModel.setModel)
+            }
+            .store(in: &subscriptions)
 
         dataSource.noteButtonTapped
             .sink { index in
@@ -127,7 +138,7 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
             .store(in: &subscriptions)
                 
         dataSource.exerciseButtonTapped
-            .sink { [weak self] in self?.coordinator?.showDescriptions(for: $0) }
+            .sink { [weak self] in self?.showDescriptions(for: $0)}
             .store(in: &subscriptions)
         
         dataSource.plusExerciseButtonTapped
@@ -143,7 +154,7 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
             .store(in: &subscriptions)
         
         viewModel.updatedExercise
-            .sink { [weak self] in self?.dataSource.update(for: $0) }
+            .sink { [weak self] in self?.dataSource.update(for: $0)}
             .store(in: &subscriptions)
         
     }
@@ -167,12 +178,13 @@ extension LiveWorkoutDisplayViewController {
     }
     
     func addExercise() {
-        coordinator?.addExercise(viewModel, workoutPosition: viewModel.getExerciseCount())
+        let newExercise = ExerciseModel(workoutPosition: viewModel.getExerciseCount())
+        coordinator?.addExercise(newExercise, publisher: viewModel.addedExercise)
     }
     
     func addSet(at indexPath: IndexPath) {
-        let exerciseViewModel = viewModel.getExerciseModel(at: indexPath)
-        coordinator?.addSet(exerciseViewModel)
+        let exercise = viewModel.getExercise(at: indexPath)
+        coordinator?.addSet(exercise, publisher: viewModel.updatedExercise)
     }
     func toggleClipCollection(showing: Bool, clips: [WorkoutClipModel]) {
         if !clips.isEmpty && showing {
@@ -185,12 +197,13 @@ extension LiveWorkoutDisplayViewController {
         coordinator?.addClip(for: exercise, viewModel.workoutModel, on: viewModel)
     }
     func showDescriptions(for exercise: ExerciseModel) {
-        coordinator?.showDescriptions(for: exercise)
-//        let vc = ExerciseDescriptionViewController()
-//        vc.viewModel.exercise = DiscoverExerciseModel(exerciseName: exercise.exercise)
-//        navigationController?.pushViewController(vc, animated: true)
+        let discoverModel = DiscoverExerciseModel(exerciseName: exercise.exercise)
+        coordinator?.showDescriptions(for: discoverModel)
     }
     func clipSelected(_ model: WorkoutClipModel) {
         coordinator?.viewClip(model, fromViewControllerDelegate: self)
+    }
+    func showSingleSet(_ exerciseSet: ExerciseSet) {
+        coordinator?.showSingleSet(fromViewControllerDelegate: self, setModel: exerciseSet)
     }
 }

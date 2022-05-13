@@ -41,7 +41,7 @@ extension PlayerDetailCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func addWorkout() {
-        let child = WorkoutCreationCoordinator(navigationController: navigationController, assignTo: player)
+        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: player)
         childCoordinators.append(child)
         child.start()
     }

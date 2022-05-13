@@ -1,0 +1,110 @@
+//
+//  RegularWorkoutCreationCoordinator.swift
+//  InTheGym
+//
+//  Created by Findlay Wood on 09/05/2022.
+//  Copyright © 2022 FindlayWood. All rights reserved.
+//
+
+import UIKit
+import Combine
+
+class RegularWorkoutCreationCoordinator: Coordinator {
+    
+    /// the publisher to publish the exercise when it is completed
+    var completedExercise: PassthroughSubject<ExerciseModel,Never>?
+    var completedCircuit: PassthroughSubject<CircuitModel,Never>?
+    var completedAmrap: PassthroughSubject<AMRAPModel,Never>?
+    var completedEMOM: PassthroughSubject<EMOMModel,Never>?
+    
+    var childCoordinators = [Coordinator]()
+    var navigationController: UINavigationController
+    var assignTo: Users?
+    
+    init(navigationController: UINavigationController, assignTo: Users?) {
+        self.navigationController = navigationController
+        self.assignTo = assignTo
+    }
+    
+    func start() {
+        let vc = WorkoutCreationViewController()
+        vc.coordinator = self
+        vc.viewModel.assignTo = assignTo
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+extension RegularWorkoutCreationCoordinator {
+    func addNewExercise(_ exercise: ExerciseModel) {
+        let vc = ExerciseSelectionViewController()
+        vc.coordinator = self
+        vc.viewModel.exercise = exercise
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+// Exercise Selection Flow
+extension RegularWorkoutCreationCoordinator: ExerciseSelectionFlow {
+    func exerciseSelected(_ exercise: ExerciseModel) {
+        let vc = SetSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func addCircuit() {
+        let child = CircuitCreationCoordinator(navigationController: navigationController, publisher: completedCircuit)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func addAmrap() {
+        let child = AMRAPCreationCoordinator(navigationController: navigationController, publisher: completedAmrap)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func addEmom() {
+        let child = EmomCreationCoordinator(navigationController: navigationController, publisher: completedEMOM)
+        childCoordinators.append(child)
+        child.start()
+    }
+}
+// Sets Selection Flow
+extension RegularWorkoutCreationCoordinator: SetSelectionFlow {
+    func setSelected(_ exercise: ExerciseModel) {
+        let vc = RepSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+
+}
+// Reps Selection Flow
+extension RegularWorkoutCreationCoordinator: RepSelectionFlow {
+    func repsSelected(_ exercise: ExerciseModel) {
+        let vc = WeightSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+// Weight Selection Flow
+extension RegularWorkoutCreationCoordinator: WeightSelectionFlow {
+    func weightSelected(_ exercise: ExerciseModel) {
+        let vc = AddMoreToExerciseViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+// Finished
+extension RegularWorkoutCreationCoordinator: FinishedExerciseCreationFlow {
+    func finishedExercise(_ exercise: ExerciseModel) {
+        // completedexercise.send exercise
+        completedExercise?.send(exercise)
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for viewController in viewControllers {
+            if viewController.isKind(of: WorkoutCreationViewController.self) {
+                navigationController.popToViewController(viewController, animated: true)
+                break
+            }
+        }
+    }
+}

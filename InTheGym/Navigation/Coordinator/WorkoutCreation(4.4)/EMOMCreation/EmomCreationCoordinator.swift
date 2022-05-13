@@ -6,50 +6,105 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import Combine
 
 class EmomCreationCoordinator: NSObject, Coordinator {
+    
+    var exerciseAddedPublisher: PassthroughSubject<ExerciseModel,Never>?
+    
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
-    var workoutViewModel: WorkoutCreationViewModel
-    var workoutPosition: Int
+    var publisher: PassthroughSubject<EMOMModel,Never>?
     
-    init(navigationController: UINavigationController, workoutViewModel: WorkoutCreationViewModel, workoutPosition: Int) {
+    init(navigationController: UINavigationController, publisher: PassthroughSubject<EMOMModel,Never>?) {
         self.navigationController = navigationController
-        self.workoutViewModel = workoutViewModel
-        self.workoutPosition = workoutPosition
+        self.publisher = publisher
     }
     
     func start() {
         let vc = CreateEMOMViewController()
-        vc.newCoordinator = self
-        vc.viewModel.workoutViewModel = workoutViewModel
+        vc.coordinator = self
+        vc.viewModel.completedPublisher = publisher
         navigationController.pushViewController(vc, animated: true)
     }
 }
 
 extension EmomCreationCoordinator {
-    func upload() {
-        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
-        for controller in viewControllers {
-            if controller.isKind(of: WorkoutCreationViewController.self) {
-                navigationController.popToViewController(controller, animated: true)
-                break
-            }
-        }
-    }
-    func exercise(viewModel: CreateEMOMViewModel, exercisePosition: Int) {
-        viewModel.workoutPosition = workoutPosition
-        let child = EmomExerciseSelectionCoordinator(navigationController: navigationController, emomViewModel: viewModel, workoutPosition: exercisePosition)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
     func showTimePicker(with delegate: TimeSelectionParentDelegate, time: Int) {
         let child = TimeSelectionPickerCoordinator(navigationController: navigationController, parent: delegate, currentTime: time)
         childCoordinators.append(child)
         child.start()
+    }
+}
+
+extension EmomCreationCoordinator {
+    func addNewExercise(_ exercise: ExerciseModel) {
+        let vc = ExerciseSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+// exercise selection
+extension EmomCreationCoordinator: ExerciseSelectionFlow {
+    func exerciseSelected(_ exercise: ExerciseModel) {
+        let vc = RepSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func addCircuit() {
+        
+    }
+    func addAmrap() {
+        
+    }
+    func addEmom() {
+        
+    }
+}
+// reps selection
+extension EmomCreationCoordinator: RepSelectionFlow {
+    func repsSelected(_ exercise: ExerciseModel) {
+        let vc = WeightSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+// weight selection
+extension EmomCreationCoordinator: WeightSelectionFlow {
+    func weightSelected(_ exercise: ExerciseModel) {
+        let vc = AddMoreToExerciseViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+// finish
+extension EmomCreationCoordinator: FinishedExerciseCreationFlow {
+    func finishedExercise(_ exercise: ExerciseModel) {
+        exerciseAddedPublisher?.send(exercise)
+        let viewControllers = navigationController.viewControllers
+        for viewController in viewControllers {
+            if viewController.isKind(of: CreateEMOMViewController.self) {
+                navigationController.popToViewController(viewController, animated: true)
+                break
+            }
+        }
+    }
+}
+// completed circuit
+extension EmomCreationCoordinator {
+    func completedEmom() {
+        let viewController = navigationController.viewControllers
+        for viewController in viewController {
+            if viewController.isKind(of: WorkoutCreationViewController.self) {
+                navigationController.popToViewController(viewController, animated: true)
+                break
+            }
+        }
     }
 }
 

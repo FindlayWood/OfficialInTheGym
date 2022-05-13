@@ -76,6 +76,9 @@ extension ExerciseCollectionCell {
         dataSource.completeButtonTapped
             .sink { [weak self] in self?.actionPublisher.send(.completed($0)) }
             .store(in: &subscriptions)
+        dataSource.setSelected
+            .sink { [weak self] in self?.actionPublisher.send(.setSelected($0))}
+            .store(in: &subscriptions)
     }
     public func setUserInteraction(to enabled: Bool) {
         self.rpeButton.isUserInteractionEnabled = enabled

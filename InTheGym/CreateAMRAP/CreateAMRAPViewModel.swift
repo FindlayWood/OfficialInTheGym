@@ -12,40 +12,48 @@ import Combine
 class CreateAMRAPViewModel {
     
     // MARK: - Publishers
-    var exercises = CurrentValueSubject<[ExerciseModel],Never>([])
+    @Published var exercises: [ExerciseModel] = []
+    @Published var validAmrap: Bool = false
+    @Published var timeLimit: Int = 10
+    
+    var completedPublisher: PassthroughSubject<AMRAPModel,Never>?
+    
+    var exerciseAddedPublisher = PassthroughSubject<ExerciseModel,Never>()
     
     // MARK: - Properties
-    var workoutViewModel: WorkoutCreationViewModel!
     
-    var workoutPosition: Int!
+    private var subscriptions = Set<AnyCancellable>()
     
-    var amrapPosition: Int!
-
-    var timeLimit: Int = 10
+    let navigationTitle: String = "Create AMRAP"
     
     // MARK: - Actions
     func addAMRAP() {
-        let newAMRAP = AMRAPModel(amrapPosition: workoutViewModel.amrapModels.count,
-                                  workoutPosition: workoutPosition,
-                                  timeLimit: timeLimit,
-                                  exercises: exercises.value, completed: false,
+        let newAMRAP = AMRAPModel(amrapPosition: 0,
+                                  workoutPosition: 0,
+                                  timeLimit: (timeLimit * 60),
+                                  exercises: exercises,
+                                  completed: false,
                                   roundsCompleted: 0,
                                   exercisesCompleted: 0,
                                   started: false)
-        workoutViewModel.addAMRAP(newAMRAP)
+        completedPublisher?.send(newAMRAP)
+    }
+    
+    func initSubscribers() {
+        $exercises
+            .map { $0.count > 0 }
+            .sink { [weak self] in self?.validAmrap = $0 }
+            .store(in: &subscriptions)
+        
+        exerciseAddedPublisher
+            .sink { [weak self] in self?.addExercise($0)}
+            .store(in: &subscriptions)
     }
     
 }
 
-// MARK: - Conforming to Exercise Adding
-/// Allows exercises to be added to this amrap
-extension CreateAMRAPViewModel: ExerciseAdding {
+extension CreateAMRAPViewModel {
     func addExercise(_ exercise: ExerciseModel) {
-        var currentExercises = exercises.value
-        currentExercises.append(exercise)
-        exercises.send(currentExercises)
-    }
-    func updatedExercise(_ exercise: ExerciseModel) {
-        // NULL
+        exercises.append(exercise)
     }
 }

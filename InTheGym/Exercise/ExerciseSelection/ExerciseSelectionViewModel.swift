@@ -11,8 +11,12 @@ import Firebase
 
 class ExerciseSelectionViewModel {
     
+    // MARK: - Closures
     var reloadCollectionClosure: (()->())?
     var updateLoadingStatusClosure:(()->())?
+    
+    // MARK: - Properties
+    var exercise: ExerciseModel!
     
     var exercises: [[String]] = [["Upper Body"], ["Lower Body"], ["Core"], ["Cardio"]]
     
@@ -34,9 +38,7 @@ class ExerciseSelectionViewModel {
         self.isLoading = true
         let dbref = Database.database().reference().child("Exercises")
         dbref.observeSingleEvent(of: .value) { snapshot in
-            print(snapshot.childrenCount)
             for child in snapshot.children.allObjects as! [DataSnapshot] {
-                
                 switch child.key {
                 case "Upper Body":
                     guard let snap = child.value as? [String] else {return}

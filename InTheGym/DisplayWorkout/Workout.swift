@@ -45,7 +45,7 @@ struct circuitExercise {
 
 class Observable<T: Codable> {
     var value : T? {
-        didSet{
+        didSet {
             if let value = value{
                 DispatchQueue.main.async {
                     self.valueChanged?(value)

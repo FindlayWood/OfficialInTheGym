@@ -44,7 +44,7 @@ class MainWorkoutCollectionCell: UICollectionViewCell {
     }()
     lazy var labelStack: UIStackView = {
         let view = UIStackView(arrangedSubviews: [setLabel, repsLabel, weightLabel])
-        view.spacing = 10
+        view.spacing = 8
         view.axis = .vertical
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -166,12 +166,17 @@ private extension MainWorkoutCollectionCell {
 }
 
 struct ExerciseSet: Hashable {
+    var id: String = UUID().uuidString
     var set: Int
     var reps: Int
     var weight: String
     var completed: Bool
+    var time: Int?
+    var distance: String?
+    var restTime: Int?
     
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(set)
+    var hasMoreInfo: Bool {
+        (time != nil || distance != nil || restTime != nil)
     }
+
 }

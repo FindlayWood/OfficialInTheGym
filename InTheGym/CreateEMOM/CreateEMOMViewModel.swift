@@ -14,51 +14,41 @@ class CreateEMOMViewModel {
     // MARK: - Properties
     var navigationTitle = "Create EMOM"
     
-    var emomTimeLimit: Int = 600
-    
-    var workoutViewModel: WorkoutCreationViewModel!
-    
-    var workoutPosition: Int!
-    
+    private var subscriptions = Set<AnyCancellable>()
+
     // MARK: - Publishers
-    var exercises = CurrentValueSubject<[ExerciseModel],Never>([])
+    @Published var exercises: [ExerciseModel] = []
+    @Published var emomTimeLimit: Int = 10
+    @Published var validEmom: Bool = false
+    
+    var completedPublisher: PassthroughSubject<EMOMModel,Never>?
+    var exerciseAddedPublisher = PassthroughSubject<ExerciseModel,Never>()
     
     // MARK: - Actions
     func addEMOM() {
-        let newEmom = EMOMModel(emomPosition: workoutViewModel.emomModels.count,
-                                workoutPosition: workoutPosition,
-                                exercises: exercises.value,
-                                timeLimit: emomTimeLimit,
+        let newEmom = EMOMModel(emomPosition: 0,
+                                workoutPosition: 0,
+                                exercises: exercises,
+                                timeLimit: (emomTimeLimit * 60),
                                 completed: false,
                                 started: false)
-        workoutViewModel.addEMOM(newEmom)
+        completedPublisher?.send(newEmom)
     }
     
-//    // MARK: - Callbacks
-//    var reloadTableViewClosure: (()->())?
-//
-//    var exercises = [exercise]() {
-//        didSet {
-//            reloadTableViewClosure?()
-//        }
-//    }
-//
-//    var numberOfExercises: Int {
-//        return exercises.count + 1
-//    }
-//
-//
-//    func getData(at indexPath: IndexPath) -> exercise {
-//        return exercises[indexPath.section]
-//    }
-}
-extension CreateEMOMViewModel: ExerciseAdding {
-    func addExercise(_ exercise: ExerciseModel) {
-        var currentExercises = exercises.value
-        currentExercises.append(exercise)
-        exercises.send(currentExercises)
+    func initSubscribers() {
+        
+        exerciseAddedPublisher
+            .sink { [weak self] in self?.addExercise($0)}
+            .store(in: &subscriptions)
+        
+        $exercises
+            .map { $0.count > 0 }
+            .sink { [weak self] in self?.validEmom = $0 }
+            .store(in: &subscriptions)
     }
-    func updatedExercise(_ exercise: ExerciseModel) {
-        // NULL
+}
+extension CreateEMOMViewModel {
+    func addExercise(_ exercise: ExerciseModel) {
+        exercises.append(exercise)
     }
 }

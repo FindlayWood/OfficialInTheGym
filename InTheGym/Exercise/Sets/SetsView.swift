@@ -16,7 +16,7 @@ class SetsView: UIView {
     //collection to display number options
     lazy var collection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
-        collection.backgroundColor = .white
+        collection.backgroundColor = .secondarySystemBackground
         collection.register(SetsCell.self, forCellWithReuseIdentifier: SetsCell.cellID)
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
@@ -102,7 +102,7 @@ class SetsView: UIView {
 // MARK: - Configure
 private extension SetsView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .secondarySystemBackground
         addSubview(setLabel)
         addSubview(minusButton)
         addSubview(plusButton)

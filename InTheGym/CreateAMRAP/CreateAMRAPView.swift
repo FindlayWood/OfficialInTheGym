@@ -80,8 +80,7 @@ class CreateAMRAPView: UIView {
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
-        backgroundColor = .white
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
@@ -91,18 +90,18 @@ class CreateAMRAPView: UIView {
 
 // MARK: - Setup UI
 private extension CreateAMRAPView {
-    func setup() {
-        backgroundColor = .white
+    func setupUI() {
+        backgroundColor = .secondarySystemBackground
         addSubview(timeView)
         timeView.addSubview(timeLabel)
         timeView.addSubview(timeNumberLabel)
         timeView.addSubview(timeMessage)
         addSubview(exerciseLabel)
         addSubview(tableview)
-        constrain()
+        constrainUI()
     }
     
-    func constrain() {
+    func constrainUI() {
         NSLayoutConstraint.activate([timeLabel.topAnchor.constraint(equalTo: timeView.topAnchor, constant: 10),
                                      timeLabel.leadingAnchor.constraint(equalTo: timeView.leadingAnchor, constant: 10),
                                      
@@ -114,7 +113,7 @@ private extension CreateAMRAPView {
                                      timeMessage.trailingAnchor.constraint(equalTo: timeView.trailingAnchor, constant: -10),
                                      timeMessage.bottomAnchor.constraint(equalTo: timeView.bottomAnchor, constant: -10),
                                         
-                                     timeView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+                                     timeView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
                                      timeView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
                                      timeView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
                                      
@@ -125,5 +124,11 @@ private extension CreateAMRAPView {
                                      tableview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
                                      tableview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
                                      tableview.bottomAnchor.constraint(equalTo: bottomAnchor)])
+    }
+}
+// MARK: - Public configuration
+extension CreateAMRAPView {
+    public func updateTime(with newTime: Int) {
+        timeNumberLabel.text = newTime.description + " mins"
     }
 }

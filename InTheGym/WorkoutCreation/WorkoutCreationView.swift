@@ -154,7 +154,7 @@ private extension WorkoutCreationView {
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            titleView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            titleView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
             titleView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             titleView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             
@@ -175,7 +175,7 @@ private extension WorkoutCreationView {
             exercisesView.topAnchor.constraint(equalTo: middleStack.bottomAnchor, constant: 8),
             exercisesView.leadingAnchor.constraint(equalTo: titleView.leadingAnchor),
             exercisesView.trailingAnchor.constraint(equalTo: titleView.trailingAnchor),
-            exercisesView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            exercisesView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
             
             exercisesLabel.topAnchor.constraint(equalTo: exercisesView.topAnchor, constant: 10),
             exercisesLabel.leadingAnchor.constraint(equalTo: exercisesView.leadingAnchor, constant: 10),

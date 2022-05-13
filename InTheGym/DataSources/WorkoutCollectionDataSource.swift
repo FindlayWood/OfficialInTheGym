@@ -13,6 +13,7 @@ import Combine
 class WorkoutCollectionDataSource: NSObject {
     // MARK: - Publisher
     var completeButtonTapped = PassthroughSubject<IndexPath,Never>()
+    var setSelected = PassthroughSubject<SelectedSetCell,Never>()
     var subscriptions = [IndexPath: AnyCancellable]()
     
     // MARK: - Properties
@@ -26,6 +27,7 @@ class WorkoutCollectionDataSource: NSObject {
         self.isUserInteractionEnabled = isUserInteractionEnabled
         super.init()
         self.collectionView.dataSource = makeDataSource()
+        self.collectionView.delegate = self
         self.initialSetup()
     }
     
@@ -56,5 +58,15 @@ class WorkoutCollectionDataSource: NSObject {
         var currentSnapshot = dataDource.snapshot()
         currentSnapshot.appendItems(models, toSection: .main)
         dataDource.apply(currentSnapshot, animatingDifferences: false)
+    }
+}
+// MARK: - CollectionView Delegate
+extension WorkoutCollectionDataSource: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = dataDource.itemIdentifier(for: indexPath) else {return}
+        if let cell = collectionView.cellForItem(at: indexPath) as? MainWorkoutCollectionCell {
+            let snapshot = cell.snapshotView(afterScreenUpdates: false)
+            setSelected.send(SelectedSetCell(cell: cell, snapshot: snapshot, setModel: item))
+        }
     }
 }

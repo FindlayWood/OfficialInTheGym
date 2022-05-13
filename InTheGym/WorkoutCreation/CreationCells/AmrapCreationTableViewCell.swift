@@ -91,6 +91,6 @@ private extension AmrapCreationTableViewCell {
 // MARK: - Public Functions
 extension AmrapCreationTableViewCell {
     public func configure(with amrap: AMRAPModel) {
-        minutesLabel.text = (amrap.timeLimit * 60).convertToTime()
+        minutesLabel.text = (amrap.timeLimit).convertToTime()
     }
 }

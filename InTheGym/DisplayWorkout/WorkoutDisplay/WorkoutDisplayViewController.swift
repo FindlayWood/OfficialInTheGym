@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class WorkoutDisplayViewController: UIViewController {
+class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC, AnimatingSingleSet {
     
     // MARK: - Coordinator
     weak var coordinator: WorkoutDisplayCoordinator?
@@ -28,22 +28,26 @@ class WorkoutDisplayViewController: UIViewController {
     var bottomViewChildVC = WorkoutBottomChildViewController()
     
     var subscriptions = Set<AnyCancellable>()
+    
+    // MARK: - Clip Animation
+    var selectedCell: ClipCollectionCell?
+    var selectedCellImageViewSnapshot: UIView?
+    
+    // MARK: - Set Animation
+    var selectedSetCell: MainWorkoutCollectionCell?
+    var selectedSetCellImageViewSnapshot: UIView?
 
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
+        addChildVC()
         view.backgroundColor = .lightColour
         initDataSource()
 //        setupSubscriptions()
         initBottomViewChildVC()
         initNavBar()
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-//        display.frame = getFullViewableFrame()
-//        view.addSubview(display)
-        addChildVC()
-    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         editNavBarColour(to: .white)
@@ -105,7 +109,7 @@ class WorkoutDisplayViewController: UIViewController {
         childVC.clipDataSource.updateTable(with: viewModel.getClips())
         
         childVC.dataSource.exerciseButtonTapped
-            .sink { [weak self] in self?.coordinator?.showDescriptions($0)}
+            .sink { [weak self] in self?.showDiscovery($0)}
             .store(in: &subscriptions)
         
         childVC.dataSource.emomSelected
@@ -156,8 +160,24 @@ class WorkoutDisplayViewController: UIViewController {
             }
             .store(in: &subscriptions)
         
+        childVC.dataSource.setSelected
+            .sink { [weak self] setCellModel in
+                self?.selectedSetCell = setCellModel.cell
+                self?.selectedSetCellImageViewSnapshot = setCellModel.snapshot
+                self?.showSingleSet(setCellModel.setModel)
+            }
+            .store(in: &subscriptions)
+
+        
         childVC.clipDataSource.clipSelected
-            .sink { [weak self] in self?.coordinator?.viewClip($0)}
+            .sink { [weak self] in self?.clipSelected($0)}
+            .store(in: &subscriptions)
+        
+        childVC.clipDataSource.selectedCell
+            .sink { [weak self] selectedCell in
+                self?.selectedCell = selectedCell.selectedCell
+                self?.selectedCellImageViewSnapshot = selectedCell.snapshot
+            }
             .store(in: &subscriptions)
         
     }
@@ -248,5 +268,15 @@ extension WorkoutDisplayViewController {
         childVC.dataSource.isUserInteractionEnabled = true
         childVC.display.exerciseCollection.reloadData()
         navigationItem.rightBarButtonItem?.isEnabled = true
+    }
+    func showDiscovery(_ exercise: ExerciseModel) {
+        let discoverModel = DiscoverExerciseModel(exerciseName: exercise.exercise)
+        coordinator?.showDescriptions(discoverModel)
+    }
+    func clipSelected(_ model: WorkoutClipModel) {
+        coordinator?.viewClip(model, fromViewControllerDelegate: self)
+    }
+    func showSingleSet(_ exerciseSet: ExerciseSet) {
+        coordinator?.showSingleSet(fromViewControllerDelegate: self, setModel: exerciseSet)
     }
 }

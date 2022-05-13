@@ -23,6 +23,7 @@ class LiveWorkoutDataSource: NSObject {
     var actionSubscriptions = [IndexPath: AnyCancellable]()
     var plusExerciseButtonTapped = PassthroughSubject<Void,Never>()
     var plusSetButtonTapped = PassthroughSubject<IndexPath,Never>()
+    var setSelected = PassthroughSubject<SelectedSetCell,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
@@ -52,6 +53,8 @@ class LiveWorkoutDataSource: NSObject {
                 self.actionSubscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
                         switch action {
+                        case .setSelected(let setCellModel):
+                            self?.setSelected.send(setCellModel)
                         case .noteButton:
                             self?.noteButtonTapped.send(indexPath)
                         case .rpeButton:
@@ -103,10 +106,13 @@ class LiveWorkoutDataSource: NSObject {
         scrollToBottom()
     }
     func update(for exercise: ExerciseModel) {
+        guard let item = dataDource.itemIdentifier(for: IndexPath(item: exercise.workoutPosition, section: 0)) else {return}
         var currentSnapshot = dataDource.snapshot()
-        currentSnapshot.reloadItems([LiveWorkoutItems.exercise(exercise)])
+        currentSnapshot.insertItems([LiveWorkoutItems.exercise(exercise)], afterItem: item)
+        currentSnapshot.deleteItems([item])
         dataDource.apply(currentSnapshot, animatingDifferences: false)
     }
+
     
     // MARK: - Retreive
     func getExercise(at indexPath: IndexPath) -> ExerciseModel? {

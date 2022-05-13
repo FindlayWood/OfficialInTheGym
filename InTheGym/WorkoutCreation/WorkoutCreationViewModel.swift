@@ -14,10 +14,11 @@ protocol ExerciseAdding {
     func updatedExercise(_ exercise: ExerciseModel)
 }
 
-class WorkoutCreationViewModel: ExerciseAdding {
+class WorkoutCreationViewModel {
     
     // MARK: - Publishers
-    var exercises = CurrentValueSubject<[ExerciseType],Never>([])
+    @Published var exercises: [ExerciseType] = []
+//    var exercises = CurrentValueSubject<[ExerciseType],Never>([])
     @Published var canUpload: Bool = false
     @Published var workoutTitle: String = ""
     
@@ -25,6 +26,11 @@ class WorkoutCreationViewModel: ExerciseAdding {
     var errorUploadingWorkout = PassthroughSubject<Bool,Never>()
     
     var workoutListPublisher: WorkoutList!
+    
+    var addedExercisePublisher = PassthroughSubject<ExerciseModel,Never>()
+    var addedCircuitPublisher = PassthroughSubject<CircuitModel,Never>()
+    var addedAmrapPublisher = PassthroughSubject<AMRAPModel,Never>()
+    var addedEmomPublisher = PassthroughSubject<EMOMModel,Never>()
     
     // MARK: - Exercise Types
     var exerciseModels = [ExerciseModel]()
@@ -53,7 +59,7 @@ class WorkoutCreationViewModel: ExerciseAdding {
     }
     
     func setupPublishers() {
-        Publishers.CombineLatest($workoutTitle, exercises)
+        Publishers.CombineLatest($workoutTitle, $exercises)
             .map { workoutTitle, exercises in
                 return workoutTitle.count > 0 && exercises.count > 0
             }
@@ -61,34 +67,46 @@ class WorkoutCreationViewModel: ExerciseAdding {
                 self.canUpload = valid
             }
             .store(in: &subscriptions)
+        
+        addedExercisePublisher
+            .sink { [weak self] in self?.addExercise($0) }
+            .store(in: &subscriptions)
+        addedCircuitPublisher
+            .sink { [weak self] in self?.addCircuit($0)}
+            .store(in: &subscriptions)
+        addedAmrapPublisher
+            .sink { [weak self] in self?.addAMRAP($0)}
+            .store(in: &subscriptions)
+        addedEmomPublisher
+            .sink { [weak self] in self?.addEMOM($0)}
+            .store(in: &subscriptions)
+        
     }
     
     // MARK: - Adding Functions
     func addExercise(_ exercise: ExerciseModel) {
-        var currentExercises = exercises.value
-        currentExercises.append(exercise)
-        exercises.send(currentExercises)
+        exercises.append(exercise)
         exerciseModels.append(exercise)
     }
-    func updatedExercise(_ exercise: ExerciseModel) {
-        // NULL
-    }
     func addCircuit(_ circuit: CircuitModel) {
-        var currentExercises = exercises.value
-        currentExercises.append(circuit)
-        exercises.send(currentExercises)
+        var circuit = circuit
+        circuit.workoutPosition = exercises.count
+        circuit.circuitPosition = circuitModels.count
+        exercises.append(circuit)
         circuitModels.append(circuit)
     }
     func addEMOM(_ emom: EMOMModel) {
-        var currentExercises = exercises.value
-        currentExercises.append(emom)
-        exercises.send(currentExercises)
+        var emom = emom
+        emom.workoutPosition = exercises.count
+        emom.emomPosition = emomModels.count
+        exercises.append(emom)
         emomModels.append(emom)
     }
     func addAMRAP(_ amrap: AMRAPModel) {
-        var currentExercises = exercises.value
-        currentExercises.append(amrap)
-        exercises.send(currentExercises)
+        var amrap = amrap
+        amrap.workoutPosition = exercises.count
+        amrap.amrapPosition = amrapModels.count
+        exercises.append(amrap)
         amrapModels.append(amrap)
     }
     
@@ -104,7 +122,6 @@ class WorkoutCreationViewModel: ExerciseAdding {
         apiService.uploadTimeOrderedModel(model: newSavedWorkout) { [weak self] result in
             switch result {
             case .success(let model):
-//                print(model)
                 self?.uploadDatabaseLocations(for: model)
             case .failure(_):
                 break
@@ -125,8 +142,13 @@ class WorkoutCreationViewModel: ExerciseAdding {
         
         if let assignTo = assignTo {
             let newWorkout = WorkoutModel(savedModel: model, assignTo: assignTo.uid)
-            if let newWorkoutJSON = newWorkout.toFirebaseJSON() {
-                multiUploadPoints.append(newWorkoutJSON)
+            apiService.uploadTimeOrderedModel(model: newWorkout) { [weak self] result in
+                switch result {
+                case .success(let model):
+                    break
+                case .failure(let error):
+                    break
+                }
             }
         }
 
@@ -148,7 +170,7 @@ class WorkoutCreationViewModel: ExerciseAdding {
     
     // MARK: - Reset Function
     func reset() {
-        exercises.send([])
+        exercises = []
         exerciseModels.removeAll()
         circuitModels.removeAll()
         emomModels.removeAll()

@@ -82,7 +82,7 @@ extension UploadingWorkoutViewController: UploadingWorkoutProtocol {
 
 extension UploadingWorkoutViewController {
     @objc func showWorkout() {
-        coordinator?.showWorkout(with: workoutToUpload.workout)
+        
     }
     @objc func showAssignee() {
         if workoutToUpload.assignee is Users {

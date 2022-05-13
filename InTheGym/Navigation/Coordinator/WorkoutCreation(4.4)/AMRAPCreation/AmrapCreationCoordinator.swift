@@ -1,55 +1,112 @@
 //
-//  AmrapCreationCoordinator.swift
+//  CircuitCreationCoordinator.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 11/01/2022.
+//  Created by Findlay Wood on 06/01/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
-
-import Foundation
 import UIKit
+import Combine
 
-class AmrapCreationCoordinator: NSObject, Coordinator {
+class AMRAPCreationCoordinator: NSObject, Coordinator {
+    
+    var exerciseAddedPublisher: PassthroughSubject<ExerciseModel,Never>?
+    
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
-    var workoutViewModel: WorkoutCreationViewModel
-    var workoutPosition: Int
+    var publisher: PassthroughSubject<AMRAPModel,Never>?
     
-    init(navigationController: UINavigationController, workoutViewModel: WorkoutCreationViewModel, workoutPosition: Int) {
+    init(navigationController: UINavigationController, publisher: PassthroughSubject<AMRAPModel,Never>?) {
         self.navigationController = navigationController
-        self.workoutViewModel = workoutViewModel
-        self.workoutPosition = workoutPosition
+        self.publisher = publisher
     }
     
     func start() {
         let vc = CreateAMRAPViewController()
-        vc.newCoordinator = self
-        vc.viewModel.workoutViewModel = workoutViewModel
+        vc.coordinator = self
+        vc.viewModel.completedPublisher = publisher
         navigationController.pushViewController(vc, animated: true)
     }
 }
-
-extension AmrapCreationCoordinator {
-    func upload() {
-        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
-        for controller in viewControllers {
-            if controller.isKind(of: WorkoutCreationViewController.self) {
-                navigationController.popToViewController(controller, animated: true)
-                break
-            }
-        }
+extension AMRAPCreationCoordinator {
+    func addNewExercise(_ exercise: ExerciseModel) {
+        let vc = ExerciseSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
     }
-    func exercise(viewModel: CreateAMRAPViewModel, exercisePosition: Int) {
-        viewModel.workoutPosition = workoutPosition
-        let child = AmrapExerciseSelectionCoordinator(navigationController: navigationController, amrapViewModel: viewModel, workoutPosition: exercisePosition)
+    func showTimePicker(with delegate: TimeSelectionParentDelegate, time: Int) {
+        let child = TimeSelectionPickerCoordinator(navigationController: navigationController, parent: delegate, currentTime: time)
         childCoordinators.append(child)
         child.start()
     }
 }
+// exercise selection
+extension AMRAPCreationCoordinator: ExerciseSelectionFlow {
+    func exerciseSelected(_ exercise: ExerciseModel) {
+        let vc = RepSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func addCircuit() {
+        
+    }
+    func addAmrap() {
+        
+    }
+    func addEmom() {
+        
+    }
+}
+// reps selection
+extension AMRAPCreationCoordinator: RepSelectionFlow {
+    func repsSelected(_ exercise: ExerciseModel) {
+        let vc = WeightSelectionViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+// weight selection
+extension AMRAPCreationCoordinator: WeightSelectionFlow {
+    func weightSelected(_ exercise: ExerciseModel) {
+        let vc = AddMoreToExerciseViewController()
+        vc.viewModel.exercise = exercise
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+// finish
+extension AMRAPCreationCoordinator: FinishedExerciseCreationFlow {
+    func finishedExercise(_ exercise: ExerciseModel) {
+        exerciseAddedPublisher?.send(exercise)
+        let viewControllers = navigationController.viewControllers
+        for viewController in viewControllers {
+            if viewController.isKind(of: CreateAMRAPViewController.self) {
+                navigationController.popToViewController(viewController, animated: true)
+                break
+            }
+        }
+    }
+}
+// completed circuit
+extension AMRAPCreationCoordinator {
+    func completedAmrap() {
+        let viewController = navigationController.viewControllers
+        for viewController in viewController {
+            if viewController.isKind(of: WorkoutCreationViewController.self) {
+                navigationController.popToViewController(viewController, animated: true)
+                break
+            }
+        }
+    }
+}
+
 
 //MARK: - Navigation Delegate Method
-extension AmrapCreationCoordinator: UINavigationControllerDelegate {
+extension AMRAPCreationCoordinator: UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
         guard let fromViewController = navigationController.transitionCoordinator?.viewController(forKey: .from) else {
@@ -62,5 +119,4 @@ extension AmrapCreationCoordinator: UINavigationControllerDelegate {
         
     }
 }
-
 

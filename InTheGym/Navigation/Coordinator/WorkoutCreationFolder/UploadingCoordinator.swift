@@ -27,11 +27,6 @@ class UploadingCoordinator: NSObject, Coordinator {
 
 // MARK: - Flow
 extension UploadingCoordinator {
-    func showWorkout(with workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
-        childCoordinators.append(child)
-        child.start()
-    }
     
     func showUser(user: Users) {
         let child = UserProfileCoordinator(navigationController: navigationController, user: user)
@@ -54,11 +49,6 @@ extension UploadingCoordinator: UINavigationControllerDelegate {
         
         if let PublicViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(PublicViewController.coordinator)
-        }
-        
-        
-        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
-            childDidFinish(WorkoutViewController.coordinator)
         }
     }
 }

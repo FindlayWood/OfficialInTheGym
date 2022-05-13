@@ -34,11 +34,6 @@ class GroupWorkoutsCoordinator: NSObject, Coordinator {
 
 // MARK: - Group Workout Flow
 extension GroupWorkoutsCoordinator {
-    func addNewWorkout() {
-        let child = AddGroupWorkoutCoordinator(navigationController: navigationController, group: group)
-        childCoordinators.append(child)
-        child.start()
-    }
     func showSavedWorkout(_ workout: SavedWorkoutModel) {
         let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: workout)
         childCoordinators.append(child)

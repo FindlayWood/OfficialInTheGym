@@ -72,11 +72,6 @@ extension UserProfileCoordinator {
 //MARK: - Child Coordinators Methods
 extension UserProfileCoordinator {
     
-    func showWorkout(workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
-        childCoordinators.append(child)
-        child.start()
-    }
 }
 
 // MARK: - Show Clip
@@ -109,10 +104,6 @@ extension UserProfileCoordinator: UINavigationControllerDelegate {
         
         if navigationController.viewControllers.contains(fromViewController){
             return
-        }
-        
-        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
-            childDidFinish(WorkoutViewController.coordinator)
         }
         
         if let createdWorkoutsViewController = fromViewController as? PublicCreatedWorkoutsViewController {

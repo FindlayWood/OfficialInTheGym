@@ -10,14 +10,13 @@ import UIKit
 import Combine
 
 class AddMoreTimeViewController: UIViewController {
+    
     // MARK: - Properties
     weak var coordinator: AddMoreToExerciseCoordinator?
     
     var display = AddMoreBasicView()
     
     var cellModel: AddMoreCellModel!
-    
-    var exerciseViewModel: ExerciseCreationViewModel!
     
     var setsDataSource: SetsDataSource!
     
@@ -89,7 +88,7 @@ class AddMoreTimeViewController: UIViewController {
             }
             .store(in: &subscriptions)
         
-        viewModel.getTimeCellModels(from: exerciseViewModel)
+        viewModel.getTimeCellModels()
     }
 }
 // MARK: - Actions
@@ -99,24 +98,15 @@ private extension AddMoreTimeViewController {
               let enteredWeight = display.weightMeasurementField.text
         else {return}
         guard var timeInt = Int(enteredTime) else {return}
-        if display.weightMeasurementField.text == "mins" {
+        if enteredWeight == "mins" {
             timeInt = timeInt * 60
         }
         viewModel.timeUpdated(timeInt.description)
     }
     @objc func addPressed() {
-        guard let enteredTime = display.numberTextfield.text,
-              let enteredWeight = display.weightMeasurementField.text
-        else {return}
-        guard var timeInt = Int(enteredTime) else {return}
-        if display.weightMeasurementField.text == "mins" {
-            timeInt = timeInt * 60
-        }
         cellModel.value.value = "Added"
-        guard let times = (viewModel.setCellModels?.map { $0.weightString }) else {return}
-        let seconds = times.map { Int($0) ?? 0}
-        exerciseViewModel.addTime(seconds)
-        coordinator?.timeAdded(timeInt)
+        viewModel.timeAdded()
+        navigationController?.popViewController(animated: true)
     }
     @objc func secondsPressed() {
         display.weightMeasurementField.text = "secs"

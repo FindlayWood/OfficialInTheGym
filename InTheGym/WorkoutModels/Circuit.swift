@@ -101,6 +101,7 @@ class circuit: WorkoutType {
 }
 
 struct CircuitModel: ExerciseType, Codable, Hashable {
+    var id: String = UUID().uuidString
     var circuitPosition: Int
     var workoutPosition: Int
     var exercises: [ExerciseModel]

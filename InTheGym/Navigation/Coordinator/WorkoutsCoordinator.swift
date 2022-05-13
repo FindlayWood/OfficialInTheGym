@@ -10,11 +10,8 @@ import Foundation
 import UIKit
 
 protocol WorkoutsFlow: AnyObject {
-    func showWorkout(workout: WorkoutDelegate)
     func addNewWorkout(_ assignTo: Users?)
-    func regularWorkout(_ assignee: Assignable)
     func addLiveWorkout()
-    func startLiveWorkout(_ model: liveWorkout)
     func addSavedWorkout()
 }
 
@@ -30,15 +27,9 @@ class WorkoutsCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-//        let vc = PlayerWorkoutsViewController()
-//        vc.coordinator = self
-//        navigationController.pushViewController(vc, animated: true)
         let vc = DisplayingWorkoutsViewController()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
-//        let vc = PlayerWorkoutViewController.instantiate()
-//        vc.coordinator = self
-//        navigationController.pushViewController(vc, animated: true)
     }
     
     func childDidFinish(_ child: Coordinator?) {
@@ -53,11 +44,7 @@ class WorkoutsCoordinator: NSObject, Coordinator {
 
 //MARK: - Flow Methods
 extension WorkoutsCoordinator: WorkoutsFlow {
-    func showWorkout(workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
-        childCoordinators.append(child)
-        child.start()
-    }
+
     func plusPressed() {
         let vc = AddWorkoutSelectionViewController.instantiate()
         vc.coordinator = self
@@ -65,24 +52,16 @@ extension WorkoutsCoordinator: WorkoutsFlow {
     }
     
     func addNewWorkout(_ assignTo: Users?) {
-        let child = WorkoutCreationCoordinator(navigationController: navigationController, assignTo: assignTo)
+        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: assignTo)
         childCoordinators.append(child)
         child.start()
-//        let vc = AddWorkoutSelectionViewController.instantiate()
-//        vc.coordinator = self
-//        navigationController.pushViewController(vc, animated: true)
     }
     func addProgram() {
         let child = MyProgramsCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
         child.start()
     }
-    
-    func regularWorkout(_ assignee: Assignable) {
-        let child = RegularWorkoutCoordinator(navigationController: navigationController, assignTo: assignee)
-        childCoordinators.append(child)
-        child.start()
-    }
+
     
     func addLiveWorkout() {
         let vc = PreLiveWorkoutViewController.instantiate()
@@ -90,14 +69,8 @@ extension WorkoutsCoordinator: WorkoutsFlow {
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func startLiveWorkout(_ model: liveWorkout) {
-        let child = LiveWorkoutCoordinator(navigationController: navigationController, model: model)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
     func addSavedWorkout() {
-        let child = WorkoutCreationCoordinator(navigationController: navigationController, assignTo: nil)
+        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: nil)
         childCoordinators.append(child)
         child.start()
     }
@@ -134,10 +107,6 @@ extension WorkoutsCoordinator: UINavigationControllerDelegate {
         
         if let PublicViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(PublicViewController.coordinator)
-        }
-        
-        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
-            childDidFinish(WorkoutViewController.coordinator)
         }
     }
 }

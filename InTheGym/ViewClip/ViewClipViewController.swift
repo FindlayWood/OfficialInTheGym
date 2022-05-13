@@ -18,29 +18,13 @@ enum clipViewingState {
 
 class ViewClipViewController: UIViewController {
     
-    weak var coordinator: ViewClipFlow?
-    
     weak var newCoordinator: ClipProfileCustomCoordinator?
     
     var player: AVPlayer?
     
-//    var storageURL: String!
-    
     var display = ViewClipView()
     
-//    var informationView = ViewClipBottomView()
-    
-//    var flashView = FlashView()
-    
-//    private var bottomViewHeight = Constants.screenSize.height * 0.2
-    
     var paused: Bool = false
-    
-//    var exerciseName: String!
-    
-//    var creatorID: String!
-    
-//    var workoutID: String!
     
     var viewModel = ViewClipViewModel()
     

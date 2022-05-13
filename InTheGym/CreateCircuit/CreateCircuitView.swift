@@ -15,7 +15,7 @@ class CreateCircuitView: UIView {
     // MARK: - Subviews
     var titlefield: SkyFloatingLabelTextField = {
        let field = SkyFloatingLabelTextField()
-        field.tintColor = Constants.darkColour
+        field.tintColor = .darkColour
         field.returnKeyType = .done
         field.textColor = .black
         field.placeholderColor = .lightGray
@@ -25,8 +25,8 @@ class CreateCircuitView: UIView {
         field.lineColor = .lightGray
         field.title = "enter title"
         field.selectedTitle = "Circuit Title"
-        field.selectedTitleColor = Constants.darkColour
-        field.selectedLineColor = Constants.darkColour
+        field.selectedTitleColor = .darkColour
+        field.selectedLineColor = .darkColour
         field.placeholder = "enter circuit title..."
         field.font = .systemFont(ofSize: 20, weight: .bold)
         field.clearButtonMode = .never
@@ -74,14 +74,14 @@ class CreateCircuitView: UIView {
 private extension CreateCircuitView {
     
     func setUpView() {
-        backgroundColor = .white
+        backgroundColor = .secondarySystemBackground
         addSubview(titlefield)
         addSubview(exerciseLabel)
         addSubview(tableview)
         constrainView()
     }
     func constrainView() {
-        NSLayoutConstraint.activate([titlefield.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+        NSLayoutConstraint.activate([titlefield.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
                                      titlefield.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
                                      titlefield.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
                                      titlefield.heightAnchor.constraint(equalToConstant: 50),

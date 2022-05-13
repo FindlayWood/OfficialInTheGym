@@ -22,7 +22,6 @@ class ClipProfileCustomCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-//        let keyModel = KeyClipModel(clipKey: clipModel.id, storageURL: clipModel.storageURL)
         let vc = ViewClipViewController()
         vc.newCoordinator = self
         vc.viewModel.keyClipModel = clipModel
@@ -40,7 +39,6 @@ class ClipProfileCustomCoordinator: NSObject, Coordinator {
 extension ClipProfileCustomCoordinator: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         guard
-//            let firstViewController = presenting as? CustomAnimatingClipFromVC,
             let secondViewController = presented as? ViewClipViewController,
             let selectedCellImageViewSnapshot = fromViewControllerDelegate.selectedCellImageViewSnapshot
             else { return nil }

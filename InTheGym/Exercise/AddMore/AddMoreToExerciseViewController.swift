@@ -11,7 +11,8 @@ import UIKit
 class AddMoreToExerciseViewController: UIViewController {
     
     // MARK: - Properties
-    weak var coordinator: AddMoreToExerciseCoordinator?
+//    weak var coordinator: AddMoreToExerciseCoordinator?
+    weak var coordinator: FinishedExerciseCreationFlow?
     
     var display = AddMoreToExerciseView()
     
@@ -30,6 +31,7 @@ class AddMoreToExerciseViewController: UIViewController {
         view.backgroundColor = .white
         initDisplay()
         initBarButton()
+        viewModel.observePublishers()
     }
     override func viewWillAppear(_ animated: Bool) {
         editNavBarColour(to: .darkColour)
@@ -60,13 +62,32 @@ extension AddMoreToExerciseViewController: AddMoreToExerciseProtocol {
     func itemSelected(at indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            coordinator?.timeSelected(viewModel.getData(at: indexPath))
+            let vc = AddMoreTimeViewController()
+            vc.viewModel.exercise = viewModel.exercise
+            vc.cellModel = viewModel.getData(at: indexPath)
+            vc.viewModel.timeUpdatedPublisher = viewModel.timeUpdatedPublisher
+            vc.viewModel.isLive = coordinator is LiveWorkoutSetCreationCoordinator
+            navigationController?.pushViewController(vc, animated: true)
         case 1:
-            coordinator?.distanceSelected(viewModel.getData(at: indexPath))
+            let vc = AddMoreDistanceViewController()
+            vc.viewModel.exercise = viewModel.exercise
+            vc.cellModel = viewModel.getData(at: indexPath)
+            vc.viewModel.distanceUpdatedPublisher = viewModel.distanceUpdatedPublisher
+            vc.viewModel.isLive = coordinator is LiveWorkoutSetCreationCoordinator
+            navigationController?.pushViewController(vc, animated: true)
         case 2:
-            coordinator?.restTimeSelected(viewModel.getData(at: indexPath))
+            let vc = AddMoreRestTimeViewController()
+            vc.viewModel.exercise = viewModel.exercise
+            vc.cellModel = viewModel.getData(at: indexPath)
+            vc.viewModel.restTimeUpdatedPublisher = viewModel.restTimeUpdatedPublisher
+            vc.viewModel.isLive = coordinator is LiveWorkoutSetCreationCoordinator
+            navigationController?.pushViewController(vc, animated: true)
         case 3:
-            coordinator?.noteSelected(viewModel.getData(at: indexPath))
+            let vc = AddMoreNoteViewController()
+            vc.viewModel.exercise = viewModel.exercise
+            vc.cellModel = viewModel.getData(at: indexPath)
+            vc.viewModel.noteUpdatedPublisher = viewModel.noteUpdatedPublisher
+            navigationController?.present(vc, animated: true)
         default:
             break
         }
@@ -75,6 +96,6 @@ extension AddMoreToExerciseViewController: AddMoreToExerciseProtocol {
 // MARK: - Actions
 private extension AddMoreToExerciseViewController {
     @objc func continuePressed() {
-        coordinator?.addNewExercise()
+        coordinator?.finishedExercise(viewModel.exercise)
     }
 }

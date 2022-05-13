@@ -15,8 +15,17 @@ class AddMoreViewModel {
     @Published var setCellModels: [SetCellModel]?
     @Published var isLiveWorkout: Bool = false
     
+    var timeUpdatedPublisher: PassthroughSubject<[Int]?,Never>?
+    var distanceUpdatedPublisher: PassthroughSubject<[String]?,Never>?
+    var restTimeUpdatedPublisher: PassthroughSubject<[Int]?,Never>?
+    var noteUpdatedPublisher: PassthroughSubject<String,Never>?
+    
     // MARK: - Properties
     var selectedSet: Int? = nil
+    
+    var exercise: ExerciseModel!
+    
+    var isLive: Bool = false
     
     var cellCount: Int? {
         if let cellCount = setCellModels?.count {
@@ -27,13 +36,17 @@ class AddMoreViewModel {
     }
     
     // MARK: - Actions
-    func timeUpdated(_ weight: String) {
+    func timeUpdated(_ time: String) {
         if let selectedSet = selectedSet {
-            setCellModels?[selectedSet].weightString = weight
+            setCellModels?[selectedSet].weightString = time
         } else {
-            let newModels = setCellModels?.map { SetCellModel(setNumber: $0.setNumber, repNumber: $0.repNumber, weightString: weight) }
+            let newModels = setCellModels?.map { SetCellModel(setNumber: $0.setNumber, repNumber: $0.repNumber, weightString: time) }
             setCellModels = newModels
         }
+    }
+    func timeAdded() {
+        let times = setCellModels?.map { Int($0.weightString) ?? 0 }
+        timeUpdatedPublisher?.send(times)
     }
     func distanceUpdated(_ weight: String) {
         if let selectedSet = selectedSet {
@@ -43,6 +56,10 @@ class AddMoreViewModel {
             setCellModels = newModels
         }
     }
+    func distanceAdded() {
+        let distances = setCellModels?.map { $0.weightString }
+        distanceUpdatedPublisher?.send(distances)
+    }
     func restTimeUpdated(_ weight: String) {
         if let selectedSet = selectedSet {
             setCellModels?[selectedSet].weightString = weight
@@ -51,37 +68,43 @@ class AddMoreViewModel {
             setCellModels = newModels
         }
     }
-    
+    func restTimeAdded() {
+        let times = setCellModels?.map { Int($0.weightString) ?? 0 }
+        restTimeUpdatedPublisher?.send(times)
+    }
+    func noteAdded(_ note: String) {
+        noteUpdatedPublisher?.send(note)
+    }
     // MARK: - Functions
-    func getTimeCellModels(from viewModel: ExerciseCreationViewModel) {
+    func getTimeCellModels() {
         var models = [SetCellModel]()
-        guard let reps = viewModel.exercise.reps else {return}
+        guard let reps = exercise.reps else {return}
         for (index, rep) in reps.enumerated() {
-            let newModel = SetCellModel(setNumber: index + 1, repNumber: rep, weightString: viewModel.exercise.time?[index].description ?? " ")
+            let newModel = SetCellModel(setNumber: index + 1, repNumber: rep, weightString: exercise.time?[index].description ?? " ")
             models.append(newModel)
         }
         setCellModels = models
-        isLiveWorkout = (viewModel.exercisekind == .live)
+        isLiveWorkout = isLive
     }
-    func getDistanceCellModels(from viewModel: ExerciseCreationViewModel) {
+    func getDistanceCellModels() {
         var models = [SetCellModel]()
-        guard let reps = viewModel.exercise.reps else {return}
+        guard let reps = exercise.reps else {return}
         for (index, rep) in reps.enumerated() {
-            let newModel = SetCellModel(setNumber: index + 1, repNumber: rep, weightString: viewModel.exercise.distance?[index] ?? " ")
+            let newModel = SetCellModel(setNumber: index + 1, repNumber: rep, weightString: exercise.distance?[index] ?? " ")
             models.append(newModel)
         }
         setCellModels = models
-        isLiveWorkout = (viewModel.exercisekind == .live)
+        isLiveWorkout = isLive
     }
-    func getRestTimeCellModels(from viewModel: ExerciseCreationViewModel) {
+    func getRestTimeCellModels() {
         var models = [SetCellModel]()
-        guard let reps = viewModel.exercise.reps else {return}
+        guard let reps = exercise.reps else {return}
         for (index, rep) in reps.enumerated() {
-            let newModel = SetCellModel(setNumber: index + 1, repNumber: rep, weightString: viewModel.exercise.restTime?[index].description ?? " ")
+            let newModel = SetCellModel(setNumber: index + 1, repNumber: rep, weightString: exercise.restTime?[index].description ?? " ")
             models.append(newModel)
         }
         setCellModels = models
-        isLiveWorkout = (viewModel.exercisekind == .live)
+        isLiveWorkout = isLive
     }
     
 }

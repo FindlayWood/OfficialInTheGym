@@ -27,11 +27,7 @@ class PublicCreatedWorkoutsCoordinator: NSObject, Coordinator {
 }
 //MARK: Flow Methods
 extension PublicCreatedWorkoutsCoordinator {
-    func showWorkout(workout: WorkoutDelegate) {
-        let child = WorkoutCoordinator(navigationController: navigationController, workout: workout)
-        childCoordinators.append(child)
-        child.start()
-    }
+
 }
 
 //MARK: - Navigation Delegate Method
@@ -44,10 +40,6 @@ extension PublicCreatedWorkoutsCoordinator: UINavigationControllerDelegate {
         
         if navigationController.viewControllers.contains(fromViewController){
             return
-        }
-        
-        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
-            childDidFinish(WorkoutViewController.coordinator)
         }
     }
 }

@@ -21,7 +21,7 @@ class AddMoreToExerciseCoordinator: NSObject, Coordinator {
     func start() {
         let vc = AddMoreToExerciseViewController()
         vc.viewModel.exerciseCreationViewModel = creationViewModel
-        vc.coordinator = self
+//        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
 }
@@ -31,21 +31,21 @@ extension AddMoreToExerciseCoordinator {
         let vc = AddMoreTimeViewController()
         vc.coordinator = self
         vc.cellModel = cellModel
-        vc.exerciseViewModel = creationViewModel
+//        vc.exerciseViewModel = creationViewModel
         navigationController.pushViewController(vc, animated: true)
     }
     func distanceSelected(_ cellModel: AddMoreCellModel) {
         let vc = AddMoreDistanceViewController()
         vc.coordinator = self
         vc.cellModel = cellModel
-        vc.exerciseViewModel = creationViewModel
+//        vc.exerciseViewModel = creationViewModel
         navigationController.pushViewController(vc, animated: true)
     }
     func restTimeSelected(_ cellModel: AddMoreCellModel) {
         let vc = AddMoreRestTimeViewController()
         vc.coordinator = self
         vc.cellModel = cellModel
-        vc.exerciseViewModel = creationViewModel
+//        vc.exerciseViewModel = creationViewModel
         navigationController.pushViewController(vc, animated: true)
     }
     func noteSelected(_ cellModel: AddMoreCellModel) {

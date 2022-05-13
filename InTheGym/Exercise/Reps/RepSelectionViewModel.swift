@@ -14,6 +14,8 @@ class RepSelectionViewModel {
     @Published var setCellModels: [SetCellModel]?
     @Published var isLiveWorkout: Bool = false
     
+    var exercise: ExerciseModel!
+    
     var selectedSet: Int? = nil
     
     var cellCount: Int? {
@@ -35,14 +37,14 @@ class RepSelectionViewModel {
     }
     
     // MARK: - Functions
-    func getSetCellModels(from viewModel: ExerciseCreationViewModel) {
+    func getSetCellModels() {
         var models = [SetCellModel]()
-        guard let reps = viewModel.exercise.reps else {return}
+        guard let reps = exercise.reps else {return}
         for (index, rep) in reps.enumerated() {
-            let newModel = SetCellModel(setNumber: index + 1, repNumber: rep, weightString: viewModel.exercise.weight?[index] ?? " ")
+            let newModel = SetCellModel(setNumber: index + 1, repNumber: rep, weightString: exercise.weight?[index] ?? " ")
             models.append(newModel)
         }
         setCellModels = models
-        isLiveWorkout = (viewModel.exercisekind == .live)
+//        isLiveWorkout = (viewModel.exercisekind == .live)
     }
 }

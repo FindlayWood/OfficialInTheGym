@@ -20,8 +20,8 @@ class CircuitCoordinator: Coordinator {
     }
     
     func start() {
-        let vc = CreateCircuitViewController.instantiate()
-        vc.coordinator = self
+        let vc = CreateCircuitViewController()
+//        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
 }
@@ -35,17 +35,8 @@ extension CircuitCoordinator {
 // MARK: - Creation Flow
 extension CircuitCoordinator: CreationFlow {
     func addExercise(_ circuit: exercise) {
-        if #available(iOS 13, *) {
-            let vc = ExerciseSelectionViewController()
-            vc.coordinator = self
-            vc.newExercise = circuit
-            navigationController.pushViewController(vc, animated: true)
-        } else {
-            let vc = BodyTypeViewController.instantiate()
-            vc.coordinator = self
-            vc.newExercise = circuit
-            navigationController.pushViewController(vc, animated: true)
-        }
+        let vc = ExerciseSelectionViewController()
+        navigationController.pushViewController(vc, animated: true)
     }
     func otherSelected(_ exercise: exercise) {
         let vc = OtherExerciseViewController()
@@ -55,18 +46,16 @@ extension CircuitCoordinator: CreationFlow {
     }
     
     func exerciseSelected(_ exercise: exercise) {
-        let vc = ExerciseSetsViewController.instantiate()
-        vc.coordinator = self
-        vc.newExercise = exercise
+        let vc = SetSelectionViewController()
         navigationController.pushViewController(vc, animated: true)
     }
     
     func repsSelected(_ exercise: exercise) {
-        let vc = NewWeightViewController()
+        let vc = WeightSelectionViewController()
         navigationController.pushViewController(vc, animated: true)
     }
     func weightSelected(_ exercise: exercise) {
-        CreateCircuitViewController.circuitExercises.append(exercise)
+//        CreateCircuitViewController.circuitExercises.append(exercise)
         let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
         for controller in viewControllers {
             if controller.isKind(of: CreateCircuitViewController.self) {
@@ -82,9 +71,9 @@ extension CircuitCoordinator: CreationFlow {
 
 extension CircuitCoordinator: RegularAndCircuitFlow {
     func setsSelected(_ exercise: exercise) {
-        let vc = NewRepsViewController()
-        vc.coordinator = self
-        vc.newExercise = exercise
+        let vc = RepSelectionViewController()
+//        vc.coordinator = self
+//        vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
 }

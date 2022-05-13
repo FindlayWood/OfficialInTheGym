@@ -68,6 +68,14 @@ class CreateNewPostViewController: UIViewController {
             .sink { [weak self] in self?.display.setLoading(to: $0)}
             .store(in: &subscriptions)
         
+        viewModel.$attachedWorkout
+            .compactMap{ $0 }
+            .sink { [weak self] workoutModel in
+                self?.display.addWorkout(workoutModel)
+                self?.viewModel.updateAttachedWorkout(with: workoutModel)
+            }
+            .store(in: &subscriptions)
+        
         viewModel.succesfullyPostedClosure = { [weak self] in
             guard let self = self else {return}
             self.showTopAlert(with: "Successfully posted!")
@@ -101,8 +109,8 @@ extension CreateNewPostViewController {
     }
     @objc func workoutTapped(_ sender: UIButton) {
         coordinator?.showSavedWorkoutPicker(completion: { [display, viewModel] pickedSavedWorkout in
-            display.addWorkout(pickedSavedWorkout)
-            viewModel.updateAttachedWorkout(with: pickedSavedWorkout)
+            display.addSavedWorkout(pickedSavedWorkout)
+            viewModel.updateAttachedSavedWorkout(with: pickedSavedWorkout)
         })
     }
     @objc func togglePrivacy(_ sender: UIButton) {

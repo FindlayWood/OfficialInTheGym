@@ -17,8 +17,6 @@ class AddMoreRestTimeViewController: UIViewController {
     
     var cellModel: AddMoreCellModel!
     
-    var exerciseViewModel: ExerciseCreationViewModel!
-    
     var setsDataSource: SetsDataSource!
     
     var viewModel = AddMoreViewModel()
@@ -84,7 +82,7 @@ class AddMoreRestTimeViewController: UIViewController {
             }
             .store(in: &subscriptions)
         
-        viewModel.getRestTimeCellModels(from: exerciseViewModel)
+        viewModel.getRestTimeCellModels()
     }
 
     func emptyCheck() -> Bool {
@@ -98,24 +96,15 @@ extension AddMoreRestTimeViewController {
               let enteredWeight = display.weightMeasurementField.text
         else {return}
         guard var timeInt = Int(enteredTime) else {return}
-        if display.weightMeasurementField.text == "mins" {
+        if enteredWeight == "mins" {
             timeInt = timeInt * 60
         }
         viewModel.restTimeUpdated(timeInt.description)
     }
     @objc func addPressed() {
-        guard let enteredTime = display.numberTextfield.text,
-              let enteredWeight = display.weightMeasurementField.text
-        else {return}
-        guard var timeInt = Int(enteredTime) else {return}
-        if display.weightMeasurementField.text == "mins" {
-            timeInt = timeInt * 60
-        }
         cellModel.value.value = "Added"
-        guard let times = (viewModel.setCellModels?.map { $0.weightString }) else {return}
-        let seconds = times.map { Int($0) ?? 0}
-        exerciseViewModel.addRestTime(seconds)
-        coordinator?.restTimeAdded(timeInt)
+        viewModel.restTimeAdded()
+        navigationController?.popViewController(animated: true)
     }
     @objc func secondsPressed() {
         display.weightMeasurementField.text = "secs"

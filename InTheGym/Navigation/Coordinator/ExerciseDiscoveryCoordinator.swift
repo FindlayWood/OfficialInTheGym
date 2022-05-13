@@ -12,9 +12,9 @@ import UIKit
 class ExerciseDiscoveryCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
-    var exercise: ExerciseModel
+    var exercise: DiscoverExerciseModel
     
-    init(navigationController: UINavigationController, exercise: ExerciseModel) {
+    init(navigationController: UINavigationController, exercise: DiscoverExerciseModel) {
         self.navigationController = navigationController
         self.exercise = exercise
     }
@@ -22,7 +22,9 @@ class ExerciseDiscoveryCoordinator: NSObject, Coordinator {
     func start() {
         let vc = ExerciseDescriptionViewController()
         vc.clipsVC.coordinator = self
-        vc.viewModel.exercise = DiscoverExerciseModel(exerciseName: exercise.exercise)
+        vc.viewModel.exercise = exercise
+        vc.clipsVC.viewModel.exerciseModel = exercise
+        vc.descriptionsVC.viewModel.exerciseModel = exercise
         navigationController.pushViewController(vc, animated: true)
     }
 }
@@ -34,14 +36,6 @@ extension ExerciseDiscoveryCoordinator: ClipSelectorFlow {
         let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate)
         childCoordinators.append(child)
         child.start()
-        
-//        let keyModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
-//        let vc = ViewClipViewController()
-//        vc.viewModel.keyClipModel = keyModel
-//        vc.modalPresentationStyle = .custom
-//        vc.transitioningDelegate = self
-//        navigationController.present(vc, animated: true)
-//        navigationController.present(vc, animated: true, completion: nil)
     }
 }
 

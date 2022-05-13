@@ -21,7 +21,7 @@ class AMRAPCoordinator: Coordinator {
     
     func start() {
         let vc = CreateAMRAPViewController()
-        vc.coordinator = self
+//        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
 }
@@ -36,17 +36,8 @@ extension AMRAPCoordinator {
 extension AMRAPCoordinator: CreationFlow {
     
     func addExercise(_ exercise: exercise) {
-        if #available(iOS 13, *) {
-            let vc = ExerciseSelectionViewController()
-            vc.coordinator = self
-            vc.newExercise = exercise
-            navigationController.pushViewController(vc, animated: true)
-        } else {
-            let vc = BodyTypeViewController.instantiate()
-            vc.coordinator = self
-            vc.newExercise = exercise
-            navigationController.pushViewController(vc, animated: true)
-        }
+        let vc = ExerciseSelectionViewController()
+        navigationController.pushViewController(vc, animated: true)
     }
     
     func otherSelected(_ exercise: exercise) {
@@ -57,9 +48,9 @@ extension AMRAPCoordinator: CreationFlow {
     }
     
     func exerciseSelected(_ exercise: exercise) {
-        let vc = NewRepsViewController()
-        vc.coordinator = self
-        vc.newExercise = exercise
+        let vc = RepSelectionViewController()
+//        vc.coordinator = self
+//        vc.newExercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
     func repsSelected(_ exercise: exercise) {
@@ -67,7 +58,7 @@ extension AMRAPCoordinator: CreationFlow {
 //        vc.coordinator = self
 //        vc.newExercise = exercise
 //        navigationController.pushViewController(vc, animated: true)
-        CreateAMRAPViewController.exercises.append(exercise)
+//        CreateAMRAPViewController.exercises.append(exercise)
         let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
         for controller in viewControllers {
             if controller.isKind(of: CreateAMRAPViewController.self) {
@@ -78,14 +69,14 @@ extension AMRAPCoordinator: CreationFlow {
     }
     
     func weightSelected(_ exercise: exercise) {
-        CreateAMRAPViewController.exercises.append(exercise)
-        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
-        for controller in viewControllers {
-            if controller.isKind(of: CreateAMRAPViewController.self) {
-                navigationController.popToViewController(controller, animated: true)
-                break
-            }
-        }
+//        CreateAMRAPViewController.exercises.append(exercise)
+//        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+//        for controller in viewControllers {
+//            if controller.isKind(of: CreateAMRAPViewController.self) {
+//                navigationController.popToViewController(controller, animated: true)
+//                break
+//            }
+//        }
     }
     func completeExercise() {
         // not implemented

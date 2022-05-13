@@ -80,6 +80,6 @@ private extension EmomCreationTableViewCell {
 // MARK: - Public Functions
 extension EmomCreationTableViewCell {
     public func configure(with emom: EMOMModel) {
-        minutesLabel.text = (emom.timeLimit * 60).convertToTime()
+        minutesLabel.text = (emom.timeLimit).convertToTime()
     }
 }

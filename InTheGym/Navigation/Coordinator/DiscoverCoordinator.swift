@@ -47,9 +47,12 @@ extension DiscoverCoordinator {
     }
     
     func exerciseSelected(_ model: DiscoverExerciseModel) {
-        let child = ExerciseDescriptionCoordinator(navigationController: navigationController, exercise: model)
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: model)
         childCoordinators.append(child)
         child.start()
+//        let child = ExerciseDescriptionCoordinator(navigationController: navigationController, exercise: model)
+//        childCoordinators.append(child)
+//        child.start()
 //        let vc = ExerciseDescriptionViewController()
 //        vc.viewModel.exercise = model
 //        vc.hidesBottomBarWhenPushed = true
@@ -88,14 +91,6 @@ extension DiscoverCoordinator: UINavigationControllerDelegate {
         
         if let PublicViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(PublicViewController.coordinator)
-        }
-        
-//        if let DiscussionViewController = fromViewController as? DiscussionViewViewController {
-//            childDidFinish(DiscussionViewController.coordinator)
-//        }
-        
-        if let WorkoutViewController = fromViewController as? DisplayWorkoutViewController {
-            childDidFinish(WorkoutViewController.coordinator)
         }
     }
 }
