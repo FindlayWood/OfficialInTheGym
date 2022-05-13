@@ -14,6 +14,7 @@ class RecordClipViewModel: NSObject {
     
     // MARK: - Publishers
     var outPutFilePublisher = PassthroughSubject<URL,Never>()
+    @Published var countDownTime: Int = 10
     
     // MARK: - Properties
     var captureSession: AVCaptureSession!
@@ -38,6 +39,14 @@ class RecordClipViewModel: NSObject {
     
     var addingDelegate: ClipAdding!
     
+    let maxVideoLength: Double = 16
+    
+    var countDownStartTime: Int = 10
+    let countDownStartTimeConstant: Int = 10
+    
+    var countDownTimer: AnyCancellable!
+    var recordingTimer: AnyCancellable!
+    
     // MARK: - Methods
     func beginRecording() {
         let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -49,14 +58,12 @@ class RecordClipViewModel: NSObject {
     // MARK: - Capture Session
     func setUpCaptureSession() {
         captureSession = AVCaptureSession()
-        captureSession.sessionPreset = .photo
         captureSession.beginConfiguration()
-        if captureSession.canSetSessionPreset(.photo) {
-            captureSession.sessionPreset = .photo
+        if captureSession.canSetSessionPreset(.high) {
+            captureSession.sessionPreset = .high
         }
         captureSession.automaticallyConfiguresCaptureDeviceForWideColor = true
         setUpDevices()
-//        setUpPreviewLayer()
         setUpVideoOutput()
         captureSession.commitConfiguration()
         captureSession.startRunning()
@@ -116,27 +123,37 @@ class RecordClipViewModel: NSObject {
             captureSession.addOutput(videoOutput)
         }
     }
+    
+    func startRecordingTimer() {
+        recordingTimer = Timer.publish(every: 16, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.videoOutput.stopRecording()
+            }
+    }
+    func startCountDown() {
+        countDownTime = 10
+        countDownTimer = Timer.publish(every: 1.0, on: RunLoop.main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in self?.changeCountDown()}
+    }
+}
+// MARK: - Countdown
+private extension RecordClipViewModel {
+
+    func changeCountDown() {
+        countDownTime -= 1
+    }
 }
 
 // MARK: - Camera recording output delegate
 extension RecordClipViewModel: AVCaptureFileOutputRecordingDelegate {
     func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
+        recordingTimer.cancel()
         if let error = error {
             print(error)
         } else {
             outPutFilePublisher.send(outputFileURL)
-            // if no error then show video on custom avplayer vc
-//            let player = AVPlayer(url: outputFileURL)
-//            let vc = RecordedClipPlayerViewController()
-//            vc.player = player
-//            vc.workoutID = workoutID
-//            vc.exerciseName = exerciseName
-//            vc.clipNumber = clipNumber
-//            vc.uploadingDelegate = self
-//            vc.addingDelegate = self.addingDelegate
-//            vc.modalTransitionStyle = .coverVertical
-//            vc.modalPresentationStyle = .fullScreen
-//            present(vc, animated: false, completion: nil)
         }
     }
 }

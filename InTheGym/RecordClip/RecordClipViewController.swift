@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import AVKit
 import Combine
+import AudioToolbox
 
 class RecordClipViewController: UIViewController {
     
@@ -60,7 +61,6 @@ class RecordClipViewController: UIViewController {
         display.backButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
         display.flipCameraButton.addTarget(self, action: #selector(flipCamera), for: .touchUpInside)
         display.countDownButton.addTarget(self, action: #selector(toggleCountDown), for: .touchUpInside)
-        display.videoLengthButton.addTarget(self, action: #selector(changeVideoLength), for: .touchUpInside)
         display.recordButton.addTarget(self, action: #selector(recordButtonTapped), for: .touchUpInside)
     }
     
@@ -69,11 +69,38 @@ class RecordClipViewController: UIViewController {
         viewModel.outPutFilePublisher
             .sink { [weak self] in self?.finishedRecording(with: $0) }
             .store(in: &subscriptions)
+        
+        viewModel.$countDownTime
+            .dropFirst()
+            .sink { [weak self] newTime in
+                if newTime > 0 {
+                    self?.display.setCountDown(to: newTime)
+                    if newTime < 4 {
+                        self?.playSound()
+                    }
+                } else {
+                    self?.display.setUIRecording()
+                    self?.viewModel.countDownTimer.cancel()
+                    self?.startRecording()
+                }
+            }
+            .store(in: &subscriptions)
+    }
+    
+    func playSound() {
+        AudioServicesPlaySystemSound(SystemSoundID(1117))
+    }
+    
+    func startRecording() {
+        viewModel.beginRecording()
+        viewModel.startRecordingTimer()
+        display.setUIRecording()
     }
     
     func finishedRecording(with outputFileURL: URL) {
+        AudioServicesPlaySystemSound(SystemSoundID(1118))
+        display.setUIDefault()
         let clipStorageModel = ClipStorageModel(fileURL: outputFileURL)
-//        coordinator?.finishedRecording(clipStorageModel)
         
         let vc = RecordedClipPlayerViewController()
         vc.viewModel.exerciseModel = viewModel.exerciseModel
@@ -106,40 +133,28 @@ class RecordClipViewController: UIViewController {
         if !viewModel.videoOutput.isRecording {
             //check if countdown is on
             if viewModel.countDownOn {
+                playSound()
                 display.setUICountdownOn()
-                display.startCountDown()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
-                    // begin to record a video
-                    guard let self = self else {return}
-                    self.beginRecording()
-                    self.viewModel.beginRecording()
-                }
+                viewModel.startCountDown()
             } else {
-                beginRecording()
-                viewModel.beginRecording()
-//                // begin to record a video
+                startRecording()
             }
         } else {
             // stop recording video
+            AudioServicesPlaySystemSound(SystemSoundID(1118))
             viewModel.videoOutput.stopRecording()
             display.setUIDefault()
         }
     }
     
     func beginRecording() {
-        // begin to record a video
-//        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-//        let outputURL = path[0].appendingPathComponent("output").appendingPathExtension("mov")
-//        try? FileManager.default.removeItem(at: outputURL)
-//        viewModel.videoOutput.startRecording(to: outputURL, recordingDelegate: self)
         display.setUIRecording()
-        startVideoTimer(with: display.currentVideoLength)
+        startVideoTimer()
     }
     
-    func startVideoTimer(with maxLength: videoLength) {
-        // 20 second time limit on videos
+    func startVideoTimer() {
         // TODO: add a display that shows how long recording is
-        DispatchQueue.main.asyncAfter(deadline: .now() + maxLength.rawValue) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.maxVideoLength) { [weak self] in
             guard let self = self else {return}
             if self.viewModel.videoOutput.isRecording {
                 self.viewModel.videoOutput.stopRecording()
@@ -158,9 +173,6 @@ private extension RecordClipViewController {
     @objc func toggleCountDown() {
         viewModel.countDownOn.toggle()
         display.toggleCountDownUI(isOn: viewModel.countDownOn)
-    }
-    @objc func changeVideoLength() {
-        display.changeVideoLength()
     }
     @objc func flipCamera() {
         //flip which camera is displaying
