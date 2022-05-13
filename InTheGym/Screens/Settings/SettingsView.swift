@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    var viewModel: SettingsViewModel!
+    var viewModel: SettingsViewModel
     
     var body: some View {
         Form {
@@ -112,12 +112,13 @@ struct SettingsView: View {
             }
 
         }
+        .edgesIgnoringSafeArea(.top)
     }
 }
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
+        SettingsView(viewModel: SettingsViewModel())
             .preferredColorScheme(.dark)
     }
 }

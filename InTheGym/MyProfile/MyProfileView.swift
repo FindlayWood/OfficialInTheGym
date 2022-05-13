@@ -62,6 +62,19 @@ class MyProfileView: UIView {
         return button
     }()
     
+    var tableview: UITableView = {
+        let view = UITableView()
+        view.register(ProfileInfoTableViewCell.self, forCellReuseIdentifier: ProfileInfoTableViewCell.cellID)
+        view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
+        if #available(iOS 15.0, *) { view.sectionHeaderTopPadding = 0 }
+        view.backgroundColor = .secondarySystemBackground
+        view.tableFooterView = UIView()
+        view.separatorInset = .zero
+        view.layoutMargins = .zero
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateLayout(with: selectedIndex))
         view.register(ProfileInfoCollectionViewCell.self, forCellWithReuseIdentifier: ProfileInfoCollectionViewCell.reuseID)
@@ -98,17 +111,18 @@ private extension MyProfileView {
         addSubview(moreButton)
         addSubview(notificationsButton)
         addSubview(groupsButton)
-        addSubview(collectionView)
+//        addSubview(collectionView)
+        addSubview(tableview)
         configureUI()
     }
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            topBackgroundView.topAnchor.constraint(equalTo: topAnchor),
+            topBackgroundView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             topBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
             topBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
             
-            iconLabel.topAnchor.constraint(equalTo: topAnchor),
+            iconLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             iconLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             iconLabel.heightAnchor.constraint(equalToConstant: 30),
             
@@ -121,10 +135,10 @@ private extension MyProfileView {
             groupsButton.trailingAnchor.constraint(equalTo: notificationsButton.leadingAnchor, constant: -12),
             groupsButton.topAnchor.constraint(equalTo: moreButton.topAnchor),
             
-            collectionView.topAnchor.constraint(equalTo: topBackgroundView.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            tableview.topAnchor.constraint(equalTo: topBackgroundView.bottomAnchor),
+            tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
+            tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
+            tableview.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
             
         ])
     }

@@ -5,7 +5,6 @@
 //  Created by Findlay Wood on 05/05/2021.
 //  Copyright © 2021 FindlayWood. All rights reserved.
 //
-
 import Foundation
 import UIKit
 
@@ -51,10 +50,6 @@ class MyProfileCoordinator: NSObject, Coordinator {
 //MARK: - Flow Methods
 extension MyProfileCoordinator {
     
-    func showUser(user user: Users) {
-        
-    }
-    
     func showGroups() {
         let child = GroupCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
@@ -95,14 +90,13 @@ extension MyProfileCoordinator {
     
     func showMoreInfo() {
         if UserDefaults.currentUser.admin {
-            let vc = CoachProfileMoreViewController()
-            vc.hidesBottomBarWhenPushed = true
-            navigationController.pushViewController(vc, animated: true)
-            
+            let child = CoachProfileMoreCoordinator(navigationController: navigationController)
+            childCoordinators.append(child)
+            child.start()
         } else {
-            let vc = PlayerProfileMoreViewController()
-            vc.hidesBottomBarWhenPushed = true
-            navigationController.pushViewController(vc, animated: true)
+            let child = PlayerProfileMoreCoordinator(navigationController: navigationController)
+            childCoordinators.append(child)
+            child.start()
         }
     }
     
@@ -153,6 +147,17 @@ extension MyProfileCoordinator: UIViewControllerTransitioningDelegate {
 extension MyProfileCoordinator: SavedWorkoutsFlow {
     func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
         let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: selectedWorkout, listener: listener)
+        childCoordinators.append(child)
+        child.start()
+    }
+}
+
+
+//MARK: - Child Coordinators
+extension MyProfileCoordinator {
+    
+    func showUser(user: Users) {
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(child)
         child.start()
     }

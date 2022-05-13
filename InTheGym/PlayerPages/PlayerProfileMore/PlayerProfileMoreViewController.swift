@@ -13,6 +13,8 @@ import Combine
 class PlayerProfileMoreViewController: UIViewController {
     
     // MARK: - Properties
+    weak var coordinator: PlayerProfileMoreCoordinator?
+    
     var childContentView: PlayerProfileMoreView!
     
     var viewModel = PlayerProfileMoreViewModel()
@@ -22,12 +24,13 @@ class PlayerProfileMoreViewController: UIViewController {
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .secondarySystemBackground
         addChildView()
         initViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         editNavBarColour(to: .darkColour)
-//        navigationItem.title = viewModel.navigationTitle
+        navigationItem.title = UserDefaults.currentUser.username
     }
 
 
@@ -36,9 +39,15 @@ class PlayerProfileMoreViewController: UIViewController {
         childContentView = .init(viewModel: viewModel)
         let childView = UIHostingController(rootView: childContentView)
         addChild(childView)
-        childView.view.frame = view.bounds
         view.addSubview(childView.view)
         childView.didMove(toParent: self)
+        childView.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            childView.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            childView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            childView.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            childView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
     
     // MARK: - View Model
@@ -53,28 +62,20 @@ class PlayerProfileMoreViewController: UIViewController {
 private extension PlayerProfileMoreViewController {
     func actionHandler(_ action: PlayerProfileMoreAction) {
         switch action {
+        case .editProfile:
+            coordinator?.editProfile()
         case .myCoaches:
-            let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let SVC = Storyboard.instantiateViewController(withIdentifier: "COACHESViewController") as! COACHESViewController
-            self.navigationController?.pushViewController(SVC, animated: true)
+            coordinator?.myCoaches()
         case .requests:
-            let vc = RequestsViewController()
-            navigationController?.pushViewController(vc, animated: true)
+            coordinator?.myRequests()
         case .exerciseStats:
-            let vc = DisplayExerciseStatsViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
+            coordinator?.exerciseStats()
         case .measureJump:
-            let vc = JumpMeasuringViewController()
-            vc.hidesBottomBarWhenPushed = true
-            vc.modalPresentationStyle = .fullScreen
-            navigationController?.present(vc, animated: true)
+            coordinator?.jumpMeasure()
         case .breathWork:
-            let vc = MethodSelectionViewController()
-            vc.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(vc, animated: true)
+            coordinator?.breathWork()
         case .settings:
-            let vc = SettingsViewController()
-            navigationController?.pushViewController(vc, animated: true)
+            coordinator?.settings()
         }
     }
 }
