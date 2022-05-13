@@ -7,3 +7,10 @@
 //
 
 import Foundation
+
+enum ProfileInfoActions {
+    case followers
+    case following
+    case clips
+    case savedWorkouts
+}

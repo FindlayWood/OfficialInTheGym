@@ -40,8 +40,8 @@ class CreateNewPostViewModel {
     var successfullyPosted: Bool = false {
         didSet {
             succesfullyPostedClosure?()
-            updateText(with: "")
-            removeAllAttachments()
+//            updateText(with: "")
+//            removeAllAttachments()
         }
     }
     var errorPosting: Error? {
