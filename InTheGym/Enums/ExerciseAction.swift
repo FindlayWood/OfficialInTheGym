@@ -9,6 +9,7 @@
 import Foundation
 
 enum ExerciseAction {
+    case setSelected(SelectedSetCell)
     case noteButton
     case rpeButton
     case clipButton

@@ -697,7 +697,6 @@
 		74EE4EB827E3AAAF00051451 /* DescriptionUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EB727E3AAAF00051451 /* DescriptionUploadViewController.swift */; };
 		74EE4EBA27E3AAD200051451 /* DescriptionUploadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EB927E3AAD100051451 /* DescriptionUploadViewModel.swift */; };
 		74EE4EBC27E3AADE00051451 /* DescriptionUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EBB27E3AADE00051451 /* DescriptionUploadView.swift */; };
-		74EE4EBE27E4C75600051451 /* ExerciseDescriptionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EBD27E4C75600051451 /* ExerciseDescriptionCoordinator.swift */; };
 		74EE4EC027E4FB3300051451 /* DescriptionsCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EBF27E4FB3300051451 /* DescriptionsCellViewModel.swift */; };
 		74EE4EC227E5112300051451 /* VoteCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EC127E5112300051451 /* VoteCache.swift */; };
 		74EE4EC527E536A100051451 /* LastThreeScoresViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EC427E536A100051451 /* LastThreeScoresViewController.swift */; };
@@ -1514,7 +1513,6 @@
 		74EE4EB727E3AAAF00051451 /* DescriptionUploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionUploadViewController.swift; sourceTree = "<group>"; };
 		74EE4EB927E3AAD100051451 /* DescriptionUploadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionUploadViewModel.swift; sourceTree = "<group>"; };
 		74EE4EBB27E3AADE00051451 /* DescriptionUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionUploadView.swift; sourceTree = "<group>"; };
-		74EE4EBD27E4C75600051451 /* ExerciseDescriptionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDescriptionCoordinator.swift; sourceTree = "<group>"; };
 		74EE4EBF27E4FB3300051451 /* DescriptionsCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionsCellViewModel.swift; sourceTree = "<group>"; };
 		74EE4EC127E5112300051451 /* VoteCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteCache.swift; sourceTree = "<group>"; };
 		74EE4EC427E536A100051451 /* LastThreeScoresViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastThreeScoresViewController.swift; sourceTree = "<group>"; };
@@ -2712,7 +2710,6 @@
 				744AED332798880F000D2D74 /* SavedWorkoutCoordinator.swift */,
 				742C1C5427B4001C00DD1BB0 /* ClipCoordinator.swift */,
 				742C1C7527BAEA5000DD1BB0 /* GroupCommentSectionCoordinator.swift */,
-				74EE4EBD27E4C75600051451 /* ExerciseDescriptionCoordinator.swift */,
 				74EE4ED82800695300051451 /* ExerciseDiscoveryCoordinator.swift */,
 			);
 			path = Coordinator;
@@ -4793,7 +4790,6 @@
 				744AED162796F449000D2D74 /* WorkoutCollectionDataSource.swift in Sources */,
 				742C1C9627BD914D00DD1BB0 /* DescriptionsViewModel.swift in Sources */,
 				741BA3A2271B169700E99C6E /* JumpMeasuringViewController.swift in Sources */,
-				74EE4EBE27E4C75600051451 /* ExerciseDescriptionCoordinator.swift in Sources */,
 				7472C87227DFF628004836B8 /* DiscoverPageView.swift in Sources */,
 				742FF36B277B812F00AEE3D2 /* CommentSectionItems.swift in Sources */,
 				74F18ADB27D65CE80043551F /* CoachPlayerWorkoutsView.swift in Sources */,

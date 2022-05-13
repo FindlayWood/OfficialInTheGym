@@ -19,16 +19,19 @@ class WorkoutChildViewController: UIViewController {
     lazy var clipDataSource: ClipCollectionDataSource = ClipCollectionDataSource(collectionView: display.clipCollection)
     
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         initDataSource()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = view.bounds
-        view.addSubview(display)
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        display.frame = view.bounds
+//        view.addSubview(display)
+//    }
     
     // MARK: - Data Source
     func initDataSource() {

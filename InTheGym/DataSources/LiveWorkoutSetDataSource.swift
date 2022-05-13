@@ -72,9 +72,15 @@ class LiveWorkoutSetDataSource: NSObject {
 // MARK: - CollectionView Delegate
 extension LiveWorkoutSetDataSource: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? MainWorkoutCollectionCell {
-            let snapshot = cell.snapshotView(afterScreenUpdates: false)
-            setSelected.send(SelectedSetCell(cell: cell, snapshot: snapshot))
+        guard let item = dataDource.itemIdentifier(for: indexPath) else {return}
+        switch item {
+        case .exerciseSet(let setModel):
+            if let cell = collectionView.cellForItem(at: indexPath) as? MainWorkoutCollectionCell {
+                let snapshot = cell.snapshotView(afterScreenUpdates: false)
+                setSelected.send(SelectedSetCell(cell: cell, snapshot: snapshot, setModel: setModel))
+            }
+        default:
+            break
         }
     }
 }
@@ -82,4 +88,5 @@ extension LiveWorkoutSetDataSource: UICollectionViewDelegate {
 struct SelectedSetCell {
     var cell: MainWorkoutCollectionCell
     var snapshot: UIView?
+    var setModel: ExerciseSet
 }

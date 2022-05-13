@@ -152,7 +152,14 @@ struct ExerciseModel: ExerciseType, Codable, Hashable {
         var setModels = [ExerciseSet]()
         guard let reps = reps, let weight = weight, let completedSets = completedSets else {return setModels}
         for i in 0..<sets {
-            setModels.append(ExerciseSet(set: i + 1, reps: reps[i], weight: weight[i], completed: completedSets[i]))
+            setModels.append(ExerciseSet(set: i + 1,
+                                         reps: reps[i],
+                                         weight: weight[i],
+                                         completed: completedSets[i],
+                                         time: time?[i],
+                                         distance: distance?[i],
+                                         restTime: restTime?[i]
+                                        ))
         }
         return setModels
     }

@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class SavedWorkoutDisplayViewController: UIViewController {
+class SavedWorkoutDisplayViewController: UIViewController, AnimatingSingleSet {
     
     // MARK: - Properties
     weak var coordinator: SavedWorkoutCoordinator?
@@ -26,13 +26,15 @@ class SavedWorkoutDisplayViewController: UIViewController {
     
     var subscriptions = Set<AnyCancellable>()
 
+    // MARK: - Set Animation
+    var selectedSetCell: MainWorkoutCollectionCell?
+    var selectedSetCellImageViewSnapshot: UIView?
 
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightColour
         viewModel.addAView()
-//        setupSubscriptions()
         initDataSource()
         addBottomChildVC()
     }
@@ -50,14 +52,11 @@ class SavedWorkoutDisplayViewController: UIViewController {
     func addChildVC() {
         addChild(childVC)
         view.insertSubview(childVC.view, belowSubview: bottomViewChildVC.view)
-//        view.addSubview(childVC.view)
         childVC.view.frame = getFullViewableFrame()
         childVC.didMove(toParent: self)
-//        initDataSource()
     }
     func addBottomChildVC() {
         bottomViewChildVC.viewModel.savedWorkoutModel = viewModel.savedWorkout
-//        bottomViewChildVC.viewModel.listListener = viewModel.listListener
         addChild(bottomViewChildVC)
         view.addSubview(bottomViewChildVC.view)
         bottomViewChildVC.view.frame = bottomViewChildVC.viewModel.normalFrame
@@ -92,7 +91,7 @@ class SavedWorkoutDisplayViewController: UIViewController {
         childVC.dataSource.updateTable(with: viewModel.exercises)
         
         childVC.dataSource.exerciseButtonTapped
-            .sink { [weak self] in self?.coordinator?.showDescriptions($0)}
+            .sink { [weak self] in self?.showDiscover($0)}
             .store(in: &subscriptions)
         
         childVC.dataSource.amrapSelected
@@ -106,35 +105,36 @@ class SavedWorkoutDisplayViewController: UIViewController {
         childVC.dataSource.emomSelected
             .sink { [weak self] in self?.coordinator?.showEMOM($0)}
             .store(in: &subscriptions)
+        
+        childVC.dataSource.setSelected
+            .sink { [weak self] setCellModel in
+                self?.selectedSetCell = setCellModel.cell
+                self?.selectedSetCellImageViewSnapshot = setCellModel.snapshot
+                self?.showSingleSet(setCellModel.setModel)
+            }
+            .store(in: &subscriptions)
     }
     
     // MARK: - Subscriptions
     func setupSubscriptions() {
 
         dataSource.exerciseButtonTapped
-            .sink { [weak self] in self?.coordinator?.showDescriptions($0)}
+            .sink { [weak self] in self?.showDiscover($0)}
             .store(in: &subscriptions)
     }
-    
-    // MARK: - Actions
-    @objc func showOptions() {
-        coordinator?.showOptions(for: viewModel.savedWorkout)
+}
+// MARK: - Actions
+private extension SavedWorkoutDisplayViewController {
+    func showDiscover(_ exercise: ExerciseModel) {
+        let discoverModel = DiscoverExerciseModel(exerciseName: exercise.exercise)
+        coordinator?.showDescriptions(discoverModel)
     }
-    
     func snapBottomView(to newFrame: CGRect) {
         UIView.animate(withDuration: 0.3) {
             self.bottomViewChildVC.view.frame = newFrame
         }
     }
-
-    // MARK: - RPE
-    func rpe(index: IndexPath) {
-        showRPEAlert(for: index) { [weak self] index, score in
-            guard let self = self else {return}
-            guard let cell = self.display.exerciseCollection.cellForItem(at: index) else {return}
-            cell.flash(with: score)
-            self.viewModel.updateRPE(at: index, to: score)
-        }
+    func showSingleSet(_ exerciseSet: ExerciseSet) {
+        coordinator?.showSingleSet(fromViewControllerDelegate: self, setModel: exerciseSet)
     }
-
 }

@@ -24,6 +24,7 @@ class WorkoutExerciseCollectionDataSource: NSObject {
     var clipButtonTapped = PassthroughSubject<ExerciseModel,Never>()
     var exerciseButtonTapped = PassthroughSubject<ExerciseModel,Never>()
     var showClipPublisher = PassthroughSubject<Bool,Never>()
+    var setSelected = PassthroughSubject<SelectedSetCell,Never>()
     var actionSubscriptions = [IndexPath: AnyCancellable]()
     
     // MARK: - Properties
@@ -53,6 +54,8 @@ class WorkoutExerciseCollectionDataSource: NSObject {
                 self.actionSubscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
                         switch action {
+                        case .setSelected(let setModel):
+                            self?.setSelected.send(setModel)
                         case .noteButton:
                             self?.noteButtonTapped.send(indexPath)
                         case .rpeButton:

@@ -12,10 +12,9 @@ import UIKit
 class LiveWorkoutDisplayView: UIView {
     
     // MARK: - Properties
-    private let showClipsFrame = CGRect(x: 5, y: 0, width: Constants.screenSize.width - 10, height: 100)
-    private let hideClipsFrame = CGRect(x: 5, y: 0, width: Constants.screenSize.width - 10, height: 0)
     
     private var tableviewTopAnchor: NSLayoutConstraint!
+    private var clipHeightAnchor: NSLayoutConstraint!
     
     var isClipShowing: Bool = false
     
@@ -25,7 +24,7 @@ class LiveWorkoutDisplayView: UIView {
         collection.backgroundColor = .lightColour
         collection.register(DisplayClipCell.self, forCellWithReuseIdentifier: DisplayClipCell.reuseID)
         collection.showsHorizontalScrollIndicator = false
-        collection.translatesAutoresizingMaskIntoConstraints = true
+        collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
 
@@ -59,9 +58,13 @@ private extension LiveWorkoutDisplayView {
         constrainUI()
     }
     func constrainUI() {
-        clipCollection.frame = hideClipsFrame
-        tableviewTopAnchor = exerciseCollection.topAnchor.constraint(equalTo: topAnchor, constant: 0)
+        tableviewTopAnchor = exerciseCollection.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0)
+        clipHeightAnchor = clipCollection.heightAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
+            clipHeightAnchor,
+            clipCollection.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            clipCollection.leadingAnchor.constraint(equalTo: leadingAnchor),
+            clipCollection.trailingAnchor.constraint(equalTo: trailingAnchor),
                                      tableviewTopAnchor,
                                      exerciseCollection.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
                                      exerciseCollection.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
@@ -93,18 +96,18 @@ extension LiveWorkoutDisplayView {
     public func showClipCollection() {
         isClipShowing = true
         tableviewTopAnchor.constant = 100
+        clipHeightAnchor.constant = 100
         UIView.animate(withDuration: 0.3) { [weak self] in
             guard let self = self else {return}
-            self.clipCollection.frame = self.showClipsFrame
             self.layoutIfNeeded()
         }
     }
     public func hideClipCollection() {
         isClipShowing = false
         tableviewTopAnchor.constant = 0
+        clipHeightAnchor.constant = 0
         UIView.animate(withDuration: 0.3) { [weak self] in
             guard let self = self else {return}
-            self.clipCollection.frame = self.hideClipsFrame
             self.layoutIfNeeded()
         }
     }

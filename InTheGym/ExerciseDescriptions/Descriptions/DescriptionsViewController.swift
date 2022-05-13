@@ -12,7 +12,6 @@ import Combine
 class DescriptionsViewController: UIViewController {
 
     // MARK: - Properties
-    weak var coordinator: ExerciseDescriptionCoordinator?
     
     var display = DescriptionsView()
     
@@ -65,12 +64,6 @@ class DescriptionsViewController: UIViewController {
 private extension DescriptionsViewController {
     @objc func plusButtonPressed(_ sender: UIButton) {
         let descriptionModel = DescriptionModel(exercise: viewModel.exerciseModel.exerciseName, description: "")
-        coordinator?.addDescription(descriptionModel, listener: viewModel.newDescriptionListener)
-        
-//        let vc = DescriptionUploadViewController()
-//        vc.viewModel.descriptionModel = descriptionModel
-//        vc.viewModel.listener = viewModel.newDescriptionListener
-//        vc.modalPresentationStyle = .fullScreen
-//        navigationController?.present(vc, animated: true)
+
     }
 }

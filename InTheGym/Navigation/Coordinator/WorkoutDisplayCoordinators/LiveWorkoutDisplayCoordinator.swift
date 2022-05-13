@@ -70,13 +70,13 @@ extension LiveWorkoutDisplayCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func showDescriptions(for exercise: ExerciseModel) {
+    func showDescriptions(for exercise: DiscoverExerciseModel) {
         let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise)
         childCoordinators.append(child)
         child.start()
     }
-    func showSingleSet(fromViewControllerDelegate: AnimatingSingleSet) {
-        let child = SingleSetCoordinator(navigationController: navigationController, fromViewControllerDelegate: fromViewControllerDelegate)
+    func showSingleSet(fromViewControllerDelegate: AnimatingSingleSet, setModel: ExerciseSet) {
+        let child = SingleSetCoordinator(navigationController: navigationController, fromViewControllerDelegate: fromViewControllerDelegate, setModel: setModel)
         childCoordinators.append(child)
         child.start()
     }

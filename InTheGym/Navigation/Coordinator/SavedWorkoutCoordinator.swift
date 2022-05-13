@@ -33,36 +33,21 @@ class SavedWorkoutCoordinator: NSObject, Coordinator {
 
 // MARK: - Methods
 extension SavedWorkoutCoordinator {
-    
-    func showOptions(for workout: SavedWorkoutModel) {
-        let vc = SavedWorkoutOptionsViewController()
-        vc.viewModel.savedWorkout = workout
-        vc.coordinator = self
-        vc.modalPresentationStyle = .custom
-        vc.transitioningDelegate = self
-        navigationController.present(vc, animated: true, completion: nil)
-    }
-    
     func showWorkoutStats(with savedWorkoutID: String) {
-//        navigationController.dismiss(animated: true)
         let vc = DisplayWorkoutStatsViewController()
         vc.savedWorkoutID = savedWorkoutID
         navigationController.pushViewController(vc, animated: true)
     }
-    
     func showUser(_ user: Users) {
-//        navigationController.dismiss(animated: true)
         let child = UserProfileCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(child)
         child.start()
     }
-    
-    func showDescriptions(_ exercise: ExerciseModel) {
+    func showDescriptions(_ exercise: DiscoverExerciseModel) {
         let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise)
         childCoordinators.append(child)
         child.start()
     }
-    
     func showEMOM(_ emom: EMOMModel) {
         let vc = DisplayEMOMViewController()
         vc.viewModel.emomModel = emom
@@ -83,15 +68,10 @@ extension SavedWorkoutCoordinator {
         vc.viewModel.savedWorkoutModel = model
         navigationController.pushViewController(vc, animated: true)
     }
-
-}
-
-// MARK: - Custom Clip Picker
-extension SavedWorkoutCoordinator: UIViewControllerTransitioningDelegate {
-    
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        let controller = BottomViewPresentationController(presentedViewController: presented, presenting: presenting)
-        controller.viewHeightPrecentage = 0.7
-        return controller
+    func showSingleSet(fromViewControllerDelegate: AnimatingSingleSet, setModel: ExerciseSet) {
+        let child = SingleSetCoordinator(navigationController: navigationController, fromViewControllerDelegate: fromViewControllerDelegate, setModel: setModel)
+        childCoordinators.append(child)
+        child.start()
     }
+
 }

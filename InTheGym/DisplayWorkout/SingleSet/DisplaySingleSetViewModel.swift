@@ -12,6 +12,8 @@ struct DisplaySingleSetViewModel {
     // MARK: - Publishers
     
     // MARK: - Properties
+    var setModel: ExerciseSet!
+    
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     
     // MARK: - Initializer

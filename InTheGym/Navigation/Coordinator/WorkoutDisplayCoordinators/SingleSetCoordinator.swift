@@ -11,15 +11,18 @@ class SingleSetCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var fromViewControllerDelegate: AnimatingSingleSet
+    var setModel: ExerciseSet
     
-    init(navigationController: UINavigationController, fromViewControllerDelegate: AnimatingSingleSet) {
+    init(navigationController: UINavigationController, fromViewControllerDelegate: AnimatingSingleSet, setModel: ExerciseSet) {
         self.navigationController = navigationController
         self.fromViewControllerDelegate = fromViewControllerDelegate
+        self.setModel = setModel
     }
     
     func start() {
         let vc = DisplaySingleSetViewController()
         vc.coordinator = self
+        vc.viewModel.setModel = setModel
         vc.modalPresentationStyle = .custom
         vc.hidesBottomBarWhenPushed = true
         vc.transitioningDelegate = self

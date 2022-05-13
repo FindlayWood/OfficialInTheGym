@@ -80,14 +80,16 @@ final class ShowSingleSetCustomTransition: NSObject, UIViewControllerAnimatedTra
         toView.alpha = 0
         
         // B3 - 24
-        [selectedCellImageViewSnapshot, controllerImageSnapshot, cellLabelSnapshot].forEach { containerView.addSubview($0) }
+        [controllerImageSnapshot, selectedCellImageViewSnapshot].forEach { containerView.addSubview($0) }
+//        [controllerImageSnapshot, cellLabelSnapshot].forEach { containerView.addSubview($0) }
 
         // B3 - 25
-        let controllerImageViewRect = secondViewController.view.convert(secondViewController.display.bounds, to: window)
+        let controllerImageViewRect = secondViewController.view.convert(secondViewController.view.bounds, to: window)
         let controllerLabelRect = secondViewController.display.setLabel.convert(secondViewController.display.setLabel.bounds, to: window)
+        let controllerTestViewRect = secondViewController.display.setView.convert(secondViewController.display.setView.bounds, to: window)
 
         // B3 - 26
-        [selectedCellImageViewSnapshot, controllerImageSnapshot].forEach {
+        [controllerImageSnapshot].forEach {
             $0.frame = isPresenting ? cellImageViewRect : controllerImageViewRect
             
             $0.layer.cornerRadius = isPresenting ? 10 : 0
@@ -95,14 +97,18 @@ final class ShowSingleSetCustomTransition: NSObject, UIViewControllerAnimatedTra
         }
         
         // B4 - 36
-        controllerImageSnapshot.alpha = isPresenting ? 0 : 1
+        controllerImageSnapshot.alpha = isPresenting ? 1 : 1
+        controllerImageSnapshot.layer.cornerRadius = 10
 
         // B4 - 37
-        selectedCellImageViewSnapshot.alpha = isPresenting ? 1 : 0
+//        selectedCellImageViewSnapshot.alpha = isPresenting ? 1 : 0
         
+        selectedCellImageViewSnapshot.frame = isPresenting ? cellImageViewRect : controllerTestViewRect
+        selectedCellImageViewSnapshot.layer.cornerRadius = 10
+        selectedCellImageViewSnapshot.clipsToBounds = true
         cellLabelSnapshot.frame = isPresenting ? cellLabelRect : controllerLabelRect
         
-        cellLabelSnapshot.alpha = isPresenting ? 0 : 1
+        cellLabelSnapshot.alpha = isPresenting ? 1 : 1
         
         // B3 - 27
         UIView.animateKeyframes(withDuration: Self.duration, delay: 0, options: .calculationModeCubic, animations: {
@@ -110,22 +116,22 @@ final class ShowSingleSetCustomTransition: NSObject, UIViewControllerAnimatedTra
             UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1) {
                 // B3 - 28
                 // B4 - 38
-                self.selectedCellImageViewSnapshot.frame = isPresenting ? controllerImageViewRect : self.cellImageViewRect
+                self.selectedCellImageViewSnapshot.frame = isPresenting ? controllerTestViewRect : self.cellImageViewRect
                 controllerImageSnapshot.frame = isPresenting ? controllerImageViewRect : self.cellImageViewRect
-                cellLabelSnapshot.frame = isPresenting ? controllerLabelRect : self.cellLabelRect
+//                cellLabelSnapshot.frame = isPresenting ? controllerLabelRect : self.cellLabelRect
                 
                 
                 // B8 - 60
-                [controllerImageSnapshot, self.selectedCellImageViewSnapshot].forEach {
+                [controllerImageSnapshot].forEach {
                     $0.layer.cornerRadius = isPresenting ? 0 : 10
                 }
             }
 
             // B4 - 39
-            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.6) {
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.9) {
                 self.selectedCellImageViewSnapshot.alpha = isPresenting ? 0 : 1
                 controllerImageSnapshot.alpha = isPresenting ? 1 : 0
-                cellLabelSnapshot.alpha = isPresenting ? 1 : 0
+//                cellLabelSnapshot.alpha = isPresenting ? 1 : 0
             }
           
         }, completion: { _ in
@@ -133,7 +139,7 @@ final class ShowSingleSetCustomTransition: NSObject, UIViewControllerAnimatedTra
             // B4 - 39.1
             self.selectedCellImageViewSnapshot.removeFromSuperview()
             controllerImageSnapshot.removeFromSuperview()
-            cellLabelSnapshot.removeFromSuperview()
+//            cellLabelSnapshot.removeFromSuperview()
 
             // B3 - 30
             toView.alpha = 1
