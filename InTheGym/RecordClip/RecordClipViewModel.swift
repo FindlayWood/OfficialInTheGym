@@ -58,10 +58,9 @@ class RecordClipViewModel: NSObject {
     // MARK: - Capture Session
     func setUpCaptureSession() {
         captureSession = AVCaptureSession()
-        captureSession.sessionPreset = .photo
         captureSession.beginConfiguration()
-        if captureSession.canSetSessionPreset(.photo) {
-            captureSession.sessionPreset = .photo
+        if captureSession.canSetSessionPreset(.high) {
+            captureSession.sessionPreset = .high
         }
         captureSession.automaticallyConfiguresCaptureDeviceForWideColor = true
         setUpDevices()
