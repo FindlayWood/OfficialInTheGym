@@ -68,11 +68,29 @@ class RecordClipViewController: UIViewController {
         viewModel.outPutFilePublisher
             .sink { [weak self] in self?.finishedRecording(with: $0) }
             .store(in: &subscriptions)
+        
+        viewModel.$countDownTime
+            .dropFirst()
+            .sink { [weak self] newTime in
+                if newTime > 0 {
+                    self?.display.setCountDown(to: newTime)
+                } else {
+                    self?.display.setUIRecording()
+                    self?.viewModel.countDownTimer.cancel()
+                    self?.startRecording()
+                }
+            }
+            .store(in: &subscriptions)
+    }
+    
+    func startRecording() {
+        viewModel.beginRecording()
+        viewModel.startRecordingTimer()
+        display.setUIRecording()
     }
     
     func finishedRecording(with outputFileURL: URL) {
         let clipStorageModel = ClipStorageModel(fileURL: outputFileURL)
-//        coordinator?.finishedRecording(clipStorageModel)
         
         let vc = RecordedClipPlayerViewController()
         vc.viewModel.exerciseModel = viewModel.exerciseModel
@@ -106,17 +124,9 @@ class RecordClipViewController: UIViewController {
             //check if countdown is on
             if viewModel.countDownOn {
                 display.setUICountdownOn()
-                display.startCountDown()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
-                    // begin to record a video
-                    guard let self = self else {return}
-                    self.beginRecording()
-                    self.viewModel.beginRecording()
-                }
+                viewModel.startCountDown()
             } else {
-                beginRecording()
-                viewModel.beginRecording()
-//                // begin to record a video
+                startRecording()
             }
         } else {
             // stop recording video

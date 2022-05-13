@@ -25,8 +25,6 @@ class RecordClipView: UIView {
         button.setImage(UIImage(systemName: "chevron.backward.circle.fill"), for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.tintColor = .darkColour
-//        button.layer.borderWidth = 2
-//        button.layer.borderColor = UIColor.black.cgColor
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -38,8 +36,6 @@ class RecordClipView: UIView {
         button.setImage(UIImage(systemName: "timer"), for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.tintColor = .darkColour
-//        button.layer.borderWidth = 2
-//        button.layer.borderColor = UIColor.black.cgColor
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -52,8 +48,6 @@ class RecordClipView: UIView {
         button.setImage(UIImage(systemName: "arrow.triangle.2.circlepath.camera.fill"), for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.tintColor = .darkColour
-//        button.layer.borderWidth = 2
-//        button.layer.borderColor = UIColor.black.cgColor
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -70,16 +64,13 @@ class RecordClipView: UIView {
         return button
     }()
     
-    var countDownNumber: Int = 10
-    var timer = Timer()
-    
-    lazy var countDownLabel: UILabel = {
+    var countDownLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.font = UIFont(name: "Menlo-Bold", size: 75)
         label.textAlignment = .center
         label.isHidden = true
-        label.text = countDownNumber.description
+        label.text = "10"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -152,6 +143,7 @@ class RecordClipView: UIView {
     }
     
     func setUIRecording() {
+        countDownLabel.isHidden = true
         recordButton.isHidden = false
         recordButton.backgroundColor = .red
         recordButton.alpha = 1
@@ -162,9 +154,11 @@ class RecordClipView: UIView {
     func setUICountdownOn() {
         stackView.isHidden = true
         recordButton.isHidden = true
+        countDownLabel.isHidden = false
     }
     
     func setUIDefault() {
+        countDownLabel.isHidden = true
         recordButton.isHidden = false
         recordButton.backgroundColor = .white
         recordButton.alpha = 0.6
@@ -179,23 +173,6 @@ class RecordClipView: UIView {
             countDownButton.backgroundColor = .white
         }
         showMessage(countdown: isOn)
-    }
-    
-    func startCountDown() {
-        countDownLabel.isHidden = false
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCountDownLabel), userInfo: nil, repeats: true)
-    }
-    
-    @objc func updateCountDownLabel() {
-        if countDownNumber > 0 {
-            countDownNumber -= 1
-            countDownLabel.text = countDownNumber.description
-        } else {
-            timer.invalidate()
-            countDownLabel.isHidden = true
-            countDownNumber = 10
-            countDownLabel.text = countDownNumber.description
-        }
     }
     
     func showMessage(countdown: Bool) {
@@ -219,6 +196,9 @@ class RecordClipView: UIView {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
             self?.messageLabel.isHidden = true
         }
+    }
+    func setCountDown(to number: Int) {
+        countDownLabel.text = number.description
     }
 
 }
