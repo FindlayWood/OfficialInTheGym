@@ -25,6 +25,7 @@ class ExerciseDiscoveryCoordinator: NSObject, Coordinator {
         vc.viewModel.exercise = exercise
         vc.clipsVC.viewModel.exerciseModel = exercise
         vc.descriptionsVC.viewModel.exerciseModel = exercise
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
 }

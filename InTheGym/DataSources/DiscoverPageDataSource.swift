@@ -14,11 +14,14 @@ class DiscoverPageDataSource: NSObject {
     // MARK: - Publisher
     var itemSelected = PassthroughSubject<DiscoverPageItems,Never>()
     var selectedClip = PassthroughSubject<SelectedClip,Never>()
+    var moreSelected = PassthroughSubject<DiscoverPageItems,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
     
     private lazy var dataSource = makeDataSource()
+    
+    var actionSubscriptions = [IndexPath: AnyCancellable]()
     
     
     // MARK: - Initializer
@@ -63,6 +66,8 @@ class DiscoverPageDataSource: NSObject {
             
             let section = dataSource.snapshot().sectionIdentifiers[indexPath.section]
             view?.label.text = section.rawValue
+            self.actionSubscriptions[indexPath] = view?.moreButtonTapped
+                .sink { [weak self] in self?.moreButtonAction(for: indexPath) }
             return view
         }
         
@@ -72,7 +77,7 @@ class DiscoverPageDataSource: NSObject {
     // MARK: - Initial Setup
     func initialSetup() {
         var snapshot = NSDiffableDataSourceSnapshot<DiscoverPageSections,DiscoverPageItems>()
-        snapshot.appendSections([.Workouts,.Exercises,.Programs,.Clips])
+        snapshot.appendSections([.Workouts,.Exercises,.Clips])
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
@@ -106,6 +111,11 @@ class DiscoverPageDataSource: NSObject {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.appendItems(items, toSection: .Programs)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
+    // MARK: - More Button Action
+    func moreButtonAction(for index: IndexPath) {
+        guard let model = dataSource.itemIdentifier(for: index) else {return}
+        moreSelected.send(model)
     }
 }
 

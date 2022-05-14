@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import Combine
 
 class DiscoverSectionHeader: UICollectionReusableView {
+    
+    // MARK: - Publishers
+    var moreButtonTapped = PassthroughSubject<Void,Never>()
     
     // MARK: - Properties
     static let reuseIdentifier = "DiscoverSectionHeaderreuseID"
@@ -21,6 +25,14 @@ class DiscoverSectionHeader: UICollectionReusableView {
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    var moreButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("more", for: .normal)
+        button.setTitleColor(.darkColour, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     // MARK: - Initializer
@@ -38,13 +50,20 @@ class DiscoverSectionHeader: UICollectionReusableView {
 private extension DiscoverSectionHeader {
     func setupUI() {
         addSubview(label)
-        backgroundColor = .white
+        addSubview(moreButton)
+        backgroundColor = .systemBackground
         constrainUI()
+        moreButton.addTarget(self, action: #selector(moreButtonAction(_:)), for: .touchUpInside)
     }
     func constrainUI() {
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            label.centerYAnchor.constraint(equalTo: centerYAnchor)
+            label.centerYAnchor.constraint(equalTo: centerYAnchor),
+            moreButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            moreButton.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
+    }
+    @objc func moreButtonAction(_ sender: UIButton) {
+        moreButtonTapped.send(())
     }
 }
