@@ -114,13 +114,14 @@ extension DiscoverPageViewController {
     func moreSelected(_ item: DiscoverPageItems) {
         switch item {
         case .workout(_):
-            print("to workouts")
+            coordinator?.moreWorkoutsSelected()
         case .exercise(_):
-            print("to exercises")
+            let emptyExercise = ExerciseModel(workoutPosition: 0)
+            coordinator?.moreExercisesSelected(emptyExercise)
         case .program(_):
             break
         case .clip(_):
-            print("to clips")
+            coordinator?.moreClipsSelected()
         }
     }
 }

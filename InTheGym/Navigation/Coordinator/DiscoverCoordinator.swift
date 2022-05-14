@@ -50,13 +50,6 @@ extension DiscoverCoordinator {
         let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: model)
         childCoordinators.append(child)
         child.start()
-//        let child = ExerciseDescriptionCoordinator(navigationController: navigationController, exercise: model)
-//        childCoordinators.append(child)
-//        child.start()
-//        let vc = ExerciseDescriptionViewController()
-//        vc.viewModel.exercise = model
-//        vc.hidesBottomBarWhenPushed = true
-//        navigationController.pushViewController(vc, animated: true)
     }
     
     func programSelected(_ model: SavedProgramModel) {
@@ -70,10 +63,41 @@ extension DiscoverCoordinator {
         child.start()
     }
     
-    
+    func moreWorkoutsSelected() {
+        let vc = DiscoverMoreWorkoutsViewController()
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func moreClipsSelected() {
+        let vc = DiscoverMoreClipsViewController()
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func moreExercisesSelected(_ emptyExercise: ExerciseModel) {
+        let vc = ExerciseSelectionViewController()
+        vc.coordinator = self
+        vc.viewModel.exercise = emptyExercise
+        navigationController.pushViewController(vc, animated: true)
+    }
     func search() {
         let vc = SearchForUsersViewController.instantiate()
         navigationController.pushViewController(vc, animated: true)
+    }
+}
+extension DiscoverCoordinator: ExerciseSelectionFlow {
+    func exerciseSelected(_ exercise: ExerciseModel) {
+        let discoverModel = DiscoverExerciseModel(exerciseName: exercise.exercise)
+        exerciseSelected(discoverModel)
+    }
+    
+    func addCircuit() {
+        
+    }
+    
+    func addAmrap() {
+        
+    }
+    
+    func addEmom() {
+        
     }
 }
 
