@@ -151,7 +151,7 @@ extension ExerciseSelectionView {
         UIView.animate(withDuration: 0.3) {
             self.hideStack()
             self.searchBarTopAnchor.isActive = false
-            self.searchBarTopAnchor = self.searchBar.topAnchor.constraint(equalTo: self.topAnchor)
+            self.searchBarTopAnchor = self.searchBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor)
             self.searchBarTopAnchor.isActive = true
         }
     }

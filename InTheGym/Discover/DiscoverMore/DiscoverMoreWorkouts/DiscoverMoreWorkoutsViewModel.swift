@@ -16,6 +16,8 @@ class DiscoverMoreWorkoutsViewModel {
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     
     // MARK: - Initializer
+    var navigationTitle: String = "More Workouts"
+    
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }

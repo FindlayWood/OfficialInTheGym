@@ -27,20 +27,5 @@ class SavedWorkoutsChildViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-//        initDataSource()
     }
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        display.frame = getFullViewableFrame()
-//        view.addSubview(display)
-//    }
-    
-//    // MARK: - Data Source
-//    func initDataSource() {
-////        dataSource = .init(collectionView: display.collectionView)
-//
-//        dataSource.workoutSelected
-//            .sink { [weak self] in self?.workoutSelected.send($0)}
-//            .store(in: &subscriptions)
-//    }
 }

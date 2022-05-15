@@ -40,8 +40,12 @@ private extension SavedWorkoutsChildView {
     }
     
     func configureUI() {
-        addFullConstraint(to: collectionView)
-        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
     func generateCollectionLayout() -> UICollectionViewFlowLayout {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()

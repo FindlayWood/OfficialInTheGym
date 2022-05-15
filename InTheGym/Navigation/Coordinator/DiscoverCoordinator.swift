@@ -65,10 +65,14 @@ extension DiscoverCoordinator {
     
     func moreWorkoutsSelected() {
         let vc = DiscoverMoreWorkoutsViewController()
+        vc.coordinator = self
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
     func moreClipsSelected() {
         let vc = DiscoverMoreClipsViewController()
+        vc.coordinator = self
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
     func moreExercisesSelected(_ emptyExercise: ExerciseModel) {

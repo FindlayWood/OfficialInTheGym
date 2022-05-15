@@ -27,9 +27,5 @@ class MyClipsChildViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
     }
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        display.frame = view.bounds
-//        view.addSubview(display)
-//    }
+
 }

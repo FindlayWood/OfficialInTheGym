@@ -11,6 +11,8 @@ import Combine
 
 class DiscoverMoreWorkoutsViewController: UIViewController {
     
+    weak var coordinator: DiscoverCoordinator?
+    
     var childVC = SavedWorkoutsChildViewController()
     
     var viewModel = DiscoverMoreWorkoutsViewModel()
@@ -25,10 +27,12 @@ class DiscoverMoreWorkoutsViewController: UIViewController {
         super.viewDidLoad()
         addChildVC()
         initViewModel()
+        initDataSource()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationItem.title = viewModel.navigationTitle
         editNavBarColour(to: .darkColour)
     }
     
@@ -39,6 +43,9 @@ class DiscoverMoreWorkoutsViewController: UIViewController {
     
     func initDataSource() {
         
+        childVC.dataSource.workoutSelected
+            .sink { [weak self] in self?.coordinator?.workoutSelected($0)}
+            .store(in: &subscriptions)
     }
     
     func initViewModel() {

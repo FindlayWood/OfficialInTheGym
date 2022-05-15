@@ -14,6 +14,8 @@ class DiscoverMoreClipsViewModel {
     @Published var clips: [ClipModel] = []
     
     // MARK: - Properties
+    var navigationTitle: String = "More Clips"
+    
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     
     // MARK: - Initializer
