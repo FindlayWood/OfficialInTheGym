@@ -33,13 +33,19 @@ class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
+        initTargets()
         initDataSource()
         initViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    // MARK: - Targets
+    func initTargets() {
+        display.searchButton.addTarget(self, action: #selector(searchButtonAction(_:)), for: .touchUpInside)
     }
     
     // MARK: - Data Source
@@ -105,7 +111,7 @@ class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
 
 //MARK: - Actions
 extension DiscoverPageViewController {
-    @IBAction func searchTapped(_ sender: UIButton) {
+    @IBAction func searchButtonAction(_ sender: UIButton) {
         coordinator?.search()
     }
     func clipSelected(_ model: ClipModel) {

@@ -82,7 +82,8 @@ extension DiscoverCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func search() {
-        let vc = SearchForUsersViewController.instantiate()
+        let vc = SearchViewController()
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
 }

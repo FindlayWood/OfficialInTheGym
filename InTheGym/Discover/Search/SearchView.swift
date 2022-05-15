@@ -14,8 +14,9 @@ class SearchView: UIView {
     // MARK: - Subviews
     var searchField: UISearchBar = {
         let view = UISearchBar()
-        view.placeholder = "search..."
-        view.showsCancelButton = false
+        view.placeholder = "search usernames..."
+        view.showsCancelButton = true
+        view.searchBarStyle = .prominent
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -23,6 +24,8 @@ class SearchView: UIView {
     var tableview: UITableView = {
         let view = UITableView()
         view.register(UserTableViewCell.self, forCellReuseIdentifier: UserTableViewCell.cellID)
+        view.tableFooterView = UIView()
+        view.backgroundColor = .secondarySystemBackground
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -41,7 +44,7 @@ class SearchView: UIView {
 // MARK: - Configure
 private extension SearchView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         addSubview(searchField)
         addSubview(tableview)
         configureUI()
@@ -49,13 +52,14 @@ private extension SearchView {
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            searchField.topAnchor.constraint(equalTo: topAnchor),
+            searchField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             searchField.leadingAnchor.constraint(equalTo: leadingAnchor),
             searchField.trailingAnchor.constraint(equalTo: trailingAnchor),
             
             tableview.topAnchor.constraint(equalTo: searchField.bottomAnchor),
             tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
-            tableview.trailingAnchor.constraint(equalTo: trailingAnchor)
+            tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
+            tableview.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }

@@ -22,7 +22,7 @@ class DiscoverPageView: UIView {
         return label
     }()
     
-    var plusButton: UIButton = {
+    var searchButton: UIButton = {
         let button = UIButton()
         let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
         button.setImage(UIImage(systemName: "magnifyingglass", withConfiguration: configuration), for: .normal)
@@ -58,7 +58,7 @@ private extension DiscoverPageView {
     func setupUI() {
         backgroundColor = .white
         addSubview(titleLabel)
-        addSubview(plusButton)
+        addSubview(searchButton)
         addSubview(collectionView)
         configureUI()
     }
@@ -68,8 +68,8 @@ private extension DiscoverPageView {
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             
-            plusButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-            plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            searchButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            searchButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
