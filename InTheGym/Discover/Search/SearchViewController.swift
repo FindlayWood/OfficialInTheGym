@@ -10,6 +10,8 @@ import UIKit
 import Combine
 
 class SearchViewController: UIViewController {
+    
+    weak var coordinator: DiscoverCoordinator?
 
     var display = SearchView()
     
@@ -22,7 +24,6 @@ class SearchViewController: UIViewController {
     override func loadView() {
         view = display
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initDataSource()
@@ -37,7 +38,9 @@ class SearchViewController: UIViewController {
     }
     func initDataSource() {
         dataSource = .init(tableView: display.tableview)
-        
+        dataSource.userSelected
+            .sink { [weak self] in self?.coordinator?.userSelected($0)}
+            .store(in: &subscriptions)
     }
     func initViewModel() {
         viewModel.$isSearching
@@ -74,7 +77,6 @@ private extension SearchViewController {
         }
     }
 }
-
 
 // MARK: - IMPORTANT!
 /// Text search is not supported by Firebase which makes this feature tricky

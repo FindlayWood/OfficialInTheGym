@@ -83,8 +83,14 @@ extension DiscoverCoordinator {
     }
     func search() {
         let vc = SearchViewController()
+        vc.coordinator = self
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
+    }
+    func userSelected(_ user: Users) {
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        childCoordinators.append(child)
+        child.start()
     }
 }
 extension DiscoverCoordinator: ExerciseSelectionFlow {
