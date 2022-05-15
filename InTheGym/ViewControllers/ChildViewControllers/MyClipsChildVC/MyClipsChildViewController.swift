@@ -20,24 +20,12 @@ class MyClipsChildViewController: UIViewController {
     
     private var subscriptions = Set<AnyCancellable>()
 
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        initViewModel()
+        view.backgroundColor = .systemBackground
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = view.bounds
-        view.addSubview(display)
-    }
-    
-    // MARK: - View Model
-    func initViewModel() {
-        
-        viewModel.clipPublisher
-            .sink { [weak self] in self?.dataSource.updateTable(with: $0)}
-            .store(in: &subscriptions)
-        
-        viewModel.fetchClipKeys()
-    }
+
 }

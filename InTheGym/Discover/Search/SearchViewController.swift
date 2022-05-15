@@ -13,17 +13,65 @@ class SearchViewController: UIViewController {
 
     var display = SearchView()
     
+    var dataSource: UsersDataSource!
+    
     var viewModel = SearchViewModel()
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
+    private var subscriptions = Set<AnyCancellable>()
+    
+    override func loadView() {
+        view = display
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        initDataSource()
+        initViewModel()
+        display.searchField.delegate = self
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationItem.title = viewModel.navigationTitle
+        editNavBarColour(to: .darkColour)
+    }
+    func initDataSource() {
+        dataSource = .init(tableView: display.tableview)
+        
+    }
+    func initViewModel() {
+        viewModel.$isSearching
+            .sink { [weak self] in self?.setNavBar($0)}
+            .store(in: &subscriptions)
+        viewModel.$initialUsers
+            .sink { [weak self] in self?.dataSource.updateTable(with: $0)}
+            .store(in: &subscriptions)
+        viewModel.returnedSearchUser
+            .sink { [weak self] in self?.dataSource.insertFirst($0)}
+            .store(in: &subscriptions)
+        viewModel.loadInitialUsers()
+        viewModel.initSubscribers()
+    }
+}
+extension SearchViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.searchText = searchText
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        viewModel.searchDatabase()
+    }
+}
+private extension SearchViewController {
+    func setNavBar(_ searching: Bool) {
+        if searching {
+            initLoadingNavBar(with: .darkColour)
+        } else {
+            navigationItem.rightBarButtonItem = nil
+        }
     }
 }
 
@@ -39,3 +87,8 @@ class SearchViewController: UIViewController {
 /// databaseReference.orderByChild('_searchFirstName')
 ///    .startAt(queryText)
 ///    .endAt(queryText+"uf8ff")
+// MARK: - Update!
+/// This now works by initial loading 20 users from the database
+/// These users are then filtered when the search bar receives text
+/// If the search bar is tapped the database will be searched for matching username
+/// If found this user will be inserted into the loaded users

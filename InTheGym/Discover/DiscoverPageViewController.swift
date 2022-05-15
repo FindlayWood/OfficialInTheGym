@@ -28,20 +28,24 @@ class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
     var selectedCellImageViewSnapshot: UIView?
 
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
+        initTargets()
         initDataSource()
         initViewModel()
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getViewableFrameWithBottomSafeArea()
-        view.addSubview(display)
-    }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    // MARK: - Targets
+    func initTargets() {
+        display.searchButton.addTarget(self, action: #selector(searchButtonAction(_:)), for: .touchUpInside)
     }
     
     // MARK: - Data Source
@@ -57,6 +61,10 @@ class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
                 self?.selectedCell = selectedClip.selectedCell
                 self?.selectedCellImageViewSnapshot = selectedClip.snapshot
             }
+            .store(in: &subscriptions)
+        
+        dataSource.moreSelected
+            .sink { [weak self] in self?.moreSelected($0)}
             .store(in: &subscriptions)
     }
     
@@ -84,9 +92,9 @@ class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
             .sink { [weak self] in self?.dataSource.updateClips(with: $0)}
             .store(in: &subscriptions)
         
-        viewModel.programPublisher
-            .sink { [weak self] in self?.dataSource.updateProgram(with: $0)}
-            .store(in: &subscriptions)
+//        viewModel.programPublisher
+//            .sink { [weak self] in self?.dataSource.updateProgram(with: $0)}
+//            .store(in: &subscriptions)
         
         viewModel.clipSelected
             .sink { [weak self] in self?.clipSelected($0)}
@@ -95,7 +103,7 @@ class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
         viewModel.loadWorkouts()
         viewModel.loadExercises()
         viewModel.loadClips()
-        viewModel.loadPrograms()
+//        viewModel.loadPrograms()
         
     }
     
@@ -103,11 +111,24 @@ class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
 
 //MARK: - Actions
 extension DiscoverPageViewController {
-    @IBAction func searchTapped(_ sender: UIButton) {
+    @IBAction func searchButtonAction(_ sender: UIButton) {
         coordinator?.search()
     }
     func clipSelected(_ model: ClipModel) {
         coordinator?.clipSelected(model, fromViewControllerDelegate: self)
+    }
+    func moreSelected(_ item: DiscoverPageItems) {
+        switch item {
+        case .workout(_):
+            coordinator?.moreWorkoutsSelected()
+        case .exercise(_):
+            let emptyExercise = ExerciseModel(workoutPosition: 0)
+            coordinator?.moreExercisesSelected(emptyExercise)
+        case .program(_):
+            break
+        case .clip(_):
+            coordinator?.moreClipsSelected()
+        }
     }
 }
 

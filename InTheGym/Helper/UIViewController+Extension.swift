@@ -89,3 +89,14 @@ extension UIViewController {
         removeFromParent()
     }
 }
+
+// MARK: - Loading Nav Bar
+extension UIViewController {
+    func initLoadingNavBar(with color: UIColor) {
+        let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        activityIndicator.startAnimating()
+        activityIndicator.color = color
+        let barButton = UIBarButtonItem(customView: activityIndicator)
+        navigationItem.rightBarButtonItem = barButton
+    }
+}

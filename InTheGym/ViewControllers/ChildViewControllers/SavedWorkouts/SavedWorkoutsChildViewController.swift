@@ -21,23 +21,11 @@ class SavedWorkoutsChildViewController: UIViewController {
     
     private var subscriptions = Set<AnyCancellable>()
 
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        initDataSource()
-    }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
-    
-    // MARK: - Data Source
-    func initDataSource() {
-//        dataSource = .init(collectionView: display.collectionView)
-        
-        dataSource.workoutSelected
-            .sink { [weak self] in self?.workoutSelected.send($0)}
-            .store(in: &subscriptions)
+        view.backgroundColor = .systemBackground
     }
 }

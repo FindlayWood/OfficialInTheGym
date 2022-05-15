@@ -71,7 +71,9 @@ class ExerciseSelectionViewController: UIViewController {
         display.collectionView.delegate = adapter
         display.collectionView.dataSource = adapter
         display.searchBar.delegate = self
-        if coordinator is CircuitCreationCoordinator || coordinator is LiveWorkoutExerciseCreationCoordinator || coordinator is AMRAPCreationCoordinator || coordinator is EmomCreationCoordinator {
+        if coordinator is RegularWorkoutCreationCoordinator {
+            display.showStack()
+        } else {
             display.hideStack()
         }
     }

@@ -67,14 +67,14 @@ class DiscoverPageViewModel {
         }
     }
     func loadPrograms() {
-        apiService.fetchLimited(model: SavedProgramModel.self, limit: 10) { [weak self] result in
-            switch result {
-            case .success(let models):
-                self?.programPublisher.send(models)
-            case .failure(let error):
-                self?.errorPublisher.send(error)
-            }
-        }
+//        apiService.fetchLimited(model: SavedProgramModel.self, limit: 10) { [weak self] result in
+//            switch result {
+//            case .success(let models):
+//                self?.programPublisher.send(models)
+//            case .failure(let error):
+//                self?.errorPublisher.send(error)
+//            }
+//        }
     }
     
     // MARK: - Actions

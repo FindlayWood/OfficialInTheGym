@@ -58,6 +58,17 @@ class UsersDataSource: NSObject {
         currentSnapshot.appendItems([user], toSection: .main)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
+    func insertFirst(_ user: Users) {
+        var currentSnapshot = dataSource.snapshot()
+        if let firstItem = dataSource.itemIdentifier(for: IndexPath(row: 0, section: 0)) {
+            if firstItem != user {
+                currentSnapshot.insertItems([user], beforeItem: firstItem)
+            }
+        } else {
+            currentSnapshot.appendItems([user], toSection: .main)
+        }
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
 }
 // MARK: - Delegate
 extension UsersDataSource: UITableViewDelegate {
