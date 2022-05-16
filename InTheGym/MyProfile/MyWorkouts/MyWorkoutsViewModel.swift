@@ -1,15 +1,15 @@
 //
-//  DiscoverMoreWorkoutsViewModel.swift
+//  MyWorkoutsViewModel.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 14/05/2022.
+//  Created by Findlay Wood on 16/05/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import Foundation
 import Combine
 
-class DiscoverMoreWorkoutsViewModel {
+class MyWorkoutsViewModel {
     // MARK: - Publishers
     @Published var isLoading: Bool = false
     @Published var workouts: [SavedWorkoutModel] = []
@@ -19,11 +19,10 @@ class DiscoverMoreWorkoutsViewModel {
     
     // MARK: - Properties
     private var subscriptions = Set<AnyCancellable>()
+    public var navigationTitle: String = "My Saved Workouts"
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     
     // MARK: - Initializer
-    var navigationTitle: String = "More Workouts"
-    
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
@@ -43,16 +42,29 @@ class DiscoverMoreWorkoutsViewModel {
             .sink { [weak self] in self?.filterWorkouts(with: $0)}
             .store(in: &subscriptions)
     }
-    func loadWorkouts() {
+    func fetchWorkoutKeys() {
         isLoading = true
-        apiService.fetch(SavedWorkoutModel.self) { [weak self] result in
+        let referencesModel = SavedWorkoutsReferences(id: UserDefaults.currentUser.uid)
+        apiService.fetchKeys(from: referencesModel) { [weak self] result in
             switch result {
-            case.success(let models):
-                self?.workouts = models
-                self?.storedWorkouts = models
+            case .success(let keys):
+                self?.loadWorkouts(from: keys)
+            case .failure(_):
                 self?.isLoading = false
-            case .failure(let error):
-                print(String(describing: error))
+                break
+            }
+        }
+    }
+    
+    private func loadWorkouts(from keys: [String]) {
+        let savedKeysModel = keys.map { SavedWorkoutKeyModel(id: $0) }
+        apiService.fetchRange(from: savedKeysModel, returning: SavedWorkoutModel.self) { [weak self] result in
+            switch result {
+            case .success(let savedWorkoutModels):
+                self?.workouts = savedWorkoutModels
+                self?.storedWorkouts = savedWorkoutModels
+                self?.isLoading = false
+            case .failure(_):
                 self?.isLoading = false
                 break
             }

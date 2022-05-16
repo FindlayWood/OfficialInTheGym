@@ -52,6 +52,12 @@ class SavedWorkoutsCollectionDataSource: NSObject {
         currentSnapshot.appendItems(models, toSection: .main)
         dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
+    func updateCollection(with models: [SavedWorkoutModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<SingleSection,SavedWorkoutModel>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(models, toSection: .main)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
     
     // MARK: - Remove
     func removeWorkout(_ model: SavedWorkoutModel) {

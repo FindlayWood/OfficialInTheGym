@@ -127,6 +127,12 @@ extension MyProfileCoordinator {
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
+    func showMyWorkouts() {
+        let vc = MyWorkoutsViewController()
+        vc.coordinator = self
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
 }
 
 // MARK: - Show Clip

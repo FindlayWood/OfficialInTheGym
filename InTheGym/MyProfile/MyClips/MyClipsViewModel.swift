@@ -32,7 +32,7 @@ class MyClipsViewModel {
         if text.isEmpty {
             clips = storedClips
         } else {
-            filteredClips = storedClips.filter { $0.exerciseName.lowercased().contains(text.lowercased())}
+            filteredClips = storedClips.filter { $0.exerciseName.lowercased().contains(text.trimTrailingWhiteSpaces().lowercased())}
             clips = filteredClips
         }
     }

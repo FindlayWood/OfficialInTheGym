@@ -33,7 +33,7 @@ class DiscoverMoreClipsViewModel {
         if text.isEmpty {
             clips = storedClips
         } else {
-            filteredClips = storedClips.filter { $0.exerciseName.lowercased().contains(text.lowercased())}
+            filteredClips = storedClips.filter { $0.exerciseName.lowercased().contains(text.trimTrailingWhiteSpaces().lowercased())}
             clips = filteredClips
         }
     }
@@ -45,13 +45,16 @@ class DiscoverMoreClipsViewModel {
     }
 
     func loadClips() {
+        isLoading = true
         apiService.fetch(ClipModel.self) { [weak self] result in
             switch result {
             case .success(let models):
                 self?.clips = models
                 self?.storedClips = models
+                self?.isLoading = false
             case .failure(let error):
                 print(String(describing: error))
+                self?.isLoading = false
                 break
             }
         }

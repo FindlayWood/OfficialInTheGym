@@ -12,6 +12,14 @@ class SavedWorkoutsChildView: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
+    var searchField: UISearchBar = {
+        let view = UISearchBar()
+        view.placeholder = "search workouts..."
+        view.showsCancelButton = true
+        view.searchBarStyle = .prominent
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
         view.register(SavedWorkoutCollectionCell.self, forCellWithReuseIdentifier: SavedWorkoutCollectionCell.reuseID)
@@ -34,14 +42,18 @@ class SavedWorkoutsChildView: UIView {
 // MARK: - Configure
 private extension SavedWorkoutsChildView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
+        addSubview(searchField)
         addSubview(collectionView)
         configureUI()
     }
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            searchField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            searchField.leadingAnchor.constraint(equalTo: leadingAnchor),
+            searchField.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: searchField.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
