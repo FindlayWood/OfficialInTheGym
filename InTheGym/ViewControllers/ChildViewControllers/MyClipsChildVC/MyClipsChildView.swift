@@ -12,6 +12,14 @@ class MyClipsChildView: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
+    var searchField: UISearchBar = {
+        let view = UISearchBar()
+        view.placeholder = "search exercises..."
+        view.showsCancelButton = true
+        view.searchBarStyle = .prominent
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
         view.register(ExerciseClipsCollectionCell.self, forCellWithReuseIdentifier: ExerciseClipsCollectionCell.reuseID)
@@ -35,13 +43,17 @@ class MyClipsChildView: UIView {
 private extension MyClipsChildView {
     func setupUI() {
         addSubview(collectionView)
-        backgroundColor = .white
+        addSubview(searchField)
+        backgroundColor = .systemBackground
         configureUI()
     }
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            searchField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            searchField.leadingAnchor.constraint(equalTo: leadingAnchor),
+            searchField.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: searchField.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)

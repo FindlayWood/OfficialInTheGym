@@ -157,7 +157,7 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
         case .following:
             print("following")
         case .clips:
-            print("clips")
+            coordinator?.showMyClips()
         case .savedWorkouts:
             print("workouts")
         }

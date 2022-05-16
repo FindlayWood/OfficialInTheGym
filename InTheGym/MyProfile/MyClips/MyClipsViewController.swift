@@ -1,42 +1,43 @@
 //
-//  DiscoverMoreClipsViewController.swift
+//  MyClipsViewController.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 14/05/2022.
+//  Created by Findlay Wood on 16/05/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import UIKit
 import Combine
 
-class DiscoverMoreClipsViewController: UIViewController, CustomAnimatingClipFromVC {
-    // coordinatoe
-    weak var coordinator: DiscoverCoordinator?
+class MyClipsViewController: UIViewController, CustomAnimatingClipFromVC {
+    // coordinator
+    weak var coordinator: MyProfileCoordinator?
+    // view model
+    var viewModel = MyClipsViewModel()
     // child vc
     var childVC = MyClipsChildViewController()
-    // view model
-    var viewModel = DiscoverMoreClipsViewModel()
     // subscriptions
     private var subscriptions = Set<AnyCancellable>()
     
-    // MARK: - Custom Clip Variables
+    // MARK: - Clip Animation Variables
     var selectedCell: ClipCollectionCell?
     var selectedCellImageViewSnapshot: UIView?
-    // MARK: View
+
+    // MARK: - View
     override func loadView() {
         view = childVC.display
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         addChildVC()
-        initViewModel()
         initDataSource()
+        initViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
-        navigationItem.title = viewModel.navigationTitle
         editNavBarColour(to: .darkColour)
+        navigationItem.title = viewModel.navigationTitle
     }
     // MARK: - Child VC
     func addChildVC() {
@@ -64,12 +65,12 @@ class DiscoverMoreClipsViewController: UIViewController, CustomAnimatingClipFrom
         viewModel.$clips
             .sink { [weak self] in self?.childVC.dataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
-        viewModel.loadClips()
+        viewModel.fetchClipKeys()
         viewModel.initSubscribers()
     }
 }
 // MARK: - Actions
-private extension DiscoverMoreClipsViewController {
+private extension MyClipsViewController {
     func setLoading(to loading: Bool) {
         if loading {
             initLoadingNavBar(with: .darkColour)
@@ -82,7 +83,7 @@ private extension DiscoverMoreClipsViewController {
     }
 }
 // MARK: - Search Bar Delegate
-extension DiscoverMoreClipsViewController: UISearchBarDelegate {
+extension MyClipsViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.searchText = searchText
     }
