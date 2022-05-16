@@ -1,15 +1,15 @@
 //
-//  DiscoverMoreClipsViewModel.swift
+//  PublicClipsViewModel.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 14/05/2022.
+//  Created by Findlay Wood on 16/05/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import Foundation
 import Combine
 
-class DiscoverMoreClipsViewModel {
+class PublicClipsViewModel {
     // MARK: - Publishers
     @Published var isLoading: Bool = false
     @Published var clips: [ClipModel] = []
@@ -19,11 +19,11 @@ class DiscoverMoreClipsViewModel {
     
     // MARK: - Properties
     private var subscriptions = Set<AnyCancellable>()
-    var navigationTitle: String = "More Clips"
-    
+    public lazy var navigationTitle: String = "\(user.username) Clips"
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     
     // MARK: - Initializer
+    var user: Users!
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
@@ -43,21 +43,33 @@ class DiscoverMoreClipsViewModel {
             .sink { [weak self] in self?.filterClips(with: $0)}
             .store(in: &subscriptions)
     }
-
-    func loadClips() {
+    public func fetchClipKeys() {
         isLoading = true
-        apiService.fetch(ClipModel.self) { [weak self] result in
+        let searchModel = UserClipsModel(id: user.uid)
+        apiService.fetchInstance(of: searchModel, returning: KeyClipModel.self) { [weak self] result in
             switch result {
             case .success(let models):
-                let filteredModels = models.filter { !($0.isPrivate) }
+                self?.loadClips(from: models)
+            case .failure(_):
+                self?.isLoading = false
+                break
+            }
+        }
+    }
+    fileprivate func loadClips(from keys: [KeyClipModel]) {
+        apiService.fetchRange(from: keys, returning: ClipModel.self) { [weak self] result in
+            switch result {
+            case .success(let models):
+                var filteredModels = models.filter { !($0.isPrivate) }
+                filteredModels.sort { $0.time > $1.time }
                 self?.clips = filteredModels
                 self?.storedClips = filteredModels
                 self?.isLoading = false
-            case .failure(let error):
-                print(String(describing: error))
+            case .failure(_):
                 self?.isLoading = false
                 break
             }
         }
     }
 }
+

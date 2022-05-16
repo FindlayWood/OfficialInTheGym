@@ -1,24 +1,28 @@
 //
-//  DiscoverMoreWorkoutsViewController.swift
+//  MyClipsViewController.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 14/05/2022.
+//  Created by Findlay Wood on 16/05/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import UIKit
 import Combine
 
-class DiscoverMoreWorkoutsViewController: UIViewController {
-    
-    weak var coordinator: DiscoverCoordinator?
-    
-    var childVC = SavedWorkoutsChildViewController()
-    
-    var viewModel = DiscoverMoreWorkoutsViewModel()
-    
+class MyClipsViewController: UIViewController, CustomAnimatingClipFromVC {
+    // coordinator
+    weak var coordinator: MyProfileCoordinator?
+    // view model
+    var viewModel = MyClipsViewModel()
+    // child vc
+    var childVC = MyClipsChildViewController()
+    // subscriptions
     private var subscriptions = Set<AnyCancellable>()
     
+    // MARK: - Clip Animation Variables
+    var selectedCell: ClipCollectionCell?
+    var selectedCellImageViewSnapshot: UIView?
+
     // MARK: - View
     override func loadView() {
         view = childVC.display
@@ -26,14 +30,14 @@ class DiscoverMoreWorkoutsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addChildVC()
-        initViewModel()
         initDataSource()
+        initViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
-        navigationItem.title = viewModel.navigationTitle
         editNavBarColour(to: .darkColour)
+        navigationItem.title = viewModel.navigationTitle
     }
     // MARK: - Child VC
     func addChildVC() {
@@ -43,9 +47,14 @@ class DiscoverMoreWorkoutsViewController: UIViewController {
     }
     // MARK: - Init Data Source
     func initDataSource() {
-        
-        childVC.dataSource.workoutSelected
-            .sink { [weak self] in self?.coordinator?.workoutSelected($0)}
+        childVC.dataSource.selectedCell
+            .sink { [weak self] selectedCell in
+                self?.selectedCell = selectedCell.selectedCell
+                self?.selectedCellImageViewSnapshot = selectedCell.snapshot
+            }
+            .store(in: &subscriptions)
+        childVC.dataSource.clipSelected
+            .sink { [weak self] in self?.showClip($0)}
             .store(in: &subscriptions)
     }
     // MARK: - Init View Model
@@ -53,15 +62,15 @@ class DiscoverMoreWorkoutsViewController: UIViewController {
         viewModel.$isLoading
             .sink { [weak self] in self?.setLoading(to: $0)}
             .store(in: &subscriptions)
-        viewModel.$workouts
-            .sink { [weak self] in self?.childVC.dataSource.updateCollection(with: $0)}
+        viewModel.$clips
+            .sink { [weak self] in self?.childVC.dataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
-        viewModel.loadWorkouts()
+        viewModel.fetchClipKeys()
         viewModel.initSubscribers()
     }
 }
 // MARK: - Actions
-private extension DiscoverMoreWorkoutsViewController {
+private extension MyClipsViewController {
     func setLoading(to loading: Bool) {
         if loading {
             initLoadingNavBar(with: .darkColour)
@@ -69,9 +78,12 @@ private extension DiscoverMoreWorkoutsViewController {
             navigationItem.rightBarButtonItem = nil
         }
     }
+    func showClip(_ clipModel: ClipModel) {
+        coordinator?.clipSelected(clipModel, fromViewControllerDelegate: self)
+    }
 }
 // MARK: - Search Bar Delegate
-extension DiscoverMoreWorkoutsViewController: UISearchBarDelegate {
+extension MyClipsViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.searchText = searchText
     }

@@ -20,7 +20,7 @@ class ProfileHeaderView: UICollectionReusableView {
     
     // MARK: - Subviews
     var segmentControl: CustomUnderlineSegmentControl = {
-        let view = CustomUnderlineSegmentControl(frame: .zero, buttonTitles: ["Posts"])
+        let view = CustomUnderlineSegmentControl(frame: CGRect(x: 0, y: 0, width: Constants.screenSize.width, height: 30), buttonTitles: ["Posts"])
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

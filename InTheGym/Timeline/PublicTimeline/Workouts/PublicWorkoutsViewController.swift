@@ -1,24 +1,24 @@
 //
-//  DiscoverMoreWorkoutsViewController.swift
+//  PublicWorkoutsViewController.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 14/05/2022.
+//  Created by Findlay Wood on 16/05/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import UIKit
 import Combine
 
-class DiscoverMoreWorkoutsViewController: UIViewController {
-    
-    weak var coordinator: DiscoverCoordinator?
-    
+class PublicWorkoutsViewController: UIViewController {
+    // coordinator
+    weak var coordinator: UserProfileCoordinator?
+    // view model
+    var viewModel = PublicWorkoutsViewModel()
+    // child vc
     var childVC = SavedWorkoutsChildViewController()
-    
-    var viewModel = DiscoverMoreWorkoutsViewModel()
-    
+    // subscriptions
     private var subscriptions = Set<AnyCancellable>()
-    
+
     // MARK: - View
     override func loadView() {
         view = childVC.display
@@ -26,14 +26,14 @@ class DiscoverMoreWorkoutsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addChildVC()
-        initViewModel()
         initDataSource()
+        initViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
-        navigationItem.title = viewModel.navigationTitle
         editNavBarColour(to: .darkColour)
+        navigationItem.title = viewModel.navigationTitle
     }
     // MARK: - Child VC
     func addChildVC() {
@@ -43,9 +43,8 @@ class DiscoverMoreWorkoutsViewController: UIViewController {
     }
     // MARK: - Init Data Source
     func initDataSource() {
-        
         childVC.dataSource.workoutSelected
-            .sink { [weak self] in self?.coordinator?.workoutSelected($0)}
+            .sink { [weak self] in self?.coordinator?.showSavedWorkout($0)}
             .store(in: &subscriptions)
     }
     // MARK: - Init View Model
@@ -56,12 +55,12 @@ class DiscoverMoreWorkoutsViewController: UIViewController {
         viewModel.$workouts
             .sink { [weak self] in self?.childVC.dataSource.updateCollection(with: $0)}
             .store(in: &subscriptions)
-        viewModel.loadWorkouts()
+        viewModel.fetchWorkoutKeys()
         viewModel.initSubscribers()
     }
 }
 // MARK: - Actions
-private extension DiscoverMoreWorkoutsViewController {
+private extension PublicWorkoutsViewController {
     func setLoading(to loading: Bool) {
         if loading {
             initLoadingNavBar(with: .darkColour)
@@ -71,7 +70,7 @@ private extension DiscoverMoreWorkoutsViewController {
     }
 }
 // MARK: - Search Bar Delegate
-extension DiscoverMoreWorkoutsViewController: UISearchBarDelegate {
+extension PublicWorkoutsViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.searchText = searchText
     }

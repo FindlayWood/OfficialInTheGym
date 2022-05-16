@@ -1,15 +1,15 @@
 //
-//  DiscoverMoreClipsViewModel.swift
+//  MyClipsViewModel.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 14/05/2022.
+//  Created by Findlay Wood on 16/05/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import Foundation
 import Combine
 
-class DiscoverMoreClipsViewModel {
+class MyClipsViewModel {
     // MARK: - Publishers
     @Published var isLoading: Bool = false
     @Published var clips: [ClipModel] = []
@@ -19,8 +19,7 @@ class DiscoverMoreClipsViewModel {
     
     // MARK: - Properties
     private var subscriptions = Set<AnyCancellable>()
-    var navigationTitle: String = "More Clips"
-    
+    public var navigationTitle: String = "My Clips"
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     
     // MARK: - Initializer
@@ -43,18 +42,28 @@ class DiscoverMoreClipsViewModel {
             .sink { [weak self] in self?.filterClips(with: $0)}
             .store(in: &subscriptions)
     }
-
-    func loadClips() {
+    public func fetchClipKeys() {
         isLoading = true
-        apiService.fetch(ClipModel.self) { [weak self] result in
+        let searchModel = UserClipsModel(id: UserDefaults.currentUser.uid)
+        apiService.fetchInstance(of: searchModel, returning: KeyClipModel.self) { [weak self] result in
             switch result {
             case .success(let models):
-                let filteredModels = models.filter { !($0.isPrivate) }
-                self?.clips = filteredModels
-                self?.storedClips = filteredModels
+                self?.loadClips(from: models)
+            case .failure(_):
                 self?.isLoading = false
-            case .failure(let error):
-                print(String(describing: error))
+                break
+            }
+        }
+    }
+    fileprivate func loadClips(from keys: [KeyClipModel]) {
+        apiService.fetchRange(from: keys, returning: ClipModel.self) { [weak self] result in
+            switch result {
+            case .success(var models):
+                models.sort { $0.time > $1.time }
+                self?.clips = models
+                self?.storedClips = models
+                self?.isLoading = false
+            case .failure(_):
                 self?.isLoading = false
                 break
             }

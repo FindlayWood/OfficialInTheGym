@@ -121,6 +121,24 @@ extension MyProfileCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    func showMyClips() {
+        let vc = MyClipsViewController()
+        vc.coordinator = self
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func showMyWorkouts() {
+        let vc = MyWorkoutsViewController()
+        vc.coordinator = self
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func showMyFollowers() {
+        let vc = MyFollowersViewController()
+        vc.coordinator = self
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
 }
 
 // MARK: - Show Clip
