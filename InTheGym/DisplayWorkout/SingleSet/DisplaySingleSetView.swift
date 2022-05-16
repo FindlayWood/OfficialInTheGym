@@ -280,7 +280,7 @@ extension DisplaySingleSetView {
             }
         }
         if let distance = exercise.distance {
-            if !(distance.isEmpty) {
+            if !(distance.trimTrailingWhiteSpaces().isEmpty) {
                 distanceVStack.isHidden = false
                 distanceLabel.text = distance
             }

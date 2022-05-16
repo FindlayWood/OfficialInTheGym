@@ -94,6 +94,9 @@ class LiveWorkoutDisplayViewModel {
         currentExercise.reps?.append(1)
         currentExercise.weight?.append(" ")
         currentExercise.completedSets?.append(true)
+        currentExercise.time?.append(0)
+        currentExercise.distance?.append(" ")
+        currentExercise.restTime?.append(0)
         return currentExercise
     }
     

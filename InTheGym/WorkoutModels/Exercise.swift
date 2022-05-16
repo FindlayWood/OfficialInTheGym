@@ -146,6 +146,9 @@ struct ExerciseModel: ExerciseType, Codable, Hashable {
         self.type = .CU
         self.completedSets = [Bool]()
         self.sets = 0
+        self.time = [Int]()
+        self.distance = [String]()
+        self.restTime = [Int]()
     }
     
     func getSets() -> [ExerciseSet] {

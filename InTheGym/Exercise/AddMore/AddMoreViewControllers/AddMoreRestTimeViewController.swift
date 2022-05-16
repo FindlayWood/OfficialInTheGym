@@ -76,7 +76,7 @@ class AddMoreRestTimeViewController: UIViewController {
         viewModel.$isLiveWorkout
             .sink { [weak self] isLive in
                 if isLive {
-                    self?.display.topCollection.isUserInteractionEnabled = false
+                    self?.setsDataSource.isLive = true
                     self?.setsDataSource.setSelected.send(self?.viewModel.cellCount)
                 }
             }
