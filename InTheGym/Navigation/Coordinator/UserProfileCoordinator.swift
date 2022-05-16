@@ -66,6 +66,27 @@ extension UserProfileCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    func showUserClips(user: Users) {
+        let vc = PublicClipsViewController()
+        vc.viewModel.user = user
+        vc.coordinator = self
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func showUserWorkouts(user: Users) {
+        let vc = PublicWorkoutsViewController()
+        vc.viewModel.user = user
+        vc.coordinator = self
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func showUserFollowers(user: Users) {
+        let vc = PublicFollowersViewController()
+        vc.viewModel.user = user
+        vc.coordinator = self
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
 }
 
 

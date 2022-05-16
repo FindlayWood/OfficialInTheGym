@@ -43,7 +43,8 @@ class DiscoverPageViewModel {
         apiService.fetchLimited(model: SavedWorkoutModel.self, limit: 10) { [weak self] result in
             switch result {
             case .success(let models):
-                self?.workoutModelsPublisher.send(models)
+                let filteredModels = models.filter { !($0.isPrivate) }
+                self?.workoutModelsPublisher.send(filteredModels)
             case .failure(let error):
                 self?.errorPublisher.send(error)
             }
@@ -60,7 +61,8 @@ class DiscoverPageViewModel {
         apiService.fetchLimited(model: ClipModel.self, limit: 10) { [weak self] result in
             switch result {
             case .success(let models):
-                self?.clipsPublisher.send(models)
+                let filteredModels = models.filter { !($0.isPrivate) }
+                self?.clipsPublisher.send(filteredModels)
             case .failure(let error):
                 self?.errorPublisher.send(error)
             }

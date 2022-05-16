@@ -151,13 +151,13 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
     func profileInfoAction(_ action: ProfileInfoActions) {
         switch action {
         case .followers:
-            print("followers")
+            coordinator?.showUserFollowers(user: viewModel.user)
         case .following:
-            print("following")
+            coordinator?.showUserFollowers(user: viewModel.user)
         case .clips:
-            print("clips")
+            coordinator?.showUserClips(user: viewModel.user)
         case .savedWorkouts:
-            print("workouts")
+            coordinator?.showUserWorkouts(user: viewModel.user)
         }
     }
 //    func newSegmentSelected(_ newIndex: Int) {
