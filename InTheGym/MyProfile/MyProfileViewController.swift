@@ -153,9 +153,9 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
     func profileInfoAction(_ action: ProfileInfoActions) {
         switch action {
         case .followers:
-            print("followers")
+            coordinator?.showMyFollowers()
         case .following:
-            print("following")
+            coordinator?.showMyFollowers()
         case .clips:
             coordinator?.showMyClips()
         case .savedWorkouts:

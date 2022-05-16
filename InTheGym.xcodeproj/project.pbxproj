@@ -97,6 +97,9 @@
 		741FB1E5266F9B9F0039EB29 /* DisplayAMRAPProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1E4266F9B9F0039EB29 /* DisplayAMRAPProtocol.swift */; };
 		741FB1E7266F9BAA0039EB29 /* DisplayAMRAPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1E6266F9BAA0039EB29 /* DisplayAMRAPView.swift */; };
 		741FB1EB2671568C0039EB29 /* AMRAPFirebaseAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1EA2671568C0039EB29 /* AMRAPFirebaseAPIService.swift */; };
+		7420399728329A1D00074ECB /* MyFollowersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7420399628329A1D00074ECB /* MyFollowersViewController.swift */; };
+		7420399928329A3100074ECB /* MyFollowersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7420399828329A3100074ECB /* MyFollowersViewModel.swift */; };
+		7420399B28329A3A00074ECB /* MyFollowersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7420399A28329A3A00074ECB /* MyFollowersView.swift */; };
 		74220899256FFE2C00B42563 /* LaunchPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74220898256FFE2C00B42563 /* LaunchPageViewController.swift */; };
 		74221B3B2642D86800D05527 /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74221B3A2642D86800D05527 /* TabBarCoordinator.swift */; };
 		74221B3D2642D9ED00D05527 /* TimelineCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74221B3C2642D9ED00D05527 /* TimelineCoordinator.swift */; };
@@ -920,6 +923,9 @@
 		741FB1E4266F9B9F0039EB29 /* DisplayAMRAPProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAMRAPProtocol.swift; sourceTree = "<group>"; };
 		741FB1E6266F9BAA0039EB29 /* DisplayAMRAPView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayAMRAPView.swift; sourceTree = "<group>"; };
 		741FB1EA2671568C0039EB29 /* AMRAPFirebaseAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMRAPFirebaseAPIService.swift; sourceTree = "<group>"; };
+		7420399628329A1D00074ECB /* MyFollowersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFollowersViewController.swift; sourceTree = "<group>"; };
+		7420399828329A3100074ECB /* MyFollowersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFollowersViewModel.swift; sourceTree = "<group>"; };
+		7420399A28329A3A00074ECB /* MyFollowersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFollowersView.swift; sourceTree = "<group>"; };
 		74220898256FFE2C00B42563 /* LaunchPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchPageViewController.swift; sourceTree = "<group>"; };
 		74221B3A2642D86800D05527 /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
 		74221B3C2642D9ED00D05527 /* TimelineCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineCoordinator.swift; sourceTree = "<group>"; };
@@ -1910,6 +1916,16 @@
 				740E5B7C2832897B005B03FF /* MyWorkoutsViewModel.swift */,
 			);
 			path = MyWorkouts;
+			sourceTree = "<group>";
+		};
+		740E5B7E283292FA005B03FF /* MyFollowers */ = {
+			isa = PBXGroup;
+			children = (
+				7420399628329A1D00074ECB /* MyFollowersViewController.swift */,
+				7420399828329A3100074ECB /* MyFollowersViewModel.swift */,
+				7420399A28329A3A00074ECB /* MyFollowersView.swift */,
+			);
+			path = MyFollowers;
 			sourceTree = "<group>";
 		};
 		7416CCC3264ED1FD0043B1C2 /* WorkoutCreationFolder */ = {
@@ -3937,6 +3953,7 @@
 		74FCFA2B2614E9CA0064699F /* MyProfile */ = {
 			isa = PBXGroup;
 			children = (
+				740E5B7E283292FA005B03FF /* MyFollowers */,
 				740E5B7928328957005B03FF /* MyWorkouts */,
 				740E5B7428327D28005B03FF /* MyClips */,
 				74D93465282EF68A005D15DE /* EditProfile */,
@@ -4244,6 +4261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7420399728329A1D00074ECB /* MyFollowersViewController.swift in Sources */,
 				741FB1D2266849580039EB29 /* CreateAMRAPView.swift in Sources */,
 				74DE6D8627D2496D009FB44A /* AdminPlayersView.swift in Sources */,
 				744D564326F916B600D3E1FA /* DisplayEMOMViewModel.swift in Sources */,
@@ -4609,6 +4627,7 @@
 				74028E6425E69B52005A1D21 /* TextFieldReturning.swift in Sources */,
 				743B16AA270B43B500F4C6C0 /* CustomTimer.swift in Sources */,
 				74FDB5B026A49C17000649CC /* RoundingExtension.swift in Sources */,
+				7420399B28329A3A00074ECB /* MyFollowersView.swift in Sources */,
 				7466A8C725F0307F00F4050F /* SavedWorkoutsViewController.swift in Sources */,
 				742C1C8A27BD43D700DD1BB0 /* ExerciseDescriptionView.swift in Sources */,
 				74F2CCC926DE748300D7AD79 /* AttachingClipView.swift in Sources */,
@@ -4762,6 +4781,7 @@
 				748613AA27D69BE300D50506 /* SavedWorkoutBottomChildView.swift in Sources */,
 				74EE4EE72804C56600051451 /* HofBreathingView.swift in Sources */,
 				74F2CCD826E1284100D7AD79 /* ExerciseSelectionHeader.swift in Sources */,
+				7420399928329A3100074ECB /* MyFollowersViewModel.swift in Sources */,
 				743E933F2809A7320029F447 /* ProfileInfoCollectionViewCell.swift in Sources */,
 				743330C7278F2CB0005A0C45 /* SaveView.swift in Sources */,
 				74F18AD927D65C7D0043551F /* CoachPlayerWorkoutsViewModel.swift in Sources */,

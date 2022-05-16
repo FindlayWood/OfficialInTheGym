@@ -89,6 +89,7 @@ class CustomUnderlineSegmentControl: UIView {
     convenience init(frame: CGRect, buttonTitles: [String]) {
         self.init(frame: frame)
         self.buttonTitles = buttonTitles
+        self.updateView()
     }
     
     // Only override draw() if you perform custom drawing.
@@ -99,7 +100,7 @@ class CustomUnderlineSegmentControl: UIView {
 //        layer.cornerRadius = frame.height / 2
 //        layer.borderWidth = 2
 //        layer.borderColor = UIColor.darkColour.cgColor
-        updateView()
+//        updateView()
     }
     
     func setButtonTitles(buttonTitle: [String]) {

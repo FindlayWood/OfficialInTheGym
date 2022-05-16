@@ -133,6 +133,12 @@ extension MyProfileCoordinator {
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
+    func showMyFollowers() {
+        let vc = MyFollowersViewController()
+        vc.coordinator = self
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
 }
 
 // MARK: - Show Clip

@@ -32,4 +32,24 @@ class UsersLoader {
             }
         }
     }
+    // MARK: - Range Load
+    func loadRange(from searchModels: [UserSearchModel], completion: @escaping (Result<[Users],Error>) -> Void) {
+        var rangeOfUsers = [Users]()
+        let dispatchGroup = DispatchGroup()
+        for model in searchModels {
+            dispatchGroup.enter()
+            load(from: model) { result in
+                switch result {
+                case .success(let post):
+                    rangeOfUsers.append(post)
+                    dispatchGroup.leave()
+                case .failure(_):
+                    dispatchGroup.leave()
+                }
+            }
+        }
+        dispatchGroup.notify(queue: .main) {
+            completion(.success(rangeOfUsers))
+        }
+    }
 }
