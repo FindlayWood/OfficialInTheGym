@@ -120,8 +120,8 @@ class WorkoutCollectionViewCell: FullWidthCollectionViewCell {
 // MARK: - Configure
 private extension WorkoutCollectionViewCell {
     func setupUI() {
-        backgroundColor = .offWhiteColour
-        addViewShadow(with: .darkColour)
+//        backgroundColor = .offWhiteColour
+//        addViewShadow(with: .darkColour)
         layer.cornerRadius = 10
 //        layer.borderWidth = 1
 //        layer.borderColor = UIColor.white.cgColor

@@ -19,16 +19,16 @@ class PostLoader {
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     
     // MARK: - Cache
-    private let cache = Cache<String,post>()
+    private let cache = Cache<String,PostModel>()
     
-    typealias handler = ((Result<post,Error>) -> Void)
+    typealias handler = ((Result<PostModel,Error>) -> Void)
     
     // MARK: - Single Load
     func load(from searchModel: PostKeyModel, completion: @escaping handler) {
         if let cached = cache[searchModel.id] {
             completion(.success(cached))
         } else {
-            apiService.fetchSingleInstance(of: searchModel, returning: post.self) { [weak self] result in
+            apiService.fetchSingleInstance(of: searchModel, returning: PostModel.self) { [weak self] result in
                 guard let self = self else {return}
                 switch result {
                 case .success(let post):
@@ -42,8 +42,8 @@ class PostLoader {
     }
     
     // MARK: - Range Load
-    func loadRange(from searchModels: [PostKeyModel], completion: @escaping (Result<[post],Error>) -> Void) {
-        var rangeOfPosts = [post]()
+    func loadRange(from searchModels: [PostKeyModel], completion: @escaping (Result<[PostModel],Error>) -> Void) {
+        var rangeOfPosts = [PostModel]()
         let dispatchGroup = DispatchGroup()
         for model in searchModels {
             dispatchGroup.enter()
@@ -63,7 +63,7 @@ class PostLoader {
     }
     
     // MARK: - Add
-    func add(_ post: post) {
+    func add(_ post: PostModel) {
         cache[post.id] = post
     }
 }

@@ -37,8 +37,8 @@ class PostCellViewModel {
     // MARK: - Actions
     func likedPost() {
         switch post {
-        case is post:
-            like(post as! post)
+        case is PostModel:
+            like(post as! PostModel)
         case is GroupPost:
             groupLike(post as! GroupPost)
         default:
@@ -46,13 +46,14 @@ class PostCellViewModel {
         }
     }
     
-    func like(_ post: post) {
+    func like(_ post: PostModel) {
         let likeModels = LikeTransportLayer(postID: post.id).postLike(post: post)
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(()):
-                LikesAPIService.shared.LikedPostsCache[self.post.id] = true
+                LikeCache.shared.upload(postID: post.id)
+//                LikesAPIService.shared.LikedPostsCache[self.post.id] = true
             case .failure(let error):
                 self.errorLikingPost.send(error)
             }
@@ -63,7 +64,8 @@ class PostCellViewModel {
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
             case .success(()):
-                LikesAPIService.shared.LikedPostsCache[groupPost.id] = true
+                LikeCache.shared.upload(postID: groupPost.id)
+//                LikesAPIService.shared.LikedPostsCache[groupPost.id] = true
 //                self?.groupListener?.send(post)
             case .failure(let error):
                 self?.errorLikingPost.send(error)

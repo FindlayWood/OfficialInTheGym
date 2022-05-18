@@ -16,11 +16,11 @@ class ProfileDataSource: NSObject {
     var itemSelected = PassthroughSubject<ProfilePageItems,Never>()
     var cellSelected = PassthroughSubject<SelectedClip,Never>()
     
-    var likeButtonTapped = PassthroughSubject<post,Never>()
+    var likeButtonTapped = PassthroughSubject<PostModel,Never>()
     
-    var userTapped = PassthroughSubject<post,Never>()
+    var userTapped = PassthroughSubject<PostModel,Never>()
     
-    var workoutTapped = PassthroughSubject<post,Never>()
+    var workoutTapped = PassthroughSubject<PostModel,Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
@@ -116,7 +116,7 @@ class ProfileDataSource: NSObject {
     }
     
     // MARK: - Update Posts
-    func updatePosts(with models: [post]) {
+    func updatePosts(with models: [PostModel]) {
         let items = models.map { ProfilePageItems.post($0)}
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.deleteSections([.UserData])

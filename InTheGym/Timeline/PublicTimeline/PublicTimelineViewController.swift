@@ -174,7 +174,7 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
 //            break
 //        }
 //    }
-    func showCommentSection(for post: post) {
+    func showCommentSection(for post: PostModel) {
         coordinator?.showCommentSection(for: post, with: viewModel.reloadListener)
     }
 

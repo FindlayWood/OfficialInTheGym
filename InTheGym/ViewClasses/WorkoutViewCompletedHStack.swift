@@ -57,6 +57,17 @@ private extension WorkoutViewCompletedHStack {
     }
     
     func configureUI() {
-        addFullConstraint(to: stack)
+        let completedHeight = completedLabel.heightAnchor.constraint(equalToConstant: 24)
+        completedHeight.priority = UILayoutPriority(999)
+        let dateHeight = dateLabel.heightAnchor.constraint(equalToConstant: 24)
+        dateHeight.priority = UILayoutPriority(999)
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: topAnchor),
+            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            completedHeight,
+            dateHeight,
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
 }

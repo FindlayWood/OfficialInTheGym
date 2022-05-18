@@ -68,7 +68,7 @@ private extension UploadGroupWorkoutView {
 
 extension UploadGroupWorkoutView {
     func configureWorkoutView(with data: UploadableWorkout) {
-        workoutView.configure(with: data.workout)
+//        workoutView.configure(with: data.workout)
         assigneeView.configure(with: data.assignee)
     }
 }

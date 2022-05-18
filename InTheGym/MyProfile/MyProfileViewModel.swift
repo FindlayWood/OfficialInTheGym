@@ -13,7 +13,9 @@ import Combine
 class MyProfileViewModel {
     
     // MARK: - Publishers
-    var postPublisher = CurrentValueSubject<[post],Never>([])
+    @Published var isLoading: Bool = false
+    
+    var postPublisher = CurrentValueSubject<[PostModel],Never>([])
     
     var savedWorkouts = CurrentValueSubject<[SavedWorkoutModel],Never>([])
     
@@ -35,7 +37,7 @@ class MyProfileViewModel {
     
     var errorLikingPost = PassthroughSubject<Error,Never>()
     
-    var reloadListener = PassthroughSubject<post,Never>()
+    var reloadListener = PassthroughSubject<PostModel,Never>()
     
     
     // MARK: - Properties
@@ -52,6 +54,7 @@ class MyProfileViewModel {
     
     // MARK: - Fetching functions
     func fetchPostRefs() {
+        isLoading = false
         let postRefModel = PostReferencesModel(id: UserDefaults.currentUser.uid)
         apiService.fetchKeys(from: postRefModel) { [weak self] result in
             switch result {
@@ -59,6 +62,7 @@ class MyProfileViewModel {
                 self?.loadPosts(from: keys)
             case .failure(_):
                 self?.errorLoadingPosts.send(())
+                self?.isLoading = false
             }
         }
     }
@@ -69,8 +73,10 @@ class MyProfileViewModel {
             switch result {
             case .success(let posts):
                 self?.postPublisher.send(posts)
+                self?.isLoading = false
             case .failure(_):
                 self?.errorLoadingPosts.send(())
+                self?.isLoading = false
             }
         }
     }
@@ -159,7 +165,7 @@ class MyProfileViewModel {
 
     
     // MARK: - Liking Posts
-    func likeCheck(_ post: post) {
+    func likeCheck(_ post: PostModel) {
         let likeCheck = PostLikesModel(postID: post.id)
         apiService.checkExistence(of: likeCheck) { [weak self] result in
             switch result {
@@ -173,7 +179,7 @@ class MyProfileViewModel {
         }
     }
     
-    func like(_ post: post) {
+    func like(_ post: PostModel) {
         let likeModels = LikeTransportLayer(postID: post.id).postLike(post: post)
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
@@ -189,7 +195,7 @@ class MyProfileViewModel {
     
     
     // MARK: - Retreive Functions
-    func getWorkout(from tappedPost: post) {
+    func getWorkout(from tappedPost: PostModel) {
         if let workoutID = tappedPost.workoutID {
             let keyModel = WorkoutKeyModel(id: workoutID, assignID: tappedPost.posterID)
             WorkoutLoader.shared.load(from: keyModel) { [weak self] result in
@@ -206,7 +212,7 @@ class MyProfileViewModel {
         }
     }
     
-    func getUser(from tappedPost: post) {
+    func getUser(from tappedPost: PostModel) {
         let userSearchModel = UserSearchModel(uid: tappedPost.posterID)
         UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
             guard let user = try? result.get() else {return}

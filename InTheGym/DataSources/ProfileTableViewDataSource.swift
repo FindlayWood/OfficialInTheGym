@@ -15,14 +15,14 @@ class ProfileTableViewDataSource: NSObject {
     @Published var selectedIndex: Int = 0
     var itemSelected = PassthroughSubject<ProfilePageItems,Never>()
     var cellSelected = PassthroughSubject<SelectedClip,Never>()
-    var postSelected = PassthroughSubject<post,Never>()
+    var postSelected = PassthroughSubject<PostModel,Never>()
     var profileInfoAction = PassthroughSubject<ProfileInfoActions,Never>()
     
-    var likeButtonTapped = PassthroughSubject<post,Never>()
+    var likeButtonTapped = PassthroughSubject<PostModel,Never>()
     
-    var userTapped = PassthroughSubject<post,Never>()
+    var userTapped = PassthroughSubject<PostModel,Never>()
     
-    var workoutTapped = PassthroughSubject<post,Never>()
+    var workoutTapped = PassthroughSubject<PostModel,Never>()
     
     // MARK: - Properties
     var tableView: UITableView
@@ -96,7 +96,7 @@ class ProfileTableViewDataSource: NSObject {
     }
     
     // MARK: - Update Posts
-    func updatePosts(with models: [post]) {
+    func updatePosts(with models: [PostModel]) {
         let items = models.map { ProfilePageItems.post($0)}
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.deleteSections([.UserData])
@@ -108,8 +108,8 @@ class ProfileTableViewDataSource: NSObject {
     // MARK: -
     func reloadSection() {
         var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.deleteSections([.UserData])
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+        currentSnapshot.reloadSections([.UserInfo])
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Actions

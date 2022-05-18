@@ -13,17 +13,17 @@ import Combine
 class PostsDataSource: NSObject {
     
     // MARK: - Publisher
-    var postSelcted = PassthroughSubject<post,Never>()
+    var postSelcted = PassthroughSubject<PostModel,Never>()
     
     var scrollPublisher = PassthroughSubject<CGFloat,Never>()
     
     var draggedPublihser = PassthroughSubject<CGFloat,Never>()
     
-    var likeButtonTapped = PassthroughSubject<post,Never>()
+    var likeButtonTapped = PassthroughSubject<PostModel,Never>()
     
-    var userTapped = PassthroughSubject<post,Never>()
+    var userTapped = PassthroughSubject<PostModel,Never>()
     
-    var workoutTapped = PassthroughSubject<post,Never>()
+    var workoutTapped = PassthroughSubject<PostModel,Never>()
     
     // MARK: - Properties
     var tableView: UITableView
@@ -46,7 +46,7 @@ class PostsDataSource: NSObject {
     }
     
     // MARK: - Create Data Source
-    func makeDataSource() -> UITableViewDiffableDataSource<SingleSection,post> {
+    func makeDataSource() -> UITableViewDiffableDataSource<SingleSection,PostModel> {
         return UITableViewDiffableDataSource(tableView: self.tableView) { tableView, indexPath, itemIdentifier in
             let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
             cell.longDateFormat = false
@@ -61,20 +61,21 @@ class PostsDataSource: NSObject {
     
     // MARK: - Initial Setup
     func initialSetup() {
-        var snapshot = NSDiffableDataSourceSnapshot<SingleSection,post>()
+        var snapshot = NSDiffableDataSourceSnapshot<SingleSection,PostModel>()
         snapshot.appendSections([.main])
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     // MARK: - Update
-    func updateTable(with models: [post]) {
-        var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendItems(models, toSection: .main)
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    func updateTable(with models: [PostModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<SingleSection,PostModel>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(models, toSection: .main)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     // MARK: - Add
-    func addNewPost(_ newPost: post) {
+    func addNewPost(_ newPost: PostModel) {
         var currentSnapshot = dataSource.snapshot()
         if let firstItem = currentSnapshot.itemIdentifiers.first {
             currentSnapshot.insertItems([newPost], beforeItem: firstItem)
@@ -85,7 +86,7 @@ class PostsDataSource: NSObject {
     }
     
     // MARK: - Reload
-    func reloadPost(_ reloadPost: post) {
+    func reloadPost(_ reloadPost: PostModel) {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.reloadItems([reloadPost])
         dataSource.apply(currentSnapshot, animatingDifferences: false)
@@ -93,10 +94,15 @@ class PostsDataSource: NSObject {
     
     // MARK: - Actions
     func actionPublisher(action: PostAction, indexPath: IndexPath) {
+        var currentSnapshot = dataSource.snapshot()
         guard let post = dataSource.itemIdentifier(for: indexPath) else {return}
         switch action {
         case .likeButtonTapped:
-            likeButtonTapped.send(post)
+            var newPost = post
+            newPost.likeCount += 1
+            currentSnapshot.insertItems([newPost], afterItem: post)
+            currentSnapshot.deleteItems([post])
+            dataSource.apply(currentSnapshot,animatingDifferences: false)
         case .workoutTapped:
             workoutTapped.send(post)
         case .userTapped:

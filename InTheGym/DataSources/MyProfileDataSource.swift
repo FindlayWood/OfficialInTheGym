@@ -13,14 +13,14 @@ import Combine
 class MyProfileDataSource: NSObject {
     
     // MARK: - Publisher
-    var postSelected = PassthroughSubject<post,Never>()
+    var postSelected = PassthroughSubject<PostModel,Never>()
     var optionSelected = PassthroughSubject<ProfileOptions,Never>()
     
-    var userTapped = PassthroughSubject<post,Never>()
+    var userTapped = PassthroughSubject<PostModel,Never>()
     
-    var workoutTapped = PassthroughSubject<post,Never>()
+    var workoutTapped = PassthroughSubject<PostModel,Never>()
     
-    var likeButtonTapped = PassthroughSubject<post,Never>()
+    var likeButtonTapped = PassthroughSubject<PostModel,Never>()
     
     // MARK: - Properties
     var tableView: UITableView
@@ -74,7 +74,7 @@ class MyProfileDataSource: NSObject {
     }
     
     // MARK: - Update
-    func updatePosts(with models: [post]) {
+    func updatePosts(with models: [PostModel]) {
         let items = models.map { ProfileItems.posts($0) }
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.appendItems(items, toSection: .posts)
@@ -82,7 +82,7 @@ class MyProfileDataSource: NSObject {
     }
     
     // MARK: - Reload
-    func reloadPost(_ reloadPost: post) {
+    func reloadPost(_ reloadPost: PostModel) {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.reloadItems([ProfileItems.posts(reloadPost)])
         dataSource.apply(currentSnapshot, animatingDifferences: false)

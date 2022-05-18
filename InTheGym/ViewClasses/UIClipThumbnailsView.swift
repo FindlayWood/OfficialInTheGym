@@ -17,7 +17,7 @@ class UIClipThumbnailsView: UIView {
     var thumbnailOne: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .clear
         view.layer.cornerRadius = 15
         view.clipsToBounds = true
         view.heightAnchor.constraint(equalToConstant: 30).isActive = true
@@ -30,7 +30,7 @@ class UIClipThumbnailsView: UIView {
     var thumbnailTwo: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .clear
         view.layer.cornerRadius = 15
         view.clipsToBounds = true
         view.heightAnchor.constraint(equalToConstant: 30).isActive = true
@@ -43,7 +43,7 @@ class UIClipThumbnailsView: UIView {
     var thumbnailThree: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .clear
         view.layer.cornerRadius = 15
         view.clipsToBounds = true
         view.heightAnchor.constraint(equalToConstant: 30).isActive = true
@@ -89,13 +89,15 @@ private extension UIClipThumbnailsView {
         NSLayoutConstraint.activate([
             thumbnailOne.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             thumbnailOne.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            thumbnailTwo.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            thumbnailOne.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor, constant: -8),
             
             thumbnailTwo.topAnchor.constraint(equalTo: thumbnailOne.topAnchor),
             thumbnailTwo.leadingAnchor.constraint(equalTo: thumbnailOne.trailingAnchor, constant: -16),
+            thumbnailTwo.bottomAnchor.constraint(equalTo: thumbnailOne.bottomAnchor),
             
             thumbnailThree.topAnchor.constraint(equalTo: thumbnailOne.topAnchor),
             thumbnailThree.leadingAnchor.constraint(equalTo: thumbnailTwo.trailingAnchor, constant: -16),
+            thumbnailThree.bottomAnchor.constraint(equalTo: thumbnailOne.bottomAnchor),
             
             label.leadingAnchor.constraint(equalTo: thumbnailThree.trailingAnchor, constant: 8),
             label.centerYAnchor.constraint(equalTo: centerYAnchor),

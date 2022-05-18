@@ -136,8 +136,8 @@ private extension SavedWorkoutCollectionCell {
 //        contentView.addSubview(privacyIcon)
 //        addViewShadow(with: .darkColour)
 //        constrainUI()
-        backgroundColor = .offWhiteColour
-        addViewShadow(with: .darkColour)
+//        backgroundColor = .offWhiteColour
+//        addViewShadow(with: .darkColour)
         layer.cornerRadius = 10
         contentView.addSubview(workoutView)
         constrainUI()

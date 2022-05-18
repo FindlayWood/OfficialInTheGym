@@ -42,6 +42,11 @@ class PostTableViewCell: UITableViewCell {
         let button = UIButton()
         button.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
         button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        button.titleLabel?.minimumScaleFactor = 0.1
+        button.titleLabel?.numberOfLines = 1
+        button.titleLabel?.lineBreakMode = .byClipping
+//        button.heightAnchor.constraint(equalToConstant: 36).isActive = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -50,6 +55,10 @@ class PostTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 10, weight: .light)
         label.textColor = .lightGray
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.1
+        label.numberOfLines = 1
+//        label.heightAnchor.constraint(equalToConstant: 12).isActive = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -84,11 +93,18 @@ class PostTableViewCell: UITableViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    var stack: UIStackView = {
-        let stack = UIStackView()
+    var spacerView: UIView = {
+        let view = UIView()
+//        view.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        view.backgroundColor = .clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    lazy var stack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [spacerView, workoutView])
         stack.axis = .vertical
-        stack.distribution = .equalSpacing
-        stack.spacing = 10
+        stack.distribution = .fillProportionally
+        stack.spacing = 8
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -157,14 +173,14 @@ class PostTableViewCell: UITableViewCell {
 private extension PostTableViewCell {
     func setupUI() {
         selectionStyle = .none
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         contentView.addSubview(profileImageButton)
         contentView.addSubview(usernameButton)
         contentView.addSubview(timeLabel)
         contentView.addSubview(textView)
-        stack.addArrangedSubview(workoutView)
-        stack.addArrangedSubview(photoImageView)
-        stack.addArrangedSubview(clipImageView)
+//        stack.addArrangedSubview(workoutView)
+//        stack.addArrangedSubview(photoImageView)
+//        stack.addArrangedSubview(clipImageView)
         contentView.addSubview(stack)
         contentView.addSubview(replyImageView)
         contentView.addSubview(replyCountLabel)
@@ -174,29 +190,41 @@ private extension PostTableViewCell {
         addActions()
     }
     func constrainUI() {
+        let spacerHeight = spacerView.heightAnchor.constraint(equalToConstant: 1)
+        spacerHeight.priority = UILayoutPriority(999)
+        let buttonHeight = usernameButton.heightAnchor.constraint(equalToConstant: 36)
+        buttonHeight.priority = UILayoutPriority(999)
+        let timeHeight = timeLabel.heightAnchor.constraint(equalToConstant: 12)
+        timeHeight.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
+            spacerHeight,
             profileImageButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             profileImageButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             
             usernameButton.leadingAnchor.constraint(equalTo: profileImageButton.trailingAnchor, constant: 10),
             usernameButton.topAnchor.constraint(equalTo: profileImageButton.topAnchor),
             
-            timeLabel.topAnchor.constraint(equalTo: usernameButton.bottomAnchor, constant: 1),
-            timeLabel.leadingAnchor.constraint(equalTo: usernameButton.leadingAnchor, constant: 2),
+            timeLabel.topAnchor.constraint(equalTo: usernameButton.bottomAnchor),
+            timeLabel.leadingAnchor.constraint(equalTo: usernameButton.leadingAnchor),
             
             textView.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 15),
             textView.leadingAnchor.constraint(equalTo: profileImageButton.trailingAnchor, constant: 10),
             textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             
+            spacerHeight,
+            buttonHeight,
+            timeHeight,
+            
             stack.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 5),
             stack.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: textView.trailingAnchor),
             
-            workoutView.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            photoImageView.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            photoImageView.heightAnchor.constraint(equalTo: stack.widthAnchor),
-            clipImageView.widthAnchor.constraint(equalTo: stack.widthAnchor),
-            clipImageView.heightAnchor.constraint(equalTo: stack.widthAnchor),
+//            workoutView.widthAnchor.constraint(equalTo: stack.widthAnchor),
+//            workoutView.heightAnchor.constraint(equalToConstant: 250),
+//            photoImageView.widthAnchor.constraint(equalTo: stack.widthAnchor),
+//            photoImageView.heightAnchor.constraint(equalTo: stack.widthAnchor),
+//            clipImageView.widthAnchor.constraint(equalTo: stack.widthAnchor),
+//            clipImageView.heightAnchor.constraint(equalTo: stack.widthAnchor),
             
             
             replyImageView.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
@@ -241,9 +269,9 @@ private extension PostTableViewCell {
             .sink { [weak self] in self?.workoutView.configure(with: $0)}
             .store(in: &subscriptions)
         
-        viewModel.errorWorkout
-            .sink { [weak self] _ in self?.workoutView.setError()}
-            .store(in: &subscriptions)
+//        viewModel.errorWorkout
+//            .sink { [weak self] _ in self?.workoutView.setError()}
+//            .store(in: &subscriptions)
         
         viewModel.checkLike()
         viewModel.loadProfileImage()
@@ -287,18 +315,22 @@ extension PostTableViewCell {
         textView.text = post.text
         replyCountLabel.text = post.replyCount.description
         likeCountLabel.text = post.likeCount.description
-        if post.attachedClip == nil { clipImageView.isHidden = true }
-        if post.attachedPhoto == nil { photoImageView.isHidden = true }
+        clipImageView.isHidden = true
+        photoImageView.isHidden = true
+//        if post.attachedClip == nil { clipImageView.isHidden = true }
+//        if post.attachedPhoto == nil { photoImageView.isHidden = true }
         if let workoutID = post.workoutID {
             workoutView.isHidden = false
-            workoutView.setLoading()
-            viewModel.checkWorkout()
+            workoutView.configure(with: workoutID, assignID: post.posterID)
+//            workoutView.setLoading()
+//            viewModel.checkWorkout()
 //            workoutView.configure(with: workoutID, assignID: post.posterID)
         }
         if let savedWorkoutID = post.savedWorkoutID {
             workoutView.isHidden = false
-            workoutView.setLoading()
-            viewModel.checkSavedWorkout()
+            workoutView.configure(for: savedWorkoutID)
+//            workoutView.setLoading()
+//            viewModel.checkSavedWorkout()
 //            workoutView.configure(for: savedWorkoutID)
         }
     }
@@ -323,6 +355,7 @@ extension PostTableViewCell {
         } completion: { _ in
             sender.isUserInteractionEnabled = false
             self.likeCountLabel.increment()
+            self.actionPublisher.send(.likeButtonTapped)
         }
     }
     @objc func workoutTapped(_ sender: UIView) {

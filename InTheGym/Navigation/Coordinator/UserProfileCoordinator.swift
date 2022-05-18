@@ -46,7 +46,7 @@ extension UserProfileCoordinator {
         child.start()
     }
     
-    func showCommentSection(for post: post, with listener: PostListener) {
+    func showCommentSection(for post: PostModel, with listener: PostListener) {
         let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener)
         childCoordinators.append(child)
         child.start()

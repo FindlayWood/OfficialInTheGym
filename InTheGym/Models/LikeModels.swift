@@ -72,7 +72,7 @@ struct LikeTransportLayer {
 //        }
         return uploadPoints
     }
-    func postLike(post: post) -> [FirebaseMultiUploadDataPoint] {
+    func postLike(post: PostModel) -> [FirebaseMultiUploadDataPoint] {
         var uploadPoints = [FirebaseMultiUploadDataPoint]()
         uploadPoints.append(PostLikesModel(postID: postID).toMultiUploadPoint(with: true))
         uploadPoints.append(LikesModel(postID: postID).toMultiUploadPoint(with: true))

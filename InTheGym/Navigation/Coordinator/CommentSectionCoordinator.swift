@@ -13,11 +13,11 @@ import Combine
 class CommentSectionCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
-    var mainPost: post
+    var mainPost: PostModel
     var savedWorkoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
     var listener: PostListener?
     
-    init(navigationController: UINavigationController, mainPost: post, listener: PostListener?) {
+    init(navigationController: UINavigationController, mainPost: PostModel, listener: PostListener?) {
         self.navigationController = navigationController
         self.mainPost = mainPost
         self.listener = listener

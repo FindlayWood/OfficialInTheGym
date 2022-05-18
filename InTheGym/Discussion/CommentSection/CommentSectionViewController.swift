@@ -24,17 +24,21 @@ class CommentSectionViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getViewableFrameWithBottomSafeArea()
-        display.commentView.textViewDidChange(display.commentView.commentTextField)
-        display.tableview.separatorStyle = .none
-        view.addSubview(display)
+    override func loadView() {
+        view = display
     }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        display.frame = getViewableFrameWithBottomSafeArea()
+//        display.commentView.textViewDidChange(display.commentView.commentTextField)
+//        display.tableview.separatorStyle = .none
+//        view.addSubview(display)
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
+        display.commentView.textViewDidChange(display.commentView.commentTextField)
         initTableView()
 //        initialTableSetUp()
         initDataSource()

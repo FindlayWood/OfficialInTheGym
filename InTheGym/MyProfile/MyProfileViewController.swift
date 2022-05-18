@@ -50,6 +50,8 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
         display.moreButton.addTarget(self, action: #selector(showMore(_:)), for: .touchUpInside)
         display.notificationsButton.addTarget(self, action: #selector(showNotifications(_:)), for: .touchUpInside)
         display.groupsButton.addTarget(self, action: #selector(showGroups(_:)), for: .touchUpInside)
+        display.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
+        display.tableview.refreshControl = display.refreshControl
     }
 
     
@@ -111,6 +113,10 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
     // MARK: - View Model
     func initViewModel(){
         
+        viewModel.$isLoading
+            .sink { [weak self] in self?.setLoading($0)}
+            .store(in: &subscriptions)
+        
         viewModel.postPublisher
             .sink { [weak self] in self?.dataSource.updatePosts(with: $0) }
             .store(in: &subscriptions)
@@ -163,21 +169,7 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
         }
     }
     
-//    func newSegmentSelected(_ newIndex: Int) {
-//        display.selectedIndex = newIndex
-//        switch newIndex {
-//        case 0:
-//            dataSource.updatePosts(with: viewModel.postPublisher.value)
-//        case 1:
-//            dataSource.updateClips(with: viewModel.clipPublisher.value)
-//            break
-//        case 2:
-//            dataSource.updateWorkouts(with: viewModel.savedWorkouts.value)
-//        default:
-//            break
-//        }
-//    }
-    func showCommentSection(for post: post) {
+    func showCommentSection(for post: PostModel) {
         coordinator?.showCommentSection(post: post, with: viewModel.reloadListener)
     }
     
@@ -190,21 +182,15 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
     @objc func showGroups(_ sender: UIButton) {
         coordinator?.showGroups()
     }
-    
-
-    
-    @IBAction func editProfile(_ sender:UIButton) {
-
+    @objc func handleRefresh(_ sender: AnyObject) {
+        viewModel.fetchPostRefs()
+        dataSource.reloadSection()
     }
-    
-    @IBAction func showFollowers(_ sender:UIButton){
-        coordinator?.showFollowers(true)
+    func setLoading(_ loading: Bool) {
+        if !loading {
+            display.refreshControl.endRefreshing()
+        }
     }
-    
-    @IBAction func showFollowing(_ sender:UIButton){
-        coordinator?.showFollowers(false)
-    }
-
 }
 
 // extension for first time message

@@ -12,11 +12,11 @@ import Combine
 
 class CommentSectionDataSource: NSObject {
     // MARK: - Publisher
-    var likeButtonTapped = PassthroughSubject<post,Never>()
+    var likeButtonTapped = PassthroughSubject<PostModel,Never>()
     
-    var userTapped = PassthroughSubject<post,Never>()
+    var userTapped = PassthroughSubject<PostModel,Never>()
     
-    var workoutTapped = PassthroughSubject<post,Never>()
+    var workoutTapped = PassthroughSubject<PostModel,Never>()
     
     var groupPostLikeButtonTapped = PassthroughSubject<GroupPost,Never>()
     
@@ -75,11 +75,11 @@ class CommentSectionDataSource: NSObject {
         }
     }
     // MARK: - Initial Setup
-    func initialSetup(with post: post) {
+    func initialSetup(with post: PostModel) {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.appendSections([.Post, .comments])
         currentSnapshot.appendItems([.mainPost(post)], toSection: .Post)
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Initial Group Setup
@@ -87,7 +87,7 @@ class CommentSectionDataSource: NSObject {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.appendSections([.Post, .comments])
         currentSnapshot.appendItems([.mainGroupPost(post)], toSection: .Post)
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Update

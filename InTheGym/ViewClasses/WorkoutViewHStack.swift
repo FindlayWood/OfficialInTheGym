@@ -19,6 +19,9 @@ class WorkoutViewHStack: UIView {
         label.font = .systemFont(ofSize: 20, weight: .bold)
         label.textColor = .black
         label.text = "5"
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.1
+        label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -27,7 +30,6 @@ class WorkoutViewHStack: UIView {
         view.contentMode = .scaleAspectFill
         view.backgroundColor = .clear
         view.image = UIImage(named: "dumbbell_icon")
-        view.heightAnchor.constraint(equalToConstant: 30).isActive = true
         view.widthAnchor.constraint(equalToConstant: 30).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -37,6 +39,7 @@ class WorkoutViewHStack: UIView {
         stack.axis = .vertical
         stack.alignment = .center
         stack.spacing = 4
+        stack.distribution = .fill
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -55,7 +58,6 @@ class WorkoutViewHStack: UIView {
         view.contentMode = .scaleAspectFill
         view.backgroundColor = .clear
         view.image = UIImage(named: "clock_icon")
-        view.heightAnchor.constraint(equalToConstant: 30).isActive = true
         view.widthAnchor.constraint(equalToConstant: 30).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -82,6 +84,8 @@ class WorkoutViewHStack: UIView {
         label.text = "RPE"
         label.font = .systemFont(ofSize: 20, weight: .bold)
         label.textColor = .black
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -98,6 +102,7 @@ class WorkoutViewHStack: UIView {
         let stack = UIStackView(arrangedSubviews: [stackOne, stackTwo, stackThree])
         stack.axis = .horizontal
         stack.spacing = 32
+        stack.distribution = .fillEqually
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -120,12 +125,24 @@ private extension WorkoutViewHStack {
         addSubview(hstack)
         configureUI()
     }
-    
     func configureUI() {
-        addFullConstraint(to: hstack)
+        let exerciseIconHeight = exerciseCountIcon.heightAnchor.constraint(equalToConstant: 30)
+        exerciseIconHeight.priority = UILayoutPriority(999)
+        let timeIconHeight = timeIcon.heightAnchor.constraint(equalToConstant: 30)
+        timeIconHeight.priority = UILayoutPriority(999)
+        let rpeLabelIcon = rpeIcon.heightAnchor.constraint(equalToConstant: 30)
+        rpeLabelIcon.priority = UILayoutPriority(999)
+        NSLayoutConstraint.activate([
+            hstack.topAnchor.constraint(equalTo: topAnchor),
+            hstack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            hstack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            exerciseIconHeight,
+            timeIconHeight,
+            rpeLabelIcon,
+            hstack.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor, constant: -8)
+        ])
     }
 }
-
 // MARK: - Public Configuration
 extension WorkoutViewHStack {
     public func configure(with model: SavedWorkoutModel) {
@@ -144,7 +161,6 @@ extension WorkoutViewHStack {
         } else {
             stackThree.isHidden = true
         }
-
     }
     public func configure(with model: WorkoutModel) {
         exerciseCountLabel.text = model.totalExerciseCount().description

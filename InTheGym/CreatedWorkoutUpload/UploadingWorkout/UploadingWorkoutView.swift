@@ -95,6 +95,6 @@ private extension UploadingWorkoutView {
 extension UploadingWorkoutView {
     public func configure(with uploadable: UploadableWorkout) {
         assigneeView.configure(with: uploadable.assignee)
-        workoutView.configure(with: uploadable.workout)
+//        workoutView.configure(with: uploadable.workout)
     }
 }

@@ -81,7 +81,7 @@ class CreateNewPostViewModel {
     func postTapped() {
         isLoading = true
         postable.time = Date().timeIntervalSince1970
-        if let postModel = postable as? post {
+        if let postModel = postable as? PostModel {
             post(postModel)
         } else if let groupPost = postable as? GroupPost {
             post(groupPost)
@@ -108,7 +108,7 @@ class CreateNewPostViewModel {
     }
     
     func reference(_ model: Postable) {
-        if model is post {
+        if model is PostModel {
             let uploadPoint = UploadPostReferenceModel(id: model.id).uploadPoint
             apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
                 switch result {

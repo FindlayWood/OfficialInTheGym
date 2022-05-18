@@ -79,6 +79,7 @@ private extension ProfileInfoTableViewCell {
             infoView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             infoView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             infoView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+//            infoView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
             stack.topAnchor.constraint(equalTo: infoView.bottomAnchor,constant: 8),
             stack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
             stack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
@@ -88,6 +89,7 @@ private extension ProfileInfoTableViewCell {
     func addTargets() {
         infoView.followerView.followerCountButton.addTarget(self, action: #selector(followersTapped(_:)), for: .touchUpInside)
         infoView.followerView.followingCountButton.addTarget(self, action: #selector(followingTapped(_:)), for: .touchUpInside)
+        infoView.followButton.addTarget(self, action: #selector(followButtonAction(_:)), for: .touchUpInside)
         clipButton.addTarget(self, action: #selector(clipsTapped(_:)), for: .touchUpInside)
         workoutsButton.addTarget(self, action: #selector(savedWorkoutsTapped(_:)), for: .touchUpInside)
     }
@@ -128,6 +130,10 @@ private extension ProfileInfoTableViewCell {
     }
     @objc func followingTapped(_ sender:  UIButton) {
         actionPublisher.send(.following)
+    }
+    @objc func followButtonAction(_ sender: UIButton) {
+        infoView.setFollowButton(to: .loading)
+        viewModel.followButtonAction()
     }
 }
 
