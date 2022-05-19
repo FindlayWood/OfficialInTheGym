@@ -59,7 +59,7 @@ class CommentSectionViewModel {
             guard let self = self else {return}
             switch result {
             case .success(var comments):
-                comments.sort { $0.time > $1.time }
+                comments.sort { $0.time < $1.time }
                 self.comments.send(comments)
                 self.isLoading.send(false)
             case .failure(let error):
@@ -87,14 +87,22 @@ class CommentSectionViewModel {
             switch result {
             case .success(()):
                 self.isLoading.send(false)
-                self.mainPost.replyCount += 1
-                self.uploadingNewComment.send(newComment)
-                self.listener?.send(self.mainPost)
+                self.addedReply(newComment)
             case .failure(_):
                 self.errorUploadingComment.send(())
                 self.isLoading.send(false)
             }
         }
+    }
+    
+    func addedReply(_ comment: Comment) {
+        mainPost.replyCount += 1
+        listener?.send(mainPost)
+        PostLoader.shared.add(mainPost)
+        uploadingNewComment.send(comment)
+    }
+    func likedMainPost() {
+        mainPost.likeCount += 1
     }
     
     func groupSendPressed() {
@@ -113,15 +121,21 @@ class CommentSectionViewModel {
             guard let self = self else {return}
             switch result {
             case .success(()):
-                self.uploadingNewComment.send(newComment)
                 self.isLoading.send(false)
-                self.mainGroupPost.replyCount += 1
-                self.groupListener?.send(self.mainGroupPost)
+                self.addedGroupReply(newComment)
             case .failure(_):
                 self.errorUploadingComment.send(())
                 self.isLoading.send(false)
             }
         }
+    }
+    func addedGroupReply(_ comment: Comment) {
+        mainGroupPost.replyCount += 1
+        groupListener?.send(mainGroupPost)
+        uploadingNewComment.send(comment)
+    }
+    func likedMainGroupPost() {
+        mainGroupPost.likeCount += 1
     }
     
     func updateCommentText(with text: String) {

@@ -269,6 +269,10 @@ private extension PostTableViewCell {
             .sink { [weak self] in self?.workoutView.configure(with: $0)}
             .store(in: &subscriptions)
         
+        viewModel.completedLikeButtonAction
+            .sink { [weak self] in self?.actionPublisher.send(.likeButtonTapped)}
+            .store(in: &subscriptions)
+        
 //        viewModel.errorWorkout
 //            .sink { [weak self] _ in self?.workoutView.setError()}
 //            .store(in: &subscriptions)
@@ -355,7 +359,7 @@ extension PostTableViewCell {
         } completion: { _ in
             sender.isUserInteractionEnabled = false
             self.likeCountLabel.increment()
-            self.actionPublisher.send(.likeButtonTapped)
+//            self.actionPublisher.send(.likeButtonTapped)
         }
     }
     @objc func workoutTapped(_ sender: UIView) {

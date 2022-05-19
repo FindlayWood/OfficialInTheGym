@@ -83,7 +83,7 @@ class GroupHomePageDataSource: NSObject {
     func initialSetup() {
         var snapshot = NSDiffableDataSourceSnapshot<GroupSections,GroupItems>()
         snapshot.appendSections([.groupName, .groupLeader, .groupInfo, .groupPosts])
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     // MARK: - Update
@@ -101,14 +101,14 @@ class GroupHomePageDataSource: NSObject {
                 currentSnapshot.appendItems([.posts(post)], toSection: .groupPosts)
             }
         }
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Update Leader
     func updateLeader(_ leader: Users) {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.appendItems([GroupItems.leader(leader)], toSection: .groupLeader)
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Update Name
@@ -128,7 +128,7 @@ class GroupHomePageDataSource: NSObject {
 //        for post in posts {
 //            currentSnapshot.appendItems([.posts(post)], toSection: .groupPosts)
 //        }
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Add New Post
@@ -144,11 +144,17 @@ class GroupHomePageDataSource: NSObject {
     
     // MARK: - Actions
     func actionPublisher(action: PostAction, indexPath: IndexPath) {
+        var currentSnapshot = dataSource.snapshot()
         guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
         switch item {
         case .posts(let groupPost):
             switch action {
             case .likeButtonTapped:
+                var newPost = groupPost
+                newPost.likeCount += 1
+                currentSnapshot.insertItems([.posts(newPost)], afterItem: item)
+                currentSnapshot.deleteItems([item])
+                dataSource.apply(currentSnapshot,animatingDifferences: false)
                 likeButtonTapped.send(groupPost)
             case .workoutTapped:
                 workoutTapped.send(groupPost)
@@ -174,6 +180,13 @@ extension GroupHomePageDataSource: UITableViewDelegate {
             leaderSelected.send(leader)
         default:
             break
+        }
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 1 {
+            return 76
+        } else {
+            return UITableView.automaticDimension
         }
     }
     

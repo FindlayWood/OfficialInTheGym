@@ -13,7 +13,7 @@ import Combine
 class PostsDataSource: NSObject {
     
     // MARK: - Publisher
-    var postSelcted = PassthroughSubject<PostModel,Never>()
+    var postSelcted = PassthroughSubject<(PostModel,IndexPath),Never>()
     
     var scrollPublisher = PassthroughSubject<CGFloat,Never>()
     
@@ -86,9 +86,13 @@ class PostsDataSource: NSObject {
     }
     
     // MARK: - Reload
-    func reloadPost(_ reloadPost: PostModel) {
+    func reloadPost(with newPost: PostModel, at index: IndexPath) {
+        guard let post = dataSource.itemIdentifier(for: index) else {return}
         var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.reloadItems([reloadPost])
+        var newPost = newPost
+//        newPost.likeCount += 1
+        currentSnapshot.insertItems([newPost], afterItem: post)
+        currentSnapshot.deleteItems([post])
         dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
@@ -115,7 +119,7 @@ extension PostsDataSource: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let post = dataSource.itemIdentifier(for: indexPath) else {return}
-        postSelcted.send(post)
+        postSelcted.send((post, indexPath))
     }
     
     // MARK: - Check Scroll

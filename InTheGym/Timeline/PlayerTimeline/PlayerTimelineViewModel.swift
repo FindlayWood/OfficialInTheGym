@@ -33,6 +33,7 @@ class PlayerTimelineViewModel {
     var newPostListener = NewPostListener()
 
     // MARK: - Properties
+    var selectedCellIndex: IndexPath?
     
     var apiService: FirebaseDatabaseManagerService
 

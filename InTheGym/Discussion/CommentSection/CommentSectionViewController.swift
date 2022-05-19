@@ -27,18 +27,12 @@ class CommentSectionViewController: UIViewController {
     override func loadView() {
         view = display
     }
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        display.frame = getViewableFrameWithBottomSafeArea()
-//        display.commentView.textViewDidChange(display.commentView.commentTextField)
-//        display.tableview.separatorStyle = .none
-//        view.addSubview(display)
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         display.commentView.textViewDidChange(display.commentView.commentTextField)
+        display.tableview.separatorStyle = .none
         initTableView()
 //        initialTableSetUp()
         initDataSource()
@@ -84,7 +78,10 @@ class CommentSectionViewController: UIViewController {
             .store(in: &subscriptions)
         
         dataSource.likeButtonTapped
-            .sink { [weak self] in self?.viewModel.likeCheck($0) }
+            .sink { [weak self] postModel in
+                self?.viewModel.listener?.send(postModel)
+                self?.viewModel.likedMainPost()
+            }
             .store(in: &subscriptions)
     }
     
@@ -108,7 +105,7 @@ class CommentSectionViewController: UIViewController {
                 self.dataSource.addComment(comment)
                 self.display.resetView()
                 self.viewModel.attachedWorkout = nil
-                self.dataSource.reloadMain()
+                self.dataSource.reloadMain(with: self.viewModel.mainPost)
             }
             .store(in: &subscriptions)
         

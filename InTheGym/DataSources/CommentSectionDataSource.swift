@@ -106,20 +106,35 @@ class CommentSectionDataSource: NSObject {
     }
     
     // MARK: - Reload Main Post
-    func reloadMain() {
+    func reloadMain(with post: PostModel) {
         var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.reloadSections([.Post])
+        guard let first = currentSnapshot.itemIdentifiers.first else {return}
+        var newPost = post
+        currentSnapshot.insertItems([.mainPost(newPost)], beforeItem: first)
+        currentSnapshot.deleteItems([first])
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
+    }
+    // MARK: - Reload Main Post
+    func reloadMainGroup(with post: GroupPost) {
+        var currentSnapshot = dataSource.snapshot()
+        guard let first = currentSnapshot.itemIdentifiers.first else {return}
+        var newPost = post
+        currentSnapshot.insertItems([.mainGroupPost(newPost)], beforeItem: first)
+        currentSnapshot.deleteItems([first])
         dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Actions
     func actionPublisher(action: PostAction, indexPath: IndexPath) {
+        var currentSnapshot = dataSource.snapshot()
         guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
         switch item {
         case .mainPost(let post):
             switch action {
             case .likeButtonTapped:
-                likeButtonTapped.send(post)
+                var newPost = post
+                newPost.likeCount += 1
+                likeButtonTapped.send(newPost)
             case .workoutTapped:
                 workoutTapped.send(post)
             case .userTapped:

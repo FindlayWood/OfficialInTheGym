@@ -24,24 +24,22 @@ class GroupCommentSectionViewController: UIViewController {
 
     private var dataSource: CommentSectionDataSource!
     
-    // MARK: - View Setup
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getViewableFrameWithBottomSafeArea()
-        display.commentView.textViewDidChange(display.commentView.commentTextField)
-        display.tableview.separatorStyle = .none
-        view.addSubview(display)
+    // MARK: - View
+    override func loadView() {
+        view = display
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
+        display.commentView.textViewDidChange(display.commentView.commentTextField)
+        display.tableview.separatorStyle = .none
         initTableView()
 //        initialTableSetUp()
         initDataSource()
         initViewModel()
-        initTargets()
         setupKeyBoardObservers()
+        initTargets()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,7 +80,7 @@ class GroupCommentSectionViewController: UIViewController {
             .store(in: &subscriptions)
         
         dataSource.groupPostLikeButtonTapped
-            .sink { [weak self] in self?.viewModel.groupLikeCheck($0) }
+            .sink { [weak self] in self?.viewModel.groupListener?.send($0) }
             .store(in: &subscriptions)
     }
     
@@ -114,7 +112,7 @@ class GroupCommentSectionViewController: UIViewController {
                 self.dataSource.addComment(comment)
                 self.display.resetView()
                 self.viewModel.attachedWorkout = nil
-                self.dataSource.reloadMain()
+//                self.dataSource.reloadMain(with: )
             }
             .store(in: &subscriptions)
         
@@ -206,7 +204,6 @@ extension GroupCommentSectionViewController {
     
     @objc func attachedWorkoutPressed(_ sender: UIButton) {
         display.commentView.commentTextField.resignFirstResponder()
-        print("show saved workouts...")
         coordinator?.attachWorkout()
     }
     

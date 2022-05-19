@@ -20,6 +20,8 @@ class PostCellViewModel {
     @Published var workoutModel: WorkoutModel?
     @Published var savedWorkoutModel: SavedWorkoutModel?
     
+    var completedLikeButtonAction = PassthroughSubject<Void,Never>()
+    
     var errorWorkout = PassthroughSubject<Error,Never>()
     
     var errorLikingPost = PassthroughSubject<Error,Never>()
@@ -53,7 +55,8 @@ class PostCellViewModel {
             switch result {
             case .success(()):
                 LikeCache.shared.upload(postID: post.id)
-//                LikesAPIService.shared.LikedPostsCache[self.post.id] = true
+                self.addLikedPostToCache(post)
+                self.completedLikeButtonAction.send(())
             case .failure(let error):
                 self.errorLikingPost.send(error)
             }
@@ -65,8 +68,7 @@ class PostCellViewModel {
             switch result {
             case .success(()):
                 LikeCache.shared.upload(postID: groupPost.id)
-//                LikesAPIService.shared.LikedPostsCache[groupPost.id] = true
-//                self?.groupListener?.send(post)
+                self?.completedLikeButtonAction.send(())
             case .failure(let error):
                 self?.errorLikingPost.send(error)
             }
@@ -120,5 +122,10 @@ class PostCellViewModel {
                 }
             }
         }
+    }
+    func addLikedPostToCache(_ post: PostModel) {
+        var newPost = post
+        newPost.likeCount += 1
+        PostLoader.shared.add(newPost)
     }
 }

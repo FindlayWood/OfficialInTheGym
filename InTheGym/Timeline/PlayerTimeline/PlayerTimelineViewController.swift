@@ -85,7 +85,10 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
 //            .store(in: &subscriptions)
         
         dataSource.postSelcted
-            .sink { [weak self] in self?.showCommentSection(for: $0) }
+            .sink { [weak self] (postModel, indexPath) in
+                self?.showCommentSection(for: postModel)
+                self?.viewModel.selectedCellIndex = indexPath
+            }
             .store(in: &subscriptions)
     }
     
@@ -126,7 +129,11 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
             .store(in: &subscriptions)
 
         viewModel.reloadListener
-            .sink { [weak self] in self?.dataSource.reloadPost($0)}
+            .sink { [weak self] newPost in
+                guard let self = self else {return}
+                guard let selectedCellIndex = self.viewModel.selectedCellIndex else {return}
+                self.dataSource.reloadPost(with: newPost, at: selectedCellIndex)
+            }
             .store(in: &subscriptions)
         
         viewModel.newPostListener
@@ -162,7 +169,9 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     }
     func setLoading(_ loading: Bool) {
         if !loading {
-            display.refreshControl.endRefreshing()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.display.refreshControl.endRefreshing()
+            }
         }
     }
 }
