@@ -28,7 +28,7 @@ class UIWorkoutView: UIView {
         label.textColor = .darkColour
         label.font = .systemFont(ofSize: 25, weight: .bold)
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.2
+        label.minimumScaleFactor = 0.1
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -95,7 +95,8 @@ class UIWorkoutView: UIView {
         let stack = UIStackView(arrangedSubviews: [titleLabel,separatorView,completedStack,hstack,clipView])
         stack.axis = .vertical
         stack.alignment = .center
-        stack.spacing = 16
+        stack.distribution = .fill
+//        stack.spacing = 8
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -143,13 +144,6 @@ private extension UIWorkoutView {
     }
     func constrainUI() {
         let separatorHeihgtAnchor = separatorView.heightAnchor.constraint(equalToConstant: 1)
-        separatorHeihgtAnchor.priority = UILayoutPriority(999)
-        let titleHeight = titleLabel.heightAnchor.constraint(equalToConstant: 32)
-        titleHeight.priority = UILayoutPriority(999)
-        let hstackHeight = completedStack.heightAnchor.constraint(equalToConstant: 24)
-        hstackHeight.priority = UILayoutPriority(999)
-        let hstackHeightAnchor = hstack.heightAnchor.constraint(equalToConstant: 60)
-        hstackHeightAnchor.priority = UILayoutPriority(999)
         let clipViewHeightAnchor = clipView.heightAnchor.constraint(equalToConstant: 46)
         clipViewHeightAnchor.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
@@ -157,13 +151,10 @@ private extension UIWorkoutView {
             mainStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             mainStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             separatorHeihgtAnchor,
-            titleHeight,
-            hstackHeight,
-            hstackHeightAnchor,
             clipViewHeightAnchor,
             separatorView.widthAnchor.constraint(equalTo: mainStack.widthAnchor),
             titleLabel.widthAnchor.constraint(equalTo: mainStack.widthAnchor),
-            mainStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+            mainStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
 
             activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -262,7 +253,6 @@ extension UIWorkoutView {
         completedStack.dateLabel.isHidden = true
         titleLabel.text = model.title
         hstack.exerciseCountLabel.text = model.totalExerciseCount().description
-
     }
     public func configure(with workoutID: String, assignID: String) {
         viewModel.loadWorkout(from: workoutID, assignID: assignID)

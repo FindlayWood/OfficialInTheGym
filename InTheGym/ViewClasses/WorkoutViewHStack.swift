@@ -19,15 +19,13 @@ class WorkoutViewHStack: UIView {
         label.font = .systemFont(ofSize: 20, weight: .bold)
         label.textColor = .black
         label.text = "5"
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.1
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     var exerciseCountIcon: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFill
+        view.contentMode = .scaleAspectFit
         view.backgroundColor = .clear
         view.image = UIImage(named: "dumbbell_icon")
         view.widthAnchor.constraint(equalToConstant: 30).isActive = true
@@ -38,8 +36,7 @@ class WorkoutViewHStack: UIView {
         let stack = UIStackView(arrangedSubviews: [exerciseCountLabel,exerciseCountIcon])
         stack.axis = .vertical
         stack.alignment = .center
-        stack.spacing = 4
-        stack.distribution = .fill
+        stack.distribution = .fillEqually
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -48,14 +45,12 @@ class WorkoutViewHStack: UIView {
         let label = UILabel()
         label.textColor = .darkGray
         label.font = .systemFont(ofSize: 17)
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     var timeIcon: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFill
+        view.contentMode = .scaleAspectFit
         view.backgroundColor = .clear
         view.image = UIImage(named: "clock_icon")
         view.widthAnchor.constraint(equalToConstant: 30).isActive = true
@@ -66,7 +61,7 @@ class WorkoutViewHStack: UIView {
         let stack = UIStackView(arrangedSubviews: [timeLabel,timeIcon])
         stack.axis = .vertical
         stack.alignment = .center
-        stack.spacing = 4
+        stack.distribution = .fillEqually
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -86,6 +81,7 @@ class WorkoutViewHStack: UIView {
         label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.2
+        label.widthAnchor.constraint(equalToConstant: 30).isActive = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -93,7 +89,7 @@ class WorkoutViewHStack: UIView {
         let stack = UIStackView(arrangedSubviews: [rpeLabel,rpeIcon])
         stack.axis = .vertical
         stack.alignment = .center
-        stack.spacing = 4
+        stack.distribution = .fillEqually
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -102,7 +98,7 @@ class WorkoutViewHStack: UIView {
         let stack = UIStackView(arrangedSubviews: [stackOne, stackTwo, stackThree])
         stack.axis = .horizontal
         stack.spacing = 32
-        stack.distribution = .fillEqually
+        stack.distribution = .equalSpacing
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -134,12 +130,10 @@ private extension WorkoutViewHStack {
         rpeLabelIcon.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
             hstack.topAnchor.constraint(equalTo: topAnchor),
-            hstack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            hstack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            hstack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            hstack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             exerciseIconHeight,
-            timeIconHeight,
-            rpeLabelIcon,
-            hstack.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor, constant: -8)
+            hstack.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }

@@ -89,7 +89,7 @@ private extension UIClipThumbnailsView {
         NSLayoutConstraint.activate([
             thumbnailOne.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             thumbnailOne.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            thumbnailOne.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor, constant: -8),
+            thumbnailOne.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor),
             
             thumbnailTwo.topAnchor.constraint(equalTo: thumbnailOne.topAnchor),
             thumbnailTwo.leadingAnchor.constraint(equalTo: thumbnailOne.trailingAnchor, constant: -16),
@@ -100,7 +100,7 @@ private extension UIClipThumbnailsView {
             thumbnailThree.bottomAnchor.constraint(equalTo: thumbnailOne.bottomAnchor),
             
             label.leadingAnchor.constraint(equalTo: thumbnailThree.trailingAnchor, constant: 8),
-            label.centerYAnchor.constraint(equalTo: centerYAnchor),
+            label.centerYAnchor.constraint(equalTo: thumbnailOne.centerYAnchor),
             label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8)
         ])
     }
