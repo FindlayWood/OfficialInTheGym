@@ -15,12 +15,12 @@ enum CommentSectionSections: Hashable {
 }
 
 enum CommentItems: Hashable {
-    case mainPost(post)
+    case mainPost(PostModel)
     case comment(Comment)
 }
 
 enum GroupCommentItems: Hashable {
-    case mainPost(post)
+    case mainPost(PostModel)
     case mainGroupPost(GroupPost)
     case comment(Comment)
 }

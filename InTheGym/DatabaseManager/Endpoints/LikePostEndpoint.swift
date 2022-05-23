@@ -10,8 +10,8 @@ import Foundation
 import Firebase
 
 enum LikePostEndpoint: MultipleDatabaseEndpoint {
-    case likePost(post: post)
-    case likeGroupPost(post: post, groupID: String)
+    case likePost(post: PostModel)
+    case likeGroupPost(post: PostModel, groupID: String)
 
     var paths: [String : Any] {
         switch self {

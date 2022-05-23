@@ -17,7 +17,7 @@ class MockFirebaseManager: FirebaseManagerService {
         completion(uploadResult)
     }
     
-    func retreivePosts(from endpoint: PostEndpoint, completion: @escaping (Result<[post], Error>) -> Void) {
+    func retreivePosts(from endpoint: PostEndpoint, completion: @escaping (Result<[PostModel], Error>) -> Void) {
         completion(.success([]))
     }
     

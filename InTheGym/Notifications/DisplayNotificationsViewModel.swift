@@ -86,7 +86,7 @@ class DisplayNotificationsViewModel {
 }
 
 enum NotificationDestination {
-    case post(post)
+    case post(PostModel)
     case groupPost(GroupPost)
     case user(Users)
     case newRequest

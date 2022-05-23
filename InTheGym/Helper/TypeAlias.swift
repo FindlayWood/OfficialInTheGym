@@ -14,7 +14,7 @@ import Combine
 /// Any VC contain a list of workouts should pass a value of this type to workout Creation VC to listen for updates
 typealias WorkoutList = PassthroughSubject<WorkoutModel,Never>
 
-typealias PostListener = PassthroughSubject<post,Never>
+typealias PostListener = PassthroughSubject<PostModel,Never>
 
 typealias GroupPostListener = PassthroughSubject<GroupPost,Never>
 

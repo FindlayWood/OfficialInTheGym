@@ -10,14 +10,12 @@ import UIKit
 import SCLAlertView
 import Combine
 
-class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate, Storyboarded {
+class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate {
     
     // MARK: - Properties
     var coordinator: TimelineCoordinator?
     
     var display = PlayerTimelineView()
-    
-//    var refreshControl: UIRefreshControl!
     
     var viewModel = PlayerTimelineViewModel()
     
@@ -30,7 +28,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         super.viewDidLoad()
         
         showFirstMessage()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         display.tableview.backgroundColor = .darkColour
         
@@ -39,8 +37,6 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         initDataSource()
         initViewModel()
         initTargets()
-//        initRefreshControl()
-        
     }
     
     override func viewDidLayoutSubviews() {
@@ -56,6 +52,8 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     // MARK: - Display Targets
     func initTargets() {
         display.postButton.addTarget(self, action: #selector(makePostPressed(_:)), for: .touchUpInside)
+        display.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
+        display.tableview.refreshControl = display.refreshControl
     }
     
     // MARK: - Data Source
@@ -87,12 +85,19 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
 //            .store(in: &subscriptions)
         
         dataSource.postSelcted
-            .sink { [weak self] in self?.showCommentSection(for: $0) }
+            .sink { [weak self] (postModel, indexPath) in
+                self?.showCommentSection(for: postModel)
+                self?.viewModel.selectedCellIndex = indexPath
+            }
             .store(in: &subscriptions)
     }
     
     // MARK: - View Model
     func initViewModel(){
+        
+        viewModel.$isLoading
+            .sink { [weak self] in self?.setLoading($0)}
+            .store(in: &subscriptions)
         
         viewModel.postPublisher
             .dropFirst()
@@ -124,11 +129,15 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
             .store(in: &subscriptions)
 
         viewModel.reloadListener
-            .sink { [weak self] in self?.dataSource.reloadPost($0)}
+            .sink { [weak self] newPost in
+                guard let self = self else {return}
+                guard let selectedCellIndex = self.viewModel.selectedCellIndex else {return}
+                self.dataSource.reloadPost(with: newPost, at: selectedCellIndex)
+            }
             .store(in: &subscriptions)
         
         viewModel.newPostListener
-            .compactMap { $0 as? post }
+            .compactMap { $0 as? PostModel }
             .sink { [weak self] in self?.dataSource.addNewPost($0) }
             .store(in: &subscriptions)
         
@@ -138,35 +147,17 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     }
     
     // MARK: - Actions
-    func showCommentSection(for post: post) {
+    func showCommentSection(for post: PostModel) {
         coordinator?.showCommentSection(for: post, with: viewModel.reloadListener)
     }
     
-    
-//    func initRefreshControl(){
-//        refreshControl = UIRefreshControl()
-//        refreshControl.tintColor = .white
-//        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-//        self.display.tableview.refreshControl = refreshControl
-//    }
-//
-//    @objc func handleRefresh(){
-//        // go to viewmodel to refresh
-//        //viewModel.fetchData()
-//    }
+    @objc func handleRefresh(_ sender: AnyObject){
+        viewModel.fetchPosts()
+    }
     
     
     @objc func makePostPressed(_ sender: UIButton) {
-        coordinator?.makePost(postable: post(), listener: viewModel.newPostListener)
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let postVC = storyboard.instantiateViewController(withIdentifier: "MakePostViewController") as! MakePostViewController
-//        coordinator?.makePost(groupPost: false, delegate: self)
-//        postVC.groupBool = false
-//        postVC.timelineDelegate = self
-//        postVC.modalTransitionStyle = .coverVertical
-//        postVC.modalPresentationStyle = .fullScreen
-//        self.navigationController?.present(postVC, animated: true, completion: nil)
-        
+        coordinator?.makePost(postable: PostModel(), listener: viewModel.newPostListener)
     }
     
     // tap tab bar to scroll to top
@@ -176,8 +167,13 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         }
         return true
     }
-    
-
+    func setLoading(_ loading: Bool) {
+        if !loading {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.display.refreshControl.endRefreshing()
+            }
+        }
+    }
 }
 
 

@@ -134,7 +134,6 @@ private extension ExerciseSelectionView {
         ])
     }
 }
-
 // MARK: - Configurations
 extension ExerciseSelectionView {
     public func hideStack() {
@@ -159,7 +158,7 @@ extension ExerciseSelectionView {
         UIView.animate(withDuration: 0.3) {
             self.showStack()
             self.searchBarTopAnchor.isActive = false
-            self.searchBarTopAnchor = self.searchBar.topAnchor.constraint(equalTo: self.topStack.bottomAnchor, constant: 5)
+            self.searchBarTopAnchor = self.searchBar.topAnchor.constraint(equalTo: self.topStack.bottomAnchor, constant: 8)
             self.searchBarTopAnchor.isActive = true
         }
     }

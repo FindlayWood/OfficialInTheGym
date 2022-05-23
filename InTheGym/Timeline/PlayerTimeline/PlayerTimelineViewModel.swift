@@ -12,9 +12,11 @@ import Combine
 class PlayerTimelineViewModel {
     
     // MARK: - Publishers
+    @Published var isLoading: Bool = false
+    
     var thinkingTimeActivePublisher = PassthroughSubject<Bool,Never>()
     
-    var postPublisher = CurrentValueSubject<[post],Never>([])
+    var postPublisher = CurrentValueSubject<[PostModel],Never>([])
     
     var workoutSelected = PassthroughSubject<WorkoutModel,Never>()
     
@@ -26,11 +28,12 @@ class PlayerTimelineViewModel {
     
     var errorLikingPost = PassthroughSubject<Error,Never>()
     
-    var reloadListener = PassthroughSubject<post,Never>()
+    var reloadListener = PassthroughSubject<PostModel,Never>()
     
     var newPostListener = NewPostListener()
 
     // MARK: - Properties
+    var selectedCellIndex: IndexPath?
     
     var apiService: FirebaseDatabaseManagerService
 
@@ -42,18 +45,20 @@ class PlayerTimelineViewModel {
 
     // MARK: - Fetch Posts
     func fetchPosts() {
-        apiService.fetch(post.self) { [weak self] result in
+        isLoading = true
+        apiService.fetch(PostModel.self) { [weak self] result in
             guard let self = self else {return}
             do {
                 let posts = try result.get()
                 self.filterPosts(posts)
             } catch {
                 print(String(describing: error))
+                self.isLoading = false
             }
         }
     }
-    func filterPosts(_ posts: [post]) {
-        var postsToShow = [post]()
+    func filterPosts(_ posts: [PostModel]) {
+        var postsToShow = [PostModel]()
         let dispatchGroup = DispatchGroup()
         for post in posts {
             dispatchGroup.enter()
@@ -71,9 +76,10 @@ class PlayerTimelineViewModel {
             postsToShow.sort(by: {$0.time > $1.time})
             self.postPublisher.send(postsToShow)
             self.addPostsToCache(postsToShow)
+            self.isLoading = false
         }
     }
-    func addPostsToCache(_ posts: [post]) {
+    func addPostsToCache(_ posts: [PostModel]) {
         let _ = posts.map { PostLoader.shared.add($0) }
     }
     
@@ -85,7 +91,7 @@ class PlayerTimelineViewModel {
     }
     
     // MARK: - TimeLine Algorithm
-    func timeLineAlgorithm(_ post: post, completion: @escaping (Bool) -> Void) {
+    func timeLineAlgorithm(_ post: PostModel, completion: @escaping (Bool) -> Void) {
         let followingModel = FollowingCheckModel(id: post.posterID)
         apiService.checkExistence(of: followingModel) { result in
             do {
@@ -101,13 +107,12 @@ class PlayerTimelineViewModel {
                 print(String(describing: error))
                 completion(false)
             }
-
         }
     }
 
  
     // MARK: - Liking Posts
-    func likeCheck(_ post: post) {
+    func likeCheck(_ post: PostModel) {
         let likeCheck = PostLikesModel(postID: post.id)
         apiService.checkExistence(of: likeCheck) { [weak self] result in
             switch result {
@@ -121,7 +126,7 @@ class PlayerTimelineViewModel {
         }
     }
     
-    func like(_ post: post) {
+    func like(_ post: PostModel) {
         let likeModels = LikeTransportLayer(postID: post.id).postLike(post: post)
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
@@ -137,7 +142,7 @@ class PlayerTimelineViewModel {
     
     
     // MARK: - Retreive Functions
-    func getWorkout(from tappedPost: post) {
+    func getWorkout(from tappedPost: PostModel) {
         if let workoutID = tappedPost.workoutID {
             let keyModel = WorkoutKeyModel(id: workoutID, assignID: tappedPost.posterID)
             WorkoutLoader.shared.load(from: keyModel) { [weak self] result in
@@ -154,7 +159,7 @@ class PlayerTimelineViewModel {
         }
     }
     
-    func getUser(from tappedPost: post) {
+    func getUser(from tappedPost: PostModel) {
         let userSearchModel = UserSearchModel(uid: tappedPost.posterID)
         UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
             guard let user = try? result.get() else {return}

@@ -330,14 +330,14 @@ class FirebaseAPIGroupService: FirebaseAPIGroupServiceProtocol {
         }
     }
     
-    func loadPosts(from endpoint: PostEndpoint, completion: @escaping (Result<[post], Error>) -> Void) {
+    func loadPosts(from endpoint: PostEndpoint, completion: @escaping (Result<[PostModel], Error>) -> Void) {
         print("part of timeline...")
         guard let path = endpoint.path
         else {
             completion(.failure(NSError(domain: "Nil Info", code: 0, userInfo: nil)))
             return
         }
-        var tempPosts: [post] = []
+        var tempPosts: [PostModel] = []
         let myGroup = DispatchGroup()
         let databaseReference = Database.database().reference().child(path)
         databaseReference.observeSingleEvent(of: .value) { snapshot in
@@ -345,7 +345,7 @@ class FirebaseAPIGroupService: FirebaseAPIGroupServiceProtocol {
                 myGroup.enter()
                 guard let postObject = child.value as? [String: AnyObject] else {return}
                 do {
-                    let postData = try FirebaseDecoder().decode(post.self, from: postObject)
+                    let postData = try FirebaseDecoder().decode(PostModel.self, from: postObject)
                     tempPosts.append(postData)
                     myGroup.leave()
                 }

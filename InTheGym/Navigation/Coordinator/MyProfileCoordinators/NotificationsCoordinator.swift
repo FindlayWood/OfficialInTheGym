@@ -34,7 +34,7 @@ extension NotificationsCoordinator {
         child.start()
     }
     
-    func showPost(post: post) {
+    func showPost(post: PostModel) {
         let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: nil)
         childCoordinators.append(child)
         child.start()

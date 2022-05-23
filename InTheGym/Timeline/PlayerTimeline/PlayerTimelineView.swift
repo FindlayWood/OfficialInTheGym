@@ -103,16 +103,18 @@ class PlayerTimelineView: UIView {
         let view = UITableView()
         view.rowHeight = UITableView.automaticDimension
         view.estimatedRowHeight = 90
-        view.backgroundColor = Constants.darkColour
-//        view.register(UINib(nibName: "TimelinePostTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelinePostTableViewCell")
-//        view.register(UINib(nibName: "TimelineCreatedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCreatedWorkoutTableViewCell")
-//        view.register(UINib(nibName: "TimelineCompletedWorkoutTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineCompletedTableViewCell")
-//        view.register(UINib(nibName: "TimelineActivityTableViewCell", bundle: nil), forCellReuseIdentifier: "TimelineActivityTableViewCell")
+        view.backgroundColor = .darkColour
         view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
         view.tableFooterView = UIView()
         view.separatorInset = .zero
         view.layoutMargins = .zero
         view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    var refreshControl: UIRefreshControl = {
+        let view = UIRefreshControl()
+        view.tintColor = .systemBackground
         return view
     }()
     
@@ -129,7 +131,7 @@ class PlayerTimelineView: UIView {
 // MARK: - Setup UI
 private extension PlayerTimelineView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         //topView.addSubview(iconImageView)
         topView.addSubview(iconLabel)
         topView.addSubview(messagesButton)

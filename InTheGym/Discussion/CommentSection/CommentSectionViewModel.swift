@@ -27,7 +27,7 @@ class CommentSectionViewModel {
     
     var commentText: String = ""
     
-    var mainPost: post!
+    var mainPost: PostModel!
     
     var mainGroupPost: GroupPost!
     
@@ -59,7 +59,7 @@ class CommentSectionViewModel {
             guard let self = self else {return}
             switch result {
             case .success(var comments):
-                comments.sort { $0.time > $1.time }
+                comments.sort { $0.time < $1.time }
                 self.comments.send(comments)
                 self.isLoading.send(false)
             case .failure(let error):
@@ -87,14 +87,22 @@ class CommentSectionViewModel {
             switch result {
             case .success(()):
                 self.isLoading.send(false)
-                self.mainPost.replyCount += 1
-                self.uploadingNewComment.send(newComment)
-                self.listener?.send(self.mainPost)
+                self.addedReply(newComment)
             case .failure(_):
                 self.errorUploadingComment.send(())
                 self.isLoading.send(false)
             }
         }
+    }
+    
+    func addedReply(_ comment: Comment) {
+        mainPost.replyCount += 1
+        listener?.send(mainPost)
+        PostLoader.shared.add(mainPost)
+        uploadingNewComment.send(comment)
+    }
+    func likedMainPost() {
+        mainPost.likeCount += 1
     }
     
     func groupSendPressed() {
@@ -113,15 +121,21 @@ class CommentSectionViewModel {
             guard let self = self else {return}
             switch result {
             case .success(()):
-                self.uploadingNewComment.send(newComment)
                 self.isLoading.send(false)
-                self.mainGroupPost.replyCount += 1
-                self.groupListener?.send(self.mainGroupPost)
+                self.addedGroupReply(newComment)
             case .failure(_):
                 self.errorUploadingComment.send(())
                 self.isLoading.send(false)
             }
         }
+    }
+    func addedGroupReply(_ comment: Comment) {
+        mainGroupPost.replyCount += 1
+        groupListener?.send(mainGroupPost)
+        uploadingNewComment.send(comment)
+    }
+    func likedMainGroupPost() {
+        mainGroupPost.likeCount += 1
     }
     
     func updateCommentText(with text: String) {
@@ -129,7 +143,7 @@ class CommentSectionViewModel {
     }
     
     // MARK: - Like Check
-    func likeCheck(_ post: post) {
+    func likeCheck(_ post: PostModel) {
         let likeCheck = PostLikesModel(postID: post.id)
         apiService.checkExistence(of: likeCheck) { [weak self] result in
             switch result {
@@ -171,7 +185,7 @@ class CommentSectionViewModel {
         }
     }
     // MARK: - Like Post
-    func like(_ post: post) {
+    func like(_ post: PostModel) {
         let likeModels = LikeTransportLayer(postID: post.id).postLike(post: post)
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
@@ -189,7 +203,7 @@ class CommentSectionViewModel {
     }
     
     // MARK: - Retreive Functions
-    func getWorkout(from tappedPost: post) {
+    func getWorkout(from tappedPost: PostModel) {
         if let workoutID = tappedPost.workoutID {
             let keyModel = WorkoutKeyModel(id: workoutID, assignID: tappedPost.posterID)
             WorkoutLoader.shared.load(from: keyModel) { [weak self] result in
@@ -223,7 +237,7 @@ class CommentSectionViewModel {
         }
     }
     
-    func getUser(from tappedPost: post) {
+    func getUser(from tappedPost: PostModel) {
         let userSearchModel = UserSearchModel(uid: tappedPost.posterID)
         UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
             guard let user = try? result.get() else {return}

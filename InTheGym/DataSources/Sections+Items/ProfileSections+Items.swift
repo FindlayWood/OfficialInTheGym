@@ -17,5 +17,5 @@ enum ProfileSections {
 enum ProfileItems: Hashable {
     case userInfo(UserProfileModel)
     case options
-    case posts(post)
+    case posts(PostModel)
 }

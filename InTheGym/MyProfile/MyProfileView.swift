@@ -71,6 +71,7 @@ class MyProfileView: UIView {
         view.tableFooterView = UIView()
         view.separatorInset = .zero
         view.layoutMargins = .zero
+        view.rowHeight = UITableView.automaticDimension
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -84,6 +85,11 @@ class MyProfileView: UIView {
         view.register(ProfileHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProfileHeaderView.reuseIdentifier)
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    var refreshControl: UIRefreshControl = {
+        let view = UIRefreshControl()
+        view.tintColor = .darkColour
         return view
     }()
     
@@ -209,7 +215,7 @@ private extension MyProfileView {
     }
     func generateWorkoutsLayout() -> NSCollectionLayoutSection {
         
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(300))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)

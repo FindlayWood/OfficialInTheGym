@@ -20,6 +20,7 @@ class ProfileButton: UIButton {
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.2
         label.isUserInteractionEnabled = false
+        label.heightAnchor.constraint(equalToConstant: 24).isActive = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -28,7 +29,7 @@ class ProfileButton: UIButton {
         view.contentMode = .scaleAspectFit
         view.backgroundColor = .clear
         view.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 30).isActive = true
+//        view.widthAnchor.constraint(equalToConstant: 30).isActive = true
         view.isUserInteractionEnabled = false
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -64,10 +65,16 @@ private extension ProfileButton {
     }
     
     func configureUI() {
-        addFullConstraint(to: stack, withConstant: 8)
+        let buttonWidthAnchor = buttonImage.heightAnchor.constraint(equalToConstant: 30)
+        buttonWidthAnchor.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            buttonWidthAnchor,
             label.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
-            label.trailingAnchor.constraint(equalTo: stack.trailingAnchor)
+            label.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
         ])
     }
 }

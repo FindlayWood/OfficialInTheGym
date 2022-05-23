@@ -19,6 +19,7 @@ class WorkoutViewCompletedHStack: UIView {
         label.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.2
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -26,6 +27,9 @@ class WorkoutViewCompletedHStack: UIView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .label
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.2
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -33,6 +37,7 @@ class WorkoutViewCompletedHStack: UIView {
         let stack = UIStackView(arrangedSubviews: [completedLabel,dateLabel])
         stack.axis = .horizontal
         stack.alignment = .center
+        stack.distribution = .fillEqually
         stack.spacing = 8
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
@@ -57,6 +62,11 @@ private extension WorkoutViewCompletedHStack {
     }
     
     func configureUI() {
-        addFullConstraint(to: stack)
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
 }

@@ -12,7 +12,7 @@ import Combine
 class PublicTimelineViewModel {
     
     // MARK: - Publishers
-    var postPublisher = CurrentValueSubject<[post],Never>([])
+    var postPublisher = CurrentValueSubject<[PostModel],Never>([])
     
     var savedWorkouts = CurrentValueSubject<[SavedWorkoutModel],Never>([])
     
@@ -34,7 +34,7 @@ class PublicTimelineViewModel {
     
     var userSelected = PassthroughSubject<Users,Never>()
     
-    var reloadListener = PassthroughSubject<post,Never>()
+    var reloadListener = PassthroughSubject<PostModel,Never>()
     
     var followSuccess = PassthroughSubject<Bool,Never>()
 
@@ -162,7 +162,7 @@ class PublicTimelineViewModel {
     
     
     // MARK: - Retreive Functions
-    func getWorkout(from tappedPost: post) {
+    func getWorkout(from tappedPost: PostModel) {
         if let workoutID = tappedPost.workoutID {
             let keyModel = WorkoutKeyModel(id: workoutID, assignID: tappedPost.posterID)
             WorkoutLoader.shared.load(from: keyModel) { [weak self] result in
@@ -179,7 +179,7 @@ class PublicTimelineViewModel {
         }
     }
     
-    func getUser(from tappedPost: post) {
+    func getUser(from tappedPost: PostModel) {
         let userSearchModel = UserSearchModel(uid: tappedPost.posterID)
         UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
             guard let user = try? result.get() else {return}

@@ -87,7 +87,7 @@ private extension DiscoverPageView {
             case .Exercises:
                 return self.generateExercisesLayout()
             case .Programs:
-                return self.generateProgramsLayout()
+                return self.generateClipsLayout()
             case .Clips:
                 return self.generateClipsLayout()
             }
@@ -96,12 +96,13 @@ private extension DiscoverPageView {
     }
     
     func generateWorkoutsLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .estimated(300))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(130))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
+//        item.edgeSpacing = .init(leading: .fixed(0), top: .fixed(0), trailing: .fixed(8), bottom: .fixed(0))
         item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
         
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitem: item, count: 1)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .absolute(130))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: 1)
         
         
         let section = NSCollectionLayoutSection(group: group)
@@ -116,6 +117,7 @@ private extension DiscoverPageView {
     func generateExercisesLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/3))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        item.edgeSpacing = .init(leading: .fixed(8), top: nil, trailing: .fixed(8), bottom: .fixed(8))
         item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8)
 
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .fractionalWidth(1/2))

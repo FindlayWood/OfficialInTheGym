@@ -22,14 +22,14 @@ class GroupHomePageInfoTableViewCell: UITableViewCell {
     var membersView: UIImageLabelView = {
         let view = UIImageLabelView()
         view.configureView(image: UIImage(named: "groups_icon")!, label: "Members")
-        view.heightAnchor.constraint(equalToConstant: 90).isActive = true
+//        view.heightAnchor.constraint(equalToConstant: 90).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     var workoutsView: UIImageLabelView = {
         let view = UIImageLabelView()
         view.configureView(image: UIImage(named: "benchpress_icon")!, label: "Workouts")
-        view.heightAnchor.constraint(equalToConstant: 90).isActive = true
+//        view.heightAnchor.constraint(equalToConstant: 90).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -91,10 +91,17 @@ private extension GroupHomePageInfoTableViewCell {
         initTargets()
     }
     func constrainView() {
+        let memebersHeightAnchor = membersView.heightAnchor.constraint(equalToConstant: 90)
+        memebersHeightAnchor.priority = UILayoutPriority(999)
+        let workoutsHeightAnchor = workoutsView.heightAnchor.constraint(equalToConstant: 90)
+        workoutsHeightAnchor.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
             mainStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             mainStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             mainStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            imageViewStack.widthAnchor.constraint(equalTo: mainStack.widthAnchor),
+            memebersHeightAnchor,
+            workoutsHeightAnchor,
             mainStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
         ])
     }

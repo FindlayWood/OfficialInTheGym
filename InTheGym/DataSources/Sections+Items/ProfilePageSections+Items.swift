@@ -15,7 +15,7 @@ enum ProfilePageSections: CaseIterable {
 
 enum ProfilePageItems: Hashable {
     case profileInfo(Users)
-    case post(post)
+    case post(PostModel)
     case workout(SavedWorkoutModel)
     case clip(ClipModel)
 }

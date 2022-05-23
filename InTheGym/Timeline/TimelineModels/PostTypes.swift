@@ -9,7 +9,7 @@
 import Foundation
 
 enum PostTypes {
-    case post(post)
+    case post(PostModel)
     case groupPost(GroupPost)
 }
 
@@ -18,9 +18,9 @@ protocol DisplayablePost {
     var posterID: String { get }
     var time: TimeInterval { get }
     var text: String { get }
-    var attachedWorkout: attachedWorkout? { get }
-    var attachedPhoto: attachedPhoto? { get }
-    var attachedClip: attachedClip? { get }
+//    var attachedWorkout: attachedWorkout? { get }
+//    var attachedPhoto: attachedPhoto? { get }
+//    var attachedClip: attachedClip? { get }
     var workoutID: String? { get }
     var savedWorkoutID: String? { get }
     var likeCount: Int { get set }
@@ -29,113 +29,7 @@ protocol DisplayablePost {
     var id: String { get }
 }
 
-class post: Codable, Hashable, AutoIDable, DisplayablePost, Postable {
-    
-    var id: String
-    var username: String
-    var posterID: String
-    var time: TimeInterval
-    var text: String
-    var attachedWorkout: attachedWorkout?
-    var attachedPhoto: attachedPhoto?
-    var attachedClip: attachedClip?
-    var workoutID: String?
-    var savedWorkoutID: String?
-    var likeCount: Int
-    var replyCount: Int
-    var isPrivate: Bool
-    
-    init() {
-        self.id = UUID().uuidString
-        self.username = UserDefaults.currentUser.username
-        self.posterID = UserDefaults.currentUser.uid
-        self.time = Date().timeIntervalSince1970
-        self.text = ""
-        self.likeCount = 0
-        self.replyCount = 0
-        self.isPrivate = false
-    }
-    init(workoutID: String) {
-        self.id = UUID().uuidString
-        self.username = UserDefaults.currentUser.username
-        self.posterID = UserDefaults.currentUser.uid
-        self.time = Date().timeIntervalSince1970
-        self.workoutID = workoutID
-        self.text = ""
-        self.likeCount = 0
-        self.replyCount = 0
-        self.isPrivate = false
-    }
-    
-    
-    static func == (lhs: post, rhs: post) -> Bool {
-        return lhs.id == rhs.id
-    }
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-}
-extension post: FirebaseModel {
-    static var path: String {
-        return "Posts"
-    }
-}
 
-extension post: FirebaseTimeOrderedModel {
-    var internalPath: String {
-        return "Posts"
-    }
-}
-
-
-class GroupPost: Codable, Hashable, AutoIDable, DisplayablePost, Postable {
-    
-    var id: String
-    var username: String
-    var posterID: String
-    var time: TimeInterval
-    var text: String
-    var attachedWorkout: attachedWorkout?
-    var attachedPhoto: attachedPhoto?
-    var attachedClip: attachedClip?
-    var workoutID: String?
-    var savedWorkoutID: String?
-    var likeCount: Int
-    var replyCount: Int
-    var isPrivate: Bool
-    var groupID: String
-    
-    init(groupID: String) {
-        self.id = UUID().uuidString
-        self.username = UserDefaults.currentUser.username
-        self.posterID = UserDefaults.currentUser.uid
-        self.time = Date().timeIntervalSince1970
-        self.text = ""
-        self.likeCount = 0
-        self.replyCount = 0
-        self.isPrivate = false
-        self.groupID = groupID
-    }
-    
-    
-    static func == (lhs: GroupPost, rhs: GroupPost) -> Bool {
-        return lhs.id == rhs.id
-    }
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-}
-extension GroupPost: FirebaseModel {
-    static var path: String {
-        return "GroupPosts"
-    }
-}
-
-extension GroupPost: FirebaseTimeOrderedModel {
-    var internalPath: String {
-        return "GroupPosts/\(groupID)"
-    }
-}
 
 struct attachedClip: Codable {
     var storageURL: String

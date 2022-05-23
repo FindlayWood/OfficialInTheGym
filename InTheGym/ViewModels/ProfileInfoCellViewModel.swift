@@ -32,6 +32,20 @@ class ProfileInfoCellViewModel {
             checkFollowing()
         }
     }
+    func followButtonAction() {
+        let followActionModel = FollowModel(id: user.uid)
+        let uploadPoints = followActionModel.getUploadPoints()
+        apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
+            switch result {
+            case .success(()):
+                self?.isFollowing = true
+                self?.getFollowerCount()
+            case .failure(let error):
+                print(String(describing: error))
+                self?.isFollowing = false
+            }
+        }
+    }
     
     // MARK: - Functions
     func getFollowerCount() {
@@ -63,7 +77,7 @@ class ProfileInfoCellViewModel {
             case .success(let exists):
                 self?.isFollowing = exists
             case .failure(_):
-                break
+                self?.isFollowing = false
             }
         }
     }

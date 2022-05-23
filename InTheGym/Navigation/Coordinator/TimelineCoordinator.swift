@@ -17,7 +17,7 @@ protocol TimelineFlow: AnyObject {
 
 protocol NewsFeedFlow: TimelineFlow {
     func makePost(postable: Postable, listener: NewPostListener)
-    func showCommentSection(for post: post, with listener: PostListener)
+    func showCommentSection(for post: PostModel, with listener: PostListener)
     func showWorkout(_ model: WorkoutModel)
     func showSavedWorkout(_ model: SavedWorkoutModel)
 }
@@ -61,7 +61,7 @@ extension TimelineCoordinator {
         child.start()
     }
     
-    func showCommentSection(for post: post, with listener: PostListener) {
+    func showCommentSection(for post: PostModel, with listener: PostListener) {
         let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener)
         childCoordinators.append(child)
         child.start()

@@ -53,21 +53,21 @@ class CommentSectionView: UIView {
 // MARK: - Configure
 private extension CommentSectionView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         addSubview(tableview)
         addSubview(commentView)
         configureUI()
     }
     
     func configureUI() {
-        bottomViewAnchor = commentView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        bottomViewAnchor = commentView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         NSLayoutConstraint.activate([
             commentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             commentView.trailingAnchor.constraint(equalTo: trailingAnchor),
             commentView.heightAnchor.constraint(equalToConstant: 60),
             bottomViewAnchor,
             
-            tableview.topAnchor.constraint(equalTo: topAnchor),
+            tableview.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
             tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
             tableview.bottomAnchor.constraint(equalTo: commentView.topAnchor)

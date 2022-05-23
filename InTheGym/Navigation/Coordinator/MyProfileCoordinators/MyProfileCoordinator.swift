@@ -49,45 +49,26 @@ class MyProfileCoordinator: NSObject, Coordinator {
 
 //MARK: - Flow Methods
 extension MyProfileCoordinator {
-    
     func showGroups() {
         let child = GroupCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
         child.start()
     }
-    
     func showNotifications() {
         let child = NotificationsCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
         child.start()
     }
-    
     func showSavedWorkouts() {
         let vc = SavedWorkoutsViewController()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
-    
     func showCreatedWorkouts() {
         let child = CreatedWorkoutsCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
         child.start()
-    
     }
-    
-    func showScores() {
-        if ViewController.admin {
-            let vc = CoachScoresViewController.instantiate()
-            vc.hidesBottomBarWhenPushed = true
-            navigationController.pushViewController(vc, animated: true)
-            
-        } else {
-            let vc = MYSCORESViewController.instantiate()
-            vc.hidesBottomBarWhenPushed = true
-            navigationController.pushViewController(vc, animated: true)
-        }
-    }
-    
     func showMoreInfo() {
         if UserDefaults.currentUser.admin {
             let child = CoachProfileMoreCoordinator(navigationController: navigationController)
@@ -99,13 +80,6 @@ extension MyProfileCoordinator {
             child.start()
         }
     }
-    
-    func showFollowers(_ followers: Bool) {
-        let vc = FollowersDisplayViewController.instantiate()
-        vc.followers = followers
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
     func showWorkout(_ model: WorkoutModel) {
         let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: model)
         childCoordinators.append(child)
@@ -116,7 +90,7 @@ extension MyProfileCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func showCommentSection(post: post, with listener: PostListener) {
+    func showCommentSection(post: PostModel, with listener: PostListener) {
         let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener)
         childCoordinators.append(child)
         child.start()

@@ -49,7 +49,7 @@ class UsersDataSource: NSObject {
         var snapshot = NSDiffableDataSourceSnapshot<SingleSection,Users>()
         snapshot.appendSections([.main])
         snapshot.appendItems(users, toSection: .main)
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     // MARK: - Add
@@ -60,7 +60,7 @@ class UsersDataSource: NSObject {
     }
     func insertFirst(_ user: Users) {
         var currentSnapshot = dataSource.snapshot()
-        if let firstItem = dataSource.itemIdentifier(for: IndexPath(row: 0, section: 0)) {
+        if let firstItem = currentSnapshot.itemIdentifiers.first {
             if firstItem != user {
                 currentSnapshot.insertItems([user], beforeItem: firstItem)
             }
@@ -75,5 +75,8 @@ extension UsersDataSource: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let user = dataSource.itemIdentifier(for: indexPath) else {return}
         userSelected.send(user)
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 76
     }
 }

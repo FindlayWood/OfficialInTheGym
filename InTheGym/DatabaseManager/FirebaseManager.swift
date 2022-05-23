@@ -12,7 +12,7 @@ import CodableFirebase
 
 protocol FirebaseManagerService {
     func upload(from endpoint: PostEndpoint, completion: @escaping (Result<Void, Error>) -> Void)
-    func retreivePosts(from endpoint: PostEndpoint, completion: @escaping (Result<[post], Error>) -> Void)
+    func retreivePosts(from endpoint: PostEndpoint, completion: @escaping (Result<[PostModel], Error>) -> Void)
     func updateMultiLocation(from endPoint: MultipleDatabaseEndpoint, completion: @escaping (Result<[String:Any], Error>) -> Void)
 }
 
@@ -54,13 +54,13 @@ class FirebaseManager: FirebaseManagerService {
         }
     }
     
-    func retreivePosts(from endpoint: PostEndpoint, completion: @escaping (Result<[post], Error>) -> Void) {
+    func retreivePosts(from endpoint: PostEndpoint, completion: @escaping (Result<[PostModel], Error>) -> Void) {
         guard let path = endpoint.path
         else {
             completion(.failure(NSError(domain: "Nil Info", code: 0, userInfo: nil)))
             return
         }
-        var tempPosts: [post] = []
+        var tempPosts: [PostModel] = []
         let myGroup = DispatchGroup()
         databaseReference = Database.database().reference().child(path)
         databaseReference.observeSingleEvent(of: .value) { snapshot in
@@ -68,7 +68,7 @@ class FirebaseManager: FirebaseManagerService {
                 myGroup.enter()
                 guard let postObject = child.value as? [String: AnyObject] else {return}
                 do {
-                    let postData = try FirebaseDecoder().decode(post.self, from: postObject)
+                    let postData = try FirebaseDecoder().decode(PostModel.self, from: postObject)
                     tempPosts.append(postData)
                     myGroup.leave()
                 }

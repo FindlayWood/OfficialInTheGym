@@ -193,8 +193,8 @@ extension PostCollectionViewCell {
         textView.text = post.text
         replyCountLabel.text = post.replyCount.description
         likeCountLabel.text = post.likeCount.description
-        if post.attachedClip == nil { dataView.clipImageView.isHidden = true }
-        if post.attachedPhoto == nil { dataView.photoImageView.isHidden = true }
+//        if post.attachedClip == nil { dataView.clipImageView.isHidden = true }
+//        if post.attachedPhoto == nil { dataView.photoImageView.isHidden = true }
         if let workoutID = post.workoutID {
             dataView.workoutView.isHidden = false
             dataView.workoutView.configure(with: workoutID, assignID: post.posterID)
