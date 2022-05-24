@@ -233,8 +233,9 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
         showRPEAlert(for: index) { [weak self] index, score in
             guard let self = self else {return}
             guard let cell = self.childVC.display.exerciseCollection.cellForItem(at: index) else {return}
-            cell.flash(with: score)
-            self.viewModel.updateRPE(at: index, to: score)
+            cell.flash(with: score) {
+                self.viewModel.updateRPE(at: index, to: score)
+            }
         }
     }
 }

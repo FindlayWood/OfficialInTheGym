@@ -84,7 +84,7 @@ private extension LiveWorkoutDisplayView {
     func generateExerciseCollectionLayout() -> UICollectionViewFlowLayout {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 20
-        layout.estimatedItemSize = CGSize(width: Constants.screenSize.width - 10, height: 360)
+        layout.itemSize = CGSize(width: Constants.screenSize.width - 10, height: 360)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.scrollDirection = .vertical
         return layout

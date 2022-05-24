@@ -30,18 +30,16 @@ class DisplayingWorkoutsViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         initDataSource()
         setupSubscribers()
         buttonActions()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
+        initDisplay()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -54,10 +52,16 @@ class DisplayingWorkoutsViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: true)
     }
+    // MARK: - Init Display
+    func initDisplay() {
+        display.segment.selectedIndex
+            .sink { [weak self] in self?.viewModel.switchSegment(to: $0) }
+            .store(in: &subscriptions)
+    }
     
     // MARK: - Data Source Initializer
     func initDataSource() {
-        dataSource = .init(collectionView: display.collectionView)
+        dataSource = .init(collectionView: display.collectionView, searchDelegate: self)
     }
     
     // MARK: - Button Actions
@@ -75,7 +79,7 @@ class DisplayingWorkoutsViewController: UIViewController {
             .sink { [weak self] in self?.setLoading($0)}
             .store(in: &subscriptions)
         
-        viewModel.workouts
+        viewModel.$workouts
             .dropFirst()
             .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
@@ -89,6 +93,7 @@ class DisplayingWorkoutsViewController: UIViewController {
             .store(in: &subscriptions)
         
         viewModel.fetchWorkouts()
+        viewModel.initSubscribers()
     }
     
     // MARK: - Actions
@@ -115,8 +120,21 @@ class DisplayingWorkoutsViewController: UIViewController {
     
     func setLoading(_ loading: Bool) {
         if !loading {
-            refreshControl.endRefreshing()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.refreshControl.endRefreshing()
+            }
         }
     }
 }
-
+// MARK: - Search Bar Delegate
+extension DisplayingWorkoutsViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.searchText = searchText
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+}

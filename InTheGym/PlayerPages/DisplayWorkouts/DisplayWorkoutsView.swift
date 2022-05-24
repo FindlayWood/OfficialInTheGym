@@ -38,11 +38,16 @@ class DisplayingWorkoutsView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+    var segment: CustomUnderlineSegmentControl = {
+        let view = CustomUnderlineSegmentControl(frame: CGRect(x: 0, y: 0, width: Constants.screenSize.width, height: 32), buttonTitles: ["All","Completed","Live"])
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
         view.register(WorkoutCollectionViewCell.self, forCellWithReuseIdentifier: WorkoutCollectionViewCell.reuseID)
-        view.backgroundColor = .white
+        view.register(DisplayWorkoutsCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DisplayWorkoutsCollectionHeader.reuseIdentifier)
+        view.backgroundColor = .systemBackground
         view.alwaysBounceVertical = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -62,10 +67,11 @@ class DisplayingWorkoutsView: UIView {
 // MARK: - Configure
 private extension DisplayingWorkoutsView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         addSubview(titleLabel)
         addSubview(plusButton)
         addSubview(programButton)
+        addSubview(segment)
         addSubview(collectionView)
         configureUI()
     }
@@ -73,7 +79,7 @@ private extension DisplayingWorkoutsView {
     func configureUI() {
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
+            titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             
             plusButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
@@ -81,10 +87,15 @@ private extension DisplayingWorkoutsView {
             programButton.trailingAnchor.constraint(equalTo: plusButton.leadingAnchor, constant: -4),
             programButton.topAnchor.constraint(equalTo: plusButton.topAnchor),
             
+            segment.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            segment.leadingAnchor.constraint(equalTo: leadingAnchor),
+            segment.trailingAnchor.constraint(equalTo: trailingAnchor),
+            segment.heightAnchor.constraint(equalToConstant: 32),
+            
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            collectionView.topAnchor.constraint(equalTo: segment.bottomAnchor, constant: 0),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
@@ -95,6 +106,8 @@ private extension DisplayingWorkoutsView {
         layout.estimatedItemSize = CGSize(width: Constants.screenSize.width - 16, height: 200)
         layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         layout.scrollDirection = .vertical
+        layout.headerReferenceSize = CGSize(width: Constants.screenSize.width, height: 48)
+        layout.sectionHeadersPinToVisibleBounds = false
         return layout
     }
 }

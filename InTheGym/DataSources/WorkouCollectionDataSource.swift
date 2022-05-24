@@ -17,31 +17,45 @@ class WorkoutsCollectionDataSource: NSObject {
     
     // MARK: - Properties
     var collectionView: UICollectionView
-    private lazy var dataDource = makeDataSource()
+    private var searchDelegate: UISearchBarDelegate
+    private lazy var dataSource = makeDataSource()
     
     // MARK: - Initializer
-    init(collectionView: UICollectionView) {
+    init(collectionView: UICollectionView, searchDelegate: UISearchBarDelegate) {
         self.collectionView = collectionView
+        self.searchDelegate = searchDelegate
         super.init()
         self.collectionView.dataSource = makeDataSource()
         self.collectionView.delegate = self
-//        self.initialSetup()
+        self.initialSetup()
     }
     
     // MARK: - Create Data Source
     func makeDataSource() -> UICollectionViewDiffableDataSource<SingleSection,WorkoutModel> {
-        return UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
+        
+        let dataSource = UICollectionViewDiffableDataSource<SingleSection,WorkoutModel>(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WorkoutCollectionViewCell.reuseID, for: indexPath) as! WorkoutCollectionViewCell
             cell.configure(with: itemIdentifier)
             return cell
         }
+        
+        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
+            guard kind == UICollectionView.elementKindSectionHeader else {
+                return nil
+            }
+            let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DisplayWorkoutsCollectionHeader.reuseIdentifier, for: indexPath) as? DisplayWorkoutsCollectionHeader
+            view?.searchField.delegate = self.searchDelegate
+            return view
+            
+        }
+        return dataSource
     }
     
     // MARK: - Initial Setup
     func initialSetup() {
         var snapshot = NSDiffableDataSourceSnapshot<SingleSection,WorkoutModel>()
         snapshot.appendSections([.main])
-        dataDource.apply(snapshot, animatingDifferences: false)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     // MARK: - Update
@@ -49,21 +63,21 @@ class WorkoutsCollectionDataSource: NSObject {
         var currentSnapshot = NSDiffableDataSourceSnapshot<SingleSection,WorkoutModel>()
         currentSnapshot.appendSections([.main])
         currentSnapshot.appendItems(models, toSection: .main)
-        dataDource.apply(currentSnapshot, animatingDifferences: false)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Reload
     func reloadModel(_ model: WorkoutModel) {
-        var currentSnapshot = dataDource.snapshot()
+        var currentSnapshot = dataSource.snapshot()
         currentSnapshot.reloadItems([model])
-        dataDource.apply(currentSnapshot, animatingDifferences: false)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
 }
 // MARK: - Delegate - Select Row
 extension WorkoutsCollectionDataSource: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let workout = dataDource.itemIdentifier(for: indexPath) else {return}
+        guard let workout = dataSource.itemIdentifier(for: indexPath) else {return}
         workoutSelected.send(workout)
     }
 }

@@ -57,8 +57,8 @@ private extension LiveWorkoutPlusCollectionCell {
             plusButton.widthAnchor.constraint(equalToConstant: 100),
             plusButton.heightAnchor.constraint(equalToConstant: 100),
             
-            plusButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 25),
-            plusButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -25)
+//            plusButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 25),
+//            plusButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -25)
         ])
     }
     @objc func plusTapped(_ sender: UIButton) {

@@ -60,6 +60,7 @@
 		7416CCD3265817540043B1C2 /* FirebaseLiveWorkoutUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416CCD2265817540043B1C2 /* FirebaseLiveWorkoutUpdater.swift */; };
 		7416CCD6265C04560043B1C2 /* FirstScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416CCD5265C04560043B1C2 /* FirstScreenView.swift */; };
 		74172204245B41230013EAC8 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74172203245B41230013EAC8 /* FeedbackViewController.swift */; };
+		741858FA283D70980042B81B /* DisplayWorkoutsCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741858F9283D70980042B81B /* DisplayWorkoutsCollectionHeader.swift */; };
 		741B21FA2635A3F700B1F5B3 /* TimelineEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741B21F92635A3F700B1F5B3 /* TimelineEndpoints.swift */; };
 		741B22022636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741B22012636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift */; };
 		741B22072637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741B22062637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift */; };
@@ -895,6 +896,7 @@
 		7416CCD2265817540043B1C2 /* FirebaseLiveWorkoutUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLiveWorkoutUpdater.swift; sourceTree = "<group>"; };
 		7416CCD5265C04560043B1C2 /* FirstScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstScreenView.swift; sourceTree = "<group>"; };
 		74172203245B41230013EAC8 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
+		741858F9283D70980042B81B /* DisplayWorkoutsCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayWorkoutsCollectionHeader.swift; sourceTree = "<group>"; };
 		741B21F92635A3F700B1F5B3 /* TimelineEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineEndpoints.swift; sourceTree = "<group>"; };
 		741B22012636FF5300B1F5B3 /* PublicCreatedWorkoutsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCreatedWorkoutsViewModel.swift; sourceTree = "<group>"; };
 		741B22062637050D00B1F5B3 /* PublicCreatedWorkoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCreatedWorkoutsViewController.swift; sourceTree = "<group>"; };
@@ -3450,6 +3452,7 @@
 				74B6F6952751532B00A72679 /* DisplayWorkoutsViewController.swift */,
 				74B6F6972751536E00A72679 /* DisplayWorkoutsView.swift */,
 				74B6F699275153A300A72679 /* DisplayingWorkoutsViewModel.swift */,
+				741858F9283D70980042B81B /* DisplayWorkoutsCollectionHeader.swift */,
 			);
 			path = DisplayWorkouts;
 			sourceTree = "<group>";
@@ -4719,6 +4722,7 @@
 				749222BD28106266008C6CB1 /* SavedProgramOptionsDisplayViewController.swift in Sources */,
 				74B6F68A2744242B00A72679 /* LoginView.swift in Sources */,
 				7425D4182545AE8000567DAB /* Constants.swift in Sources */,
+				741858FA283D70980042B81B /* DisplayWorkoutsCollectionHeader.swift in Sources */,
 				7444D09326D136700009C7A6 /* AddMoreToExerciseViewModel.swift in Sources */,
 				742AEDCD282A8EF20004E901 /* LiveWorkoutSetCreationCoordinator.swift in Sources */,
 				7403A60926C56627000588CE /* GroupCellView.swift in Sources */,
