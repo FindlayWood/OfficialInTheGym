@@ -21,12 +21,12 @@ class ExerciseSelectionCell: UICollectionViewCell {
     // MARK: - Subviews
     var label: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 25, weight: .bold)
+        label.font = .systemFont(ofSize: 20, weight: .bold)
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
-        label.textColor = .black
+        label.minimumScaleFactor = 0.1
+        label.textColor = .label
         label.lineBreakMode = .byWordWrapping
-        label.numberOfLines = 3
+        label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -79,9 +79,10 @@ private extension ExerciseSelectionCell {
             circleViewTwo.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 10),
             circleViewTwo.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 50),
             
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+            label.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
+            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            label.bottomAnchor.constraint(equalTo: bottomAnchor)
             
         ])
     }
