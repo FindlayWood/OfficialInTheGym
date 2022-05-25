@@ -1,24 +1,24 @@
 //
-//  DisplayWorkoutsViewController.swift
+//  CoachWorkoutsViewController.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 26/11/2021.
-//  Copyright © 2021 FindlayWood. All rights reserved.
+//  Created by Findlay Wood on 25/05/2022.
+//  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import UIKit
 import Combine
 
-class DisplayingWorkoutsViewController: UIViewController {
+class CoachWorkoutsViewController: UIViewController {
     
     // MARK: - Coordinator
-    var coordinator: WorkoutsCoordinator?
+    var coordinator: CoachWorkoutsCoordinator?
     
     // MARK: - Display Property
-    var display = DisplayingWorkoutsView()
+    var display = CoachWorkoutsView()
     
     // MARK: - ViewModel
-    var viewModel = DisplayingWorkoutsViewModel()
+    var viewModel = CoachWorkoutsViewModel()
     
     // MARK: - Data Source
     private var dataSource: WorkoutsCollectionDataSource!
@@ -40,23 +40,24 @@ class DisplayingWorkoutsViewController: UIViewController {
         setupSubscribers()
         buttonActions()
         initDisplay()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        guard let selectedWorkout = viewModel.selectedWorkout else { return }
-        dataSource.reloadModel(selectedWorkout)
-        viewModel.selectedWorkout = nil
+        initNavBar()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: true)
+        editNavBarColour(to: .darkColour)
+        navigationItem.title = viewModel.navigationTitle
     }
     // MARK: - Init Display
     func initDisplay() {
         display.segment.selectedIndex
             .sink { [weak self] in self?.viewModel.switchSegment(to: $0) }
             .store(in: &subscriptions)
+    }
+    // MARK: - Init Nav Bar
+    func initNavBar() {
+        let navBarButton = UIBarButtonItem(image: UIImage(systemName: "plus.circle.fill"), style: .done, target: self, action: #selector(plusButtonTapped(_:)))
+        navBarButton.tintColor = .darkColour
+        navigationItem.rightBarButtonItem = navBarButton
     }
     
     // MARK: - Data Source Initializer
@@ -66,8 +67,6 @@ class DisplayingWorkoutsViewController: UIViewController {
     
     // MARK: - Button Actions
     func buttonActions() {
-        display.plusButton.addTarget(self, action: #selector(plusButtonTapped(_:)), for: .touchUpInside)
-        display.programButton.addTarget(self, action: #selector(programButtonTapped(_:)), for: .touchUpInside)
         refreshControl.addTarget(self, action: #selector(didPullToRefresh(_:)), for: .valueChanged)
         display.collectionView.refreshControl = refreshControl
     }
@@ -108,7 +107,6 @@ class DisplayingWorkoutsViewController: UIViewController {
     
     @objc func plusButtonTapped(_ sender: UIButton) {
         coordinator?.plusPressed()
-//        coordinator?.addNewWorkout(UserDefaults.currentUser)
     }
     @objc func programButtonTapped(_ sender: UIButton) {
         coordinator?.addProgram()
@@ -127,7 +125,7 @@ class DisplayingWorkoutsViewController: UIViewController {
     }
 }
 // MARK: - Search Bar Delegate
-extension DisplayingWorkoutsViewController: UISearchBarDelegate {
+extension CoachWorkoutsViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.searchText = searchText
     }

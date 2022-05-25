@@ -15,7 +15,7 @@ struct RPEUpdateModel {
 }
 extension RPEUpdateModel: FirebaseInstance {
     var internalPath: String {
-        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workoutID)/exercises/\(exercise.workoutPosition)/rpe"
+        return "Workouts/\(UserDefaults.currentUser.uid)/\(workoutID)/exercises/\(exercise.workoutPosition)/rpe"
     }
 }
 

@@ -227,14 +227,19 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
             .sink { [weak self] in self?.clipDataSource.updateTable(with: [$0]) }
             .store(in: &subscriptions)
         
+        viewModel.updatedExercise
+            .sink { [weak self] in self?.childVC.dataSource.update(for: $0)}
+            .store(in: &subscriptions)
+        
     }
     // MARK: - RPE
     func rpe(index: IndexPath) {
         showRPEAlert(for: index) { [weak self] index, score in
             guard let self = self else {return}
             guard let cell = self.childVC.display.exerciseCollection.cellForItem(at: index) else {return}
-            cell.flash(with: score)
-            self.viewModel.updateRPE(at: index, to: score)
+            cell.flash(with: score) {
+                self.viewModel.updateRPE(at: index, to: score)
+            }
         }
     }
 }

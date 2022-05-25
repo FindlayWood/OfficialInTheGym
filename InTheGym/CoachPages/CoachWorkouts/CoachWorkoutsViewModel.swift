@@ -1,15 +1,15 @@
 //
-//  DisplayingWorkoutsViewModel.swift
+//  CoachWorkoutsViewModel.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 26/11/2021.
-//  Copyright © 2021 FindlayWood. All rights reserved.
+//  Created by Findlay Wood on 25/05/2022.
+//  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import Foundation
 import Combine
 
-class DisplayingWorkoutsViewModel {
+class CoachWorkoutsViewModel {
     
     // MARK: - Publisher
     @Published var isLoading: Bool = false
@@ -28,6 +28,8 @@ class DisplayingWorkoutsViewModel {
     private var currentSegment: WorkoutSegments = .all
     
     // MARK: - Properties
+    var navigationTitle: String = "My Workouts"
+    
     var apiService: FirebaseDatabaseManagerService
     
     // MARK: - Initializer
@@ -38,7 +40,7 @@ class DisplayingWorkoutsViewModel {
     // MARK: - Functions
     func initSubscribers() {
         $searchText
-            .sink { [weak self] in self?.filterInitialUsers(with: $0)}
+            .sink { [weak self] in self?.filterWorkouts(with: $0)}
             .store(in: &subscriptions)
     }
     
@@ -65,7 +67,7 @@ class DisplayingWorkoutsViewModel {
         return currentModels[indexPath.row]
     }
     
-    func filterInitialUsers(with text: String) {
+    func filterWorkouts(with text: String) {
         if text.isEmpty {
             filteredWorkouts = storedWorkouts.filter { filterForSegment($0)}
             workouts = filteredWorkouts
@@ -85,7 +87,7 @@ class DisplayingWorkoutsViewModel {
         default:
             break
         }
-        filterInitialUsers(with: searchText)
+        filterWorkouts(with: searchText)
     }
     func filterForSegment(_ workout: WorkoutModel) -> Bool {
         switch currentSegment {
@@ -103,5 +105,3 @@ class DisplayingWorkoutsViewModel {
         case live
     }
 }
-
-

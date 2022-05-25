@@ -44,7 +44,7 @@ class CoachPlayerWorkoutsViewController: UIViewController {
     
     // MARK: - Data Source
     func initDataSource() {
-        dataSource = .init(collectionView: display.collectionView)
+        dataSource = .init(collectionView: display.collectionView, searchDelegate: self)
         
         dataSource.workoutSelected
             .sink { [weak self] in self?.coordinator?.showWorkout($0)}
@@ -63,5 +63,17 @@ class CoachPlayerWorkoutsViewController: UIViewController {
             .store(in: &subscriptions)
         
         viewModel.loadWorkouts()
+    }
+}
+// MARK: - Search Bar Delegate
+extension CoachPlayerWorkoutsViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        viewModel.searchText = searchText
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 }

@@ -29,6 +29,7 @@ class BaseExerciseCollectionCell: FullWidthCollectionViewCell {
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.titleLabel?.minimumScaleFactor = 0.2
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -45,6 +46,7 @@ class BaseExerciseCollectionCell: FullWidthCollectionViewCell {
         let label = UILabel()
         label.font = UIFont(name: "Menlo-Bold", size: 22)
         label.textColor = .black
+        label.heightAnchor.constraint(equalToConstant: 25).isActive = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -53,6 +55,7 @@ class BaseExerciseCollectionCell: FullWidthCollectionViewCell {
         let label = UILabel()
         label.font = UIFont(name: "Menlo", size: 18)
         label.textColor = .lightGray
+        label.heightAnchor.constraint(equalToConstant: 21).isActive = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -61,6 +64,7 @@ class BaseExerciseCollectionCell: FullWidthCollectionViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .semibold)
         label.textColor = .black
+        label.heightAnchor.constraint(equalToConstant: 24).isActive = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

@@ -64,19 +64,20 @@ class FirebaseAPIWorkoutManager {
             if var stats = currentData.value as? [String:AnyObject] {
                 var repStat = stats[self.repStatString] as? Int ?? 0
                 var sets = stats[self.setStatString] as? Int ?? 0
+                let maxWeight = stats[self.maxWeightStatString] as? Double ?? 0
                 repStat += reps
                 sets += 1
                 stats[self.repStatString] = repStat as AnyObject
                 stats[self.setStatString] = sets as AnyObject
+                stats[self.maxWeightStatString] = maxWeight as AnyObject
                 if let weightString = weight {
                     var totalWeight = stats[self.totalWeightStatString] as? Double ?? 0
-                    let maxWeight = stats[self.maxWeightStatString] as? Double ?? 0
                     let weightNumber = self.getWeight(from: self.poundsOrKilograms(from: weightString) ?? .kg(0.0))
                     totalWeight += weightNumber
                     stats[self.totalWeightStatString] = totalWeight as AnyObject
                     if weightNumber > maxWeight {
                         stats[self.maxWeightStatString] = weightNumber as AnyObject
-                        stats[self.maxWeightDateStatString] = ServerValue.timestamp() as AnyObject
+                        stats[self.maxWeightDateStatString] = Date().timeIntervalSince1970 as AnyObject
                         self.updateMaxHistory(exercise: name, weight: weightNumber)
                     }
                    
@@ -95,7 +96,7 @@ class FirebaseAPIWorkoutManager {
     // Update max history
     private func updateMaxHistory(exercise: String, weight: Double) {
         let userID = FirebaseAuthManager.currentlyLoggedInUser.uid
-        let currentTime = ServerValue.timestamp()
+        let currentTime = Date().timeIntervalSince1970
         let path =  "ExerciseMaxHistory/\(userID)/\(exercise)"
         let ref = baseRef.child(path).childByAutoId()
         let data = ["time": currentTime,

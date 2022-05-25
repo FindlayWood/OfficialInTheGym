@@ -13,7 +13,7 @@ import Combine
 class PreLiveWorkoutViewController: UIViewController, Storyboarded {
     
     // MARK: - Coordinator
-    weak var coordinator: WorkoutsCoordinator?
+    weak var coordinator: PreLiveWorkoutFlow?
     
     // MARK: - Properties
     var apiService = FirebaseAPIWorkoutManager.shared
@@ -56,7 +56,6 @@ class PreLiveWorkoutViewController: UIViewController, Storyboarded {
         display.tableview.dataSource = adapter
         display.tableview.backgroundColor = .white
         display.titleField.delegate = self
-//        display.continueButton.addTarget(self, action: #selector(continuePressed(_:)), for: .touchUpInside)
     }
     
     // MARK: - Nav Bar

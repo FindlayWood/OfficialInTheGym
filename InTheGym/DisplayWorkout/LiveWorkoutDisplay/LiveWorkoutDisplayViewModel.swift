@@ -57,13 +57,17 @@ class LiveWorkoutDisplayViewModel {
         exercise.rpe = score
         let rpeUpdateModel = RPEUpdateModel(workoutID: workoutModel.id, exercise: exercise)
         let uploadPoint = FirebaseMultiUploadDataPoint(value: score, path: rpeUpdateModel.internalPath)
-        apiService.multiLocationUpload(data: [uploadPoint]) { result in
+        apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
             switch result {
-            case .success(()): break
+            case .success(()):
+                self?.workoutModel.exercises?[exercise.workoutPosition] = exercise
+                self?.updatedExercise.send(exercise)
             case .failure(_): break
             }
         }
-        FirebaseAPIWorkoutManager.shared.checkForCompletionStats(name: exercise.exercise, rpe: score)
+        DispatchQueue.global(qos: .background).async {
+            FirebaseAPIWorkoutManager.shared.checkForCompletionStats(name: exercise.exercise, rpe: score)
+        }
     }
     
     func completed() {
@@ -148,7 +152,9 @@ extension LiveWorkoutDisplayViewModel: ExerciseAdding {
                 break
             }
         }
-        FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise, reps: exercise.reps?.last ?? 0, weight: exercise.weight?.last ?? "")
+        DispatchQueue.global(qos: .background).async {
+            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise, reps: exercise.reps?.last ?? 0, weight: exercise.weight?.last ?? "")
+        }
     }
 }
 

@@ -216,7 +216,7 @@ class WorkoutModel: Codable, Hashable {
     static func == (lhs: WorkoutModel, rhs: WorkoutModel) -> Bool {
         lhs.id == rhs.id
     }
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }

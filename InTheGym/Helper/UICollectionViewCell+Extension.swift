@@ -13,7 +13,7 @@ extension UICollectionViewCell {
     // MARK: - Flash Colour
     /// when rpe is selected flash cell to corresponding colour and then scroll to next index if possible
     /// will only work with MainWorkoutExerciseCollectionCell
-    func flash(with score: Int) {
+    func flash(with score: Int, completion: @escaping (() -> Void)) {
         guard let self = self as? BaseExerciseCollectionCell else {return}
         guard let collection = self.superview as? UICollectionView else {return}
         let colour = Constants.rpeColors[score - 1]
@@ -32,6 +32,9 @@ extension UICollectionViewCell {
                 if currentIndex < lastindextoscroll {
                     let indextoscroll = IndexPath.init(item: currentIndex + 1, section: 0)
                     collection.scrollToItem(at: indextoscroll, at: .top, animated: true)
+                    completion()
+                } else {
+                    completion()
                 }
             }
         }
