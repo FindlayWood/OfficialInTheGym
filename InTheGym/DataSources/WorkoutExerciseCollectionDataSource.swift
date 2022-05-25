@@ -114,6 +114,13 @@ class WorkoutExerciseCollectionDataSource: NSObject {
         }
         dataDource.apply(currentSnapshot, animatingDifferences: false)
     }
+    func update(for exercise: ExerciseModel) {
+        guard let item = dataDource.itemIdentifier(for: IndexPath(item: exercise.workoutPosition, section: 0)) else {return}
+        var currentSnapshot = dataDource.snapshot()
+        currentSnapshot.insertItems([ExerciseRow.exercise(exercise)], afterItem: item)
+        currentSnapshot.deleteItems([item])
+        dataDource.apply(currentSnapshot, animatingDifferences: false)
+    }
     
     // MARK: - Retreive
     func getExercise(at indexPath: IndexPath) -> ExerciseModel? {

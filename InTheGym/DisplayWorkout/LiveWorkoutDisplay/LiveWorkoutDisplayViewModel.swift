@@ -65,7 +65,9 @@ class LiveWorkoutDisplayViewModel {
             case .failure(_): break
             }
         }
-        FirebaseAPIWorkoutManager.shared.checkForCompletionStats(name: exercise.exercise, rpe: score)
+        DispatchQueue.global(qos: .background).async {
+            FirebaseAPIWorkoutManager.shared.checkForCompletionStats(name: exercise.exercise, rpe: score)
+        }
     }
     
     func completed() {
@@ -150,7 +152,9 @@ extension LiveWorkoutDisplayViewModel: ExerciseAdding {
                 break
             }
         }
-        FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise, reps: exercise.reps?.last ?? 0, weight: exercise.weight?.last ?? "")
+        DispatchQueue.global(qos: .background).async {
+            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise, reps: exercise.reps?.last ?? 0, weight: exercise.weight?.last ?? "")
+        }
     }
 }
 

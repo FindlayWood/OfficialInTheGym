@@ -143,7 +143,6 @@ extension MainWorkoutCollectionCell {
 // MARK: - Actions
 private extension MainWorkoutCollectionCell {
     @objc func complete(_ sender: UIButton) {
-        completeButtonTapped.send(())
         sender.setImage(UIImage(named: "tickRing"), for: .normal)
         sender.isUserInteractionEnabled = false
         
@@ -160,6 +159,7 @@ private extension MainWorkoutCollectionCell {
                     let indextoscroll = IndexPath.init(row: currentIndex! + 1, section: 0)
                     collection.scrollToItem(at: indextoscroll, at: .left, animated: true)
                 }
+                self.completeButtonTapped.send(())
             }
         }
     }
