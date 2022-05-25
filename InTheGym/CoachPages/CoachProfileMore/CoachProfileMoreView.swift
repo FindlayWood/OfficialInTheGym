@@ -79,14 +79,14 @@ struct CoachProfileMoreView: View {
             }
             Section {
                 Button {
-                    viewModel.action(.myPlayers)
+                    viewModel.action(.myWorkouts)
                 } label: {
                     HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "player_icon")!)
+                        Image(uiImage: UIImage(named: "benchpress_icon")!)
                             .resizable()
                             .frame(width: 30, height: 30)
                             .cornerRadius(4)
-                        Text("My Players")
+                        Text("My Workouts")
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
                     }

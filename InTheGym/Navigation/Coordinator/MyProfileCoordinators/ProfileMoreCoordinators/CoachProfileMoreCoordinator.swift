@@ -29,6 +29,11 @@ extension CoachProfileMoreCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    func showMyWorkouts() {
+        let child = CoachWorkoutsCoordinator(navigationController: navigationController)
+        childCoordinators.append(child)
+        child.start()
+    }
     func myRequests() {
         let vc = RequestsViewController()
         navigationController.pushViewController(vc, animated: true)

@@ -19,7 +19,7 @@ class DisplayWorkoutsCollectionHeader: UICollectionReusableView {
     // MARK: - Subviews
     var searchField: UISearchBar = {
         let view = UISearchBar()
-        view.placeholder = "search usernames..."
+        view.placeholder = "search workouts..."
         view.showsCancelButton = true
         view.searchBarStyle = .prominent
         view.translatesAutoresizingMaskIntoConstraints = false
