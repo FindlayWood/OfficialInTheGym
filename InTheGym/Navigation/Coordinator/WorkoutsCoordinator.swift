@@ -46,7 +46,7 @@ class WorkoutsCoordinator: NSObject, Coordinator {
 extension WorkoutsCoordinator: WorkoutsFlow {
 
     func plusPressed() {
-        let vc = AddWorkoutSelectionViewController.instantiate()
+        let vc = NewWorkoutSelectionViewController()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }

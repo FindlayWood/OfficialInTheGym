@@ -494,6 +494,8 @@
 		7479A921229F2B4D00D39E2E /* InTheGymTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479A920229F2B4D00D39E2E /* InTheGymTests.swift */; };
 		7479A92C229F2B4D00D39E2E /* InTheGymUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479A92B229F2B4D00D39E2E /* InTheGymUITests.swift */; };
 		7479AFA9253F844500E6A79C /* InsideCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479AFA8253F844500E6A79C /* InsideCollectionViewCell.swift */; };
+		747AE923283E54FF0037FBEF /* NewWorkoutSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747AE922283E54FF0037FBEF /* NewWorkoutSelectionView.swift */; };
+		747AE925283E5AD10037FBEF /* NewWorkoutSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747AE924283E5AD10037FBEF /* NewWorkoutSelectionViewModel.swift */; };
 		747B672E25FFAAFC000AD6B7 /* NotificationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747B672C25FFAAFC000AD6B7 /* NotificationsTableViewCell.swift */; };
 		747B673925FFBDF6000AD6B7 /* DisplayNotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747B673825FFBDF6000AD6B7 /* DisplayNotificationsViewController.swift */; };
 		747B673E25FFBEE8000AD6B7 /* DisplayNotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747B673D25FFBEE8000AD6B7 /* DisplayNotificationsViewModel.swift */; };
@@ -537,7 +539,7 @@
 		748915DE28121D74001A1EBE /* PlayerProfileMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748915DD28121D74001A1EBE /* PlayerProfileMoreView.swift */; };
 		748B403D25236EBD00C947B6 /* SetSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748B403C25236EBD00C947B6 /* SetSelectionViewController.swift */; };
 		748E094825AB446900ABE9C9 /* TabBarSelectionImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E094725AB446800ABE9C9 /* TabBarSelectionImage.swift */; };
-		748E3C3125B87032004D6D4A /* AddWorkoutSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E3C3025B87032004D6D4A /* AddWorkoutSelectionViewController.swift */; };
+		748E3C3125B87032004D6D4A /* NewWorkoutSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E3C3025B87032004D6D4A /* NewWorkoutSelectionViewController.swift */; };
 		748E3C3625B89202004D6D4A /* PreLiveWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E3C3525B89202004D6D4A /* PreLiveWorkoutViewController.swift */; };
 		749222BA281048BF008C6CB1 /* UICurrentProgramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749222B9281048BE008C6CB1 /* UICurrentProgramView.swift */; };
 		749222BD28106266008C6CB1 /* SavedProgramOptionsDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749222BC28106266008C6CB1 /* SavedProgramOptionsDisplayViewController.swift */; };
@@ -1337,6 +1339,8 @@
 		7479A92B229F2B4D00D39E2E /* InTheGymUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InTheGymUITests.swift; sourceTree = "<group>"; };
 		7479A92D229F2B4D00D39E2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7479AFA8253F844500E6A79C /* InsideCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsideCollectionViewCell.swift; sourceTree = "<group>"; };
+		747AE922283E54FF0037FBEF /* NewWorkoutSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWorkoutSelectionView.swift; sourceTree = "<group>"; };
+		747AE924283E5AD10037FBEF /* NewWorkoutSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWorkoutSelectionViewModel.swift; sourceTree = "<group>"; };
 		747B672C25FFAAFC000AD6B7 /* NotificationsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsTableViewCell.swift; sourceTree = "<group>"; };
 		747B673825FFBDF6000AD6B7 /* DisplayNotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayNotificationsViewController.swift; sourceTree = "<group>"; };
 		747B673D25FFBEE8000AD6B7 /* DisplayNotificationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayNotificationsViewModel.swift; sourceTree = "<group>"; };
@@ -1380,7 +1384,7 @@
 		748915DD28121D74001A1EBE /* PlayerProfileMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreView.swift; sourceTree = "<group>"; };
 		748B403C25236EBD00C947B6 /* SetSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetSelectionViewController.swift; sourceTree = "<group>"; };
 		748E094725AB446800ABE9C9 /* TabBarSelectionImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarSelectionImage.swift; sourceTree = "<group>"; };
-		748E3C3025B87032004D6D4A /* AddWorkoutSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWorkoutSelectionViewController.swift; sourceTree = "<group>"; };
+		748E3C3025B87032004D6D4A /* NewWorkoutSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWorkoutSelectionViewController.swift; sourceTree = "<group>"; };
 		748E3C3525B89202004D6D4A /* PreLiveWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreLiveWorkoutViewController.swift; sourceTree = "<group>"; };
 		749222B9281048BE008C6CB1 /* UICurrentProgramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICurrentProgramView.swift; sourceTree = "<group>"; };
 		749222BC28106266008C6CB1 /* SavedProgramOptionsDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedProgramOptionsDisplayViewController.swift; sourceTree = "<group>"; };
@@ -2912,6 +2916,7 @@
 		746AEB902827FF9E00EE2412 /* Workouts */ = {
 			isa = PBXGroup;
 			children = (
+				747AE921283E54E30037FBEF /* AddNewWorkout */,
 				746AEB912827FFAA00EE2412 /* PostCompletedWorkout */,
 				74B48E1227A9A02800BBFC16 /* CompletedWorkoutPage */,
 			);
@@ -3057,7 +3062,6 @@
 				74BAB0E625642600009D35E8 /* LineChart.swift */,
 				74F5470525EDA14900C1A6A9 /* Discover */,
 				748E094725AB446800ABE9C9 /* TabBarSelectionImage.swift */,
-				748E3C3025B87032004D6D4A /* AddWorkoutSelectionViewController.swift */,
 				74028E5A25E693E9005A1D21 /* Helper */,
 				7432F06325E811880088CF07 /* ViewModels */,
 				74028E0E25E53695005A1D21 /* Models */,
@@ -3094,6 +3098,16 @@
 				7479A92D229F2B4D00D39E2E /* Info.plist */,
 			);
 			path = InTheGymUITests;
+			sourceTree = "<group>";
+		};
+		747AE921283E54E30037FBEF /* AddNewWorkout */ = {
+			isa = PBXGroup;
+			children = (
+				748E3C3025B87032004D6D4A /* NewWorkoutSelectionViewController.swift */,
+				747AE922283E54FF0037FBEF /* NewWorkoutSelectionView.swift */,
+				747AE924283E5AD10037FBEF /* NewWorkoutSelectionViewModel.swift */,
+			);
+			path = AddNewWorkout;
 			sourceTree = "<group>";
 		};
 		747B676E26001F92000AD6B7 /* Timeline */ = {
@@ -4531,6 +4545,7 @@
 				74B48DEE27A1FE6A00BBFC16 /* PostLoader.swift in Sources */,
 				7479813A27DBA50100CF3F9B /* UITableViewCell+Extension.swift in Sources */,
 				742565A9277F6B4D00A7764D /* MyGroupsTableViewCell.swift in Sources */,
+				747AE923283E54FF0037FBEF /* NewWorkoutSelectionView.swift in Sources */,
 				74318F3E26B572F1009EDFAC /* PreLiveWorkoutAdapter.swift in Sources */,
 				74B48E0527A42F9200BBFC16 /* LiveWorkoutDisplayViewController.swift in Sources */,
 				74D93464282EF63D005D15DE /* EditProfileModel.swift in Sources */,
@@ -4978,7 +4993,7 @@
 				74478E2026BDF05600D8178E /* NotificationsCoordinator.swift in Sources */,
 				744AED20279701E2000D2D74 /* MainWorkoutEMOMCollectionCell.swift in Sources */,
 				74318F4226B6EC4B009EDFAC /* PreLiveWorkoutViewModel.swift in Sources */,
-				748E3C3125B87032004D6D4A /* AddWorkoutSelectionViewController.swift in Sources */,
+				748E3C3125B87032004D6D4A /* NewWorkoutSelectionViewController.swift in Sources */,
 				74F18AD027D659790043551F /* PlayerDetailCoordinator.swift in Sources */,
 				74F2CCC326DD576800D7AD79 /* ImagePickerCoordinator.swift in Sources */,
 				74E9899927D7CCDA00898C59 /* WorkoutBottomChildViewModel.swift in Sources */,
@@ -4998,6 +5013,7 @@
 				7444D09C26D13DDE0009C7A6 /* AddMoreBasicView.swift in Sources */,
 				744AED27279843EF000D2D74 /* SavedWorkoutDisplayViewController.swift in Sources */,
 				74B48E1627A9A05200BBFC16 /* CompletedWorkoutPageViewModel.swift in Sources */,
+				747AE925283E5AD10037FBEF /* NewWorkoutSelectionViewModel.swift in Sources */,
 				74DB061B2303017B00C4A19C /* ResetPasswordViewController.swift in Sources */,
 				74FDB97D25A4978A00CC18EF /* DiscoverPageViewController.swift in Sources */,
 				74EC43A9263AD6D100D81E5B /* DisplayCircuitExerciseTableViewCell.swift in Sources */,

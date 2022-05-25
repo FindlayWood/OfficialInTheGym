@@ -647,10 +647,10 @@
             </objects>
             <point key="canvasLocation" x="-452" y="-2531"/>
         </scene>
-        <!--Add Workout Selection View Controller-->
+        <!--New Workout Selection View Controller-->
         <scene sceneID="fdY-PW-fXb">
             <objects>
-                <viewController storyboardIdentifier="AddWorkoutSelectionViewController" id="fxf-Hl-IKU" customClass="AddWorkoutSelectionViewController" customModule="InTheGym" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddWorkoutSelectionViewController" id="fxf-Hl-IKU" customClass="NewWorkoutSelectionViewController" customModule="InTheGym" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DMj-Dl-5LQ">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
