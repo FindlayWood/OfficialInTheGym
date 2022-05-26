@@ -36,8 +36,9 @@ class DiscoverPageView: UIView {
         view.register(ProgramCollectionCell.self, forCellWithReuseIdentifier: ProgramCollectionCell.reuseID)
         view.register(ExerciseClipsCollectionCell.self, forCellWithReuseIdentifier: ExerciseClipsCollectionCell.reuseID)
         view.register(ExerciseSelectionCell.self, forCellWithReuseIdentifier: ExerciseSelectionCell.reuseIdentifier)
+        view.register(ExerciseTagCell.self, forCellWithReuseIdentifier: ExerciseTagCell.reuseID)
         view.register(DiscoverSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DiscoverSectionHeader.reuseIdentifier)
-        view.backgroundColor = .white
+        view.backgroundColor = .secondarySystemBackground
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -56,7 +57,7 @@ class DiscoverPageView: UIView {
 // MARK: - Configure
 private extension DiscoverPageView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .secondarySystemBackground
         addSubview(titleLabel)
         addSubview(searchButton)
         addSubview(collectionView)
@@ -86,8 +87,8 @@ private extension DiscoverPageView {
                 return self.generateWorkoutsLayout()
             case .Exercises:
                 return self.generateExercisesLayout()
-            case .Programs:
-                return self.generateClipsLayout()
+            case .Tags:
+                return self.generateTagsLayout()
             case .Clips:
                 return self.generateClipsLayout()
             }
@@ -98,7 +99,6 @@ private extension DiscoverPageView {
     func generateWorkoutsLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(130))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//        item.edgeSpacing = .init(leading: .fixed(0), top: .fixed(0), trailing: .fixed(8), bottom: .fixed(0))
         item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .absolute(130))
@@ -117,7 +117,6 @@ private extension DiscoverPageView {
     func generateExercisesLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/3))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//        item.edgeSpacing = .init(leading: .fixed(8), top: nil, trailing: .fixed(8), bottom: .fixed(8))
         item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8)
 
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .fractionalWidth(1/2))
@@ -132,13 +131,13 @@ private extension DiscoverPageView {
         return section
     }
     
-    func generateProgramsLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1))
+    func generateTagsLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .estimated(160))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .estimated(204))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: 3)
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous

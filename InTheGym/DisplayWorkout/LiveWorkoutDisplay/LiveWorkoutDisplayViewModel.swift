@@ -15,6 +15,7 @@ class LiveWorkoutDisplayViewModel {
     @Published var exercises: [ExerciseModel] = []
     var addedExercise = PassthroughSubject<ExerciseModel,Never>()
     var updatedExercise = PassthroughSubject<ExerciseModel,Never>()
+    var updateExerciseRPE = PassthroughSubject<ExerciseModel,Never>()
     
     var addedClipPublisher = PassthroughSubject<WorkoutClipModel,Never>()
     
@@ -57,16 +58,16 @@ class LiveWorkoutDisplayViewModel {
         exercise.rpe = score
         let rpeUpdateModel = RPEUpdateModel(workoutID: workoutModel.id, exercise: exercise)
         let uploadPoint = FirebaseMultiUploadDataPoint(value: score, path: rpeUpdateModel.internalPath)
-        apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
+        let completionModel = UpdateExerciseStatsModel(exerciseName: exercise.exercise, rpe: score)
+        var points: [FirebaseMultiUploadDataPoint] = completionModel.points
+        points.append(uploadPoint)
+        apiService.multiLocationUpload(data: points) { [weak self] result in
             switch result {
             case .success(()):
                 self?.workoutModel.exercises?[exercise.workoutPosition] = exercise
-                self?.updatedExercise.send(exercise)
+                self?.updateExerciseRPE.send(exercise)
             case .failure(_): break
             }
-        }
-        DispatchQueue.global(qos: .background).async {
-            FirebaseAPIWorkoutManager.shared.checkForCompletionStats(name: exercise.exercise, rpe: score)
         }
     }
     
@@ -143,18 +144,21 @@ extension LiveWorkoutDisplayViewModel: ExerciseAdding {
         workoutModel.exercises?[exercise.workoutPosition] = exercise
         let uploadModel = LiveWorkoutExerciseModel(workout: workoutModel, exercise: exercise)
         guard let uploadPoints = uploadModel.addExerciseModel() else {return}
-        apiService.multiLocationUpload(data: uploadPoints) { result in
+        let statsUpdateModel = UpdateExerciseSetStatsModel(exerciseName: exercise.exercise, reps: exercise.reps?.last ?? 0, weight: exercise.weight?.last)
+        var points: [FirebaseMultiUploadDataPoint] = statsUpdateModel.points
+        points.append(contentsOf: uploadPoints)
+        apiService.multiLocationUpload(data: points) { result in
             switch result {
             case .success(()):
-                break
+                statsUpdateModel.checkMax()
             case .failure(_):
                 // TODO: - Connection error
                 break
             }
         }
-        DispatchQueue.global(qos: .background).async {
-            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise, reps: exercise.reps?.last ?? 0, weight: exercise.weight?.last ?? "")
-        }
+//        DispatchQueue.global(qos: .background).async {
+//            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise, reps: exercise.reps?.last ?? 0, weight: exercise.weight?.last ?? "")
+//        }
     }
 }
 

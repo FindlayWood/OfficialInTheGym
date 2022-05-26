@@ -66,7 +66,7 @@ private extension ExerciseSelectionCell {
     func setupUI() {
         layer.cornerRadius = 10
         clipsToBounds = true
-        backgroundColor = .offWhiteColour
+        backgroundColor = .systemBackground
         addSubview(circleViewOne)
         addSubview(circleViewTwo)
         addSubview(label)

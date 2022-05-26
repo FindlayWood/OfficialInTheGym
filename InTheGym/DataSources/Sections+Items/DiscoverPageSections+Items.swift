@@ -11,13 +11,13 @@ import Foundation
 enum DiscoverPageSections: String, CaseIterable {
     case Workouts = "Workouts"
     case Exercises = "Exercises"
-    case Programs = "Programs"
+    case Tags = "Tags"
     case Clips = "Clips"
 }
 
 enum DiscoverPageItems: Hashable {
     case workout(SavedWorkoutModel)
     case exercise(DiscoverExerciseModel)
-    case program(SavedProgramModel)
+    case tag(ExerciseTagReturnModel)
     case clip(ClipModel)
 }

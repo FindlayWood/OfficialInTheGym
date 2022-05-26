@@ -53,14 +53,12 @@ private extension ExerciseClipsCollectionCell {
         contentView.addSubview(thumbnailImageView)
         contentView.addSubview(profileImageButton)
         backgroundColor = .lightGray
-        addViewShadow(with: .darkColour)
         layer.cornerRadius = 8
         contentView.layer.cornerRadius = 8
         configureUI()
     }
     
     func configureUI() {
-//        addFullConstraint(to: thumbnailImageView)
         NSLayoutConstraint.activate([
             thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),

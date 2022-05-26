@@ -13,7 +13,7 @@ class FirebaseAPIWorkoutManager {
     
     static var shared = FirebaseAPIWorkoutManager()
     private init() {}
-    private var baseRef = Database.database().reference()
+    private let baseRef = Database.database().reference()
     
     private let kilogramSuffix = "kg"
     private let poundsSuffix = "lbs"
@@ -26,6 +26,29 @@ class FirebaseAPIWorkoutManager {
     private let rpeStatString = "totalRPE"
     private let completionStatString = "numberOfCompletions"
     private let exerciseNameString = "exerciseName"
+    
+    func checkMaxWeight(exercise: String, weight: Double) {
+        let path = "ExerciseStats/\(UserDefaults.currentUser.uid)/\(exercise)"
+        let ref = baseRef.child(path)
+        
+        ref.runTransactionBlock { currentData in
+            if var stats = currentData.value as? [String:AnyObject] {
+                let maxWeight = stats[self.maxWeightStatString] as? Double ?? 0.0
+                if weight > maxWeight {
+                    stats[self.maxWeightStatString] = weight as AnyObject
+                    stats[self.maxWeightDateStatString] = Date().timeIntervalSince1970 as AnyObject
+                    self.updateMaxHistory(exercise: exercise, weight: weight)
+                }
+                currentData.value = stats
+                return TransactionResult.success(withValue: currentData)
+            }
+            return TransactionResult.success(withValue: currentData)
+        } andCompletionBlock: { error, committed, snapshot in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
     
 
 //MARK: Workout & Exercise Stats Methods
@@ -64,14 +87,13 @@ class FirebaseAPIWorkoutManager {
             if var stats = currentData.value as? [String:AnyObject] {
                 var repStat = stats[self.repStatString] as? Int ?? 0
                 var sets = stats[self.setStatString] as? Int ?? 0
-                let maxWeight = stats[self.maxWeightStatString] as? Double ?? 0
                 repStat += reps
                 sets += 1
                 stats[self.repStatString] = repStat as AnyObject
                 stats[self.setStatString] = sets as AnyObject
-                stats[self.maxWeightStatString] = maxWeight as AnyObject
                 if let weightString = weight {
                     var totalWeight = stats[self.totalWeightStatString] as? Double ?? 0
+                    let maxWeight = stats[self.maxWeightStatString] as? Double ?? 0
                     let weightNumber = self.getWeight(from: self.poundsOrKilograms(from: weightString) ?? .kg(0.0))
                     totalWeight += weightNumber
                     stats[self.totalWeightStatString] = totalWeight as AnyObject
@@ -80,7 +102,6 @@ class FirebaseAPIWorkoutManager {
                         stats[self.maxWeightDateStatString] = Date().timeIntervalSince1970 as AnyObject
                         self.updateMaxHistory(exercise: name, weight: weightNumber)
                     }
-                   
                 }
                 currentData.value = stats
                 return TransactionResult.success(withValue: currentData)
@@ -112,14 +133,18 @@ class FirebaseAPIWorkoutManager {
         newData[self.repStatString] = reps as AnyObject
         newData[self.setStatString] = 1 as AnyObject
         newData[self.exerciseNameString] = name as AnyObject
+        newData[self.completionStatString] = 0 as AnyObject
         if let weightString = weight {
             let weightNumber = self.getWeight(from: self.poundsOrKilograms(from: weightString) ?? .kg(0.0))
+            newData[self.totalWeightStatString] = weightNumber as AnyObject
+            newData[self.maxWeightStatString] = weightNumber as AnyObject
             if weightNumber > 0.0 {
-                newData[self.totalWeightStatString] = weightNumber as AnyObject
-                newData[self.maxWeightStatString] = weightNumber as AnyObject
                 self.updateMaxHistory(exercise: name, weight: weightNumber)
             }
-         }
+        } else {
+            newData[self.totalWeightStatString] = 0.0 as AnyObject
+            newData[self.maxWeightStatString] = 0.0 as AnyObject
+        }
         ref.setValue(newData)
     }
     private func completeExercise(name: String, with rpe: Int) {

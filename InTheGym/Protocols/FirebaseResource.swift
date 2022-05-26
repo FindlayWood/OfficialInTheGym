@@ -95,3 +95,16 @@ protocol FirebaseQueryModel: FirebaseInstance {
     /// The string value to search in the query
     var equalTo: String { get }
 }
+
+// MARK: - Firebase String Search Model
+/// A type that has a string query to search
+/// It has an orderedByChild string value - the path to query
+/// This type requires Firebase Instance to have internal path
+protocol FirebaseStringSearchModel: FirebaseInstance {
+    
+    /// The string value tp order the query by
+    var orderedBy: String { get }
+    
+    /// The String value to search in the query
+    var equalTo: String { get }
+}

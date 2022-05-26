@@ -81,6 +81,11 @@ extension DiscoverCoordinator {
         vc.viewModel.exercise = emptyExercise
         navigationController.pushViewController(vc, animated: true)
     }
+    func moreTagsSelected(text: String?) {
+        let child = SearchTagCoordinator(navigationController: navigationController, searchText: text)
+        childCoordinators.append(child)
+        child.start()
+    }
     func search() {
         let vc = SearchViewController()
         vc.coordinator = self

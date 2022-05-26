@@ -92,9 +92,16 @@ class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
             .sink { [weak self] in self?.dataSource.updateClips(with: $0)}
             .store(in: &subscriptions)
         
+        viewModel.tagsPublisher
+            .sink { [weak self] in self?.dataSource.updateTags(with: $0)}
+            .store(in: &subscriptions)
 //        viewModel.programPublisher
 //            .sink { [weak self] in self?.dataSource.updateProgram(with: $0)}
 //            .store(in: &subscriptions)
+        
+        viewModel.tagSelected
+            .sink { [weak self] in self?.coordinator?.moreTagsSelected(text: $0)}
+            .store(in: &subscriptions)
         
         viewModel.clipSelected
             .sink { [weak self] in self?.clipSelected($0)}
@@ -102,6 +109,7 @@ class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
         
         viewModel.loadWorkouts()
         viewModel.loadExercises()
+        viewModel.loadTags()
         viewModel.loadClips()
 //        viewModel.loadPrograms()
         
@@ -124,8 +132,8 @@ extension DiscoverPageViewController {
         case .exercise(_):
             let emptyExercise = ExerciseModel(workoutPosition: 0)
             coordinator?.moreExercisesSelected(emptyExercise)
-        case .program(_):
-            break
+        case .tag(_):
+            coordinator?.moreTagsSelected(text: nil)
         case .clip(_):
             coordinator?.moreClipsSelected()
         }

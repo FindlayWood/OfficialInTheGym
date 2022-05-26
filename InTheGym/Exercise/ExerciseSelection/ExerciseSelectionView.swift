@@ -61,7 +61,7 @@ class ExerciseSelectionView: UIView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: compositionalLayout)
         view.register(ExerciseSelectionCell.self, forCellWithReuseIdentifier: ExerciseSelectionCell.reuseIdentifier)
         view.register(ExerciseSelectionHeader.self, forSupplementaryViewOfKind: ExerciseSelectionHeader.elementID, withReuseIdentifier: ExerciseSelectionHeader.reuseIdentifier)
-        view.backgroundColor = .white
+        view.backgroundColor = .secondarySystemBackground
         view.alpha = 0.0
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -106,7 +106,7 @@ class ExerciseSelectionView: UIView {
 // MARK: - Setup UI
 private extension ExerciseSelectionView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .secondarySystemBackground
         topStack.addArrangedSubview(circuitView)
         topStack.addArrangedSubview(amrapView)
         topStack.addArrangedSubview(emomView)

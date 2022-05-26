@@ -51,7 +51,7 @@ private extension DiscoverSectionHeader {
     func setupUI() {
         addSubview(label)
         addSubview(moreButton)
-        backgroundColor = .systemBackground
+        backgroundColor = .secondarySystemBackground
         constrainUI()
         moreButton.addTarget(self, action: #selector(moreButtonAction(_:)), for: .touchUpInside)
     }
