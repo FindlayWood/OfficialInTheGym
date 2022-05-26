@@ -39,6 +39,7 @@ class AddNewTagView: UIView {
         view.layer.cornerRadius = 8
         view.placeholder = "add tag..."
         view.font = .systemFont(ofSize: 20, weight: .semibold)
+        view.returnKeyType = .done
         view.tintColor = .darkColour
         view.heightAnchor.constraint(equalToConstant: 48).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
