@@ -41,8 +41,6 @@ extension EMOMCoordinator: CreationFlow {
     
     func otherSelected(_ exercise: exercise) {
         let vc = OtherExerciseViewController()
-        vc.newExercise = exercise
-        vc.coordinator = self
         navigationController.present(vc, animated: true, completion: nil)
     }
     

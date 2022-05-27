@@ -19,9 +19,9 @@ class OtherExerciseView: UIView {
         let field = SkyFloatingLabelTextField()
         field.tintColor = Constants.darkColour
         field.returnKeyType = .done
-        field.textColor = .black
+        field.textColor = .label
         field.font = .systemFont(ofSize: 18, weight: .medium)
-        field.placeholderColor = .lightGray
+        field.placeholderColor = .tertiaryLabel
         field.selectedLineHeight = 4
         field.lineHeight = 2
         field.titleColor = .darkColour
@@ -32,7 +32,6 @@ class OtherExerciseView: UIView {
         field.selectedLineColor = .darkColour
         field.placeholder = "enter exercise name"
         field.clearButtonMode = .never
-        field.delegate = self
         field.autocapitalizationType = .words
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
@@ -43,7 +42,7 @@ class OtherExerciseView: UIView {
         view.isUserInteractionEnabled = false
         view.text = messageText
         view.font = .systemFont(ofSize: 12, weight: .medium)
-        view.textColor = .darkGray
+        view.textColor = .secondaryLabel
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -51,9 +50,7 @@ class OtherExerciseView: UIView {
         let button = UIButton()
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.darkColour, for: .normal)
-        button.setTitleColor(.lightGray, for: .disabled)
         button.titleLabel?.font = .boldSystemFont(ofSize: 16)
-        button.isEnabled = false
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -80,7 +77,7 @@ class OtherExerciseView: UIView {
 // MARK: - Setup UI
 private extension OtherExerciseView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .secondarySystemBackground
         addSubview(textfield)
         addSubview(message)
         addSubview(continueButton)
@@ -103,21 +100,10 @@ private extension OtherExerciseView {
                                      cancelButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5)])
     }
 }
-
-// MARK: - Textfield
-extension OtherExerciseView: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string).trimTrailingWhiteSpaces()
-        continueButton.isEnabled = (newString != "")
-        //continueButton.isEnabled = !newString.isEmpty
-//        if newString == "" {
-//            continueButton.isEnabled = false
-//        } else {
-//            continueButton.isEnabled = true
-//        }
-        return true
-    }
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+// MARK: - Public Config
+extension OtherExerciseView {
+    public func setContinueButton(to enabled: Bool) {
+        continueButton.setTitleColor(enabled ? .darkColour : .darkColour.withAlphaComponent(0.6), for: .normal)
+        continueButton.isUserInteractionEnabled = enabled ? true : false
     }
 }

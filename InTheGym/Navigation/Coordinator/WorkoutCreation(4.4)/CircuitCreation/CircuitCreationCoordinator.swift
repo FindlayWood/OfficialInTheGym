@@ -45,6 +45,12 @@ extension CircuitCreationCoordinator: ExerciseSelectionFlow {
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
+    func otherSelected(_ exercise: ExerciseModel) {
+        let vc = OtherExerciseViewController()
+        vc.viewModel.exerciseModel = exercise
+        vc.coordinator = self
+        navigationController.present(vc, animated: true)
+    }
     func addCircuit() {
         
     }

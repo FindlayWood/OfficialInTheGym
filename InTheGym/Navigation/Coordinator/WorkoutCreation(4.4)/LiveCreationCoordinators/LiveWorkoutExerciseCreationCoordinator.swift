@@ -42,6 +42,12 @@ extension LiveWorkoutExerciseCreationCoordinator: ExerciseSelectionFlow {
             }
         }
     }
+    func otherSelected(_ exercise: ExerciseModel) {
+        let vc = OtherExerciseViewController()
+        vc.viewModel.exerciseModel = exercise
+        vc.coordinator = self
+        navigationController.present(vc, animated: true)
+    }
     func addCircuit() {
         
     }

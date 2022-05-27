@@ -38,6 +38,8 @@ class FirebaseAPIWorkoutManager {
                     stats[self.maxWeightStatString] = weight as AnyObject
                     stats[self.maxWeightDateStatString] = Date().timeIntervalSince1970 as AnyObject
                     self.updateMaxHistory(exercise: exercise, weight: weight)
+                } else if weight == 0.0 {
+                    stats[self.maxWeightStatString] = weight as AnyObject
                 }
                 currentData.value = stats
                 return TransactionResult.success(withValue: currentData)

@@ -84,8 +84,7 @@ class ExerciseSelectionViewController: UIViewController {
     }
     
     @objc func otherTapped(_ sender: UIBarButtonItem) {
-//        guard let newExercise = newExercise else {return}
-//        coordinator?.otherSelected(newExercise)
+        coordinator?.otherSelected(viewModel.exercise)
     }
     
     func initViewTaps() {
@@ -125,15 +124,11 @@ extension ExerciseSelectionViewController: ExerciseSelectionProtocol {
         }
     }
     func itemSelected(at indexPath: IndexPath) {
-        
         let exercise = viewModel.getData(at: indexPath)
         let type = viewModel.getBodyType(from: indexPath)
         viewModel.exercise.exercise = exercise
         viewModel.exercise.type = type
         coordinator?.exerciseSelected(viewModel.exercise)
-        
-        
-
     }
 }
 

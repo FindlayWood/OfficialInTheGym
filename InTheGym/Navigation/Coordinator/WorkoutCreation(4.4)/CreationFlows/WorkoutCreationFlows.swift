@@ -10,6 +10,7 @@ import Foundation
 
 protocol ExerciseSelectionFlow: AnyObject {
     func exerciseSelected(_ exercise: ExerciseModel)
+    func otherSelected(_ exercise: ExerciseModel)
     func addCircuit()
     func addAmrap()
     func addEmom()
