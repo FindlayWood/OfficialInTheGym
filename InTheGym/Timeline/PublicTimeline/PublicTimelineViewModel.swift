@@ -37,6 +37,8 @@ class PublicTimelineViewModel {
     var fetchedLikedPosts: Bool = false
     var currentIndex: Int = 0
     
+    var selectedCellIndex: IndexPath?
+    
     var apiService: FirebaseDatabaseManagerService
     
     // the user to view, passed from coordinator

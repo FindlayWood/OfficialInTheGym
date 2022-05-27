@@ -40,6 +40,8 @@ class MyProfileViewModel {
     
     var currentProfileModel: UserProfileModel = UserProfileModel(user: UserDefaults.currentUser)
     
+    var selectedCellIndex: IndexPath?
+    
     var apiService: FirebaseDatabaseManagerService
     
     // MARK: - Initializer

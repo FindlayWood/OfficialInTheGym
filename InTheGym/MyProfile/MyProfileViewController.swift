@@ -61,7 +61,10 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
         dataSource.updateUserInfo(with: UserDefaults.currentUser)
         
         dataSource.postSelected
-            .sink { [weak self] in self?.showCommentSection(for: $0)}
+            .sink { [weak self] (postModel, indexPath) in
+                self?.showCommentSection(for: postModel)
+                self?.viewModel.selectedCellIndex = indexPath
+            }
             .store(in: &subscriptions)
         dataSource.profileInfoAction
             .sink { [weak self] in self?.profileInfoAction($0)}
@@ -101,6 +104,14 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
         
         viewModel.userSelected
             .sink { [weak self] in self?.coordinator?.showUser(user: $0) }
+            .store(in: &subscriptions)
+        
+        viewModel.reloadListener
+            .sink { [weak self] newPost in
+                guard let self = self else {return}
+                guard let selectedCellIndex = self.viewModel.selectedCellIndex else {return}
+                self.dataSource.reloadPost(with: newPost, at: selectedCellIndex)
+            }
             .store(in: &subscriptions)
         
         viewModel.fetchPostRefs()
