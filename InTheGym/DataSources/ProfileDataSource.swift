@@ -70,6 +70,8 @@ class ProfileDataSource: NSObject {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExerciseClipsCollectionCell.reuseID, for: indexPath) as! ExerciseClipsCollectionCell
                 cell.configure(with: model)
                 return cell
+            case .spacer:
+                return UICollectionViewCell()
             }
         }
         
@@ -171,6 +173,8 @@ class ProfileDataSource: NSObject {
         case .workout(_):
             break
         case .clip(_):
+            break
+        case .spacer:
             break
         }
 

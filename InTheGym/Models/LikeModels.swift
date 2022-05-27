@@ -83,3 +83,12 @@ struct LikeTransportLayer {
         return uploadPoints
     }
 }
+
+struct FetchLikedPostsModel {
+    var id: String
+}
+extension FetchLikedPostsModel: FirebaseInstance {
+    var internalPath: String {
+        "Likes/\(id)"
+    }
+}

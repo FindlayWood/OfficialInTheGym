@@ -734,6 +734,7 @@
 		74DE6DAC27D62A26009FB44A /* WorkloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6DAB27D62A26009FB44A /* WorkloadTests.swift */; };
 		74DE6DAE27D636A4009FB44A /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6DAD27D636A4009FB44A /* TimeInterval+Extension.swift */; };
 		74E08A762840F345009D0DCB /* OtherExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E08A752840F345009D0DCB /* OtherExerciseViewModel.swift */; };
+		74E08A7828411E64009D0DCB /* SpacerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E08A7728411E64009D0DCB /* SpacerCell.swift */; };
 		74E51D0C25AF615E002054D6 /* DiscoverPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E51D0B25AF615E002054D6 /* DiscoverPosts.swift */; };
 		74E79E63283ABFB7002578BB /* PostUserSubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E79E62283ABFB7002578BB /* PostUserSubview.swift */; };
 		74E79E65283ADA03002578BB /* PostTextSubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E79E64283ADA03002578BB /* PostTextSubview.swift */; };
@@ -1600,6 +1601,7 @@
 		74DE6DAB27D62A26009FB44A /* WorkloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkloadTests.swift; sourceTree = "<group>"; };
 		74DE6DAD27D636A4009FB44A /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
 		74E08A752840F345009D0DCB /* OtherExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherExerciseViewModel.swift; sourceTree = "<group>"; };
+		74E08A7728411E64009D0DCB /* SpacerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacerCell.swift; sourceTree = "<group>"; };
 		74E51D0B25AF615E002054D6 /* DiscoverPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPosts.swift; sourceTree = "<group>"; };
 		74E79E62283ABFB7002578BB /* PostUserSubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostUserSubview.swift; sourceTree = "<group>"; };
 		74E79E64283ADA03002578BB /* PostTextSubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTextSubview.swift; sourceTree = "<group>"; };
@@ -2991,6 +2993,7 @@
 				74D9345C282EF54F005D15DE /* ProfileInfoTableViewCell.swift */,
 				742FD56E283EB6240025E43C /* ExerciseTagCell.swift */,
 				742FD582283FEFC80025E43C /* TagAndExerciseCell.swift */,
+				74E08A7728411E64009D0DCB /* SpacerCell.swift */,
 			);
 			path = CellClasses;
 			sourceTree = "<group>";
@@ -4689,6 +4692,7 @@
 				74B48DE827A1E0F400BBFC16 /* WorkoutLoader.swift in Sources */,
 				7444D07E26CEB80F0009C7A6 /* UIImageLabelView.swift in Sources */,
 				74EC43A3263A0F2500D81E5B /* DisplayCircuitProtocol.swift in Sources */,
+				74E08A7828411E64009D0DCB /* SpacerCell.swift in Sources */,
 				7444D05F26CD41B00009C7A6 /* GroupWorkoutsViewModel.swift in Sources */,
 				743E92BD280779780029F447 /* MethodSelectionViewController.swift in Sources */,
 				744AED54279B1A36000D2D74 /* SavedWorkoutLoader.swift in Sources */,

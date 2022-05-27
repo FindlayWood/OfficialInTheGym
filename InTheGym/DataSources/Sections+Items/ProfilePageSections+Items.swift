@@ -11,6 +11,7 @@ import Foundation
 enum ProfilePageSections: CaseIterable {
     case UserInfo
     case UserData
+    case Spacer
 }
 
 enum ProfilePageItems: Hashable {
@@ -18,4 +19,5 @@ enum ProfilePageItems: Hashable {
     case post(PostModel)
     case workout(SavedWorkoutModel)
     case clip(ClipModel)
+    case spacer
 }

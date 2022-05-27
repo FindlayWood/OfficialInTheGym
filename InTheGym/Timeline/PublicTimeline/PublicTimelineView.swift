@@ -35,12 +35,18 @@ class PublicTimelineView: UIView {
         let view = UITableView()
         view.register(ProfileInfoTableViewCell.self, forCellReuseIdentifier: ProfileInfoTableViewCell.cellID)
         view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
+        view.register(SpacerCell.self, forCellReuseIdentifier: SpacerCell.cellID)
         if #available(iOS 15.0, *) { view.sectionHeaderTopPadding = 0 }
         view.backgroundColor = .secondarySystemBackground
         view.tableFooterView = UIView()
         view.separatorInset = .zero
         view.layoutMargins = .zero
         view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    var refreshControl: UIRefreshControl = {
+        let view = UIRefreshControl()
+        view.tintColor = .darkColour
         return view
     }()
     

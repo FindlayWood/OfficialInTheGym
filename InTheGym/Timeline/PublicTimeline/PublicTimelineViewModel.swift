@@ -12,17 +12,11 @@ import Combine
 class PublicTimelineViewModel {
     
     // MARK: - Publishers
+    @Published var isLoading: Bool = false
+    @Published var postsToShow: [PostModel] = []
     var postPublisher = CurrentValueSubject<[PostModel],Never>([])
     
-    var savedWorkouts = CurrentValueSubject<[SavedWorkoutModel],Never>([])
-    
-    var clipPublisher = CurrentValueSubject<[ClipModel],Never>([])
-    
-    var followerCountPublisher = CurrentValueSubject<Int,Never>(0)
-    
-    var followingCountPublisher = CurrentValueSubject<Int,Never>(0)
-    
-    var isFollowingPublisher = CurrentValueSubject<Bool,Never>(false)
+    var errorLoadingPosts = PassthroughSubject<Void,Never>()
     
     var errorLikingPost = PassthroughSubject<Error,Never>()
     
@@ -35,15 +29,15 @@ class PublicTimelineViewModel {
     var userSelected = PassthroughSubject<Users,Never>()
     
     var reloadListener = PassthroughSubject<PostModel,Never>()
-    
-    var followSuccess = PassthroughSubject<Bool,Never>()
 
-    
     // MARK: - Properties
+    var storedPosts: [PostModel] = []
+    var storedLikedPosts: [PostModel] = []
+    var fetchedPosts: Bool = false
+    var fetchedLikedPosts: Bool = false
+    var currentIndex: Int = 0
     
     var apiService: FirebaseDatabaseManagerService
-    
-
     
     // the user to view, passed from coordinator
     var user: Users!
@@ -56,110 +50,93 @@ class PublicTimelineViewModel {
         self.apiService = apiService
     }
     
-    
-    // MARK: - Fetch Posts
-    func fetchPosts(){
-        let postRefModel = PostReferencesModel(id: user.uid)
-        apiService.fetchKeys(from: postRefModel) { [weak self] result in
-            guard let postKeys = try? result.get() else {return}
-            self?.loadPosts(from: postKeys)
+    func switchSegment(to index: Int) {
+        postsToShow = []
+        currentIndex = index
+        if index == 0 {
+            fetchPostRefs()
+        } else {
+            fetchLikedPostRefs()
+        }
+    }
+    func refresh() {
+        fetchedPosts = false
+        fetchedLikedPosts = false
+        if currentIndex == 0 {
+            fetchPostRefs()
+        } else {
+            fetchLikedPostRefs()
         }
     }
     
+    // MARK: - Fetching functions
+    func fetchPostRefs() {
+        if fetchedPosts {
+            postsToShow = storedPosts
+        } else {
+            isLoading = false
+            let postRefModel = PostReferencesModel(id: user.uid)
+            apiService.fetchKeys(from: postRefModel) { [weak self] result in
+                switch result {
+                case .success(let keys):
+                    self?.loadPosts(from: keys)
+                case .failure(_):
+                    self?.errorLoadingPosts.send(())
+                    self?.isLoading = false
+                }
+            }
+        }
+    }
     func loadPosts(from keys: [String]) {
         let models = keys.map { PostKeyModel(id: $0)}
         PostLoader.shared.loadRange(from: models) { [weak self] result in
             switch result {
             case .success(let posts):
-                self?.postPublisher.send(posts)
+                self?.storedPosts = posts
+                self?.postsToShow = posts
+                self?.isLoading = false
+                self?.fetchedPosts = true
             case .failure(_):
-                print("failed")
-                break
+                self?.errorLoadingPosts.send(())
+                self?.isLoading = false
             }
         }
-    }
-    
-    // MARK: - Fetching functions
-    func fetchWorkoutKeys() {
-        let referencesModel = SavedWorkoutCreatorKeyModel(id: user.uid)
-        apiService.fetchKeys(from: referencesModel) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(let keys):
-                self.loadWorkouts(from: keys)
-            case .failure(let error):
-                self.errorFetchingWorkouts.send(error)
-            }
-        }
-    }
-    
-    func loadWorkouts(from keys: [String]) {
-        let savedKeysModel = keys.map { SavedWorkoutKeyModel(id: $0) }
-        apiService.fetchRange(from: savedKeysModel, returning: SavedWorkoutModel.self) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(let savedWorkoutModels):
-                let models = savedWorkoutModels.filter { $0.isPrivate == false }
-                self.savedWorkouts.send(models)
-            case .failure(let error):
-                self.errorFetchingWorkouts.send(error)
-            }
-        }
-    }
-    
-    // MARK: - Fetch Clips
-    func fetchClipKeys() {
-        let searchModel = UserClipsModel(id: user.uid)
-        apiService.fetchInstance(of: searchModel, returning: KeyClipModel.self) { [weak self] result in
-            switch result {
-            case .success(let models):
-                self?.loadClips(from: models)
-            case .failure(_):
-                break
-            }
-        }
-    }
-    private func loadClips(from keys: [KeyClipModel]) {
-        apiService.fetchRange(from: keys, returning: ClipModel.self) { [weak self] result in
-            switch result {
-            case .success(var models):
-                models.sort { $0.time < $1.time }
-                self?.clipPublisher.send(models)
-            case .failure(_):
-                break
-            }
-        }
-    }
-    
-    // MARK: - Liking Posts
-//    func likeCheck(_ post: post) {
-//        let likeCheck = PostLikesModel(postID: post.id)
-//        apiService.checkExistence(of: likeCheck) { [weak self] result in
-//            switch result {
-//            case .success(let liked):
-//                if !liked {
-//                    self?.like(post)
-//                }
-//            case .failure(let error):
-//                self?.errorLikingPost.send(error)
-//            }
-//        }
-//    }
-//
-//    func like(_ post: post) {
-//        let likeModels = LikeTransportLayer(postID: post.id).postLike(post: post)
-//        apiService.multiLocationUpload(data: likeModels) { [weak self] result in
-//            switch result {
-//            case .success(()):
-//                LikesAPIService.shared.LikedPostsCache[post.id] = true
-//            case .failure(let error):
-//                self?.errorLikingPost.send(error)
-//            }
-//        }
-//    }
 
+    }
+    // MARK: - Fetch Like Posts
+    func fetchLikedPostRefs() {
+        if fetchedLikedPosts {
+            postsToShow = storedLikedPosts
+        } else {
+            isLoading = true
+            let fetchModel = FetchLikedPostsModel(id: user.uid)
+            apiService.fetchKeys(from: fetchModel) { [weak self] result in
+                switch result {
+                case .success(let keys):
+                    self?.loadLikedPosts(from: keys)
+                case .failure(_):
+                    self?.errorLoadingPosts.send(())
+                    self?.isLoading = false
+                }
+            }
+        }
+    }
+    func loadLikedPosts(from keys: [String]) {
+        let models = keys.map { PostKeyModel(id: $0)}
+        PostLoader.shared.loadRange(from: models) { [weak self] result in
+            switch result {
+            case .success(let posts):
+                self?.storedLikedPosts = posts
+                self?.postsToShow = posts
+                self?.isLoading = false
+                self?.fetchedLikedPosts = true
+            case .failure(_):
+                self?.errorLoadingPosts.send(())
+                self?.isLoading = false
+            }
+        }
+    }
 
-    
     
     // MARK: - Retreive Functions
     func getWorkout(from tappedPost: PostModel) {
@@ -188,20 +165,4 @@ class PublicTimelineViewModel {
             }
         }
     }
-    
-    
-    
-    // MARK: - Actions
-//    func follow() {
-//        let followModel = FollowModel(id: user.uid)
-//        let points = followModel.getUploadPoints()
-//        apiService.multiLocationUpload(data: points) { [weak self] result in
-//            switch result {
-//            case .success(()):
-//                self?.followSuccess.send(true)
-//            case .failure(_):
-//                self?.followSuccess.send(false)
-//            }
-//        }
-//    }
 }

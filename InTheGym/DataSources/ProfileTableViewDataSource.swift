@@ -24,6 +24,8 @@ class ProfileTableViewDataSource: NSObject {
     
     var workoutTapped = PassthroughSubject<PostModel,Never>()
     
+    var currentOffset: CGPoint = CGPoint(x: 0, y: 0)
+    
     // MARK: - Properties
     var tableView: UITableView
     
@@ -65,6 +67,9 @@ class ProfileTableViewDataSource: NSObject {
                         self?.actionPublisher(action: action, indexPath: indexPath)
                     })
                 return cell
+            case .spacer:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SpacerCell.cellID, for: indexPath) as? SpacerCell
+                return cell
             default:
                 return UITableViewCell()
             }
@@ -78,6 +83,17 @@ class ProfileTableViewDataSource: NSObject {
         var snapshot = NSDiffableDataSourceSnapshot<ProfilePageSections,ProfilePageItems>()
         snapshot.appendSections([.UserInfo,.UserData])
         dataSource.apply(snapshot, animatingDifferences: false)
+    }
+    
+    func fullUpdate(user: Users, posts: [PostModel]) {
+        currentOffset = tableView.contentOffset
+        var snapshot = NSDiffableDataSourceSnapshot<ProfilePageSections,ProfilePageItems>()
+        snapshot.appendSections([.UserInfo,.UserData])
+        snapshot.appendItems([.profileInfo(user)], toSection: .UserInfo)
+        let items = posts.map { ProfilePageItems.post($0)}
+        snapshot.appendItems(items, toSection: .UserData)
+        dataSource.apply(snapshot, animatingDifferences: false)
+        tableView.setContentOffset(currentOffset, animated: false)
     }
     
     // MARK: - Update User Info
@@ -97,11 +113,24 @@ class ProfileTableViewDataSource: NSObject {
     
     // MARK: - Update Posts
     func updatePosts(with models: [PostModel]) {
+        currentOffset = tableView.contentOffset
         let items = models.map { ProfilePageItems.post($0)}
         var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.deleteSections([.UserData])
-        currentSnapshot.appendSections([.UserData])
-        currentSnapshot.appendItems(items, toSection: .UserData)
+        let currentItems = currentSnapshot.itemIdentifiers(inSection: .UserData)
+        currentSnapshot.deleteItems(currentItems)
+        if items.isEmpty {
+            currentSnapshot.appendItems([.spacer], toSection: .UserData)
+        } else {
+            currentSnapshot.appendItems(items, toSection: .UserData)
+        }
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
+        tableView.setContentOffset(currentOffset, animated: false)
+    }
+    func addSpacerCell() {
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.deleteSections([.Spacer])
+        currentSnapshot.appendSections([.Spacer])
+        currentSnapshot.appendItems([.spacer], toSection: .Spacer)
         dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
@@ -131,6 +160,8 @@ class ProfileTableViewDataSource: NSObject {
             break
         case .clip(_):
             break
+        case .spacer:
+            break
         }
 
     }
@@ -149,7 +180,11 @@ extension ProfileTableViewDataSource: UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 {
-            return ProfileHeaderView()
+            let view = ProfileHeaderView()
+            view.segmentControl.selectedIndex
+                .sink { [weak self] in self?.selectedIndex = $0 }
+                .store(in: &subscriptions)
+            return view
         } else {
             return nil
         }

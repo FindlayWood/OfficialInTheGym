@@ -58,55 +58,25 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
     // MARK: - Data Source
     func initDataSource() {
         dataSource = .init(tableView: display.tableview)
-//        dataSource = .init(collectionView: display.collectionView)
-//
         dataSource.updateUserInfo(with: UserDefaults.currentUser)
         
         dataSource.postSelected
             .sink { [weak self] in self?.showCommentSection(for: $0)}
             .store(in: &subscriptions)
-//
         dataSource.profileInfoAction
             .sink { [weak self] in self?.profileInfoAction($0)}
             .store(in: &subscriptions)
-//        dataSource.$selectedIndex
-//            .sink { [weak self] in self?.newSegmentSelected($0) }
-//            .store(in: &subscriptions)
-//
-//        dataSource.itemSelected
-//            .sink { [weak self] item in
-//                guard let self = self else {return}
-//                switch item {
-//                case .post(let post):
-//                    self.showCommentSection(for: post)
-//                case .clip(let clip):
-//                    self.coordinator?.clipSelected(clip, fromViewControllerDelegate: self)
-//                case .workout(let workout):
-//                    self.coordinator?.showSavedWorkout(workout)
-//                default:
-//                    break
-//                }
-//            }
-//            .store(in: &subscriptions)
-//
-//        dataSource.cellSelected
-//            .sink { [weak self] selectedCellModel in
-//                self?.selectedCell = selectedCellModel.selectedCell
-//                self?.selectedCellImageViewSnapshot = selectedCellModel.snapshot
-//            }
-//            .store(in: &subscriptions)
-//
+
         dataSource.userTapped
             .sink { [weak self]in self?.viewModel.getUser(from: $0) }
             .store(in: &subscriptions)
-//
+
         dataSource.workoutTapped
             .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
             .store(in: &subscriptions)
-//
-//        dataSource.likeButtonTapped
-//            .sink { [weak self] in self?.viewModel.likeCheck($0) }
-//            .store(in: &subscriptions)
+        dataSource.$selectedIndex
+            .sink { [weak self] in self?.viewModel.switchSegment(to: $0) }
+            .store(in: &subscriptions)
         
     }
     
@@ -117,30 +87,14 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
             .sink { [weak self] in self?.setLoading($0)}
             .store(in: &subscriptions)
         
-        viewModel.postPublisher
+        viewModel.$postsToShow
             .sink { [weak self] in self?.dataSource.updatePosts(with: $0) }
             .store(in: &subscriptions)
-        
-//        viewModel.clipPublisher
-//            .sink { [weak self] clips in
-//                if self?.display.selectedIndex == 1 {
-//                    self?.dataSource.updateClips(with: clips)
-//                }
-//            }
-//            .store(in: &subscriptions)
-        
-//        viewModel.savedWorkouts
-//            .sink { [weak self] workouts in
-//                if self?.display.selectedIndex == 2 {
-//                    self?.dataSource.updateWorkouts(with: workouts)
-//                }
-//            }
-//            .store(in: &subscriptions)
         
         viewModel.workoutSelected
             .sink { [weak self] in self?.coordinator?.showWorkout($0) }
             .store(in: &subscriptions)
-//
+        
         viewModel.savedWorkoutSelected
             .sink { [weak self] in self?.coordinator?.showSavedWorkout($0) }
             .store(in: &subscriptions)
@@ -150,8 +104,6 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
             .store(in: &subscriptions)
         
         viewModel.fetchPostRefs()
-//        viewModel.fetchClipKeys()
-//        viewModel.fetchWorkoutKeys()
     }
     
     
@@ -183,12 +135,14 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
         coordinator?.showGroups()
     }
     @objc func handleRefresh(_ sender: AnyObject) {
-        viewModel.fetchPostRefs()
+        viewModel.refresh()
         dataSource.reloadSection()
     }
     func setLoading(_ loading: Bool) {
         if !loading {
-            display.refreshControl.endRefreshing()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.display.refreshControl.endRefreshing()
+            }
         }
     }
 }

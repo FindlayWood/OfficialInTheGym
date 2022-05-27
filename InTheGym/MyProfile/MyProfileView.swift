@@ -66,6 +66,7 @@ class MyProfileView: UIView {
         let view = UITableView()
         view.register(ProfileInfoTableViewCell.self, forCellReuseIdentifier: ProfileInfoTableViewCell.cellID)
         view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
+        view.register(SpacerCell.self, forCellReuseIdentifier: SpacerCell.cellID)
         if #available(iOS 15.0, *) { view.sectionHeaderTopPadding = 0 }
         view.backgroundColor = .secondarySystemBackground
         view.tableFooterView = UIView()
