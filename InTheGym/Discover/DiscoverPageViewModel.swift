@@ -16,6 +16,8 @@ class DiscoverPageViewModel {
     
     var exercisesPublisher = CurrentValueSubject<[DiscoverExerciseModel],Never>([])
     
+    var tagsPublisher = CurrentValueSubject<[ExerciseTagReturnModel],Never>([])
+    
     var clipsPublisher = CurrentValueSubject<[ClipModel],Never>([])
     
     var programPublisher = CurrentValueSubject<[SavedProgramModel],Never>([])
@@ -29,6 +31,8 @@ class DiscoverPageViewModel {
     var programSelected = PassthroughSubject<SavedProgramModel,Never>()
     
     var clipSelected = PassthroughSubject<ClipModel,Never>()
+    
+    var tagSelected = PassthroughSubject<String,Never>()
     
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
@@ -79,6 +83,11 @@ class DiscoverPageViewModel {
 //        }
     }
     
+    func loadTags() {
+        let tagModels: [ExerciseTagReturnModel] = [.init(tag: "chest"),.init(tag: "triceps"),.init(tag: "legs"),.init(tag: "power"),.init(tag: "hamstring"),.init(tag: "warmup"),]
+        tagsPublisher.send(tagModels)
+    }
+    
     // MARK: - Actions
     func itemSelected(_ item: DiscoverPageItems) {
         switch item {
@@ -86,8 +95,8 @@ class DiscoverPageViewModel {
             workoutSelected.send(savedWorkoutModel)
         case .exercise(let discoverExerciseModel):
             exerciseSelected.send(discoverExerciseModel)
-        case .program(let savedProgramModel):
-            programSelected.send(savedProgramModel)
+        case .tag(let exerciseTagModel):
+            tagSelected.send(exerciseTagModel.tag)
         case .clip(let clipModel):
             clipSelected.send(clipModel)
         }

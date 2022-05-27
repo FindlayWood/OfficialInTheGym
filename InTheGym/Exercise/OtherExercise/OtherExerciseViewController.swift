@@ -7,39 +7,53 @@
 //
 
 import UIKit
+import Combine
 
 class OtherExerciseViewController: UIViewController {
-    
-    weak var coordinator: CreationFlow?
-    
-    var newExercise: exercise?
-    
+    // Coordinator
+    weak var coordinator: ExerciseSelectionFlow?
+    // exercise
+    var exercise: ExerciseModel?
+    // display
     var display = OtherExerciseView()
-
+    // view model
+    var viewModel = OtherExerciseViewModel()
+    // subscriptions
+    private var subscriptions = Set<AnyCancellable>()
+    // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .secondarySystemBackground
         initDisplay()
+        initViewModel()
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = view.frame
-        view.addSubview(display)
-    }
-    
+    // MARK: - Display
     func initDisplay() {
         display.continueButton.addTarget(self, action: #selector(continueTapped(_:)), for: .touchUpInside)
         display.cancelButton.addTarget(self, action: #selector(cancelTapped(_:)), for: .touchUpInside)
+        display.textfield.delegate = self
+        display.textfield.textPublisher
+            .sink { [weak self] in self?.viewModel.text = $0 }
+            .store(in: &subscriptions)
     }
-    
+    // MARK: - View Model
+    func initViewModel() {
+        viewModel.$isValid
+            .sink { [weak self] in self?.display.setContinueButton(to: $0)}
+            .store(in: &subscriptions)
+        viewModel.initSubscriptions()
+    }
+}
+// MARK: - Actions
+private extension OtherExerciseViewController {
     @objc func continueTapped(_ sender: UIButton) {
-        guard let newExercise = newExercise,
-              let exerciseName = display.textfield.text
-        else {return}
-        newExercise.exercise = exerciseName
-        newExercise.type = .CU
+        viewModel.exerciseModel.exercise = viewModel.text.trimTrailingWhiteSpaces()
+        viewModel.exerciseModel.type = .CU
         dismiss(animated: true, completion: nil)
-        coordinator?.exerciseSelected(newExercise)
+        coordinator?.exerciseSelected(viewModel.exerciseModel)
     }
     @objc func cancelTapped(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)

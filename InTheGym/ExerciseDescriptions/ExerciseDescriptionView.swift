@@ -13,8 +13,8 @@ class ExerciseDescriptionView: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
-    var segmentControl: CustomisedSegmentControl = {
-        let view = CustomisedSegmentControl(frame: .zero, buttonTitles: ["Clips", "Descriptions"])
+    var segmentControl: CustomUnderlineSegmentControl = {
+        let view = CustomUnderlineSegmentControl(frame: CGRect(x: 0, y: 0, width: Constants.screenSize.width, height: 32), buttonTitles: ["Clips", "Descriptions", "Tags"])
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -47,9 +47,9 @@ private extension ExerciseDescriptionView {
     func configureUI() {
         NSLayoutConstraint.activate([
             segmentControl.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            segmentControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            segmentControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            segmentControl.heightAnchor.constraint(equalToConstant: 50),
+            segmentControl.leadingAnchor.constraint(equalTo: leadingAnchor),
+            segmentControl.trailingAnchor.constraint(equalTo: trailingAnchor),
+            segmentControl.heightAnchor.constraint(equalToConstant: 32),
             
             containerView.topAnchor.constraint(equalTo: segmentControl.bottomAnchor, constant: 16),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor),

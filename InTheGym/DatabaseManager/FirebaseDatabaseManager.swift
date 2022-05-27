@@ -258,6 +258,27 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
             completion(.success(tempModels))
         }
     }
+    func searchTextQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
+        var tempModels = [T]()
+        let dbref = Database.database().reference().child(model.internalPath)
+            .queryOrdered(byChild: model.orderedBy)
+            .queryStarting(atValue: model.equalTo)
+            .queryEnding(atValue: model.equalTo+"\u{f8ff}")
+        dbref.observeSingleEvent(of: .value) { snapshot in
+            for child in snapshot.children.allObjects as! [DataSnapshot] {
+                guard let object = child.value as? [String: AnyObject] else {return}
+                do {
+                    let data = try FirebaseDecoder().decode(returning, from: object)
+                    tempModels.insert(data, at: 0)
+                }
+                catch {
+                    print(String(describing: error))
+                }
+            }
+            completion(.success(tempModels))
+
+        }
+    }
     
 }
 
@@ -276,4 +297,5 @@ protocol FirebaseDatabaseManagerService {
     func uploadTimeOrderedModel<Model: FirebaseTimeOrderedModel>(model: Model, completion: @escaping (Result<Model,Error>) -> Void)
     func searchQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<T,Error>) -> Void)
     func fetchLimited<Model: FirebaseModel>(model: Model.Type, limit: Int, completion: @escaping (Result<[Model],Error>) -> Void)
+    func searchTextQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
  }

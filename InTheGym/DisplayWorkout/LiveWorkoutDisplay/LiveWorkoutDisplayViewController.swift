@@ -157,6 +157,10 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
             .sink { [weak self] in self?.dataSource.update(for: $0)}
             .store(in: &subscriptions)
         
+        viewModel.updateExerciseRPE
+            .sink { [weak self] in self?.dataSource.update(for: $0)}
+            .store(in: &subscriptions)
+        
     }
     
     // MARK: - RPE

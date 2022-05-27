@@ -1,21 +1,20 @@
 //
-//  ExerciseClipsView.swift
+//  ExerciseTagsView.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 17/02/2022.
+//  Created by Findlay Wood on 25/05/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
-class ExerciseClipsView: UIView {
+class ExerciseTagsView: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
-        view.register(ExerciseClipsCollectionCell.self, forCellWithReuseIdentifier: ExerciseClipsCollectionCell.reuseID)
+        view.register(ExerciseTagCell.self, forCellWithReuseIdentifier: ExerciseTagCell.reuseID)
         view.backgroundColor = .secondarySystemBackground
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -28,7 +27,6 @@ class ExerciseClipsView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,17 +39,19 @@ class ExerciseClipsView: UIView {
     
 }
 // MARK: - Configure
-private extension ExerciseClipsView {
+private extension ExerciseTagsView {
     func setupUI() {
         addSubview(collectionView)
         addSubview(plusButton)
-        backgroundColor = .secondarySystemBackground
         configureUI()
     }
     
     func configureUI() {
-        addFullConstraint(to: collectionView)
         NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
             plusButton.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor, constant: -5),
             plusButton.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -5)
         ])
@@ -59,7 +59,7 @@ private extension ExerciseClipsView {
     func generateCollectionLayout() -> UICollectionViewFlowLayout {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 16
-        layout.itemSize = CGSize(width: Constants.screenSize.width / 2 - 16, height: Constants.screenSize.width / 2)
+        layout.itemSize = CGSize(width: Constants.screenSize.width - 16, height: 60)
         layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 8)
         layout.scrollDirection = .vertical
         return layout

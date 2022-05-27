@@ -81,6 +81,11 @@ extension DiscoverCoordinator {
         vc.viewModel.exercise = emptyExercise
         navigationController.pushViewController(vc, animated: true)
     }
+    func moreTagsSelected(text: String?) {
+        let child = SearchTagCoordinator(navigationController: navigationController, searchText: text)
+        childCoordinators.append(child)
+        child.start()
+    }
     func search() {
         let vc = SearchViewController()
         vc.coordinator = self
@@ -98,7 +103,12 @@ extension DiscoverCoordinator: ExerciseSelectionFlow {
         let discoverModel = DiscoverExerciseModel(exerciseName: exercise.exercise)
         exerciseSelected(discoverModel)
     }
-    
+    func otherSelected(_ exercise: ExerciseModel) {
+        let vc = OtherExerciseViewController()
+        vc.viewModel.exerciseModel = exercise
+        vc.coordinator = self
+        navigationController.present(vc, animated: true)
+    }
     func addCircuit() {
         
     }

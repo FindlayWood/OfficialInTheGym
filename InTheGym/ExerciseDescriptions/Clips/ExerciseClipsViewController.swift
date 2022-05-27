@@ -30,7 +30,7 @@ class ExerciseClipsViewController: UIViewController, CustomAnimatingClipFromVC {
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .secondarySystemBackground
         initButtonActions()
         initDataSource()
         initViewModel()

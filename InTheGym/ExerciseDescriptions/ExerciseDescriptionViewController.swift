@@ -21,6 +21,8 @@ class ExerciseDescriptionViewController: UIViewController {
     
     var clipsVC = ExerciseClipsViewController()
     
+    var tagsVC = ExerciseTagsViewController()
+    
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - View
@@ -33,6 +35,7 @@ class ExerciseDescriptionViewController: UIViewController {
         initSubscriptions()
         descriptionsVC.viewModel.exerciseModel = viewModel.exercise
         clipsVC.viewModel.exerciseModel = viewModel.exercise
+        tagsVC.viewModel.exerciseModel = viewModel.exercise
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,8 +48,10 @@ class ExerciseDescriptionViewController: UIViewController {
         super.viewDidAppear(animated)
         if viewModel.selectedIndex == 0 {
             addToContainer(vc: clipsVC)
-        } else {
+        } else if viewModel.selectedIndex == 1 {
             addToContainer(vc: descriptionsVC)
+        } else {
+            addToContainer(vc: tagsVC)
         }
     }
     
@@ -77,10 +82,16 @@ class ExerciseDescriptionViewController: UIViewController {
         viewModel.selectedIndex = index
         if index == 0 {
             removeFromContainer(vc: descriptionsVC)
+            removeFromContainer(vc: tagsVC)
             addToContainer(vc: clipsVC)
+        } else if index == 1 {
+            removeFromContainer(vc: clipsVC)
+            removeFromContainer(vc: tagsVC)
+            addToContainer(vc: descriptionsVC)
         } else {
             removeFromContainer(vc: clipsVC)
-            addToContainer(vc: descriptionsVC)
+            removeFromContainer(vc: descriptionsVC)
+            addToContainer(vc: tagsVC)
         }
     }
 }

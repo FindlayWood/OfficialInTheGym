@@ -45,8 +45,8 @@ class DiscoverPageDataSource: NSObject {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExerciseSelectionCell.reuseIdentifier, for: indexPath) as! ExerciseSelectionCell
                 cell.configure(with: model.exerciseName)
                 return cell
-            case .program(let model):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProgramCollectionCell.reuseID, for: indexPath) as! ProgramCollectionCell
+            case .tag(let model):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExerciseTagCell.reuseID, for: indexPath) as! ExerciseTagCell
                 cell.configure(with: model)
                 return cell
             case .clip(let model):
@@ -77,7 +77,7 @@ class DiscoverPageDataSource: NSObject {
     // MARK: - Initial Setup
     func initialSetup() {
         var snapshot = NSDiffableDataSourceSnapshot<DiscoverPageSections,DiscoverPageItems>()
-        snapshot.appendSections([.Workouts,.Exercises,.Clips])
+        snapshot.appendSections([.Workouts,.Exercises,.Tags,.Clips])
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
@@ -106,10 +106,10 @@ class DiscoverPageDataSource: NSObject {
     }
     
     // MARK: - Update Programs
-    func updateProgram(with models: [SavedProgramModel]) {
-        let items = models.map { DiscoverPageItems.program($0)}
+    func updateTags(with models: [ExerciseTagReturnModel]) {
+        let items = models.map { DiscoverPageItems.tag($0)}
         var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendItems(items, toSection: .Programs)
+        currentSnapshot.appendItems(items, toSection: .Tags)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
     // MARK: - More Button Action

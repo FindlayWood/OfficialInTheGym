@@ -38,7 +38,7 @@ class ExerciseSelectionHeader: UICollectionReusableView {
 private extension ExerciseSelectionHeader {
     func setupUI() {
         addSubview(label)
-        backgroundColor = .white
+        backgroundColor = .secondarySystemBackground
         constrainUI()
     }
     func constrainUI() {
