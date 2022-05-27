@@ -47,12 +47,15 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
         editNavBarColour(to: .lightColour)
         navigationItem.title = viewModel.user.username
     }
+    // MARK: - Display
+    func initDisplay(){
+        display.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
+        display.tableview.refreshControl = display.refreshControl
+    }
     
     // MARK: - Data Source
     func initDataSource() {
-//        dataSource = .init(collectionView: display.collectionView)
         dataSource = .init(tableView: display.tableview)
-        
         dataSource.updatePublicUserInfo(with: viewModel.user)
         
         dataSource.profileInfoAction
@@ -60,35 +63,11 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
             .store(in: &subscriptions)
         
         dataSource.postSelected
-            .sink { [weak self] in self?.showCommentSection(for: $0)}
+            .sink { [weak self] (postModel, indexPath) in
+                self?.showCommentSection(for: postModel)
+                self?.viewModel.selectedCellIndex = indexPath
+            }
             .store(in: &subscriptions)
-        
-//        dataSource.$selectedIndex
-//            .sink { [weak self] in self?.newSegmentSelected($0) }
-//            .store(in: &subscriptions)
-        
-//        dataSource.cellSelected
-//            .sink { [weak self] selectedCellModel in
-//                self?.selectedCell = selectedCellModel.selectedCell
-//                self?.selectedCellImageViewSnapshot = selectedCellModel.snapshot
-//            }
-//            .store(in: &subscriptions)
-        
-//        dataSource.itemSelected
-//            .sink { [weak self] item in
-//                guard let self = self else {return}
-//                switch item {
-//                case .post(let post):
-//                    self.showCommentSection(for: post)
-//                case .clip(let clip):
-//                    self.coordinator?.clipSelected(clip, fromViewControllerDelegate: self)
-//                case .workout(let workout):
-//                    self.coordinator?.showSavedWorkout(workout)
-//                default:
-//                    break
-//                }
-//            }
-//            .store(in: &subscriptions)
         
         dataSource.userTapped
             .sink { [weak self]in self?.viewModel.getUser(from: $0) }
@@ -97,10 +76,6 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
         dataSource.workoutTapped
             .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
             .store(in: &subscriptions)
-        
-//        dataSource.likeButtonTapped
-//            .sink { [weak self] in self?.viewModel.likeCheck($0) }
-//            .store(in: &subscriptions)
     }
     
 
@@ -111,22 +86,6 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
         viewModel.postPublisher
             .sink { [weak self] in self?.dataSource.updatePosts(with: $0) }
             .store(in: &subscriptions)
-        
-//        viewModel.clipPublisher
-//            .sink { [weak self] clips in
-//                if self?.display.selectedIndex == 1 {
-//                    self?.dataSource.updateClips(with: clips)
-//                }
-//            }
-//            .store(in: &subscriptions)
-//
-//        viewModel.savedWorkouts
-//            .sink { [weak self] workouts in
-//                if self?.display.selectedIndex == 2 {
-//                    self?.dataSource.updateWorkouts(with: workouts)
-//                }
-//            }
-//            .store(in: &subscriptions)
         
         viewModel.workoutSelected
             .sink { [weak self] in self?.coordinator?.showWorkout($0) }
@@ -139,11 +98,16 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
         viewModel.userSelected
             .sink { [weak self] in self?.coordinator?.showUser(user: $0) }
             .store(in: &subscriptions)
-
+        
+        viewModel.reloadListener
+            .sink { [weak self] newPost in
+                guard let self = self else {return}
+                guard let selectedCellIndex = self.viewModel.selectedCellIndex else {return}
+                self.dataSource.reloadPost(with: newPost, at: selectedCellIndex)
+            }
+            .store(in: &subscriptions)
         
         viewModel.fetchPosts()
-//        viewModel.fetchClipKeys()
-//        viewModel.fetchWorkoutKeys()
     }
 
     
@@ -160,20 +124,6 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
             coordinator?.showUserWorkouts(user: viewModel.user)
         }
     }
-//    func newSegmentSelected(_ newIndex: Int) {
-//        display.selectedIndex = newIndex
-//        switch newIndex {
-//        case 0:
-//            dataSource.updatePosts(with: viewModel.postPublisher.value)
-//        case 1:
-//            dataSource.updateClips(with: viewModel.clipPublisher.value)
-//            break
-//        case 2:
-//            dataSource.updateWorkouts(with: viewModel.savedWorkouts.value)
-//        default:
-//            break
-//        }
-//    }
     func showCommentSection(for post: PostModel) {
         coordinator?.showCommentSection(for: post, with: viewModel.reloadListener)
     }
@@ -181,5 +131,16 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
     @IBAction func showCreatedWorkouts(_ sender:UIButton){
         coordinator?.showCreatedWorkouts(for: viewModel.user)
 
+    }
+    @objc func handleRefresh(_ sender: AnyObject) {
+        viewModel.fetchPosts()
+        dataSource.reloadSection()
+    }
+    func setLoading(_ loading: Bool) {
+        if !loading {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.display.refreshControl.endRefreshing()
+            }
+        }
     }
 }

@@ -15,7 +15,7 @@ class ProfileTableViewDataSource: NSObject {
     @Published var selectedIndex: Int = 0
     var itemSelected = PassthroughSubject<ProfilePageItems,Never>()
     var cellSelected = PassthroughSubject<SelectedClip,Never>()
-    var postSelected = PassthroughSubject<PostModel,Never>()
+    var postSelected = PassthroughSubject<(PostModel, IndexPath),Never>()
     var profileInfoAction = PassthroughSubject<ProfileInfoActions,Never>()
     
     var likeButtonTapped = PassthroughSubject<PostModel,Never>()
@@ -99,8 +99,8 @@ class ProfileTableViewDataSource: NSObject {
     func updatePosts(with models: [PostModel]) {
         let items = models.map { ProfilePageItems.post($0)}
         var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.deleteSections([.UserData])
-        currentSnapshot.appendSections([.UserData])
+        let currentItems = currentSnapshot.itemIdentifiers(inSection: .UserData)
+        currentSnapshot.deleteItems(currentItems)
         currentSnapshot.appendItems(items, toSection: .UserData)
         dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
@@ -109,6 +109,15 @@ class ProfileTableViewDataSource: NSObject {
     func reloadSection() {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.reloadSections([.UserInfo])
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
+    }
+    // MARK: - Reload
+    func reloadPost(with newPost: PostModel, at index: IndexPath) {
+        guard let post = dataSource.itemIdentifier(for: index) else {return}
+        var currentSnapshot = dataSource.snapshot()
+        var newPost = newPost
+        currentSnapshot.insertItems([ProfilePageItems.post(newPost)], afterItem: post)
+        currentSnapshot.deleteItems([post])
         dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
@@ -142,7 +151,7 @@ extension ProfileTableViewDataSource: UITableViewDelegate {
         guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
         switch item {
         case .post(let post):
-            postSelected.send(post)
+            postSelected.send((post, indexPath))
         default:
             break
         }
