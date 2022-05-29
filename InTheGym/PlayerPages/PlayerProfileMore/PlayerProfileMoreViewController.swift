@@ -70,6 +70,8 @@ private extension PlayerProfileMoreViewController {
             coordinator?.myRequests()
         case .exerciseStats:
             coordinator?.exerciseStats()
+        case .workoutStats:
+            coordinator?.myWorkoutStats()
         case .measureJump:
             coordinator?.jumpMeasure()
         case .breathWork:

@@ -43,6 +43,7 @@ class CompletedWorkoutPageViewModel {
             case .success(()):
                 self?.uploadWorkload()
                 self?.uploadScore()
+                self?.uploadMyWorkoutStats()
             case .failure(let error):
                 self?.errorUpload.send(error)
                 self?.isLoading = false
@@ -77,10 +78,22 @@ class CompletedWorkoutPageViewModel {
         let scoreModel = ScoresModel(id: UUID().uuidString, score: score)
         apiService.uploadTimeOrderedModel(model: scoreModel) { [weak self] result in
             switch result {
-            case .success(let model):
+            case .success(_):
                 break
             case .failure(_):
                 self?.uploadScore()
+            }
+        }
+    }
+    func uploadMyWorkoutStats() {
+        guard let time = workout.timeToComplete else {return}
+        let uploadModel = MyWorkoutStatsUploadModel(time: time)
+        apiService.multiLocationUpload(data: uploadModel.uploadPoints) { [weak self] result in
+            switch result {
+            case .success(_):
+                break
+            case .failure(_):
+                self?.uploadMyWorkoutStats()
             }
         }
     }

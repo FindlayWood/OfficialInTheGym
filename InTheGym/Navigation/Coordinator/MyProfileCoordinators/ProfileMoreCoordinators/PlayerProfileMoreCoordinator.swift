@@ -40,7 +40,11 @@ extension PlayerProfileMoreCoordinator {
     }
     func exerciseStats() {
         let vc = DisplayExerciseStatsViewController()
-        self.navigationController.pushViewController(vc, animated: true)
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func myWorkoutStats() {
+        let vc = MyWorkoutStatsViewController()
+        navigationController.pushViewController(vc, animated: true)
     }
     func jumpMeasure() {
         let vc = JumpMeasuringViewController()

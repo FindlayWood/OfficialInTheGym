@@ -16,7 +16,7 @@ class LastThreeScoresView: UIView {
     var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.textColor = .white
+        label.textColor = .label
         label.text = "Last 3 Scores"
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -48,9 +48,10 @@ class LastThreeScoresView: UIView {
 // MARK: - Configure
 private extension LastThreeScoresView {
     func setupUI() {
-        backgroundColor = .lightColour
-        addViewShadow(with: .darkColour)
+        backgroundColor = .systemBackground
         layer.cornerRadius = 8
+        layer.borderWidth = 2
+        layer.borderColor = UIColor.darkColour.cgColor
         addSubview(titleLabel)
         addSubview(stackView)
         configureUI()
@@ -66,12 +67,11 @@ private extension LastThreeScoresView {
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
         ])
-//        addFullConstraint(to: stackView, withConstant: 16)
     }
     func createNewLabel(with score: Int) -> UILabel {
         let newLabel = UILabel()
         newLabel.font = .systemFont(ofSize: 20, weight: .bold)
-        newLabel.textColor = .black
+        newLabel.textColor = .label
         newLabel.textAlignment = .center
         newLabel.text = score.description
         newLabel.backgroundColor = Constants.rpeColors[score - 1]
