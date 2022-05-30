@@ -167,9 +167,11 @@ private extension PostTableViewCell {
         if liked {
             self.postInteractionsView.likeButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
             self.postInteractionsView.likeButton.isUserInteractionEnabled = false
+            self.postInteractionsView.likeButton.tintColor = .redColour
         } else {
             self.postInteractionsView.likeButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
             self.postInteractionsView.likeButton.isUserInteractionEnabled = true
+            self.postInteractionsView.likeButton.tintColor = .darkColour
         }
     }
     func setProfileImage(with data: Data?) {
@@ -235,6 +237,7 @@ extension PostTableViewCell {
         selection.selectionChanged()
         UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
             sender.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+            sender.tintColor = .redColour
         } completion: { _ in
             sender.isUserInteractionEnabled = false
             self.postInteractionsView.likeCountLabel.increment()
