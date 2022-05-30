@@ -13,4 +13,5 @@ protocol ExerciseSelectionProtocol {
     func numberOfItems(at section: Int) -> Int
     func numberOfSections() -> Int
     func itemSelected(at indexPath: IndexPath)
+    func infoButtonSelected(at indexPath: IndexPath)
 }

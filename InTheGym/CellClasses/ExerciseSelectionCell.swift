@@ -7,17 +7,15 @@
 //
 
 import UIKit
+import Combine
 
 class ExerciseSelectionCell: UICollectionViewCell {
-    
+    // MARK: - Publishers
+    var infoButtonTapped = PassthroughSubject<Void,Never>()
     // MARK: - Properties
-    private let viewDimension: CGFloat = 100
-    private let imageViewDimension: CGFloat = 50
-    
     static let reuseIdentifier = "ExerciseSelectionCellID"
-    
-    weak var delegate: UploadingCellActions?
-    
+    var indexPath: IndexPath!
+    var delegate: ExerciseSelectionProtocol!
     // MARK: - Subviews
     var label: UILabel = {
         let label = UILabel()
@@ -30,27 +28,16 @@ class ExerciseSelectionCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    lazy var circleViewOne: UIView = {
-        let view = UIView()
-        view.backgroundColor = .lightColour
-        view.alpha = 0.6
-        view.layer.cornerRadius = 50
-        view.widthAnchor.constraint(equalToConstant: viewDimension).isActive = true
-        view.heightAnchor.constraint(equalToConstant: viewDimension).isActive = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    var infoButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        button.tintColor = .darkColour
+        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
-    lazy var circleViewTwo: UIView = {
-        let view = UIView()
-        view.backgroundColor = .lightColour
-        view.alpha = 0.6
-        view.layer.cornerRadius = 50
-        view.widthAnchor.constraint(equalToConstant: viewDimension).isActive = true
-        view.heightAnchor.constraint(equalToConstant: viewDimension).isActive = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -59,35 +46,37 @@ class ExerciseSelectionCell: UICollectionViewCell {
         super.init(coder: coder)
         setupUI()
     }
-
+    override func prepareForReuse() {
+        infoButtonTapped = PassthroughSubject<Void,Never>()
+    }
 }
-
+// MARK: - Setup UI
 private extension ExerciseSelectionCell {
     func setupUI() {
         layer.cornerRadius = 10
         clipsToBounds = true
         backgroundColor = .systemBackground
-        addSubview(circleViewOne)
-        addSubview(circleViewTwo)
-        addSubview(label)
+        contentView.addSubview(label)
+        contentView.addSubview(infoButton)
         constrainUI()
+        infoButton.addTarget(self, action: #selector(infoButtonAction(_:)), for: .touchUpInside)
     }
     func constrainUI() {
         NSLayoutConstraint.activate([
-            circleViewOne.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 40),
-            circleViewOne.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 20),
-            circleViewTwo.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 10),
-            circleViewTwo.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 50),
+            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            label.trailingAnchor.constraint(equalTo: infoButton.leadingAnchor, constant: -4),
+            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            label.bottomAnchor.constraint(equalTo: bottomAnchor)
-            
+            infoButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            infoButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
+    @objc func infoButtonAction(_ sender: UIButton) {
+        delegate.infoButtonSelected(at: indexPath)
+    }
 }
-
+// MARK: - Public Configuration
 extension ExerciseSelectionCell {
     func configure(with exercise: String) {
         label.text = exercise
