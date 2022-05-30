@@ -14,6 +14,7 @@ class PostWorkoutSubview: UIView {
     // MARK: - Subviews
     var workoutView: UIWorkoutView = {
         let view = UIWorkoutView()
+        view.backgroundColor = .thirdColour
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

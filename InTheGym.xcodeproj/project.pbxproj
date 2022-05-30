@@ -220,6 +220,9 @@
 		742FCD1728450BBA007ED1C6 /* ExerciseMaxHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FCD1628450BBA007ED1C6 /* ExerciseMaxHistoryView.swift */; };
 		742FCD19284531D6007ED1C6 /* ExerciseMaxHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FCD18284531D6007ED1C6 /* ExerciseMaxHistoryCell.swift */; };
 		742FCD1D284532E6007ED1C6 /* ExerciseMaxHistoryDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FCD1C284532E6007ED1C6 /* ExerciseMaxHistoryDataSource.swift */; };
+		742FCD202845658B007ED1C6 /* MyCoachesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FCD1F2845658B007ED1C6 /* MyCoachesViewModel.swift */; };
+		742FCD2228456597007ED1C6 /* MyCoachesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FCD2128456597007ED1C6 /* MyCoachesView.swift */; };
+		742FCD24284567A6007ED1C6 /* MyCoachesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FCD23284567A6007ED1C6 /* MyCoachesModel.swift */; };
 		742FD566283EAEDC0025E43C /* TagModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FD565283EAEDC0025E43C /* TagModel.swift */; };
 		742FD569283EB1740025E43C /* ExerciseTagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FD568283EB1740025E43C /* ExerciseTagsViewController.swift */; };
 		742FD56B283EB1820025E43C /* ExerciseTagsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742FD56A283EB1820025E43C /* ExerciseTagsViewModel.swift */; };
@@ -1095,6 +1098,9 @@
 		742FCD1628450BBA007ED1C6 /* ExerciseMaxHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseMaxHistoryView.swift; sourceTree = "<group>"; };
 		742FCD18284531D6007ED1C6 /* ExerciseMaxHistoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseMaxHistoryCell.swift; sourceTree = "<group>"; };
 		742FCD1C284532E6007ED1C6 /* ExerciseMaxHistoryDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseMaxHistoryDataSource.swift; sourceTree = "<group>"; };
+		742FCD1F2845658B007ED1C6 /* MyCoachesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCoachesViewModel.swift; sourceTree = "<group>"; };
+		742FCD2128456597007ED1C6 /* MyCoachesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCoachesView.swift; sourceTree = "<group>"; };
+		742FCD23284567A6007ED1C6 /* MyCoachesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCoachesModel.swift; sourceTree = "<group>"; };
 		742FD565283EAEDC0025E43C /* TagModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagModel.swift; sourceTree = "<group>"; };
 		742FD568283EB1740025E43C /* ExerciseTagsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTagsViewController.swift; sourceTree = "<group>"; };
 		742FD56A283EB1820025E43C /* ExerciseTagsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTagsViewModel.swift; sourceTree = "<group>"; };
@@ -2326,6 +2332,16 @@
 				742FCD1628450BBA007ED1C6 /* ExerciseMaxHistoryView.swift */,
 			);
 			path = ExerciseMaxHistory;
+			sourceTree = "<group>";
+		};
+		742FCD1E28456572007ED1C6 /* MyCoaches */ = {
+			isa = PBXGroup;
+			children = (
+				746062702528C35D005B1480 /* COACHESViewController.swift */,
+				742FCD1F2845658B007ED1C6 /* MyCoachesViewModel.swift */,
+				742FCD2128456597007ED1C6 /* MyCoachesView.swift */,
+			);
+			path = MyCoaches;
 			sourceTree = "<group>";
 		};
 		742FD567283EB1630025E43C /* ExerciseTags */ = {
@@ -3731,6 +3747,7 @@
 			isa = PBXGroup;
 			children = (
 				74D93463282EF63D005D15DE /* EditProfileModel.swift */,
+				742FCD23284567A6007ED1C6 /* MyCoachesModel.swift */,
 			);
 			path = UserModels;
 			sourceTree = "<group>";
@@ -3796,12 +3813,12 @@
 		74DC1C8A25181742007156A0 /* PlayerPages */ = {
 			isa = PBXGroup;
 			children = (
+				742FCD1E28456572007ED1C6 /* MyCoaches */,
 				748915DC28121D5E001A1EBE /* PlayerProfileMore */,
 				743330D42790FAE1005A0C45 /* Workouts */,
 				74B6F6942751530E00A72679 /* DisplayWorkouts */,
 				74BDA834246C479F00DFAEEF /* PlayerInfoCell.swift */,
 				746061E125264147005B1480 /* NewInfoViewController.swift */,
-				746062702528C35D005B1480 /* COACHESViewController.swift */,
 				7460620B25278D34005B1480 /* MYSCORESViewController.swift */,
 			);
 			path = PlayerPages;
@@ -4812,6 +4829,7 @@
 				742C1C7427BAB81A00DD1BB0 /* UserProfileModel.swift in Sources */,
 				74EC4391263A0EF400D81E5B /* DisplayCircuitViewController.swift in Sources */,
 				747B672E25FFAAFC000AD6B7 /* NotificationsTableViewCell.swift in Sources */,
+				742FCD24284567A6007ED1C6 /* MyCoachesModel.swift in Sources */,
 				74221B3F2642E38500D05527 /* DiscoverCoordinator.swift in Sources */,
 				7429784226C151E60023365E /* CreateNewGroupView.swift in Sources */,
 				744AED452799D052000D2D74 /* SavedWorkoutDisplayView.swift in Sources */,
@@ -4995,6 +5013,7 @@
 				743330E227930DBE005A0C45 /* SavedWorkoutKeyModel.swift in Sources */,
 				741FB1D8266E48F00039EB29 /* NewExerciseCell.swift in Sources */,
 				742C1CD027C66DD000DD1BB0 /* MyProgramsCoordinator.swift in Sources */,
+				742FCD202845658B007ED1C6 /* MyCoachesViewModel.swift in Sources */,
 				74EE4EDB28009CFE00051451 /* UIProfileInfoView.swift in Sources */,
 				7444D0BE26D3C86F0009C7A6 /* UploadingWorkoutProtocol.swift in Sources */,
 				741FB1C32667DFE50039EB29 /* DiscoverWorkout.swift in Sources */,
@@ -5238,6 +5257,7 @@
 				7431030926FA30DC00F7121B /* TimeSelectionViewControllerView.swift in Sources */,
 				7423B528279F4F93007AA889 /* UITopMessageView.swift in Sources */,
 				7459BD662641F82B0005C530 /* Coordinator.swift in Sources */,
+				742FCD2228456597007ED1C6 /* MyCoachesView.swift in Sources */,
 				74C89C7A2619F5C2009F3C72 /* WorkoutCompletedAdapter.swift in Sources */,
 				744D563F26F9168B00D3E1FA /* DisplayEMOMViewController.swift in Sources */,
 				7444D0C626D3E8870009C7A6 /* Assignable.swift in Sources */,
