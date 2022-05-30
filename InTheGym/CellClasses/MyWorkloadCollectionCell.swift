@@ -34,6 +34,14 @@ class MyWorkloadCollectionCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    var workloadView: UIView = {
+        let view = UIView()
+        view.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        view.layer.cornerRadius = 10
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     var rpeLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .bold)
@@ -68,6 +76,7 @@ private extension MyWorkloadCollectionCell {
         contentView.addSubview(dateLabel)
         contentView.addSubview(topSeparatorView)
         contentView.addSubview(workloadLabel)
+        contentView.addSubview(workloadView)
         contentView.addSubview(rpeLabel)
         contentView.addSubview(timeLabel)
         configureUI()
@@ -84,6 +93,8 @@ private extension MyWorkloadCollectionCell {
             
             workloadLabel.topAnchor.constraint(equalTo: topSeparatorView.bottomAnchor, constant: 8),
             workloadLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            workloadView.leadingAnchor.constraint(equalTo: workloadLabel.trailingAnchor, constant: 8),
+            workloadView.centerYAnchor.constraint(equalTo: workloadLabel.centerYAnchor),
             
             rpeLabel.topAnchor.constraint(equalTo: topSeparatorView.bottomAnchor, constant: 8),
             rpeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -100,6 +111,8 @@ extension MyWorkloadCollectionCell {
         dateLabel.text = date.getWorkoutFormat()
         workloadLabel.text = model.workload.description
         rpeLabel.text = model.rpe.description
+        rpeLabel.textColor = Constants.rpeColors[model.rpe - 1]
         timeLabel.text = model.timeToComplete.convertToWorkoutTime()
+        workloadView.backgroundColor = Constants.rpeColors[model.rpe - 1]
     }
 }
