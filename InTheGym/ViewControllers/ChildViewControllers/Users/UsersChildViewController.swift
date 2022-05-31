@@ -35,7 +35,7 @@ class UsersChildViewController: UIViewController {
         super.viewDidLayoutSubviews()
         display.frame = getFullViewableFrame()
         display.tableview.separatorStyle = .none
-        display.backgroundColor = .darkColour
+        display.backgroundColor = .secondarySystemBackground
         view.addSubview(display)
     }
     
