@@ -35,6 +35,10 @@ class EditProfileViewController: UIViewController {
         initDisplay()
         display.profileBioTextView.delegate = self
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
     
     // MARK: - Init Display
     func initDisplay() {
