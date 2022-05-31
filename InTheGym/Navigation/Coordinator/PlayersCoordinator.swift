@@ -36,7 +36,7 @@ class PlayersCoordinator: NSObject, Coordinator {
 //MARK: - Flow Methods
 extension PlayersCoordinator: PlayersFlow {
     func addNewPlayer(_ currentPlayers: [Users]) {
-        let vc = AddPlayerViewController.instantiate()
+        let vc = AddPlayerViewController()
         vc.viewModel.currentPlayers = currentPlayers
         vc.modalTransitionStyle = .coverVertical
         vc.modalPresentationStyle = .fullScreen

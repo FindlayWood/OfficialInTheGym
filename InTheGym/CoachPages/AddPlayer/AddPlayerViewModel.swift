@@ -12,16 +12,13 @@ import Combine
 class AddPlayerViewModel {
     
     // MARK: - Publishers
+    @Published var cellModels: [CoachRequestCellModel]?
     @Published var username: String = ""
     @Published var canAdd: Bool = false
     @Published var isLoading: Bool = false
-    
-    var nilUserError = PassthroughSubject<Error,Never>()
-    var errorSearchingUser = PassthroughSubject<Error,Never>()
-    var requestExists = PassthroughSubject<Users,Never>()
-    
-    var alreadyPlayer = PassthroughSubject<Users,Never>()
-    var successfullySentRequest = PassthroughSubject<Bool,Never>()
+    @Published var searchText: String = ""
+    @Published var loadingRequests: Bool = false
+    var requestSentUsers: [String] = []
     
     // MARK: - Properties
     var currentPlayers: [Users]!
@@ -40,62 +37,63 @@ class AddPlayerViewModel {
     
     // MARK: - Subscriptions
     func initSubscriptions() {
-        
-        $username
-            .map { $0.count > 0 }
-            .sink { [unowned self] in self.canAdd = $0 }
+        $searchText
+            .sink { [weak self] in self?.searchModel.equalTo = $0 }
+            .store(in: &subscriptions)
+        $searchText
+            .debounce(for: 0.5, scheduler: RunLoop.main)
+            .sink { [weak self] in self?.search($0) }
             .store(in: &subscriptions)
     }
     
     // MARK: - Actions
-    func updateSearchModel(with username: String) {
-        searchModel.equalTo = username
-        self.username = username
+    func search(_ text: String) {
+        if !text.isEmpty {
+            isLoading = true
+            apiService.searchTextQueryModel(model: searchModel, returning: Users.self) { [weak self] result in
+                switch result {
+                case .success(let returnedUsers):
+                    let filteredUsers = returnedUsers.filter { !($0.admin) }
+                    self?.initCellModels(from: filteredUsers)
+                case .failure(let error):
+                    print(String(describing: error))
+                    self?.isLoading = false
+                }
+            }
+        }
+    }
+    func initCellModels(from users: [Users]) {
+        var cellModels: [CoachRequestCellModel] = []
+        for user in users {
+            if currentPlayers.contains(user) {
+                cellModels.append(.init(user: user, requestStatus: .accepted))
+            } else if requestSentUsers.contains(user.uid) {
+                cellModels.append(.init(user: user, requestStatus: .sent))
+            } else {
+                cellModels.append(.init(user: user, requestStatus: .none))
+            }
+        }
+        self.cellModels = cellModels
+        self.isLoading = false
     }
     
     // MARK: - Functions
-    private func searchForUser() {
-        apiService.searchQueryModel(model: searchModel, returning: Users.self) { [weak self] result in
+    func loadCurrentRequests() {
+        loadingRequests = true
+        let searchModel = CoachRequestsModel(coachID: UserDefaults.currentUser.uid)
+        apiService.fetchKeys(from: searchModel) { [weak self] result in
             switch result {
-            case .success(let user):
-                self?.checkForRequest(user)
+            case .success(let keys):
+                self?.requestSentUsers = keys
+                self?.loadingRequests = false
             case .failure(let error):
-                self?.nilUserError.send(error)
-                self?.isLoading = false
+                print(String(describing: error))
+                self?.loadingRequests = false
             }
         }
     }
-    
-    func checkAlreadyCoach() {
-        isLoading = true
-        let filteredUsers = currentPlayers.filter { $0.username == searchModel.equalTo }
-        if let user = filteredUsers.first {
-            alreadyPlayer.send(user)
-            isLoading = false
-        } else {
-            searchForUser()
-        }
-    }
-    
-    private func checkForRequest(_ user: Users) {
-        let coachRequestModel = CoachRequestUploadModel(playerID: user.uid, coachID: UserDefaults.currentUser.uid)
-        apiService.checkExistence(of: coachRequestModel) { [weak self] result in
-            switch result {
-            case .success(let exists):
-                if exists {
-                    self?.requestExists.send(user)
-                    self?.isLoading = false
-                } else {
-                    self?.sendRequest(to: user)
-                }
-            case .failure(let error):
-                self?.errorSearchingUser.send(error)
-                self?.isLoading = false
-            }
-        }
-    }
-    
     private func sendRequest(to user: Users) {
+        self.isLoading = true
         let coachRequestModel = CoachRequestUploadModel(playerID: user.uid, coachID: UserDefaults.currentUser.uid)
         let playerRequestModel = PlayerRequestUploadModel(playerID: user.uid, coachID: UserDefaults.currentUser.uid)
         
@@ -103,19 +101,15 @@ class AddPlayerViewModel {
         apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
             switch result {
             case .success(()):
-                self?.successfullySentRequest.send(true)
                 self?.isLoading = false
-                self?.sendNotification(to: user)
             case .failure(_):
-                self?.successfullySentRequest.send(false)
                 self?.isLoading = false
             }
         }
     }
-    
-    private func sendNotification(to user: Users) {
-        NotificationManager().send(.sentRequest(sendTo: user.uid)) { [weak self] result in
-            print("doe")
-        }
+    func requestSent(at indexPath: IndexPath) {
+        guard let cellModel = cellModels?[indexPath.item] else {return}
+        requestSentUsers.append(cellModel.user.uid)
+        sendRequest(to: cellModel.user)
     }
 }
