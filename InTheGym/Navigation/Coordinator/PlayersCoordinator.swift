@@ -36,11 +36,15 @@ class PlayersCoordinator: NSObject, Coordinator {
 //MARK: - Flow Methods
 extension PlayersCoordinator: PlayersFlow {
     func addNewPlayer(_ currentPlayers: [Users]) {
-        let vc = AddPlayerViewController()
-        vc.viewModel.currentPlayers = currentPlayers
-        vc.modalTransitionStyle = .coverVertical
-        vc.modalPresentationStyle = .fullScreen
-        navigationController.present(vc, animated: true, completion: nil)
+        let child = AddPlayerCoordinator(navigationController: navigationController, currentPlayers: currentPlayers)
+        childCoordinators.append(child)
+        child.start()
+        
+//        let vc = AddPlayerViewController()
+//        vc.viewModel.currentPlayers = currentPlayers
+//        vc.modalTransitionStyle = .coverVertical
+//        vc.modalPresentationStyle = .fullScreen
+//        navigationController.present(vc, animated: true, completion: nil)
     }
     func showPlayerInMoreDetail(player: Users) {
         let child = PlayerDetailCoordinator(navigationController: navigationController, player: player)

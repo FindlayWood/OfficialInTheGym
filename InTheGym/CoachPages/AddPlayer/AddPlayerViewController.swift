@@ -12,6 +12,7 @@ import Combine
 class AddPlayerViewController: UIViewController {
     
     // MARK: - Properties
+    weak var coordinator: AddPlayerCoordinator?
     var display = AddPlayerView()
     var viewModel = AddPlayerViewModel()
     var dataSource: CoachRequestsDataSource!
@@ -40,6 +41,9 @@ class AddPlayerViewController: UIViewController {
     // MARK: - Data Source
     func initDataSource() {
         dataSource = .init(tableView: display.tableview)
+        dataSource.userSelected
+            .sink { [weak self] in self?.coordinator?.showUser($0)}
+            .store(in: &subscriptions)
         dataSource.requestSent
             .sink { [weak self] in self?.viewModel.requestSent(at: $0)}
             .store(in: &subscriptions)
