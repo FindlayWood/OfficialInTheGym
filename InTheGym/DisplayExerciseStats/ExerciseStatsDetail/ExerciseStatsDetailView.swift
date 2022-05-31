@@ -38,41 +38,41 @@ class ExerciseStatsDetailView: UIView {
     var maxWeightView: CompletedInfoView = {
         let view = CompletedInfoView()
         view.titleLabel.text = "Max Weight"
-        view.addViewShadow(with: .darkColour)
+//        view.addViewShadow(with: .darkColour)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     var totalWeightView: CompletedInfoView = {
         let view = CompletedInfoView()
         view.titleLabel.text = "Total Weight"
-        view.addViewShadow(with: .darkColour)
+//        view.addViewShadow(with: .darkColour)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     var averageWeightView: CompletedInfoView = {
         let view = CompletedInfoView()
         view.titleLabel.text = "Average Weight"
-        view.addViewShadow(with: .darkColour)
+//        view.addViewShadow(with: .darkColour)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     var averageRPEView: CompletedInfoView = {
         let view = CompletedInfoView()
         view.titleLabel.text = "Average RPE"
-        view.addViewShadow(with: .darkColour)
+//        view.addViewShadow(with: .darkColour)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
-        view.register(ExerciseClipsCollectionCell.self, forCellWithReuseIdentifier: ExerciseClipsCollectionCell.reuseID)
-        view.register(ExerciseStatsDetailHeaderView.self, forSupplementaryViewOfKind: ExerciseStatsDetailHeaderView.elementID, withReuseIdentifier: ExerciseStatsDetailHeaderView.reuseIdentifier)
-        view.backgroundColor = .systemRed
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    var maxButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .systemBackground
+        button.setTitle("View Max History", for: .normal)
+        button.setTitleColor(.lightColour, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
+        button.layer.cornerRadius = 8
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: UIScreen.main.bounds)
@@ -82,27 +82,23 @@ class ExerciseStatsDetailView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension ExerciseStatsDetailView {
     func setupUI() {
         backgroundColor = .secondarySystemBackground
-//        addSubview(collectionView)
-//        addSubview(scrollView)
         addSubview(repCountLabel)
         addSubview(repLabel)
         addSubview(maxWeightView)
         addSubview(totalWeightView)
         addSubview(averageWeightView)
         addSubview(averageRPEView)
-        addSubview(collectionView)
+        addSubview(maxButton)
         configureUI()
     }
     
     func configureUI() {
         NSLayoutConstraint.activate([
-            
             repCountLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
             repCountLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 
@@ -129,6 +125,10 @@ private extension ExerciseStatsDetailView {
             averageRPEView.widthAnchor.constraint(equalTo: maxWeightView.widthAnchor),
             averageRPEView.heightAnchor.constraint(equalTo: maxWeightView.heightAnchor),
             
+            maxButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            maxButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            maxButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            maxButton.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
     func generateCollectionLayout() -> UICollectionViewFlowLayout {

@@ -24,6 +24,8 @@ extension ExerciseSelectionAdapter: UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExerciseSelectionCell.reuseIdentifier, for: indexPath) as! ExerciseSelectionCell
         cell.configure(with: delegate.getData(at: indexPath))
+        cell.indexPath = indexPath
+        cell.delegate = delegate
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

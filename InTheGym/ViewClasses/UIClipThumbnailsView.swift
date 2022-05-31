@@ -77,7 +77,6 @@ class UIClipThumbnailsView: UIView {
 // MARK: - Configure
 private extension UIClipThumbnailsView {
     func setupUI() {
-        backgroundColor = .thirdColour
         addSubview(thumbnailThree)
         addSubview(thumbnailTwo)
         addSubview(thumbnailOne)

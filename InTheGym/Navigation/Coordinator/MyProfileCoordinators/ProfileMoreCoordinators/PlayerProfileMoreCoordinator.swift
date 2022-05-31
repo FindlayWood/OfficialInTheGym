@@ -30,9 +30,9 @@ extension PlayerProfileMoreCoordinator {
         child.start()
     }
     func myCoaches() {
-        let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let SVC = Storyboard.instantiateViewController(withIdentifier: "COACHESViewController") as! COACHESViewController
-        navigationController.pushViewController(SVC, animated: true)
+        let vc = COACHESViewController()
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
     }
     func myRequests() {
         let vc = RequestsViewController()
@@ -40,7 +40,11 @@ extension PlayerProfileMoreCoordinator {
     }
     func exerciseStats() {
         let vc = DisplayExerciseStatsViewController()
-        self.navigationController.pushViewController(vc, animated: true)
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func myWorkoutStats() {
+        let vc = MyWorkoutStatsViewController()
+        navigationController.pushViewController(vc, animated: true)
     }
     func jumpMeasure() {
         let vc = JumpMeasuringViewController()
@@ -56,5 +60,10 @@ extension PlayerProfileMoreCoordinator {
     func settings() {
         let vc = SettingsViewController()
         navigationController.pushViewController(vc, animated: true)
+    }
+    func userSelected(_ user: Users) {
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        childCoordinators.append(child)
+        child.start()
     }
 }

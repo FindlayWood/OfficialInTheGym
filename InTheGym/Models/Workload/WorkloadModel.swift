@@ -9,7 +9,7 @@
 import Foundation
 
 // MARK: - Workload Model
-struct WorkloadModel {
+struct WorkloadModel: Hashable {
     var id: String
     var endTime: TimeInterval
     var rpe: Int

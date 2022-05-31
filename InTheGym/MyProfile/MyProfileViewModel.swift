@@ -41,6 +41,7 @@ class MyProfileViewModel {
     
     
     // MARK: - Properties
+    var selectedCellIndex: IndexPath?
     
     var currentProfileModel: UserProfileModel = UserProfileModel(user: UserDefaults.currentUser)
     

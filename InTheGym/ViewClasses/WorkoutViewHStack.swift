@@ -117,7 +117,6 @@ class WorkoutViewHStack: UIView {
 // MARK: - Configure
 private extension WorkoutViewHStack {
     func setupUI() {
-        backgroundColor = .thirdColour
         addSubview(hstack)
         configureUI()
     }

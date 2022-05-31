@@ -44,6 +44,7 @@ class DiscoverPageDataSource: NSObject {
             case .exercise(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExerciseSelectionCell.reuseIdentifier, for: indexPath) as! ExerciseSelectionCell
                 cell.configure(with: model.exerciseName)
+                cell.infoButton.isHidden = true
                 return cell
             case .tag(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExerciseTagCell.reuseID, for: indexPath) as! ExerciseTagCell

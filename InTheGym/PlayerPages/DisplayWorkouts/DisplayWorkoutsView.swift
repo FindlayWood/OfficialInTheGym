@@ -47,7 +47,7 @@ class DisplayingWorkoutsView: UIView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
         view.register(WorkoutCollectionViewCell.self, forCellWithReuseIdentifier: WorkoutCollectionViewCell.reuseID)
         view.register(DisplayWorkoutsCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DisplayWorkoutsCollectionHeader.reuseIdentifier)
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .secondarySystemBackground
         view.alwaysBounceVertical = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

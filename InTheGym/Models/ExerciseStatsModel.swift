@@ -18,6 +18,22 @@ struct ExerciseStatsModel: Hashable {
     var numberOfSetsCompleted: Int
     var totalRPE: Int
     var totalWeight: Double
+    
+    var repsCompletedString: String {
+        numberOfRepsCompleted.description
+    }
+    var maxWeightString: String {
+        maxWeight.description + "kg"
+    }
+    var totalWeightString: String {
+        totalWeight.description + "kg"
+    }
+    var averageWeightString: String {
+        averageWeight().description + "kg"
+    }
+    var averageRPEString: String {
+        averageRPE().description
+    }
 }
 extension ExerciseStatsModel {
     func averageWeight() -> Double {

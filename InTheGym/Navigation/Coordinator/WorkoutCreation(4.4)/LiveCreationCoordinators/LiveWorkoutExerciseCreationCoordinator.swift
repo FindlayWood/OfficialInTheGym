@@ -48,6 +48,11 @@ extension LiveWorkoutExerciseCreationCoordinator: ExerciseSelectionFlow {
         vc.coordinator = self
         navigationController.present(vc, animated: true)
     }
+    func infoSelected(_ discoverModel: DiscoverExerciseModel) {
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: discoverModel)
+        childCoordinators.append(child)
+        child.start()
+    }
     func addCircuit() {
         
     }

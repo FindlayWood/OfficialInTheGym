@@ -130,6 +130,11 @@ extension ExerciseSelectionViewController: ExerciseSelectionProtocol {
         viewModel.exercise.type = type
         coordinator?.exerciseSelected(viewModel.exercise)
     }
+    func infoButtonSelected(at indexPath: IndexPath) {
+        let exercise = viewModel.getData(at: indexPath)
+        let discoverModel = DiscoverExerciseModel(exerciseName: exercise)
+        coordinator?.infoSelected(discoverModel)
+    }
 }
 
 extension ExerciseSelectionViewController: UISearchBarDelegate {

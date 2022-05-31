@@ -7,9 +7,12 @@
 //
 
 import Foundation
+import Combine
 
-
-class ExerciseStatsDetailViewModel {
+struct ExerciseStatsDetailViewModel {
+    
+    // MARK: - Publisher
+    var viewMax = PassthroughSubject<Void,Never>()
     
     // MARK: - Properties
     var statsModel: ExerciseStatsModel!

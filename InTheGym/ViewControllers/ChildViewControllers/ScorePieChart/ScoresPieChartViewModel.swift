@@ -52,7 +52,8 @@ class ScoresPieChartViewModel {
     
     func lastThreeScores(_ models: [ScoresModel]) {
         let numbers = models.map { $0.score }
-        lastThreePublisher.send(numbers.suffix(3))
+        let firsts = numbers.prefix(3)
+        lastThreePublisher.send(Array(firsts))
     }
     
     func prepareChartData(from models: [ScoresModel]) {
@@ -68,7 +69,7 @@ class ScoresPieChartViewModel {
     }
     
     func setAverage(with average: Double) {
-        let myAttribute = [NSAttributedString.Key.font: UIFont(name: "Menlo-Bold", size: 15)!, NSAttributedString.Key.foregroundColor: UIColor.white]
+        let myAttribute = [NSAttributedString.Key.font: UIFont(name: "Menlo-Bold", size: 15)!, NSAttributedString.Key.foregroundColor: UIColor.label]
         let myAttrString = NSAttributedString(string: average.rounded(toPlaces: 1).description, attributes: myAttribute)
         centerStringPublihser.send(myAttrString)
     }
@@ -85,7 +86,7 @@ class ScoresPieChartViewModel {
         chartDataSet.colors = Constants.rpeColors
         
     
-        chartDataSet.drawValuesEnabled = true
+        chartDataSet.drawValuesEnabled = false
         chartDataSet.valueFont = UIFont(name: "Menlo-Bold", size: 15)!
         chartDataSet.valueTextColor = .black
         

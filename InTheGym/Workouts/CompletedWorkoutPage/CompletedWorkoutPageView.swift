@@ -281,8 +281,10 @@ class CompletedInfoView: UIView {
 // MARK: - Configure
 private extension CompletedInfoView {
     func setupUI() {
-        backgroundColor = .thirdColour
-        layer.cornerRadius = 10
+        backgroundColor = .systemBackground
+        layer.cornerRadius = 8
+        layer.borderColor = UIColor.darkColour.cgColor
+        layer.borderWidth = 2
         addSubview(titleLabel)
         addSubview(imageView)
         addSubview(label)

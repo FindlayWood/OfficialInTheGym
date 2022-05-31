@@ -43,6 +43,12 @@ class PublicTimelineView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    var refreshControl: UIRefreshControl = {
+        let view = UIRefreshControl()
+        view.tintColor = .darkColour
+        return view
+    }()
+
     
     // MARK: - Initializer
     override init(frame: CGRect) {

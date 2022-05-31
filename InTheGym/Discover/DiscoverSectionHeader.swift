@@ -44,6 +44,10 @@ class DiscoverSectionHeader: UICollectionReusableView {
         super.init(coder: coder)
         setupUI()
     }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        moreButtonTapped = PassthroughSubject<Void,Never>()
+    }
 }
 
 // MARK: - Setup UI

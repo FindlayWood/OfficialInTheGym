@@ -132,7 +132,7 @@ class UIWorkoutView: UIView {
 // MARK: - Setup UI
 private extension UIWorkoutView {
     func setupUI() {
-        backgroundColor = .thirdColour
+        backgroundColor = .systemBackground
         layer.cornerRadius = 10
         layer.borderWidth = 1
         layer.borderColor = UIColor.darkColour.cgColor

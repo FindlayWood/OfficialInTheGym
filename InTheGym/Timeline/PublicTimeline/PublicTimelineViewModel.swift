@@ -40,6 +40,7 @@ class PublicTimelineViewModel {
 
     
     // MARK: - Properties
+    var selectedCellIndex: IndexPath?
     
     var apiService: FirebaseDatabaseManagerService
     

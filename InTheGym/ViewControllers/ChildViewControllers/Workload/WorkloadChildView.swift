@@ -16,18 +16,18 @@ class WorkloadChildView: UIView {
     var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.textColor = .black
+        label.textColor = .label
         label.text = "Workload"
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var lineChart: LineChartView = {
-        let view = LineChartView()
+    var lineChart: BarChartView = {
+        let view = BarChartView()
         view.animate(xAxisDuration: 1.0, yAxisDuration: 1.0, easingOption: .easeInOutSine)
         view.xAxis.axisMinimum = 0.0
-        view.xAxis.axisMaximum = 7
+        view.xAxis.axisMaximum = 8
         view.xAxis.labelPosition = XAxis.LabelPosition.bottom
         view.rightAxis.drawAxisLineEnabled = false
         view.noDataTextColor = .black
@@ -36,11 +36,11 @@ class WorkloadChildView: UIView {
         view.chartDescription.enabled = false
         view.legend.enabled = false
         view.leftAxis.drawGridLinesEnabled = false
-        view.leftAxis.drawAxisLineEnabled = false
-        view.leftAxis.drawLabelsEnabled = false
+        view.leftAxis.drawAxisLineEnabled = true
+        view.leftAxis.drawLabelsEnabled = true
         view.rightAxis.drawLabelsEnabled = false
         view.rightAxis.drawGridLinesEnabled = false
-        view.xAxis.drawLabelsEnabled = false
+        view.xAxis.drawLabelsEnabled = true
         view.backgroundColor = .clear
         view.isUserInteractionEnabled = false
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -69,8 +69,9 @@ class WorkloadChildView: UIView {
 private extension WorkloadChildView {
     func setupUI() {
         layer.cornerRadius = 8
-        addViewShadow(with: .darkColour)
-        backgroundColor = .white
+        layer.borderWidth = 2
+        layer.borderColor = UIColor.darkColour.cgColor
+        backgroundColor = .systemBackground
         addSubview(titleLabel)
         addSubview(lineChart)
         addSubview(activitiyIndicator)
@@ -88,7 +89,6 @@ private extension WorkloadChildView {
             lineChart.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             lineChart.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
         ])
-//        addFullConstraint(to: lineChart)
         addFullConstraint(to: activitiyIndicator)
     }
 }

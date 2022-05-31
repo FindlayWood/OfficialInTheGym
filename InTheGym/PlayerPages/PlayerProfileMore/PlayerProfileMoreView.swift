@@ -123,7 +123,7 @@ struct PlayerProfileMoreView: View {
                     }
                 }
                 Button {
-                    
+                    viewModel.action(.workoutStats)
                 } label: {
                     HStack(spacing: 16) {
                         Image(uiImage: UIImage(named: "linechart_icon")!)

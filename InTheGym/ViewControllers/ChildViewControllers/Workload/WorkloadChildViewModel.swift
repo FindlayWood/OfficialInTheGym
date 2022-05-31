@@ -13,15 +13,17 @@ import Charts
 class WorkloadChildViewModel {
     
     // MARK: - Publishers
-    var chartDataPublisher = PassthroughSubject<LineChartData,Never>()
+    var chartDataPublisher = PassthroughSubject<BarChartData,Never>()
     var currentlySelectedIndex = CurrentValueSubject<Int,Never>(0)
     
     @Published var isLoading: Bool = false
     
     // MARK: - Properties
+    var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
+    
     var user: Users!
     
-    var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
+    var workloadModels: [WorkloadModel] = []
     
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
@@ -38,22 +40,20 @@ class WorkloadChildViewModel {
             switch result {
             case .success(let models):
                 self?.getChartEntries(from: models)
-            case .failure(let error):
+                self?.workloadModels = models
+            case .failure(_):
                 self?.isLoading = false
                 break
             }
         }
     }
     func getChartEntries(from models: [WorkloadModel]) {
-        var chartEntries = [ChartDataEntry]()
+        var chartEntries = [BarChartDataEntry]()
         let filteredModels = models.filter { $0.endTime.daysAgo() < 7 }
         let occurences = getOccurences(filteredModels.map { $0.endTime.daysAgo() }, filteredModels.map { $0.workload })
         for (key, value) in occurences {
-            chartEntries.append(ChartDataEntry(x: Double(7 - key), y: Double(value)))
+            chartEntries.append(BarChartDataEntry(x: Double(7 - key), y: Double(value)))
         }
-//        filteredModels.forEach { model in
-//            chartEntries.append(ChartDataEntry(x: Double(7 - model.endTime.daysAgo()), y: Double(model.workload)))
-//        }
         chartEntries.sort { $0.x < $1.x }
         setChartData(with: chartEntries)
     }
@@ -66,23 +66,27 @@ class WorkloadChildViewModel {
         return occureneces
     }
     
-    func setChartData(with entries: [ChartDataEntry]) {
-        let chartDataSet = LineChartDataSet(entries: entries, label: "workload")
-        let chartData = LineChartData()
+    func setChartData(with entries: [BarChartDataEntry]) {
+        let chartDataSet = BarChartDataSet(entries: entries, label: "workload")
+        let chartData = BarChartData()
         chartData.append(chartDataSet)
         chartData.setDrawValues(true)
-        chartDataSet.colors = [#colorLiteral(red: 0, green: 0.5, blue: 1, alpha: 1), #colorLiteral(red: 0.6332940925, green: 0.8493953339, blue: 1, alpha: 1), #colorLiteral(red: 0.7802333048, green: 1, blue: 0.5992883134, alpha: 1), #colorLiteral(red: 0.9427440068, green: 1, blue: 0.3910798373, alpha: 1), #colorLiteral(red: 1, green: 1, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.8438837757, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.7074058219, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.4706228596, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.3134631849, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)]
-        chartDataSet.setCircleColor(Constants.backgroundColour)
-        chartDataSet.circleHoleColor = Constants.backgroundColour
-        chartDataSet.circleHoleRadius = 1
-        chartDataSet.circleRadius = 5
-        chartDataSet.mode = .cubicBezier
-        chartDataSet.cubicIntensity = 0.15
-        chartDataSet.drawCirclesEnabled = true
-        chartDataSet.fillColor = .lightColour
-        chartDataSet.drawFilledEnabled = true
+        let colors = entries.map { setBarColour(for: $0.y) }
+        chartDataSet.colors = colors
         
         chartDataPublisher.send(chartData)
         isLoading = false
+    }
+    func setBarColour(for value: Double?) -> UIColor {
+        guard let value = value else {
+            return .lightColour
+        }
+        if value > 500 {
+            return UIColor.red
+        } else if value > 400 {
+            return .orange
+        } else {
+            return .green
+        }
     }
 }
