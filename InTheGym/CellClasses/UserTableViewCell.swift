@@ -79,7 +79,7 @@ private extension UserTableViewCell {
             profileImage.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             profileImage.heightAnchor.constraint(equalToConstant: imageDimension),
             profileImage.widthAnchor.constraint(equalToConstant: imageDimension),
-            profileImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+//            profileImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
             
             fullNameLabel.topAnchor.constraint(equalTo: profileImage.topAnchor),
             fullNameLabel.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 8),

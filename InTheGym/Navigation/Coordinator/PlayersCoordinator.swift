@@ -30,46 +30,31 @@ class PlayersCoordinator: NSObject, Coordinator {
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
-//
-//    func childDidFinish(_ child: Coordinator?) {
-//        for (index, coordinator) in childCoordinators.enumerated() {
-//            if coordinator === child {
-//                childCoordinators.remove(at: index)
-//                break
-//            }
-//        }
-//    }
 }
 
 
 //MARK: - Flow Methods
 extension PlayersCoordinator: PlayersFlow {
-    
     func addNewPlayer(_ currentPlayers: [Users]) {
-        let vc = AddPlayerViewController.instantiate()
-        vc.viewModel.currentPlayers = currentPlayers
-        vc.modalTransitionStyle = .coverVertical
-        vc.modalPresentationStyle = .fullScreen
-        navigationController.present(vc, animated: true, completion: nil)
+        let child = AddPlayerCoordinator(navigationController: navigationController, currentPlayers: currentPlayers)
+        childCoordinators.append(child)
+        child.start()
+        
+//        let vc = AddPlayerViewController()
+//        vc.viewModel.currentPlayers = currentPlayers
+//        vc.modalTransitionStyle = .coverVertical
+//        vc.modalPresentationStyle = .fullScreen
+//        navigationController.present(vc, animated: true, completion: nil)
     }
-    
     func showPlayerInMoreDetail(player: Users) {
         let child = PlayerDetailCoordinator(navigationController: navigationController, player: player)
         childCoordinators.append(child)
         child.start()
-//        let vc = PlayerDetailViewController()
-//        vc.viewModel.user = player
-//        vc.hidesBottomBarWhenPushed = true
-//        navigationController.pushViewController(vc, animated: true)
-        
-//        let child = CoachPlayerViewCoordinator(navigationController: navigationController, player: player)
-//        childCoordinators.append(child)
-//        child.start()
-        
-//        let vc = PlayerViewController.instantiate()
-//        vc.player = player
-//        vc.hidesBottomBarWhenPushed = true
-//        navigationController.pushViewController(vc, animated: true)
+    }
+    func showMyWorkouts() {
+        let child = CoachWorkoutsCoordinator(navigationController: navigationController)
+        childCoordinators.append(child)
+        child.start()
     }
 }
 

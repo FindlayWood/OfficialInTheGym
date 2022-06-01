@@ -584,6 +584,11 @@
 		7492265622DA43BB00EAD386 /* RequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492265522DA43BB00EAD386 /* RequestsViewController.swift */; };
 		7492265822DA49E500EAD386 /* RequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492265722DA49E500EAD386 /* RequestTableViewCell.swift */; };
 		749867722832D00C0032A748 /* GroupPostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749867712832D00C0032A748 /* GroupPostModel.swift */; };
+		749B37A62846410A00ADF33D /* AddPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749B37A52846410A00ADF33D /* AddPlayerView.swift */; };
+		749B37A8284646E000ADF33D /* CoachRequestCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749B37A7284646E000ADF33D /* CoachRequestCellModel.swift */; };
+		749B37AA2846487000ADF33D /* CoachRequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749B37A92846487000ADF33D /* CoachRequestTableViewCell.swift */; };
+		749B37AC28464B0400ADF33D /* CoachRequestsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749B37AB28464B0400ADF33D /* CoachRequestsDataSource.swift */; };
+		749B37AE2846732300ADF33D /* AddPlayerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749B37AD2846732300ADF33D /* AddPlayerCoordinator.swift */; };
 		749E9FEF260B9633000E96AE /* TimelineTapProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749E9FEE260B9633000E96AE /* TimelineTapProtocol.swift */; };
 		74A1EC3C260D03BA00943745 /* DiscussionModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1EC3B260D03BA00943745 /* DiscussionModels.swift */; };
 		74AF6D4A2683A796005C52A8 /* FirebaseAPILoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AF6D492683A796005C52A8 /* FirebaseAPILoader.swift */; };
@@ -1469,6 +1474,11 @@
 		7492265522DA43BB00EAD386 /* RequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RequestsViewController.swift; path = "../New Group/RequestsViewController.swift"; sourceTree = "<group>"; };
 		7492265722DA49E500EAD386 /* RequestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTableViewCell.swift; sourceTree = "<group>"; };
 		749867712832D00C0032A748 /* GroupPostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupPostModel.swift; sourceTree = "<group>"; };
+		749B37A52846410A00ADF33D /* AddPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerView.swift; sourceTree = "<group>"; };
+		749B37A7284646E000ADF33D /* CoachRequestCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachRequestCellModel.swift; sourceTree = "<group>"; };
+		749B37A92846487000ADF33D /* CoachRequestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachRequestTableViewCell.swift; sourceTree = "<group>"; };
+		749B37AB28464B0400ADF33D /* CoachRequestsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachRequestsDataSource.swift; sourceTree = "<group>"; };
+		749B37AD2846732300ADF33D /* AddPlayerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerCoordinator.swift; sourceTree = "<group>"; };
 		749E9FEE260B9633000E96AE /* TimelineTapProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineTapProtocol.swift; sourceTree = "<group>"; };
 		74A1EC3B260D03BA00943745 /* DiscussionModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionModels.swift; sourceTree = "<group>"; };
 		74AF6D492683A796005C52A8 /* FirebaseAPILoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAPILoader.swift; sourceTree = "<group>"; };
@@ -2570,6 +2580,7 @@
 				742FD572283FAD350025E43C /* SearchTagsDataSource.swift */,
 				74E08A8B28442592009D0DCB /* MyWorkloadsDataSource.swift */,
 				742FCD1C284532E6007ED1C6 /* ExerciseMaxHistoryDataSource.swift */,
+				749B37AB28464B0400ADF33D /* CoachRequestsDataSource.swift */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -2776,6 +2787,7 @@
 			children = (
 				74F18ACF27D659790043551F /* PlayerDetailCoordinator.swift */,
 				745E1DA9283E7857009CA236 /* CoachWorkoutsCoordinator.swift */,
+				749B37AD2846732300ADF33D /* AddPlayerCoordinator.swift */,
 			);
 			path = CoachSide;
 			sourceTree = "<group>";
@@ -3055,6 +3067,7 @@
 				742FD582283FEFC80025E43C /* TagAndExerciseCell.swift */,
 				74E08A8928439603009D0DCB /* MyWorkloadCollectionCell.swift */,
 				742FCD18284531D6007ED1C6 /* ExerciseMaxHistoryCell.swift */,
+				749B37A92846487000ADF33D /* CoachRequestTableViewCell.swift */,
 			);
 			path = CellClasses;
 			sourceTree = "<group>";
@@ -3398,6 +3411,7 @@
 				7480EBB325F500DD00E4E768 /* DisplayWorkoutCellModels.swift */,
 				74F2CCE326E2883400D7AD79 /* AddMoreCellModel.swift */,
 				742FD584283FF1D60025E43C /* TagAndExerciseCellModel.swift */,
+				749B37A7284646E000ADF33D /* CoachRequestCellModel.swift */,
 			);
 			path = CellModels;
 			sourceTree = "<group>";
@@ -3893,6 +3907,7 @@
 			children = (
 				7492263122C8D1DF00EAD386 /* AddPlayerViewController.swift */,
 				74DE6D8A27D25FC3009FB44A /* AddPlayerViewModel.swift */,
+				749B37A52846410A00ADF33D /* AddPlayerView.swift */,
 			);
 			path = AddPlayer;
 			sourceTree = "<group>";
@@ -4694,6 +4709,7 @@
 				742C1C6E27B6AE4100DD1BB0 /* ProfileOptionsCell.swift in Sources */,
 				744AED432799C24C000D2D74 /* UIWorkoutStartView.swift in Sources */,
 				74D1EF93258D529800A719BC /* Posts.swift in Sources */,
+				749B37AA2846487000ADF33D /* CoachRequestTableViewCell.swift in Sources */,
 				74B48DD927A0299900BBFC16 /* DisplayCircuitView.swift in Sources */,
 				742C1C7D27BC048300DD1BB0 /* ExerciseStatsDetailView.swift in Sources */,
 				7416CCD3265817540043B1C2 /* FirebaseLiveWorkoutUpdater.swift in Sources */,
@@ -4770,6 +4786,7 @@
 				743A0509276CFAB50027B752 /* CommentSectionAdapter.swift in Sources */,
 				74EE4EE32804C54200051451 /* HofBreathingViewController.swift in Sources */,
 				743A0503276A885A0027B752 /* CommentView.swift in Sources */,
+				749B37A62846410A00ADF33D /* AddPlayerView.swift in Sources */,
 				74DE6D8127D11E48009FB44A /* SavedWorkoutsChildView.swift in Sources */,
 				742C1CAB27C27C2600DD1BB0 /* Programs.swift in Sources */,
 				7444D08726D0117D0009C7A6 /* DisplaySingleSetView.swift in Sources */,
@@ -4892,6 +4909,7 @@
 				744AED1E2797010A000D2D74 /* MainWorkoutAMRAPCollectionCell.swift in Sources */,
 				747B67862600E740000AD6B7 /* TimelineModels.swift in Sources */,
 				74E08A862843951E009D0DCB /* MyWorkloadsViewModel.swift in Sources */,
+				749B37AC28464B0400ADF33D /* CoachRequestsDataSource.swift in Sources */,
 				74C4268B2829A866009ADB70 /* SetSelectionViewModel.swift in Sources */,
 				742C1C4527AC1C7D00DD1BB0 /* CompletedWorkoutUploadModel.swift in Sources */,
 				74C89C852619FA63009F3C72 /* WorkoutCompletedCollectionViewCell.swift in Sources */,
@@ -5251,6 +5269,7 @@
 				7472C87227DFF628004836B8 /* DiscoverPageView.swift in Sources */,
 				742FF36B277B812F00AEE3D2 /* CommentSectionItems.swift in Sources */,
 				74F18ADB27D65CE80043551F /* CoachPlayerWorkoutsView.swift in Sources */,
+				749B37AE2846732300ADF33D /* AddPlayerCoordinator.swift in Sources */,
 				742C1C5527B4001C00DD1BB0 /* ClipCoordinator.swift in Sources */,
 				7431030B26FA30EA00F7121B /* TimeSelectionAdapter.swift in Sources */,
 				74B6F6982751536E00A72679 /* DisplayWorkoutsView.swift in Sources */,
@@ -5308,6 +5327,7 @@
 				74AF6D6A268A325E005C52A8 /* DisplayExerciseStatsView.swift in Sources */,
 				7403D05E280CA65500268CEC /* UIClipThumbnailsView.swift in Sources */,
 				742C1C7627BAEA5000DD1BB0 /* GroupCommentSectionCoordinator.swift in Sources */,
+				749B37A8284646E000ADF33D /* CoachRequestCellModel.swift in Sources */,
 				74AF6D6D268B6D23005C52A8 /* RecordClipViewController.swift in Sources */,
 				74DE6D9527D3A142009FB44A /* ScoreSearchModel.swift in Sources */,
 				7433308A2787402D005A0C45 /* WorkoutCreationView.swift in Sources */,

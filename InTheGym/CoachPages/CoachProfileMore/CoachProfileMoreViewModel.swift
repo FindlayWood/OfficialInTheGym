@@ -49,7 +49,7 @@ class CoachProfileMoreViewModel: ObservableObject {
 enum CoachProfileMoreAction {
     case editProfile
     case myWorkouts
-    case requests
+    case workoutStats
     case exerciseStats
     case measureJump
     case breathWork

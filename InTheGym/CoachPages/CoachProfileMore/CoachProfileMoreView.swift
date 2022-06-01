@@ -91,19 +91,6 @@ struct CoachProfileMoreView: View {
                             .foregroundColor(.primary)
                     }
                 }
-                Button {
-                    viewModel.action(.requests)
-                } label: {
-                    HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "trainer_icon")!)
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .cornerRadius(4)
-                        Text("Requests")
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                    }
-                }
             } header: {
                 Text("Coaches")
             }
@@ -123,7 +110,7 @@ struct CoachProfileMoreView: View {
                     }
                 }
                 Button {
-                    
+                    viewModel.action(.workoutStats)
                 } label: {
                     HStack(spacing: 16) {
                         Image(uiImage: UIImage(named: "linechart_icon")!)

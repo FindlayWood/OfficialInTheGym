@@ -64,8 +64,8 @@ private extension CoachProfileMoreViewController {
             coordinator?.editProfile()
         case .myWorkouts:
             coordinator?.showMyWorkouts()
-        case .requests:
-            break
+        case .workoutStats:
+            coordinator?.myWorkoutStats()
         case .exerciseStats:
             coordinator?.exerciseStats()
         case .measureJump:

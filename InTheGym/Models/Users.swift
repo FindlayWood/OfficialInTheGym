@@ -86,6 +86,16 @@ extension CoachRequestUploadModel: FirebaseInstance {
     }
 }
 
+// MARK: - Coach Requests Model
+/// model used to load all current requests for a coach
+struct CoachRequestsModel {
+    var coachID: String
+}
+extension CoachRequestsModel: FirebaseInstance {
+    var internalPath: String {
+        "CoachRequests/\(coachID)"
+    }
+}
 // MARK: - Player Request Model
 /// Model only used by coaches to send requests
 struct PlayerRequestUploadModel {
@@ -98,7 +108,7 @@ extension PlayerRequestUploadModel: FirebaseInstance {
     }
 }
 
-// MARK: - Coach PLayers Model
+// MARK: - Coach Players Model
 struct CoachPlayersModel {
     var coachID: String
     var playerID: String

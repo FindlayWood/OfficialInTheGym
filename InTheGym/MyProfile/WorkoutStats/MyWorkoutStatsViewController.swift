@@ -25,54 +25,62 @@ class MyWorkoutStatsViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - View
-//    override func loadView() {
-//        view = display
-//    }
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemBackground
-        lastThreeSubscription()
-        initViewModel()
-//        initTargets()
-    }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getViewableFrameWithBottomSafeArea()
-        view.addSubview(display)
         initScoreChildVC()
         inintWorkloadChildVC()
         initLastThreeChildVC()
+        lastThreeSubscription()
+        initViewModel()
+        initTargets()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         editNavBarColour(to: .darkColour)
         navigationItem.title = viewModel.navigationTitle
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        initTargets()
-    }
     // MARK: - Child VC
     func initScoreChildVC() {
         scoreChildVC.viewModel.user = UserDefaults.currentUser
         addChild(scoreChildVC)
         display.addSubview(scoreChildVC.view)
-        scoreChildVC.view.frame = display.scoreContainerView.frame
+        scoreChildVC.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            scoreChildVC.view.topAnchor.constraint(equalTo: display.scoreContainerView.topAnchor),
+            scoreChildVC.view.leadingAnchor.constraint(equalTo: display.scoreContainerView.leadingAnchor),
+            scoreChildVC.view.trailingAnchor.constraint(equalTo: display.scoreContainerView.trailingAnchor),
+            scoreChildVC.view.bottomAnchor.constraint(equalTo: display.scoreContainerView.bottomAnchor)
+        ])
         scoreChildVC.didMove(toParent: self)
     }
     func inintWorkloadChildVC() {
         workloadChildVC.viewModel.user = UserDefaults.currentUser
         addChild(workloadChildVC)
         display.addSubview(workloadChildVC.view)
-        workloadChildVC.view.frame = display.workloadContainerView.frame
+        workloadChildVC.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            workloadChildVC.view.topAnchor.constraint(equalTo: display.workloadContainerView.topAnchor),
+            workloadChildVC.view.leadingAnchor.constraint(equalTo: display.workloadContainerView.leadingAnchor),
+            workloadChildVC.view.trailingAnchor.constraint(equalTo: display.workloadContainerView.trailingAnchor),
+            workloadChildVC.view.bottomAnchor.constraint(equalTo: display.workloadContainerView.bottomAnchor)
+        ])
         workloadChildVC.didMove(toParent: self)
     }
     func initLastThreeChildVC() {
         addChild(lastThreeScoresChildVC)
         display.addSubview(lastThreeScoresChildVC.view)
-        lastThreeScoresChildVC.view.frame = display.lastThreeScoresContainerView.frame
+        lastThreeScoresChildVC.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            lastThreeScoresChildVC.view.topAnchor.constraint(equalTo: display.lastThreeScoresContainerView.topAnchor),
+            lastThreeScoresChildVC.view.leadingAnchor.constraint(equalTo: display.lastThreeScoresContainerView.leadingAnchor),
+            lastThreeScoresChildVC.view.trailingAnchor.constraint(equalTo: display.lastThreeScoresContainerView.trailingAnchor),
+            lastThreeScoresChildVC.view.bottomAnchor.constraint(equalTo: display.lastThreeScoresContainerView.bottomAnchor)
+        ])
         lastThreeScoresChildVC.didMove(toParent: self)
- 
     }
     func lastThreeSubscription() {
         scoreChildVC.viewModel.lastThreePublisher

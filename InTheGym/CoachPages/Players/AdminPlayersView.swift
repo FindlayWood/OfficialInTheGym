@@ -8,8 +8,11 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class AdminPlayersView: UIView {
+    // MARK: - Publishers
+    var myWorkoutsSelected = PassthroughSubject<Void,Never>()
     // MARK: - Properties
     
     // MARK: - Subviews
@@ -46,24 +49,22 @@ class AdminPlayersView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    var containerView: UIView = {
-        let view = UIView()
+    var tableview: UITableView = {
+        let view = UITableView()
+        view.register(UserTableViewCell.self, forCellReuseIdentifier: UserTableViewCell.cellID)
+        view.tableFooterView = UIView()
+        view.separatorStyle = .none
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     var coachMenu: UIMenu {
         let menu = UIMenu(title: "Options", children: [
             UIAction(title: "My Workouts") { action in
-                print("my workouts")
-            },
-            UIAction(title: "My Programs") { action in
-                print("My Pograms")
+                self.myWorkoutsSelected.send(())
             }
         ])
         return menu
     }
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -73,22 +74,20 @@ class AdminPlayersView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension AdminPlayersView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .secondarySystemBackground
         addSubview(iconButton)
         addSubview(plusButton)
         addSubview(activityIndicator)
-        addSubview(containerView)
+        addSubview(tableview)
         configureUI()
     }
-    
     func configureUI() {
         NSLayoutConstraint.activate([
-            iconButton.topAnchor.constraint(equalTo: topAnchor),
+            iconButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             iconButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             iconButton.heightAnchor.constraint(equalToConstant: 32),
             
@@ -98,10 +97,10 @@ private extension AdminPlayersView {
             activityIndicator.centerYAnchor.constraint(equalTo: plusButton.centerYAnchor),
             activityIndicator.trailingAnchor.constraint(equalTo: plusButton.trailingAnchor),
             
-            containerView.topAnchor.constraint(equalTo: iconButton.bottomAnchor, constant: 16),
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            tableview.topAnchor.constraint(equalTo: iconButton.bottomAnchor, constant: 16),
+            tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
+            tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
+            tableview.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 }

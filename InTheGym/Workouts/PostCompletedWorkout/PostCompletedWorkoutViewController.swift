@@ -28,6 +28,10 @@ class PostCompletedWorkoutViewController: UIViewController {
         addChildView()
         initViewModel()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
     
     // MARK: - Swift UI Child View
      func addChildView() {

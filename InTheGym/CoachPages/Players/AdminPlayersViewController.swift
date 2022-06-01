@@ -7,93 +7,67 @@
 //
 
 import UIKit
-import Firebase
-import SCLAlertView
 import Combine
 
 class AdminPlayersViewController: UIViewController {
-    
-    var coordinator: PlayersFlow?
+    // MARK: - Coordinator
+    var coordinator: PlayersCoordinator?
     
     // MARK: - Properties
     var display = AdminPlayersView()
-    
-    var childVC = UsersChildViewController()
-    
     var viewModel = AdminPlayersViewModel()
-
+    var dataSource: UsersDataSource!
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        showFirstMessage()
+        view.backgroundColor = .systemBackground
         initDataSource()
         initTargets()
-//        initDisplay()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getViewableFrameWithBottomSafeArea()
-        childVC.display.tableview.backgroundColor = .darkColour
-        view.addSubview(display)
-        addChildVC()
+        initViewModel()
+        initDisplay()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
-    // MARK: - Child VC
-    func addChildVC() {
-        addChild(childVC)
-        display.addSubview(childVC.view)
-        childVC.view.frame = display.containerView.frame
-        childVC.didMove(toParent: self)
-    }
-    
     // MARK: Display iOS 14
     func initDisplay() {
+        display.tableview.backgroundColor = .secondarySystemBackground
+        display.myWorkoutsSelected
+            .sink { [weak self] in self?.coordinator?.showMyWorkouts()}
+            .store(in: &subscriptions)
         if #available(iOS 14.0, *) {
             display.iconButton.menu = display.coachMenu
             display.iconButton.showsMenuAsPrimaryAction = true
         }
     }
-    
     // MARK: - Targets
     func initTargets() {
         display.plusButton.addTarget(self, action: #selector(addPlayerTapped(_:)), for: .touchUpInside)
     }
-    
     // MARK: - Data Source
     func initDataSource() {
-        
-        childVC.dataSource.userSelected
+        dataSource = .init(tableView: display.tableview)
+        dataSource.userSelected
             .sink { [weak self] in self?.coordinator?.showPlayerInMoreDetail(player: $0)}
             .store(in: &subscriptions)
-        
-        initViewModel()
     }
-    
      // MARK: - View Model
     func initViewModel() {
-        
         viewModel.$isLoading
             .sink { [weak self] in self?.setLoading($0) }
             .store(in: &subscriptions)
-        
         viewModel.playersPublisher
-            .sink { [weak self] in self?.childVC.dataSource.updateTable(with: $0)}
+            .sink { [weak self] in self?.dataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
         
         viewModel.fetchPlayers()
     }
-    
     // MARK: - Actions
     @objc func addPlayerTapped(_ sender: UIButton) {
         coordinator?.addNewPlayer(viewModel.playersPublisher.value)
@@ -104,23 +78,6 @@ class AdminPlayersViewController: UIViewController {
             display.activityIndicator.startAnimating()
         } else {
             display.activityIndicator.stopAnimating()
-        }
-    }
-}
-
-// extension for first time message
-extension AdminPlayersViewController {
-    func showFirstMessage() {
-        if UIApplication.isFirstPlayersLaunch() {
-
-            let screenSize: CGRect = UIScreen.main.bounds
-            let screenWidth = screenSize.width
-            
-            let appearance = SCLAlertView.SCLAppearance(
-                kWindowWidth: screenWidth - 40 )
-
-            let alert = SCLAlertView(appearance: appearance)
-            alert.showInfo("PLAYERS!", subTitle: FirstTimeMessages.playersMessage, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
         }
     }
 }
