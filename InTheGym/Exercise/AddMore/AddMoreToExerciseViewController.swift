@@ -67,6 +67,8 @@ extension AddMoreToExerciseViewController: AddMoreToExerciseProtocol {
             vc.cellModel = viewModel.getData(at: indexPath)
             vc.viewModel.timeUpdatedPublisher = viewModel.timeUpdatedPublisher
             vc.viewModel.isLive = coordinator is LiveWorkoutSetCreationCoordinator
+            vc.viewModel.editingSet = viewModel.editingSet
+            vc.viewModel.isEditing = viewModel.isEditing
             navigationController?.pushViewController(vc, animated: true)
         case 1:
             let vc = AddMoreDistanceViewController()
@@ -74,6 +76,8 @@ extension AddMoreToExerciseViewController: AddMoreToExerciseProtocol {
             vc.cellModel = viewModel.getData(at: indexPath)
             vc.viewModel.distanceUpdatedPublisher = viewModel.distanceUpdatedPublisher
             vc.viewModel.isLive = coordinator is LiveWorkoutSetCreationCoordinator
+            vc.viewModel.editingSet = viewModel.editingSet
+            vc.viewModel.isEditing = viewModel.isEditing
             navigationController?.pushViewController(vc, animated: true)
         case 2:
             let vc = AddMoreRestTimeViewController()
@@ -81,6 +85,8 @@ extension AddMoreToExerciseViewController: AddMoreToExerciseProtocol {
             vc.cellModel = viewModel.getData(at: indexPath)
             vc.viewModel.restTimeUpdatedPublisher = viewModel.restTimeUpdatedPublisher
             vc.viewModel.isLive = coordinator is LiveWorkoutSetCreationCoordinator
+            vc.viewModel.editingSet = viewModel.editingSet
+            vc.viewModel.isEditing = viewModel.isEditing
             navigationController?.pushViewController(vc, animated: true)
         case 3:
             let vc = AddMoreNoteViewController()

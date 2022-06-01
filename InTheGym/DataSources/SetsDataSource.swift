@@ -45,7 +45,6 @@ class SetsDataSource: NSObject {
             }
             return cell
         }
-        
         return dataSource
     }
     
@@ -79,7 +78,6 @@ class SetsDataSource: NSObject {
                 if let set = setSelected {
                     self?.collectionView.scrollToItem(at: IndexPath(item: set, section: 0), at: .centeredHorizontally, animated: true)
                 }
-                
             }.store(in: &subscriptions)
     }
 }

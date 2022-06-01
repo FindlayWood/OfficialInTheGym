@@ -7,11 +7,14 @@
 //
 
 import Foundation
+import Combine
 
 struct DisplaySingleSetViewModel {
     // MARK: - Publishers
+    var editSetAction: PassthroughSubject<ExerciseSet,Never>?
     
     // MARK: - Properties
+    var isEditable: Bool?
     var setModel: ExerciseSet!
     
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared

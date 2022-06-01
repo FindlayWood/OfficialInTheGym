@@ -14,6 +14,7 @@ class AddMoreViewModel {
     // MARK: - Publishers
     @Published var setCellModels: [SetCellModel]?
     @Published var isLiveWorkout: Bool = false
+    @Published var isEditing: Bool = false
     
     var timeUpdatedPublisher: PassthroughSubject<[Int]?,Never>?
     var distanceUpdatedPublisher: PassthroughSubject<[String]?,Never>?
@@ -22,6 +23,7 @@ class AddMoreViewModel {
     
     // MARK: - Properties
     var selectedSet: Int? = nil
+    var editingSet: Int? = nil
     
     var exercise: ExerciseModel!
     

@@ -107,7 +107,7 @@ class SavedWorkoutDisplayViewController: UIViewController, AnimatingSingleSet {
             .store(in: &subscriptions)
         
         childVC.dataSource.setSelected
-            .sink { [weak self] setCellModel in
+            .sink { [weak self] (setCellModel, exerciseModel) in
                 self?.selectedSetCell = setCellModel.cell
                 self?.selectedSetCellImageViewSnapshot = setCellModel.snapshot
                 self?.showSingleSet(setCellModel.setModel)

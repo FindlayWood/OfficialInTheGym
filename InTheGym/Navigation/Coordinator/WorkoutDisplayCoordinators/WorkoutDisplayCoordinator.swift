@@ -8,18 +8,20 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class WorkoutDisplayCoordinator: NSObject, Coordinator {
+    // MARK: - Coordinators
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var modalNavigationController: UINavigationController?
     var workout: WorkoutModel
-    
+    // MARK: - Initializer
     init(navigationController: UINavigationController, workout: WorkoutModel) {
         self.navigationController = navigationController
         self.workout = workout
     }
-    
+    // MARK: - Start
     func start() {
         let vc = WorkoutDisplayViewController()
         vc.viewModel.workout = workout
@@ -69,8 +71,13 @@ extension WorkoutDisplayCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func showSingleSet(fromViewControllerDelegate: AnimatingSingleSet, setModel: ExerciseSet) {
-        let child = SingleSetCoordinator(navigationController: navigationController, fromViewControllerDelegate: fromViewControllerDelegate, setModel: setModel)
+    func showSingleSet(fromViewControllerDelegate: AnimatingSingleSet, setModel: ExerciseSet, editAction: PassthroughSubject<ExerciseSet,Never>? = nil, isEditable: Bool? = false) {
+        let child = SingleSetCoordinator(navigationController: navigationController, fromViewControllerDelegate: fromViewControllerDelegate, setModel: setModel, editAction: editAction, isEditable: isEditable)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func editSet(exerciseModel: ExerciseModel, publisher: PassthroughSubject<ExerciseModel,Never>, setNumber: Int) {
+        let child = EditExerciseCoordinator(navigationController: navigationController, exercise: exerciseModel, publisher: publisher, setNumber: setNumber)
         childCoordinators.append(child)
         child.start()
     }

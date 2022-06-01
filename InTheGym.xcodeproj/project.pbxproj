@@ -589,6 +589,7 @@
 		749B37AA2846487000ADF33D /* CoachRequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749B37A92846487000ADF33D /* CoachRequestTableViewCell.swift */; };
 		749B37AC28464B0400ADF33D /* CoachRequestsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749B37AB28464B0400ADF33D /* CoachRequestsDataSource.swift */; };
 		749B37AE2846732300ADF33D /* AddPlayerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749B37AD2846732300ADF33D /* AddPlayerCoordinator.swift */; };
+		749B37B12847A2BE00ADF33D /* EditExerciseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749B37B02847A2BE00ADF33D /* EditExerciseCoordinator.swift */; };
 		749E9FEF260B9633000E96AE /* TimelineTapProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749E9FEE260B9633000E96AE /* TimelineTapProtocol.swift */; };
 		74A1EC3C260D03BA00943745 /* DiscussionModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1EC3B260D03BA00943745 /* DiscussionModels.swift */; };
 		74AF6D4A2683A796005C52A8 /* FirebaseAPILoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AF6D492683A796005C52A8 /* FirebaseAPILoader.swift */; };
@@ -1479,6 +1480,7 @@
 		749B37A92846487000ADF33D /* CoachRequestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachRequestTableViewCell.swift; sourceTree = "<group>"; };
 		749B37AB28464B0400ADF33D /* CoachRequestsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachRequestsDataSource.swift; sourceTree = "<group>"; };
 		749B37AD2846732300ADF33D /* AddPlayerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerCoordinator.swift; sourceTree = "<group>"; };
+		749B37B02847A2BE00ADF33D /* EditExerciseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExerciseCoordinator.swift; sourceTree = "<group>"; };
 		749E9FEE260B9633000E96AE /* TimelineTapProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineTapProtocol.swift; sourceTree = "<group>"; };
 		74A1EC3B260D03BA00943745 /* DiscussionModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionModels.swift; sourceTree = "<group>"; };
 		74AF6D492683A796005C52A8 /* FirebaseAPILoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAPILoader.swift; sourceTree = "<group>"; };
@@ -2461,6 +2463,7 @@
 		7433308F27875B4C005A0C45 /* WorkoutCreation(4.4) */ = {
 			isa = PBXGroup;
 			children = (
+				749B37AF2847A2A600ADF33D /* EditWorkoutCoordinators */,
 				742AEDD0282B317E0004E901 /* RegularCreationCoordinators */,
 				742AEDCF282B316D0004E901 /* CreationFlows */,
 				742AEDCE282B313C0004E901 /* LiveCreationCoordinators */,
@@ -3466,6 +3469,14 @@
 				749867712832D00C0032A748 /* GroupPostModel.swift */,
 			);
 			path = PostModels;
+			sourceTree = "<group>";
+		};
+		749B37AF2847A2A600ADF33D /* EditWorkoutCoordinators */ = {
+			isa = PBXGroup;
+			children = (
+				749B37B02847A2BE00ADF33D /* EditExerciseCoordinator.swift */,
+			);
+			path = EditWorkoutCoordinators;
 			sourceTree = "<group>";
 		};
 		749E9FF3260BA0BA000E96AE /* DisplayWorkout */ = {
@@ -4882,6 +4893,7 @@
 				7403A61226C9B31D000588CE /* MoreGroupInfoViewModel.swift in Sources */,
 				7479AFA9253F844500E6A79C /* InsideCollectionViewCell.swift in Sources */,
 				74318F4A26B9A072009EDFAC /* DisplayAMRAPShowAllExercisesView.swift in Sources */,
+				749B37B12847A2BE00ADF33D /* EditExerciseCoordinator.swift in Sources */,
 				74B48DF927A2DCA300BBFC16 /* ThinkingTimeMessages.swift in Sources */,
 				740E5B7B28328965005B03FF /* MyWorkoutsViewController.swift in Sources */,
 				743E933B28099E3F0029F447 /* ProfileHeaderView.swift in Sources */,

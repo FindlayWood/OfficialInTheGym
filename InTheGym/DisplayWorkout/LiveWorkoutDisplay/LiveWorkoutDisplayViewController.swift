@@ -55,14 +55,12 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
         toggleClipCollection(showing: true, clips: viewModel.getClips())
         navigationItem.rightBarButtonItem?.isEnabled = viewModel.isInteractionEnabled()
     }
-    
     // MARK: - Nav Bar
     func initNavBar() {
         let barButton = UIBarButtonItem(title: "Completed", style: .done, target: self, action: #selector(completed(_:)))
         navigationItem.rightBarButtonItem = barButton
         navigationItem.rightBarButtonItem?.isEnabled = viewModel.isInteractionEnabled()
     }
-    
     // MARK: - View Model
     func initViewModel() {
         
@@ -76,7 +74,6 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
         
         viewModel.initSubscriptions()
     }
-    
     // MARK: - Data Source
     func initDataSource() {
         dataSource = .init(collectionView: display.exerciseCollection, isUserInteractionEnabled: viewModel.isInteractionEnabled())
@@ -104,15 +101,13 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
             }
             .store(in: &subscriptions)
     }
-
     // MARK: - Subscriptions
     func setupSubscriptions() {
-        
         dataSource.setSelected
-            .sink { [weak self] setCellModel in
+            .sink { [weak self] (setCellModel, exerciseModel) in
                 self?.selectedSetCell = setCellModel.cell
                 self?.selectedSetCellImageViewSnapshot = setCellModel.snapshot
-                self?.showSingleSet(setCellModel.setModel)
+                self?.showSingleSet(setCellModel.setModel, exerciseModel: exerciseModel)
             }
             .store(in: &subscriptions)
 
@@ -160,9 +155,7 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
         viewModel.updateExerciseRPE
             .sink { [weak self] in self?.dataSource.update(for: $0)}
             .store(in: &subscriptions)
-        
     }
-    
     // MARK: - RPE
     func rpe(index: IndexPath) {
         showRPEAlert(for: index) { [weak self] index, score in
@@ -174,19 +167,16 @@ class LiveWorkoutDisplayViewController: UIViewController, CustomAnimatingClipFro
         }
     }
 }
-
 // MARK: - Actions
 extension LiveWorkoutDisplayViewController {
     @objc func completed(_ sender: UIBarButtonItem) {
         viewModel.completed()
         coordinator?.complete(viewModel.workoutModel)
     }
-    
     func addExercise() {
         let newExercise = ExerciseModel(workoutPosition: viewModel.getExerciseCount())
         coordinator?.addExercise(newExercise, publisher: viewModel.addedExercise)
     }
-    
     func addSet(at indexPath: IndexPath) {
         let exercise = viewModel.getExercise(at: indexPath)
         coordinator?.addSet(exercise, publisher: viewModel.updatedExercise)
@@ -208,7 +198,8 @@ extension LiveWorkoutDisplayViewController {
     func clipSelected(_ model: WorkoutClipModel) {
         coordinator?.viewClip(model, fromViewControllerDelegate: self)
     }
-    func showSingleSet(_ exerciseSet: ExerciseSet) {
+    func showSingleSet(_ exerciseSet: ExerciseSet, exerciseModel: ExerciseModel?) {
+        viewModel.showExerciseDetail = exerciseModel
         coordinator?.showSingleSet(fromViewControllerDelegate: self, setModel: exerciseSet)
     }
 }

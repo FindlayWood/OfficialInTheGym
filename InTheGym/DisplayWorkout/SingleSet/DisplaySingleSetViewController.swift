@@ -9,13 +9,10 @@
 import UIKit
 
 class DisplaySingleSetViewController: UIViewController {
-    
+    // MARK: - Properties
     weak var coordinator: SingleSetCoordinator?
-    
     var display = DisplaySingleSetView()
-    
     var viewModel = DisplaySingleSetViewModel()
-
     // MARK: - View
     override func loadView() {
         view = display
@@ -36,13 +33,18 @@ class DisplaySingleSetViewController: UIViewController {
     // MARK: - Init Display
     func initDisplay() {
         display.dismissButton.addTarget(self, action: #selector(dismissButtonAction(_:)), for: .touchUpInside)
-        display.configure(with: viewModel.setModel)
+        display.editButton.addTarget(self, action: #selector(editButtonAction(_:)), for: .touchUpInside)
+        display.configure(with: viewModel.setModel, isEditable: viewModel.isEditable)
     }
 }
 // MARK: - Actions
 private extension DisplaySingleSetViewController {
     @objc func dismissButtonAction(_ sender: UIButton) {
         coordinator?.dismissVC()
+    }
+    @objc func editButtonAction(_ sender: UIButton) {
+        coordinator?.editSet()
+        viewModel.editSetAction?.send(viewModel.setModel)
     }
     func animateBackground(to opacity: CGFloat) {
         UIView.animate(withDuration: 0.3) {

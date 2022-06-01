@@ -48,6 +48,23 @@ extension PlayerDetailCoordinator {
     func showWorkout(_ model: WorkoutModel) {
         let vc = CoachPlayerWorkoutViewController()
         vc.viewModel.workoutModel = model
+        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
+    }
+    func viewClip(_ clipModel: WorkoutClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC) {
+        let keyClipModel = KeyClipModel(clipKey: clipModel.clipKey, storageURL: clipModel.storageURL)
+        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func showDescriptions(_ exercise: DiscoverExerciseModel) {
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise)
+        childCoordinators.append(child)
+        child.start()
+    }
+    func showSingleSet(fromViewControllerDelegate: AnimatingSingleSet, setModel: ExerciseSet) {
+        let child = SingleSetCoordinator(navigationController: navigationController, fromViewControllerDelegate: fromViewControllerDelegate, setModel: setModel)
+        childCoordinators.append(child)
+        child.start()
     }
 }
