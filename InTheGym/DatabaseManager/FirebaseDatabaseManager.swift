@@ -101,7 +101,10 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     func fetchSingleInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<T,Error>) -> Void) {
         let DBRef = Database.database().reference().child(model.internalPath)
         DBRef.observeSingleEvent(of: .value) { snapshot in
-            guard let object = snapshot.value as? [String: AnyObject] else {return}
+            guard let object = snapshot.value as? [String: AnyObject] else {
+                completion(.failure(NSError(domain: "Invalid Infp", code: 0, userInfo: nil)))
+                return
+            }
             do {
                 let data = try FirebaseDecoder().decode(returnType, from: object)
                 completion(.success(data))

@@ -16,8 +16,12 @@ class MyWorkoutStatsView: UIView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 100, weight: .semibold)
         label.textColor = .darkColour
-        label.text = "43"
+        label.text = "0"
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.1
+        label.lineBreakMode = .byClipping
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -34,10 +38,12 @@ class MyWorkoutStatsView: UIView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 100, weight: .semibold)
         label.textColor = .darkColour
-        label.text = "47h 31m"
+        label.text = "0m 0s"
         label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.2
+        label.minimumScaleFactor = 0.1
+        label.lineBreakMode = .byClipping
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -68,7 +74,7 @@ class MyWorkoutStatsView: UIView {
     
     // MARK: - Initializer
     override init(frame: CGRect) {
-        super.init(frame: UIScreen.main.bounds)
+        super.init(frame: frame)
         setupUI()
     }
     required init?(coder: NSCoder) {
@@ -96,6 +102,7 @@ private extension MyWorkoutStatsView {
             totalWorkoutsLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
             totalWorkoutsLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             totalWorkoutsLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.85),
+            totalWorkoutsLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.1),
             totalWorkoutsSubLabel.topAnchor.constraint(equalTo: totalWorkoutsLabel.bottomAnchor),
             totalWorkoutsSubLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             totalWorkoutsSubLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.7),
@@ -103,6 +110,7 @@ private extension MyWorkoutStatsView {
             totalTimeLabel.topAnchor.constraint(equalTo: totalWorkoutsLabel.bottomAnchor, constant: 16),
             totalTimeLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.85),
             totalTimeLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            totalTimeLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.1),
             totalTimeSubLabel.topAnchor.constraint(equalTo: totalTimeLabel.bottomAnchor),
             totalTimeSubLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             totalTimeSubLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.7),

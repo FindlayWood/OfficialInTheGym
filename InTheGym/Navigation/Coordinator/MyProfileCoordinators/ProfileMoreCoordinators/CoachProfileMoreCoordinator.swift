@@ -34,13 +34,13 @@ extension CoachProfileMoreCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func myRequests() {
-        let vc = RequestsViewController()
-        navigationController.pushViewController(vc, animated: true)
-    }
     func exerciseStats() {
         let vc = DisplayExerciseStatsViewController()
         self.navigationController.pushViewController(vc, animated: true)
+    }
+    func myWorkoutStats() {
+        let vc = MyWorkoutStatsViewController()
+        navigationController.pushViewController(vc, animated: true)
     }
     func jumpMeasure() {
         let vc = JumpMeasuringViewController()
