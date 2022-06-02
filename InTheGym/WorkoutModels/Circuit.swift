@@ -134,3 +134,19 @@ struct CircuitModel: ExerciseType, Codable, Hashable {
         return circuitModels
     }
 }
+// MARK: - Circuit Database Models
+struct CircuitDatabaseModel {
+    var circuitModel: CircuitModel
+    var workoutModel: WorkoutModel
+}
+extension CircuitDatabaseModel {
+    func getCompletedSetPoint(exercisePosition: Int, setNumber: Int) -> FirebaseMultiUploadDataPoint {
+        let path = "Workouts/\(UserDefaults.currentUser.uid)/\(workoutModel.id)/circuits/\(circuitModel.circuitPosition)/exercises/\(exercisePosition)/completedSets/\(setNumber)"
+        return FirebaseMultiUploadDataPoint(value: true, path: path)
+    }
+    func getCompletedCircuitPoints(rpe: Int) -> [FirebaseMultiUploadDataPoint] {
+        let scorePath = "Workouts/\(UserDefaults.currentUser.uid)/\(workoutModel.id)/circuits/\(circuitModel.circuitPosition)/score"
+        let completedPath = "Workouts/\(UserDefaults.currentUser.uid)/\(workoutModel.id)/circuits/\(circuitModel.circuitPosition)/completed"
+        return [FirebaseMultiUploadDataPoint(value: rpe, path: scorePath), FirebaseMultiUploadDataPoint(value: true, path: completedPath)]
+    }
+}

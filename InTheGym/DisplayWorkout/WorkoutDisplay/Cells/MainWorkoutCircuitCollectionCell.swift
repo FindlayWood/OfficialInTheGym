@@ -10,10 +10,8 @@ import Foundation
 import UIKit
 
 class MainWorkoutCircuitCollectionCell: FullWidthCollectionViewCell {
-    
     // MARK: - Properties
     static let reuseID = "MainWorkoutCircuitCollectionCell"
-    
     // MARK: - Subviews
     var circuitLabel: UILabel = {
         let label = UILabel()
@@ -24,7 +22,6 @@ class MainWorkoutCircuitCollectionCell: FullWidthCollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     var separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
@@ -32,7 +29,6 @@ class MainWorkoutCircuitCollectionCell: FullWidthCollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo-Bold", size: 22)
@@ -41,7 +37,6 @@ class MainWorkoutCircuitCollectionCell: FullWidthCollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     var exercisesLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo", size: 15)
@@ -50,7 +45,17 @@ class MainWorkoutCircuitCollectionCell: FullWidthCollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+    var completedIcon: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.backgroundColor = .clear
+        view.image = UIImage(systemName: "circle")
+        view.tintColor = .darkColour
+        view.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        view.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,21 +65,20 @@ class MainWorkoutCircuitCollectionCell: FullWidthCollectionViewCell {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension MainWorkoutCircuitCollectionCell {
     func setupUI() {
-        backgroundColor = .offWhiteColour
-        layer.cornerRadius = 10
+        backgroundColor = .systemBackground
+        layer.cornerRadius = 8
         layer.masksToBounds = true
         addSubview(circuitLabel)
         addSubview(separatorView)
         addSubview(titleLabel)
         addSubview(exercisesLabel)
+        addSubview(completedIcon)
         configureUI()
     }
-    
     func configureUI() {
         NSLayoutConstraint.activate([
             circuitLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
@@ -91,15 +95,18 @@ private extension MainWorkoutCircuitCollectionCell {
             
             exercisesLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             exercisesLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            exercisesLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
+            
+            completedIcon.topAnchor.constraint(equalTo: exercisesLabel.bottomAnchor, constant: 8),
+            completedIcon.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            completedIcon.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
 }
-
 // MARK: - Public Configuration
 extension MainWorkoutCircuitCollectionCell {
     public func configure(with model: CircuitModel) {
         titleLabel.text = model.circuitName
         exercisesLabel.text = model.exercises.count.description + " exercises"
+        completedIcon.image = model.completed ? UIImage(systemName: "checkmark.circle") : UIImage(systemName: "circle")
     }
 }

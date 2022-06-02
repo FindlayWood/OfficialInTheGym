@@ -146,7 +146,7 @@ class MainWorkoutExerciseCollectionCell: FullWidthCollectionViewCell {
 // MARK: - Configure
 private extension MainWorkoutExerciseCollectionCell {
     func setupUI() {
-        backgroundColor = .offWhiteColour
+        backgroundColor = .systemBackground
         layer.cornerRadius = 10
         contentView.layer.cornerRadius = 10
         contentView.addSubview(exerciseNameButton)

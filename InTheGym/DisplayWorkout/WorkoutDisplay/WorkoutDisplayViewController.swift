@@ -107,9 +107,7 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
             .store(in: &subscriptions)
         
         childVC.dataSource.circuitSelected
-            .sink { [weak self] model in
-                guard let self = self else {return}
-                self.coordinator?.showCircuit(model, self.viewModel.workout)}
+            .sink { [weak self] in self?.circuitSelected($0)}
             .store(in: &subscriptions)
         
         childVC.dataSource.amrapSelected
@@ -191,6 +189,10 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
         viewModel.editAction
             .sink { [weak self] in self?.editSet($0)}
             .store(in: &subscriptions)
+        
+        viewModel.updatedCircuit
+            .sink { [weak self] in self?.childVC.dataSource.updateCircuit($0)}
+            .store(in: &subscriptions)
     }
     // MARK: - RPE
     func rpe(index: IndexPath) {
@@ -247,5 +249,8 @@ extension WorkoutDisplayViewController {
     func editSet(_ set: ExerciseSet) {
         guard let exercise = viewModel.showExerciseDetail else {return}
         coordinator?.editSet(exerciseModel: exercise, publisher: viewModel.editedExercise, setNumber: set.set)
+    }
+    func circuitSelected(_ circuit: CircuitModel) {
+        coordinator?.showCircuit(circuit, viewModel.workout, viewModel.updatedCircuit)
     }
 }

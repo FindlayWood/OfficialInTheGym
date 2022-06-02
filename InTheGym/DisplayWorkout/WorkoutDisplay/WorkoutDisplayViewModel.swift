@@ -16,7 +16,7 @@ class WorkoutDisplayViewModel {
     var updatedExercise = PassthroughSubject<ExerciseModel,Never>()
     var editedExercise = PassthroughSubject<ExerciseModel,Never>()
     var editAction = PassthroughSubject<ExerciseSet,Never>()
-    
+    var updatedCircuit = PassthroughSubject<CircuitModel,Never>()
     // MARK: - Properties
     var workout: WorkoutModel!
     var showExerciseDetail: ExerciseModel?
@@ -49,6 +49,9 @@ class WorkoutDisplayViewModel {
     func initSubscriptions() {
         editedExercise
             .sink { [weak self] in self?.editedExercise($0)}
+            .store(in: &subscriptions)
+        updatedCircuit
+            .sink { [weak self] in self?.updateCircuit($0)}
             .store(in: &subscriptions)
     }
     
@@ -102,6 +105,13 @@ class WorkoutDisplayViewModel {
         let exercises = exercises.filter { $0 is ExerciseModel }
         let exerciseModels = exercises.map { ($0 as! ExerciseModel)}
         workout.exercises = exerciseModels
+    }
+    // MARK: - Update Circuit
+    func updateCircuit(_ circuit: CircuitModel) {
+        exercises[circuit.workoutPosition] = circuit
+        let circuits = exercises.filter { $0 is CircuitModel }
+        let circuitModels = circuits.map { ($0 as! CircuitModel) }
+        workout.circuits = circuitModels
     }
     // MARK: - Retreive Function
     func isInteractionEnabled() -> Bool {

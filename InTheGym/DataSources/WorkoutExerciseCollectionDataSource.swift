@@ -121,6 +121,14 @@ class WorkoutExerciseCollectionDataSource: NSObject {
         currentSnapshot.deleteItems([item])
         dataDource.apply(currentSnapshot, animatingDifferences: false)
     }
+    // MARK: - Update Circuit
+    func updateCircuit(_ newCircuit: CircuitModel) {
+        guard let item = dataDource.itemIdentifier(for: IndexPath(item: newCircuit.workoutPosition, section: 0)) else {return}
+        var snapshot = dataDource.snapshot()
+        snapshot.insertItems([ExerciseRow.circuit(newCircuit)], afterItem: item)
+        snapshot.deleteItems([item])
+        dataDource.apply(snapshot, animatingDifferences: false)
+    }
     
     // MARK: - Retreive
     func getExercise(at indexPath: IndexPath) -> ExerciseModel? {

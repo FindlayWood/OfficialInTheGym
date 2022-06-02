@@ -32,6 +32,27 @@ extension UIViewController {
         }
         alert.showSuccess("RPE", subTitle: "Enter RPE score for this exercise.", closeButtonTitle: "Cancel")
     }
+    func showCircuitRPE(completion: @escaping (Int) -> Void) {
+        let alert = SCLAlertView()
+        let rpe = alert.addTextField()
+        rpe.placeholder = "enter rpe 1-10..."
+        rpe.keyboardType = .numberPad
+        rpe.becomeFirstResponder()
+        alert.addButton("Save") {
+            guard let score = rpe.text else {
+                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
+                return}
+            guard let scoreInt = Int(score) else {
+                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
+                return}
+            if scoreInt > 0 && scoreInt < 11 {
+                completion(scoreInt)
+            } else {
+                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
+            }
+        }
+        alert.showSuccess("RPE", subTitle: "Enter RPE for this circuit.", closeButtonTitle: "cancel")
+    }
     
     func showRPEEMOM(completion: @escaping (Int) -> Void) {
         let alert = SCLAlertView()

@@ -56,7 +56,8 @@ class Observable<T: Codable> {
     var valueChanged: ((T) -> Void)?
 }
 
-struct CircuitTableModel {
+struct CircuitTableModel: Hashable {
+    var id = UUID()
     var exerciseName:String
     var reps:Int
     var weight:String

@@ -10,10 +10,8 @@ import Foundation
 import UIKit
 
 class MainWorkoutAMRAPCollectionCell: FullWidthCollectionViewCell {
-    
     // MARK: - Properties
     static let reuseID = "MainWorkoutAMRAPCollectionCellreuseID"
-    
     // MARK: - Subviews
     var amrapLabel: UILabel = {
        let label = UILabel()
@@ -24,14 +22,12 @@ class MainWorkoutAMRAPCollectionCell: FullWidthCollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     var separatorView: UIView = {
        let view = UIView()
         view.backgroundColor = .black
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     var exerciseLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo", size: 20)
@@ -40,7 +36,6 @@ class MainWorkoutAMRAPCollectionCell: FullWidthCollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
        return label
     }()
-    
     var timeLabel: UILabel = {
        let label = UILabel()
         label.font = UIFont(name: "Menlo", size: 20)
@@ -49,26 +44,17 @@ class MainWorkoutAMRAPCollectionCell: FullWidthCollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    var completedLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .bold)
-        label.textAlignment = .right
-        label.text = "COMPLETED"
-        label.textColor = .green
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    var completedIcon: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.backgroundColor = .clear
+        view.image = UIImage(systemName: "circle")
+        view.tintColor = .darkColour
+        view.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        view.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
-    
-    var roundsLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .bold)
-        label.textAlignment = .center
-        label.textColor = Constants.darkColour
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -78,60 +64,47 @@ class MainWorkoutAMRAPCollectionCell: FullWidthCollectionViewCell {
         super.init(coder: coder)
         setupUI()
     }
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        //amrapModel.completed.valueChanged = nil
-        //amrapModel.roundsCompleted.valueChanged = nil
-        completedLabel.isHidden = true
-        roundsLabel.isHidden = true
-    }
 }
 // MARK: - Setup UI
 private extension MainWorkoutAMRAPCollectionCell {
     func setupUI() {
-        backgroundColor = .offWhiteColour
-        layer.cornerRadius = 10
+        backgroundColor = .systemBackground
+        layer.cornerRadius = 8
         layer.masksToBounds = true
         addSubview(amrapLabel)
         addSubview(separatorView)
         addSubview(exerciseLabel)
         addSubview(timeLabel)
-//        addSubview(completedLabel)
-        addSubview(roundsLabel)
+        addSubview(completedIcon)
         constrainUI()
     }
-    
     func constrainUI() {
         NSLayoutConstraint.activate([
             amrapLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             exerciseLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             timeLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
-            amrapLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            amrapLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             
-            separatorView.topAnchor.constraint(equalTo: amrapLabel.bottomAnchor, constant: 5),
+            separatorView.topAnchor.constraint(equalTo: amrapLabel.bottomAnchor, constant: 8),
             separatorView.heightAnchor.constraint(equalToConstant: 1),
-            separatorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            separatorView.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -10),
+            separatorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            separatorView.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -8),
             
-            exerciseLabel.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 10),
-            timeLabel.topAnchor.constraint(equalTo: exerciseLabel.bottomAnchor, constant: 10),
-            timeLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            exerciseLabel.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 16),
+            timeLabel.topAnchor.constraint(equalTo: exerciseLabel.bottomAnchor, constant: 8),
             
-//            completedLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-//            completedLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
-            
-            roundsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-            roundsLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5)
+            completedIcon.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 8),
+            completedIcon.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            completedIcon.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
 }
-
 // MARK: - Public Configuration
 extension MainWorkoutAMRAPCollectionCell {
-    
-    func configure(with model: AMRAPModel) {
+    public func configure(with model: AMRAPModel) {
         exerciseLabel.text = model.exercises.count.description + " exercises"
         timeLabel.text = model.timeLimit.convertToTime()
+        completedIcon.image = model.completed ? UIImage(systemName: "checkmark.circle") : UIImage(systemName: "circle")
     }
 }
