@@ -34,8 +34,8 @@ class OtherExerciseViewController: UIViewController {
     func initDisplay() {
         display.continueButton.addTarget(self, action: #selector(continueTapped(_:)), for: .touchUpInside)
         display.cancelButton.addTarget(self, action: #selector(cancelTapped(_:)), for: .touchUpInside)
-        display.textfield.delegate = self
-        display.textfield.textPublisher
+        display.exerciseTextField.delegate = self
+        display.exerciseTextField.textPublisher
             .sink { [weak self] in self?.viewModel.text = $0 }
             .store(in: &subscriptions)
     }
