@@ -203,4 +203,7 @@ extension WorkoutCreationView {
             assignView.isHidden = true
         }
     }
+    public func reset() {
+        workoutTitleField.text = ""
+    }
 }

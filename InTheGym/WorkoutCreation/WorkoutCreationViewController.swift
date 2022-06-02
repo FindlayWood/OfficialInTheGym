@@ -30,7 +30,6 @@ class WorkoutCreationViewController: UIViewController {
     override func loadView() {
         view = display
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -57,12 +56,12 @@ class WorkoutCreationViewController: UIViewController {
         navigationItem.rightBarButtonItem = uploadButton
         navigationItem.rightBarButtonItem?.isEnabled = false
     }
-    
+    // MARK: - Display
     func initDisplay() {
         display.configure(with: viewModel.assignTo)
         display.workoutTitleField.delegate = self
     }
-    
+    // MARK: - Targets
     func setUpActions() {
         display.plusButton.addTarget(self, action: #selector(plusButtonPressed(_:)), for: .touchUpInside)
         display.saveView.savingButton.addTarget(self, action: #selector(toggleSaving(_:)), for: .touchUpInside)
@@ -92,8 +91,7 @@ class WorkoutCreationViewController: UIViewController {
             .sink { [weak self] success in
                 guard let self = self else {return}
                 if success {
-                    // TODO: - Reset page
-                    // TODO: - Display Top View
+                    self.display.reset()
                     self.displayTopMessage(with: "Uploaded Workout!")
                     self.viewModel.reset()
                 }
@@ -104,7 +102,6 @@ class WorkoutCreationViewController: UIViewController {
             .sink { [weak self] error in
                 guard let self = self else {return}
                 if error {
-                    // TODO: - Display Top Alert
                     self.displayTopMessage(with: "Error! Please try again.")
                 }
             }

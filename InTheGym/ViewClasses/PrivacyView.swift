@@ -26,7 +26,7 @@ class PrivacyView: UIView {
     var privacyButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "public_icon"), for: .normal)
-        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
+//        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
 //        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false

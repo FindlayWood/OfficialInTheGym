@@ -26,6 +26,7 @@ class AssignView: UIView {
         let button = UIButton()
         button.imageView?.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 25
+        button.clipsToBounds = true
         button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -57,7 +58,6 @@ class AssignView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension AssignView {
@@ -72,8 +72,6 @@ private extension AssignView {
     
     func configureUI() {
         NSLayoutConstraint.activate([
-//            profileImage.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4),
-//            profileImage.heightAnchor.constraint(equalTo: profileImage.heightAnchor),
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             stack.leadingAnchor.constraint(equalTo: leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor),
