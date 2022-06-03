@@ -42,7 +42,6 @@ class DescriptionTableViewCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
     var timeLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 10, weight: .light)
@@ -63,6 +62,7 @@ class DescriptionTableViewCell: UITableViewCell {
         let button = UIButton()
         button.setImage(UIImage(systemName: "hand.thumbsup", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
         button.tintColor = .darkColour
+        button.imageView?.contentMode = .scaleAspectFill
         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -76,8 +76,6 @@ class DescriptionTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
-    
     // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -87,17 +85,16 @@ class DescriptionTableViewCell: UITableViewCell {
         super.init(coder: coder)
         setupUI()
     }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
         self.upVoteButton.setImage(notVoteImage, for: .normal)
         self.upVoteButton.isUserInteractionEnabled = true
     }
 }
-
 // MARK: - Setup UI
 private extension DescriptionTableViewCell {
     func setupUI() {
+        selectionStyle = .none
         contentView.addSubview(profileImageButton)
         contentView.addSubview(usernameButton)
         contentView.addSubview(timeLabel)
@@ -111,13 +108,13 @@ private extension DescriptionTableViewCell {
         NSLayoutConstraint.activate([
             profileImageButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             profileImageButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            
+
             usernameButton.leadingAnchor.constraint(equalTo: profileImageButton.trailingAnchor, constant: 10),
             usernameButton.topAnchor.constraint(equalTo: profileImageButton.topAnchor),
-            
+
             timeLabel.topAnchor.constraint(equalTo: usernameButton.bottomAnchor, constant: 1),
             timeLabel.leadingAnchor.constraint(equalTo: usernameButton.leadingAnchor, constant: 2),
-            
+
             descriptionText.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 15),
             descriptionText.leadingAnchor.constraint(equalTo: profileImageButton.trailingAnchor, constant: 10),
             
@@ -130,8 +127,6 @@ private extension DescriptionTableViewCell {
             
             descriptionText.trailingAnchor.constraint(equalTo: upVoteButton.leadingAnchor, constant: -8),
             descriptionText.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -16)
-            
-        
         ])
     }
     func initButtonActions() {
@@ -153,7 +148,6 @@ private extension DescriptionTableViewCell {
         actionPublisher.send(.userTapped)
     }
 }
-
 // MARK: - Public Configuration
 extension DescriptionTableViewCell {
     func configure(with model: DescriptionModel) {
@@ -173,8 +167,6 @@ extension DescriptionTableViewCell {
                 self?.profileImageButton.backgroundColor = .lightGray
             }
         }
-        
-        
         viewModel.votedPublishers
             .sink { [weak self] voted in
                 if voted {

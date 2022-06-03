@@ -13,16 +13,11 @@ class ExerciseClipsViewController: UIViewController, CustomAnimatingClipFromVC {
     
     // MARK: - Coordinator
     weak var coordinator: ClipSelectorFlow?
-    
     // MARK: - Properties
     var display = ExerciseClipsView()
-    
     var viewModel = ExerciseClipsViewModel()
-    
     var dataSource: ExerciseClipsDataSource!
-    
     private var subscriptions = Set<AnyCancellable>()
-    
     // MARK: - Clip Animation Variables
     var selectedCell: ClipCollectionCell?
     var selectedCellImageViewSnapshot: UIView?

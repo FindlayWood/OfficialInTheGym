@@ -13,6 +13,14 @@ class AddNewTagView: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
+    var cancelButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        button.tintColor = .darkColour
+        button.imageView?.contentMode = .scaleAspectFill
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
@@ -35,7 +43,7 @@ class AddNewTagView: UIView {
     }()
     var textfield: UITextField = {
         let view = UITextField()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .secondarySystemBackground
         view.layer.cornerRadius = 8
         view.placeholder = "add tag..."
         view.font = .systemFont(ofSize: 20, weight: .semibold)
@@ -73,17 +81,6 @@ class AddNewTagView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    var dismissButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Dismiss", for: .normal)
-        button.setTitleColor(.secondaryLabel, for: .normal)
-        button.backgroundColor = .white
-        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        button.layer.cornerRadius = 8
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -93,28 +90,26 @@ class AddNewTagView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension AddNewTagView {
     func setupUI() {
         backgroundColor = .secondarySystemBackground
+        addSubview(cancelButton)
         addSubview(stack)
-        addSubview(dismissButton)
         configureUI()
     }
     
     func configureUI() {
         NSLayoutConstraint.activate([
+            cancelButton.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            cancelButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 32),
             stack.leadingAnchor.constraint(equalTo: leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor),
             label.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.7),
             textfield.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8),
             addButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8),
-            dismissButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            dismissButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            dismissButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.7)
         ])
     }
 }

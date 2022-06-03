@@ -29,7 +29,6 @@ class ExerciseDescriptionViewController: UIViewController {
     override func loadView() {
         view = display
     }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         initSubscriptions()
@@ -37,13 +36,11 @@ class ExerciseDescriptionViewController: UIViewController {
         clipsVC.viewModel.exerciseModel = viewModel.exercise
         tagsVC.viewModel.exerciseModel = viewModel.exercise
     }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = viewModel.exercise.exerciseName
         editNavBarColour(to: .darkColour)
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if viewModel.selectedIndex == 0 {
@@ -54,7 +51,6 @@ class ExerciseDescriptionViewController: UIViewController {
             addToContainer(vc: tagsVC)
         }
     }
-    
     // MARK: - Container
     func addToContainer(vc controller: UIViewController) {
         addChild(controller)

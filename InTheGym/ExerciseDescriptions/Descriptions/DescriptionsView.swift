@@ -38,7 +38,6 @@ class DescriptionsView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension DescriptionsView {
@@ -47,7 +46,6 @@ private extension DescriptionsView {
         addSubview(plusButton)
         configureUI()
     }
-    
     func configureUI() {
         NSLayoutConstraint.activate([
             tableview.topAnchor.constraint(equalTo: topAnchor),

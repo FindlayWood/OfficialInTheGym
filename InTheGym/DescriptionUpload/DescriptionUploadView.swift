@@ -16,9 +16,9 @@ class DescriptionUploadView: UIView {
     // MARK: - Subviews
     var cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("cancel", for: .normal)
-        button.setTitleColor(.darkColour, for: .normal)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 15)
+        button.setImage(UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        button.tintColor = .darkColour
+        button.imageView?.contentMode = .scaleAspectFill
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -26,14 +26,11 @@ class DescriptionUploadView: UIView {
         let button = UIButton()
         button.setTitle("Upload", for: .normal)
         button.setTitleColor(.darkColour, for: .normal)
-        button.setTitleColor(.lightGray, for: .disabled)
+        button.setTitleColor(.secondarySystemBackground, for: .disabled)
         button.titleLabel?.font = .boldSystemFont(ofSize: 18)
-        button.layer.cornerRadius = 12
-        button.isEnabled = false
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
     var profileImage: UIImageView = {
         let view = UIImageView()
         view.backgroundColor = .lightGray
@@ -45,39 +42,30 @@ class DescriptionUploadView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+    var iconImageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.backgroundColor = .clear
+        view.image = UIImage(named: "note_icon")
+        view.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        view.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     lazy var descriptionTextView: UITextView = {
         let view = UITextView()
         view.addToolBar()
         view.font = .systemFont(ofSize: 17, weight: .medium)
-        view.textColor = .lightGray
+        view.textColor = .secondaryLabel
         view.text = placeholder
-        view.backgroundColor = .clear
+        view.backgroundColor = .secondarySystemBackground
         view.tintColor = .darkColour
         view.isScrollEnabled = true
         view.isUserInteractionEnabled = true
+        view.layer.cornerRadius = 8
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    var separatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        view.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    var messageLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .regular)
-        label.textColor = .white
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
     var loadingIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.color = .darkColour
@@ -86,7 +74,13 @@ class DescriptionUploadView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+    var characterCountLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 12, weight: .regular)
+        label.textColor = .tertiaryLabel
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -96,18 +90,17 @@ class DescriptionUploadView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension DescriptionUploadView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .secondarySystemBackground
         addSubview(cancelButton)
         addSubview(uploadButton)
+        addSubview(iconImageView)
         addSubview(profileImage)
         addSubview(descriptionTextView)
-        addSubview(separatorView)
-        addSubview(messageLabel)
+        addSubview(characterCountLabel)
         addSubview(loadingIndicator)
         configureUI()
         setProfileImage()
@@ -116,12 +109,17 @@ private extension DescriptionUploadView {
     func configureUI() {
         NSLayoutConstraint.activate([
             cancelButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            cancelButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            cancelButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            cancelButton.widthAnchor.constraint(equalToConstant: 50),
+            cancelButton.heightAnchor.constraint(equalToConstant: 50),
             
-            uploadButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            uploadButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             uploadButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             
-            profileImage.topAnchor.constraint(equalTo: uploadButton.bottomAnchor, constant: 8),
+            iconImageView.topAnchor.constraint(equalTo: cancelButton.bottomAnchor),
+            iconImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
+            profileImage.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 8),
             profileImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             
             descriptionTextView.topAnchor.constraint(equalTo: profileImage.topAnchor),
@@ -129,16 +127,11 @@ private extension DescriptionUploadView {
             descriptionTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             descriptionTextView.heightAnchor.constraint(equalToConstant: 200),
             
-            separatorView.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 4),
-            separatorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            separatorView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            
-            messageLabel.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 8),
-            messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            characterCountLabel.trailingAnchor.constraint(equalTo: descriptionTextView.trailingAnchor),
+            characterCountLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 4),
             
             loadingIndicator.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            loadingIndicator.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            loadingIndicator.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             loadingIndicator.widthAnchor.constraint(equalToConstant: 30),
             loadingIndicator.heightAnchor.constraint(equalToConstant: 30)
         ])
@@ -167,5 +160,9 @@ extension DescriptionUploadView {
             cancelButton.isHidden = false
             descriptionTextView.isUserInteractionEnabled = true
         }
+    }
+    public func setCharacterCount(_ count: Int) {
+        guard count <= 500 else {return}
+        characterCountLabel.text = (500 - count).description
     }
 }
