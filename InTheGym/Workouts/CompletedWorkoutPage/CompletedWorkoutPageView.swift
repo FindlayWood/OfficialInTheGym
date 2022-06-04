@@ -329,10 +329,8 @@ class CompletedSummaryView: UIView {
     var summaryLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .medium)
-        label.textColor = .darkColour
+        label.textColor = .secondaryLabel
         label.numberOfLines = 0
-        label.backgroundColor = .red
-        label.text = "test test test /n test"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -345,13 +343,14 @@ class CompletedSummaryView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension CompletedSummaryView {
     func setupUI() {
-        backgroundColor = .offWhiteColour
-        layer.cornerRadius = 10
+        backgroundColor = .systemBackground
+        layer.cornerRadius = 8
+        layer.borderColor = UIColor.darkColour.cgColor
+        layer.borderWidth = 2
         addSubview(titleLabel)
         addSubview(imageView)
         addSubview(summaryLabel)
@@ -362,6 +361,7 @@ private extension CompletedSummaryView {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            titleLabel.heightAnchor.constraint(equalToConstant: 40),
             
             imageView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),

@@ -14,7 +14,7 @@ class CompletedWorkoutPageViewModel {
     // MARK: - Publisher
     var completedUpload = PassthroughSubject<Void,Never>()
     var errorUpload = PassthroughSubject<Error,Never>()
-    
+    var addedSummaryPublisher = PassthroughSubject<String,Never>()
     @Published var isLoading: Bool = false
     
     // MARK: - Properties
@@ -101,6 +101,8 @@ class CompletedWorkoutPageViewModel {
     func checkCompleted() {
         if !(workout.completed) {
             workout.timeToComplete = nil
+            workout.score = nil
+            workout.summary = nil
         }
     }
 }

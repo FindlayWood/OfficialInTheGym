@@ -51,7 +51,7 @@ class DescriptionUploadViewModel {
     
     // MARK: - Actions
     func updateText(with newText: String) {
-        postText = newText
+        postText = newText.trimTrailingWhiteSpaces()
     }
     
     // MARK: - Functions
