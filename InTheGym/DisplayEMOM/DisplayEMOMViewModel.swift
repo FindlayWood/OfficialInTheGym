@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 class DisplayEMOMViewModel {
     
@@ -29,6 +30,8 @@ class DisplayEMOMViewModel {
     var connectionError:(()->())?
     
     var exerciseToShow:((ExerciseModel)->())?
+    
+    var updatedEmomPublisher: PassthroughSubject<EMOMModel,Never>?
     
     // MARK: - Testing Variables
     var successfullyStartedEMOM: Bool = false
@@ -87,7 +90,7 @@ class DisplayEMOMViewModel {
         // TODO: - Update Firebase started = true
         startTimers()
         emomModel.started = true
-
+        
     }
     func completedMinute() {
         let numberOfExercises = emomModel.exercises.count
@@ -100,6 +103,8 @@ class DisplayEMOMViewModel {
         exerciseToShow?(exercises[position])
     }
     func emomCompleted() {
+        emomModel.completed = true
+        updatedEmomPublisher?.send(emomModel)
         // TODO: - Update Firebase completed = true
         guard let workoutModel = workoutModel else {
             return

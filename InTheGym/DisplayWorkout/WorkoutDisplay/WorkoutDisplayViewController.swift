@@ -101,9 +101,7 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
             .store(in: &subscriptions)
         
         childVC.dataSource.emomSelected
-            .sink { [weak self] model in
-                guard let self = self else {return}
-                self.coordinator?.showEMOM(model, self.viewModel.workout)}
+            .sink { [weak self] in self?.emomSelected($0) }
             .store(in: &subscriptions)
         
         childVC.dataSource.circuitSelected
@@ -111,9 +109,7 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
             .store(in: &subscriptions)
         
         childVC.dataSource.amrapSelected
-            .sink { [weak self] model in
-                guard let self = self else {return}
-                self.coordinator?.showAMRAP(model, self.viewModel.workout)}
+            .sink { [weak self] in self?.amrapSelected($0) }
             .store(in: &subscriptions)
         
         childVC.dataSource.rpeButtonTapped
@@ -193,6 +189,12 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
         viewModel.updatedCircuit
             .sink { [weak self] in self?.childVC.dataSource.updateCircuit($0)}
             .store(in: &subscriptions)
+        viewModel.updatedAMRAP
+            .sink { [weak self] in self?.childVC.dataSource.updateAMRAP($0)}
+            .store(in: &subscriptions)
+        viewModel.updatedEMOM
+            .sink { [weak self] in self?.childVC.dataSource.updateEMOM($0)}
+            .store(in: &subscriptions)
     }
     // MARK: - RPE
     func rpe(index: IndexPath) {
@@ -252,5 +254,11 @@ extension WorkoutDisplayViewController {
     }
     func circuitSelected(_ circuit: CircuitModel) {
         coordinator?.showCircuit(circuit, viewModel.workout, viewModel.updatedCircuit)
+    }
+    func amrapSelected(_ amrap: AMRAPModel) {
+        coordinator?.showAMRAP(amrap, viewModel.workout, viewModel.updatedAMRAP)
+    }
+    func emomSelected(_ emom: EMOMModel) {
+        coordinator?.showEMOM(emom, viewModel.workout, viewModel.updatedEMOM)
     }
 }

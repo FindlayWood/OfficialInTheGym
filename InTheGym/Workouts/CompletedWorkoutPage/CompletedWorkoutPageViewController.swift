@@ -44,7 +44,6 @@ class CompletedWorkoutPageViewController: UIViewController {
             viewModel.checkCompleted()
         }
     }
-    
     // MARK: - Display
     func initDisplay() {
         display.configure(with: viewModel.workout)
@@ -76,9 +75,7 @@ class CompletedWorkoutPageViewController: UIViewController {
             .sink { [weak self] _ in self?.completedUpload()}
             .store(in: &subscriptions)
     }
-
 }
-
 // MARK: - Actions
 extension CompletedWorkoutPageViewController {
     @objc func addRPEScore() {

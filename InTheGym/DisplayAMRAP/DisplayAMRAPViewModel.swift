@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 class DisplayAMRAPViewModel {
     
@@ -22,6 +23,7 @@ class DisplayAMRAPViewModel {
     var updateTimeLabelToRedHandler: (()->())?
     var timerCompleted: (()->())?
     var connectionError: (()->())?
+    var amrapUpdatedPublisher: PassthroughSubject<AMRAPModel,Never>?
     
     // MARK: - Properties
     
@@ -33,27 +35,21 @@ class DisplayAMRAPViewModel {
     var exercises: CircularLinkedList<ExerciseModel> {
         return CircularLinkedList(amrapModel.exercises)
     }
-    
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
-    
-
     // MARK: - Start AMRAP
     func start() {
         // TODO: - Start the timer
         amrapModel.started = true
         startTimer()
     }
-
-
     // MARK: - Timer
     func startTimer() {
         seconds = amrapModel.timeLimit
         updateTimeLabelHandler?(seconds)
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
-
     }
     @objc func updateTimer() {
         if seconds > 0 {
@@ -68,6 +64,7 @@ class DisplayAMRAPViewModel {
     
     // MARK: - Complete Exercise
     func exerciseCompleted() {
+        updateStats(for: getCurrentExercise())
         amrapModel.exercisesCompleted += 1
         updateExercisesLabelHandler?(amrapModel.exercisesCompleted)
         updateCurrentExercise?(getCurrentExercise())
@@ -77,10 +74,12 @@ class DisplayAMRAPViewModel {
             updateRoundsLabelHandler?(amrapModel.roundsCompleted)
             updateDataBase(with: .rounds)
         }
+        amrapUpdatedPublisher?.send(amrapModel)
     }
     // MARK: - AMRAP Completed
     func amrapCompleted() {
         amrapModel.completed = true
+        amrapUpdatedPublisher?.send(amrapModel)
         updateDataBase(with: .completed)
     }
     func rpeScoreGiven(_ score: Int) {
@@ -109,13 +108,25 @@ class DisplayAMRAPViewModel {
 
         let updateModel = AMRAPUpdateModel(workout: workoutModel, amrap: amrapModel, type: type)
         let uploadModel = updateModel.uploadModel()
-        apiService.multiLocationUpload(data: [uploadModel]) { [weak self] result in
-            guard let self = self else {return}
+        
+        apiService.multiLocationUpload(data: [uploadModel]) { result in
             switch result {
             case .success(()): break
             case .failure(_):
-                //TODO: - Show connection error message
                 break
+            }
+        }
+    }
+    func updateStats(for exercise: ExerciseModel) {
+        DispatchQueue.global(qos: .background).async {
+            let statsUpdateModel = UpdateExerciseSetStatsModel(exerciseName: exercise.exercise, reps: (exercise.reps?[0])!, weight: exercise.weight?.first)
+            self.apiService.multiLocationUpload(data: statsUpdateModel.points) { result in
+                switch result {
+                case .success(_):
+                    break
+                case .failure(_):
+                    break
+                }
             }
         }
     }

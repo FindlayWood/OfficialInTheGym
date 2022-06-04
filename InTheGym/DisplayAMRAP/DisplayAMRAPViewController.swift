@@ -26,6 +26,9 @@ class DisplayAMRAPViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -34,28 +37,27 @@ class DisplayAMRAPViewController: UIViewController {
         initViewModel()
         initDisplay()
     }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         display.frame = getViewableFrameWithBottomSafeArea()
         displayAllExercises.frame = display.frame.insetBy(dx: 20, dy: 40)
         view.insertSubview(display, at: 0)
     }
-    
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.navigationItem.title = "AMRAP"
         editNavBarColour(to: .darkColour)
     }
     override func viewDidAppear(_ animated: Bool) {
         
     }
-    
+    // MARK: - Nav Bar
     func initNavBar() {
         let barButton = UIBarButtonItem(title: "Start", style: .done, target: self, action: #selector(startTimer))
         navigationItem.rightBarButtonItem = barButton
         navigationItem.rightBarButtonItem?.isEnabled = viewModel.isStartButtonEnabled()
     }
-    
+    // MARK: - Display
     func initDisplay() {
         display.amrapExerciseView.configure(with: viewModel.getCurrentExercise())
         let initialTime = viewModel.amrapModel.timeLimit
@@ -67,15 +69,11 @@ class DisplayAMRAPViewController: UIViewController {
     }
     
     func setup() {
-        
         allExercisesAdapter = .init(delegate: self)
         displayAllExercises.tableview.dataSource = allExercisesAdapter
-        
         display.helpIcon.addTarget(self, action: #selector(displayAllExercisesView), for: .touchUpInside)
-
     }
-    
-    // MARK: - Init View Model
+    // MARK: - View Model
     func initViewModel() {
         viewModel.updateTimeLabelHandler = { [weak self] newValue in
             guard let self = self else {return}
@@ -106,7 +104,6 @@ class DisplayAMRAPViewController: UIViewController {
         }
     }
 }
-
 // MARK: - Actions
 extension DisplayAMRAPViewController {
     @objc func startTimer() {
@@ -122,9 +119,7 @@ extension DisplayAMRAPViewController {
     @objc func doneButtonTapped(_ sender: UIButton) {
         viewModel.exerciseCompleted()
     }
-
 }
-
 // MARK: - Display All Exercises Delegate
 extension DisplayAMRAPViewController: DisplayAMRAPProtocol {
     func getExercise(at indexPath: IndexPath) -> ExerciseModel {

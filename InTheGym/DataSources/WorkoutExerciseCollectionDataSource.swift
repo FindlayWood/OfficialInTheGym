@@ -121,11 +121,25 @@ class WorkoutExerciseCollectionDataSource: NSObject {
         currentSnapshot.deleteItems([item])
         dataDource.apply(currentSnapshot, animatingDifferences: false)
     }
-    // MARK: - Update Circuit
+    // MARK: - Update Functions
     func updateCircuit(_ newCircuit: CircuitModel) {
         guard let item = dataDource.itemIdentifier(for: IndexPath(item: newCircuit.workoutPosition, section: 0)) else {return}
         var snapshot = dataDource.snapshot()
         snapshot.insertItems([ExerciseRow.circuit(newCircuit)], afterItem: item)
+        snapshot.deleteItems([item])
+        dataDource.apply(snapshot, animatingDifferences: false)
+    }
+    func updateAMRAP(_ newAmrap: AMRAPModel) {
+        guard let item = dataDource.itemIdentifier(for: IndexPath(item: newAmrap.workoutPosition, section: 0)) else {return}
+        var snapshot = dataDource.snapshot()
+        snapshot.insertItems([ExerciseRow.amrap(newAmrap)], afterItem: item)
+        snapshot.deleteItems([item])
+        dataDource.apply(snapshot, animatingDifferences: false)
+    }
+    func updateEMOM(_ newEmom: EMOMModel) {
+        guard let item = dataDource.itemIdentifier(for: IndexPath(item: newEmom.workoutPosition, section: 0)) else {return}
+        var snapshot = dataDource.snapshot()
+        snapshot.insertItems([ExerciseRow.emom(newEmom)], afterItem: item)
         snapshot.deleteItems([item])
         dataDource.apply(snapshot, animatingDifferences: false)
     }

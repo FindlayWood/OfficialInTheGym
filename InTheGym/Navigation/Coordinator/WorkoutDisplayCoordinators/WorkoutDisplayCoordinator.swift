@@ -37,10 +37,11 @@ extension WorkoutDisplayCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func showEMOM(_ emom: EMOMModel, _ workout: WorkoutModel) {
+    func showEMOM(_ emom: EMOMModel, _ workout: WorkoutModel, _ publisher: PassthroughSubject<EMOMModel,Never>) {
         let vc = DisplayEMOMViewController()
         vc.viewModel.emomModel = emom
         vc.viewModel.workoutModel = workout
+//        vc.viewModel.emomUpdatedPublisher = publisher
         navigationController.pushViewController(vc, animated: true)
     }
     func showCircuit(_ circuit: CircuitModel, _ workout: WorkoutModel, _ publisher: PassthroughSubject<CircuitModel,Never>) {
@@ -52,10 +53,11 @@ extension WorkoutDisplayCoordinator {
 //        vc.viewModel.workoutModel = workout
 //        navigationController.pushViewController(vc, animated: true)
     }
-    func showAMRAP(_ amrap: AMRAPModel, _ workout: WorkoutModel) {
+    func showAMRAP(_ amrap: AMRAPModel, _ workout: WorkoutModel, _ publisher: PassthroughSubject<AMRAPModel,Never>) {
         let vc = DisplayAMRAPViewController()
         vc.viewModel.amrapModel = amrap
         vc.viewModel.workoutModel = workout
+        vc.viewModel.amrapUpdatedPublisher = publisher
         navigationController.pushViewController(vc, animated: true)
     }
     func addClip(for exercise: ExerciseModel, _ workout: WorkoutModel, on delegate: ClipAdding) {

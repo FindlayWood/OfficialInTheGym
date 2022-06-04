@@ -16,7 +16,10 @@ class WorkoutDisplayViewModel {
     var updatedExercise = PassthroughSubject<ExerciseModel,Never>()
     var editedExercise = PassthroughSubject<ExerciseModel,Never>()
     var editAction = PassthroughSubject<ExerciseSet,Never>()
+    /// update publishers
     var updatedCircuit = PassthroughSubject<CircuitModel,Never>()
+    var updatedAMRAP = PassthroughSubject<AMRAPModel,Never>()
+    var updatedEMOM = PassthroughSubject<EMOMModel,Never>()
     // MARK: - Properties
     var workout: WorkoutModel!
     var showExerciseDetail: ExerciseModel?
@@ -52,6 +55,12 @@ class WorkoutDisplayViewModel {
             .store(in: &subscriptions)
         updatedCircuit
             .sink { [weak self] in self?.updateCircuit($0)}
+            .store(in: &subscriptions)
+        updatedAMRAP
+            .sink { [weak self] in self?.updateAMRAP($0)}
+            .store(in: &subscriptions)
+        updatedEMOM
+            .sink { [weak self] in self?.updateEMOM($0)}
             .store(in: &subscriptions)
     }
     
@@ -106,12 +115,24 @@ class WorkoutDisplayViewModel {
         let exerciseModels = exercises.map { ($0 as! ExerciseModel)}
         workout.exercises = exerciseModels
     }
-    // MARK: - Update Circuit
+    // MARK: - Update Functions
     func updateCircuit(_ circuit: CircuitModel) {
         exercises[circuit.workoutPosition] = circuit
         let circuits = exercises.filter { $0 is CircuitModel }
         let circuitModels = circuits.map { ($0 as! CircuitModel) }
         workout.circuits = circuitModels
+    }
+    func updateAMRAP(_ amrap: AMRAPModel) {
+        exercises[amrap.workoutPosition] = amrap
+        let amraps = exercises.filter { $0 is AMRAPModel }
+        let amrapModels = amraps.map { ($0 as! AMRAPModel) }
+        workout.amraps = amrapModels
+    }
+    func updateEMOM(_ emom: EMOMModel) {
+        exercises[emom.workoutPosition] = emom
+        let emoms = exercises.filter { $0 is EMOMModel }
+        let emomModels = emoms.map { ($0 as! EMOMModel)}
+        workout.emoms = emomModels
     }
     // MARK: - Retreive Function
     func isInteractionEnabled() -> Bool {
