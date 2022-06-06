@@ -21,6 +21,7 @@ class DescriptionUploadViewModel {
     var errorPublisher = PassthroughSubject<Error,Never>()
     
     // MARK: - Properties
+    var placeholder: String = "add a comment..."
     private var subscriptions = Set<AnyCancellable>()
     
     var descriptionModel: DescriptionModel!

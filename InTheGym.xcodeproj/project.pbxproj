@@ -81,6 +81,9 @@
 		741EC11F284BDCA8009B00AB /* AddWorkoutSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741EC11E284BDCA8009B00AB /* AddWorkoutSummaryViewController.swift */; };
 		741EC121284BDCBC009B00AB /* AddWorkoutSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741EC120284BDCBC009B00AB /* AddWorkoutSummaryViewModel.swift */; };
 		741EC123284BDCC7009B00AB /* AddWorkoutSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741EC122284BDCC7009B00AB /* AddWorkoutSummaryView.swift */; };
+		741EC126284BF6C0009B00AB /* ExerciseCommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741EC125284BF6C0009B00AB /* ExerciseCommentsViewController.swift */; };
+		741EC128284BF6D1009B00AB /* ExerciseCommentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741EC127284BF6D1009B00AB /* ExerciseCommentsViewModel.swift */; };
+		741EC12A284BF6DD009B00AB /* ExerciseCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741EC129284BF6DC009B00AB /* ExerciseCommentsView.swift */; };
 		741FB1B426603C350039EB29 /* FlashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1B326603C350039EB29 /* FlashView.swift */; };
 		741FB1B62666A5520039EB29 /* FirebasePostAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1B52666A5520039EB29 /* FirebasePostAPI.swift */; };
 		741FB1B92667DEB20039EB29 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FB1B82667DEB20039EB29 /* Exercise.swift */; };
@@ -712,6 +715,9 @@
 		74D31EA025FC18950024CC05 /* FollowersDisplayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D31E9E25FC18950024CC05 /* FollowersDisplayTableViewCell.swift */; };
 		74D31EA125FC18950024CC05 /* FollowersDisplayTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74D31E9F25FC18950024CC05 /* FollowersDisplayTableViewCell.xib */; };
 		74D31F0425FE47D50024CC05 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D31F0325FE47D50024CC05 /* NotificationManager.swift */; };
+		74D40193284CCADB00C8AA89 /* ExerciseRatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D40192284CCADB00C8AA89 /* ExerciseRatingViewController.swift */; };
+		74D40195284CCAE700C8AA89 /* ExerciseRatingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D40194284CCAE700C8AA89 /* ExerciseRatingViewModel.swift */; };
+		74D40197284CCAF100C8AA89 /* ExerciseRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D40196284CCAF100C8AA89 /* ExerciseRatingView.swift */; };
 		74D7F4D82629CD74006C3D5C /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D7F4D72629CD74006C3D5C /* SignUpViewModel.swift */; };
 		74D7F4DD2629CF6E006C3D5C /* SignUpUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D7F4DC2629CF6E006C3D5C /* SignUpUserModel.swift */; };
 		74D7F4FF262A5552006C3D5C /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D7F4FE262A5552006C3D5C /* StringExtension.swift */; };
@@ -800,6 +806,7 @@
 		74EEA754270C992A00911A77 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EEA753270C992A00911A77 /* Int+Extension.swift */; };
 		74EEA756270CAADC00911A77 /* EMOMExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EEA755270CAADC00911A77 /* EMOMExerciseView.swift */; };
 		74EEA758270DD3B700911A77 /* AVAsset+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EEA757270DD3B700911A77 /* AVAsset+Extension.swift */; };
+		74F0C6FC284E274800FE3A01 /* ExerciseRatingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0C6FB284E274800FE3A01 /* ExerciseRatingModel.swift */; };
 		74F18AD027D659790043551F /* PlayerDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F18ACF27D659790043551F /* PlayerDetailCoordinator.swift */; };
 		74F18AD727D65C680043551F /* CoachPlayerWorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F18AD627D65C680043551F /* CoachPlayerWorkoutsViewController.swift */; };
 		74F18AD927D65C7D0043551F /* CoachPlayerWorkoutsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F18AD827D65C7D0043551F /* CoachPlayerWorkoutsViewModel.swift */; };
@@ -968,6 +975,9 @@
 		741EC11E284BDCA8009B00AB /* AddWorkoutSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWorkoutSummaryViewController.swift; sourceTree = "<group>"; };
 		741EC120284BDCBC009B00AB /* AddWorkoutSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWorkoutSummaryViewModel.swift; sourceTree = "<group>"; };
 		741EC122284BDCC7009B00AB /* AddWorkoutSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWorkoutSummaryView.swift; sourceTree = "<group>"; };
+		741EC125284BF6C0009B00AB /* ExerciseCommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCommentsViewController.swift; sourceTree = "<group>"; };
+		741EC127284BF6D1009B00AB /* ExerciseCommentsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCommentsViewModel.swift; sourceTree = "<group>"; };
+		741EC129284BF6DC009B00AB /* ExerciseCommentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCommentsView.swift; sourceTree = "<group>"; };
 		741FB1B326603C350039EB29 /* FlashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashView.swift; sourceTree = "<group>"; };
 		741FB1B52666A5520039EB29 /* FirebasePostAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebasePostAPI.swift; sourceTree = "<group>"; };
 		741FB1B82667DEB20039EB29 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
@@ -1606,6 +1616,9 @@
 		74D31E9E25FC18950024CC05 /* FollowersDisplayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersDisplayTableViewCell.swift; sourceTree = "<group>"; };
 		74D31E9F25FC18950024CC05 /* FollowersDisplayTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FollowersDisplayTableViewCell.xib; sourceTree = "<group>"; };
 		74D31F0325FE47D50024CC05 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationManager.swift; path = InTheGym/FollowersModel/NotificationManager.swift; sourceTree = SOURCE_ROOT; };
+		74D40192284CCADB00C8AA89 /* ExerciseRatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRatingViewController.swift; sourceTree = "<group>"; };
+		74D40194284CCAE700C8AA89 /* ExerciseRatingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRatingViewModel.swift; sourceTree = "<group>"; };
+		74D40196284CCAF100C8AA89 /* ExerciseRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRatingView.swift; sourceTree = "<group>"; };
 		74D7F4D72629CD74006C3D5C /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		74D7F4DC2629CF6E006C3D5C /* SignUpUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpUserModel.swift; sourceTree = "<group>"; };
 		74D7F4FE262A5552006C3D5C /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
@@ -1694,6 +1707,7 @@
 		74EEA753270C992A00911A77 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		74EEA755270CAADC00911A77 /* EMOMExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EMOMExerciseView.swift; sourceTree = "<group>"; };
 		74EEA757270DD3B700911A77 /* AVAsset+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAsset+Extension.swift"; sourceTree = "<group>"; };
+		74F0C6FB284E274800FE3A01 /* ExerciseRatingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRatingModel.swift; sourceTree = "<group>"; };
 		74F18ACF27D659790043551F /* PlayerDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailCoordinator.swift; sourceTree = "<group>"; };
 		74F18AD627D65C680043551F /* CoachPlayerWorkoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachPlayerWorkoutsViewController.swift; sourceTree = "<group>"; };
 		74F18AD827D65C7D0043551F /* CoachPlayerWorkoutsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachPlayerWorkoutsViewModel.swift; sourceTree = "<group>"; };
@@ -1828,6 +1842,7 @@
 		74028E0E25E53695005A1D21 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				74F0C6FA284E273B00FE3A01 /* ExeerciseModels */,
 				749867702832CF9D0032A748 /* PostModels */,
 				74D93462282EF631005D15DE /* UserModels */,
 				74313E8E27E0F53400922ABF /* DiscoverModels */,
@@ -2099,6 +2114,16 @@
 			path = AddWorkoutSummary;
 			sourceTree = "<group>";
 		};
+		741EC124284BF6A9009B00AB /* ExerciseComments */ = {
+			isa = PBXGroup;
+			children = (
+				741EC125284BF6C0009B00AB /* ExerciseCommentsViewController.swift */,
+				741EC127284BF6D1009B00AB /* ExerciseCommentsViewModel.swift */,
+				741EC129284BF6DC009B00AB /* ExerciseCommentsView.swift */,
+			);
+			path = ExerciseComments;
+			sourceTree = "<group>";
+		};
 		741FB1B72667DE9B0039EB29 /* WorkoutModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -2241,6 +2266,8 @@
 		742C1C8427BD437600DD1BB0 /* ExerciseDescriptions */ = {
 			isa = PBXGroup;
 			children = (
+				74D40191284CCAC500C8AA89 /* ExerciseRating */,
+				741EC124284BF6A9009B00AB /* ExerciseComments */,
 				742FD567283EB1630025E43C /* ExerciseTags */,
 				742C1C9027BD875F00DD1BB0 /* Clips */,
 				742C1C8D27BD818F00DD1BB0 /* Descriptions */,
@@ -3784,6 +3811,16 @@
 			path = Notifications;
 			sourceTree = "<group>";
 		};
+		74D40191284CCAC500C8AA89 /* ExerciseRating */ = {
+			isa = PBXGroup;
+			children = (
+				74D40192284CCADB00C8AA89 /* ExerciseRatingViewController.swift */,
+				74D40194284CCAE700C8AA89 /* ExerciseRatingViewModel.swift */,
+				74D40196284CCAF100C8AA89 /* ExerciseRatingView.swift */,
+			);
+			path = ExerciseRating;
+			sourceTree = "<group>";
+		};
 		74D7F4D62629CCC4006C3D5C /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
@@ -4110,6 +4147,14 @@
 				74EE4EE62804C56600051451 /* HofBreathingView.swift */,
 			);
 			path = HofMethod;
+			sourceTree = "<group>";
+		};
+		74F0C6FA284E273B00FE3A01 /* ExeerciseModels */ = {
+			isa = PBXGroup;
+			children = (
+				74F0C6FB284E274800FE3A01 /* ExerciseRatingModel.swift */,
+			);
+			path = ExeerciseModels;
 			sourceTree = "<group>";
 		};
 		74F18AD127D65C130043551F /* PlayerWorkouts */ = {
@@ -4622,6 +4667,7 @@
 				74BDA835246C479F00DFAEEF /* PlayerInfoCell.swift in Sources */,
 				742C1C5F27B5737300DD1BB0 /* UINameUsernameSubView.swift in Sources */,
 				7444D0AA26D2AF200009C7A6 /* SwiftUICard.swift in Sources */,
+				741EC126284BF6C0009B00AB /* ExerciseCommentsViewController.swift in Sources */,
 				741FB1B426603C350039EB29 /* FlashView.swift in Sources */,
 				744AED1C2796FE45000D2D74 /* MainWorkoutCircuitCollectionCell.swift in Sources */,
 				74B48E0F27A442CD00BBFC16 /* ExerciseAction.swift in Sources */,
@@ -4791,6 +4837,7 @@
 				74FDB5B726A77F04000649CC /* ClipModels.swift in Sources */,
 				742FD581283FCF430025E43C /* AddNewTagView.swift in Sources */,
 				74318F4426B80DF7009EDFAC /* CreateCircuitView.swift in Sources */,
+				74D40195284CCAE700C8AA89 /* ExerciseRatingViewModel.swift in Sources */,
 				743330A32787944F005A0C45 /* WorkoutCreationAdapter.swift in Sources */,
 				74B48DEE27A1FE6A00BBFC16 /* PostLoader.swift in Sources */,
 				7479813A27DBA50100CF3F9B /* UITableViewCell+Extension.swift in Sources */,
@@ -4863,6 +4910,7 @@
 				742565AB277F9A9400A7764D /* MyGroupsView.swift in Sources */,
 				7403A60526C5591D000588CE /* GroupHomePageView.swift in Sources */,
 				74E79E69283AF24C002578BB /* PostInteractionsSubview.swift in Sources */,
+				74D40193284CCADB00C8AA89 /* ExerciseRatingViewController.swift in Sources */,
 				743A0501276A873F0027B752 /* CommentSectionViewModel.swift in Sources */,
 				7429783A26C151AF0023365E /* CreateNewGroupViewController.swift in Sources */,
 				7403D05C280B7E6C00268CEC /* ClipProfileCustomCoordinator.swift in Sources */,
@@ -4940,6 +4988,7 @@
 				746BFFAC26B304270010C465 /* ThumbnailGenerator.swift in Sources */,
 				74F45CD3260A9DBC00AF16DF /* PublicTimelineProtocol.swift in Sources */,
 				747B676A2600071C000AD6B7 /* DateExtension.swift in Sources */,
+				741EC12A284BF6DD009B00AB /* ExerciseCommentsView.swift in Sources */,
 				743330E4279311BE005A0C45 /* SavedWorkoutsView.swift in Sources */,
 				74028E5C25E693FB005A1D21 /* TopView.swift in Sources */,
 				744AED1E2797010A000D2D74 /* MainWorkoutAMRAPCollectionCell.swift in Sources */,
@@ -4998,6 +5047,7 @@
 				743E93412809AA2A0029F447 /* ProfileDataSource.swift in Sources */,
 				749222BD28106266008C6CB1 /* SavedProgramOptionsDisplayViewController.swift in Sources */,
 				74B6F68A2744242B00A72679 /* LoginView.swift in Sources */,
+				741EC128284BF6D1009B00AB /* ExerciseCommentsViewModel.swift in Sources */,
 				742FD573283FAD350025E43C /* SearchTagsDataSource.swift in Sources */,
 				7425D4182545AE8000567DAB /* Constants.swift in Sources */,
 				741858FA283D70980042B81B /* DisplayWorkoutsCollectionHeader.swift in Sources */,
@@ -5025,6 +5075,7 @@
 				747B67A12600F1DC000AD6B7 /* TimelineCompletedWorkoutTableViewCell.swift in Sources */,
 				7466A84F25EFCCE900F4050F /* PlayerMyInfoViewModel.swift in Sources */,
 				747B673E25FFBEE8000AD6B7 /* DisplayNotificationsViewModel.swift in Sources */,
+				74D40197284CCAF100C8AA89 /* ExerciseRatingView.swift in Sources */,
 				744D563826F3975100D3E1FA /* EMOMCoordinator.swift in Sources */,
 				7479813F27DF7AE000CF3F9B /* NotificationModel.swift in Sources */,
 				74FDB5AE26976DB8000649CC /* FirebaseVideoUploader.swift in Sources */,
@@ -5148,6 +5199,7 @@
 				74EE4EE72804C56600051451 /* HofBreathingView.swift in Sources */,
 				74F2CCD826E1284100D7AD79 /* ExerciseSelectionHeader.swift in Sources */,
 				7420399928329A3100074ECB /* MyFollowersViewModel.swift in Sources */,
+				74F0C6FC284E274800FE3A01 /* ExerciseRatingModel.swift in Sources */,
 				743E933F2809A7320029F447 /* ProfileInfoCollectionViewCell.swift in Sources */,
 				743330C7278F2CB0005A0C45 /* SaveView.swift in Sources */,
 				741EC123284BDCC7009B00AB /* AddWorkoutSummaryView.swift in Sources */,

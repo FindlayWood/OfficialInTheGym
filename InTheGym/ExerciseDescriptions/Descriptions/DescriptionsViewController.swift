@@ -32,6 +32,7 @@ class DescriptionsViewController: UIViewController {
     // MARK: - Button Targets
     func initButtonActions() {
         display.plusButton.addTarget(self, action: #selector(plusButtonPressed(_:)), for: .touchUpInside)
+        display.addRatingButton.addTarget(self, action: #selector(addRatingButtonAction(_:)), for: .touchUpInside)
     }
     
     // MARK: - Data Source
@@ -41,6 +42,14 @@ class DescriptionsViewController: UIViewController {
     
     // MARK: - View Model
     func initViewModel() {
+        viewModel.$rating
+            .compactMap { $0 }
+            .sink { [weak self] in self?.display.setRating(to: $0)}
+            .store(in: &subscriptions)
+        viewModel.$ratingCount
+            .compactMap { $0 }
+            .sink { [weak self] in self?.display.setRatingCount(to: $0)}
+            .store(in: &subscriptions)
         viewModel.$descriptionModels
             .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
@@ -50,6 +59,8 @@ class DescriptionsViewController: UIViewController {
             .store(in: &subscriptions)
         
         viewModel.fetchModels()
+        viewModel.loadRating()
+        viewModel.initSubscriptions()
     }
 }
 // MARK: - Button Actions
@@ -57,5 +68,12 @@ private extension DescriptionsViewController {
     @objc func plusButtonPressed(_ sender: UIButton) {
         let descriptionModel = DescriptionModel(exercise: viewModel.exerciseModel.exerciseName, description: "")
         coordinator?.addNewDescription(descriptionModel, publisher: viewModel.newDescriptionListener)
+    }
+    @objc func addRatingButtonAction(_ sender: UIButton) {
+        let vc = ExerciseRatingViewController()
+        vc.viewModel.exerciseModel = viewModel.exerciseModel
+        vc.viewModel.addedRatingPublisher = viewModel.addedRatingPublisher
+        vc.viewModel.currentRating = viewModel.rating
+        navigationController?.present(vc, animated: true)
     }
 }

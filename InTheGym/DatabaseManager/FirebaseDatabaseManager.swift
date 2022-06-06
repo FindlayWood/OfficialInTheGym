@@ -116,6 +116,27 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         }
     }
     
+    func fetchSingleObjectInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
+        var tempModels = [T]()
+        let DBRef = Database.database().reference().child(model.internalPath)
+        DBRef.observeSingleEvent(of: .value) { snapshot in
+            for child in snapshot.children.allObjects as! [DataSnapshot] {
+                guard let object = child.value as? T else {
+                    completion(.failure(NSError(domain: "wrong data type", code: 0, userInfo: nil)))
+                    return
+                }
+                do {
+                    let data = try FirebaseDecoder().decode(returnType, from: object)
+                    tempModels.insert(data, at: 0)
+                }
+                catch {
+                    print(String(describing: error))
+                }
+            }
+            completion(.success(tempModels))
+        }
+    }
+    
     func fetchRange<M: FirebaseInstance, T: Decodable>(from models: [M], returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
         var tempModels = [T]()
         let dispatchGroup = DispatchGroup()
@@ -301,4 +322,5 @@ protocol FirebaseDatabaseManagerService {
     func searchQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<T,Error>) -> Void)
     func fetchLimited<Model: FirebaseModel>(model: Model.Type, limit: Int, completion: @escaping (Result<[Model],Error>) -> Void)
     func searchTextQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
+    func fetchSingleObjectInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
  }

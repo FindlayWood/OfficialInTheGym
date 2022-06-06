@@ -16,7 +16,7 @@ class DescriptionUploadView: UIView {
     // MARK: - Subviews
     var cancelButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        button.setImage(UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20)), for: .normal)
         button.tintColor = .darkColour
         button.imageView?.contentMode = .scaleAspectFill
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -24,10 +24,9 @@ class DescriptionUploadView: UIView {
     }()
     var uploadButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Upload", for: .normal)
-        button.setTitleColor(.darkColour, for: .normal)
-        button.setTitleColor(.secondarySystemBackground, for: .disabled)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 18)
+        button.setImage(UIImage(systemName: "arrow.up.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)), for: .normal)
+        button.tintColor = .darkColour
+        button.imageView?.contentMode = .scaleAspectFill
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -52,12 +51,11 @@ class DescriptionUploadView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    lazy var descriptionTextView: UITextView = {
+    var descriptionTextView: UITextView = {
         let view = UITextView()
         view.addToolBar()
-        view.font = .systemFont(ofSize: 17, weight: .medium)
+        view.font = .systemFont(ofSize: 20, weight: .medium)
         view.textColor = .secondaryLabel
-        view.text = placeholder
         view.backgroundColor = .secondarySystemBackground
         view.tintColor = .darkColour
         view.isScrollEnabled = true
@@ -110,8 +108,6 @@ private extension DescriptionUploadView {
         NSLayoutConstraint.activate([
             cancelButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             cancelButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            cancelButton.widthAnchor.constraint(equalToConstant: 50),
-            cancelButton.heightAnchor.constraint(equalToConstant: 50),
             
             uploadButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             uploadButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),

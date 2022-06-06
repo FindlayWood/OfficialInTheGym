@@ -30,6 +30,7 @@ class DescriptionUploadViewController: UIViewController {
     // MARK: - Display
     func initDisplay() {
         display.descriptionTextView.delegate = self
+        display.descriptionTextView.text = viewModel.placeholder
         display.setCharacterCount(0)
         display.descriptionTextView.textChangedPublisher
             .sink { [weak self] in self?.viewModel.updateText(with: $0)}
@@ -81,7 +82,7 @@ extension DescriptionUploadViewController: UITextViewDelegate {
     }
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty || textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            textView.text = display.placeholder
+            textView.text = viewModel.placeholder
             textView.textColor = .secondaryLabel
             display.uploadButton.isEnabled = false
         }
