@@ -32,7 +32,7 @@ class WorkoutCreationViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .secondarySystemBackground
         display.exercisesTableView.dataSource = dataSource
         initAdapter()
         initialTableSetup()
@@ -49,6 +49,7 @@ class WorkoutCreationViewController: UIViewController {
     
     func initAdapter() {
         display.exercisesTableView.separatorStyle = .singleLine
+        display.exercisesTableView.backgroundColor = .secondarySystemBackground
     }
     
     func initNavBar() {
@@ -59,7 +60,7 @@ class WorkoutCreationViewController: UIViewController {
     // MARK: - Display
     func initDisplay() {
         display.configure(with: viewModel.assignTo)
-        display.workoutTitleField.delegate = self
+        display.titleTextField.delegate = self
     }
     // MARK: - Targets
     func setUpActions() {
@@ -185,7 +186,7 @@ extension WorkoutCreationViewController {
 extension WorkoutCreationViewController {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string).trimTrailingWhiteSpaces()
-        if textField == display.workoutTitleField {
+        if textField == display.titleTextField {
             viewModel.updateTitle(with: newString)
         }
         return true

@@ -75,15 +75,8 @@ class CreateNewPostView: UIView {
     }()
     var removeAttachmentButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .red
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.black.cgColor
-        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        button.layer.cornerRadius = 15
-        button.setTitle("X", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 15)
+        button.setImage(UIImage(systemName: "xmark.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)), for: .normal)
+        button.tintColor = .red
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -138,8 +131,6 @@ class CreateNewPostView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
-    
     lazy var privacyButton: UIButton = {
         let button = UIButton()
         button.setImage(publicImage, for: .normal)

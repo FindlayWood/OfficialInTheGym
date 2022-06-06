@@ -19,7 +19,7 @@ class UISaveView: UIView {
         label.text = "Save"
         label.font = .systemFont(ofSize: 20, weight: .bold)
         label.textAlignment = .center
-        label.textColor = .white
+        label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -27,9 +27,7 @@ class UISaveView: UIView {
         let button = UIButton()
         button.setImage(UIImage(named: "Workout Completed"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
-//        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-//        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -40,7 +38,6 @@ class UISaveView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -50,19 +47,17 @@ class UISaveView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension UISaveView {
     func setupUI() {
-        backgroundColor = .lightColour
+        backgroundColor = .secondarySystemBackground
         layer.cornerRadius = 8
-        layer.borderColor = UIColor.black.cgColor
-        layer.borderWidth = 2
+        layer.borderColor = UIColor.darkColour.cgColor
+//        layer.borderWidth = 2
         addSubview(stack)
         configureUI()
     }
-    
     func configureUI() {
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
@@ -70,15 +65,12 @@ private extension UISaveView {
             stack.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
-    
     @objc func buttonTapped(_ sender: UIButton) {
         self.saving.toggle()
         let newButtonImage = saving ? UIImage(named: "Workout Completed") : UIImage(named: "Workout UnCompleted")
         savingButton.setImage(newButtonImage, for: .normal)
     }
-
 }
-
 // MARK: - Public Configuration
 extension UISaveView {
     public func configure(with saving: Bool) {

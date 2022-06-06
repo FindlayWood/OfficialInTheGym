@@ -13,46 +13,27 @@ class WorkoutCreationView: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
-    var titleView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .lightColour
-        view.layer.cornerRadius = 8
-        view.layer.borderColor = UIColor.black.cgColor
-        view.layer.borderWidth = 2
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.text = "Title:"
-        label.textColor = .white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    var workoutTitleField: SkyFloatingLabelTextField = {
-        let field = SkyFloatingLabelTextField()
-        field.tintColor = .white
-        field.returnKeyType = .done
-        field.textColor = .white
-        field.placeholderColor = .lightGray
-        field.selectedLineHeight = 4
-        field.lineHeight = 2
-        field.titleColor = .white
-        field.lineColor = .white
-        field.title = ""
-        field.selectedTitle = ""
-        field.selectedTitleColor = .white
-        field.selectedLineColor = .white
-        field.placeholder = "enter workout title..."
-        field.font = .systemFont(ofSize: 20, weight: .bold)
-        field.clearButtonMode = .never
+    var titleTextField: UITextField = {
+        let field = UITextField()
+        field.placeholder = "enter title..."
+        field.textColor = .label
+        field.font = .systemFont(ofSize: 22, weight: .bold)
+        field.adjustsFontSizeToFitWidth = true
+        field.minimumFontSize = 8
+        field.tintColor = .darkColour
         field.autocapitalizationType = .words
-        field.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        field.backgroundColor = .secondarySystemBackground
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
-
+    var optionsLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.textColor = .label
+        label.text = "Options:"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     var privacyView: PrivacyView = {
         let view = PrivacyView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -76,27 +57,17 @@ class WorkoutCreationView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    var exercisesView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .lightColour
-        view.layer.cornerRadius = 8
-        view.layer.borderColor = UIColor.black.cgColor
-        view.layer.borderWidth = 2
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
     var exercisesLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .bold)
         label.text = "Exercises:"
-        label.textColor = .white
+        label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     var exercisesTableView: UITableView = {
         let view = UITableView()
         view.tableFooterView = UIView()
-        view.layer.cornerRadius = 8
         view.register(ExerciseCreationTableViewCell.self, forCellReuseIdentifier: ExerciseCreationTableViewCell.cellID)
         view.register(CircuitCreationTableViewCell.self, forCellReuseIdentifier: CircuitCreationTableViewCell.cellID)
         view.register(EmomCreationTableViewCell.self, forCellReuseIdentifier: EmomCreationTableViewCell.cellID)
@@ -107,9 +78,8 @@ class WorkoutCreationView: UIView {
     }()
     var plusButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "bluePlus3"), for: .normal)
-        button.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 100)), for: .normal)
+        button.tintColor = .lightColour
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -124,7 +94,6 @@ class WorkoutCreationView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -134,58 +103,45 @@ class WorkoutCreationView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension WorkoutCreationView {
     func setupUI() {
-        backgroundColor = .white
-        titleView.addSubview(workoutTitleField)
-        titleView.addSubview(titleLabel)
-        exercisesView.addSubview(exercisesLabel)
-        exercisesView.addSubview(exercisesTableView)
-        exercisesView.addSubview(plusButton)
-        addSubview(titleView)
+        backgroundColor = .secondarySystemBackground
+        addSubview(titleTextField)
+        addSubview(optionsLabel)
         addSubview(middleStack)
-        addSubview(exercisesView)
+        addSubview(exercisesLabel)
+        addSubview(exercisesTableView)
+        addSubview(plusButton)
         addSubview(emptyMessage)
         configureUI()
     }
-    
     func configureUI() {
         NSLayoutConstraint.activate([
-            titleView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
-            titleView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            titleView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            
-            titleLabel.topAnchor.constraint(equalTo: titleView.topAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: titleView.leadingAnchor, constant: 8),
-            
-            workoutTitleField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: -4),
-            workoutTitleField.leadingAnchor.constraint(equalTo: titleView.leadingAnchor, constant: 8),
-            workoutTitleField.trailingAnchor.constraint(equalTo: titleView.trailingAnchor, constant: -8),
-            workoutTitleField.bottomAnchor.constraint(equalTo: titleView.bottomAnchor, constant: -20),
-            
-            middleStack.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 8),
-            middleStack.leadingAnchor.constraint(equalTo: titleView.leadingAnchor),
-            middleStack.trailingAnchor.constraint(equalTo: titleView.trailingAnchor),
-            
+            titleTextField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
+            titleTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            titleTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            titleTextField.heightAnchor.constraint(equalToConstant: 40),
+
+            optionsLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 16),
+            optionsLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+
+            middleStack.topAnchor.constraint(equalTo: optionsLabel.bottomAnchor, constant: 8),
+            middleStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            middleStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+
             saveView.heightAnchor.constraint(equalTo: privacyView.heightAnchor),
-            
-            exercisesView.topAnchor.constraint(equalTo: middleStack.bottomAnchor, constant: 8),
-            exercisesView.leadingAnchor.constraint(equalTo: titleView.leadingAnchor),
-            exercisesView.trailingAnchor.constraint(equalTo: titleView.trailingAnchor),
-            exercisesView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-            
-            exercisesLabel.topAnchor.constraint(equalTo: exercisesView.topAnchor, constant: 10),
-            exercisesLabel.leadingAnchor.constraint(equalTo: exercisesView.leadingAnchor, constant: 10),
+
+            exercisesLabel.topAnchor.constraint(equalTo: middleStack.bottomAnchor, constant: 16),
+            exercisesLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             exercisesTableView.topAnchor.constraint(equalTo: exercisesLabel.bottomAnchor, constant: 8),
-            exercisesTableView.leadingAnchor.constraint(equalTo: exercisesView.leadingAnchor, constant: 10),
-            exercisesTableView.trailingAnchor.constraint(equalTo: exercisesView.trailingAnchor, constant: -10),
-            exercisesTableView.bottomAnchor.constraint(equalTo: exercisesView.bottomAnchor, constant: -10),
+            exercisesTableView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            exercisesTableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            exercisesTableView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            plusButton.trailingAnchor.constraint(equalTo: exercisesTableView.trailingAnchor, constant: -5),
-            plusButton.bottomAnchor.constraint(equalTo: exercisesTableView.bottomAnchor, constant: -5),
+            plusButton.trailingAnchor.constraint(equalTo: exercisesTableView.trailingAnchor),
+            plusButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
             
             emptyMessage.centerXAnchor.constraint(equalTo: exercisesTableView.centerXAnchor),
             emptyMessage.centerYAnchor.constraint(equalTo: exercisesTableView.centerYAnchor),
@@ -204,6 +160,6 @@ extension WorkoutCreationView {
         }
     }
     public func reset() {
-        workoutTitleField.text = ""
+        titleTextField.text = ""
     }
 }

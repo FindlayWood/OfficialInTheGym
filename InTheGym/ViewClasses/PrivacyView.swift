@@ -19,16 +19,14 @@ class PrivacyView: UIView {
         label.text = "Privacy"
         label.font = .systemFont(ofSize: 20, weight: .bold)
         label.textAlignment = .center
-        label.textColor = .white
+        label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     var privacyButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "public_icon"), for: .normal)
-//        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-//        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -36,7 +34,7 @@ class PrivacyView: UIView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .semibold)
         label.text = "Public"
-        label.textColor = .white
+        label.textColor = .label
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -63,10 +61,10 @@ class PrivacyView: UIView {
 // MARK: - Configure
 private extension PrivacyView {
     func setupUI() {
-        backgroundColor = .lightColour
+        backgroundColor = .secondarySystemBackground
         layer.cornerRadius = 8
-        layer.borderColor = UIColor.black.cgColor
-        layer.borderWidth = 2
+        layer.borderColor = UIColor.darkColour.cgColor
+//        layer.borderWidth = 2
         addSubview(stack)
         configureUI()
     }

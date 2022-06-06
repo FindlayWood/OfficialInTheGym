@@ -18,7 +18,7 @@ class AssignView: UIView {
         label.text = "Assign To"
         label.font = .systemFont(ofSize: 20, weight: .bold)
         label.textAlignment = .center
-        label.textColor = .white
+        label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -35,7 +35,7 @@ class AssignView: UIView {
     var bottomLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .semibold)
-        label.textColor = .lightGray
+        label.textColor = .secondaryLabel
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -62,10 +62,10 @@ class AssignView: UIView {
 // MARK: - Configure
 private extension AssignView {
     func setupUI() {
-        backgroundColor = .lightColour
+        backgroundColor = .secondarySystemBackground
         layer.cornerRadius = 8
-        layer.borderColor = UIColor.black.cgColor
-        layer.borderWidth = 2
+        layer.borderColor = UIColor.darkColour.cgColor
+//        layer.borderWidth = 2
         addSubview(stack)
         configureUI()
     }
