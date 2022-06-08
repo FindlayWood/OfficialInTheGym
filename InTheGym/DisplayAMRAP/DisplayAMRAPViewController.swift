@@ -37,12 +37,12 @@ class DisplayAMRAPViewController: UIViewController {
         initViewModel()
         initDisplay()
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getViewableFrameWithBottomSafeArea()
-        displayAllExercises.frame = display.frame.insetBy(dx: 20, dy: 40)
-        view.insertSubview(display, at: 0)
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        display.frame = getViewableFrameWithBottomSafeArea()
+//        displayAllExercises.frame = display.frame.insetBy(dx: 20, dy: 40)
+//        view.insertSubview(display, at: 0)
+//    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.title = "AMRAP"
@@ -59,6 +59,7 @@ class DisplayAMRAPViewController: UIViewController {
     }
     // MARK: - Display
     func initDisplay() {
+        displayAllExercises.frame = display.frame.insetBy(dx: 20, dy: 40)
         display.amrapExerciseView.configure(with: viewModel.getCurrentExercise())
         let initialTime = viewModel.amrapModel.timeLimit
         display.initialTimeLabel.text = initialTime.convertToTime()

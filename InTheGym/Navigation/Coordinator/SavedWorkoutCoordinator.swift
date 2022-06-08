@@ -33,9 +33,9 @@ class SavedWorkoutCoordinator: NSObject, Coordinator {
 
 // MARK: - Methods
 extension SavedWorkoutCoordinator {
-    func showWorkoutStats(with savedWorkoutID: String) {
+    func showWorkoutStats() {
         let vc = DisplayWorkoutStatsViewController()
-        vc.savedWorkoutID = savedWorkoutID
+        vc.viewModel.savedWorkoutModel = savedWorkoutModel
         navigationController.pushViewController(vc, animated: true)
     }
     func showUser(_ user: Users) {

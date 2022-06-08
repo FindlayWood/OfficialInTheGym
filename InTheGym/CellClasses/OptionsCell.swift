@@ -38,8 +38,6 @@ final class OptionsCell: FullWidthCollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,13 +47,11 @@ final class OptionsCell: FullWidthCollectionViewCell {
         super.init(coder: coder)
         setupUI()
     }
-
 }
 // MARK: - Configure
 private extension OptionsCell {
     func setupUI() {
-        backgroundColor = .offWhiteColour
-        addViewShadow(with: .darkColour)
+        backgroundColor = .systemBackground
         layer.cornerRadius = 8
         contentView.addSubview(titleLabel)
         contentView.addSubview(optionIcon)
@@ -83,8 +79,10 @@ extension OptionsCell {
         titleLabel.text = option.rawValue
         optionIcon.image = option.image
         if option == .delete {
+            titleLabel.textColor = .red
             optionIcon.tintColor = .red
         } else {
+            titleLabel.textColor = .darkColour
             optionIcon.tintColor = .darkColour
         }
     }

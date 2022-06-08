@@ -32,6 +32,9 @@ class WorkoutCreationViewModel {
     var addedAmrapPublisher = PassthroughSubject<AMRAPModel,Never>()
     var addedEmomPublisher = PassthroughSubject<EMOMModel,Never>()
     
+    var toggledSaving = PassthroughSubject<Void,Never>()
+    var toggledPrivacy = PassthroughSubject<Void,Never>()
+    var addedNewTag = PassthroughSubject<ExerciseTagReturnModel,Never>()
     // MARK: - Exercise Types
     var exerciseModels = [ExerciseModel]()
     var circuitModels = [CircuitModel]()
@@ -44,6 +47,8 @@ class WorkoutCreationViewModel {
     var isSaving: Bool = true
     
     var isPrivate: Bool = false
+    
+    var workoutTags: [ExerciseTagReturnModel] = []
     
     // MARK: - Assign To User
     /// The user to assign this workout to - if nil then just adding to created workouts with save option
@@ -80,7 +85,17 @@ class WorkoutCreationViewModel {
         addedEmomPublisher
             .sink { [weak self] in self?.addEMOM($0)}
             .store(in: &subscriptions)
-        
+    }
+    func optionSubscriptions() {
+        toggledSaving
+            .sink { [weak self] in self?.isSaving.toggle()}
+            .store(in: &subscriptions)
+        toggledPrivacy
+            .sink { [weak self] in self?.isPrivate.toggle()}
+            .store(in: &subscriptions)
+        addedNewTag
+            .sink { [weak self] in self?.workoutTags.append($0)}
+            .store(in: &subscriptions)
     }
     
     // MARK: - Adding Functions
@@ -134,24 +149,29 @@ class WorkoutCreationViewModel {
 
         let savedCreatorsRef = FirebaseMultiUploadDataPoint(value: true, path: "SavedWorkoutCreators/\(UserDefaults.currentUser.uid)/\(model.id)")
         multiUploadPoints.append(savedCreatorsRef)
-        
+
         if isSaving {
             let savedWorkoutsRef = FirebaseMultiUploadDataPoint(value: true, path: "SavedWorkoutReferences/\(UserDefaults.currentUser.uid)/\(model.id)")
             multiUploadPoints.append(savedWorkoutsRef)
         }
-        
+
         if let assignTo = assignTo {
             let newWorkout = WorkoutModel(savedModel: model, assignTo: assignTo.uid)
-            apiService.uploadTimeOrderedModel(model: newWorkout) { [weak self] result in
+            apiService.uploadTimeOrderedModel(model: newWorkout) { result in
                 switch result {
-                case .success(let model):
+                case .success(_):
                     break
-                case .failure(let error):
+                case .failure(_):
                     break
                 }
             }
         }
-
+        if !workoutTags.isEmpty {
+            let workoutTagModel = WorkoutTagModel(tags: workoutTags, savedWorkoutModel: model)
+            let points = workoutTagModel.getPoints()
+            multiUploadPoints.append(contentsOf: points)
+        }
+    
         apiService.multiLocationUpload(data: multiUploadPoints) { [weak self] result in
             guard let self = self else {return}
             switch result {
@@ -175,6 +195,9 @@ class WorkoutCreationViewModel {
         circuitModels.removeAll()
         emomModels.removeAll()
         amrapModels.removeAll()
+        workoutTags.removeAll()
+        isSaving = true
+        isPrivate = false
         updateTitle(with: "")
     }
 }

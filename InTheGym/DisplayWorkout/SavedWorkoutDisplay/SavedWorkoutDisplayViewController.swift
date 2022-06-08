@@ -75,7 +75,7 @@ class SavedWorkoutDisplayViewController: UIViewController, AnimatingSingleSet {
             .store(in: &subscriptions)
         
         bottomViewChildVC.showWorkoutStatsPublisher
-            .sink { [weak self] in self?.coordinator?.showWorkoutStats(with: $0)}
+            .sink { [weak self] in self?.coordinator?.showWorkoutStats()}
             .store(in: &subscriptions)
         
         bottomViewChildVC.showAssignPublisher

@@ -26,6 +26,21 @@ class WorkoutCreationView: UIView {
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
+    var topSeparatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        view.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    var optionsButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("more Options", for: .normal)
+        button.setTitleColor(.darkColour, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .medium)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     var optionsLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .bold)
@@ -34,26 +49,10 @@ class WorkoutCreationView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    var privacyView: PrivacyView = {
-        let view = PrivacyView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    var saveView: UISaveView = {
-        let view = UISaveView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    var assignView: AssignView = {
-        let view = AssignView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    lazy var middleStack: UIStackView = {
-        let view = UIStackView(arrangedSubviews: [assignView, privacyView, saveView])
-        view.axis = .horizontal
-        view.distribution = .fillEqually
-        view.spacing = 4
+    var middleSeparatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        view.heightAnchor.constraint(equalToConstant: 2).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -78,7 +77,7 @@ class WorkoutCreationView: UIView {
     }()
     var plusButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 100)), for: .normal)
+        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 60)), for: .normal)
         button.tintColor = .lightColour
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -87,7 +86,7 @@ class WorkoutCreationView: UIView {
         let label = UILabel()
         label.text = "No Exercises.\n Tap the + icon below to add an exercise."
         label.font = .systemFont(ofSize: 20, weight: .semibold)
-        label.textColor = .lightGray
+        label.textColor = .secondaryLabel
         label.textAlignment = .center
         label.backgroundColor = .clear
         label.numberOfLines = 0
@@ -109,8 +108,9 @@ private extension WorkoutCreationView {
     func setupUI() {
         backgroundColor = .secondarySystemBackground
         addSubview(titleTextField)
-        addSubview(optionsLabel)
-        addSubview(middleStack)
+        addSubview(topSeparatorView)
+        addSubview(optionsButton)
+        addSubview(middleSeparatorView)
         addSubview(exercisesLabel)
         addSubview(exercisesTableView)
         addSubview(plusButton)
@@ -123,25 +123,28 @@ private extension WorkoutCreationView {
             titleTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             titleTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             titleTextField.heightAnchor.constraint(equalToConstant: 40),
+            
+            topSeparatorView.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 4),
+            topSeparatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            topSeparatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
+            optionsButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: 8),
+            optionsButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            optionsButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
+            middleSeparatorView.bottomAnchor.constraint(equalTo: optionsButton.topAnchor, constant: -8),
+            middleSeparatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            middleSeparatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-            optionsLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 16),
-            optionsLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-
-            middleStack.topAnchor.constraint(equalTo: optionsLabel.bottomAnchor, constant: 8),
-            middleStack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            middleStack.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-            saveView.heightAnchor.constraint(equalTo: privacyView.heightAnchor),
-
-            exercisesLabel.topAnchor.constraint(equalTo: middleStack.bottomAnchor, constant: 16),
+            exercisesLabel.topAnchor.constraint(equalTo: topSeparatorView.bottomAnchor, constant: 8),
             exercisesLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             exercisesTableView.topAnchor.constraint(equalTo: exercisesLabel.bottomAnchor, constant: 8),
             exercisesTableView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             exercisesTableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            exercisesTableView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            exercisesTableView.bottomAnchor.constraint(equalTo: middleSeparatorView.topAnchor),
             
             plusButton.trailingAnchor.constraint(equalTo: exercisesTableView.trailingAnchor),
-            plusButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            plusButton.bottomAnchor.constraint(equalTo: exercisesTableView.bottomAnchor, constant: -8),
             
             emptyMessage.centerXAnchor.constraint(equalTo: exercisesTableView.centerXAnchor),
             emptyMessage.centerYAnchor.constraint(equalTo: exercisesTableView.centerYAnchor),
@@ -149,16 +152,8 @@ private extension WorkoutCreationView {
         ])
     }
 }
-
 // MARK: - Public Configuration
 extension WorkoutCreationView {
-    public func configure(with user: Users?) {
-        if let user = user {
-            assignView.configure(with: user)
-        } else {
-            assignView.isHidden = true
-        }
-    }
     public func reset() {
         titleTextField.text = ""
     }

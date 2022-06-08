@@ -142,4 +142,14 @@ class DisplayEMOMViewModel {
             }
         }
     }
+    func isStartButtonEnabled() -> Bool {
+        guard let workoutModel = workoutModel else {
+            return false
+        }
+        if workoutModel.startTime != nil && !workoutModel.completed {
+            return true
+        } else {
+            return false
+        }
+    }
 }

@@ -11,7 +11,7 @@ import UIKit
 enum Options: String {
     case assign = "Assign"
     case save = "Save"
-    case delete = "Delete"
+    case delete = "Remove from Saved"
     case review = "Review"
     case addWorkout = "Add to Workouts"
     case saveWorkout = "Save Workout"

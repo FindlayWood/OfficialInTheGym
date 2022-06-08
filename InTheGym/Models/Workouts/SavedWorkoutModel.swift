@@ -59,6 +59,10 @@ class SavedWorkoutModel: Codable, Hashable {
 
 // MARK: - Saved Model Functions
 extension SavedWorkoutModel {
+    func averageTime() -> Double {
+        guard completions > 0 else { return 0 }
+        return Double(totalTime / completions)
+    }
     func averageTime() -> String {
         guard completions > 0 else { return "0" }
         return (totalTime / completions).convertToWorkoutTime()

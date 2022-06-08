@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 
 class DisplayWorkoutStatsCell: UICollectionViewCell {
-    
+    // MARK: - Properties
     private let imageDimension: CGFloat = 40
-    
+    // MARK: - Subviews
     lazy var image: UIImageView = {
         let image = UIImageView()
         image.widthAnchor.constraint(equalToConstant: imageDimension).isActive = true
@@ -20,23 +20,20 @@ class DisplayWorkoutStatsCell: UICollectionViewCell {
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
-    
     var title: UILabel = {
         let label = UILabel()
         label.font = Constants.font
-        label.textColor = .black
+        label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     var stat: UILabel = {
         let label = UILabel()
         label.font = Constants.font
-        label.textColor = Constants.darkColour
+        label.textColor = .darkColour
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -46,42 +43,40 @@ class DisplayWorkoutStatsCell: UICollectionViewCell {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
+    // MARK: - Initialozer
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = Constants.offWhiteColour
-        setUpView()
+        setupUI()
     }
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    private func setUpView() {
-        layer.cornerRadius = 10
-//        stackView.addArrangedSubview(image)
-//        stackView.addArrangedSubview(title)
-//        stackView.addArrangedSubview(stat)
-//        addSubview(stackView)
+}
+// MARK: - Setup UI
+private extension DisplayWorkoutStatsCell {
+    private func setupUI() {
+        backgroundColor = .systemBackground
+        layer.cornerRadius = 8
         addSubview(image)
         addSubview(title)
         addSubview(stat)
-        constrainView()
+        constrainUI()
     }
-    
-    private func constrainView() {
+    private func constrainUI() {
         NSLayoutConstraint.activate([
-                                    image.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
-                                    image.centerYAnchor.constraint(equalTo: centerYAnchor),
+            image.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
+            image.centerYAnchor.constraint(equalTo: centerYAnchor),
             
             title.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 20),
             title.centerYAnchor.constraint(equalTo: centerYAnchor),
             
             stat.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
             stat.centerYAnchor.constraint(equalTo: centerYAnchor)
-            
-            
         ])
     }
+}
+// MARK: - Public Config
+extension DisplayWorkoutStatsCell {
     func setupStats(with model: WorkoutStatCellModel) {
         image.image = model.image
         title.text = model.title

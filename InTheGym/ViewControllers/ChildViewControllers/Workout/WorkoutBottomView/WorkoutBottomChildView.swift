@@ -11,8 +11,8 @@ import UIKit
 class WorkoutBottomChildView: UIView {
     
     // MARK: - Properties
-    let firstStageMessage = "Scroll to view exercises. When ready tap Begin Workout to start the workout."
-    let secondStageMessage = "Are you ready? Tap Continue to start the timer and begin the workout."
+    let firstStageMessage = "Scroll to view exercises. \n When ready tap Begin Workout to start the workout."
+    let secondStageMessage = "Are you ready? \n Tap Continue to start the timer and begin the workout."
     
     // MARK: - Subviews
     var newButton: UIButton = {
@@ -20,9 +20,8 @@ class WorkoutBottomChildView: UIView {
         button.setTitle("Begin Workout", for: .normal)
         button.backgroundColor = .darkColour
         button.setTitleColor(.white, for: .normal)
-        button.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.05).isActive = true
+//        button.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.05).isActive = true
         button.layer.cornerRadius = 8
-        button.addViewShadow(with: .darkColour)
         button.titleLabel?.font = .systemFont(ofSize: 22, weight: .semibold)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -47,7 +46,6 @@ class WorkoutBottomChildView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
     lazy var stack: UIStackView = {
         let view = UIStackView(arrangedSubviews: [newButton, label, cancelButton])
         view.axis = .vertical
@@ -64,7 +62,6 @@ class WorkoutBottomChildView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -74,25 +71,26 @@ class WorkoutBottomChildView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension WorkoutBottomChildView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         layer.cornerRadius = 8
-        layer.maskedCorners = [ .layerMinXMinYCorner, . layerMaxXMinYCorner]
+        layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
         addViewTopShadow(with: .black)
         addSubview(stack)
         configureUI()
     }
-    
     func configureUI() {
-        
-        addFullConstraint(to: stack, withConstant: 8)
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+//            stack.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
 }
-
 // MARK: - Public
 extension WorkoutBottomChildView {
     public func changeStage(to stage: WorkoutBottomViewStage) {

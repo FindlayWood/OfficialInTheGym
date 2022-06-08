@@ -46,6 +46,7 @@ class DisplayEMOMViewController: UIViewController {
     func initNavBar() {
         let barButton = UIBarButtonItem(title: "Start", style: .done, target: self, action: #selector(startTimerPressed(_:)))
         navigationItem.rightBarButtonItem = barButton
+        navigationItem.rightBarButtonItem?.isEnabled = viewModel.isStartButtonEnabled()
     }
     
     // MARK: - View Model
@@ -101,7 +102,7 @@ class DisplayEMOMViewController: UIViewController {
     }
     
     func initDisplay() {
-        navigationItem.rightBarButtonItem?.isEnabled = !viewModel.emomModel.completed
+//        navigationItem.rightBarButtonItem?.isEnabled = !viewModel.emomModel.completed
         let exerciseOne = viewModel.emomModel.exercises[viewModel.exerciseIndex]
         display.exerciseView.configure(with: exerciseOne)
         display.initialMainTime.text = viewModel.emomModel.timeLimit.convertToTime()

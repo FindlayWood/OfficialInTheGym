@@ -18,7 +18,6 @@ class UsersChildView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,7 +27,6 @@ class UsersChildView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension UsersChildView {
@@ -37,7 +35,6 @@ private extension UsersChildView {
         addSubview(tableview)
         configureUI()
     }
-    
     func configureUI() {
         addFullConstraint(to: tableview)
     }

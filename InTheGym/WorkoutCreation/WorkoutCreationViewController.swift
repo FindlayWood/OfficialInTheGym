@@ -59,14 +59,12 @@ class WorkoutCreationViewController: UIViewController {
     }
     // MARK: - Display
     func initDisplay() {
-        display.configure(with: viewModel.assignTo)
         display.titleTextField.delegate = self
     }
     // MARK: - Targets
     func setUpActions() {
         display.plusButton.addTarget(self, action: #selector(plusButtonPressed(_:)), for: .touchUpInside)
-        display.saveView.savingButton.addTarget(self, action: #selector(toggleSaving(_:)), for: .touchUpInside)
-        display.privacyView.privacyButton.addTarget(self, action: #selector(togglePrivacy(_:)), for: .touchUpInside)
+        display.optionsButton.addTarget(self, action: #selector(optionsButtonActions(_:)), for: .touchUpInside)
     }
     
     //MARK: - Subscribers
@@ -107,6 +105,7 @@ class WorkoutCreationViewController: UIViewController {
                 }
             }
             .store(in: &subscriptions)
+        viewModel.optionSubscriptions()
     }
 }
 // MARK: - Actions
@@ -118,13 +117,16 @@ extension WorkoutCreationViewController {
         let newExercise = ExerciseModel(workoutPosition: viewModel.exercises.count)
         coordinator?.addNewExercise(newExercise)
     }
-    @objc func toggleSaving(_ sender: UIButton) {
-        viewModel.isSaving.toggle()
-        display.saveView.configure(with: viewModel.isSaving)
-    }
-    @objc func togglePrivacy(_ sender: UIButton) {
-        viewModel.isPrivate.toggle()
-        display.privacyView.configure(with: viewModel.isPrivate)
+    @objc func optionsButtonActions(_ sender: UIButton) {
+        let navigationModel = WorkoutCreationOptionsNavigationModel(
+            isSaving: viewModel.isSaving,
+            isPrivate: viewModel.isPrivate,
+            assignTo: viewModel.assignTo,
+            currentTags: viewModel.workoutTags,
+            toggledSaving: viewModel.toggledSaving,
+            toggledPrivacy: viewModel.toggledPrivacy,
+            addedNewTag: viewModel.addedNewTag)
+        coordinator?.workoutOptions(navigationModel)
     }
 }
 
