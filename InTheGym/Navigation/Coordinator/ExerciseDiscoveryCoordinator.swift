@@ -33,10 +33,9 @@ class ExerciseDiscoveryCoordinator: NSObject, Coordinator {
 }
 // MARK: - Description Flow
 extension ExerciseDiscoveryCoordinator: DescriptionFlow {
-    func addNewDescription(_ model: DescriptionModel, publisher: NewDescriptionListener) {
+    func addNewDescription(publisher: NewCommentListener) {
         let vc = DescriptionUploadViewController()
         vc.coordinator = self
-        vc.viewModel.descriptionModel = model
         vc.viewModel.listener = publisher
         navigationController.present(vc, animated: true)
     }
@@ -71,7 +70,7 @@ protocol ClipSelectorFlow: AnyObject {
 }
 // MARK: - Descriptions Flow
 protocol DescriptionFlow: AnyObject {
-    func addNewDescription(_ model: DescriptionModel, publisher: NewDescriptionListener)
+    func addNewDescription(publisher: NewCommentListener)
     func uploadedNewDescription()
     func dismiss()
 }

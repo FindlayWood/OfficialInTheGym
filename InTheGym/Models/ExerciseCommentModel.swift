@@ -11,24 +11,26 @@ import Firebase
 
 // MARK: - Description Model
 ///Model for exercise description
-class DescriptionModel: Codable, Hashable {
-    
+class ExerciseCommentModel: DisplayableComment, Codable, Hashable {
+
     var id: String
     var exercise: String
     var username: String
     var posterID: String
     var time: TimeInterval
-    var description: String
-    var vote: Int
+    var comment: String
+    var likeCount: Int
+    var replyCount: Int
     
-    init(exercise: String, description: String) {
+    init(exercise: String, comment: String) {
         self.id = UUID().uuidString
         self.exercise = exercise
         self.username = UserDefaults.currentUser.username
         self.posterID = UserDefaults.currentUser.uid
         self.time = Date().timeIntervalSince1970
-        self.description = description
-        self.vote = 0
+        self.comment = comment
+        self.likeCount = 0
+        self.replyCount = 0
     }
     
     func uploadPoints() -> [FirebaseMultiUploadDataPoint] {
@@ -46,7 +48,7 @@ class DescriptionModel: Codable, Hashable {
         return points
     }
     
-    static func == (lhs: DescriptionModel, rhs: DescriptionModel) -> Bool {
+    static func == (lhs: ExerciseCommentModel, rhs: ExerciseCommentModel) -> Bool {
         lhs.id == rhs.id
     }
     func hash(into hasher: inout Hasher) {
@@ -54,41 +56,40 @@ class DescriptionModel: Codable, Hashable {
     }
 
 }
-extension DescriptionModel: FirebaseInstance {
+extension ExerciseCommentModel: FirebaseInstance {
     var internalPath: String {
-        return "ExerciseDescriptions/\(exercise)/\(id)"
+        return "ExerciseComments/\(exercise)/\(id)"
     }
     var myDescriptionsPath: String {
-        return "MyDescriptions/\(UserDefaults.currentUser.uid)/\(exercise)/\(id)"
+        return "MyComments/\(UserDefaults.currentUser.uid)/\(exercise)/\(id)"
     }
     var votePath: String {
-        return "ExerciseDescriptions/\(exercise)/\(id)/vote"
+        return "ExerciseComments/\(exercise)/\(id)/likeCount"
     }
     var myVotesDescriptionPath: String {
-        return "MyDescriptionVotes/\(UserDefaults.currentUser.uid)/\(id)"
+        return "MyCommentLikes/\(UserDefaults.currentUser.uid)/\(id)"
     }
 }
 
-// MARK: - Descriptions
+// MARK: - ExerciseCommentSearchModel
 /// Model to search for all descriptions for a given exercise
-struct Descriptions {
+struct ExerciseCommentSearchModel {
     var exercise: String
 }
-extension Descriptions: FirebaseInstance {
+extension ExerciseCommentSearchModel: FirebaseInstance {
     var internalPath: String {
-        return "ExerciseDescriptions/\(exercise)"
+        return "ExerciseComments/\(exercise)"
     }
 }
 
-
 // MARK: - Vote Search Model
-/// Search if current user has voted for given description
-struct VoteSearchModel {
-    var descriptionID: String
+/// Search if current user has liked comment
+struct CommentLikeSearchModel {
+    var commentID: String
     var userID: String
 }
-extension VoteSearchModel: FirebaseInstance {
+extension CommentLikeSearchModel: FirebaseInstance {
     var internalPath: String {
-        return "MyDescriptionVotes/\(userID)/\(descriptionID)"
+        return "MyCommentLikes/\(userID)/\(commentID)"
     }
 }

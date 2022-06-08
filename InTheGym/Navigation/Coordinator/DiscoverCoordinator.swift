@@ -41,7 +41,8 @@ class DiscoverCoordinator: NSObject, Coordinator {
 extension DiscoverCoordinator {
     
     func workoutSelected(_ model: SavedWorkoutModel) {
-        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
+        let child = WorkoutDiscoveryCoordinator(navigationController: navigationController, savedWorkoutModel: model)
+//        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
         childCoordinators.append(child)
         child.start()
     }

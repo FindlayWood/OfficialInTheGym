@@ -10,38 +10,64 @@ import Foundation
 import Combine
 
 class DescriptionsCellViewModel {
-    
     // MARK: - Publishers
+    @Published var imageData: Data?
     var votedPublishers = PassthroughSubject<Bool,Never>()
-    
     // MARK: - Properties
-    var descriptionModel: DescriptionModel!
-    
+    var descriptionModel: DisplayableComment!
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
-    
     // MARK: - Actions
-    
+    func likeButtonAction() {
+        switch descriptionModel {
+        case is WorkoutCommentModel:
+            likeWorkoutComment()
+        case is ExerciseCommentModel:
+            likeExerciseComment()
+        default:
+            break
+        }
+    }
     // MARK: - Functions
-    func vote() {
-        let points = descriptionModel.votePoints()
-        apiService.multiLocationUpload(data: points) { [weak self] result in
-            guard let self = self else {return}
+    func loadProfileImage() {
+        DispatchQueue.global(qos: .background).async {
+            let profileImageModel = ProfileImageDownloadModel(id: self.descriptionModel.posterID)
+            ImageCache.shared.load(from: profileImageModel) { [weak self] result in
+                let imageData = try? result.get().pngData()
+                self?.imageData = imageData
+            }
+        }
+    }
+    func likeExerciseComment() {
+        guard let model = descriptionModel as? ExerciseCommentModel else {return}
+        let points = model.votePoints()
+        apiService.multiLocationUpload(data: points) { result in
             switch result {
             case .success(()):
-                VoteCache.shared.upload(descriptionID: self.descriptionModel.id)
+                VoteCache.shared.upload(descriptionID: model.id)
             case .failure(_):
                 break
             }
         }
     }
-    
+    func likeWorkoutComment() {
+        guard let model = descriptionModel as? WorkoutCommentModel else {return}
+        let points = model.uploadPoints()
+        apiService.multiLocationUpload(data: points) { result in
+            switch result {
+            case .success(_):
+                VoteCache.shared.upload(descriptionID: model.id)
+            case .failure(_):
+                break
+            }
+        }
+    }
     func checkVote() {
-        let searchModel = VoteSearchModel(descriptionID: descriptionModel.id, userID: UserDefaults.currentUser.uid)
+        let searchModel = CommentLikeSearchModel(commentID: descriptionModel.id, userID: UserDefaults.currentUser.uid)
         VoteCache.shared.load(from: searchModel) { [weak self] result in
             switch result {
             case .success(let voted):

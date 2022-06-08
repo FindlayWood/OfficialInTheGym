@@ -1,15 +1,13 @@
 //
-//  DescriptionsView.swift
+//  WorkoutDiscoveryCommentsView.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 16/02/2022.
+//  Created by Findlay Wood on 08/06/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
-
-import Foundation
 import UIKit
 
-class DescriptionsView: UIView {
+class WorkoutDiscoveryCommentsView: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
@@ -46,7 +44,7 @@ class DescriptionsView: UIView {
     }()
     var plusButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 100)), for: .normal)
+        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 60)), for: .normal)
         button.tintColor = .lightColour
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -62,11 +60,12 @@ class DescriptionsView: UIView {
     }
 }
 // MARK: - Configure
-private extension DescriptionsView {
+private extension WorkoutDiscoveryCommentsView {
     func setupUI() {
+        backgroundColor = .secondarySystemBackground
         addSubview(ratingLabel)
-        addSubview(ratingCountLabel)
         addSubview(addRatingButton)
+        addSubview(ratingCountLabel)
         addSubview(tableview)
         addSubview(plusButton)
         configureUI()
@@ -87,13 +86,13 @@ private extension DescriptionsView {
             tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
             tableview.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            plusButton.trailingAnchor.constraint(equalTo: tableview.trailingAnchor, constant: -5),
-            plusButton.bottomAnchor.constraint(equalTo: tableview.bottomAnchor, constant: -5)
+            plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            plusButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -8)
         ])
     }
 }
 // MARK: - Public Config
-extension DescriptionsView {
+extension WorkoutDiscoveryCommentsView {
     public func setRating(to rating: Double) {
         ratingLabel.text = "Rating: " + rating.description
     }

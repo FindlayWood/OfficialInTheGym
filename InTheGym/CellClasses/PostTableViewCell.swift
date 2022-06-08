@@ -125,6 +125,7 @@ private extension PostTableViewCell {
             postInteractionsView.widthAnchor.constraint(equalTo: fullPostStack.widthAnchor)
         ])
     }
+    // MARK: - View Model
     func initViewModel() {
         
         viewModel.$isLiked
@@ -165,11 +166,11 @@ private extension PostTableViewCell {
 private extension PostTableViewCell {
     func setLiked(to liked: Bool) {
         if liked {
-            self.postInteractionsView.likeButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+            self.postInteractionsView.likeButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25)), for: .normal)
             self.postInteractionsView.likeButton.isUserInteractionEnabled = false
             self.postInteractionsView.likeButton.tintColor = .redColour
         } else {
-            self.postInteractionsView.likeButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+            self.postInteractionsView.likeButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25)), for: .normal)
             self.postInteractionsView.likeButton.isUserInteractionEnabled = true
             self.postInteractionsView.likeButton.tintColor = .darkColour
         }

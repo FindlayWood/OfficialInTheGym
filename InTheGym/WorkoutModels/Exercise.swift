@@ -136,6 +136,9 @@ struct ExerciseModel: ExerciseType, Codable, Hashable {
         self.type = type
         self.completedSets = [Bool]()
         self.sets = 0
+        self.time = [Int]()
+        self.distance = [String]()
+        self.restTime = [Int]()
     }
     
     init(workoutPosition: Int) {

@@ -50,13 +50,11 @@ class DescriptionUploadViewController: UIViewController {
             .sink { [weak self] _ in self?.coordinator?.uploadedNewDescription()}
             .store(in: &subscriptions)
     }
-    
     // MARK: - Targets
     func initTargets() {
         display.uploadButton.addTarget(self, action: #selector(uploadTapped(_:)), for: .touchUpInside)
         display.cancelButton.addTarget(self, action: #selector(cancelTapped(_:)), for: .touchUpInside)
     }
-    
     // MARK: - Actions
     @objc func uploadTapped(_ sender: UIButton) {
         viewModel.upload()
@@ -65,7 +63,6 @@ class DescriptionUploadViewController: UIViewController {
         coordinator?.dismiss()
     }
 }
-
 // MARK: - TextView Delegate
 extension DescriptionUploadViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
