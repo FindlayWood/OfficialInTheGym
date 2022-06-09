@@ -15,26 +15,27 @@ class OtherExerciseView: UIView {
     let messageText = "Make sure you have checked that the exercise you are looking for is not in the app. Using exercises already in the app makes it easier to record exercise data. If it does not exist enter the exercise name above, if you have previously entered the exercise - make sure to enter it exactly the same (they are case sensitive) to keep your stats accurate. We keep a track of all exercises entered manually to help us add more exercises to the app."
     
     // MARK: - Subview
-    lazy var textfield: SkyFloatingLabelTextField = {
-        let field = SkyFloatingLabelTextField()
-        field.tintColor = Constants.darkColour
-        field.returnKeyType = .done
-        field.textColor = .label
-        field.font = .systemFont(ofSize: 18, weight: .medium)
-        field.placeholderColor = .tertiaryLabel
-        field.selectedLineHeight = 4
-        field.lineHeight = 2
-        field.titleColor = .darkColour
-        field.lineColor = .darkColour
-        field.title = "Exercise Name"
-        field.selectedTitle = "Exercise Name"
-        field.selectedTitleColor = .darkColour
-        field.selectedLineColor = .darkColour
-        field.placeholder = "enter exercise name"
-        field.clearButtonMode = .never
-        field.autocapitalizationType = .words
-        field.translatesAutoresizingMaskIntoConstraints = false
-        return field
+    var imageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.backgroundColor = .clear
+        view.image = UIImage(named: "situps")
+        view.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        view.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    var exerciseTextField: UITextField = {
+        let view = UITextField()
+        view.placeholder = "enter exercise name..."
+        view.textColor = .label
+        view.backgroundColor = .systemBackground
+        view.layer.cornerRadius = 8
+        view.font = .systemFont(ofSize: 18, weight: .semibold)
+        view.autocapitalizationType = .words
+        view.tintColor = .darkColour
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     lazy var message: UITextView = {
         let view = UITextView()
@@ -43,6 +44,8 @@ class OtherExerciseView: UIView {
         view.text = messageText
         view.font = .systemFont(ofSize: 12, weight: .medium)
         view.textColor = .secondaryLabel
+        view.backgroundColor = .clear
+        view.textAlignment = .center
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -50,15 +53,16 @@ class OtherExerciseView: UIView {
         let button = UIButton()
         button.setTitle("Continue", for: .normal)
         button.setTitleColor(.darkColour, for: .normal)
+        button.setTitleColor(.secondarySystemBackground, for: .disabled)
         button.titleLabel?.font = .boldSystemFont(ofSize: 16)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     var cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Cancel", for: .normal)
-        button.setTitleColor(.darkColour, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.setImage(UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.tintColor = .darkColour
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -78,32 +82,43 @@ class OtherExerciseView: UIView {
 private extension OtherExerciseView {
     func setupUI() {
         backgroundColor = .secondarySystemBackground
-        addSubview(textfield)
+        addSubview(imageView)
+        addSubview(exerciseTextField)
         addSubview(message)
         addSubview(continueButton)
         addSubview(cancelButton)
         constrainUI()
     }
     func constrainUI() {
-        NSLayoutConstraint.activate([textfield.topAnchor.constraint(equalTo: topAnchor, constant: 40),
-                                     textfield.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
-                                     textfield.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
-                                     textfield.heightAnchor.constraint(equalToConstant: 45),
-        
-                                     message.topAnchor.constraint(equalTo: textfield.bottomAnchor, constant: 5),
-                                     message.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
-                                     message.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
-        
-                                     continueButton.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-                                     continueButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
-                                     cancelButton.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-                                     cancelButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5)])
+        NSLayoutConstraint.activate([
+            cancelButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            cancelButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            cancelButton.widthAnchor.constraint(equalToConstant: 50),
+            cancelButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            continueButton.centerYAnchor.constraint(equalTo: cancelButton.centerYAnchor),
+            continueButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            
+            imageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
+            message.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
+            message.centerXAnchor.constraint(equalTo: centerXAnchor),
+            message.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8),
+            
+            exerciseTextField.topAnchor.constraint(equalTo: message.bottomAnchor, constant: 8),
+            exerciseTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            exerciseTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            exerciseTextField.heightAnchor.constraint(equalToConstant: 40),
+            
+
+        ])
     }
 }
 // MARK: - Public Config
 extension OtherExerciseView {
     public func setContinueButton(to enabled: Bool) {
-        continueButton.setTitleColor(enabled ? .darkColour : .darkColour.withAlphaComponent(0.6), for: .normal)
-        continueButton.isUserInteractionEnabled = enabled ? true : false
+        continueButton.isEnabled = enabled
+        continueButton.isUserInteractionEnabled = enabled
     }
 }

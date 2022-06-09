@@ -72,7 +72,7 @@ class AddMoreDistanceViewController: UIViewController {
             .compactMap { $0 }
             .sink { [weak self] in self?.setsDataSource.updateCollection(with: $0)}
             .store(in: &subscriptions)
-        
+        viewModel.getDistanceCellModels()
         viewModel.$isLiveWorkout
             .sink { [weak self] isLive in
                 if isLive {
@@ -81,8 +81,13 @@ class AddMoreDistanceViewController: UIViewController {
                 }
             }
             .store(in: &subscriptions)
+        viewModel.$isEditing
+            .filter { $0 }
+            .sink { [weak self] _ in
+                self?.setsDataSource.isLive = true
+                self?.setsDataSource.setSelected.send(self?.viewModel.editingSet)
+            }.store(in: &subscriptions)
         
-        viewModel.getDistanceCellModels()
     }
 
     func emptyCheck() -> Bool {

@@ -43,31 +43,26 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
         addChildVC()
         view.backgroundColor = .lightColour
         initDataSource()
-//        setupSubscriptions()
+        initViewModel()
         initBottomViewChildVC()
         initNavBar()
     }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         editNavBarColour(to: .white)
         navigationItem.title = viewModel.workout.title
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         toggleClipCollection(showing: true, clips: viewModel.getClips())
     }
-    
     // MARK: - Add Child
     func addChildVC() {
         addChild(childVC)
         view.insertSubview(childVC.view, belowSubview: bottomViewChildVC.view)
-//        view.addSubview(childVC.view)
         childVC.view.frame = getFullViewableFrame()
         childVC.didMove(toParent: self)
     }
-    
     // MARK: - Bottom Child VC
     func initBottomViewChildVC() {
         if viewModel.showBottomView() {
@@ -94,13 +89,6 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
         navigationItem.rightBarButtonItem?.isEnabled = viewModel.isInteractionEnabled()
     }
     
-    // MARK: - View Model
-    func initViewModel() {
-        viewModel.addedClipPublisher
-            .sink { [weak self] in self?.childVC.clipDataSource.updateTable(with: [$0])}
-            .store(in: &subscriptions)
-    }
-    
     // MARK: - Data Source
     func initDataSource() {
         childVC.dataSource.isUserInteractionEnabled = viewModel.isInteractionEnabled()
@@ -113,21 +101,15 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
             .store(in: &subscriptions)
         
         childVC.dataSource.emomSelected
-            .sink { [weak self] model in
-                guard let self = self else {return}
-                self.coordinator?.showEMOM(model, self.viewModel.workout)}
+            .sink { [weak self] in self?.emomSelected($0) }
             .store(in: &subscriptions)
         
         childVC.dataSource.circuitSelected
-            .sink { [weak self] model in
-                guard let self = self else {return}
-                self.coordinator?.showCircuit(model, self.viewModel.workout)}
+            .sink { [weak self] in self?.circuitSelected($0)}
             .store(in: &subscriptions)
         
         childVC.dataSource.amrapSelected
-            .sink { [weak self] model in
-                guard let self = self else {return}
-                self.coordinator?.showAMRAP(model, self.viewModel.workout)}
+            .sink { [weak self] in self?.amrapSelected($0) }
             .store(in: &subscriptions)
         
         childVC.dataSource.rpeButtonTapped
@@ -161,14 +143,13 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
             .store(in: &subscriptions)
         
         childVC.dataSource.setSelected
-            .sink { [weak self] setCellModel in
+            .sink { [weak self] (setCellModel, exerciseModel) in
                 self?.selectedSetCell = setCellModel.cell
                 self?.selectedSetCellImageViewSnapshot = setCellModel.snapshot
-                self?.showSingleSet(setCellModel.setModel)
+                self?.showSingleSet(setCellModel.setModel, exerciseModel: exerciseModel)
             }
             .store(in: &subscriptions)
 
-        
         childVC.clipDataSource.clipSelected
             .sink { [weak self] in self?.clipSelected($0)}
             .store(in: &subscriptions)
@@ -179,49 +160,15 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
                 self?.selectedCellImageViewSnapshot = selectedCell.snapshot
             }
             .store(in: &subscriptions)
-        
     }
-
     func initClipDataSource() {
         clipDataSource = .init(collectionView: display.clipCollection)
         clipDataSource.updateTable(with: viewModel.getClips())
     }
     
-    
-    // MARK: - Subscriptions
-    func setupSubscriptions() {
-        dataSource.completeButtonTapped
-            .sink { [weak self] in self?.viewModel.completeSet(at: $0) }
-            .store(in: &subscriptions)
-        dataSource.noteButtonTapped
-            .sink { index in
-                print("note tapped at \(index)")
-            }
-            .store(in: &subscriptions)
-        dataSource.rpeButtonTapped
-            .debounce(for: 0.3, scheduler: DispatchQueue.main)
-            .sink { [weak self] in self?.rpe(index: $0) }
-            .store(in: &subscriptions)
-        dataSource.showClipPublisher
-            .debounce(for: 0.5, scheduler: RunLoop.main)
-            .sink { [weak self] show in
-                guard let self = self else {return}
-                self.toggleClipCollection(showing: show, clips: self.viewModel.getClips())
-            }
-            .store(in: &subscriptions)
-        dataSource.clipButtonTapped
-            .sink { [weak self] in self?.clipButton(at: $0) }
-            .store(in: &subscriptions)
-
-        
-        display.bottomView.readyToStartWorkout
-            .sink { [weak self] in
-                self?.display.bottomView.removeFromSuperview()
-                self?.display.flashView.removeFromSuperview()
-                self?.initDataSource()
-                self?.initNavBar()
-            }
-            .store(in: &subscriptions)
+    // MARK: - View Model
+    func initViewModel() {
+        viewModel.initSubscriptions()
         
         viewModel.addedClipPublisher
             .sink { [weak self] in self?.clipDataSource.updateTable(with: [$0]) }
@@ -231,6 +178,23 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
             .sink { [weak self] in self?.childVC.dataSource.update(for: $0)}
             .store(in: &subscriptions)
         
+        viewModel.editedExercise
+            .sink { [weak self] in self?.childVC.dataSource.update(for: $0)}
+            .store(in: &subscriptions)
+        
+        viewModel.editAction
+            .sink { [weak self] in self?.editSet($0)}
+            .store(in: &subscriptions)
+        
+        viewModel.updatedCircuit
+            .sink { [weak self] in self?.childVC.dataSource.updateCircuit($0)}
+            .store(in: &subscriptions)
+        viewModel.updatedAMRAP
+            .sink { [weak self] in self?.childVC.dataSource.updateAMRAP($0)}
+            .store(in: &subscriptions)
+        viewModel.updatedEMOM
+            .sink { [weak self] in self?.childVC.dataSource.updateEMOM($0)}
+            .store(in: &subscriptions)
     }
     // MARK: - RPE
     func rpe(index: IndexPath) {
@@ -250,7 +214,6 @@ extension WorkoutDisplayViewController {
         viewModel.completed()
         coordinator?.complete(viewModel.workout)
     }
-
     func toggleClipCollection(showing: Bool, clips: [WorkoutClipModel]) {
         if !clips.isEmpty && showing {
             childVC.display.showClipCollection()
@@ -281,7 +244,21 @@ extension WorkoutDisplayViewController {
     func clipSelected(_ model: WorkoutClipModel) {
         coordinator?.viewClip(model, fromViewControllerDelegate: self)
     }
-    func showSingleSet(_ exerciseSet: ExerciseSet) {
-        coordinator?.showSingleSet(fromViewControllerDelegate: self, setModel: exerciseSet)
+    func showSingleSet(_ exerciseSet: ExerciseSet, exerciseModel: ExerciseModel?) {
+        viewModel.showExerciseDetail = exerciseModel
+        coordinator?.showSingleSet(fromViewControllerDelegate: self, setModel: exerciseSet, editAction: viewModel.editAction, isEditable: viewModel.isEditable)
+    }
+    func editSet(_ set: ExerciseSet) {
+        guard let exercise = viewModel.showExerciseDetail else {return}
+        coordinator?.editSet(exerciseModel: exercise, publisher: viewModel.editedExercise, setNumber: set.set)
+    }
+    func circuitSelected(_ circuit: CircuitModel) {
+        coordinator?.showCircuit(circuit, viewModel.workout, viewModel.updatedCircuit)
+    }
+    func amrapSelected(_ amrap: AMRAPModel) {
+        coordinator?.showAMRAP(amrap, viewModel.workout, viewModel.updatedAMRAP)
+    }
+    func emomSelected(_ emom: EMOMModel) {
+        coordinator?.showEMOM(emom, viewModel.workout, viewModel.updatedEMOM)
     }
 }

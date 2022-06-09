@@ -70,7 +70,7 @@ class SavedWorkoutOptionsViewController: UIViewController {
     }
 
     @objc func statsButtonTapped(_ sender: UIButton) {
-        coordinator?.showWorkoutStats(with: viewModel.savedWorkout.id)
+        coordinator?.showWorkoutStats()
     }
     
     // MARK: -

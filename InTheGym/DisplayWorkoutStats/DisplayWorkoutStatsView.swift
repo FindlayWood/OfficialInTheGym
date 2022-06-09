@@ -10,49 +10,49 @@ import Foundation
 import UIKit
 
 class DisplayWorkoutStatsView: UIView {
-    
+    // MARK: - Subviews
     lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(frame: self.frame)
-        indicator.color = Constants.darkColour
+        indicator.color = .darkColour
         return indicator
     }()
-    
     lazy var collection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
-        collection.backgroundColor = .white
+        collection.backgroundColor = .secondarySystemBackground
         collection.isScrollEnabled = true
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
-    
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUpView()
+        setupUI()
     }
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    private func setUpView() {
+}
+// MARK: - Setup UI
+private extension DisplayWorkoutStatsView {
+    func setupUI() {
         backgroundColor = .white
         addSubview(collection)
         addSubview(activityIndicator)
-        ConstrainView()
+        constrainUI()
     }
-    
-    private func ConstrainView() {
-        NSLayoutConstraint.activate([collection.topAnchor.constraint(equalTo: topAnchor),
-                                     collection.leadingAnchor.constraint(equalTo: leadingAnchor),
-                                     collection.trailingAnchor.constraint(equalTo: trailingAnchor),
-                                     collection.bottomAnchor.constraint(equalTo: bottomAnchor)])
+    func constrainUI() {
+        NSLayoutConstraint.activate([
+            collection.topAnchor.constraint(equalTo: topAnchor),
+            collection.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collection.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collection.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
-    
-    private func generateLayout() -> UICollectionViewFlowLayout {
+    func generateLayout() -> UICollectionViewFlowLayout {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 5
-        layout.minimumLineSpacing = 5
-        layout.itemSize = CGSize(width: Constants.screenSize.width - 10, height: Constants.screenSize.height / 10)
-        layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        layout.minimumLineSpacing = 8
+        layout.itemSize = CGSize(width: Constants.screenSize.width - 16, height: Constants.screenSize.height / 10)
+        layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         layout.scrollDirection = .horizontal
         return layout
     }

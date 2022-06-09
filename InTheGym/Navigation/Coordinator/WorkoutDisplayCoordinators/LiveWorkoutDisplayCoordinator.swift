@@ -10,16 +10,17 @@ import UIKit
 import Combine
 
 class LiveWorkoutDisplayCoordinator: NSObject, Coordinator {
+    // MARK: - Properties
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var modalNavigationController: UINavigationController?
     var workout: WorkoutModel
-    
+    // MARK: - Initializer
     init(navigationController: UINavigationController, workout: WorkoutModel) {
         self.navigationController = navigationController
         self.workout = workout
     }
-    
+    // MARK: - Start
     func start() {
         let vc = LiveWorkoutDisplayViewController()
         vc.viewModel.workoutModel = workout
@@ -28,7 +29,7 @@ class LiveWorkoutDisplayCoordinator: NSObject, Coordinator {
         navigationController.pushViewController(vc, animated: true)
     }
 }
-// MARK: - Methods
+// MARK: - Flow
 extension LiveWorkoutDisplayCoordinator {
     func showEMOM(_ emom: EMOMModel, _ workout: WorkoutModel) {
         let vc = DisplayEMOMViewController()
@@ -75,8 +76,8 @@ extension LiveWorkoutDisplayCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func showSingleSet(fromViewControllerDelegate: AnimatingSingleSet, setModel: ExerciseSet) {
-        let child = SingleSetCoordinator(navigationController: navigationController, fromViewControllerDelegate: fromViewControllerDelegate, setModel: setModel)
+    func showSingleSet(fromViewControllerDelegate: AnimatingSingleSet, setModel: ExerciseSet, editAction: PassthroughSubject<ExerciseSet,Never>? = nil) {
+        let child = SingleSetCoordinator(navigationController: navigationController, fromViewControllerDelegate: fromViewControllerDelegate, setModel: setModel, editAction: editAction)
         childCoordinators.append(child)
         child.start()
     }

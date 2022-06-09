@@ -16,7 +16,7 @@ class SavedWorkoutBottomChildViewModel {
     var optionsPublisher = PassthroughSubject<[Options],Never>()
     
     var optionsRemovePublisher = PassthroughSubject<Options,Never>()
-    
+    var workoutDiscoveryPublisher = PassthroughSubject<Void,Never>()
     var savedWorkoutPublisher = PassthroughSubject<Bool,Never>()
     
     var addedWorkoutPublisher = PassthroughSubject<Bool,Never>()
@@ -25,7 +25,7 @@ class SavedWorkoutBottomChildViewModel {
     
     var showUserPublisher = PassthroughSubject<Users,Never>()
     
-    var showWorkoutStatsPublisher = PassthroughSubject<String,Never>()
+    var showWorkoutStatsPublisher = PassthroughSubject<Void,Never>()
     
     var assignPublisher = PassthroughSubject<Void,Never>()
     
@@ -59,10 +59,12 @@ class SavedWorkoutBottomChildViewModel {
     // MARK: - Actions
     func setOptions(_ isSaved: Bool) {
         if isSaved {
-            options = [.addWorkout, .viewWorkoutStats, .viewCreatorProfile, .delete]
-
+            options = [.workoutDiscovery, .addWorkout, .viewCreatorProfile, .delete]
         } else {
-            options = [.saveWorkout, .addWorkout, .viewWorkoutStats, .viewCreatorProfile]
+            options = [.workoutDiscovery, .saveWorkout, .addWorkout, .viewCreatorProfile]
+        }
+        if UserDefaults.currentUser.uid == savedWorkoutModel.creatorID {
+            options.insert(.viewWorkoutStats, at: 2)
         }
         if UserDefaults.currentUser.admin {
             options.insert(.assign, at: 0)
@@ -81,9 +83,11 @@ class SavedWorkoutBottomChildViewModel {
         case .viewCreatorProfile:
             loadCreator()
         case .viewWorkoutStats:
-            showWorkoutStatsPublisher.send(savedWorkoutModel.id)
+            showWorkoutStatsPublisher.send(())
         case .assign:
             assignPublisher.send(())
+        case .workoutDiscovery:
+            workoutDiscoveryPublisher.send(())
         default:
             break
         }

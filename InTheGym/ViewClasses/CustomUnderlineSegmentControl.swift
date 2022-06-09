@@ -55,6 +55,8 @@ class CustomUnderlineSegmentControl: UIView {
             button.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
             button.setTitleColor(textColour, for: .normal)
             button.titleLabel?.font = .systemFont(ofSize: 18, weight: .medium)
+            button.titleLabel?.adjustsFontSizeToFitWidth = true
+            button.titleLabel?.minimumScaleFactor = 0.2
             buttons.append(button)
         }
         buttons[0].setTitleColor(selectedTextColour, for: .normal)

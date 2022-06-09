@@ -13,11 +13,8 @@ class CompletedWorkoutPageViewController: UIViewController {
     
     // MARK: - Properties
     weak var coordinator: CompletedWorkoutCoordinator?
-    
     var display = CompletedWorkoutPageView()
-    
     var viewModel = CompletedWorkoutPageViewModel()
-    
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
@@ -44,7 +41,6 @@ class CompletedWorkoutPageViewController: UIViewController {
             viewModel.checkCompleted()
         }
     }
-    
     // MARK: - Display
     func initDisplay() {
         display.configure(with: viewModel.workout)
@@ -62,7 +58,6 @@ class CompletedWorkoutPageViewController: UIViewController {
         let barButton = UIBarButtonItem(customView: activityIndicator)
         navigationItem.rightBarButtonItem = barButton
     }
-    
     // MARK: - View Model
     func initViewModel() {
         
@@ -75,10 +70,15 @@ class CompletedWorkoutPageViewController: UIViewController {
         viewModel.completedUpload
             .sink { [weak self] _ in self?.completedUpload()}
             .store(in: &subscriptions)
+        
+        viewModel.addedSummaryPublisher
+            .sink { [weak self] summary in
+                self?.display.summaryView.summaryLabel.text = summary
+                self?.display.addSummary()
+            }
+            .store(in: &subscriptions)
     }
-
 }
-
 // MARK: - Actions
 extension CompletedWorkoutPageViewController {
     @objc func addRPEScore() {
@@ -91,14 +91,11 @@ extension CompletedWorkoutPageViewController {
         }
     }
     @objc func addSummary() {
-        display.addSummary()
+        coordinator?.addSummary(viewModel.workout, publisher: viewModel.addedSummaryPublisher)
     }
-    
-    
     @objc func upload() {
         viewModel.upload()
     }
-    
     func setToLoading(_ value: Bool) {
         navigationItem.hidesBackButton = value
         if value {

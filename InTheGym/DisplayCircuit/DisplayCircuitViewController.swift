@@ -7,91 +7,75 @@
 //
 
 import UIKit
-import SCLAlertView
+import Combine
 
-class DisplayCircuitViewController: UIViewController, Storyboarded {
-    
-    @IBOutlet weak var tableview:UITableView!
-
-    
-    var exercises : [CircuitTableModel]!
-    var circuit : circuit!
-    var workout : WorkoutDelegate!
-    var exercisePosition : Int!
-    
-    var adapter : DisplayCircuitAdapter!
-    
+class DisplayCircuitViewController: UIViewController {
+    // MARK: - Properties
+    weak var coordinator: DisplayCircuitCoordinator?
     var viewModel = DisplayCircuitViewModel()
-    
     var display = DisplayCircuitView()
-        
-
+    var dataSource: CircuitDataSource!
+    private var subscriptions = Set<AnyCancellable>()
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightColour
-        adapter = DisplayCircuitAdapter(delegate: self)
-        display.tableview.delegate = adapter
-        display.tableview.dataSource = adapter
-        display.tableview.backgroundColor = Constants.lightColour
+        initNavBar()
+        initDataSource()
+        initViewModel()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
-        initUI()
-    }
-    
-    func initUI(){
+        super.viewWillAppear(animated)
         navigationItem.title = viewModel.circuitModel.circuitName
-        let rightBarButton = UIBarButtonItem(title: "Completed", style: .done, target: self, action: #selector(completePressed(_:)))
-        navigationItem.rightBarButtonItem = rightBarButton
+        editNavBarColour(to: .white)
+    }
+    // MARK: - Nav Bar
+    func initNavBar() {
+        let barButton = UIBarButtonItem(title: "Completed", style: .done, target: self, action: #selector(completePressed(_:)))
+        navigationItem.rightBarButtonItem = barButton
         navigationItem.rightBarButtonItem?.isEnabled = viewModel.isInteractionEnabled()
     }
-    
-    func displayShadowView(){
-        let flashView = UIView()
-        flashView.frame = self.view.frame
-        flashView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5)
-        self.view.insertSubview(flashView, at: 2)
-        flashView.isUserInteractionEnabled = false
+    // MARK: - Data Source
+    func initDataSource() {
+        dataSource = .init(collectionView: display.collectionView)
+        dataSource.updateCollection(with: viewModel.circuitModel.intergrate())
+        dataSource.exerciseNameButtonAction
+            .sink { [weak self] in self?.showExerciseDiscovery($0)}
+            .store(in: &subscriptions)
+        dataSource.completeButtonAction
+            .sink { [weak self] in self?.completedCell(at: $0)}
+            .store(in: &subscriptions)
     }
-    
+    // MARK: - View Model
+    func initViewModel() {
+        viewModel.$isLoading
+            .sink { [weak self] in self?.setLoading(to: $0)}
+            .store(in: &subscriptions)
+        viewModel.updateModelPublisher
+            .sink { [weak self] (newCell, indexPath) in
+                self?.dataSource.updateCell(newCell: newCell, at: indexPath)}
+            .store(in: &subscriptions)
+        viewModel.completedCircuitPublisher
+            .sink { [weak self] in self?.uploadedView()}
+            .store(in: &subscriptions)
+    }
     // MARK: - Actions
     @objc func completePressed(_ sender: UIButton){
-        if self.isButtonInteractionEnabled() {
-            let alert = SCLAlertView()
-            let rpe = alert.addTextField()
-            rpe.placeholder = "enter rpe 1-10..."
-            rpe.keyboardType = .numberPad
-            rpe.becomeFirstResponder()
-            alert.addButton("SAVE") {
-                if rpe.text == "" {
-                    self.showError()
-                }else if Int((rpe.text)!)! < 1 || Int((rpe.text)!)! > 10{
-                    self.showError()
-                }else{
-                    // haptic feedback : complete exercise
-                    let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
-                    notificationFeedbackGenerator.prepare()
-                    notificationFeedbackGenerator.notificationOccurred(.success)
-                    self.circuit.newRPE.value = Int(rpe.text!)
-                    self.circuit.completed.value = true
-                    rpe.resignFirstResponder()
-                    self.viewModel.completeCircuit(with: Int(rpe.text!)!)
-                    self.uploadedView()
-                }
-                
-                
-            }
-            alert.showSuccess("RPE", subTitle: "Enter rpe for exercise title!!!",closeButtonTitle: "cancel")
+        showCircuitRPE { score in
+            self.viewModel.completeCircuit(with: score)
         }
     }
-    
+    func completedCell(at indexPath: IndexPath) {
+        if viewModel.isInteractionEnabled() {
+            guard let cell = display.collectionView.cellForItem(at: indexPath) else {return}
+            cell.circuitFlash {
+                self.viewModel.completedExercise(at: indexPath)
+            }
+        }
+    }
     func uploadedView(){
         let showView = UIView()
         showView.backgroundColor = .white
@@ -107,64 +91,21 @@ class DisplayCircuitViewController: UIViewController, Storyboarded {
         label.centerYAnchor.constraint(equalTo: showView.centerYAnchor).isActive = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             showView.removeFromSuperview()
-            self.navigationController?.popViewController(animated: true)
+            self.coordinator?.completed()
         }
-    }
-    
-    func showError(){
-        let alert = SCLAlertView()
-        alert.showError("Error", subTitle: "Enter a score between 1 and 10", closeButtonTitle: "ok", animationStyle: .noAnimation)
     }
 }
-
-// MARK: - Protocol
-extension DisplayCircuitViewController: DisplayCircuitProtocol {
-    
-    func getData(at indexPath: IndexPath) -> CircuitTableModel {
-        return viewModel.getModel(at: indexPath)
+// MARK: - Actions
+private extension DisplayCircuitViewController {
+    func showExerciseDiscovery(_ model: CircuitTableModel) {
+        let discoverModel = DiscoverExerciseModel(exerciseName: model.exerciseName)
+        coordinator?.showExerciseDiscovery(discoverModel)
     }
-    
-    func retreiveNumberOfExercises() -> Int {
-        return viewModel.retreiveNumberOfExercises()
-    }
-    
-    func exerciseCompleted(at indexPath: IndexPath) {
-        viewModel.completedExercise(at: indexPath)
-    }
-    
-    func completedExercise(on cell: UITableViewCell) {
-        let index = tableview.indexPath(for: cell)!
-        let exerciseIndex = exercises[index.section].exerciseOrder
-        let exerciseSetIndex = exercises[index.section].set - 1
-        let completedIndexPath = IndexPath(item: exerciseSetIndex, section: exerciseIndex)
-        viewModel.completedExercise(at: completedIndexPath)
-        viewModel.updateStats(for: exercises[index.section])
-        self.exercises[index.section].completed = true
-        self.circuit.exercises![exerciseIndex].completedSets![exerciseSetIndex] = true
-        UIView.animate(withDuration: 0.5) {
-            cell.backgroundColor = .green
-        } completion: { (_) in
-            UIView.animate(withDuration: 0.5) {
-                cell.backgroundColor = Constants.offWhiteColour
-            } completion: { (_) in
-                let lastIndexToScroll = self.tableview.numberOfSections - 1
-                if index.section < lastIndexToScroll{
-                    let indexToScroll = IndexPath.init(row: 0, section: index.section + 1)
-                    self.tableview.scrollToRow(at: indexToScroll, at: .top, animated: true)
-                }
-            }
-        }
-    }
-    
-    func isButtonInteractionEnabled() -> Bool {
-        if let workout = workout as? workout{
-            if workout.startTime != nil && workout.completed == false{
-                return true
-            } else {
-                return false
-            }
+    func setLoading(to loading: Bool) {
+        if loading {
+            initLoadingNavBar(with: .white)
         } else {
-            return false
+            initNavBar()
         }
     }
 }

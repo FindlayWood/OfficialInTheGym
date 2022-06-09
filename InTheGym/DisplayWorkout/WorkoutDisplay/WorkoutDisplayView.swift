@@ -38,20 +38,6 @@ class WorkoutDisplayView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    var bottomView: UIWorkoutStartView = {
-        let view = UIWorkoutStartView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    var flashView: FlashView = {
-        let view = FlashView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -121,29 +107,29 @@ extension WorkoutDisplayView {
             self.layoutIfNeeded()
         }
     }
-    public func addBottomView() {
-        addSubview(flashView)
-        addSubview(bottomView)
-        var flashHeight: NSLayoutConstraint!
-        flashHeight = flashView.heightAnchor.constraint(equalToConstant: 0)
-        NSLayoutConstraint.activate([
-            bottomView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            bottomView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            bottomView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            
-            flashHeight,
-            flashView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            flashView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            flashView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-        flashHeight.isActive = false
-        flashHeight = flashView.heightAnchor.constraint(equalToConstant: Constants.screenSize.height)
-        flashHeight.isActive = true
-        
-        UIView.animate(withDuration: 0.3) {
-            self.layoutIfNeeded()
-            self.flashView.alpha = 0.4
-        }
-        
-    }
+//    public func addBottomView() {
+//        addSubview(flashView)
+//        addSubview(bottomView)
+//        var flashHeight: NSLayoutConstraint!
+//        flashHeight = flashView.heightAnchor.constraint(equalToConstant: 0)
+//        NSLayoutConstraint.activate([
+//            bottomView.leadingAnchor.constraint(equalTo: leadingAnchor),
+//            bottomView.trailingAnchor.constraint(equalTo: trailingAnchor),
+//            bottomView.bottomAnchor.constraint(equalTo: bottomAnchor),
+//            
+//            flashHeight,
+//            flashView.leadingAnchor.constraint(equalTo: leadingAnchor),
+//            flashView.trailingAnchor.constraint(equalTo: trailingAnchor),
+//            flashView.bottomAnchor.constraint(equalTo: bottomAnchor)
+//        ])
+//        flashHeight.isActive = false
+//        flashHeight = flashView.heightAnchor.constraint(equalToConstant: Constants.screenSize.height)
+//        flashHeight.isActive = true
+//        
+//        UIView.animate(withDuration: 0.3) {
+//            self.layoutIfNeeded()
+//            self.flashView.alpha = 0.4
+//        }
+//        
+//    }
 }

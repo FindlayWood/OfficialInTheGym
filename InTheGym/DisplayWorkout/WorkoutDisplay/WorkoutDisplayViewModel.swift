@@ -14,9 +14,15 @@ class WorkoutDisplayViewModel {
     // MARK: - Publishers
     var addedClipPublisher = PassthroughSubject<WorkoutClipModel,Never>()
     var updatedExercise = PassthroughSubject<ExerciseModel,Never>()
-    
+    var editedExercise = PassthroughSubject<ExerciseModel,Never>()
+    var editAction = PassthroughSubject<ExerciseSet,Never>()
+    /// update publishers
+    var updatedCircuit = PassthroughSubject<CircuitModel,Never>()
+    var updatedAMRAP = PassthroughSubject<AMRAPModel,Never>()
+    var updatedEMOM = PassthroughSubject<EMOMModel,Never>()
     // MARK: - Properties
     var workout: WorkoutModel!
+    var showExerciseDetail: ExerciseModel?
     
     lazy var exercises: [ExerciseType] = {
         var exercises = [ExerciseType]()
@@ -26,26 +32,36 @@ class WorkoutDisplayViewModel {
         exercises.append(contentsOf: workout.emoms ?? [])
         return exercises.sorted(by: { $0.workoutPosition < $1.workoutPosition} )
     }()
-    
-    func getAllExercises() -> [ExerciseType] {
-        var exercises = [ExerciseType]()
-        exercises.append(contentsOf: workout.exercises ?? [])
-        exercises.append(contentsOf: workout.circuits ?? [])
-        exercises.append(contentsOf: workout.amraps ?? [])
-        exercises.append(contentsOf: workout.emoms ?? [])
-        return exercises.sorted(by: { $0.workoutPosition < $1.workoutPosition} )
-    }
-    
     func getClips() -> [WorkoutClipModel] {
         guard let clips = workout.clipData else {return []}
         return clips
     }
+    var isEditable: Bool {
+        workout.startTime != nil && !(workout.completed)
+    }
+    
+    private var subscriptions = Set<AnyCancellable>()
     
     var apiService: FirebaseDatabaseManagerService
     
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
+    }
+    
+    func initSubscriptions() {
+        editedExercise
+            .sink { [weak self] in self?.editedExercise($0)}
+            .store(in: &subscriptions)
+        updatedCircuit
+            .sink { [weak self] in self?.updateCircuit($0)}
+            .store(in: &subscriptions)
+        updatedAMRAP
+            .sink { [weak self] in self?.updateAMRAP($0)}
+            .store(in: &subscriptions)
+        updatedEMOM
+            .sink { [weak self] in self?.updateEMOM($0)}
+            .store(in: &subscriptions)
     }
     
     // MARK: - Updating Functions
@@ -56,7 +72,7 @@ class WorkoutDisplayViewModel {
         apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
             switch result {
             case .success(()):
-                self?.workout.exercises?[exercise.workoutPosition] = exercise
+                self?.updateExerciseModels(with: exercise)
                 self?.updatedExercise.send(exercise)
             case .failure(_): break
             }
@@ -73,7 +89,7 @@ class WorkoutDisplayViewModel {
         apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
             switch result {
             case .success(()):
-                self?.workout.exercises?[exercise.workoutPosition] = exercise
+                self?.updateExerciseModels(with: exercise)
                 self?.updatedExercise.send(exercise)
             case .failure(_): break
             }
@@ -82,7 +98,42 @@ class WorkoutDisplayViewModel {
             FirebaseAPIWorkoutManager.shared.checkForCompletionStats(name: exercise.exercise, rpe: score)
         }
     }
-    
+    func editedExercise(_ exercise: ExerciseModel) {
+        updateExerciseModels(with: exercise)
+        let uploadModel = LiveWorkoutExerciseModel(workout: workout, exercise: exercise)
+        guard let uploadPoints = uploadModel.addExerciseModel() else {return}
+        apiService.multiLocationUpload(data: uploadPoints) { result in
+            switch result {
+            case .success(_): break
+            case .failure(_): break
+            }
+        }
+    }
+    func updateExerciseModels(with newExercise: ExerciseModel) {
+        exercises[newExercise.workoutPosition] = newExercise
+        let exercises = exercises.filter { $0 is ExerciseModel }
+        let exerciseModels = exercises.map { ($0 as! ExerciseModel)}
+        workout.exercises = exerciseModels
+    }
+    // MARK: - Update Functions
+    func updateCircuit(_ circuit: CircuitModel) {
+        exercises[circuit.workoutPosition] = circuit
+        let circuits = exercises.filter { $0 is CircuitModel }
+        let circuitModels = circuits.map { ($0 as! CircuitModel) }
+        workout.circuits = circuitModels
+    }
+    func updateAMRAP(_ amrap: AMRAPModel) {
+        exercises[amrap.workoutPosition] = amrap
+        let amraps = exercises.filter { $0 is AMRAPModel }
+        let amrapModels = amraps.map { ($0 as! AMRAPModel) }
+        workout.amraps = amrapModels
+    }
+    func updateEMOM(_ emom: EMOMModel) {
+        exercises[emom.workoutPosition] = emom
+        let emoms = exercises.filter { $0 is EMOMModel }
+        let emomModels = emoms.map { ($0 as! EMOMModel)}
+        workout.emoms = emomModels
+    }
     // MARK: - Retreive Function
     func isInteractionEnabled() -> Bool {
         if workout.startTime != nil && !workout.completed {

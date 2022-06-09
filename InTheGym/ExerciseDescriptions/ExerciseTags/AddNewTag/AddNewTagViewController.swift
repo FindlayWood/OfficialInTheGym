@@ -31,7 +31,7 @@ class AddNewTagViewController: UIViewController {
     // MARK: - Targets
     func initTargets() {
         display.addButton.addTarget(self, action: #selector(addButtonAction(_:)), for: .touchUpInside)
-        display.dismissButton.addTarget(self, action: #selector(dismissButtonAction(_:)), for: .touchUpInside)
+        display.cancelButton.addTarget(self, action: #selector(dismissButtonAction(_:)), for: .touchUpInside)
         display.textfield.delegate = self
     }
     // MARK: - Display

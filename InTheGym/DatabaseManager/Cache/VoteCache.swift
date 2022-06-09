@@ -24,14 +24,14 @@ class VoteCache {
     
     typealias handler = ((Result<Bool,Error>) -> Void)
     
-    func load(from searchModel: VoteSearchModel, completion: @escaping handler) {
-        if let cached = cache[searchModel.descriptionID] {
+    func load(from searchModel: CommentLikeSearchModel, completion: @escaping handler) {
+        if let cached = cache[searchModel.commentID] {
             completion(.success(cached))
         } else {
             apiService.checkExistence(of: searchModel) { [weak self] result in
                 do {
                     let exists = try result.get()
-                    self?.cache[searchModel.descriptionID] = exists
+                    self?.cache[searchModel.commentID] = exists
                     completion(result)
                 } catch {
                     completion(result)

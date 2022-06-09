@@ -10,35 +10,29 @@ import UIKit
 import Combine
 
 class DescriptionsViewController: UIViewController {
-
+    // MARK: - Coordinatoe
+    weak var coordinator: DescriptionFlow?
     // MARK: - Properties
-    
     var display = DescriptionsView()
-    
     var viewModel = DescriptionsViewModel()
-    
     var dataSource: DescriptionsDataSource!
-    
     private var subscriptions = Set<AnyCancellable>()
-    
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemBackground
+        display.tableview.backgroundColor = .secondarySystemBackground
         initButtonActions()
         initDataSource()
-//        initViewModel()
+        initViewModel()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
-    
     // MARK: - Button Targets
     func initButtonActions() {
         display.plusButton.addTarget(self, action: #selector(plusButtonPressed(_:)), for: .touchUpInside)
+        display.addRatingButton.addTarget(self, action: #selector(addRatingButtonAction(_:)), for: .touchUpInside)
     }
     
     // MARK: - Data Source
@@ -48,22 +42,32 @@ class DescriptionsViewController: UIViewController {
     
     // MARK: - View Model
     func initViewModel() {
-        viewModel.descriptionModels
+        viewModel.$rating
+            .compactMap { $0 }
+            .sink { [weak self] in self?.display.setRating(to: $0)}
+            .store(in: &subscriptions)
+        viewModel.$ratingCount
+            .compactMap { $0 }
+            .sink { [weak self] in self?.display.setRatingCount(to: $0)}
+            .store(in: &subscriptions)
+        viewModel.$descriptionModels
             .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
-        
-        viewModel.newDescriptionListener
-            .sink { [weak self] in self?.dataSource.addNew($0) }
-            .store(in: &subscriptions)
-        
+
         viewModel.fetchModels()
+        viewModel.loadRating()
+        viewModel.initSubscriptions()
     }
 }
-
 // MARK: - Button Actions
 private extension DescriptionsViewController {
     @objc func plusButtonPressed(_ sender: UIButton) {
-        let descriptionModel = DescriptionModel(exercise: viewModel.exerciseModel.exerciseName, description: "")
-
+        coordinator?.addNewDescription(publisher: viewModel.newCommentListener)
+    }
+    @objc func addRatingButtonAction(_ sender: UIButton) {
+        let vc = ExerciseRatingViewController()
+        vc.viewModel.addedRatingPublisher = viewModel.addedRatingPublisher
+        vc.viewModel.currentRating = viewModel.rating
+        navigationController?.present(vc, animated: true)
     }
 }

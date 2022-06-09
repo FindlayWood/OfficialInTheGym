@@ -14,11 +14,11 @@ class WeightSelectionViewModel {
     // MARK: - Publishers
     @Published var setCellModels: [SetCellModel]?
     @Published var isLiveWorkout: Bool = false
-    
+    @Published var isEditing: Bool = false
+    // MARK: - Properties
     var exercise: ExerciseModel!
-    
     var selectedSet: Int? = nil
-    
+    var editingSet: Int? = nil
     var cellCount: Int? {
         if let cellCount = setCellModels?.count {
             return cellCount - 1
@@ -48,6 +48,5 @@ class WeightSelectionViewModel {
             models.append(newModel)
         }
         setCellModels = models
-//        isLiveWorkout = (viewModel.exercisekind == .live)
     }
 }

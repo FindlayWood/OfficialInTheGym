@@ -21,11 +21,8 @@ class PostInteractionsSubview: UIView {
     }()
     var replyImageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
         view.backgroundColor = .clear
-        view.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        view.image = UIImage(systemName: "bubble.left")
+        view.image = UIImage(systemName: "bubble.left", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))
         view.tintColor = .darkColour
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -47,9 +44,7 @@ class PostInteractionsSubview: UIView {
     }()
     var likeButton: UIButton = {
         let button = UIButton()
-        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        button.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        button.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25)), for: .normal)
         button.tintColor = .darkColour
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -62,7 +57,6 @@ class PostInteractionsSubview: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -72,7 +66,6 @@ class PostInteractionsSubview: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension PostInteractionsSubview {
@@ -81,7 +74,6 @@ private extension PostInteractionsSubview {
         addSubview(likeStack)
         configureUI()
     }
-    
     func configureUI() {
         NSLayoutConstraint.activate([
             replyStack.topAnchor.constraint(equalTo: topAnchor, constant: 8),

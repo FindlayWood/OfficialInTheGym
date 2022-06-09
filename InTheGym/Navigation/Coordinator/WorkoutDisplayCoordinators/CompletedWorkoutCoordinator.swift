@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 class CompletedWorkoutCoordinator: Coordinator {
     /// this coordinators child coordinators
@@ -44,6 +45,13 @@ extension CompletedWorkoutCoordinator {
         if let modalNavigationController = modalNavigationController {
             navigationController.present(modalNavigationController, animated: true)
         }
+    }
+    func addSummary(_ model: WorkoutModel, publisher: PassthroughSubject<String,Never>) {
+        let vc = AddWorkoutSummaryViewController()
+        vc.viewModel.workoutModel = model
+        vc.viewModel.addedSummaryPublisher = publisher
+        vc.coordinator = self
+        navigationController.present(vc, animated: true)
     }
     func postWorkout(_ model: WorkoutModel) {
         guard let modalNavigationController = modalNavigationController else {return}

@@ -11,10 +11,8 @@ import UIKit
 
 /// this class creates the cell to be displayed for an EMOM
 class MainWorkoutEMOMCollectionCell: FullWidthCollectionViewCell {
-    
     // MARK: - Properties
     static let reuseID = "MainWorkoutEMOMCollectionCell"
-    
     // MARK: - Subviews
     var emomLabel: UILabel = {
         let label = UILabel()
@@ -24,7 +22,6 @@ class MainWorkoutEMOMCollectionCell: FullWidthCollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     var separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
@@ -32,7 +29,14 @@ class MainWorkoutEMOMCollectionCell: FullWidthCollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+    var exerciseLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Menlo", size: 20)
+        label.textColor = .black
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+       return label
+    }()
     var timeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo", size: 20)
@@ -40,18 +44,17 @@ class MainWorkoutEMOMCollectionCell: FullWidthCollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    var completedLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .bold)
-        label.textAlignment = .right
-        label.text = "COMPLETED"
-        label.textColor = .green
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    var completedIcon: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.backgroundColor = .clear
+        view.image = UIImage(systemName: "circle")
+        view.tintColor = .darkColour
+        view.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        view.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
-    
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -61,49 +64,46 @@ class MainWorkoutEMOMCollectionCell: FullWidthCollectionViewCell {
         super.init(coder: coder)
         setupUI()
     }
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        //emomModel.completed.valueChanged = nil
-        completedLabel.isHidden = true
-    }
 }
-
 // MARK: - Setup UI
 private extension MainWorkoutEMOMCollectionCell {
     func setupUI() {
-        backgroundColor = .offWhiteColour
-        layer.cornerRadius = 10
+        backgroundColor = .systemBackground
+        layer.cornerRadius = 8
         layer.masksToBounds = true
         addSubview(emomLabel)
         addSubview(separatorView)
+        addSubview(exerciseLabel)
         addSubview(timeLabel)
-//        addSubview(completedLabel)
+        addSubview(completedIcon)
         constrainUI()
     }
-    
     func constrainUI() {
         NSLayoutConstraint.activate([
-            emomLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            emomLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             emomLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
-            separatorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
-            separatorView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
-            separatorView.topAnchor.constraint(equalTo: emomLabel.bottomAnchor, constant: 10),
+            separatorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            separatorView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            separatorView.topAnchor.constraint(equalTo: emomLabel.bottomAnchor, constant: 8),
             
-            timeLabel.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 20),
+            exerciseLabel.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 16),
+            exerciseLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
+            timeLabel.topAnchor.constraint(equalTo: exerciseLabel.bottomAnchor, constant: 8),
             timeLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            timeLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             
-//            completedLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-//            completedLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+            completedIcon.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 8),
+            completedIcon.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            completedIcon.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
 }
-
 // MARK: - Public Configuration
 extension MainWorkoutEMOMCollectionCell {
-    
-    func configure(with model: EMOMModel) {
+    public func configure(with model: EMOMModel) {
         timeLabel.text = model.timeLimit.convertToTime()
+        exerciseLabel.text = model.exercises.count.description + " exercises"
+        completedIcon.image = model.completed ? UIImage(systemName: "checkmark.circle") : UIImage(systemName: "circle")
     }
 }

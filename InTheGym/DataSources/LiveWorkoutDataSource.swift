@@ -23,7 +23,7 @@ class LiveWorkoutDataSource: NSObject {
     var actionSubscriptions = [IndexPath: AnyCancellable]()
     var plusExerciseButtonTapped = PassthroughSubject<Void,Never>()
     var plusSetButtonTapped = PassthroughSubject<IndexPath,Never>()
-    var setSelected = PassthroughSubject<SelectedSetCell,Never>()
+    var setSelected = PassthroughSubject<(SelectedSetCell,ExerciseModel?),Never>()
     
     // MARK: - Properties
     var collectionView: UICollectionView
@@ -54,7 +54,7 @@ class LiveWorkoutDataSource: NSObject {
                     .sink(receiveValue: { [weak self] action in
                         switch action {
                         case .setSelected(let setCellModel):
-                            self?.setSelected.send(setCellModel)
+                            self?.setSelected.send((setCellModel,self?.getExercise(at: indexPath)))
                         case .noteButton:
                             self?.noteButtonTapped.send(indexPath)
                         case .rpeButton:

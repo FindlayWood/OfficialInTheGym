@@ -24,7 +24,7 @@ class WorkoutExerciseCollectionDataSource: NSObject {
     var clipButtonTapped = PassthroughSubject<ExerciseModel,Never>()
     var exerciseButtonTapped = PassthroughSubject<ExerciseModel,Never>()
     var showClipPublisher = PassthroughSubject<Bool,Never>()
-    var setSelected = PassthroughSubject<SelectedSetCell,Never>()
+    var setSelected = PassthroughSubject<(SelectedSetCell,ExerciseModel?),Never>()
     var actionSubscriptions = [IndexPath: AnyCancellable]()
     
     // MARK: - Properties
@@ -55,7 +55,7 @@ class WorkoutExerciseCollectionDataSource: NSObject {
                     .sink(receiveValue: { [weak self] action in
                         switch action {
                         case .setSelected(let setModel):
-                            self?.setSelected.send(setModel)
+                            self?.setSelected.send((setModel,self?.getExercise(at: indexPath)))
                         case .noteButton:
                             self?.noteButtonTapped.send(indexPath)
                         case .rpeButton:
@@ -120,6 +120,28 @@ class WorkoutExerciseCollectionDataSource: NSObject {
         currentSnapshot.insertItems([ExerciseRow.exercise(exercise)], afterItem: item)
         currentSnapshot.deleteItems([item])
         dataDource.apply(currentSnapshot, animatingDifferences: false)
+    }
+    // MARK: - Update Functions
+    func updateCircuit(_ newCircuit: CircuitModel) {
+        guard let item = dataDource.itemIdentifier(for: IndexPath(item: newCircuit.workoutPosition, section: 0)) else {return}
+        var snapshot = dataDource.snapshot()
+        snapshot.insertItems([ExerciseRow.circuit(newCircuit)], afterItem: item)
+        snapshot.deleteItems([item])
+        dataDource.apply(snapshot, animatingDifferences: false)
+    }
+    func updateAMRAP(_ newAmrap: AMRAPModel) {
+        guard let item = dataDource.itemIdentifier(for: IndexPath(item: newAmrap.workoutPosition, section: 0)) else {return}
+        var snapshot = dataDource.snapshot()
+        snapshot.insertItems([ExerciseRow.amrap(newAmrap)], afterItem: item)
+        snapshot.deleteItems([item])
+        dataDource.apply(snapshot, animatingDifferences: false)
+    }
+    func updateEMOM(_ newEmom: EMOMModel) {
+        guard let item = dataDource.itemIdentifier(for: IndexPath(item: newEmom.workoutPosition, section: 0)) else {return}
+        var snapshot = dataDource.snapshot()
+        snapshot.insertItems([ExerciseRow.emom(newEmom)], afterItem: item)
+        snapshot.deleteItems([item])
+        dataDource.apply(snapshot, animatingDifferences: false)
     }
     
     // MARK: - Retreive

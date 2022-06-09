@@ -19,6 +19,8 @@ class AddMoreToExerciseViewModel {
     
     
     // MARK: - Properties
+    var isEditing: Bool = false
+    var editingSet: Int? = nil
     var exercise: ExerciseModel!
     
     var exerciseCreationViewModel: ExerciseCreationViewModel!

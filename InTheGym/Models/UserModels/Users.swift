@@ -22,6 +22,9 @@ struct Users: Codable, Hashable, Assignable {
     var profilePhotoURL: String?
     var profileBio: String?
     var accountCreated: TimeInterval?
+    var verifiedTrainerAccount: Bool?
+    var verifiedAthleteAccount: Bool?
+    var eliteTrainerAccount: Bool?
     
     var id: String {
         return uid

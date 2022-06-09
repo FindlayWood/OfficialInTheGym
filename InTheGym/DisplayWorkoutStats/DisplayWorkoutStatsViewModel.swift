@@ -10,13 +10,11 @@ import Foundation
 import UIKit
 
 class DisplayWorkoutStatsViewModel {
-    
+    // MARK: - Closures
     var reloadCollectionViewClosure: (() -> ())?
     var updateLoadingStatusClosure: (() -> ())?
-    
-    var firebaseService: FirebaseAPILoader!
-    var workoutSavedID: String!
-    
+    // MARK: - Properties
+    var savedWorkoutModel: SavedWorkoutModel!
     let images: [UIImage] = [UIImage(named: "eye_icon")!, UIImage(named: "download_icon")!, UIImage(named: "clock_icon")!, UIImage(named: "scores_icon")!, UIImage(named: "Workout Completed")!]
     let titles = ["Views", "Downloads", "Average Time", "Average Score", "Completions"]
     
@@ -27,11 +25,7 @@ class DisplayWorkoutStatsViewModel {
     }
     
     var numberOfItems: Int {
-        if stats != nil {
-            return 5
-        } else {
-            return 0
-        }
+        return 5
     }
     
     var isLoading: Bool = false {
@@ -40,56 +34,23 @@ class DisplayWorkoutStatsViewModel {
         }
     }
     
-    init(workoutSavedID: String, firebaseService: FirebaseAPILoader) {
-        self.workoutSavedID = workoutSavedID
-        self.firebaseService = firebaseService
-    }
-    
-    
-    func fetchData() {
-        self.isLoading = true
-        firebaseService.loadWorkoutStats(with: workoutSavedID) { [weak self] result in
-            guard let self = self else {return}
-            switch result{
-            case .failure(let error):
-                print(error.localizedDescription)
-                self.isLoading = false
-            case .success(let model):
-                self.stats = model
-                self.isLoading = false
-            }
-        }
-    }
-    
-    
     func getData(at indexPath: IndexPath) -> WorkoutStatCellModel {
         let image = images[indexPath.item]
         let title = titles[indexPath.item]
         var stat: String!
-        switch title{
+        switch title {
         case "Views":
-            stat = stats.numberOfView.description
+            stat = savedWorkoutModel.views.description
         case "Downloads":
-            stat = stats.numberOfDownloads.description
+            stat = savedWorkoutModel.downloads.description
         case "Average Time":
-            let formatter = DateComponentsFormatter()
-            
-            if stats.averageTimeToComplete > 3600{
-                formatter.allowedUnits = [.hour, .minute]
-                formatter.unitsStyle = .abbreviated
-            }else{
-                formatter.allowedUnits = [.minute, .second]
-                formatter.unitsStyle = .abbreviated
-            }
-            
-            let timeString = formatter.string(from: TimeInterval(stats.averageTimeToComplete))
-            stat = timeString
+            stat = savedWorkoutModel.averageTime()
         case "Average Score":
-            stat = stats.averageRPEScore.description
+            stat = savedWorkoutModel.averageScore().rounded(toPlaces: 1).description
         case "Completions":
-            stat = stats.numberOfCompletes.description
+            stat = savedWorkoutModel.completions.description
         default:
-            stat = stats.numberOfView.description
+            stat = savedWorkoutModel.views.description
         }
         return WorkoutStatCellModel(image: image, title: title, stat: stat)
     }

@@ -18,8 +18,6 @@ class CompletedWorkoutPageView: UIView {
         view.titleLabel.text = "Time"
         view.imageView.image = UIImage(named: "clock_icon")
         view.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.15).isActive = true
-//        view.widthAnchor.constraint(equalToConstant: Constants.screenSize.width - 20).isActive = true
-        view.addViewShadow(with: .darkColour)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -28,8 +26,6 @@ class CompletedWorkoutPageView: UIView {
         view.titleLabel.text = "Average RPE"
         view.imageView.image = UIImage(named: "scores_icon")
         view.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.15).isActive = true
-//        view.widthAnchor.constraint(equalToConstant: Constants.screenSize.width - 20).isActive = true
-        view.addViewShadow(with: .darkColour)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -47,16 +43,12 @@ class CompletedWorkoutPageView: UIView {
     var summaryView: CompletedSummaryView = {
         let view = CompletedSummaryView()
         view.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.18).isActive = true
-        //view.widthAnchor.constraint(equalToConstant: Constants.screenSize.width - 20).isActive = true
-        view.addViewShadow(with: .darkColour)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     var newView: WorkoutRPEScoreView = {
         let view = WorkoutRPEScoreView()
         view.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.15).isActive = true
-        //view.widthAnchor.constraint(equalToConstant: Constants.screenSize.width - 20).isActive = true
-        view.addViewShadow(with: .darkColour)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -64,7 +56,6 @@ class CompletedWorkoutPageView: UIView {
         let view = CompletedInfoView()
         view.titleLabel.text = "Workload"
         view.imageView.image = UIImage(named: "linechart_icon")
-        view.addViewShadow(with: .darkColour)
         view.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.15).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -197,8 +188,10 @@ class WorkoutRPEScoreView: UIView {
 // MARK: - Configure
 private extension WorkoutRPEScoreView {
     func setupUI() {
-        layer.cornerRadius = 10
-        backgroundColor = .thirdColour
+        layer.cornerRadius = 8
+        layer.borderWidth = 2
+        layer.borderColor = UIColor.darkColour.cgColor
+        backgroundColor = .systemBackground
         addSubview(titleLabel)
         addSubview(scoreLabelButton)
         configureUI()
@@ -226,9 +219,10 @@ extension WorkoutRPEScoreView {
             self.scoreLabelButton.setTitle(score.description, for: .normal)
             self.scoreLabelButton.setTitleColor(Constants.rpeColors[score - 1], for: .normal)
         } completion: { _ in
-            self.addViewShadow(with: Constants.rpeColors[score - 1])
+//            self.addViewShadow(with: Constants.rpeColors[score - 1])
+            self.layer.borderColor = Constants.rpeColors[score - 1].cgColor
             UIView.animate(withDuration: 0.5) {
-                self.backgroundColor = .offWhiteColour
+                self.backgroundColor = .systemBackground
             }
         }
     }
@@ -335,10 +329,8 @@ class CompletedSummaryView: UIView {
     var summaryLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .medium)
-        label.textColor = .darkColour
+        label.textColor = .secondaryLabel
         label.numberOfLines = 0
-        label.backgroundColor = .red
-        label.text = "test test test /n test"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -351,13 +343,14 @@ class CompletedSummaryView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension CompletedSummaryView {
     func setupUI() {
-        backgroundColor = .offWhiteColour
-        layer.cornerRadius = 10
+        backgroundColor = .systemBackground
+        layer.cornerRadius = 8
+        layer.borderColor = UIColor.darkColour.cgColor
+        layer.borderWidth = 2
         addSubview(titleLabel)
         addSubview(imageView)
         addSubview(summaryLabel)
@@ -368,6 +361,7 @@ private extension CompletedSummaryView {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            titleLabel.heightAnchor.constraint(equalToConstant: 40),
             
             imageView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),

@@ -75,7 +75,7 @@ class SavedWorkoutDisplayViewController: UIViewController, AnimatingSingleSet {
             .store(in: &subscriptions)
         
         bottomViewChildVC.showWorkoutStatsPublisher
-            .sink { [weak self] in self?.coordinator?.showWorkoutStats(with: $0)}
+            .sink { [weak self] in self?.coordinator?.showWorkoutStats()}
             .store(in: &subscriptions)
         
         bottomViewChildVC.showAssignPublisher
@@ -83,6 +83,10 @@ class SavedWorkoutDisplayViewController: UIViewController, AnimatingSingleSet {
                 guard let self = self else {return}
                 self.coordinator?.showAssign(self.viewModel.savedWorkout)
             }
+            .store(in: &subscriptions)
+        
+        bottomViewChildVC.showWorkoutDiscoveryPublisher
+            .sink { [weak self] in self?.coordinator?.showWorkoutDiscovery()}
             .store(in: &subscriptions)
         
     }
@@ -107,7 +111,7 @@ class SavedWorkoutDisplayViewController: UIViewController, AnimatingSingleSet {
             .store(in: &subscriptions)
         
         childVC.dataSource.setSelected
-            .sink { [weak self] setCellModel in
+            .sink { [weak self] (setCellModel, exerciseModel) in
                 self?.selectedSetCell = setCellModel.cell
                 self?.selectedSetCellImageViewSnapshot = setCellModel.snapshot
                 self?.showSingleSet(setCellModel.setModel)

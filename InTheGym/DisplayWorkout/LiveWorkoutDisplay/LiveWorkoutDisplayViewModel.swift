@@ -20,6 +20,8 @@ class LiveWorkoutDisplayViewModel {
     var addedClipPublisher = PassthroughSubject<WorkoutClipModel,Never>()
     
     // MARK: - Properties
+    var showExerciseDetail: ExerciseModel?
+    
     var workoutModel: WorkoutModel!
     
     var apiService: FirebaseDatabaseManagerService
@@ -156,12 +158,8 @@ extension LiveWorkoutDisplayViewModel: ExerciseAdding {
                 break
             }
         }
-//        DispatchQueue.global(qos: .background).async {
-//            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise, reps: exercise.reps?.last ?? 0, weight: exercise.weight?.last ?? "")
-//        }
     }
 }
-
 // MARK: - Clip Protocol
 extension LiveWorkoutDisplayViewModel: ClipAdding {
     func addClip(_ model: ClipModel) {

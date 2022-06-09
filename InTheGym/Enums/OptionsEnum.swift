@@ -9,9 +9,10 @@
 import UIKit
 
 enum Options: String {
+    case workoutDiscovery = "Show Workout Discovery"
     case assign = "Assign"
     case save = "Save"
-    case delete = "Delete"
+    case delete = "Remove from Saved"
     case review = "Review"
     case addWorkout = "Add to Workouts"
     case saveWorkout = "Save Workout"
@@ -21,6 +22,8 @@ enum Options: String {
     
     var image: UIImage {
         switch self {
+        case .workoutDiscovery:
+            return UIImage(systemName: "magnifyingglass")!
         case .assign:
             return UIImage(systemName: "arrowshape.turn.up.forward")!
         case .save:

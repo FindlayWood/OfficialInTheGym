@@ -26,6 +26,9 @@ class AssigningSelectionViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -33,17 +36,13 @@ class AssigningSelectionViewController: UIViewController {
         initViewModel()
         initDataSource()
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         editNavBarColour(to: .darkColour)
         navigationItem.title = "Assign"
     }
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         addToContainer(vc: usersChildVC)
     }
     // MARK: - Display
@@ -52,7 +51,6 @@ class AssigningSelectionViewController: UIViewController {
             .sink { [weak self] in self?.changedSegment(to: $0)}
             .store(in: &subscriptions)
     }
-    
     // MARK: - View Model
     func initViewModel() {
         
@@ -62,7 +60,6 @@ class AssigningSelectionViewController: UIViewController {
         
         viewModel.fetchPlayers()
     }
-    
     // MARK: - Data Source
     func initDataSource() {
         
@@ -74,7 +71,6 @@ class AssigningSelectionViewController: UIViewController {
             .sink { [weak self] in self?.viewModel.selectedGroup($0)}
             .store(in: &subscriptions)
     }
-    
     // MARK: - Add Child
     func addToContainer(vc controller: UIViewController) {
         addChild(controller)
@@ -83,7 +79,6 @@ class AssigningSelectionViewController: UIViewController {
         controller.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         controller.didMove(toParent: self)
     }
-    
     // MARK: - Remove Child
     func removeFromContainer(vc controller: UIViewController) {
         controller.willMove(toParent: nil)
@@ -91,7 +86,6 @@ class AssigningSelectionViewController: UIViewController {
         controller.removeFromParent()
     }
 }
-
 // MARK: - Actions
 private extension AssigningSelectionViewController {
     func changedSegment(to newIndex: Int) {

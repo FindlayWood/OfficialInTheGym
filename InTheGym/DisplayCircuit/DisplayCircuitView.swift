@@ -13,15 +13,13 @@ class DisplayCircuitView: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
-    var tableview: UITableView = {
-        let view = UITableView()
-        view.tableFooterView = UIView()
-        if #available(iOS 15.0, *) { view.sectionHeaderTopPadding = 0 }
-        view.register(UINib(nibName: "DisplayCircuitExerciseTableViewCell", bundle: nil), forCellReuseIdentifier: "DisplayCircuitExerciseTableViewCell")
+    lazy var collectionView: UICollectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
+        view.register(CircuitCollectionViewCell.self, forCellWithReuseIdentifier: CircuitCollectionViewCell.reuseID)
+        view.backgroundColor = .lightColour
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,22 +29,28 @@ class DisplayCircuitView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension DisplayCircuitView {
     func setupUI() {
         backgroundColor = .lightColour
-        addSubview(tableview)
+        addSubview(collectionView)
         configureUI()
     }
-    
     func configureUI() {
         NSLayoutConstraint.activate([
-            tableview.topAnchor.constraint(equalTo: topAnchor),
-            tableview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
-            tableview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
-            tableview.bottomAnchor.constraint(equalTo: bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+    }
+    func generateCollectionLayout() -> UICollectionViewFlowLayout {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 16
+        layout.itemSize = CGSize(width: Constants.screenSize.width - 16, height: 200)
+        layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        layout.scrollDirection = .vertical
+        return layout
     }
 }

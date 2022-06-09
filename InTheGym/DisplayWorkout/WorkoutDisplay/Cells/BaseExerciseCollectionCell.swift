@@ -72,7 +72,7 @@ class BaseExerciseCollectionCell: FullWidthCollectionViewCell {
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
         view.register(MainWorkoutCollectionCell.self, forCellWithReuseIdentifier: MainWorkoutCollectionCell.reuseID)
-        view.backgroundColor = .offWhiteColour
+        view.backgroundColor = .systemBackground
         view.heightAnchor.constraint(equalToConstant: 169).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -117,9 +117,9 @@ class BaseExerciseCollectionCell: FullWidthCollectionViewCell {
 // MARK: - Configure
 extension BaseExerciseCollectionCell {
     func setupUI() {
-        backgroundColor = .offWhiteColour
-        layer.cornerRadius = 10
-        contentView.layer.cornerRadius = 10
+        backgroundColor = .systemBackground
+        layer.cornerRadius = 8
+        contentView.layer.cornerRadius = 8
         contentView.addSubview(exerciseNameButton)
         contentView.addSubview(topSeparatorView)
         contentView.addSubview(setsLabel)

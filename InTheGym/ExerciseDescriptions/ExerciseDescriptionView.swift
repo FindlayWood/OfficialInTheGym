@@ -14,7 +14,7 @@ class ExerciseDescriptionView: UIView {
     
     // MARK: - Subviews
     var segmentControl: CustomUnderlineSegmentControl = {
-        let view = CustomUnderlineSegmentControl(frame: CGRect(x: 0, y: 0, width: Constants.screenSize.width, height: 32), buttonTitles: ["Clips", "Descriptions", "Tags"])
+        let view = CustomUnderlineSegmentControl(frame: CGRect(x: 0, y: 0, width: Constants.screenSize.width, height: 32), buttonTitles: ["Clips", "Comments", "Tags"])
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

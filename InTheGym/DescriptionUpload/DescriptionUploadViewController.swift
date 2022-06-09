@@ -10,34 +10,34 @@ import UIKit
 import Combine
 
 class DescriptionUploadViewController: UIViewController {
-    
+    // MARK: - Coordinator
+    weak var coordinator: DescriptionFlow?
     // MARK: - Properties
-    
     var display = DescriptionUploadView()
-    
     var viewModel = DescriptionUploadViewModel()
-    
     private var subscriptions = Set<AnyCancellable>()
-    
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        
+        view.backgroundColor = .secondarySystemBackground
+        initDisplay()
         initViewModel()
         initTargets()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
+    // MARK: - Display
+    func initDisplay() {
         display.descriptionTextView.delegate = self
+        display.descriptionTextView.text = viewModel.placeholder
+        display.setCharacterCount(0)
+        display.descriptionTextView.textChangedPublisher
+            .sink { [weak self] in self?.viewModel.updateText(with: $0)}
+            .store(in: &subscriptions)
     }
-
     // MARK: - View Model
     func initViewModel() {
-        
         viewModel.$canPost
             .sink { [weak self] in self?.display.uploadButton.isEnabled = $0 }
             .store(in: &subscriptions)
@@ -46,48 +46,41 @@ class DescriptionUploadViewController: UIViewController {
             .sink { [weak self] in self?.display.setLoading(to: $0)}
             .store(in: &subscriptions)
         
-        viewModel.postedPublisher
-            .filter { $0 }
-            .sink { [weak self] _ in self?.dismiss(animated: true)}
+        viewModel.listener?
+            .sink { [weak self] _ in self?.coordinator?.uploadedNewDescription()}
             .store(in: &subscriptions)
     }
-    
     // MARK: - Targets
     func initTargets() {
         display.uploadButton.addTarget(self, action: #selector(uploadTapped(_:)), for: .touchUpInside)
         display.cancelButton.addTarget(self, action: #selector(cancelTapped(_:)), for: .touchUpInside)
     }
-    
     // MARK: - Actions
     @objc func uploadTapped(_ sender: UIButton) {
         viewModel.upload()
     }
     @objc func cancelTapped(_ sender: UIButton) {
-        self.dismiss(animated: true)
+        coordinator?.dismiss()
     }
 }
-
 // MARK: - TextView Delegate
 extension DescriptionUploadViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.lightGray {
+        if textView.textColor == .secondaryLabel {
             textView.text = nil
-            textView.textColor = .black
+            textView.textColor = .label
         }
     }
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         let numberOfChars = newText.count
-        if numberOfChars < 300 {
-            viewModel.updateText(with: newText)
-        }
-        return numberOfChars < 300
+        display.setCharacterCount(numberOfChars)
+        return numberOfChars <= 500
     }
-    
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty || textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            textView.text = display.placeholder
-            textView.textColor = UIColor.lightGray
+            textView.text = viewModel.placeholder
+            textView.textColor = .secondaryLabel
             display.uploadButton.isEnabled = false
         }
     }

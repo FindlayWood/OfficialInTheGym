@@ -41,6 +41,11 @@ extension RegularWorkoutCreationCoordinator {
         vc.viewModel.exercise = exercise
         navigationController.pushViewController(vc, animated: true)
     }
+    func workoutOptions(_ model: WorkoutCreationOptionsNavigationModel) {
+        let child = WorkoutCreationOptionsCoordinator(navigationController: navigationController, navigationModel: model)
+        childCoordinators.append(child)
+        child.start()
+    }
 }
 // Exercise Selection Flow
 extension RegularWorkoutCreationCoordinator: ExerciseSelectionFlow {
@@ -85,7 +90,6 @@ extension RegularWorkoutCreationCoordinator: SetSelectionFlow {
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
-
 }
 // Reps Selection Flow
 extension RegularWorkoutCreationCoordinator: RepSelectionFlow {

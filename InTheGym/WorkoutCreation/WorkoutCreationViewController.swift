@@ -30,10 +30,9 @@ class WorkoutCreationViewController: UIViewController {
     override func loadView() {
         view = display
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .secondarySystemBackground
         display.exercisesTableView.dataSource = dataSource
         initAdapter()
         initialTableSetup()
@@ -50,6 +49,7 @@ class WorkoutCreationViewController: UIViewController {
     
     func initAdapter() {
         display.exercisesTableView.separatorStyle = .singleLine
+        display.exercisesTableView.backgroundColor = .secondarySystemBackground
     }
     
     func initNavBar() {
@@ -57,16 +57,14 @@ class WorkoutCreationViewController: UIViewController {
         navigationItem.rightBarButtonItem = uploadButton
         navigationItem.rightBarButtonItem?.isEnabled = false
     }
-    
+    // MARK: - Display
     func initDisplay() {
-        display.configure(with: viewModel.assignTo)
-        display.workoutTitleField.delegate = self
+        display.titleTextField.delegate = self
     }
-    
+    // MARK: - Targets
     func setUpActions() {
         display.plusButton.addTarget(self, action: #selector(plusButtonPressed(_:)), for: .touchUpInside)
-        display.saveView.savingButton.addTarget(self, action: #selector(toggleSaving(_:)), for: .touchUpInside)
-        display.privacyView.privacyButton.addTarget(self, action: #selector(togglePrivacy(_:)), for: .touchUpInside)
+        display.optionsButton.addTarget(self, action: #selector(optionsButtonActions(_:)), for: .touchUpInside)
     }
     
     //MARK: - Subscribers
@@ -92,8 +90,7 @@ class WorkoutCreationViewController: UIViewController {
             .sink { [weak self] success in
                 guard let self = self else {return}
                 if success {
-                    // TODO: - Reset page
-                    // TODO: - Display Top View
+                    self.display.reset()
                     self.displayTopMessage(with: "Uploaded Workout!")
                     self.viewModel.reset()
                 }
@@ -104,11 +101,11 @@ class WorkoutCreationViewController: UIViewController {
             .sink { [weak self] error in
                 guard let self = self else {return}
                 if error {
-                    // TODO: - Display Top Alert
                     self.displayTopMessage(with: "Error! Please try again.")
                 }
             }
             .store(in: &subscriptions)
+        viewModel.optionSubscriptions()
     }
 }
 // MARK: - Actions
@@ -120,13 +117,16 @@ extension WorkoutCreationViewController {
         let newExercise = ExerciseModel(workoutPosition: viewModel.exercises.count)
         coordinator?.addNewExercise(newExercise)
     }
-    @objc func toggleSaving(_ sender: UIButton) {
-        viewModel.isSaving.toggle()
-        display.saveView.configure(with: viewModel.isSaving)
-    }
-    @objc func togglePrivacy(_ sender: UIButton) {
-        viewModel.isPrivate.toggle()
-        display.privacyView.configure(with: viewModel.isPrivate)
+    @objc func optionsButtonActions(_ sender: UIButton) {
+        let navigationModel = WorkoutCreationOptionsNavigationModel(
+            isSaving: viewModel.isSaving,
+            isPrivate: viewModel.isPrivate,
+            assignTo: viewModel.assignTo,
+            currentTags: viewModel.workoutTags,
+            toggledSaving: viewModel.toggledSaving,
+            toggledPrivacy: viewModel.toggledPrivacy,
+            addedNewTag: viewModel.addedNewTag)
+        coordinator?.workoutOptions(navigationModel)
     }
 }
 
@@ -188,7 +188,7 @@ extension WorkoutCreationViewController {
 extension WorkoutCreationViewController {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string).trimTrailingWhiteSpaces()
-        if textField == display.workoutTitleField {
+        if textField == display.titleTextField {
             viewModel.updateTitle(with: newString)
         }
         return true

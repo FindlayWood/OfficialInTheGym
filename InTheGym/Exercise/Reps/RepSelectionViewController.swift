@@ -96,14 +96,13 @@ class RepSelectionViewController: UIViewController {
             .sink { [weak self] in self?.viewModel.selectedSet = $0 }
             .store(in: &subscriptions)
     }
-    
+    // MARK: - View Model
     func initViewModel() {
-        
         viewModel.$setCellModels
             .compactMap{ $0 }
             .sink { [weak self] in self?.setsDataSource.updateCollection(with: $0)}
             .store(in: &subscriptions)
-        
+        viewModel.getSetCellModels()
         viewModel.$isLiveWorkout
             .sink { [weak self] isLive in
                 if isLive {
@@ -112,18 +111,18 @@ class RepSelectionViewController: UIViewController {
                 }
             }
             .store(in: &subscriptions)
-
-        viewModel.getSetCellModels()
+        viewModel.$isEditing
+            .sink { [weak self] isEditing in
+                if isEditing {
+                    self?.setsDataSource.isLive = true
+                    self?.setsDataSource.setSelected.send(self?.viewModel.editingSet)
+                }
+            }.store(in: &subscriptions)
         viewModel.isLiveWorkout = coordinator is LiveWorkoutSetCreationCoordinator
     }
-    
-
 }
-
-
-//MARK: - button methods
+//MARK: - Actions
 extension RepSelectionViewController{
-    
     @objc func plus() {
         if repCounter < 99 {
             repCounter += 1
@@ -132,7 +131,6 @@ extension RepSelectionViewController{
             display.topCollection.reloadData()
         }
     }
-    
     @objc func minus() {
         if repCounter == 1 {
             display.repLabel.text = "M"
@@ -144,7 +142,6 @@ extension RepSelectionViewController{
         dataSource.repSelected.send(repCounter)
         display.topCollection.reloadData()
     }
-    
     @objc func nextPressed() {
         let reps = viewModel.setCellModels?.map { $0.repNumber }
         viewModel.exercise.reps = reps

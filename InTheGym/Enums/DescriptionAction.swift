@@ -9,7 +9,6 @@
 import Foundation
 
 enum DescriptionAction {
-    case upVote
-    case downVote
+    case likeButton
     case userTapped
 }

@@ -152,13 +152,13 @@ private extension MainWorkoutCollectionCell {
             UIView.animate(withDuration: 0.5) {
                 self.backgroundColor = .darkColour
             } completion: { (_) in
-                let collection = self.superview as! UICollectionView
-                let currentIndex = collection.indexPath(for: self)?.item
-                let lastindextoscroll = collection.numberOfItems(inSection: 0) - 1
-                if currentIndex! < lastindextoscroll {
-                    let indextoscroll = IndexPath.init(row: currentIndex! + 1, section: 0)
-                    collection.scrollToItem(at: indextoscroll, at: .left, animated: true)
-                }
+//                let collection = self.superview as! UICollectionView
+//                let currentIndex = collection.indexPath(for: self)?.item
+//                let lastindextoscroll = collection.numberOfItems(inSection: 0) - 1
+//                if currentIndex! < lastindextoscroll {
+//                    let indextoscroll = IndexPath.init(row: currentIndex! + 1, section: 0)
+//                    collection.scrollToItem(at: indextoscroll, at: .left, animated: true)
+//                }
                 self.completeButtonTapped.send(())
             }
         }

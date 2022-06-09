@@ -31,18 +31,14 @@ class WeightSelectionViewController: UIViewController {
     override func loadView() {
         view = display
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         hideKeyboardWhenTappedAround()
-        
         initDataSource()
         initViewModel()
         initTargets()
         initNavBar()
     }
-    
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.title = "Weight"
         editNavBarColour(to: .darkColour)
@@ -60,14 +56,14 @@ class WeightSelectionViewController: UIViewController {
             .store(in: &subscriptions)
     }
     
-    // MARK: - Init View Model
+    // MARK: - View Model
     func initViewModel() {
         
         viewModel.$setCellModels
             .compactMap { $0 }
             .sink { [weak self] in self?.setsDataSource.updateCollection(with: $0)}
             .store(in: &subscriptions)
-        
+        viewModel.getSetCellModels()
         viewModel.$isLiveWorkout
             .sink { [weak self] isLive in
                 if isLive {
@@ -76,19 +72,20 @@ class WeightSelectionViewController: UIViewController {
                 }
             }
             .store(in: &subscriptions)
-        
-        viewModel.getSetCellModels()
+        viewModel.$isEditing
+            .filter { $0 }
+            .sink { [weak self] _ in
+                self?.setsDataSource.isLive = true
+                self?.setsDataSource.setSelected.send(self?.viewModel.editingSet)
+            }.store(in: &subscriptions)
         viewModel.isLiveWorkout = coordinator is LiveWorkoutSetCreationCoordinator
     }
-    
-    
     // MARK: - Nav Bar
     func initNavBar() {
         let nextButton = UIBarButtonItem(title: "Next", style: .done, target: self, action: #selector(nextPressed(_:)))
         navigationItem.rightBarButtonItem = nextButton
         navigationItem.rightBarButtonItem?.isEnabled = false
     }
-    
     // MARK: - Init Targets
     func initTargets() {
         display.kgButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
@@ -102,7 +99,6 @@ class WeightSelectionViewController: UIViewController {
         display.nextButton.addTarget(self, action: #selector(nextPressed(_:)), for: .touchUpInside)
         display.skipButton.addTarget(self, action: #selector(skipPressed(_:)), for: .touchUpInside)
     }
-    
     func showEmptyAlert(){
         let screenSize: CGRect = UIScreen.main.bounds
         let screenWidth = screenSize.width
@@ -114,7 +110,6 @@ class WeightSelectionViewController: UIViewController {
         alert.showError("Enter a Weight!", subTitle: "You have not entered a number for the weight. To enter a number tap on the left side of the big dark blue box. You can continue without entering a weight by pressing the SKIP button near the bottom of the screen.", closeButtonTitle: "OK")
     }
 }
-
 // MARK: - Actions
 private extension WeightSelectionViewController {
     @objc func buttonPressed(_ sender: UIButton) {

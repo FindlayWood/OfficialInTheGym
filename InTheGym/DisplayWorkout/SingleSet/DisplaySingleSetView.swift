@@ -209,7 +209,14 @@ class DisplaySingleSetView: UIView {
         stack.isHidden = true
         return stack
     }()
-    
+    var editButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Edit Set", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: UIScreen.main.bounds)
@@ -230,6 +237,7 @@ private extension DisplaySingleSetView {
         addSubview(moreInfoLabelStack)
         addSubview(completeButton)
         addSubview(dismissButton)
+        addSubview(editButton)
         constrainUI()
     }
     func constrainUI() {
@@ -250,7 +258,10 @@ private extension DisplaySingleSetView {
             completeButton.bottomAnchor.constraint(equalTo: setView.bottomAnchor),
             completeButton.centerXAnchor.constraint(equalTo: setView.centerXAnchor),
             
-            moreInfoLabelStack.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: -16),
+            editButton.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: -8),
+            editButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
+            
+            moreInfoLabelStack.bottomAnchor.constraint(equalTo: editButton.topAnchor, constant: -8),
             moreInfoLabelStack.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 16),
             moreInfoLabelStack.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -16),
             moreInfoLabelStack.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
@@ -266,10 +277,11 @@ private extension DisplaySingleSetView {
 }
 // MARK: - Configure View
 extension DisplaySingleSetView {
-    func configure(with exercise: ExerciseSet) {
+    func configure(with exercise: ExerciseSet, isEditable: Bool? = false) {
         backgroundView.backgroundColor = exercise.completed ? .darkColour : .lightColour
         completeButton.setImage(exercise.completed ? UIImage(named: "tickRing") : UIImage(named: "emptyRing"), for: .normal)
         completeButton.isUserInteractionEnabled = exercise.completed ? false : false
+        editButton.isHidden = (exercise.completed || (isEditable == false))
         setLabel.text = "Set \(exercise.set)"
         repLabel.text = "\(exercise.reps) reps"
         weightLabel.text = exercise.weight

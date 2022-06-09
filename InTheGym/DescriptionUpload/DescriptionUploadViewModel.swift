@@ -15,18 +15,15 @@ class DescriptionUploadViewModel {
     @Published var postText: String = ""
     @Published var canPost: Bool = false
     @Published var isLoading: Bool = false
-    
+    var uploadCommentPublisher: PassthroughSubject<String,Never>!
     var postedPublisher = PassthroughSubject<Bool,Never>()
-    
     var errorPublisher = PassthroughSubject<Error,Never>()
     
     // MARK: - Properties
+    var placeholder: String = "add a comment..."
     private var subscriptions = Set<AnyCancellable>()
-    
-    var descriptionModel: DescriptionModel!
-    
-    var listener: NewDescriptionListener?
-    
+//    var descriptionModel: DescriptionModel!
+    var listener: NewCommentListener?
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     
     // MARK: - Initializer
@@ -34,44 +31,40 @@ class DescriptionUploadViewModel {
         self.apiService = apiService
         initSubscriptions()
     }
-    
+    // MARK: - Subscriptions
     func initSubscriptions() {
-        
-        $postText
-            .dropFirst()
-            .sink { [unowned self] in self.descriptionModel.description = $0 }
-            .store(in: &subscriptions)
-        
+//        $postText
+//            .dropFirst()
+//            .sink { [unowned self] in self.descriptionModel.description = $0 }
+//            .store(in: &subscriptions)
+//        
         $postText
             .map { return $0.count > 0 }
             .sink { [unowned self] in self.canPost = $0 }
             .store(in: &subscriptions)
-        
     }
-    
     // MARK: - Actions
     func updateText(with newText: String) {
-        postText = newText
+        postText = newText.trimTrailingWhiteSpaces()
     }
-    
     // MARK: - Functions
     func upload() {
-        descriptionModel.time = Date().timeIntervalSince1970
-        isLoading = true
-        
-        let uploadPoints = descriptionModel.uploadPoints()
-        apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(()):
-                self.postedPublisher.send(true)
-                self.listener?.send(self.descriptionModel)
-                self.isLoading = false
-            case .failure(let error):
-                self.errorPublisher.send(error)
-                self.isLoading = false
-            }
-        }
+        listener?.send(postText)
+//        descriptionModel.time = Date().timeIntervalSince1970
+//        isLoading = true
+//
+//        let uploadPoints = descriptionModel.uploadPoints()
+//        apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
+//            guard let self = self else {return}
+//            switch result {
+//            case .success(()):
+//                self.postedPublisher.send(true)
+//                self.listener?.send(self.descriptionModel)
+//                self.isLoading = false
+//            case .failure(let error):
+//                self.errorPublisher.send(error)
+//                self.isLoading = false
+//            }
+//        }
     }
-    
 }

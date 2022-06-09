@@ -9,26 +9,22 @@
 import UIKit
 
 class DisplayEMOMView: UIView {
-    
     // MARK: - Subviews
     var fullTimePrgoressView: CircularProgressView = {
         let view = CircularProgressView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     var minuteProgressView: CircularProgressView = {
         let view = CircularProgressView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     var exerciseView: EMOMExerciseView = {
         let view = EMOMExerciseView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     var initialMainTime: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo-Bold", size: 20)
@@ -36,7 +32,6 @@ class DisplayEMOMView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     var initialMinuteTime: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Menlo-Bold", size: 20)
@@ -44,7 +39,6 @@ class DisplayEMOMView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -55,11 +49,10 @@ class DisplayEMOMView: UIView {
         setupUI()
     }
 }
-
 // MARK: - Setup UI
 private extension DisplayEMOMView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         addSubview(fullTimePrgoressView)
         addSubview(minuteProgressView)
         addSubview(exerciseView)
@@ -69,7 +62,7 @@ private extension DisplayEMOMView {
     }
     func constrainUI() {
         NSLayoutConstraint.activate([
-            fullTimePrgoressView.topAnchor.constraint(equalTo: topAnchor),
+            fullTimePrgoressView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             fullTimePrgoressView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4),
             fullTimePrgoressView.centerXAnchor.constraint(equalTo: centerXAnchor),
             fullTimePrgoressView.heightAnchor.constraint(equalTo: fullTimePrgoressView.widthAnchor),
@@ -89,11 +82,9 @@ private extension DisplayEMOMView {
             
             initialMinuteTime.centerXAnchor.constraint(equalTo: minuteProgressView.centerXAnchor),
             initialMinuteTime.centerYAnchor.constraint(equalTo: minuteProgressView.centerYAnchor)
-            
         ])
     }
 }
-
 // MARK: - Actions
 extension DisplayEMOMView {
     public func updateFullTime() {

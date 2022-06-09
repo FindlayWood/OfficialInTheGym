@@ -14,46 +14,36 @@ class SavedWorkoutBottomChildViewController: UIViewController {
     // MARK: - Publishers
     var framePublisher = PassthroughSubject<CGRect,Never>()
     var snapPublisher = PassthroughSubject<CGRect,Never>()
-    
     var showUserPublisher = PassthroughSubject<Users,Never>()
-    var showWorkoutStatsPublisher = PassthroughSubject<String,Never>()
+    var showWorkoutStatsPublisher = PassthroughSubject<Void,Never>()
     var showAssignPublisher = PassthroughSubject<Void,Never>()
+    var showWorkoutDiscoveryPublisher = PassthroughSubject<Void,Never>()
 
     // MARK: - Properties
     var display = SavedWorkoutBottomChildView()
-    
     var viewModel = SavedWorkoutBottomChildViewModel()
-    
-    var optionsChildVC = OptionsChildViewController()
-    
+    var dataSource: OptionsCollectionDataSource!
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        display.frame = view.bounds
-        view.addSubview(display)
         addPan()
-//        addChildVC()
+        initTargets()
         initViewModel()
-        initChildDataSource()
+        initDataSource()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        addChildVC()
+    // MARK: - Targets
+    func initTargets() {
+        display.optionsButton.addTarget(self, action: #selector(optionsButtonAction(_:)), for: .touchUpInside)
     }
-    
-    // MARK: - Add Child
-    func addChildVC() {
-        addChild(optionsChildVC)
-        display.addSubview(optionsChildVC.view)
-        optionsChildVC.view.frame = display.newView.frame
-        optionsChildVC.didMove(toParent: self)
-    }
-    
-    func initChildDataSource() {
-        optionsChildVC.dataSource.optionSelected
+    // MARK: - Data Source
+    func initDataSource() {
+        dataSource = .init(collectionView: display.collectionView)
+        dataSource.optionSelected
             .sink { [weak self] in self?.viewModel.optionSelected($0)}
             .store(in: &subscriptions)
     }
@@ -62,17 +52,17 @@ class SavedWorkoutBottomChildViewController: UIViewController {
     func initViewModel() {
         
         viewModel.optionsPublisher
-            .sink { [weak self] in self?.optionsChildVC.dataSource.updateTable(with: $0)}
+            .sink { [weak self] in self?.dataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
-        
+
         viewModel.optionsRemovePublisher
-            .sink { [weak self] in self?.optionsChildVC.dataSource.remove($0)}
+            .sink { [weak self] in self?.dataSource.remove($0)}
             .store(in: &subscriptions)
         
         viewModel.removedSavedWorkoutPublisher
             .sink { [weak self] success in
                 if success {
-                    self?.showTopMessage("Removed from Saved Workouts.")
+                    self?.displayTopMessage(with: "Removed from Saved Workouts")
                 } else {
                     self?.showTopMessage()
                 }
@@ -82,7 +72,7 @@ class SavedWorkoutBottomChildViewController: UIViewController {
         viewModel.addedWorkoutPublisher
             .sink { [weak self] success in
                 if success {
-                    self?.showTopMessage("Added to Workouts.")
+                    self?.displayTopMessage(with: "Added to Workouts.")
                 } else {
                     self?.showTopMessage()
                 }
@@ -92,7 +82,7 @@ class SavedWorkoutBottomChildViewController: UIViewController {
         viewModel.savedWorkoutPublisher
             .sink { [weak self] success in
                 if success {
-                    self?.showTopMessage("Added to Saved Workouts.")
+                    self?.displayTopMessage(with: "Added to Saved Workouts.")
                 } else {
                     self?.showTopMessage()
                 }
@@ -104,11 +94,15 @@ class SavedWorkoutBottomChildViewController: UIViewController {
             .store(in: &subscriptions)
         
         viewModel.showWorkoutStatsPublisher
-            .sink { [weak self] in self?.showWorkoutStatsPublisher.send($0)}
+            .sink { [weak self] in self?.showWorkoutStatsPublisher.send(())}
             .store(in: &subscriptions)
         
         viewModel.assignPublisher
             .sink { [weak self] in self?.showAssignPublisher.send(())}
+            .store(in: &subscriptions)
+        
+        viewModel.workoutDiscoveryPublisher
+            .sink { [weak self] in self?.showWorkoutDiscoveryPublisher.send(())}
             .store(in: &subscriptions)
         
         viewModel.isSaved()
@@ -185,4 +179,14 @@ class SavedWorkoutBottomChildViewController: UIViewController {
         }
     }
     
+}
+// MARK: - Actions
+private extension SavedWorkoutBottomChildViewController {
+    @objc func optionsButtonAction(_ sender: UIButton) {
+        if viewModel.bottomViewCurrentState == .normal {
+            snapToState(.expanded)
+        } else {
+            snapToState(.normal)
+        }
+    }
 }
