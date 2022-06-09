@@ -17,6 +17,7 @@ class SavedWorkoutBottomChildViewController: UIViewController {
     var showUserPublisher = PassthroughSubject<Users,Never>()
     var showWorkoutStatsPublisher = PassthroughSubject<Void,Never>()
     var showAssignPublisher = PassthroughSubject<Void,Never>()
+    var showWorkoutDiscoveryPublisher = PassthroughSubject<Void,Never>()
 
     // MARK: - Properties
     var display = SavedWorkoutBottomChildView()
@@ -98,6 +99,10 @@ class SavedWorkoutBottomChildViewController: UIViewController {
         
         viewModel.assignPublisher
             .sink { [weak self] in self?.showAssignPublisher.send(())}
+            .store(in: &subscriptions)
+        
+        viewModel.workoutDiscoveryPublisher
+            .sink { [weak self] in self?.showWorkoutDiscoveryPublisher.send(())}
             .store(in: &subscriptions)
         
         viewModel.isSaved()

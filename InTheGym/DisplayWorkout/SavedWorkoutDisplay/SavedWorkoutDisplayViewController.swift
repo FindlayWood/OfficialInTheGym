@@ -85,6 +85,10 @@ class SavedWorkoutDisplayViewController: UIViewController, AnimatingSingleSet {
             }
             .store(in: &subscriptions)
         
+        bottomViewChildVC.showWorkoutDiscoveryPublisher
+            .sink { [weak self] in self?.coordinator?.showWorkoutDiscovery()}
+            .store(in: &subscriptions)
+        
     }
     // MARK: - Data Source
     func initDataSource() {

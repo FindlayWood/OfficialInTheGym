@@ -48,6 +48,11 @@ extension SavedWorkoutCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    func showWorkoutDiscovery() {
+        let child = WorkoutDiscoveryCoordinator(navigationController: navigationController, savedWorkoutModel: savedWorkoutModel)
+        childCoordinators.append(child)
+        child.start()
+    }
     func showEMOM(_ emom: EMOMModel) {
         let vc = DisplayEMOMViewController()
         vc.viewModel.emomModel = emom
