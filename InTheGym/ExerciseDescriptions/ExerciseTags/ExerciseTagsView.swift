@@ -21,9 +21,8 @@ class ExerciseTagsView: UIView {
     }()
     var plusButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "bluePlus3"), for: .normal)
-        button.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        button.tintColor = .lightColour
+        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 100)), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -36,7 +35,6 @@ class ExerciseTagsView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension ExerciseTagsView {
@@ -45,7 +43,6 @@ private extension ExerciseTagsView {
         addSubview(plusButton)
         configureUI()
     }
-    
     func configureUI() {
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: topAnchor),

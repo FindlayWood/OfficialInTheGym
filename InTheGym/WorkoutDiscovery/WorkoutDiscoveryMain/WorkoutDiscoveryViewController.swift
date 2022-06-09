@@ -28,7 +28,7 @@ class WorkoutDiscoveryViewController: UIViewController {
         initTargets()
         display.workoutView.configure(with: viewModel.savedWorkoutModel)
         commentsVC.viewModel.savedWorkoutModel = viewModel.savedWorkoutModel
-        // Do any additional setup after loading the view.
+        tagsVC.viewModel.savedWorkoutModel = viewModel.savedWorkoutModel
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -67,7 +67,6 @@ class WorkoutDiscoveryViewController: UIViewController {
             .sink { [weak self] in self?.segmentChanged(to: $0) }
             .store(in: &subscriptions)
     }
-    
     // MARK: - Switch Segment
     func segmentChanged(to index: Int) {
         viewModel.selectedIndex = index

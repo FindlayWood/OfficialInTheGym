@@ -9,8 +9,6 @@
 import Foundation
 
 struct WorkoutDiscoveryViewModel {
-    // MARK: - Publishers
-    
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     var savedWorkoutModel: SavedWorkoutModel!
@@ -19,8 +17,4 @@ struct WorkoutDiscoveryViewModel {
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
-    
-    // MARK: - Actions
-    
-    // MARK: - Functions
 }

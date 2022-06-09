@@ -24,6 +24,7 @@ class WorkoutDiscoveryCoordinator: Coordinator {
         let vc = WorkoutDiscoveryViewController()
         vc.coordinator = self
         vc.commentsVC.coordinator = self
+        vc.tagsVC.coordinator = self
         vc.viewModel.savedWorkoutModel = savedWorkoutModel
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
@@ -37,7 +38,7 @@ extension WorkoutDiscoveryCoordinator {
         child.start()
     }
 }
-// MARK: - Description Flow
+// MARK: - Comments Flow
 extension WorkoutDiscoveryCoordinator: DescriptionFlow {
     func addNewDescription(publisher: NewCommentListener) {
         let vc = DescriptionUploadViewController()
@@ -50,5 +51,14 @@ extension WorkoutDiscoveryCoordinator: DescriptionFlow {
     }
     func dismiss() {
         navigationController.dismiss(animated: true)
+    }
+}
+// MARK: - Tag Flow
+extension WorkoutDiscoveryCoordinator {
+    func addNewTag(_ model: AddWorkoutTagsNavigationModel) {
+        let vc = AddWorkoutTagsViewController()
+        vc.viewModel.currentTags = model.currentTags
+        vc.viewModel.addNewTagPublisher = model.addedNewTagPublisher
+        navigationController.present(vc, animated: true)
     }
 }
