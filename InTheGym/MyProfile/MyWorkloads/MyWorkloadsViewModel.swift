@@ -9,21 +9,12 @@
 import Foundation
 
 struct MyWorkloadsViewModel {
-    // MARK: - Publishers
-    
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
-    
     var workloadModels: [WorkloadModel]!
-    
     var navigationTitle: String = "Workloads"
-    
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
-    
-    // MARK: - Actions
-    
-    // MARK: - Functions
 }

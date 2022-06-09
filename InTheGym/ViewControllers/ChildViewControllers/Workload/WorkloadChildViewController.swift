@@ -33,16 +33,12 @@ class WorkloadChildViewController: UIViewController {
     
     // MARK: - ViewModel
     func initViewModel() {
-        
         viewModel.chartDataPublisher
             .sink { [weak self] in self?.display.lineChart.data = $0 }
             .store(in: &subscriptions)
-        
         viewModel.$isLoading
             .sink { [weak self] in self?.setLoading(to: $0)}
             .store(in: &subscriptions)
-        
-        
         viewModel.loadWorkloads()
     }
 

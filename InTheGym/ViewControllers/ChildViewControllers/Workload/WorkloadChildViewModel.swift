@@ -15,21 +15,17 @@ class WorkloadChildViewModel {
     // MARK: - Publishers
     var chartDataPublisher = PassthroughSubject<BarChartData,Never>()
     var currentlySelectedIndex = CurrentValueSubject<Int,Never>(0)
-    
+    @Published var barCharData: BarChartData?
+    @Published var workloadsToShow: [WorkloadModel] = []
     @Published var isLoading: Bool = false
-    
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
-    
     var user: Users!
-    
     var workloadModels: [WorkloadModel] = []
-    
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
-    
     // MARK: - Actions
     
     // MARK: - Functions
@@ -47,17 +43,17 @@ class WorkloadChildViewModel {
             }
         }
     }
-    func getChartEntries(from models: [WorkloadModel]) {
+    func getChartEntries(from models: [WorkloadModel], for days: Int = 7) {
         var chartEntries = [BarChartDataEntry]()
-        let filteredModels = models.filter { $0.endTime.daysAgo() < 7 }
+        let filteredModels = models.filter { $0.endTime.daysAgo() < days }
+        workloadsToShow = filteredModels
         let occurences = getOccurences(filteredModels.map { $0.endTime.daysAgo() }, filteredModels.map { $0.workload })
         for (key, value) in occurences {
-            chartEntries.append(BarChartDataEntry(x: Double(7 - key), y: Double(value)))
+            chartEntries.append(BarChartDataEntry(x: Double(days - key), y: Double(value)))
         }
         chartEntries.sort { $0.x < $1.x }
         setChartData(with: chartEntries)
     }
-    
     func getOccurences(_ days: [Int], _ workloads: [Int]) -> [Int:Int] {
         var occureneces = [Int:Int]()
         for (index, value) in days.enumerated() {
@@ -65,16 +61,16 @@ class WorkloadChildViewModel {
         }
         return occureneces
     }
-    
     func setChartData(with entries: [BarChartDataEntry]) {
         let chartDataSet = BarChartDataSet(entries: entries, label: "workload")
         let chartData = BarChartData()
         chartData.append(chartDataSet)
-        chartData.setDrawValues(true)
+        chartData.setDrawValues(false)
         let colors = entries.map { setBarColour(for: $0.y) }
         chartDataSet.colors = colors
         
-        chartDataPublisher.send(chartData)
+//        chartDataPublisher.send(chartData)
+        barCharData = chartData
         isLoading = false
     }
     func setBarColour(for value: Double?) -> UIColor {

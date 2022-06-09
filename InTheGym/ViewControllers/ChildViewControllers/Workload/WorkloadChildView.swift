@@ -40,7 +40,7 @@ class WorkloadChildView: UIView {
         view.leftAxis.drawLabelsEnabled = true
         view.rightAxis.drawLabelsEnabled = false
         view.rightAxis.drawGridLinesEnabled = false
-        view.xAxis.drawLabelsEnabled = true
+        view.xAxis.drawLabelsEnabled = false
         view.backgroundColor = .clear
         view.isUserInteractionEnabled = false
         view.translatesAutoresizingMaskIntoConstraints = false
