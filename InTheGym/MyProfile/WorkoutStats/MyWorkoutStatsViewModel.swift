@@ -17,7 +17,7 @@ class MyWorkoutStatsViewModel {
     
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
-    
+    var selectedIndex: Int = 0
     var navigationTitle: String {
         "My Workout Stats"
     }

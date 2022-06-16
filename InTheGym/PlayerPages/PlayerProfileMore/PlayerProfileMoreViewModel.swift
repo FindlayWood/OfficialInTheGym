@@ -18,7 +18,13 @@ class PlayerProfileMoreViewModel: ObservableObject {
     
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
-    
+    var subscriptionType: String {
+        if UserDefaults.currentUser.premiumAccount ?? false {
+            return "Premium Account"
+        } else {
+            return "None"
+        }
+    }
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
@@ -48,10 +54,12 @@ class PlayerProfileMoreViewModel: ObservableObject {
 
 enum PlayerProfileMoreAction {
     case editProfile
+    case subscription
     case myCoaches
     case requests
     case exerciseStats
     case workoutStats
+    case performanceMonitor
     case measureJump
     case breathWork
     case settings

@@ -21,6 +21,8 @@ class ViewClipViewModel: NSObject {
     var failedToPreparePublihser = PassthroughSubject<Void,Never>()
     
     @Published var isLoading: Bool = true
+    @Published var clipModel: ClipModel?
+    @Published var error: Error?
     
     // MARK: - Properties
     var keyClipModel: KeyClipModel!
@@ -65,7 +67,18 @@ class ViewClipViewModel: NSObject {
             premiumAccountPublisher.send(())
         }
     }
-    
+    // MARK: - Fetch Clip Model
+    func fetchClipModel() {
+        let clipSearchModel = ClipModelDownloadModel(clipKey: keyClipModel.clipKey)
+        apiService.fetchSingleInstance(of: clipSearchModel, returning: ClipModel.self) { [weak self] result in
+            switch result {
+            case .success(let model):
+                self?.clipModel = model
+            case .failure(let error):
+                self?.error = error
+            }
+        }
+    }
     // MARK: - Prepare To Play
     func prepareToPlay(_ asset: AVAsset) {
         

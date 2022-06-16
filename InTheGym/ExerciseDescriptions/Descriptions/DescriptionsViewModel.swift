@@ -16,7 +16,10 @@ class DescriptionsViewModel {
     @Published var ratingCount: Int?
     @Published var isLoading: Bool = false
     @Published var error: Error?
+    @Published var eliteStampCount: Int = 0
+    @Published var verifiedStampCount: Int = 0
     var addedRatingPublisher = PassthroughSubject<Int,Never>()
+    var addedStampPublisher = PassthroughSubject<[Stamps],Never>()
     private var subscriptions = Set<AnyCancellable>()
     // MARK: - Properties
     var ratings: [Int]?
@@ -35,8 +38,10 @@ class DescriptionsViewModel {
         newCommentListener
             .sink { [weak self] in self?.newComment($0)}
             .store(in: &subscriptions)
+        addedStampPublisher
+            .sink { [weak self] in self?.newStamps($0)}
+            .store(in: &subscriptions)
     }
-    
     // MARK: - Fetch Models
     func fetchModels() {
         isLoading = true
@@ -68,6 +73,26 @@ class DescriptionsViewModel {
                 self?.ratingCount = ratings.count
             case .failure(let error):
                 print(String(describing: error))
+            }
+        }
+    }
+    func loadStamps() {
+        let eliteStamp = EliteExerciseStampsModel(exerciseName: exerciseModel.exerciseName)
+        apiService.childCount(of: eliteStamp) { [weak self] result in
+            switch result {
+            case .success(let count):
+                self?.eliteStampCount = count
+            case .failure(let error):
+                self?.error = error
+            }
+        }
+        let verifiedStamp = VerifiedExerciseStampsModel(exerciseName: exerciseModel.exerciseName)
+        apiService.childCount(of: verifiedStamp) { [weak self] result in
+            switch result {
+            case .success(let count):
+                self?.verifiedStampCount = count
+            case .failure(let error):
+                self?.error = error
             }
         }
     }
@@ -103,6 +128,27 @@ class DescriptionsViewModel {
             case .failure(let error):
                 self?.error = error
                 self?.isLoading = false
+            }
+        }
+    }
+    func newStamps(_ stamps: [Stamps]) {
+        var uploadPoints = [FirebaseMultiUploadDataPoint]()
+        if stamps.contains(.verified) {
+            let model = VerifiedExerciseStampsModel(exerciseName: exerciseModel.exerciseName)
+            uploadPoints.append(model.getUploadPoint())
+            verifiedStampCount += 1
+        }
+        if stamps.contains(.elite) {
+            let model = EliteExerciseStampsModel(exerciseName: exerciseModel.exerciseName)
+            uploadPoints.append(model.getUploadPoint())
+            eliteStampCount += 1
+        }
+        apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
+            switch result {
+            case .success(_):
+                break
+            case .failure(let error):
+                self?.error = error
             }
         }
     }

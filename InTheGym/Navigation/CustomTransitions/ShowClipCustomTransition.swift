@@ -59,8 +59,8 @@ final class ShowClipCustomTransition: NSObject, UIViewControllerAnimatedTransiti
         guard let selectedCell = firstViewController.selectedCell,
               let window = firstViewController.view.window ?? secondViewController.view.window,
               let cellImageSnapshot = selectedCell.thumbnailImageView.snapshotView(afterScreenUpdates: true),
-              let controllerImageSnapshot = secondViewController.display.thumbnailImageView.snapshotView(afterScreenUpdates: true),
-              let closeButtonSnapshot = secondViewController.display.backButton.snapshotView(afterScreenUpdates: true)
+              let controllerImageSnapshot = secondViewController.display.thumbnailImageView.snapshotView(afterScreenUpdates: true)
+//              let closeButtonSnapshot = secondViewController.display.backButton.snapshotView(afterScreenUpdates: true)
             else {
                 transitionContext.completeTransition(true)
                 return
@@ -89,12 +89,12 @@ final class ShowClipCustomTransition: NSObject, UIViewControllerAnimatedTransiti
         toView.alpha = 0
         
         // B3 - 24
-        [backgroundView, selectedCellImageViewSnapshot, controllerImageSnapshot, closeButtonSnapshot].forEach { containerView.addSubview($0) }
+        [backgroundView, selectedCellImageViewSnapshot, controllerImageSnapshot].forEach { containerView.addSubview($0) }
 
         // B3 - 25
         let controllerImageViewRect = secondViewController.view.convert(secondViewController.view.bounds, to: window)
         
-        let closeButtonRect = secondViewController.display.backButton.convert(secondViewController.display.backButton.bounds, to: window)
+//        let closeButtonRect = secondViewController.display.backButton.convert(secondViewController.display.backButton.bounds, to: window)
 
         // B3 - 26
         [selectedCellImageViewSnapshot, controllerImageSnapshot].forEach {
@@ -111,8 +111,8 @@ final class ShowClipCustomTransition: NSObject, UIViewControllerAnimatedTransiti
         selectedCellImageViewSnapshot.alpha = isPresenting ? 1 : 0
         
         // B7 - 56
-        closeButtonSnapshot.frame = closeButtonRect
-        closeButtonSnapshot.alpha = isPresenting ? 0 : 1
+//        closeButtonSnapshot.frame = closeButtonRect
+//        closeButtonSnapshot.alpha = isPresenting ? 0 : 1
         
         // B3 - 27
         UIView.animateKeyframes(withDuration: Self.duration, delay: 0, options: .calculationModeCubic, animations: {
@@ -139,7 +139,7 @@ final class ShowClipCustomTransition: NSObject, UIViewControllerAnimatedTransiti
             }
             // B7 - 57
             UIView.addKeyframe(withRelativeStartTime: isPresenting ? 0.7 : 0, relativeDuration: 0.3) {
-                closeButtonSnapshot.alpha = isPresenting ? 1 : 0
+//                closeButtonSnapshot.alpha = isPresenting ? 1 : 0
             }
         }, completion: { _ in
             // B3 - 29
@@ -150,7 +150,7 @@ final class ShowClipCustomTransition: NSObject, UIViewControllerAnimatedTransiti
             // B5 - 44
             backgroundView.removeFromSuperview()
             
-            closeButtonSnapshot.removeFromSuperview()
+//            closeButtonSnapshot.removeFromSuperview()
 
             // B3 - 30
             toView.alpha = 1

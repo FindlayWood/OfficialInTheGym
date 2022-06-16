@@ -92,6 +92,8 @@ private extension ProfileInfoTableViewCell {
         infoView.followButton.addTarget(self, action: #selector(followButtonAction(_:)), for: .touchUpInside)
         clipButton.addTarget(self, action: #selector(clipsTapped(_:)), for: .touchUpInside)
         workoutsButton.addTarget(self, action: #selector(savedWorkoutsTapped(_:)), for: .touchUpInside)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(stampsTapAction(_:)))
+        infoView.userStampsView.addGestureRecognizer(tap)
     }
     func initViewModel() {
         
@@ -135,8 +137,10 @@ private extension ProfileInfoTableViewCell {
         infoView.setFollowButton(to: .loading)
         viewModel.followButtonAction()
     }
+    @objc func stampsTapAction(_ sender: UIButton) {
+        actionPublisher.send(.stamps)
+    }
 }
-
 // MARK: - Public Configuration
 extension ProfileInfoTableViewCell {
     func configure(with user: Users) {

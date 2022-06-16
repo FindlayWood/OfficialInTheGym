@@ -146,7 +146,8 @@ extension LiveWorkoutDisplayViewModel: ExerciseAdding {
         workoutModel.exercises?[exercise.workoutPosition] = exercise
         let uploadModel = LiveWorkoutExerciseModel(workout: workoutModel, exercise: exercise)
         guard let uploadPoints = uploadModel.addExerciseModel() else {return}
-        let statsUpdateModel = UpdateExerciseSetStatsModel(exerciseName: exercise.exercise, reps: exercise.reps?.last ?? 0, weight: exercise.weight?.last)
+        let statsUpdateModel = UpdateExerciseSetStatsModel(exerciseName: exercise.exercise, reps: exercise.reps?.last ?? 0, weight: exercise.weight?.last,
+                                                           time: exercise.time?.last ?? 0, distance: exercise.distance?.last)
         var points: [FirebaseMultiUploadDataPoint] = statsUpdateModel.points
         points.append(contentsOf: uploadPoints)
         apiService.multiLocationUpload(data: points) { result in

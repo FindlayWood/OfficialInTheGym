@@ -89,14 +89,30 @@ struct UpdateExerciseSetStatsModel {
     var exerciseName: String
     var reps: Int
     var weight: String?
+    var time: Int?
+    var distance: String?
     
     var points: [FirebaseMultiUploadDataPoint] {
-        [exerciseNamePoint, totalRepsPoint, totalSetsPoint, totalWeightPoint]
+        [exerciseNamePoint, totalRepsPoint, totalSetsPoint, totalWeightPoint, totalDistancePoint, totalTimePoint]
     }
     
     var weightNumber: Double {
         if let weight = weight {
             return getWeight(from: poundsOrKilograms(from: weight) ?? .kg(0.0))
+        } else {
+            return 0.0
+        }
+    }
+    var timeInSeconds: Int {
+        if let time = time {
+            return time
+        } else {
+            return 0
+        }
+    }
+    var distanceNumber: Double {
+        if let distance = distance {
+            return milesOrMetres(from: distance) ?? 0.0
         } else {
             return 0.0
         }
@@ -107,6 +123,8 @@ struct UpdateExerciseSetStatsModel {
     
     private let kilogramSuffix = "kg"
     private let poundsSuffix = "lbs"
+    private let milesSuffix = "miles"
+    private let kmSuffix = "km"
 }
 extension UpdateExerciseSetStatsModel {
     var totalWeightPath: String {
@@ -120,6 +138,12 @@ extension UpdateExerciseSetStatsModel {
     }
     var exerciseNamePath: String {
         "ExerciseStats/\(UserDefaults.currentUser.uid)/\(exerciseName)/exerciseName"
+    }
+    var totalDistancePath: String {
+        "ExerciseStats/\(UserDefaults.currentUser.uid)/\(exerciseName)/totalDistance"
+    }
+    var totalTimePath: String {
+        "ExerciseStats/\(UserDefaults.currentUser.uid)/\(exerciseName)/totalTime"
     }
 }
 extension UpdateExerciseSetStatsModel {
@@ -135,11 +159,14 @@ extension UpdateExerciseSetStatsModel {
     var totalWeightPoint: FirebaseMultiUploadDataPoint {
         FirebaseMultiUploadDataPoint(value: ServerValue.increment(weightNumber as NSNumber), path: totalWeightPath)
     }
+    var totalDistancePoint: FirebaseMultiUploadDataPoint {
+        FirebaseMultiUploadDataPoint(value: ServerValue.increment(distanceNumber as NSNumber), path: totalDistancePath)
+    }
+    var totalTimePoint: FirebaseMultiUploadDataPoint {
+        FirebaseMultiUploadDataPoint(value: ServerValue.increment(timeInSeconds as NSNumber), path: totalTimePath)
+    }
 }
-
-
-
-
+// MARK: - Weight Extraction
 extension UpdateExerciseSetStatsModel {
     private func convertToKG(from pounds: Double) -> Double {
         return pounds / 2.205
@@ -171,6 +198,26 @@ extension UpdateExerciseSetStatsModel {
             return kilos
         case .lbs(let pounds):
             return convertToKG(from: pounds)
+        }
+    }
+}
+// MARK: - Distance Extraction
+extension UpdateExerciseSetStatsModel {
+    private func milesOrMetres(from string: String) -> Double? {
+        let lastTwo = string.suffix(2)
+        let lastFive = string.suffix(5)
+        if lastFive == milesSuffix {
+            let milesString = string.dropLast(5)
+            guard let miles = Double(milesString) else {return nil}
+            return miles.convertMilesToKm()
+        } else if lastTwo == kmSuffix {
+            let kmString = string.dropLast(2)
+            guard let km = Double(kmString) else {return nil}
+            return km
+        } else {
+            let mString = string.dropLast(1)
+            guard let m = Double(mString) else {return nil}
+            return m / 1000
         }
     }
 }

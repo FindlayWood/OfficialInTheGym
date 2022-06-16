@@ -37,6 +37,11 @@ class DescriptionsView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    var exerciseStampsView: ExerciseStampsView = {
+        let view = ExerciseStampsView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     var tableview: UITableView = {
         let view = UITableView()
         view.register(DescriptionTableViewCell.self, forCellReuseIdentifier: DescriptionTableViewCell.cellID)
@@ -50,6 +55,13 @@ class DescriptionsView: UIView {
         button.tintColor = .lightColour
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    lazy var stack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [exerciseStampsView, tableview])
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -67,7 +79,8 @@ private extension DescriptionsView {
         addSubview(ratingLabel)
         addSubview(ratingCountLabel)
         addSubview(addRatingButton)
-        addSubview(tableview)
+//        addSubview(tableview)
+        addSubview(stack)
         addSubview(plusButton)
         configureUI()
     }
@@ -82,10 +95,14 @@ private extension DescriptionsView {
             ratingCountLabel.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 8),
             ratingCountLabel.bottomAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: -2),
             
-            tableview.topAnchor.constraint(equalTo: addRatingButton.bottomAnchor, constant: 8),
+            stack.topAnchor.constraint(equalTo: addRatingButton.bottomAnchor, constant: 8),
+            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
+//            tableview.topAnchor.constraint(equalTo: addRatingButton.bottomAnchor, constant: 8),
             tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
             tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tableview.bottomAnchor.constraint(equalTo: bottomAnchor),
+//            tableview.bottomAnchor.constraint(equalTo: bottomAnchor),
             
             plusButton.trailingAnchor.constraint(equalTo: tableview.trailingAnchor, constant: -5),
             plusButton.bottomAnchor.constraint(equalTo: tableview.bottomAnchor, constant: -5)

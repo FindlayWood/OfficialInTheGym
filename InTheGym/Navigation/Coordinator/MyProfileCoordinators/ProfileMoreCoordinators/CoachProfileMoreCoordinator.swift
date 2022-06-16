@@ -9,13 +9,14 @@
 import UIKit
 
 class CoachProfileMoreCoordinator: Coordinator {
+    // MARK: - Properties
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
-    
+    // MARK: - Initializer
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-    
+    // MARK: - Start
     func start() {
          let vc = CoachProfileMoreViewController()
         vc.hidesBottomBarWhenPushed = true
@@ -23,6 +24,7 @@ class CoachProfileMoreCoordinator: Coordinator {
         navigationController.pushViewController(vc, animated: true)
     }
 }
+// MARK: - Flow
 extension CoachProfileMoreCoordinator {
     func editProfile() {
         let child = EditProfileCoordinator(navigationController: navigationController)
@@ -40,6 +42,11 @@ extension CoachProfileMoreCoordinator {
     }
     func myWorkoutStats() {
         let vc = MyWorkoutStatsViewController()
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func showPerformanceMonitor(for user: Users) {
+        let vc = PerformanceMonitorViewController()
+        vc.viewModel.user = user
         navigationController.pushViewController(vc, animated: true)
     }
     func jumpMeasure() {

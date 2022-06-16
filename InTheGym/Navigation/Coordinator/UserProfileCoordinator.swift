@@ -61,6 +61,10 @@ extension UserProfileCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    func showStampsPreview() {
+        let vc = StampsPreviewViewController()
+        navigationController.present(vc, animated: true)
+    }
     func showUser(user: Users) {
         let child = UserProfileCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(child)

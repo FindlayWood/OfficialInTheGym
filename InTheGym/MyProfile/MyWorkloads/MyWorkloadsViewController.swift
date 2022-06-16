@@ -7,16 +7,14 @@
 //
 
 import UIKit
+import Combine
 
 class MyWorkloadsViewController: UIViewController {
-    
     // MARK: - Properties
     var display = MyWorkloadsView()
-    
     var viewModel = MyWorkloadsViewModel()
-    
     var dataSource: MyWorkloadsDataSource!
-
+    private var subscriptions = Set<AnyCancellable>()
     // MARK: - View
     override func loadView() {
         view = display

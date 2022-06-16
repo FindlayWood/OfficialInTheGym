@@ -15,7 +15,8 @@ struct WorkloadModel: Hashable {
     var rpe: Int
     var timeToComplete: Int
     var workload: Int
-    var workoutID: String
+    var customAddedWorkload: Int?
+    var workoutID: String?
 }
 extension WorkloadModel: FirebaseTimeOrderedModel {
     var internalPath: String {

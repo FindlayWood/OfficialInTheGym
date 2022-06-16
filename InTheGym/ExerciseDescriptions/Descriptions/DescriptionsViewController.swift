@@ -53,10 +53,17 @@ class DescriptionsViewController: UIViewController {
         viewModel.$descriptionModels
             .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
+        viewModel.$eliteStampCount
+            .sink { [weak self] in self?.display.exerciseStampsView.eliteCountLabel.text = $0.description }
+            .store(in: &subscriptions)
+        viewModel.$verifiedStampCount
+            .sink { [weak self] in self?.display.exerciseStampsView.verifiedCountLabel.text = $0.description }
+            .store(in: &subscriptions)
 
         viewModel.fetchModels()
         viewModel.loadRating()
         viewModel.initSubscriptions()
+        viewModel.loadStamps()
     }
 }
 // MARK: - Button Actions
@@ -67,6 +74,7 @@ private extension DescriptionsViewController {
     @objc func addRatingButtonAction(_ sender: UIButton) {
         let vc = ExerciseRatingViewController()
         vc.viewModel.addedRatingPublisher = viewModel.addedRatingPublisher
+        vc.viewModel.addedStampPublisher = viewModel.addedStampPublisher
         vc.viewModel.currentRating = viewModel.rating
         navigationController?.present(vc, animated: true)
     }

@@ -9,10 +9,10 @@
 import Foundation
 
 extension TimeInterval {
-    
     func daysAgo() -> Int {
-        let date = Date(timeIntervalSince1970: self)
-        let days = Calendar.current.dateComponents([.day], from: date, to: Date())
+        let fromDate = Calendar.current.startOfDay(for: Date(timeIntervalSince1970: self))
+        let toDate = Calendar.current.startOfDay(for: Date())
+        let days = Calendar.current.dateComponents([.day], from: fromDate, to: toDate)
         return days.day ?? 0
     }
 }

@@ -37,7 +37,6 @@ class CompletedWorkoutPageViewModel {
         workout.completed = true
         let uploadModel = CompletedWorkoutUploadModel(workout: workout)
         let uploadPoints = uploadModel.uploadPoints()
-        print(uploadPoints)
         apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
             switch result {
             case .success(()):

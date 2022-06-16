@@ -121,6 +121,8 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
             coordinator?.showMyClips()
         case .savedWorkouts:
             coordinator?.showMyWorkouts()
+        case .stamps:
+            coordinator?.showStampsPreview()
         }
     }
     

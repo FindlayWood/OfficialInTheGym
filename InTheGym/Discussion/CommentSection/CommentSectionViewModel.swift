@@ -51,7 +51,6 @@ class CommentSectionViewModel {
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
-    
     // MARK: - Functions
     func loadGeneric<T: FirebaseInstance>(for postGeneric: T) {
         isLoading.send(true)
@@ -68,7 +67,6 @@ class CommentSectionViewModel {
             }
         }
     }
-    
     // MARK: - Actions
     func sendPressed() {
         self.isLoading.send(true)
@@ -94,7 +92,6 @@ class CommentSectionViewModel {
             }
         }
     }
-    
     func addedReply(_ comment: Comment) {
         mainPost.replyCount += 1
         listener?.send(mainPost)
@@ -104,7 +101,6 @@ class CommentSectionViewModel {
     func likedMainPost() {
         mainPost.likeCount += 1
     }
-    
     func groupSendPressed() {
         self.isLoading.send(true)
         let newComment = Comment(id: UUID().uuidString,

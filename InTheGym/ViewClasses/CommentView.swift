@@ -19,7 +19,7 @@ class CommentView: UIView {
     var bottomViewAnchor: NSLayoutConstraint!
     var commentFieldHeightAnchor: NSLayoutConstraint!
     private let placeholder = "add a reply..."
-    private let placeholderColour: UIColor = Constants.darkColour
+    private let placeholderColour: UIColor = .tertiaryLabel
     private let stackViewSpacing: CGFloat = 10, constraintSpaicng: CGFloat = 10
     
     var replyType: replyType = .Text {
@@ -81,18 +81,16 @@ class CommentView: UIView {
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
     }()
-    
     var sendButton: UIButton = {
         let button = UIButton()
         button.setTitle("Send", for: .normal)
-        button.setTitleColor(.lightGray, for: .disabled)
-        button.setTitleColor(.lightGray, for: .normal)
-        button.isUserInteractionEnabled = false
+        button.setTitleColor(.lightColour, for: .normal)
+        button.setTitleColor(.secondaryLabel, for: .disabled)
+        button.isEnabled = false
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
     var separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
@@ -110,7 +108,6 @@ class CommentView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -120,7 +117,6 @@ class CommentView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension CommentView {
@@ -133,7 +129,6 @@ private extension CommentView {
         addSubview(removeAttachmentButton)
         configureUI()
     }
-    
     func configureUI() {
         commentFieldHeightAnchor = commentTextField.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.9)
         NSLayoutConstraint.activate([
@@ -168,7 +163,6 @@ private extension CommentView {
         textViewDidChange(commentTextField)
     }
 }
-
 // MARK: - Public Attachments
 extension CommentView {
     public func attachWorkout(_ workout: SavedWorkoutModel) {
@@ -216,13 +210,13 @@ extension CommentView: UITextViewDelegate {
         }
         
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || textView.text == placeholder  {
-//            sendButton.isEnabled = false
-            sendButton.setTitleColor(.lightGray, for: .normal)
-            sendButton.isUserInteractionEnabled = false
+            sendButton.isEnabled = false
+//            sendButton.setTitleColor(.lightGray, for: .normal)
+//            sendButton.isUserInteractionEnabled = false
         } else {
-//            sendButton.isEnabled = true
-            sendButton.setTitleColor(Constants.lightColour, for: .normal)
-            sendButton.isUserInteractionEnabled = true
+            sendButton.isEnabled = true
+//            sendButton.setTitleColor(Constants.lightColour, for: .normal)
+//            sendButton.isUserInteractionEnabled = true
         }
         
 

@@ -17,7 +17,7 @@ enum clipViewingState {
 }
 
 class ViewClipViewController: UIViewController {
-    
+    // MARK: - Properties
     weak var newCoordinator: ClipProfileCustomCoordinator?
     
     var player: AVPlayer?
@@ -38,14 +38,12 @@ class ViewClipViewController: UIViewController {
     override func loadView() {
         view = display
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initViewModel()
         addObservers()
         initTargets()
     }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -56,18 +54,13 @@ class ViewClipViewController: UIViewController {
             self?.display.thumbnailImageView.image = image
         }
     }
-
-
     // MARK: - Targets
     func initTargets() {
-        display.backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         let tap = UITapGestureRecognizer(target: self, action: #selector(togglePause))
         display.addGestureRecognizer(tap)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         display.addGestureRecognizer(pan)
     }
-    
-    
     // MARK: - View Model
     func initViewModel() {
         
@@ -85,8 +78,14 @@ class ViewClipViewController: UIViewController {
         viewModel.premiumAccountPublisher
             .sink { [weak self] in self?.premiumAccountAlert() }
             .store(in: &subscriptions)
+        
+        viewModel.$clipModel
+            .compactMap { $0 }
+            .sink { [weak self] in self?.display.setModel($0) }
+            .store(in: &subscriptions)
             
         viewModel.fetchClip()
+        viewModel.fetchClipModel()
     }
     
     func setPlayer(_ player: AVPlayer) {
@@ -99,18 +98,13 @@ class ViewClipViewController: UIViewController {
         player.play()
         addTimerObserver()
     }
- 
     func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(clipFinished), name: .AVPlayerItemDidPlayToEndTime, object: nil)
     }
-
-    
     // MARK: - Alert
     func premiumAccountAlert() {
         print("need premium account")
     }
-
-
     // TODO: - Move to view model
     func addTimerObserver() {
         guard let player = viewModel.playerPublisher.value else {return}
@@ -126,7 +120,6 @@ class ViewClipViewController: UIViewController {
             }
         }
     }
-    
     @objc func handlePan(_ sender: UIPanGestureRecognizer) {
         
         let translation = sender.translation(in: display)
@@ -146,7 +139,6 @@ class ViewClipViewController: UIViewController {
             break
         }
     }
-    
     func snapToState(_ state: clipViewingState) {
         switch state {
         case .fullScreen:

@@ -32,8 +32,6 @@ class PlayerProfileMoreViewController: UIViewController {
         editNavBarColour(to: .darkColour)
         navigationItem.title = UserDefaults.currentUser.username
     }
-
-
     // MARK: - Swift UI Child View
     func addChildView() {
         childContentView = .init(viewModel: viewModel)
@@ -64,6 +62,9 @@ private extension PlayerProfileMoreViewController {
         switch action {
         case .editProfile:
             coordinator?.editProfile()
+        case .subscription:
+            let vc = PremiumAccountViewController()
+            navigationController?.present(vc, animated: true)
         case .myCoaches:
             coordinator?.myCoaches()
         case .requests:
@@ -72,6 +73,8 @@ private extension PlayerProfileMoreViewController {
             coordinator?.exerciseStats()
         case .workoutStats:
             coordinator?.myWorkoutStats()
+        case .performanceMonitor:
+            coordinator?.showPerformanceMonitor(for: UserDefaults.currentUser)
         case .measureJump:
             coordinator?.jumpMeasure()
         case .breathWork:

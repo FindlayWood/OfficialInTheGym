@@ -66,6 +66,42 @@ class ExerciseRatingView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    var addStampLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 24, weight: .semibold)
+        label.textColor = .label
+        label.textAlignment = .center
+        label.text = "Add Stamp"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    var stampMessageLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.textColor = .secondaryLabel
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .center
+        label.text = "Add your stamp to this exercise. Tap the button below to add your stamp."
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    var newButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "stamp_icon"), for: .normal)
+        button.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    lazy var stampStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [addStampLabel, stampMessageLabel,newButton])
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.spacing = 8
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -86,6 +122,7 @@ private extension ExerciseRatingView {
         addSubview(stack)
         addSubview(messageLabel)
         addSubview(submitButton)
+        addSubview(stampStack)
         configureUI()
         addButtons()
     }
@@ -96,12 +133,13 @@ private extension ExerciseRatingView {
             loadingIndicator.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             loadingIndicator.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
+            currentRatingLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            currentRatingLabel.topAnchor.constraint(equalTo: dismissButton.bottomAnchor, constant: 16),
+            
+            stack.topAnchor.constraint(equalTo: currentRatingLabel.bottomAnchor, constant: 8),
             stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            stack.bottomAnchor.constraint(equalTo: centerYAnchor),
-            
-            currentRatingLabel.bottomAnchor.constraint(equalTo: stack.topAnchor, constant: -16),
-            currentRatingLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+//            stack.bottomAnchor.constraint(equalTo: centerYAnchor),
             
             messageLabel.topAnchor.constraint(equalTo: stack.bottomAnchor, constant: 8),
             messageLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -109,7 +147,13 @@ private extension ExerciseRatingView {
             
             submitButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 8),
             submitButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            submitButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.6)
+            submitButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.6),
+            
+            stampStack.topAnchor.constraint(equalTo: submitButton.bottomAnchor, constant: 16),
+            stampStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stampStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
+            stampMessageLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8)
         ])
     }
     func addButtons(_ selectedIndex: Int? = nil) {
@@ -145,5 +189,12 @@ private extension ExerciseRatingView {
 extension ExerciseRatingView {
     public func setSubmitButton(to enabled: Bool) {
         submitButton.backgroundColor = enabled ? .darkColour : .darkColour.withAlphaComponent(0.5)
+    }
+    public func configureStamps() {
+        if UserDefaults.currentUser.verifiedAccount ?? false || UserDefaults.currentUser.eliteAccount ?? false {
+            stampStack.isHidden = false
+        } else {
+            stampStack.isHidden = true
+        }
     }
 }
