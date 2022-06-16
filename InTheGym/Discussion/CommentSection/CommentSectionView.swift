@@ -35,6 +35,7 @@ class CommentSectionView: UIView {
         let view = CommentView()
         view.removeAttachedWorkout()
         view.textViewDidChange(view.commentTextField)
+        view.sendButton.isEnabled = false
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -48,7 +49,6 @@ class CommentSectionView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension CommentSectionView {
@@ -83,8 +83,8 @@ extension CommentSectionView {
     public func setInteraction(to allowed: Bool) {
         commentView.attachmentButton.isUserInteractionEnabled = allowed
         commentView.commentTextField.isUserInteractionEnabled = allowed
-        commentView.sendButton.isEnabled = allowed
-        commentView.sendButton.setTitleColor(allowed ? .lightColour : .lightGray, for: .normal)
+//        commentView.sendButton.isEnabled = allowed
+//        commentView.sendButton.setTitleColor(allowed ? .lightColour : .lightGray, for: .normal)
     }
     public func resetView() {
         commentView.commentTextField.resignFirstResponder()
@@ -93,7 +93,7 @@ extension CommentSectionView {
         commentView.textViewDidEndEditing(commentView.commentTextField)
         commentView.removeAttachedWorkout()
         commentView.sendButton.isEnabled = false
-        commentView.sendButton.setTitleColor(.lightGray, for: .normal)
+//        commentView.sendButton.setTitleColor(.lightGray, for: .normal)
     }
 }
     

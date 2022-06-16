@@ -11,16 +11,11 @@ import SwiftUI
 import Combine
 
 class CoachProfileMoreViewController: UIViewController {
-    
     // MARK: - Properties
     weak var coordinator: CoachProfileMoreCoordinator?
-    
     var childContentView: CoachProfileMoreView!
-    
     var viewModel = CoachProfileMoreViewModel()
-    
     private var subscriptions = Set<AnyCancellable>()
-
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +42,6 @@ class CoachProfileMoreViewController: UIViewController {
             childView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
     // MARK: - View Model
     func initViewModel() {
         
@@ -68,6 +62,8 @@ private extension CoachProfileMoreViewController {
             coordinator?.myWorkoutStats()
         case .exerciseStats:
             coordinator?.exerciseStats()
+        case .performanceMonitor:
+            coordinator?.showPerformanceMonitor(for: UserDefaults.currentUser)
         case .measureJump:
             coordinator?.jumpMeasure()
         case .breathWork:

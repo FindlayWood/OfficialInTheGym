@@ -16,6 +16,7 @@ class ExerciseRatingViewModel {
     @Published var selectedRating: Int?
     @Published var error: Error?
     var addedRatingPublisher: PassthroughSubject<Int,Never>?
+    var addedStampPublisher: PassthroughSubject<[Stamps],Never>?
     var uploadSuccessful = PassthroughSubject<Void,Never>()
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
@@ -47,6 +48,16 @@ class ExerciseRatingViewModel {
 //                self?.isLoading = false
 //            }
 //        }
+    }
+    func submitStamp() {
+        var stamps = [Stamps]()
+        if UserDefaults.currentUser.verifiedAccount ?? false {
+            stamps.append(.verified)
+        }
+        if UserDefaults.currentUser.eliteAccount ?? false {
+            stamps.append(.elite)
+        }
+        addedStampPublisher?.send(stamps)
     }
     // MARK: - Functions
 }

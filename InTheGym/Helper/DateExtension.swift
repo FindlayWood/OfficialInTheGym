@@ -9,7 +9,6 @@
 import Foundation
 
 extension Date {
-    
     func timeAgo() -> String {
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .short
@@ -18,7 +17,6 @@ extension Date {
         formatter.maximumUnitCount = 1
         return String(format: formatter.string(from: self, to: Date())!)
     }
-    
     func getDayOfWeek() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE"
@@ -46,5 +44,13 @@ extension Date {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
         return formatter.string(from: self)
+    }
+    func getDayMonthFormat() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM"
+        return formatter.string(from: self)
+    }
+    func addOrSubtractDay(day: Int) -> Date? {
+      return Calendar.current.date(byAdding: .day, value: day, to: self)
     }
 }

@@ -9,14 +9,9 @@
 import UIKit
 
 class UIProfileInfoView: UIView {
-    
-    
-    // MARK: - Properties
-    
     // MARK: - Subviews
     var profileImageView: UIButton = {
         let view = UIButton()
-//        view.contentMode = .scaleAspectFill
         view.backgroundColor = .clear
         view.clipsToBounds = true
         view.layer.cornerRadius = (Constants.screenSize.width * 0.35) / 2
@@ -25,7 +20,6 @@ class UIProfileInfoView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     var nameUsernameView: UINameUsernameSubView = {
         let view = UINameUsernameSubView()
         view.nameLabel.textAlignment = .center
@@ -33,10 +27,13 @@ class UIProfileInfoView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     var followerView: UIUserFollowerSubView = {
         let view = UIUserFollowerSubView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    var userStampsView: UserStampsView = {
+        let view = UserStampsView()
         return view
     }()
     var followButton: UIButton = {
@@ -50,7 +47,6 @@ class UIProfileInfoView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
     var bioLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .regular)
@@ -60,7 +56,6 @@ class UIProfileInfoView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     var loadingIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.hidesWhenStopped = true
@@ -70,16 +65,14 @@ class UIProfileInfoView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     lazy var stack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [profileImageView, nameUsernameView, followerView, followButton, bioLabel])
+        let stack = UIStackView(arrangedSubviews: [profileImageView, nameUsernameView, followerView, userStampsView, followButton, bioLabel])
         stack.axis = .vertical
         stack.alignment = .center
         stack.spacing = 8
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -89,7 +82,6 @@ class UIProfileInfoView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension UIProfileInfoView {
@@ -97,17 +89,16 @@ private extension UIProfileInfoView {
         addSubview(stack)
         configureUI()
     }
-    
     func configureUI() {
         addFullConstraint(to: stack)
     }
 }
-
 // MARK: - Public Configuration
 extension UIProfileInfoView {
     public func configure(with user: Users) {
         nameUsernameView.configure(with: user)
         followerView.configure(admin: user.admin)
+        userStampsView.configure(with: user)
         bioLabel.text = user.profileBio
         let imageDownloader = ProfileImageDownloadModel(id: user.uid)
         ImageCache.shared.load(from: imageDownloader) { [weak self] result in
@@ -120,7 +111,6 @@ extension UIProfileInfoView {
             }
         }
     }
-
     public func setFollowerCount(to count: Int) {
         followerView.setFollowers(to: count)
     }

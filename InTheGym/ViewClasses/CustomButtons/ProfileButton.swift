@@ -53,17 +53,17 @@ class ProfileButton: UIButton {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension ProfileButton {
     func setupUI() {
         backgroundColor = .secondarySystemBackground
         layer.cornerRadius = 8
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.darkColour.cgColor
         addSubview(stack)
         configureUI()
     }
-    
     func configureUI() {
         let buttonWidthAnchor = buttonImage.heightAnchor.constraint(equalToConstant: 30)
         buttonWidthAnchor.priority = UILayoutPriority(999)

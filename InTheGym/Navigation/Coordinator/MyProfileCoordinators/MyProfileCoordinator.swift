@@ -19,17 +19,17 @@ protocol MyProfileFlow: TimelineFlow {
 }
 
 class MyProfileCoordinator: NSObject, Coordinator {
-    
+    // MARK: - Properties
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
-    
+    // MARK: - Initializer
     init(navigationController: UINavigationController){
         self.navigationController = navigationController
         self.navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController.navigationBar.shadowImage = UIImage()
         self.navigationController.navigationBar.tintColor = .white
     }
-    
+    // MARK: - Start
     func start() {
         navigationController.delegate = self
         let vc = MyProfileViewController()
@@ -63,6 +63,10 @@ extension MyProfileCoordinator {
         let vc = SavedWorkoutsViewController()
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
+    }
+    func showStampsPreview() {
+        let vc = StampsPreviewViewController()
+        navigationController.present(vc, animated: true)
     }
     func showCreatedWorkouts() {
         let child = CreatedWorkoutsCoordinator(navigationController: navigationController)

@@ -51,6 +51,7 @@ enum CoachProfileMoreAction {
     case myWorkouts
     case workoutStats
     case exerciseStats
+    case performanceMonitor
     case measureJump
     case breathWork
     case settings

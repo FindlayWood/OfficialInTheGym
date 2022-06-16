@@ -114,6 +114,11 @@ class LaunchPageViewController: UIViewController, Storyboarded {
         
         //checkForUser()
     }
+    func backgroundUpdate() {
+        let userID = UserDefaults.currentUser.uid
+        let userSeachModel = UserSearchModel(uid: userID)
+        
+    }
     
     func showSuccess(){
         let user = Auth.auth().currentUser

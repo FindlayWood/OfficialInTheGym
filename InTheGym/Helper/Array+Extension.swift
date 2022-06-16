@@ -38,3 +38,17 @@ extension Array where Element == String {
         return String(weightString.dropLast())
     }
 }
+
+extension Array where Element == Double {
+    func sum() -> Double {
+        self.reduce(0, +)
+    }
+    func avg() -> Double {
+        self.sum() / Double(self.count)
+    }
+    func stdev() -> Double {
+        let mean = self.avg()
+        let v = self.reduce(0, { $0 + ($1 - mean)*($1 - mean) })
+        return sqrt(v / Double(self.count) - 1)
+    }
+}

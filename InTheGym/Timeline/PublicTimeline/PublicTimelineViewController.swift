@@ -122,6 +122,8 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
             coordinator?.showUserClips(user: viewModel.user)
         case .savedWorkouts:
             coordinator?.showUserWorkouts(user: viewModel.user)
+        case .stamps:
+            coordinator?.showStampsPreview()
         }
     }
     func showCommentSection(for post: PostModel) {

@@ -13,4 +13,5 @@ enum ProfileInfoActions {
     case following
     case clips
     case savedWorkouts
+    case stamps
 }

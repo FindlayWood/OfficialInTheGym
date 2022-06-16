@@ -16,4 +16,5 @@ extension UIColor {
     static let babyBlue = #colorLiteral(red: 0.7490196078, green: 0.8431372549, blue: 0.9294117647, alpha: 1)
     static let thirdColour = #colorLiteral(red: 0.9529411765, green: 0.9803921569, blue: 1, alpha: 1)
     static let redColour = UIColor(named: "redColour")
+    static let goldColour = UIColor(named: "goldColour")
 }

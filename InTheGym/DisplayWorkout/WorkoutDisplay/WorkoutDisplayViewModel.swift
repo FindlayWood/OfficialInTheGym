@@ -78,7 +78,10 @@ class WorkoutDisplayViewModel {
             }
         }
         DispatchQueue.global(qos: .background).async {
-            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise, reps: exercise.reps?[index.item] ?? 0, weight: exercise.weight?[index.item] ?? "")
+            let statsUpdateModel = UpdateExerciseSetStatsModel(exerciseName: exercise.exercise, reps: exercise.reps?[index.item] ?? 0, weight: exercise.weight?[index.item] ?? "",
+                                                               time: exercise.time?[index.item] ?? 0, distance: exercise.distance?[index.item] ?? "")
+            self.apiService.multiLocationUpload(data: statsUpdateModel.points) { _ in }
+//            FirebaseAPIWorkoutManager.shared.checkForExerciseStats(name: exercise.exercise, reps: exercise.reps?[index.item] ?? 0, weight: exercise.weight?[index.item] ?? "")
         }
     }
     
@@ -95,7 +98,9 @@ class WorkoutDisplayViewModel {
             }
         }
         DispatchQueue.global(qos: .background).async {
-            FirebaseAPIWorkoutManager.shared.checkForCompletionStats(name: exercise.exercise, rpe: score)
+            let completionModel = UpdateExerciseStatsModel(exerciseName: exercise.exercise, rpe: score)
+            self.apiService.multiLocationUpload(data: completionModel.points) { _ in }
+//            FirebaseAPIWorkoutManager.shared.checkForCompletionStats(name: exercise.exercise, rpe: score)
         }
     }
     func editedExercise(_ exercise: ExerciseModel) {

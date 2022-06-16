@@ -30,8 +30,10 @@ class ExerciseRatingViewController: UIViewController {
     }
     // MARK: - Targets
     func initDisplay() {
+        display.configureStamps()
         display.dismissButton.addTarget(self, action: #selector(dismissAction(_:)), for: .touchUpInside)
         display.submitButton.addTarget(self, action: #selector(submitButtonAction(_:)), for: .touchUpInside)
+        display.newButton.addTarget(self, action: #selector(stampButtonSction(_:)), for: .touchUpInside)
         display.currentRatingLabel.text = viewModel.currentRating?.description
         display.ratingSelected
             .sink { [weak self] newRating in
@@ -64,6 +66,9 @@ extension ExerciseRatingViewController {
     }
     @objc func submitButtonAction(_ sender: UIButton) {
         viewModel.submitRating()
+    }
+    @objc func stampButtonSction(_ sender: UIButton) {
+        viewModel.submitStamp()
     }
     @objc func dismissAction(_ sender: UIButton) {
         dismiss(animated: true)

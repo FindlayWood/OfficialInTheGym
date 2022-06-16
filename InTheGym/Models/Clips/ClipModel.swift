@@ -70,3 +70,11 @@ extension KeyClipModel: FirebaseInstance {
         return "Clips/\(clipKey)"
     }
 }
+// MARK: - Clip Model Download Model
+/// model to download a clip model from clip key
+struct ClipModelDownloadModel: FirebaseInstance {
+    var clipKey: String
+    var internalPath: String {
+        "Clips/\(clipKey)"
+    }
+}

@@ -21,17 +21,6 @@ class ViewClipView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    var backButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .white
-        button.setImage(UIImage(systemName: "chevron.backward.circle.fill"), for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.tintColor = .darkColour
-        button.layer.cornerRadius = 20
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     var loadingIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.style = .large
@@ -40,75 +29,32 @@ class ViewClipView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     var progressBar: UIView = {
        let view = UIView()
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    var exerciseName: UILabel = {
-        let label = UILabel()
-        label.font = Constants.font
-        label.textColor = .white
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    var moreButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .white
-        button.setImage(UIImage(named: "more_icon"), for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.cornerRadius = 30
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    var viewsView: UIView = {
+    var bottomView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
-        view.layer.borderWidth = 2
-        view.layer.borderColor = UIColor.black.cgColor
-        view.layer.cornerRadius = 30
+        view.backgroundColor = .black.withAlphaComponent(0.4)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    var viewLabel: UILabel = {
+    var exerciseName: UILabel = {
         let label = UILabel()
-        label.text = "100"
-        label.font = UIFont(name: "Menlo-Bold", size: 12)
-        label.textColor = .black
+        label.font = .systemFont(ofSize: 20, weight: .semibold)
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    var likeButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .white
-        button.setTitle("L", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.cornerRadius = 30
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    var dateLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
-    
-    var stackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.spacing = 10
-        stack.distribution = .equalSpacing
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: UIScreen.main.bounds)
@@ -117,77 +63,43 @@ class ViewClipView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
 }
-
 // MARK: - Setup UI
 private extension ViewClipView {
-    
     func setupUI() {
         addSubview(thumbnailImageView)
-        addSubview(backButton)
         addSubview(loadingIndicator)
         addSubview(progressBar)
-        addSubview(exerciseName)
-        
-        viewsView.addSubview(viewLabel)
-        
-//        stackView.addArrangedSubview(moreButton)
-//        stackView.addArrangedSubview(viewsView)
-//        stackView.addArrangedSubview(likeButton)
-        
-        viewsView.isHidden = true
-        likeButton.isHidden = true
-        
-        //addSubview(stackView)
-        
-        addSubview(moreButton)
-        
+        addSubview(bottomView)
+        bottomView.addSubview(exerciseName)
+        bottomView.addSubview(dateLabel)
         progressBar.frame = CGRect(x: 0, y: 0, width: 0, height: 5)
-        constrainView()
+        constrainUI()
     }
-    func constrainView() {
+    func constrainUI() {
         NSLayoutConstraint.activate([
-            
             thumbnailImageView.topAnchor.constraint(equalTo: topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             thumbnailImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             thumbnailImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            backButton.widthAnchor.constraint(equalToConstant: 40),
-            backButton.heightAnchor.constraint(equalToConstant: 40),
-            backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            backButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
+            bottomView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            bottomView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            bottomView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            bottomView.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 0.2),
             
-            exerciseName.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
-            exerciseName.centerXAnchor.constraint(equalTo: centerXAnchor),
+            exerciseName.topAnchor.constraint(equalTo: bottomView.topAnchor, constant: 8),
+            exerciseName.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 16),
+            exerciseName.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -8),
+            
+            dateLabel.topAnchor.constraint(equalTo: exerciseName.bottomAnchor, constant: 4),
+            dateLabel.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 16),
             
             loadingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
-            
-            viewLabel.centerXAnchor.constraint(equalTo: viewsView.centerXAnchor),
-            viewLabel.centerYAnchor.constraint(equalTo: viewsView.centerYAnchor),
-            
-            moreButton.widthAnchor.constraint(equalToConstant: 60),
-            moreButton.heightAnchor.constraint(equalToConstant: 60),
-            
-            moreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-            moreButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            
-            viewsView.widthAnchor.constraint(equalToConstant: 60),
-            viewsView.heightAnchor.constraint(equalToConstant: 60),
-            
-            likeButton.widthAnchor.constraint(equalToConstant: 60),
-            likeButton.heightAnchor.constraint(equalToConstant: 60),
-            
-            //                                     stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-            //                                     stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            //                                     stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
-            
         ])
     }
 }
-
 // MARK: - Public Configuration
 extension ViewClipView {
     public func setLoading(to loading: Bool) {
@@ -206,7 +118,6 @@ extension ViewClipView {
             }
         }
     }
-    
     public func updateProgressBar(currentTime: Double, videolength: Double) {
         let progress = CGFloat((currentTime) / videolength)
         if progress == 0 {
@@ -216,5 +127,10 @@ extension ViewClipView {
                 self.progressBar.frame = CGRect(x: 0, y: self.safeAreaInsets.top, width: Constants.screenSize.width * progress, height: 5)
             }
         }
+    }
+    public func setModel(_ clipModel: ClipModel) {
+        exerciseName.text = clipModel.exerciseName
+        let date = Date(timeIntervalSince1970: clipModel.time)
+        dateLabel.text = date.getWorkoutFormat()
     }
 }
