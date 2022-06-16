@@ -56,6 +56,9 @@ private extension CoachProfileMoreViewController {
         switch action {
         case .editProfile:
             coordinator?.editProfile()
+        case .subscriptions:
+            let vc = PremiumAccountViewController()
+            navigationController?.present(vc, animated: true)
         case .myWorkouts:
             coordinator?.showMyWorkouts()
         case .workoutStats:

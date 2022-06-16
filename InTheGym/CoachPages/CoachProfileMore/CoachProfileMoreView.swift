@@ -79,6 +79,22 @@ struct CoachProfileMoreView: View {
             }
             Section {
                 Button {
+                    viewModel.action(.subscriptions)
+                } label: {
+                    HStack(spacing: 16) {
+                        Image(systemName: "crown.fill")
+                            .foregroundColor(Color(.goldColour ?? .systemYellow))
+                            .cornerRadius(4)
+                        Text(viewModel.subscriptionType)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+                    }
+                }
+            } header: {
+                Text("Subscription")
+            }
+            Section {
+                Button {
                     viewModel.action(.myWorkouts)
                 } label: {
                     HStack(spacing: 16) {
