@@ -29,25 +29,25 @@ class MainCoordinator: Coordinator {
     
     func notLoggedIn() {
         let vc = ViewController.instantiate()
-        vc.coordinator = self
+//        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
     
     func login() {
         let vc = LoginViewController.instantiate()
-        vc.coordinator = self
+//        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
     
     func signUpStepOne() {
         let vc = PlayerOrCoachViewController.instantiate()
-        vc.coordinator = self
+//        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
     
     func signUpStepTwo(isAdmin: Bool) {
         let vc = SignUpViewController.instantiate()
-        vc.coordinator = self
+//        vc.coordinator = self
         vc.admin = isAdmin
         navigationController.pushViewController(vc, animated: true)
     }

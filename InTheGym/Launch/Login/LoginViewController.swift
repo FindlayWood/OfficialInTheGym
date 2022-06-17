@@ -16,39 +16,33 @@ import Combine
 class LoginViewController: UIViewController, Storyboarded {
     
     // MARK: - Properties
-    weak var coordinator: MainCoordinator?
-    
+    weak var coordinator: SignUpCoordinator?
+//    weak var coordinator: MainCoordinator?
     var viewModel = LoginViewModel()
-    
     var display = LoginView()
-    
     let haptic = UINotificationFeedbackGenerator()
-    
     var subscriptions = Set<AnyCancellable>()
-
     // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
         navigationItem.title = "Login"
-        
         haptic.prepare()
-        
         display.loginButtonValid(false)
         display.emailField.delegate = self
         display.passwordField.delegate = self
-        
         initTargets()
         initViewModel()
-
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
-    
+//
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        display.frame = getFullViewableFrame()
+//        view.addSubview(display)
+//    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
@@ -62,11 +56,11 @@ class LoginViewController: UIViewController, Storyboarded {
             .store(in: &subscriptions)
         
         viewModel.userSuccessfullyLoggedIn
-            .sink { [weak self] loggedInUser in
-                guard let self = self else {return}
-                self.haptic.notificationOccurred(.success)
-                self.coordinator?.coordinateToTabBar()
-                self.navigationController?.popToRootViewController(animated: false)
+            .sink { [weak self] in self?.receivedLoggedInUser($0)
+//                guard let self = self else {return}
+//                self.haptic.notificationOccurred(.success)
+////                self.coordinator?.coordinateToTabBar()
+//                self.navigationController?.popToRootViewController(animated: false)
             }.store(in: &subscriptions)
         
         viewModel.errorWhenLogginIn
@@ -100,16 +94,23 @@ class LoginViewController: UIViewController, Storyboarded {
         viewModel.login()
     }
     @objc func forgotPasswordButtonTapped() {
-        coordinator?.forgotPassword()
+//        coordinator?.forgotPassword()
     }
-
+    func receivedLoggedInUser(_ user: Users) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        if user.admin {
+            appDelegate.loggedInCoach()
+        } else {
+            appDelegate.loggedInPlayer()
+        }
+    }
     // MARK: - Alerts
     func showError(for error: loginError) {
         switch error {
         case .emailNotVerified(let user):
             let alert = SCLAlertView()
-            alert.addButton("Resend verification email?") {
-                self.viewModel.resendEmailVerification(to: user)
+            alert.addButton("Resend verification email?") { [weak self] in
+                self?.viewModel.resendEmailVerification(to: user)
             }
             alert.showError("Verify!", subTitle: "You have not verified your account. Please do so to login.", closeButtonTitle: "Cancel")
         case .invalidCredentials, .unKnown:

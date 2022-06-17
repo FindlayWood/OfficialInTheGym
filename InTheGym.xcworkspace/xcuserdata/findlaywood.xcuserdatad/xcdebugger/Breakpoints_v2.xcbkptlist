@@ -23,16 +23,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B49B7491-8950-491B-85D0-71B7E951E176"
+            uuid = "3AC088A2-9937-4A82-8ED6-7929BB0749E8"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "InTheGym/Discussion/CommentSection/CommentSectionViewController.swift"
+            filePath = "InTheGym/Launch/LaunchPageViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
-            landmarkName = "sendPressed(_:)"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "checkForUser()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BEA1AACF-FDC8-4FF4-8AAF-D5400E8EF3F6"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "InTheGym/Launch/LaunchPageViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "checkForUser()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

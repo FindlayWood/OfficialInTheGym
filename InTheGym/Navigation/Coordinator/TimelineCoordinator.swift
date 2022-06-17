@@ -50,8 +50,6 @@ class TimelineCoordinator: NSObject, Coordinator {
         }
     }
 }
-
-
 //MARK: - Flow Methods
 extension TimelineCoordinator {
     

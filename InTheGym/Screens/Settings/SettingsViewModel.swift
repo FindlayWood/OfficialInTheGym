@@ -50,14 +50,19 @@ class SettingsViewModel {
     }
     // MARK: - Functions
     func logout() {
+        apiService.logout { [weak self] success in
+            self?.successfullyLoggedOut.send(success)
+        }
+    }
+    func resetPassword() {
         apiService.sendResetPassword(to: UserDefaults.currentUser.email) { [weak self] success in
             self?.successfullySentResetPassword.send(success)
         }
     }
-    func resetPassword() {
-        apiService.logout { [weak self] success in
-            self?.successfullyLoggedOut.send(success)
-        }
+    // MARK: - Success
+    func loggedOut() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.nilUser()
     }
 }
 

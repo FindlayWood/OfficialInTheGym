@@ -15,8 +15,9 @@ import SwiftUI
 
 
 class ViewController: UIViewController, Storyboarded {
-    
-    weak var coordinator: MainCoordinator?
+    // MARK: - Properties
+    var coordinator: SignUpCoordinator?
+//    weak var coordinator: MainCoordinator?
     
     let firstView = FirstScreenView()
     
@@ -52,9 +53,9 @@ class ViewController: UIViewController, Storyboarded {
 //        circleView.layer.mask = circleShape
         
         //check for internet connection
-        monitor.pathUpdateHandler = { path in
+        monitor.pathUpdateHandler = { [weak self] path in
             if path.status == .unsatisfied{
-                self.showAlert()
+                self?.showAlert()
             }
         }
         
@@ -165,6 +166,8 @@ class ViewController: UIViewController, Storyboarded {
     @objc func login(_ sender: UIButton) {
         selection.selectionChanged()
         coordinator?.login()
+//        let vc = LoginViewController()
+//        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func signUp(_ sender: UIButton) {
@@ -174,7 +177,7 @@ class ViewController: UIViewController, Storyboarded {
     
     // set navigation bar hidden
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     

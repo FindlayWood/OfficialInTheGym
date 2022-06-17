@@ -79,18 +79,18 @@ private extension DiscoverPageView {
         ])
     }
     func generateLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             
             let sectionLayoutKind = DiscoverPageSections.allCases[sectionIndex]
             switch sectionLayoutKind {
             case .Workouts:
-                return self.generateWorkoutsLayout()
+                return self?.generateWorkoutsLayout()
             case .Exercises:
-                return self.generateExercisesLayout()
+                return self?.generateExercisesLayout()
             case .Tags:
-                return self.generateTagsLayout()
+                return self?.generateTagsLayout()
             case .Clips:
-                return self.generateClipsLayout()
+                return self?.generateClipsLayout()
             }
         }
         return layout

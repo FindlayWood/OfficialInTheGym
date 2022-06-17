@@ -179,7 +179,7 @@ private extension PlayerTimelineView {
         ])
     }
     func fetchProfileImage() {
-        let userID = FirebaseAuthManager.currentlyLoggedInUser.uid
+        let userID = UserDefaults.currentUser.uid
         ImageAPIService.shared.getProfileImage(for: userID) { [weak self] image in
             guard let self = self else {return}
             if image != nil {

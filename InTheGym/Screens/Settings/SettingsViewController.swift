@@ -52,6 +52,12 @@ class SettingsViewController: UIViewController {
         viewModel.settingActions
             .sink { [weak self] in self?.tapAction($0)}
             .store(in: &subscriptions)
+        viewModel.successfullyLoggedOut
+            .sink { [weak self] in self?.loggedOut($0)}
+            .store(in: &subscriptions)
+        viewModel.successfullySentResetPassword
+            .sink { [weak self] in self?.resetPassword($0)}
+            .store(in: &subscriptions)
     }
 }
 // MARK: - Actions
@@ -73,7 +79,6 @@ private extension SettingsViewController {
                 self?.viewModel.resetPassword()
             }
         case .logout:
-            loggedOut(true)
             showButtonAlert(title: "Logout?", subtitle: "Are you sure you want to logout?") { [weak self] in
                 self?.viewModel.logout()
             }
@@ -95,7 +100,9 @@ private extension SettingsViewController {
             UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
             LikeCache.shared.removeAll()
             ClipCache.shared.removeAll()
-            UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: false)
+//            PostLoader.shared.removeAll()
+            viewModel.loggedOut()
+//            UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: false)
         } else {
             showError()
         }
