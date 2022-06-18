@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
+//        onBoard()
         launchScreen()
 //        let navController = UINavigationController()
 //        coordinator = MainCoordinator(navigationController: navController)
@@ -31,7 +32,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     func onBoard() {
-        // TODO: Implement On Board scene
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let vc = OnBoardMainViewController()
+        window?.rootViewController = vc
+        window?.makeKeyAndVisible()
+        
     }
     func launchScreen() {
         window = UIWindow(frame: UIScreen.main.bounds)

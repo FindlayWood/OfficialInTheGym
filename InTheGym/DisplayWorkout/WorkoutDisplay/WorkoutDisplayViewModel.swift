@@ -163,6 +163,12 @@ class WorkoutDisplayViewModel {
 extension WorkoutDisplayViewModel: ClipAdding {
     func addClip(_ model: ClipModel) {
         let workoutClipModel = WorkoutClipModel(storageURL: model.storageURL, clipKey: model.id, exerciseName: model.exerciseName)
+        if workout.clipData != nil {
+            workout.clipData?.append(workoutClipModel)
+        } else {
+            workout.clipData = [workoutClipModel]
+        }
         addedClipPublisher.send(workoutClipModel)
     }
+
 }
