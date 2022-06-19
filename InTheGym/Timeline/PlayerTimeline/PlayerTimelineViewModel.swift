@@ -86,7 +86,7 @@ class PlayerTimelineViewModel {
     struct FollowingCheckModel: FirebaseInstance {
         var id: String
         var internalPath: String {
-            return "Following/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(id)"
+            return "Following/\(UserDefaults.currentUser.uid)/\(id)"
         }
     }
     

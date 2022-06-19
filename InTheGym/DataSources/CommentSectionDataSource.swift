@@ -43,13 +43,13 @@ class CommentSectionDataSource: NSObject {
     
     // MARK: - Create Data Source
     func makeDataSource() -> UITableViewDiffableDataSource<CommentSectionSections,GroupCommentItems> {
-        return UITableViewDiffableDataSource(tableView: tableView) { tableView, indexPath, itemIdentifier in
+        return UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, itemIdentifier in
             switch itemIdentifier {
             case .mainPost(let post):
                 let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
                 cell.longDateFormat = true
                 cell.configure(with: post)
-                self.subscriptions[indexPath] = cell.actionPublisher
+                self?.subscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
                         self?.actionPublisher(action: action, indexPath: indexPath)
                     })
@@ -58,7 +58,7 @@ class CommentSectionDataSource: NSObject {
                 let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
                 cell.longDateFormat = true
                 cell.configure(with: post)
-                self.subscriptions[indexPath] = cell.actionPublisher
+                self?.subscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
                         self?.actionPublisher(action: action, indexPath: indexPath)
                     })
@@ -66,7 +66,7 @@ class CommentSectionDataSource: NSObject {
             case .comment(let comment):
                 let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.cellID, for: indexPath) as! CommentTableViewCell
                 cell.setup(with: comment)
-                self.subscriptions[indexPath] = cell.actionPublisher
+                self?.subscriptions[indexPath] = cell.actionPublisher
                     .sink(receiveValue: { [weak self] action in
                         self?.actionPublisher(action: action, indexPath: indexPath)
                     })

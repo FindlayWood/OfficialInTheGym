@@ -10,8 +10,6 @@ import UIKit
 import SkyFloatingLabelTextField
 
 class SignUpView: UIView {
-    // MARK: - Properties
-    
     // MARK: - Subviews
     var firstNameField: SkyFloatingTextField = {
         let view = SkyFloatingTextField()
@@ -60,7 +58,6 @@ class SignUpView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
     lazy var stack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [firstNameField, lastNameField, emailField, usernameField, passwordField, signUpButton])
         stack.axis = .vertical
@@ -68,7 +65,6 @@ class SignUpView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
     var pageNumberLabel: UILabel = {
         let label = UILabel()
         label.text = "2 of 2"
@@ -77,7 +73,6 @@ class SignUpView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     var logoLabel: UILabel = {
         let label = UILabel()
         label.text = "INTHEGYM"
@@ -86,7 +81,6 @@ class SignUpView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     lazy var bottomStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [pageNumberLabel, logoLabel])
         stack.axis = .vertical
@@ -94,7 +88,6 @@ class SignUpView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -104,29 +97,26 @@ class SignUpView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension SignUpView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         addSubview(stack)
         addSubview(bottomStack)
         configureUI()
     }
-    
     func configureUI() {
         NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
+            stack.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             
-            bottomStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+            bottomStack.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
             bottomStack.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
 }
-
 extension SignUpView {
     public func signButtonValid(_ valid: Bool) {
         signUpButton.layer.shadowColor = UIColor.black.cgColor
@@ -143,4 +133,3 @@ extension SignUpView {
         passwordField.textFieldView.text = ""
     }
 }
-

@@ -49,7 +49,7 @@ class SavedWorkoutDisplayViewModel {
     }
     
     func addAView() {
-        if savedWorkout.creatorID != FirebaseAuthManager.currentlyLoggedInUser.uid {
+        if savedWorkout.creatorID != UserDefaults.currentUser.uid {
             let uploadPoints: [FirebaseMultiUploadDataPoint] = [savedWorkout.viewUploadPoint()]
             apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
                 guard let self = self else {return}

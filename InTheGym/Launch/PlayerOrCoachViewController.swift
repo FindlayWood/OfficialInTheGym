@@ -11,23 +11,24 @@ import SCLAlertView
 
 class PlayerOrCoachViewController: UIViewController, Storyboarded {
     
-    weak var coordinator: MainCoordinator?
+    weak var coordinator: SignUpCoordinator?
+//    weak var coordinator: MainCoordinator?
     
-    @IBOutlet var coachView:UIView!
-    @IBOutlet var playerView:UIView!
-    @IBOutlet var coachButton:UIView!
-    @IBOutlet var playerButton:UIView!
+    @IBOutlet var coachView: UIView!
+    @IBOutlet var playerView: UIView!
+    @IBOutlet var coachButton: UIView!
+    @IBOutlet var playerButton: UIView!
     
-    @IBOutlet weak var contineButton:UIButton!
-    @IBOutlet weak var text:UITextView!
+    @IBOutlet weak var contineButton: UIButton!
+    @IBOutlet weak var text: UITextView!
     
-    var cornerRadia : CGFloat = 10.0
+    var cornerRadia: CGFloat = 10.0
     var borderColour = Constants.darkColour.cgColor
-    var borderWidth : CGFloat = 2.0
+    var borderWidth: CGFloat = 2.0
     
     let selection = UISelectionFeedbackGenerator()
     
-    var isAdmin:Bool!
+    var isAdmin: Bool!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +61,7 @@ class PlayerOrCoachViewController: UIViewController, Storyboarded {
     }
     
     @objc fileprivate func coachPressed(){
-        text.text = SignUpMessages.coachMessage
+//        text.text = SignUpMessages.coachMessage
         text.isHidden = false
         coachView.backgroundColor = Constants.darkColour
         playerView.backgroundColor = Constants.lightColour
@@ -71,7 +72,7 @@ class PlayerOrCoachViewController: UIViewController, Storyboarded {
     }
     
     @objc fileprivate func playerPressed(){
-        text.text = SignUpMessages.playerMessage
+//        text.text = SignUpMessages.playerMessage
         text.isHidden = false
         playerView.backgroundColor = Constants.darkColour
         coachView.backgroundColor = Constants.lightColour

@@ -11,8 +11,6 @@ import UIKit
 import SkyFloatingLabelTextField
 
 class ResettingPasswordView: UIView {
-    // MARK: - Properties
-    
     // MARK: - Subviews
     var emailField: SkyFloatingLabelTextField = {
         let field = SkyFloatingLabelTextField()
@@ -35,7 +33,6 @@ class ResettingPasswordView: UIView {
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
-    
     var sendButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .darkColour
@@ -46,7 +43,6 @@ class ResettingPasswordView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
     var loadingIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.hidesWhenStopped = true
@@ -56,7 +52,6 @@ class ResettingPasswordView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -66,22 +61,19 @@ class ResettingPasswordView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
-
 // MARK: - Configure
 private extension ResettingPasswordView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         addSubview(emailField)
         addSubview(sendButton)
         addSubview(loadingIndicator)
         configureUI()
     }
-    
     func configureUI() {
         NSLayoutConstraint.activate([
-            emailField.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            emailField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
             emailField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             emailField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             emailField.heightAnchor.constraint(equalToConstant: 50),
@@ -98,16 +90,15 @@ private extension ResettingPasswordView {
         ])
     }
 }
-
+// MARK: - Public Config
 extension ResettingPasswordView {
     public func sendButtonValid(_ valid: Bool) {
         sendButton.layer.shadowColor = UIColor.black.cgColor
         sendButton.layer.shadowOffset = CGSize(width: 0, height: 0.0)
         sendButton.layer.shadowRadius = valid ? 6.0 : 0
         sendButton.layer.shadowOpacity = valid ? 1.0 : 0
-        sendButton.backgroundColor = .darkColour.withAlphaComponent(valid ? 1.0 : 0.7)
+        sendButton.backgroundColor = .darkColour.withAlphaComponent(valid ? 1.0 : 0.6)
     }
-    
     public func setLoading(to loading: Bool) {
         if loading {
             loadingIndicator.startAnimating()

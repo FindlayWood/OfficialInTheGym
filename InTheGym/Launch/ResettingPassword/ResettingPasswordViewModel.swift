@@ -10,29 +10,23 @@ import Foundation
 import Combine
 
 class ResettingPasswordViewModel {
-    
     // MARK: - Published Properties
     @Published var email: String = ""
     @Published var isEmailValid: Bool = false
-    
-    var subscriptions = Set<AnyCancellable>()
-    
+    private var subscriptions = Set<AnyCancellable>()
     //MARK: - Action Related Publishers
     var sendButtonTapped = PassthroughSubject<String, Never>()
     var emailSentSuccessfully = PassthroughSubject<Bool, Never>()
-    
     // MARK: - Email Regex
     let emailPredicate = NSPredicate(format: "SELF MATCHES %@", "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}")
-    
     // MARK: - Private Properties
     private var apiService: AuthManagerService
-    
+    var navigationTitle: String = "Reset Password"
     // MARK: - Initializer
     init(apiService: AuthManagerService = FirebaseAuthManager.shared) {
         self.apiService = apiService
         startSubscriptions()
     }
-    
     // MARK: - Combine Subscriptions
     func startSubscriptions() {
         $email
@@ -61,12 +55,10 @@ class ResettingPasswordViewModel {
             .store(in: &subscriptions)
 
     }
-    
     // MARK: - Actions
     func sendButtonAction() {
         sendButtonTapped.send(email)
     }
-    
     // MARK: - API Call
     func sendEmail(to email: String) -> AnyPublisher<Bool, Never> {
         Future { [weak self] promise in
@@ -80,7 +72,6 @@ class ResettingPasswordViewModel {
             }
         }.eraseToAnyPublisher()
     }
-    
     // MARK: - Update
     func updateEmail(with newValue: String) {
         email = newValue

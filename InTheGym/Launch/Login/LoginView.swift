@@ -87,7 +87,6 @@ class LoginView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -98,11 +97,10 @@ class LoginView: UIView {
         setupUI()
     }
 }
-
 // MARK: - Setup UI
 private extension LoginView {
     func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         addSubview(emailField)
         addSubview(passwordField)
         addSubview(loginButton)
@@ -110,10 +108,9 @@ private extension LoginView {
         addSubview(loadingIndicator)
         constrainUI()
     }
-    
     func constrainUI() {
         NSLayoutConstraint.activate([
-            emailField.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            emailField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
             emailField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             emailField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             emailField.heightAnchor.constraint(equalToConstant: 50),

@@ -21,7 +21,7 @@ class TabBarCoordinator: Coordinator {
     }
     
     func start() {
-        let tabBarController = PlayerInitialViewController.instantiate()
+        let tabBarController = PlayerInitialViewController()
         //tabBarController = PlayerInitialViewController.instantiate()
         tabBarController.coordinator = self
         
@@ -69,7 +69,7 @@ class TabBarCoordinator: Coordinator {
         let myProfileCoord = MyProfileCoordinator(navigationController: myProfileNavigationController)
         
         
-        if FirebaseAuthManager.currentlyLoggedInUser.admin {
+        if UserDefaults.currentUser.admin {
             tabBarController.viewControllers = [timelineNavigationController,
                                                 discoverNavigationController,
                                                 playersNavigationController,
@@ -83,13 +83,13 @@ class TabBarCoordinator: Coordinator {
         }
         
         
-        tabBarController.modalPresentationStyle = .fullScreen
+//        tabBarController.modalPresentationStyle = .fullScreen
         navigationController.present(tabBarController, animated: true, completion: nil)
         
         coordinate(to: timeLineCoord)
         coordinate(to: discoverCoord)
         coordinate(to: myProfileCoord)
-        if FirebaseAuthManager.currentlyLoggedInUser.admin {
+        if UserDefaults.currentUser.admin {
             coordinate(to: playerCoord)
         } else {
             coordinate(to: workoutsCoord)

@@ -20,6 +20,7 @@ enum loginError: Error {
 protocol AuthManagerService {
     func createNewUser(with user: SignUpUserModel, completion: @escaping (Result<Void,SignUpError>) -> Void)
     func checkUsernameIsUnique(for username:String, completion: @escaping (Bool) -> ())
+    func checkForCurrentUser(completion: @escaping (Result<User, checkingForUserError>) -> Void)
     func loginUser(with loginModel: LoginModel, completion: @escaping (Result<Users, loginError>) -> Void)
     func resendEmailVerification(to user: User, completion: @escaping (Bool) -> Void)
     func sendResetPassword(to email: String, completion: @escaping (Bool) -> Void)

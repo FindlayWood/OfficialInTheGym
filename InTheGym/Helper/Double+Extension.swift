@@ -12,4 +12,7 @@ extension Double {
     func convertMilesToKm() -> Double {
         return self * 1.60934
     }
+    func convertPoundsToKG() -> Double {
+        return self / 2.205
+    }
 }

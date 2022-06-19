@@ -13,26 +13,51 @@ import Firebase
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var coordinator:MainCoordinator?
+    var coordinator: MainCoordinator?
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
-        //IQKeyboardManager.shared.enable = true
-        //IQKeyboardManager.shared.enableAutoToolbar = false
-        
+        launchScreen()
+        return true
+    }
+    func onBoard() {
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let vc = OnBoardMainViewController()
+        window?.rootViewController = vc
+        window?.makeKeyAndVisible()
+    }
+    func launchScreen() {
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let vc = LaunchPageViewController.instantiate()
+        window?.rootViewController = vc
+        window?.makeKeyAndVisible()
+    }
+    func loggedInPlayer() {
         let navController = UINavigationController()
-        coordinator = MainCoordinator(navigationController: navController)
-        coordinator?.start()
-        
+        let mainPlayerCoordinator = MainPlayerCoordinator(navigationController: navController)
+        mainPlayerCoordinator.start()
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
-        
-        return true
     }
-    
+    func loggedInCoach() {
+        let navController = UINavigationController()
+        let mainCoachCoordinator = MainCoachCoordinator(navigationController: navController)
+        mainCoachCoordinator.start()
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = navController
+        window?.makeKeyAndVisible()
+    }
+    func nilUser() {
+        let navController = UINavigationController()
+        let signUpCoordinator = SignUpCoordinator(navigationController: navController)
+        signUpCoordinator.start()
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = navController
+        window?.makeKeyAndVisible()
+    }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
