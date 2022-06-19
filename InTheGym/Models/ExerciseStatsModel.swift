@@ -98,7 +98,7 @@ struct UpdateExerciseSetStatsModel {
     
     var weightNumber: Double {
         if let weight = weight {
-            return getWeight(from: poundsOrKilograms(from: weight) ?? .kg(0.0))
+            return poundsOrKilograms(from: weight) ?? 0.0
         } else {
             return 0.0
         }
@@ -168,36 +168,19 @@ extension UpdateExerciseSetStatsModel {
 }
 // MARK: - Weight Extraction
 extension UpdateExerciseSetStatsModel {
-    private func convertToKG(from pounds: Double) -> Double {
-        return pounds / 2.205
-    }
-    private func poundsOrKilograms(from string: String) -> Weight? {
+    private func poundsOrKilograms(from string: String) -> Double? {
         let lastTwoChar = string.suffix(2)
         let lastThreeChar = string.suffix(3)
         if lastTwoChar == kilogramSuffix {
             let weightString = string.dropLast(2)
-            if let weight = Double(weightString) {
-                return .kg(weight)
-            } else {
-                return nil
-            }
+            guard let weight = Double(weightString) else {return nil}
+            return weight
         } else if lastThreeChar == poundsSuffix {
             let weightString = string.dropLast(3)
-            if let weight = Double(weightString) {
-                return .lbs(weight)
-            } else {
-                return nil
-            }
+            guard let weight = Double(weightString) else {return nil}
+            return weight.convertPoundsToKG()
         } else {
             return nil
-        }
-    }
-    private func getWeight(from weight: Weight) -> Double {
-        switch weight {
-        case.kg(let kilos):
-            return kilos
-        case .lbs(let pounds):
-            return convertToKG(from: pounds)
         }
     }
 }

@@ -55,7 +55,7 @@ class FirebaseAPIWorkoutManager {
 
 //MARK: Workout & Exercise Stats Methods
     func checkForExerciseStats(name: String, reps: Int, weight: String?) {
-        guard let userID = Auth.auth().currentUser?.uid else {return}
+        let userID = UserDefaults.currentUser.uid
         let path = "ExerciseStats/\(userID)/\(name)"
         let ref = baseRef.child(path)
         ref.observeSingleEvent(of: .value) { snapshot in
@@ -67,7 +67,7 @@ class FirebaseAPIWorkoutManager {
         }
     }
     func checkForCompletionStats(name: String, rpe: Int) {
-        guard let userID = Auth.auth().currentUser?.uid else {return}
+        let userID = UserDefaults.currentUser.uid
         let path = "ExerciseStats/\(userID)/\(name)"
         let ref = baseRef.child(path)
         ref.observeSingleEvent(of: .value) { snapshot in
@@ -81,7 +81,7 @@ class FirebaseAPIWorkoutManager {
     
     
     private func updateExerciseStats(name: String, reps: Int, weight: String?) {
-        guard let userID = Auth.auth().currentUser?.uid else {return}
+        let userID = UserDefaults.currentUser.uid
         let path = "ExerciseStats/\(userID)/\(name)"
         let ref = baseRef.child(path)
         
@@ -118,7 +118,7 @@ class FirebaseAPIWorkoutManager {
     
     // Update max history
     private func updateMaxHistory(exercise: String, weight: Double) {
-        let userID = FirebaseAuthManager.currentlyLoggedInUser.uid
+        let userID = UserDefaults.currentUser.uid
         let currentTime = Date().timeIntervalSince1970
         let path =  "ExerciseMaxHistory/\(userID)/\(exercise)"
         let ref = baseRef.child(path).childByAutoId()
@@ -128,7 +128,7 @@ class FirebaseAPIWorkoutManager {
     }
     
     private func addExerciseStats( name: String, reps: Int, weight: String?) {
-        guard let userID = Auth.auth().currentUser?.uid else {return}
+        let userID = UserDefaults.currentUser.uid
         let path = "ExerciseStats/\(userID)/\(name)"
         let ref = baseRef.child(path)
         var newData = [String: AnyObject]()
@@ -150,7 +150,7 @@ class FirebaseAPIWorkoutManager {
         ref.setValue(newData)
     }
     private func completeExercise(name: String, with rpe: Int) {
-        guard let userID = Auth.auth().currentUser?.uid else {return}
+        let userID = UserDefaults.currentUser.uid
         let path = "ExerciseStats/\(userID)/\(name)"
         let ref = baseRef.child(path)
         
@@ -173,7 +173,7 @@ class FirebaseAPIWorkoutManager {
         }
     }
     private func addCompletionStats(name: String, rpe: Int) {
-        guard let userID = Auth.auth().currentUser?.uid else {return}
+        let userID = UserDefaults.currentUser.uid
         let path = "ExerciseStats/\(userID)/\(name)"
         let ref = baseRef.child(path)
         var newData = [String: AnyObject]()
@@ -218,9 +218,7 @@ class FirebaseAPIWorkoutManager {
     
 // MARK: LiveWorkout Methods
     func startLiveWorkout(with title: String, completion: @escaping (liveWorkout?) -> Void) {
-        guard let userID = Auth.auth().currentUser?.uid else {
-            completion(nil)
-            return}
+        let userID = UserDefaults.currentUser.uid
         let workoutRef = baseRef.child("Workouts").child(userID).childByAutoId()
         let workoutID = workoutRef.key!
         let workoutData = ["completed":false,

@@ -26,10 +26,14 @@ class LaunchPageViewModel {
     }
     // MARK: - Functions
     func checkForUserDefault() {
-        if UserDefaults.currentUser.uid == "" {
+        if UserDefaults.currentUser == Users.nilUser {
             checkFirebase()
         } else {
             user = UserDefaults.currentUser
+            FirebaseAuthManager.currentlyLoggedInUser = UserDefaults.currentUser
+            ViewController.admin = UserDefaults.currentUser.admin /// depreciated
+            ViewController.username = UserDefaults.currentUser.username /// depreciated
+            backgroundUpdate()
         }
     }
     private func checkFirebase() {
@@ -87,14 +91,30 @@ class LaunchPageViewModel {
             switch result {
             case .success(let userModel):
                 self?.user = userModel
+                UserDefaults.currentUser = userModel
+                FirebaseAuthManager.currentlyLoggedInUser = userModel
+                ViewController.username = userModel.username /// depreciated
+                ViewController.admin = userModel.admin /// depreciated
             case .failure(let error):
                 self?.error = error
             }
         }
     }
+    // MARK: - Background Update User Check
+    /// on background thread reload the user from the database
+    /// update userdefaults user
     func backgroundUpdate() {
-        let userID = UserDefaults.currentUser.uid
-        let userSeachModel = UserSearchModel(uid: userID)
-        
+        DispatchQueue.global(qos: .background).async {
+            let userID = UserDefaults.currentUser.uid
+            let userSeachModel = UserSearchModel(uid: userID)
+            self.apiService.fetchSingleInstance(of: userSeachModel, returning: Users.self) { result in
+                switch result {
+                case .success(let userModel):
+                    UserDefaults.currentUser = userModel
+                case .failure(_):
+                    break
+                }
+            }
+        }
     }
 }
