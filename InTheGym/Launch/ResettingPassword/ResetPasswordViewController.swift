@@ -13,57 +13,32 @@ import SCLAlertView
 import Combine
 
 class ResetPasswordViewController: UIViewController {
-    
+    // MARK: - Properties
     var display = ResettingPasswordView()
-    
     var viewModel = ResettingPasswordViewModel()
-    
     var subscriptions = Set<AnyCancellable>()
-    
-//    @IBOutlet weak var emailTextField:UITextField!
-//    
-//    @IBAction func resetPressed(_ sender:UIButton){
-//        if emailTextField.text!.isEmpty{
-//            
-//            // new alert from update 1.1 - not added
-//            let alert = SCLAlertView()
-//            alert.showWarning("Error", subTitle: "Enter email.", closeButtonTitle: "ok")
-//            
-//        }
-//        else{
-//            let email = emailTextField.text!
-//            Auth.auth().sendPasswordReset(withEmail: email) { (error) in
-//                if let error = error{
-//                    print(error)
-//                    
-//                    // new alert from update 1.1
-//                    let alert = SCLAlertView()
-//                    alert.showError("Error", subTitle: "Failed to send reset email, please try again.", closeButtonTitle: "ok")
-//                    
-//                    
-//                }
-//                else{
-//                    // new alert from update 1.1
-//                    let alert = SCLAlertView()
-//                    alert.showSuccess("Sent!", subTitle: "Reset email sent. Follow instructions in the email to change your password.", closeButtonTitle: "ok")
-//                    
-//                    
-//                    self.emailTextField.text = ""
-//                }
-//            }
-//        }
-//    }
-
+    // MARK: - View
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationItem.title = "Reset Password"
-        view.backgroundColor = .white
-        
+        initDisplay()
+        initViewModel()
+        initTargets()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        editNavBarColour(to: .darkColour)
+        navigationItem.title = viewModel.navigationTitle
+    }
+    // MARK: - Display
+    func initDisplay() {
         display.emailField.delegate = self
-        
-        setupButtonActions()
-
+    }
+    // MARK: - View Model
+    func initViewModel() {
         viewModel.$isEmailValid
             .receive(on: DispatchQueue.main)
             .sink { [weak self] emailValid in
@@ -78,28 +53,22 @@ class ResetPasswordViewController: UIViewController {
                 self.showAlert(for: successful)
             }.store(in: &subscriptions)
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        editNavBarColour(to: .darkColour)
-    }
-    
-    func setupButtonActions() {
+}
+// MARK: - Targets
+private extension ResetPasswordViewController {
+    func initTargets() {
         display.sendButton.addTarget(self, action: #selector(sendButtonTapped(_:)), for: .touchUpInside)
     }
-    
+}
+// MARK: - Actions
+private extension ResetPasswordViewController {
     @objc func sendButtonTapped(_ sender: UIButton) {
         viewModel.sendButtonAction()
         display.setLoading(to: true)
     }
-
+}
+// MARK: - Alerts
+private extension ResetPasswordViewController {
     func showAlert(for success: Bool) {
         if success {
             let alert = SCLAlertView()
@@ -112,9 +81,8 @@ class ResetPasswordViewController: UIViewController {
         }
     }
 }
-
+// MARK: - Textfield delegate
 extension ResetPasswordViewController {
-    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
         if textField == display.emailField {

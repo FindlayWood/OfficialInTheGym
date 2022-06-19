@@ -37,12 +37,6 @@ class LoginViewController: UIViewController, Storyboarded {
         initTargets()
         initViewModel()
     }
-//
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        display.frame = getFullViewableFrame()
-//        view.addSubview(display)
-//    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
@@ -94,7 +88,7 @@ class LoginViewController: UIViewController, Storyboarded {
         viewModel.login()
     }
     @objc func forgotPasswordButtonTapped() {
-//        coordinator?.forgotPassword()
+        coordinator?.forgotPassword()
     }
     func receivedLoggedInUser(_ user: Users) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate

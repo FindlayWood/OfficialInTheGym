@@ -42,4 +42,8 @@ extension SignUpCoordinator {
         vc.admin = isAdmin
         navigationController.pushViewController(vc, animated: true)
     }
+    func forgotPassword() {
+        let vc = ResetPasswordViewController()
+        navigationController.present(vc, animated: true)
+    }
 }
