@@ -240,6 +240,42 @@ class OptimalWorkloadRatioView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    var freshnessIndexLineChart: LineChartView = {
+        let view = LineChartView()
+        view.animate(xAxisDuration: 1.0, yAxisDuration: 1.0, easingOption: .easeInCubic)
+        view.xAxis.labelPosition = XAxis.LabelPosition.bottom
+        view.rightAxis.drawAxisLineEnabled = false
+        view.noDataTextColor = .black
+        view.noDataText = "NO DATA"
+        view.xAxis.drawGridLinesEnabled = false
+        view.chartDescription.enabled = false
+        view.legend.enabled = true
+        view.leftAxis.drawGridLinesEnabled = false
+        view.leftAxis.drawAxisLineEnabled = true
+        view.leftAxis.drawLabelsEnabled = true
+        view.rightAxis.drawLabelsEnabled = false
+        view.rightAxis.drawGridLinesEnabled = false
+        view.xAxis.drawLabelsEnabled = true
+        view.xAxis.valueFormatter = ACWRChartXAxisFormatter()
+        view.leftAxis.labelCount = 4
+        view.backgroundColor = .systemBackground
+        view.layer.borderColor = UIColor.darkColour.cgColor
+        view.layer.borderWidth = 2
+        view.layer.cornerRadius = 8
+        view.isUserInteractionEnabled = false
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    var moreFreshnessIndexButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .darkColour
+        button.setTitle("more Freshness Index", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
+        button.layer.cornerRadius = 8
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -274,6 +310,8 @@ private extension OptimalWorkloadRatioView {
         monotonyLineChart.leftAxis.addLimitLine(monotonyLimitLine)
         addSubview(trainingStrainLineChart)
         addSubview(moreTrainingStrainButton)
+        addSubview(freshnessIndexLineChart)
+        addSubview(moreFreshnessIndexButton)
         configureUI()
         addGradient()
     }
@@ -319,7 +357,16 @@ private extension OptimalWorkloadRatioView {
             moreACWRButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8),
 //            moreACWRButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
             
-            monotonyLineChart.topAnchor.constraint(equalTo: moreACWRButton.bottomAnchor, constant: 16),
+            freshnessIndexLineChart.topAnchor.constraint(equalTo: moreACWRButton.bottomAnchor, constant: 16),
+            freshnessIndexLineChart.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9),
+            freshnessIndexLineChart.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 0.7),
+            freshnessIndexLineChart.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
+            moreFreshnessIndexButton.topAnchor.constraint(equalTo: freshnessIndexLineChart.bottomAnchor, constant: 8),
+            moreFreshnessIndexButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            moreFreshnessIndexButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8),
+            
+            monotonyLineChart.topAnchor.constraint(equalTo: moreFreshnessIndexButton.bottomAnchor, constant: 16),
             monotonyLineChart.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9),
             monotonyLineChart.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 0.7),
             monotonyLineChart.centerXAnchor.constraint(equalTo: centerXAnchor),

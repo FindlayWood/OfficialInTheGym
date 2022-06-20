@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import UIKit
 
 class PlayerDetailViewModel {
     // MARK: - Publishers
-    
+    @Published var profileImageData: Data?
     // MARK: - Properties
     var navigationTitle = "Player Detail"
     
