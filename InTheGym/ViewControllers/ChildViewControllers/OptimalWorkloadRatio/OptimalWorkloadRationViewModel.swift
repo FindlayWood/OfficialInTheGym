@@ -17,6 +17,7 @@ class OptimalWorkloadRatioViewModel {
     @Published var acuteLoad: Double = 0.0
     @Published var chronicLoad: Double = 0.0
     @Published var acwrChartData: LineChartData?
+    @Published var freshnessIndexData: LineChartData?
     @Published var monotonyLineChartData: LineChartData?
     @Published var trainingStrainLineChartData: LineChartData?
     // MARK: - Properties
@@ -69,7 +70,8 @@ class OptimalWorkloadRatioViewModel {
         let trainingStrain = sevenDayModels.sum() * monotony
         let acuteLoad = sevenDayModels.sum()
         let chronicLoad = twentyEightDayModels.sum() / 4
-        return RatioModel(acwr: acwr, monotony: monotony, trainingStrain: trainingStrain, acuteLoad: acuteLoad, chronicLoad: chronicLoad)
+        let freshnessIndex = chronicLoad - acuteLoad
+        return RatioModel(acwr: acwr, monotony: monotony, trainingStrain: trainingStrain, acuteLoad: acuteLoad, chronicLoad: chronicLoad, freshnessIndex: freshnessIndex)
     }
     func getOccurences(_ days: [Int], _ workloads: [Double]) -> [Int:Double] {
         var occureneces = [Int:Double]()
@@ -81,14 +83,17 @@ class OptimalWorkloadRatioViewModel {
     func getChartEntries(from ratioModels: inout [RatioModel]) {
         ratioModels.reverse()
         var chartEntries = [ChartDataEntry]()
+        var freshnessEntries = [ChartDataEntry]()
         var secondChartEntries = [ChartDataEntry]()
         var strainEntries = [ChartDataEntry]()
         for (index, value) in ratioModels.enumerated() {
             chartEntries.append(ChartDataEntry(x: Double(index), y: value.acwr))
+            freshnessEntries.append(ChartDataEntry(x: Double(index), y: value.freshnessIndex))
             secondChartEntries.append(ChartDataEntry(x: Double(index), y: value.monotony))
             strainEntries.append(ChartDataEntry(x: Double(index), y: value.trainingStrain))
         }
         let chartDataSet = LineChartDataSet(entries: chartEntries, label: "ACWR")
+        let freshnessDataSet = LineChartDataSet(entries: freshnessEntries, label: "Freshness Index")
         let secondChartDataSet = LineChartDataSet(entries: secondChartEntries, label: "Monotony")
         let thirdChartDataSet = LineChartDataSet(entries: strainEntries, label: "Training Strain")
         secondChartDataSet.lineWidth = 3
@@ -101,6 +106,13 @@ class OptimalWorkloadRatioViewModel {
         thirdChartDataSet.fillColor = .lightColour.withAlphaComponent(0.6)
         thirdChartDataSet.mode = .cubicBezier
         thirdChartDataSet.drawFilledEnabled = true
+        freshnessDataSet.mode = .cubicBezier
+        freshnessDataSet.lineWidth = 3
+        freshnessDataSet.drawCirclesEnabled = false
+        freshnessDataSet.setColor(.lightColour)
+        freshnessDataSet.fillColor = .lightColour.withAlphaComponent(0.6)
+        freshnessDataSet.mode = .cubicBezier
+        freshnessDataSet.drawFilledEnabled = true
         let chartData = LineChartData(dataSets: [chartDataSet])
         chartData.setDrawValues(false)
         chartDataSet.lineWidth = 3
@@ -114,6 +126,9 @@ class OptimalWorkloadRatioViewModel {
         let strainChartData = LineChartData(dataSets: [thirdChartDataSet])
         strainChartData.setDrawValues(false)
         trainingStrainLineChartData = strainChartData
+        let freshnessLineChartData = LineChartData(dataSets: [freshnessDataSet])
+        freshnessLineChartData.setDrawValues(false)
+        freshnessIndexData = freshnessLineChartData
     }
 }
 
@@ -124,6 +139,7 @@ struct RatioModel {
     var trainingStrain: Double
     var acuteLoad: Double
     var chronicLoad: Double
+    var freshnessIndex: Double
     
     func getACWR() -> Double {
         acwr.isNaN ? 0.0 : acwr

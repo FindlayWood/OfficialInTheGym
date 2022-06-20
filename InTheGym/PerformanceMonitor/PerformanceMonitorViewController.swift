@@ -22,6 +22,7 @@ class PerformanceMonitorViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
+        initDisplay()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -40,5 +41,11 @@ class PerformanceMonitorViewController: UIViewController {
         addChild(viewController)
         display.stack.addArrangedSubview(viewController.view)
         viewController.didMove(toParent: self)
+    }
+    // MARK: - Display
+    func initDisplay() {
+        if viewModel.user != UserDefaults.currentUser {
+            workloadChildVC.display.addButton.isHidden = true
+        }
     }
 }

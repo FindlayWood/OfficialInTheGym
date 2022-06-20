@@ -59,6 +59,13 @@
 		7410450D285E02CB00A9FF4E /* OnBoardSecondView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7410450C285E02CB00A9FF4E /* OnBoardSecondView.swift */; };
 		74104510285E056F00A9FF4E /* OnBoardThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7410450F285E056F00A9FF4E /* OnBoardThirdViewController.swift */; };
 		74104512285E057D00A9FF4E /* OnBoardThirdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74104511285E057D00A9FF4E /* OnBoardThirdView.swift */; };
+		74104518285FC75400A9FF4E /* PlayerInfoDetailSubviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74104517285FC75400A9FF4E /* PlayerInfoDetailSubviewViewController.swift */; };
+		7410451A285FC77600A9FF4E /* PlayerInfoDetailSubviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74104519285FC77600A9FF4E /* PlayerInfoDetailSubviewView.swift */; };
+		7410451C285FCA2E00A9FF4E /* PlayerInfpDetailSubviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7410451B285FCA2E00A9FF4E /* PlayerInfpDetailSubviewViewModel.swift */; };
+		7410451F285FCDD700A9FF4E /* PlayerPerformanceSubviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7410451E285FCDD700A9FF4E /* PlayerPerformanceSubviewViewController.swift */; };
+		74104521285FCDE300A9FF4E /* PlayerPerformanceSubviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74104520285FCDE300A9FF4E /* PlayerPerformanceSubviewView.swift */; };
+		74104524285FD44700A9FF4E /* PlayerDetailButtonSubviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74104523285FD44700A9FF4E /* PlayerDetailButtonSubviewViewController.swift */; };
+		74104526285FD45200A9FF4E /* PlayerDetailButtonSubviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74104525285FD45200A9FF4E /* PlayerDetailButtonSubviewView.swift */; };
 		7412D61D282C5ADF009B3EFA /* DisplaySingleSetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7412D61C282C5ADF009B3EFA /* DisplaySingleSetViewModel.swift */; };
 		7412D61F282C5C03009B3EFA /* ShowSingleSetCustomTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7412D61E282C5C03009B3EFA /* ShowSingleSetCustomTransition.swift */; };
 		7412D621282C5D3C009B3EFA /* SingleSetCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7412D620282C5D3C009B3EFA /* SingleSetCoordinator.swift */; };
@@ -1020,6 +1027,13 @@
 		7410450C285E02CB00A9FF4E /* OnBoardSecondView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardSecondView.swift; sourceTree = "<group>"; };
 		7410450F285E056F00A9FF4E /* OnBoardThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardThirdViewController.swift; sourceTree = "<group>"; };
 		74104511285E057D00A9FF4E /* OnBoardThirdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardThirdView.swift; sourceTree = "<group>"; };
+		74104517285FC75400A9FF4E /* PlayerInfoDetailSubviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerInfoDetailSubviewViewController.swift; sourceTree = "<group>"; };
+		74104519285FC77600A9FF4E /* PlayerInfoDetailSubviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerInfoDetailSubviewView.swift; sourceTree = "<group>"; };
+		7410451B285FCA2E00A9FF4E /* PlayerInfpDetailSubviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerInfpDetailSubviewViewModel.swift; sourceTree = "<group>"; };
+		7410451E285FCDD700A9FF4E /* PlayerPerformanceSubviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPerformanceSubviewViewController.swift; sourceTree = "<group>"; };
+		74104520285FCDE300A9FF4E /* PlayerPerformanceSubviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPerformanceSubviewView.swift; sourceTree = "<group>"; };
+		74104523285FD44700A9FF4E /* PlayerDetailButtonSubviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailButtonSubviewViewController.swift; sourceTree = "<group>"; };
+		74104525285FD45200A9FF4E /* PlayerDetailButtonSubviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailButtonSubviewView.swift; sourceTree = "<group>"; };
 		7412D61C282C5ADF009B3EFA /* DisplaySingleSetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySingleSetViewModel.swift; sourceTree = "<group>"; };
 		7412D61E282C5C03009B3EFA /* ShowSingleSetCustomTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowSingleSetCustomTransition.swift; sourceTree = "<group>"; };
 		7412D620282C5D3C009B3EFA /* SingleSetCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSetCoordinator.swift; sourceTree = "<group>"; };
@@ -2278,6 +2292,44 @@
 				74104511285E057D00A9FF4E /* OnBoardThirdView.swift */,
 			);
 			path = OnBoardThird;
+			sourceTree = "<group>";
+		};
+		74104515285FC72100A9FF4E /* PlayerDetailSubviews */ = {
+			isa = PBXGroup;
+			children = (
+				74104522285FD41A00A9FF4E /* PlayerDetailButtonSubview */,
+				7410451D285FCDA700A9FF4E /* PlayerPerformanceSubview */,
+				74104516285FC73600A9FF4E /* PlayerInfoDetailSubview */,
+			);
+			path = PlayerDetailSubviews;
+			sourceTree = "<group>";
+		};
+		74104516285FC73600A9FF4E /* PlayerInfoDetailSubview */ = {
+			isa = PBXGroup;
+			children = (
+				74104517285FC75400A9FF4E /* PlayerInfoDetailSubviewViewController.swift */,
+				74104519285FC77600A9FF4E /* PlayerInfoDetailSubviewView.swift */,
+				7410451B285FCA2E00A9FF4E /* PlayerInfpDetailSubviewViewModel.swift */,
+			);
+			path = PlayerInfoDetailSubview;
+			sourceTree = "<group>";
+		};
+		7410451D285FCDA700A9FF4E /* PlayerPerformanceSubview */ = {
+			isa = PBXGroup;
+			children = (
+				7410451E285FCDD700A9FF4E /* PlayerPerformanceSubviewViewController.swift */,
+				74104520285FCDE300A9FF4E /* PlayerPerformanceSubviewView.swift */,
+			);
+			path = PlayerPerformanceSubview;
+			sourceTree = "<group>";
+		};
+		74104522285FD41A00A9FF4E /* PlayerDetailButtonSubview */ = {
+			isa = PBXGroup;
+			children = (
+				74104523285FD44700A9FF4E /* PlayerDetailButtonSubviewViewController.swift */,
+				74104525285FD45200A9FF4E /* PlayerDetailButtonSubviewView.swift */,
+			);
+			path = PlayerDetailButtonSubview;
 			sourceTree = "<group>";
 		};
 		7416CCC3264ED1FD0043B1C2 /* WorkoutCreationFolder */ = {
@@ -4384,6 +4436,7 @@
 		74DE6D9827D3D7D5009FB44A /* PlayerDetail */ = {
 			isa = PBXGroup;
 			children = (
+				74104515285FC72100A9FF4E /* PlayerDetailSubviews */,
 				74DE6D9927D3D7E9009FB44A /* PlayerDetailViewController.swift */,
 				74DE6D9B27D3D7F6009FB44A /* PlayerDetailViewModel.swift */,
 				74DE6D9D27D3D801009FB44A /* PlayerDetailView.swift */,
@@ -5185,6 +5238,7 @@
 				743330BB278CFB8A005A0C45 /* CreateAMRAPViewModel.swift in Sources */,
 				749867722832D00C0032A748 /* GroupPostModel.swift in Sources */,
 				742FD576283FB28E0025E43C /* DiscoverMoreTagsViewController.swift in Sources */,
+				74104518285FC75400A9FF4E /* PlayerInfoDetailSubviewViewController.swift in Sources */,
 				742039A82832B43500074ECB /* PublicFollowersViewController.swift in Sources */,
 				74AF6D552684ED6F005C52A8 /* DisplayWorkoutStatsCell.swift in Sources */,
 				741E62B5263C63D700D51BC7 /* AppInformationTwoTableViewCell.swift in Sources */,
@@ -5194,6 +5248,7 @@
 				74EC4399263A0F0B00D81E5B /* DisplayCircuitViewModel.swift in Sources */,
 				74B48DDB27A06C6000BBFC16 /* ExerciseStatsUpdater.swift in Sources */,
 				7431030D26FA340500F7121B /* TimeSelectionProtocol.swift in Sources */,
+				7410451A285FC77600A9FF4E /* PlayerInfoDetailSubviewView.swift in Sources */,
 				74DD39E028355D3E00165C63 /* UserCellViewModel.swift in Sources */,
 				7403D06F280E08C800268CEC /* AssigningSelectionViewModel.swift in Sources */,
 				741E6E26264E9710001778A2 /* FollowingAPIService.swift in Sources */,
@@ -5294,6 +5349,7 @@
 				743A04F6276A5DC80027B752 /* SearchViewController.swift in Sources */,
 				742C1CB827C3EF4D00DD1BB0 /* NumberCircleCollectionCell.swift in Sources */,
 				744AED2E27985E95000D2D74 /* SavedWorkoutOptionsViewModel.swift in Sources */,
+				7410451C285FCA2E00A9FF4E /* PlayerInfpDetailSubviewViewModel.swift in Sources */,
 				7416CCCD265468E10043B1C2 /* RepsCell.swift in Sources */,
 				74E08A882843952A009D0DCB /* MyWorkloadsView.swift in Sources */,
 				7412D61D282C5ADF009B3EFA /* DisplaySingleSetViewModel.swift in Sources */,
@@ -5534,6 +5590,7 @@
 				74FDB5AE26976DB8000649CC /* FirebaseVideoUploader.swift in Sources */,
 				742C1CD327C676B500DD1BB0 /* ProgramsChildViewController.swift in Sources */,
 				742C1C6627B698B700DD1BB0 /* ProfileInfoCell.swift in Sources */,
+				74104526285FD45200A9FF4E /* PlayerDetailButtonSubviewView.swift in Sources */,
 				74163A4422E37089005A7D2E /* ButtonExtension.swift in Sources */,
 				742C1C8327BD2CF300DD1BB0 /* ExerciseStatsDataSource.swift in Sources */,
 				7470FD70281968DA003DB256 /* PlayerProfileMoreViewModel.swift in Sources */,
@@ -5586,6 +5643,7 @@
 				74EE4EDF2804634500051451 /* LiveWorkoutModel.swift in Sources */,
 				74C126BA2819B1EB00C3B171 /* CoachProfileMoreView.swift in Sources */,
 				74478E1C26BDE58600D8178E /* PublicCreatedWorkoutsCoordinator.swift in Sources */,
+				74104524285FD44700A9FF4E /* PlayerDetailButtonSubviewViewController.swift in Sources */,
 				741EC11F284BDCA8009B00AB /* AddWorkoutSummaryViewController.swift in Sources */,
 				74EE4EBA27E3AAD200051451 /* DescriptionUploadViewModel.swift in Sources */,
 				747B677526001FC9000AD6B7 /* PlayerTimelineViewModel.swift in Sources */,
@@ -5642,6 +5700,7 @@
 				742FD578283FB2A80025E43C /* DiscoverMoreTagsViewModel.swift in Sources */,
 				744D562E26F2ABF100D3E1FA /* CreateEMOMViewController.swift in Sources */,
 				74F2CCCD26DE912E00D7AD79 /* FirebaseManager.swift in Sources */,
+				74104521285FCDE300A9FF4E /* PlayerPerformanceSubviewView.swift in Sources */,
 				746062072526843F005B1480 /* NewInfoTableViewCell.swift in Sources */,
 				747FAFBB2727365100E2966E /* UserDefaults+Extension.swift in Sources */,
 				7466A8EB25F1500400F4050F /* LoadSavedWorkouts.swift in Sources */,
@@ -5920,6 +5979,7 @@
 				744AED472799DA7E000D2D74 /* WorkoutBottomViewController.swift in Sources */,
 				74B647AD2814415D00ADDB7A /* RepsDataSource.swift in Sources */,
 				741FB1EB2671568C0039EB29 /* AMRAPFirebaseAPIService.swift in Sources */,
+				7410451F285FCDD700A9FF4E /* PlayerPerformanceSubviewViewController.swift in Sources */,
 				74D31E9525FC173D0024CC05 /* FolllowersDisplayProtocol.swift in Sources */,
 				7480EBB425F500DD00E4E768 /* DisplayWorkoutCellModels.swift in Sources */,
 				746AEB952827FFCE00EE2412 /* PostCompletedWorkoutViewModel.swift in Sources */,

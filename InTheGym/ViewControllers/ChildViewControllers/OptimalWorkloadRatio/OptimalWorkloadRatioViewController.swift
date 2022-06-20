@@ -32,6 +32,10 @@ class OptimalWorkloadRatioViewController: UIViewController {
             .compactMap { $0 }
             .sink { [weak self] in self?.display.acwrLineChart.data = $0 }
             .store(in: &subscriptions)
+        viewModel.$freshnessIndexData
+            .compactMap { $0 }
+            .sink { [weak self] in self?.display.freshnessIndexLineChart.data = $0 }
+            .store(in: &subscriptions)
         viewModel.$monotonyLineChartData
             .compactMap { $0 }
             .sink { [weak self] in self?.display.monotonyLineChart.data = $0}
