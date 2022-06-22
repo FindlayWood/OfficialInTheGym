@@ -587,6 +587,11 @@
 		747B68792603EA79000AD6B7 /* RequestsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747B68782603EA79000AD6B7 /* RequestsViewModel.swift */; };
 		747C07582613634400E9F1E2 /* SeeNewPostsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747C07572613634400E9F1E2 /* SeeNewPostsButton.swift */; };
 		747C07972613CF9C00E9F1E2 /* ImageAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747C07962613CF9C00E9F1E2 /* ImageAPIService.swift */; };
+		747E0C892861EAB600D828A4 /* JumpResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E0C882861EAB600D828A4 /* JumpResultsViewController.swift */; };
+		747E0C8B2861EAC800D828A4 /* JumpResultsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E0C8A2861EAC800D828A4 /* JumpResultsViewModel.swift */; };
+		747E0C8D2861EAD100D828A4 /* JumpResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E0C8C2861EAD100D828A4 /* JumpResultsView.swift */; };
+		747E0C902862116F00D828A4 /* MyJumpsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E0C8F2862116F00D828A4 /* MyJumpsViewController.swift */; };
+		747E0C942862267800D828A4 /* RecordJumpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E0C932862267800D828A4 /* RecordJumpViewModel.swift */; };
 		747FAFBB2727365100E2966E /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FAFBA2727365100E2966E /* UserDefaults+Extension.swift */; };
 		747FAFBF272853F000E2966E /* DisplayEMOMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FAFBE272853F000E2966E /* DisplayEMOMTests.swift */; };
 		747FAFC1272856A300E2966E /* EndPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FAFC0272856A300E2966E /* EndPoints.swift */; };
@@ -611,6 +616,9 @@
 		748915DB2811FBDA001A1EBE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748915DA2811FBDA001A1EBE /* SettingsView.swift */; };
 		748915DE28121D74001A1EBE /* PlayerProfileMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748915DD28121D74001A1EBE /* PlayerProfileMoreView.swift */; };
 		748B403D25236EBD00C947B6 /* SetSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748B403C25236EBD00C947B6 /* SetSelectionViewController.swift */; };
+		748B98AC28635046003226CA /* URL+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748B98AB28635046003226CA /* URL+Extension.swift */; };
+		748B98AE2863A844003226CA /* MyJumpsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748B98AD2863A844003226CA /* MyJumpsViewModel.swift */; };
+		748B98B02863A84F003226CA /* MyJumpsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748B98AF2863A84F003226CA /* MyJumpsView.swift */; };
 		748E094825AB446900ABE9C9 /* TabBarSelectionImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E094725AB446800ABE9C9 /* TabBarSelectionImage.swift */; };
 		748E3C3125B87032004D6D4A /* NewWorkoutSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E3C3025B87032004D6D4A /* NewWorkoutSelectionViewController.swift */; };
 		748E3C3625B89202004D6D4A /* PreLiveWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E3C3525B89202004D6D4A /* PreLiveWorkoutViewController.swift */; };
@@ -1562,6 +1570,11 @@
 		747B68782603EA79000AD6B7 /* RequestsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsViewModel.swift; sourceTree = "<group>"; };
 		747C07572613634400E9F1E2 /* SeeNewPostsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeNewPostsButton.swift; sourceTree = "<group>"; };
 		747C07962613CF9C00E9F1E2 /* ImageAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAPIService.swift; sourceTree = "<group>"; };
+		747E0C882861EAB600D828A4 /* JumpResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpResultsViewController.swift; sourceTree = "<group>"; };
+		747E0C8A2861EAC800D828A4 /* JumpResultsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpResultsViewModel.swift; sourceTree = "<group>"; };
+		747E0C8C2861EAD100D828A4 /* JumpResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpResultsView.swift; sourceTree = "<group>"; };
+		747E0C8F2862116F00D828A4 /* MyJumpsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyJumpsViewController.swift; sourceTree = "<group>"; };
+		747E0C932862267800D828A4 /* RecordJumpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordJumpViewModel.swift; sourceTree = "<group>"; };
 		747FAFBA2727365100E2966E /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
 		747FAFBE272853F000E2966E /* DisplayEMOMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayEMOMTests.swift; sourceTree = "<group>"; };
 		747FAFC0272856A300E2966E /* EndPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoints.swift; sourceTree = "<group>"; };
@@ -1586,6 +1599,9 @@
 		748915DA2811FBDA001A1EBE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		748915DD28121D74001A1EBE /* PlayerProfileMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreView.swift; sourceTree = "<group>"; };
 		748B403C25236EBD00C947B6 /* SetSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetSelectionViewController.swift; sourceTree = "<group>"; };
+		748B98AB28635046003226CA /* URL+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extension.swift"; sourceTree = "<group>"; };
+		748B98AD2863A844003226CA /* MyJumpsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyJumpsViewModel.swift; sourceTree = "<group>"; };
+		748B98AF2863A84F003226CA /* MyJumpsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyJumpsView.swift; sourceTree = "<group>"; };
 		748E094725AB446800ABE9C9 /* TabBarSelectionImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarSelectionImage.swift; sourceTree = "<group>"; };
 		748E3C3025B87032004D6D4A /* NewWorkoutSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWorkoutSelectionViewController.swift; sourceTree = "<group>"; };
 		748E3C3525B89202004D6D4A /* PreLiveWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreLiveWorkoutViewController.swift; sourceTree = "<group>"; };
@@ -2078,6 +2094,7 @@
 				74DE6DAD27D636A4009FB44A /* TimeInterval+Extension.swift */,
 				7479813927DBA50000CF3F9B /* UITableViewCell+Extension.swift */,
 				7419B1212857A10900E879DE /* Double+Extension.swift */,
+				748B98AB28635046003226CA /* URL+Extension.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -2403,11 +2420,10 @@
 		741BA39E271B13D100E99C6E /* JumpMeasuringVideo */ = {
 			isa = PBXGroup;
 			children = (
-				741BA3A1271B169700E99C6E /* JumpMeasuringViewController.swift */,
-				741BA39F271B13ED00E99C6E /* JumpMeasuringView.swift */,
-				741BA3A3271B197100E99C6E /* ReplayJumpMeasureViewController.swift */,
-				741BA3A5271B198A00E99C6E /* ReplayJumpMeasureView.swift */,
-				741BA3A7271EF97600E99C6E /* JumpMeasureViewModel.swift */,
+				747E0C922862266000D828A4 /* ReplayJump */,
+				747E0C912862264F00D828A4 /* RecordJump */,
+				747E0C8E2862115800D828A4 /* MyJumps */,
+				747E0C872861EAA400D828A4 /* JumpResults */,
 			);
 			path = JumpMeasuringVideo;
 			sourceTree = "<group>";
@@ -3767,6 +3783,46 @@
 			path = MyInfo;
 			sourceTree = "<group>";
 		};
+		747E0C872861EAA400D828A4 /* JumpResults */ = {
+			isa = PBXGroup;
+			children = (
+				747E0C882861EAB600D828A4 /* JumpResultsViewController.swift */,
+				747E0C8A2861EAC800D828A4 /* JumpResultsViewModel.swift */,
+				747E0C8C2861EAD100D828A4 /* JumpResultsView.swift */,
+			);
+			path = JumpResults;
+			sourceTree = "<group>";
+		};
+		747E0C8E2862115800D828A4 /* MyJumps */ = {
+			isa = PBXGroup;
+			children = (
+				747E0C8F2862116F00D828A4 /* MyJumpsViewController.swift */,
+				748B98AD2863A844003226CA /* MyJumpsViewModel.swift */,
+				748B98AF2863A84F003226CA /* MyJumpsView.swift */,
+			);
+			path = MyJumps;
+			sourceTree = "<group>";
+		};
+		747E0C912862264F00D828A4 /* RecordJump */ = {
+			isa = PBXGroup;
+			children = (
+				741BA39F271B13ED00E99C6E /* JumpMeasuringView.swift */,
+				741BA3A1271B169700E99C6E /* JumpMeasuringViewController.swift */,
+				747E0C932862267800D828A4 /* RecordJumpViewModel.swift */,
+			);
+			path = RecordJump;
+			sourceTree = "<group>";
+		};
+		747E0C922862266000D828A4 /* ReplayJump */ = {
+			isa = PBXGroup;
+			children = (
+				741BA3A3271B197100E99C6E /* ReplayJumpMeasureViewController.swift */,
+				741BA3A5271B198A00E99C6E /* ReplayJumpMeasureView.swift */,
+				741BA3A7271EF97600E99C6E /* JumpMeasureViewModel.swift */,
+			);
+			path = ReplayJump;
+			sourceTree = "<group>";
+		};
 		7480907028287C2A00F32192 /* WorkoutDisplayCoordinators */ = {
 			isa = PBXGroup;
 			children = (
@@ -5121,6 +5177,7 @@
 				74F2CCDC26E1315000D7AD79 /* ExerciseSelectionViewModel.swift in Sources */,
 				743A04F8276A5DD30027B752 /* SearchViewModel.swift in Sources */,
 				7459BD642641F6490005C530 /* Storyboarded.swift in Sources */,
+				747E0C8B2861EAC800D828A4 /* JumpResultsViewModel.swift in Sources */,
 				7444D07826CE98C90009C7A6 /* UploadGroupWorkoutViewController.swift in Sources */,
 				742C1CD527C676DD00DD1BB0 /* ProgramsChildView.swift in Sources */,
 				74104500285D0D7400A9FF4E /* OnBoardMainViewController.swift in Sources */,
@@ -5129,6 +5186,7 @@
 				74B48E0027A422B500BBFC16 /* LiveWorkoutPlusCollectionCell.swift in Sources */,
 				74B48E1427A9A04100BBFC16 /* CompletedWorkoutPageViewController.swift in Sources */,
 				741FB1E7266F9BAA0039EB29 /* DisplayAMRAPView.swift in Sources */,
+				748B98AE2863A844003226CA /* MyJumpsViewModel.swift in Sources */,
 				742565AD277FA7C700A7764D /* GroupKeysModel.swift in Sources */,
 				74E08A7B2841542D009D0DCB /* MyWorkoutStatsViewController.swift in Sources */,
 				74AF6D4A2683A796005C52A8 /* FirebaseAPILoader.swift in Sources */,
@@ -5237,6 +5295,7 @@
 				744AED3627989DC6000D2D74 /* UIUserView.swift in Sources */,
 				743330BB278CFB8A005A0C45 /* CreateAMRAPViewModel.swift in Sources */,
 				749867722832D00C0032A748 /* GroupPostModel.swift in Sources */,
+				747E0C892861EAB600D828A4 /* JumpResultsViewController.swift in Sources */,
 				742FD576283FB28E0025E43C /* DiscoverMoreTagsViewController.swift in Sources */,
 				74104518285FC75400A9FF4E /* PlayerInfoDetailSubviewViewController.swift in Sources */,
 				742039A82832B43500074ECB /* PublicFollowersViewController.swift in Sources */,
@@ -5295,6 +5354,7 @@
 				7431030F26FA3FFE00F7121B /* TimeSelectionPickerCoordinator.swift in Sources */,
 				7419B1292857AA0D00E879DE /* PerformanceMonitorView.swift in Sources */,
 				744AED1027960B8D000D2D74 /* MainWorkoutTableViewCell.swift in Sources */,
+				748B98B02863A84F003226CA /* MyJumpsView.swift in Sources */,
 				74B48E0B27A4350000BBFC16 /* BaseExerciseCollectionCell.swift in Sources */,
 				743330E727931610005A0C45 /* SavedWorkoutsDataSource.swift in Sources */,
 				741FB1B62666A5520039EB29 /* FirebasePostAPI.swift in Sources */,
@@ -5409,6 +5469,7 @@
 				7429783A26C151AF0023365E /* CreateNewGroupViewController.swift in Sources */,
 				7403D05C280B7E6C00268CEC /* ClipProfileCustomCoordinator.swift in Sources */,
 				742565A7277E3C3F00A7764D /* GroupPosts.swift in Sources */,
+				747E0C8D2861EAD100D828A4 /* JumpResultsView.swift in Sources */,
 				74EE4ED127E8B5F100051451 /* MyClipsChildViewController.swift in Sources */,
 				7465596F282FDBC800E1CA9A /* DiscoverMoreWorkoutsViewController.swift in Sources */,
 				742C1CCE27C556A300DD1BB0 /* MyProgramsDataSource.swift in Sources */,
@@ -5771,6 +5832,7 @@
 				7466A8CC25F030B600F4050F /* SavedWorkoutsViewModel.swift in Sources */,
 				742FD57F283FCF380025E43C /* AddNewTagViewModel.swift in Sources */,
 				74F5467D25E93F4000C1A6A9 /* SignUpUser.swift in Sources */,
+				748B98AC28635046003226CA /* URL+Extension.swift in Sources */,
 				74B48DFE27A41E6700BBFC16 /* LiveWorkoutSections+Items.swift in Sources */,
 				74A0B58C285A0A8A0037FD3F /* ExerciseStampsModels.swift in Sources */,
 				74D93470282EF854005D15DE /* EditProfileCoordinator.swift in Sources */,
@@ -5887,6 +5949,7 @@
 				741BA39D2715EB0700E99C6E /* AMRAPExerciseView.swift in Sources */,
 				74E08A762840F345009D0DCB /* OtherExerciseViewModel.swift in Sources */,
 				7479813827DB9AC200CF3F9B /* RequestsTableViewCellViewModel.swift in Sources */,
+				747E0C902862116F00D828A4 /* MyJumpsViewController.swift in Sources */,
 				74226E142637157A0074E616 /* PublicCreatedWorkoutTableViewCell.swift in Sources */,
 				7419B1252857A9C400E879DE /* PerformanceMonitorViewController.swift in Sources */,
 				744AED162796F449000D2D74 /* WorkoutCollectionDataSource.swift in Sources */,
@@ -5945,6 +6008,7 @@
 				7444D09126D136600009C7A6 /* AddMoreToExerciseViewController.swift in Sources */,
 				747FED3525659A2900080AC8 /* AddNewGroupViewController.swift in Sources */,
 				74F18ADE27D65F530043551F /* WorkoutSearchModel.swift in Sources */,
+				747E0C942862267800D828A4 /* RecordJumpViewModel.swift in Sources */,
 				74CCBADD261685F100A20A94 /* WorkoutCompletedViewModel.swift in Sources */,
 				7444D0AC26D2B2C50009C7A6 /* CardCollectionViewCell.swift in Sources */,
 				742C1C9827BD91D500DD1BB0 /* ExerciseCommentModel.swift in Sources */,

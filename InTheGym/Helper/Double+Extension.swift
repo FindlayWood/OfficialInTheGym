@@ -15,4 +15,10 @@ extension Double {
     func convertPoundsToKG() -> Double {
         return self / 2.205
     }
+    func convertCMtoInches() -> Double {
+        return self * 0.393701
+    }
+    func convertInchestoCM() -> Double {
+        return self * 2.54
+    }
 }

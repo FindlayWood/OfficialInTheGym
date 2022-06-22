@@ -28,11 +28,6 @@ class PostCompletedWorkoutViewController: UIViewController {
         addChildView()
         initViewModel()
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-    
     // MARK: - Swift UI Child View
      func addChildView() {
          childContentView = .init(viewModel: viewModel)
@@ -42,7 +37,7 @@ class PostCompletedWorkoutViewController: UIViewController {
          childView.didMove(toParent: self)
          childView.view.translatesAutoresizingMaskIntoConstraints = false
          NSLayoutConstraint.activate([
-             childView.view.topAnchor.constraint(equalTo: view.topAnchor),
+            childView.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
              childView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
              childView.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
              childView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)

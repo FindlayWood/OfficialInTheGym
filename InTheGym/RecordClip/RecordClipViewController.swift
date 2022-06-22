@@ -51,8 +51,8 @@ class RecordClipViewController: UIViewController {
         videoPreviewLayer = AVCaptureVideoPreviewLayer(session: viewModel.captureSession)
         videoPreviewLayer.videoGravity = .resizeAspectFill
         videoPreviewLayer.connection?.videoOrientation = .portrait
-        videoPreviewLayer.frame = self.view.frame
-        self.view.layer.insertSublayer(videoPreviewLayer, at: 0)
+        videoPreviewLayer.frame = view.frame
+        view.layer.insertSublayer(videoPreviewLayer, at: 0)
     }
 
     
@@ -101,7 +101,6 @@ class RecordClipViewController: UIViewController {
         AudioServicesPlaySystemSound(SystemSoundID(1118))
         display.setUIDefault()
         let clipStorageModel = ClipStorageModel(fileURL: outputFileURL)
-        
         let vc = RecordedClipPlayerViewController()
         vc.viewModel.exerciseModel = viewModel.exerciseModel
         vc.viewModel.workoutModel = viewModel.workoutModel
@@ -109,6 +108,18 @@ class RecordClipViewController: UIViewController {
         vc.viewModel.addDelegate = viewModel.addingDelegate
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: false)
+        do {
+            let data = try Data(contentsOf: outputFileURL)
+            print("original data count: \(data.count)")
+            print("original file size: \(Double(data.count) / 1048576) mb")
+            let bcf = ByteCountFormatter()
+            bcf.allowedUnits = [.useMB] // optional: restricts the units to MB only
+            bcf.countStyle = .file
+            let string = bcf.string(fromByteCount: Int64(data.count))
+            print("formatted result: \(string)")
+        } catch {
+            print("no original data")
+        }
     }
     
     func switchCameraInput() {

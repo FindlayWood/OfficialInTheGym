@@ -54,10 +54,13 @@ extension PlayerProfileMoreCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func jumpMeasure() {
-        let vc = JumpMeasuringViewController()
+        let vc = MyJumpsViewController()
         vc.hidesBottomBarWhenPushed = true
-        vc.modalPresentationStyle = .fullScreen
-        navigationController.present(vc, animated: true)
+        navigationController.pushViewController(vc, animated: true)
+//        let vc = JumpMeasuringViewController()
+//        vc.hidesBottomBarWhenPushed = true
+//        vc.modalPresentationStyle = .fullScreen
+//        navigationController.present(vc, animated: true)
     }
     func breathWork() {
         let vc = MethodSelectionViewController()

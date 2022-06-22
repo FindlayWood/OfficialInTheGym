@@ -42,17 +42,35 @@ class RecordedClipPlayerViewModel {
     }
     
     func removeFromFileManager() {
-        let currentVideoURL = clipStorageModel.fileURL
-        try? FileManager.default.removeItem(at: currentVideoURL)
+        clipStorageModel.fileURL.removeUrlFromFileManager()
+//        let currentVideoURL = clipStorageModel.fileURL
+//        currentVideoURL.removeUrlFromFileManager()
+//        do {
+//            try FileManager.default.removeItem(at: currentVideoURL)
+//            print("SUCCESSFULLY removed file from manager at \(currentVideoURL)")
+//        } catch {
+//            print("could NOT file from manager! \(currentVideoURL)")
+//        }
+        
     }
     
     
     // MARK: - Storage
     func uploadClipToStorage() {
+        let originalFileURL = clipStorageModel.fileURL
+        originalFileURL.compressVideoSize { [weak self] compressedURL in
+            self?.clipStorageModel.fileURL = compressedURL
+            self?.uploadClipAfterCompress()
+            originalFileURL.removeUrlFromFileManager()
+        }
+    }
+    func uploadClipAfterCompress() {
+        
         storageAPI.fileUpload(model: clipStorageModel) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(let fileURL):
+                print("successfully uploaded to \(fileURL)")
                 self.uploadToDatabase(with: fileURL)
             case .failure(_):
                 // TODO: - Show Upload Error

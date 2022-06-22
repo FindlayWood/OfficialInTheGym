@@ -18,6 +18,7 @@ struct JumpMeasureViewModel {
     
     
     // MARK: - Properties
+    var fileURL: URL!
     var takeOffTime: Double = 0.0
     var landingTime: Double = 0.0
     

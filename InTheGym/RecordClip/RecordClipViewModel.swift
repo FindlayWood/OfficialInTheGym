@@ -14,35 +14,24 @@ class RecordClipViewModel: NSObject {
     
     // MARK: - Publishers
     var outPutFilePublisher = PassthroughSubject<URL,Never>()
-    @Published var countDownTime: Int = 10
+    @Published var countDownTime: Int = 16
     
     // MARK: - Properties
     var captureSession: AVCaptureSession!
-    
     var backCameraOn: Bool = true
-    
     var countDownOn: Bool = false
-    
     var backCamera: AVCaptureDevice!
     var frontCamera: AVCaptureDevice!
-    
     var audio: AVCaptureDevice!
-    
     var backCameraInput: AVCaptureInput!
     var frontCameraInput: AVCaptureInput!
-    
     var videoOutput: AVCaptureMovieFileOutput!
-    
     var workoutModel: WorkoutModel?
-    
     var exerciseModel: DiscoverExerciseModel!
-    
     var addingDelegate: ClipAdding!
-    
     let maxVideoLength: Double = 16
-    
-    var countDownStartTime: Int = 10
-    let countDownStartTimeConstant: Int = 10
+    var countDownStartTime: Int = 16
+    let countDownStartTimeConstant: Int = 16
     
     var countDownTimer: AnyCancellable!
     var recordingTimer: AnyCancellable!
@@ -132,7 +121,7 @@ class RecordClipViewModel: NSObject {
             }
     }
     func startCountDown() {
-        countDownTime = 10
+        countDownTime = 16
         countDownTimer = Timer.publish(every: 1.0, on: RunLoop.main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in self?.changeCountDown()}

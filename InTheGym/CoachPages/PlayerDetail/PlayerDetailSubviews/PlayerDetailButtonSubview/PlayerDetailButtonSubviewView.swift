@@ -15,10 +15,11 @@ class PlayerDetailButtonSubviewView: UIView {
         button.backgroundColor = .systemBackground
         button.setTitle("View Player Workouts", for: .normal)
         button.setTitleColor(.label, for: .normal)
-//        button.contentHorizontalAlignment = .left
+        button.contentHorizontalAlignment = .left
         button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
         button.layer.cornerRadius = 8
-        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        button.contentEdgeInsets.left = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -27,10 +28,11 @@ class PlayerDetailButtonSubviewView: UIView {
         button.backgroundColor = .systemBackground
         button.setTitle("Add Workout", for: .normal)
         button.setTitleColor(.label, for: .normal)
-//        button.contentHorizontalAlignment = .left
+        button.contentHorizontalAlignment = .left
         button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
         button.layer.cornerRadius = 8
-        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        button.contentEdgeInsets.left = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -61,8 +63,8 @@ private extension PlayerDetailButtonSubviewView {
     func configureUI() {
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
             stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
         ])
     }

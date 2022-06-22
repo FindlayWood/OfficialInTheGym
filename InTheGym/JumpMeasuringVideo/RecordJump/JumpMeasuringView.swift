@@ -20,75 +20,44 @@ class JumpMeasuringView: UIView {
     // MARK: - Subviews
     var backButton: UIButton = {
         let button = UIButton()
-        if #available(iOS 13.0, *) {
-            let largeConfig = UIImage.SymbolConfiguration(pointSize: 50, weight: .bold, scale: .large)
-            let image = UIImage(systemName: "chevron.backward.circle.fill", withConfiguration: largeConfig)
-            button.setImage(image, for: .normal)
-        } else {
-            button.setTitle("X", for: .normal)
-        }
-        button.tintColor = .lightColour
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    var countDownButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .red
-        if #available(iOS 13.0, *) {
-            button.setImage(UIImage(systemName: "timer"), for: .normal)
-        } else {
-            button.setTitle("C", for: .normal)
-        }
+        button.backgroundColor = .white
+        button.setImage(UIImage(systemName: "chevron.backward.circle.fill"), for: .normal)
         button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
+        button.tintColor = .darkColour
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
-    
+    var countDownButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .white
+        button.setImage(UIImage(systemName: "timer"), for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.tintColor = .darkColour
+        button.layer.cornerRadius = 20
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     var flipCameraButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
-        if #available(iOS 13.0, *) {
-            button.setImage(UIImage(systemName: "arrow.triangle.2.circlepath.camera.fill"), for: .normal)
-        } else {
-            button.setTitle("F", for: .normal)
-        }
+        button.setImage(UIImage(systemName: "arrow.triangle.2.circlepath.camera.fill"), for: .normal)
         button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
+        button.tintColor = .darkColour
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
-    
-    var videoLengthButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .white
-        button.setTitle("30", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.cornerRadius = 20
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     var recordButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
         button.alpha = 0.6
         button.layer.borderWidth = 5
-        button.layer.borderColor = Constants.lightColour.cgColor
+        button.layer.borderColor = Constants.darkColour.cgColor
         button.layer.cornerRadius = 40
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
     lazy var countDownLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -99,7 +68,6 @@ class JumpMeasuringView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -108,26 +76,35 @@ class JumpMeasuringView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
+    var messageLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textAlignment = .center
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUpView()
+        setupUI()
     }
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    func setUpView() {
+}
+private extension JumpMeasuringView {
+    func setupUI() {
         stackView.addArrangedSubview(backButton)
         stackView.addArrangedSubview(countDownButton)
-        stackView.addArrangedSubview(videoLengthButton)
         stackView.addArrangedSubview(flipCameraButton)
         addSubview(stackView)
+        addSubview(messageLabel)
         addSubview(recordButton)
         addSubview(countDownLabel)
-        constrainView()
+        constrainUI()
     }
-    func constrainView() {
+    func constrainUI() {
         NSLayoutConstraint.activate([
             backButton.widthAnchor.constraint(equalToConstant: 40),
             backButton.heightAnchor.constraint(equalToConstant: 40),
@@ -135,14 +112,16 @@ class JumpMeasuringView: UIView {
             countDownButton.widthAnchor.constraint(equalToConstant: 40),
             countDownButton.heightAnchor.constraint(equalToConstant: 40),
             
-            videoLengthButton.widthAnchor.constraint(equalToConstant: 40),
-            videoLengthButton.heightAnchor.constraint(equalToConstant: 40),
             flipCameraButton.widthAnchor.constraint(equalToConstant: 40),
             flipCameraButton.heightAnchor.constraint(equalToConstant: 40),
             
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            
+            messageLabel.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 8),
+            messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             
             recordButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             recordButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40),
@@ -155,8 +134,10 @@ class JumpMeasuringView: UIView {
         
         ])
     }
-    
+}
+extension JumpMeasuringView {
     func setUIRecording() {
+        countDownLabel.isHidden = true
         recordButton.isHidden = false
         recordButton.backgroundColor = .red
         recordButton.alpha = 1
@@ -165,23 +146,38 @@ class JumpMeasuringView: UIView {
     }
     
     func setUICountdownOn() {
+        countDownLabel.isHidden = false
         stackView.isHidden = true
         recordButton.isHidden = true
     }
     
     func setUIDefault() {
+        countDownLabel.isHidden = true
         recordButton.isHidden = false
         recordButton.backgroundColor = .white
         recordButton.alpha = 0.6
-        recordButton.layer.borderColor = Constants.lightColour.cgColor
+        recordButton.layer.borderColor = UIColor.lightColour.cgColor
         stackView.isHidden = false
     }
     
     func toggleCountDownUI(isOn: Bool) {
         if isOn {
-            countDownButton.backgroundColor = .green
+            countDownButton.backgroundColor = .lightColour
         } else {
-            countDownButton.backgroundColor = .red
+            countDownButton.backgroundColor = .white
+        }
+        showMessage(countdown: isOn)
+    }
+    
+    func showMessage(countdown: Bool) {
+        if countdown {
+            messageLabel.text = "10s countdown is on."
+        } else {
+            messageLabel.text = "10s countdown is off."
+        }
+        messageLabel.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+            self?.messageLabel.isHidden = true
         }
     }
     
@@ -200,5 +196,9 @@ class JumpMeasuringView: UIView {
             countDownNumber = 10
             countDownLabel.text = countDownNumber.description
         }
+    }
+    func setCountDown(to number: Int) {
+        countDownLabel.isHidden = false
+        countDownLabel.text = number.description
     }
 }
