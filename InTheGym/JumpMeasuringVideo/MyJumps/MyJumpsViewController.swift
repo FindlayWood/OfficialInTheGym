@@ -10,6 +10,7 @@ import UIKit
 
 class MyJumpsViewController: UIViewController {
     // MARK: - Properties
+    weak var coordinator: JumpCoordinator?
     var display = MyJumpsView()
     // MARK: - View
     override func loadView() {
@@ -22,14 +23,15 @@ class MyJumpsViewController: UIViewController {
     // MARK: - Targets
     func initTargets() {
         display.newJumpButton.addTarget(self, action: #selector(recordNewJumpActions(_:)), for: .touchUpInside)
+        display.helpButton.addTarget(self, action: #selector(instructionsAction(_:)), for: .touchUpInside)
     }
 }
 // MARK: - Actions
 private extension MyJumpsViewController {
     @objc func recordNewJumpActions(_ sender: UIButton) {
-        let vc = JumpMeasuringViewController()
-        vc.hidesBottomBarWhenPushed = true
-        vc.modalPresentationStyle = .fullScreen
-        navigationController?.present(vc, animated: true)
+        coordinator?.recordNewJump()
+    }
+    @objc func instructionsAction(_ sender: UIButton) {
+        coordinator?.instructions()
     }
 }

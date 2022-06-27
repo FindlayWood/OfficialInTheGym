@@ -54,9 +54,12 @@ extension PlayerProfileMoreCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func jumpMeasure() {
-        let vc = MyJumpsViewController()
-        vc.hidesBottomBarWhenPushed = true
-        navigationController.pushViewController(vc, animated: true)
+        let child = JumpCoordinator(navigationController: navigationController)
+        childCoordinators.append(child)
+        child.start()
+//        let vc = MyJumpsViewController()
+//        vc.hidesBottomBarWhenPushed = true
+//        navigationController.pushViewController(vc, animated: true)
 //        let vc = JumpMeasuringViewController()
 //        vc.hidesBottomBarWhenPushed = true
 //        vc.modalPresentationStyle = .fullScreen

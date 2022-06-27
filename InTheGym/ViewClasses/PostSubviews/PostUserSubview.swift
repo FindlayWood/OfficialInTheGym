@@ -33,6 +33,13 @@ class PostUserSubview: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    lazy var usernamStampHStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [usernameButton,stampView])
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.spacing = 4
+        return stack
+    }()
     var timeLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 10, weight: .light)
@@ -44,12 +51,16 @@ class PostUserSubview: UIView {
         return label
     }()
     lazy var usernameTimeVstack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [usernameButton,timeLabel])
+        let stack = UIStackView(arrangedSubviews: [usernamStampHStack,timeLabel])
         stack.alignment = .leading
         stack.distribution = .fillProportionally
         stack.axis = .vertical
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
+    }()
+    var stampView: UserStampsView = {
+        let view = UserStampsView()
+        return view
     }()
     lazy var fullStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [profileImageButton,usernameTimeVstack])
@@ -60,7 +71,6 @@ class PostUserSubview: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -70,7 +80,6 @@ class PostUserSubview: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension PostUserSubview {
@@ -78,7 +87,6 @@ private extension PostUserSubview {
         addSubview(fullStack)
         configureUI()
     }
-    
     func configureUI() {
         NSLayoutConstraint.activate([
             fullStack.topAnchor.constraint(equalTo: topAnchor),
@@ -86,5 +94,11 @@ private extension PostUserSubview {
             fullStack.trailingAnchor.constraint(equalTo: trailingAnchor),
             fullStack.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+    }
+}
+// MARK: - Public
+extension PostUserSubview {
+    public func congigureStampView(for userID: String) {
+        
     }
 }

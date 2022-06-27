@@ -138,6 +138,12 @@ private extension PostTableViewCell {
             .sink { [weak self] in self?.setProfileImage(with: $0)}
             .store(in: &subscriptions)
         
+        viewModel.$userModel
+            .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink { [weak self] in self?.postUserView.stampView.configureForPost(with: $0)}
+            .store(in: &subscriptions)
+        
         viewModel.$workoutModel
             .compactMap {$0}
             .receive(on: DispatchQueue.main)
@@ -160,6 +166,7 @@ private extension PostTableViewCell {
         
         viewModel.checkLike()
         viewModel.loadProfileImage()
+        viewModel.loadUserModel()
     }
 }
 

@@ -54,6 +54,10 @@ class JumpMeasuringViewController: UIViewController {
         display.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top)
         view.addSubview(display)
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
     
     func displaySetUp() {
         display.backButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
