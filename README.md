@@ -78,6 +78,11 @@ the max weight lifted for every exercise, the average weight lifted for every ex
   - Vertical Jump Height Measure
   - Programs
 
+<h2>
+  Performance Monitor
+</h2>
+With a premium account a user may gain access to the Performance Monitor. Here the user will be able to see all kinds of data relating to their performance including their Acute workload, Chronic workload, ACWR (Acute Chronic Workload Ratio) and more. 
+
 <h1>
   Stack
 </h1>
