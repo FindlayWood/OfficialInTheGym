@@ -12,10 +12,9 @@
   <img src="https://user-images.githubusercontent.com/39130967/169828661-bebd907e-f9f9-4ea0-a35c-cca0d64fad0b.PNG" width="159"     height="300">
   <img src="https://user-images.githubusercontent.com/39130967/169829503-f3bb22fa-7148-4818-9fb6-82e9189b8261.PNG" width="159"     height="300">
   <img src="https://user-images.githubusercontent.com/39130967/177224531-423ee1a7-11dc-4047-aa34-80709b1a8924.PNG" width="159"     height="300">
-  <img src="https://user-images.githubusercontent.com/39130967/169829823-56586ef0-6020-4ef1-b0f1-428ecc373c1e.PNG" width="159"     height="300">
-  <img src="https://user-images.githubusercontent.com/39130967/169829998-0c2f0b37-c0e5-4dfc-8fa9-b05c3ec03a72.PNG" width="159"     height="300">
+  <img src="https://user-images.githubusercontent.com/39130967/177224580-a2de6114-da92-4d26-a67b-0ffa64faf099.PNG" width="159"     height="300">
+  <img src="https://user-images.githubusercontent.com/39130967/177224587-89172d87-84be-4338-a1a3-fe5fdb12867a.PNG" width="159"     height="300">
 </p>
-
 
 InTheGym is an app that allows users to create and share workouts.
 
