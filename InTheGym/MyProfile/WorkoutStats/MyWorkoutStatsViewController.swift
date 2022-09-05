@@ -8,7 +8,7 @@
 
 import UIKit
 import Combine
-import Charts
+//import Charts
 
 class MyWorkoutStatsViewController: UIViewController {
     // MARK: - Properties

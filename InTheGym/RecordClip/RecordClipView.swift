@@ -177,9 +177,9 @@ class RecordClipView: UIView {
     
     func showMessage(countdown: Bool) {
         if countdown {
-            messageLabel.text = "10s countdown is on."
+            messageLabel.text = "16s countdown is on."
         } else {
-            messageLabel.text = "10s countdown is off."
+            messageLabel.text = "16s countdown is off."
         }
         messageLabel.isHidden = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in

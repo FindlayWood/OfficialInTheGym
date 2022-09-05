@@ -9,7 +9,7 @@
 // this page is used instead of weightviewcontroller
 
 import UIKit
-import SCLAlertView
+//import SCLAlertView
 import Combine
 
 class WeightSelectionViewController: UIViewController {
@@ -100,14 +100,14 @@ class WeightSelectionViewController: UIViewController {
         display.skipButton.addTarget(self, action: #selector(skipPressed(_:)), for: .touchUpInside)
     }
     func showEmptyAlert(){
-        let screenSize: CGRect = UIScreen.main.bounds
-        let screenWidth = screenSize.width
-        
-        let appearance = SCLAlertView.SCLAppearance(
-            kWindowWidth: screenWidth - 40, showCircularIcon: true
-        )
-        let alert = SCLAlertView(appearance: appearance)
-        alert.showError("Enter a Weight!", subTitle: "You have not entered a number for the weight. To enter a number tap on the left side of the big dark blue box. You can continue without entering a weight by pressing the SKIP button near the bottom of the screen.", closeButtonTitle: "OK")
+//        let screenSize: CGRect = UIScreen.main.bounds
+//        let screenWidth = screenSize.width
+//        
+//        let appearance = SCLAlertView.SCLAppearance(
+//            kWindowWidth: screenWidth - 40, showCircularIcon: true
+//        )
+//        let alert = SCLAlertView(appearance: appearance)
+//        alert.showError("Enter a Weight!", subTitle: "You have not entered a number for the weight. To enter a number tap on the left side of the big dark blue box. You can continue without entering a weight by pressing the SKIP button near the bottom of the screen.", closeButtonTitle: "OK")
     }
 }
 // MARK: - Actions

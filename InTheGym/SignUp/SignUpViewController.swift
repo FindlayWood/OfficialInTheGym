@@ -9,7 +9,7 @@
 //sign up page to create a new user
 
 import UIKit
-import SCLAlertView
+//import SCLAlertView
 import Combine
 
 class SignUpViewController: UIViewController, Storyboarded {
@@ -102,38 +102,38 @@ extension SignUpViewController  {
 extension SignUpViewController {
     func showSuccess(with email: String) {
         self.haptic.notificationOccurred(.success)
-        let screenSize: CGRect = UIScreen.main.bounds
-        let screenWidth = screenSize.width
-        
-        let appearance = SCLAlertView.SCLAppearance(
-            kWindowWidth: screenWidth - 40 )
-        let newAlert = SCLAlertView(appearance: appearance)
-        newAlert.showSuccess("Account Created!", subTitle: "You have successfully created an account. We have sent a verification email to \(email), follow the steps in the email to verify your account then you will be able to login. Once you have successfully logged in your device will be remembered and you will be automatically logged in.", closeButtonTitle: "Ok")
+//        let screenSize: CGRect = UIScreen.main.bounds
+//        let screenWidth = screenSize.width
+//        
+//        let appearance = SCLAlertView.SCLAppearance(
+//            kWindowWidth: screenWidth - 40 )
+//        let newAlert = SCLAlertView(appearance: appearance)
+//        newAlert.showSuccess("Account Created!", subTitle: "You have successfully created an account. We have sent a verification email to \(email), follow the steps in the email to verify your account then you will be able to login. Once you have successfully logged in your device will be remembered and you will be automatically logged in.", closeButtonTitle: "Ok")
         display.resetView()
         viewModel.resetFields()
     }
     
     func showError(for error: SignUpError) {
-        self.haptic.notificationOccurred(.success)
-        let screenSize: CGRect = UIScreen.main.bounds
-        let screenWidth = screenSize.width
-        
-        let appearance = SCLAlertView.SCLAppearance(
-            kWindowWidth: screenWidth - 40 )
-        let newAlert = SCLAlertView(appearance: appearance)
-        var errorMessage: String!
-        switch error {
-        case .invalidEmail:
-            errorMessage = "Invalid email. Please make sure to enter a valid email."
-        case .emailTaken:
-            errorMessage = "An account with this email already exists. If you have forgotten your password go to the login screen and select forgot password."
-        case .takenUsername:
-            errorMessage = "An account with this username already exists. Please choose a different one."
-        case .passwordTooShort:
-            errorMessage = "This password is too short. To keep accounts secure your password must be at least six characters long."
-        case .unknown, .fillAllFields, .passwordsDoNotMatch:
-            errorMessage = "There was an error trying to sign you up. Please try again."
-        }
-        newAlert.showError("Error", subTitle: errorMessage, closeButtonTitle: "Ok")
+//        self.haptic.notificationOccurred(.success)
+//        let screenSize: CGRect = UIScreen.main.bounds
+//        let screenWidth = screenSize.width
+//
+//        let appearance = SCLAlertView.SCLAppearance(
+//            kWindowWidth: screenWidth - 40 )
+//        let newAlert = SCLAlertView(appearance: appearance)
+//        var errorMessage: String!
+//        switch error {
+//        case .invalidEmail:
+//            errorMessage = "Invalid email. Please make sure to enter a valid email."
+//        case .emailTaken:
+//            errorMessage = "An account with this email already exists. If you have forgotten your password go to the login screen and select forgot password."
+//        case .takenUsername:
+//            errorMessage = "An account with this username already exists. Please choose a different one."
+//        case .passwordTooShort:
+//            errorMessage = "This password is too short. To keep accounts secure your password must be at least six characters long."
+//        case .unknown, .fillAllFields, .passwordsDoNotMatch:
+//            errorMessage = "There was an error trying to sign you up. Please try again."
+//        }
+//        newAlert.showError("Error", subTitle: errorMessage, closeButtonTitle: "Ok")
     }
 }

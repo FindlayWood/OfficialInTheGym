@@ -77,15 +77,16 @@ class PlayerMyInfoViewController: UIViewController {
             let SVC = Storyboard.instantiateViewController(withIdentifier: "MyProfileViewController") as! MyProfileViewController
             self.navigationController?.pushViewController(SVC, animated: true)
         case 1:
-            if ViewController.admin {
-                let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = Storyboard.instantiateViewController(withIdentifier: "CoachScoresViewController") as! CoachScoresViewController
-                self.navigationController?.pushViewController(SVC, animated: true)
-            } else {
-                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = StoryBoard.instantiateViewController(withIdentifier: "MYSCORESViewController") as! MYSCORESViewController
-                navigationController?.pushViewController(SVC, animated: true)
-            }
+            print("wrong option")
+//            if ViewController.admin {
+//                let Storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                let SVC = Storyboard.instantiateViewController(withIdentifier: "CoachScoresViewController") as! CoachScoresViewController
+//                self.navigationController?.pushViewController(SVC, animated: true)
+//            } else {
+//                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
+//                let SVC = StoryBoard.instantiateViewController(withIdentifier: "MYSCORESViewController") as! MYSCORESViewController
+//                navigationController?.pushViewController(SVC, animated: true)
+//            }
         case 2:
             let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
             let SVC = StoryBoard.instantiateViewController(withIdentifier: "SavedWorkoutsViewController") as! SavedWorkoutsViewController

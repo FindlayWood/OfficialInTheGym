@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SCLAlertView
+//import SCLAlertView
 import Combine
 
 class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
@@ -144,16 +144,16 @@ extension DiscoverPageViewController {
 //MARK: - First Launch Message
 extension DiscoverPageViewController {
     func showFirstMessage() {
-        if UIApplication.isFirstDiscoverLaunch() {
-
-            let screenSize: CGRect = UIScreen.main.bounds
-            let screenWidth = screenSize.width
-            
-            let appearance = SCLAlertView.SCLAppearance(
-                kWindowWidth: screenWidth - 40 )
-
-            let alert = SCLAlertView(appearance: appearance)
-            alert.showInfo("DISCOVER!", subTitle: FirstTimeMessages.discoverMessage, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
-        }
+//        if UIApplication.isFirstDiscoverLaunch() {
+//
+//            let screenSize: CGRect = UIScreen.main.bounds
+//            let screenWidth = screenSize.width
+//
+//            let appearance = SCLAlertView.SCLAppearance(
+//                kWindowWidth: screenWidth - 40 )
+//
+//            let alert = SCLAlertView(appearance: appearance)
+//            alert.showInfo("DISCOVER!", subTitle: FirstTimeMessages.discoverMessage, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
+//        }
     }
 }

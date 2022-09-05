@@ -40,6 +40,14 @@ extension Date {
         formatter.maximumUnitCount = 1
         return String(format: formatter.string(from: self, to: Date())!)
     }
+    func getAbbreviatedDateFormat() -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .abbreviated
+        formatter.allowedUnits = [.year, .month, .day, .hour, .minute, .second]
+        formatter.zeroFormattingBehavior = .dropAll
+        formatter.maximumUnitCount = 1
+        return String(format: formatter.string(from: self, to: Date())!)
+    }
     func getWorkoutFormat() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"

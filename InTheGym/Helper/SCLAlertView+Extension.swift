@@ -6,7 +6,7 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import SCLAlertView
 
 extension UIViewController {

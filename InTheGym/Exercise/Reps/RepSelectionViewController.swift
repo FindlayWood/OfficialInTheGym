@@ -10,7 +10,7 @@
 
 import UIKit
 import Combine
-import SCLAlertView
+//import SCLAlertView
 
 enum setSelected {
     case allSelected

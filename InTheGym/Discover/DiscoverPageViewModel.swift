@@ -65,10 +65,11 @@ class DiscoverPageViewModel {
         apiService.fetchLimited(model: ClipModel.self, limit: 10) { [weak self] result in
             switch result {
             case .success(let models):
-                let filteredModels = models.filter { !($0.isPrivate) }
+                let filteredModels = models.filter { !($0.isPrivate) }.sorted { $0.time > $1.time }
                 self?.clipsPublisher.send(filteredModels)
             case .failure(let error):
                 self?.errorPublisher.send(error)
+                print(String(describing: error))
             }
         }
     }

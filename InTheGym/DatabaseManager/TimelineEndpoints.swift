@@ -62,11 +62,11 @@ protocol DatabaseEndpoint {
 }
 extension DatabaseEndpoint{
     func retreive<T:Codable>(expectedReturnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void){
-        FirebaseAPI.shared().retreive(from: self.path, expectingReturnType: expectedReturnType, completion: completion)
+//        FirebaseAPI.shared().retreive(from: self.path, expectingReturnType: expectedReturnType, completion: completion)
     }
     
     func retreiveProfileTimeline(completion: @escaping (Result<[PostProtocol], Error>) -> Void) {
-        FirebaseAPI.shared().loadProfileTimelineReferences(from: self.path, completion: completion)
+//        FirebaseAPI.shared().loadProfileTimelineReferences(from: self.path, completion: completion)
     }
     
     func post(){

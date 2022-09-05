@@ -43,6 +43,7 @@ class ExerciseMaxHistoryViewModel {
                 self?.loadChartEntries(from: models)
                 self?.models = models
             case .failure(let error):
+                print(String(describing: error))
                 self?.error.send(error)
                 self?.isLoading = false
             }
@@ -56,12 +57,13 @@ class ExerciseMaxHistoryViewModel {
             entries.append(newEntry)
         }
         let chartDataSet = LineChartDataSet(entries: entries, label: "max")
-        chartDataSet.circleColors = [NSUIColor.darkColour]
-        chartDataSet.circleHoleColor = NSUIColor.darkColour
-        chartDataSet.fillColor = NSUIColor.darkColour
+        chartDataSet.lineWidth = 3
+        chartDataSet.mode = .horizontalBezier
+        chartDataSet.drawCirclesEnabled = false
+        chartDataSet.setColor(.lightColour)
         let chartData = LineChartData()
         chartData.append(chartDataSet)
-        chartData.setDrawValues(true)
+        chartData.setDrawValues(false)
         chartDataPublisher = chartData
         isLoading = false
     }

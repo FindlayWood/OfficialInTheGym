@@ -9,7 +9,7 @@
 import UIKit
 import AVKit
 import AVFoundation
-import SCLAlertView
+//import SCLAlertView
 import Combine
 
 
@@ -131,8 +131,8 @@ class RecordedClipPlayerViewController: UIViewController {
     }
     
     func showUploadError() {
-        let alert = SCLAlertView()
-        alert.showError("Error", subTitle: "There was an error uploading this clip, please try again.", closeButtonTitle: "ok")
+//        let alert = SCLAlertView()
+//        alert.showError("Error", subTitle: "There was an error uploading this clip, please try again.", closeButtonTitle: "ok")
     }
     
     @objc func togglePrivacy() {

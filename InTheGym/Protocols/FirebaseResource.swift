@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import CodableFirebase
 
 /// A type that can be loaded and uploaded to and from Firebase
 /// A Firebase Resource REQUIRES Codable
@@ -73,8 +72,9 @@ typealias FirebaseTimeOrderedModel = FirebaseInstance & TimeOrderedID
 extension FirebaseInstance {
     func toFirebaseJSON() -> FirebaseMultiUploadDataPoint? {
         do {
-            let value = try FirebaseEncoder().encode(self)
-            return FirebaseMultiUploadDataPoint(value: value, path: self.internalPath)
+            let data = try JSONEncoder().encode(self)
+            let firebaseJSON = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            return FirebaseMultiUploadDataPoint(value: firebaseJSON, path: self.internalPath)
         }
         catch {
             return nil

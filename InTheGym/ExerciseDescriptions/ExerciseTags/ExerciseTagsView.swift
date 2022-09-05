@@ -22,7 +22,7 @@ class ExerciseTagsView: UIView {
     var plusButton: UIButton = {
         let button = UIButton()
         button.tintColor = .lightColour
-        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 100)), for: .normal)
+        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 60)), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -49,8 +49,8 @@ private extension ExerciseTagsView {
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            plusButton.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor, constant: -5),
-            plusButton.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -5)
+            plusButton.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor, constant: -8),
+            plusButton.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -16)
         ])
     }
     func generateCollectionLayout() -> UICollectionViewFlowLayout {

@@ -65,6 +65,10 @@ private extension PlayerProfileMoreViewController {
         case .subscription:
             let vc = PremiumAccountViewController()
             navigationController?.present(vc, animated: true)
+        case .measurements:
+            let vc = MyMeasurementsViewController()
+            vc.modalPresentationStyle = .fullScreen
+            navigationController?.present(vc, animated: true)
         case .myCoaches:
             coordinator?.myCoaches()
         case .requests:

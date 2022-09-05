@@ -115,11 +115,19 @@ class WorkoutExerciseCollectionDataSource: NSObject {
         dataDource.apply(currentSnapshot, animatingDifferences: false)
     }
     func update(for exercise: ExerciseModel) {
+        var offset: CGPoint = .zero
+        let indexPath = IndexPath(item: exercise.workoutPosition, section: 0)
+        if let cell = collectionView.cellForItem(at: indexPath) as? ExerciseCollectionCell {
+            offset = cell.collectionView.contentOffset
+        }
         guard let item = dataDource.itemIdentifier(for: IndexPath(item: exercise.workoutPosition, section: 0)) else {return}
         var currentSnapshot = dataDource.snapshot()
         currentSnapshot.insertItems([ExerciseRow.exercise(exercise)], afterItem: item)
         currentSnapshot.deleteItems([item])
         dataDource.apply(currentSnapshot, animatingDifferences: false)
+        if let cell = collectionView.cellForItem(at: indexPath) as? ExerciseCollectionCell {
+            cell.collectionView.setContentOffset(offset, animated: false)
+        }
     }
     // MARK: - Update Functions
     func updateCircuit(_ newCircuit: CircuitModel) {
@@ -162,7 +170,6 @@ class WorkoutExerciseCollectionDataSource: NSObject {
 }
 // MARK: - Delegate - Select Row
 extension WorkoutExerciseCollectionDataSource: UICollectionViewDelegate {
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let rowSelected = dataDource.itemIdentifier(for: indexPath) else {return}
         switch rowSelected {
@@ -176,7 +183,6 @@ extension WorkoutExerciseCollectionDataSource: UICollectionViewDelegate {
             emomSelected.send(emomModel)
         }
     }
-    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.lastContentOffset = scrollView.contentOffset.y
     }

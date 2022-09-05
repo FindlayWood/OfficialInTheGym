@@ -16,6 +16,7 @@ class AddMoreToExerciseViewModel {
     var distanceUpdatedPublisher = PassthroughSubject<[String]?,Never>()
     var restTimeUpdatedPublisher = PassthroughSubject<[Int]?,Never>()
     var noteUpdatedPublisher = PassthroughSubject<String,Never>()
+    var tempoUpdatedPublisher = PassthroughSubject<[ExerciseTempoModel]?,Never>()
     
     
     // MARK: - Properties
@@ -28,7 +29,8 @@ class AddMoreToExerciseViewModel {
     let data: [AddMoreCellModel] = [.init(title: "Time", imageName: "clock_icon", value: Observable<String>()),
                                     .init(title: "Distance", imageName: "distance_icon", value: Observable<String>()),
                                     .init(title: "Rest Time", imageName: "restTime_icon", value: Observable<String>()),
-                                    .init(title: "Note", imageName: "note_icon", value: Observable<String>())]
+                                    .init(title: "Note", imageName: "note_icon", value: Observable<String>()),
+                                    .init(title: "Tempo", imageName: "tempo_icon", value: Observable<String>())]
     
     var numberOfItems: Int {
         return data.count
@@ -51,6 +53,9 @@ class AddMoreToExerciseViewModel {
             .store(in: &subscriptions)
         noteUpdatedPublisher
             .sink { [weak self] in self?.exercise.note = $0}
+            .store(in: &subscriptions)
+        tempoUpdatedPublisher
+            .sink { [weak self] in self?.exercise.tempo = $0}
             .store(in: &subscriptions)
     }
     

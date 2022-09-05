@@ -8,7 +8,7 @@
 
 import UIKit
 import Combine
-import SCLAlertView
+//import SCLAlertView
 
 
 class PlayerWorkoutsViewController: UIViewController {
@@ -51,8 +51,8 @@ class PlayerWorkoutsViewController: UIViewController {
     
     // MARK: - Subscribers
     func setupSubscribers() {
-        viewModel.workouts
-            .dropFirst()
+        viewModel.$workouts
+//            .dropFirst()
             .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
         
@@ -78,14 +78,14 @@ extension PlayerWorkoutsViewController {
     func showFirstMessage() {
         if UIApplication.isFirstWorkoutsLaunch() {
 
-            let screenSize: CGRect = UIScreen.main.bounds
-            let screenWidth = screenSize.width
-            
-            let appearance = SCLAlertView.SCLAppearance(
-                kWindowWidth: screenWidth - 40 )
-
-            let alert = SCLAlertView(appearance: appearance)
-            alert.showInfo("WORKOUTS!", subTitle: FirstTimeMessages.workoutsMessage, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
+//            let screenSize: CGRect = UIScreen.main.bounds
+//            let screenWidth = screenSize.width
+//            
+//            let appearance = SCLAlertView.SCLAppearance(
+//                kWindowWidth: screenWidth - 40 )
+//
+//            let alert = SCLAlertView(appearance: appearance)
+//            alert.showInfo("WORKOUTS!", subTitle: FirstTimeMessages.workoutsMessage, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
         }
     }
 }

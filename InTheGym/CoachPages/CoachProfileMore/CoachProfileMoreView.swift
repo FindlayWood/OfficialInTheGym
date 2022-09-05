@@ -95,6 +95,23 @@ struct CoachProfileMoreView: View {
             }
             Section {
                 Button {
+                    viewModel.action(.measurements)
+                } label: {
+                    HStack(spacing: 16) {
+                        Image(uiImage: UIImage(named: "ruler_icon")!)
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .cornerRadius(4)
+                        Text("My Measurments")
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+                    }
+                }
+            } header: {
+                Text("My Measurements")
+            }
+            Section {
+                Button {
                     viewModel.action(.myWorkouts)
                 } label: {
                     HStack(spacing: 16) {

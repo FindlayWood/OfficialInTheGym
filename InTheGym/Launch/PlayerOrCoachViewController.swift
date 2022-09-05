@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SCLAlertView
+//import SCLAlertView
 
 class PlayerOrCoachViewController: UIViewController, Storyboarded {
     
@@ -50,8 +50,8 @@ class PlayerOrCoachViewController: UIViewController, Storyboarded {
         let playerTap = UITapGestureRecognizer(target: self, action: #selector(playerPressed))
         playerView.addGestureRecognizer(playerTap)
         
-        let warningalert = SCLAlertView()
-        warningalert.showNotice("Verification", subTitle: "New accounts must be verified and you will be sent an email to verify your account before you can login.", closeButtonTitle: "Ok")
+//        let warningalert = SCLAlertView()
+//        warningalert.showNotice("Verification", subTitle: "New accounts must be verified and you will be sent an email to verify your account before you can login.", closeButtonTitle: "Ok")
         
         selection.prepare()
         contineButton.isHidden = true

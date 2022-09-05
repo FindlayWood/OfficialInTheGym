@@ -52,7 +52,7 @@ class WorkoutChildView: UIView {
 // MARK: - Setup UI
 private extension WorkoutChildView {
     func setupUI() {
-        backgroundColor = Constants.lightColour
+        backgroundColor = .lightColour
         addSubview(clipCollection)
         addSubview(exerciseCollection)
         constrainUI()

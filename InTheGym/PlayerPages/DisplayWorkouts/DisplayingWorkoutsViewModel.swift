@@ -49,9 +49,9 @@ class DisplayingWorkoutsViewModel {
             guard let self = self else {return}
             switch result {
             case .success(let models):
-                self.workouts = models
-                self.storedWorkouts = models
-                self.filteredWorkouts = models
+                self.workouts = models.reversed()
+                self.storedWorkouts = models.reversed()
+                self.filteredWorkouts = models.reversed()
                 self.isLoading = false
             case .failure(let error):
                 self.errorFetching.send(error)

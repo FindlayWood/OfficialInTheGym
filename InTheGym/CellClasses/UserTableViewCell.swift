@@ -27,7 +27,6 @@ class UserTableViewCell: UITableViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     var fullNameLabel: UILabel = {
         let label = UILabel()
         label.font = Constants.font
@@ -35,7 +34,6 @@ class UserTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
     var usernameLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 18)
@@ -43,9 +41,11 @@ class UserTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-
-    
+    var stampView: UserStampsView = {
+        let view = UserStampsView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -60,9 +60,7 @@ class UserTableViewCell: UITableViewCell {
         super.prepareForReuse()
         profileImage.image = nil
     }
-    
 }
-
 // MARK: - Setup Methods
 private extension UserTableViewCell {
     func setUpUI() {
@@ -70,6 +68,7 @@ private extension UserTableViewCell {
         backgroundColor = .systemBackground
         addSubview(profileImage)
         addSubview(fullNameLabel)
+        addSubview(stampView)
         addSubview(usernameLabel)
         constrainUI()
     }
@@ -83,6 +82,11 @@ private extension UserTableViewCell {
             
             fullNameLabel.topAnchor.constraint(equalTo: profileImage.topAnchor),
             fullNameLabel.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 8),
+            fullNameLabel.trailingAnchor.constraint(equalTo: stampView.leadingAnchor, constant: -4),
+            
+            stampView.centerYAnchor.constraint(equalTo: fullNameLabel.centerYAnchor),
+            stampView.leadingAnchor.constraint(equalTo: fullNameLabel.trailingAnchor, constant: 4),
+            stampView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -8),
             
             usernameLabel.topAnchor.constraint(equalTo: fullNameLabel.bottomAnchor, constant: 2),
             usernameLabel.leadingAnchor.constraint(equalTo: fullNameLabel.leadingAnchor),
@@ -104,7 +108,6 @@ private extension UserTableViewCell {
         }
     }
 }
-
 // MARK: - Configure Cell
 extension UserTableViewCell {
     public func configureCell(with user: Users) {
@@ -121,6 +124,7 @@ extension UserTableViewCell {
 //                self.profileImage.image = image
 //            }
 //        }
+        stampView.configureForPost(with: user)
     }
     public func selected() {
         fullNameLabel.textColor = Constants.darkColour

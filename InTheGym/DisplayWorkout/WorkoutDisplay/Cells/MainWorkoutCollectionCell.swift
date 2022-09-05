@@ -174,9 +174,10 @@ struct ExerciseSet: Hashable {
     var time: Int?
     var distance: String?
     var restTime: Int?
+    var tempo: ExerciseTempoModel?
     
     var hasMoreInfo: Bool {
-        (time != nil || distance != nil || restTime != nil)
+        (time != nil || distance != nil || restTime != nil || tempo != nil)
     }
 
 }

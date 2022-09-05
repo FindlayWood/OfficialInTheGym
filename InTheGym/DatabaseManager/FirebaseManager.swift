@@ -8,7 +8,7 @@
 
 import Foundation
 import Firebase
-import CodableFirebase
+//import CodableFirebase
 
 protocol FirebaseManagerService {
     func upload(from endpoint: PostEndpoint, completion: @escaping (Result<Void, Error>) -> Void)
@@ -40,14 +40,15 @@ class FirebaseManager: FirebaseManagerService {
         data.time = Date().timeIntervalSince1970 ///set the time to current time
         
         do {
-            let uploadObject = try FirebaseEncoder().encode(data)
-            databaseReference.setValue(uploadObject) { error, ref in
-                if let error = error {
-                    completion(.failure(error))
-                } else {
-                    completion(.success(()))
-                }
-            }
+            try databaseReference.setValue(from: data)
+//            let uploadObject = try FirebaseEncoder().encode(data)
+//            databaseReference.setValue(uploadObject) { error, ref in
+//                if let error = error {
+//                    completion(.failure(error))
+//                } else {
+//                    completion(.success(()))
+//                }
+//            }
         }
         catch {
             completion(.failure(error))
@@ -60,25 +61,36 @@ class FirebaseManager: FirebaseManagerService {
             completion(.failure(NSError(domain: "Nil Info", code: 0, userInfo: nil)))
             return
         }
-        var tempPosts: [PostModel] = []
-        let myGroup = DispatchGroup()
+//        var tempPosts: [PostModel] = []
+//        let myGroup = DispatchGroup()
         databaseReference = Database.database().reference().child(path)
         databaseReference.observeSingleEvent(of: .value) { snapshot in
-            for child in snapshot.children.allObjects as! [DataSnapshot] {
-                myGroup.enter()
-                guard let postObject = child.value as? [String: AnyObject] else {return}
-                do {
-                    let postData = try FirebaseDecoder().decode(PostModel.self, from: postObject)
-                    tempPosts.append(postData)
-                    myGroup.leave()
-                }
-                catch {
-                    myGroup.leave()
-                }
+            guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
+                completion(.failure(NSError()))
+                return
             }
-            myGroup.notify(queue: .main) {
-                completion(.success(tempPosts))
+            do {
+                let data = try children.compactMap { try $0.data(as: PostModel.self) }
+                completion(.success(data))
+            } catch {
+                completion(.failure(error))
             }
+            
+//            for child in snapshot.children.allObjects as! [DataSnapshot] {
+//                myGroup.enter()
+//                guard let postObject = child.value as? [String: AnyObject] else {return}
+//                do {
+//                    let postData = try FirebaseDecoder().decode(PostModel.self, from: postObject)
+//                    tempPosts.append(postData)
+//                    myGroup.leave()
+//                }
+//                catch {
+//                    myGroup.leave()
+//                }
+//            }
+//            myGroup.notify(queue: .main) {
+//                completion(.success(tempPosts))
+//            }
         }
     }
     

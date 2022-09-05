@@ -11,7 +11,7 @@
 // and then passes onto the new implementation of reps page
 
 import UIKit
-import SCLAlertView
+//import SCLAlertView
 import Combine
 
 class SetSelectionViewController: UIViewController {

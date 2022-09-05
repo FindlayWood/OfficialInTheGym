@@ -13,9 +13,9 @@ class ScoresPieChartChildViewController: UIViewController {
     
     
     // MARK: - Properties
-    var display = ScoresPieChartView()
+//    var display = ScoresPieChartView()
     
-    var viewModel = ScoresPieChartViewModel()
+//    var viewModel = ScoresPieChartViewModel()
     
     private var subscriptions = Set<AnyCancellable>()
 
@@ -27,37 +27,37 @@ class ScoresPieChartChildViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        display.frame = view.bounds
-        view.addSubview(display)
+//        display.frame = view.bounds
+//        view.addSubview(display)
     }
     
     // MARK: - View Model
     func initViewModel() {
         
-        viewModel.chartDataPublisher
-            .sink { [weak self] in self?.display.pieChartView.data = $0 }
-            .store(in: &subscriptions)
+//        viewModel.chartDataPublisher
+//            .sink { [weak self] in self?.display.pieChartView.data = $0 }
+//            .store(in: &subscriptions)
+//
+//        viewModel.centerStringPublihser
+//            .sink { [weak self] in self?.display.pieChartView.centerAttributedText = $0}
+//            .store(in: &subscriptions)
+//
+//        viewModel.$isLoading
+//            .sink { [weak self] in self?.setLoading(to: $0)}
+//            .store(in: &subscriptions)
         
-        viewModel.centerStringPublihser
-            .sink { [weak self] in self?.display.pieChartView.centerAttributedText = $0}
-            .store(in: &subscriptions)
-        
-        viewModel.$isLoading
-            .sink { [weak self] in self?.setLoading(to: $0)}
-            .store(in: &subscriptions)
-        
-        viewModel.loadScores()
+//        viewModel.loadScores()
         
     }
     
     // MARK: - Actions
     func setLoading(to loading: Bool) {
-        if loading {
-            display.activitiyIndicator.startAnimating()
-            display.pieChartView.isHidden = true
-        } else {
-            display.activitiyIndicator.stopAnimating()
-            display.pieChartView.isHidden = false
-        }
+//        if loading {
+//            display.activitiyIndicator.startAnimating()
+//            display.pieChartView.isHidden = true
+//        } else {
+//            display.activitiyIndicator.stopAnimating()
+//            display.pieChartView.isHidden = false
+//        }
     }
 }

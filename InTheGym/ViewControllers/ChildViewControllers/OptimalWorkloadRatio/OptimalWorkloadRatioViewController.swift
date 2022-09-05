@@ -8,6 +8,7 @@
 
 import UIKit
 import Combine
+import Charts
 
 class OptimalWorkloadRatioViewController: UIViewController {
     // MARK: - Properties

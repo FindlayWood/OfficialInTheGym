@@ -17,6 +17,7 @@ class PostCellViewModel {
     // MARK: - Publishers
     @Published var isLiked: Bool = false
     @Published var imageData: Data?
+    @Published var userModel: Users?
     @Published var workoutModel: WorkoutModel?
     @Published var savedWorkoutModel: SavedWorkoutModel?
     
@@ -127,5 +128,15 @@ class PostCellViewModel {
         var newPost = post
         newPost.likeCount += 1
         PostLoader.shared.add(newPost)
+    }
+    // MARK: - User Model
+    func loadUserModel() {
+        DispatchQueue.global(qos: .background).async {
+            let userSearchModel = UserSearchModel(uid: self.post.posterID)
+            UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
+                let userModel = try? result.get()
+                self?.userModel = userModel
+            }
+        }
     }
 }

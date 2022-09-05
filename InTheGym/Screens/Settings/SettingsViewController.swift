@@ -93,7 +93,7 @@ private extension SettingsViewController {
     }
     func loggedOut(_ success: Bool) {
         if success {
-            FirebaseAPI.shared().dispose()
+//            FirebaseAPI.shared().dispose()
             LikesAPIService.shared.LikedPostsCache.removeAll()
             ViewController.admin = nil
             ViewController.username = nil

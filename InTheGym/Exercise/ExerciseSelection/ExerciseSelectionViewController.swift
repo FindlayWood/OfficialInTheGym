@@ -142,17 +142,17 @@ extension ExerciseSelectionViewController: UISearchBarDelegate {
         viewModel.filterExercises(with: searchText)
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        if coordinator is RegularWorkoutCreationCoordinator || coordinator is LiveWorkoutExerciseCreationCoordinator {
-            display.searchBegins()
-        }
+//        if coordinator is RegularWorkoutCreationCoordinator || coordinator is LiveWorkoutExerciseCreationCoordinator {
+//            display.searchBegins()
+//        }
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         display.searchBar.resignFirstResponder()
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         display.searchBar.resignFirstResponder()
-        if coordinator is RegularWorkoutCreationCoordinator || coordinator is LiveWorkoutExerciseCreationCoordinator {
-            display.searchEnded()
-        }
+//        if coordinator is RegularWorkoutCreationCoordinator || coordinator is LiveWorkoutExerciseCreationCoordinator {
+//            display.searchEnded()
+//        }
     }
 }

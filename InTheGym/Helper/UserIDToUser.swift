@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import Firebase
-import CodableFirebase
+//import CodableFirebase
 
 class UserIDToUser:NSObject{
     
@@ -19,13 +19,20 @@ class UserIDToUser:NSObject{
 //        user.uid = userID
         let userRef = Database.database().reference().child("users").child(userID)
         userRef.observeSingleEvent(of: .value) { (snapshot) in
-            guard let snap = snapshot.value as? [String: AnyObject] else {return}
             do {
-                let user = try FirebaseDecoder().decode(Users.self, from: snap)
+                let user = try snapshot.data(as: Users.self)
                 completion(user)
-            } catch let error {
-                print(error.localizedDescription)
+            } catch {
+                print(String(describing: error))
             }
+            
+//            guard let snap = snapshot.value as? [String: AnyObject] else {return}
+//            do {
+//                let user = try FirebaseDecoder().decode(Users.self, from: snap)
+//                completion(user)
+//            } catch let error {
+//                print(error.localizedDescription)
+//            }
             
 //            if let snap = snapshot.value as? [String:AnyObject]{
 //                user.firstName = snap["firstName"] as? String
@@ -45,14 +52,20 @@ class UserIDToUser:NSObject{
     static func groupIdToGroupName(groupID: String, completion: @escaping (GroupModel) -> ()) {
         let groupRef = Database.database().reference().child("Groups").child(groupID)
         groupRef.observeSingleEvent(of: .value) { (snapshot) in
-            guard let snap = snapshot.value as? [String:AnyObject] else {return}
             do {
-                let group = try FirebaseDecoder().decode(GroupModel.self, from: snap)
-                completion(group)
+                let data = try snapshot.data(as: GroupModel.self)
+                completion(data)
+            } catch {
+                print(String(describing: error))
             }
-            catch {
-                print(error.localizedDescription)
-            }
+//            guard let snap = snapshot.value as? [String:AnyObject] else {return}
+//            do {
+//                let group = try FirebaseDecoder().decode(GroupModel.self, from: snap)
+//                completion(group)
+//            }
+//            catch {
+//                print(error.localizedDescription)
+//            }
         }
     }
     

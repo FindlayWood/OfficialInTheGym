@@ -8,6 +8,7 @@
 
 import UIKit
 import Combine
+import SwiftUI
 
 class DisplayExerciseStatsViewController: UIViewController {
     
@@ -20,25 +21,34 @@ class DisplayExerciseStatsViewController: UIViewController {
     
     var dataSource: ExerciseStatsDataSource!
 
+    var childContentView: ExerciseStatsListView!
+    
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        initDataSource()
-        initAdapter()
+        addChildView()
+//        initDataSource()
+//        initAdapter()
         initViewModel()
-        hideKeyboardWhenTappedAround()
+//        hideKeyboardWhenTappedAround()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getViewableFrameWithBottomSafeArea()
-        view.addSubview(display)
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        display.frame = getViewableFrameWithBottomSafeArea()
+//        view.addSubview(display)
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationItem.title = "Exercise Stats"
         editNavBarColour(to: .darkColour)
+    }
+    
+    // MARK: - Swift UI Child View
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel)
+        addSwiftUIViewWithNavBar(childContentView)
     }
 
     func initDataSource() {
@@ -51,14 +61,21 @@ class DisplayExerciseStatsViewController: UIViewController {
     
     func initViewModel() {
         
-        viewModel.statModelPublisher
-            .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
+//        viewModel.statModelPublisher
+//            .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
+//            .store(in: &subscriptions)
+//        
+//        dataSource.exerciseSelected
+//            .sink { [weak self] in self?.showDetail(for: $0)}
+//            .store(in: &subscriptions)
+        
+        viewModel.$isLoading
+            .sink { [weak self] in self?.setLoading($0) }
             .store(in: &subscriptions)
         
-        dataSource.exerciseSelected
-            .sink { [weak self] in self?.showDetail(for: $0)}
+        viewModel.selectedExercise
+            .sink { [weak self] in self?.showDetail(for: $0) }
             .store(in: &subscriptions)
-        
         
         viewModel.fetchStatModels()
     }
@@ -81,5 +98,14 @@ extension DisplayExerciseStatsViewController: UISearchResultsUpdating {
             viewModel.filterExercises(from: searchText)
         }
     }
+}
 
+extension DisplayExerciseStatsViewController {
+    func setLoading(_ loading: Bool) {
+        if loading {
+            initLoadingNavBar(with: .darkColour)
+        } else {
+            navigationItem.rightBarButtonItem = nil
+        }
+    }
 }

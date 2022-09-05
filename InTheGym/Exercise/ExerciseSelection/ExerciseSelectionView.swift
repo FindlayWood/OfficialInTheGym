@@ -110,19 +110,20 @@ private extension ExerciseSelectionView {
         topStack.addArrangedSubview(circuitView)
         topStack.addArrangedSubview(amrapView)
         topStack.addArrangedSubview(emomView)
-        addSubview(topStack)
+//        addSubview(topStack)
         addSubview(searchBar)
         addSubview(collectionView)
         constrainUI()
     }
     func constrainUI() {
-        searchBarTopAnchor = searchBar.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: 8)
+//        searchBarTopAnchor = searchBar.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: 8)
         NSLayoutConstraint.activate([
-            topStack.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
-            topStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            topStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+//            topStack.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
+//            topStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+//            topStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
-            searchBarTopAnchor,
+//            searchBarTopAnchor,
+            searchBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: trailingAnchor),
             searchBar.heightAnchor.constraint(equalToConstant: 48),
@@ -147,19 +148,19 @@ extension ExerciseSelectionView {
         emomView.isHidden = false
     }
     public func searchBegins() {
-        UIView.animate(withDuration: 0.3) {
-            self.hideStack()
-            self.searchBarTopAnchor.isActive = false
-            self.searchBarTopAnchor = self.searchBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor)
-            self.searchBarTopAnchor.isActive = true
-        }
+//        UIView.animate(withDuration: 0.3) {
+//            self.hideStack()
+//            self.searchBarTopAnchor.isActive = false
+//            self.searchBarTopAnchor = self.searchBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor)
+//            self.searchBarTopAnchor.isActive = true
+//        }
     }
     public func searchEnded() {
-        UIView.animate(withDuration: 0.3) {
-            self.showStack()
-            self.searchBarTopAnchor.isActive = false
-            self.searchBarTopAnchor = self.searchBar.topAnchor.constraint(equalTo: self.topStack.bottomAnchor, constant: 8)
-            self.searchBarTopAnchor.isActive = true
-        }
+//        UIView.animate(withDuration: 0.3) {
+//            self.showStack()
+//            self.searchBarTopAnchor.isActive = false
+//            self.searchBarTopAnchor = self.searchBar.topAnchor.constraint(equalTo: self.topStack.bottomAnchor, constant: 8)
+//            self.searchBarTopAnchor.isActive = true
+//        }
     }
 }

@@ -47,7 +47,8 @@ class WorkloadChildViewModel {
                 self?.loadRange(from: models)
                 self?.acuteLoad(from: models)
                 self?.workloadModels = models
-            case .failure(_):
+            case .failure(let error):
+                print(String(describing: error))
                 self?.isLoading = false
                 break
             }

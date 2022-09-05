@@ -69,4 +69,15 @@ class FirebaseStorageManager {
             }
         }
     }
+    // MARK: - Delete Function
+    func deleteFile<T: FirebaseStorageFile>(model: T, completion: @escaping ((Result<Void,Error>) -> Void)) {
+        let storageRef = Storage.storage().reference().child(model.storagePath)
+        storageRef.delete { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
 }

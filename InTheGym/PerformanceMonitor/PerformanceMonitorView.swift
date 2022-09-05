@@ -55,6 +55,5 @@ private extension PerformanceMonitorView {
             stack.centerXAnchor.constraint(equalTo: centerXAnchor),
             stack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor)
         ])
-
     }
 }

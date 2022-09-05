@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 
 extension UIViewController {
@@ -98,5 +99,31 @@ extension UIViewController {
         activityIndicator.color = color
         let barButton = UIBarButtonItem(customView: activityIndicator)
         navigationItem.rightBarButtonItem = barButton
+    }
+}
+
+// MARK: - SwiftUI View
+extension UIViewController {
+    func addSwiftUIView<T:View>(_ childContentView: T) {
+        let childView = UIHostingController(rootView: childContentView)
+        addChild(childView)
+        view.addSubview(childView.view)
+        childView.didMove(toParent: self)
+        childView.view.frame = view.bounds
+        childView.view.backgroundColor = .secondarySystemBackground
+    }
+    func addSwiftUIViewWithNavBar<content: View>(_ childContentView: content) {
+        let childView = UIHostingController(rootView: childContentView)
+        addChild(childView)
+        view.addSubview(childView.view)
+        childView.didMove(toParent: self)
+        childView.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            childView.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            childView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            childView.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            childView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
     }
 }

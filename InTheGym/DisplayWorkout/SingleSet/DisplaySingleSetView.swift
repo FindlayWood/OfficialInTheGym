@@ -217,6 +217,14 @@ class DisplaySingleSetView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    var tempoLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .title1, weight: .bold)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: UIScreen.main.bounds)
@@ -238,6 +246,7 @@ private extension DisplaySingleSetView {
         addSubview(completeButton)
         addSubview(dismissButton)
         addSubview(editButton)
+        addSubview(tempoLabel)
         constrainUI()
     }
     func constrainUI() {
@@ -257,6 +266,9 @@ private extension DisplaySingleSetView {
             
             completeButton.bottomAnchor.constraint(equalTo: setView.bottomAnchor),
             completeButton.centerXAnchor.constraint(equalTo: setView.centerXAnchor),
+            
+            tempoLabel.topAnchor.constraint(equalTo: setView.bottomAnchor, constant: 16),
+            tempoLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             editButton.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: -8),
             editButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
@@ -302,6 +314,9 @@ extension DisplaySingleSetView {
                 restTimeVStack.isHidden = false
                 restTimeLabel.text = "\(restTime)s"
             }
+        }
+        if let tempo = exercise.tempo {
+            tempoLabel.text = tempo.generatedString
         }
     }
 }

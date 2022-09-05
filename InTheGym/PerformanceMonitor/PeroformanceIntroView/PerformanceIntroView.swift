@@ -7,81 +7,77 @@
 //
 //
 
+import UIKit
 import SwiftUI
+
+extension PerformanceIntroViewController {
+    final class Display: UIView {
+        // MARK: - Properties
+        
+        // MARK: - Subviews
+        var scrollView: UIScrollView = {
+            let view = UIScrollView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            return view
+        }()
+        var stack: UIStackView = {
+            let stack = UIStackView()
+            stack.axis = .vertical
+            stack.spacing = 16
+            stack.alignment = .fill
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            return stack
+        }()
+        // MARK: - Initializer
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            setupUI()
+        }
+        required init?(coder: NSCoder) {
+            super.init(coder: coder)
+            setupUI()
+        }
+        // MARK: - Configure
+        func setupUI() {
+            backgroundColor = .secondarySystemBackground
+            addSubview(scrollView)
+            scrollView.addSubview(stack)
+            configureUI()
+        }
+        func configureUI() {
+            NSLayoutConstraint.activate([
+                scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+                scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+                
+                stack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+                stack.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.95),
+                stack.centerXAnchor.constraint(equalTo: centerXAnchor),
+                stack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor)
+            ])
+        }
+    }
+}
+
 
 struct PerformanceIntroView: View {
     
+    var viewModel: PerformanceIntroViewModel
+    
     var body: some View {
-        VStack(spacing: 16) {
-            Image("monitor_icon")
-                .resizable()
-                .frame(width: 100, height: 100)
-            Text("Welcome to the Performance Monitor")
-                .foregroundColor(.primary)
-                .font(.title)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
-            Text("Here you will find some statistics related to all the workouts you have completed on this app. Data has been calculated to help you get the most out of your training and keep you healthy.")
-                .foregroundColor(.secondary)
-                .font(.body)
-                .fontWeight(.medium)
-                .multilineTextAlignment(.center)
-            HStack {
-                Image(systemName: "chart.bar.xaxis")
-                    .resizable()
-                    .foregroundColor(Color(.darkColour))
-                    .frame(width: 40, height: 40)
-                VStack(alignment: .leading) {
-                    Text("Workload")
-                        .foregroundColor(.primary)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                    Text("Check out your workload over the last 7 days, 14 days or 28 days.")
-                        .foregroundColor(.secondary)
-                        .font(.body)
-                        .fontWeight(.medium )
+        NavigationView {
+            ScrollView {
+                ForEach(0..<25) { _ in
+                    Text("heelo ronald")
+                }
+                VStack {
+                    Text("hello world")
+                    Spacer()
+                    Text("What is going on?")
                 }
             }
-            HStack {
-                Image(systemName: "chart.xyaxis.line")
-                    .resizable()
-                    .foregroundColor(Color(.darkColour))
-                    .frame(width: 40, height: 40)
-                VStack(alignment: .leading) {
-                    Text("Acute Chronic Workload Ratio")
-                        .foregroundColor(.primary)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                    Text("Check out your acwr and see how you compare with the optimal ratio and peak performance.")
-                        .foregroundColor(.secondary)
-                        .font(.body)
-                        .fontWeight(.medium )
-                }
-            }
-            HStack {
-                Image(systemName: "chart.xyaxis.line")
-                    .resizable()
-                    .foregroundColor(Color(.darkColour))
-                    .frame(width: 40, height: 40)
-                VStack(alignment: .leading) {
-                    Text("Training Strain")
-                        .foregroundColor(.primary)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                    Text("Check out your training strain and see if you are putting too much stress on your body.")
-                        .foregroundColor(.secondary)
-                        .font(.body)
-                        .fontWeight(.medium )
-                }
-            }
+            .navigationTitle("Hello")
         }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color(UIColor.secondarySystemBackground))
-        .cornerRadius(8)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color(.darkColour), lineWidth: 2)
-        )
     }
 }

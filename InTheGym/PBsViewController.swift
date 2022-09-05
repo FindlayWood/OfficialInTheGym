@@ -95,7 +95,7 @@ class PBsViewController: UIViewController {
     
     func uploadActivity(){
         // adding to posts and timeline
-        FirebaseAPI.shared().uploadActivity(with: .UpdatePBs)
+//        FirebaseAPI.shared().uploadActivity(with: .UpdatePBs)
         
         // added for new feature
         // adding to public feed of coach
