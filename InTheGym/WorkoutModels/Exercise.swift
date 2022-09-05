@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import CodableFirebase
+//import CodableFirebase
 
 
 class exercise: WorkoutType, Codable {
@@ -127,6 +127,7 @@ struct ExerciseModel: ExerciseType, Codable, Hashable {
     var distance: [String]?
     var restTime: [Int]?
     var note: String?
+    var tempo: [ExerciseTempoModel]?
     
     init(exercise: String, type: bodyType) {
         self.workoutPosition = 0
@@ -139,6 +140,7 @@ struct ExerciseModel: ExerciseType, Codable, Hashable {
         self.time = [Int]()
         self.distance = [String]()
         self.restTime = [Int]()
+        self.tempo = [ExerciseTempoModel]()
     }
     
     init(workoutPosition: Int) {
@@ -152,6 +154,7 @@ struct ExerciseModel: ExerciseType, Codable, Hashable {
         self.time = [Int]()
         self.distance = [String]()
         self.restTime = [Int]()
+        self.tempo = [ExerciseTempoModel]()
     }
     
     func getSets() -> [ExerciseSet] {
@@ -164,7 +167,8 @@ struct ExerciseModel: ExerciseType, Codable, Hashable {
                                          completed: completedSets[i],
                                          time: time?[i],
                                          distance: distance?[i],
-                                         restTime: restTime?[i]
+                                         restTime: restTime?[i],
+                                         tempo: tempo?[i]
                                         ))
         }
         return setModels

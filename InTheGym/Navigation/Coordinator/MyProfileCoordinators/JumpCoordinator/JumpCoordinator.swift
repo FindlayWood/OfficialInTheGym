@@ -12,6 +12,9 @@ class JumpCoordinator: Coordinator {
     // MARK: - Properties
     var childCoordinators: [Coordinator] = [Coordinator]()
     var navigationController: UINavigationController
+    var modalNavigationController: UINavigationController!
+    var replayModelNavigationController: UINavigationController!
+    var maxModel: VerticalJumpModel?
     // MARK: - Initializer
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -24,14 +27,30 @@ class JumpCoordinator: Coordinator {
     }
 }
 // MARK: - Flow
-extension JumpCoordinator {
+extension JumpCoordinator: JumpCoordinatorFlow {
     func recordNewJump() {
-        let child = RecordJumpCoordinator(navigationController: navigationController)
-        childCoordinators.append(child)
-        child.start()
-//        let vc = JumpMeasuringViewController()
-//        vc.modalPresentationStyle = .fullScreen
-//        navigationController.present(vc, animated: true)
+        let vc = JumpMeasuringViewController()
+        vc.coordinator = self
+        modalNavigationController = UINavigationController(rootViewController: vc)
+        modalNavigationController.modalPresentationStyle = .fullScreen
+        navigationController.present(modalNavigationController, animated: true)
+    }
+    
+    func showJump(_ outputURL: URL) {
+        let vc = ReplayJumpMeasureViewController()
+        vc.viewModel.fileURL = outputURL
+        vc.coordinator = self
+        replayModelNavigationController = UINavigationController(rootViewController: vc)
+        replayModelNavigationController.modalPresentationStyle = .fullScreen
+        modalNavigationController.present(replayModelNavigationController, animated: false)
+    }
+    
+    func showResult(_ height: Double) {
+        // TODO: - Show Specific Results page
+        let vc = JumpResultsViewController()
+        vc.viewModel.height = height
+        vc.viewModel.maxModel = maxModel
+        replayModelNavigationController.present(vc, animated: true)
     }
     func instructions() {
         let vc = JumpInstructionsViewController()

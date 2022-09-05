@@ -24,14 +24,18 @@ class ExerciseMaxHistoryView: UIView {
         view.noDataText = "NO DATA"
         view.xAxis.drawGridLinesEnabled = false
         view.chartDescription.enabled = false
-        view.legend.enabled = false
+        view.legend.enabled = true
         view.leftAxis.drawGridLinesEnabled = false
         view.leftAxis.drawAxisLineEnabled = true
         view.leftAxis.drawLabelsEnabled = true
         view.rightAxis.drawLabelsEnabled = false
         view.rightAxis.drawGridLinesEnabled = false
-        view.xAxis.drawLabelsEnabled = false
-        view.backgroundColor = .clear
+        view.xAxis.drawLabelsEnabled = true
+        view.xAxis.valueFormatter = ACWRChartXAxisFormatter()
+        view.backgroundColor = .systemBackground
+        view.layer.cornerRadius = 8
+        view.layer.borderColor = UIColor.darkColour.cgColor
+        view.layer.borderWidth = 1
         view.isUserInteractionEnabled = false
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

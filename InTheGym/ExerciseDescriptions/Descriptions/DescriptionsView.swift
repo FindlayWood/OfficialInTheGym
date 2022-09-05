@@ -51,8 +51,8 @@ class DescriptionsView: UIView {
     }()
     var plusButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 100)), for: .normal)
         button.tintColor = .lightColour
+        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 60)), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -104,8 +104,8 @@ private extension DescriptionsView {
             tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
 //            tableview.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            plusButton.trailingAnchor.constraint(equalTo: tableview.trailingAnchor, constant: -5),
-            plusButton.bottomAnchor.constraint(equalTo: tableview.bottomAnchor, constant: -5)
+            plusButton.trailingAnchor.constraint(equalTo: tableview.trailingAnchor, constant: -8),
+            plusButton.bottomAnchor.constraint(equalTo: tableview.bottomAnchor, constant: -16)
         ])
     }
 }

@@ -169,12 +169,13 @@ class NewInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
 //                SVC.username = ViewController.username
 //                self.navigationController?.pushViewController(SVC, animated: true)
             case 2:
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = storyboard.instantiateViewController(withIdentifier: "WorkloadDisplayViewController") as! WorkloadDisplayViewController
-                SVC.username = ViewController.username
-                SVC.playerID = Auth.auth().currentUser?.uid
-                SVC.hidesBottomBarWhenPushed = true
-                navigationController?.pushViewController(SVC, animated: true)
+                print("wrong option")
+//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                let SVC = storyboard.instantiateViewController(withIdentifier: "WorkloadDisplayViewController") as! WorkloadDisplayViewController
+//                SVC.username = ViewController.username
+//                SVC.playerID = Auth.auth().currentUser?.uid
+//                SVC.hidesBottomBarWhenPushed = true
+//                navigationController?.pushViewController(SVC, animated: true)
             case 3:
 //                let Storyboard = UIStoryboard(name: "Main", bundle: nil)
 //                let SVC = Storyboard.instantiateViewController(withIdentifier: "RequestsViewController") as! RequestsViewController

@@ -179,6 +179,7 @@ class RecordClipViewController: UIViewController {
 private extension RecordClipViewController {
 
     @objc func dismissView() {
+        viewModel.captureSession.stopRunning()
         dismiss(animated: true, completion: nil)
     }
     @objc func toggleCountDown() {

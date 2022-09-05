@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SCLAlertView
+//import SCLAlertView
 import Firebase
 import Combine
 
@@ -81,8 +81,8 @@ class CreateCircuitViewController: UIViewController {
     }
     
     func showError(){
-        let alert = SCLAlertView()
-        alert.showError("Error", subTitle: "Add a title.", closeButtonTitle: "Ok")
+//        let alert = SCLAlertView()
+//        alert.showError("Error", subTitle: "Add a title.", closeButtonTitle: "Ok")
     }
 
 

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SCLAlertView
+//import SCLAlertView
 import Combine
 
 class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
@@ -157,14 +157,14 @@ extension MyProfileViewController {
     func showFirstMessage() {
         if UIApplication.isFirstProfileLaunch() {
 
-            let screenSize: CGRect = UIScreen.main.bounds
-            let screenWidth = screenSize.width
-            
-            let appearance = SCLAlertView.SCLAppearance(
-                kWindowWidth: screenWidth - 40 )
-
-            let alert = SCLAlertView(appearance: appearance)
-            alert.showInfo("MY PROFILE!", subTitle: FirstTimeMessages.myPRofileMessage, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
+//            let screenSize: CGRect = UIScreen.main.bounds
+//            let screenWidth = screenSize.width
+//            
+//            let appearance = SCLAlertView.SCLAppearance(
+//                kWindowWidth: screenWidth - 40 )
+//
+//            let alert = SCLAlertView(appearance: appearance)
+//            alert.showInfo("MY PROFILE!", subTitle: FirstTimeMessages.myPRofileMessage, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
         }
     }
 }

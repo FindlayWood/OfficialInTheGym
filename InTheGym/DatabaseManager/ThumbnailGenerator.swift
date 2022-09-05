@@ -9,6 +9,7 @@
 import Foundation
 import Firebase
 import AVKit
+import FirebaseStorage
 
 class ThumbnailGenerator {
     

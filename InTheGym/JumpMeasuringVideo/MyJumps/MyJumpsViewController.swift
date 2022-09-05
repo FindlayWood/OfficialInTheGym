@@ -6,24 +6,37 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
+import Combine
 import UIKit
 
 class MyJumpsViewController: UIViewController {
     // MARK: - Properties
     weak var coordinator: JumpCoordinator?
-    var display = MyJumpsView()
+    var childContentView: VerticalJumpHomeView!
+    var viewModel = MyJumpsViewModel()
+    private var subscriptions = Set<AnyCancellable>()
     // MARK: - View
-    override func loadView() {
-        view = display
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        initTargets()
+        view.backgroundColor = .systemBackground
+        addChildView()
+        initViewModel()
     }
-    // MARK: - Targets
-    func initTargets() {
-        display.newJumpButton.addTarget(self, action: #selector(recordNewJumpActions(_:)), for: .touchUpInside)
-        display.helpButton.addTarget(self, action: #selector(instructionsAction(_:)), for: .touchUpInside)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    // MARK: - Swift UI Child View
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel)
+        addSwiftUIViewWithNavBar(childContentView)
+    }
+    // MARK: - View Model
+    func initViewModel() {
+        viewModel.$action
+            .compactMap { $0 }
+            .sink { [weak self] in self?.buttonAction($0) }
+            .store(in: &subscriptions)
     }
 }
 // MARK: - Actions
@@ -33,5 +46,16 @@ private extension MyJumpsViewController {
     }
     @objc func instructionsAction(_ sender: UIButton) {
         coordinator?.instructions()
+    }
+    func buttonAction(_ action: VerticalJumpHomeViewActions) {
+        switch action {
+        case .recordNewJump:
+            coordinator?.maxModel = viewModel.maxModel
+            coordinator?.recordNewJump()
+        case .previousJumps:
+            print("not done")
+        case .help:
+            coordinator?.instructions()
+        }
     }
 }

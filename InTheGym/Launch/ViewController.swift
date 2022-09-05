@@ -10,7 +10,7 @@
 import UIKit
 import Firebase
 import Network
-import SCLAlertView
+//import SCLAlertView
 import SwiftUI
 
 
@@ -183,16 +183,16 @@ class ViewController: UIViewController, Storyboarded {
     
     // alert to show when user has no internet connection
     @objc func showAlert(){
-        let appearance = SCLAlertView.SCLAppearance(showCloseButton: false)
-        let alert = SCLAlertView(appearance: appearance)
-        alert.showError("Error", subTitle: "You must have an internet connection to use this app. Please connect to the internet and try again.")
+//        let appearance = SCLAlertView.SCLAppearance(showCloseButton: false)
+//        let alert = SCLAlertView(appearance: appearance)
+//        alert.showError("Error", subTitle: "You must have an internet connection to use this app. Please connect to the internet and try again.")
         
     }
     
     func showSuccess(){
-        let user = Auth.auth().currentUser
-        let alert = SCLAlertView()
-        alert.showSuccess("Sent", subTitle: "Verification email sent to \(user?.email ?? "NA")")
+//        let user = Auth.auth().currentUser
+//        let alert = SCLAlertView()
+//        alert.showSuccess("Sent", subTitle: "Verification email sent to \(user?.email ?? "NA")")
     }
     
 

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SCLAlertView
+//import SCLAlertView
 import Combine
 
 class PreLiveWorkoutViewController: UIViewController, Storyboarded {
@@ -112,8 +112,8 @@ private extension PreLiveWorkoutViewController {
     }
     @objc func continuePressed(_ sender: UIBarButtonItem) {
         if display.titleField.text?.trimmingCharacters(in: .whitespaces) == "" {
-            let alert = SCLAlertView()
-            alert.showError("Enter a title!", subTitle: "You must enter a title to begin the workout. The title can be anything you want.")
+//            let alert = SCLAlertView()
+//            alert.showError("Enter a title!", subTitle: "You must enter a title to begin the workout. The title can be anything you want.")
         } else {
             viewModel.startLiveWorkout()
         }

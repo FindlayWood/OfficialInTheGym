@@ -94,6 +94,12 @@ extension AddMoreToExerciseViewController: AddMoreToExerciseProtocol {
             vc.cellModel = viewModel.getData(at: indexPath)
             vc.viewModel.noteUpdatedPublisher = viewModel.noteUpdatedPublisher
             navigationController?.present(vc, animated: true)
+        case 4:
+            let vc = AddExerciseTempoViewController()
+            vc.viewModel.exercise = viewModel.exercise
+            vc.cellModel = viewModel.getData(at: indexPath)
+            vc.viewModel.tempoUpdatedPublisher = viewModel.tempoUpdatedPublisher
+            navigationController?.pushViewController(vc, animated: true)
         default:
             break
         }

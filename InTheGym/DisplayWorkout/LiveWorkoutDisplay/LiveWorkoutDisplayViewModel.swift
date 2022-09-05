@@ -104,6 +104,7 @@ class LiveWorkoutDisplayViewModel {
         currentExercise.time?.append(0)
         currentExercise.distance?.append(" ")
         currentExercise.restTime?.append(0)
+        currentExercise.tempo?.append(ExerciseTempoModel(eccentric: 0, eccentricPause: 0, concentric: 0, concentricPause: 0))
         return currentExercise
     }
     

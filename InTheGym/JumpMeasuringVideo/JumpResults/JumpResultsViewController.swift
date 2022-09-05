@@ -6,38 +6,36 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
-import UIKit
 import Combine
+import UIKit
 
 class JumpResultsViewController: UIViewController {
     // MARK: - Properties
-    var display = JumpResultsView()
+    var childContentView: JumpResultsView!
     var viewModel = JumpResultsViewModel()
     private var subscriptions = Set<AnyCancellable>()
     // MARK: - View
-    override func loadView() {
-        view = display
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        initDisplay()
+        addChildView()
+        initViewModel()
     }
-    // MARK: - Display
-    func initDisplay() {
-        display.configure(with: viewModel.jumpResultCM, viewModel.resultCM)
-        display.segment.selectedIndex
-            .sink { [weak self] in self?.switchSegment(to: $0)}
-            .store(in: &subscriptions)
+    // MARK: - Swift UI Child View
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel)
+        addSwiftUIView(childContentView)
     }
     // MARK: - View Model
     func initViewModel() {
-        
+        viewModel.$dismiss
+            .sink { [weak self] value in
+                if value { self?.dismiss() }
+            }.store(in: &subscriptions)
     }
 }
 // MARK: - Actions
 private extension JumpResultsViewController {
-    func switchSegment(to index: Int) {
-        viewModel.switchSegment(to: index)
-        display.configure(with: viewModel.currentValue, viewModel.resultCM)
+    func dismiss() {
+        self.dismiss(animated: true)
     }
 }

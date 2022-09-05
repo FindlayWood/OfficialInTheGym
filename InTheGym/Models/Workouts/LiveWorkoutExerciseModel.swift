@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import CodableFirebase
 
 // MARK: - Live Workout Exercise Model
 struct LiveWorkoutExerciseModel {
@@ -29,7 +28,8 @@ struct LiveWorkoutExerciseModel {
     
     func addExerciseModel() -> [FirebaseMultiUploadDataPoint]? {
         do {
-            let data = try FirebaseEncoder().encode(exercise)
+            let encoded = try JSONEncoder().encode(exercise)
+            let data = try JSONSerialization.jsonObject(with: encoded, options: []) as? [String: Any]
             return [FirebaseMultiUploadDataPoint(value: data as Any, path: basePath)]
         }
         catch {

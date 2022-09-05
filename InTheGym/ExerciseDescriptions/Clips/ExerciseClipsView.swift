@@ -22,13 +22,11 @@ class ExerciseClipsView: UIView {
     }()
     var plusButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "bluePlus3"), for: .normal)
-        button.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        button.tintColor = .lightColour
+        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 60)), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,7 +36,6 @@ class ExerciseClipsView: UIView {
         super.init(coder: coder)
         setupUI()
     }
-    
 }
 // MARK: - Configure
 private extension ExerciseClipsView {
@@ -48,12 +45,11 @@ private extension ExerciseClipsView {
         backgroundColor = .secondarySystemBackground
         configureUI()
     }
-    
     func configureUI() {
         addFullConstraint(to: collectionView)
         NSLayoutConstraint.activate([
-            plusButton.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor, constant: -5),
-            plusButton.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -5)
+            plusButton.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor, constant: -8),
+            plusButton.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -16)
         ])
     }
     func generateCollectionLayout() -> UICollectionViewFlowLayout {

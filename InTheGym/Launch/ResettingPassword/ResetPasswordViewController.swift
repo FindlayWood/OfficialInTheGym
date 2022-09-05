@@ -9,7 +9,7 @@
 
 import UIKit
 import Firebase
-import SCLAlertView
+//import SCLAlertView
 import Combine
 
 class ResetPasswordViewController: UIViewController {
@@ -70,15 +70,15 @@ private extension ResetPasswordViewController {
 // MARK: - Alerts
 private extension ResetPasswordViewController {
     func showAlert(for success: Bool) {
-        if success {
-            let alert = SCLAlertView()
-            alert.showSuccess("Sent!", subTitle: "Reset email sent. Follow instructions in the email to change your password.", closeButtonTitle: "ok")
-            display.emailField.text = ""
-            viewModel.updateEmail(with: "")
-        } else {
-            let alert = SCLAlertView()
-            alert.showError("Error", subTitle: "Failed to send reset email, please try again.", closeButtonTitle: "ok")
-        }
+//        if success {
+//            let alert = SCLAlertView()
+//            alert.showSuccess("Sent!", subTitle: "Reset email sent. Follow instructions in the email to change your password.", closeButtonTitle: "ok")
+//            display.emailField.text = ""
+//            viewModel.updateEmail(with: "")
+//        } else {
+//            let alert = SCLAlertView()
+//            alert.showError("Error", subTitle: "Failed to send reset email, please try again.", closeButtonTitle: "ok")
+//        }
     }
 }
 // MARK: - Textfield delegate

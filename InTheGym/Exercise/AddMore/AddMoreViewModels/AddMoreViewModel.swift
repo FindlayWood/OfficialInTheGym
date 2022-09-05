@@ -20,6 +20,7 @@ class AddMoreViewModel {
     var distanceUpdatedPublisher: PassthroughSubject<[String]?,Never>?
     var restTimeUpdatedPublisher: PassthroughSubject<[Int]?,Never>?
     var noteUpdatedPublisher: PassthroughSubject<String,Never>?
+    var tempoUpdatedPublisher: PassthroughSubject<[ExerciseTempoModel]?,Never>?
     
     // MARK: - Properties
     var selectedSet: Int? = nil
@@ -77,6 +78,17 @@ class AddMoreViewModel {
     func noteAdded(_ note: String) {
         noteUpdatedPublisher?.send(note)
     }
+    func tempoUpdated(_ model: ExerciseTempoModel) {
+        if let selectedSet = selectedSet {
+            setCellModels?[selectedSet].weightString = model.generatedString
+        } else {
+            let newModels = setCellModels?.map { SetCellModel(setNumber: $0.setNumber, repNumber: $0.repNumber, weightString: model.generatedString) }
+            setCellModels = newModels
+        }
+    }
+    func tempoAdded(_ models: [ExerciseTempoModel]) {
+        tempoUpdatedPublisher?.send(models)
+    }
     // MARK: - Functions
     func getTimeCellModels() {
         var models = [SetCellModel]()
@@ -103,6 +115,16 @@ class AddMoreViewModel {
         guard let reps = exercise.reps else {return}
         for (index, rep) in reps.enumerated() {
             let newModel = SetCellModel(setNumber: index + 1, repNumber: rep, weightString: exercise.restTime?[index].description ?? " ")
+            models.append(newModel)
+        }
+        setCellModels = models
+        isLiveWorkout = isLive
+    }
+    func getTempoCellModels() {
+        var models = [SetCellModel]()
+        guard let reps = exercise.reps else {return}
+        for (index, rep) in reps.enumerated() {
+            let newModel = SetCellModel(setNumber: index + 1, repNumber: rep, weightString: exercise.tempo?[index].generatedString ?? " ")
             models.append(newModel)
         }
         setCellModels = models

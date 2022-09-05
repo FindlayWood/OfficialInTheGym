@@ -8,7 +8,7 @@
 
 import UIKit
 import Firebase
-import SCLAlertView
+//import SCLAlertView
 
 class CompletedWorkoutViewController: UIViewController {
     
@@ -285,8 +285,8 @@ class CompletedWorkoutViewController: UIViewController {
     }
     
     func showError(){
-        let alert = SCLAlertView()
-        alert.showError("Enter Workout RPE", subTitle: "Enter a score between 1 and 10 to complete the workout.")
+//        let alert = SCLAlertView()
+//        alert.showError("Enter Workout RPE", subTitle: "Enter a score between 1 and 10 to complete the workout.")
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -49,9 +49,12 @@ extension PlayerProfileMoreCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func showPerformanceMonitor(for user: Users) {
-        let vc = PerformanceMonitorViewController()
-        vc.viewModel.user = user
-        navigationController.pushViewController(vc, animated: true)
+        let child = PerformanceHomeCoordinator(navigationController: navigationController, user: user)
+        childCoordinators.append(child)
+        child.start()
+//        let vc = PerformanceIntroViewController()
+////        vc.viewModel.user = user
+//        navigationController.pushViewController(vc, animated: true)
     }
     func jumpMeasure() {
         let child = JumpCoordinator(navigationController: navigationController)

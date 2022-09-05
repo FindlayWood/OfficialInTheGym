@@ -33,7 +33,7 @@ class PerformanceMonitorViewController: UIViewController {
     func addSubViews() {
         workloadChildVC.viewModel.user = viewModel.user
         optimalRatioVC.viewModel.user = viewModel.user
-        addToStack(introVC)
+//        addToStack(introVC)
         addToStack(workloadChildVC)
         addToStack(optimalRatioVC)
     }

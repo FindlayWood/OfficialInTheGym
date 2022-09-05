@@ -8,7 +8,7 @@
 
 import UIKit
 import Firebase
-import SCLAlertView
+//import SCLAlertView
 
 class FeedbackViewController: UIViewController, UITextViewDelegate {
     
@@ -42,15 +42,15 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
         if feedback.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty{
             
             // new alert
-            let alert = SCLAlertView()
-            alert.showWarning("Blank Upload", subTitle: "Please write something before uploading feedback. You can write whatever you like. New exercises, new features, found any bugs? Lets us know!", closeButtonTitle: "Ok")
+//            let alert = SCLAlertView()
+//            alert.showWarning("Blank Upload", subTitle: "Please write something before uploading feedback. You can write whatever you like. New exercises, new features, found any bugs? Lets us know!", closeButtonTitle: "Ok")
             
         }
         else if feedback.text == plcholder{
             
             // new alert
-            let alert = SCLAlertView()
-            alert.showWarning("Blank Upload", subTitle: "Please write something before uploading feedback. You can write whatever you like. New exercises, new features, found any bugs? Lets us know!", closeButtonTitle: "Ok")
+//            let alert = SCLAlertView()
+//            alert.showWarning("Blank Upload", subTitle: "Please write something before uploading feedback. You can write whatever you like. New exercises, new features, found any bugs? Lets us know!", closeButtonTitle: "Ok")
             
         }
         else{
@@ -73,16 +73,16 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
     
     func showSuccess(){
         // new alert
-        let alert = SCLAlertView()
-        alert.showSuccess("Feedback Uploaded!", subTitle: "Thank you for your feedback. We read all of it and are always looking to improve user experience so every bit of feedback is much appreciated.", closeButtonTitle: "Ok")
+//        let alert = SCLAlertView()
+//        alert.showSuccess("Feedback Uploaded!", subTitle: "Thank you for your feedback. We read all of it and are always looking to improve user experience so every bit of feedback is much appreciated.", closeButtonTitle: "Ok")
 
         feedback.text = plcholder
         feedback.textColor = UIColor.lightGray
     }
     
     func showError(){
-        let alert = SCLAlertView()
-        alert.showError("Woops", subTitle: "Sorry there was an error trying to upload your feedback. Please try again.", closeButtonTitle: "Ok")
+//        let alert = SCLAlertView()
+//        alert.showError("Woops", subTitle: "Sorry there was an error trying to upload your feedback. Please try again.", closeButtonTitle: "Ok")
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {

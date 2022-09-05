@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SCLAlertView
+//import SCLAlertView
 import Combine
 
 class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate {
@@ -181,20 +181,20 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
 extension PlayerTimelineViewController {
     func showFirstMessage() {
         if UIApplication.isFirstLaunch() {
-            var message : String!
-            if ViewController.admin{
-                message = FirstTimeMessages.firstPageCoachMessage
-            } else {
-                message = FirstTimeMessages.firstPagePlayerMessage
-            }
-            let screenSize: CGRect = UIScreen.main.bounds
-            let screenWidth = screenSize.width
-            
-            let appearance = SCLAlertView.SCLAppearance(
-                kWindowWidth: screenWidth - 40 )
-
-            let alert = SCLAlertView(appearance: appearance)
-            alert.showInfo("Welcome!", subTitle: message, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
+//            var message : String!
+//            if ViewController.admin{
+//                message = FirstTimeMessages.firstPageCoachMessage
+//            } else {
+//                message = FirstTimeMessages.firstPagePlayerMessage
+//            }
+//            let screenSize: CGRect = UIScreen.main.bounds
+//            let screenWidth = screenSize.width
+//            
+//            let appearance = SCLAlertView.SCLAppearance(
+//                kWindowWidth: screenWidth - 40 )
+//
+//            let alert = SCLAlertView(appearance: appearance)
+//            alert.showInfo("Welcome!", subTitle: message, closeButtonTitle: "GOT IT!", colorStyle: 0x347aeb, animationStyle: .bottomToTop)
         }
     }
 }

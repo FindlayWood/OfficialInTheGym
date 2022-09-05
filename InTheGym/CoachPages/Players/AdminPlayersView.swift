@@ -57,6 +57,13 @@ class AdminPlayersView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    lazy var collectionView: UICollectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
+        view.register(PlayerDashBoardCollectionCell.self, forCellWithReuseIdentifier: PlayerDashBoardCollectionCell.reuseID)
+        view.backgroundColor = .secondarySystemBackground
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     var coachMenu: UIMenu {
         let menu = UIMenu(title: "Options", children: [
             UIAction(title: "My Workouts") { action in
@@ -82,7 +89,7 @@ private extension AdminPlayersView {
         addSubview(iconButton)
         addSubview(plusButton)
         addSubview(activityIndicator)
-        addSubview(tableview)
+        addSubview(collectionView)
         configureUI()
     }
     func configureUI() {
@@ -97,10 +104,18 @@ private extension AdminPlayersView {
             activityIndicator.centerYAnchor.constraint(equalTo: plusButton.centerYAnchor),
             activityIndicator.trailingAnchor.constraint(equalTo: plusButton.trailingAnchor),
             
-            tableview.topAnchor.constraint(equalTo: iconButton.bottomAnchor, constant: 16),
-            tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
-            tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tableview.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: iconButton.bottomAnchor, constant: 16),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+    func generateCollectionLayout() -> UICollectionViewFlowLayout {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 16
+        layout.itemSize = CGSize(width: Constants.screenSize.width - 32, height: 280)
+        layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        layout.scrollDirection = .vertical
+        return layout
     }
 }

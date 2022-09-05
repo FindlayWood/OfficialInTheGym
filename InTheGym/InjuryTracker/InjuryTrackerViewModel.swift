@@ -1,0 +1,112 @@
+//
+//  InjuryTrackerViewModel.swift
+//  InTheGym
+//
+//  Created by Findlay Wood on 19/08/2022.
+//  Copyright © 2022 FindlayWood. All rights reserved.
+//
+
+import FirebaseFirestore
+import Foundation
+
+
+class InjuryTrackerViewModel: ObservableObject {
+    // MARK: - Published Properties
+    @Published var isLoading: Bool = false
+    @Published var currentInjury: InjuryModel?
+    @Published var previousInjuries: [InjuryModel] = []
+    
+    // MARK: - Methods
+    @MainActor
+    func loadModels() async {
+        isLoading = true
+        let bdref = Firestore.firestore().collection("InjuryStatus/\(UserDefaults.currentUser.uid)/statusUpdates")
+        let currentRef = Firestore.firestore().collection("InjuryStatus").document(UserDefaults.currentUser.uid)
+        
+        do {
+            currentInjury = try await currentRef.getDocument().data(as: InjuryModel.self)
+            let snapshots = try await bdref.getDocuments()
+            let dataModels = try snapshots.documents.map { try $0.data(as: InjuryModel.self) }
+            previousInjuries = dataModels.sorted()
+            isLoading = false
+        } catch {
+            print(String(describing: error))
+            isLoading = false
+        }
+    }
+    
+    @Published var bodyPart: String = ""
+    @Published var recoveryTime: Int = 7
+    @Published var recoveryTimeOptions: RecoveryTimeOptions = .days
+    @Published var sendNotification = true
+    @Published var severity: InjurySeverity = .moderate
+    
+    func addNewInjury() {
+        var status: InjuryStatus = .injured
+        if severity == .light {
+            status = .minorInjury
+        }
+        let newModel = InjuryModel(dateOccured: .now,
+                                   recoveryTime: getRecoveryDays(recoveryTime, recoveryTimeOptions),
+                                   recovered: false,
+                                   bodyPart: bodyPart,
+                                   severity: severity,
+                                   status: status)
+        let docRef = Firestore.firestore().collection("InjuryStatus").document(UserDefaults.currentUser.uid)
+        let historyRef = Firestore.firestore().collection("InjuryStatus/\(UserDefaults.currentUser.uid)/statusUpdates").document()
+        do {
+            try docRef.setData(from: newModel)
+            try historyRef.setData(from: newModel)
+            previousInjuries.append(newModel)
+            currentInjury = newModel
+        } catch {
+            print(String(describing: error))
+        }
+    }
+    
+    func getRecoveryDays(_ recoveryTime: Int, _ option: RecoveryTimeOptions) -> Int {
+        switch option {
+        case .days:
+            return recoveryTime
+        case .weeks:
+            return recoveryTime * 7
+        case .months:
+            return recoveryTime * 30
+        }
+    }
+}
+
+
+struct InjuryModel: Identifiable, Codable, Comparable {
+    var dateOccured: Date
+    var recoveryTime: Int /// days
+    var recovered: Bool
+    var bodyPart: String
+    var severity: InjurySeverity
+    var status: InjuryStatus
+    
+    var id: String {
+        UUID().uuidString
+    }
+    
+    static func < (lhs: InjuryModel, rhs: InjuryModel) -> Bool {
+        lhs.dateOccured > rhs.dateOccured
+    }
+}
+
+enum InjurySeverity: String, Codable, CaseIterable {
+    case light
+    case moderate
+    case severe
+    
+    var title: String {
+        switch self {
+        case .light:
+            return "Light"
+        case .moderate:
+            return "Moderate"
+        case .severe:
+            return "Severe"
+        }
+    }
+}

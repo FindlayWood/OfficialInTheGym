@@ -12,7 +12,8 @@ import Combine
 class PlayerWorkoutsViewModel {
     
     // MARK: - Publisher
-    var workouts = CurrentValueSubject<[WorkoutModel],Never>([])
+    @Published var workouts: [WorkoutModel] = []
+//    var workouts = CurrentValueSubject<[WorkoutModel],Never>([])
     var errorFetching = PassthroughSubject<Error,Never>()
     
     // MARK: - Properties
@@ -29,7 +30,8 @@ class PlayerWorkoutsViewModel {
             guard let self = self else {return}
             switch result {
             case .success(let models):
-                self.workouts.send(models)
+                self.workouts = models.reversed()
+//                self.workouts.send(models)
             case .failure(let error):
                 self.errorFetching.send(error)
             }
@@ -37,7 +39,8 @@ class PlayerWorkoutsViewModel {
     }
     
     func workoutSelected(at indexPath: IndexPath) -> WorkoutModel {
-        let currentModels = workouts.value
+//        let currentModels = workouts.value
+        let currentModels = workouts
         return currentModels[indexPath.row]
     }
 }
@@ -45,8 +48,9 @@ class PlayerWorkoutsViewModel {
 // MARK: - Workout List
 extension PlayerWorkoutsViewModel: WorkoutsList {
     func addWorkout(_ workout: WorkoutModel) {
-        var currentWorkouts = workouts.value
-        currentWorkouts.append(workout)
-        workouts.send(currentWorkouts)
+//        var currentWorkouts = workouts.value
+//        currentWorkouts.append(workout)
+//        workouts.send(currentWorkouts)
+        workouts.append(workout)
     }
 }

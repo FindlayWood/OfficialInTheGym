@@ -2,97 +2,108 @@
 //  JumpResultsView.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 21/06/2022.
+//  Created by Findlay Wood on 21/08/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
-import UIKit
+import SwiftUI
 
-class JumpResultsView: UIView {
-    // MARK: - Subviews
-    var segment: CustomisedSegmentControl = {
-        let view = CustomisedSegmentControl(frame: CGRect(x: 0, y: 0, width: Constants.screenSize.width - 32, height: 40), buttonTitles: ["cm", "inches"])
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    var resultLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 100, weight: .bold)
-        label.textColor = .label
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.1
-        label.lineBreakMode = .byClipping
-        label.numberOfLines = 1
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    var resultMeasurementLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .semibold)
-        label.textColor = .secondaryLabel
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    lazy var hstack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [resultLabel,resultMeasurementLabel])
-        stack.axis = .horizontal
-        stack.alignment = .center
-        return stack
-    }()
-    var saveButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Save Jump", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .darkColour
-        button.layer.cornerRadius = 8
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    lazy var stack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [segment,hstack,saveButton])
-        stack.axis = .vertical
-        stack.alignment = .center
-        stack.spacing = 16
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
-    // MARK: - Initializer
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupUI()
+struct JumpResultsView: View {
+    
+    @ObservedObject var viewModel: JumpResultsViewModel
+    
+    var body: some View {
+        NavigationView {
+            List {
+                Section("Result") {
+                    HStack {
+                        Spacer()
+                        Text(viewModel.height, format: .number)
+                            .font(.largeTitle.bold())
+                        Text(viewModel.measurements.title)
+                        Spacer()
+                    }
+                    .padding()
+                    Picker("Select Measurement", selection: $viewModel.measurements) {
+                        ForEach(JumpMeasurement.allCases, id: \.self) {
+                            Text($0.title)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: viewModel.measurements) { newValue in
+                        switch newValue {
+                        case .cm:
+                            viewModel.convertToCM()
+                        case .inches:
+                            viewModel.convertToInches()
+                        }
+                    }
+                }
+                
+                Section {
+                    
+                    if viewModel.isSaving {
+                        HStack {
+                            Spacer()
+                            VStack {
+                                ProgressView()
+                                Text("Saving Result...")
+                            }
+                            .padding()
+                            Spacer()
+                        }
+                        .listRowBackground(Color.clear)
+                    } else {
+                        if viewModel.saveSucces {
+                            HStack {
+                                Spacer()
+                                VStack {
+                                    Image(systemName: "checkmark.diamond.fill")
+                                        .font(.title)
+                                        .foregroundColor(Color(.darkColour))
+                                    Text("Saved!")
+                                        .font(.headline)
+                                        .foregroundColor(Color(.darkColour))
+                                }
+                                .padding()
+                                Spacer()
+                            }
+                            .listRowBackground(Color.clear)
+                        } else {
+                            Button {
+                                viewModel.saveResult()
+                            } label: {
+                                Text("Save Jump")
+                            }
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color(.darkColour))
+                            .cornerRadius(8)
+                            .listRowBackground(Color.clear)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Vertical Jump Results")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        viewModel.dismissAction()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .foregroundColor(Color(.darkColour))
+                    }
+                    
+                }
+            }
+        }
     }
 }
-// MARK: - Configure
-private extension JumpResultsView {
-    func setupUI() {
-        backgroundColor = .secondarySystemBackground
-        addSubview(stack)
-        configureUI()
-    }
-    func configureUI() {
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor),
-            
-            segment.widthAnchor.constraint(equalTo: widthAnchor, constant: -32),
-            segment.heightAnchor.constraint(equalToConstant: 40),
-            
-            resultLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5),
-            
-            saveButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8)
-        ])
-    }
-}
-// MARK: - Public Config
-extension JumpResultsView {
-    func configure(with result: Double, _ cm: Bool) {
-        resultLabel.text = result.description
-        resultMeasurementLabel.text = cm ? "cm" : "in"
+
+struct JumpResultsView_Previews: PreviewProvider {
+    static var previews: some View {
+        JumpResultsView(viewModel: JumpResultsViewModel())
     }
 }

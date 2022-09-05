@@ -51,7 +51,7 @@ class WorkoutDisplayView: UIView {
 // MARK: - Setup UI
 private extension WorkoutDisplayView {
     func setupUI() {
-        backgroundColor = Constants.lightColour
+        backgroundColor = .lightColour.withAlphaComponent(0.1)
         addSubview(clipCollection)
         addSubview(exerciseCollection)
         constrainUI()

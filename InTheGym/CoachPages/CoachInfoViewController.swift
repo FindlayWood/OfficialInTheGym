@@ -150,10 +150,11 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         if indexPath.section == 1{
             switch indexPath.row {
             case 0:
-                let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let SVC = Storyboard.instantiateViewController(withIdentifier: "CoachScoresViewController") as! CoachScoresViewController
-                SVC.hidesBottomBarWhenPushed = true
-                self.navigationController?.pushViewController(SVC, animated: true)
+                print("how did we end up here")
+//                let Storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                let SVC = Storyboard.instantiateViewController(withIdentifier: "CoachScoresViewController") as! CoachScoresViewController
+//                SVC.hidesBottomBarWhenPushed = true
+//                self.navigationController?.pushViewController(SVC, animated: true)
             case 1:
 //                let StoryBoard = UIStoryboard(name: "Main", bundle: nil)
 //                let SVC = StoryBoard.instantiateViewController(withIdentifier: "AppInfoViewController") as! AppInfoViewController

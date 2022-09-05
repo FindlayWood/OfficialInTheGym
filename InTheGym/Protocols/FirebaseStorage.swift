@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import FirebaseStorage
 
 // MARK: - Firebsae Storage Protocol
 ///Models that have a path to Firebase Storage

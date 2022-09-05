@@ -9,18 +9,21 @@
 import UIKit
 import AVKit
 import AVFoundation
-import SCLAlertView
+//import SCLAlertView
 
 
 class ReplayJumpMeasureViewController: UIViewController {
+    // MARK: - Coordinator
+    weak var coordinator: JumpCoordinatorFlow?
+    // MARK: - Properties
     var player: AVPlayer!
     var viewModel = JumpMeasureViewModel()
     
     var display = ReplayJumpMeasureView()
     
-    var frames: [UIImage] = [UIImage]()
-    var timeStamps: [Double] = [Double]()
-    var currentFrame: Int = 0
+//    var frames: [UIImage] = [UIImage]()
+//    var timeStamps: [Double] = [Double]()
+//    var currentFrame: Int = 0
 
     // MARK: - View
     override func loadView() {
@@ -67,10 +70,11 @@ class ReplayJumpMeasureViewController: UIViewController {
         }
         viewModel.heightCalculatedCallback = { [weak self] (height) in
             guard let self = self else {return}
-            let vc = JumpResultsViewController()
-            vc.viewModel.jumpResultCM = height
-            vc.viewModel.currentValue = height
-            self.present(vc, animated: true)
+            self.coordinator?.showResult(height)
+//            let vc = JumpResultsViewController()
+//            vc.viewModel.jumpResultCM = height
+//            vc.viewModel.currentValue = height
+//            self.present(vc, animated: true)
 //            self.showHeight(height: height)
         }
     }
@@ -123,8 +127,8 @@ class ReplayJumpMeasureViewController: UIViewController {
         viewModel.calculate()
     }
     func showHeight(height: Double) {
-        let alert = SCLAlertView()
-        alert.showInfo("Jump Height", subTitle: "You jumped \(height)cm!", closeButtonTitle: "ok")
+//        let alert = SCLAlertView()
+//        alert.showInfo("Jump Height", subTitle: "You jumped \(height)cm!", closeButtonTitle: "ok")
     }
     @objc func handleSliderChange() {
         guard let playerItem = player.currentItem else {return}

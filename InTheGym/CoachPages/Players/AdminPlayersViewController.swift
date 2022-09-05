@@ -6,8 +6,8 @@
 //  Copyright © 2019 FindlayWood. All rights reserved.
 //
 
-import UIKit
 import Combine
+import UIKit
 
 class AdminPlayersViewController: UIViewController {
     // MARK: - Coordinator
@@ -16,7 +16,7 @@ class AdminPlayersViewController: UIViewController {
     // MARK: - Properties
     var display = AdminPlayersView()
     var viewModel = AdminPlayersViewModel()
-    var dataSource: UsersDataSource!
+    var dataSource: PlayerDashBoardDataSource!
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - View
@@ -41,10 +41,8 @@ class AdminPlayersViewController: UIViewController {
         display.myWorkoutsSelected
             .sink { [weak self] in self?.coordinator?.showMyWorkouts()}
             .store(in: &subscriptions)
-        if #available(iOS 14.0, *) {
-            display.iconButton.menu = display.coachMenu
-            display.iconButton.showsMenuAsPrimaryAction = true
-        }
+        display.iconButton.menu = display.coachMenu
+        display.iconButton.showsMenuAsPrimaryAction = true
     }
     // MARK: - Targets
     func initTargets() {
@@ -52,7 +50,7 @@ class AdminPlayersViewController: UIViewController {
     }
     // MARK: - Data Source
     func initDataSource() {
-        dataSource = .init(tableView: display.tableview)
+        dataSource = .init(collectionView: display.collectionView)
         dataSource.userSelected
             .sink { [weak self] in self?.coordinator?.showPlayerInMoreDetail(player: $0)}
             .store(in: &subscriptions)

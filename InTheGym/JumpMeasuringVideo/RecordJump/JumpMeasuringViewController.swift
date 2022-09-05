@@ -13,6 +13,8 @@ import Combine
 import AudioToolbox
 
 class JumpMeasuringViewController: UIViewController {
+    // MARK: - Coordinator
+    weak var coordinator: JumpCoordinatorFlow?
     // MARK: - Properties
     var display = JumpMeasuringView()
     var viewModel = RecordJumpViewModel()
@@ -135,14 +137,15 @@ class JumpMeasuringViewController: UIViewController {
         display.setUIDefault()
         let asset = AVAsset(url: outputFileURL)
         print(asset.tracks(withMediaType: .video).first?.nominalFrameRate)
-        let vc = ReplayJumpMeasureViewController()
-        vc.viewModel.fileURL = outputFileURL
-        vc.modalTransitionStyle = .coverVertical
-        vc.modalPresentationStyle = .fullScreen
-        let nav = UINavigationController(rootViewController: vc)
-        nav.modalPresentationStyle = .fullScreen
-        nav.modalTransitionStyle = .coverVertical
-        present(nav, animated: false, completion: nil)
+        coordinator?.showJump(outputFileURL)
+//        let vc = ReplayJumpMeasureViewController()
+//        vc.viewModel.fileURL = outputFileURL
+//        vc.modalTransitionStyle = .coverVertical
+//        vc.modalPresentationStyle = .fullScreen
+//        let nav = UINavigationController(rootViewController: vc)
+//        nav.modalPresentationStyle = .fullScreen
+//        nav.modalTransitionStyle = .coverVertical
+//        present(nav, animated: false, completion: nil)
     }
     @objc func recordButtonTapped() {
         if !viewModel.videoOutput.isRecording {
@@ -193,6 +196,7 @@ class JumpMeasuringViewController: UIViewController {
     }
     
     @objc func dismissView() {
+        viewModel.captureSession.stopRunning()
         dismiss(animated: true, completion: nil)
     }
     @objc func toggleCountDown() {

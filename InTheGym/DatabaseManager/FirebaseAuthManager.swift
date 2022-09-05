@@ -9,7 +9,7 @@
 import Foundation
 import Firebase
 import Network
-import CodableFirebase
+//import CodableFirebase
 
 enum loginError: Error {
     case emailNotVerified(User)
@@ -67,16 +67,16 @@ class FirebaseAuthManager: AuthManagerService {
         let dbref = Database.database().reference()
         var newUserData = Dictionary<String,Any>()
         do {
-            let object = try FirebaseEncoder().encode(user)
-            newUserData["users/\(userID)"] = object
-            newUserData["Usernames/\(user.username)"] = true
-            dbref.updateChildValues(newUserData) { error, _ in
-                if error != nil {
-                    completion(.failure(.unknown))
-                } else {
-                    completion(.success(()))
-                }
-            }
+//            let object = try FirebaseEncoder().encode(user)
+//            newUserData["users/\(userID)"] = object
+//            newUserData["Usernames/\(user.username)"] = true
+//            dbref.updateChildValues(newUserData) { error, _ in
+//                if error != nil {
+//                    completion(.failure(.unknown))
+//                } else {
+//                    completion(.success(()))
+//                }
+//            }
         }
         catch {
             completion(.failure(.unknown))

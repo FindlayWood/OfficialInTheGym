@@ -8,12 +8,13 @@
 
 import Foundation
 import Firebase
-import CodableFirebase
+import FirebaseDatabaseSwift
+//import CodableFirebase
 
 final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     
     func multiLocationUpload(data: [FirebaseMultiUploadDataPoint], completion: @escaping (Result<Void, Error>) -> Void) {
-        var keyPaths = [String:Any?]()
+        var keyPaths = [String: Any?]()
         for datum in data {
             keyPaths[datum.path] = datum.value
         }
@@ -50,90 +51,137 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     }
     
     func fetch<Model: FirebaseModel>(_ model: Model.Type, completion: @escaping(Result<[Model],Error>) -> Void) {
-        var tempModels = [Model]()
+//        var tempModels = [Model]()
         let DBRef = Database.database().reference().child(Model.path)
         DBRef.observeSingleEvent(of: .value) { snapshot in
-            for child in snapshot.children.allObjects as! [DataSnapshot] {
-                guard let object = child.value as? [String: AnyObject] else {return}
-                do {
-                    let data = try FirebaseDecoder().decode(model, from: object)
-                    tempModels.insert(data, at: 0)
-                }
-                catch {
-                    print(String(describing: error))
-                }
+            guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
+                completion(.failure(NSError()))
+                return
             }
-            completion(.success(tempModels))
+            do {
+                let data = try children.compactMap { try? $0.data(as: model) }
+                completion(.success(data))
+            } catch {
+                completion(.failure(error))
+            }
+            
+            
+            
+//            for child in snapshot.children.allObjects as! [DataSnapshot] {
+//                guard let object = child.value as? [String: AnyObject] else {return}
+//                do {
+//                    let data = try FirebaseDecoder().decode(model, from: object)
+//                    tempModels.insert(data, at: 0)
+//                }
+//                catch {
+//                    print(String(describing: error))
+//                }
+//            }
+//            completion(.success(tempModels))
         }
     }
     func fetchSingleModel<Model: FirebaseModel>(_ model: Model.Type, completion: @escaping (Result<Model,Error>) -> Void) {
         let DBRef = Database.database().reference().child(model.path)
         DBRef.observeSingleEvent(of: .value) { snapshot in
-            guard let object = snapshot.value as? [String: AnyObject] else {return}
             do {
-                let data = try FirebaseDecoder().decode(model, from: object)
+                let data = try snapshot.data(as: model)
                 completion(.success(data))
-            }
-            catch {
-                print(String(describing: error))
+            } catch {
                 completion(.failure(error))
             }
+//            guard let object = snapshot.value as? [String: AnyObject] else {return}
+//            do {
+//                let data = try FirebaseDecoder().decode(model, from: object)
+//                completion(.success(data))
+//            }
+//            catch {
+//                print(String(describing: error))
+//                completion(.failure(error))
+//            }
         }
     }
     func fetchInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
-        var tempModels = [T]()
+//        var tempModels = [T]()
         let DBRef = Database.database().reference().child(model.internalPath)
         DBRef.observeSingleEvent(of: .value) { snapshot in
-            for child in snapshot.children.allObjects as! [DataSnapshot] {
-                guard let object = child.value as? [String: AnyObject] else {return}
-                do {
-                    let data = try FirebaseDecoder().decode(returnType, from: object)
-                    tempModels.insert(data, at: 0)
-                }
-                catch {
-                    print(String(describing: error))
-                }
+            guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
+                completion(.failure(NSError()))
+                return
             }
-            completion(.success(tempModels))
+            do {
+                let data = try children.compactMap { try? $0.data(as: returnType) }
+                completion(.success(data))
+            } catch {
+                completion(.failure(error))
+            }
+            
+//            for child in snapshot.children.allObjects as! [DataSnapshot] {
+//                guard let object = child.value as? [String: AnyObject] else {return}
+//                do {
+//                    let data = try FirebaseDecoder().decode(returnType, from: object)
+//                    tempModels.insert(data, at: 0)
+//                }
+//                catch {
+//                    print(String(describing: error))
+//                }
+//            }
+//            completion(.success(tempModels))
         }
     }
     
     func fetchSingleInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<T,Error>) -> Void) {
         let DBRef = Database.database().reference().child(model.internalPath)
         DBRef.observeSingleEvent(of: .value) { snapshot in
-            guard let object = snapshot.value as? [String: AnyObject] else {
-                completion(.failure(NSError(domain: "Invalid Infp", code: 0, userInfo: nil)))
-                return
-            }
             do {
-                let data = try FirebaseDecoder().decode(returnType, from: object)
+                let data = try snapshot.data(as: returnType)
                 completion(.success(data))
-            }
-            catch {
-                print(String(describing: error))
+            } catch {
                 completion(.failure(error))
             }
+//            guard let object = snapshot.value as? [String: AnyObject] else {
+//                completion(.failure(NSError(domain: "Invalid Infp", code: 0, userInfo: nil)))
+//                return
+//            }
+//            do {
+//                let data = try FirebaseDecoder().decode(returnType, from: object)
+//                completion(.success(data))
+//            }
+//            catch {
+//                print(String(describing: error))
+//                completion(.failure(error))
+//            }
         }
     }
     
     func fetchSingleObjectInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
-        var tempModels = [T]()
+//        var tempModels = [T]()
         let DBRef = Database.database().reference().child(model.internalPath)
         DBRef.observeSingleEvent(of: .value) { snapshot in
-            for child in snapshot.children.allObjects as! [DataSnapshot] {
-                guard let object = child.value as? T else {
-                    completion(.failure(NSError(domain: "wrong data type", code: 0, userInfo: nil)))
-                    return
-                }
-                do {
-                    let data = try FirebaseDecoder().decode(returnType, from: object)
-                    tempModels.insert(data, at: 0)
-                }
-                catch {
-                    print(String(describing: error))
-                }
+            guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
+                completion(.failure(NSError()))
+                return
             }
-            completion(.success(tempModels))
+            do {
+                let data = try children.compactMap { try $0.data(as: returnType) }
+                completion(.success(data))
+            } catch {
+                completion(.failure(error))
+            }
+            
+//            for child in snapshot.children.allObjects as! [DataSnapshot] {
+//                guard let object = child.value as? T else {
+//                    completion(.failure(NSError(domain: "wrong data type", code: 0, userInfo: nil)))
+//                    return
+//                }
+//                do {
+//                    let data = try FirebaseDecoder().decode(returnType, from: object)
+//                    tempModels.insert(data, at: 0)
+//                }
+//                catch {
+//                    print(String(describing: error))
+//                }
+//            }
+//            completion(.success(tempModels))
         }
     }
     
@@ -145,14 +193,20 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
             dispatchGroup.enter()
             dbref.child(model.internalPath).observeSingleEvent(of: .value) { snapshot in
                 defer { dispatchGroup.leave() }
-                guard let object = snapshot.value as? [String: AnyObject] else {return}
                 do {
-                    let data = try FirebaseDecoder().decode(returnType, from: object)
+                    let data = try snapshot.data(as: returnType)
                     tempModels.insert(data, at: 0)
-                }
-                catch {
+                } catch {
                     print(String(describing: error))
                 }
+//                guard let object = snapshot.value as? [String: AnyObject] else {return}
+//                do {
+//                    let data = try FirebaseDecoder().decode(returnType, from: object)
+//                    tempModels.insert(data, at: 0)
+//                }
+//                catch {
+//                    print(String(describing: error))
+//                }
             }
         }
         dispatchGroup.notify(queue: .main) {
@@ -178,14 +232,16 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
             dbref.childByAutoId()
         }
         do {
-            let firebaseData = try FirebaseEncoder().encode(data)
-            dbref.setValue(firebaseData) { error, ref in
-                if let error = error {
-                    completion(.failure(error))
-                } else {
-                    completion(.success(()))
-                }
-            }
+            try dbref.setValue(from: data)
+            completion(.success(()))
+//            let firebaseData = try FirebaseEncoder().encode(data)
+//            dbref.setValue(from: data) { error, ref in
+//                if let error = error {
+//                    completion(.failure(error))
+//                } else {
+//                    completion(.success(()))
+//                }
+//            }
         }
         catch {
             completion(.failure(error))
@@ -225,16 +281,18 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         uploadModel.id = autoID!
 //        print(uploadModel)
         do {
-            let firebaseData = try FirebaseEncoder().encode(uploadModel)
+            try dbref.setValue(from: uploadModel)
+            completion(.success(uploadModel))
+//            let firebaseData = try FirebaseEncoder().encode(uploadModel)
 //            print(firebaseData)
 //            completion(.success(uploadModel))
-            dbref.setValue(firebaseData) { error, ref in
-                if let error = error {
-                    completion(.failure(error))
-                } else {
-                    completion(.success((uploadModel)))
-                }
-            }
+//            dbref.setValue(firebaseData) { error, ref in
+//                if let error = error {
+//                    completion(.failure(error))
+//                } else {
+//                    completion(.success((uploadModel)))
+//                }
+//            }
         }
         catch {
             completion(.failure(error))
@@ -245,20 +303,27 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         let dbref = Database.database().reference().child(model.internalPath).queryOrdered(byChild: model.orderedBy).queryEqual(toValue: model.equalTo)
         dbref.observeSingleEvent(of: .value) { snapshot in
             if snapshot.exists() {
-                for child in snapshot.children.allObjects as! [DataSnapshot] {
-                    if let object = child.value as? [String: AnyObject] {
-                        do {
-                            let data = try FirebaseDecoder().decode(returning, from: object)
-                            completion(.success(data))
-                        }
-                        catch {
-                            print(String(describing: error))
-                            completion(.failure(error))
-                        }
-                    } else {
-                        completion(.failure(NSError(domain: "No Object", code: 0, userInfo: nil)))
-                    }
+                do {
+                    let data = try snapshot.data(as: returning)
+                    completion(.success(data))
+                } catch {
+                    completion(.failure(error))
                 }
+                
+//                for child in snapshot.children.allObjects as! [DataSnapshot] {
+//                    if let object = child.value as? [String: AnyObject] {
+//                        do {
+//                            let data = try FirebaseDecoder().decode(returning, from: object)
+//                            completion(.success(data))
+//                        }
+//                        catch {
+//                            print(String(describing: error))
+//                            completion(.failure(error))
+//                        }
+//                    } else {
+//                        completion(.failure(NSError(domain: "No Object", code: 0, userInfo: nil)))
+//                    }
+//                }
             } else {
                 completion(.failure(NSError(domain: "No Snapshot", code: -1, userInfo: nil)))
             }
@@ -267,39 +332,85 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     
     func fetchLimited<Model: FirebaseModel>(model: Model.Type, limit: Int, completion: @escaping (Result<[Model],Error>) -> Void) {
         let dbref = Database.database().reference().child(model.path).queryLimited(toLast: UInt(limit))
-        var tempModels = [Model]()
+//        var tempModels = [Model]()
         dbref.observeSingleEvent(of: .value) { snapshot in
-            for child in snapshot.children.allObjects as! [DataSnapshot] {
-                guard let object = child.value as? [String: AnyObject] else {return}
-                do {
-                    let data = try FirebaseDecoder().decode(model, from: object)
-                    tempModels.insert(data, at: 0)
-                }
-                catch {
-                    print(String(describing: error))
-                }
+            guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
+                completion(.failure(NSError()))
+                return
             }
-            completion(.success(tempModels))
+            do {
+                let data = try children.compactMap { try $0.data(as: model) }
+                completion(.success(data))
+            } catch {
+                completion(.failure(error))
+            }
+//            for child in snapshot.children.allObjects as! [DataSnapshot] {
+//                guard let object = child.value as? [String: AnyObject] else {return}
+//                do {
+//                    let data = try FirebaseDecoder().decode(model, from: object)
+//                    tempModels.insert(data, at: 0)
+//                }
+//                catch {
+//                    print(String(describing: error))
+//                }
+//            }
+//            completion(.success(tempModels))
         }
     }
+    func fetchLimitedInstance<Model: FirebaseInstance, T: Decodable>(of model: Model, returning returnType: T.Type, limit: Int, completion: @escaping (Result<[T],Error>) -> Void) {
+        let dbRef = Database.database().reference().child(model.internalPath).queryLimited(toLast: UInt(limit))
+//        var tempModels = [T]()
+        dbRef.observeSingleEvent(of: .value) { snapshot in
+            guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
+                completion(.failure(NSError()))
+                return
+            }
+            do {
+                let data = try children.compactMap { try $0.data(as: returnType) }
+                completion(.success(data))
+            } catch {
+                completion(.failure(error))
+            }
+//            for child in snapshot.children.allObjects as! [DataSnapshot] {
+//                guard let object = child.value as? [String: AnyObject] else { return }
+//                do {
+//                    let data = try FirebaseDecoder().decode(returnType, from: object)
+//                    tempModels.insert(data, at: 0)
+//                } catch {
+//                    print(String(describing: error))
+//                }
+//            }
+//            completion(.success(tempModels))
+         }
+    }
     func searchTextQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
-        var tempModels = [T]()
+//        var tempModels = [T]()
         let dbref = Database.database().reference().child(model.internalPath)
             .queryOrdered(byChild: model.orderedBy)
             .queryStarting(atValue: model.equalTo)
             .queryEnding(atValue: model.equalTo+"\u{f8ff}")
         dbref.observeSingleEvent(of: .value) { snapshot in
-            for child in snapshot.children.allObjects as! [DataSnapshot] {
-                guard let object = child.value as? [String: AnyObject] else {return}
-                do {
-                    let data = try FirebaseDecoder().decode(returning, from: object)
-                    tempModels.insert(data, at: 0)
-                }
-                catch {
-                    print(String(describing: error))
-                }
+            guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
+                completion(.failure(NSError()))
+                return
             }
-            completion(.success(tempModels))
+            do {
+                let data = try children.compactMap { try $0.data(as: returning) }
+                completion(.success(data))
+            } catch {
+                completion(.failure(error))
+            }
+//            for child in snapshot.children.allObjects as! [DataSnapshot] {
+//                guard let object = child.value as? [String: AnyObject] else {return}
+//                do {
+//                    let data = try FirebaseDecoder().decode(returning, from: object)
+//                    tempModels.insert(data, at: 0)
+//                }
+//                catch {
+//                    print(String(describing: error))
+//                }
+//            }
+//            completion(.success(tempModels))
 
         }
     }
@@ -323,4 +434,5 @@ protocol FirebaseDatabaseManagerService {
     func fetchLimited<Model: FirebaseModel>(model: Model.Type, limit: Int, completion: @escaping (Result<[Model],Error>) -> Void)
     func searchTextQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
     func fetchSingleObjectInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
+    func fetchLimitedInstance<Model: FirebaseInstance, T: Decodable>(of model: Model, returning returnType: T.Type, limit: Int, completion: @escaping (Result<[T],Error>) -> Void)
  }
