@@ -12,7 +12,7 @@ struct JournalEntryView: View {
     @Environment(\.dismiss) var dismiss
     @State private var placeholder = "enter text..."
     @StateObject var viewModel = JournalEntryViewModel()
-    
+    var action: (JournalEntryModel) -> ()
     var body: some View {
         NavigationView {
             VStack {
@@ -47,7 +47,11 @@ struct JournalEntryView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         Task {
-                            await viewModel.uploadNewEntry()
+                            do {
+                                let newEntry = try await viewModel.uploadNewEntry()
+                                action(newEntry)
+                                dismiss()
+                            }
                         }
                     } label: {
                         Image(systemName: "arrow.up.circle.fill")
@@ -62,6 +66,8 @@ struct JournalEntryView: View {
 
 struct JournalEntryView_Previews: PreviewProvider {
     static var previews: some View {
-        JournalEntryView()
+        JournalEntryView { model in
+            
+        }
     }
 }

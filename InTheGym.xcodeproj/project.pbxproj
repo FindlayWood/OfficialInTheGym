@@ -36,6 +36,8 @@
 		7403D06F280E08C800268CEC /* AssigningSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403D06E280E08C800268CEC /* AssigningSelectionViewModel.swift */; };
 		7403D071280E08E500268CEC /* AssigningSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403D070280E08E500268CEC /* AssigningSelectionView.swift */; };
 		7403D073280E1C0000268CEC /* SavedWorkoutCreatorKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403D072280E1BFF00268CEC /* SavedWorkoutCreatorKeyModel.swift */; };
+		7404A4AD28C903270034AADC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7404A4AC28C903270034AADC /* StoreKit.framework */; };
+		7404A4B028C926D70034AADC /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 7404A4AF28C926D70034AADC /* RevenueCat */; };
 		740682F828901CC700CD9C08 /* PerformanceIntroSubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740682F728901CC700CD9C08 /* PerformanceIntroSubview.swift */; };
 		740682FA2890424000CD9C08 /* PlayerDashBoardCollectioncell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740682F92890424000CD9C08 /* PlayerDashBoardCollectioncell.swift */; };
 		740682FC2890452B00CD9C08 /* PlayerDashBoardDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740682FB2890452B00CD9C08 /* PlayerDashBoardDataSource.swift */; };
@@ -1082,6 +1084,7 @@
 		7403D06E280E08C800268CEC /* AssigningSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssigningSelectionViewModel.swift; sourceTree = "<group>"; };
 		7403D070280E08E500268CEC /* AssigningSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssigningSelectionView.swift; sourceTree = "<group>"; };
 		7403D072280E1BFF00268CEC /* SavedWorkoutCreatorKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWorkoutCreatorKeyModel.swift; sourceTree = "<group>"; };
+		7404A4AC28C903270034AADC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		740682F728901CC700CD9C08 /* PerformanceIntroSubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceIntroSubview.swift; sourceTree = "<group>"; };
 		740682F92890424000CD9C08 /* PlayerDashBoardCollectioncell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDashBoardCollectioncell.swift; sourceTree = "<group>"; };
 		740682FB2890452B00CD9C08 /* PlayerDashBoardDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDashBoardDataSource.swift; sourceTree = "<group>"; };
@@ -2092,6 +2095,8 @@
 				74330441289E962B00F2569A /* FirebaseAuth in Frameworks */,
 				74330443289E962B00F2569A /* FirebaseDatabase in Frameworks */,
 				74330447289E962B00F2569A /* FirebaseFirestore in Frameworks */,
+				7404A4B028C926D70034AADC /* RevenueCat in Frameworks */,
+				7404A4AD28C903270034AADC /* StoreKit.framework in Frameworks */,
 				74330449289E962B00F2569A /* FirebaseFirestoreCombine-Community in Frameworks */,
 				7433044B289E962B00F2569A /* FirebaseFirestoreSwift in Frameworks */,
 			);
@@ -5271,6 +5276,7 @@
 		D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7404A4AC28C903270034AADC /* StoreKit.framework */,
 				746061BC252547E9005B1480 /* AppTrackingTransparency.framework */,
 			);
 			name = Frameworks;
@@ -5306,6 +5312,7 @@
 				74EB1E48289EB2B200C4502A /* Algorithms */,
 				74FA60B028B2DBDF007B2CD8 /* Charts */,
 				74FA60B328B3E500007B2CD8 /* SCLAlertView */,
+				7404A4AF28C926D70034AADC /* RevenueCat */,
 			);
 			productName = InTheGym;
 			productReference = 7479A905229F2B4C00D39E2E /* InTheGym.app */;
@@ -5386,6 +5393,7 @@
 				74A7EB6B289EB145007C2ECD /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				74FA60AF28B2DBDE007B2CD8 /* XCRemoteSwiftPackageReference "Charts" */,
 				74FA60B228B3E4FF007B2CD8 /* XCRemoteSwiftPackageReference "SCLAlertView-Swift" */,
+				7404A4AE28C926D70034AADC /* XCRemoteSwiftPackageReference "purchases-ios" */,
 			);
 			productRefGroup = 7479A906229F2B4C00D39E2E /* Products */;
 			projectDirPath = "";
@@ -7000,6 +7008,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7404A4AE28C926D70034AADC /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		7433043F289E962B00F2569A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -7043,6 +7059,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7404A4AF28C926D70034AADC /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7404A4AE28C926D70034AADC /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
 		74330440289E962B00F2569A /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7433043F289E962B00F2569A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

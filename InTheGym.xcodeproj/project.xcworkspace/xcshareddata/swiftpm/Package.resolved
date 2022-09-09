@@ -109,6 +109,15 @@
       }
     },
     {
+      "identity" : "purchases-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RevenueCat/purchases-ios.git",
+      "state" : {
+        "revision" : "1c41c4a034edd002ed3f93ea4c12be814e434319",
+        "version" : "4.11.0"
+      }
+    },
+    {
       "identity" : "sclalertview-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vikmeup/SCLAlertView-Swift",

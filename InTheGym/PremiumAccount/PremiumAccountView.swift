@@ -5,6 +5,84 @@
 //  Created by Findlay Wood on 15/06/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
+import SwiftUI
+import RevenueCat
+
+struct PremiumAccountViewSwiftUI: View {
+    @StateObject var viewModel = PremiumAccountViewModel()
+    var body: some View {
+        VStack {
+            Text("Premium Account")
+                .font(.largeTitle.bold())
+                .foregroundColor(Color(.darkColour))
+            Text("Sign up for a premium account and gain access to awesome features and power yourself into an elite athlete.")
+                .font(.body.weight(.medium))
+                .foregroundColor(.secondary)
+            HStack {
+                Image("clip_icon")
+                    .resizable()
+                    .frame(width: 60, height: 60)
+                VStack(alignment: .leading) {
+                    Text("Clips")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Text("Record and upload clips.")
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                }
+            }
+            HStack {
+                Image("monitor_icon")
+                    .resizable()
+                    .frame(width: 60, height: 60)
+                VStack(alignment: .leading) {
+                    Text("Performance Center")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Text("Gain access to the performance center.")
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                }
+            }
+            HStack {
+                ForEach(viewModel.subscriptionPackages) { package in
+                    VStack {
+                        Text(package.storeProduct.subscriptionPeriod?.durationTitle ?? "Error")
+                        Text(package.storeProduct.localizedPriceString)
+                        if viewModel.selectedPackage == package {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(Color(.darkColour))
+                        } else {
+                            Button {
+                                viewModel.selectedPackage = package
+                            } label: {
+                                Image(systemName: "cicrle")
+                                    .foregroundColor(Color(.darkColour))
+                            }
+                        }
+                    }
+                }
+            }
+            Button {
+                
+            } label: {
+                Text("Subscribe")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color(.darkColour))
+                    .padding()
+            }
+            Text("Recurring bill, cancel anytime, \n Your payment will be charged to your iTunes account and your subscription will automatically renew for the same package length at the same price until you cancel it. Cancel anytime from settings -> subscriptions.")
+                .font(.footnote)
+                .foregroundColor(Color(.tertiaryLabel))
+        }
+        .task {
+            await viewModel.fetchIAPOfferings()
+        }
+    }
+}
 
 import UIKit
 

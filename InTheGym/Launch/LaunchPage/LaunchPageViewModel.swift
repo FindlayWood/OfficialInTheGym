@@ -25,6 +25,10 @@ class LaunchPageViewModel {
         print("deinit launch page view model")
     }
     // MARK: - Functions
+    
+    /// checking UserDefaults for current user
+    /// if exists - log in user and background check firebase and replace user model - firebase could contain updates
+    /// if not exists - check firebase for user - if still not exist - show initial screen
     func checkForUserDefault() {
         if UserDefaults.currentUser == Users.nilUser {
             checkFirebase()

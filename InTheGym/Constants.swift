@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Constants {
+enum Constants {
     
     static let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     
@@ -47,4 +47,6 @@ class Constants {
     static let font = UIFont(name: "Menlo-Bold", size: 25)
     
     static let defaultAccountCreatedDate = "2020"
+    
+    static let revenueCatAPIKey = "appl_UNHZDcsihiAlfmlxyaNlmUzddjO"
 }
