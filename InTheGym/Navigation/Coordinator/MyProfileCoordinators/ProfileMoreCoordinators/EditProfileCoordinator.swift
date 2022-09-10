@@ -19,14 +19,15 @@ class EditProfileCoordinator: Coordinator {
     }
     
     func start() {
-        modalNavigationController = UINavigationController()
+//        modalNavigationController = UINavigationController()
         let vc = EditProfileViewController()
         vc.coordinator = self
-        modalNavigationController?.setViewControllers([vc], animated: true)
-        if let modalNavigationController = modalNavigationController {
-            modalNavigationController.modalPresentationStyle = .fullScreen
-            navigationController.present(modalNavigationController, animated: true)
-        }
+        navigationController.present(vc, animated: true)
+//        modalNavigationController?.setViewControllers([vc], animated: true)
+//        if let modalNavigationController = modalNavigationController {
+////            modalNavigationController.modalPresentationStyle = .fullScreen
+//            navigationController.present(modalNavigationController, animated: true)
+//        }
     }
 }
 extension EditProfileCoordinator {

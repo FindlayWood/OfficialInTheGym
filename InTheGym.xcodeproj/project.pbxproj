@@ -796,6 +796,7 @@
 		74BA1641281752D900E10E8A /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BA1640281752D900E10E8A /* SettingsViewModel.swift */; };
 		74BA1643281856A400E10E8A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BA1642281856A400E10E8A /* SettingsViewController.swift */; };
 		74BAB0E725642600009D35E8 /* LineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BAB0E625642600009D35E8 /* LineChart.swift */; };
+		74BAB7EE28CCE70B00E5CEFE /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BAB7ED28CCE70B00E5CEFE /* ImagePicker.swift */; };
 		74BDA835246C479F00DFAEEF /* PlayerInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BDA834246C479F00DFAEEF /* PlayerInfoCell.swift */; };
 		74C126B62819B1C900C3B171 /* CoachProfileMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C126B52819B1C900C3B171 /* CoachProfileMoreViewController.swift */; };
 		74C126B82819B1D900C3B171 /* CoachProfileMoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C126B72819B1D900C3B171 /* CoachProfileMoreViewModel.swift */; };
@@ -1840,6 +1841,7 @@
 		74BA1640281752D900E10E8A /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		74BA1642281856A400E10E8A /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		74BAB0E625642600009D35E8 /* LineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChart.swift; sourceTree = "<group>"; };
+		74BAB7ED28CCE70B00E5CEFE /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		74BDA834246C479F00DFAEEF /* PlayerInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerInfoCell.swift; sourceTree = "<group>"; };
 		74C126B52819B1C900C3B171 /* CoachProfileMoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachProfileMoreViewController.swift; sourceTree = "<group>"; };
 		74C126B72819B1D900C3B171 /* CoachProfileMoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachProfileMoreViewModel.swift; sourceTree = "<group>"; };
@@ -3554,6 +3556,7 @@
 				7431030526FA30B600F7121B /* TimeSelection */,
 				7459BD602641B1A50005C530 /* NibsNames.swift */,
 				743B16A9270B43B500F4C6C0 /* CustomTimer.swift */,
+				74BAB7ED28CCE70B00E5CEFE /* ImagePicker.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -6085,6 +6088,7 @@
 				743330F627959F87005A0C45 /* UICollectionView+Extension.swift in Sources */,
 				747C07582613634400E9F1E2 /* SeeNewPostsButton.swift in Sources */,
 				74F5468F25E9911200C1A6A9 /* UserIDToUser.swift in Sources */,
+				74BAB7EE28CCE70B00E5CEFE /* ImagePicker.swift in Sources */,
 				74C426892829A4E9009ADB70 /* LiveWorkoutExerciseCreationCoordinator.swift in Sources */,
 				742C1C9227BD877200DD1BB0 /* ExerciseClipsViewController.swift in Sources */,
 				744AED50279B022C000D2D74 /* WorkoutDisplayCoordinator.swift in Sources */,

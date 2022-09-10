@@ -6,8 +6,8 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
-import Foundation
 import Combine
+import UIKit
 
 // PostCellViewModel
 // This class is the viewModel for any post cell
@@ -16,7 +16,7 @@ class PostCellViewModel {
     
     // MARK: - Publishers
     @Published var isLiked: Bool = false
-    @Published var imageData: Data?
+    @Published var profileImage: UIImage?
     @Published var userModel: Users?
     @Published var workoutModel: WorkoutModel?
     @Published var savedWorkoutModel: SavedWorkoutModel?
@@ -91,8 +91,7 @@ class PostCellViewModel {
         DispatchQueue.global(qos: .background).async {
             let profileImageModel = ProfileImageDownloadModel(id: self.post.posterID)
             ImageCache.shared.load(from: profileImageModel) { [weak self] result in
-                let imageData = try? result.get().pngData()
-                self?.imageData = imageData
+                self?.profileImage = try? result.get()
             }
         }
     }
