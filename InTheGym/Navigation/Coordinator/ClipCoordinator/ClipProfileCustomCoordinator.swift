@@ -22,13 +22,18 @@ class ClipProfileCustomCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let vc = ViewClipViewController()
-        vc.newCoordinator = self
-        vc.viewModel.keyClipModel = clipModel
-        vc.modalPresentationStyle = .custom
-        vc.hidesBottomBarWhenPushed = true
-        vc.transitioningDelegate = self
-        navigationController.present(vc, animated: true)
+        if SubscriptionManager.shared.isSubscribed {
+            let vc = ViewClipViewController()
+            vc.newCoordinator = self
+            vc.viewModel.keyClipModel = clipModel
+            vc.modalPresentationStyle = .custom
+            vc.hidesBottomBarWhenPushed = true
+            vc.transitioningDelegate = self
+            navigationController.present(vc, animated: true)
+        } else {
+            let vc = PremiumAccountViewController()
+            navigationController.present(vc, animated: true)
+        }
     }
     
     func dismissVC() {

@@ -46,7 +46,7 @@ struct PremiumAccountViewSwiftUI: View {
                                 } else {
                                     Image(systemName: "circle")
                                         .font(.title)
-                                        .foregroundColor(viewModel.selectedPackage == package ? .white : Color(.darkColour)) 
+                                        .foregroundColor(viewModel.selectedPackage == package ? .white : Color(.darkColour))
                                 }
                             }
                             .padding()

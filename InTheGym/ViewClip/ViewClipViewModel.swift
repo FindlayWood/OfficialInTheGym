@@ -51,20 +51,14 @@ class ViewClipViewModel: NSObject {
     // MARK: - Functions
     func fetchClip() {
         isLoading = true
-//        if UserDefaults.currentUser.premiumAccount ?? true {
-        if true {
-            ClipCache.shared.load(from: keyClipModel) { [weak self] result in
-                switch result {
-                case .success(let asset):
-                    self?.prepareToPlay(asset)
-                case .failure(let error):
-                    self?.errorPublisher.send(error)
-                    self?.isLoading = false
-                }
+        ClipCache.shared.load(from: keyClipModel) { [weak self] result in
+            switch result {
+            case .success(let asset):
+                self?.prepareToPlay(asset)
+            case .failure(let error):
+                self?.errorPublisher.send(error)
+                self?.isLoading = false
             }
-        } else {
-            isLoading = false
-            premiumAccountPublisher.send(())
         }
     }
     // MARK: - Fetch Clip Model
