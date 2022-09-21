@@ -902,6 +902,7 @@
 		74E08A882843952A009D0DCB /* MyWorkloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E08A872843952A009D0DCB /* MyWorkloadsView.swift */; };
 		74E08A8A28439603009D0DCB /* MyWorkloadCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E08A8928439603009D0DCB /* MyWorkloadCollectionCell.swift */; };
 		74E08A8C28442592009D0DCB /* MyWorkloadsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E08A8B28442592009D0DCB /* MyWorkloadsDataSource.swift */; };
+		74E338D028CE863200A85E8E /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E338CF28CE863200A85E8E /* SubscriptionManager.swift */; };
 		74E51D0C25AF615E002054D6 /* DiscoverPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E51D0B25AF615E002054D6 /* DiscoverPosts.swift */; };
 		74E79E63283ABFB7002578BB /* PostUserSubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E79E62283ABFB7002578BB /* PostUserSubview.swift */; };
 		74E79E65283ADA03002578BB /* PostTextSubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E79E64283ADA03002578BB /* PostTextSubview.swift */; };
@@ -1947,6 +1948,7 @@
 		74E08A872843952A009D0DCB /* MyWorkloadsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorkloadsView.swift; sourceTree = "<group>"; };
 		74E08A8928439603009D0DCB /* MyWorkloadCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorkloadCollectionCell.swift; sourceTree = "<group>"; };
 		74E08A8B28442592009D0DCB /* MyWorkloadsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorkloadsDataSource.swift; sourceTree = "<group>"; };
+		74E338CF28CE863200A85E8E /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
 		74E51D0B25AF615E002054D6 /* DiscoverPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPosts.swift; sourceTree = "<group>"; };
 		74E79E62283ABFB7002578BB /* PostUserSubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostUserSubview.swift; sourceTree = "<group>"; };
 		74E79E64283ADA03002578BB /* PostTextSubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTextSubview.swift; sourceTree = "<group>"; };
@@ -3826,6 +3828,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				74E338CE28CE861500A85E8E /* PurchaseManager */,
 				74EA155E28C53D21000669A8 /* Journal */,
 				74FA609A28AFF7A6007B2CD8 /* InjuryTracker */,
 				74DC3B6A28A02E4800DCEAF7 /* TrainingStatus */,
@@ -4873,6 +4876,14 @@
 				74E08A872843952A009D0DCB /* MyWorkloadsView.swift */,
 			);
 			path = MyWorkloads;
+			sourceTree = "<group>";
+		};
+		74E338CE28CE861500A85E8E /* PurchaseManager */ = {
+			isa = PBXGroup;
+			children = (
+				74E338CF28CE863200A85E8E /* SubscriptionManager.swift */,
+			);
+			path = PurchaseManager;
 			sourceTree = "<group>";
 		};
 		74E79E61283ABFA0002578BB /* PostSubviews */ = {
@@ -6084,6 +6095,7 @@
 				74B6F7652759212B00A72679 /* FirebaseDatabaseManager.swift in Sources */,
 				74A0B591285A82EC0037FD3F /* PremiumAccountViewController.swift in Sources */,
 				743E92B6280735C20029F447 /* LinkedListNode.swift in Sources */,
+				74E338D028CE863200A85E8E /* SubscriptionManager.swift in Sources */,
 				741B21FA2635A3F700B1F5B3 /* TimelineEndpoints.swift in Sources */,
 				743330F627959F87005A0C45 /* UICollectionView+Extension.swift in Sources */,
 				747C07582613634400E9F1E2 /* SeeNewPostsButton.swift in Sources */,

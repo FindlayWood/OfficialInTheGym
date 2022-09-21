@@ -38,6 +38,9 @@ class LaunchPageViewModel {
             ViewController.admin = UserDefaults.currentUser.admin /// depreciated
             ViewController.username = UserDefaults.currentUser.username /// depreciated
             backgroundUpdate()
+            Task {
+                await SubscriptionManager.shared.launch()
+            }
         }
     }
     private func checkFirebase() {
@@ -99,6 +102,9 @@ class LaunchPageViewModel {
                 FirebaseAuthManager.currentlyLoggedInUser = userModel
                 ViewController.username = userModel.username /// depreciated
                 ViewController.admin = userModel.admin /// depreciated
+                Task {
+                    await SubscriptionManager.shared.launch()
+                }
             case .failure(let error):
                 self?.error = error
             }

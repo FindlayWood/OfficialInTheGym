@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         launchScreen()
         // setup revenue cat
         Purchases.logLevel = .debug
-        Purchases.configure(withAPIKey: Constants.revenueCatAPIKey)
+//        Purchases.configure(withAPIKey: Constants.revenueCatAPIKey)
         return true
     }
     func onBoard() {
