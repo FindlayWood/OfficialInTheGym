@@ -92,7 +92,7 @@ extension UserStampsView {
         } else {
             eliteImageView.isHidden = true
         }
-        if SubscriptionManager.shared.isSubscribed {
+        if user == UserDefaults.currentUser && SubscriptionManager.shared.isSubscribed {
             premiumImageView.isHidden = false
         } else {
             premiumImageView.isHidden = true
