@@ -27,9 +27,9 @@ enum PerformanceIntroOptions: CaseIterable {
     var image: UIImage {
         switch self {
         case .workload:
-            return UIImage(systemName: "chart.bar.xaxis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 50))!
+            return UIImage(named: "bar-chart_icon")!
         case .wellness:
-            return UIImage(named: "wellness_icon")!
+            return UIImage(named: "guru_icon")!
         case .trainingStatus:
             return UIImage(named: "calendar_icon")!
         case .verticalJump:
@@ -37,7 +37,7 @@ enum PerformanceIntroOptions: CaseIterable {
         case .cmj:
             return UIImage(named: "bolt_icon")!
         case .injury:
-            return UIImage(named: "injury_icon")!
+            return UIImage(named: "plaster_icon")!
         case .journal:
             return UIImage(named: "journal_icon")!
         }
@@ -65,17 +65,17 @@ enum PerformanceIntroOptions: CaseIterable {
     var message: String {
         switch self {
         case .workload:
-            return "Monitor your workload. See all workload for every session recoreded and add custom sessions. See more info including ACWR, training strain and more..."
+            return "Monitor your workload."
         case .wellness:
-            return "Answer some questions about your wellbeing to calculate your wellness score. This is most accurate when taken daily."
+            return "Complete your daily wellness questions."
         case .trainingStatus:
-            return "Update your current training status. Let you coaches know what training cycle you are on."
+            return "Update your current training status."
         case .verticalJump:
-            return "Measure your vertical jump. Make use of high speed video to record your jumps and then tag them to measure your jump height."
+            return "Measure your vertical jump."
         case .cmj:
-            return "Counter Movement Jump. Monitor your lower body power, either to check your power or monitor your fatigue levels. See the CMJ instructions, most recent output and several CMJ variations."
+            return "Monitor your lower body power output."
         case .injury:
-            return "Update your injury status and track your recovery times and previous injuries."
+            return "Update your injury status."
         case .journal:
             return "Keep a private journal of your every day."
         }
