@@ -6,99 +6,94 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
-import UIKit
+import SwiftUI
 
-class EditProfileView: UIView {
-    // MARK: - Properties
+struct EditProfileViewSwiftUI: View {
     
-    // MARK: - Subviews
-    var profileImageButton: UIButton = {
-        let button = UIButton()
-        button.tintColor = .darkColour
-        button.backgroundColor = .lightGray
-//        button.widthAnchor.constraint(equalToConstant: 100).isActive = true
-//        button.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        button.layer.cornerRadius = 50
-        button.clipsToBounds = true
-        button.imageView?.contentMode = .scaleAspectFill
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    var profileBioTextView: UITextView = {
-        let view = UITextView()
-        view.addToolBar()
-        view.font = .systemFont(ofSize: 14, weight: .medium)
-        view.textColor = .secondaryLabel
-        view.isScrollEnabled = false
-        view.isUserInteractionEnabled = true
-        view.layer.cornerRadius = 8
-        view.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    var characterCountLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .tertiaryLabel
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    var doneButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .darkColour
-        button.layer.cornerRadius = 8
-        button.setTitle("Done", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    @ObservedObject var viewModel: EditProfileViewModel
     
-    // MARK: - Initializer
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupUI()
-    }
-}
-// MARK: - Configure
-private extension EditProfileView {
-    func setupUI() {
-        backgroundColor = .secondarySystemBackground
-        addSubview(profileImageButton)
-        addSubview(characterCountLabel)
-        addSubview(profileBioTextView)
-        addSubview(doneButton)
-        configureUI()
-    }
+    @State private var showingImagePicker = false
+   
     
-    func configureUI() {
-        NSLayoutConstraint.activate([
-            profileImageButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
-            profileImageButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            profileImageButton.widthAnchor.constraint(equalToConstant: 100),
-            profileImageButton.heightAnchor.constraint(equalToConstant: 100),
-            
-            profileBioTextView.topAnchor.constraint(equalTo: profileImageButton.bottomAnchor, constant: 16),
-            profileBioTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            profileBioTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            
-            characterCountLabel.trailingAnchor.constraint(equalTo: profileBioTextView.trailingAnchor),
-            characterCountLabel.topAnchor.constraint(equalTo: profileBioTextView.bottomAnchor, constant: 4),
-            
-            doneButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -8),
-            doneButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            doneButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
-        ])
-    }
-}
-// MARK: - Public Configuration
-extension EditProfileView {
-    public func setCharacterCount(_ count: Int) {
-        guard count <= 200 else {return}
-        characterCountLabel.text = (200 - count).description
+    var body: some View {
+        NavigationView {
+            VStack {
+                if let profileImage = viewModel.profileImage {
+                    Image(uiImage: profileImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 100, height: 100)
+                        .clipShape(Circle())
+                    Button {
+                        showingImagePicker = true
+                    } label: {
+                        Text("Edit Photo")
+                    }
+                } else {
+                    Image(systemName: "person.circle.fill")
+                        .font(.largeTitle)
+                        .padding()
+                        .frame(width: 100, height: 100)
+                    Button {
+                        showingImagePicker = true
+                    } label: {
+                        Text("Add Photo")
+                            .foregroundColor(Color(.darkColour))
+                    }
+                }
+                TextEditor(text: $viewModel.bioText)
+                    .font(.body.weight(.medium))
+                    .foregroundColor(.secondary)
+                    .padding(.vertical)
+                    .frame(height: 200)
+                HStack {
+                    Spacer()
+                    Text(viewModel.characterRemaining, format: .number)
+                        .font(.caption2)
+                        .foregroundColor(Color(.tertiaryLabel))
+                }
+                Spacer()
+            }
+            .padding(.horizontal)
+            .onAppear {
+                viewModel.initialLoad()
+            }
+            .sheet(isPresented: $showingImagePicker) {
+                ImagePicker(image: $viewModel.newProfileImage)
+            }
+            .onChange(of: viewModel.newProfileImage) { newValue in
+                viewModel.profileImage = newValue
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if !viewModel.saving {
+                        Button {
+                            viewModel.dismiss.send(true)
+                        } label: {
+                            Text("Dismiss")
+                                .foregroundColor(Color(.darkColour))
+                        }
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if viewModel.saving {
+                        ProgressView()
+                    } else {
+                        Button {
+                            viewModel.saving = true
+                            viewModel.saveImage()
+                            viewModel.saveBio()
+                        } label: {
+                            Text("Save")
+                                .bold()
+                                .foregroundColor(viewModel.canSave ? Color(.darkColour) : Color(.lightGray))
+                        }
+                        .disabled(!viewModel.canSave)
+                    }
+                }
+            }
+            .navigationTitle("Edit Profile")
+            .navigationBarTitleDisplayMode(.inline)
+        }
     }
 }

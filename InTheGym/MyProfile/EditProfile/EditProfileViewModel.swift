@@ -12,16 +12,36 @@ import Combine
 import UIKit
 
 
-class EditProfileViewModel {
+class EditProfileViewModel: ObservableObject {
     
     // MARK: - Publishers
+    @Published var newProfileImage: UIImage?
     @Published var profileImage: UIImage?
-    @Published var bioText: String = ""
+    @Published var bioText: String = "" {
+        didSet {
+            if bioText.count > bioCharacterLimit {
+                bioText = String(bioText.prefix(bioCharacterLimit))
+            }
+        }
+    }
+    @Published var saving = false
+    @Published var imageSaved = false
+    @Published var bioSaved = false
     
+    var dismiss = PassthroughSubject<Bool,Never>()
     var imageError = PassthroughSubject<Error,Never>()
     var bioError = PassthroughSubject<Error,Never>()
     
+    // MARK: - Computed Properties
+    var canSave: Bool {
+        newProfileImage != nil || bioText.trimTrailingWhiteSpaces() != UserDefaults.currentUser.profileBio
+    }
+    
     // MARK: - Properties
+    private let bioCharacterLimit = 200
+    var characterRemaining: Int {
+        bioCharacterLimit - bioText.count
+    }
     private var subscriptions = Set<AnyCancellable>()
     
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
@@ -39,9 +59,11 @@ class EditProfileViewModel {
             FirebaseStorageManager.shared.dataUpload(model: uploadImageModel) { [weak self] result in
                 switch result {
                 case .success(()):
-                    break
+                    self?.imageSaved = true
+                    ImageCache.shared.replace(UserDefaults.currentUser.id, with: profileImage)
                 case .failure(let error):
                     self?.imageError.send(error)
+                    self?.saving = false
                 }
             }
         }
@@ -53,9 +75,10 @@ class EditProfileViewModel {
         apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
             switch result {
             case .success(()):
-                break
+                self?.bioSaved = true
             case .failure(let error):
                 self?.bioError.send(error)
+                self?.saving = false
             }
         }
     }
@@ -63,15 +86,9 @@ class EditProfileViewModel {
     // MARK: - Functions
     func initSubscriptions() {
         
-        $bioText
-            .dropFirst()
-            .debounce(for: 5, scheduler: RunLoop.main)
-            .sink { [weak self] _ in self?.saveBio() }
-            .store(in: &subscriptions)
-        
-        $profileImage
-            .dropFirst()
-            .sink { [weak self] _ in self?.saveImage() }
+        Publishers.CombineLatest($bioSaved, $imageSaved)
+            .map { $0 && $1 }
+            .sink { [weak self] in self?.dismiss.send($0) }
             .store(in: &subscriptions)
     }
     

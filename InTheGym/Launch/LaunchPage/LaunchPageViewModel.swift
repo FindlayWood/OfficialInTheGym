@@ -25,6 +25,10 @@ class LaunchPageViewModel {
         print("deinit launch page view model")
     }
     // MARK: - Functions
+    
+    /// checking UserDefaults for current user
+    /// if exists - log in user and background check firebase and replace user model - firebase could contain updates
+    /// if not exists - check firebase for user - if still not exist - show initial screen
     func checkForUserDefault() {
         if UserDefaults.currentUser == Users.nilUser {
             checkFirebase()
@@ -34,6 +38,9 @@ class LaunchPageViewModel {
             ViewController.admin = UserDefaults.currentUser.admin /// depreciated
             ViewController.username = UserDefaults.currentUser.username /// depreciated
             backgroundUpdate()
+            Task {
+                await SubscriptionManager.shared.launch()
+            }
         }
     }
     private func checkFirebase() {
@@ -95,6 +102,9 @@ class LaunchPageViewModel {
                 FirebaseAuthManager.currentlyLoggedInUser = userModel
                 ViewController.username = userModel.username /// depreciated
                 ViewController.admin = userModel.admin /// depreciated
+                Task {
+                    await SubscriptionManager.shared.launch()
+                }
             case .failure(let error):
                 self?.error = error
             }

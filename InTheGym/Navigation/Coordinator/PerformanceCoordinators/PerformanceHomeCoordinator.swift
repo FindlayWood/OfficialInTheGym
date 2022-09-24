@@ -21,11 +21,17 @@ class PerformanceHomeCoordinator: Coordinator {
     }
     // MARK: - Start
     func start() {
-        let vc = PerformanceIntroViewController()
-        vc.coordinator = self
-        modalNavigationController = UINavigationController(rootViewController: vc)
-        modalNavigationController.modalPresentationStyle = .fullScreen
-        navigationController.present(modalNavigationController, animated: true)
+        if SubscriptionManager.shared.isSubscribed {
+            let vc = PerformanceIntroViewController()
+            vc.coordinator = self
+            modalNavigationController = UINavigationController(rootViewController: vc)
+            modalNavigationController.modalPresentationStyle = .fullScreen
+            navigationController.present(modalNavigationController, animated: true)
+        } else {
+            let vc = PremiumAccountViewController()
+            navigationController.present(vc, animated: true)
+        }
+
     }
     func dismiss() {
         navigationController.dismiss(animated: true)

@@ -14,76 +14,37 @@ class EditProfileViewController: UIViewController {
     /// the coordinator for this view
     weak var coordinator: EditProfileCoordinator?
     
-    /// the view for this screen
-    var display = EditProfileView()
-    
     /// the view model
     var viewModel = EditProfileViewModel()
     
     /// hold all combine subscriptions
     private var subscriptions = Set<AnyCancellable>()
     
+    /// child content view - swiftui view
+    var childContentView: EditProfileViewSwiftUI!
+    
     // MARK: - View
-    override func loadView() {
-        view = display
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .secondarySystemBackground
+        addChildView()
         initViewModel()
-        initDisplay()
-        display.profileBioTextView.delegate = self
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
-    // MARK: - Init Display
-    func initDisplay() {
-        display.profileImageButton.addTarget(self, action: #selector(selectedNewImage(_:)), for: .touchUpInside)
-        display.doneButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
-        display.setCharacterCount(display.profileBioTextView.text.count)
-        display.profileBioTextView.textChangedPublisher
-            .sink { [weak self] in self?.viewModel.bioText = $0 }
-            .store(in: &subscriptions)
+    // MARK: - Add Child View
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel)
+        addSwiftUIView(childContentView)
     }
     
     // MARK: - Init View Model
     func initViewModel() {
         
-        viewModel.$bioText
-            .sink { [weak self] in self?.display.profileBioTextView.text = $0 }
+        viewModel.dismiss
+            .sink { [weak self] value in
+                if value {
+                    self?.coordinator?.dismiss()
+                }
+            }
             .store(in: &subscriptions)
-        
-        viewModel.$profileImage
-            .compactMap { $0 }
-            .sink { [weak self] in self?.display.profileImageButton.setImage($0, for: .normal)}
-            .store(in: &subscriptions)
-        
-        viewModel.initialLoad()
-    }
-}
-// MARK: - TextView Delegate
-extension EditProfileViewController: UITextViewDelegate {
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        let numberOfChars = newText.count
-        display.setCharacterCount(numberOfChars)
-        return numberOfChars <= 200
-    }
-}
-// MARK: - Actions
-private extension EditProfileViewController {
-    @objc func dismiss(_ sender: UIButton) {
-        // make sure to save bio before dismissing
-        viewModel.saveBio()
-        coordinator?.dismiss()
-    }
-    @objc func selectedNewImage(_ sender: UIButton) {
-        coordinator?.showImagePicker(completion: { [weak self] newImage in
-            self?.viewModel.profileImage = newImage
-        })
     }
 }

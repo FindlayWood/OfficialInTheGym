@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import Firebase
+import RevenueCat
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,6 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         launchScreen()
+        // setup revenue cat
+        Purchases.logLevel = .debug
+//        Purchases.configure(withAPIKey: Constants.revenueCatAPIKey)
         return true
     }
     func onBoard() {

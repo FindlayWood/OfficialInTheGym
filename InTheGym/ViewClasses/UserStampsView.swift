@@ -92,8 +92,8 @@ extension UserStampsView {
         } else {
             eliteImageView.isHidden = true
         }
-        if let premiumAccount = user.premiumAccount {
-            premiumImageView.isHidden = !premiumAccount
+        if user == UserDefaults.currentUser && SubscriptionManager.shared.isSubscribed {
+            premiumImageView.isHidden = false
         } else {
             premiumImageView.isHidden = true
         }

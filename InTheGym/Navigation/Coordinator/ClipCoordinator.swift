@@ -25,22 +25,19 @@ class ClipCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        
-        let vc = RecordClipViewController()
-//        self.modalNavigationController = UINavigationController(rootViewController: vc)
-        vc.coordinator = self
-        vc.viewModel.workoutModel = workout
-        vc.viewModel.exerciseModel = exercise
-        vc.viewModel.addingDelegate = addingDelegate
-        vc.modalPresentationStyle = .fullScreen
-        vc.modalTransitionStyle = .coverVertical
-        navigationController.present(vc, animated: true)
-//        if let modalNavigationController = modalNavigationController {
-//            modalNavigationController.modalPresentationStyle = .fullScreen
-//            navigationController.setNavigationBarHidden(true, animated: false)
-//            navigationController.present(modalNavigationController, animated: true, completion: nil)
-//        }
-
+        if SubscriptionManager.shared.isSubscribed {
+            let vc = RecordClipViewController()
+            vc.coordinator = self
+            vc.viewModel.workoutModel = workout
+            vc.viewModel.exerciseModel = exercise
+            vc.viewModel.addingDelegate = addingDelegate
+            vc.modalPresentationStyle = .fullScreen
+            vc.modalTransitionStyle = .coverVertical
+            navigationController.present(vc, animated: true)
+        } else {
+            let vc = PremiumAccountViewController()
+            navigationController.present(vc, animated: true)   
+        }
     }
 }
 

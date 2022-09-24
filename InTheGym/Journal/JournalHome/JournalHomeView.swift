@@ -59,7 +59,9 @@ struct JournalHomeView: View {
             }
         }
         .fullScreenCover(isPresented: $viewModel.isShowingNewEntrySheet) {
-            JournalEntryView()
+            JournalEntryView { model in
+                viewModel.journalEntries.append(model)
+            }
         }
         .task {
             await viewModel.getJournalEntries()

@@ -96,6 +96,7 @@ class PostTableViewCell: UITableViewCell {
         super.prepareForReuse()
         actionPublisher = PassthroughSubject<PostAction,Never>()
         postWorkoutView.isHidden = true
+        postUserView.profileImageButton.setImage(nil, for: .normal)
         layoutIfNeeded()
     }
 }
@@ -133,9 +134,9 @@ private extension PostTableViewCell {
             .sink { [weak self] in self?.setLiked(to: $0)}
             .store(in: &subscriptions)
         
-        viewModel.$imageData
+        viewModel.$profileImage
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.setProfileImage(with: $0)}
+            .sink { [weak self] in self?.setProfileImage(with: $0) }
             .store(in: &subscriptions)
         
         viewModel.$userModel
@@ -182,12 +183,11 @@ private extension PostTableViewCell {
             self.postInteractionsView.likeButton.tintColor = .darkColour
         }
     }
-    func setProfileImage(with data: Data?) {
-        if let data = data {
-            let image = UIImage(data: data)
-            postUserView.profileImageButton.setImage(image, for: .normal)
+    func setProfileImage(with image: UIImage?) {
+        if let image = image {
+            self.postUserView.profileImageButton.setImage(image, for: .normal)
         } else {
-            postUserView.profileImageButton.setImage(nil, for: .normal)
+            self.postUserView.profileImageButton.setImage(nil, for: .normal)
         }
     }
 }

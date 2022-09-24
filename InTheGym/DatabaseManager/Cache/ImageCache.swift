@@ -52,4 +52,7 @@ class ImageCache {
             }
         }
     }
+    func replace(_ id: String, with image: UIImage) {
+        cache[id] = image
+    }
 }

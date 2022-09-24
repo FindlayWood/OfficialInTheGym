@@ -19,7 +19,7 @@ class CoachProfileMoreViewModel: ObservableObject {
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     var subscriptionType: String {
-        if UserDefaults.currentUser.premiumAccount ?? false {
+        if SubscriptionManager.shared.isSubscribed {
             return "Premium Account"
         } else {
             return "None"

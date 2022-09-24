@@ -21,9 +21,15 @@ class JumpCoordinator: Coordinator {
     }
     // MARK: - Start
     func start() {
-        let vc = MyJumpsViewController()
-        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
+        if SubscriptionManager.shared.isSubscribed {
+            let vc = MyJumpsViewController()
+            vc.coordinator = self
+            navigationController.pushViewController(vc, animated: true)
+        } else {
+            let vc = PremiumAccountViewController()
+            navigationController.present(vc, animated: true)
+        }
+
     }
 }
 // MARK: - Flow

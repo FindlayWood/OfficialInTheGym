@@ -25,7 +25,7 @@ extension ProfileImageUploadModel: FirebaseStorageData {
         return "ProfilePhotos/\(id)"
     }
     var data: Data? {
-        let data = image.jpegData(compressionQuality: 0.4)
+        let data = image.jpegData(compressionQuality: 0.1)
         return data
     }
     var metaData: StorageMetadata {

@@ -52,21 +52,11 @@ extension PlayerProfileMoreCoordinator {
         let child = PerformanceHomeCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(child)
         child.start()
-//        let vc = PerformanceIntroViewController()
-////        vc.viewModel.user = user
-//        navigationController.pushViewController(vc, animated: true)
     }
     func jumpMeasure() {
         let child = JumpCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
         child.start()
-//        let vc = MyJumpsViewController()
-//        vc.hidesBottomBarWhenPushed = true
-//        navigationController.pushViewController(vc, animated: true)
-//        let vc = JumpMeasuringViewController()
-//        vc.hidesBottomBarWhenPushed = true
-//        vc.modalPresentationStyle = .fullScreen
-//        navigationController.present(vc, animated: true)
     }
     func breathWork() {
         let vc = MethodSelectionViewController()
