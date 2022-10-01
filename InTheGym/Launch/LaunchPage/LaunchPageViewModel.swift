@@ -16,10 +16,12 @@ class LaunchPageViewModel {
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     var authService: AuthManagerService = FirebaseAuthManager.shared
+    var userService: CurrentUserService = CurrentUserManager.shared
     // MARK: - Initializer
-    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared, authService: AuthManagerService = FirebaseAuthManager.shared) {
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared, authService: AuthManagerService = FirebaseAuthManager.shared, userService: CurrentUserService = CurrentUserManager.shared) {
         self.apiService = apiService
         self.authService = authService
+        self.userService = userService
     }
     deinit {
         print("deinit launch page view model")
@@ -30,8 +32,12 @@ class LaunchPageViewModel {
     /// if exists - log in user and background check firebase and replace user model - firebase could contain updates
     /// if not exists - check firebase for user - if still not exist - show initial screen
     func checkForUserDefault() {
-        if UserDefaults.currentUser == Users.nilUser {
+        userService.launch()
+        if userService.currentUser == Users.nilUser {
             checkFirebase()
+//        }
+//        if UserDefaults.currentUser == Users.nilUser {
+//            checkFirebase()
         } else {
             user = UserDefaults.currentUser
             FirebaseAuthManager.currentlyLoggedInUser = UserDefaults.currentUser
@@ -99,6 +105,7 @@ class LaunchPageViewModel {
             case .success(let userModel):
                 self?.user = userModel
                 UserDefaults.currentUser = userModel
+                self?.userService.storeCurrentUser(userModel)
                 FirebaseAuthManager.currentlyLoggedInUser = userModel
                 ViewController.username = userModel.username /// depreciated
                 ViewController.admin = userModel.admin /// depreciated

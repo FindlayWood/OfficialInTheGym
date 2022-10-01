@@ -30,6 +30,8 @@ class LoginView: UIView {
         field.placeholder = "email"
         field.clearButtonMode = .whileEditing
         field.autocapitalizationType = .none
+        field.textContentType = .username
+        field.keyboardType = .emailAddress
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()

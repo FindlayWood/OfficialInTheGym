@@ -1006,6 +1006,9 @@
 		74F664DB28DF40C80086BA4E /* CMJMyJumpsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F664DA28DF40C80086BA4E /* CMJMyJumpsViewController.swift */; };
 		74F664DD28DF40D40086BA4E /* CMJMyJumpsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F664DC28DF40D40086BA4E /* CMJMyJumpsView.swift */; };
 		74F664DF28DF40EF0086BA4E /* CMJMyJumpsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F664DE28DF40EF0086BA4E /* CMJMyJumpsViewModel.swift */; };
+		74F664E128DF5A930086BA4E /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F664E028DF5A930086BA4E /* AuthenticationServices.framework */; };
+		74F664E428DFBE630086BA4E /* CurrentUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F664E328DFBE630086BA4E /* CurrentUserManager.swift */; };
+		74F664E628E098FB0086BA4E /* FileManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F664E528E098FB0086BA4E /* FileManager+Extension.swift */; };
 		74F6E57D24049FB100233438 /* GeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */; };
 		74F78B992631BF5600C21077 /* YourWorkoutBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F78B982631BF5600C21077 /* YourWorkoutBottomView.swift */; };
 		74F78B9E2631D0EC00C21077 /* LaunchMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F78B9D2631D0EC00C21077 /* LaunchMessageController.swift */; };
@@ -2054,6 +2057,9 @@
 		74F664DA28DF40C80086BA4E /* CMJMyJumpsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMJMyJumpsViewController.swift; sourceTree = "<group>"; };
 		74F664DC28DF40D40086BA4E /* CMJMyJumpsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMJMyJumpsView.swift; sourceTree = "<group>"; };
 		74F664DE28DF40EF0086BA4E /* CMJMyJumpsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMJMyJumpsViewModel.swift; sourceTree = "<group>"; };
+		74F664E028DF5A930086BA4E /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		74F664E328DFBE630086BA4E /* CurrentUserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserManager.swift; sourceTree = "<group>"; };
+		74F664E528E098FB0086BA4E /* FileManager+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extension.swift"; sourceTree = "<group>"; };
 		74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTableViewCell.swift; sourceTree = "<group>"; };
 		74F78B982631BF5600C21077 /* YourWorkoutBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourWorkoutBottomView.swift; sourceTree = "<group>"; };
 		74F78B9D2631D0EC00C21077 /* LaunchMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchMessageController.swift; sourceTree = "<group>"; };
@@ -2105,6 +2111,7 @@
 				74330441289E962B00F2569A /* FirebaseAuth in Frameworks */,
 				74330443289E962B00F2569A /* FirebaseDatabase in Frameworks */,
 				74330447289E962B00F2569A /* FirebaseFirestore in Frameworks */,
+				74F664E128DF5A930086BA4E /* AuthenticationServices.framework in Frameworks */,
 				7404A4B028C926D70034AADC /* RevenueCat in Frameworks */,
 				7404A4AD28C903270034AADC /* StoreKit.framework in Frameworks */,
 				74330449289E962B00F2569A /* FirebaseFirestoreCombine-Community in Frameworks */,
@@ -2241,6 +2248,7 @@
 				748B98AB28635046003226CA /* URL+Extension.swift */,
 				747511AA288DEDB3006720E9 /* UIFont+Extension.swift */,
 				74FA60A428B03081007B2CD8 /* Calendar+Extension.swift */,
+				74F664E528E098FB0086BA4E /* FileManager+Extension.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -3835,6 +3843,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				74F664E228DFBE4F0086BA4E /* UserManager */,
 				74E338CE28CE861500A85E8E /* PurchaseManager */,
 				74EA155E28C53D21000669A8 /* Journal */,
 				74FA609A28AFF7A6007B2CD8 /* InjuryTracker */,
@@ -5227,6 +5236,14 @@
 			path = MyJumps;
 			sourceTree = "<group>";
 		};
+		74F664E228DFBE4F0086BA4E /* UserManager */ = {
+			isa = PBXGroup;
+			children = (
+				74F664E328DFBE630086BA4E /* CurrentUserManager.swift */,
+			);
+			path = UserManager;
+			sourceTree = "<group>";
+		};
 		74F8A6292823F5F7008EB5E9 /* UserSelection */ = {
 			isa = PBXGroup;
 			children = (
@@ -5307,6 +5324,7 @@
 		D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				74F664E028DF5A930086BA4E /* AuthenticationServices.framework */,
 				7404A4AC28C903270034AADC /* StoreKit.framework */,
 				746061BC252547E9005B1480 /* AppTrackingTransparency.framework */,
 			);
@@ -5888,6 +5906,7 @@
 				74FDB5AA268E232A000649CC /* RecordedClipPlayerViewController.swift in Sources */,
 				74104502285D146900A9FF4E /* OnBoardFirstViewController.swift in Sources */,
 				744AED182796FBF6000D2D74 /* WorkoutExerciseCollectionDataSource.swift in Sources */,
+				74F664E428DFBE630086BA4E /* CurrentUserManager.swift in Sources */,
 				742C1C8F27BD81A900DD1BB0 /* DescriptionsViewController.swift in Sources */,
 				7444D0A626D197710009C7A6 /* AddMoreToExerciseCoordinator.swift in Sources */,
 				7479A911229F2B4C00D39E2E /* InTheGym.xcdatamodeld in Sources */,
@@ -5964,6 +5983,7 @@
 				743330B5278B45A9005A0C45 /* EmomCreationTableViewCell.swift in Sources */,
 				741044FD285CC3BA00A9FF4E /* MainCoachCoordinator.swift in Sources */,
 				74028E6425E69B52005A1D21 /* TextFieldReturning.swift in Sources */,
+				74F664E628E098FB0086BA4E /* FileManager+Extension.swift in Sources */,
 				743B16AA270B43B500F4C6C0 /* CustomTimer.swift in Sources */,
 				74FDB5B026A49C17000649CC /* RoundingExtension.swift in Sources */,
 				7420399B28329A3A00074ECB /* MyFollowersView.swift in Sources */,
