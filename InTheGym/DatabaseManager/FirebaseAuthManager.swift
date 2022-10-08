@@ -25,6 +25,9 @@ protocol AuthManagerService {
     func resendEmailVerification(to user: User, completion: @escaping (Bool) -> Void)
     func sendResetPassword(to email: String, completion: @escaping (Bool) -> Void)
     func logout(completion: @escaping (Bool) -> Void)
+    
+    // MARK: - Async
+    func loginAsync(with loginModel: LoginModel) async throws -> Users
 }
 
 class FirebaseAuthManager: AuthManagerService {
@@ -129,6 +132,20 @@ class FirebaseAuthManager: AuthManagerService {
                     return
                 }
             }
+        }
+    }
+    
+    func loginAsync(with loginModel: LoginModel) async throws -> Users {
+        let authResult = try await Auth.auth().signIn(withEmail: loginModel.email, password: loginModel.password)
+        let user = authResult.user
+        if user.isEmailVerified {
+            let searchModel = UserSearchModel(uid: user.uid)
+            let userModel = try await UsersLoaderAsync.shared.load(from: searchModel)
+            FirebaseAuthManager.currentlyLoggedInUser = userModel
+            UserDefaults.currentUser = userModel
+            return userModel
+        } else {
+            throw loginError.emailNotVerified(user)
         }
     }
     

@@ -100,6 +100,14 @@ private extension SettingsViewController {
             UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
             LikeCache.shared.removeAll()
             ClipCache.shared.removeAll()
+            let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
+            Task {
+                do {
+                    try await FirestoreManager.shared.upload(fcmTokenModel)
+                } catch {
+                    print(String(describing: error))
+                }
+            }
 //            PostLoader.shared.removeAll()
             viewModel.loggedOut()
 //            UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: false)

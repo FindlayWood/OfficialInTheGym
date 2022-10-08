@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import FirebaseMessaging
 class LaunchPageViewModel {
     // MARK: - Publishers
     @Published var user: Users?
@@ -32,12 +32,12 @@ class LaunchPageViewModel {
     /// if exists - log in user and background check firebase and replace user model - firebase could contain updates
     /// if not exists - check firebase for user - if still not exist - show initial screen
     func checkForUserDefault() {
-        userService.launch()
-        if userService.currentUser == Users.nilUser {
-            checkFirebase()
-//        }
-//        if UserDefaults.currentUser == Users.nilUser {
+//        userService.launch()
+//        if userService.currentUser == Users.nilUser {
 //            checkFirebase()
+////        }
+        if UserDefaults.currentUser == Users.nilUser {
+            checkFirebase()
         } else {
             user = UserDefaults.currentUser
             FirebaseAuthManager.currentlyLoggedInUser = UserDefaults.currentUser

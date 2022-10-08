@@ -85,7 +85,9 @@ class LoginViewController: UIViewController, Storyboarded {
     
     // MARK: - Actions
     @objc func loginButtonTapped() {
-        viewModel.login()
+        Task {
+            await viewModel.login()
+        }
     }
     @objc func forgotPasswordButtonTapped() {
         coordinator?.forgotPassword()

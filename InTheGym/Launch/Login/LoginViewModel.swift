@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import Firebase
+import FirebaseMessaging
 
 class LoginViewModel {
     
@@ -74,17 +75,49 @@ class LoginViewModel {
     }
     
     // MARK: - Login Function
-    func login() {
+    func login() async {
         isLoading = true
+        do {
+            let userModel = try await apiService.loginAsync(with: loginModel)
+            userSuccessfullyLoggedIn.send(userModel)
+            isLoading = false
+            await updateFCMToken()
+        } catch {
+            let error = error as NSError
+            switch error.code {
+            case AuthErrorCode.userNotFound.rawValue:
+                self.errorWhenLogginIn.send(.invalidCredentials)
+            case AuthErrorCode.invalidEmail.rawValue:
+                self.errorWhenLogginIn.send(.invalidCredentials)
+            default:
+                self.errorWhenLogginIn.send(.unKnown)
+            }
+        }
+        
         apiService.loginUser(with: loginModel) { [weak self] result in
+            guard let self = self else {return}
             switch result {
             case .success(let user):
-                self?.userSuccessfullyLoggedIn.send(user)
-                self?.isLoading = false
+                self.userSuccessfullyLoggedIn.send(user)
+                self.isLoading = false
+                Task {
+                    await self.updateFCMToken()
+                }
             case .failure(let error):
-                self?.errorWhenLogginIn.send(error)
-                self?.isLoading = false
+                self.errorWhenLogginIn.send(error)
+                self.isLoading = false
             }
+        }
+    }
+    
+    func updateFCMToken() async {
+        do {
+            let fcmToken = try await Messaging.messaging().token()
+            let tokenModel = FCMTokenModel(fcmToken: fcmToken, tokenUpdatedDate: .now)
+            try await FirestoreManager.shared.upload(tokenModel)
+            print(fcmToken)
+        } catch {
+            print(String(describing: error))
         }
     }
 

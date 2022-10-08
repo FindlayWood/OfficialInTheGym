@@ -185,6 +185,13 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         }
     }
     
+    func fetchSingleInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model) async throws -> T {
+        let ref = Database.database().reference().child(model.internalPath)
+        let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
+        let data = try snapshot.data(as: T.self)
+        return data
+    }
+    
     func fetchRange<M: FirebaseInstance, T: Decodable>(from models: [M], returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
         var tempModels = [T]()
         let dispatchGroup = DispatchGroup()
@@ -247,6 +254,8 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
             completion(.failure(error))
         }
     }
+    
+    
     
     // MARK: - Check Existence
     func checkExistence<Model:FirebaseInstance>(of model: Model, completion: @escaping(Result<Bool,Error>) -> Void) {
@@ -435,4 +444,7 @@ protocol FirebaseDatabaseManagerService {
     func searchTextQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
     func fetchSingleObjectInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
     func fetchLimitedInstance<Model: FirebaseInstance, T: Decodable>(of model: Model, returning returnType: T.Type, limit: Int, completion: @escaping (Result<[T],Error>) -> Void)
+    
+    // MARK: Async
+    func fetchSingleInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model) async throws -> T
  }

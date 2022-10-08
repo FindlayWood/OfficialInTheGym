@@ -1009,6 +1009,10 @@
 		74F664E128DF5A930086BA4E /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F664E028DF5A930086BA4E /* AuthenticationServices.framework */; };
 		74F664E428DFBE630086BA4E /* CurrentUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F664E328DFBE630086BA4E /* CurrentUserManager.swift */; };
 		74F664E628E098FB0086BA4E /* FileManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F664E528E098FB0086BA4E /* FileManager+Extension.swift */; };
+		74F664E828E8DA6D0086BA4E /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 74F664E728E8DA6D0086BA4E /* FirebaseMessaging */; };
+		74F664EB28EA09320086BA4E /* FCMTokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F664EA28EA09320086BA4E /* FCMTokenModel.swift */; };
+		74F664ED28EA0B400086BA4E /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F664EC28EA0B3F0086BA4E /* FirestoreManager.swift */; };
+		74F664EF28EA0C5D0086BA4E /* FirestoreResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F664EE28EA0C5D0086BA4E /* FirestoreResource.swift */; };
 		74F6E57D24049FB100233438 /* GeneralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */; };
 		74F78B992631BF5600C21077 /* YourWorkoutBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F78B982631BF5600C21077 /* YourWorkoutBottomView.swift */; };
 		74F78B9E2631D0EC00C21077 /* LaunchMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F78B9D2631D0EC00C21077 /* LaunchMessageController.swift */; };
@@ -2060,6 +2064,9 @@
 		74F664E028DF5A930086BA4E /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		74F664E328DFBE630086BA4E /* CurrentUserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserManager.swift; sourceTree = "<group>"; };
 		74F664E528E098FB0086BA4E /* FileManager+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extension.swift"; sourceTree = "<group>"; };
+		74F664EA28EA09320086BA4E /* FCMTokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMTokenModel.swift; sourceTree = "<group>"; };
+		74F664EC28EA0B3F0086BA4E /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
+		74F664EE28EA0C5D0086BA4E /* FirestoreResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreResource.swift; sourceTree = "<group>"; };
 		74F6E57C24049FB100233438 /* GeneralTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTableViewCell.swift; sourceTree = "<group>"; };
 		74F78B982631BF5600C21077 /* YourWorkoutBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourWorkoutBottomView.swift; sourceTree = "<group>"; };
 		74F78B9D2631D0EC00C21077 /* LaunchMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchMessageController.swift; sourceTree = "<group>"; };
@@ -2099,6 +2106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74F664E828E8DA6D0086BA4E /* FirebaseMessaging in Frameworks */,
 				74FA60B128B2DBDF007B2CD8 /* Charts in Frameworks */,
 				74330445289E962B00F2569A /* FirebaseDatabaseSwift in Frameworks */,
 				74A7EB65289EAE92007C2ECD /* SkyFloatingLabelTextField in Frameworks */,
@@ -2156,6 +2164,7 @@
 		74028E0E25E53695005A1D21 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				74F664E928EA09200086BA4E /* FCMTokenModels */,
 				74EA155928C4D192000669A8 /* JumpModels */,
 				74F0C70D284F9C9300FE3A01 /* NavigationModels */,
 				74F0C6FA284E273B00FE3A01 /* ExeerciseModels */,
@@ -2207,6 +2216,7 @@
 				74B48DE027A06E9A00BBFC16 /* FirebaseStorage.swift */,
 				742C1C5A27B46CB100DD1BB0 /* ClipProtocols.swift */,
 				74A602C028510E7A00AFA236 /* DisplayableComment.swift */,
+				74F664EE28EA0C5D0086BA4E /* FirestoreResource.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -4079,6 +4089,7 @@
 				74B6F7642759212B00A72679 /* FirebaseDatabaseManager.swift */,
 				74B48DDA27A06C6000BBFC16 /* ExerciseStatsUpdater.swift */,
 				74B48DDE27A06E4400BBFC16 /* FirebaseStorageManager.swift */,
+				74F664EC28EA0B3F0086BA4E /* FirestoreManager.swift */,
 			);
 			path = DatabaseManager;
 			sourceTree = "<group>";
@@ -5244,6 +5255,14 @@
 			path = UserManager;
 			sourceTree = "<group>";
 		};
+		74F664E928EA09200086BA4E /* FCMTokenModels */ = {
+			isa = PBXGroup;
+			children = (
+				74F664EA28EA09320086BA4E /* FCMTokenModel.swift */,
+			);
+			path = FCMTokenModels;
+			sourceTree = "<group>";
+		};
 		74F8A6292823F5F7008EB5E9 /* UserSelection */ = {
 			isa = PBXGroup;
 			children = (
@@ -5362,6 +5381,7 @@
 				74FA60B028B2DBDF007B2CD8 /* Charts */,
 				74FA60B328B3E500007B2CD8 /* SCLAlertView */,
 				7404A4AF28C926D70034AADC /* RevenueCat */,
+				74F664E728E8DA6D0086BA4E /* FirebaseMessaging */,
 			);
 			productName = InTheGym;
 			productReference = 7479A905229F2B4C00D39E2E /* InTheGym.app */;
@@ -5916,6 +5936,7 @@
 				7479AFA9253F844500E6A79C /* InsideCollectionViewCell.swift in Sources */,
 				74318F4A26B9A072009EDFAC /* DisplayAMRAPShowAllExercisesView.swift in Sources */,
 				749B37B12847A2BE00ADF33D /* EditExerciseCoordinator.swift in Sources */,
+				74F664EB28EA09320086BA4E /* FCMTokenModel.swift in Sources */,
 				74B48DF927A2DCA300BBFC16 /* ThinkingTimeMessages.swift in Sources */,
 				740E5B7B28328965005B03FF /* MyWorkoutsViewController.swift in Sources */,
 				743E933B28099E3F0029F447 /* ProfileHeaderView.swift in Sources */,
@@ -5948,6 +5969,7 @@
 				747B67862600E740000AD6B7 /* TimelineModels.swift in Sources */,
 				74E08A862843951E009D0DCB /* MyWorkloadsViewModel.swift in Sources */,
 				749B37AC28464B0400ADF33D /* CoachRequestsDataSource.swift in Sources */,
+				74F664EF28EA0C5D0086BA4E /* FirestoreResource.swift in Sources */,
 				74C4268B2829A866009ADB70 /* SetSelectionViewModel.swift in Sources */,
 				742C1C4527AC1C7D00DD1BB0 /* CompletedWorkoutUploadModel.swift in Sources */,
 				74C89C852619FA63009F3C72 /* WorkoutCompletedCollectionViewCell.swift in Sources */,
@@ -6315,6 +6337,7 @@
 				744AED1427961A33000D2D74 /* MainWorkoutCollectionCell.swift in Sources */,
 				7459BD6A2641FF640005C530 /* PlayerInitialViewController.swift in Sources */,
 				74221B432642F60C00D05527 /* PlayersCoordinator.swift in Sources */,
+				74F664ED28EA0B400086BA4E /* FirestoreManager.swift in Sources */,
 				7444D07126CD762C0009C7A6 /* AddGroupWorkoutTypeView.swift in Sources */,
 				74EA156528C544F2000669A8 /* JournalHomeViewController.swift in Sources */,
 				7433043C289E8F6500F2569A /* WellnessMainView.swift in Sources */,
@@ -7174,6 +7197,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 74A7EB6B289EB145007C2ECD /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
+		};
+		74F664E728E8DA6D0086BA4E /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7433043F289E962B00F2569A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 		74FA60B028B2DBDF007B2CD8 /* Charts */ = {
 			isa = XCSwiftPackageProductDependency;
