@@ -6,11 +6,13 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
+import Combine
 import SwiftUI
 
 struct MatchTrackerView: View {
     @StateObject var viewModel = MatchTrackerViewModel()
     @State private var isShowingNeMatchSheet = false
+    var tapped = PassthroughSubject<MatchTrackerModel,Never>()
     var body: some View {
         List {
             /// top section to display info about match tracker
@@ -59,6 +61,9 @@ struct MatchTrackerView: View {
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
                         .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+                        .onTapGesture {
+                            tapped.send(model)
+                        }
                 }
             } header: {
                 Text("Previous Matches")

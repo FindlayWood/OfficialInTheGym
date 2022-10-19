@@ -31,6 +31,8 @@ class MatchTrackerCoordinator: NSObject, Coordinator {
 // MARK: - Methods
 extension MatchTrackerCoordinator {
     func showDetail(_ model: MatchTrackerModel) {
-        // TODO: Show Detail
+        let vc = MatchTrackerDetailViewController()
+        vc.matchTrackerModel = model
+        navigationController.pushViewController(vc, animated: true)
     }
 }

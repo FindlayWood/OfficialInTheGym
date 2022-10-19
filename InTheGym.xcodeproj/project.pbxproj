@@ -863,6 +863,8 @@
 		74DA1AEB28F1CA5C00F4DB9E /* MatchTrackerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AEA28F1CA5C00F4DB9E /* MatchTrackerModel.swift */; };
 		74DA1AED28FDBC4300F4DB9E /* MatchTrackerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AEC28FDBC4300F4DB9E /* MatchTrackerListView.swift */; };
 		74DA1AEF29008F8B00F4DB9E /* MatchTrackerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AEE29008F8B00F4DB9E /* MatchTrackerCoordinator.swift */; };
+		74DA1AF1290091B000F4DB9E /* MatchTrackerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AF0290091B000F4DB9E /* MatchTrackerDetailView.swift */; };
+		74DA1AF3290091D200F4DB9E /* MatchTrackerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AF2290091D200F4DB9E /* MatchTrackerDetailViewController.swift */; };
 		74DB061B2303017B00C4A19C /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DB061A2303017B00C4A19C /* ResetPasswordViewController.swift */; };
 		74DC3B67289F240D00DCEAF7 /* WellnessQuestionaireView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DC3B66289F240D00DCEAF7 /* WellnessQuestionaireView.swift */; };
 		74DC3B69289FE87500DCEAF7 /* WellnessStatusRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DC3B68289FE87500DCEAF7 /* WellnessStatusRowView.swift */; };
@@ -1926,6 +1928,8 @@
 		74DA1AEA28F1CA5C00F4DB9E /* MatchTrackerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerModel.swift; sourceTree = "<group>"; };
 		74DA1AEC28FDBC4300F4DB9E /* MatchTrackerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerListView.swift; sourceTree = "<group>"; };
 		74DA1AEE29008F8B00F4DB9E /* MatchTrackerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerCoordinator.swift; sourceTree = "<group>"; };
+		74DA1AF0290091B000F4DB9E /* MatchTrackerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerDetailView.swift; sourceTree = "<group>"; };
+		74DA1AF2290091D200F4DB9E /* MatchTrackerDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerDetailViewController.swift; sourceTree = "<group>"; };
 		74DB061A2303017B00C4A19C /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		74DC3B66289F240D00DCEAF7 /* WellnessQuestionaireView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessQuestionaireView.swift; sourceTree = "<group>"; };
 		74DC3B68289FE87500DCEAF7 /* WellnessStatusRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessStatusRowView.swift; sourceTree = "<group>"; };
@@ -4718,6 +4722,8 @@
 				74DA1AE528F1A9B200F4DB9E /* MatchTrackerViewModel.swift */,
 				74DA1AE728F1BE8B00F4DB9E /* NewMatchTrackerSheet.swift */,
 				74DA1AEC28FDBC4300F4DB9E /* MatchTrackerListView.swift */,
+				74DA1AF0290091B000F4DB9E /* MatchTrackerDetailView.swift */,
+				74DA1AF2290091D200F4DB9E /* MatchTrackerDetailViewController.swift */,
 			);
 			path = MatchTracker;
 			sourceTree = "<group>";
@@ -5973,6 +5979,7 @@
 				7403A61226C9B31D000588CE /* MoreGroupInfoViewModel.swift in Sources */,
 				7479AFA9253F844500E6A79C /* InsideCollectionViewCell.swift in Sources */,
 				74318F4A26B9A072009EDFAC /* DisplayAMRAPShowAllExercisesView.swift in Sources */,
+				74DA1AF1290091B000F4DB9E /* MatchTrackerDetailView.swift in Sources */,
 				749B37B12847A2BE00ADF33D /* EditExerciseCoordinator.swift in Sources */,
 				74F664EB28EA09320086BA4E /* FCMTokenModel.swift in Sources */,
 				74B48DF927A2DCA300BBFC16 /* ThinkingTimeMessages.swift in Sources */,
@@ -5988,6 +5995,7 @@
 				74DE6D7527D10FF2009FB44A /* UsersChildView.swift in Sources */,
 				74D31D2125F974350024CC05 /* SavedWorkoutBottomView.swift in Sources */,
 				748613A827D69BC100D50506 /* SavedWorkoutBottomChildViewController.swift in Sources */,
+				74DA1AF3290091D200F4DB9E /* MatchTrackerDetailViewController.swift in Sources */,
 				7403A61826C9B345000588CE /* MoreGroupInfoView.swift in Sources */,
 				74B48DEA27A1E14A00BBFC16 /* WorkoutKeyModel.swift in Sources */,
 				74B48DE127A06E9A00BBFC16 /* FirebaseStorage.swift in Sources */,
