@@ -58,6 +58,11 @@ extension Date {
         formatter.dateFormat = "dd/MM"
         return formatter.string(from: self)
     }
+    func getMonthYearFormat() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMM yyyy"
+        return formatter.string(from: self)
+    }
     func addOrSubtractDay(day: Int) -> Date? {
       return Calendar.current.date(byAdding: .day, value: day, to: self)
     }

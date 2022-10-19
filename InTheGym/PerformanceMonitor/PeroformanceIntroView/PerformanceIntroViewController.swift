@@ -17,6 +17,7 @@ class PerformanceIntroViewController: UIViewController {
     
     // MARK: - Sub Views
     var mainView = PerformanceIntroMainView()
+    var matchTrackerView = PerformanceIntroSubview(option: .matchTracker)
     var workloadView = PerformanceIntroSubview(option: .workload)
     var wellnessView = PerformanceIntroSubview(option: .wellness)
     var trainingStatusView = PerformanceIntroSubview(option: .trainingStatus)
@@ -82,6 +83,7 @@ class PerformanceIntroViewController: UIViewController {
     // MARK: - Child VC
     func addSubViews() {
         addToStack(mainView)
+        addToStack(matchTrackerView)
         addToStack(workloadView)
         addToStack(wellnessView)
         addToStack(trainingStatusView)
@@ -104,6 +106,8 @@ class PerformanceIntroViewController: UIViewController {
 private extension PerformanceIntroViewController {
     func actionSelected(_ action: PerformanceIntroOptions) {
         switch action {
+        case .matchTracker:
+            coordinator?.showMatchTracker()
         case .workload:
             coordinator?.showWorkload()
         case .wellness:

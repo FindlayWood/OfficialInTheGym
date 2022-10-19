@@ -129,6 +129,16 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         }
     }
     
+    func fetchInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model) async throws -> [T] {
+        let ref = Database.database().reference().child(model.internalPath)
+        let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
+        guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
+            throw NSError(domain: "No snapshto children", code: 0)
+        }
+        let data = children.compactMap { try? $0.data(as: T.self) }
+        return data
+    }
+    
     func fetchSingleInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<T,Error>) -> Void) {
         let DBRef = Database.database().reference().child(model.internalPath)
         DBRef.observeSingleEvent(of: .value) { snapshot in
@@ -253,6 +263,20 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         catch {
             completion(.failure(error))
         }
+    }
+    
+    func uploadAsync<Model: FirebaseInstance>(data: Model) async throws {
+        let dbref = Database.database().reference().child(data.internalPath)
+        try await dbref.setValue(data)
+    }
+    func uploadTimeOrderedModelAsync<Model: FirebaseTimeOrderedModel>(data: inout Model) async throws -> Model {
+        let ref = Database.database().reference().child(data.internalPath).childByAutoId()
+        guard let autoID = ref.key else {
+            throw NSError(domain: "Cant generate auto ID", code: -1)
+        }
+        data.id = autoID
+        try ref.setValue(from: data)
+        return data
     }
     
     
@@ -447,4 +471,7 @@ protocol FirebaseDatabaseManagerService {
     
     // MARK: Async
     func fetchSingleInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model) async throws -> T
+    func uploadAsync<Model: FirebaseInstance>(data: Model) async throws
+    func uploadTimeOrderedModelAsync<Model: FirebaseTimeOrderedModel>(data: inout Model) async throws -> Model
+    func fetchInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model) async throws -> [T]
  }

@@ -73,7 +73,7 @@ struct WellnessScoreModel: Codable, Identifiable {
 }
 
 struct WellnessAnswersModel: Codable, Identifiable {
-    @DocumentID var docID: String?
+//    @DocumentID var docID: String?
     
     var time: Date
     var sleepAmount: Double
@@ -85,6 +85,6 @@ struct WellnessAnswersModel: Codable, Identifiable {
     var status: WellnessStatus
     
     var id: String {
-        docID ?? UUID().uuidString
+        time.description
     }
 }

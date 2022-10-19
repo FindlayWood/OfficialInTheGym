@@ -55,32 +55,38 @@ class WorkloadChildViewModel {
         }
     }
     func acuteLoad(from models: [WorkloadModel]) {
-        let sevenDayModels = models.filter { $0.endTime.daysAgo() < 7 }.map { Double($0.workload) + Double($0.customAddedWorkload ?? 0) }
-        let twentyEightDayModels = models.filter { $0.endTime.daysAgo() < 28 }.map { Double($0.workload) + Double($0.customAddedWorkload ?? 0) }
+        let sevenDayModels = models.filter { $0.endTime.daysAgo() < 7 }.map { Double($0.workload) + Double($0.customAddedWorkload ?? 0) + Double($0.matchWorkload ?? 0) }
+        let twentyEightDayModels = models.filter { $0.endTime.daysAgo() < 28 }.map { Double($0.workload) + Double($0.customAddedWorkload ?? 0) + Double($0.matchWorkload ?? 0) }
         acuteLoad = sevenDayModels.sum()
         chronicLoad = twentyEightDayModels.sum() / 4
     }
     func loadRange(from models: [WorkloadModel], for days: Int = 7) {
         var workloads = Array(repeating: 0.0, count: days)
         var customWorkloads = Array(repeating: 0.0, count: days)
+        var matchWorkloads = Array(repeating: 0.0, count: days)
         let filteredModels = models.filter { $0.endTime.daysAgo() < days }
         workloadsToShow = filteredModels
         let addedWorkloads = getOccurences( filteredModels.map { $0.endTime.daysAgo() }, filteredModels.map { Double($0.workload) })
         let customAddedWorkloads = getOccurences( filteredModels.map { $0.endTime.daysAgo() }, filteredModels.map { Double($0.customAddedWorkload ?? 0) })
+        let matchAddedWorkloads = getOccurences( filteredModels.map { $0.endTime.daysAgo() }, filteredModels.map { Double($0.matchWorkload ?? 0) })
         for (key, value) in addedWorkloads {
             workloads[key] = value
         }
         for (key, value) in customAddedWorkloads {
             customWorkloads[key] = value
         }
-        getChartEntries(from: &workloads, and: &customWorkloads)
+        for (key, value) in matchAddedWorkloads {
+            matchWorkloads[key] = value
+        }
+        getChartEntries(from: &workloads, and: &customWorkloads, match: &matchWorkloads)
     }
-    func getChartEntries(from models: inout [Double], and customModels: inout [Double]) {
+    func getChartEntries(from models: inout [Double], and customModels: inout [Double], match matchWorkloads: inout [Double]) {
         models.reverse()
         customModels.reverse()
+        matchWorkloads.reverse()
         var chartEntries = [BarChartDataEntry]()
         for (key, value) in models.enumerated() {
-            chartEntries.append(BarChartDataEntry(x: Double(key), yValues: [value, customModels[key]]))
+            chartEntries.append(BarChartDataEntry(x: Double(key), yValues: [value, customModels[key], matchWorkloads[key]]))
         }
         setChartData(with: chartEntries)
     }
@@ -96,8 +102,8 @@ class WorkloadChildViewModel {
         let chartData = BarChartData()
         chartData.append(chartDataSet)
         chartData.setDrawValues(false)
-        chartDataSet.colors = [NSUIColor.lightColour, .green]
-        chartDataSet.stackLabels = ["Workload", "Added Workload"]
+        chartDataSet.colors = [NSUIColor.lightColour, .green, .red]
+        chartDataSet.stackLabels = ["Gym", "Added", "Match"]
         barCharData = chartData
         isLoading = false
     }
