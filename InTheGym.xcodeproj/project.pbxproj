@@ -862,6 +862,7 @@
 		74DA1AE828F1BE8B00F4DB9E /* NewMatchTrackerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AE728F1BE8B00F4DB9E /* NewMatchTrackerSheet.swift */; };
 		74DA1AEB28F1CA5C00F4DB9E /* MatchTrackerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AEA28F1CA5C00F4DB9E /* MatchTrackerModel.swift */; };
 		74DA1AED28FDBC4300F4DB9E /* MatchTrackerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AEC28FDBC4300F4DB9E /* MatchTrackerListView.swift */; };
+		74DA1AEF29008F8B00F4DB9E /* MatchTrackerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AEE29008F8B00F4DB9E /* MatchTrackerCoordinator.swift */; };
 		74DB061B2303017B00C4A19C /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DB061A2303017B00C4A19C /* ResetPasswordViewController.swift */; };
 		74DC3B67289F240D00DCEAF7 /* WellnessQuestionaireView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DC3B66289F240D00DCEAF7 /* WellnessQuestionaireView.swift */; };
 		74DC3B69289FE87500DCEAF7 /* WellnessStatusRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DC3B68289FE87500DCEAF7 /* WellnessStatusRowView.swift */; };
@@ -1924,6 +1925,7 @@
 		74DA1AE728F1BE8B00F4DB9E /* NewMatchTrackerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMatchTrackerSheet.swift; sourceTree = "<group>"; };
 		74DA1AEA28F1CA5C00F4DB9E /* MatchTrackerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerModel.swift; sourceTree = "<group>"; };
 		74DA1AEC28FDBC4300F4DB9E /* MatchTrackerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerListView.swift; sourceTree = "<group>"; };
+		74DA1AEE29008F8B00F4DB9E /* MatchTrackerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerCoordinator.swift; sourceTree = "<group>"; };
 		74DB061A2303017B00C4A19C /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		74DC3B66289F240D00DCEAF7 /* WellnessQuestionaireView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessQuestionaireView.swift; sourceTree = "<group>"; };
 		74DC3B68289FE87500DCEAF7 /* WellnessStatusRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessStatusRowView.swift; sourceTree = "<group>"; };
@@ -3698,6 +3700,7 @@
 			children = (
 				745F89EA286F4494000070B2 /* PerformanceHomeCoordinator.swift */,
 				747511AC288DF5B5006720E9 /* CMJCoordinator.swift */,
+				74DA1AEE29008F8B00F4DB9E /* MatchTrackerCoordinator.swift */,
 			);
 			path = PerformanceCoordinators;
 			sourceTree = "<group>";
@@ -5980,6 +5983,7 @@
 				74318F4026B5733F009EDFAC /* PreLiveWorkoutProtocol.swift in Sources */,
 				743330882787401C005A0C45 /* WorkoutCreationViewController.swift in Sources */,
 				74221B412642F5FF00D05527 /* WorkoutsCoordinator.swift in Sources */,
+				74DA1AEF29008F8B00F4DB9E /* MatchTrackerCoordinator.swift in Sources */,
 				7452304828BD2168008F1E8D /* ExerciseTempoModel.swift in Sources */,
 				74DE6D7527D10FF2009FB44A /* UsersChildView.swift in Sources */,
 				74D31D2125F974350024CC05 /* SavedWorkoutBottomView.swift in Sources */,

@@ -9,6 +9,9 @@
 import UIKit
 
 class MatchTrackerViewController: UIViewController {
+    
+    // MARK: - Coordinator
+    weak var coordinator: MatchTrackerCoordinator?
 
     // MARK: - Properties
     var childContentView: MatchTrackerView!
