@@ -40,8 +40,9 @@ class PerformanceHomeCoordinator: Coordinator {
 // MARK: - Flow
 extension PerformanceHomeCoordinator {
     func showMatchTracker() {
-        let vc = MatchTrackerViewController()
-        modalNavigationController.pushViewController(vc, animated: true)
+        let child = MatchTrackerCoordinator(navigationController: modalNavigationController)
+        childCoordinators.append(child)
+        child.start()
     }
     func showWorkload() {
         let vc = PerformanceMonitorViewController()
