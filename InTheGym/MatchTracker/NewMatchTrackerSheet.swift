@@ -11,7 +11,7 @@ import SwiftUI
 struct NewMatchTrackerSheet: View {
     @ObservedObject var viewModel: MatchTrackerViewModel
     @State var placeholder: String = "enter note..."
-    
+    @FocusState private var isNoteFocusses: Bool
     var body: some View {
         NavigationView {
             List {
@@ -30,26 +30,31 @@ struct NewMatchTrackerSheet: View {
                 } header: {
                     Text("Rate Your Overall Performance")
                 }
+                .disabled(viewModel.isUploading)
                 Section {
                     QuestionView(number: $viewModel.technicalRating, title: "Technical Rating", message: "How would you rate your technical performance?")
                 } header: {
                     Text("Physical")
                 }
+                .disabled(viewModel.isUploading)
                 Section {
                     QuestionView(number: $viewModel.tacticalRating, title: "Tactical Rating", message: "How would you rate your tactical performance?")
                 } header: {
                     Text("Technical")
                 }
+                .disabled(viewModel.isUploading)
                 Section {
                     QuestionView(number: $viewModel.physicalRating, title: "Physical Rating", message: "How would you rate your physical performance?")
                 } header: {
                     Text("Tactical")
                 }
+                .disabled(viewModel.isUploading)
                 Section {
                     QuestionView(number: $viewModel.mentalRating, title: "Mental Rating", message: "How would you rate your mental performance?")
                 } header: {
                     Text("Mental")
                 }
+                .disabled(viewModel.isUploading)
                 
                 Section {
                     VStack {
@@ -63,6 +68,7 @@ struct NewMatchTrackerSheet: View {
                             TextEditor(text: $viewModel.note)
                                 .font(.title3.weight(.medium))
                                 .opacity(viewModel.note.isEmpty ? 0.25 : 1)
+                                .focused($isNoteFocusses)
                         }
                         .frame(maxHeight: UIScreen.main.bounds.height * 0.8)
                         Spacer()
@@ -70,15 +76,37 @@ struct NewMatchTrackerSheet: View {
                 } header: {
                     Text("Notes")
                 }
+                .disabled(viewModel.isUploading)
                 
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        viewModel.upload()
+                        viewModel.isShowingNeMatchSheet = false
                     } label: {
-                        Image(systemName: "arrow.up.circle.fill")
+                        Text("Dismiss")
                             .foregroundColor(Color(.darkColour))
+                            .font(.body.bold())
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if viewModel.isUploading {
+                        ProgressView()
+                    } else {
+                        Button {
+                            viewModel.upload()
+                        } label: {
+                            Image(systemName: "arrow.up.circle.fill")
+                                .foregroundColor(Color(.darkColour))
+                        }
+                    }
+                }
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button("Done") {
+                            isNoteFocusses = false
+                        }
                     }
                 }
             }

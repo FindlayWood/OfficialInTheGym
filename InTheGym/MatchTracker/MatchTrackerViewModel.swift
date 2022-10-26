@@ -12,6 +12,8 @@ import FirebaseFirestore
 class MatchTrackerViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var isLoading = false
+    @Published var isUploading = false
+    @Published var isShowingNeMatchSheet = false
     
     // MARK: - Previous Models
     @Published var previousMatchModels: [MatchTrackerModel] = []
@@ -39,17 +41,21 @@ class MatchTrackerViewModel: ObservableObject {
     // MARK: - Load Models
     @MainActor
     func load() async {
+        isLoading = true
         let matchTrackerSearchModel = MatchTrackerSearchModel(id: UserDefaults.currentUser.uid)
         do {
             let models: [MatchTrackerModel] = try await apiService.fetchInstanceAsync(of: matchTrackerSearchModel)
             previousMatchModels = models.sorted(by: { $0.date > $1.date })
+            isLoading = false
         } catch {
             print(String(describing: error))
+            isLoading = false
         }
     }
     
     // MARK: - Methods
     func upload() {
+        isUploading = true
         loadWorkloads()
     }
     
@@ -69,7 +75,7 @@ class MatchTrackerViewModel: ObservableObject {
                     await self.uploadMatchTrackerModel(workloadModel: sorted.first, ratioModel: ratioModel, CMJModel: cmjModel, WellnessModel: wellnessModel)
                 }
             case .failure(let error):
-                self.isLoading = false
+                self.isUploading = true
                 print(String(describing: error))
             }
         }
@@ -105,10 +111,11 @@ class MatchTrackerViewModel: ObservableObject {
             matchWorkloadModel.workoutID = model.id
             let _ = try await apiService.uploadTimeOrderedModelAsync(data: &matchWorkloadModel)
             uploadedMatchTrackerModel = model
-            isLoading = false
+            isUploading = true
+            isShowingNeMatchSheet = false
         } catch {
             print(String(describing: error))
-            isLoading = false
+            isUploading = true
         }
     }
     

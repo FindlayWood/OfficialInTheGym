@@ -11,7 +11,7 @@ import SwiftUI
 
 struct MatchTrackerView: View {
     @StateObject var viewModel = MatchTrackerViewModel()
-    @State private var isShowingNeMatchSheet = false
+    
     var tapped = PassthroughSubject<MatchTrackerModel,Never>()
     var body: some View {
         List {
@@ -39,7 +39,7 @@ struct MatchTrackerView: View {
             /// button to record new match
             Section {
                 Button {
-                    isShowingNeMatchSheet = true
+                    viewModel.isShowingNeMatchSheet = true
                 } label: {
                     HStack {
                         Image("match_icon")
@@ -56,20 +56,29 @@ struct MatchTrackerView: View {
             
             /// section to display previous matches
             Section {
-                ForEach(viewModel.previousMatchModels, id: \.id) { model in
-                    MatchTrackerListView(model: model)
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color.clear)
-                        .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
-                        .onTapGesture {
-                            tapped.send(model)
-                        }
+                if viewModel.isLoading && viewModel.previousMatchModels.isEmpty {
+                    ProgressView()
+                } else if viewModel.previousMatchModels.isEmpty {
+                    Text("No previous matches.")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                } else {
+                    ForEach(viewModel.previousMatchModels, id: \.id) { model in
+                        MatchTrackerListView(model: model)
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                            .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+                            .onTapGesture {
+                                tapped.send(model)
+                            }
+                    }
                 }
+                
             } header: {
                 Text("Previous Matches")
             }
         }
-        .sheet(isPresented: $isShowingNeMatchSheet) {
+        .sheet(isPresented: $viewModel.isShowingNeMatchSheet) {
             NewMatchTrackerSheet(viewModel: viewModel)
         }
         .task {
