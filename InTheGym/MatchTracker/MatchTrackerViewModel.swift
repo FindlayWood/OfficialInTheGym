@@ -42,7 +42,7 @@ class MatchTrackerViewModel: ObservableObject {
         let matchTrackerSearchModel = MatchTrackerSearchModel(id: UserDefaults.currentUser.uid)
         do {
             let models: [MatchTrackerModel] = try await apiService.fetchInstanceAsync(of: matchTrackerSearchModel)
-            previousMatchModels = models
+            previousMatchModels = models.sorted(by: { $0.date > $1.date })
         } catch {
             print(String(describing: error))
         }
@@ -61,11 +61,12 @@ class MatchTrackerViewModel: ObservableObject {
             guard let self = self else {return}
             switch result {
             case .success(let models):
-                let ratioModel = self.loadData(from: models)
+                let sorted = models.sorted(by: { $0.endTime > $1.endTime })
+                let ratioModel = self.loadData(from: sorted)
                 Task {
                     let cmjModel = await self.loadCMJModel()
                     let wellnessModel = await self.loadWellnessModel()
-                    await self.uploadMatchTrackerModel(workloadModel: models.first, ratioModel: ratioModel, CMJModel: cmjModel, WellnessModel: wellnessModel)
+                    await self.uploadMatchTrackerModel(workloadModel: sorted.first, ratioModel: ratioModel, CMJModel: cmjModel, WellnessModel: wellnessModel)
                 }
             case .failure(let error):
                 self.isLoading = false
@@ -122,7 +123,7 @@ class MatchTrackerViewModel: ObservableObject {
     func loadModelRanges(from startDay: Int, to endDay: Int, from models: [WorkloadModel], with size: Int) -> [Double] {
         var workloads = Array(repeating: 0.0, count: size)
         let models = models.filter { $0.endTime.daysAgo() >= startDay && $0.endTime.daysAgo() < endDay }
-        let addedWorkloads = getOccurences( models.map { $0.endTime.daysAgo() }, models.map { Double($0.workload) + Double($0.customAddedWorkload ?? 0) })
+        let addedWorkloads = getOccurences( models.map { $0.endTime.daysAgo() }, models.map { Double($0.workload) + Double($0.customAddedWorkload ?? 0) + Double($0.matchWorkload ?? 0)})
         for (key, value) in addedWorkloads {
             workloads[key - startDay] = value
         }
