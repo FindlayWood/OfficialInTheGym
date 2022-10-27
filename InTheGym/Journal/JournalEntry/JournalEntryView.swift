@@ -29,7 +29,7 @@ struct JournalEntryView: View {
                         .opacity(viewModel.entryText.isEmpty ? 0.25 : 1)
                         .padding()
                 }
-                .frame(maxHeight: UIScreen.main.bounds.height * 0.3)
+                .frame(maxHeight: UIScreen.main.bounds.height * 0.8)
                 Spacer()
             }
             .navigationTitle("Today's Entry")

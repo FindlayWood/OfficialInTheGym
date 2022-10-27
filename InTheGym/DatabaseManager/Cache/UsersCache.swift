@@ -53,3 +53,36 @@ class UsersLoader {
         }
     }
 }
+
+class UsersLoaderAsync {
+    
+    // MARK: - Properties
+    static let shared = UsersLoaderAsync()
+    
+    private init(){}
+    
+    private let cache = Cache<String,Users>()
+    
+    var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
+    
+    typealias completionHandler = ((Result<Users,Error>) -> Void)
+    
+    func load(from searchModel: UserSearchModel) async throws -> Users {
+        if let cached = cache[searchModel.uid] {
+            return cached
+        } else {
+            let userModel: Users = try await apiService.fetchSingleInstanceAsync(of: searchModel)
+            return userModel
+        }
+    }
+    // MARK: - Range Load
+    func loadRange(from searchModels: [UserSearchModel]) async -> [Users] {
+        var rangeOfUsers = [Users]()
+        for model in searchModels {
+            if let userModel = try? await load(from: model) {
+                rangeOfUsers.append(userModel)
+            }
+        }
+        return rangeOfUsers
+    }
+}
