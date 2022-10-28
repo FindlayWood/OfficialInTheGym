@@ -654,7 +654,6 @@
 		7486C20F267A43ED008A1E21 /* WeightAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7486C20E267A43ED008A1E21 /* WeightAdapter.swift */; };
 		7486C211267A4727008A1E21 /* WeightViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7486C210267A4727008A1E21 /* WeightViewModel.swift */; };
 		7486C213267A4D5F008A1E21 /* WeightButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7486C212267A4D5F008A1E21 /* WeightButton.swift */; };
-		748826C1290C19C9001B180D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 748826C0290C19C9001B180D /* GoogleService-Info.plist */; };
 		748915DB2811FBDA001A1EBE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748915DA2811FBDA001A1EBE /* SettingsView.swift */; };
 		748915DE28121D74001A1EBE /* PlayerProfileMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748915DD28121D74001A1EBE /* PlayerProfileMoreView.swift */; };
 		748B403D25236EBD00C947B6 /* SetSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748B403C25236EBD00C947B6 /* SetSelectionViewController.swift */; };
@@ -1721,7 +1720,6 @@
 		7486C20E267A43ED008A1E21 /* WeightAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightAdapter.swift; sourceTree = "<group>"; };
 		7486C210267A4727008A1E21 /* WeightViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightViewModel.swift; sourceTree = "<group>"; };
 		7486C212267A4D5F008A1E21 /* WeightButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightButton.swift; sourceTree = "<group>"; };
-		748826C0290C19C9001B180D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		748915DA2811FBDA001A1EBE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		748915DD28121D74001A1EBE /* PlayerProfileMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreView.swift; sourceTree = "<group>"; };
 		748B403C25236EBD00C947B6 /* SetSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetSelectionViewController.swift; sourceTree = "<group>"; };
@@ -3951,7 +3949,6 @@
 				7479A912229F2B4D00D39E2E /* Assets.xcassets */,
 				7479A914229F2B4D00D39E2E /* LaunchScreen.storyboard */,
 				7479A917229F2B4D00D39E2E /* Info.plist */,
-				748826C0290C19C9001B180D /* GoogleService-Info.plist */,
 				7479A90F229F2B4C00D39E2E /* InTheGym.xcdatamodeld */,
 				74163A4722E4A7AF005A7D2E /* ActivityTableViewCell.swift */,
 				74163A4522E39523005A7D2E /* PlayerTableViewCell.swift */,
@@ -5536,7 +5533,6 @@
 				7479A913229F2B4D00D39E2E /* Assets.xcassets in Resources */,
 				74028E0525E45C0F005A1D21 /* UserCell.xib in Resources */,
 				747B67912600EBAD000AD6B7 /* TimelinePostTableViewCell.xib in Resources */,
-				748826C1290C19C9001B180D /* GoogleService-Info.plist in Resources */,
 				7480EBCB25F5194E00E4E768 /* DisplayPlusTableView.xib in Resources */,
 				74F5472025EE9AB100C1A6A9 /* ProfileTopView.xib in Resources */,
 				747B67A92600F4F3000AD6B7 /* TimelineActivityTableViewCell.xib in Resources */,
