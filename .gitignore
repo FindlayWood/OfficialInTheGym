@@ -5,6 +5,9 @@
 ## Google Services
 GoogleService-Info.plist
 
+# OS-specific files
+.DS_Store
+
 ## User settings
 xcuserdata/
 
