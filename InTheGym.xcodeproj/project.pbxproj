@@ -43,6 +43,7 @@
 		740682FC2890452B00CD9C08 /* PlayerDashBoardDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740682FB2890452B00CD9C08 /* PlayerDashBoardDataSource.swift */; };
 		740682FE2890498600CD9C08 /* PlayerDashBoardCollectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740682FD2890498600CD9C08 /* PlayerDashBoardCollectionCellViewModel.swift */; };
 		740C065A2833EE7D00E9F637 /* WorkoutViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740C06592833EE7D00E9F637 /* WorkoutViewViewModel.swift */; };
+		740CEF32290C22B800AADBBA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 740CEF31290C22B800AADBBA /* GoogleService-Info.plist */; };
 		740E5B7628327D3A005B03FF /* MyClipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740E5B7528327D3A005B03FF /* MyClipsViewController.swift */; };
 		740E5B7828327D50005B03FF /* MyClipsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740E5B7728327D50005B03FF /* MyClipsViewModel.swift */; };
 		740E5B7B28328965005B03FF /* MyWorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740E5B7A28328965005B03FF /* MyWorkoutsViewController.swift */; };
@@ -1110,6 +1111,7 @@
 		740682FB2890452B00CD9C08 /* PlayerDashBoardDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDashBoardDataSource.swift; sourceTree = "<group>"; };
 		740682FD2890498600CD9C08 /* PlayerDashBoardCollectionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDashBoardCollectionCellViewModel.swift; sourceTree = "<group>"; };
 		740C06592833EE7D00E9F637 /* WorkoutViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutViewViewModel.swift; sourceTree = "<group>"; };
+		740CEF31290C22B800AADBBA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		740E5B7528327D3A005B03FF /* MyClipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClipsViewController.swift; sourceTree = "<group>"; };
 		740E5B7728327D50005B03FF /* MyClipsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClipsViewModel.swift; sourceTree = "<group>"; };
 		740E5B7A28328965005B03FF /* MyWorkoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorkoutsViewController.swift; sourceTree = "<group>"; };
@@ -3949,6 +3951,7 @@
 				7479A912229F2B4D00D39E2E /* Assets.xcassets */,
 				7479A914229F2B4D00D39E2E /* LaunchScreen.storyboard */,
 				7479A917229F2B4D00D39E2E /* Info.plist */,
+				740CEF31290C22B800AADBBA /* GoogleService-Info.plist */,
 				7479A90F229F2B4C00D39E2E /* InTheGym.xcdatamodeld */,
 				74163A4722E4A7AF005A7D2E /* ActivityTableViewCell.swift */,
 				74163A4522E39523005A7D2E /* PlayerTableViewCell.swift */,
@@ -5533,6 +5536,7 @@
 				7479A913229F2B4D00D39E2E /* Assets.xcassets in Resources */,
 				74028E0525E45C0F005A1D21 /* UserCell.xib in Resources */,
 				747B67912600EBAD000AD6B7 /* TimelinePostTableViewCell.xib in Resources */,
+				740CEF32290C22B800AADBBA /* GoogleService-Info.plist in Resources */,
 				7480EBCB25F5194E00E4E768 /* DisplayPlusTableView.xib in Resources */,
 				74F5472025EE9AB100C1A6A9 /* ProfileTopView.xib in Resources */,
 				747B67A92600F4F3000AD6B7 /* TimelineActivityTableViewCell.xib in Resources */,
