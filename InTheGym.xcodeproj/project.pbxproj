@@ -525,7 +525,6 @@
 		7459BD682641F8C20005C530 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7459BD672641F8C20005C530 /* MainCoordinator.swift */; };
 		7459BD6A2641FF640005C530 /* PlayerInitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7459BD692641FF640005C530 /* PlayerInitialViewController.swift */; };
 		745B330325782FF100594019 /* CompletedWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B330225782FF100594019 /* CompletedWorkoutViewController.swift */; };
-		745D0E7822A007A3007670E3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 745D0E7722A007A3007670E3 /* GoogleService-Info.plist */; };
 		745D0E7A22A17E26007670E3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745D0E7922A17E26007670E3 /* LoginViewController.swift */; };
 		745D0E7C22A17ED2007670E3 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745D0E7B22A17ED2007670E3 /* SignUpViewController.swift */; };
 		745DA4DC2562AE2300FDA053 /* WorkloadDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DA4DB2562AE2300FDA053 /* WorkloadDisplayViewController.swift */; };
@@ -655,6 +654,7 @@
 		7486C20F267A43ED008A1E21 /* WeightAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7486C20E267A43ED008A1E21 /* WeightAdapter.swift */; };
 		7486C211267A4727008A1E21 /* WeightViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7486C210267A4727008A1E21 /* WeightViewModel.swift */; };
 		7486C213267A4D5F008A1E21 /* WeightButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7486C212267A4D5F008A1E21 /* WeightButton.swift */; };
+		748826C1290C19C9001B180D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 748826C0290C19C9001B180D /* GoogleService-Info.plist */; };
 		748915DB2811FBDA001A1EBE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748915DA2811FBDA001A1EBE /* SettingsView.swift */; };
 		748915DE28121D74001A1EBE /* PlayerProfileMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748915DD28121D74001A1EBE /* PlayerProfileMoreView.swift */; };
 		748B403D25236EBD00C947B6 /* SetSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748B403C25236EBD00C947B6 /* SetSelectionViewController.swift */; };
@@ -1586,7 +1586,6 @@
 		7459BD672641F8C20005C530 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		7459BD692641FF640005C530 /* PlayerInitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerInitialViewController.swift; sourceTree = "<group>"; };
 		745B330225782FF100594019 /* CompletedWorkoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedWorkoutViewController.swift; sourceTree = "<group>"; };
-		745D0E7722A007A3007670E3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		745D0E7922A17E26007670E3 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		745D0E7B22A17ED2007670E3 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		745DA4DB2562AE2300FDA053 /* WorkloadDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkloadDisplayViewController.swift; sourceTree = "<group>"; };
@@ -1722,6 +1721,7 @@
 		7486C20E267A43ED008A1E21 /* WeightAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightAdapter.swift; sourceTree = "<group>"; };
 		7486C210267A4727008A1E21 /* WeightViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightViewModel.swift; sourceTree = "<group>"; };
 		7486C212267A4D5F008A1E21 /* WeightButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightButton.swift; sourceTree = "<group>"; };
+		748826C0290C19C9001B180D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		748915DA2811FBDA001A1EBE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		748915DD28121D74001A1EBE /* PlayerProfileMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreView.swift; sourceTree = "<group>"; };
 		748B403C25236EBD00C947B6 /* SetSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetSelectionViewController.swift; sourceTree = "<group>"; };
@@ -3951,7 +3951,7 @@
 				7479A912229F2B4D00D39E2E /* Assets.xcassets */,
 				7479A914229F2B4D00D39E2E /* LaunchScreen.storyboard */,
 				7479A917229F2B4D00D39E2E /* Info.plist */,
-				745D0E7722A007A3007670E3 /* GoogleService-Info.plist */,
+				748826C0290C19C9001B180D /* GoogleService-Info.plist */,
 				7479A90F229F2B4C00D39E2E /* InTheGym.xcdatamodeld */,
 				74163A4722E4A7AF005A7D2E /* ActivityTableViewCell.swift */,
 				74163A4522E39523005A7D2E /* PlayerTableViewCell.swift */,
@@ -5532,11 +5532,11 @@
 				7480EBC625F5136800E4E768 /* DisplayWorkout.xib in Resources */,
 				74FCFA4C261541640064699F /* MyInfoTableViewCell.xib in Resources */,
 				741E62B6263C63D700D51BC7 /* AppInformationTwoTableViewCell.xib in Resources */,
-				745D0E7822A007A3007670E3 /* GoogleService-Info.plist in Resources */,
 				74226E0E2637148E0074E616 /* PrivateCreatedWorkoutTableViewCell.xib in Resources */,
 				7479A913229F2B4D00D39E2E /* Assets.xcassets in Resources */,
 				74028E0525E45C0F005A1D21 /* UserCell.xib in Resources */,
 				747B67912600EBAD000AD6B7 /* TimelinePostTableViewCell.xib in Resources */,
+				748826C1290C19C9001B180D /* GoogleService-Info.plist in Resources */,
 				7480EBCB25F5194E00E4E768 /* DisplayPlusTableView.xib in Resources */,
 				74F5472025EE9AB100C1A6A9 /* ProfileTopView.xib in Resources */,
 				747B67A92600F4F3000AD6B7 /* TimelineActivityTableViewCell.xib in Resources */,
