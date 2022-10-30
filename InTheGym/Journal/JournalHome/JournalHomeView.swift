@@ -14,11 +14,18 @@ struct JournalHomeView: View {
     
     var body: some View {
         List {
+            
             Section {
-                if viewModel.isLoading {
-                    ProgressView()
-                } else if viewModel.hasEnteredToday {
-                    if let entry = viewModel.todayEntry {
+                Button {
+                    viewModel.addNewEntryAction()
+                } label: {
+                    Text("Add new journal entry")
+                }
+            }
+            
+            if !viewModel.todayEntry.isEmpty {
+                Section {
+                    ForEach(viewModel.todayEntry) { entry in
                         VStack(alignment: .leading) {
                             Text(entry.date, format: .dateTime.day().month().year())
                                 .foregroundColor(.secondary)
@@ -29,16 +36,13 @@ struct JournalHomeView: View {
                                 .multilineTextAlignment(.leading)
                                 .lineLimit(3)
                         }
+                        .onTapGesture {
+                            viewModel.selectedEntry = entry
+                        }
                     }
-                } else {
-                    Button {
-                        viewModel.isShowingNewEntrySheet = true
-                    } label: {
-                        Text("Add today's journal entry")
-                    }
+                } header: {
+                    Text("Today's Entries")
                 }
-            } header: {
-                Text("Today's Entry")
             }
             
             Section {
@@ -53,16 +57,22 @@ struct JournalHomeView: View {
                             .multilineTextAlignment(.leading)
                             .lineLimit(3)
                     }
+                    .onTapGesture {
+                        viewModel.selectedEntry = entry
+                    }
                 }
             } header: {
-                Text("Previous Entries")
+                Text("All Entries")
             }
         }
         .fullScreenCover(isPresented: $viewModel.isShowingNewEntrySheet) {
             JournalEntryView { model in
-                viewModel.journalEntries.append(model)
+                viewModel.newEntryAdded(model)
             }
         }
+        .fullScreenCover(item: $viewModel.selectedEntry, content: { item in
+            ViewJournalEntryView(entry: item)
+        })
         .task {
             await viewModel.getJournalEntries()
         }

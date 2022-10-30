@@ -15,7 +15,8 @@ class JournalHomeViewModel: ObservableObject {
     @Published var isShowingNewEntrySheet = false
     @Published private(set) var hasEnteredToday: Bool = false
     @Published var journalEntries: [JournalEntryModel] = []
-    @Published private(set) var todayEntry: JournalEntryModel?
+    @Published private(set) var todayEntry: [JournalEntryModel] = []
+    @Published var selectedEntry: JournalEntryModel?
     // MARK: - Properties
     
     // MARK: - Methods
@@ -30,15 +31,25 @@ class JournalHomeViewModel: ObservableObject {
             journalEntries = data
             let mostRecentEntry = try await mostRecentEntryRef.getDocument().data(as: JournalEntryModel.self)
             let calendar = NSCalendar.current
-            if calendar.isDateInToday(mostRecentEntry.date) {
-                hasEnteredToday = true
+            journalEntries.forEach { model in
+                if calendar.isDateInToday(model.date) {
+                    todayEntry.append(model)
+                }
             }
-            todayEntry = mostRecentEntry
             isLoading = false
         } catch {
             print(String(describing: error))
             isLoading = false
         }
+    }
+    
+    @MainActor
+    func addNewEntryAction() {
+        isShowingNewEntrySheet = true
+    }
+    func newEntryAdded(_ model: JournalEntryModel) {
+        todayEntry.insert(model, at: 0)
+        journalEntries.insert(model, at: 0)
     }
 }
 
