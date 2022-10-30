@@ -1056,6 +1056,7 @@
 		74FDB5B726A77F04000649CC /* ClipModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB5B626A77F04000649CC /* ClipModels.swift */; };
 		74FDB5B926B0C42D000649CC /* ViewClipBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB5B826B0C42D000649CC /* ViewClipBottomView.swift */; };
 		74FDB97D25A4978A00CC18EF /* DiscoverPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB97C25A4978A00CC18EF /* DiscoverPageViewController.swift */; };
+		9FA4F1EB290EE7AF00757860 /* ViewJournalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2117,6 +2118,7 @@
 		74FDB5B626A77F04000649CC /* ClipModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipModels.swift; sourceTree = "<group>"; };
 		74FDB5B826B0C42D000649CC /* ViewClipBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipBottomView.swift; sourceTree = "<group>"; };
 		74FDB97C25A4978A00CC18EF /* DiscoverPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageViewController.swift; sourceTree = "<group>"; };
+		9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewJournalEntryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4988,6 +4990,7 @@
 		74EA155E28C53D21000669A8 /* Journal */ = {
 			isa = PBXGroup;
 			children = (
+				9FA4F1E9290EE79E00757860 /* ViewJournalEntry */,
 				74EA156628C54862000669A8 /* JournalEntry */,
 				74EA155F28C53D3A000669A8 /* JournalHome */,
 			);
@@ -5381,6 +5384,14 @@
 				7403D05B280B7E6C00268CEC /* ClipProfileCustomCoordinator.swift */,
 			);
 			path = ClipCoordinator;
+			sourceTree = "<group>";
+		};
+		9FA4F1E9290EE79E00757860 /* ViewJournalEntry */ = {
+			isa = PBXGroup;
+			children = (
+				9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */,
+			);
+			path = ViewJournalEntry;
 			sourceTree = "<group>";
 		};
 		D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */ = {
@@ -6529,6 +6540,7 @@
 				74AF6D6A268A325E005C52A8 /* DisplayExerciseStatsView.swift in Sources */,
 				7403D05E280CA65500268CEC /* UIClipThumbnailsView.swift in Sources */,
 				742C1C7627BAEA5000DD1BB0 /* GroupCommentSectionCoordinator.swift in Sources */,
+				9FA4F1EB290EE7AF00757860 /* ViewJournalEntryView.swift in Sources */,
 				749B37A8284646E000ADF33D /* CoachRequestCellModel.swift in Sources */,
 				74330439289E8F1500F2569A /* WellnessMainViewController.swift in Sources */,
 				74AF6D6D268B6D23005C52A8 /* RecordClipViewController.swift in Sources */,

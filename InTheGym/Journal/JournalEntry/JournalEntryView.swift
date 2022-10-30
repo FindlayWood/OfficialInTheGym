@@ -32,7 +32,12 @@ struct JournalEntryView: View {
                 .frame(maxHeight: UIScreen.main.bounds.height * 0.8)
                 Spacer()
             }
-            .navigationTitle("Today's Entry")
+            .onChange(of: viewModel.uploaded, perform: { newValue in
+                if newValue {
+                    dismiss()
+                }
+            })
+            .navigationTitle("New Entry")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -45,19 +50,23 @@ struct JournalEntryView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        Task {
-                            do {
-                                let newEntry = try await viewModel.uploadNewEntry()
-                                action(newEntry)
-                                dismiss()
+                    if viewModel.isUploading {
+                        ProgressView()
+                    } else {
+                        Button {
+                            Task {
+                                do {
+                                    let newEntry = try await viewModel.uploadNewEntry()
+                                    action(newEntry)
+                                    dismiss()
+                                }
                             }
+                        } label: {
+                            Image(systemName: "arrow.up.circle.fill")
+                                .foregroundColor(viewModel.canUpload ? Color(.darkColour) : Color(.darkColour).opacity(0.3))
                         }
-                    } label: {
-                        Image(systemName: "arrow.up.circle.fill")
-                            .foregroundColor(viewModel.canUpload ? Color(.darkColour) : Color(.darkColour).opacity(0.3))
+                        .disabled(!viewModel.canUpload)
                     }
-                    .disabled(!viewModel.canUpload)
                 }
             }
         }
