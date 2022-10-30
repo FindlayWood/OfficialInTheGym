@@ -85,10 +85,14 @@ struct CMJModel: Codable {
     var maxDate: Date
 }
 
-struct CMJHistoyModel: Codable {
+struct CMJHistoyModel: Codable, Identifiable {
     var date: Date
     var height: Double
     var peakPower: Double
     var averagePower: Double
     var fatigueLevel: CMJFatigueLevel
+    
+    var id: Double {
+        date.timeIntervalSince1970
+    }
 }

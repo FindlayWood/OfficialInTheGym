@@ -138,7 +138,7 @@ private extension CMJHomeViewController {
             coordinator?.measurementsModel = measurementModel
             coordinator?.recordNewJump()
         case .myJumps:
-            print("not done")
+            coordinator?.showMyJumps()
         case .myMeasurements:
             coordinator?.showMeasurements()
         }

@@ -66,4 +66,9 @@ extension CMJCoordinator: JumpCoordinatorFlow {
         vc.modalPresentationStyle = .fullScreen
         navigationController.present(vc, animated: true)
     }
+    
+    func showMyJumps() {
+        let vc = CMJMyJumpsViewController()
+        navigationController.pushViewController(vc, animated: true)
+    }
 }

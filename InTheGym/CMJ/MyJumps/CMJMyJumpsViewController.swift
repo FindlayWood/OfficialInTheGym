@@ -10,21 +10,20 @@ import UIKit
 
 class CMJMyJumpsViewController: UIViewController {
 
+    // MARK: - Properties
+    var childContentView: CMJMyJumpsView!
+    // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        addChildView()
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.title = "My CMJ Jumps"
     }
-    */
-
+    // MARK: - Swift UI Child View
+    func addChildView() {
+        childContentView = .init()
+        addSwiftUIView(childContentView)
+    }
 }
