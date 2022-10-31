@@ -63,6 +63,7 @@ extension JumpCoordinator: JumpCoordinatorFlow {
         navigationController.present(vc, animated: true)
     }
     func jumpHistory() {
-        
+        let vc = PreviousJumpsViewController()
+        navigationController.pushViewController(vc, animated: true)
     }
 }

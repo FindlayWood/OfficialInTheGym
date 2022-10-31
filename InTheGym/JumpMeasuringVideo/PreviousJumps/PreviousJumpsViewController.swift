@@ -1,17 +1,17 @@
 //
-//  CMJMyJumpsViewController.swift
+//  PreviousJumpsViewController.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 24/09/2022.
+//  Created by Findlay-Personal on 31/10/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import UIKit
 
-class CMJMyJumpsViewController: UIViewController {
+class PreviousJumpsViewController: UIViewController {
 
     // MARK: - Properties
-    var childContentView: CMJMyJumpsView!
+    var childContentView: PreviousJumpsView!
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +19,7 @@ class CMJMyJumpsViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.title = "My CMJ Jumps"
+        navigationItem.title = "My Vertical Jumps"
     }
     // MARK: - Swift UI Child View
     func addChildView() {

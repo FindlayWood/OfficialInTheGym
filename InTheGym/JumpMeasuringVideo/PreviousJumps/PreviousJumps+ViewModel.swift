@@ -1,41 +1,41 @@
 //
-//  CMJMyJumpsViewModel.swift
+//  PreviousJumps+ViewModel.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 24/09/2022.
+//  Created by Findlay-Personal on 31/10/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import Foundation
 import FirebaseFirestore
 
-extension CMJMyJumpsView {
+extension PreviousJumpsView {
     
-    @MainActor
     final class ViewModel: ObservableObject {
         // MARK: - Published Properties
-        @Published var isLoading: Bool = false
-        @Published var jumpModels: [CMJHistoyModel] = []
+        @Published private(set) var isLoading = false
+        @Published private(set) var jumpModels: [VerticalJumpModel] = []
         @Published private(set) var sortedByDate = true
         @Published var measurement: JumpMeasurement = .cm
         
         // MARK: - Properties
-        var sortedModels: [CMJHistoyModel] {
+        var sortedModels: [VerticalJumpModel] {
             if sortedByDate {
-                return jumpModels.sorted(by: { $0.date > $1.date })
+                return jumpModels.sorted(by: { $0.time > $1.time })
             } else {
                 return jumpModels.sorted(by: {$0.height > $1.height })
             }
         }
         
         // MARK: - Methods
+        @MainActor
         func loadModels() async {
             isLoading = true
-            let docRef = Firestore.firestore().collection("CMJ").document(UserDefaults.currentUser.uid).collection("Results")
+            let docRef = Firestore.firestore().collection("VerticalJump").document(UserDefaults.currentUser.uid).collection("Results")
             do {
                 let snapshot = try await docRef.getDocuments()
-                let models = snapshot.documents.compactMap { try? $0.data(as: CMJHistoyModel.self) }
-                jumpModels = models.sorted(by: { $0.date > $1.date })
+                let models = snapshot.documents.compactMap { try? $0.data(as: VerticalJumpModel.self) }
+                jumpModels = models.sorted(by: { $0.time > $1.time })
                 isLoading = false
             } catch {
                 print(String(describing: error))

@@ -1,17 +1,15 @@
 //
-//  CMJMyJumpsView.swift
+//  PreviousJumpsView.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 24/09/2022.
+//  Created by Findlay-Personal on 31/10/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import SwiftUI
 
-struct CMJMyJumpsView: View {
-    
-    @StateObject var viewModel = ViewModel()
-    
+struct PreviousJumpsView: View {
+    @StateObject private var viewModel = ViewModel()
     var body: some View {
         List {
             Section {
@@ -59,50 +57,35 @@ struct CMJMyJumpsView: View {
             }
             .listRowBackground(Color.clear)
             
-            if viewModel.isLoading {
-                ProgressView()
-            } else if viewModel.jumpModels.isEmpty {
-                Text("No Recorded CMJ Jumps")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-            } else {
-                ForEach(viewModel.sortedModels) { model in
+            Section {
+                ForEach(viewModel.sortedModels, id: \.time) { model in
                     VStack {
                         HStack {
-                            Text(model.date, format: .dateTime.day().month())
+                            Text(model.time, format: .dateTime.day().month())
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             Spacer()
                         }
                         HStack {
-                            
-                            VStack {
-                                if viewModel.measurement == .cm {
-                                    Text("\(model.height, specifier: "%.2f")cm")
-                                        .font(.headline)
-                                        .foregroundColor(Color(.darkColour))
-                                } else {
-                                    Text("\(model.height.convertCMtoInches(), specifier: "%.2f")in")
-                                        .font(.headline)
-                                        .foregroundColor(Color(.darkColour))
-                                }
-                                Text("Jump Height")
-                            }
-                            VStack {
-                                Text(model.peakPower, format: .number)
-                                    .font(.headline)
+                            Spacer()
+                            if viewModel.measurement == .cm {
+                                Text("\(model.height, specifier: "%.2f")cm")
+                                    .font(.largeTitle.bold())
                                     .foregroundColor(Color(.darkColour))
-                                Text("Peak Power")
+                            } else {
+                                Text("\(model.height.convertCMtoInches(), specifier: "%.2f")in")
+                                    .font(.largeTitle.bold())
+                                    .foregroundColor(Color(.darkColour))
                             }
-                        }
-                        .padding(.bottom)
-                        VStack {
-                            Text(model.fatigueLevel.title)
-                                .font(.headline)
-                            Text("Fatigue Level")
+                            Spacer()
                         }
                     }
                 }
+            } header: {
+                HStack {
+                    Text("Previous Jumps")
+                }
+                
             }
         }
         .task {
@@ -111,8 +94,8 @@ struct CMJMyJumpsView: View {
     }
 }
 
-struct CMJMyJumpsView_Previews: PreviewProvider {
+struct PreviousJumpsView_Previews: PreviewProvider {
     static var previews: some View {
-        CMJMyJumpsView()
+        PreviousJumpsView()
     }
 }
