@@ -11,6 +11,7 @@ import SwiftUI
 struct InjuryTrackerView: View {
     @StateObject var viewModel = InjuryTrackerViewModel()
     @State private var isShowingSheet = false
+    @State var selectedInjury: InjuryModel?
     
     var body: some View {
         List {
@@ -25,16 +26,11 @@ struct InjuryTrackerView: View {
                                 HStack(spacing: 0) {
                                     Text("Recovery time: ")
                                     Text((model.recoveryTime - Calendar.current.numberOfDaysBetween(model.dateOccured, and: .now)), format: .number)
-                                    Text("days")
+                                    Text(" days")
                                 }
-                                
-                                if !model.recovered {
-                                    Button {
-                                        print("recovered")
-                                    } label: {
-                                        Text("Mark as Recovered")
-                                    }
-                                }
+                            }
+                            .onTapGesture {
+                                selectedInjury = model
                             }
                         }
                     }
@@ -50,6 +46,8 @@ struct InjuryTrackerView: View {
                         Text("Add new Injury")
                     }
                 }
+            } header: {
+                Text("New Injury")
             }
             
             Section("Injury History") {
@@ -61,6 +59,9 @@ struct InjuryTrackerView: View {
         .sheet(isPresented: $isShowingSheet) {
             AddNewInjuryView(viewModel: viewModel)
         }
+        .sheet(item: $selectedInjury, content: { model in
+            InjuryDetailView(viewModel: viewModel, injuryModel: model)
+        })
         .task {
             await viewModel.loadModels()
         }
@@ -84,5 +85,6 @@ struct InjuryRow: View {
                 .font(.footnote)
                 .foregroundColor(.secondary)
         }
+        .padding(.bottom)
     }
 }

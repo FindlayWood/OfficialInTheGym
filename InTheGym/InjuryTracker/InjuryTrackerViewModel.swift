@@ -7,6 +7,7 @@
 //
 
 import FirebaseFirestore
+import FirebaseFirestoreSwift
 import Foundation
 
 
@@ -74,10 +75,25 @@ class InjuryTrackerViewModel: ObservableObject {
             return recoveryTime * 30
         }
     }
+    
+    func markInjuryAsRecovered(_ model: InjuryModel) async {
+        let docRef = Firestore.firestore().collection("InjuryStatus").document(UserDefaults.currentUser.uid)
+        
+        do {
+            try await docRef.updateData(["recovered": true])
+            if let docID = model.docID {
+                let detailDocRef = Firestore.firestore().collection("InjuryStatus").document(UserDefaults.currentUser.uid).collection("statusUpdates").document(docID)
+                try await detailDocRef.updateData(["recovered": true])
+            }
+        } catch {
+            print(String(describing: error))
+        }
+    }
 }
 
 
 struct InjuryModel: Identifiable, Codable, Comparable {
+    @DocumentID var docID: String?
     var dateOccured: Date
     var recoveryTime: Int /// days
     var recovered: Bool
