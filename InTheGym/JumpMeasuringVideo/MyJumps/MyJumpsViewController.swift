@@ -52,7 +52,7 @@ private extension MyJumpsViewController {
             coordinator?.maxModel = viewModel.maxModel
             coordinator?.recordNewJump()
         case .previousJumps:
-            print("not done")
+            coordinator?.jumpHistory()
         case .help:
             coordinator?.instructions()
         }
