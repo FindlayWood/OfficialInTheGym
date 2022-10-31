@@ -20,7 +20,7 @@ struct VerticalJumpHomeView: View {
                     Image("jump_icon")
                         .resizable()
                         .frame(width: 60, height: 60)
-                    Text("Welcome to the vertical jump measurement. Here you can measure the height of your vertical jump. Save jumps to the database to keep track of your jump history.")
+                    Text("Welcome to the vertical jump measurement. Here you can measure the height of your vertical jump.")
                         .font(.body.weight(.medium))
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
@@ -29,6 +29,33 @@ struct VerticalJumpHomeView: View {
             }
             .listRowBackground(Color.clear)
             
+            Section {
+                if viewModel.isLoading {
+                    ProgressView()
+                } else if let max = viewModel.maxModel {
+                    VStack {
+                        HStack {
+                            Text(max.time, format: .dateTime.day().month())
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Spacer()
+                        }
+                        HStack {
+                            Spacer()
+                            Text("\(max.height, specifier: "%.2f")cm")
+                                .font(.largeTitle.bold())
+                                .foregroundColor(Color(.darkColour))
+                            Spacer()
+                        }
+                    }
+                } else {
+                    Text("No Jumps recorded.")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                }
+            } header: {
+                Text("Max Jump Height")
+            }
             
             Section {
                 Button {

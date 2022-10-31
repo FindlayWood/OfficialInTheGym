@@ -18,7 +18,6 @@ class MyJumpsViewController: UIViewController {
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
         addChildView()
         initViewModel()
     }
@@ -29,7 +28,7 @@ class MyJumpsViewController: UIViewController {
     // MARK: - Swift UI Child View
     func addChildView() {
         childContentView = .init(viewModel: viewModel)
-        addSwiftUIViewWithNavBar(childContentView)
+        addSwiftUIView(childContentView)
     }
     // MARK: - View Model
     func initViewModel() {
