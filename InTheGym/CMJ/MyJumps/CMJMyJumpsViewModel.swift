@@ -16,6 +16,17 @@ extension CMJMyJumpsView {
         // MARK: - Published Properties
         @Published var isLoading: Bool = false
         @Published var jumpModels: [CMJHistoyModel] = []
+        @Published private(set) var sortedByDate = true
+        @Published var measurement: JumpMeasurement = .cm
+        
+        // MARK: - Properties
+        var sortedModels: [CMJHistoyModel] {
+            if sortedByDate {
+                return jumpModels.sorted(by: { $0.date > $1.date })
+            } else {
+                return jumpModels.sorted(by: {$0.height > $1.height })
+            }
+        }
         
         // MARK: - Methods
         func loadModels() async {
@@ -30,6 +41,10 @@ extension CMJMyJumpsView {
                 print(String(describing: error))
                 isLoading = false
             }
+        }
+        
+        func sortedByDate(_ value: Bool) {
+            sortedByDate = value
         }
     }
 }
