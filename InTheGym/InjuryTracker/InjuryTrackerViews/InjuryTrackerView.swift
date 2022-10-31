@@ -29,6 +29,7 @@ struct InjuryTrackerView: View {
                                     Text(" days")
                                 }
                             }
+                            .contentShape(Rectangle())
                             .onTapGesture {
                                 selectedInjury = model
                             }

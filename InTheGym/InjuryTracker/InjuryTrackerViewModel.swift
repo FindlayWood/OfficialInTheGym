@@ -47,7 +47,8 @@ class InjuryTrackerViewModel: ObservableObject {
         if severity == .light {
             status = .minorInjury
         }
-        let newModel = InjuryModel(dateOccured: .now,
+        let newModel = InjuryModel(id: UUID().uuidString,
+                                   dateOccured: .now,
                                    recoveryTime: getRecoveryDays(recoveryTime, recoveryTimeOptions),
                                    recovered: false,
                                    bodyPart: bodyPart,
@@ -81,10 +82,8 @@ class InjuryTrackerViewModel: ObservableObject {
         
         do {
             try await docRef.updateData(["recovered": true])
-            if let docID = model.docID {
-                let detailDocRef = Firestore.firestore().collection("InjuryStatus").document(UserDefaults.currentUser.uid).collection("statusUpdates").document(docID)
-                try await detailDocRef.updateData(["recovered": true])
-            }
+            let detailDocRef = Firestore.firestore().collection("InjuryStatus").document(UserDefaults.currentUser.uid).collection("statusUpdates").document(model.id)
+            try await detailDocRef.updateData(["recovered": true])
         } catch {
             print(String(describing: error))
         }
@@ -93,17 +92,13 @@ class InjuryTrackerViewModel: ObservableObject {
 
 
 struct InjuryModel: Identifiable, Codable, Comparable {
-    @DocumentID var docID: String?
+    var id: String
     var dateOccured: Date
     var recoveryTime: Int /// days
     var recovered: Bool
     var bodyPart: String
     var severity: InjurySeverity
     var status: InjuryStatus
-    
-    var id: String {
-        UUID().uuidString
-    }
     
     static func < (lhs: InjuryModel, rhs: InjuryModel) -> Bool {
         lhs.dateOccured > rhs.dateOccured
