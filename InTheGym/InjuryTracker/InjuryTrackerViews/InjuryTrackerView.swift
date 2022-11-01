@@ -52,8 +52,14 @@ struct InjuryTrackerView: View {
             }
             
             Section("Injury History") {
-                ForEach(viewModel.previousInjuries) { model in
-                    InjuryRow(model: model)
+                if viewModel.previousInjuries.isEmpty {
+                    Text("No previous injuries")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                } else {
+                    ForEach(viewModel.previousInjuries) { model in
+                        InjuryRow(model: model)
+                    }
                 }
             }
         }
