@@ -21,7 +21,7 @@ class InjuryTrackerViewModel: ObservableObject {
     @MainActor
     func loadModels() async {
         isLoading = true
-        let bdref = Firestore.firestore().collection("InjuryStatus/\(UserDefaults.currentUser.uid)/statusUpdates")
+        let bdref = Firestore.firestore().collection("InjuryStatus").document(UserDefaults.currentUser.uid).collection("statusUpdates")
         let currentRef = Firestore.firestore().collection("InjuryStatus").document(UserDefaults.currentUser.uid)
         
         do {
