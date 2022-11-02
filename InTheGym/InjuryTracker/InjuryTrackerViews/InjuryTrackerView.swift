@@ -11,30 +11,20 @@ import SwiftUI
 struct InjuryTrackerView: View {
     @StateObject var viewModel = InjuryTrackerViewModel()
     @State private var isShowingSheet = false
+    @State var selectedInjury: InjuryModel?
     
     var body: some View {
         List {
-            if viewModel.currentInjury != nil || viewModel.isLoading {
+            if viewModel.currentInjury != nil && (viewModel.currentInjury?.recovered == false) || viewModel.isLoading {
                 Section("Current Injury") {
                     if viewModel.isLoading {
                         ProgressView()
                     } else {
                         if let model = viewModel.currentInjury {
-                            VStack(alignment: .leading) {
+                            Button {
+                                selectedInjury = model
+                            } label: {
                                 InjuryRow(model: model)
-                                HStack(spacing: 0) {
-                                    Text("Recovery time: ")
-                                    Text((model.recoveryTime - Calendar.current.numberOfDaysBetween(model.dateOccured, and: .now)), format: .number)
-                                    Text("days")
-                                }
-                                
-                                if !model.recovered {
-                                    Button {
-                                        print("recovered")
-                                    } label: {
-                                        Text("Mark as Recovered")
-                                    }
-                                }
                             }
                         }
                     }
@@ -50,17 +40,32 @@ struct InjuryTrackerView: View {
                         Text("Add new Injury")
                     }
                 }
+            } header: {
+                Text("New Injury")
             }
             
             Section("Injury History") {
-                ForEach(viewModel.previousInjuries) { model in
-                    InjuryRow(model: model)
+                if viewModel.previousInjuries.isEmpty {
+                    Text("No previous injuries")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                } else {
+                    ForEach(viewModel.previousInjuries) { model in
+                        Button {
+                            selectedInjury = model
+                        } label: {
+                            InjuryRow(model: model)
+                        }
+                    }
                 }
             }
         }
         .sheet(isPresented: $isShowingSheet) {
             AddNewInjuryView(viewModel: viewModel)
         }
+        .sheet(item: $selectedInjury, content: { model in
+            InjuryDetailView(viewModel: viewModel, injuryModel: model)
+        })
         .task {
             await viewModel.loadModels()
         }
@@ -83,6 +88,13 @@ struct InjuryRow: View {
             Text(model.dateOccured, format: .dateTime.day().month().year())
                 .font(.footnote)
                 .foregroundColor(.secondary)
+            HStack(spacing: 0) {
+                Text("Recovery time: ")
+                Text((model.recoveryTime - Calendar.current.numberOfDaysBetween(model.dateOccured, and: .now)), format: .number)
+                Text(" days")
+            }
+            .font(.footnote)
+            .foregroundColor(.secondary)
         }
     }
 }

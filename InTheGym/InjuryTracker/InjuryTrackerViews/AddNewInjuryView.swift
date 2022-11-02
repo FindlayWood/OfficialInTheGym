@@ -11,21 +11,46 @@ import SwiftUI
 struct AddNewInjuryView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var viewModel: InjuryTrackerViewModel
-
+    @FocusState private var isDescriptionFocussed: Bool
     
     var body: some View {
         NavigationView {
             List {
                 Section {
                     TextField("enter body part of injury", text: $viewModel.bodyPart)
+                        .disabled(viewModel.uploading)
                 } header: {
                     Text("Body Part")
                 } footer: {
                     Text("Enter the body part where your injury has occurred. Be specific - this helps you and your coaches/trainers.")
                 }
+                Section {
+                    VStack {
+                        ZStack {
+                            if viewModel.description.isEmpty {
+                                TextEditor(text: $viewModel.placeholder)
+                                    .font(.body.weight(.medium))
+                                    .foregroundColor(Color(.tertiaryLabel))
+                                    .disabled(true)
+                                    .frame(height: 200)
+                            }
+                            TextEditor(text: $viewModel.description)
+                                .font(.body.weight(.medium))
+                                .opacity(viewModel.description.isEmpty ? 0.25 : 1)
+                                .focused($isDescriptionFocussed)
+                                .frame(height: 200)
+                                .disabled(viewModel.uploading)
+                        }
+                        Spacer()
+                    }
+                } header: {
+                    Text("Description")
+                } footer: {
+                    Text("Enter more detail about the injury, including how it occurred and where the pain is coming from.")
+                }
                 
                 Section {
-                    HStack {
+                    VStack {
                         TextField("estimated recovery time...", value: $viewModel.recoveryTime, format: .number)
                         Picker("Recovery Time", selection: $viewModel.recoveryTimeOptions) {
                             ForEach(RecoveryTimeOptions.allCases, id: \.self) { option in
@@ -34,12 +59,10 @@ struct AddNewInjuryView: View {
                         }
                         .pickerStyle(.menu)
                     }
-                    
-                    Toggle("Send Notification", isOn: $viewModel.sendNotification)
                 } header: {
                     Text("Recovery Time")
                 } footer: {
-                    Text("Enter the estimated recovery time in days for this injury. If send notification is on, we will send you a notification when the recovery time is up.")
+                    Text("Enter the estimated recovery time in days for this injury.")
                 }
                 
                 Section {
@@ -58,9 +81,11 @@ struct AddNewInjuryView: View {
                 Section {
                     Button {
                         viewModel.addNewInjury()
+                        dismiss()
                     } label: {
                         Text("Submit Injury Report")
-                    }.disabled(viewModel.bodyPart == "")
+                    }
+                    .disabled(viewModel.bodyPart == "" || viewModel.uploading)
                 } header: {
                     Text("Submit")
                 }
@@ -75,6 +100,19 @@ struct AddNewInjuryView: View {
                         Image(systemName: "xmark")
                             .font(.body)
                             .foregroundColor(Color(.darkColour))
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if viewModel.uploading {
+                        ProgressView()
+                    }
+                }
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button("Done") {
+                            isDescriptionFocussed = false
+                        }
                     }
                 }
             }

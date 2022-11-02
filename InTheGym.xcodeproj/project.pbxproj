@@ -1060,6 +1060,7 @@
 		9FA4F1EE290FECD800757860 /* PreviousJumpsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */; };
 		9FA4F1F0290FECF800757860 /* PreviousJumps+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */; };
 		9FA4F1F2290FEEC100757860 /* PreviousJumpsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1F1290FEEC100757860 /* PreviousJumpsViewController.swift */; };
+		9FA4F1F429102E7400757860 /* InjuryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1F329102E7400757860 /* InjuryDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2125,6 +2126,7 @@
 		9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousJumpsView.swift; sourceTree = "<group>"; };
 		9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviousJumps+ViewModel.swift"; sourceTree = "<group>"; };
 		9FA4F1F1290FEEC100757860 /* PreviousJumpsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousJumpsViewController.swift; sourceTree = "<group>"; };
+		9FA4F1F329102E7400757860 /* InjuryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuryDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5341,6 +5343,7 @@
 			children = (
 				74FA60A028AFF834007B2CD8 /* InjuryTrackerView.swift */,
 				74FA60A228B0034B007B2CD8 /* AddNewInjuryView.swift */,
+				9FA4F1F329102E7400757860 /* InjuryDetailView.swift */,
 			);
 			path = InjuryTrackerViews;
 			sourceTree = "<group>";
@@ -5617,6 +5620,7 @@
 				74B48DEC27A1FCBF00BBFC16 /* PostReferencesModel.swift in Sources */,
 				744AED52279B08AB000D2D74 /* WorkouCollectionDataSource.swift in Sources */,
 				7410450B285D439100A9FF4E /* OnBoardMainView.swift in Sources */,
+				9FA4F1F429102E7400757860 /* InjuryDetailView.swift in Sources */,
 				74FA60A328B0034B007B2CD8 /* AddNewInjuryView.swift in Sources */,
 				74F2CCE626E2E98700D7AD79 /* AddMoreNoteViewController.swift in Sources */,
 				74DE6D7227D10FC2009FB44A /* UsersChildViewController.swift in Sources */,
