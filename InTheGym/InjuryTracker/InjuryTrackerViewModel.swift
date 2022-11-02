@@ -17,6 +17,11 @@ class InjuryTrackerViewModel: ObservableObject {
     @Published var currentInjury: InjuryModel?
     @Published var previousInjuries: [InjuryModel] = []
     
+    @Published var uploading = false
+    @Published var uploaded = false
+    @Published var description: String = ""
+    @Published var placeholder: String = "enter description..."
+    
     // MARK: - Methods
     @MainActor
     func loadModels() async {
@@ -42,7 +47,9 @@ class InjuryTrackerViewModel: ObservableObject {
     @Published var sendNotification = true
     @Published var severity: InjurySeverity = .moderate
     
+    @MainActor
     func addNewInjury() {
+        uploading = true
         var status: InjuryStatus = .injured
         if severity == .light {
             status = .minorInjury
@@ -52,17 +59,20 @@ class InjuryTrackerViewModel: ObservableObject {
                                    recoveryTime: getRecoveryDays(recoveryTime, recoveryTimeOptions),
                                    recovered: false,
                                    bodyPart: bodyPart,
+                                   description: description,
                                    severity: severity,
                                    status: status)
         let docRef = Firestore.firestore().collection("InjuryStatus").document(UserDefaults.currentUser.uid)
-        let historyRef = Firestore.firestore().collection("InjuryStatus/\(UserDefaults.currentUser.uid)/statusUpdates").document()
+        let historyRef = Firestore.firestore().collection("InjuryStatus/\(UserDefaults.currentUser.uid)/statusUpdates").document(newModel.id)
         do {
             try docRef.setData(from: newModel)
             try historyRef.setData(from: newModel)
             previousInjuries.append(newModel)
             currentInjury = newModel
+            uploading = false
         } catch {
             print(String(describing: error))
+            uploading = false
         }
     }
     
@@ -81,7 +91,9 @@ class InjuryTrackerViewModel: ObservableObject {
         let docRef = Firestore.firestore().collection("InjuryStatus").document(UserDefaults.currentUser.uid)
         
         do {
-            try await docRef.updateData(["recovered": true])
+            if currentInjury?.id == model.id {
+                try await docRef.updateData(["recovered": true])
+            }
             let detailDocRef = Firestore.firestore().collection("InjuryStatus").document(UserDefaults.currentUser.uid).collection("statusUpdates").document(model.id)
             try await detailDocRef.updateData(["recovered": true])
         } catch {
@@ -97,6 +109,7 @@ struct InjuryModel: Identifiable, Codable, Comparable {
     var recoveryTime: Int /// days
     var recovered: Bool
     var bodyPart: String
+    var description: String
     var severity: InjurySeverity
     var status: InjuryStatus
     

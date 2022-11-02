@@ -15,23 +15,16 @@ struct InjuryTrackerView: View {
     
     var body: some View {
         List {
-            if viewModel.currentInjury != nil || viewModel.isLoading {
+            if viewModel.currentInjury != nil && (viewModel.currentInjury?.recovered == false) || viewModel.isLoading {
                 Section("Current Injury") {
                     if viewModel.isLoading {
                         ProgressView()
                     } else {
                         if let model = viewModel.currentInjury {
-                            VStack(alignment: .leading) {
-                                InjuryRow(model: model)
-                                HStack(spacing: 0) {
-                                    Text("Recovery time: ")
-                                    Text((model.recoveryTime - Calendar.current.numberOfDaysBetween(model.dateOccured, and: .now)), format: .number)
-                                    Text(" days")
-                                }
-                            }
-                            .contentShape(Rectangle())
-                            .onTapGesture {
+                            Button {
                                 selectedInjury = model
+                            } label: {
+                                InjuryRow(model: model)
                             }
                         }
                     }
@@ -58,7 +51,11 @@ struct InjuryTrackerView: View {
                         .foregroundColor(.secondary)
                 } else {
                     ForEach(viewModel.previousInjuries) { model in
-                        InjuryRow(model: model)
+                        Button {
+                            selectedInjury = model
+                        } label: {
+                            InjuryRow(model: model)
+                        }
                     }
                 }
             }
@@ -91,7 +88,13 @@ struct InjuryRow: View {
             Text(model.dateOccured, format: .dateTime.day().month().year())
                 .font(.footnote)
                 .foregroundColor(.secondary)
+            HStack(spacing: 0) {
+                Text("Recovery time: ")
+                Text((model.recoveryTime - Calendar.current.numberOfDaysBetween(model.dateOccured, and: .now)), format: .number)
+                Text(" days")
+            }
+            .font(.footnote)
+            .foregroundColor(.secondary)
         }
-        .padding(.bottom)
     }
 }

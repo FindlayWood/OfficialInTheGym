@@ -24,6 +24,15 @@ struct InjuryDetailView: View {
                 }
                 
                 Section {
+                    Text(injuryModel.description)
+                        .multilineTextAlignment(.leading)
+                        .font(.body)
+                        .foregroundColor(.primary)
+                } header: {
+                    Text("Description")
+                }
+                
+                Section {
                     Text("Start Date: \(injuryModel.dateOccured, format: .dateTime.day().month().year())")
                     Text("Estimated Recovery Time: \(injuryModel.recoveryTime) days")
                     if let estimatedRecoveryDate {
