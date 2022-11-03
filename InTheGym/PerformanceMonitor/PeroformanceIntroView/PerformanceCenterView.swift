@@ -22,10 +22,11 @@ struct PerformanceCenterView: View {
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                 ForEach(PerformanceIntroOptions.allCases, id: \.self) { option in
-                    PerformanceCenterOptionView(option: option)
-                        .onTapGesture {
-                            viewModel.action.send(option)
-                        }
+                    Button {
+                        viewModel.action.send(option)
+                    } label: {
+                        PerformanceCenterOptionView(option: option)
+                    }
                 }
             }
             .padding(.horizontal)

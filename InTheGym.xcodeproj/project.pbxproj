@@ -1061,6 +1061,15 @@
 		9FA4F1F0290FECF800757860 /* PreviousJumps+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */; };
 		9FA4F1F2290FEEC100757860 /* PreviousJumpsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1F1290FEEC100757860 /* PreviousJumpsViewController.swift */; };
 		9FA4F1F429102E7400757860 /* InjuryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1F329102E7400757860 /* InjuryDetailView.swift */; };
+		9FB0F29229142D7D00BF222E /* PracticeTrackerHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29129142D7D00BF222E /* PracticeTrackerHomeViewController.swift */; };
+		9FB0F29429142D8C00BF222E /* PracticeTrackerHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29329142D8C00BF222E /* PracticeTrackerHomeView.swift */; };
+		9FB0F29629142DD900BF222E /* PracticeTrackerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29529142DD900BF222E /* PracticeTrackerViewModel.swift */; };
+		9FB0F29829142E0B00BF222E /* PracticeTrackerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29729142E0B00BF222E /* PracticeTrackerModel.swift */; };
+		9FB0F29A2914306900BF222E /* NewPracticeTrackerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F2992914306900BF222E /* NewPracticeTrackerSheet.swift */; };
+		9FB0F29C2914323B00BF222E /* PracticeTrackerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29B2914323B00BF222E /* PracticeTrackerListView.swift */; };
+		9FB0F29E2914331E00BF222E /* PracticeTrackerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29D2914331E00BF222E /* PracticeTrackerCoordinator.swift */; };
+		9FB0F2A129147F1700BF222E /* PracticeTrackerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F2A029147F1700BF222E /* PracticeTrackerDetailViewController.swift */; };
+		9FB0F2A329147F2E00BF222E /* PracticeTrackerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2127,6 +2136,15 @@
 		9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviousJumps+ViewModel.swift"; sourceTree = "<group>"; };
 		9FA4F1F1290FEEC100757860 /* PreviousJumpsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousJumpsViewController.swift; sourceTree = "<group>"; };
 		9FA4F1F329102E7400757860 /* InjuryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuryDetailView.swift; sourceTree = "<group>"; };
+		9FB0F29129142D7D00BF222E /* PracticeTrackerHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerHomeViewController.swift; sourceTree = "<group>"; };
+		9FB0F29329142D8C00BF222E /* PracticeTrackerHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerHomeView.swift; sourceTree = "<group>"; };
+		9FB0F29529142DD900BF222E /* PracticeTrackerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerViewModel.swift; sourceTree = "<group>"; };
+		9FB0F29729142E0B00BF222E /* PracticeTrackerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerModel.swift; sourceTree = "<group>"; };
+		9FB0F2992914306900BF222E /* NewPracticeTrackerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPracticeTrackerSheet.swift; sourceTree = "<group>"; };
+		9FB0F29B2914323B00BF222E /* PracticeTrackerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerListView.swift; sourceTree = "<group>"; };
+		9FB0F29D2914331E00BF222E /* PracticeTrackerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerCoordinator.swift; sourceTree = "<group>"; };
+		9FB0F2A029147F1700BF222E /* PracticeTrackerDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerDetailViewController.swift; sourceTree = "<group>"; };
+		9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3716,6 +3734,7 @@
 				745F89EA286F4494000070B2 /* PerformanceHomeCoordinator.swift */,
 				747511AC288DF5B5006720E9 /* CMJCoordinator.swift */,
 				74DA1AEE29008F8B00F4DB9E /* MatchTrackerCoordinator.swift */,
+				9FB0F29D2914331E00BF222E /* PracticeTrackerCoordinator.swift */,
 			);
 			path = PerformanceCoordinators;
 			sourceTree = "<group>";
@@ -3884,6 +3903,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				9FB0F29029142D6500BF222E /* PracticeTracker */,
 				74DA1AE028F1A98600F4DB9E /* MatchTracker */,
 				74F664E228DFBE4F0086BA4E /* UserManager */,
 				74E338CE28CE861500A85E8E /* PurchaseManager */,
@@ -4743,6 +4763,7 @@
 			isa = PBXGroup;
 			children = (
 				74DA1AEA28F1CA5C00F4DB9E /* MatchTrackerModel.swift */,
+				9FB0F29729142E0B00BF222E /* PracticeTrackerModel.swift */,
 			);
 			path = PerformanceModels;
 			sourceTree = "<group>";
@@ -5414,6 +5435,28 @@
 			path = PreviousJumps;
 			sourceTree = "<group>";
 		};
+		9FB0F29029142D6500BF222E /* PracticeTracker */ = {
+			isa = PBXGroup;
+			children = (
+				9FB0F29F29147EEB00BF222E /* PracticeDetail */,
+				9FB0F29129142D7D00BF222E /* PracticeTrackerHomeViewController.swift */,
+				9FB0F29329142D8C00BF222E /* PracticeTrackerHomeView.swift */,
+				9FB0F29529142DD900BF222E /* PracticeTrackerViewModel.swift */,
+				9FB0F2992914306900BF222E /* NewPracticeTrackerSheet.swift */,
+				9FB0F29B2914323B00BF222E /* PracticeTrackerListView.swift */,
+			);
+			path = PracticeTracker;
+			sourceTree = "<group>";
+		};
+		9FB0F29F29147EEB00BF222E /* PracticeDetail */ = {
+			isa = PBXGroup;
+			children = (
+				9FB0F2A029147F1700BF222E /* PracticeTrackerDetailViewController.swift */,
+				9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */,
+			);
+			path = PracticeDetail;
+			sourceTree = "<group>";
+		};
 		D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -5696,6 +5739,7 @@
 				742FD585283FF1D60025E43C /* TagAndExerciseCellModel.swift in Sources */,
 				744B52C127CA8E7E00B9D45B /* OptionsEnum.swift in Sources */,
 				7444D0DE26D68E850009C7A6 /* WorkoutEndoints.swift in Sources */,
+				9FB0F29229142D7D00BF222E /* PracticeTrackerHomeViewController.swift in Sources */,
 				7416CCD12655897B0043B1C2 /* RepsView.swift in Sources */,
 				74EE4EBC27E3AADE00051451 /* DescriptionUploadView.swift in Sources */,
 				74EE4ED727E8B9F700051451 /* UserClipsModel.swift in Sources */,
@@ -5716,6 +5760,7 @@
 				742039AA2832B47A00074ECB /* PublicFollowersViewModel.swift in Sources */,
 				74DE6D7A27D1145E009FB44A /* GroupMembersViewController.swift in Sources */,
 				742FD57A283FB2B50025E43C /* DiscoverMoreTagsView.swift in Sources */,
+				9FB0F29829142E0B00BF222E /* PracticeTrackerModel.swift in Sources */,
 				741EC121284BDCBC009B00AB /* AddWorkoutSummaryViewModel.swift in Sources */,
 				74221B452642F61900D05527 /* MyProfileCoordinator.swift in Sources */,
 				74D9345D282EF54F005D15DE /* ProfileInfoTableViewCell.swift in Sources */,
@@ -5855,6 +5900,7 @@
 				74DA1AEB28F1CA5C00F4DB9E /* MatchTrackerModel.swift in Sources */,
 				7492264E22D7873300EAD386 /* TableViewCell.swift in Sources */,
 				741BA3A6271B198A00E99C6E /* ReplayJumpMeasureView.swift in Sources */,
+				9FB0F2A329147F2E00BF222E /* PracticeTrackerDetailView.swift in Sources */,
 				74FDB5B726A77F04000649CC /* ClipModels.swift in Sources */,
 				742FD581283FCF430025E43C /* AddNewTagView.swift in Sources */,
 				74318F4426B80DF7009EDFAC /* CreateCircuitView.swift in Sources */,
@@ -5900,6 +5946,7 @@
 				742C1CAB27C27C2600DD1BB0 /* Programs.swift in Sources */,
 				7444D08726D0117D0009C7A6 /* DisplaySingleSetView.swift in Sources */,
 				743330D82790FB14005A0C45 /* PlayerWorkoutsViewModel.swift in Sources */,
+				9FB0F29C2914323B00BF222E /* PracticeTrackerListView.swift in Sources */,
 				742C1C4F27B2B4DF00DD1BB0 /* RecordedClipPlayerViewModel.swift in Sources */,
 				7444D0D626D432D50009C7A6 /* UploadCellProtocol.swift in Sources */,
 				74F45CC9260A9D0400AF16DF /* PublicTimelineViewModel.swift in Sources */,
@@ -6008,6 +6055,7 @@
 				7479A911229F2B4C00D39E2E /* InTheGym.xcdatamodeld in Sources */,
 				744C9CD725F3C450004B03DF /* WorkoutDelegate.swift in Sources */,
 				742C1C9A27BD96A000DD1BB0 /* DescriptionTableViewCell.swift in Sources */,
+				9FB0F29429142D8C00BF222E /* PracticeTrackerHomeView.swift in Sources */,
 				7403A61226C9B31D000588CE /* MoreGroupInfoViewModel.swift in Sources */,
 				7479AFA9253F844500E6A79C /* InsideCollectionViewCell.swift in Sources */,
 				74318F4A26B9A072009EDFAC /* DisplayAMRAPShowAllExercisesView.swift in Sources */,
@@ -6069,6 +6117,7 @@
 				74F8A62D2823FD48008EB5E9 /* UserSelectionCellModel.swift in Sources */,
 				742FD587284004040025E43C /* SearchTagCoordinator.swift in Sources */,
 				74EEA754270C992A00911A77 /* Int+Extension.swift in Sources */,
+				9FB0F29E2914331E00BF222E /* PracticeTrackerCoordinator.swift in Sources */,
 				742FF36D277B880900AEE3D2 /* PostReplies.swift in Sources */,
 				74F5468A25E96DAA00C1A6A9 /* UploadPostViewModel.swift in Sources */,
 				74DE6D7F27D11E39009FB44A /* SavedWorkoutsChildViewController.swift in Sources */,
@@ -6202,6 +6251,7 @@
 				742FCD202845658B007ED1C6 /* MyCoachesViewModel.swift in Sources */,
 				748FFA2E285397D0001DDE69 /* OptimalWorkloadRatioView.swift in Sources */,
 				74EE4EDB28009CFE00051451 /* UIProfileInfoView.swift in Sources */,
+				9FB0F29629142DD900BF222E /* PracticeTrackerViewModel.swift in Sources */,
 				7444D0BE26D3C86F0009C7A6 /* UploadingWorkoutProtocol.swift in Sources */,
 				741FB1C32667DFE50039EB29 /* DiscoverWorkout.swift in Sources */,
 				7479812B27DA6DC200CF3F9B /* LikeCache.swift in Sources */,
@@ -6213,6 +6263,7 @@
 				7444D0C826D3F7D40009C7A6 /* UploadableWorkout.swift in Sources */,
 				74EE4EDF2804634500051451 /* LiveWorkoutModel.swift in Sources */,
 				74C126BA2819B1EB00C3B171 /* CoachProfileMoreView.swift in Sources */,
+				9FB0F29A2914306900BF222E /* NewPracticeTrackerSheet.swift in Sources */,
 				74478E1C26BDE58600D8178E /* PublicCreatedWorkoutsCoordinator.swift in Sources */,
 				74104524285FD44700A9FF4E /* PlayerDetailButtonSubviewViewController.swift in Sources */,
 				741EC11F284BDCA8009B00AB /* AddWorkoutSummaryViewController.swift in Sources */,
@@ -6330,6 +6381,7 @@
 				74F18AE627D66D920043551F /* CoachPlayerWorkoutViewController.swift in Sources */,
 				7444D07C26CE98FB0009C7A6 /* UploadGroupWorkoutView.swift in Sources */,
 				742FCD1D284532E6007ED1C6 /* ExerciseMaxHistoryDataSource.swift in Sources */,
+				9FB0F2A129147F1700BF222E /* PracticeTrackerDetailViewController.swift in Sources */,
 				74AF6D5C2686799A005C52A8 /* DisplayExerciseStatsModel.swift in Sources */,
 				743330812785E540005A0C45 /* WorkoutTableViewController.swift in Sources */,
 				74D31E8B25FC13060024CC05 /* FollowersDisplayViewController.swift in Sources */,

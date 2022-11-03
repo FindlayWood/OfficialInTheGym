@@ -44,6 +44,11 @@ extension PerformanceHomeCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    func showPracticeTracker() {
+        let child = PracticeTrackerCoordinator(navigationController: modalNavigationController)
+        childCoordinators.append(child)
+        child.start()
+    }
     func showWorkload() {
         let vc = PerformanceMonitorViewController()
         vc.viewModel.user = user

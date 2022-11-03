@@ -17,6 +17,7 @@ class PerformanceIntroViewModel {
 
 enum PerformanceIntroOptions: CaseIterable {
     case matchTracker
+    case practiceTracker
     case workload
     case wellness
     case trainingStatus
@@ -29,6 +30,8 @@ enum PerformanceIntroOptions: CaseIterable {
         switch self {
         case .matchTracker:
             return UIImage(named: "contest_icon")!
+        case .practiceTracker:
+            return UIImage(named: "circuit_icon")!
         case .workload:
             return UIImage(named: "bar-chart_icon")!
         case .wellness:
@@ -50,6 +53,8 @@ enum PerformanceIntroOptions: CaseIterable {
         switch self {
         case .matchTracker:
             return "Match Tracker"
+        case .practiceTracker:
+            return "Practice Tracker"
         case .workload:
             return "Workload"
         case .wellness:
@@ -71,6 +76,8 @@ enum PerformanceIntroOptions: CaseIterable {
         switch self {
         case .matchTracker:
             return "Track and record all matches/games/competitions."
+        case .practiceTracker:
+            return "Track and record all practice sessions."
         case .workload:
             return "Monitor your workload."
         case .wellness:

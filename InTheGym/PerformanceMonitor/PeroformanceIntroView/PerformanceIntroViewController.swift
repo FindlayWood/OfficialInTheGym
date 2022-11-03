@@ -18,6 +18,7 @@ class PerformanceIntroViewController: UIViewController {
     // MARK: - Sub Views
     var mainView = PerformanceIntroMainView()
     var matchTrackerView = PerformanceIntroSubview(option: .matchTracker)
+    var practiceTrackerView = PerformanceIntroSubview(option: .practiceTracker)
     var workloadView = PerformanceIntroSubview(option: .workload)
     var wellnessView = PerformanceIntroSubview(option: .wellness)
     var trainingStatusView = PerformanceIntroSubview(option: .trainingStatus)
@@ -32,16 +33,11 @@ class PerformanceIntroViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
     
 //    // MARK: - View
-//    override func loadView() {
-//        view = display
-//    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemBackground
         addChildView()
         initViewModel()
-//        initTargets()
-//        addSubViews()
         initNavBar()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -122,6 +118,8 @@ private extension PerformanceIntroViewController {
             coordinator?.showInjuryTracker()
         case .journal:
             coordinator?.showJournalHome()
+        case .practiceTracker:
+            coordinator?.showPracticeTracker()
         }
     }
     @objc func dismissButtonAction(_ sender: UIButton) {
