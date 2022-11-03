@@ -17,6 +17,7 @@ struct WorkloadModel: Hashable {
     var workload: Int
     var customAddedWorkload: Int?
     var matchWorkload: Int?
+    var practiceWorkload: Int?
     var workoutID: String?
 }
 extension WorkloadModel: FirebaseTimeOrderedModel {

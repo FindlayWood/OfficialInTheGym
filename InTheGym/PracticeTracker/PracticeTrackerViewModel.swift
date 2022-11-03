@@ -1,27 +1,29 @@
 //
-//  MatchTrackerViewModel.swift
+//  PracticeTrackerViewModel.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 08/10/2022.
+//  Created by Findlay-Personal on 03/11/2022.
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
 import Foundation
 import FirebaseFirestore
 
-class MatchTrackerViewModel: ObservableObject {
+class PracticeTrackerViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var isLoading = false
     @Published var isUploading = false
     @Published var isShowingNeMatchSheet = false
     
     // MARK: - Previous Models
-    @Published var previousMatchModels: [MatchTrackerModel] = []
+    @Published var previousPracticeModels: [PracticeTrackerModel] = []
     
     // MARK: - New Model
-    @Published var uploadedMatchTrackerModel: MatchTrackerModel?
+    @Published var uploadedPracticeTrackerModel: PracticeTrackerModel?
     
     // MARK: - Ratings
+    @Published var rpe: Int = 5
+    @Published var duration: Double = 60
     @Published var overallRating: Int = 5
     @Published var physicalRating: Int = 5
     @Published var technicalRating: Int = 5
@@ -42,10 +44,10 @@ class MatchTrackerViewModel: ObservableObject {
     @MainActor
     func load() async {
         isLoading = true
-        let matchTrackerSearchModel = MatchTrackerSearchModel(id: UserDefaults.currentUser.uid)
+        let matchTrackerSearchModel = PracticeTrackerSearchModel(id: UserDefaults.currentUser.uid)
         do {
-            let models: [MatchTrackerModel] = try await apiService.fetchInstanceAsync(of: matchTrackerSearchModel)
-            previousMatchModels = models.sorted(by: { $0.date > $1.date })
+            let models: [PracticeTrackerModel] = try await apiService.fetchInstanceAsync(of: matchTrackerSearchModel)
+            previousPracticeModels = models.sorted(by: { $0.date > $1.date })
             isLoading = false
         } catch {
             print(String(describing: error))
@@ -84,7 +86,7 @@ class MatchTrackerViewModel: ObservableObject {
     // MARK: - Upload
     @MainActor
     func uploadMatchTrackerModel(workloadModel: WorkloadModel?, ratioModel: RatioModel?, CMJModel: CMJModel?, WellnessModel: WellnessAnswersModel?) async {
-        var matchTrackerModel = MatchTrackerModel(id: UUID().uuidString,
+        var matchTrackerModel = PracticeTrackerModel(id: UUID().uuidString,
                                                   userID: UserDefaults.currentUser.uid,
                                                   date: Date().timeIntervalSince1970,
                                                   overallRating: overallRating,
@@ -97,20 +99,19 @@ class MatchTrackerViewModel: ObservableObject {
                                                   mostRecentWorkload: workloadModel,
                                                   wellnessStatus: WellnessModel,
                                                   cmjModel: CMJModel)
-        
+        let workload = Int(Double(duration * Double(rpe)) * 1.5)
         var matchWorkloadModel = WorkloadModel(id: UUID().uuidString,
                                                endTime: Date().timeIntervalSince1970,
-                                               rpe: 10,
-                                               timeToComplete: 120,
+                                               rpe: rpe,
+                                               timeToComplete: (Int(duration) * 60),
                                                workload: 0,
-                                               customAddedWorkload: 0,
-                                               matchWorkload: 1000)
+                                               practiceWorkload: workload)
         
         do {
             let model = try await apiService.uploadTimeOrderedModelAsync(data: &matchTrackerModel)
             matchWorkloadModel.workoutID = model.id
             let _ = try await apiService.uploadTimeOrderedModelAsync(data: &matchWorkloadModel)
-            uploadedMatchTrackerModel = model
+            uploadedPracticeTrackerModel = model
             isUploading = true
             isShowingNeMatchSheet = false
         } catch {

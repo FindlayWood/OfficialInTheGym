@@ -58,7 +58,7 @@ class OptimalWorkloadRatioViewModel {
     func loadModelRanges(from startDay: Int, to endDay: Int, from models: [WorkloadModel], with size: Int) -> [Double] {
         var workloads = Array(repeating: 0.0, count: size)
         let models = models.filter { $0.endTime.daysAgo() >= startDay && $0.endTime.daysAgo() < endDay }
-        let addedWorkloads = getOccurences( models.map { $0.endTime.daysAgo() }, models.map { Double($0.workload) + Double($0.customAddedWorkload ?? 0) + Double($0.matchWorkload ?? 0) })
+        let addedWorkloads = getOccurences( models.map { $0.endTime.daysAgo() }, models.map { Double($0.workload) + Double($0.customAddedWorkload ?? 0) + Double($0.matchWorkload ?? 0) + Double($0.practiceWorkload ?? 0) })
         for (key, value) in addedWorkloads {
             workloads[key - startDay] = value
         }

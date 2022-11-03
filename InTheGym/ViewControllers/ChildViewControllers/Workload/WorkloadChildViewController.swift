@@ -115,7 +115,7 @@ extension WorkloadChildViewController {
         }
     }
     func updateDisplay(with models: [WorkloadModel]) {
-        let workloads = models.map { $0.workload + ($0.customAddedWorkload ?? 0) + ($0.matchWorkload ?? 0)}
+        let workloads = models.map { $0.workload + ($0.customAddedWorkload ?? 0) + ($0.matchWorkload ?? 0) + ($0.practiceWorkload ?? 0) }
         let totalWorkload = workloads.reduce(0, +)
         display.totalWorkloadLabel.text = totalWorkload.description
         let times = models.map { $0.timeToComplete }
