@@ -42,13 +42,13 @@ struct PracticeTrackerHomeView: View {
                     viewModel.isShowingNeMatchSheet = true
                 } label: {
                     HStack {
-                        Image("match_icon")
+                        Image("circuit_icon")
                             .resizable()
                             .frame(width: 30, height: 30)
                         Text("Record New Practice")
                             .font(.headline)
                     }
-                    .padding(.vertical, 12)
+                    .padding(.vertical, 8)
                 }
             } header: {
                 Text("New Practice")

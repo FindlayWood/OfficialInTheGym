@@ -36,16 +36,20 @@ struct NewPracticeTrackerSheet: View {
                             viewModel.duration -= 1
                         } label: {
                             Image(systemName: "minus.circle.fill")
+                                .foregroundColor(Color(.darkColour))
                         }
                         .buttonStyle(.borderless)
                         VStack {
-                            Text("\(viewModel.duration) mins")
+                            Text("\(viewModel.duration, specifier: "%.0f") mins")
+                                .font(.headline)
                             Slider(value: $viewModel.duration, in: 0...240, step: 1)
+                                .tint(Color(.darkColour))
                         }
                         Button {
                             viewModel.duration += 1
                         } label: {
                             Image(systemName: "plus.circle.fill")
+                                .foregroundColor(Color(.darkColour))
                         }
                         .buttonStyle(.borderless)
                     }
@@ -61,19 +65,19 @@ struct NewPracticeTrackerSheet: View {
                 Section {
                     QuestionView(number: $viewModel.technicalRating, title: "Technical Rating", message: "How would you rate your technical performance?")
                 } header: {
-                    Text("Physical")
+                    Text("Technical")
                 }
                 .disabled(viewModel.isUploading)
                 Section {
                     QuestionView(number: $viewModel.tacticalRating, title: "Tactical Rating", message: "How would you rate your tactical performance?")
                 } header: {
-                    Text("Technical")
+                    Text("Tactical")
                 }
                 .disabled(viewModel.isUploading)
                 Section {
                     QuestionView(number: $viewModel.physicalRating, title: "Physical Rating", message: "How would you rate your physical performance?")
                 } header: {
-                    Text("Tactical")
+                    Text("Physical")
                 }
                 .disabled(viewModel.isUploading)
                 Section {
@@ -137,7 +141,7 @@ struct NewPracticeTrackerSheet: View {
                     }
                 }
             }
-            .navigationTitle("New Match")
+            .navigationTitle("New Practice Session")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
