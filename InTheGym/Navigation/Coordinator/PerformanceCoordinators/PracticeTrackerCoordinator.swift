@@ -31,6 +31,8 @@ class PracticeTrackerCoordinator: NSObject, Coordinator {
 // MARK: - Methods
 extension PracticeTrackerCoordinator {
     func showDetail(_ model: PracticeTrackerModel) {
-        
+        let vc = PracticeTrackerDetailViewController()
+        vc.practiceTrackerModel = model
+        navigationController.pushViewController(vc, animated: true)
     }
 }

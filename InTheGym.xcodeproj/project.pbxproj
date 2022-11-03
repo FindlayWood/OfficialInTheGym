@@ -1068,6 +1068,8 @@
 		9FB0F29A2914306900BF222E /* NewPracticeTrackerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F2992914306900BF222E /* NewPracticeTrackerSheet.swift */; };
 		9FB0F29C2914323B00BF222E /* PracticeTrackerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29B2914323B00BF222E /* PracticeTrackerListView.swift */; };
 		9FB0F29E2914331E00BF222E /* PracticeTrackerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29D2914331E00BF222E /* PracticeTrackerCoordinator.swift */; };
+		9FB0F2A129147F1700BF222E /* PracticeTrackerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F2A029147F1700BF222E /* PracticeTrackerDetailViewController.swift */; };
+		9FB0F2A329147F2E00BF222E /* PracticeTrackerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2141,6 +2143,8 @@
 		9FB0F2992914306900BF222E /* NewPracticeTrackerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPracticeTrackerSheet.swift; sourceTree = "<group>"; };
 		9FB0F29B2914323B00BF222E /* PracticeTrackerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerListView.swift; sourceTree = "<group>"; };
 		9FB0F29D2914331E00BF222E /* PracticeTrackerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerCoordinator.swift; sourceTree = "<group>"; };
+		9FB0F2A029147F1700BF222E /* PracticeTrackerDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerDetailViewController.swift; sourceTree = "<group>"; };
+		9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5434,6 +5438,7 @@
 		9FB0F29029142D6500BF222E /* PracticeTracker */ = {
 			isa = PBXGroup;
 			children = (
+				9FB0F29F29147EEB00BF222E /* PracticeDetail */,
 				9FB0F29129142D7D00BF222E /* PracticeTrackerHomeViewController.swift */,
 				9FB0F29329142D8C00BF222E /* PracticeTrackerHomeView.swift */,
 				9FB0F29529142DD900BF222E /* PracticeTrackerViewModel.swift */,
@@ -5441,6 +5446,15 @@
 				9FB0F29B2914323B00BF222E /* PracticeTrackerListView.swift */,
 			);
 			path = PracticeTracker;
+			sourceTree = "<group>";
+		};
+		9FB0F29F29147EEB00BF222E /* PracticeDetail */ = {
+			isa = PBXGroup;
+			children = (
+				9FB0F2A029147F1700BF222E /* PracticeTrackerDetailViewController.swift */,
+				9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */,
+			);
+			path = PracticeDetail;
 			sourceTree = "<group>";
 		};
 		D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */ = {
@@ -5886,6 +5900,7 @@
 				74DA1AEB28F1CA5C00F4DB9E /* MatchTrackerModel.swift in Sources */,
 				7492264E22D7873300EAD386 /* TableViewCell.swift in Sources */,
 				741BA3A6271B198A00E99C6E /* ReplayJumpMeasureView.swift in Sources */,
+				9FB0F2A329147F2E00BF222E /* PracticeTrackerDetailView.swift in Sources */,
 				74FDB5B726A77F04000649CC /* ClipModels.swift in Sources */,
 				742FD581283FCF430025E43C /* AddNewTagView.swift in Sources */,
 				74318F4426B80DF7009EDFAC /* CreateCircuitView.swift in Sources */,
@@ -6366,6 +6381,7 @@
 				74F18AE627D66D920043551F /* CoachPlayerWorkoutViewController.swift in Sources */,
 				7444D07C26CE98FB0009C7A6 /* UploadGroupWorkoutView.swift in Sources */,
 				742FCD1D284532E6007ED1C6 /* ExerciseMaxHistoryDataSource.swift in Sources */,
+				9FB0F2A129147F1700BF222E /* PracticeTrackerDetailViewController.swift in Sources */,
 				74AF6D5C2686799A005C52A8 /* DisplayExerciseStatsModel.swift in Sources */,
 				743330812785E540005A0C45 /* WorkoutTableViewController.swift in Sources */,
 				74D31E8B25FC13060024CC05 /* FollowersDisplayViewController.swift in Sources */,
