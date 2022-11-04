@@ -118,6 +118,7 @@ extension SetSelectionViewController: UICollectionViewDelegate, UICollectionView
         viewModel.exercise.time = Array(repeating: 0, count: viewModel.setNumber)
         viewModel.exercise.distance = Array(repeating: " ", count: viewModel.setNumber)
         viewModel.exercise.restTime = Array(repeating: 0, count: viewModel.setNumber)
+        viewModel.exercise.tempo = Array(repeating: ExerciseTempoModel(eccentric: 0, eccentricPause: 0, concentric: 0, concentricPause: 0), count: viewModel.setNumber)
         coordinator?.setSelected(viewModel.exercise)
         
 //        exerciseViewModel?.addSets(setNumber)
