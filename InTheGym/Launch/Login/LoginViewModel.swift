@@ -94,21 +94,6 @@ class LoginViewModel {
                 self.errorWhenLogginIn.send(.unKnown)
             }
         }
-        
-        apiService.loginUser(with: loginModel) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(let user):
-                self.userSuccessfullyLoggedIn.send(user)
-                self.isLoading = false
-                Task {
-                    await self.updateFCMToken()
-                }
-            case .failure(let error):
-                self.errorWhenLogginIn.send(error)
-                self.isLoading = false
-            }
-        }
     }
     
     func updateFCMToken() async {
@@ -116,7 +101,6 @@ class LoginViewModel {
             let fcmToken = try await Messaging.messaging().token()
             let tokenModel = FCMTokenModel(fcmToken: fcmToken, tokenUpdatedDate: .now)
             try await FirestoreManager.shared.upload(tokenModel)
-            print(fcmToken)
         } catch {
             print(String(describing: error))
         }

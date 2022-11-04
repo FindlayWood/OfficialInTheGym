@@ -52,11 +52,11 @@ class SettingsViewController: UIViewController {
         viewModel.settingActions
             .sink { [weak self] in self?.tapAction($0)}
             .store(in: &subscriptions)
-        viewModel.successfullyLoggedOut
-            .sink { [weak self] in self?.loggedOut($0)}
-            .store(in: &subscriptions)
         viewModel.successfullySentResetPassword
             .sink { [weak self] in self?.resetPassword($0)}
+            .store(in: &subscriptions)
+        viewModel.errorLoggingOut
+            .sink { [weak self] _ in self?.showError() }
             .store(in: &subscriptions)
     }
 }
@@ -90,30 +90,5 @@ private extension SettingsViewController {
         } else {
             showError()
         }
-    }
-    func loggedOut(_ success: Bool) {
-        if success {
-//            FirebaseAPI.shared().dispose()
-            LikesAPIService.shared.LikedPostsCache.removeAll()
-            ViewController.admin = nil
-            ViewController.username = nil
-            UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
-            LikeCache.shared.removeAll()
-            ClipCache.shared.removeAll()
-            let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
-            Task {
-                do {
-                    try await FirestoreManager.shared.upload(fcmTokenModel)
-                } catch {
-                    print(String(describing: error))
-                }
-            }
-//            PostLoader.shared.removeAll()
-            viewModel.loggedOut()
-//            UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: false)
-        } else {
-            showError()
-        }
-        
     }
 }

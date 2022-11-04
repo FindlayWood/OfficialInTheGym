@@ -50,12 +50,8 @@ class LoginViewController: UIViewController, Storyboarded {
             .store(in: &subscriptions)
         
         viewModel.userSuccessfullyLoggedIn
-            .sink { [weak self] in self?.receivedLoggedInUser($0)
-//                guard let self = self else {return}
-//                self.haptic.notificationOccurred(.success)
-////                self.coordinator?.coordinateToTabBar()
-//                self.navigationController?.popToRootViewController(animated: false)
-            }.store(in: &subscriptions)
+            .sink { [weak self] in self?.receivedLoggedInUser($0) }
+            .store(in: &subscriptions)
         
         viewModel.errorWhenLogginIn
             .sink { [weak self] in self?.showError(for: $0) }

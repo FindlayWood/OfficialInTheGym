@@ -16,6 +16,7 @@ class SettingsViewModel {
     var successfullyLoggedOut = PassthroughSubject<Bool,Never>()
     var successfullySentResetPassword = PassthroughSubject<Bool,Never>()
     var settingActions = PassthroughSubject<SettingsAction,Never>()
+    var errorLoggingOut = PassthroughSubject<Bool, Never>()
     
     // MARK: - Properties
     var apiService: AuthManagerService = FirebaseAuthManager.shared
@@ -51,7 +52,25 @@ class SettingsViewModel {
     // MARK: - Functions
     func logout() {
         apiService.logout { [weak self] success in
-            self?.successfullyLoggedOut.send(success)
+            if success {
+                LikesAPIService.shared.LikedPostsCache.removeAll()
+                ViewController.admin = nil
+                ViewController.username = nil
+                LikeCache.shared.removeAll()
+                ClipCache.shared.removeAll()
+                let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
+                Task {
+                    do {
+                        try await FirestoreManager.shared.upload(fcmTokenModel)
+                        UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
+                    } catch {
+                        print(String(describing: error))
+                    }
+                }
+                self?.loggedOut()
+            } else {
+                self?.errorLoggingOut.send(true)
+            }
         }
     }
     func resetPassword() {
