@@ -75,6 +75,7 @@ class LoginViewModel {
     }
     
     // MARK: - Login Function
+    @MainActor
     func login() async {
         isLoading = true
         do {
