@@ -30,6 +30,7 @@ class SignUpViewController: UIViewController, Storyboarded {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
         haptic.prepare()
+        initTargets()
         initDisplay()
         initViewModel()
 //        display.signButtonValid(false)
@@ -45,6 +46,10 @@ class SignUpViewController: UIViewController, Storyboarded {
             navigationItem.title = "PLAYER ACCOUNT"
             viewModel.updateAdmin(with: false)
         }
+    }
+    // MARK: - Targets
+    func initTargets() {
+        display.signUpButton.addTarget(self, action: #selector(signUpPressedAction), for: .touchUpInside)
     }
     // MARK: - Display
     func initDisplay() {
@@ -74,6 +79,12 @@ class SignUpViewController: UIViewController, Storyboarded {
         viewModel.errorCreatingAccount
             .sink { [weak self] in self?.showError(for: $0)}
             .store(in: &subscriptions)
+    }
+}
+// MARK: - Actions
+extension SignUpViewController {
+    @objc func signUpPressedAction(_ sender: UIButton) {
+        viewModel.signUpButtonPressed()
     }
 }
 // MARK: - Textfield Delegate

@@ -11,7 +11,7 @@ import Combine
 import Firebase
 import FirebaseMessaging
 
-class LoginViewModel {
+class LoginViewModel: ObservableObject {
     
     // MARK: - Published Properties
     @Published var email: String = ""
@@ -30,6 +30,7 @@ class LoginViewModel {
     var userSuccessfullyLoggedIn = PassthroughSubject<Users, Never>()
     var errorWhenLogginIn = PassthroughSubject<loginError, Never>()
     var resendEmailVerificationReturned = PassthroughSubject<Bool,Never>()
+    var forgotPassword = PassthroughSubject<Bool,Never>()
     
     // MARK: - Private Properties
     private var loginModel = LoginModel()

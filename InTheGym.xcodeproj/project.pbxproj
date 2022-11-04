@@ -1056,6 +1056,7 @@
 		74FDB5B726A77F04000649CC /* ClipModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB5B626A77F04000649CC /* ClipModels.swift */; };
 		74FDB5B926B0C42D000649CC /* ViewClipBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB5B826B0C42D000649CC /* ViewClipBottomView.swift */; };
 		74FDB97D25A4978A00CC18EF /* DiscoverPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB97C25A4978A00CC18EF /* DiscoverPageViewController.swift */; };
+		9F612BBD2915CBE300B5AE5A /* LoginViewSwifUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */; };
 		9FA4F1EB290EE7AF00757860 /* ViewJournalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */; };
 		9FA4F1EE290FECD800757860 /* PreviousJumpsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */; };
 		9FA4F1F0290FECF800757860 /* PreviousJumps+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */; };
@@ -2131,6 +2132,7 @@
 		74FDB5B626A77F04000649CC /* ClipModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipModels.swift; sourceTree = "<group>"; };
 		74FDB5B826B0C42D000649CC /* ViewClipBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipBottomView.swift; sourceTree = "<group>"; };
 		74FDB97C25A4978A00CC18EF /* DiscoverPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageViewController.swift; sourceTree = "<group>"; };
+		9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwifUI.swift; sourceTree = "<group>"; };
 		9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewJournalEntryView.swift; sourceTree = "<group>"; };
 		9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousJumpsView.swift; sourceTree = "<group>"; };
 		9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviousJumps+ViewModel.swift"; sourceTree = "<group>"; };
@@ -4547,6 +4549,7 @@
 				745D0E7922A17E26007670E3 /* LoginViewController.swift */,
 				74B6F6892744242B00A72679 /* LoginView.swift */,
 				74B9A010273D8C87000AA2D6 /* LoginViewModel.swift */,
+				9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -6294,6 +6297,7 @@
 				743330F627959F87005A0C45 /* UICollectionView+Extension.swift in Sources */,
 				747C07582613634400E9F1E2 /* SeeNewPostsButton.swift in Sources */,
 				74F5468F25E9911200C1A6A9 /* UserIDToUser.swift in Sources */,
+				9F612BBD2915CBE300B5AE5A /* LoginViewSwifUI.swift in Sources */,
 				74BAB7EE28CCE70B00E5CEFE /* ImagePicker.swift in Sources */,
 				74C426892829A4E9009ADB70 /* LiveWorkoutExerciseCreationCoordinator.swift in Sources */,
 				742C1C9227BD877200DD1BB0 /* ExerciseClipsViewController.swift in Sources */,

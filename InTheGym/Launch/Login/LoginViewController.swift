@@ -9,7 +9,6 @@
 //login page. existing users can log in
 
 import UIKit
-import Firebase
 import SCLAlertView
 import Combine
 
@@ -17,24 +16,18 @@ class LoginViewController: UIViewController, Storyboarded {
     
     // MARK: - Properties
     weak var coordinator: SignUpCoordinator?
-//    weak var coordinator: MainCoordinator?
+    
+    var childContentView: LoginViewSwifUI!
     var viewModel = LoginViewModel()
-    var display = LoginView()
     let haptic = UINotificationFeedbackGenerator()
     var subscriptions = Set<AnyCancellable>()
+    
     // MARK: - View
-    override func loadView() {
-        view = display
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        hideKeyboardWhenTappedAround()
+        addChildView()
         navigationItem.title = "Login"
         haptic.prepare()
-        display.loginButtonValid(false)
-        display.emailField.delegate = self
-        display.passwordField.delegate = self
-        initTargets()
         initViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -42,12 +35,13 @@ class LoginViewController: UIViewController, Storyboarded {
         navigationController?.setNavigationBarHidden(false, animated: true)
         editNavBarColour(to: .darkColour)
     }
-    
+    // MARK: - Swift UI Child View
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel)
+        addSwiftUIView(childContentView)
+    }
     // MARK: - View Model
     func initViewModel() {
-        viewModel.$isLoading
-            .sink { [weak self] in self?.display.setLoading(to: $0)}
-            .store(in: &subscriptions)
         
         viewModel.userSuccessfullyLoggedIn
             .sink { [weak self] in self?.receivedLoggedInUser($0) }
@@ -55,11 +49,6 @@ class LoginViewController: UIViewController, Storyboarded {
         
         viewModel.errorWhenLogginIn
             .sink { [weak self] in self?.showError(for: $0) }
-            .store(in: &subscriptions)
-
-        viewModel.$canLogin
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.display.loginButtonValid($0) }
             .store(in: &subscriptions)
         
         viewModel.resendEmailVerificationReturned
@@ -71,12 +60,10 @@ class LoginViewController: UIViewController, Storyboarded {
                     self.displayTopMessage(with: "Error. Try Again.")
                 }
             }.store(in: &subscriptions)
-    }
-    
-    // MARK: - Targets
-    func initTargets() {
-        display.loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
-        display.forgotPasswordButton.addTarget(self, action: #selector(forgotPasswordButtonTapped), for: .touchUpInside)
+        
+        viewModel.forgotPassword
+            .sink { [weak self] _ in self?.forgotPasswordButtonTapped() }
+            .store(in: &subscriptions)
     }
     
     // MARK: - Actions
@@ -109,19 +96,5 @@ class LoginViewController: UIViewController, Storyboarded {
             let alert = SCLAlertView()
             alert.showError("Error", subTitle: "There was an error logging you in, make sure you enter the correct email and password. If you forgot your password tap FORGOT PASSWORD.", closeButtonTitle: "Ok")
         }
-    }
-}
-
-// MARK: - Textfield Delegate
-extension LoginViewController {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
-        if textField == display.emailField {
-            viewModel.updateEmail(with: newString)
-        }
-        if textField == display.passwordField {
-            viewModel.updatePassword(with: newString)
-        }
-        return true
     }
 }

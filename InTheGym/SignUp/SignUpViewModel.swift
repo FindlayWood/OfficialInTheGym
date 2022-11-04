@@ -93,16 +93,32 @@ class SignUpViewModel {
     
     // MARK: - Actions
     func signUpButtonPressed() {
-        apiService.createNewUser(with: self.user) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(_):
+        Task {
+            do {
+                try await apiService.createNewUserAsync(with: self.user)
                 self.successfullyCreatedAccount.send(self.user.email)
-            case .failure(let error):
-                self.errorCreatingAccount.send(error)
-                //print(error.localizedDescription)
+            } catch {
+                let error = error as NSError
+                switch error.code {
+                case AuthErrorCode.emailAlreadyInUse.rawValue:
+                    errorCreatingAccount.send(.emailTaken)
+                case AuthErrorCode.invalidEmail.rawValue:
+                    errorCreatingAccount.send(.invalidEmail)
+                default:
+                    errorCreatingAccount.send(.unknown)
+                }
             }
         }
+//        apiService.createNewUser(with: self.user) { [weak self] result in
+//            guard let self = self else {return}
+//            switch result {
+//            case .success(_):
+//                self.successfullyCreatedAccount.send(self.user.email)
+//            case .failure(let error):
+//                self.errorCreatingAccount.send(error)
+//                //print(error.localizedDescription)
+//            }
+//        }
     }
     
     // MARK: - Subscriptions

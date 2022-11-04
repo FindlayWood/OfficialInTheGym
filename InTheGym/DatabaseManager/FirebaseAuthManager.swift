@@ -18,7 +18,6 @@ enum loginError: Error {
 }
 
 protocol AuthManagerService {
-    func createNewUser(with user: SignUpUserModel, completion: @escaping (Result<Void,SignUpError>) -> Void)
     func checkUsernameIsUnique(for username:String, completion: @escaping (Bool) -> ())
     func checkForCurrentUser(completion: @escaping (Result<User, checkingForUserError>) -> Void)
     func loginUser(with loginModel: LoginModel, completion: @escaping (Result<Users, loginError>) -> Void)
@@ -28,6 +27,7 @@ protocol AuthManagerService {
     
     // MARK: - Async
     func loginAsync(with loginModel: LoginModel) async throws -> Users
+    func createNewUserAsync(with user: SignUpUserModel) async throws
 }
 
 class FirebaseAuthManager: AuthManagerService {
@@ -38,53 +38,49 @@ class FirebaseAuthManager: AuthManagerService {
     private init(){}
     
     // MARK: - Create User
-    func createNewUser(with user: SignUpUserModel, completion: @escaping (Result<Void,SignUpError>) -> Void) {
-        Auth.auth().createUser(withEmail: user.email, password: user.password) { [weak self] AuthResult, error in
-            guard let self = self else {return}
-            if let error = error {
-                let error = error as NSError
-                switch error.code {
-                case AuthErrorCode.emailAlreadyInUse.rawValue:
-                    completion(.failure(.emailTaken))
-                case AuthErrorCode.invalidEmail.rawValue:
-                    completion(.failure(.invalidEmail))
-                default:
-                    completion(.failure(.unknown))
-                }
-            } else  {
-                guard let newUserID = AuthResult?.user.uid else {return}
-                let newUser = Users(admin: user.admin,
-                                    email: user.email,
-                                    username: user.username,
-                                    firstName: user.firstName,
-                                    lastName: user.lastName,
-                                    uid: newUserID,
-                                    accountCreated: Date().timeIntervalSince1970)
-                self.addUserToDatabase(user: newUser, completion: completion)
-            }
-        }
+//    func createNewUser(with user: SignUpUserModel, completion: @escaping (Result<Void,SignUpError>) -> Void) {
+//        Auth.auth().createUser(withEmail: user.email, password: user.password) { [weak self] AuthResult, error in
+//            guard let self = self else {return}
+//            if let error = error {
+//                let error = error as NSError
+//                switch error.code {
+//                case AuthErrorCode.emailAlreadyInUse.rawValue:
+//                    completion(.failure(.emailTaken))
+//                case AuthErrorCode.invalidEmail.rawValue:
+//                    completion(.failure(.invalidEmail))
+//                default:
+//                    completion(.failure(.unknown))
+//                }
+//            } else  {
+//                guard let newUserID = AuthResult?.user.uid else {return}
+//                let newUser = Users(admin: user.admin,
+//                                    email: user.email,
+//                                    username: user.username,
+//                                    firstName: user.firstName,
+//                                    lastName: user.lastName,
+//                                    uid: newUserID,
+//                                    accountCreated: Date().timeIntervalSince1970)
+//                self.addUserToDatabase(user: newUser, completion: completion)
+//            }
+//        }
+//    }
+    
+    // MARK: - Create User Async
+    func createNewUserAsync(with user: SignUpUserModel) async throws {
+        let authResult = try await Auth.auth().createUser(withEmail: user.email, password: user.password)
+        try await authResult.user.sendEmailVerification()
+        let newUserID = authResult.user.uid
+        let newUser = Users(admin: user.admin, email: user.email, username: user.username, firstName: user.firstName, lastName: user.lastName, uid: newUserID, accountCreated: Date().timeIntervalSince1970)
+        try await addUserToDatabaseAsync(user: newUser)
     }
     
-    func addUserToDatabase(user: Users, completion: @escaping (Result<Void,SignUpError>) -> Void) {
-        let userID = user.uid
-        let dbref = Database.database().reference()
-        var newUserData = Dictionary<String,Any>()
-        do {
-//            let object = try FirebaseEncoder().encode(user)
-//            newUserData["users/\(userID)"] = object
-//            newUserData["Usernames/\(user.username)"] = true
-//            dbref.updateChildValues(newUserData) { error, _ in
-//                if error != nil {
-//                    completion(.failure(.unknown))
-//                } else {
-//                    completion(.success(()))
-//                }
-//            }
-        }
-        catch {
-            completion(.failure(.unknown))
-        }
+    func addUserToDatabaseAsync(user: Users) async throws {
+        let dbref = Database.database().reference().child("users").child(user.uid)
+        try dbref.setValue(from: user)
+        let userNameRef = Database.database().reference().child("Usernames").child(user.username)
+        try await userNameRef.setValue(true)
     }
+    
     
     //MARK: - Checking username is unique
     func checkUsernameIsUnique(for username:String, completion: @escaping (Bool) -> ()) {
@@ -135,6 +131,7 @@ class FirebaseAuthManager: AuthManagerService {
         }
     }
     
+    // MARK: - Login Async
     func loginAsync(with loginModel: LoginModel) async throws -> Users {
         let authResult = try await Auth.auth().signIn(withEmail: loginModel.email, password: loginModel.password)
         let user = authResult.user

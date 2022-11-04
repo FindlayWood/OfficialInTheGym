@@ -56,10 +56,8 @@ private extension LaunchPageViewController {
             } else {
                 appDelegate.loggedInPlayer()
             }
-//            coordinator?.coordinateToTabBar()
         } else {
             appDelegate.nilUser()
-//            coordinator?.notLoggedIn()
         }
     }
     func receivedCheckingError(_ error: checkingForUserError) {
@@ -91,7 +89,26 @@ private extension LaunchPageViewController {
             user.sendEmailVerification()
             self.showSuccess(to: user)
         }
+        alertview.addButton("OK") {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.nilUser()
+        }
 
-        alertview.showWarning("Verify", subTitle: "You must verify your account from the email we sent you. Then we can log you in straight away.", closeButtonTitle: "OK")
+        alertview.showWarning("Verify", subTitle: "You must verify your account from the email we sent you. Then we can log you in straight away.")
+    }
+    func showError() {
+        let screenSize: CGRect = UIScreen.main.bounds
+        let screenWidth = screenSize.width
+
+        let appearance = SCLAlertView.SCLAppearance(
+            kWindowWidth: screenWidth - 40 )
+
+        let alertview = SCLAlertView(appearance: appearance)
+        alertview.addButton("OK") {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.nilUser()
+        }
+
+        alertview.showError("Error", subTitle: "There was an error.")
     }
 }
