@@ -58,7 +58,7 @@ class FirstScreenView: UIView {
         button.setTitle("SIGN UP", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont(name: fontName, size: 25)
-        button.layer.cornerRadius = 20
+        button.layer.cornerRadius = 30
         button.backgroundColor = Constants.darkColour
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOffset = CGSize(width: 0, height: 0.0)

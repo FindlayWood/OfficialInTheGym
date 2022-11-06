@@ -46,4 +46,13 @@ extension SignUpCoordinator {
         let vc = ResetPasswordViewController()
         navigationController.present(vc, animated: true)
     }
+    func signUpSucess() {
+        let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
+        for viewController in viewControllers {
+            if viewController.isKind(of: ViewController.self) {
+                navigationController.popToViewController(viewController, animated: true)
+                break
+            }
+        }
+    }
 }

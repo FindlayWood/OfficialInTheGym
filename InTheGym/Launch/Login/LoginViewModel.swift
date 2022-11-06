@@ -85,7 +85,10 @@ class LoginViewModel: ObservableObject {
             isLoading = false
             await updateFCMToken()
             await SubscriptionManager.shared.launch()
+        } catch loginError.emailNotVerified(let notVerifiedUser) {
+            self.errorWhenLogginIn.send(.emailNotVerified(notVerifiedUser))
         } catch {
+            isLoading = false
             let error = error as NSError
             switch error.code {
             case AuthErrorCode.userNotFound.rawValue:

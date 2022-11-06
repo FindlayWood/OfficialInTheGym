@@ -82,7 +82,8 @@ private extension LaunchPageViewController {
         let screenWidth = screenSize.width
 
         let appearance = SCLAlertView.SCLAppearance(
-            kWindowWidth: screenWidth - 40 )
+            kWindowWidth: screenWidth - 40,
+            showCloseButton: false)
 
         let alertview = SCLAlertView(appearance: appearance)
         alertview.addButton("Resend Verification Email") {

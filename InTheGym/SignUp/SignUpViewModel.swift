@@ -179,6 +179,7 @@ class SignUpViewModel: ObservableObject {
             .store(in: &subscriptions)
         
         $username
+            .removeDuplicates()
             .sink { [unowned self] username in
                 if username.count < 3 {
                     self.usernameValid = .notEnoughInfo
@@ -204,11 +205,12 @@ class SignUpViewModel: ObservableObject {
             .store(in: &subscriptions)
         
         $password
+            .filter { $0.count > 0 }
             .map { password -> SignUpValidState in
                 if password.count > 5 {
                     return .valid
                 } else {
-                    return .notEnoughInfo
+                    return .inValidInfo
                 }
             }
             .sink { [weak self] newPasswordValid in

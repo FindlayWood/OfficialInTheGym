@@ -88,10 +88,10 @@ class LoginViewController: UIViewController, Storyboarded {
         switch error {
         case .emailNotVerified(let user):
             let alert = SCLAlertView()
-            alert.addButton("Resend verification email?") { [weak self] in
+            alert.addButton("Resend verification email") { [weak self] in
                 self?.viewModel.resendEmailVerification(to: user)
             }
-            alert.showError("Verify!", subTitle: "You have not verified your account. Please do so to login.", closeButtonTitle: "Cancel")
+            alert.showWarning("Verify!", subTitle: "You have not verified your account. Please do so to login.", closeButtonTitle: "Cancel")
         case .invalidCredentials, .unKnown:
             let alert = SCLAlertView()
             alert.showError("Error", subTitle: "There was an error logging you in, make sure you enter the correct email and password. If you forgot your password tap FORGOT PASSWORD.", closeButtonTitle: "Ok")

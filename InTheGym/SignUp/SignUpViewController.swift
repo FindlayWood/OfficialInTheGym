@@ -130,9 +130,13 @@ extension SignUpViewController {
         let screenWidth = screenSize.width
         
         let appearance = SCLAlertView.SCLAppearance(
-            kWindowWidth: screenWidth - 40 )
+            kWindowWidth: screenWidth - 40,
+            showCloseButton: false)
         let newAlert = SCLAlertView(appearance: appearance)
-        newAlert.showSuccess("Account Created!", subTitle: "You have successfully created an account. We have sent a verification email to \(email), follow the steps in the email to verify your account then you will be able to login. Once you have successfully logged in your device will be remembered and you will be automatically logged in.", closeButtonTitle: "Ok")
+        newAlert.addButton("Ok") {
+            self.coordinator?.signUpSucess()
+        }
+        newAlert.showSuccess("Account Created!", subTitle: "You have successfully created an account. We have sent a verification email to \(email), follow the steps in the email to verify your account then you will be able to login. Once you have successfully logged in your device will be remembered and you will be automatically logged in.")
         display.resetView()
         viewModel.resetFields()
     }

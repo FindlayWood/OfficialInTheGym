@@ -10,15 +10,16 @@ import SwiftUI
 
 struct SignUpMainView: View {
     @ObservedObject var viewModel: SignUpViewModel
+    @State private var accountType: Bool = false
     var body: some View {
         ZStack {
             ScrollView {
                 VStack {
-                    CustomTextField(text: $viewModel.firstName, placeholder: "first name...")
-                    CustomTextField(text: $viewModel.lastName, placeholder: "last name...")
-                    CustomTextField(text: $viewModel.email, placeholder: "email...")
-                    CustomTextField(text: $viewModel.username, placeholder: "username...")
-                    CustomTextField(text: $viewModel.password, placeholder: "password...")
+                    CustomTextField(text: $viewModel.firstName, image: "person.fill", placeholder: "first name...")
+                    CustomTextField(text: $viewModel.lastName, image: "person.fill", placeholder: "last name...")
+                    CustomTextFieldWithCheck(text: $viewModel.email, state: $viewModel.emailValid, errorMessage: "Invalid Email", image: "envelope.fill", placeholder: "email...")
+                    CustomTextFieldWithCheck(text: $viewModel.username, state: $viewModel.usernameValid, errorMessage: "This username is already taken.", image: "tag.fill", placeholder: "username...")
+                    CustomSecureTextField(text: $viewModel.password, state: $viewModel.passwordValid, placeholder: "password...")
                     Button {
                         viewModel.signUpButtonPressed()
                     } label: {
@@ -37,6 +38,16 @@ struct SignUpMainView: View {
                 }
                 .padding([.horizontal, .top])
             }
+            VStack {
+                Spacer()
+                Text("2 of 2")
+                    .font(.footnote.bold())
+                    .foregroundColor(Color(.darkColour))
+                Text("INTHEGYM")
+                    .font(.footnote.bold())
+                    .foregroundColor(Color(.darkColour))
+            }
+            .frame(maxHeight: .infinity)
             if viewModel.isLoading {
                 LoadingView()
             }
