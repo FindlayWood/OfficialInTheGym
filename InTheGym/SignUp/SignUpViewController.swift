@@ -9,12 +9,13 @@
 //sign up page to create a new user
 
 import UIKit
-//import SCLAlertView
+import SCLAlertView
 import Combine
 
 class SignUpViewController: UIViewController, Storyboarded {
     // MARK: - Properties
     weak var coordinator: SignUpCoordinator?
+    var childContentView: SignUpMainView!
     var display = SignUpView()
     var subscriptions = Set<AnyCancellable>()
     let haptic = UINotificationFeedbackGenerator()
@@ -23,15 +24,16 @@ class SignUpViewController: UIViewController, Storyboarded {
     // is the user a coach, admin = true, or player, admin = false
     var admin: Bool = false
     // MARK: - View
-    override func loadView() {
-        view = display
-    }
+//    override func loadView() {
+//        view = display
+//    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        hideKeyboardWhenTappedAround()
+        addChildView()
+//        hideKeyboardWhenTappedAround()
         haptic.prepare()
-        initTargets()
-        initDisplay()
+//        initTargets()
+//        initDisplay()
         initViewModel()
 //        display.signButtonValid(false)
     }
@@ -47,6 +49,11 @@ class SignUpViewController: UIViewController, Storyboarded {
             viewModel.updateAdmin(with: false)
         }
     }
+    // MARK: - Swift UI Child View
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel)
+        addSwiftUIView(childContentView)
+    }
     // MARK: - Targets
     func initTargets() {
         display.signUpButton.addTarget(self, action: #selector(signUpPressedAction), for: .touchUpInside)
@@ -61,6 +68,9 @@ class SignUpViewController: UIViewController, Storyboarded {
     }
     // MARK: - View Model
     func initViewModel() {
+        viewModel.$isLoading
+            .sink { [weak self] in self?.setLoading($0) }
+            .store(in: &subscriptions)
         viewModel.$emailValid
             .sink { [weak self] in self?.display.emailField.changeState(to: $0)}
             .store(in: &subscriptions)
@@ -85,6 +95,9 @@ class SignUpViewController: UIViewController, Storyboarded {
 extension SignUpViewController {
     @objc func signUpPressedAction(_ sender: UIButton) {
         viewModel.signUpButtonPressed()
+    }
+    func setLoading(_ loading: Bool) {
+        navigationItem.hidesBackButton = loading
     }
 }
 // MARK: - Textfield Delegate
@@ -113,38 +126,38 @@ extension SignUpViewController  {
 extension SignUpViewController {
     func showSuccess(with email: String) {
         self.haptic.notificationOccurred(.success)
-//        let screenSize: CGRect = UIScreen.main.bounds
-//        let screenWidth = screenSize.width
-//        
-//        let appearance = SCLAlertView.SCLAppearance(
-//            kWindowWidth: screenWidth - 40 )
-//        let newAlert = SCLAlertView(appearance: appearance)
-//        newAlert.showSuccess("Account Created!", subTitle: "You have successfully created an account. We have sent a verification email to \(email), follow the steps in the email to verify your account then you will be able to login. Once you have successfully logged in your device will be remembered and you will be automatically logged in.", closeButtonTitle: "Ok")
+        let screenSize: CGRect = UIScreen.main.bounds
+        let screenWidth = screenSize.width
+        
+        let appearance = SCLAlertView.SCLAppearance(
+            kWindowWidth: screenWidth - 40 )
+        let newAlert = SCLAlertView(appearance: appearance)
+        newAlert.showSuccess("Account Created!", subTitle: "You have successfully created an account. We have sent a verification email to \(email), follow the steps in the email to verify your account then you will be able to login. Once you have successfully logged in your device will be remembered and you will be automatically logged in.", closeButtonTitle: "Ok")
         display.resetView()
         viewModel.resetFields()
     }
     
     func showError(for error: SignUpError) {
-//        self.haptic.notificationOccurred(.success)
-//        let screenSize: CGRect = UIScreen.main.bounds
-//        let screenWidth = screenSize.width
-//
-//        let appearance = SCLAlertView.SCLAppearance(
-//            kWindowWidth: screenWidth - 40 )
-//        let newAlert = SCLAlertView(appearance: appearance)
-//        var errorMessage: String!
-//        switch error {
-//        case .invalidEmail:
-//            errorMessage = "Invalid email. Please make sure to enter a valid email."
-//        case .emailTaken:
-//            errorMessage = "An account with this email already exists. If you have forgotten your password go to the login screen and select forgot password."
-//        case .takenUsername:
-//            errorMessage = "An account with this username already exists. Please choose a different one."
-//        case .passwordTooShort:
-//            errorMessage = "This password is too short. To keep accounts secure your password must be at least six characters long."
-//        case .unknown, .fillAllFields, .passwordsDoNotMatch:
-//            errorMessage = "There was an error trying to sign you up. Please try again."
-//        }
-//        newAlert.showError("Error", subTitle: errorMessage, closeButtonTitle: "Ok")
+        self.haptic.notificationOccurred(.success)
+        let screenSize: CGRect = UIScreen.main.bounds
+        let screenWidth = screenSize.width
+
+        let appearance = SCLAlertView.SCLAppearance(
+            kWindowWidth: screenWidth - 40 )
+        let newAlert = SCLAlertView(appearance: appearance)
+        var errorMessage: String!
+        switch error {
+        case .invalidEmail:
+            errorMessage = "Invalid email. Please make sure to enter a valid email."
+        case .emailTaken:
+            errorMessage = "An account with this email already exists. If you have forgotten your password go to the login screen and select forgot password."
+        case .takenUsername:
+            errorMessage = "An account with this username already exists. Please choose a different one."
+        case .passwordTooShort:
+            errorMessage = "This password is too short. To keep accounts secure your password must be at least six characters long."
+        case .unknown, .fillAllFields, .passwordsDoNotMatch:
+            errorMessage = "There was an error trying to sign you up. Please try again."
+        }
+        newAlert.showError("Error", subTitle: errorMessage, closeButtonTitle: "Ok")
     }
 }

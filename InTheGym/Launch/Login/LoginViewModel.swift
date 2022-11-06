@@ -84,6 +84,7 @@ class LoginViewModel: ObservableObject {
             userSuccessfullyLoggedIn.send(userModel)
             isLoading = false
             await updateFCMToken()
+            await SubscriptionManager.shared.launch()
         } catch {
             let error = error as NSError
             switch error.code {

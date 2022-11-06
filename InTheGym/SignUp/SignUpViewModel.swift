@@ -28,7 +28,9 @@ enum SignUpError: String, Error {
 typealias successClosure = ((String) -> Void)?
 typealias failedClosure = ((SignUpError) -> Void)?
 
-class SignUpViewModel {
+class SignUpViewModel: ObservableObject {
+    
+    @Published var isLoading = false
     
     // MARK: - Combine Varibles
     @Published var email: String = ""
@@ -92,12 +94,16 @@ class SignUpViewModel {
     }
     
     // MARK: - Actions
+    @MainActor
     func signUpButtonPressed() {
+        isLoading = true
         Task {
             do {
                 try await apiService.createNewUserAsync(with: self.user)
                 self.successfullyCreatedAccount.send(self.user.email)
+                isLoading = false
             } catch {
+                isLoading = false
                 let error = error as NSError
                 switch error.code {
                 case AuthErrorCode.emailAlreadyInUse.rawValue:
@@ -123,6 +129,21 @@ class SignUpViewModel {
     
     // MARK: - Subscriptions
     func setUpSubscriptions() {
+        $firstName
+            .sink { [weak self] in self?.user.firstName = $0 }
+            .store(in: &subscriptions)
+        $lastName
+            .sink { [weak self] in self?.user.lastName = $0 }
+            .store(in: &subscriptions)
+        $email
+            .sink { [weak self] in self?.user.email = $0 }
+            .store(in: &subscriptions)
+        $username
+            .sink { [weak self] in self?.user.username = $0 }
+            .store(in: &subscriptions)
+        $password
+            .sink { [weak self] in self?.user.password = $0 }
+            .store(in: &subscriptions)
         
         $firstName
             .map { newName in
