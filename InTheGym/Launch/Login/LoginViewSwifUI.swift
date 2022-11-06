@@ -10,6 +10,7 @@ import SwiftUI
 
 struct LoginViewSwifUI: View {
     @ObservedObject var viewModel: LoginViewModel
+    @State private var showingPassword: Bool = false
     var body: some View {
         ZStack {
             VStack {
@@ -17,6 +18,7 @@ struct LoginViewSwifUI: View {
                     Image(systemName: "envelope.fill")
                         .foregroundColor(Color(.darkColour))
                     TextField("email", text: $viewModel.email)
+                        .tint(Color(.darkColour))
                 }
                 .padding()
                 .background(.white)
@@ -26,7 +28,19 @@ struct LoginViewSwifUI: View {
                 HStack {
                     Image(systemName: "lock.fill")
                         .foregroundColor(Color(.darkColour))
-                    SecureField("password", text: $viewModel.password)
+                    if showingPassword {
+                        TextField("password", text: $viewModel.password)
+                            .tint(Color(.darkColour))
+                    } else {
+                        SecureField("password", text: $viewModel.password)
+                            .tint(Color(.darkColour))
+                    }
+                    Button {
+                        showingPassword.toggle()
+                    } label: {
+                        Image(systemName: showingPassword ? "eye" : "eye.slash")
+                            .foregroundColor(.black)
+                    }
                 }
                 .padding()
                 .background(.white)

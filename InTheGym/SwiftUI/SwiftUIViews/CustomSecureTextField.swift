@@ -22,8 +22,10 @@ struct CustomSecureTextField: View {
                     
                     if showing {
                         TextField(placeholder, text: $text)
+                            .tint(Color(.darkColour))
                     } else {
                         SecureField(placeholder, text: $text)
+                            .tint(Color(.darkColour))
                     }
                     Button {
                         showing.toggle()

@@ -23,6 +23,7 @@ struct CustomTextFieldWithCheck: View {
                             .foregroundColor(Color(.darkColour))
                     }
                     TextField(placeholder, text: $text)
+                        .tint(Color(.darkColour))
                     switch state {
                     case .notEnoughInfo:
                         EmptyView()

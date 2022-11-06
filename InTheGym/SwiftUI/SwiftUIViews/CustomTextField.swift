@@ -20,6 +20,7 @@ struct CustomTextField: View {
             }
             
             TextField(placeholder, text: $text)
+                .tint(Color(.darkColour))
         }
         .padding()
         .background(.white)

@@ -42,6 +42,9 @@ class LoginViewController: UIViewController, Storyboarded {
     }
     // MARK: - View Model
     func initViewModel() {
+        viewModel.$isLoading
+            .sink { [weak self] in self?.setLoading($0) }
+            .store(in: &subscriptions)
         
         viewModel.userSuccessfullyLoggedIn
             .sink { [weak self] in self?.receivedLoggedInUser($0) }
@@ -82,6 +85,9 @@ class LoginViewController: UIViewController, Storyboarded {
         } else {
             appDelegate.loggedInPlayer()
         }
+    }
+    func setLoading(_ loading: Bool) {
+        navigationItem.hidesBackButton = loading
     }
     // MARK: - Alerts
     func showError(for error: loginError) {
