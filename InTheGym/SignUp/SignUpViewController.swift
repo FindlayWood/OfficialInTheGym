@@ -16,7 +16,6 @@ class SignUpViewController: UIViewController, Storyboarded {
     // MARK: - Properties
     weak var coordinator: SignUpCoordinator?
     var childContentView: SignUpMainView!
-    var display = SignUpView()
     var subscriptions = Set<AnyCancellable>()
     let haptic = UINotificationFeedbackGenerator()
     let viewModel = SignUpViewModel()
@@ -24,18 +23,11 @@ class SignUpViewController: UIViewController, Storyboarded {
     // is the user a coach, admin = true, or player, admin = false
     var admin: Bool = false
     // MARK: - View
-//    override func loadView() {
-//        view = display
-//    }
     override func viewDidLoad() {
         super.viewDidLoad()
         addChildView()
-//        hideKeyboardWhenTappedAround()
         haptic.prepare()
-//        initTargets()
-//        initDisplay()
         initViewModel()
-//        display.signButtonValid(false)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -54,34 +46,10 @@ class SignUpViewController: UIViewController, Storyboarded {
         childContentView = .init(viewModel: viewModel)
         addSwiftUIView(childContentView)
     }
-    // MARK: - Targets
-    func initTargets() {
-        display.signUpButton.addTarget(self, action: #selector(signUpPressedAction), for: .touchUpInside)
-    }
-    // MARK: - Display
-    func initDisplay() {
-        display.firstNameField.textfield.delegate = self
-        display.lastNameField.textfield.delegate = self
-        display.emailField.textFieldView.delegate = self
-        display.usernameField.textFieldView.delegate = self
-        display.passwordField.textFieldView.delegate = self
-    }
     // MARK: - View Model
     func initViewModel() {
         viewModel.$isLoading
             .sink { [weak self] in self?.setLoading($0) }
-            .store(in: &subscriptions)
-        viewModel.$emailValid
-            .sink { [weak self] in self?.display.emailField.changeState(to: $0)}
-            .store(in: &subscriptions)
-        viewModel.$usernameValid
-            .sink { [weak self] in self?.display.usernameField.changeState(to: $0)}
-            .store(in: &subscriptions)
-        viewModel.$passwordValid
-            .sink { [weak self] in self?.display.passwordField.changeState(to: $0)}
-            .store(in: &subscriptions)
-        viewModel.$canSignUp
-            .sink { [weak self] in self?.display.signButtonValid($0)}
             .store(in: &subscriptions)
         viewModel.successfullyCreatedAccount
             .sink { [weak self] in self?.showSuccess(with: $0)}
@@ -100,28 +68,6 @@ extension SignUpViewController {
         navigationItem.hidesBackButton = loading
     }
 }
-// MARK: - Textfield Delegate
-extension SignUpViewController  {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
-        if textField == display.emailField.textFieldView {
-            viewModel.updateEmail(with: newString)
-        }
-        if textField == display.usernameField.textFieldView {
-            viewModel.updateUsername(with: newString)
-        }
-        if textField == display.firstNameField.textfield {
-            viewModel.updateFirstName(with: newString)
-        }
-        if textField == display.lastNameField.textfield {
-            viewModel.updateLastName(with: newString)
-        }
-        if textField == display.passwordField.textFieldView {
-            viewModel.updatePassword(with: newString)
-        }
-        return true
-    }
-}
 // MARK: - Alerts
 extension SignUpViewController {
     func showSuccess(with email: String) {
@@ -137,7 +83,6 @@ extension SignUpViewController {
             self.coordinator?.signUpSucess()
         }
         newAlert.showSuccess("Account Created!", subTitle: "You have successfully created an account. We have sent a verification email to \(email), follow the steps in the email to verify your account then you will be able to login. Once you have successfully logged in your device will be remembered and you will be automatically logged in.")
-        display.resetView()
         viewModel.resetFields()
     }
     

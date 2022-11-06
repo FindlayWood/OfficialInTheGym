@@ -44,7 +44,11 @@ extension SignUpCoordinator {
     }
     func forgotPassword() {
         let vc = ResetPasswordViewController()
+        vc.coordinator = self
         navigationController.present(vc, animated: true)
+    }
+    func resetPasswordSent() {
+        navigationController.dismiss(animated: true)
     }
     func signUpSucess() {
         let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]

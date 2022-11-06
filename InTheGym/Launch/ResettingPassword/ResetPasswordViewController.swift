@@ -8,24 +8,21 @@
 // resetting email page
 
 import UIKit
-import Firebase
-//import SCLAlertView
+import SCLAlertView
 import Combine
 
 class ResetPasswordViewController: UIViewController {
     // MARK: - Properties
+    weak var coordinator: SignUpCoordinator?
+    var childContentView: ResetPasswordView!
     var display = ResettingPasswordView()
     var viewModel = ResettingPasswordViewModel()
     var subscriptions = Set<AnyCancellable>()
-    // MARK: - View
-    override func loadView() {
-        view = display
-    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        initDisplay()
         initViewModel()
-        initTargets()
+        addChildView()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -33,9 +30,10 @@ class ResetPasswordViewController: UIViewController {
         editNavBarColour(to: .darkColour)
         navigationItem.title = viewModel.navigationTitle
     }
-    // MARK: - Display
-    func initDisplay() {
-        display.emailField.delegate = self
+    // MARK: - Swift UI Child View
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel)
+        addSwiftUIView(childContentView)
     }
     // MARK: - View Model
     func initViewModel() {
@@ -54,12 +52,6 @@ class ResetPasswordViewController: UIViewController {
             }.store(in: &subscriptions)
     }
 }
-// MARK: - Targets
-private extension ResetPasswordViewController {
-    func initTargets() {
-        display.sendButton.addTarget(self, action: #selector(sendButtonTapped(_:)), for: .touchUpInside)
-    }
-}
 // MARK: - Actions
 private extension ResetPasswordViewController {
     @objc func sendButtonTapped(_ sender: UIButton) {
@@ -70,15 +62,19 @@ private extension ResetPasswordViewController {
 // MARK: - Alerts
 private extension ResetPasswordViewController {
     func showAlert(for success: Bool) {
-//        if success {
-//            let alert = SCLAlertView()
-//            alert.showSuccess("Sent!", subTitle: "Reset email sent. Follow instructions in the email to change your password.", closeButtonTitle: "ok")
-//            display.emailField.text = ""
-//            viewModel.updateEmail(with: "")
-//        } else {
-//            let alert = SCLAlertView()
-//            alert.showError("Error", subTitle: "Failed to send reset email, please try again.", closeButtonTitle: "ok")
-//        }
+        if success {
+            let appearance = SCLAlertView.SCLAppearance(
+                showCloseButton: false)
+            let alert = SCLAlertView(appearance: appearance)
+            alert.addButton("Ok") {
+                self.coordinator?.resetPasswordSent()
+            }
+            alert.showSuccess("Sent!", subTitle: "Reset email sent. Follow instructions in the email to change your password.")
+            viewModel.updateEmail(with: "")
+        } else {
+            let alert = SCLAlertView()
+            alert.showError("Error", subTitle: "Failed to send reset email, please try again.", closeButtonTitle: "ok")
+        }
     }
 }
 // MARK: - Textfield delegate

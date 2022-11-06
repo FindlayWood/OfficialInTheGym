@@ -9,17 +9,36 @@
 import SwiftUI
 
 struct ResetPasswordView: View {
-    
-    @State private var email: String = ""
-     
+    @ObservedObject var viewModel: ResettingPasswordViewModel
     var body: some View {
-        VStack {
-            TextField("email", text: $email)
-            
-            Button {
-                
-            } label: {
-                Text("Send Email")
+        ZStack {
+            VStack {
+                CustomTextField(text: $viewModel.email, placeholder: "enter email...")
+                    .padding(.top)
+                Button {
+                    viewModel.sendButtonAction()
+                } label: {
+                    Text("Send Email")
+                        .padding()
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .background(Color(.darkColour).opacity(viewModel.isEmailValid ? 1 : 0.3))
+                        .clipShape(Capsule())
+                        .shadow(radius: viewModel.isEmailValid ? 4 : 0)
+                        
+                }
+                .disabled(!viewModel.isEmailValid)
+                .padding(.vertical)
+                Text("You will be sent an email in which you can enter a new password.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                Spacer()
+            }
+            .padding()
+            if viewModel.isLoading {
+                LoadingView()
             }
         }
     }
@@ -27,6 +46,6 @@ struct ResetPasswordView: View {
 
 struct ResetPasswordView_Previews: PreviewProvider {
     static var previews: some View {
-        ResetPasswordView()
+        ResetPasswordView(viewModel: ResettingPasswordViewModel())
     }
 }

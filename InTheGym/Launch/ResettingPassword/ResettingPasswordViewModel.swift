@@ -9,8 +9,9 @@
 import Foundation
 import Combine
 
-class ResettingPasswordViewModel {
+class ResettingPasswordViewModel: ObservableObject {
     // MARK: - Published Properties
+    @Published var isLoading: Bool = false
     @Published var email: String = ""
     @Published var isEmailValid: Bool = false
     private var subscriptions = Set<AnyCancellable>()
@@ -51,12 +52,14 @@ class ResettingPasswordViewModel {
                 print(error)
             } receiveValue: { [unowned self] successful in
                 self.emailSentSuccessfully.send(successful)
+                self.isLoading = false
             }
             .store(in: &subscriptions)
 
     }
     // MARK: - Actions
     func sendButtonAction() {
+        isLoading = true
         sendButtonTapped.send(email)
     }
     // MARK: - API Call
