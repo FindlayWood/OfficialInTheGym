@@ -38,7 +38,8 @@ class CoachPlayerWorkoutsViewModel {
         apiService.fetchInstance(of: workoutSearchModel, returning: WorkoutModel.self) { [weak self] result in
             switch result {
             case .success(let models):
-                self?.workoutsPublisher.send(models)
+                let sortedModels = models.sorted(by: { $0.startTime ?? 0 > $1.startTime ?? 0})
+                self?.workoutsPublisher.send(sortedModels)
                 self?.isLoading = false
             case .failure(let error):
                 self?.errorPublisher.send(error)

@@ -92,7 +92,7 @@ class InjuryTrackerViewModel: ObservableObject {
         
         do {
             if currentInjury?.id == model.id {
-                try await docRef.updateData(["recovered": true])
+                try await docRef.updateData(["recovered": true, "status": "fit"])
             }
             let detailDocRef = Firestore.firestore().collection("InjuryStatus").document(UserDefaults.currentUser.uid).collection("statusUpdates").document(model.id)
             try await detailDocRef.updateData(["recovered": true])

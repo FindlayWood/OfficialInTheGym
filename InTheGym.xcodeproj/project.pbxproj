@@ -1064,6 +1064,9 @@
 		9F612BC82917FF2600B5AE5A /* SignUpAccountSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BC72917FF2600B5AE5A /* SignUpAccountSelectionView.swift */; };
 		9F612BCA2917FF6900B5AE5A /* AccountTypeEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BC92917FF6900B5AE5A /* AccountTypeEnum.swift */; };
 		9F612BCC291804B300B5AE5A /* CustomTextFieldWithCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BCB291804B300B5AE5A /* CustomTextFieldWithCheck.swift */; };
+		9F612BD0291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BCF291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift */; };
+		9F612BD229197DF900B5AE5A /* UserFollowingSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */; };
+		9F612BD529197E6400B5AE5A /* UserFollowing+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */; };
 		9FA4F1EB290EE7AF00757860 /* ViewJournalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */; };
 		9FA4F1EE290FECD800757860 /* PreviousJumpsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */; };
 		9FA4F1F0290FECF800757860 /* PreviousJumps+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */; };
@@ -2147,6 +2150,9 @@
 		9F612BC72917FF2600B5AE5A /* SignUpAccountSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpAccountSelectionView.swift; sourceTree = "<group>"; };
 		9F612BC92917FF6900B5AE5A /* AccountTypeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTypeEnum.swift; sourceTree = "<group>"; };
 		9F612BCB291804B300B5AE5A /* CustomTextFieldWithCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldWithCheck.swift; sourceTree = "<group>"; };
+		9F612BCF291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailViewSwiftUI.swift; sourceTree = "<group>"; };
+		9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFollowingSwiftUI.swift; sourceTree = "<group>"; };
+		9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserFollowing+ViewModel.swift"; sourceTree = "<group>"; };
 		9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewJournalEntryView.swift; sourceTree = "<group>"; };
 		9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousJumpsView.swift; sourceTree = "<group>"; };
 		9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviousJumps+ViewModel.swift"; sourceTree = "<group>"; };
@@ -3710,6 +3716,7 @@
 		745F89D7286DCFAE000070B2 /* SwiftUIViews */ = {
 			isa = PBXGroup;
 			children = (
+				9F612BD329197E3000B5AE5A /* UserFollowing */,
 				745F89D8286DCFBB000070B2 /* LoadingView.swift */,
 				9F612BC32915DB4A00B5AE5A /* CustomTextField.swift */,
 				9F612BC52917DD1500B5AE5A /* CustomSecureTextField.swift */,
@@ -4957,6 +4964,7 @@
 				74DE6D9927D3D7E9009FB44A /* PlayerDetailViewController.swift */,
 				74DE6D9B27D3D7F6009FB44A /* PlayerDetailViewModel.swift */,
 				74DE6D9D27D3D801009FB44A /* PlayerDetailView.swift */,
+				9F612BCF291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift */,
 			);
 			path = PlayerDetail;
 			sourceTree = "<group>";
@@ -5447,6 +5455,15 @@
 				9F612BC72917FF2600B5AE5A /* SignUpAccountSelectionView.swift */,
 			);
 			path = SignUpViews;
+			sourceTree = "<group>";
+		};
+		9F612BD329197E3000B5AE5A /* UserFollowing */ = {
+			isa = PBXGroup;
+			children = (
+				9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */,
+				9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */,
+			);
+			path = UserFollowing;
 			sourceTree = "<group>";
 		};
 		9FA4F1E9290EE79E00757860 /* ViewJournalEntry */ = {
@@ -6174,6 +6191,7 @@
 				743B16AA270B43B500F4C6C0 /* CustomTimer.swift in Sources */,
 				74FDB5B026A49C17000649CC /* RoundingExtension.swift in Sources */,
 				7420399B28329A3A00074ECB /* MyFollowersView.swift in Sources */,
+				9F612BD229197DF900B5AE5A /* UserFollowingSwiftUI.swift in Sources */,
 				74E08A8C28442592009D0DCB /* MyWorkloadsDataSource.swift in Sources */,
 				74EA155D28C50A95000669A8 /* VerticalJumpHomeView.swift in Sources */,
 				7466A8C725F0307F00F4050F /* SavedWorkoutsViewController.swift in Sources */,
@@ -6311,6 +6329,7 @@
 				745F89DB286DD8F7000070B2 /* JumpResultsFlow.swift in Sources */,
 				74F5471325EE929900C1A6A9 /* SettingsMessages.swift in Sources */,
 				7479812D27DA6E2900CF3F9B /* LikeSearchModel.swift in Sources */,
+				9F612BD0291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift in Sources */,
 				74B48DF027A1FEB400BBFC16 /* PostKeyModel.swift in Sources */,
 				74E08A8128425D48009D0DCB /* myWorkoutStatsUploadModel.swift in Sources */,
 				743E92B2280705600029F447 /* BoxBreathingView.swift in Sources */,
@@ -6532,6 +6551,7 @@
 				7444D0B626D30B330009C7A6 /* UploadingWorkoutViewController.swift in Sources */,
 				744B9F4B261E013F002574D7 /* MyGroupsViewController.swift in Sources */,
 				74C89C8C261B67D8009F3C72 /* WorkoutPrivacyCollectionViewCell.swift in Sources */,
+				9F612BD529197E6400B5AE5A /* UserFollowing+ViewModel.swift in Sources */,
 				74A0B595285A83040037FD3F /* PremiumAccountView.swift in Sources */,
 				742C1C4B27AD9BED00DD1BB0 /* ClipDataSource.swift in Sources */,
 				742FD56D283EB18F0025E43C /* ExerciseTagsView.swift in Sources */,
