@@ -101,7 +101,7 @@ class MatchTrackerViewModel: ObservableObject {
         var matchWorkloadModel = WorkloadModel(id: UUID().uuidString,
                                                endTime: Date().timeIntervalSince1970,
                                                rpe: 10,
-                                               timeToComplete: 120,
+                                               timeToComplete: 7200,
                                                workload: 0,
                                                customAddedWorkload: 0,
                                                matchWorkload: 1000)
