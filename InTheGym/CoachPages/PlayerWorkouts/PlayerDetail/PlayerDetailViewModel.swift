@@ -25,6 +25,7 @@ class PlayerDetailViewModel: ObservableObject {
         case performance
         case workouts
         case addWorkout
+        case workout(WorkoutModel)
     }
     var navigationTitle = "Player Detail"
     

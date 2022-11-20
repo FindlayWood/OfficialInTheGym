@@ -67,6 +67,8 @@ class PlayerDetailViewController: UIViewController {
                     self?.viewWorkouts()
                 case .addWorkout:
                     self?.addWorkout()
+                case .workout(let model):
+                    self?.showWorkout(model)
                 }
             }
             .store(in: &subscriptions)
@@ -91,5 +93,8 @@ private extension PlayerDetailViewController {
     }
     func showPerformance() {
         coordinator?.showPerformance(viewModel.user)
+    }
+    func showWorkout(_ model: WorkoutModel) {
+        coordinator?.showWorkout(model)
     }
 }

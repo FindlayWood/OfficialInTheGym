@@ -1081,6 +1081,9 @@
 		9FB0F29E2914331E00BF222E /* PracticeTrackerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29D2914331E00BF222E /* PracticeTrackerCoordinator.swift */; };
 		9FB0F2A129147F1700BF222E /* PracticeTrackerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F2A029147F1700BF222E /* PracticeTrackerDetailViewController.swift */; };
 		9FB0F2A329147F2E00BF222E /* PracticeTrackerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */; };
+		9FF8B30429283D8A00C47313 /* WorkoutListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B30329283D8A00C47313 /* WorkoutListView.swift */; };
+		9FF8B3062928422A00C47313 /* WorkoutFiguresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */; };
+		9FF8B3082928459E00C47313 /* WorkoutClipThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2167,6 +2170,9 @@
 		9FB0F29D2914331E00BF222E /* PracticeTrackerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerCoordinator.swift; sourceTree = "<group>"; };
 		9FB0F2A029147F1700BF222E /* PracticeTrackerDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerDetailViewController.swift; sourceTree = "<group>"; };
 		9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerDetailView.swift; sourceTree = "<group>"; };
+		9FF8B30329283D8A00C47313 /* WorkoutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListView.swift; sourceTree = "<group>"; };
+		9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFiguresView.swift; sourceTree = "<group>"; };
+		9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutClipThumbnailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3716,6 +3722,7 @@
 		745F89D7286DCFAE000070B2 /* SwiftUIViews */ = {
 			isa = PBXGroup;
 			children = (
+				9FF8B30229283D7000C47313 /* Workouts */,
 				9F612BD329197E3000B5AE5A /* UserFollowing */,
 				745F89D8286DCFBB000070B2 /* LoadingView.swift */,
 				9F612BC32915DB4A00B5AE5A /* CustomTextField.swift */,
@@ -5506,6 +5513,16 @@
 			path = PracticeDetail;
 			sourceTree = "<group>";
 		};
+		9FF8B30229283D7000C47313 /* Workouts */ = {
+			isa = PBXGroup;
+			children = (
+				9FF8B30329283D8A00C47313 /* WorkoutListView.swift */,
+				9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */,
+				9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */,
+			);
+			path = Workouts;
+			sourceTree = "<group>";
+		};
 		D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -5890,6 +5907,7 @@
 				7444D0F026D8524C0009C7A6 /* CreateNewPostViewModel.swift in Sources */,
 				74A602B52850D4F200AFA236 /* WorkoutDiscoveryCommentsView.swift in Sources */,
 				74D7F4D82629CD74006C3D5C /* SignUpViewModel.swift in Sources */,
+				9FF8B30429283D8A00C47313 /* WorkoutListView.swift in Sources */,
 				74318F4626B815FC009EDFAC /* CreateCircuitViewModel.swift in Sources */,
 				742D8BEB2819752E003682A2 /* PlayerProfileMoreViewController.swift in Sources */,
 				742C1C6E27B6AE4100DD1BB0 /* ProfileOptionsCell.swift in Sources */,
@@ -6163,6 +6181,7 @@
 				749B37B62848D4BA00ADF33D /* CircuitDataSource.swift in Sources */,
 				7444D09F26D143550009C7A6 /* AddMoreTimeViewController.swift in Sources */,
 				742C1C6A27B6A54600DD1BB0 /* MyProfileDataSource.swift in Sources */,
+				9FF8B3062928422A00C47313 /* WorkoutFiguresView.swift in Sources */,
 				74B6F69A275153A400A72679 /* DisplayingWorkoutsViewModel.swift in Sources */,
 				74AF6D64268682F3005C52A8 /* DisplayExerciseStatsProtocol.swift in Sources */,
 				74D31D1C25F948850024CC05 /* MainWorkoutBottomView.swift in Sources */,
@@ -6378,6 +6397,7 @@
 				743330C9278F39FD005A0C45 /* AssignView.swift in Sources */,
 				7492265222D8D0BA00EAD386 /* DetailTableViewCell.swift in Sources */,
 				74F8A62F2823FEFD008EB5E9 /* UserSelectionDataSource.swift in Sources */,
+				9FF8B3082928459E00C47313 /* WorkoutClipThumbnailView.swift in Sources */,
 				742C1C5127B2D4EB00DD1BB0 /* ClipStorageModel.swift in Sources */,
 				7452304B28BD2405008F1E8D /* AddExerciseTempoViewController.swift in Sources */,
 				748FFA312853ABA2001DDE69 /* AllTimeStatsViewController.swift in Sources */,

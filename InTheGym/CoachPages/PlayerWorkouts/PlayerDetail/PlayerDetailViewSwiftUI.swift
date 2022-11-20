@@ -70,21 +70,51 @@ struct PlayerDetailViewSwiftUI: View {
             }
             // TODO: - Show 3 most recent workouts
             Section {
-                Button {
-                    viewModel.action.send(.workouts)
-                } label: {
-                    Text("View Workouts")
+//                Button {
+//                    viewModel.action.send(.workouts)
+//                } label: {
+//                    Text("View Workouts")
+//                }
+//                Button {
+//                    viewModel.action.send(.addWorkout)
+//                } label: {
+//                    Text("Add New Workout")
+//                }
+                if viewModel.lastWorkouts.isEmpty {
+                    Text("This player has no workouts.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                } else {
+                    ForEach(viewModel.lastWorkouts, id: \.id) { model in
+                        Button {
+                            viewModel.action.send(.workout(model))
+                        } label: {
+                            WorkoutListView(model: model)
+                        }
+                        .padding(.bottom)
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 1, leading: 1, bottom: 0, trailing: 1))
+                        
+                    }
                 }
-                Button {
-                    viewModel.action.send(.addWorkout)
-                } label: {
-                    Text("Add New Workout")
-                }
-                ForEach(viewModel.lastWorkouts, id: \.id) { model in
-                    Text(model.title)
-                }
+                
             } header: {
-                Text("Workouts")
+                HStack {
+                    Text("Recent Workouts")
+                    Spacer()
+                    if !viewModel.lastWorkouts.isEmpty {
+                        Button {
+                            viewModel.action.send(.workouts)
+                        } label: {
+                            Text("see all")
+                                .font(.footnote.bold())
+                                .foregroundColor(Color(.darkColour))
+                        }
+                    }
+                }
+                
+                
             }
         }
         .onAppear {

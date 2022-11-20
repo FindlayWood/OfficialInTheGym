@@ -28,6 +28,7 @@ class PremiumAccountViewModel: ObservableObject {
     // MARK: - Actions
     
     // MARK: - Methods
+    @MainActor
     func fetchIAPOfferings() async {
         do {
             if let packages = try await subscriptionService.getOfferings() {
