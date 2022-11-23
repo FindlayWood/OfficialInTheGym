@@ -56,6 +56,15 @@ class PlayerTimelineView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    var performanceButton: UIButton = {
+       let button = UIButton()
+        button.setImage(UIImage(systemName: "sparkles.tv.fill"), for: .normal)
+        button.tintColor = .darkColour
+        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     var messagesButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "paperplane", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
@@ -134,6 +143,7 @@ private extension PlayerTimelineView {
         backgroundColor = .systemBackground
         //topView.addSubview(iconImageView)
         topView.addSubview(iconLabel)
+        topView.addSubview(performanceButton)
         topView.addSubview(messagesButton)
         //topView.addSubview(notifButton)
         postView.addSubview(profileImageView)
@@ -162,6 +172,8 @@ private extension PlayerTimelineView {
                                      
                                      messagesButton.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -10),
                                      messagesButton.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
+                                     performanceButton.trailingAnchor.constraint(equalTo: messagesButton.leadingAnchor, constant: -8),
+                                     performanceButton.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
 //                                     notifButton.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -10),
 //                                     notifButton.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
                                      

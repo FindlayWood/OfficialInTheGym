@@ -54,6 +54,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
         display.postButton.addTarget(self, action: #selector(makePostPressed(_:)), for: .touchUpInside)
         display.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         display.tableview.refreshControl = display.refreshControl
+        display.performanceButton.addTarget(self, action: #selector(performancePressed(_:)), for: .touchUpInside)
     }
     
     // MARK: - Data Source
@@ -158,6 +159,10 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     
     @objc func makePostPressed(_ sender: UIButton) {
         coordinator?.makePost(postable: PostModel(), listener: viewModel.newPostListener)
+    }
+    
+    @objc func performancePressed(_ sender: UIButton) {
+        coordinator?.showPerformance()
     }
     
     // tap tab bar to scroll to top

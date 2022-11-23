@@ -79,6 +79,11 @@ extension TimelineCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    func showPerformance() {
+        let child = PerformanceHomeCoordinator(navigationController: navigationController, user: UserDefaults.currentUser)
+        childCoordinators.append(child)
+        child.start()
+    }
 }
 
 //MARK: - Navigation Delegate Method
@@ -98,6 +103,9 @@ extension TimelineCoordinator: UINavigationControllerDelegate {
         }
         if let CommentSectionViewController = fromViewController as? CommentSectionViewController {
             childDidFinish(CommentSectionViewController.coordinator)
+        }
+        if let performanceViewController = fromViewController as? PerformanceIntroViewController {
+            childDidFinish(performanceViewController.coordinator)
         }
     }
 }
