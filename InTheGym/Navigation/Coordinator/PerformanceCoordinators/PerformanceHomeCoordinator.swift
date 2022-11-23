@@ -24,6 +24,7 @@ class PerformanceHomeCoordinator: Coordinator {
         if SubscriptionManager.shared.isSubscribed {
             let vc = PerformanceIntroViewController()
             vc.coordinator = self
+            vc.viewModel.user = user
             modalNavigationController = UINavigationController(rootViewController: vc)
             modalNavigationController.modalPresentationStyle = .fullScreen
             navigationController.present(modalNavigationController, animated: true)

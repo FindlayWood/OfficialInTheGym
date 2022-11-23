@@ -46,9 +46,12 @@ extension PlayerDetailCoordinator {
         child.start()
     }
     func showPerformance(_ user: Users) {
-        let vc = PerformanceMonitorViewController()
-        vc.viewModel.user = user
-        navigationController.pushViewController(vc, animated: true)
+        let child = PerformanceHomeCoordinator(navigationController: navigationController, user: user)
+        childCoordinators.append(child)
+        child.start()
+//        let vc = PerformanceMonitorViewController()
+//        vc.viewModel.user = user
+//        navigationController.pushViewController(vc, animated: true)
     }
     func showWorkout(_ model: WorkoutModel) {
         let vc = CoachPlayerWorkoutViewController()

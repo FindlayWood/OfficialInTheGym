@@ -13,6 +13,17 @@ import UIKit
 class PerformanceIntroViewModel {
     // MARK: - Publishers
     var action = PassthroughSubject<PerformanceIntroOptions,Never>()
+    
+    // MARK: - Properties
+    var user: Users!
+    var performanceOptions: [PerformanceIntroOptions] {
+        if user.uid == UserDefaults.currentUser.uid {
+            return PerformanceIntroOptions.allCases
+        } else {
+            let options = PerformanceIntroOptions.allCases.filter( { $0 != .journal })
+            return options
+        }
+    }
 }
 
 enum PerformanceIntroOptions: CaseIterable {

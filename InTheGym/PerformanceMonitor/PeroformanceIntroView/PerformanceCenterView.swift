@@ -21,7 +21,7 @@ struct PerformanceCenterView: View {
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
-                ForEach(PerformanceIntroOptions.allCases, id: \.self) { option in
+                ForEach(viewModel.performanceOptions, id: \.self) { option in
                     Button {
                         viewModel.action.send(option)
                     } label: {
