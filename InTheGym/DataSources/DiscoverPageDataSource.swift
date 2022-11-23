@@ -78,7 +78,7 @@ class DiscoverPageDataSource: NSObject {
     // MARK: - Initial Setup
     func initialSetup() {
         var snapshot = NSDiffableDataSourceSnapshot<DiscoverPageSections,DiscoverPageItems>()
-        snapshot.appendSections([.Workouts,.Exercises,.Tags,.Clips])
+        snapshot.appendSections([.Clips,.Workouts,.Exercises,.Tags])
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
