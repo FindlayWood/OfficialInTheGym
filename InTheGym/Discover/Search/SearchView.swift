@@ -30,6 +30,32 @@ class SearchView: UIView {
         return view
     }()
     
+    var icon: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(systemName: "magnifyingglass", withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+        view.tintColor = .darkColour
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    var emptyListLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Search for other users by their usernames."
+        label.backgroundColor = .clear
+        label.font = .preferredFont(forTextStyle: .body, weight: .medium)
+        label.textColor = .label
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    lazy var vstack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [icon, emptyListLabel])
+        stack.axis = .vertical
+        stack.spacing = 8
+        stack.alignment = .center
+        stack.distribution = .fill
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -47,6 +73,7 @@ private extension SearchView {
         backgroundColor = .systemBackground
         addSubview(searchField)
         addSubview(tableview)
+        addSubview(vstack)
         configureUI()
     }
     
@@ -59,7 +86,12 @@ private extension SearchView {
             tableview.topAnchor.constraint(equalTo: searchField.bottomAnchor),
             tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
             tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tableview.bottomAnchor.constraint(equalTo: bottomAnchor)
+            tableview.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            vstack.centerYAnchor.constraint(equalTo: tableview.centerYAnchor),
+            vstack.centerXAnchor.constraint(equalTo: tableview.centerXAnchor),
+            vstack.leadingAnchor.constraint(equalTo: tableview.leadingAnchor, constant: 16),
+            vstack.trailingAnchor.constraint(equalTo: tableview.trailingAnchor, constant: -16)
         ])
     }
 }

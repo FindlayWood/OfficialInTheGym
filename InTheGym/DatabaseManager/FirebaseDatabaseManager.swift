@@ -456,6 +456,20 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
 //            completion(.success(tempModels))
 
         }
+        
+    }
+    // MARK: Search Async
+    func searchTextQueryModelAsync<Model: FirebaseQueryModel, T: Decodable>(model: Model) async throws -> [T] {
+        let ref = Database.database().reference().child(model.internalPath)
+            .queryOrdered(byChild: model.orderedBy)
+            .queryStarting(atValue: model.equalTo)
+            .queryEnding(atValue: model.equalTo+"\u{f8ff}")
+        let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
+        guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
+            throw NSError(domain: "No snapshot children", code: 0)
+        }
+        let data = children.compactMap { try? $0.data(as: T.self) }
+        return data
     }
     
 }
@@ -485,4 +499,5 @@ protocol FirebaseDatabaseManagerService {
     func uploadTimeOrderedModelAsync<Model: FirebaseTimeOrderedModel>(data: inout Model) async throws -> Model
     func fetchInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model) async throws -> [T]
     func fetchLimitedInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model, limit: Int) async throws -> [T]
+    func searchTextQueryModelAsync<Model: FirebaseQueryModel, T: Decodable>(model: Model) async throws -> [T]
  }

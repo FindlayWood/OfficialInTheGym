@@ -11,6 +11,7 @@ import Combine
 
 class SearchViewController: UIViewController {
     
+    // MARK: - Properties
     weak var coordinator: DiscoverCoordinator?
 
     var display = SearchView()
@@ -21,11 +22,15 @@ class SearchViewController: UIViewController {
     
     private var subscriptions = Set<AnyCancellable>()
     
-    override func loadView() {
-        view = display
-    }
+    var childContentView: DiscoverSearchView!
+    
+    // MARK: - View
+//    override func loadView() {
+//        view = display
+//    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        addChildView()
         initDataSource()
         initViewModel()
         display.searchField.delegate = self
@@ -36,26 +41,37 @@ class SearchViewController: UIViewController {
         navigationItem.title = viewModel.navigationTitle
         editNavBarColour(to: .darkColour)
     }
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel) { [weak self] user in
+            self?.coordinator?.userSelected(user)
+        }
+        addSwiftUIView(childContentView)
+    }
+    // MARK: - Data Source
     func initDataSource() {
         dataSource = .init(tableView: display.tableview)
         dataSource.userSelected
             .sink { [weak self] in self?.coordinator?.userSelected($0)}
             .store(in: &subscriptions)
     }
+    // MARK: - View Model
     func initViewModel() {
         viewModel.$isSearching
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.setNavBar($0)}
             .store(in: &subscriptions)
-        viewModel.$initialUsers
+        viewModel.$searchedUsers
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.dataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
-        viewModel.returnedSearchUser
-            .sink { [weak self] in self?.dataSource.insertFirst($0)}
+        viewModel.$searchedUsers
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.showEmpty($0) }
             .store(in: &subscriptions)
-        viewModel.loadInitialUsers()
         viewModel.initSubscribers()
     }
 }
+// MARK: - Search Bar Delegate
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.searchText = searchText
@@ -65,7 +81,6 @@ extension SearchViewController: UISearchBarDelegate {
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        viewModel.searchDatabase()
     }
 }
 private extension SearchViewController {
@@ -75,6 +90,9 @@ private extension SearchViewController {
         } else {
             navigationItem.rightBarButtonItem = nil
         }
+    }
+    func showEmpty(_ users: [Users]) {
+        display.emptyListLabel.isHidden = !users.isEmpty
     }
 }
 
