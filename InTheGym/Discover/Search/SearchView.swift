@@ -95,4 +95,9 @@ private extension SearchView {
         ])
     }
 }
-
+// MARK: - Public Configure
+extension SearchView {
+    func showEmpty(_ hidden: Bool) {
+        vstack.isHidden = hidden
+    }
+}

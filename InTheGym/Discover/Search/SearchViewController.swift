@@ -25,12 +25,11 @@ class SearchViewController: UIViewController {
     var childContentView: DiscoverSearchView!
     
     // MARK: - View
-//    override func loadView() {
-//        view = display
-//    }
+    override func loadView() {
+        view = display
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        addChildView()
         initDataSource()
         initViewModel()
         display.searchField.delegate = self
@@ -40,12 +39,6 @@ class SearchViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationItem.title = viewModel.navigationTitle
         editNavBarColour(to: .darkColour)
-    }
-    func addChildView() {
-        childContentView = .init(viewModel: viewModel) { [weak self] user in
-            self?.coordinator?.userSelected(user)
-        }
-        addSwiftUIView(childContentView)
     }
     // MARK: - Data Source
     func initDataSource() {
@@ -92,7 +85,7 @@ private extension SearchViewController {
         }
     }
     func showEmpty(_ users: [Users]) {
-        display.emptyListLabel.isHidden = !users.isEmpty
+        display.showEmpty(users.isEmpty)
     }
 }
 

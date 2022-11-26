@@ -49,7 +49,7 @@ class UsersDataSource: NSObject {
         var snapshot = NSDiffableDataSourceSnapshot<SingleSection,Users>()
         snapshot.appendSections([.main])
         snapshot.appendItems(users, toSection: .main)
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     // MARK: - Add
