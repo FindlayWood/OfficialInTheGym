@@ -22,18 +22,21 @@ class CreateNewPostViewController: UIViewController {
     
     private var subscriptions = Set<AnyCancellable>()
     
+    var childContentView: NewPostView!
+    
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightColour
+//        view.backgroundColor = .lightColour
         initDisplay()
         initViewModel()
+        addChildView()
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        display.frame = getFullViewableFrame()
+//        view.addSubview(display)
+//    }
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
@@ -51,6 +54,12 @@ class CreateNewPostViewController: UIViewController {
         display.privacyButton.addTarget(self, action: #selector(togglePrivacy(_:)), for: .touchUpInside)
         display.messageText.delegate = self
         if viewModel.postable is GroupPost { display.privacyButton.isHidden = true }
+    }
+    func addChildView() {
+        childContentView = .init(cancel: {
+            self.dismiss(animated: true, completion: nil)
+        })
+        addSwiftUIView(childContentView)
     }
     
     // MARK: - View Model

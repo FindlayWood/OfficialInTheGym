@@ -231,6 +231,27 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         }
     }
     
+    // MARK: - Fetch Range Async
+    func fetchRangeAsync<M: FirebaseInstance, T: Decodable>(from models: [M]) async throws -> [T] {
+        var tempModels = [T]()
+//        let dispatchGroup = DispatchGroup()
+        let dbref = Database.database().reference()
+        for model in models {
+//            dispatchGroup.enter()
+            let (snapshot, _) = await dbref.child(model.internalPath).observeSingleEventAndPreviousSiblingKey(of: .value)
+            do {
+                let data = try snapshot.data(as: T.self)
+                tempModels.insert(data, at: 0)
+            } catch {
+                print(String(describing: error))
+            }
+        }
+        return tempModels
+//        dispatchGroup.notify(queue: .main) {
+//            return tempModels
+//        }
+    }
+    
     // MARK: - Fetch Keys
     func fetchKeys<M: FirebaseInstance>(from model: M, completion: @escaping (Result<[String],Error>) -> Void) {
         var tempKeys = [String]()
@@ -241,6 +262,16 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
             }
             completion(.success(tempKeys))
         }
+    }
+    // MARK: - Fetch Keys Async
+    func fetchKeysAsync<M: FirebaseInstance>(from model: M) async throws -> [String] {
+        let ref = Database.database().reference().child(model.internalPath)
+        let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
+        guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
+            throw NSError(domain: "No snapshot children", code: 0)
+        }
+        let keys = children.map { $0.key }
+        return keys
     }
     
     func upload<Model: FirebaseInstance>(data: Model, autoID: Bool, completion: @escaping (Result<Void,Error>) -> Void) {
@@ -500,4 +531,6 @@ protocol FirebaseDatabaseManagerService {
     func fetchInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model) async throws -> [T]
     func fetchLimitedInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model, limit: Int) async throws -> [T]
     func searchTextQueryModelAsync<Model: FirebaseQueryModel, T: Decodable>(model: Model) async throws -> [T]
+    func fetchKeysAsync<M: FirebaseInstance>(from model: M) async throws -> [String]
+    func fetchRangeAsync<M: FirebaseInstance, T: Decodable>(from models: [M]) async throws -> [T]
  }

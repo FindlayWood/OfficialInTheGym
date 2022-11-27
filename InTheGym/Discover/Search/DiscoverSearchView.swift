@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct DiscoverSearchView: View {
-    @ObservedObject var viewModel: SearchViewModel
+    @StateObject var viewModel = SearchViewModel()
     var action: (Users) -> ()
     var body: some View {
         VStack {
@@ -46,6 +46,9 @@ struct DiscoverSearchView: View {
             .background(Color(.secondarySystemBackground))
         }
         .background(Color(.systemBackground))
+        .onAppear {
+            viewModel.initSubscribers()
+        }
     }
 }
 
