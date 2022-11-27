@@ -49,7 +49,8 @@ class SearchViewModel: ObservableObject {
         Task {
             do {
                 let users: [Users] = try await apiService.searchTextQueryModelAsync(model: searchModel)
-                searchedUsers = users
+                let filteredUsers = users.filter { $0.uid != UserDefaults.currentUser.uid }
+                searchedUsers = filteredUsers
                 isSearching = false
             } catch {
                 print(String(describing: error))
