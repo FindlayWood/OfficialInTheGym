@@ -9,9 +9,7 @@
 import SwiftUI
 
 struct PostAttachmentSheet: View {
-    // MARK: - Environment
-    @Environment(\.dismiss) var dismiss
-    
+
     // MARK: - View Model
     @ObservedObject var viewModel: NewPostViewModel
     
@@ -19,6 +17,9 @@ struct PostAttachmentSheet: View {
     @State var showingWorkoutSheet: Bool = false
     @State var showingUsersSheet: Bool = false
     @State var showingClipsSheet: Bool = false
+    
+    // MARK: - Call backs
+    var dismiss: () -> ()
     
     // MARK: - View
     var body: some View {
@@ -114,7 +115,7 @@ struct PostAttachmentSheet: View {
                 DiscoverSearchView { tagUser($0) }
             }
             .sheet(isPresented: $showingClipsSheet) {
-                ClipsView()
+                ClipsView { viewModel.attachedClip = $0 }
             }
         }
     }
@@ -133,6 +134,6 @@ struct PostAttachmentSheet: View {
 
 struct PostAttachmentSheet_Previews: PreviewProvider {
     static var previews: some View {
-        PostAttachmentSheet(viewModel: NewPostViewModel())
+        PostAttachmentSheet(viewModel: NewPostViewModel(), dismiss: {})
     }
 }

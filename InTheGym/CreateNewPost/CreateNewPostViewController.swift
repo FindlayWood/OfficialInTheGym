@@ -20,6 +20,8 @@ class CreateNewPostViewController: UIViewController {
     
     var viewModel = CreateNewPostViewModel()
     
+    var newPostViewModel = NewPostViewModel()
+    
     private var subscriptions = Set<AnyCancellable>()
     
     var childContentView: NewPostView!
@@ -56,8 +58,12 @@ class CreateNewPostViewController: UIViewController {
         if viewModel.postable is GroupPost { display.privacyButton.isHidden = true }
     }
     func addChildView() {
-        childContentView = .init(cancel: {
-            self.dismiss(animated: true, completion: nil)
+        childContentView = .init(viewModel: newPostViewModel, addAttachments: {
+            self.coordinator?.showAttachments(self.newPostViewModel)
+        }, changePrivacy: {
+            self.coordinator?.showPrivacy(self.newPostViewModel)
+        }, cancel: {
+            self.dismiss(animated: true)
         })
         addSwiftUIView(childContentView)
     }

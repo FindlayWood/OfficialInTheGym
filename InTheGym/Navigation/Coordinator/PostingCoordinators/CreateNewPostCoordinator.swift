@@ -42,6 +42,20 @@ class CreateNewPostCoordinator: NSObject, Coordinator {
 
 // MARK: Flow Methods
 extension CreateNewPostCoordinator {
+    func showAttachments(_ viewModel: NewPostViewModel) {
+        guard let modalNavigationController else {return}
+        let vc = AttachmentsViewController()
+        vc.viewModel = viewModel
+        vc.coordinator = self
+        modalNavigationController.present(vc, animated: true, completion: nil)
+    }
+    func showPrivacy(_ viewModel: NewPostViewModel) {
+        guard let modalNavigationController else {return}
+        let vc = PrivacySettingsViewController()
+        vc.viewModel = viewModel
+        modalNavigationController.present(vc, animated: true)
+    }
+    
     func showImagePicker(completion: @escaping (UIImage) -> Void) {
         self.completion = completion
         guard let modalNavigationController = modalNavigationController else {return}

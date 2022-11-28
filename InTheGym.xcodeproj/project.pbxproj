@@ -1067,6 +1067,9 @@
 		9F24629A2933D8D3006C5656 /* NewPost+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2462992933D8D3006C5656 /* NewPost+ViewModel.swift */; };
 		9F24629D29340DEB006C5656 /* ClipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F24629C29340DEB006C5656 /* ClipsView.swift */; };
 		9F24629F29340FE6006C5656 /* ClipsView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F24629E29340FE6006C5656 /* ClipsView+ViewModel.swift */; };
+		9F3F820D2935582700CC9980 /* ClipGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F820C2935582700CC9980 /* ClipGridView.swift */; };
+		9F3F8210293563B000CC9980 /* AttachmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F820F293563B000CC9980 /* AttachmentsViewController.swift */; };
+		9F3F8213293569A300CC9980 /* PrivacySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F8212293569A300CC9980 /* PrivacySettingsViewController.swift */; };
 		9F612BBD2915CBE300B5AE5A /* LoginViewSwifUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */; };
 		9F612BC02915D78600B5AE5A /* SignUpMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */; };
 		9F612BC22915DB2900B5AE5A /* SignUpNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BC12915DB2900B5AE5A /* SignUpNameView.swift */; };
@@ -2167,6 +2170,9 @@
 		9F2462992933D8D3006C5656 /* NewPost+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NewPost+ViewModel.swift"; sourceTree = "<group>"; };
 		9F24629C29340DEB006C5656 /* ClipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipsView.swift; sourceTree = "<group>"; };
 		9F24629E29340FE6006C5656 /* ClipsView+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClipsView+ViewModel.swift"; sourceTree = "<group>"; };
+		9F3F820C2935582700CC9980 /* ClipGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipGridView.swift; sourceTree = "<group>"; };
+		9F3F820F293563B000CC9980 /* AttachmentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsViewController.swift; sourceTree = "<group>"; };
+		9F3F8212293569A300CC9980 /* PrivacySettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySettingsViewController.swift; sourceTree = "<group>"; };
 		9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwifUI.swift; sourceTree = "<group>"; };
 		9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpMainView.swift; sourceTree = "<group>"; };
 		9F612BC12915DB2900B5AE5A /* SignUpNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpNameView.swift; sourceTree = "<group>"; };
@@ -3516,6 +3522,8 @@
 		7444D0EC26D852280009C7A6 /* CreateNewPost */ = {
 			isa = PBXGroup;
 			children = (
+				9F3F8211293568F900CC9980 /* Privacy */,
+				9F3F820E2935639E00CC9980 /* Attachments */,
 				9F2462922932BB46006C5656 /* UIViews */,
 				7444D0ED26D8523A0009C7A6 /* CreateNewPostViewController.swift */,
 				7444D0EF26D8524C0009C7A6 /* CreateNewPostViewModel.swift */,
@@ -3755,8 +3763,6 @@
 				9F612BC52917DD1500B5AE5A /* CustomSecureTextField.swift */,
 				9F612BCB291804B300B5AE5A /* CustomTextFieldWithCheck.swift */,
 				9F2462892931790C006C5656 /* SearchBar.swift */,
-				9F2462952932D001006C5656 /* PrivacySheet.swift */,
-				9F2462972933CC16006C5656 /* PostAttachmentSheet.swift */,
 			);
 			path = SwiftUIViews;
 			sourceTree = "<group>";
@@ -5505,8 +5511,27 @@
 			children = (
 				9F24629C29340DEB006C5656 /* ClipsView.swift */,
 				9F24629E29340FE6006C5656 /* ClipsView+ViewModel.swift */,
+				9F3F820C2935582700CC9980 /* ClipGridView.swift */,
 			);
 			path = Clips;
+			sourceTree = "<group>";
+		};
+		9F3F820E2935639E00CC9980 /* Attachments */ = {
+			isa = PBXGroup;
+			children = (
+				9F3F820F293563B000CC9980 /* AttachmentsViewController.swift */,
+				9F2462972933CC16006C5656 /* PostAttachmentSheet.swift */,
+			);
+			path = Attachments;
+			sourceTree = "<group>";
+		};
+		9F3F8211293568F900CC9980 /* Privacy */ = {
+			isa = PBXGroup;
+			children = (
+				9F3F8212293569A300CC9980 /* PrivacySettingsViewController.swift */,
+				9F2462952932D001006C5656 /* PrivacySheet.swift */,
+			);
+			path = Privacy;
 			sourceTree = "<group>";
 		};
 		9F612BBE2915D77000B5AE5A /* SignUpViews */ = {
@@ -5951,6 +5976,7 @@
 				7431030D26FA340500F7121B /* TimeSelectionProtocol.swift in Sources */,
 				7410451A285FC77600A9FF4E /* PlayerInfoDetailSubviewView.swift in Sources */,
 				74DD39E028355D3E00165C63 /* UserCellViewModel.swift in Sources */,
+				9F3F8210293563B000CC9980 /* AttachmentsViewController.swift in Sources */,
 				7403D06F280E08C800268CEC /* AssigningSelectionViewModel.swift in Sources */,
 				745F89D6286DCF7C000070B2 /* PrivacyPopupView.swift in Sources */,
 				741E6E26264E9710001778A2 /* FollowingAPIService.swift in Sources */,
@@ -6073,6 +6099,7 @@
 				74EE4EE32804C54200051451 /* HofBreathingViewController.swift in Sources */,
 				743A0503276A885A0027B752 /* CommentView.swift in Sources */,
 				749B37A62846410A00ADF33D /* AddPlayerView.swift in Sources */,
+				9F3F820D2935582700CC9980 /* ClipGridView.swift in Sources */,
 				74DE6D8127D11E48009FB44A /* SavedWorkoutsChildView.swift in Sources */,
 				742C1CAB27C27C2600DD1BB0 /* Programs.swift in Sources */,
 				7444D08726D0117D0009C7A6 /* DisplaySingleSetView.swift in Sources */,
@@ -6708,6 +6735,7 @@
 				7444D0C626D3E8870009C7A6 /* Assignable.swift in Sources */,
 				742C1C5B27B46CB100DD1BB0 /* ClipProtocols.swift in Sources */,
 				74FCFA4B261541640064699F /* MyInfoTableViewCell.swift in Sources */,
+				9F3F8213293569A300CC9980 /* PrivacySettingsViewController.swift in Sources */,
 				74B6F68F274D588000A72679 /* ResetPasswordView.swift in Sources */,
 				7416CCC7264ED2A40043B1C2 /* CircuitCoordinator.swift in Sources */,
 				74104512285E057D00A9FF4E /* OnBoardThirdView.swift in Sources */,

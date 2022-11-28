@@ -13,6 +13,7 @@ class NewPostViewModel: ObservableObject {
     @Published var text: String = ""
     @Published var placeholder: String = "enter text..."
     @Published var attachedWorkout: SavedWorkoutModel?
+    @Published var attachedClip: ClipModel?
     @Published var taggedUsers: [Users] = []
     @Published var isPrivate: Bool = false
     

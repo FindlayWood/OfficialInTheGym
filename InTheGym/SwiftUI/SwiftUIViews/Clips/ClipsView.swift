@@ -15,18 +15,26 @@ struct ClipsView: View {
     // MARK: - View Model
     @StateObject var viewModel = ClipsViewModel()
     
+    // MARK: - Callback
+    var selection: (ClipModel) -> ()
+    
     // MARK: - View
     var body: some View {
         NavigationView {
             VStack {
                 SearchBar(searchText: $viewModel.searchText, placeholder: "search clips...")
-                List {
-                    ForEach(viewModel.clips, id: \.id) { model in
-                        Rectangle()
-                            .foregroundColor(.gray)
-                            .frame(width: 100, height: 100)
+                ScrollView {
+                    LazyVGrid(columns: [.init(.flexible()), .init(.flexible())]) {
+                        ForEach(viewModel.clips, id: \.id) { model in
+                            Button {
+                                selection(model)
+                            } label: {
+                                ClipGridView(clipModel: model)
+                            }
+                        }
                     }
                 }
+                .padding()
             }
             .navigationTitle("Clips")
             .navigationBarTitleDisplayMode(.inline)
@@ -40,7 +48,7 @@ struct ClipsView: View {
                             .foregroundColor(Color(.darkColour))
                     }
                 }
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     if viewModel.isLoading {
                         ProgressView()
                             .foregroundColor(Color(.darkColour))

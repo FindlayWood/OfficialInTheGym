@@ -10,11 +10,13 @@ import SwiftUI
 
 struct NewPostView: View {
     // MARK: - View Model
-    @StateObject var viewModel = NewPostViewModel()
+    @ObservedObject var viewModel: NewPostViewModel
     // MARK: - View Variables
     @State var showAttachmentSheet: Bool = false
     @State var showPrivacySheet: Bool = false
     // MARK: - Callback to ViewController
+    var addAttachments: () -> ()
+    var changePrivacy: () -> ()
     var cancel: () -> ()
     
     // MARK: - View
@@ -90,7 +92,7 @@ struct NewPostView: View {
             Spacer()
             HStack {
                 Button {
-                    showAttachmentSheet = true
+                    addAttachments()
                 } label: {
                     Image(systemName: "paperclip")
                         .font(.title)
@@ -98,7 +100,7 @@ struct NewPostView: View {
                 }
                 Spacer()
                 Button {
-                    showPrivacySheet = true
+                    changePrivacy()
                 } label: {
                     Image(systemName: viewModel.isPrivate ? "lock.fill" : "globe")
                         .font(.title)
@@ -107,17 +109,17 @@ struct NewPostView: View {
             }
         }
         .padding()
-        .sheet(isPresented: $showAttachmentSheet) {
-            PostAttachmentSheet(viewModel: viewModel)
-        }
-        .sheet(isPresented: $showPrivacySheet) {
-            PrivacySheet(isPrivate: $viewModel.isPrivate)
-        }
+//        .sheet(isPresented: $showAttachmentSheet) {
+////            PostAttachmentSheet(viewModel: viewModel)
+//        }
+//        .sheet(isPresented: $showPrivacySheet) {
+//            PrivacySheet(isPrivate: $viewModel.isPrivate)
+//        }
     }
 }
 
-struct NewPostView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewPostView(cancel: {})
-    }
-}
+//struct NewPostView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NewPostView(cancel: {})
+//    }
+//}

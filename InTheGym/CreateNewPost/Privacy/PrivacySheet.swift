@@ -9,10 +9,14 @@
 import SwiftUI
 
 struct PrivacySheet: View {
-    // MARK: - Environment
-    @Environment(\.dismiss) var dismiss
-    // MARK: - Bindings
-    @Binding var isPrivate: Bool
+    
+    // MARK: - Published Variables
+    @State var isPrivate: Bool = false
+    @State var optionChanged: Bool = false
+    
+    // MARK: - Call backs
+    var action: (Bool) -> ()
+    var dismiss: () -> ()
     
     // MARK: - View
     var body: some View {
@@ -38,7 +42,8 @@ struct PrivacySheet: View {
                                     .font(.title3.bold())
                                     .foregroundColor(Color(.darkColour))
                             }
-                            Text("Choosing PUBLIC will allow access to all InTheGym users.")
+                            .padding(.bottom)
+                            Text("Choosing PUBLIC will allow access to all InTheGym users. Confirm your choice by tapping Confirm Changes.")
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.leading)
                                 .font(.footnote)
@@ -69,7 +74,8 @@ struct PrivacySheet: View {
                                     .font(.title3.bold())
                                     .foregroundColor(Color(.darkColour))
                             }
-                            Text("Choosing PRIVATE will restrict access to only followers and coaches/players.")
+                            .padding(.bottom)
+                            Text("Choosing PRIVATE will restrict access to only followers and coaches/players. Confirm your choice by tapping Confirm Changes.")
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.leading)
                                 .font(.footnote)
@@ -89,6 +95,19 @@ struct PrivacySheet: View {
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(Color(.darkColour), lineWidth: 2)
                 }
+                if optionChanged {
+                    Button {
+                        action(isPrivate)
+                    } label: {
+                        Text("Confirm Change")
+                            .font(.title3.bold())
+                            .padding()
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .background(Color(.darkColour))
+                            .clipShape(Capsule())
+                    }
+                }
                 Spacer()
             }
             .padding()
@@ -103,12 +122,15 @@ struct PrivacySheet: View {
                     }
                 }
             }
+            .onChange(of: isPrivate) { _ in
+                optionChanged = true
+            }
         }
     }
 }
 
 struct PrivacySheet_Previews: PreviewProvider {
     static var previews: some View {
-        PrivacySheet(isPrivate: .constant(false))
+        PrivacySheet(action: { _ in}, dismiss: {})
     }
 }
