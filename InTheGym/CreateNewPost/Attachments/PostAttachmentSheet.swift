@@ -19,6 +19,8 @@ struct PostAttachmentSheet: View {
     @State var showingClipsSheet: Bool = false
     
     // MARK: - Call backs
+    var addWorkout: () -> ()
+    var addUser: () -> ()
     var dismiss: () -> ()
     
     // MARK: - View
@@ -32,7 +34,7 @@ struct PostAttachmentSheet: View {
                             .listRowInsets(EdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1))
                     } else {
                         Button {
-                            showingWorkoutSheet = true
+                            addWorkout()
                         } label: {
                             VStack(spacing: 16) {
                                 Image(systemName: "plus")
@@ -81,7 +83,7 @@ struct PostAttachmentSheet: View {
                         Text("Tagged Users")
                         Spacer()
                         Button {
-                            showingUsersSheet = true
+                            addUser()
                         } label: {
                             Image(systemName: "plus.circle.fill")
                                 .foregroundColor(Color(.darkColour))
@@ -90,7 +92,7 @@ struct PostAttachmentSheet: View {
                 }
                 Section {
                     Button {
-                        showingClipsSheet = true
+                        
                     } label: {
                         Text("Add Clip")
                     }
@@ -134,6 +136,6 @@ struct PostAttachmentSheet: View {
 
 struct PostAttachmentSheet_Previews: PreviewProvider {
     static var previews: some View {
-        PostAttachmentSheet(viewModel: NewPostViewModel(), dismiss: {})
+        PostAttachmentSheet(viewModel: NewPostViewModel(), addWorkout: {}, addUser: {}, dismiss: {})
     }
 }

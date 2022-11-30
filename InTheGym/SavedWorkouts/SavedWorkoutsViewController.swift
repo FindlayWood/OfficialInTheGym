@@ -29,19 +29,20 @@ class SavedWorkoutsViewController: UIViewController {
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightColour
+        view.backgroundColor = .systemBackground
         initDataSource()
         setupSubscriptions()
+        initNavBar()
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         display.frame = getFullViewableFrame()
-        display.tableview.backgroundColor = .lightColour
+        display.tableview.backgroundColor = .systemBackground
         view.addSubview(display)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        editNavBarColour(to: .white)
+        editNavBarColour(to: .darkColour)
         navigationItem.title = "Saved Workouts"
     }
     
@@ -50,8 +51,20 @@ class SavedWorkoutsViewController: UIViewController {
         collectionDataSource = .init(collectionView: display.collectionView)
     }
     
+    // MARK: - Nav Bar
+    func initNavBar() {
+        if navigationController?.viewControllers.first == self {
+            let dismissButton = UIBarButtonItem(title: "dismiss", style: .done, target: self, action: #selector(dismissAction))
+            navigationItem.leftBarButtonItem = dismissButton
+        }
+    }
+    
     // MARK: - Subscriptions
     func setupSubscriptions() {
+        viewModel.$isLoading
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in self?.loadingAction($0) }
+            .store(in: &subscriptions)
         viewModel.savedWorkoutss
             .receive(on: RunLoop.main)
             .sink { [weak self] in self?.collectionDataSource.updateTable(with: $0)}
@@ -75,4 +88,15 @@ class SavedWorkoutsViewController: UIViewController {
 //        let workout = viewModel.workoutSelected(at: indexPath)
 //        coordinator?.savedWorkoutSelected(workout, listener: <#SavedWorkoutRemoveListener?#>)
 //    }
+    // MARK: - Actions
+    @objc func dismissAction(_ sender: UIBarButtonItem) {
+        self.dismiss(animated: true)
+    }
+    func loadingAction(_ loading: Bool) {
+        if loading {
+            initLoadingNavBar(with: .darkColour)
+        } else {
+            navigationItem.rightBarButtonItem = nil
+        }
+    }
 }

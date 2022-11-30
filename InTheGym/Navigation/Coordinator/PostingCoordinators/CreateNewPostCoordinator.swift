@@ -12,8 +12,10 @@ class CreateNewPostCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var modalNavigationController: UINavigationController?
+    var attachmentsModal: UINavigationController!
     private var completion: (UIImage) -> Void = { _ in }
     private var savedCompletionHandle: (SavedWorkoutModel) -> Void = { _ in }
+    private var userCompletionHandler: (Users) -> Void = { _ in }
     var postable: Postable
     var listener: NewPostListener?
     var workout: WorkoutModel?
@@ -45,9 +47,10 @@ extension CreateNewPostCoordinator {
     func showAttachments(_ viewModel: NewPostViewModel) {
         guard let modalNavigationController else {return}
         let vc = AttachmentsViewController()
+        attachmentsModal = UINavigationController(rootViewController: vc)
         vc.viewModel = viewModel
         vc.coordinator = self
-        modalNavigationController.present(vc, animated: true, completion: nil)
+        modalNavigationController.present(attachmentsModal, animated: true, completion: nil)
     }
     func showPrivacy(_ viewModel: NewPostViewModel) {
         guard let modalNavigationController else {return}
@@ -78,6 +81,13 @@ extension CreateNewPostCoordinator {
         vc.coordinator = self
         modalNavigationController.present(vc, animated: true, completion: nil)
     }
+    func showUserSelection(completion: @escaping (Users) -> ()) {
+        self.userCompletionHandler = completion
+        let vc = SearchViewController()
+        vc.coordinator = self
+        let nav = UINavigationController(rootViewController: vc)
+        attachmentsModal.present(nav, animated: true)
+    }
     func posted() {
         navigationController.dismiss(animated: true)
     }
@@ -86,16 +96,15 @@ extension CreateNewPostCoordinator {
 extension CreateNewPostCoordinator: SavedWorkoutsFlow {
     func showSavedWorkoutPicker(completion: @escaping (SavedWorkoutModel) -> Void) {
         self.savedCompletionHandle = completion
-        guard let modalNavigationController = modalNavigationController else {return}
         let vc = SavedWorkoutsViewController()
+        let navController = UINavigationController(rootViewController: vc)
         vc.coordinator = self
-        modalNavigationController.present(vc, animated: true, completion: nil)
+        attachmentsModal.present(navController, animated: true, completion: nil)
     }
     
     func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
         savedCompletionHandle(selectedWorkout)
-        guard let modalNavigationController = modalNavigationController else {return}
-        modalNavigationController.dismiss(animated: true)
+        attachmentsModal.dismiss(animated: true)
     }
 }
 
@@ -106,5 +115,11 @@ extension CreateNewPostCoordinator: ImagePickerFlow {
         childDidFinish(coordinator)
     }
 }
-
+// MARK: - User Selection
+extension CreateNewPostCoordinator: UserSearchFlow {
+    func userSelected(_ user: Users) {
+        userCompletionHandler(user)
+        attachmentsModal.dismiss(animated: true)
+    }
+}
 

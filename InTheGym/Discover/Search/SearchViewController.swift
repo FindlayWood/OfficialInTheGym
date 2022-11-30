@@ -12,7 +12,7 @@ import Combine
 class SearchViewController: UIViewController {
     
     // MARK: - Properties
-    weak var coordinator: DiscoverCoordinator?
+    weak var coordinator: UserSearchFlow?
 
     var display = SearchView()
     
@@ -33,12 +33,20 @@ class SearchViewController: UIViewController {
         initDataSource()
         initViewModel()
         display.searchField.delegate = self
+        initNavBar()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationItem.title = viewModel.navigationTitle
         editNavBarColour(to: .darkColour)
+    }
+    // MARK: - Nav Bar
+    func initNavBar() {
+        if navigationController?.viewControllers.first == self {
+            let dismissButton = UIBarButtonItem(title: "dismiss", style: .done, target: self, action: #selector(dismissAction))
+            navigationItem.leftBarButtonItem = dismissButton
+        }
     }
     // MARK: - Data Source
     func initDataSource() {
@@ -62,6 +70,12 @@ class SearchViewController: UIViewController {
             .sink { [weak self] in self?.showEmpty($0) }
             .store(in: &subscriptions)
         viewModel.initSubscribers()
+    }
+}
+// MARK: - Actions
+extension SearchViewController {
+    @objc func dismissAction(_ sender: UIBarButtonItem) {
+        self.dismiss(animated: true)
     }
 }
 // MARK: - Search Bar Delegate

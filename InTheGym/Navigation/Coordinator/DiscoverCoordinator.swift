@@ -93,6 +93,13 @@ extension DiscoverCoordinator {
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
+//    func userSelected(_ user: Users) {
+//        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+//        childCoordinators.append(child)
+//        child.start()
+//    }
+}
+extension DiscoverCoordinator: UserSearchFlow {
     func userSelected(_ user: Users) {
         let child = UserProfileCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(child)

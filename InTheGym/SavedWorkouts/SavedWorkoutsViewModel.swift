@@ -12,6 +12,7 @@ import Combine
 class SavedWorkoutsViewModel:NSObject {
     
     // MARK: - Publishers
+    @Published var isLoading: Bool = false
     var savedWorkoutss = CurrentValueSubject<[SavedWorkoutModel],Never>([])
     var errorFetchingWorkouts = PassthroughSubject<Error,Never>()
 
@@ -31,6 +32,7 @@ class SavedWorkoutsViewModel:NSObject {
     
     // MARK: - Fetching functions
     func fetchKeys() {
+        isLoading = true
         let referencesModel = SavedWorkoutsReferences(id: UserDefaults.currentUser.uid)
         apiService.fetchKeys(from: referencesModel) { [weak self] result in
             guard let self = self else {return}
@@ -39,6 +41,7 @@ class SavedWorkoutsViewModel:NSObject {
                 self.loadWorkouts(from: keys)
             case .failure(let error):
                 self.errorFetchingWorkouts.send(error)
+                self.isLoading = false
             }
         }
     }
@@ -50,8 +53,10 @@ class SavedWorkoutsViewModel:NSObject {
             switch result {
             case .success(let savedWorkoutModels):
                 self.savedWorkoutss.send(savedWorkoutModels)
+                self.isLoading = false
             case .failure(let error):
                 self.errorFetchingWorkouts.send(error)
+                self.isLoading = false
             }
         }
     }

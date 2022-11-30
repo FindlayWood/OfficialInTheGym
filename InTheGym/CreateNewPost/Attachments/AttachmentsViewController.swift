@@ -25,10 +25,22 @@ class AttachmentsViewController: UIViewController {
         addChildView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
     func addChildView() {
-        childContentView = .init(viewModel: viewModel) {
-            self.dismiss(animated: true)
-        }
+        childContentView = .init(viewModel: viewModel, addWorkout: { [weak self] in
+            self?.coordinator?.showSavedWorkoutPicker(completion: { [weak self] model in
+                self?.viewModel.attachedWorkout = model
+            })
+        }, addUser: { [weak self] in
+            self?.coordinator?.showUserSelection(completion: { [weak self] model in
+                self?.viewModel.addTaggedUser(model)
+            })
+        }, dismiss: { [weak self] in
+            self?.dismiss(animated: true)
+        })
         addSwiftUIView(childContentView)
     }
 }

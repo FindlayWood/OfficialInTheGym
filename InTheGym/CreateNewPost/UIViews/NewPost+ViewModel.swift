@@ -24,5 +24,12 @@ class NewPostViewModel: ObservableObject {
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
+    // MARK: - Methods
+    func addTaggedUser(_ user: Users) {
+        if !taggedUsers.contains(where: { $0.uid == user.uid }) {
+            taggedUsers.append(user)
+        }
+    }
+    
 }
  
