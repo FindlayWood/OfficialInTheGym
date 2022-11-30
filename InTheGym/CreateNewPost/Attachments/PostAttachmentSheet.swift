@@ -28,7 +28,7 @@ struct PostAttachmentSheet: View {
         NavigationView {
             List {
                 Section {
-                    if let attachedWorkout = viewModel.attachedWorkout {
+                    if let attachedWorkout = viewModel.attachedSavedWorkout {
                         SavedWorkoutListView(model: attachedWorkout)
                             .listRowBackground(Color.clear)
                             .listRowInsets(EdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1))
@@ -55,9 +55,9 @@ struct PostAttachmentSheet: View {
                     HStack {
                         Text("Workouts")
                         Spacer()
-                        if viewModel.attachedWorkout != nil {
+                        if viewModel.attachedSavedWorkout != nil {
                             Button {
-                                viewModel.attachedWorkout = nil
+                                viewModel.removeAttachedSavedWorkout()
                             } label: {
                                 Text("Remove")
                                     .font(.caption.bold())
@@ -110,27 +110,11 @@ struct PostAttachmentSheet: View {
                     }
                 }
             }
-            .sheet(isPresented: $showingWorkoutSheet) {
-                SavedWorkoutSheet { viewModel.attachedWorkout = $0 }
-            }
-            .sheet(isPresented: $showingUsersSheet) {
-                DiscoverSearchView { tagUser($0) }
-            }
-            .sheet(isPresented: $showingClipsSheet) {
-                ClipsView { viewModel.attachedClip = $0 }
-            }
         }
-    }
-    
-    func tagUser(_ user: Users) {
-        if !(viewModel.taggedUsers.contains(where: { $0.uid == user.uid })) {
-            viewModel.taggedUsers.append(user)
-        }
-        showingUsersSheet = false
     }
     func delete(at offsets: IndexSet) {
         // delete the objects here
-        viewModel.taggedUsers.remove(atOffsets: offsets)
+        viewModel.removeTaggedUsers(at: offsets)
     }
 }
 

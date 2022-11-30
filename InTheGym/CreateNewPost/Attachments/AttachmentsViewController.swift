@@ -32,11 +32,11 @@ class AttachmentsViewController: UIViewController {
     func addChildView() {
         childContentView = .init(viewModel: viewModel, addWorkout: { [weak self] in
             self?.coordinator?.showSavedWorkoutPicker(completion: { [weak self] model in
-                self?.viewModel.attachedWorkout = model
+                self?.viewModel.updateAttachedSavedWorkout(with: model)
             })
         }, addUser: { [weak self] in
             self?.coordinator?.showUserSelection(completion: { [weak self] model in
-                self?.viewModel.addTaggedUser(model)
+                self?.viewModel.updateAttachedTaggedUser(model)
             })
         }, dismiss: { [weak self] in
             self?.dismiss(animated: true)

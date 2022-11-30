@@ -14,7 +14,10 @@ struct NewPostView: View {
     // MARK: - View Variables
     @State var showAttachmentSheet: Bool = false
     @State var showPrivacySheet: Bool = false
+    // MARK: - Variables
+    var isGroup: Bool
     // MARK: - Callback to ViewController
+    var post: () -> ()
     var addAttachments: () -> ()
     var changePrivacy: () -> ()
     var cancel: () -> ()
@@ -31,19 +34,24 @@ struct NewPostView: View {
                         .foregroundColor(Color(.darkColour))
                 }
                 Spacer()
-                Button {
-                    
-                } label: {
-                    Text("Post")
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .padding(.horizontal)
-                        .padding(.vertical, 4)
-                        .background(Color(.darkColour))
-                        .clipShape(Capsule())
+                if viewModel.isLoading {
+                    ProgressView()
+                        .foregroundColor(Color(.darkColour))
+                } else {
+                    Button {
+                        post()
+                    } label: {
+                        Text("Post")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .padding(.horizontal)
+                            .padding(.vertical, 4)
+                            .background(Color(.darkColour))
+                            .clipShape(Capsule())
+                    }
+                    .disabled(viewModel.text.isEmpty)
+                    .opacity(viewModel.text.isEmpty ? 0.5 : 1)
                 }
-                .disabled(viewModel.text.isEmpty)
-                .opacity(viewModel.text.isEmpty ? 0.5 : 1)
             }
             HStack(alignment: .top) {
                 Circle()
@@ -65,7 +73,7 @@ struct NewPostView: View {
                 }
 //                .frame(maxHeight: 300)
             }
-            if let attachedWorkout = viewModel.attachedWorkout {
+            if let attachedWorkout = viewModel.attachedSavedWorkout {
                 SavedWorkoutListView(model: attachedWorkout)
             }
             if !viewModel.taggedUsers.isEmpty {
@@ -99,12 +107,14 @@ struct NewPostView: View {
                         .foregroundColor(Color(.darkColour))
                 }
                 Spacer()
-                Button {
-                    changePrivacy()
-                } label: {
-                    Image(systemName: viewModel.isPrivate ? "lock.fill" : "globe")
-                        .font(.title)
-                        .foregroundColor(Color(.darkColour))
+                if !isGroup {
+                    Button {
+                        changePrivacy()
+                    } label: {
+                        Image(systemName: viewModel.isPrivate ? "lock.fill" : "globe")
+                            .font(.title)
+                            .foregroundColor(Color(.darkColour))
+                    }
                 }
             }
         }

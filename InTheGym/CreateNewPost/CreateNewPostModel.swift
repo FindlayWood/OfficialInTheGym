@@ -43,4 +43,7 @@ protocol Postable: FirebaseTimeOrderedModel {
     /// user may choose to attach saved workout
     var savedWorkoutID: String? { get set }
     
+    /// user may choose to tag other users - array of user IDs
+    var taggedUsers: [String]? { get set }
+    
 }

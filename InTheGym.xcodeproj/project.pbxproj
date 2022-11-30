@@ -1057,6 +1057,8 @@
 		74FDB5B926B0C42D000649CC /* ViewClipBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB5B826B0C42D000649CC /* ViewClipBottomView.swift */; };
 		74FDB97D25A4978A00CC18EF /* DiscoverPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB97C25A4978A00CC18EF /* DiscoverPageViewController.swift */; };
 		9F1DA6FE2937EE8900F41089 /* UserSearchFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1DA6FD2937EE8900F41089 /* UserSearchFlow.swift */; };
+		9F1DA7012937F5B300F41089 /* TopMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1DA7002937F5B300F41089 /* TopMessageView.swift */; };
+		9F1DA704293804C000F41089 /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1DA703293804C000F41089 /* BannerView.swift */; };
 		9F2462882931782F006C5656 /* DiscoverSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2462872931782F006C5656 /* DiscoverSearchView.swift */; };
 		9F24628A2931790C006C5656 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2462892931790C006C5656 /* SearchBar.swift */; };
 		9F24628D293180BC006C5656 /* UserRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F24628C293180BC006C5656 /* UserRow.swift */; };
@@ -2161,6 +2163,8 @@
 		74FDB5B826B0C42D000649CC /* ViewClipBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipBottomView.swift; sourceTree = "<group>"; };
 		74FDB97C25A4978A00CC18EF /* DiscoverPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageViewController.swift; sourceTree = "<group>"; };
 		9F1DA6FD2937EE8900F41089 /* UserSearchFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchFlow.swift; sourceTree = "<group>"; };
+		9F1DA7002937F5B300F41089 /* TopMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopMessageView.swift; sourceTree = "<group>"; };
+		9F1DA703293804C000F41089 /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
 		9F2462872931782F006C5656 /* DiscoverSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSearchView.swift; sourceTree = "<group>"; };
 		9F2462892931790C006C5656 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		9F24628C293180BC006C5656 /* UserRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRow.swift; sourceTree = "<group>"; };
@@ -2406,6 +2410,7 @@
 		7403A61926C9B3A9000588CE /* ViewClasses */ = {
 			isa = PBXGroup;
 			children = (
+				9F1DA702293804B200F41089 /* Banner */,
 				74E79E61283ABFA0002578BB /* PostSubviews */,
 				74D93473282EF9CD005D15DE /* CustomButtons */,
 				7403A61A26C9B3B3000588CE /* UITableViewView.swift */,
@@ -3766,6 +3771,7 @@
 				9F612BC52917DD1500B5AE5A /* CustomSecureTextField.swift */,
 				9F612BCB291804B300B5AE5A /* CustomTextFieldWithCheck.swift */,
 				9F2462892931790C006C5656 /* SearchBar.swift */,
+				9F1DA7002937F5B300F41089 /* TopMessageView.swift */,
 			);
 			path = SwiftUIViews;
 			sourceTree = "<group>";
@@ -5500,6 +5506,14 @@
 			path = CooridnatorFlows;
 			sourceTree = "<group>";
 		};
+		9F1DA702293804B200F41089 /* Banner */ = {
+			isa = PBXGroup;
+			children = (
+				9F1DA703293804C000F41089 /* BannerView.swift */,
+			);
+			path = Banner;
+			sourceTree = "<group>";
+		};
 		9F24628B293180AE006C5656 /* Users */ = {
 			isa = PBXGroup;
 			children = (
@@ -5877,6 +5891,7 @@
 				745F89E8286F432B000070B2 /* PerformanceIntroViewModel.swift in Sources */,
 				743330FA2795AB22005A0C45 /* LikeModels.swift in Sources */,
 				74B48E0D27A442A100BBFC16 /* LiveExerciseCollectionCell.swift in Sources */,
+				9F1DA7012937F5B300F41089 /* TopMessageView.swift in Sources */,
 				7444D06D26CD6FAD0009C7A6 /* GroupWorkoutsCoordinator.swift in Sources */,
 				744AED3027985F15000D2D74 /* SavedWorkoutOptionsView.swift in Sources */,
 				745E1DAA283E7857009CA236 /* CoachWorkoutsCoordinator.swift in Sources */,
@@ -6505,6 +6520,7 @@
 				9FF8B3082928459E00C47313 /* WorkoutClipThumbnailView.swift in Sources */,
 				742C1C5127B2D4EB00DD1BB0 /* ClipStorageModel.swift in Sources */,
 				7452304B28BD2405008F1E8D /* AddExerciseTempoViewController.swift in Sources */,
+				9F1DA704293804C000F41089 /* BannerView.swift in Sources */,
 				748FFA312853ABA2001DDE69 /* AllTimeStatsViewController.swift in Sources */,
 				74F18AE327D668D00043551F /* WorkoutChildView.swift in Sources */,
 				74C5883228BBBC4E008661B7 /* PerformanceCenterOptionView.swift in Sources */,

@@ -26,7 +26,7 @@ class PrivacySettingsViewController: UIViewController {
     
     func addChildView() {
         childContentView = .init(isPrivate: viewModel.isPrivate, action: { [weak self] privacy in
-            self?.viewModel.isPrivate = privacy
+            self?.viewModel.updatePrivacy(to: privacy)
             self?.dismiss(animated: true)
         }, dismiss: {
             self.dismiss(animated: true)

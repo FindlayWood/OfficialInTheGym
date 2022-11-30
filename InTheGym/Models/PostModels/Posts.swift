@@ -21,6 +21,7 @@ struct PostModel: Codable, Hashable, DisplayablePost, Postable {
 //    var attachedClip: attachedClip?
     var workoutID: String?
     var savedWorkoutID: String?
+    var taggedUsers: [String]?
     var likeCount: Int
     var replyCount: Int
     var isPrivate: Bool

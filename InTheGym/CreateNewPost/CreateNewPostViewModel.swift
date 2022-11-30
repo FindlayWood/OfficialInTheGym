@@ -135,6 +135,7 @@ class CreateNewPostViewModel {
     
     func updateAttachedSavedWorkout(with model: SavedWorkoutModel) {
         removeAllAttachments()
+        
         postable.savedWorkoutID = model.id
     }
     func updateAttachedWorkout(with model: WorkoutModel) {

@@ -126,4 +126,18 @@ extension UIViewController {
         ])
         
     }
+    func addSwiftUISubView<content: View>(_ childContentView: content) -> UIHostingController<content> {
+        let childView = UIHostingController(rootView: childContentView)
+        addChild(childView)
+        view.addSubview(childView.view)
+        childView.didMove(toParent: self)
+        childView.view.backgroundColor = .clear
+        childView.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            childView.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            childView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            childView.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        return childView
+    }
 }
