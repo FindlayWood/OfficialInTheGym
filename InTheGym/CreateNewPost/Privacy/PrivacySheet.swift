@@ -11,7 +11,7 @@ import SwiftUI
 struct PrivacySheet: View {
     
     // MARK: - Published Variables
-    @State var isPrivate: Bool = false
+    @State var isPrivate: Bool
     @State var optionChanged: Bool = false
     
     // MARK: - Call backs
@@ -131,6 +131,6 @@ struct PrivacySheet: View {
 
 struct PrivacySheet_Previews: PreviewProvider {
     static var previews: some View {
-        PrivacySheet(action: { _ in}, dismiss: {})
+        PrivacySheet(isPrivate: false, action: { _ in}, dismiss: {})
     }
 }
