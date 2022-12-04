@@ -25,34 +25,34 @@ struct NewPostView: View {
     // MARK: - View
     var body: some View {
         VStack {
-            HStack {
-                Button {
-                    cancel()
-                } label: {
-                    Text("cancel")
-                        .fontWeight(.bold)
-                        .foregroundColor(Color(.darkColour))
-                }
-                Spacer()
-                if viewModel.isLoading {
-                    ProgressView()
-                        .foregroundColor(Color(.darkColour))
-                } else {
-                    Button {
-                        post()
-                    } label: {
-                        Text("Post")
-                            .fontWeight(.semibold)
-                            .foregroundColor(.white)
-                            .padding(.horizontal)
-                            .padding(.vertical, 4)
-                            .background(Color(.darkColour))
-                            .clipShape(Capsule())
-                    }
-                    .disabled(viewModel.text.isEmpty)
-                    .opacity(viewModel.text.isEmpty ? 0.5 : 1)
-                }
-            }
+//            HStack {
+//                Button {
+//                    cancel()
+//                } label: {
+//                    Text("cancel")
+//                        .fontWeight(.bold)
+//                        .foregroundColor(Color(.darkColour))
+//                }
+//                Spacer()
+//                if viewModel.isLoading {
+//                    ProgressView()
+//                        .foregroundColor(Color(.darkColour))
+//                } else {
+//                    Button {
+//                        post()
+//                    } label: {
+//                        Text("Post")
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(.white)
+//                            .padding(.horizontal)
+//                            .padding(.vertical, 4)
+//                            .background(Color(.darkColour))
+//                            .clipShape(Capsule())
+//                    }
+//                    .disabled(viewModel.text.isEmpty)
+//                    .opacity(viewModel.text.isEmpty ? 0.5 : 1)
+//                }
+//            }
             HStack(alignment: .top) {
                 Circle()
                     .foregroundColor(.gray)

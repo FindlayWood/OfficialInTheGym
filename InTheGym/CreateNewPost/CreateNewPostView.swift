@@ -331,4 +331,8 @@ extension CreateNewPostView {
             privacyButton.isUserInteractionEnabled = true
         }
     }
+    func setPostButton(to enabled: Bool) {
+        postButton.isEnabled = enabled
+        postButton.backgroundColor = .darkColour.withAlphaComponent(enabled ? 1 : 0.3)
+    }
 }

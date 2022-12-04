@@ -32,6 +32,7 @@ class CreateNewPostViewController: UIViewController {
 //        view.backgroundColor = .lightColour
 //        initDisplay()
         initViewModel()
+        initNavBar()
         addChildView()
     }
 //    override func viewDidLayoutSubviews() {
@@ -39,12 +40,19 @@ class CreateNewPostViewController: UIViewController {
 //        display.frame = getFullViewableFrame()
 //        view.addSubview(display)
 //    }
-    override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+//    override func viewWillAppear(_ animated: Bool) {
+////        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+//    }
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+////        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+//    }
+    func initNavBar() {
+        let cancelButton = UIBarButtonItem(title: "cancel", style: .done, target: self, action: #selector(cancelTapped))
+        let postButton = UIBarButtonItem(customView: display.postButton)
+        navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.rightBarButtonItem = postButton
+        editNavBarColour(to: .darkColour)
     }
     func initDisplay() {
 //        display.cancelButton.addTarget(self, action: #selector(cancelTapped(_:)), for: .touchUpInside)
@@ -75,10 +83,10 @@ class CreateNewPostViewController: UIViewController {
     
     // MARK: - View Model
     func initViewModel() {
-        
-//        viewModel.$canPost
-//            .sink { [weak self] in self?.display.postButton.isEnabled = $0 }
-//            .store(in: &subscriptions)
+        viewModel.$text
+            .map { $0.count > 0 }
+            .sink { [weak self] in self?.display.setPostButton(to: $0) }
+            .store(in: &subscriptions)
         
         viewModel.$isPrivate
             .sink { [weak self] in self?.display.togglePrivacy(to: $0)}
@@ -113,7 +121,7 @@ class CreateNewPostViewController: UIViewController {
 
 // MARK: - Actions
 extension CreateNewPostViewController {
-    func cancelTapped() {
+    @objc func cancelTapped() {
         self.dismiss(animated: true, completion: nil)
     }
 //    @objc func postTapped(_ sender: UIButton) {

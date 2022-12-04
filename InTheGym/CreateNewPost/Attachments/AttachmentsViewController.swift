@@ -23,11 +23,24 @@ class AttachmentsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addChildView()
+        initNavBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    // MARK: - Naav bar
+    func initNavBar() {
+        let dismissButton = UIBarButtonItem(title: "dismiss", style: .done, target: self, action: #selector(dismissAction(_:)))
+        navigationItem.leftBarButtonItem = dismissButton
+        navigationItem.title = "Attachments"
+        
+        editNavBarColour(to: .darkColour)
     }
     func addChildView() {
         childContentView = .init(viewModel: viewModel, addWorkout: { [weak self] in
@@ -42,5 +55,8 @@ class AttachmentsViewController: UIViewController {
             self?.dismiss(animated: true)
         })
         addSwiftUIView(childContentView)
+    }
+    @objc func dismissAction(_ sender: UIBarButtonItem) {
+        self.dismiss(animated: true)
     }
 }

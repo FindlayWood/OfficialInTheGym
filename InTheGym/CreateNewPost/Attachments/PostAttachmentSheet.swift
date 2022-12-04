@@ -98,18 +98,18 @@ struct PostAttachmentSheet: View {
                     }
                 }
             }
-            .navigationTitle("Attachments")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Text("dismiss")
-                            .fontWeight(.bold)
-                            .foregroundColor(Color(.darkColour))
-                    }
-                }
-            }
+//            .navigationTitle("Attachments")
+//            .toolbar {
+//                ToolbarItem(placement: .navigationBarLeading) {
+//                    Button {
+//                        dismiss()
+//                    } label: {
+//                        Text("dismiss")
+//                            .fontWeight(.bold)
+//                            .foregroundColor(Color(.darkColour))
+//                    }
+//                }
+//            }
         }
     }
     func delete(at offsets: IndexSet) {
