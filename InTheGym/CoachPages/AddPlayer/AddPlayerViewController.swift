@@ -25,18 +25,25 @@ class AddPlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        initNavBar()
         initDisplay()
         initDataSource()
         initViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        super.viewWillAppear(animated)
+        editNavBarColour(to: .darkColour)
+    }
+    // MARK: - Nav Bar
+    func initNavBar() {
+        let dismissButton = UIBarButtonItem(title: "close", style: .done, target: self, action: #selector(dismissAction))
+        navigationItem.leftBarButtonItem = dismissButton
+        navigationItem.title = "Add Players"
     }
     // MARK: - Display
     func initDisplay() {
         display.searchField.delegate = self
         display.tableview.backgroundColor = .secondarySystemBackground
-        display.dismissButton.addTarget(self, action: #selector(dismissAction(_:)), for: .touchUpInside)
     }
     // MARK: - Data Source
     func initDataSource() {
@@ -60,6 +67,10 @@ class AddPlayerViewController: UIViewController {
             .compactMap { $0 }
             .sink { [weak self] in self?.dataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
+        viewModel.$cellModels
+            .map { $0.count > 0 }
+            .sink { [weak self] in self?.display.setPlaceHolder(to: $0) }
+            .store(in: &subscriptions)
         viewModel.initSubscriptions()
         viewModel.loadCurrentRequests()
     }
@@ -68,17 +79,17 @@ class AddPlayerViewController: UIViewController {
 private extension AddPlayerViewController {
     func setLoading(_ loading: Bool) {
         if loading {
-            display.activityIndicator.startAnimating()
+            initLoadingNavBar(with: .darkColour)
         } else {
-            display.activityIndicator.stopAnimating()
+            navigationItem.rightBarButtonItem = nil
         }
     }
     func setInitialLoading(to loading: Bool) {
         if loading {
-            display.activityIndicator.startAnimating()
+            initLoadingNavBar(with: .darkColour)
             display.searchField.isUserInteractionEnabled = false
         } else {
-            display.activityIndicator.stopAnimating()
+            navigationItem.rightBarButtonItem = nil
             display.searchField.isUserInteractionEnabled = true
         }
     }

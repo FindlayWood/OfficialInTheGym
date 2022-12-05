@@ -50,24 +50,6 @@ class AddPlayerView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    var activityIndicator: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView()
-        view.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        view.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        view.hidesWhenStopped = true
-        view.color = .darkColour
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    var dismissButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-        button.tintColor = .darkColour
-        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -82,28 +64,22 @@ class AddPlayerView: UIView {
 private extension AddPlayerView {
     func setupUI() {
         addSubview(searchField)
+        addSubview(tableview)
         addSubview(playerIcon)
         addSubview(messageLabel)
-        addSubview(tableview)
-        addSubview(activityIndicator)
-        addSubview(dismissButton)
         configureUI()
     }
     func configureUI() {
         NSLayoutConstraint.activate([
-            activityIndicator.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            activityIndicator.trailingAnchor.constraint(equalTo: trailingAnchor),
-            dismissButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            dismissButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             
-            playerIcon.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 32),
+            playerIcon.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 32),
             playerIcon.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             messageLabel.topAnchor.constraint(equalTo: playerIcon.bottomAnchor, constant: 8),
             messageLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             messageLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.7),
             
-            searchField.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 8),
+            searchField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             searchField.leadingAnchor.constraint(equalTo: leadingAnchor),
             searchField.trailingAnchor.constraint(equalTo: trailingAnchor),
             searchField.heightAnchor.constraint(equalToConstant: 48),
@@ -113,5 +89,12 @@ private extension AddPlayerView {
             tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
             tableview.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+    }
+}
+// MARK: - Public Configure
+extension AddPlayerView {
+    func setPlaceHolder(to hidden: Bool) {
+        playerIcon.isHidden = hidden
+        messageLabel.isHidden = hidden
     }
 }

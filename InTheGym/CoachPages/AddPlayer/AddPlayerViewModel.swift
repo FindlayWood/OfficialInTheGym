@@ -12,7 +12,7 @@ import Combine
 class AddPlayerViewModel {
     
     // MARK: - Publishers
-    @Published var cellModels: [CoachRequestCellModel]?
+    @Published var cellModels: [CoachRequestCellModel] = []
     @Published var username: String = ""
     @Published var canAdd: Bool = false
     @Published var isLoading: Bool = false
@@ -108,7 +108,7 @@ class AddPlayerViewModel {
         }
     }
     func requestSent(at indexPath: IndexPath) {
-        guard let cellModel = cellModels?[indexPath.item] else {return}
+        let cellModel = cellModels[indexPath.item]
         requestSentUsers.append(cellModel.user.uid)
         sendRequest(to: cellModel.user)
     }
