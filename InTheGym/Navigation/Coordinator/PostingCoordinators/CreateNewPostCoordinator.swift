@@ -17,13 +17,11 @@ class CreateNewPostCoordinator: NSObject, Coordinator {
     private var savedCompletionHandle: (SavedWorkoutModel) -> Void = { _ in }
     private var userCompletionHandler: (Users) -> Void = { _ in }
     var postable: Postable
-    var listener: NewPostListener?
     var workout: WorkoutModel?
     
-    init(navigationController: UINavigationController, postable: Postable, listener: NewPostListener?, workout: WorkoutModel? = nil) {
+    init(navigationController: UINavigationController, postable: Postable, workout: WorkoutModel? = nil) {
         self.navigationController = navigationController
         self.postable = postable
-        self.listener = listener
         self.workout = workout
     }
     
@@ -33,7 +31,6 @@ class CreateNewPostCoordinator: NSObject, Coordinator {
         modalNavigationController?.setViewControllers([vc], animated: false)
         vc.coordinator = self
         vc.viewModel.postable = postable
-        vc.viewModel.listener = listener
         vc.viewModel.attachedWorkout = workout
         if let modalNavigationController = modalNavigationController {
             modalNavigationController.modalPresentationStyle = .fullScreen

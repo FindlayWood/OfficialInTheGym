@@ -106,6 +106,11 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
             }
             .store(in: &subscriptions)
         
+        NotificationCenter.default.publisher(for: Notification.newPostFromCurrentUser)
+            .compactMap { $0.object as? PostModel }
+            .sink { [weak self] in self?.dataSource.addNewPost($0) }
+            .store(in: &subscriptions)
+        
         viewModel.fetchPostRefs()
     }
     

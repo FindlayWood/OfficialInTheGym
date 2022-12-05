@@ -156,6 +156,11 @@ class CreateNewPostView: UIView {
         return view
     }()
     
+    lazy var postNavBarButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(customView: postButton)
+        return button
+    }()
+    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)

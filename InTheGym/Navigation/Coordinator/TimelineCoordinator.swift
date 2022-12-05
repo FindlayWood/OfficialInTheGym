@@ -53,8 +53,8 @@ class TimelineCoordinator: NSObject, Coordinator {
 //MARK: - Flow Methods
 extension TimelineCoordinator {
     
-    func makePost(postable: Postable, listener: NewPostListener) {
-        let child = CreateNewPostCoordinator(navigationController: navigationController, postable: postable, listener: listener)
+    func makePost(postable: Postable) {
+        let child = CreateNewPostCoordinator(navigationController: navigationController, postable: postable)
         childCoordinators.append(child)
         child.start()
     }

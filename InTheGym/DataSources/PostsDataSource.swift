@@ -82,7 +82,7 @@ class PostsDataSource: NSObject {
         } else {
             currentSnapshot.appendItems([newPost], toSection: .main)
         }
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
     // MARK: - Reload

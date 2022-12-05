@@ -1084,6 +1084,7 @@
 		9F612BD0291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BCF291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift */; };
 		9F612BD229197DF900B5AE5A /* UserFollowingSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */; };
 		9F612BD529197E6400B5AE5A /* UserFollowing+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */; };
+		9F84639C293E8F5B001E549F /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */; };
 		9FA4F1EB290EE7AF00757860 /* ViewJournalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */; };
 		9FA4F1EE290FECD800757860 /* PreviousJumpsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */; };
 		9FA4F1F0290FECF800757860 /* PreviousJumps+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */; };
@@ -2190,6 +2191,7 @@
 		9F612BCF291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailViewSwiftUI.swift; sourceTree = "<group>"; };
 		9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFollowingSwiftUI.swift; sourceTree = "<group>"; };
 		9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserFollowing+ViewModel.swift"; sourceTree = "<group>"; };
+		9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewJournalEntryView.swift; sourceTree = "<group>"; };
 		9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousJumpsView.swift; sourceTree = "<group>"; };
 		9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviousJumps+ViewModel.swift"; sourceTree = "<group>"; };
@@ -2369,6 +2371,7 @@
 				747511AA288DEDB3006720E9 /* UIFont+Extension.swift */,
 				74FA60A428B03081007B2CD8 /* Calendar+Extension.swift */,
 				74F664E528E098FB0086BA4E /* FileManager+Extension.swift */,
+				9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -6071,6 +6074,7 @@
 				7403D05A280B6F9900268CEC /* ShowClipCustomTransition.swift in Sources */,
 				74F2CCE826E3817000D7AD79 /* AddMoreNoteView.swift in Sources */,
 				7479812727DA31DE00CF3F9B /* ClipCache.swift in Sources */,
+				9F84639C293E8F5B001E549F /* NotificationName+Extension.swift in Sources */,
 				7479813C27DF626500CF3F9B /* RequestCellModel.swift in Sources */,
 				745B330325782FF100594019 /* CompletedWorkoutViewController.swift in Sources */,
 				74318F3C26B570F5009EDFAC /* PreLiveWorkoutView.swift in Sources */,

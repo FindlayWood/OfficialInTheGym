@@ -29,8 +29,6 @@ class PlayerTimelineViewModel {
     var errorLikingPost = PassthroughSubject<Error,Never>()
     
     var reloadListener = PassthroughSubject<PostModel,Never>()
-    
-    var newPostListener = NewPostListener()
 
     // MARK: - Properties
     var selectedCellIndex: IndexPath?

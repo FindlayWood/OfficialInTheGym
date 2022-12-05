@@ -49,9 +49,11 @@ class CreateNewPostViewController: UIViewController {
 //    }
     func initNavBar() {
         let cancelButton = UIBarButtonItem(title: "cancel", style: .done, target: self, action: #selector(cancelTapped))
-        let postButton = UIBarButtonItem(customView: display.postButton)
+//        let postButton = UIBarButtonItem(customView: display.postButton)
+        display.postButton.addTarget(self, action: #selector(postTapped), for: .touchUpInside)
+        display.postNavBarButton.action = #selector(postTapped)
         navigationItem.leftBarButtonItem = cancelButton
-        navigationItem.rightBarButtonItem = postButton
+        navigationItem.rightBarButtonItem = display.postNavBarButton
         editNavBarColour(to: .darkColour)
     }
     func initDisplay() {
@@ -93,7 +95,7 @@ class CreateNewPostViewController: UIViewController {
             .store(in: &subscriptions)
         
         viewModel.$isLoading
-            .sink { [weak self] in self?.display.setLoading(to: $0)}
+            .sink { [weak self] in self?.setLoading(to: $0)}
             .store(in: &subscriptions)
         
 //        viewModel.$attachedWorkout
@@ -124,9 +126,16 @@ extension CreateNewPostViewController {
     @objc func cancelTapped() {
         self.dismiss(animated: true, completion: nil)
     }
-//    @objc func postTapped(_ sender: UIButton) {
-//        viewModel.postTapped()
-//    }
+    @objc func postTapped(_ sender: UIButton) {
+        viewModel.postAction()
+    }
+    func setLoading(to loading: Bool) {
+        if loading {
+            initLoadingNavBar(with: .darkColour)
+        } else {
+            navigationItem.rightBarButtonItem = display.postNavBarButton
+        }
+    }
 //    @objc func attachmentTapped(_ sender: UIButton) {
 //        coordinator?.showImagePicker(completion: { [display] pickedImage in
 //            display.addImage(pickedImage)

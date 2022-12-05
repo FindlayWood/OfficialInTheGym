@@ -55,7 +55,7 @@ extension CompletedWorkoutCoordinator {
     }
     func postWorkout(_ model: WorkoutModel) {
         guard let modalNavigationController = modalNavigationController else {return}
-        let child = CreateNewPostCoordinator(navigationController: modalNavigationController, postable: PostModel(), listener: nil, workout: model)
+        let child = CreateNewPostCoordinator(navigationController: modalNavigationController, postable: PostModel(), workout: model)
         childCoordinators.append(child)
         child.start()
     }

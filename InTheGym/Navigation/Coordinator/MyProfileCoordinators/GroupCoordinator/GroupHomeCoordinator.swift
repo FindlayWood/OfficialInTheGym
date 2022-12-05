@@ -44,7 +44,7 @@ extension GroupHomeCoordinator {
         child.start()
     }
     func createNewPost(_ postable: Postable, listener: NewPostListener?) {
-        let child = CreateNewPostCoordinator(navigationController: navigationController, postable: postable, listener: listener)
+        let child = CreateNewPostCoordinator(navigationController: navigationController, postable: postable)
         childCoordinators.append(child)
         child.start()
     }

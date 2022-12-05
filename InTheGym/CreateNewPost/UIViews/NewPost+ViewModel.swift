@@ -27,7 +27,6 @@ class NewPostViewModel: ObservableObject {
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService
     var postable: Postable! /// postable - either post or group post
-    weak var listener: NewPostListener? /// post listener
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - Initializer
@@ -112,8 +111,8 @@ class NewPostViewModel: ObservableObject {
             apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
                 switch result {
                 case .success(()):
+                    NotificationCenter.default.post(name: Notification.newPostFromCurrentUser, object: model)
                     self?.successfullyPosted = true
-                    self?.listener?.send(model)
                     self?.isLoading = false
                 case .failure(let error):
                     self?.errorPosting = error
@@ -122,7 +121,6 @@ class NewPostViewModel: ObservableObject {
             }
         } else {
             self.successfullyPosted = true
-            self.listener?.send(model)
             self.isLoading = false
         }
     }

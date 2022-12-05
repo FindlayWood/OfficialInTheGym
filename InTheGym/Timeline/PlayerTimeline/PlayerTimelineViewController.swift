@@ -137,10 +137,11 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
             }
             .store(in: &subscriptions)
         
-        viewModel.newPostListener
-            .compactMap { $0 as? PostModel }
+        NotificationCenter.default.publisher(for: Notification.newPostFromCurrentUser)
+            .compactMap { $0.object as? PostModel }
             .sink { [weak self] in self?.dataSource.addNewPost($0) }
             .store(in: &subscriptions)
+        
         
         viewModel.checkForThinkingTime()
         viewModel.fetchPosts()
@@ -158,7 +159,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     
     
     @objc func makePostPressed(_ sender: UIButton) {
-        coordinator?.makePost(postable: PostModel(), listener: viewModel.newPostListener)
+        coordinator?.makePost(postable: PostModel())
     }
     
     @objc func performancePressed(_ sender: UIButton) {

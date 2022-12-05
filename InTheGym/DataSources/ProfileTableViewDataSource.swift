@@ -105,6 +105,18 @@ class ProfileTableViewDataSource: NSObject {
         dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
+    func addNewPost(_ newPost: PostModel) {
+        let item = ProfilePageItems.post(newPost)
+        var currentSnapshot = dataSource.snapshot()
+        if let firstItem = currentSnapshot.itemIdentifiers(inSection: .UserData).first {
+            currentSnapshot.insertItems([item], beforeItem: firstItem)
+        } else {
+            currentSnapshot.appendItems([item], toSection: .UserData)
+        }
+        
+        dataSource.apply(currentSnapshot, animatingDifferences: false)
+    }
+    
     // MARK: -
     func reloadSection() {
         var currentSnapshot = dataSource.snapshot()
