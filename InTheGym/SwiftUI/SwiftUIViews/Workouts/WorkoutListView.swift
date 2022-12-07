@@ -11,7 +11,7 @@ import SwiftUI
 struct WorkoutListView: View {
     var model: WorkoutModel
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             Text(model.title)
                 .font(.title.bold())
                 .foregroundColor(Color(.darkColour))

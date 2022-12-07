@@ -45,8 +45,11 @@ struct NewPostView: View {
                 }
 //                .frame(maxHeight: 300)
             }
-            if let attachedWorkout = viewModel.attachedSavedWorkout {
-                SavedWorkoutListView(model: attachedWorkout)
+            if let attachedSavedWorkout = viewModel.attachedSavedWorkout {
+                SavedWorkoutListView(model: attachedSavedWorkout)
+            }
+            if let attachedWorkout = viewModel.attachedWorkout {
+                WorkoutListView(model: attachedWorkout)
             }
             if !viewModel.taggedUsers.isEmpty {
                 HStack {
