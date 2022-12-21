@@ -13,26 +13,31 @@ struct UserFollowingSwiftUI: View {
     var user: Users
     var body: some View {
         HStack(alignment: .bottom) {
+            Spacer()
             VStack {
                 Text(viewModel.followerCount, format: .number)
                     .font(.subheadline.weight(.semibold))
                 Text("Followers")
-                    .font(.body.weight(.medium))
+                    .font(.subheadline.weight(.medium))
             }
+            Spacer()
             VStack {
                 Text(viewModel.followingCount, format: .number)
                     .font(.subheadline.weight(.semibold))
                 Text("Following")
-                    .font(.body.weight(.medium))
+                    .font(.subheadline.weight(.medium))
             }
+            Spacer()
             VStack {
                 Image(user.admin ? "coach_icon" : "player_icon")
                     .resizable()
                     .frame(width: 30, height: 30)
                 Text(user.admin ? "Coach" : "Player")
-                    .font(.body.weight(.medium))
+                    .font(.subheadline.weight(.medium))
             }
+            Spacer()
         }
+        .frame(maxWidth: .infinity)
         .onAppear {
             viewModel.getFollowerCount(user)
             viewModel.getFollowingCount(user)
