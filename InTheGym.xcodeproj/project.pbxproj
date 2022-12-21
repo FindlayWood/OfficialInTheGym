@@ -1074,6 +1074,7 @@
 		9F3F820D2935582700CC9980 /* ClipGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F820C2935582700CC9980 /* ClipGridView.swift */; };
 		9F3F8210293563B000CC9980 /* AttachmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F820F293563B000CC9980 /* AttachmentsViewController.swift */; };
 		9F3F8213293569A300CC9980 /* PrivacySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F8212293569A300CC9980 /* PrivacySettingsViewController.swift */; };
+		9F4FFD832953837E004853BD /* MainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4FFD822953837E004853BD /* MainButton.swift */; };
 		9F612BBD2915CBE300B5AE5A /* LoginViewSwifUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */; };
 		9F612BC02915D78600B5AE5A /* SignUpMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */; };
 		9F612BC22915DB2900B5AE5A /* SignUpNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BC12915DB2900B5AE5A /* SignUpNameView.swift */; };
@@ -2182,6 +2183,7 @@
 		9F3F820C2935582700CC9980 /* ClipGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipGridView.swift; sourceTree = "<group>"; };
 		9F3F820F293563B000CC9980 /* AttachmentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsViewController.swift; sourceTree = "<group>"; };
 		9F3F8212293569A300CC9980 /* PrivacySettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySettingsViewController.swift; sourceTree = "<group>"; };
+		9F4FFD822953837E004853BD /* MainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButton.swift; sourceTree = "<group>"; };
 		9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwifUI.swift; sourceTree = "<group>"; };
 		9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpMainView.swift; sourceTree = "<group>"; };
 		9F612BC12915DB2900B5AE5A /* SignUpNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpNameView.swift; sourceTree = "<group>"; };
@@ -3776,6 +3778,7 @@
 				9F612BCB291804B300B5AE5A /* CustomTextFieldWithCheck.swift */,
 				9F2462892931790C006C5656 /* SearchBar.swift */,
 				9F1DA7002937F5B300F41089 /* TopMessageView.swift */,
+				9F4FFD822953837E004853BD /* MainButton.swift */,
 			);
 			path = SwiftUIViews;
 			sourceTree = "<group>";
@@ -6368,6 +6371,7 @@
 				749222BD28106266008C6CB1 /* SavedProgramOptionsDisplayViewController.swift in Sources */,
 				74B6F68A2744242B00A72679 /* LoginView.swift in Sources */,
 				741EC128284BF6D1009B00AB /* ExerciseCommentsViewModel.swift in Sources */,
+				9F4FFD832953837E004853BD /* MainButton.swift in Sources */,
 				742FD573283FAD350025E43C /* SearchTagsDataSource.swift in Sources */,
 				7425D4182545AE8000567DAB /* Constants.swift in Sources */,
 				741858FA283D70980042B81B /* DisplayWorkoutsCollectionHeader.swift in Sources */,

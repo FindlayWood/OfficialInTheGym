@@ -22,14 +22,14 @@ class ExerciseStatsDetailViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - View
-    override func loadView() {
-        view = display
-    }
+//    override func loadView() {
+//        view = display
+//    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemBackground
-//        addChildView()
-        display.configure(with: viewModel.statsModel)
+        addChildView()
+//        display.configure(with: viewModel.statsModel)
         initViewModel()
         initTargets()
     }
@@ -59,14 +59,19 @@ class ExerciseStatsDetailViewController: UIViewController {
     }
     // MARK: - View Model
     func initViewModel() {
-//        viewModel.viewMax
-//            .sink { [weak self] in self?.viewMaxAction()}
-//            .store(in: &subscriptions)
+        viewModel.viewMax
+            .sink { [weak self] in self?.viewMaxAction()}
+            .store(in: &subscriptions)
     }
 }
 // MARK: - Actions
 extension ExerciseStatsDetailViewController {
     @objc func viewMaxAction(_ sender: UIButton) {
+        let vc = ExerciseMaxHistoryViewController()
+        vc.viewModel.exerciseName = viewModel.statsModel.exerciseName
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    func viewMaxAction() {
         let vc = ExerciseMaxHistoryViewController()
         vc.viewModel.exerciseName = viewModel.statsModel.exerciseName
         navigationController?.pushViewController(vc, animated: true)

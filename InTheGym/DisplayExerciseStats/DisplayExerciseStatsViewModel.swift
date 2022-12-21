@@ -15,6 +15,7 @@ class DisplayExerciseStatsViewModel: ObservableObject {
     // MARK: - Publishers
     @Published var isLoading = false
     @Published var exerciseModels: [ExerciseStatsModel] = []
+    @Published var searchText: String = ""
     
     var selectedExercise = PassthroughSubject<ExerciseStatsModel,Never>()
     var statModelPublisher = CurrentValueSubject<[ExerciseStatsModel],Never>([])
@@ -23,6 +24,14 @@ class DisplayExerciseStatsViewModel: ObservableObject {
     var apiService: FirebaseDatabaseManagerService
     
     var unfilteredModels: [ExerciseStatsModel]!
+    
+    var filteredModels: [ExerciseStatsModel] {
+        if searchText.isEmpty {
+            return exerciseModels
+        } else {
+            return exerciseModels.filter { $0.exerciseName.lowercased().contains(searchText.lowercased()) }
+        }
+    }
     
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService

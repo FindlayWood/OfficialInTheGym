@@ -11,44 +11,43 @@ import SwiftUI
 struct ExerciseStatsView: View {
     var viewModel: ExerciseStatsDetailViewModel
     var body: some View {
-        VStack {
-            HStack(alignment: .center) {
-                Text(viewModel.statsModel.repsCompletedString)
-                    .font(.system(size: 80))
-                    .fontWeight(.heavy)
-                Text("reps")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }.padding(EdgeInsets(top: 32, leading: 8, bottom: 32, trailing: 8))
-            HStack {
-                ExerciseStatSubView(title: "Max Weight ", value: viewModel.statsModel.maxWeightString)
-                    .padding()
-                ExerciseStatSubView(title: "Total Weight", value: viewModel.statsModel.totalWeightString)
-                    .padding()
+        ScrollView {
+            VStack {
+                ZStack {
+                    Circle()
+                        .fill(
+                            RadialGradient(colors: [Color(.darkColour), Color(.lightColour)], center: .center, startRadius: 50, endRadius: 150)
+                        )
+                        .frame(width: 250, height: 250)
+                        .shadow(radius: 4)
+                    HStack(alignment: .center) {
+                        Text(viewModel.statsModel.repsCompletedString)
+                            .font(.system(size: 80))
+                            .fontWeight(.heavy)
+                            .foregroundColor(.white)
+                        Text("reps")
+                            .font(.subheadline)
+                            .foregroundColor(.white)
+                    }
+                    .padding(EdgeInsets(top: 32, leading: 8, bottom: 32, trailing: 8))
+                }
+                .padding(.bottom)
+                
+                ExerciseStatSubView(title: "Max Weight:", value: viewModel.statsModel.maxWeightString)
+                ExerciseStatSubView(title: "Total Weight:", value: viewModel.statsModel.totalWeightString)
+                ExerciseStatSubView(title: "Average Weight:", value: viewModel.statsModel.averageWeightString)
+                ExerciseStatSubView(title: "Average RPE:", value: viewModel.statsModel.averageRPEString)
+                    .padding(.bottom)
+                MainButton(text: "View Max History") {
+                    viewModel.viewMax.send(())
+                }
             }
-            HStack {
-                ExerciseStatSubView(title: "Average Weight", value: viewModel.statsModel.averageWeightString)
-                    .padding()
-                ExerciseStatSubView(title: "Average RPE", value: viewModel.statsModel.averageRPEString)
-                    .padding()
-            }
-            Button {
-                viewModel.viewMax.send(())
-            } label: {
-                Text("View Max History")
-                    .font(.headline)
-                    .foregroundColor(Color(.lightColour))
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color(.systemBackground))
-                    .cornerRadius(8)
-                    .padding()
-                    
-            }
-            Spacer()
+            .padding(.horizontal)
         }
-        .edgesIgnoringSafeArea(.all)
-        .background(Color(.secondarySystemBackground))
+        .edgesIgnoringSafeArea([.top, .leading, .trailing])
+        .background(
+            LinearGradient(colors: [Color(.secondarySystemBackground), Color(.secondarySystemBackground), Color(.lightColour)], startPoint: .top, endPoint: .bottom)
+        )
     }
 }
 
@@ -62,22 +61,25 @@ struct ExerciseStatSubView: View {
     var title: String
     var value: String
     var body: some View {
-        VStack(spacing: 16) {
+        HStack {
             Text(title)
                 .font(.headline)
                 .fontWeight(.semibold)
                 .foregroundColor(.secondary)
+            Spacer()
             Text(value)
                 .font(.title)
                 .fontWeight(.bold)
                 .padding()
         }
         .frame(maxWidth: .infinity)
-        .padding()
+        .padding(.horizontal)
         .background(Color(.systemBackground))
+        .cornerRadius(8)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color(.darkColour), lineWidth: 2)
         )
+        .shadow(radius: 4)
     }
 }
