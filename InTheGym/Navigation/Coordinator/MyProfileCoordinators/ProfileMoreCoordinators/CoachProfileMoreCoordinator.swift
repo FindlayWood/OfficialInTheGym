@@ -31,6 +31,15 @@ extension CoachProfileMoreCoordinator {
         childCoordinators.append(child)
         child.start()
     }
+    func showMySubscriptions() {
+        let vc = PremiumAccountViewController()
+        navigationController.present(vc, animated: true)
+    }
+    func showMyMeasurements() {
+        let vc = MyMeasurementsViewController()
+        vc.modalPresentationStyle = .fullScreen
+        navigationController.present(vc, animated: true)
+    }
     func showMyWorkouts() {
         let child = CoachWorkoutsCoordinator(navigationController: navigationController)
         childCoordinators.append(child)

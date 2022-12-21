@@ -83,7 +83,7 @@ struct CoachProfileMoreView: View {
                 } label: {
                     HStack(spacing: 16) {
                         Image(systemName: "crown.fill")
-                            .foregroundColor(Color(.goldColour ?? .systemYellow))
+                            .foregroundColor(Color(.goldColour))
                             .cornerRadius(4)
                         Text(viewModel.subscriptionType)
                             .fontWeight(.bold)
