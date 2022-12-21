@@ -1056,6 +1056,7 @@
 		74FDB5B726A77F04000649CC /* ClipModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB5B626A77F04000649CC /* ClipModels.swift */; };
 		74FDB5B926B0C42D000649CC /* ViewClipBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB5B826B0C42D000649CC /* ViewClipBottomView.swift */; };
 		74FDB97D25A4978A00CC18EF /* DiscoverPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FDB97C25A4978A00CC18EF /* DiscoverPageViewController.swift */; };
+		9F1416C8294145A600D02F69 /* PostCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1416C7294145A600D02F69 /* PostCellView.swift */; };
 		9F1DA6FE2937EE8900F41089 /* UserSearchFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1DA6FD2937EE8900F41089 /* UserSearchFlow.swift */; };
 		9F1DA7012937F5B300F41089 /* TopMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1DA7002937F5B300F41089 /* TopMessageView.swift */; };
 		9F1DA704293804C000F41089 /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1DA703293804C000F41089 /* BannerView.swift */; };
@@ -2163,6 +2164,7 @@
 		74FDB5B626A77F04000649CC /* ClipModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipModels.swift; sourceTree = "<group>"; };
 		74FDB5B826B0C42D000649CC /* ViewClipBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipBottomView.swift; sourceTree = "<group>"; };
 		74FDB97C25A4978A00CC18EF /* DiscoverPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageViewController.swift; sourceTree = "<group>"; };
+		9F1416C7294145A600D02F69 /* PostCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCellView.swift; sourceTree = "<group>"; };
 		9F1DA6FD2937EE8900F41089 /* UserSearchFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchFlow.swift; sourceTree = "<group>"; };
 		9F1DA7002937F5B300F41089 /* TopMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopMessageView.swift; sourceTree = "<group>"; };
 		9F1DA703293804C000F41089 /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
@@ -3104,7 +3106,6 @@
 				74F5468425E948D900C1A6A9 /* LoadAllUsernames.swift */,
 				74F5468925E96DA900C1A6A9 /* UploadPostViewModel.swift */,
 				743E93492809CE4F0029F447 /* ProfileInfoCellViewModel.swift */,
-				7403D061280D904300268CEC /* PostCellViewModel.swift */,
 				74C426862829A347009ADB70 /* RegularWorkoutCreationViewModel.swift */,
 				740C06592833EE7D00E9F637 /* WorkoutViewViewModel.swift */,
 				74DD39DF28355D3E00165C63 /* UserCellViewModel.swift */,
@@ -3858,6 +3859,7 @@
 		7466A86325EFDB7100F4050F /* CellClasses */ = {
 			isa = PBXGroup;
 			children = (
+				9F1416C62941459800D02F69 /* Posts */,
 				742C1C6427B6988900DD1BB0 /* ProfileCells */,
 				7480EBB225F500B800E4E768 /* CellModels */,
 				7429784D26C1DCBE0023365E /* UserTableViewCell.swift */,
@@ -3867,7 +3869,6 @@
 				7444D0A926D2AF200009C7A6 /* SwiftUICard.swift */,
 				7444D0AB26D2B2C50009C7A6 /* CardCollectionViewCell.swift */,
 				7444D0AD26D2B30E0009C7A6 /* SwiftUICollectionViewCell.swift */,
-				7444D0EA26D7FF6C0009C7A6 /* PostTableViewCell.swift */,
 				74F2CCD926E1291B00D7AD79 /* ExerciseSelectionCell.swift */,
 				74F2CCE126E2877400D7AD79 /* AddMoreCollectionCell.swift */,
 				74B6F69B2755300600A72679 /* WorkoutCollectionViewCell.swift */,
@@ -5501,6 +5502,16 @@
 			path = ClipCoordinator;
 			sourceTree = "<group>";
 		};
+		9F1416C62941459800D02F69 /* Posts */ = {
+			isa = PBXGroup;
+			children = (
+				9F1416C7294145A600D02F69 /* PostCellView.swift */,
+				7444D0EA26D7FF6C0009C7A6 /* PostTableViewCell.swift */,
+				7403D061280D904300268CEC /* PostCellViewModel.swift */,
+			);
+			path = Posts;
+			sourceTree = "<group>";
+		};
 		9F1DA6FF2937EE8D00F41089 /* CooridnatorFlows */ = {
 			isa = PBXGroup;
 			children = (
@@ -6751,6 +6762,7 @@
 				7472C87227DFF628004836B8 /* DiscoverPageView.swift in Sources */,
 				742FF36B277B812F00AEE3D2 /* CommentSectionItems.swift in Sources */,
 				74F18ADB27D65CE80043551F /* CoachPlayerWorkoutsView.swift in Sources */,
+				9F1416C8294145A600D02F69 /* PostCellView.swift in Sources */,
 				749B37AE2846732300ADF33D /* AddPlayerCoordinator.swift in Sources */,
 				742C1C5527B4001C00DD1BB0 /* ClipCoordinator.swift in Sources */,
 				7431030B26FA30EA00F7121B /* TimeSelectionAdapter.swift in Sources */,
