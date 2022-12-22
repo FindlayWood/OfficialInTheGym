@@ -14,6 +14,7 @@ struct NewPostView: View {
     // MARK: - View Variables
     @State var showAttachmentSheet: Bool = false
     @State var showPrivacySheet: Bool = false
+    @State var profileImage: UIImage?
     // MARK: - Variables
     var isGroup: Bool
     // MARK: - Callback to ViewController
@@ -26,9 +27,18 @@ struct NewPostView: View {
     var body: some View {
         VStack {
             HStack(alignment: .top) {
-                Circle()
-                    .foregroundColor(.gray)
-                    .frame(width: 30, height: 30)
+                if let profileImage {
+                    Image(uiImage: profileImage)
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .scaledToFill()
+                        .clipShape(Circle())
+                } else {
+                    Circle()
+                        .foregroundColor(.gray)
+                        .frame(width: 30, height: 30)
+                }
+                
                 ZStack(alignment: .leading) {
                     if viewModel.text.isEmpty {
                         TextEditor(text: $viewModel.placeholder)
@@ -94,12 +104,15 @@ struct NewPostView: View {
             }
         }
         .padding()
-//        .sheet(isPresented: $showAttachmentSheet) {
-////            PostAttachmentSheet(viewModel: viewModel)
-//        }
-//        .sheet(isPresented: $showPrivacySheet) {
-//            PrivacySheet(isPrivate: $viewModel.isPrivate)
-//        }
+        .onAppear {
+            loadProfileImage()
+        }
+    }
+    
+    func loadProfileImage() {
+        ImageAPIService.shared.getProfileImage(for: UserDefaults.currentUser.uid) { image in
+            self.profileImage = image
+        }
     }
 }
 
