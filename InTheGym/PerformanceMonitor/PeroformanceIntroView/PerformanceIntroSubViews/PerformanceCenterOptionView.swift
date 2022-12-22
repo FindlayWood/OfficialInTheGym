@@ -26,12 +26,17 @@ struct PerformanceCenterOptionView: View {
             Text(option.message)
                 .font(.body)
                 .foregroundColor(.secondary)
+                .multilineTextAlignment(.leading)
         }
         .padding()
         .frame(maxWidth: .infinity)
         .background(Color(.systemBackground))
         .cornerRadius(8)
         .shadow(radius: 4)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color(.darkColour), lineWidth: 1)
+        )
     }
 }
 

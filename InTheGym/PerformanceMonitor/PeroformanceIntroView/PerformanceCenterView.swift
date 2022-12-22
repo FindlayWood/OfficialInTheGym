@@ -31,19 +31,22 @@ struct PerformanceCenterView: View {
             }
             .padding(.horizontal)
         }
-        .navigationTitle("Performance Center")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    print("dismiss")
-                } label: {
-                    Text("Dismiss")
-                        .bold()
-                        .foregroundColor(Color(.darkColour))
-                }
-            }
-        }
+        .background(
+            LinearGradient(colors: [Color(.secondarySystemBackground), Color(.lightColour)], startPoint: .top, endPoint: .bottom)
+        )
+//        .navigationTitle("Performance Center")
+//        .navigationBarTitleDisplayMode(.inline)
+//        .toolbar {
+//            ToolbarItem(placement: .navigationBarLeading) {
+//                Button {
+//                    print("dismiss")
+//                } label: {
+//                    Text("Dismiss")
+//                        .bold()
+//                        .foregroundColor(Color(.darkColour))
+//                }
+//            }
+//        }
     }
 }
 
