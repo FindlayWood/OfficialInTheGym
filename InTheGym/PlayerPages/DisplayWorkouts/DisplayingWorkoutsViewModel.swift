@@ -70,7 +70,7 @@ class DisplayingWorkoutsViewModel {
             filteredWorkouts = storedWorkouts.filter { filterForSegment($0)}
             workouts = filteredWorkouts
         } else {
-            filteredWorkouts = storedWorkouts.filter { $0.title.lowercased().contains(text.lowercased()) && filterForSegment($0)}
+            filteredWorkouts = storedWorkouts.filter { ($0.title.lowercased().contains(text.lowercased()) || filterForExercises($0, text: text)) && filterForSegment($0)}
             workouts = filteredWorkouts
         }
     }
@@ -96,6 +96,16 @@ class DisplayingWorkoutsViewModel {
         case .live:
             return workout.liveWorkout ?? false
         }
+    }
+    func filterForExercises(_ workout: WorkoutModel, text: String) -> Bool {
+        for exercise in workout.exercises ?? [] {
+            if exercise.exercise.lowercased().contains(text.lowercased()) {
+                return true
+            } else {
+                continue
+            }
+        }
+        return false
     }
     enum WorkoutSegments {
         case all
