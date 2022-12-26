@@ -18,7 +18,9 @@ class PremiumAccountViewController: UIViewController {
     }
     // MARK: - Swift UI Child View
     func addChildView() {
-        childContentView = .init()
+        childContentView = .init { [weak self] in
+            self?.dismiss(animated: true)
+        }
         addSwiftUIView(childContentView)
     }
 }

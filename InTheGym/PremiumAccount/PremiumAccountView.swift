@@ -10,107 +10,131 @@ import RevenueCat
 
 struct PremiumAccountViewSwiftUI: View {
     @StateObject var viewModel = PremiumAccountViewModel()
+    var dismissAction: () -> ()
     var body: some View {
-        
-        VStack {
-            Spacer()
-            Text("Premium Account")
-                .font(.largeTitle.bold())
-                .foregroundColor(Color(.darkColour))
-            Text("Sign up for a premium account and gain access to awesome features and power yourself into an elite athlete.")
-                .font(.body.weight(.medium))
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-            Spacer()
-            if SubscriptionManager.shared.isSubscribed {
-                SubscribedView()
-            } else {
-                SubscriptionFeatureView(imageName: "clip_icon", title: "Clips", message: "Record and upload clips.")
-                SubscriptionFeatureView(imageName: "monitor_icon", title: "Performance Center", message: "Gain access to the performance center.")
-                HStack {
-                    ForEach(viewModel.subscriptionPackages) { package in
-                        Button {
-                            viewModel.selectedPackage = package
-                        } label: {
-                            VStack(spacing: 8) {
-                                Text(package.storeProduct.subscriptionPeriod?.durationTitle ?? "Error")
-                                    .font(.headline)
-                                    .foregroundColor(viewModel.selectedPackage == package ? .white : .primary)
-                                Text(package.storeProduct.localizedPriceString)
-                                    .font(.subheadline)
-                                    .foregroundColor(viewModel.selectedPackage == package ? .white : .primary)
-                                if viewModel.selectedPackage == package {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .font(.title)
-                                        .foregroundColor(viewModel.selectedPackage == package ? .white : Color(.darkColour))
-                                } else {
-                                    Image(systemName: "circle")
-                                        .font(.title)
-                                        .foregroundColor(viewModel.selectedPackage == package ? .white : Color(.darkColour))
+        NavigationView {
+            ScrollView {
+                VStack {
+                    if SubscriptionManager.shared.isSubscribed {
+                        SubscribedView()
+                    } else {
+                        Text("Sign up for a premium account and gain access to awesome features and power yourself into an elite athlete.")
+                            .font(.body.weight(.medium))
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.bottom)
+                        Spacer()
+                        SubscriptionFeatureView(imageName: "clip_icon", title: "Clips", message: "Record and upload clips.")
+                        SubscriptionFeatureView(imageName: "monitor_icon", title: "Performance Center", message: "Gain access to the performance center.")
+                        HStack {
+                            ForEach(viewModel.subscriptionPackages) { package in
+                                Button {
+                                    viewModel.selectedPackage = package
+                                } label: {
+                                    VStack(spacing: 8) {
+                                        Text(package.storeProduct.subscriptionPeriod?.durationTitle ?? "Error")
+                                            .font(.headline)
+                                            .foregroundColor(viewModel.selectedPackage == package ? .white : .primary)
+                                        Text(package.storeProduct.localizedPriceString)
+                                            .font(.subheadline)
+                                            .foregroundColor(viewModel.selectedPackage == package ? .white : .primary)
+                                        if viewModel.selectedPackage == package {
+                                            Image(systemName: "checkmark.circle.fill")
+                                                .font(.title)
+                                                .foregroundColor(viewModel.selectedPackage == package ? .white : Color(.darkColour))
+                                        } else {
+                                            Image(systemName: "circle")
+                                                .font(.title)
+                                                .foregroundColor(viewModel.selectedPackage == package ? .white : Color(.darkColour))
+                                        }
+                                    }
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(viewModel.selectedPackage == package ? Color(.darkColour) : Color(.systemBackground))
+                                    .cornerRadius(8)
+                                    .shadow(radius: viewModel.selectedPackage == package ? 0 : 4)
+                                    .overlay(RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color(.darkColour), lineWidth: 2))
+                                    .padding()
+                                }
+                                .disabled(viewModel.isLoading)
+                            }
+                        }
+                        .padding(.horizontal)
+                        if viewModel.isLoading {
+                            VStack {
+                                ProgressView()
+                                    .tint(.white)
+                                    .padding()
+                            }
+                            .background(Color(.darkColour))
+                            .clipShape(Capsule())
+                        } else {
+                            MainButton(text: "Subscribe") {
+                                Task {
+                                    await viewModel.subscribeAction()
                                 }
                             }
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(viewModel.selectedPackage == package ? Color(.darkColour) : Color(.systemBackground))
-                            .cornerRadius(8)
-                            .overlay(RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color(.darkColour), lineWidth: 2))
-                            .padding()
                         }
-                        .disabled(viewModel.isLoading)
+                        
+                        Text("Recurring bill, cancel anytime, \n Your payment will be charged to your iTunes account and your subscription will automatically renew for the same package length at the same price until you cancel it. Cancel anytime from settings -> subscriptions.")
+                            .font(.footnote)
+                            .foregroundColor(Color(.secondaryLabel))
+                            .multilineTextAlignment(.center)
+                        Spacer()
                     }
+                    
                 }
-                .padding(.horizontal)
-                if viewModel.isLoading {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color(.darkColour))
-                            .frame(width: 100, height: 60)
-                        ProgressView()
-                            .tint(.white)
-                    }
-                    .padding()
-                } else {
-                    Button {
-                        Task {
-                            await viewModel.subscribeAction()
-                        }
-                    } label: {
-                        Text("Subscribe")
-                            .font(.title2.bold())
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color(.darkColour))
-                            .cornerRadius(8)
-                            .padding()
-                    }
-                }
+                .navigationTitle("Premium")
+                .navigationBarTitleDisplayMode(.inline)
+                .frame(maxWidth: .infinity)
+                .padding()
                 
-                Text("Recurring bill, cancel anytime, \n Your payment will be charged to your iTunes account and your subscription will automatically renew for the same package length at the same price until you cancel it. Cancel anytime from settings -> subscriptions.")
-                    .font(.footnote)
-                    .foregroundColor(Color(.tertiaryLabel))
-                    .multilineTextAlignment(.center)
-                Spacer()
+                .task {
+                    await viewModel.fetchIAPOfferings()
+                }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            dismissAction()
+                        } label: {
+                            Text("Dismiss")
+                                .fontWeight(.bold)
+                                .foregroundColor(Color(.darkColour))
+                        }
+                    }
+                }
             }
-            
-        }
-        .padding()
-        .task {
-            await viewModel.fetchIAPOfferings()
+            .background(
+                LinearGradient(colors: [Color(.secondarySystemBackground), Color(.secondarySystemBackground), Color(.lightColour)], startPoint: .top, endPoint: .bottom)
+                    .edgesIgnoringSafeArea(.all))
         }
     }
 }
 
 struct SubscribedView: View {
     var body: some View {
-        Text("Subscribed")
-            .font(.title)
-            .foregroundColor(Color(.darkColour))
-        Image(systemName: "checkmark.circle.fill")
-            .font(.largeTitle)
-            .foregroundColor(Color(.darkColour))
-        Spacer()
+        VStack {
+            Text("Subscribed")
+                .font(.title.bold())
+                .foregroundColor(.primary)
+            Image(systemName: "checkmark.circle.fill")
+                .font(.largeTitle)
+                .foregroundColor(.green)
+                .padding()
+            Text("You have subscribed to InTheGym premium! You have full access to all our awesome features. Check out the performance center and recorded and watch some clips! Thanks for subscribing to InTheGym premium.")
+                .font(.body)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding()
+        .background(Color(.white))
+        .cornerRadius(8)
+        .shadow(radius: 4)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color(.darkColour), lineWidth: 1)
+        )
     }
 }
 
@@ -135,5 +159,12 @@ struct SubscriptionFeatureView: View {
             }
             Spacer()
         }
+        .padding()
+        .background(Color(.white))
+        .cornerRadius(8)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color(.darkColour), lineWidth: 2)
+        )
     }
 }
