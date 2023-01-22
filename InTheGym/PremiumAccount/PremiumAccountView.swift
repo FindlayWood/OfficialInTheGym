@@ -17,6 +17,12 @@ struct PremiumAccountViewSwiftUI: View {
                 VStack {
                     if SubscriptionManager.shared.isSubscribed {
                         SubscribedView()
+                        Button {
+                            
+                        } label: {
+                            Text("Cancel Subscription")
+                                .foregroundColor(Color(.darkColour))
+                        }.padding()
                     } else {
                         Text("Sign up for a premium account and gain access to awesome features and power yourself into an elite athlete.")
                             .font(.body.weight(.medium))
@@ -130,7 +136,6 @@ struct SubscribedView: View {
         .padding()
         .background(Color(.white))
         .cornerRadius(8)
-        .shadow(radius: 4)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color(.darkColour), lineWidth: 1)
