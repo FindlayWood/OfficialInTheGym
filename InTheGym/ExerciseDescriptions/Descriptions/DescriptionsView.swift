@@ -25,13 +25,13 @@ class DescriptionsView: UIView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .regular)
         label.textColor = .secondaryLabel
-        label.text = "0 ratings"
+        label.text = "(0 ratings)"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     var addRatingButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)), for: .normal)
+        button.setImage(UIImage(systemName: "chevron.right.circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30)), for: .normal)
         button.imageView?.contentMode = .scaleAspectFill
         button.tintColor = .darkColour
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -56,8 +56,15 @@ class DescriptionsView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    lazy var buttonView: UIView = {
+       let view = UIView()
+        view.backgroundColor = .systemBackground
+        view.layer.cornerRadius = 8
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     lazy var stack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [exerciseStampsView, tableview])
+        let stack = UIStackView(arrangedSubviews: [tableview])
         stack.axis = .vertical
         stack.alignment = .center
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -76,33 +83,37 @@ class DescriptionsView: UIView {
 // MARK: - Configure
 private extension DescriptionsView {
     func setupUI() {
-        addSubview(ratingLabel)
-        addSubview(ratingCountLabel)
-        addSubview(addRatingButton)
-//        addSubview(tableview)
+        addSubview(buttonView)
+        buttonView.addSubview(ratingLabel)
+        buttonView.addSubview(ratingCountLabel)
+        buttonView.addSubview(addRatingButton)
         addSubview(stack)
         addSubview(plusButton)
         configureUI()
     }
     func configureUI() {
         NSLayoutConstraint.activate([
-            addRatingButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            addRatingButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            buttonView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            buttonView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            buttonView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             
-            ratingLabel.centerYAnchor.constraint(equalTo: addRatingButton.centerYAnchor),
-            ratingLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            ratingLabel.topAnchor.constraint(equalTo: buttonView.topAnchor, constant: 16),
+
+            ratingLabel.leadingAnchor.constraint(equalTo: buttonView.leadingAnchor, constant: 8),
+            ratingLabel.bottomAnchor.constraint(equalTo: buttonView.bottomAnchor, constant: -16),
             
-            ratingCountLabel.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 8),
-            ratingCountLabel.bottomAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: -2),
+            addRatingButton.centerYAnchor.constraint(equalTo: buttonView.centerYAnchor),
+            addRatingButton.trailingAnchor.constraint(equalTo: buttonView.trailingAnchor, constant: -8),
             
-            stack.topAnchor.constraint(equalTo: addRatingButton.bottomAnchor, constant: 8),
+            ratingCountLabel.leadingAnchor.constraint(equalTo: ratingLabel.trailingAnchor, constant: 4),
+            ratingCountLabel.centerYAnchor.constraint(equalTo: ratingLabel.centerYAnchor),
+            
+            stack.topAnchor.constraint(equalTo: buttonView.bottomAnchor, constant: 8),
             stack.leadingAnchor.constraint(equalTo: leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor),
             stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-//            tableview.topAnchor.constraint(equalTo: addRatingButton.bottomAnchor, constant: 8),
             tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
             tableview.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            tableview.bottomAnchor.constraint(equalTo: bottomAnchor),
             
             plusButton.trailingAnchor.constraint(equalTo: tableview.trailingAnchor, constant: -8),
             plusButton.bottomAnchor.constraint(equalTo: tableview.bottomAnchor, constant: -16)
@@ -115,6 +126,6 @@ extension DescriptionsView {
         ratingLabel.text = "Rating: " + rating.description
     }
     public func setRatingCount(to count: Int) {
-        ratingCountLabel.text = count.description + " ratings"
+        ratingCountLabel.text = "(" + count.description + " ratings)"
     }
 }
