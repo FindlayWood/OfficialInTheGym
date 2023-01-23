@@ -20,7 +20,9 @@ class TagAndExerciseCell: UICollectionViewCell {
         view.backgroundColor = .clear
         view.heightAnchor.constraint(equalToConstant: 30).isActive = true
         view.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        view.image = UIImage(named: "tag_icon")
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular)
+        view.image = UIImage(systemName: "tag", withConfiguration: symbolConfiguration)
+        view.tintColor = .darkColour
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

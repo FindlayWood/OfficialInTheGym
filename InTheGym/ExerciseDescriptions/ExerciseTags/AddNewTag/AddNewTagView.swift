@@ -27,7 +27,9 @@ class AddNewTagView: UIView {
         view.backgroundColor = .clear
         view.heightAnchor.constraint(equalToConstant: 100).isActive = true
         view.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        view.image = UIImage(named: "tag_icon")
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 100, weight: .regular)
+        view.image = UIImage(systemName: "tag", withConfiguration: symbolConfiguration)
+        view.tintColor = .darkColour
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
