@@ -47,6 +47,7 @@ class DescriptionsView: UIView {
         view.register(DescriptionTableViewCell.self, forCellReuseIdentifier: DescriptionTableViewCell.cellID)
         view.tableFooterView = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.selfSizingInvalidation = .enabledIncludingConstraints
         return view
     }()
     var plusButton: UIButton = {

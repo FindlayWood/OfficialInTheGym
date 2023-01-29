@@ -118,6 +118,7 @@ class PlayerTimelineView: UIView {
         view.separatorInset = .zero
         view.layoutMargins = .zero
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.selfSizingInvalidation = .enabledIncludingConstraints
         return view
     }()
     

@@ -61,9 +61,11 @@ class ExerciseDescriptionViewController: UIViewController {
     }
     
     func removeFromContainer(vc controller: UIViewController) {
-        controller.willMove(toParent: nil)
-        controller.view.removeFromSuperview()
-        controller.removeFromParent()
+        if controller.parent == self {
+            controller.willMove(toParent: nil)
+            controller.view.removeFromSuperview()
+            controller.removeFromParent()
+        }
     }
     
     // MARK: - Subscriptions

@@ -25,6 +25,10 @@ class PostsDataSource: NSObject {
     
     var workoutTapped = PassthroughSubject<PostModel,Never>()
     
+    var flagPost = PassthroughSubject<PostModel,Never>()
+    
+    var deletePost = PassthroughSubject<PostModel,Never>()
+    
     // MARK: - Properties
     var tableView: UITableView
     
@@ -122,6 +126,33 @@ extension PostsDataSource: UITableViewDelegate {
         postSelcted.send((post, indexPath))
     }
     
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {return nil}
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
+
+            // Create an action for sharing
+            let flag = UIAction(title: "Flag Post", image: UIImage(systemName: "flag")) { [weak self] action in
+                self?.flagPost.send(item)
+            }
+            
+            
+            let delete = UIAction(title: "Delete Post", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] action in
+                self?.deletePost.send(item)
+                guard let self else { return }
+                var currentSnapshot = self.dataSource.snapshot()
+                currentSnapshot.deleteItems([item])
+                self.dataSource.apply(currentSnapshot, animatingDifferences: true)
+            }
+
+            // Create other actions...
+            if item.posterID == UserDefaults.currentUser.id {
+                return UIMenu(title: "", children: [flag, delete])
+            } else {
+                return UIMenu(title: "", children: [flag])
+            }
+        }
+    }
+        
     // MARK: - Check Scroll
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.lastContentOffset = scrollView.contentOffset.y

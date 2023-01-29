@@ -28,14 +28,28 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         }
     }
     
+    // MARK: - Multi Location Async
+    func multiLocationUploadAsync(data: [FirebaseMultiUploadDataPoint]) async throws {
+        var keyPaths = [AnyHashable: Any?]()
+        for datum in data {
+            keyPaths[datum.path] = datum.value
+        }
+        let ref = Database.database().reference()
+        try await ref.updateChildValues(keyPaths as [AnyHashable : Any])
+    }
+    
     func incrementingValue(by increment: Int, at path: String, completion: @escaping (Result<Void, Error>) -> Void) {
         
     }
     
     func removingValue(at path: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        
+        let ref = Database.database().reference().child(path)
     }
     
+    func asyncRemove(at path: String) async throws {
+        let ref = Database.database().reference().child(path)
+        let value = try await ref.removeValue()
+    }
     
     static let shared: FirebaseDatabaseManager = .init()
     
@@ -533,4 +547,5 @@ protocol FirebaseDatabaseManagerService {
     func searchTextQueryModelAsync<Model: FirebaseQueryModel, T: Decodable>(model: Model) async throws -> [T]
     func fetchKeysAsync<M: FirebaseInstance>(from model: M) async throws -> [String]
     func fetchRangeAsync<M: FirebaseInstance, T: Decodable>(from models: [M]) async throws -> [T]
+    func multiLocationUploadAsync(data: [FirebaseMultiUploadDataPoint]) async throws
  }

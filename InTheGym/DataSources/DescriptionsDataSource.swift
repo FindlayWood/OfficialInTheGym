@@ -66,7 +66,7 @@ class DescriptionsDataSource: NSObject {
         let items = models.map { ExerciseAndWorkoutCommentItems.exercise($0)}
         snapshot.appendSections([.main])
         snapshot.appendItems(items, toSection: .main)
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
     func updateTable(with models: [WorkoutCommentModel]) {
         var snapshot = NSDiffableDataSourceSnapshot<SingleSection,ExerciseAndWorkoutCommentItems>()

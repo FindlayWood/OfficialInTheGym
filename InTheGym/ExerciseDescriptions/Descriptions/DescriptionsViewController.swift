@@ -28,6 +28,7 @@ class DescriptionsViewController: UIViewController {
         initButtonActions()
         initDataSource()
         initViewModel()
+        print("descriptions ----------------- ")
     }
     // MARK: - Button Targets
     func initButtonActions() {

@@ -13,10 +13,14 @@ class ExerciseTagsView: UIView {
     
     // MARK: - Subviews
     lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
+        var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        config.showsSeparators = false
+        let layout = UICollectionViewCompositionalLayout.list(using: config)
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.register(ExerciseTagCell.self, forCellWithReuseIdentifier: ExerciseTagCell.reuseID)
         view.backgroundColor = .secondarySystemBackground
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.selfSizingInvalidation = .enabledIncludingConstraints
         return view
     }()
     var plusButton: UIButton = {
