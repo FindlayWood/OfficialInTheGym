@@ -116,6 +116,19 @@ class DisplayingWorkoutsViewModel {
         case completed
         case live
     }
+    
+    func deleteWorkout(_ model: WorkoutModel) {
+        let deleteWorkoutModel = FirebaseMultiUploadDataPoint(value: nil, path: "Workouts/\(UserDefaults.currentUser.uid)/\(model.id)")
+        Task {
+            do {
+                try await apiService.multiLocationUploadAsync(data: [deleteWorkoutModel])
+                print("deleted")
+            }
+            catch {
+                print(String(describing: error))
+            }
+        }
+    }
 }
 
 

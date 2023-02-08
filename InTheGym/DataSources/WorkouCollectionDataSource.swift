@@ -15,6 +15,8 @@ class WorkoutsCollectionDataSource: NSObject {
     // MARK: - Publisher
     var workoutSelected = PassthroughSubject<WorkoutModel,Never>()
     
+    var deleteWorkout = PassthroughSubject<WorkoutModel,Never>()
+    
     // MARK: - Properties
     var collectionView: UICollectionView
     private var searchDelegate: UISearchBarDelegate
@@ -79,5 +81,25 @@ extension WorkoutsCollectionDataSource: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let workout = dataSource.itemIdentifier(for: indexPath) else {return}
         workoutSelected.send(workout)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {return nil}
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
+
+            // Create an action for sharing
+            
+            
+            let delete = UIAction(title: "Delete Workout", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] action in
+                self?.deleteWorkout.send(item)
+                guard let self else { return }
+                var currentSnapshot = self.dataSource.snapshot()
+                currentSnapshot.deleteItems([item])
+                self.dataSource.apply(currentSnapshot, animatingDifferences: true)
+            }
+
+            // Create other actions...
+            return UIMenu(title: "", children: [delete])
+        }
     }
 }

@@ -92,6 +92,10 @@ class DisplayingWorkoutsViewController: UIViewController {
             .sink { [weak self] in self?.workoutSelected($0) }
             .store(in: &subscriptions)
         
+        dataSource.deleteWorkout
+            .sink { [weak self] in self?.viewModel.deleteWorkout($0) }
+            .store(in: &subscriptions)
+        
         viewModel.fetchWorkouts()
         viewModel.initSubscribers()
     }
