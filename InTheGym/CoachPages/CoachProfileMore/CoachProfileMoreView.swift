@@ -174,37 +174,6 @@ struct CoachProfileMoreView: View {
             
             Section {
                 Button {
-                    viewModel.action(.measureJump)
-                } label: {
-                    HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "jump_icon")!)
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .cornerRadius(4)
-                        Text("Measure Jump")
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                    }
-                }
-                Button {
-                    viewModel.action(.breathWork)
-                } label: {
-                    HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "breath_icon")!)
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .cornerRadius(4)
-                        Text("Breath Work")
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                    }
-                }
-            } header: {
-                Text("Premium Features")
-            }
-            
-            Section {
-                Button {
                     viewModel.action(.settings)
                 } label: {
                     HStack(spacing: 16) {
