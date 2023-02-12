@@ -115,9 +115,9 @@ private extension MyProfileView {
         addSubview(topBackgroundView)
         addSubview(iconLabel)
         addSubview(moreButton)
-        addSubview(notificationsButton)
-        addSubview(groupsButton)
-//        addSubview(collectionView)
+        // MARK: - Commented out Till Working
+//        addSubview(notificationsButton)
+//        addSubview(groupsButton)
         addSubview(tableview)
         configureUI()
     }
@@ -135,11 +135,12 @@ private extension MyProfileView {
             moreButton.centerYAnchor.constraint(equalTo: iconLabel.centerYAnchor),
             moreButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             
-            notificationsButton.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -12),
-            notificationsButton.topAnchor.constraint(equalTo: moreButton.topAnchor),
+            // MARK: - Commented out Till Working
+//            notificationsButton.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -12),
+//            notificationsButton.topAnchor.constraint(equalTo: moreButton.topAnchor),
             
-            groupsButton.trailingAnchor.constraint(equalTo: notificationsButton.leadingAnchor, constant: -12),
-            groupsButton.topAnchor.constraint(equalTo: moreButton.topAnchor),
+//            groupsButton.trailingAnchor.constraint(equalTo: notificationsButton.leadingAnchor, constant: -12),
+//            groupsButton.topAnchor.constraint(equalTo: moreButton.topAnchor),
             
             tableview.topAnchor.constraint(equalTo: topBackgroundView.bottomAnchor),
             tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -176,7 +177,8 @@ private extension MyProfileView {
         let layoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(300))
         let item = NSCollectionLayoutItem(layoutSize: layoutSize)
         
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: layoutSize, subitem: item, count: 1)
+//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: layoutSize, subitem: item, count: 1)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: layoutSize, repeatingSubitem: item, count: 1)
         
         let section = NSCollectionLayoutSection(group: group)
         
@@ -187,7 +189,7 @@ private extension MyProfileView {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(275))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: itemSize, subitem: item, count: 1)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: itemSize, repeatingSubitem: item, count: 1)
         
         
         let section = NSCollectionLayoutSection(group: group)
@@ -204,7 +206,7 @@ private extension MyProfileView {
         item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.5))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 2)
         
         let section = NSCollectionLayoutSection(group: group)
         let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
@@ -220,7 +222,7 @@ private extension MyProfileView {
         
         item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
         
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitem: item, count: 1)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, repeatingSubitem: item, count: 1)
         
         let section = NSCollectionLayoutSection(group: group)
         let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
