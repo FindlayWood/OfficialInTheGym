@@ -24,6 +24,10 @@ class ProfileTableViewDataSource: NSObject {
     
     var workoutTapped = PassthroughSubject<PostModel,Never>()
     
+    var flagPost = PassthroughSubject<PostModel,Never>()
+    
+    var deletePost = PassthroughSubject<PostModel,Never>()
+    
     // MARK: - Properties
     var tableView: UITableView
     
@@ -155,6 +159,13 @@ class ProfileTableViewDataSource: NSObject {
         }
 
     }
+    
+    func deletePost(_ model: PostModel) {
+        let item = ProfilePageItems.post(model)
+        var currentSnapshot = self.dataSource.snapshot()
+        currentSnapshot.deleteItems([item])
+        self.dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
 }
 
 // MARK: - Delegate
@@ -180,6 +191,34 @@ extension ProfileTableViewDataSource: UITableViewDelegate {
             return 0
         } else {
             return UITableView.automaticDimension
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
+        switch item {
+        case .post(let postModel):
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
+
+                // Create an action for sharing
+                let flag = UIAction(title: "Flag Post", image: UIImage(systemName: "flag")) { [weak self] action in
+                    self?.flagPost.send(postModel)
+                }
+                
+                
+                let delete = UIAction(title: "Delete Post", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] action in
+                    self?.deletePost.send(postModel)
+                    guard let self else { return }
+                    var currentSnapshot = self.dataSource.snapshot()
+                    currentSnapshot.deleteItems([item])
+                    self.dataSource.apply(currentSnapshot, animatingDifferences: true)
+                }
+
+                // Create other actions...
+                return UIMenu(title: "", children: [flag, delete])
+            }
+        default:
+            return nil
         }
     }
 }

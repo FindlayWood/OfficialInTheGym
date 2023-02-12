@@ -159,6 +159,20 @@ class MyProfileViewModel {
         }
     }
 
+    // MARK: - Delete Post
+    func deletePost(_ post: PostModel) {
+        let deletePostModel = FirebaseMultiUploadDataPoint(value: nil, path: "Posts/\(post.id)")
+        let deletePostRefModel = FirebaseMultiUploadDataPoint(value: nil, path: "PostSelfReferences/\(post.posterID)/\(post.id)")
+        Task {
+            do {
+                try await apiService.multiLocationUploadAsync(data: [deletePostModel, deletePostRefModel])
+                print("deleted")
+            }
+            catch {
+                print(String(describing: error))
+            }
+        }
+    }
     
     // MARK: - Actions
     

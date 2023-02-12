@@ -19,7 +19,6 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
 
     var viewModel = MyProfileViewModel()
     
-//    var dataSource: ProfileDataSource!
     var dataSource: ProfileTableViewDataSource!
     
     var subscriptions = Set<AnyCancellable>()
@@ -66,6 +65,7 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
                 self?.viewModel.selectedCellIndex = indexPath
             }
             .store(in: &subscriptions)
+        
         dataSource.profileInfoAction
             .sink { [weak self] in self?.profileInfoAction($0)}
             .store(in: &subscriptions)
@@ -73,8 +73,15 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
         dataSource.userTapped
             .sink { [weak self]in self?.viewModel.getUser(from: $0) }
             .store(in: &subscriptions)
+        
         dataSource.workoutTapped
             .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
+            .store(in: &subscriptions)
+        
+        dataSource.deletePost
+            .sink { [weak self] postModel in
+                self?.viewModel.deletePost(postModel)
+            }
             .store(in: &subscriptions)
     }
     
@@ -109,6 +116,11 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
         NotificationCenter.default.publisher(for: Notification.newPostFromCurrentUser)
             .compactMap { $0.object as? PostModel }
             .sink { [weak self] in self?.dataSource.addNewPost($0) }
+            .store(in: &subscriptions)
+        
+        NotificationCenter.default.publisher(for: Notification.deletedPost)
+            .compactMap { $0.object as? PostModel }
+            .sink { [weak self] in self?.dataSource.deletePost($0) }
             .store(in: &subscriptions)
         
         viewModel.fetchPostRefs()
