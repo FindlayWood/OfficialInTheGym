@@ -9,7 +9,7 @@
 import Combine
 import UIKit
 
-class PlayerDashBoardCollectionCell: UICollectionViewCell {
+class PlayerDashBoardCollectionCell: FullWidthCollectionViewCell {
     // MARK: - Properties
     static let reuseID = "PlayerDashBoardCollectionCellReuseID"
     var viewModel: PlayerDashBoardCollectionViewCellViewModel!
@@ -43,7 +43,7 @@ class PlayerDashBoardCollectionCell: UICollectionViewCell {
     }()
     var topDivider: UIView = {
         let view = UIView()
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = .black
         view.heightAnchor.constraint(equalToConstant: 1).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -252,6 +252,8 @@ private extension PlayerDashBoardCollectionCell {
     func setupUI() {
         backgroundColor = .systemBackground
         layer.cornerRadius = 8
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.darkColour.cgColor
         contentView.addSubview(profileImageView)
         contentView.addSubview(fullNameLabel)
         contentView.addSubview(usernameLabel)
@@ -290,7 +292,7 @@ private extension PlayerDashBoardCollectionCell {
             workloadHStack.topAnchor.constraint(equalTo: workloadMessageLabel.bottomAnchor, constant: 8),
             workloadHStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             workloadHStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            
+            workloadHStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
 //            workloadLabel.topAnchor.constraint(equalTo: workloadMessageLabel.bottomAnchor, constant: 8),
 //            workloadLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
         ])

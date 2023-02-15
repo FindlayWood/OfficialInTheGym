@@ -14,33 +14,31 @@ struct WorkoutFiguresView: View {
         HStack(spacing: 16) {
             VStack {
                 Text(model.exercises?.count ?? 0, format: .number)
-                    .font(.title3)
+                    .font(.body.bold())
                     .foregroundColor(.primary)
-                Image("dumbbell_icon")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30)
+                Text("Exercises")
+                    .font(.caption.weight(.medium))
+                    .foregroundColor(.secondary)
             }
             if model.completed == true {
                 if let time = model.timeToComplete {
                     VStack {
                         Text(time.convertToWorkoutTime())
-                            .font(.body)
-                            .foregroundColor(.gray)
-                        Image("clock_icon")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30)
+                            .font(.body.bold())
+                            .foregroundColor(.primary)
+                        Text("Duration")
+                            .font(.caption.weight(.medium))
+                            .foregroundColor(.secondary)
                     }
                 }
                 if let rpe = model.score {
                     VStack {
                         Text(rpe, format: .number)
-                            .font(.title3.bold())
+                            .font(.body.bold())
                             .foregroundColor(.primary)
                         Text("RPE")
-                            .font(.title3.bold())
-                            .foregroundColor(.primary)
+                            .font(.caption.weight(.medium))
+                            .foregroundColor(.secondary)
                         
                     }
                 }

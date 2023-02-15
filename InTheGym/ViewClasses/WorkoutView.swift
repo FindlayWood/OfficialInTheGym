@@ -252,7 +252,7 @@ extension UIWorkoutView {
         completedStack.completedLabel.text = "Saved"
         completedStack.dateLabel.isHidden = true
         titleLabel.text = model.title
-        hstack.exerciseCountLabel.text = model.totalExerciseCount().description
+//        hstack.exerciseCountLabel.text = model.totalExerciseCount().description
     }
     public func configure(with workoutID: String, assignID: String) {
         viewModel.loadWorkout(from: workoutID, assignID: assignID)

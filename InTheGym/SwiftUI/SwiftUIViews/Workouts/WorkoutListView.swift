@@ -13,8 +13,10 @@ struct WorkoutListView: View {
     var body: some View {
         VStack(spacing: 0) {
             Text(model.title)
-                .font(.title.bold())
+                .font(.title2.bold())
                 .foregroundColor(Color(.darkColour))
+                .minimumScaleFactor(0.1)
+                .lineLimit(1)
             Rectangle()
                 .fill(.black)
                 .frame(height: 1)
@@ -22,30 +24,35 @@ struct WorkoutListView: View {
                 .padding(.horizontal)
             HStack {
                 if model.completed {
-                    Text("Completed")
-                        .foregroundColor(.green)
-                        .fontWeight(.semibold)
+                    Text("COMPLETED")
+                        .font(.callout.bold())
+                        .foregroundColor(Color(.completedColour))
                     if let date = model.startTime {
                         Text(Date(timeIntervalSince1970: date).getWorkoutFormat())
+                            .font(.callout)
                             .fontWeight(.semibold)
                             .foregroundColor(.primary)
                     }
                 } else if model.liveWorkout ?? false {
-                    Text("Live Workout")
-                        .foregroundColor(.orange)
+                    Text("LIVE")
+                        .font(.callout)
+                        .foregroundColor(Color(.liveColour))
                         .fontWeight(.semibold)
                 } else if model.startTime != nil {
-                    Text("In Progress")
-                        .foregroundColor(.orange)
+                    Text("IN PROGRESS")
+                        .font(.callout)
+                        .foregroundColor(Color(.liveColour))
                         .fontWeight(.semibold)
                 } else {
-                    Text("Not Started")
-                        .foregroundColor(.red)
+                    Text("NOT STARTED")
+                        .font(.callout)
+                        .foregroundColor(Color(.notStartedColour))
                         .fontWeight(.semibold)
                 }
             }
+            .padding(.top, 8)
             WorkoutFiguresView(model: model)
-                .padding(.top, 4)
+                .padding(.top)
             if let clipData = model.clipData {
                 if clipData.count > 0 {
                     WorkoutClipThumbnailView(models: clipData)

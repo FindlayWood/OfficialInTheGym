@@ -16,10 +16,20 @@ class WorkoutViewHStack: UIView {
     // MARK: - Stack View One
     var exerciseCountLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.textColor = .black
-        label.text = "5"
-        label.numberOfLines = 1
+        label.font = .preferredFont(forTextStyle: .body, weight: .bold)
+        label.textColor = .label
+        label.text = "n/a"
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    var exerciseMessageLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .caption1, weight: .medium)
+        label.textColor = .secondaryLabel
+        label.text = "Exercises"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -33,18 +43,29 @@ class WorkoutViewHStack: UIView {
         return view
     }()
     lazy var stackOne: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [exerciseCountLabel,exerciseCountIcon])
+        let stack = UIStackView(arrangedSubviews: [exerciseCountLabel,exerciseMessageLabel])
         stack.axis = .vertical
         stack.alignment = .center
-        stack.distribution = .fillEqually
+        stack.spacing = 8
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     // MARK: - Stack View Two
     var timeLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .darkGray
-        label.font = .systemFont(ofSize: 17)
+        label.font = .preferredFont(forTextStyle: .body, weight: .bold)
+        label.textColor = .label
+        label.text = "n/a"
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    var timeMessageLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .caption1, weight: .medium)
+        label.textColor = .secondaryLabel
+        label.text = "Duration"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -58,19 +79,29 @@ class WorkoutViewHStack: UIView {
         return view
     }()
     lazy var stackTwo: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [timeLabel,timeIcon])
+        let stack = UIStackView(arrangedSubviews: [timeLabel,timeMessageLabel])
         stack.axis = .vertical
         stack.alignment = .center
-        stack.distribution = .fillEqually
+        stack.spacing = 8
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     // MARK: - Stack View Three
     var rpeLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.textColor = .black
+        label.font = .preferredFont(forTextStyle: .body, weight: .bold)
+        label.textColor = .label
         label.text = "8"
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    var rpeMessageLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .caption1, weight: .medium)
+        label.textColor = .secondaryLabel
+        label.text = "RPE"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -86,10 +117,10 @@ class WorkoutViewHStack: UIView {
         return label
     }()
     lazy var stackThree: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [rpeLabel,rpeIcon])
+        let stack = UIStackView(arrangedSubviews: [rpeLabel,rpeMessageLabel])
         stack.axis = .vertical
         stack.alignment = .center
-        stack.distribution = .fillEqually
+        stack.spacing = 8
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -97,8 +128,8 @@ class WorkoutViewHStack: UIView {
     lazy var hstack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [stackOne, stackTwo, stackThree])
         stack.axis = .horizontal
-        stack.spacing = 32
-        stack.distribution = .equalSpacing
+        stack.alignment = .center
+        stack.spacing = 16
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -128,10 +159,10 @@ private extension WorkoutViewHStack {
         let rpeLabelIcon = rpeIcon.heightAnchor.constraint(equalToConstant: 30)
         rpeLabelIcon.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
-            hstack.topAnchor.constraint(equalTo: topAnchor),
+            hstack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             hstack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             hstack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            exerciseIconHeight,
+//            exerciseIconHeight,
             hstack.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }

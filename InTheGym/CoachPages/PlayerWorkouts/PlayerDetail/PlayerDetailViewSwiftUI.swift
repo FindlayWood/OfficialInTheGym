@@ -40,19 +40,28 @@ struct PlayerDetailViewSwiftUI: View {
                     }
                 }
                 .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color(.systemBackground))
                 .contentShape(Rectangle())
+                .overlay {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color(.darkColour), lineWidth: 1)
+                }
                 .onTapGesture {
                     viewModel.action.send(.profile)
                 }
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets(top: 1, leading: 1, bottom: 0, trailing: 1))
             } header: {
                 Text("Public Profile")
             }
             // TODO: - fade out if user not subscribed
             Section {
                 HStack {
-                    Image("monitor_icon")
+                    Image(systemName: "sparkles.tv")
                         .resizable()
                         .frame(width: 50, height: 50)
+                        .foregroundColor(Color(.darkColour))
                     VStack(alignment: .leading) {
                         Text("Performance Center")
                             .font(.headline)
@@ -61,10 +70,19 @@ struct PlayerDetailViewSwiftUI: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color(.systemBackground))
                 .contentShape(Rectangle())
+                .overlay {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color(.darkColour), lineWidth: 1)
+                }
                 .onTapGesture {
                     viewModel.action.send(.performance)
                 }
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets(top: 1, leading: 1, bottom: 0, trailing: 1))
             } header: {
                 Text("Performance Center")
             }

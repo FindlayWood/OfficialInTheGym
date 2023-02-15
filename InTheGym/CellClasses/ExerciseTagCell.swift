@@ -25,20 +25,25 @@ class ExerciseTagCell: UICollectionViewCell {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.backgroundColor = .clear
-        view.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        view.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular)
-        view.image = UIImage(systemName: "tag", withConfiguration: symbolConfiguration)
+        view.image = UIImage(systemName: "tag")
         view.tintColor = .darkColour
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     var tagNameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .semibold)
+        label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    lazy var stack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [imageView, tagNameLabel])
+        stack.axis = .horizontal
+        stack.spacing = 8
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
     
     // MARK: - Initializer
@@ -58,8 +63,7 @@ private extension ExerciseTagCell {
         backgroundColor = .clear
         layer.cornerRadius = 8
         contentView.addSubview(newView)
-        newView.addSubview(imageView)
-        newView.addSubview(tagNameLabel)
+        newView.addSubview(stack)
         configureUI()
     }
     
@@ -71,14 +75,10 @@ private extension ExerciseTagCell {
             newView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             newView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
-            imageView.centerYAnchor.constraint(equalTo: newView.centerYAnchor),
-            tagNameLabel.centerYAnchor.constraint(equalTo: newView.centerYAnchor),
-            
-            imageView.leadingAnchor.constraint(equalTo: newView.leadingAnchor, constant: 8),
-            imageView.topAnchor.constraint(equalTo: newView.topAnchor, constant: 16),
-            imageView.bottomAnchor.constraint(equalTo: newView.bottomAnchor, constant: -16),
-            tagNameLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 8),
-            tagNameLabel.trailingAnchor.constraint(equalTo: newView.trailingAnchor, constant: -8)
+            stack.topAnchor.constraint(equalTo: newView.topAnchor, constant: 16),
+            stack.leadingAnchor.constraint(equalTo: newView.leadingAnchor, constant: 8),
+            stack.bottomAnchor.constraint(equalTo: newView.bottomAnchor, constant: -16),
+            stack.trailingAnchor.constraint(lessThanOrEqualTo: newView.trailingAnchor, constant: -8)
         ])
     }
 }
