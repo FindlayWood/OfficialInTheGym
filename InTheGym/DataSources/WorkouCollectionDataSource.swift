@@ -97,9 +97,13 @@ extension WorkoutsCollectionDataSource: UICollectionViewDelegate {
                 currentSnapshot.deleteItems([item])
                 self.dataSource.apply(currentSnapshot, animatingDifferences: true)
             }
-
-            // Create other actions...
-            return UIMenu(title: "", children: [delete])
+            
+            if item.assignedTo == UserDefaults.currentUser.uid {
+                // Create other actions...
+                return UIMenu(title: "", children: [delete])
+            } else {
+                return nil
+            }
         }
     }
 }

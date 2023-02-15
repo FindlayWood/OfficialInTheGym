@@ -214,8 +214,12 @@ extension ProfileTableViewDataSource: UITableViewDelegate {
                     self.dataSource.apply(currentSnapshot, animatingDifferences: true)
                 }
 
-                // Create other actions...
-                return UIMenu(title: "", children: [flag, delete])
+                if postModel.posterID == UserDefaults.currentUser.uid {
+                    // Create other actions...
+                    return UIMenu(title: "", children: [flag, delete])
+                } else {
+                    return UIMenu(title: "", children: [flag])
+                }
             }
         default:
             return nil
