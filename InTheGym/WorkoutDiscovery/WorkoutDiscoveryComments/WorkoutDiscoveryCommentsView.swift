@@ -101,7 +101,7 @@ private extension WorkoutDiscoveryCommentsView {
             tableview.bottomAnchor.constraint(equalTo: bottomAnchor),
             
             plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            plusButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -8)
+            plusButton.bottomAnchor.constraint(equalTo: tableview.bottomAnchor, constant: -16)
         ])
     }
 }
