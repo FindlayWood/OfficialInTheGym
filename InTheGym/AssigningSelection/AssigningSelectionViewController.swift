@@ -64,8 +64,8 @@ class AssigningSelectionViewController: UIViewController {
     func initDataSource() {
         
         usersChildVC.dataSource.userSelected
-            .sink { [weak self] in self?.viewModel.selectedPlayer($0)
-            }.store(in: &subscriptions)
+            .sink { [weak self] _ in self?.showMessage()}
+            .store(in: &subscriptions)
         
         groupsChildVC.selectedGroup
             .sink { [weak self] in self?.viewModel.selectedGroup($0)}
@@ -96,5 +96,8 @@ private extension AssigningSelectionViewController {
             removeFromContainer(vc: usersChildVC)
             addToContainer(vc: groupsChildVC)
         }
+    }
+    func showMessage() {
+        displayTopMessage(with: "Assigned!")
     }
 }

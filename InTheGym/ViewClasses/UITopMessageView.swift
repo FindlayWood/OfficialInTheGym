@@ -6,61 +6,47 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import SwiftUI
 
 // MARK: - Top Message View
 ///Displays a message at the top of the screen for a brief period of time
-class UITopMessageView: UIView {
-    // MARK: - Properties
+class UITopMessageView: UIViewController {
     
+    // MARK: - Properties
+    var childContentView: UIView!
+
     // MARK: - Subviews
-    let label: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.textColor = .white
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.25
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    struct UIView: View {
+        let imageName: String
+        let message: String
+        var body: some View {
+            HStack {
+                Image(systemName: imageName)
+                    .foregroundColor(.white)
+                Text(message)
+                    .font(.title.bold())
+                    .foregroundColor(.white)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(.darkColour))
+            .cornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color.white, lineWidth: 2)
+            )
+        }
+    }
     
     // MARK: - Initializer
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
     }
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupUI()
-    }
-    
-}
-// MARK: - Configure
-private extension UITopMessageView {
-    func setupUI() {
-        backgroundColor = .darkColour
-        layer.borderWidth = 4.0
-        layer.borderColor = UIColor.white.cgColor
-        layer.cornerRadius = 20
-        addSubview(label)
-        configureUI()
-    }
-    
-    func configureUI() {
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: centerYAnchor),
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2)
-        ])
+    func addChildView(_ text: String, image: String) {
+        childContentView = .init(imageName: image, message: text)
+        addSwiftUIView(childContentView)
     }
 }
-// MARK: - Public Configuration
-extension UITopMessageView {
-    func configure(with text: String) {
-        label.text = text
-    }
-}
+
 

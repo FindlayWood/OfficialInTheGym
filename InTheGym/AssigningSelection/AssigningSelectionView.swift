@@ -56,3 +56,14 @@ private extension AssigningSelectionView {
         ])
     }
 }
+
+import SwiftUI
+
+struct AssignView: View {
+    
+    @ObservedObject var viewModel: AssigningSelectedionViewModel
+    
+    var body: some View {
+        
+    }
+}
