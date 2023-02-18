@@ -14,6 +14,7 @@ class DescriptionsViewModel {
     @Published var descriptionModels: [ExerciseCommentModel] = []
     @Published var rating: Double?
     @Published var ratingCount: Int?
+    @Published var userRating: Int?
     @Published var isLoading: Bool = false
     @Published var error: Error?
     @Published var eliteStampCount: Int = 0
@@ -128,6 +129,17 @@ class DescriptionsViewModel {
             case .failure(let error):
                 self?.error = error
                 self?.isLoading = false
+            }
+        }
+    }
+    func getUserRating() {
+        let ratingModel = ExerciseRatingUserModel(exerciseName: exerciseModel.exerciseName)
+        apiService.fetchSingleInstance(of: ratingModel, returning: Int.self) { [weak self] result in
+            switch result {
+            case .success(let rating):
+                self?.userRating = rating
+            case .failure(let error):
+                print(String(describing: error))
             }
         }
     }

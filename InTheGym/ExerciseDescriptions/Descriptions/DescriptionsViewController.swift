@@ -65,6 +65,7 @@ class DescriptionsViewController: UIViewController {
         viewModel.loadRating()
         viewModel.initSubscriptions()
         viewModel.loadStamps()
+        viewModel.getUserRating()
     }
 }
 // MARK: - Button Actions
@@ -78,8 +79,7 @@ private extension DescriptionsViewController {
         vc.viewModel.addedStampPublisher = viewModel.addedStampPublisher
         vc.viewModel.currentRating = viewModel.rating
         vc.viewModel.ratings = viewModel.ratings ?? []
-        vc.viewModel.exerciseModel = viewModel.exerciseModel
-        vc.viewModel.getUserRating()
+        vc.viewModel.selectedRating = viewModel.userRating
         navigationController?.present(vc, animated: true)
     }
 }

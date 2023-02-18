@@ -54,6 +54,7 @@ class WorkoutDiscoveryCommentsViewController: UIViewController {
         viewModel.fetchModels()
         viewModel.loadRating()
         viewModel.initSubscriptions()
+        viewModel.getUserRating()
     }
 }
 // MARK: - Button Actions
@@ -65,6 +66,8 @@ private extension WorkoutDiscoveryCommentsViewController {
         let vc = ExerciseRatingViewController()
         vc.viewModel.addedRatingPublisher = viewModel.addedRatingPublisher
         vc.viewModel.currentRating = viewModel.rating
+        vc.viewModel.ratings = viewModel.ratings ?? []
+        vc.viewModel.selectedRating = viewModel.userRating
         navigationController?.present(vc, animated: true)
     }
 }

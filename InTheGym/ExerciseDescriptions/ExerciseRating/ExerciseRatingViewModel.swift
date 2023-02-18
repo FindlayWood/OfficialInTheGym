@@ -71,18 +71,6 @@ class ExerciseRatingViewModel: ObservableObject {
         selectedRating = rating
         addedRatingPublisher?.send(rating)
     }
-    
-    func getUserRating() {
-        let ratingModel = ExerciseRatingUserModel(exerciseName: exerciseModel.exerciseName)
-        apiService.fetchSingleInstance(of: ratingModel, returning: Int.self) { [weak self] result in
-            switch result {
-            case .success(let rating):
-                self?.selectedRating = rating
-            case .failure(let error):
-                print(String(describing: error))
-            }
-        }
-    }
     func submitStamp() {
         var stamps = [Stamps]()
         if UserDefaults.currentUser.verifiedAccount ?? false {

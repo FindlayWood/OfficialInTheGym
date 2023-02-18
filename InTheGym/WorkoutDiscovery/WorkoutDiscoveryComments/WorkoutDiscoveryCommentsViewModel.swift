@@ -13,6 +13,7 @@ class WorkoutDiscoveryCommentsViewModel {
     // MARK: - Publishers
     @Published var commentModels: [WorkoutCommentModel] = []
     @Published var rating: Double?
+    @Published var userRating: Int?
     @Published var ratingCount: Int?
     @Published var isLoading: Bool = false
     @Published var error: Error?
@@ -64,6 +65,17 @@ class WorkoutDiscoveryCommentsViewModel {
                     self?.rating = ratings.average().rounded(toPlaces: 1)
                 }
                 self?.ratingCount = ratings.count
+            case .failure(let error):
+                print(String(describing: error))
+            }
+        }
+    }
+    func getUserRating() {
+        let ratingModel = WorkoutRatingUserModel(savedWorkoutID: savedWorkoutModel.id)
+        apiService.fetchSingleInstance(of: ratingModel, returning: Int.self) { [weak self] result in
+            switch result {
+            case .success(let rating):
+                self?.userRating = rating
             case .failure(let error):
                 print(String(describing: error))
             }
