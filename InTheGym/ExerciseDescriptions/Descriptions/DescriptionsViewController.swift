@@ -77,6 +77,9 @@ private extension DescriptionsViewController {
         vc.viewModel.addedRatingPublisher = viewModel.addedRatingPublisher
         vc.viewModel.addedStampPublisher = viewModel.addedStampPublisher
         vc.viewModel.currentRating = viewModel.rating
+        vc.viewModel.ratings = viewModel.ratings ?? []
+        vc.viewModel.exerciseModel = viewModel.exerciseModel
+        vc.viewModel.getUserRating()
         navigationController?.present(vc, animated: true)
     }
 }

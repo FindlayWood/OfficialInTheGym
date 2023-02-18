@@ -8,6 +8,114 @@
 
 import UIKit
 import Combine
+import SwiftUI
+
+struct RatingView: View {
+    
+    @ObservedObject var viewModel: ExerciseRatingViewModel
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    HStack {
+                        Text("\(viewModel.currentRating ?? 0.0, specifier: "%.1f")")
+                            .font(.title.bold())
+                            .foregroundColor(.primary)
+                        Text("(\(viewModel.ratings.count) ratings)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Spacer()
+                    }
+                    
+                    HStack(alignment: .bottom, spacing: 0) {
+                        ForEach(0..<11) { number in
+                            VStack {
+                                Spacer()
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color(.darkColour))
+                                    .frame(height: viewModel.heights[number])
+                                    .frame(maxWidth: .infinity)
+                                Text("\(number)")
+                                    .font(.headline)
+                                    .foregroundColor(Color(.darkColour))
+                            }
+                        }
+                    }
+                    .frame(height: 70)
+                    .frame(maxWidth: .infinity)
+                } header: {
+                    Text("Current Rating")
+                }
+                
+                Section {
+                    if let selectedRating = viewModel.selectedRating {
+                        HStack(spacing: 0) {
+                            ForEach(0..<11) { number in
+                                Text(number, format: .number)
+                                    .font(.caption)
+                                    .foregroundColor(number == selectedRating ? Color(.systemBackground) : Color(.darkColour))
+                                    .padding(3)
+                                    .frame(maxWidth: .infinity)
+                                    .background(number == selectedRating ? Color(.darkColour) : Color(.systemBackground))
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 2)
+                                            .stroke(Color(.darkColour), lineWidth: 1)
+                                    }
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical)
+                    } else {
+                        if viewModel.showAddRating {
+                            VStack {
+                                HStack(spacing: 0) {
+                                    ForEach(0..<11) { number in
+                                        Button {
+                                            viewModel.submittedRating = number
+                                        } label: {
+                                            Text(number, format: .number)
+                                                .font(.caption)
+                                                .foregroundColor(number == viewModel.submittedRating ? Color(.systemBackground) : Color(.darkColour))
+                                                .padding(3)
+                                                .frame(maxWidth: .infinity)
+                                                .background(number == viewModel.submittedRating ? Color(.darkColour) : Color(.systemBackground))
+                                                .overlay {
+                                                    RoundedRectangle(cornerRadius: 2)
+                                                        .stroke(Color(.darkColour), lineWidth: 1)
+                                                }
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical)
+                                MainButton(text: "Submit Rating", disabled: viewModel.submittedRating == nil) {
+                                    viewModel.submitRating()
+                                }
+                            }
+                            .padding(.vertical)
+                        } else {
+                            MainButton(text: "Add Rating") {
+                                withAnimation {
+                                    viewModel.showAddRating = true
+                                }
+                            }
+                            .padding(.vertical)
+                        }
+                    }
+                } header: {
+                    Text("Your Rating")
+                }
+            }
+            .navigationTitle("Rating")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+        .task {
+            viewModel.loadRatings()
+        }
+    }
+}
 
 class ExerciseRatingView: UIView {
     // MARK: - Publishers

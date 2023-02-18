@@ -11,22 +11,28 @@ import Combine
 
 class ExerciseRatingViewController: UIViewController {
     // MARK: - Properties
+    var childContentView: RatingView!
     var display = ExerciseRatingView()
     var viewModel = ExerciseRatingViewModel()
     private var subscriptions = Set<AnyCancellable>()
     // MARK: - View
-    override func loadView() {
-        view = display
-    }
+//    override func loadView() {
+//        view = display
+//    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemBackground
-        initDisplay()
+//        initDisplay()
+        addChildView()
         initViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = viewModel.navigationTitle
+    }
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel)
+        addSwiftUIView(childContentView)
     }
     // MARK: - Targets
     func initDisplay() {
@@ -44,9 +50,6 @@ class ExerciseRatingViewController: UIViewController {
     }
     // MARK: - View Model
     func initViewModel() {
-        viewModel.addedRatingPublisher?
-            .sink { [weak self] _ in self?.dismiss(animated: true)}
-            .store(in: &subscriptions)
         viewModel.$isLoading
             .sink { [weak self] in self?.setLoading(to: $0)}
             .store(in: &subscriptions)

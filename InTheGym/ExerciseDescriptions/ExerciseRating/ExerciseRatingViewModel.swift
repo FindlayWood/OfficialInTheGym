@@ -9,21 +9,32 @@
 import Foundation
 import Combine
 
-class ExerciseRatingViewModel {
+class ExerciseRatingViewModel: ObservableObject {
     // MARK: - Publishers
     @Published var isLoading: Bool = false
     @Published var ratingSelected: Bool = false
     @Published var selectedRating: Int?
     @Published var error: Error?
+    
+    @Published var currentRating: Double?
+    
+    @Published var showAddRating: Bool = false
+    @Published var submittedRating: Int?
+    
+    @Published var ratingDict: [Int: Int] = [0:0, 1:0, 2:0, 3:0, 4: 0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0]
+    @Published var heights: [Int: CGFloat] = [:]
+    
     var addedRatingPublisher: PassthroughSubject<Int,Never>?
     var addedStampPublisher: PassthroughSubject<[Stamps],Never>?
     var uploadSuccessful = PassthroughSubject<Void,Never>()
+    
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     var navigationTitle: String = "Exercise Rating"
-//    var exerciseModel: DiscoverExerciseModel!
-    var currentRating: Double?
+    var ratings: [Int] = []
+    var exerciseModel: DiscoverExerciseModel!
     var subscriptions = Set<AnyCancellable>()
+    
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
@@ -32,22 +43,45 @@ class ExerciseRatingViewModel {
     func initSubscribers() {
         
     }
+    func loadRatings() {
+        ratings.forEach { ratingDict[$0, default: 0] += 1 }
+        for (key, value) in ratingDict {
+            if ratings.count > 0 {
+                heights[key] = CGFloat((Double(value) / Double(ratings.count)) * 50)
+            } else {
+                heights[key] = 0
+            }
+        }
+    }
     func submitRating() {
-        guard let rating = selectedRating else {return}
+        guard let rating = submittedRating else {return}
+        ratings.append(rating)
+        ratingDict[rating]? += 1
+        
+        let total = ratings.reduce(0, +)
+        currentRating = Double(total) / Double(ratings.count)
+        
+        for (key, value) in ratingDict {
+            if ratings.count > 0 {
+                heights[key] = CGFloat((Double(value) / Double(ratings.count)) * 50)
+            } else {
+                heights[key] = 0
+            }
+        }
+        selectedRating = rating
         addedRatingPublisher?.send(rating)
-//        isLoading = true
-//        guard let rating = selectedRating else {return}
-//        let ratingModel = ExerciseRatingModel(rating: rating, exerciseName: exerciseModel.exerciseName)
-//        apiService.multiLocationUpload(data: [ratingModel.uploadPoint]) { [weak self] result in
-//            switch result {
-//            case .success(_):
-//                self?.addedRatingPublisher?.send(rating)
-//                self?.isLoading = false
-//            case .failure(let error):
-//                self?.error = error
-//                self?.isLoading = false
-//            }
-//        }
+    }
+    
+    func getUserRating() {
+        let ratingModel = ExerciseRatingUserModel(exerciseName: exerciseModel.exerciseName)
+        apiService.fetchSingleInstance(of: ratingModel, returning: Int.self) { [weak self] result in
+            switch result {
+            case .success(let rating):
+                self?.selectedRating = rating
+            case .failure(let error):
+                print(String(describing: error))
+            }
+        }
     }
     func submitStamp() {
         var stamps = [Stamps]()

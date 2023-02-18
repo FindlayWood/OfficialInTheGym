@@ -25,3 +25,11 @@ extension ExerciseRatingModel: FirebaseInstance {
         "ExerciseRating/\(exerciseName)"
     }
 }
+
+
+struct ExerciseRatingUserModel: FirebaseInstance {
+    var exerciseName: String
+    var internalPath: String {
+        "ExerciseRating/\(exerciseName)/\(UserDefaults.currentUser.uid)"
+    }
+}
