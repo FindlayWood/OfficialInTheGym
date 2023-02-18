@@ -59,11 +59,51 @@ private extension AssigningSelectionView {
 
 import SwiftUI
 
-struct AssignView: View {
+struct AssignSelectionView: View {
     
     @ObservedObject var viewModel: AssigningSelectedionViewModel
     
     var body: some View {
-        
+        ZStack {
+            List {
+                Section {
+                    ForEach(viewModel.users, id: \.id) { model in
+                        SelectUserRow(selected: viewModel.selectedUsers.contains(model), user: model) { selected in
+                            if selected {
+                                viewModel.selectedUsers.append(model)
+                            } else {
+                                viewModel.selectedUsers.removeAll(where: { $0.uid == model.uid })
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Your Players")
+                }
+            }
+            if viewModel.isUploading {
+                LoadingView()
+            }
+        }
+    }
+}
+
+
+struct SelectUserRow: View {
+    var selected: Bool
+    var user: Users
+    var action: (Bool) -> () // true if selected
+    var body: some View {
+        HStack {
+            UserRow(user: user)
+            Spacer()
+            Button {
+                action(!selected)
+            } label: {
+                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
+                    .font(.title)
+                    .foregroundColor(Color(.darkColour))
+            }
+            .buttonStyle(.plain)
+        }
     }
 }

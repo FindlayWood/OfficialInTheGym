@@ -9,11 +9,16 @@
 import Foundation
 import Combine
 
-class AssigningSelectedionViewModel {
+class AssigningSelectedionViewModel: ObservableObject {
     
     // MARK: - Publishers
     @Published var isLoading: Bool = false
+    @Published var isUploading: Bool = false
     @Published var isUploadingToGroup: Bool = false
+    @Published var users: [Users] = []
+    @Published var selectedUsers: [Users] = []
+    
+    var uploadedPublisher = PassthroughSubject<Void,Never>()
     var playersPublisher = PassthroughSubject<[Users],Never>()
     var errorLoadingPublisher = PassthroughSubject<Error,Never>()
     var addedWorkoutPublisher = PassthroughSubject<Bool,Never>()
@@ -33,6 +38,14 @@ class AssigningSelectedionViewModel {
     }
     
     // MARK: - Actions
+    func assignAction() {
+        isUploading = true
+        for player in selectedUsers {
+            selectedPlayer(player)
+        }
+        isUploading = false
+        uploadedPublisher.send(())
+    }
     func selectedPlayer(_ player: Users) {
         let workoutModel = WorkoutModel(savedModel: savedWorkoutModel, assignTo: player.uid)
         apiService.uploadTimeOrderedModel(model: workoutModel) { [weak self] result in
@@ -79,6 +92,7 @@ class AssigningSelectedionViewModel {
             switch result {
             case .success(let players):
                 self?.playersPublisher.send(players)
+                self?.users = players
                 self?.isLoading = false
             case .failure(let error):
                 self?.errorLoadingPublisher.send(error)
