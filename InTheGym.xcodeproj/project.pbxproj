@@ -1074,6 +1074,7 @@
 		9F3F820D2935582700CC9980 /* ClipGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F820C2935582700CC9980 /* ClipGridView.swift */; };
 		9F3F8210293563B000CC9980 /* AttachmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F820F293563B000CC9980 /* AttachmentsViewController.swift */; };
 		9F3F8213293569A300CC9980 /* PrivacySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F8212293569A300CC9980 /* PrivacySettingsViewController.swift */; };
+		9F4DFB2A29A28B3C00363AE8 /* ErrorPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB2929A28B3C00363AE8 /* ErrorPopoverView.swift */; };
 		9F4FFD832953837E004853BD /* MainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4FFD822953837E004853BD /* MainButton.swift */; };
 		9F612BBD2915CBE300B5AE5A /* LoginViewSwifUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */; };
 		9F612BC02915D78600B5AE5A /* SignUpMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */; };
@@ -2183,6 +2184,7 @@
 		9F3F820C2935582700CC9980 /* ClipGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipGridView.swift; sourceTree = "<group>"; };
 		9F3F820F293563B000CC9980 /* AttachmentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsViewController.swift; sourceTree = "<group>"; };
 		9F3F8212293569A300CC9980 /* PrivacySettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySettingsViewController.swift; sourceTree = "<group>"; };
+		9F4DFB2929A28B3C00363AE8 /* ErrorPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorPopoverView.swift; sourceTree = "<group>"; };
 		9F4FFD822953837E004853BD /* MainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButton.swift; sourceTree = "<group>"; };
 		9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwifUI.swift; sourceTree = "<group>"; };
 		9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpMainView.swift; sourceTree = "<group>"; };
@@ -3768,6 +3770,7 @@
 		745F89D7286DCFAE000070B2 /* SwiftUIViews */ = {
 			isa = PBXGroup;
 			children = (
+				9F4DFB2829A28B2A00363AE8 /* ErrorView */,
 				9F24629B29340DDD006C5656 /* Clips */,
 				9F24628B293180AE006C5656 /* Users */,
 				9FF8B30229283D7000C47313 /* Workouts */,
@@ -5576,6 +5579,14 @@
 			path = Privacy;
 			sourceTree = "<group>";
 		};
+		9F4DFB2829A28B2A00363AE8 /* ErrorView */ = {
+			isa = PBXGroup;
+			children = (
+				9F4DFB2929A28B3C00363AE8 /* ErrorPopoverView.swift */,
+			);
+			path = ErrorView;
+			sourceTree = "<group>";
+		};
 		9F612BBE2915D77000B5AE5A /* SignUpViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -5938,6 +5949,7 @@
 				742C1CAE27C2A3EA00DD1BB0 /* ProgramCreationViewController.swift in Sources */,
 				742C1CD827C7C2E300DD1BB0 /* ProgramCreationDetailViewController.swift in Sources */,
 				74A602C128510E7A00AFA236 /* DisplayableComment.swift in Sources */,
+				9F4DFB2A29A28B3C00363AE8 /* ErrorPopoverView.swift in Sources */,
 				743330D62790FB00005A0C45 /* PlayerWorkoutsViewController.swift in Sources */,
 				74CA53A726BD9040002CE5C3 /* GroupCoordinator.swift in Sources */,
 				742FD56B283EB1820025E43C /* ExerciseTagsViewModel.swift in Sources */,
