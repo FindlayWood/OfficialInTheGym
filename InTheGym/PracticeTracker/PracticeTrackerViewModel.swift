@@ -151,7 +151,12 @@ class PracticeTrackerViewModel: ObservableObject {
         let acuteLoad = sevenDayModels.sum()
         let chronicLoad = twentyEightDayModels.sum() / 4
         let freshnessIndex = chronicLoad - acuteLoad
-        return RatioModel(acwr: acwr, monotony: monotony, trainingStrain: trainingStrain, acuteLoad: acuteLoad, chronicLoad: chronicLoad, freshnessIndex: freshnessIndex)
+        return RatioModel(acwr: acwr.isNaN ? 0 : acwr,
+                          monotony: monotony.isNaN ? 0 : monotony,
+                          trainingStrain: trainingStrain.isNaN ? 0 : trainingStrain,
+                          acuteLoad: acuteLoad.isNaN ? 0 : acuteLoad,
+                          chronicLoad: chronicLoad.isNaN ? 0 : chronicLoad,
+                          freshnessIndex: freshnessIndex.isNaN ? 0 : freshnessIndex)
     }
     func loadWellnessModel() async -> WellnessAnswersModel? {
         let dbref = Firestore.firestore().collection("WellnessScores").document(UserDefaults.currentUser.uid)
