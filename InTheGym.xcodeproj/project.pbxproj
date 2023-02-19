@@ -1076,6 +1076,7 @@
 		9F3F8213293569A300CC9980 /* PrivacySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F8212293569A300CC9980 /* PrivacySettingsViewController.swift */; };
 		9F4DFB2A29A28B3C00363AE8 /* ErrorPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB2929A28B3C00363AE8 /* ErrorPopoverView.swift */; };
 		9F4DFB2C29A2A5E800363AE8 /* PublicFollowersFollowingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB2B29A2A5E800363AE8 /* PublicFollowersFollowingView.swift */; };
+		9F4DFB2E29A2CDC300363AE8 /* DiscoverSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB2D29A2CDC300363AE8 /* DiscoverSearchBar.swift */; };
 		9F4FFD832953837E004853BD /* MainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4FFD822953837E004853BD /* MainButton.swift */; };
 		9F612BBD2915CBE300B5AE5A /* LoginViewSwifUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */; };
 		9F612BC02915D78600B5AE5A /* SignUpMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */; };
@@ -2187,6 +2188,7 @@
 		9F3F8212293569A300CC9980 /* PrivacySettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySettingsViewController.swift; sourceTree = "<group>"; };
 		9F4DFB2929A28B3C00363AE8 /* ErrorPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorPopoverView.swift; sourceTree = "<group>"; };
 		9F4DFB2B29A2A5E800363AE8 /* PublicFollowersFollowingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicFollowersFollowingView.swift; sourceTree = "<group>"; };
+		9F4DFB2D29A2CDC300363AE8 /* DiscoverSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSearchBar.swift; sourceTree = "<group>"; };
 		9F4FFD822953837E004853BD /* MainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButton.swift; sourceTree = "<group>"; };
 		9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwifUI.swift; sourceTree = "<group>"; };
 		9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpMainView.swift; sourceTree = "<group>"; };
@@ -3785,6 +3787,7 @@
 				9F2462892931790C006C5656 /* SearchBar.swift */,
 				9F1DA7002937F5B300F41089 /* TopMessageView.swift */,
 				9F4FFD822953837E004853BD /* MainButton.swift */,
+				9F4DFB2D29A2CDC300363AE8 /* DiscoverSearchBar.swift */,
 			);
 			path = SwiftUIViews;
 			sourceTree = "<group>";
@@ -6615,6 +6618,7 @@
 				7444D07C26CE98FB0009C7A6 /* UploadGroupWorkoutView.swift in Sources */,
 				742FCD1D284532E6007ED1C6 /* ExerciseMaxHistoryDataSource.swift in Sources */,
 				9FB0F2A129147F1700BF222E /* PracticeTrackerDetailViewController.swift in Sources */,
+				9F4DFB2E29A2CDC300363AE8 /* DiscoverSearchBar.swift in Sources */,
 				74AF6D5C2686799A005C52A8 /* DisplayExerciseStatsModel.swift in Sources */,
 				743330812785E540005A0C45 /* WorkoutTableViewController.swift in Sources */,
 				74D31E8B25FC13060024CC05 /* FollowersDisplayViewController.swift in Sources */,

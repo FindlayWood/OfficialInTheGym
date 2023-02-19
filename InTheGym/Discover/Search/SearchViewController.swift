@@ -25,14 +25,11 @@ class SearchViewController: UIViewController {
     var childContentView: DiscoverSearchView!
     
     // MARK: - View
-    override func loadView() {
-        view = display
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        initDataSource()
+        view.backgroundColor = .systemBackground
+        addChildView()
         initViewModel()
-        display.searchField.delegate = self
         initNavBar()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -41,6 +38,12 @@ class SearchViewController: UIViewController {
         navigationItem.title = viewModel.navigationTitle
         editNavBarColour(to: .darkColour)
     }
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel, action: { [weak self] selectedUser in
+            self?.coordinator?.userSelected(selectedUser)
+        })
+        addSwiftUIViewWithNavBar(childContentView)
+    }
     // MARK: - Nav Bar
     func initNavBar() {
         if navigationController?.viewControllers.first == self {
@@ -48,26 +51,11 @@ class SearchViewController: UIViewController {
             navigationItem.leftBarButtonItem = dismissButton
         }
     }
-    // MARK: - Data Source
-    func initDataSource() {
-        dataSource = .init(tableView: display.tableview)
-        dataSource.userSelected
-            .sink { [weak self] in self?.coordinator?.userSelected($0)}
-            .store(in: &subscriptions)
-    }
     // MARK: - View Model
     func initViewModel() {
         viewModel.$isSearching
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.setNavBar($0)}
-            .store(in: &subscriptions)
-        viewModel.$searchedUsers
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.dataSource.updateTable(with: $0)}
-            .store(in: &subscriptions)
-        viewModel.$searchedUsers
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.showEmpty($0) }
             .store(in: &subscriptions)
         viewModel.initSubscribers()
     }

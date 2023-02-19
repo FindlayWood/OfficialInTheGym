@@ -9,28 +9,39 @@
 import SwiftUI
 
 struct DiscoverSearchView: View {
-    @StateObject var viewModel = SearchViewModel()
+    
+    @ObservedObject var viewModel: SearchViewModel
+    
     var action: (Users) -> ()
+    
     var body: some View {
         VStack {
-            SearchBar(searchText: $viewModel.searchText, placeholder: "Search for users")
+            HStack(spacing: 0) {
+                DiscoverSearchBar(searchText: $viewModel.searchText, placeholder: "search...")
+            }
+            .padding(.horizontal)
+            .background(Color(.systemBackground))
+
             List {
                 if viewModel.searchedUsers.isEmpty {
                     HStack {
                         Spacer()
                         VStack(spacing: 16) {
-                            Image(systemName: "magnifyingglass")
-                                .font(.largeTitle)
-                                .foregroundColor(Color(.darkColour))
+                            ZStack(alignment: .bottomTrailing) {
+                                Image(systemName: "magnifyingglass")
+                                    .resizable()
+                                    .frame(width: 80, height: 80)
+                                    .foregroundColor(Color(.darkColour))
+                            }
+                            .padding()
                             Text("Search for other users by their username.")
-                                .font(.body.weight(.semibold))
-                                .foregroundColor(.primary)
+                                .font(.caption.weight(.semibold))
+                                .foregroundColor(.secondary)
                                 .multilineTextAlignment(.center)
                         }
                         .padding()
                         Spacer()
                     }
-                    .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
                 } else {
                     ForEach(viewModel.searchedUsers, id: \.uid) { model in
@@ -42,8 +53,6 @@ struct DiscoverSearchView: View {
                     }
                 }
             }
-            .listStyle(.plain)
-            .background(Color(.secondarySystemBackground))
         }
         .background(Color(.systemBackground))
         .onAppear {

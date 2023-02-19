@@ -30,13 +30,14 @@ class SearchViewModel: ObservableObject {
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.apiService = apiService
     }
-    
-    // MARK: - Actions
-    
     // MARK: - Functions
     func initSubscribers() {
         $searchText
             .sink { [weak self] in self?.searchModel.equalTo = $0 }
+            .store(in: &subscriptions)
+        $searchText
+            .filter { $0.isEmpty }
+            .sink { [weak self] _ in self?.searchedUsers = [] }
             .store(in: &subscriptions)
         $searchText
             .filter { $0.count > 0 }
