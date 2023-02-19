@@ -1,16 +1,16 @@
 //
-//  MyFollowersView.swift
+//  PublicFollowersFollowingView.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 16/05/2022.
-//  Copyright © 2022 FindlayWood. All rights reserved.
+//  Created by Findlay-Personal on 19/02/2023.
+//  Copyright © 2023 FindlayWood. All rights reserved.
 //
 
 import SwiftUI
 
-struct FollowersFollowingView: View {
+struct PublicFollowersFollowingView: View {
     
-    @ObservedObject var viewModel: MyFollowersViewModel
+    @ObservedObject var viewModel: PublicFollowersViewModel
     @Namespace var namespace
     var selectedUser: (Users) -> ()
     
@@ -47,20 +47,21 @@ struct FollowersFollowingView: View {
             List {
                 if viewModel.usersToShow.isEmpty {
                     if viewModel.optionSelected == .following {
-                        Text("You are not following anyone.")
+                        Text("\(viewModel.user.username) is not following anyone.")
                             .font(.caption.weight(.medium))
                             .foregroundColor(.secondary)
                     } else {
-                        Text("You have no followers.")
+                        Text("\(viewModel.user.username) has no followers.")
                             .font(.caption.weight(.medium))
                             .foregroundColor(.secondary)
                     }
-                }
-                ForEach(viewModel.usersToShow, id: \.id) { model in
-                    UserRow(user: model)
-                        .onTapGesture {
-                            selectedUser(model)
-                        }
+                } else {
+                    ForEach(viewModel.usersToShow, id: \.id) { model in
+                        UserRow(user: model)
+                            .onTapGesture {
+                                selectedUser(model)
+                            }
+                    }
                 }
             }
         }

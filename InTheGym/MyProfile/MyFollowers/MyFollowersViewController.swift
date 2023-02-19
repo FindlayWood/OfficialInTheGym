@@ -13,22 +13,17 @@ class MyFollowersViewController: UIViewController {
     // coordinator
     weak var coordinator: MyProfileCoordinator?
     // display
-    var display = MyFollowersView()
+    var childContentView: FollowersFollowingView!
     // view model
     var viewModel = MyFollowersViewModel()
-    // data source
-    var dataSource: UsersDataSource!
     // subscriptions
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
-    override func loadView() {
-        view = display
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        initDisplay()
-        initDataSource()
+        view.backgroundColor = .systemBackground
+        addChildView()
         initViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -36,19 +31,11 @@ class MyFollowersViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
         editNavBarColour(to: .darkColour)
     }
-    // MARK: - Init Display
-    func initDisplay() {
-        display.segment.selectedIndex
-            .sink { [weak self] in self?.viewModel.setSegment(to: $0)}
-            .store(in: &subscriptions)
-    }
-    // MARK: - Init Data Source
-    func initDataSource() {
-        dataSource = .init(tableView: display.tableview)
-        
-        dataSource.userSelected
-            .sink { [weak self] in self?.coordinator?.showUser(user: $0)}
-            .store(in: &subscriptions)
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel) { [weak self] selectedUser in
+            self?.coordinator?.showUser(user: selectedUser)
+        }
+        addSwiftUIViewWithNavBar(childContentView)
     }
     // MARK: - View Model
     func initViewModel() {
@@ -57,9 +44,6 @@ class MyFollowersViewController: UIViewController {
             .store(in: &subscriptions)
         viewModel.$isLoading
             .sink { [weak self] in self?.setLoading(to: $0)}
-            .store(in: &subscriptions)
-        viewModel.$usersToShow
-            .sink { [weak self] in self?.dataSource.updateTable(with: $0)}
             .store(in: &subscriptions)
         viewModel.fetchFollowerKeys()
         viewModel.fetchFollowingKeys()

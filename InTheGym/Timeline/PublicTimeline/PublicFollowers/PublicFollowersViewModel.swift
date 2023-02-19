@@ -9,12 +9,13 @@
 import Foundation
 import Combine
 
-class PublicFollowersViewModel {
+class PublicFollowersViewModel: ObservableObject {
     
     // MARK: - Publishers
     @Published var isLoading: Bool = false
     @Published var usersToShow: [Users] = []
     @Published var searchText: String = ""
+    @Published var optionSelected: FollowerFollowingOptions = .followers
     private var storedFollowers: [Users] = []
     private var storedFollowing: [Users] = []
     var filteredFollowers: [Users] = []
@@ -31,15 +32,10 @@ class PublicFollowersViewModel {
     }
     
     // MARK: - Actions
-    func setSegment(to index: Int) {
-        if index == 0 {
-            usersToShow = storedFollowers
-            navigationTitle = "Followers"
-        }
-        if index == 1 {
-            usersToShow = storedFollowing
-            navigationTitle = "Following"
-        }
+    func switchSegment(to option: FollowerFollowingOptions) {
+        usersToShow = option == .following ? storedFollowing : storedFollowers
+        navigationTitle = option == .following ? "Following" : "Followers"
+        optionSelected = option
     }
     
     // MARK: - Functions
