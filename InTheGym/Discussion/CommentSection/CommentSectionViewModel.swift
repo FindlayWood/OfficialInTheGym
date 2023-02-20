@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class CommentSectionViewModel {
+class CommentSectionViewModel: ObservableObject {
     // MARK: - Publishers
     var comments = CurrentValueSubject<[Comment],Never>([])
     var errorFetchingComments = PassthroughSubject<Error,Never>()

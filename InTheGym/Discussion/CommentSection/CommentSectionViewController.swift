@@ -14,6 +14,7 @@ class CommentSectionViewController: UIViewController {
     weak var coordinator: CommentSectionCoordinator?
     
     var display = CommentSectionView()
+    var childContentView: CommentSectionViewUI!
     
     var viewModel = CommentSectionViewModel()
     
@@ -24,20 +25,21 @@ class CommentSectionViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
-    override func loadView() {
-        view = display
-    }
+//    override func loadView() {
+//        view = display
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        display.commentView.textViewDidChange(display.commentView.commentTextField)
-        display.tableview.separatorStyle = .none
-        initTableView()
+        addChildView()
+//        display.commentView.textViewDidChange(display.commentView.commentTextField)
+//        display.tableview.separatorStyle = .none
+//        initTableView()
 //        initialTableSetUp()
-        initDataSource()
+//        initDataSource()
         initViewModel()
-        setupKeyBoardObservers()
+//        setupKeyBoardObservers()
         initTargets()
     }
     
@@ -45,6 +47,10 @@ class CommentSectionViewController: UIViewController {
         super.viewWillAppear(animated)
         editNavBarColour(to: .darkColour)
         navigationItem.title = "\(viewModel.mainPost.username)'s post"
+    }
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel)
+        addSwiftUIViewWithNavBar(childContentView)
     }
     
     // MARK: - Loading Nav Bar
@@ -121,10 +127,10 @@ class CommentSectionViewController: UIViewController {
             .store(in: &subscriptions)
         
         
-        viewModel.comments
-            .receive(on: RunLoop.main)
-            .sink { [weak self] in self?.dataSource.updateComments(with: $0) }
-            .store(in: &subscriptions)
+//        viewModel.comments
+//            .receive(on: RunLoop.main)
+//            .sink { [weak self] in self?.dataSource.updateComments(with: $0) }
+//            .store(in: &subscriptions)
         
         viewModel.isLoading
             .sink { [weak self] in self?.initLoadingNavBar($0)}

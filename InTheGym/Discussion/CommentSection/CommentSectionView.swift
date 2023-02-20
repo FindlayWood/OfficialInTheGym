@@ -97,4 +97,124 @@ extension CommentSectionView {
     }
 }
     
+import SwiftUI
 
+struct CommentSectionViewUI: View {
+    
+    @ObservedObject var viewModel: CommentSectionViewModel
+    
+    var body: some View {
+        VStack {
+            List {
+                Section {
+                    PostView(post: viewModel.mainPost)
+                }
+                Section {
+                    // comments
+                }
+                
+            }
+            .listStyle(.plain)
+            
+            Rectangle()
+                .fill(Color.red)
+                .frame(maxWidth: .infinity)
+                .frame(height: 30)
+                .ignoresSafeArea(.keyboard)
+        }
+    }
+}
+
+struct PostView: View {
+    
+    @StateObject var viewModel = ViewModel()
+    
+    @State var image: UIImage?
+    
+    var post: PostModel
+    
+    var body: some View {
+        HStack(alignment: .top) {
+            if let image = viewModel.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .frame(width: 50, height: 50)
+                    .scaledToFill()
+                    .clipShape(Circle())
+            } else {
+                Circle()
+                    .foregroundColor(.gray)
+                    .frame(width: 50, height: 50)
+            }
+            VStack(alignment: .leading) {
+                HStack {
+                    Button {
+                        
+                    } label: {
+                        if let userModel = viewModel.userModel {
+                            Text(userModel.username)
+                                .font(.title3.bold())
+                        } else {
+                            Text(post.username)
+                                .font(.title3.bold())
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    if let userModel = viewModel.userModel {
+                        if userModel.eliteAccount ?? false {
+                            Image(systemName: "checkmark.seal.fill")
+                                .foregroundColor(Color(.goldColour))
+                        } else if userModel.verifiedAccount ?? false {
+                            Image(systemName: "checkmark.seal.fill")
+                                .foregroundColor(Color(.lightColour))
+                        }
+                    }
+                }
+                let time = Date(timeIntervalSince1970: (post.time))
+                Text(time.getLongPostFormat())
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom)
+                
+                Text(post.text)
+                    .font(.body.weight(.semibold))
+                    .foregroundColor(.primary)
+                    .multilineTextAlignment(.leading)
+                    .padding(.top)
+            }
+        }
+        .onAppear {
+            viewModel.getImage(for: post.posterID)
+            viewModel.loadUserModel(post)
+        }
+    }
+    
+
+}
+
+extension PostView {
+    
+    @MainActor
+    final class ViewModel: ObservableObject {
+        // MARK: - Published Properties
+        @Published var image: UIImage?
+        @Published var userModel: Users?
+        
+        // MARK: - Methods
+        func getImage(for uid: String) {
+            let downloadModel = ProfileImageDownloadModel(id: uid)
+            ImageCache.shared.load(from: downloadModel) { [weak self] result in
+                guard let image = try? result.get() else {return}
+                self?.image = image
+            }
+        }
+        // MARK: - User Model
+        func loadUserModel(_ post: PostModel) {
+            let userSearchModel = UserSearchModel(uid: post.posterID)
+            UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
+                guard let userModel = try? result.get() else {return}
+                self?.userModel = userModel
+            }
+        }
+    }
+}
