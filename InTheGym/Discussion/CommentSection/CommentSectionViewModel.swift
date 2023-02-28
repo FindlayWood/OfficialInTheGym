@@ -11,7 +11,21 @@ import Combine
 
 class CommentSectionViewModel: ObservableObject {
     // MARK: - Publishers
-    var comments = CurrentValueSubject<[Comment],Never>([])
+    @Published var isLoading: Bool = false
+    @Published var text: String = ""
+    @Published var placeholder: String = "enter text..."
+    
+    @Published var attachedWorkout: WorkoutModel?
+    @Published private(set) var attachedSavedWorkout: SavedWorkoutModel?
+    @Published var attachedClip: ClipModel?
+    @Published private(set) var taggedUsers: [Users] = []
+    @Published private(set) var isPrivate: Bool = false
+    
+    @Published var successfullyPosted: Bool?
+    @Published var errorPosting: Error?
+    
+    @Published var comments: [Comment] = []
+    
     var errorFetchingComments = PassthroughSubject<Error,Never>()
     
     var uploadingNewComment = PassthroughSubject<Comment,Never>()
@@ -20,10 +34,11 @@ class CommentSectionViewModel: ObservableObject {
     
     var errorLiking = PassthroughSubject<Void,Never>()
     
+    /// this is called when the tectview should be cleared
+    var clearTextPublisher = PassthroughSubject<Void,Never>()
+    
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService
-    
-    var attachedWorkout: SavedWorkoutModel?
     
     var commentText: String = ""
     
@@ -45,7 +60,7 @@ class CommentSectionViewModel: ObservableObject {
     
     var userSelected = PassthroughSubject<Users,Never>()
     
-    var isLoading = CurrentValueSubject<Bool,Never>(false)
+    
     
     // MARK: - Initializer
     init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
@@ -53,23 +68,44 @@ class CommentSectionViewModel: ObservableObject {
     }
     // MARK: - Functions
     func loadGeneric<T: FirebaseInstance>(for postGeneric: T) {
-        isLoading.send(true)
+        isLoading = true
         apiService.fetchInstance(of: postGeneric, returning: Comment.self) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success(var comments):
                 comments.sort { $0.time < $1.time }
-                self.comments.send(comments)
-                self.isLoading.send(false)
+                self.comments = comments
+                self.isLoading = false
             case .failure(let error):
                 self.errorFetchingComments.send(error)
-                self.isLoading.send(false)
+                self.isLoading = false
             }
         }
     }
+    // MARK: - Methods
+    func updateAttachedTaggedUser(_ user: Users) {
+        if !taggedUsers.contains(where: { $0.uid == user.uid }) {
+            taggedUsers.append(user)
+        }
+    }
+    func removeTaggedUsers(at offsets: IndexSet) {
+        taggedUsers.remove(atOffsets: offsets)
+    }
+    func updateAttachedSavedWorkout(with model: SavedWorkoutModel) {
+        attachedSavedWorkout = model
+    }
+    func removeAttachedSavedWorkout() {
+        attachedSavedWorkout = nil
+    }
+    func updateAttachedWorkout(with model: WorkoutModel) {
+        attachedWorkout = model
+    }
+    func updatePrivacy(to isPrivate: Bool) {
+        self.isPrivate = isPrivate
+    }
     // MARK: - Actions
     func sendPressed() {
-        self.isLoading.send(true)
+        self.isLoading = true
         let newComment = Comment(id: UUID().uuidString,
                                  username: UserDefaults.currentUser.username,
                                  time: Date().timeIntervalSince1970,
@@ -84,11 +120,11 @@ class CommentSectionViewModel: ObservableObject {
             guard let self = self else {return}
             switch result {
             case .success(()):
-                self.isLoading.send(false)
+                self.isLoading = false
                 self.addedReply(newComment)
             case .failure(_):
                 self.errorUploadingComment.send(())
-                self.isLoading.send(false)
+                self.isLoading = false
             }
         }
     }
@@ -102,7 +138,7 @@ class CommentSectionViewModel: ObservableObject {
         mainPost.likeCount += 1
     }
     func groupSendPressed() {
-        self.isLoading.send(true)
+        self.isLoading = true
         let newComment = Comment(id: UUID().uuidString,
                                  username: UserDefaults.currentUser.username,
                                  time: Date().timeIntervalSince1970,
@@ -117,11 +153,11 @@ class CommentSectionViewModel: ObservableObject {
             guard let self = self else {return}
             switch result {
             case .success(()):
-                self.isLoading.send(false)
+                self.isLoading = false
                 self.addedGroupReply(newComment)
             case .failure(_):
                 self.errorUploadingComment.send(())
-                self.isLoading.send(false)
+                self.isLoading = false
             }
         }
     }
@@ -135,7 +171,7 @@ class CommentSectionViewModel: ObservableObject {
     }
     
     func updateCommentText(with text: String) {
-        commentText = text
+        self.text = text
     }
     
     // MARK: - Like Check

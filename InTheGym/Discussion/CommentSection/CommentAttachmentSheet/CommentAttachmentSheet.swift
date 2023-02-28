@@ -1,24 +1,17 @@
 //
-//  PostAttachmentSheet.swift
+//  CommentAttachmentSheet.swift
 //  InTheGym
 //
-//  Created by Findlay-Personal on 27/11/2022.
-//  Copyright © 2022 FindlayWood. All rights reserved.
+//  Created by Findlay-Personal on 25/02/2023.
+//  Copyright © 2023 FindlayWood. All rights reserved.
 //
 
 import SwiftUI
 
-protocol Attachments: ObservableObject {
-    var attachedSavedWorkout: SavedWorkoutModel? { get }
-    var taggedUsers: [Users] { get }
-    func removeTaggedUsers(at offsets: IndexSet)
-    func removeAttachedSavedWorkout()
-}
-
-struct PostAttachmentSheet: View {
-
+struct CommentAttachmentSheet: View {
+    
     // MARK: - View Model
-    @ObservedObject var viewModel: NewPostViewModel
+    @ObservedObject var viewModel: CommentSectionViewModel
     
     // MARK: - View Related Properties
     @State var showingWorkoutSheet: Bool = false
@@ -111,8 +104,8 @@ struct PostAttachmentSheet: View {
     }
 }
 
-struct PostAttachmentSheet_Previews: PreviewProvider {
+struct CommentAttachmentSheet_Previews: PreviewProvider {
     static var previews: some View {
-        PostAttachmentSheet(viewModel: NewPostViewModel(), addWorkout: {}, addUser: {}, dismiss: {})
+        CommentAttachmentSheet(viewModel: CommentSectionViewModel(), addWorkout: {}, addUser: {}, dismiss: {})
     }
 }

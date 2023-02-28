@@ -1,15 +1,15 @@
 //
-//  NewPost+ViewModel.swift
+//  CommentWithAttachmentsViewModel.swift
 //  InTheGym
 //
-//  Created by Findlay-Personal on 27/11/2022.
-//  Copyright © 2022 FindlayWood. All rights reserved.
+//  Created by Findlay-Personal on 22/02/2023.
+//  Copyright © 2023 FindlayWood. All rights reserved.
 //
 
 import Combine
 import Foundation
 
-class NewPostViewModel: Attachments {
+class CommentWithAttachmentsViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var isLoading: Bool = false
     @Published var text: String = ""
@@ -26,7 +26,9 @@ class NewPostViewModel: Attachments {
     
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService
+    var mainPost: PostModel!
     var postable: Postable! /// postable - either post or group post
+    var clearTectPublisher: PassthroughSubject<Void,Never>! /// should be passed by comment view
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - Initializer
@@ -36,11 +38,11 @@ class NewPostViewModel: Attachments {
     }
     // MARK: - Subscriptions
     func initSubscriptions() {
-        $text
-            .dropFirst()
-            .compactMap { $0 }
-            .sink { [weak self] in self?.postable.text = $0 }
-            .store(in: &subscriptions)
+//        $text
+//            .dropFirst()
+//            .compactMap { $0 }
+//            .sink { [weak self] in self?.postable.text = $0 }
+//            .store(in: &subscriptions)
         $isPrivate
             .dropFirst()
             .sink { [weak self] in self?.postable.isPrivate = $0 }
@@ -125,4 +127,3 @@ class NewPostViewModel: Attachments {
         }
     }
 }
- 

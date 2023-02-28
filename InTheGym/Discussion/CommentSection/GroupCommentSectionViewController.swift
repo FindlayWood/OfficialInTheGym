@@ -98,7 +98,7 @@ class GroupCommentSectionViewController: UIViewController {
             .sink { [weak self] in self?.coordinator?.showUser($0) }
             .store(in: &subscriptions)
         
-        viewModel.comments
+        viewModel.$comments
             .receive(on: RunLoop.main)
             .sink { [weak self] comments in
                 guard let self = self else {return}
@@ -122,12 +122,12 @@ class GroupCommentSectionViewController: UIViewController {
         
         coordinator?.savedWorkoutSelected
             .sink { [weak self] in
-                self?.viewModel.attachedWorkout = $0
+                self?.viewModel.updateAttachedSavedWorkout(with: $0)
                 self?.display.commentView.attachWorkout($0)
             }
             .store(in: &subscriptions)
         
-        viewModel.isLoading
+        viewModel.$isLoading
             .sink { [weak self] in self?.initLoadingNavBar($0)}
             .store(in: &subscriptions)
         

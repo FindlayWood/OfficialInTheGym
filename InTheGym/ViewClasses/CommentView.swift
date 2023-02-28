@@ -238,6 +238,8 @@ extension CommentView: UITextViewDelegate {
         if textView.text.trimTrailingWhiteSpaces().isEmpty {
             textView.textColor = placeholderColour
             textView.text = placeholder
+        } else {
+            textView.textColor = .darkGray
         }
         textView.textContainerInset = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         textView.text = textView.text.trimTrailingWhiteSpaces()

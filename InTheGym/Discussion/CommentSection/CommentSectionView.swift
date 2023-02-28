@@ -23,7 +23,7 @@ class CommentSectionView: UIView {
         let view = UITableView()
         view.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.cellID)
         view.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.cellID)
-        if #available(iOS 15.0, *) {view.sectionHeaderTopPadding = 0}
+        view.sectionHeaderTopPadding = 0
         view.tableFooterView = UIView()
         view.separatorInset = .zero
         view.layoutMargins = .zero
@@ -116,11 +116,19 @@ struct CommentSectionViewUI: View {
             }
             .listStyle(.plain)
             
-            Rectangle()
-                .fill(Color.red)
-                .frame(maxWidth: .infinity)
-                .frame(height: 30)
-                .ignoresSafeArea(.keyboard)
+            HStack {
+                Button {
+                    
+                } label: {
+                    Image(systemName: "paperclip")
+                        .foregroundColor(Color(.darkColour))
+                }
+                TextEditor(text: $viewModel.text)
+                    .padding()
+                    .cornerRadius(8)
+            }
+            .background(Color(.secondarySystemBackground))
+            .ignoresSafeArea(.keyboard)
         }
     }
 }

@@ -1077,6 +1077,11 @@
 		9F4DFB2A29A28B3C00363AE8 /* ErrorPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB2929A28B3C00363AE8 /* ErrorPopoverView.swift */; };
 		9F4DFB2C29A2A5E800363AE8 /* PublicFollowersFollowingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB2B29A2A5E800363AE8 /* PublicFollowersFollowingView.swift */; };
 		9F4DFB2E29A2CDC300363AE8 /* DiscoverSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB2D29A2CDC300363AE8 /* DiscoverSearchBar.swift */; };
+		9F4DFB3129A6A30500363AE8 /* CommentWithAttachmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3029A6A30500363AE8 /* CommentWithAttachmentsViewController.swift */; };
+		9F4DFB3329A6A4E300363AE8 /* CommentWithAttachmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3229A6A4E300363AE8 /* CommentWithAttachmentsView.swift */; };
+		9F4DFB3529A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3429A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift */; };
+		9F4DFB3829AA801700363AE8 /* CommentAttachmentSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3729AA801700363AE8 /* CommentAttachmentSheetViewController.swift */; };
+		9F4DFB3A29AA802800363AE8 /* CommentAttachmentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3929AA802800363AE8 /* CommentAttachmentSheet.swift */; };
 		9F4FFD832953837E004853BD /* MainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4FFD822953837E004853BD /* MainButton.swift */; };
 		9F612BBD2915CBE300B5AE5A /* LoginViewSwifUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */; };
 		9F612BC02915D78600B5AE5A /* SignUpMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */; };
@@ -2189,6 +2194,11 @@
 		9F4DFB2929A28B3C00363AE8 /* ErrorPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorPopoverView.swift; sourceTree = "<group>"; };
 		9F4DFB2B29A2A5E800363AE8 /* PublicFollowersFollowingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicFollowersFollowingView.swift; sourceTree = "<group>"; };
 		9F4DFB2D29A2CDC300363AE8 /* DiscoverSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSearchBar.swift; sourceTree = "<group>"; };
+		9F4DFB3029A6A30500363AE8 /* CommentWithAttachmentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentWithAttachmentsViewController.swift; sourceTree = "<group>"; };
+		9F4DFB3229A6A4E300363AE8 /* CommentWithAttachmentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentWithAttachmentsView.swift; sourceTree = "<group>"; };
+		9F4DFB3429A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentWithAttachmentsViewModel.swift; sourceTree = "<group>"; };
+		9F4DFB3729AA801700363AE8 /* CommentAttachmentSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentAttachmentSheetViewController.swift; sourceTree = "<group>"; };
+		9F4DFB3929AA802800363AE8 /* CommentAttachmentSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentAttachmentSheet.swift; sourceTree = "<group>"; };
 		9F4FFD822953837E004853BD /* MainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButton.swift; sourceTree = "<group>"; };
 		9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwifUI.swift; sourceTree = "<group>"; };
 		9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpMainView.swift; sourceTree = "<group>"; };
@@ -3352,6 +3362,8 @@
 		743A04FB276A87090027B752 /* CommentSection */ = {
 			isa = PBXGroup;
 			children = (
+				9F4DFB3629AA7FF300363AE8 /* CommentAttachmentSheet */,
+				9F4DFB2F29A6A2E500363AE8 /* CommentWithAttachments */,
 				743A04FC276A87250027B752 /* CommentSectionViewController.swift */,
 				743A04FE276A87330027B752 /* CommentSectionView.swift */,
 				743A0500276A873F0027B752 /* CommentSectionViewModel.swift */,
@@ -5593,6 +5605,25 @@
 			path = ErrorView;
 			sourceTree = "<group>";
 		};
+		9F4DFB2F29A6A2E500363AE8 /* CommentWithAttachments */ = {
+			isa = PBXGroup;
+			children = (
+				9F4DFB3029A6A30500363AE8 /* CommentWithAttachmentsViewController.swift */,
+				9F4DFB3229A6A4E300363AE8 /* CommentWithAttachmentsView.swift */,
+				9F4DFB3429A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift */,
+			);
+			path = CommentWithAttachments;
+			sourceTree = "<group>";
+		};
+		9F4DFB3629AA7FF300363AE8 /* CommentAttachmentSheet */ = {
+			isa = PBXGroup;
+			children = (
+				9F4DFB3729AA801700363AE8 /* CommentAttachmentSheetViewController.swift */,
+				9F4DFB3929AA802800363AE8 /* CommentAttachmentSheet.swift */,
+			);
+			path = CommentAttachmentSheet;
+			sourceTree = "<group>";
+		};
 		9F612BBE2915D77000B5AE5A /* SignUpViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -6332,6 +6363,7 @@
 				7403A5EE26C315D1000588CE /* FirebaseAPIGroupService.swift in Sources */,
 				7444D0AE26D2B30E0009C7A6 /* SwiftUICollectionViewCell.swift in Sources */,
 				7479813427DB851800CF3F9B /* RequestsModel.swift in Sources */,
+				9F4DFB3529A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift in Sources */,
 				749B37B62848D4BA00ADF33D /* CircuitDataSource.swift in Sources */,
 				7444D09F26D143550009C7A6 /* AddMoreTimeViewController.swift in Sources */,
 				742C1C6A27B6A54600DD1BB0 /* MyProfileDataSource.swift in Sources */,
@@ -6352,6 +6384,7 @@
 				740682F828901CC700CD9C08 /* PerformanceIntroSubview.swift in Sources */,
 				748B403D25236EBD00C947B6 /* SetSelectionViewController.swift in Sources */,
 				742C1C7827BAFC6200DD1BB0 /* PublicTimelineView.swift in Sources */,
+				9F4DFB3329A6A4E300363AE8 /* CommentWithAttachmentsView.swift in Sources */,
 				742C1CB627C3ED0A00DD1BB0 /* NumberCircleDataSource.swift in Sources */,
 				74DE6D9E27D3D801009FB44A /* PlayerDetailView.swift in Sources */,
 				74FA60A128AFF834007B2CD8 /* InjuryTrackerView.swift in Sources */,
@@ -6363,6 +6396,7 @@
 				74F664E628E098FB0086BA4E /* FileManager+Extension.swift in Sources */,
 				743B16AA270B43B500F4C6C0 /* CustomTimer.swift in Sources */,
 				74FDB5B026A49C17000649CC /* RoundingExtension.swift in Sources */,
+				9F4DFB3829AA801700363AE8 /* CommentAttachmentSheetViewController.swift in Sources */,
 				7420399B28329A3A00074ECB /* MyFollowersView.swift in Sources */,
 				9F612BD229197DF900B5AE5A /* UserFollowingSwiftUI.swift in Sources */,
 				74E08A8C28442592009D0DCB /* MyWorkloadsDataSource.swift in Sources */,
@@ -6647,6 +6681,7 @@
 				748B98AC28635046003226CA /* URL+Extension.swift in Sources */,
 				74B48DFE27A41E6700BBFC16 /* LiveWorkoutSections+Items.swift in Sources */,
 				74A0B58C285A0A8A0037FD3F /* ExerciseStampsModels.swift in Sources */,
+				9F4DFB3129A6A30500363AE8 /* CommentWithAttachmentsViewController.swift in Sources */,
 				74D93470282EF854005D15DE /* EditProfileCoordinator.swift in Sources */,
 				74F0C701284F656000FE3A01 /* WorkoutCreationOptionsViewModel.swift in Sources */,
 				74E51D0C25AF615E002054D6 /* DiscoverPosts.swift in Sources */,
@@ -6733,6 +6768,7 @@
 				74C89C8C261B67D8009F3C72 /* WorkoutPrivacyCollectionViewCell.swift in Sources */,
 				9F612BD529197E6400B5AE5A /* UserFollowing+ViewModel.swift in Sources */,
 				74A0B595285A83040037FD3F /* PremiumAccountView.swift in Sources */,
+				9F4DFB3A29AA802800363AE8 /* CommentAttachmentSheet.swift in Sources */,
 				742C1C4B27AD9BED00DD1BB0 /* ClipDataSource.swift in Sources */,
 				742FD56D283EB18F0025E43C /* ExerciseTagsView.swift in Sources */,
 				742C1CDE27C9077700DD1BB0 /* MyProgramsItems.swift in Sources */,

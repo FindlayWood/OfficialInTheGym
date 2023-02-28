@@ -44,7 +44,7 @@ class PostTableViewCell: UITableViewCell {
         super.prepareForReuse()
         actionPublisher = PassthroughSubject<PostAction,Never>()
         view.postWorkoutView.isHidden = true
-        view.postUserView.profileImageButton.setImage(nil, for: .normal)
+        view.profileImageButton.setImage(nil, for: .normal)
         layoutIfNeeded()
     }
 }
@@ -60,10 +60,10 @@ private extension PostTableViewCell {
     }
     func constrainUI() {
         view.translatesAutoresizingMaskIntoConstraints = false
-        let workoutAnchor = view.postWorkoutView.workoutView.heightAnchor.constraint(equalToConstant: 130)
-        workoutAnchor.priority = .defaultLow
-        let spacerHeight = view.spacerView.heightAnchor.constraint(equalToConstant: 44)
-        spacerHeight.priority = .defaultLow
+//        let workoutAnchor = view.postWorkoutView.workoutView.heightAnchor.constraint(equalToConstant: 130)
+//        workoutAnchor.priority = .defaultLow
+//        let spacerHeight = view.spacerView.heightAnchor.constraint(equalToConstant: 44)
+//        spacerHeight.priority = .defaultLow
         NSLayoutConstraint.activate([
             view.topAnchor.constraint(equalTo: contentView.topAnchor),
             view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -87,7 +87,7 @@ private extension PostTableViewCell {
         viewModel.$userModel
             .receive(on: DispatchQueue.main)
             .compactMap { $0 }
-            .sink { [weak self] in self?.view.postUserView.stampView.configureForPost(with: $0)}
+            .sink { [weak self] in self?.view.stampView.configureForPost(with: $0)}
             .store(in: &subscriptions)
         
         viewModel.$workoutModel
@@ -130,9 +130,9 @@ private extension PostTableViewCell {
     }
     func setProfileImage(with image: UIImage?) {
         if let image = image {
-            self.view.postUserView.profileImageButton.setImage(image, for: .normal)
+            self.view.profileImageButton.setImage(image, for: .normal)
         } else {
-            self.view.postUserView.profileImageButton.setImage(nil, for: .normal)
+            self.view.profileImageButton.setImage(nil, for: .normal)
         }
     }
 }
@@ -143,13 +143,13 @@ extension PostTableViewCell {
         viewModel.post = post
         initViewModel()
         posterID = post.posterID
-        view.postUserView.usernameButton.setTitle(post.username, for: .normal)
+        view.usernameButton.setTitle(post.username, for: .normal)
         if longDateFormat {
             let time = Date(timeIntervalSince1970: post.time)
-            view.postUserView.timeLabel.text = time.getLongPostFormat()
+            view.timeLabel.text = time.getLongPostFormat()
         } else {
             let time = Date(timeIntervalSince1970: (post.time))
-            view.postUserView.timeLabel.text = time.getShortPostFormat() + " ago"
+            view.timeLabel.text = time.getShortPostFormat() + " ago"
         }
         if post.text.isEmpty {
             view.postTextView.isHidden = true
@@ -178,8 +178,8 @@ extension PostTableViewCell {
 extension PostTableViewCell {
     func addActions() {
         view.postInteractionsView.likeButton.addTarget(self, action: #selector(likeButtonTapped(_:)), for: .touchUpInside)
-        view.postUserView.usernameButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
-        view.postUserView.profileImageButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
+        view.usernameButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
+        view.profileImageButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
         let tap = UITapGestureRecognizer(target: self, action: #selector(workoutTapped(_:)))
         view.postWorkoutView.workoutView.addGestureRecognizer(tap)
     }

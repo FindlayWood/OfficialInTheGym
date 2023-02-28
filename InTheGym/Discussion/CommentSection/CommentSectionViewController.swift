@@ -25,22 +25,23 @@ class CommentSectionViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - View
-//    override func loadView() {
-//        view = display
-//    }
+    override func loadView() {
+        view = display
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        addChildView()
-//        display.commentView.textViewDidChange(display.commentView.commentTextField)
-//        display.tableview.separatorStyle = .none
-//        initTableView()
+//        addChildView()
+        display.commentView.textViewDidChange(display.commentView.commentTextField)
+        display.tableview.separatorStyle = .none
+        initTableView()
 //        initialTableSetUp()
-//        initDataSource()
+        initDataSource()
         initViewModel()
-//        setupKeyBoardObservers()
+        setupKeyBoardObservers()
         initTargets()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -121,19 +122,23 @@ class CommentSectionViewController: UIViewController {
         
         coordinator?.savedWorkoutSelected
             .sink { [weak self] in
-                self?.viewModel.attachedWorkout = $0
+                self?.viewModel.updateAttachedSavedWorkout(with: $0)
                 self?.display.commentView.attachWorkout($0)
             }
             .store(in: &subscriptions)
         
         
-//        viewModel.comments
-//            .receive(on: RunLoop.main)
-//            .sink { [weak self] in self?.dataSource.updateComments(with: $0) }
-//            .store(in: &subscriptions)
+        viewModel.$comments
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in self?.dataSource.updateComments(with: $0) }
+            .store(in: &subscriptions)
         
-        viewModel.isLoading
+        viewModel.$isLoading
             .sink { [weak self] in self?.initLoadingNavBar($0)}
+            .store(in: &subscriptions)
+        
+        viewModel.clearTextPublisher
+            .sink { [weak self] in self?.clearText() }
             .store(in: &subscriptions)
         
         viewModel.loadGeneric(for: viewModel.mainPostReplyModel)
@@ -199,12 +204,18 @@ extension CommentSectionViewController {
     
     @objc func attachedWorkoutPressed(_ sender: UIButton) {
         display.commentView.commentTextField.resignFirstResponder()
-        coordinator?.attachWorkout()
+        coordinator?.attachmentSheet(viewModel)
     }
     
     @objc func removeAttachedWorkout(_ sender: UIButton) {
         display.removeAttachedWorkout()
         viewModel.attachedWorkout = nil
+    }
+    
+    func clearText() {
+        display.commentView.commentTextField.text.removeAll()
+        display.commentView.textViewDidChange(display.commentView.commentTextField)
+        display.commentView.textViewDidEndEditing(display.commentView.commentTextField)
     }
 }
 

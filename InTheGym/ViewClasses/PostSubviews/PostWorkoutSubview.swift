@@ -40,7 +40,7 @@ private extension PostWorkoutSubview {
     func configureUI() {
         NSLayoutConstraint.activate([
             workoutView.topAnchor.constraint(equalTo: topAnchor),
-            workoutView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 58),
+            workoutView.leadingAnchor.constraint(equalTo: leadingAnchor),
             workoutView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             workoutView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])

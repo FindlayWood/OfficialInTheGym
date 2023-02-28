@@ -25,12 +25,11 @@ struct SavedWorkoutListView: View {
                 .fontWeight(.semibold)
             VStack(spacing: 0) {
                 Text(model.exercises?.count ?? 0, format: .number)
-                    .font(.title3)
+                    .font(.body.bold())
                     .foregroundColor(.primary)
-                Image("dumbbell_icon")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30)
+                Text("Exercises")
+                    .font(.caption.weight(.medium))
+                    .foregroundColor(.secondary)
             }
             .padding(.top, 4)
         }

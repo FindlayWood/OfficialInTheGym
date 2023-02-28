@@ -13,6 +13,10 @@ import Combine
 class CommentSectionCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var modalNavigationController: UINavigationController?
+    var attachmentsModal: UINavigationController!
+    private var userCompletionHandler: (Users) -> Void = { _ in }
+    private var savedCompletionHandle: (SavedWorkoutModel) -> Void = { _ in }
     var mainPost: PostModel
     var savedWorkoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
     var listener: PostListener?
@@ -49,20 +53,56 @@ extension CommentSectionCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func attachWorkout() {
+    func attachWorkout(_ model: PostModel) {
+        self.modalNavigationController = UINavigationController()
+        let vc = CommentWithAttachmentsViewController()
+        modalNavigationController?.setViewControllers([vc], animated: false)
+        vc.coordinator = self
+        if let modalNavigationController = modalNavigationController {
+            modalNavigationController.modalPresentationStyle = .fullScreen
+            navigationController.present(modalNavigationController, animated: true, completion: nil)
+        }
+        
+//        let vc = SavedWorkoutsViewController()
+//        vc.coordinator = self
+//        vc.modalPresentationStyle = .custom
+//        vc.transitioningDelegate = self
+//        navigationController.present(vc, animated: true, completion: nil)
+    }
+    func attachmentSheet(_ viewModel: CommentSectionViewModel) {
+        self.modalNavigationController = UINavigationController()
+        let vc = CommentWithAttachmentsViewController()
+        modalNavigationController?.setViewControllers([vc], animated: false)
+        vc.coordinator = self
+        vc.viewModel = viewModel
+        if let modalNavigationController = modalNavigationController {
+            modalNavigationController.modalPresentationStyle = .fullScreen
+            navigationController.present(modalNavigationController, animated: true, completion: nil)
+        }
+    }
+    func showAttachments(_ viewModel: CommentSectionViewModel) {
+        guard let modalNavigationController else {return}
+        let vc = CommentAttachmentSheetViewController()
+        attachmentsModal = UINavigationController(rootViewController: vc)
+        vc.viewModel = viewModel
+        vc.coordinator = self
+        modalNavigationController.present(attachmentsModal, animated: true, completion: nil)
+    }
+    func showSavedWorkoutPicker() {
+        guard let modalNavigationController = modalNavigationController else {return}
         let vc = SavedWorkoutsViewController()
         vc.coordinator = self
-        vc.modalPresentationStyle = .custom
-        vc.transitioningDelegate = self
-        navigationController.present(vc, animated: true, completion: nil)
+        modalNavigationController.present(vc, animated: true, completion: nil)
+    }
+    func showUserSelection(completion: @escaping (Users) -> ()) {
+        self.userCompletionHandler = completion
+        let vc = SearchViewController()
+        vc.coordinator = self
+        let nav = UINavigationController(rootViewController: vc)
+        attachmentsModal.present(nav, animated: true)
     }
 }
-extension CommentSectionCoordinator: SavedWorkoutsFlow {
-    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
-        savedWorkoutSelected.send(selectedWorkout)
-        navigationController.dismiss(animated: true)
-    }
-}
+
 // MARK: - Custom Clip Picker
 extension CommentSectionCoordinator: UIViewControllerTransitioningDelegate {
     
@@ -75,4 +115,27 @@ extension CommentSectionCoordinator: UIViewControllerTransitioningDelegate {
 
 extension CommentSectionCoordinator: UINavigationControllerDelegate {
     
+}
+
+// MARK: - User Selection
+extension CommentSectionCoordinator: UserSearchFlow {
+    func userSelected(_ user: Users) {
+        userCompletionHandler(user)
+        attachmentsModal.dismiss(animated: true)
+    }
+}
+// MARK: - Saved Workout Selection
+extension CommentSectionCoordinator: SavedWorkoutsFlow {
+    func showSavedWorkoutPicker(completion: @escaping (SavedWorkoutModel) -> Void) {
+        self.savedCompletionHandle = completion
+        let vc = SavedWorkoutsViewController()
+        let navController = UINavigationController(rootViewController: vc)
+        vc.coordinator = self
+        attachmentsModal.present(navController, animated: true, completion: nil)
+    }
+    
+    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
+        savedCompletionHandle(selectedWorkout)
+        attachmentsModal.dismiss(animated: true)
+    }
 }

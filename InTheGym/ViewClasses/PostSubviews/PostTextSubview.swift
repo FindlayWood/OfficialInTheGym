@@ -14,7 +14,7 @@ class PostTextSubview: UIView {
     // MARK: - Subviews
     var textView: UILabel = {
         let view = UILabel()
-        view.font = .systemFont(ofSize: 17, weight: .semibold)
+        view.font = .preferredFont(forTextStyle: .body, weight: .semibold)
         view.textColor = .label
         view.numberOfLines = 0
         view.lineBreakMode = .byWordWrapping
@@ -43,7 +43,7 @@ private extension PostTextSubview {
     func configureUI() {
         NSLayoutConstraint.activate([
             textView.topAnchor.constraint(equalTo: topAnchor),
-            textView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 58),
+            textView.leadingAnchor.constraint(equalTo: leadingAnchor),
             textView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             textView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
