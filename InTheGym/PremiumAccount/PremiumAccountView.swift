@@ -21,7 +21,7 @@ struct PremiumAccountViewSwiftUI: View {
                             
                         } label: {
                             Text("Cancel Subscription")
-                                .foregroundColor(Color(.darkColour))
+                                .foregroundColor(Color(.premiumColour))
                         }.padding()
                     } else {
                         Text("Sign up for a premium account and gain access to awesome features and power yourself into an elite athlete.")
@@ -40,27 +40,27 @@ struct PremiumAccountViewSwiftUI: View {
                                     VStack(spacing: 8) {
                                         Text(package.storeProduct.subscriptionPeriod?.durationTitle ?? "Error")
                                             .font(.headline)
-                                            .foregroundColor(viewModel.selectedPackage == package ? .white : .primary)
+                                            .foregroundColor(viewModel.selectedPackage == package ? Color(.darkColour) : .primary)
                                         Text(package.storeProduct.localizedPriceString)
                                             .font(.subheadline)
-                                            .foregroundColor(viewModel.selectedPackage == package ? .white : .primary)
+                                            .foregroundColor(viewModel.selectedPackage == package ? Color(.darkColour) : .primary)
                                         if viewModel.selectedPackage == package {
                                             Image(systemName: "checkmark.circle.fill")
                                                 .font(.title)
-                                                .foregroundColor(viewModel.selectedPackage == package ? .white : Color(.darkColour))
+                                                .foregroundColor(viewModel.selectedPackage == package ? Color(.darkColour) : Color(.premiumColour))
                                         } else {
                                             Image(systemName: "circle")
                                                 .font(.title)
-                                                .foregroundColor(viewModel.selectedPackage == package ? .white : Color(.darkColour))
+                                                .foregroundColor(viewModel.selectedPackage == package ? .white : Color(.premiumColour))
                                         }
                                     }
                                     .padding()
                                     .frame(maxWidth: .infinity)
-                                    .background(viewModel.selectedPackage == package ? Color(.darkColour) : Color(.systemBackground))
+                                    .background(viewModel.selectedPackage == package ? Color(.premiumColour) : Color(.systemBackground))
                                     .cornerRadius(8)
                                     .shadow(radius: viewModel.selectedPackage == package ? 0 : 4)
                                     .overlay(RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color(.darkColour), lineWidth: 2))
+                                        .stroke(Color(.premiumColour), lineWidth: 2))
                                     .padding()
                                 }
                                 .disabled(viewModel.isLoading)
@@ -70,16 +70,25 @@ struct PremiumAccountViewSwiftUI: View {
                         if viewModel.isLoading {
                             VStack {
                                 ProgressView()
-                                    .tint(.white)
+                                    .tint(Color(.darkColour))
                                     .padding()
                             }
-                            .background(Color(.darkColour))
+                            .background(Color(.premiumColour))
                             .clipShape(Capsule())
                         } else {
-                            MainButton(text: "Subscribe") {
+                            Button {
                                 Task {
                                     await viewModel.subscribeAction()
                                 }
+                            } label: {
+                                Text("Subscribe")
+                                    .padding()
+                                    .font(.headline)
+                                    .foregroundColor(Color(.darkColour))
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color(.premiumColour))
+                                    .clipShape(Capsule())
+                                    .shadow(radius: 4)
                             }
                         }
                         
@@ -91,6 +100,7 @@ struct PremiumAccountViewSwiftUI: View {
                     }
                     
                 }
+                .animation(.easeInOut, value: viewModel.isLoading)
                 .navigationTitle("Premium")
                 .navigationBarTitleDisplayMode(.inline)
                 .frame(maxWidth: .infinity)
@@ -112,7 +122,7 @@ struct PremiumAccountViewSwiftUI: View {
                 }
             }
             .background(
-                LinearGradient(colors: [Color(.secondarySystemBackground), Color(.secondarySystemBackground), Color(.lightColour)], startPoint: .top, endPoint: .bottom)
+                LinearGradient(colors: [Color(.secondarySystemBackground), Color(.secondarySystemBackground), Color(.premiumColour)], startPoint: .top, endPoint: .bottom)
                     .edgesIgnoringSafeArea(.all))
         }
     }
@@ -138,7 +148,7 @@ struct SubscribedView: View {
         .cornerRadius(8)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color(.darkColour), lineWidth: 1)
+                .stroke(Color(.premiumColour), lineWidth: 1)
         )
     }
 }
@@ -169,7 +179,7 @@ struct SubscriptionFeatureView: View {
         .cornerRadius(8)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color(.darkColour), lineWidth: 2)
+                .stroke(Color(.premiumColour), lineWidth: 2)
         )
     }
 }

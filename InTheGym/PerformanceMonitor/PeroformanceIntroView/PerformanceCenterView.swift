@@ -32,7 +32,7 @@ struct PerformanceCenterView: View {
             .padding(.horizontal)
         }
         .background(
-            LinearGradient(colors: [Color(.secondarySystemBackground), Color(.lightColour)], startPoint: .top, endPoint: .bottom)
+            LinearGradient(colors: [Color(.secondarySystemBackground), Color(.premiumColour)], startPoint: .top, endPoint: .bottom)
         )
 //        .navigationTitle("Performance Center")
 //        .navigationBarTitleDisplayMode(.inline)

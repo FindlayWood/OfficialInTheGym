@@ -35,7 +35,7 @@ struct PerformanceCenterOptionView: View {
         .shadow(radius: 4)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color(.darkColour), lineWidth: 1)
+                .stroke(Color(.premiumColour), lineWidth: 1)
         )
     }
 }

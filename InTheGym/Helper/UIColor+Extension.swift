@@ -20,5 +20,5 @@ extension UIColor {
     static let completedColour = #colorLiteral(red: 0.00234289733, green: 0.8251151509, blue: 0.003635218529, alpha: 1)
     static let liveColour = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
     static let notStartedColour = #colorLiteral(red: 0.8643916561, green: 0.1293050488, blue: 0.007468156787, alpha: 1)
-    static let premiumColour = UIColor(named: "premiumColour")
+    static let premiumColour = #colorLiteral(red: 0.5647058824, green: 1, blue: 0.862745098, alpha: 1)
 }
