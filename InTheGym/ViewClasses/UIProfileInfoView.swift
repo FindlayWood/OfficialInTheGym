@@ -17,6 +17,8 @@ class UIProfileInfoView: UIView {
         view.layer.cornerRadius = (Constants.screenSize.width * 0.35) / 2
         view.widthAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.35).isActive = true
         view.heightAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.35).isActive = true
+        view.layer.borderWidth = 2
+        view.layer.borderColor = SubscriptionManager.shared.isSubscribed ? UIColor.premiumColour.cgColor : UIColor.clear.cgColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

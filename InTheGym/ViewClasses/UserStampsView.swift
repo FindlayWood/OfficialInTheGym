@@ -36,7 +36,7 @@ class UserStampsView: UIView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.backgroundColor = .clear
-        view.tintColor = .goldColour
+        view.tintColor = .premiumColour
         view.image = UIImage(systemName: "crown.fill")
         view.heightAnchor.constraint(equalToConstant: 20).isActive = true
         view.widthAnchor.constraint(equalToConstant: 25).isActive = true

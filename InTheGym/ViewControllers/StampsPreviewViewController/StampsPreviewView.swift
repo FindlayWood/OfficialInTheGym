@@ -12,7 +12,7 @@ import Combine
 struct StampsPreviewView: View {
     var dismissButtonCallBack = PassthroughSubject<Void,Never>()
     var imageNames: [String] = ["checkmark.seal.fill", "checkmark.seal.fill", "crown.fill"]
-    var imageColours: [UIColor] = [.goldColour, .lightColour, .goldColour]
+    var imageColours: [UIColor] = [.goldColour, .lightColour, .premiumColour]
     var titles: [String] = ["Elite Trainer Account", "Verified Account", "Premium Account"]
     var messages: [String] = ["This stamp is given to accounts who produce elite content for athletes. This stamp is only given out when an account's content has been thoroughly reviewed by our team and beleived to help produce elite athletes. This stamp is not easy to receive and denotes a great account to follow.",
                               "This stamp is given to accounts who have verified themselves as coaches of elite athletes or an elite athlete. This stamp denotes a great account to follow.",
