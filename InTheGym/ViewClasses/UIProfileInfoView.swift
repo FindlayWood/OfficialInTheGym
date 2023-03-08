@@ -18,7 +18,7 @@ class UIProfileInfoView: UIView {
         view.widthAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.35).isActive = true
         view.heightAnchor.constraint(equalToConstant: Constants.screenSize.width * 0.35).isActive = true
         view.layer.borderWidth = 2
-        view.layer.borderColor = SubscriptionManager.shared.isSubscribed ? UIColor.premiumColour.cgColor : UIColor.clear.cgColor
+        view.layer.borderColor = UIColor.clear.cgColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -111,6 +111,11 @@ extension UIProfileInfoView {
             case .failure(_):
                 self.profileImageView.backgroundColor = .lightGray
             }
+        }
+        if UserDefaults.currentUser == user && SubscriptionManager.shared.isSubscribed {
+            profileImageView.layer.borderColor = UIColor.premiumColour.cgColor
+        } else {
+            profileImageView.layer.borderColor = UIColor.clear.cgColor
         }
     }
     public func setFollowerCount(to count: Int) {
