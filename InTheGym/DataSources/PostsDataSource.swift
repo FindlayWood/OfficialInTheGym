@@ -23,6 +23,8 @@ class PostsDataSource: NSObject {
     
     var userTapped = PassthroughSubject<PostModel,Never>()
     
+    var taggedUserTapped = PassthroughSubject<PostModel,Never>()
+    
     var workoutTapped = PassthroughSubject<PostModel,Never>()
     
     var flagPost = PassthroughSubject<PostModel,Never>()
@@ -115,6 +117,8 @@ class PostsDataSource: NSObject {
             workoutTapped.send(post)
         case .userTapped:
             userTapped.send(post)
+        case .taggedUserTapped:
+            taggedUserTapped.send(post)
         }
     }
 }

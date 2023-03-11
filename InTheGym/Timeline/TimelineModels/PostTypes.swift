@@ -23,6 +23,7 @@ protocol DisplayablePost {
 //    var attachedClip: attachedClip? { get }
     var workoutID: String? { get }
     var savedWorkoutID: String? { get }
+    var taggedUsers: [String]? { get }
     var likeCount: Int { get set }
     var replyCount: Int { get set }
     var isPrivate: Bool { get }

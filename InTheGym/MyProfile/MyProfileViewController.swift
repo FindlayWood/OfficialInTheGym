@@ -78,6 +78,10 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
             .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
             .store(in: &subscriptions)
         
+        dataSource.taggedUsersTapped
+            .sink { [weak self] in self?.showTaggedUsers(for: $0) }
+            .store(in: &subscriptions)
+        
         dataSource.deletePost
             .sink { [weak self] postModel in
                 self?.viewModel.deletePost(postModel)
@@ -141,6 +145,11 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
         case .stamps:
             coordinator?.showStampsPreview()
         }
+    }
+    
+    func showTaggedUsers(for post: PostModel) {
+        guard let tagged = post.taggedUsers else { return }
+        coordinator?.showTaggedUsers(tagged)
     }
     
     func showCommentSection(for post: PostModel) {

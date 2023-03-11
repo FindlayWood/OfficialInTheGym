@@ -117,6 +117,11 @@ extension MyProfileCoordinator {
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
+    func showTaggedUsers(_ ids: [String]) {
+        let child = TaggedUsersCoordinator(navigationController: navigationController, ids: ids)
+        childCoordinators.append(child)
+        child.start()
+    }
 }
 
 // MARK: - Show Clip

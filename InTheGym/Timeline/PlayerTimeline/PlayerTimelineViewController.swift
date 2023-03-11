@@ -65,6 +65,10 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
             .sink { [weak self]in self?.viewModel.getUser(from: $0) }
             .store(in: &subscriptions)
         
+        dataSource.taggedUserTapped
+            .sink { [weak self] in self?.showTaggedUsers(for: $0) }
+            .store(in: &subscriptions)
+        
         dataSource.workoutTapped
             .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
             .store(in: &subscriptions)
@@ -151,6 +155,11 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     // MARK: - Actions
     func showCommentSection(for post: PostModel) {
         coordinator?.showCommentSection(for: post, with: viewModel.reloadListener)
+    }
+    
+    func showTaggedUsers(for post: PostModel) {
+        guard let tagged = post.taggedUsers else { return }
+        coordinator?.showTaggedUsers(tagged)
     }
     
     @objc func handleRefresh(_ sender: AnyObject){

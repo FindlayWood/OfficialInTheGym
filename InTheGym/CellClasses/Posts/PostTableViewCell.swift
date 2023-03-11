@@ -171,6 +171,11 @@ extension PostTableViewCell {
             view.postWorkoutView.isHidden = false
             view.postWorkoutView.workoutView.configure(for: savedWorkoutID)
         }
+        if let _ = viewModel.post.taggedUsers {
+            view.postTaggedUsersView.isHidden = false
+        } else {
+            view.postTaggedUsersView.isHidden = true
+        }
     }
 }
 
@@ -182,6 +187,8 @@ extension PostTableViewCell {
         view.profileImageButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
         let tap = UITapGestureRecognizer(target: self, action: #selector(workoutTapped(_:)))
         view.postWorkoutView.workoutView.addGestureRecognizer(tap)
+        let taggedUsersTap = UITapGestureRecognizer(target: self, action: #selector(taggedUsersTapped(_:)))
+        view.postTaggedUsersView.addGestureRecognizer(taggedUsersTap)
     }
     
     @objc func likeButtonTapped(_ sender: UIButton) {
@@ -202,5 +209,8 @@ extension PostTableViewCell {
     }
     @objc func userTapped(_ sender: UIButton) {
         actionPublisher.send(.userTapped)
+    }
+    @objc func taggedUsersTapped(_ sender: UIView) {
+        actionPublisher.send(.taggedUserTapped)
     }
 }

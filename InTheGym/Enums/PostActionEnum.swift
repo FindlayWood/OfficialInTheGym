@@ -12,4 +12,5 @@ enum PostAction {
     case userTapped
     case workoutTapped
     case likeButtonTapped
+    case taggedUserTapped
 }

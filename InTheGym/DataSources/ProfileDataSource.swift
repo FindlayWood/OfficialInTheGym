@@ -167,6 +167,8 @@ class ProfileDataSource: NSObject {
                 workoutTapped.send(post)
             case .userTapped:
                 userTapped.send(post)
+            case .taggedUserTapped:
+                break
             }
         case .workout(_):
             break

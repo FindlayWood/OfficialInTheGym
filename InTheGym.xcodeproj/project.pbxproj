@@ -1082,6 +1082,11 @@
 		9F4DFB3529A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3429A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift */; };
 		9F4DFB3829AA801700363AE8 /* CommentAttachmentSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3729AA801700363AE8 /* CommentAttachmentSheetViewController.swift */; };
 		9F4DFB3A29AA802800363AE8 /* CommentAttachmentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3929AA802800363AE8 /* CommentAttachmentSheet.swift */; };
+		9F4DFB3C29BB9F7300363AE8 /* PostTaggedUsersSubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3B29BB9F7300363AE8 /* PostTaggedUsersSubview.swift */; };
+		9F4DFB4129BCE6ED00363AE8 /* TaggedUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB4029BCE6ED00363AE8 /* TaggedUsersViewController.swift */; };
+		9F4DFB4329BCE6F800363AE8 /* TaggedUsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB4229BCE6F800363AE8 /* TaggedUsersViewModel.swift */; };
+		9F4DFB4529BCE83C00363AE8 /* TaggedUsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB4429BCE83C00363AE8 /* TaggedUsersView.swift */; };
+		9F4DFB4729BD111C00363AE8 /* TaggedUsersCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB4629BD111C00363AE8 /* TaggedUsersCoordinator.swift */; };
 		9F4FFD832953837E004853BD /* MainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4FFD822953837E004853BD /* MainButton.swift */; };
 		9F612BBD2915CBE300B5AE5A /* LoginViewSwifUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */; };
 		9F612BC02915D78600B5AE5A /* SignUpMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */; };
@@ -2199,6 +2204,11 @@
 		9F4DFB3429A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentWithAttachmentsViewModel.swift; sourceTree = "<group>"; };
 		9F4DFB3729AA801700363AE8 /* CommentAttachmentSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentAttachmentSheetViewController.swift; sourceTree = "<group>"; };
 		9F4DFB3929AA802800363AE8 /* CommentAttachmentSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentAttachmentSheet.swift; sourceTree = "<group>"; };
+		9F4DFB3B29BB9F7300363AE8 /* PostTaggedUsersSubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTaggedUsersSubview.swift; sourceTree = "<group>"; };
+		9F4DFB4029BCE6ED00363AE8 /* TaggedUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaggedUsersViewController.swift; sourceTree = "<group>"; };
+		9F4DFB4229BCE6F800363AE8 /* TaggedUsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaggedUsersViewModel.swift; sourceTree = "<group>"; };
+		9F4DFB4429BCE83C00363AE8 /* TaggedUsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaggedUsersView.swift; sourceTree = "<group>"; };
+		9F4DFB4629BD111C00363AE8 /* TaggedUsersCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaggedUsersCoordinator.swift; sourceTree = "<group>"; };
 		9F4FFD822953837E004853BD /* MainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButton.swift; sourceTree = "<group>"; };
 		9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwifUI.swift; sourceTree = "<group>"; };
 		9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpMainView.swift; sourceTree = "<group>"; };
@@ -3760,6 +3770,7 @@
 				74EE4ED82800695300051451 /* ExerciseDiscoveryCoordinator.swift */,
 				742FD586284004040025E43C /* SearchTagCoordinator.swift */,
 				74A602AE2850D20D00AFA236 /* WorkoutDiscoveryCoordinator.swift */,
+				9F4DFB4629BD111C00363AE8 /* TaggedUsersCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -4009,6 +4020,7 @@
 		7479A907229F2B4C00D39E2E /* InTheGym */ = {
 			isa = PBXGroup;
 			children = (
+				9F4DFB3F29BCE6D200363AE8 /* TaggedUsers */,
 				9FB0F29029142D6500BF222E /* PracticeTracker */,
 				74DA1AE028F1A98600F4DB9E /* MatchTracker */,
 				74F664E228DFBE4F0086BA4E /* UserManager */,
@@ -5104,6 +5116,7 @@
 				74E79E64283ADA03002578BB /* PostTextSubview.swift */,
 				74E79E66283ADB82002578BB /* PostWorkoutSubview.swift */,
 				74E79E68283AF24C002578BB /* PostInteractionsSubview.swift */,
+				9F4DFB3B29BB9F7300363AE8 /* PostTaggedUsersSubview.swift */,
 			);
 			path = PostSubviews;
 			sourceTree = "<group>";
@@ -5624,6 +5637,16 @@
 			path = CommentAttachmentSheet;
 			sourceTree = "<group>";
 		};
+		9F4DFB3F29BCE6D200363AE8 /* TaggedUsers */ = {
+			isa = PBXGroup;
+			children = (
+				9F4DFB4029BCE6ED00363AE8 /* TaggedUsersViewController.swift */,
+				9F4DFB4229BCE6F800363AE8 /* TaggedUsersViewModel.swift */,
+				9F4DFB4429BCE83C00363AE8 /* TaggedUsersView.swift */,
+			);
+			path = TaggedUsers;
+			sourceTree = "<group>";
+		};
 		9F612BBE2915D77000B5AE5A /* SignUpViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -5927,6 +5950,7 @@
 				742565AD277FA7C700A7764D /* GroupKeysModel.swift in Sources */,
 				74E08A7B2841542D009D0DCB /* MyWorkoutStatsViewController.swift in Sources */,
 				74AF6D4A2683A796005C52A8 /* FirebaseAPILoader.swift in Sources */,
+				9F4DFB4529BCE83C00363AE8 /* TaggedUsersView.swift in Sources */,
 				74A602A72850C87200AFA236 /* WorkoutDiscoveryViewModel.swift in Sources */,
 				744B52C627CD042200B9D45B /* OptionsChildViewController.swift in Sources */,
 				74F2CCD126DFAC0A00D7AD79 /* InTheGymProtocols.swift in Sources */,
@@ -6482,6 +6506,7 @@
 				7492265622DA43BB00EAD386 /* RequestsViewController.swift in Sources */,
 				7472C87827E0B5D7004836B8 /* DiscoverPageSections+Items.swift in Sources */,
 				742C1C7B27BC047100DD1BB0 /* ExerciseStatsDetailViewController.swift in Sources */,
+				9F4DFB4329BCE6F800363AE8 /* TaggedUsersViewModel.swift in Sources */,
 				7479813627DB857300CF3F9B /* RequestsDataSource.swift in Sources */,
 				7452304D28BD2416008F1E8D /* AddExerciseTempoView.swift in Sources */,
 				7433043E289E93FF00F2569A /* WellnessViewModel.swift in Sources */,
@@ -6612,6 +6637,7 @@
 				7410450D285E02CB00A9FF4E /* OnBoardSecondView.swift in Sources */,
 				7444D0D426D431000009C7A6 /* PrivacyUploadCell.swift in Sources */,
 				74F18AE127D668BF0043551F /* WorkoutChildViewController.swift in Sources */,
+				9F4DFB4729BD111C00363AE8 /* TaggedUsersCoordinator.swift in Sources */,
 				74A602B72850E5DA00AFA236 /* WorkoutRatingModel.swift in Sources */,
 				7466A85525EFD78100F4050F /* ProfileViewAdapter.swift in Sources */,
 				74FA60AC28B28716007B2CD8 /* CMJResultsView.swift in Sources */,
@@ -6776,11 +6802,13 @@
 				74A602AB2850D1AF00AFA236 /* WorkoutDiscoveryCommentsViewController.swift in Sources */,
 				744AED20279701E2000D2D74 /* MainWorkoutEMOMCollectionCell.swift in Sources */,
 				74318F4226B6EC4B009EDFAC /* PreLiveWorkoutViewModel.swift in Sources */,
+				9F4DFB4129BCE6ED00363AE8 /* TaggedUsersViewController.swift in Sources */,
 				748E3C3125B87032004D6D4A /* NewWorkoutSelectionViewController.swift in Sources */,
 				74F18AD027D659790043551F /* PlayerDetailCoordinator.swift in Sources */,
 				74F2CCC326DD576800D7AD79 /* ImagePickerCoordinator.swift in Sources */,
 				74E9899927D7CCDA00898C59 /* WorkoutBottomChildViewModel.swift in Sources */,
 				74AF6D6626868D0B005C52A8 /* ExerciseStatsTitleCell.swift in Sources */,
+				9F4DFB3C29BB9F7300363AE8 /* PostTaggedUsersSubview.swift in Sources */,
 				745F89DF286E521B000070B2 /* CMJHomeViewController.swift in Sources */,
 				745D0E7C22A17ED2007670E3 /* SignUpViewController.swift in Sources */,
 				743330F827959FC8005A0C45 /* FullWidthCollectionViewCell.swift in Sources */,

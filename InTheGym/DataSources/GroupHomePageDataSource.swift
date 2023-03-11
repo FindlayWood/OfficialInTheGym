@@ -160,6 +160,8 @@ class GroupHomePageDataSource: NSObject {
                 workoutTapped.send(groupPost)
             case .userTapped:
                 userTapped.send(groupPost)
+            case .taggedUserTapped:
+                break
             }
         default:
             break

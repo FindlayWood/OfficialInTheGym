@@ -139,6 +139,8 @@ class CommentSectionDataSource: NSObject {
                 workoutTapped.send(post)
             case .userTapped:
                 userTapped.send(post)
+            case .taggedUserTapped:
+                break
             }
         case .mainGroupPost(let groupPost):
             switch action {
@@ -148,6 +150,8 @@ class CommentSectionDataSource: NSObject {
                 groupPostWorkoutButtonTapped.send(groupPost)
             case .userTapped:
                 groupUserButtonTapped.send(groupPost)
+            case .taggedUserTapped:
+                break
             }
         case .comment(let comment):
             switch action {

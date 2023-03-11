@@ -100,9 +100,14 @@ class PostCellView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    var postTaggedUsersView: PostTaggedUsersSubview = {
+        let view = PostTaggedUsersSubview()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     lazy var vstack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [usernameTimeVstack, postTextView, postWorkoutView, postInteractionsView])
+        let stack = UIStackView(arrangedSubviews: [usernameTimeVstack, postTextView, postWorkoutView, postTaggedUsersView, postInteractionsView])
         stack.axis = .vertical
         stack.alignment = .leading
         stack.spacing = 8
@@ -116,15 +121,6 @@ class PostCellView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-//    lazy var fullPostStack: UIStackView = {
-//        let stack = UIStackView(arrangedSubviews: [postUserView, postTextView, postWorkoutView, postInteractionsView])
-//        stack.axis = .vertical
-//        stack.alignment = .leading
-//        stack.distribution = .equalSpacing
-//        stack.spacing = 8
-//        stack.translatesAutoresizingMaskIntoConstraints = false
-//        return stack
-//    }()
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -140,24 +136,18 @@ class PostCellView: UIView {
 private extension PostCellView {
     func setupUI() {
         backgroundColor = .systemBackground
-//        addSubview(fullPostStack)
         addSubview(postStack)
         constrainUI()
     }
     func constrainUI() {
-//        let workoutAnchor = postWorkoutView.workoutView.heightAnchor.constraint(equalToConstant: 130)
-//        workoutAnchor.priority = .defaultLow
-//        let spacerHeight = spacerView.heightAnchor.constraint(equalToConstant: 44)
-//        spacerHeight.priority = .defaultLow
         NSLayoutConstraint.activate([
             postStack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             postStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             postStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             postStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
-//            spacerHeight,
-//            workoutAnchor,
             postWorkoutView.widthAnchor.constraint(equalTo: vstack.widthAnchor),
-            postInteractionsView.widthAnchor.constraint(equalTo: vstack.widthAnchor)
+            postInteractionsView.widthAnchor.constraint(equalTo: vstack.widthAnchor),
+            postTaggedUsersView.widthAnchor.constraint(equalTo: vstack.widthAnchor)
         ])
     }
 }

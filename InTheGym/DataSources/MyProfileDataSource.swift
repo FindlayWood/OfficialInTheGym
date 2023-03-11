@@ -22,6 +22,8 @@ class MyProfileDataSource: NSObject {
     
     var likeButtonTapped = PassthroughSubject<PostModel,Never>()
     
+    var taggedUsersTapped = PassthroughSubject<PostModel,Never>()
+    
     // MARK: - Properties
     var tableView: UITableView
     private lazy var dataSource = makeDataSource()
@@ -102,6 +104,8 @@ class MyProfileDataSource: NSObject {
                 workoutTapped.send(post)
             case .userTapped:
                 userTapped.send(post)
+            case .taggedUserTapped:
+                taggedUsersTapped.send(post)
             }
         }
     }

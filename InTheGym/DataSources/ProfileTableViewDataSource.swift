@@ -24,6 +24,8 @@ class ProfileTableViewDataSource: NSObject {
     
     var workoutTapped = PassthroughSubject<PostModel,Never>()
     
+    var taggedUsersTapped = PassthroughSubject<PostModel,Never>()
+    
     var flagPost = PassthroughSubject<PostModel,Never>()
     
     var deletePost = PassthroughSubject<PostModel,Never>()
@@ -151,6 +153,8 @@ class ProfileTableViewDataSource: NSObject {
                 workoutTapped.send(post)
             case .userTapped:
                 userTapped.send(post)
+            case .taggedUserTapped:
+                taggedUsersTapped.send(post)
             }
         case .workout(_):
             break
