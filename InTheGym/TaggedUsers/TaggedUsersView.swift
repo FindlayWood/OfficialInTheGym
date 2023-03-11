@@ -15,37 +15,12 @@ struct TaggedUsersView: View {
     var action: (Users) -> ()
     
     var body: some View {
-        VStack {
-            VStack {
-                HStack {
-                    Spacer()
-                    Rectangle()
-                        .fill(Color.primary)
-                        .frame(width: 100, height: 6)
-                        .cornerRadius(3)
-                    Spacer()
-                }
-                .padding(.top, 4)
-                HStack {
-                    Text("Tagged Users:")
-                        .font(.headline)
-                        .padding()
-                    Spacer()
-                    if viewModel.isLoading {
-                        ProgressView()
-                            .tint(Color(.darkColour))
-                            .padding()
-                    }
-                }
-            }
-            .background(Color.white)
-            List {
-                ForEach(viewModel.taggedUsers, id: \.uid) { model in
-                    Button {
-                        action(model)
-                    } label: {
-                        UserRow(user: model)
-                    }
+        List {
+            ForEach(viewModel.taggedUsers, id: \.uid) { model in
+                Button {
+                    action(model)
+                } label: {
+                    UserRow(user: model)
                 }
             }
         }

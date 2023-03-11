@@ -22,13 +22,18 @@ class TaggedUsersViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         addChildView()
+        initNavBar()
         initViewModel()
     }
     func addChildView() {
         childContentView = .init(viewModel: viewModel, action: { [weak self] selectedUser in
             self?.coordinator?.showUser(selectedUser)
         })
-        addSwiftUIView(childContentView)
+        addSwiftUIViewWithNavBar(childContentView)
+    }
+    func initNavBar() {
+        navigationItem.title = "Tagged Users"
+        editNavBarColour(to: .darkColour)
     }
     // MARK: - View Model
     func initViewModel() {

@@ -27,10 +27,10 @@ class TaggedUsersCoordinator: Coordinator {
         modalNavigationController = UINavigationController(rootViewController: vc)
         vc.viewModel.ids = ids
         guard let modalNavigationController else { return }
-        modalNavigationController.setNavigationBarHidden(true, animated: false)
         modalNavigationController.modalPresentationStyle = .pageSheet
         if let sheet = modalNavigationController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
         }
         navigationController.present(modalNavigationController, animated: true)
     }
