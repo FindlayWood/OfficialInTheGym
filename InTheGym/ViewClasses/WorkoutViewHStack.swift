@@ -126,9 +126,10 @@ class WorkoutViewHStack: UIView {
     }()
     
     lazy var hstack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [stackOne, stackTwo, stackThree])
+        let stack = UIStackView(arrangedSubviews: [stackTwo, stackOne, stackThree])
         stack.axis = .horizontal
         stack.alignment = .center
+        stack.distribution = .fillEqually
         stack.spacing = 16
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
