@@ -23,7 +23,7 @@ struct LoadingView: View {
                     .stroke(Color(.darkColour), style: StrokeStyle(lineWidth: 8, lineCap: .round, lineJoin: .round))
                     .frame(width: 48, height: 48)
                     .rotationEffect(.degrees(isAnimating ? 360 : 0))
-                    .animation(animation)
+                    .animation(animation, value: isAnimating)
                     .padding(50)
                     .onAppear {
                         isAnimating = true

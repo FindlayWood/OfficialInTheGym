@@ -10,9 +10,14 @@ import Foundation
 import UIKit
 import Combine
 
-class SavedWorkoutBottomChildViewModel {
+class SavedWorkoutBottomChildViewModel: ObservableObject {
     
     // MARK: - Publishers
+    @Published var optionsList: [Options] = [.addWorkout, .workoutDiscovery, .viewCreatorProfile, .saveWorkout]
+    @Published var isWorkoutSaved: Bool = false
+    @Published var isLoading: Bool = false
+    @Published var isShowingSuccess: Bool = false
+    
     var optionsPublisher = PassthroughSubject<[Options],Never>()
     
     var optionsRemovePublisher = PassthroughSubject<Options,Never>()
@@ -60,14 +65,18 @@ class SavedWorkoutBottomChildViewModel {
     func setOptions(_ isSaved: Bool) {
         if isSaved {
             options = [.workoutDiscovery, .addWorkout, .viewCreatorProfile, .delete]
+            optionsList = [.workoutDiscovery, .addWorkout, .viewCreatorProfile]
         } else {
             options = [.workoutDiscovery, .saveWorkout, .addWorkout, .viewCreatorProfile]
+            optionsList = [.workoutDiscovery, .saveWorkout, .addWorkout, .viewCreatorProfile]
         }
-        if UserDefaults.currentUser.uid == savedWorkoutModel.creatorID {
-            options.insert(.viewWorkoutStats, at: 2)
-        }
+//        if UserDefaults.currentUser.uid == savedWorkoutModel.creatorID {
+//            options.insert(.viewWorkoutStats, at: 2)
+//            optionsList.insert(.viewWorkoutStats, at: 2)
+//        }
         if UserDefaults.currentUser.admin {
             options.insert(.assign, at: 0)
+            optionsList.insert(.assign, at: 0)
         }
         optionsPublisher.send(options)
     }
@@ -100,14 +109,17 @@ class SavedWorkoutBottomChildViewModel {
             switch result {
             case .success(let exists):
                 self?.setOptions(exists)
+                self?.isWorkoutSaved = exists
             case .failure(_):
                 self?.setOptions(false)
+                self?.isWorkoutSaved = false
             }
         }
     }
     
     // MARK: - Add To Saved
     func addToSaved() {
+        isLoading = true
         let savedRefModel = SavedWorkoutReferenceModel(id: savedWorkoutModel.id)
         var uploadPoints = [savedRefModel.toMultipUploadPoint()]
         if savedWorkoutModel.creatorID != UserDefaults.currentUser.uid {
@@ -117,26 +129,35 @@ class SavedWorkoutBottomChildViewModel {
             switch result {
             case .success(()):
                 self?.setOptions(true)
+                self?.isWorkoutSaved = true
+                self?.isLoading = false
+                self?.isShowingSuccess = true
             case .failure(_):
                 self?.savedWorkoutPublisher.send(false)
+                self?.isLoading = false
             }
         }
     }
     // MARK: - Add To Workouts
     func addToWorkouts() {
+        isLoading = true
         let workoutModel = WorkoutModel(savedModel: savedWorkoutModel, assignTo: UserDefaults.currentUser.uid)
         apiService.uploadTimeOrderedModel(model: workoutModel) { [weak self] result in
             switch result {
             case .success(_):
                 self?.addedWorkoutPublisher.send(true)
+                self?.isLoading = false
+                self?.isShowingSuccess = true
             case .failure(_):
                 self?.addedWorkoutPublisher.send(false)
+                self?.isLoading = false
             }
         }
     }
     
     // MARK: - Remove From Saved
     func removeFromSaved() {
+        isLoading = true
         let savedRefModel = SavedWorkoutReferenceModel(id: savedWorkoutModel.id)
         let uploadPoint = [savedRefModel.removeUploadPoint()]
         apiService.multiLocationUpload(data: uploadPoint) { [weak self] result in
@@ -146,8 +167,13 @@ class SavedWorkoutBottomChildViewModel {
                 self.removedSavedWorkoutPublisher.send(true)
                 self.optionsRemovePublisher.send(.delete)
                 self.listListener?.send(self.savedWorkoutModel)
+                self.setOptions(false)
+                self.isWorkoutSaved = false
+                self.isLoading = false
+                self.isShowingSuccess = true
             case .failure(_):
                 self.removedSavedWorkoutPublisher.send(false)
+                self.isLoading = false
             }
         }
     }

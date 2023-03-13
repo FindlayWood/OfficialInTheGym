@@ -44,4 +44,28 @@ enum Options: String {
             return UIImage(systemName: "book.closed.fill")!
         }
     }
+    var imageName: String {
+        switch self {
+        case .workoutDiscovery:
+            return "magnifyingglass"
+        case .assign:
+            return "arrowshape.turn.up.forward"
+        case .save:
+            return "square.and.arrow.down"
+        case .delete:
+            return "trash"
+        case .review:
+            return "note.text"
+        case .addWorkout:
+            return "plus.circle.fill"
+        case .saveWorkout:
+            return "square.and.arrow.down"
+        case .viewCreatorProfile:
+            return "person.fill"
+        case .viewWorkoutStats:
+            return "chart.bar.fill"
+        case .makeCurrentProgram:
+            return "book.closed.fill"
+        }
+    }
 }

@@ -8,6 +8,7 @@
 
 import UIKit
 import Combine
+import SwiftUI
 
 class SavedWorkoutBottomChildViewController: UIViewController {
     
@@ -20,9 +21,9 @@ class SavedWorkoutBottomChildViewController: UIViewController {
     var showWorkoutDiscoveryPublisher = PassthroughSubject<Void,Never>()
 
     // MARK: - Properties
+    var childContentView: SavedWorkoutOptionsBottomSheetView!
     var display = SavedWorkoutBottomChildView()
     var viewModel = SavedWorkoutBottomChildViewModel()
-    var dataSource: OptionsCollectionDataSource!
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - View
@@ -34,30 +35,31 @@ class SavedWorkoutBottomChildViewController: UIViewController {
         addPan()
         initTargets()
         initViewModel()
-        initDataSource()
+        addChildView()
+    }
+    func addChildView() {
+        childContentView = .init(viewModel: viewModel, action: { [weak self] optionSelected in
+            self?.viewModel.optionSelected(optionSelected)
+        })
+        let childView = UIHostingController(rootView: childContentView)
+        addChild(childView)
+        view.addSubview(childView.view)
+        childView.didMove(toParent: self)
+        childView.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            childView.view.topAnchor.constraint(equalTo: display.topAnchor, constant: Constants.screenSize.height * 0.075),
+            childView.view.leadingAnchor.constraint(equalTo: display.leadingAnchor),
+            childView.view.trailingAnchor.constraint(equalTo: display.trailingAnchor),
+            childView.view.bottomAnchor.constraint(equalTo: display.bottomAnchor)
+        ])
     }
     // MARK: - Targets
     func initTargets() {
         display.optionsButton.addTarget(self, action: #selector(optionsButtonAction(_:)), for: .touchUpInside)
     }
-    // MARK: - Data Source
-    func initDataSource() {
-        dataSource = .init(collectionView: display.collectionView)
-        dataSource.optionSelected
-            .sink { [weak self] in self?.viewModel.optionSelected($0)}
-            .store(in: &subscriptions)
-    }
     
     // MARK: - View Model
     func initViewModel() {
-        
-        viewModel.optionsPublisher
-            .sink { [weak self] in self?.dataSource.updateTable(with: $0)}
-            .store(in: &subscriptions)
-
-        viewModel.optionsRemovePublisher
-            .sink { [weak self] in self?.dataSource.remove($0)}
-            .store(in: &subscriptions)
         
         viewModel.removedSavedWorkoutPublisher
             .sink { [weak self] success in

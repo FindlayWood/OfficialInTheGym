@@ -6,6 +6,70 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
+import SwiftUI
+
+struct SavedWorkoutOptionsBottomSheetView: View {
+    
+    @ObservedObject var viewModel: SavedWorkoutBottomChildViewModel
+    
+    var action: (Options) -> ()
+    
+    var body: some View {
+        ZStack {
+            List {
+                Section {
+                    ForEach(viewModel.optionsList, id: \.self) { option in
+                        Button {
+                            action(option)
+                        } label: {
+                            HStack {
+                                Image(systemName: option.imageName)
+                                    .foregroundColor(Color(.darkColour))
+                                Text(option.rawValue)
+                                    .font(.headline)
+                                    .foregroundColor(Color(.darkColour))
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Workout Options")
+                }
+                if viewModel.isWorkoutSaved {
+                    Section {
+                        Button {
+                            action(.delete)
+                        } label: {
+                            HStack {
+                                Image(systemName: Options.delete.imageName)
+                                    .foregroundColor(.red)
+                                Text(Options.delete.rawValue)
+                                    .font(.headline)
+                                    .foregroundColor(.red)
+                            }
+                        }
+                    } header: {
+                        Text("Delete")
+                    }
+                }
+            }
+            .animation(.easeInOut, value: viewModel.optionsList)
+            
+            if viewModel.isLoading {
+                LoadingView()
+            }
+            if viewModel.isShowingSuccess {
+                SuccessView()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self.viewModel.isShowingSuccess = false
+                        }
+                    }
+            }
+        }
+    }
+}
+
+
 import Foundation
 import UIKit
 
@@ -30,13 +94,6 @@ class SavedWorkoutBottomChildView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: generateCollectionLayout())
-        view.register(OptionsCell.self, forCellWithReuseIdentifier: OptionsCell.reuseID)
-        view.backgroundColor = .secondarySystemBackground
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,7 +113,6 @@ private extension SavedWorkoutBottomChildView {
         addViewTopShadow(with: .black)
         addSubview(scrollIndicatorView)
         addSubview(optionsButton)
-        addSubview(collectionView)
         configureUI()
     }
     func configureUI() {
@@ -67,21 +123,8 @@ private extension SavedWorkoutBottomChildView {
             
             optionsButton.topAnchor.constraint(equalTo: scrollIndicatorView.bottomAnchor, constant: 8),
             optionsButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            optionsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            
-            collectionView.topAnchor.constraint(equalTo: topAnchor, constant: Constants.screenSize.height * 0.075),
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            optionsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8)
             
         ])
-    }
-    func generateCollectionLayout() -> UICollectionViewFlowLayout {
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 8
-        layout.itemSize = CGSize(width: Constants.screenSize.width - 16, height: 60)
-        layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        layout.scrollDirection = .vertical
-        return layout
     }
 }
