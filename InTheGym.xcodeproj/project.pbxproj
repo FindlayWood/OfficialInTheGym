@@ -1076,7 +1076,6 @@
 		9F4DFB2E29A2CDC300363AE8 /* DiscoverSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB2D29A2CDC300363AE8 /* DiscoverSearchBar.swift */; };
 		9F4DFB3129A6A30500363AE8 /* CommentWithAttachmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3029A6A30500363AE8 /* CommentWithAttachmentsViewController.swift */; };
 		9F4DFB3329A6A4E300363AE8 /* CommentWithAttachmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3229A6A4E300363AE8 /* CommentWithAttachmentsView.swift */; };
-		9F4DFB3529A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3429A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift */; };
 		9F4DFB3829AA801700363AE8 /* CommentAttachmentSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3729AA801700363AE8 /* CommentAttachmentSheetViewController.swift */; };
 		9F4DFB3A29AA802800363AE8 /* CommentAttachmentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3929AA802800363AE8 /* CommentAttachmentSheet.swift */; };
 		9F4DFB3C29BB9F7300363AE8 /* PostTaggedUsersSubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB3B29BB9F7300363AE8 /* PostTaggedUsersSubview.swift */; };
@@ -2196,7 +2195,6 @@
 		9F4DFB2D29A2CDC300363AE8 /* DiscoverSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSearchBar.swift; sourceTree = "<group>"; };
 		9F4DFB3029A6A30500363AE8 /* CommentWithAttachmentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentWithAttachmentsViewController.swift; sourceTree = "<group>"; };
 		9F4DFB3229A6A4E300363AE8 /* CommentWithAttachmentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentWithAttachmentsView.swift; sourceTree = "<group>"; };
-		9F4DFB3429A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentWithAttachmentsViewModel.swift; sourceTree = "<group>"; };
 		9F4DFB3729AA801700363AE8 /* CommentAttachmentSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentAttachmentSheetViewController.swift; sourceTree = "<group>"; };
 		9F4DFB3929AA802800363AE8 /* CommentAttachmentSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentAttachmentSheet.swift; sourceTree = "<group>"; };
 		9F4DFB3B29BB9F7300363AE8 /* PostTaggedUsersSubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTaggedUsersSubview.swift; sourceTree = "<group>"; };
@@ -5609,7 +5607,6 @@
 			children = (
 				9F4DFB3029A6A30500363AE8 /* CommentWithAttachmentsViewController.swift */,
 				9F4DFB3229A6A4E300363AE8 /* CommentWithAttachmentsView.swift */,
-				9F4DFB3429A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift */,
 			);
 			path = CommentWithAttachments;
 			sourceTree = "<group>";
@@ -6371,7 +6368,6 @@
 				7403A5EE26C315D1000588CE /* FirebaseAPIGroupService.swift in Sources */,
 				7444D0AE26D2B30E0009C7A6 /* SwiftUICollectionViewCell.swift in Sources */,
 				7479813427DB851800CF3F9B /* RequestsModel.swift in Sources */,
-				9F4DFB3529A6A58900363AE8 /* CommentWithAttachmentsViewModel.swift in Sources */,
 				749B37B62848D4BA00ADF33D /* CircuitDataSource.swift in Sources */,
 				7444D09F26D143550009C7A6 /* AddMoreTimeViewController.swift in Sources */,
 				742C1C6A27B6A54600DD1BB0 /* MyProfileDataSource.swift in Sources */,

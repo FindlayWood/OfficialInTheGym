@@ -27,7 +27,7 @@ class CommentWithAttachmentsViewController: UIViewController {
     var postButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .darkColour
-        button.setTitle("POST", for: .normal)
+        button.setTitle("REPLY", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.setTitleColor(.lightGray, for: .disabled)
         button.titleLabel?.font = .boldSystemFont(ofSize: 15)
@@ -55,7 +55,7 @@ class CommentWithAttachmentsViewController: UIViewController {
         childContentView = .init(viewModel: viewModel,
                                  isGroup: false,
                                  post: {
-            // post
+            
         }, addAttachments: {
             self.coordinator?.showAttachments(self.viewModel)
         }, changePrivacy: {
@@ -68,6 +68,16 @@ class CommentWithAttachmentsViewController: UIViewController {
     
     // MARK: - View Model
     func initViewModel() {
+        viewModel.$isLoading
+            .sink { [weak self] in self?.setLoading(to: $0) }
+            .store(in: &subscriptions)
+        
+        viewModel.uploadingNewComment
+            .sink { [weak self] _ in
+                self?.viewModel.clearTextPublisher.send()
+                self?.dismiss(animated: true, completion: nil)
+            }
+            .store(in: &subscriptions)
         viewModel.$text
             .map { $0.count > 0 }
             .sink { [weak self] in self?.setPostButton(to: $0) }
@@ -77,6 +87,7 @@ class CommentWithAttachmentsViewController: UIViewController {
     // MARK: - Init Nav Bar
     func initNavBar() {
         let cancelButton = UIBarButtonItem(title: "cancel", style: .done, target: self, action: #selector(cancelTappedAction))
+        postButton.addTarget(self, action: #selector(postTappedAction), for: .touchUpInside)
         postNavBarButton.action = #selector(postTappedAction)
         navigationItem.leftBarButtonItem = cancelButton
         navigationItem.rightBarButtonItem = postNavBarButton
@@ -84,7 +95,7 @@ class CommentWithAttachmentsViewController: UIViewController {
     }
     // MARK: - Actions
     @objc func postTappedAction(_ sender: UIBarButtonItem) {
-        
+        viewModel.sendPressed()
     }
     @objc func cancelTappedAction(_ sender: UIBarButtonItem) {
         viewModel.clearTextPublisher.send()
@@ -93,5 +104,12 @@ class CommentWithAttachmentsViewController: UIViewController {
     func setPostButton(to enabled: Bool) {
         postButton.isEnabled = enabled
         postButton.backgroundColor = .darkColour.withAlphaComponent(enabled ? 1 : 0.3)
+    }
+    func setLoading(to loading: Bool) {
+        if loading {
+            initLoadingNavBar(with: .darkColour)
+        } else {
+            navigationItem.rightBarButtonItem = postNavBarButton
+        }
     }
 }

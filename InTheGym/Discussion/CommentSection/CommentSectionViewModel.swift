@@ -109,7 +109,7 @@ class CommentSectionViewModel: ObservableObject {
         let newComment = Comment(id: UUID().uuidString,
                                  username: UserDefaults.currentUser.username,
                                  time: Date().timeIntervalSince1970,
-                                 message: commentText,
+                                 message: text,
                                  posterID: UserDefaults.currentUser.uid,
                                  postID: mainPost.id,
                                  attachedWorkoutSavedID: attachedWorkout?.id)
