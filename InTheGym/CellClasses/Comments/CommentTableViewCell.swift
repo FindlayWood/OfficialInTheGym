@@ -152,9 +152,14 @@ private extension CommentTableViewCell {
         usernameButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
         interactionView.likeButton.addTarget(self, action: #selector(likeButtonTapped(_:)), for: .touchUpInside)
         interactionView.taggedUserButton.addTarget(self, action: #selector(taggedUsersButtonTapped(_:)), for: .touchUpInside)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(workoutTapped(_:)))
+        workoutView.addGestureRecognizer(tap)
     }
     @objc func userTapped(_ sender: UIButton) {
         actionPublisher.send(.userTapped)
+    }
+    @objc func workoutTapped(_ sender: UIView) {
+        actionPublisher.send(.workoutTapped)
     }
     @objc func likeButtonTapped(_ sender: UIButton) {
         viewModel.like()

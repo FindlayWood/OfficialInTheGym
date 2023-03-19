@@ -113,7 +113,7 @@ class CommentSectionViewModel: ObservableObject {
                                  message: text,
                                  posterID: UserDefaults.currentUser.uid,
                                  postID: mainPost.id,
-                                 attachedWorkoutSavedID: attachedWorkout?.id,
+                                 attachedWorkoutSavedID: attachedSavedWorkout?.id,
                                  taggedUsers: tagged)
  
         let uploadModel = UploadCommentModel(comment: newComment)
@@ -249,6 +249,15 @@ class CommentSectionViewModel: ObservableObject {
             let keyModel = SavedWorkoutKeyModel(id: savedWorkoutID)
             SavedWorkoutLoader.shared.load(from: keyModel) { [weak self] result in
                 guard let workout = try? result.get() else {return}
+                self?.savedWorkoutSelected.send(workout)
+            }
+        }
+    }
+    func getWorkout(from comment: Comment) {
+        if let savedWorkoutID = comment.attachedWorkoutSavedID {
+            let keyModel = SavedWorkoutKeyModel(id: savedWorkoutID)
+            SavedWorkoutLoader.shared.load(from: keyModel) { [weak self] result in
+                guard let workout = try? result.get() else { return }
                 self?.savedWorkoutSelected.send(workout)
             }
         }

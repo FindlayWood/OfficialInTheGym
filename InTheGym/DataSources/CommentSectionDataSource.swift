@@ -26,6 +26,8 @@ class CommentSectionDataSource: NSObject {
     
     var commentUserTapped = PassthroughSubject<Comment,Never>()
     
+    var commentWorkoutTapped = PassthroughSubject<Comment,Never>()
+    
     var mainPostTaggedUserTapped = PassthroughSubject<PostModel,Never>()
     
     var commentTaggedUserTapped = PassthroughSubject<Comment,Never>()
@@ -163,6 +165,8 @@ class CommentSectionDataSource: NSObject {
                 commentUserTapped.send(comment)
             case .taggedUserTapped:
                 commentTaggedUserTapped.send(comment)
+            case .workoutTapped:
+                commentWorkoutTapped.send(comment)
             default:
                 break
             }

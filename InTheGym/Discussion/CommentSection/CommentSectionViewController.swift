@@ -84,6 +84,10 @@ class CommentSectionViewController: UIViewController {
             .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
             .store(in: &subscriptions)
         
+        dataSource.commentWorkoutTapped
+            .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
+            .store(in: &subscriptions)
+        
         dataSource.mainPostTaggedUserTapped
             .sink { [weak self] in self?.showTaggedUsers(for: $0) }
             .store(in: &subscriptions)
