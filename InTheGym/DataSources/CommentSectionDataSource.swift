@@ -26,6 +26,10 @@ class CommentSectionDataSource: NSObject {
     
     var commentUserTapped = PassthroughSubject<Comment,Never>()
     
+    var mainPostTaggedUserTapped = PassthroughSubject<PostModel,Never>()
+    
+    var commentTaggedUserTapped = PassthroughSubject<Comment,Never>()
+    
     var subscriptions = [IndexPath: AnyCancellable]()
     
     // MARK: - Properties
@@ -140,7 +144,7 @@ class CommentSectionDataSource: NSObject {
             case .userTapped:
                 userTapped.send(post)
             case .taggedUserTapped:
-                break
+                mainPostTaggedUserTapped.send(post)
             }
         case .mainGroupPost(let groupPost):
             switch action {
@@ -157,6 +161,8 @@ class CommentSectionDataSource: NSObject {
             switch action {
             case .userTapped:
                 commentUserTapped.send(comment)
+            case .taggedUserTapped:
+                commentTaggedUserTapped.send(comment)
             default:
                 break
             }

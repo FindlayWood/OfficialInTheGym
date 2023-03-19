@@ -101,6 +101,11 @@ extension CommentSectionCoordinator {
         let nav = UINavigationController(rootViewController: vc)
         attachmentsModal.present(nav, animated: true)
     }
+    func showTaggedUsers(_ ids: [String]) {
+        let child = TaggedUsersCoordinator(navigationController: navigationController, ids: ids)
+        childCoordinators.append(child)
+        child.start()
+    }
 }
 
 // MARK: - Custom Clip Picker

@@ -88,19 +88,6 @@ extension TimelineCoordinator {
         let child = TaggedUsersCoordinator(navigationController: navigationController, ids: ids)
         childCoordinators.append(child)
         child.start()
-//        let vc = TaggedUsersViewController()
-//        let nav = UINavigationController(rootViewController: vc)
-//        vc.viewModel.ids = ids
-//        nav.modalPresentationStyle = .pageSheet
-//
-//        // 2
-//        if let sheet = nav.sheetPresentationController {
-//
-//            // 3
-//            sheet.detents = [.medium(), .large()]
-//
-//        }
-//        navigationController.present(nav, animated: true)
     }
 }
 

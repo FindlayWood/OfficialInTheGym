@@ -1084,6 +1084,9 @@
 		9F4DFB4529BCE83C00363AE8 /* TaggedUsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB4429BCE83C00363AE8 /* TaggedUsersView.swift */; };
 		9F4DFB4729BD111C00363AE8 /* TaggedUsersCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB4629BD111C00363AE8 /* TaggedUsersCoordinator.swift */; };
 		9F4DFB5029BFC15200363AE8 /* SuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB4F29BFC15200363AE8 /* SuccessView.swift */; };
+		9F4DFB5529C62A4B00363AE8 /* CommentInteractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB5429C62A4B00363AE8 /* CommentInteractionView.swift */; };
+		9F4DFB5729C661A700363AE8 /* CommentCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB5629C661A700363AE8 /* CommentCellViewModel.swift */; };
+		9F4DFB5929C668A600363AE8 /* CommentLikeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB5829C668A600363AE8 /* CommentLikeCache.swift */; };
 		9F4FFD832953837E004853BD /* MainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4FFD822953837E004853BD /* MainButton.swift */; };
 		9F612BBD2915CBE300B5AE5A /* LoginViewSwifUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */; };
 		9F612BC02915D78600B5AE5A /* SignUpMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */; };
@@ -2203,6 +2206,9 @@
 		9F4DFB4429BCE83C00363AE8 /* TaggedUsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaggedUsersView.swift; sourceTree = "<group>"; };
 		9F4DFB4629BD111C00363AE8 /* TaggedUsersCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaggedUsersCoordinator.swift; sourceTree = "<group>"; };
 		9F4DFB4F29BFC15200363AE8 /* SuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessView.swift; sourceTree = "<group>"; };
+		9F4DFB5429C62A4B00363AE8 /* CommentInteractionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInteractionView.swift; sourceTree = "<group>"; };
+		9F4DFB5629C661A700363AE8 /* CommentCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCellViewModel.swift; sourceTree = "<group>"; };
+		9F4DFB5829C668A600363AE8 /* CommentLikeCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentLikeCache.swift; sourceTree = "<group>"; };
 		9F4FFD822953837E004853BD /* MainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButton.swift; sourceTree = "<group>"; };
 		9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwifUI.swift; sourceTree = "<group>"; };
 		9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpMainView.swift; sourceTree = "<group>"; };
@@ -3640,6 +3646,7 @@
 				7479812627DA31DD00CF3F9B /* ClipCache.swift */,
 				7479812A27DA6DC200CF3F9B /* LikeCache.swift */,
 				74EE4EC127E5112300051451 /* VoteCache.swift */,
+				9F4DFB5829C668A600363AE8 /* CommentLikeCache.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -3879,6 +3886,7 @@
 		7466A86325EFDB7100F4050F /* CellClasses */ = {
 			isa = PBXGroup;
 			children = (
+				9F4DFB5329C62A2200363AE8 /* Comments */,
 				9F1416C62941459800D02F69 /* Posts */,
 				742C1C6427B6988900DD1BB0 /* ProfileCells */,
 				7480EBB225F500B800E4E768 /* CellModels */,
@@ -3892,7 +3900,6 @@
 				74F2CCD926E1291B00D7AD79 /* ExerciseSelectionCell.swift */,
 				74F2CCE126E2877400D7AD79 /* AddMoreCollectionCell.swift */,
 				74B6F69B2755300600A72679 /* WorkoutCollectionViewCell.swift */,
-				743A0504276B7C3A0027B752 /* CommentTableViewCell.swift */,
 				743330DF2791F1F2005A0C45 /* SavedWorkoutTableViewCell.swift */,
 				743330F127959925005A0C45 /* SavedWorkoutCollectionCell.swift */,
 				743330F727959FC8005A0C45 /* FullWidthCollectionViewCell.swift */,
@@ -5630,6 +5637,16 @@
 			path = TaggedUsers;
 			sourceTree = "<group>";
 		};
+		9F4DFB5329C62A2200363AE8 /* Comments */ = {
+			isa = PBXGroup;
+			children = (
+				743A0504276B7C3A0027B752 /* CommentTableViewCell.swift */,
+				9F4DFB5429C62A4B00363AE8 /* CommentInteractionView.swift */,
+				9F4DFB5629C661A700363AE8 /* CommentCellViewModel.swift */,
+			);
+			path = Comments;
+			sourceTree = "<group>";
+		};
 		9F612BBE2915D77000B5AE5A /* SignUpViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -5961,6 +5978,7 @@
 				74E08A7F28415452009D0DCB /* MyWorkoutStatsView.swift in Sources */,
 				745F89E8286F432B000070B2 /* PerformanceIntroViewModel.swift in Sources */,
 				743330FA2795AB22005A0C45 /* LikeModels.swift in Sources */,
+				9F4DFB5729C661A700363AE8 /* CommentCellViewModel.swift in Sources */,
 				74B48E0D27A442A100BBFC16 /* LiveExerciseCollectionCell.swift in Sources */,
 				9F1DA7012937F5B300F41089 /* TopMessageView.swift in Sources */,
 				7444D06D26CD6FAD0009C7A6 /* GroupWorkoutsCoordinator.swift in Sources */,
@@ -6472,6 +6490,7 @@
 				742C1C6627B698B700DD1BB0 /* ProfileInfoCell.swift in Sources */,
 				74104526285FD45200A9FF4E /* PlayerDetailButtonSubviewView.swift in Sources */,
 				74163A4422E37089005A7D2E /* ButtonExtension.swift in Sources */,
+				9F4DFB5529C62A4B00363AE8 /* CommentInteractionView.swift in Sources */,
 				9F4DFB2C29A2A5E800363AE8 /* PublicFollowersFollowingView.swift in Sources */,
 				742C1C8327BD2CF300DD1BB0 /* ExerciseStatsDataSource.swift in Sources */,
 				7470FD70281968DA003DB256 /* PlayerProfileMoreViewModel.swift in Sources */,
@@ -6622,6 +6641,7 @@
 				7466A85525EFD78100F4050F /* ProfileViewAdapter.swift in Sources */,
 				74FA60AC28B28716007B2CD8 /* CMJResultsView.swift in Sources */,
 				748613AA27D69BE300D50506 /* SavedWorkoutBottomChildView.swift in Sources */,
+				9F4DFB5929C668A600363AE8 /* CommentLikeCache.swift in Sources */,
 				74EE4EE72804C56600051451 /* HofBreathingView.swift in Sources */,
 				74F2CCD826E1284100D7AD79 /* ExerciseSelectionHeader.swift in Sources */,
 				7420399928329A3100074ECB /* MyFollowersViewModel.swift in Sources */,

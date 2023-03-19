@@ -17,6 +17,12 @@ class CommentTableViewCell: UITableViewCell {
     // MARK: - Properties
     static let cellID: String = "CommentTableViewCellID"
     
+    let selection = UISelectionFeedbackGenerator()
+    
+    var viewModel = CommentCellViewModel()
+    
+    private var subscriptions = Set<AnyCancellable>()
+    
     // MARK: - Subviews
     var profileImageButton: UIProfileImageButton = {
         let view = UIProfileImageButton()
@@ -57,11 +63,16 @@ class CommentTableViewCell: UITableViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    var interactionView: CommentInteractionView = {
+        let view = CommentInteractionView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     lazy var stackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [messageTextView, workoutView])
+        let stack = UIStackView(arrangedSubviews: [messageTextView, workoutView, interactionView])
         stack.axis = .vertical
         stack.spacing = 8
-        stack.distribution = .fillProportionally
         stack.alignment = .leading
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
@@ -119,19 +130,69 @@ private extension CommentTableViewCell {
 
         ])
     }
+    func initViewModel() {
+        
+        viewModel.$isLiked
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.setLiked(to: $0) }
+            .store(in: &subscriptions)
+        
+        viewModel.$userModel
+            .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink { [weak self] in self?.setUserModel($0) }
+            .store(in: &subscriptions)
+        
+        viewModel.checkLike()
+        viewModel.loadUserModel()
+    }
     // MARK: - Targets
     func initTargets() {
         profileImageButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
         usernameButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
+        interactionView.likeButton.addTarget(self, action: #selector(likeButtonTapped(_:)), for: .touchUpInside)
+        interactionView.taggedUserButton.addTarget(self, action: #selector(taggedUsersButtonTapped(_:)), for: .touchUpInside)
     }
     @objc func userTapped(_ sender: UIButton) {
         actionPublisher.send(.userTapped)
+    }
+    @objc func likeButtonTapped(_ sender: UIButton) {
+        viewModel.like()
+        selection.prepare()
+        selection.selectionChanged()
+        UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
+            sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            sender.tintColor = .redColour
+        } completion: { _ in
+            sender.isUserInteractionEnabled = false
+        }
+    }
+    @objc func taggedUsersButtonTapped(_ sender: UIButton) {
+        actionPublisher.send(.taggedUserTapped)
+    }
+}
+private extension CommentTableViewCell {
+    func setLiked(to liked: Bool) {
+        if liked {
+            interactionView.likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            interactionView.likeButton.isUserInteractionEnabled = false
+            interactionView.likeButton.tintColor = .redColour
+        } else {
+            interactionView.likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            interactionView.likeButton.isUserInteractionEnabled = true
+            interactionView.likeButton.tintColor = .darkColour
+        }
+    }
+    func setUserModel(_ user: Users) {
+        usernameButton.setTitle(user.username, for: .normal)
     }
 }
 
 // MARK: - Public Setup
 extension CommentTableViewCell {
     public func setup(with comment: Comment) {
+        viewModel.comment = comment
+        initViewModel()
         profileImageButton.set(for: comment.posterID)
         usernameButton.setTitle(comment.username, for: .normal)
         timeLabel.text = (Date(timeIntervalSince1970: (comment.time))).timeAgo()
@@ -141,6 +202,11 @@ extension CommentTableViewCell {
             workoutView.isHidden = false
         } else {
             workoutView.isHidden = true
+        }
+        if let _ = comment.taggedUsers {
+            interactionView.taggedUserButton.isHidden = false
+        } else {
+            interactionView.taggedUserButton.isHidden = true
         }
     }
 }

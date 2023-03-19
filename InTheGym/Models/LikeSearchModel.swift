@@ -20,3 +20,12 @@ extension LikeSearchModel: FirebaseInstance {
         return "PostLikes/\(postID)/\(UserDefaults.currentUser.uid)"
     }
 }
+
+struct LikedCommentSearchModel {
+    var commentID: String
+}
+extension LikedCommentSearchModel: FirebaseInstance {
+    var internalPath: String {
+        "LikedComments/\(UserDefaults.currentUser.uid)/\(commentID)"
+    }
+}

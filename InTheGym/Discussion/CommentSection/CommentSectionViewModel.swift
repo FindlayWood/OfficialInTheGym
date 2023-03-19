@@ -106,13 +106,15 @@ class CommentSectionViewModel: ObservableObject {
     // MARK: - Actions
     func sendPressed() {
         self.isLoading = true
+        let tagged: [String]? = taggedUsers.map { $0.uid }
         let newComment = Comment(id: UUID().uuidString,
                                  username: UserDefaults.currentUser.username,
                                  time: Date().timeIntervalSince1970,
                                  message: text,
                                  posterID: UserDefaults.currentUser.uid,
                                  postID: mainPost.id,
-                                 attachedWorkoutSavedID: attachedWorkout?.id)
+                                 attachedWorkoutSavedID: attachedWorkout?.id,
+                                 taggedUsers: tagged)
  
         let uploadModel = UploadCommentModel(comment: newComment)
         let points = uploadModel.uploadPoints()

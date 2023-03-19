@@ -84,6 +84,14 @@ class CommentSectionViewController: UIViewController {
             .sink { [weak self] in self?.viewModel.getWorkout(from: $0) }
             .store(in: &subscriptions)
         
+        dataSource.mainPostTaggedUserTapped
+            .sink { [weak self] in self?.showTaggedUsers(for: $0) }
+            .store(in: &subscriptions)
+        
+        dataSource.commentTaggedUserTapped
+            .sink { [weak self] in self?.showTaggedUsers(for: $0) }
+            .store(in: &subscriptions)
+        
         dataSource.likeButtonTapped
             .sink { [weak self] postModel in
                 self?.viewModel.listener?.send(postModel)
@@ -192,6 +200,14 @@ class CommentSectionViewController: UIViewController {
 extension CommentSectionViewController {
     func userSelected(_ user: Users) {
         coordinator?.showUser(user)
+    }
+    func showTaggedUsers(for post: PostModel) {
+        guard let tagged = post.taggedUsers else { return }
+        coordinator?.showTaggedUsers(tagged)
+    }
+    func showTaggedUsers(for comment: Comment) {
+        guard let tagged = comment.taggedUsers else { return }
+        coordinator?.showTaggedUsers(tagged)
     }
 }
 

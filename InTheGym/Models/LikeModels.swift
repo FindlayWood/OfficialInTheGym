@@ -22,6 +22,30 @@ extension PostLikesModel: FirebaseInstance {
     }
 }
 
+struct CommentLikesModel {
+    var commentID: String
+    
+    func toMultiUploadPoint(with value: Bool) -> FirebaseMultiUploadDataPoint {
+        return FirebaseMultiUploadDataPoint(value: value, path: internalPath)
+    }
+}
+extension CommentLikesModel {
+    var internalPath: String {
+        "CommentLikes/\(commentID)/\(UserDefaults.currentUser.uid)"
+    }
+}
+struct LikedCommentsModel {
+    var commentID: String
+    
+    func toMultiUploadPoint(with value: Bool) -> FirebaseMultiUploadDataPoint {
+        return FirebaseMultiUploadDataPoint(value: value, path: internalPath)
+    }
+}
+extension LikedCommentsModel {
+    var internalPath: String {
+        "LikedComments/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(commentID)"
+    }
+}
 struct LikesModel {
     var postID: String
     
@@ -80,6 +104,13 @@ struct LikeTransportLayer {
 //        if let notification = NotificationModel.createNotification(type: .LikedPost, to: post.posterID, postID: post.id)?.toFirebaseJSON() {
 //            uploadPoints.append(notification)
 //        }
+        return uploadPoints
+    }
+    
+    func commentLike(comment: Comment) -> [FirebaseMultiUploadDataPoint] {
+        var uploadPoints = [FirebaseMultiUploadDataPoint]()
+        uploadPoints.append(CommentLikesModel(commentID: comment.id).toMultiUploadPoint(with: true))
+        uploadPoints.append(LikedCommentsModel(commentID: comment.id).toMultiUploadPoint(with: true))
         return uploadPoints
     }
 }

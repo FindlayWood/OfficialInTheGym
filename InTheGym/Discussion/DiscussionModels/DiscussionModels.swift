@@ -18,6 +18,7 @@ struct Comment: Codable, Hashable {
     var posterID: String
     var postID: String
     var attachedWorkoutSavedID: String?
+    var taggedUsers: [String]?
 }
 extension Comment: FirebaseInstance {
     var internalPath: String {
