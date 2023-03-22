@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class AddPlayerViewModel {
+class AddPlayerViewModel: ObservableObject {
     
     // MARK: - Publishers
     @Published var cellModels: [CoachRequestCellModel] = []
@@ -91,25 +91,5 @@ class AddPlayerViewModel {
                 self?.loadingRequests = false
             }
         }
-    }
-    private func sendRequest(to user: Users) {
-        self.isLoading = true
-        let coachRequestModel = CoachRequestUploadModel(playerID: user.uid, coachID: UserDefaults.currentUser.uid)
-        let playerRequestModel = PlayerRequestUploadModel(playerID: user.uid, coachID: UserDefaults.currentUser.uid)
-        
-        let uploadPoints: [FirebaseMultiUploadDataPoint] = [FirebaseMultiUploadDataPoint(value: true, path: coachRequestModel.internalPath), FirebaseMultiUploadDataPoint(value: true, path: playerRequestModel.internalPath)]
-        apiService.multiLocationUpload(data: uploadPoints) { [weak self] result in
-            switch result {
-            case .success(()):
-                self?.isLoading = false
-            case .failure(_):
-                self?.isLoading = false
-            }
-        }
-    }
-    func requestSent(at indexPath: IndexPath) {
-        let cellModel = cellModels[indexPath.item]
-        requestSentUsers.append(cellModel.user.uid)
-        sendRequest(to: cellModel.user)
     }
 }

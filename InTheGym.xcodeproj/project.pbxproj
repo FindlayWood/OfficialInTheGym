@@ -1087,6 +1087,7 @@
 		9F4DFB5529C62A4B00363AE8 /* CommentInteractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB5429C62A4B00363AE8 /* CommentInteractionView.swift */; };
 		9F4DFB5729C661A700363AE8 /* CommentCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB5629C661A700363AE8 /* CommentCellViewModel.swift */; };
 		9F4DFB5929C668A600363AE8 /* CommentLikeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB5829C668A600363AE8 /* CommentLikeCache.swift */; };
+		9F4DFB5B29C7B2B500363AE8 /* CoachRequestRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4DFB5A29C7B2B500363AE8 /* CoachRequestRow.swift */; };
 		9F4FFD832953837E004853BD /* MainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4FFD822953837E004853BD /* MainButton.swift */; };
 		9F612BBD2915CBE300B5AE5A /* LoginViewSwifUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */; };
 		9F612BC02915D78600B5AE5A /* SignUpMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */; };
@@ -2209,6 +2210,7 @@
 		9F4DFB5429C62A4B00363AE8 /* CommentInteractionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInteractionView.swift; sourceTree = "<group>"; };
 		9F4DFB5629C661A700363AE8 /* CommentCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCellViewModel.swift; sourceTree = "<group>"; };
 		9F4DFB5829C668A600363AE8 /* CommentLikeCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentLikeCache.swift; sourceTree = "<group>"; };
+		9F4DFB5A29C7B2B500363AE8 /* CoachRequestRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachRequestRow.swift; sourceTree = "<group>"; };
 		9F4FFD822953837E004853BD /* MainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButton.swift; sourceTree = "<group>"; };
 		9F612BBC2915CBE300B5AE5A /* LoginViewSwifUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewSwifUI.swift; sourceTree = "<group>"; };
 		9F612BBF2915D78600B5AE5A /* SignUpMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpMainView.swift; sourceTree = "<group>"; };
@@ -5560,6 +5562,7 @@
 			isa = PBXGroup;
 			children = (
 				9F24628C293180BC006C5656 /* UserRow.swift */,
+				9F4DFB5A29C7B2B500363AE8 /* CoachRequestRow.swift */,
 			);
 			path = Users;
 			sourceTree = "<group>";
@@ -5938,6 +5941,7 @@
 				743A04F8276A5DD30027B752 /* SearchViewModel.swift in Sources */,
 				7459BD642641F6490005C530 /* Storyboarded.swift in Sources */,
 				747E0C8B2861EAC800D828A4 /* JumpResultsViewModel.swift in Sources */,
+				9F4DFB5B29C7B2B500363AE8 /* CoachRequestRow.swift in Sources */,
 				7444D07826CE98C90009C7A6 /* UploadGroupWorkoutViewController.swift in Sources */,
 				742C1CD527C676DD00DD1BB0 /* ProgramsChildView.swift in Sources */,
 				74104500285D0D7400A9FF4E /* OnBoardMainViewController.swift in Sources */,
