@@ -40,14 +40,14 @@ struct PremiumAccountViewSwiftUI: View {
                                     VStack(spacing: 8) {
                                         Text(package.storeProduct.subscriptionPeriod?.durationTitle ?? "Error")
                                             .font(.headline)
-                                            .foregroundColor(viewModel.selectedPackage == package ? Color(.darkColour) : .primary)
+                                            .foregroundColor(viewModel.selectedPackage == package ? Color(.white) : .primary)
                                         Text(package.storeProduct.localizedPriceString)
                                             .font(.subheadline)
-                                            .foregroundColor(viewModel.selectedPackage == package ? Color(.darkColour) : .primary)
+                                            .foregroundColor(viewModel.selectedPackage == package ? Color(.white) : .primary)
                                         if viewModel.selectedPackage == package {
                                             Image(systemName: "checkmark.circle.fill")
                                                 .font(.title)
-                                                .foregroundColor(viewModel.selectedPackage == package ? Color(.darkColour) : Color(.premiumColour))
+                                                .foregroundColor(viewModel.selectedPackage == package ? Color(.white) : Color(.premiumColour))
                                         } else {
                                             Image(systemName: "circle")
                                                 .font(.title)
@@ -84,7 +84,7 @@ struct PremiumAccountViewSwiftUI: View {
                                 Text("Subscribe")
                                     .padding()
                                     .font(.headline)
-                                    .foregroundColor(Color(.darkColour))
+                                    .foregroundColor(Color(.white))
                                     .frame(maxWidth: .infinity)
                                     .background(Color(.premiumColour))
                                     .clipShape(Capsule())
