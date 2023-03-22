@@ -26,6 +26,7 @@ class PracticeTrackerHomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "Practice Tracker"
+        editNavBarColour(to: .premiumColour)
     }
     // MARK: - Swift UI Child View
     func addChildView() {

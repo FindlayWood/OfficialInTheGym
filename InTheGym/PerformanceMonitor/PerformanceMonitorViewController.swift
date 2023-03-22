@@ -26,7 +26,7 @@ class PerformanceMonitorViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        editNavBarColour(to: .darkColour)
+        editNavBarColour(to: .premiumColour)
         navigationItem.title = viewModel.navigationTitle
     }
     // MARK: - Child VC

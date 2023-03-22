@@ -20,6 +20,7 @@ class WellnessMainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "Wellness"
+        editNavBarColour(to: .premiumColour)
     }
     // MARK: - Swift UI Child View
     func addChildView() {

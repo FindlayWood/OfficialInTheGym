@@ -43,10 +43,10 @@ class PerformanceIntroViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
+        editNavBarColour(to: .premiumColour)
     }
     // MARK: - NAv Bar
     func initNavBar() {
-        editNavBarColour(to: .darkColour)
         navigationItem.title = "Performance Center"
         let barButton = UIBarButtonItem(title: "Dismiss", style: .done, target: self, action: #selector(dismissButtonAction(_:)))
         navigationItem.leftBarButtonItem = barButton

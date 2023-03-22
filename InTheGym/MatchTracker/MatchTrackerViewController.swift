@@ -26,6 +26,7 @@ class MatchTrackerViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "Match Tracker"
+        editNavBarColour(to: .premiumColour)
     }
     // MARK: - Swift UI Child View
     func addChildView() {

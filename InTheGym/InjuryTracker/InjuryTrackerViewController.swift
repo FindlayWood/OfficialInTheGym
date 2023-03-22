@@ -20,6 +20,7 @@ class InjuryTrackerViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "Injury Tracker"
+        editNavBarColour(to: .premiumColour)
     }
     // MARK: - Swift UI Child View
     func addChildView() {

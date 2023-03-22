@@ -20,6 +20,7 @@ class CMJMyJumpsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "My CMJ Jumps"
+        editNavBarColour(to: .premiumColour)
     }
     // MARK: - Swift UI Child View
     func addChildView() {

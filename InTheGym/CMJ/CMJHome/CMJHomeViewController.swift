@@ -41,6 +41,7 @@ class CMJHomeViewController: UIViewController {
         super.viewWillAppear(animated)
         editNavBarColour(to: .darkColour)
         navigationItem.title = "CMJ"
+        editNavBarColour(to: .premiumColour)
     }
     // MARK: - Swift UI Child View
     func addChildView() {
