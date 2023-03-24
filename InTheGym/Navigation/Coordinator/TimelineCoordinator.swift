@@ -59,8 +59,8 @@ extension TimelineCoordinator {
         child.start()
     }
     
-    func showCommentSection(for post: PostModel, with listener: PostListener) {
-        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener)
+    func showCommentSection(for post: PostModel, with listener: PostListener, deleteListener: PostListener) {
+        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener, deleteListener: deleteListener)
         childCoordinators.append(child)
         child.start()
     }

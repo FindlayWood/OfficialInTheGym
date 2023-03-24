@@ -121,6 +121,12 @@ class PostsDataSource: NSObject {
             taggedUserTapped.send(post)
         }
     }
+    // MARK: - Delete Action
+    func delete(_ post: PostModel) {
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.deleteItems([post])
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
+    }
 }
 // MARK: - Delegate - Select Row
 extension PostsDataSource: UITableViewDelegate {
@@ -142,10 +148,11 @@ extension PostsDataSource: UITableViewDelegate {
             
             let delete = UIAction(title: "Delete Post", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] action in
                 self?.deletePost.send(item)
-                guard let self else { return }
-                var currentSnapshot = self.dataSource.snapshot()
-                currentSnapshot.deleteItems([item])
-                self.dataSource.apply(currentSnapshot, animatingDifferences: true)
+                self?.delete(item)
+//                guard let self else { return }
+//                var currentSnapshot = self.dataSource.snapshot()
+//                currentSnapshot.deleteItems([item])
+//                self.dataSource.apply(currentSnapshot, animatingDifferences: true)
             }
 
             // Create other actions...

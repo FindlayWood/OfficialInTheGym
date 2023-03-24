@@ -52,6 +52,8 @@ class CommentSectionViewModel: ObservableObject {
     
     var listener: PostListener?
     
+    var deleteListener: PostListener?
+    
     var groupListener: GroupPostListener?
     
     var workoutSelected = PassthroughSubject<WorkoutModel,Never>()
@@ -174,6 +176,21 @@ class CommentSectionViewModel: ObservableObject {
     
     func updateCommentText(with text: String) {
         self.text = text
+    }
+    // MARK: - Delete Post
+    func deletePost() {
+        deleteListener?.send(mainPost)
+        let deletePostModel = FirebaseMultiUploadDataPoint(value: nil, path: "Posts/\(mainPost.id)")
+        let deletePostRefModel = FirebaseMultiUploadDataPoint(value: nil, path: "PostSelfReferences/\(mainPost.posterID)/\(mainPost.id)")
+        Task {
+            do {
+                try await apiService.multiLocationUploadAsync(data: [deletePostModel, deletePostRefModel])
+                print("deleted")
+            }
+            catch {
+                print(String(describing: error))
+            }
+        }
     }
     
     // MARK: - Like Check

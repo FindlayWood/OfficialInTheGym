@@ -20,11 +20,13 @@ class CommentSectionCoordinator: NSObject, Coordinator {
     var mainPost: PostModel
     var savedWorkoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
     var listener: PostListener?
+    var deleteListener: PostListener?
     
-    init(navigationController: UINavigationController, mainPost: PostModel, listener: PostListener?) {
+    init(navigationController: UINavigationController, mainPost: PostModel, listener: PostListener?, deleteListener: PostListener?) {
         self.navigationController = navigationController
         self.mainPost = mainPost
         self.listener = listener
+        self.deleteListener = deleteListener
     }
     
     func start() {
@@ -33,6 +35,7 @@ class CommentSectionCoordinator: NSObject, Coordinator {
         vc.coordinator = self
         vc.viewModel.mainPost = mainPost
         vc.viewModel.listener = listener
+        vc.viewModel.deleteListener = deleteListener
         navigationController.pushViewController(vc, animated: true)
     }
 }
@@ -105,6 +108,9 @@ extension CommentSectionCoordinator {
         let child = TaggedUsersCoordinator(navigationController: navigationController, ids: ids)
         childCoordinators.append(child)
         child.start()
+    }
+    func delete() {
+        navigationController.popViewController(animated: true)
     }
 }
 

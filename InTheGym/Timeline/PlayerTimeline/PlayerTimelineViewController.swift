@@ -141,6 +141,10 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
             }
             .store(in: &subscriptions)
         
+        viewModel.deletePostListener
+            .sink { [weak self] in self?.dataSource.delete($0) }
+            .store(in: &subscriptions)
+        
         NotificationCenter.default.publisher(for: Notification.newPostFromCurrentUser)
             .compactMap { $0.object as? PostModel }
             .sink { [weak self] in self?.dataSource.addNewPost($0) }
@@ -154,7 +158,7 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
     
     // MARK: - Actions
     func showCommentSection(for post: PostModel) {
-        coordinator?.showCommentSection(for: post, with: viewModel.reloadListener)
+        coordinator?.showCommentSection(for: post, with: viewModel.reloadListener, deleteListener: viewModel.deletePostListener)
     }
     
     func showTaggedUsers(for post: PostModel) {

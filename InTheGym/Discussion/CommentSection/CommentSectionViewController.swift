@@ -41,7 +41,7 @@ class CommentSectionViewController: UIViewController {
         initViewModel()
         setupKeyBoardObservers()
         initTargets()
-        
+        initNavBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,6 +54,43 @@ class CommentSectionViewController: UIViewController {
         addSwiftUIViewWithNavBar(childContentView)
     }
     
+    // MARK: - Nav Bar
+    func initNavBar() {
+        
+        //handler to intercept event related to UIActions.
+        let handler: (_ action: UIAction) -> () = { [weak self] action in
+          switch action.identifier.rawValue {
+          case "flag":
+            print("flag")
+          case "delete":
+              self?.viewModel.deletePost()
+              self?.coordinator?.delete()
+          default:
+            break
+          }
+        }
+        
+        var actions: [UIAction] = []
+        
+        if viewModel.mainPost.posterID == UserDefaults.currentUser.uid {
+            actions = [
+                 UIAction(title: "Flag", image: UIImage(systemName: "flag"), identifier: UIAction.Identifier("flag"), handler: handler),
+                 UIAction(title: "Delete", image: UIImage(systemName: "trash"), identifier: UIAction.Identifier("delete"), attributes: .destructive, handler: handler)
+             ]
+        } else {
+            actions = [
+                 UIAction(title: "Flag", image: UIImage(systemName: "flag"), identifier: UIAction.Identifier("flag"), handler: handler)
+             ]
+        }
+
+        //Initiale UIMenu with the above array of actions.
+        let menu = UIMenu(title: "options",  children: actions)
+        
+        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), menu: menu)
+        navigationItem.rightBarButtonItem = rightBarButton
+    }
+
+    
     // MARK: - Loading Nav Bar
     func initLoadingNavBar(_ show: Bool) {
         display.setInteraction(to: !show)
@@ -63,7 +100,7 @@ class CommentSectionViewController: UIViewController {
             let barButton = UIBarButtonItem(customView: activityIndicator)
             navigationItem.rightBarButtonItem = barButton
         } else {
-            navigationItem.rightBarButtonItem = nil
+            initNavBar()
         }
     }
     
@@ -217,6 +254,10 @@ extension CommentSectionViewController {
 
 // MARK: - Display Button Actions
 extension CommentSectionViewController {
+    
+    @objc func moreOptions(_ sender: UIBarButtonItem) {
+        
+    }
     
     @objc func sendPressed(_ sender: UIButton) {
         viewModel.sendPressed()
