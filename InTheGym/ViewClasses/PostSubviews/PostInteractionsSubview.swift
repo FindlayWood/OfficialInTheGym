@@ -12,6 +12,13 @@ class PostInteractionsSubview: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
+    var postTaggedUsersView: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "person.fill"), for: .normal)
+        button.tintColor = .darkColour
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     var replyCountLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .regular)
@@ -22,6 +29,7 @@ class PostInteractionsSubview: UIView {
     var replyImageView: UIImageView = {
         let view = UIImageView()
         view.backgroundColor = .clear
+        view.contentMode = .scaleAspectFit
         view.image = UIImage(systemName: "bubble.left", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))
         view.tintColor = .darkColour
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -70,18 +78,21 @@ class PostInteractionsSubview: UIView {
 // MARK: - Configure
 private extension PostInteractionsSubview {
     func setupUI() {
+        addSubview(postTaggedUsersView)
         addSubview(replyStack)
         addSubview(likeStack)
         configureUI()
     }
     func configureUI() {
         NSLayoutConstraint.activate([
-            replyStack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            replyStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 82),
-            replyStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            postTaggedUsersView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            postTaggedUsersView.centerYAnchor.constraint(equalTo: centerYAnchor),
             likeStack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            likeStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
-            likeStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
+            likeStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            likeStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            replyStack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            replyStack.trailingAnchor.constraint(equalTo: likeStack.leadingAnchor, constant: -16),
+            replyStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
         ])
     }
 }

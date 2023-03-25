@@ -60,11 +60,6 @@ class PostCellView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-//    var postUserView: PostUserSubview = {
-//        let view = PostUserSubview()
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        return view
-//    }()
     var photoImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
@@ -100,14 +95,8 @@ class PostCellView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    var postTaggedUsersView: PostTaggedUsersSubview = {
-        let view = PostTaggedUsersSubview()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     lazy var vstack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [usernameTimeVstack, postTextView, postWorkoutView, postTaggedUsersView, postInteractionsView])
+        let stack = UIStackView(arrangedSubviews: [usernameTimeVstack, postTextView, postWorkoutView, postInteractionsView])
         stack.axis = .vertical
         stack.alignment = .leading
         stack.spacing = 8
@@ -146,8 +135,7 @@ private extension PostCellView {
             postStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             postStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
             postWorkoutView.widthAnchor.constraint(equalTo: vstack.widthAnchor),
-            postInteractionsView.widthAnchor.constraint(equalTo: vstack.widthAnchor),
-            postTaggedUsersView.widthAnchor.constraint(equalTo: vstack.widthAnchor)
+            postInteractionsView.widthAnchor.constraint(equalTo: vstack.widthAnchor)
         ])
     }
 }

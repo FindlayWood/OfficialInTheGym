@@ -60,10 +60,6 @@ private extension PostTableViewCell {
     }
     func constrainUI() {
         view.translatesAutoresizingMaskIntoConstraints = false
-//        let workoutAnchor = view.postWorkoutView.workoutView.heightAnchor.constraint(equalToConstant: 130)
-//        workoutAnchor.priority = .defaultLow
-//        let spacerHeight = view.spacerView.heightAnchor.constraint(equalToConstant: 44)
-//        spacerHeight.priority = .defaultLow
         NSLayoutConstraint.activate([
             view.topAnchor.constraint(equalTo: contentView.topAnchor),
             view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -172,9 +168,9 @@ extension PostTableViewCell {
             view.postWorkoutView.workoutView.configure(for: savedWorkoutID)
         }
         if let _ = viewModel.post.taggedUsers {
-            view.postTaggedUsersView.isHidden = false
+            view.postInteractionsView.postTaggedUsersView.isHidden = false
         } else {
-            view.postTaggedUsersView.isHidden = true
+            view.postInteractionsView.postTaggedUsersView.isHidden = true
         }
     }
 }
@@ -187,8 +183,7 @@ extension PostTableViewCell {
         view.profileImageButton.addTarget(self, action: #selector(userTapped(_:)), for: .touchUpInside)
         let tap = UITapGestureRecognizer(target: self, action: #selector(workoutTapped(_:)))
         view.postWorkoutView.workoutView.addGestureRecognizer(tap)
-        let taggedUsersTap = UITapGestureRecognizer(target: self, action: #selector(taggedUsersTapped(_:)))
-        view.postTaggedUsersView.addGestureRecognizer(taggedUsersTap)
+        view.postInteractionsView.postTaggedUsersView.addTarget(self, action: #selector(taggedUsersTapped(_:)), for: .touchUpInside)
     }
     
     @objc func likeButtonTapped(_ sender: UIButton) {
@@ -210,7 +205,7 @@ extension PostTableViewCell {
     @objc func userTapped(_ sender: UIButton) {
         actionPublisher.send(.userTapped)
     }
-    @objc func taggedUsersTapped(_ sender: UIView) {
+    @objc func taggedUsersTapped(_ sender: UIButton) {
         actionPublisher.send(.taggedUserTapped)
     }
 }
