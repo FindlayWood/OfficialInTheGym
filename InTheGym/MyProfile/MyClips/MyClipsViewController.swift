@@ -15,7 +15,7 @@ class MyClipsViewController: UIViewController, CustomAnimatingClipFromVC {
     // view model
     var viewModel = MyClipsViewModel()
     // child vc
-    var childVC = MyClipsChildViewController()
+    var childVC = ClipsChildViewController()
     // subscriptions
     private var subscriptions = Set<AnyCancellable>()
     
@@ -64,6 +64,9 @@ class MyClipsViewController: UIViewController, CustomAnimatingClipFromVC {
             .store(in: &subscriptions)
         viewModel.$clips
             .sink { [weak self] in self?.childVC.dataSource.updateTable(with: $0)}
+            .store(in: &subscriptions)
+        viewModel.$clips
+            .sink { [weak self] in self?.childVC.display.updateDisplay($0.isEmpty) }
             .store(in: &subscriptions)
         viewModel.fetchClipKeys()
         viewModel.initSubscribers()

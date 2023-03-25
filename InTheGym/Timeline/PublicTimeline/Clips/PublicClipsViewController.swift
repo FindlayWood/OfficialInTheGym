@@ -13,7 +13,7 @@ class PublicClipsViewController: UIViewController, CustomAnimatingClipFromVC {
     // coordinator
     weak var coordinator: UserProfileCoordinator?
     // child vc
-    var childVC = MyClipsChildViewController()
+    var childVC = ClipsChildViewController()
     // view model
     var viewModel = PublicClipsViewModel()
     // subscriptions

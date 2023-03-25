@@ -9,12 +9,10 @@
 import UIKit
 import Combine
 
-class MyClipsChildViewController: UIViewController {
+class ClipsChildViewController: UIViewController {
     
     // MARK: - Properties
-    var display = MyClipsChildView()
-    
-    var viewModel = MyClipsChildViewModel()
+    var display = ClipsChildView()
     
     lazy var dataSource = ExerciseClipsDataSource(collectionView: display.collectionView)
     
@@ -27,5 +25,4 @@ class MyClipsChildViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
     }
-
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MyClipsChildView: UIView {
+class ClipsChildView: UIView {
     // MARK: - Properties
     
     // MARK: - Subviews
@@ -27,6 +27,12 @@ class MyClipsChildView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    var emptyView: EmptyClipsView = {
+        let view = EmptyClipsView()
+        view.isHidden = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -40,10 +46,11 @@ class MyClipsChildView: UIView {
     
 }
 // MARK: - Configure
-private extension MyClipsChildView {
+private extension ClipsChildView {
     func setupUI() {
         addSubview(collectionView)
         addSubview(searchField)
+        addSubview(emptyView)
         backgroundColor = .systemBackground
         configureUI()
     }
@@ -56,7 +63,12 @@ private extension MyClipsChildView {
             collectionView.topAnchor.constraint(equalTo: searchField.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            emptyView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            emptyView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            emptyView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            emptyView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
         ])
     }
     func generateCollectionLayout() -> UICollectionViewFlowLayout {
@@ -66,5 +78,13 @@ private extension MyClipsChildView {
         layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         layout.scrollDirection = .vertical
         return layout
+    }
+}
+// MARK: - Public Config
+extension ClipsChildView {
+    func updateDisplay(_ empty: Bool) {
+        UIView.animate(withDuration: 0.3) {
+            self.emptyView.isHidden = !empty
+        }
     }
 }
