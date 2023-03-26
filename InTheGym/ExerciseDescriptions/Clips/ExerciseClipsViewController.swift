@@ -71,6 +71,10 @@ class ExerciseClipsViewController: UIViewController, CustomAnimatingClipFromVC {
             .sink { [weak self] in self?.dataSource.updateCollection(with: [$0])}
             .store(in: &subscriptions)
         
+        viewModel.clipModelPublisher
+            .sink { [weak self] in self?.display.updateDisplay($0.isEmpty) }
+            .store(in: &subscriptions)
+        
         viewModel.fetchClipKeys()
     }
 }

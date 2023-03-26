@@ -30,7 +30,6 @@ class ExerciseTagsViewController: UIViewController {
         initDataSource()
         initViewModel()
         initTargets()
-        print("Taggss ----------------- ")
     }
     // MARK: - Targets
     func initTargets() {

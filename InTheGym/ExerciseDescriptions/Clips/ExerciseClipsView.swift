@@ -27,6 +27,12 @@ class ExerciseClipsView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    var emptyView: EmptyClipsView = {
+        let view = EmptyClipsView()
+        view.isHidden = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,6 +47,7 @@ class ExerciseClipsView: UIView {
 private extension ExerciseClipsView {
     func setupUI() {
         addSubview(collectionView)
+        addSubview(emptyView)
         addSubview(plusButton)
         backgroundColor = .secondarySystemBackground
         configureUI()
@@ -48,6 +55,11 @@ private extension ExerciseClipsView {
     func configureUI() {
         addFullConstraint(to: collectionView)
         NSLayoutConstraint.activate([
+            emptyView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            emptyView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            emptyView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            emptyView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            
             plusButton.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor, constant: -8),
             plusButton.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -16)
         ])
@@ -59,5 +71,13 @@ private extension ExerciseClipsView {
         layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 8)
         layout.scrollDirection = .vertical
         return layout
+    }
+}
+// MARK: - Public Config
+extension ExerciseClipsView {
+    func updateDisplay(_ empty: Bool) {
+        UIView.animate(withDuration: 0.3) {
+            self.emptyView.isHidden = !empty
+        }
     }
 }
