@@ -115,11 +115,13 @@ private extension PostTableViewCell {
 private extension PostTableViewCell {
     func setLiked(to liked: Bool) {
         if liked {
-            self.view.postInteractionsView.likeButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25)), for: .normal)
+//            self.view.postInteractionsView.likeButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25)), for: .normal)
+            self.view.postInteractionsView.likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
             self.view.postInteractionsView.likeButton.isUserInteractionEnabled = false
             self.view.postInteractionsView.likeButton.tintColor = .redColour
         } else {
-            self.view.postInteractionsView.likeButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25)), for: .normal)
+//            self.view.postInteractionsView.likeButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25)), for: .normal)
+            self.view.postInteractionsView.likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
             self.view.postInteractionsView.likeButton.isUserInteractionEnabled = true
             self.view.postInteractionsView.likeButton.tintColor = .darkColour
         }
@@ -191,7 +193,7 @@ extension PostTableViewCell {
         selection.prepare()
         selection.selectionChanged()
         UIView.transition(with: sender, duration: 0.3, options: .transitionCrossDissolve) {
-            sender.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+            sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
             sender.tintColor = .redColour
         } completion: { _ in
             sender.isUserInteractionEnabled = false

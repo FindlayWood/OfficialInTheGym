@@ -30,7 +30,7 @@ class PostInteractionsSubview: UIView {
         let view = UIImageView()
         view.backgroundColor = .clear
         view.contentMode = .scaleAspectFit
-        view.image = UIImage(systemName: "bubble.left", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))
+        view.image = UIImage(systemName: "bubble.left")
         view.tintColor = .darkColour
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -52,7 +52,7 @@ class PostInteractionsSubview: UIView {
     }()
     var likeButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25)), for: .normal)
+        button.setImage(UIImage(systemName: "heart"), for: .normal)
         button.tintColor = .darkColour
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
