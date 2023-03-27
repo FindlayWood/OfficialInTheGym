@@ -96,13 +96,6 @@ struct PostAttachmentSheet: View {
                         }
                     }
                 }
-                Section {
-                    Button {
-                        
-                    } label: {
-                        Text("Add Clip")
-                    }
-                }
             }
     }
     func delete(at offsets: IndexSet) {

@@ -89,13 +89,6 @@ struct CommentAttachmentSheet: View {
                         }
                     }
                 }
-                Section {
-                    Button {
-                        
-                    } label: {
-                        Text("Add Clip")
-                    }
-                }
             }
     }
     func delete(at offsets: IndexSet) {
