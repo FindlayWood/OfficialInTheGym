@@ -17,6 +17,8 @@ class PremiumAccountViewModel: ObservableObject {
     @Published var selectedPackage: Package?
     @Published var selectedSubscription: SubscriptionEnum = .monthly
     @Published var error: SubscriptionError?
+    
+    @Published var originalPurchaseDate: Date?
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     var subscriptionService: SubscriptionService = SubscriptionManager.shared
@@ -34,6 +36,9 @@ class PremiumAccountViewModel: ObservableObject {
             if let packages = try await subscriptionService.getOfferings() {
                 subscriptionPackages = packages
                 selectedPackage = packages.first
+            }
+            if subscriptionService.isSubscribed {
+                await purchaseInfo()
             }
             
 //            let offerings = try await Purchases.shared.offerings()
@@ -67,6 +72,29 @@ class PremiumAccountViewModel: ObservableObject {
             let _ = try ref.addDocument(from: model)
         } catch {
             await uploadTransaction(model)
+        }
+    }
+    
+    @MainActor
+    func purchaseInfo() async {
+        isLoading = true
+        do {
+            let info = try await subscriptionService.getCustomerInfo()
+            originalPurchaseDate = info.originalPurchaseDate
+        } catch {
+            print(String(describing: error))
+        }
+    }
+    
+    @MainActor
+    func restorePurchaseAction() async {
+        isLoading = true
+        do {
+            try await subscriptionService.restorePurchase()
+            isLoading = false
+        } catch {
+            print(String(describing: error))
+            isLoading = false
         }
     }
 }

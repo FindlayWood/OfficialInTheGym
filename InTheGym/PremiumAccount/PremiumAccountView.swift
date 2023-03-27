@@ -17,12 +17,12 @@ struct PremiumAccountViewSwiftUI: View {
                 VStack {
                     if SubscriptionManager.shared.isSubscribed {
                         SubscribedView()
-                        Button {
-                            
-                        } label: {
-                            Text("Cancel Subscription")
-                                .foregroundColor(Color(.premiumColour))
-                        }.padding()
+                        if let originalPurchaseData = viewModel.originalPurchaseDate {
+                            Text("Purchase Date")
+                                .font(.headline)
+                            Text(originalPurchaseData, format: .dateTime.day().month().year())
+                                .fontWeight(.medium)
+                        }
                     } else {
                         Text("Sign up for a premium account and gain access to awesome features and power yourself into an elite athlete.")
                             .font(.body.weight(.medium))
@@ -90,12 +90,23 @@ struct PremiumAccountViewSwiftUI: View {
                                     .clipShape(Capsule())
                                     .shadow(radius: 4)
                             }
+                            
+                            Button {
+                                Task {
+                                    await viewModel.restorePurchaseAction()
+                                }
+                            } label: {
+                                Text("Restore Purchase")
+                                    .foregroundColor(Color(.premiumColour))
+                                    .font(.headline)
+                            }
                         }
                         
                         Text("Recurring bill, cancel anytime, \n Your payment will be charged to your iTunes account and your subscription will automatically renew for the same package length at the same price until you cancel it. Cancel anytime from settings -> subscriptions.")
                             .font(.footnote)
                             .foregroundColor(Color(.secondaryLabel))
                             .multilineTextAlignment(.center)
+                            .padding()
                         Spacer()
                     }
                     
@@ -131,25 +142,31 @@ struct PremiumAccountViewSwiftUI: View {
 struct SubscribedView: View {
     var body: some View {
         VStack {
-            Text("Subscribed")
-                .font(.title.bold())
-                .foregroundColor(.primary)
-            Image(systemName: "checkmark.circle.fill")
-                .font(.largeTitle)
-                .foregroundColor(.green)
-                .padding()
-            Text("You have subscribed to InTheGym premium! You have full access to all our awesome features. Check out the performance center and recorded and watch some clips! Thanks for subscribing to InTheGym premium.")
-                .font(.body)
+            VStack {
+                Text("Subscribed")
+                    .font(.title.bold())
+                    .foregroundColor(.primary)
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.largeTitle)
+                    .foregroundColor(.green)
+                    .padding()
+                Text("You have subscribed to InTheGym premium! You have full access to all our awesome features. Check out the performance center, record and watch some clips! Thanks for subscribing to InTheGym premium.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding()
+            .background(Color(.white))
+            .cornerRadius(8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color(.premiumColour), lineWidth: 1)
+            )
+            Text("If you would like to cancel your subscription, you must do this through Apple.")
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
+                .padding()
         }
-        .padding()
-        .background(Color(.white))
-        .cornerRadius(8)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color(.premiumColour), lineWidth: 1)
-        )
     }
 }
 

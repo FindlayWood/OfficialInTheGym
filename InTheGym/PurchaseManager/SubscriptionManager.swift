@@ -56,6 +56,18 @@ class SubscriptionManager: ObservableObject, SubscriptionService {
         return transactionModel
     }
     
+    func getCustomerInfo() async throws -> CustomerInfo {
+        return try await Purchases.shared.customerInfo()
+    }
+    func restorePurchase() async throws {
+        let customerInfo = try await Purchases.shared.restorePurchases()
+        if customerInfo.entitlements.all["Premium"]?.isActive == true {
+            isSubscribed = true
+        } else {
+            isSubscribed = false
+        }
+    }
+    
     func logOut() async throws {
         let customerInfo = try await Purchases.shared.logOut()
     }
@@ -70,8 +82,11 @@ struct RevenueCatTransactionModel: Codable {
 }
 
 protocol SubscriptionService {
+    var isSubscribed: Bool { get }
     func launch() async
     func getOfferings() async throws -> [Package]?
     func purchase(_ package: Package) async throws -> RevenueCatTransactionModel
+    func getCustomerInfo() async throws -> CustomerInfo
+    func restorePurchase() async throws
     func logOut() async throws
 }
