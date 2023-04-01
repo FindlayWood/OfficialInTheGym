@@ -34,13 +34,14 @@ class DisplayNotificationsViewModel {
  
     
     // MARK: - Fetching functions
+    @MainActor
     func fetchNotifications() {
-        apiService.fetch(NotificationModel.self) { [weak self] result in
-            switch result {
-            case .success(let models):
-                self?.notificationsPublisher.send(models)
-            case .failure(let error):
-                self?.errorPublisher.send(error)
+        Task {
+            do {
+                let models: [NotificationModel] = try await apiService.fetchAsync()
+                notificationsPublisher.send(models)
+            } catch {
+                errorPublisher.send(error)
             }
         }
     }

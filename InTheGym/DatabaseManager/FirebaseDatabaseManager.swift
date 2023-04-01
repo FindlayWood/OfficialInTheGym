@@ -43,21 +43,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         databaseReference.removeObserver(withHandle: handle)
     }
     
-    func fetch<Model: FirebaseModel>(_ model: Model.Type, completion: @escaping(Result<[Model],Error>) -> Void) {
-        let DBRef = Database.database().reference().child(Model.path)
-        DBRef.observeSingleEvent(of: .value) { snapshot in
-            guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
-                completion(.failure(NSError()))
-                return
-            }
-            do {
-                let data = try children.compactMap { try? $0.data(as: model) }
-                completion(.success(data))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
+
     func fetchSingleModel<Model: FirebaseModel>(_ model: Model.Type, completion: @escaping (Result<Model,Error>) -> Void) {
         let DBRef = Database.database().reference().child(model.path)
         DBRef.observeSingleEvent(of: .value) { snapshot in
@@ -401,7 +387,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
 }
 
 protocol FirebaseDatabaseManagerService {
-    func fetch<Model: FirebaseModel>(_ model: Model.Type, completion: @escaping(Result<[Model],Error>) -> Void)
+    
     func fetchInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
     func fetchSingleInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<T,Error>) -> Void)
     func upload<Model: FirebaseInstance>(data: Model, autoID: Bool, completion: @escaping (Result<Void,Error>) -> Void)

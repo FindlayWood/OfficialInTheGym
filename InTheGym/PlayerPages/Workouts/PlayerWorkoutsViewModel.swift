@@ -25,15 +25,14 @@ class PlayerWorkoutsViewModel {
     }
     
     // MARK: - Fetch Function
+    @MainActor
     func fetchWorkouts() {
-        apiService.fetch(WorkoutModel.self) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(let models):
-                self.workouts = models.reversed()
-//                self.workouts.send(models)
-            case .failure(let error):
-                self.errorFetching.send(error)
+        Task {
+            do {
+                let models: [WorkoutModel] = try await apiService.fetchAsync()
+                workouts = models.reversed()
+            } catch {
+                errorFetching.send(error)
             }
         }
     }

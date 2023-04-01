@@ -44,16 +44,16 @@ class PlayerTimelineViewModel {
     }
 
     // MARK: - Fetch Posts
+    @MainActor
     func fetchPosts() {
         isLoading = true
-        apiService.fetch(PostModel.self) { [weak self] result in
-            guard let self = self else {return}
+        Task {
             do {
-                let posts = try result.get()
-                self.filterPosts(posts)
+                let posts: [PostModel] = try await apiService.fetchAsync()
+                filterPosts(posts)
             } catch {
                 print(String(describing: error))
-                self.isLoading = false
+                isLoading = false
             }
         }
     }

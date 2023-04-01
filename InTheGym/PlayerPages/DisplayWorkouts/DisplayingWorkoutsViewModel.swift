@@ -43,23 +43,22 @@ class DisplayingWorkoutsViewModel {
     }
     
     // MARK: - Fetch Function
+    @MainActor
     func fetchWorkouts() {
         isLoading = true
-        apiService.fetch(WorkoutModel.self) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(let models):
+        Task {
+            do {
+                let models: [WorkoutModel] = try await apiService.fetchAsync()
                 let liveWorkouts = models.filter { !$0.completed && $0.startTime != nil }.sorted { $0.startTime ?? 0 > $1.startTime ?? 0 }
                 let completedWorkouts = models.filter { $0.completed }.sorted { $0.startTime ?? 0 > $1.startTime ?? 0}
                 let notStartedWorkouts = models.filter { $0.startTime == nil }
                 let allWorkouts = liveWorkouts + notStartedWorkouts + completedWorkouts
-                self.workouts = allWorkouts
-                self.storedWorkouts = allWorkouts
-                self.filteredWorkouts = allWorkouts
-                self.isLoading = false
-            case .failure(let error):
-                self.errorFetching.send(error)
-                self.isLoading = false
+                workouts = allWorkouts
+                storedWorkouts = allWorkouts
+                isLoading = false
+            } catch {
+                errorFetching.send(error)
+                isLoading = false
             }
         }
     }
