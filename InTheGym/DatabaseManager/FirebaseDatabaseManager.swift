@@ -59,20 +59,6 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         }
     }
     
-
-    
-    func fetchSingleInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<T,Error>) -> Void) {
-        let DBRef = Database.database().reference().child(model.internalPath)
-        DBRef.observeSingleEvent(of: .value) { snapshot in
-            do {
-                let data = try snapshot.data(as: returnType)
-                completion(.success(data))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
-    
     func fetchSingleObjectInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
         let DBRef = Database.database().reference().child(model.internalPath)
         DBRef.observeSingleEvent(of: .value) { snapshot in
@@ -377,7 +363,6 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
 protocol FirebaseDatabaseManagerService {
     
     func fetchInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
-    func fetchSingleInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<T,Error>) -> Void)
     func upload<Model: FirebaseInstance>(data: Model, autoID: Bool, completion: @escaping (Result<Void,Error>) -> Void)
     func multiLocationUpload(data: [FirebaseMultiUploadDataPoint], completion: @escaping(Result<Void,Error>) -> Void)
 //    func incrementingValue(by increment: Int, at path: String, completion: @escaping(Result<Void,Error>) -> Void)

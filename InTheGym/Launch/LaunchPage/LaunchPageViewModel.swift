@@ -8,6 +8,8 @@
 
 import Foundation
 import FirebaseMessaging
+
+@MainActor
 class LaunchPageViewModel {
     // MARK: - Publishers
     @Published var user: Users?
@@ -100,20 +102,18 @@ class LaunchPageViewModel {
 //        }
     }
     private func loadUserModel(from model: UserSearchModel) {
-        apiService.fetchSingleInstance(of: model, returning: Users.self) { [weak self] result in
-            switch result {
-            case .success(let userModel):
-                self?.user = userModel
+        Task {
+            do {
+                let userModel: Users = try await apiService.fetchSingleInstanceAsync(of: model)
+                user = userModel
                 UserDefaults.currentUser = userModel
-                self?.userService.storeCurrentUser(userModel)
+                userService.storeCurrentUser(userModel)
                 FirebaseAuthManager.currentlyLoggedInUser = userModel
                 ViewController.username = userModel.username /// depreciated
                 ViewController.admin = userModel.admin /// depreciated
-                Task {
-                    await SubscriptionManager.shared.launch()
-                }
-            case .failure(let error):
-                self?.error = error
+                await SubscriptionManager.shared.launch()
+            } catch {
+                self.error = error
             }
         }
     }
@@ -124,12 +124,12 @@ class LaunchPageViewModel {
         DispatchQueue.global(qos: .background).async {
             let userID = UserDefaults.currentUser.uid
             let userSeachModel = UserSearchModel(uid: userID)
-            self.apiService.fetchSingleInstance(of: userSeachModel, returning: Users.self) { result in
-                switch result {
-                case .success(let userModel):
-                    UserDefaults.currentUser = userModel
-                case .failure(_):
-                    break
+            Task {
+                do {
+                    let model: Users = try await self.apiService.fetchSingleInstanceAsync(of: userSeachModel)
+                    UserDefaults.currentUser = model
+                } catch {
+                    print(String(describing: error))
                 }
             }
         }
