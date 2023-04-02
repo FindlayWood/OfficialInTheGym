@@ -50,14 +50,13 @@ class AddPlayerViewModel: ObservableObject {
     func search(_ text: String) {
         if !text.isEmpty {
             isLoading = true
-            apiService.searchTextQueryModel(model: searchModel, returning: Users.self) { [weak self] result in
-                switch result {
-                case .success(let returnedUsers):
-                    let filteredUsers = returnedUsers.filter { !($0.admin) }
-                    self?.initCellModels(from: filteredUsers)
-                case .failure(let error):
-                    print(String(describing: error))
-                    self?.isLoading = false
+            Task { @MainActor in
+                do {
+                    let models: [Users] = try await apiService.searchTextQueryModelAsync(model: searchModel)
+                    let filteredUsers = models.filter { !($0.admin) }
+                    initCellModels(from: filteredUsers)
+                } catch {
+                    isLoading = false
                 }
             }
         }

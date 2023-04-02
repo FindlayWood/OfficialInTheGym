@@ -193,28 +193,6 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
             }
          }
     }
-    // MARK: - Fetch Limited
-
-    func searchTextQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
-        let dbref = Database.database().reference().child(model.internalPath)
-            .queryOrdered(byChild: model.orderedBy)
-            .queryStarting(atValue: model.equalTo)
-            .queryEnding(atValue: model.equalTo+"\u{f8ff}")
-        dbref.observeSingleEvent(of: .value) { snapshot in
-            guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
-                completion(.failure(NSError()))
-                return
-            }
-            do {
-                let data = try children.compactMap { try $0.data(as: returning) }
-                completion(.success(data))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-        
-    }
-
     
     // MARK: - Async Functions
     func fetchAsync<Model: FirebaseModel>() async throws -> [Model] {
@@ -361,7 +339,6 @@ protocol FirebaseDatabaseManagerService {
     func uploadTimeOrderedModel<Model: FirebaseTimeOrderedModel>(model: Model, completion: @escaping (Result<Model,Error>) -> Void)
 //    func searchQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<T,Error>) -> Void)
     func fetchLimited<Model: FirebaseModel>(model: Model.Type, limit: Int, completion: @escaping (Result<[Model],Error>) -> Void)
-    func searchTextQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
     func fetchSingleObjectInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
     func fetchLimitedInstance<Model: FirebaseInstance, T: Decodable>(of model: Model, returning returnType: T.Type, limit: Int, completion: @escaping (Result<[T],Error>) -> Void)
     
