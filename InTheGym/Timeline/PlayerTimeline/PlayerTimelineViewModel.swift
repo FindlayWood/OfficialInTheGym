@@ -14,8 +14,6 @@ class PlayerTimelineViewModel {
     // MARK: - Publishers
     @Published var isLoading: Bool = false
     
-    var thinkingTimeActivePublisher = PassthroughSubject<Bool,Never>()
-    
     var postPublisher = CurrentValueSubject<[PostModel],Never>([])
     
     var workoutSelected = PassthroughSubject<WorkoutModel,Never>()
@@ -182,16 +180,4 @@ class PlayerTimelineViewModel {
             }
         }
     }
-    
-
- 
-    
-    // MARK: - Thinking Time Check
-    func checkForThinkingTime() {
-        FirebaseDatabaseManager.shared.fetchSingleModel(ThinkingTimeCheckModel.self) { [weak self] result in
-            guard let model = try? result.get() else {return}
-            self?.thinkingTimeActivePublisher.send(model.isActive)
-        }
-    }
-    
 }

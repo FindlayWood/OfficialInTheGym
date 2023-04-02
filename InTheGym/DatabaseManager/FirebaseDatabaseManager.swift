@@ -43,18 +43,6 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         databaseReference.removeObserver(withHandle: handle)
     }
     
-
-    func fetchSingleModel<Model: FirebaseModel>(_ model: Model.Type, completion: @escaping (Result<Model,Error>) -> Void) {
-        let DBRef = Database.database().reference().child(model.path)
-        DBRef.observeSingleEvent(of: .value) { snapshot in
-            do {
-                let data = try snapshot.data(as: model)
-                completion(.success(data))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
     func fetchInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
         let DBRef = Database.database().reference().child(model.internalPath)
         DBRef.observeSingleEvent(of: .value) { snapshot in
