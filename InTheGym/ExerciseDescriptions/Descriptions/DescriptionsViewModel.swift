@@ -77,23 +77,24 @@ class DescriptionsViewModel {
             }
         }
     }
+    @MainActor
     func loadStamps() {
         let eliteStamp = EliteExerciseStampsModel(exerciseName: exerciseModel.exerciseName)
-        apiService.childCount(of: eliteStamp) { [weak self] result in
-            switch result {
-            case .success(let count):
-                self?.eliteStampCount = count
-            case .failure(let error):
-                self?.error = error
+        Task {
+            do {
+                let count = try await apiService.childCountAsync(of: eliteStamp)
+                eliteStampCount = count
+            } catch {
+                self.error = error
             }
         }
         let verifiedStamp = VerifiedExerciseStampsModel(exerciseName: exerciseModel.exerciseName)
-        apiService.childCount(of: verifiedStamp) { [weak self] result in
-            switch result {
-            case .success(let count):
-                self?.verifiedStampCount = count
-            case .failure(let error):
-                self?.error = error
+        Task {
+            do {
+                let count = try await apiService.childCountAsync(of: verifiedStamp)
+                verifiedStampCount = count
+            } catch {
+                self.error = error
             }
         }
     }

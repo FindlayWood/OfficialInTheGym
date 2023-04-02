@@ -32,6 +32,7 @@ class ProfileInfoCellViewModel {
             checkFollowing()
         }
     }
+    @MainActor
     func followButtonAction() {
         let followActionModel = FollowModel(id: user.uid)
         let uploadPoints = followActionModel.getUploadPoints()
@@ -48,23 +49,24 @@ class ProfileInfoCellViewModel {
     }
     
     // MARK: - Functions
+    @MainActor
     func getFollowerCount() {
         let followerModel = FollowersModel(id: user.uid)
-        apiService.childCount(of: followerModel) { [weak self] result in
-            switch result {
-            case .success(let count):
-                self?.followerCount = count
-            case .failure(_):
-                break
+        Task {
+            do {
+                let count = try await apiService.childCountAsync(of: followerModel)
+                followerCount = count
+            } catch {
+                print(String(describing: error))
             }
         }
         let followingModel = FollowingModel(id: user.uid)
-        apiService.childCount(of: followingModel) { [weak self] result in
-            switch result {
-            case .success(let count):
-                self?.followingCount = count
-            case .failure(_):
-                break
+        Task {
+            do {
+                let count = try await apiService.childCountAsync(of: followingModel)
+                followingCount = count
+            } catch {
+                print(String(describing: error))
             }
         }
     }

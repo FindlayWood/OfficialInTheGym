@@ -146,18 +146,6 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         }
     }
     
-    // MARK: - Child Count
-    func childCount<Model:FirebaseInstance>(of model: Model, completion: @escaping (Result<Int,Error>) -> Void) {
-        let dbref = Database.database().reference().child(model.internalPath)
-        dbref.observeSingleEvent(of: .value) { snapshot in
-            if snapshot.exists() {
-                completion(.success(Int(snapshot.childrenCount)))
-            } else {
-                completion(.success(0))
-            }
-        }
-    }
-    
     // MARK: - Time Ordered Upload
     func uploadTimeOrderedModel<Model: FirebaseTimeOrderedModel>(model: Model, completion: @escaping (Result<Model,Error>) -> Void) {
         print(model.internalPath)
@@ -370,7 +358,6 @@ protocol FirebaseDatabaseManagerService {
     func fetchKeys<M: FirebaseInstance>(from model: M, completion: @escaping (Result<[String],Error>) -> Void)
     func fetchRange<M: FirebaseInstance, T: Decodable>(from models: [M], returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void)
     func checkExistence<Model:FirebaseInstance>(of model: Model, completion: @escaping(Result<Bool,Error>) -> Void)
-    func childCount<Model:FirebaseInstance>(of model: Model, completion: @escaping (Result<Int,Error>) -> Void)
     func uploadTimeOrderedModel<Model: FirebaseTimeOrderedModel>(model: Model, completion: @escaping (Result<Model,Error>) -> Void)
 //    func searchQueryModel<Model: FirebaseQueryModel, T: Decodable>(model: Model, returning: T.Type, completion: @escaping (Result<T,Error>) -> Void)
     func fetchLimited<Model: FirebaseModel>(model: Model.Type, limit: Int, completion: @escaping (Result<[Model],Error>) -> Void)
