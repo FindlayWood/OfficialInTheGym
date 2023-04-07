@@ -26,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         launchScreen()
         // setup revenue cat
         Purchases.logLevel = .debug
+        UserObserver.shared.checkForUserDefault()
 //        Purchases.configure(withAPIKey: Constants.revenueCatAPIKey)
         
         // For iOS 10 display notification (sent via APNS)
@@ -75,8 +76,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func nilUser() {
         let navController = UINavigationController()
-        let signUpCoordinator = SignUpCoordinator(navigationController: navController)
-        signUpCoordinator.start()
+        let _ = LoginComposition(navigationController: navController).loginKitInterface.compose()
+//        let signUpCoordinator = SignUpCoordinator(navigationController: navController)
+//        signUpCoordinator.start()
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = navController
         window?.makeKeyAndVisible()

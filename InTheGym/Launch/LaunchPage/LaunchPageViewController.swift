@@ -35,15 +35,15 @@ class LaunchPageViewController: UIViewController, Storyboarded {
     }
     // MARK: - View Model
     func initViewModel() {
-        viewModel.$user
-            .dropFirst()
-            .sink { [weak self] in self?.receivedUser($0)}
-            .store(in: &subscriptions)
-        viewModel.$checkingError
-            .compactMap { $0 }
-            .sink { [weak self] in self?.receivedCheckingError($0)}
-            .store(in: &subscriptions)
-        viewModel.checkForUserDefault()
+//        viewModel.$user
+//            .dropFirst()
+//            .sink { [weak self] in self?.receivedUser($0)}
+//            .store(in: &subscriptions)
+//        viewModel.$checkingError
+//            .compactMap { $0 }
+//            .sink { [weak self] in self?.receivedCheckingError($0)}
+//            .store(in: &subscriptions)
+//        viewModel.checkForUserDefault()
     }
 }
 // MARK: - Actions

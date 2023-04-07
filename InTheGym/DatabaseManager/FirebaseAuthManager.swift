@@ -28,6 +28,10 @@ protocol AuthManagerService {
     // MARK: - Async
     func loginAsync(with loginModel: LoginModel) async throws -> Users
     func createNewUserAsync(with user: SignUpUserModel) async throws
+    
+    func login(with email: String, password: String) async throws
+    func signup(with email: String, password: String) async throws
+    func forgotPassword(for email: String) async throws
 }
 
 class FirebaseAuthManager: AuthManagerService {
@@ -129,6 +133,16 @@ class FirebaseAuthManager: AuthManagerService {
                 }
             }
         }
+    }
+    
+    func login(with email: String, password: String) async throws {
+        try await Auth.auth().signIn(withEmail: email, password: password)
+    }
+    func signup(with email: String, password: String) async throws {
+        try await Auth.auth().createUser(withEmail: email, password: password)
+    }
+    func forgotPassword(for email: String) async throws {
+        try await Auth.auth().sendPasswordReset(withEmail: email)
     }
     
     // MARK: - Login Async

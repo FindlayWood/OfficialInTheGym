@@ -67,7 +67,7 @@ class SettingsViewModel {
                         print(String(describing: error))
                     }
                 }
-                self?.loggedOut()
+//                self?.loggedOut()
             } else {
                 self?.errorLoggingOut.send(true)
             }
