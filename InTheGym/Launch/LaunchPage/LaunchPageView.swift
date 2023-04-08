@@ -6,4 +6,22 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
+
+struct LaunchPageView: View {
+    
+    var body: some View {
+        
+        VStack {
+            Spacer()
+            
+            Image("inthegym_icon3")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity)
+            
+            Spacer()
+        }
+        .padding()
+    }
+}

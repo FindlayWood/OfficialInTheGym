@@ -32,6 +32,8 @@ protocol AuthManagerService {
     func login(with email: String, password: String) async throws
     func signup(with email: String, password: String) async throws
     func forgotPassword(for email: String) async throws
+    func sendEmailVerification() async throws
+    func signout() throws
 }
 
 class FirebaseAuthManager: AuthManagerService {
@@ -139,12 +141,18 @@ class FirebaseAuthManager: AuthManagerService {
         try await Auth.auth().signIn(withEmail: email, password: password)
     }
     func signup(with email: String, password: String) async throws {
-        try await Auth.auth().createUser(withEmail: email, password: password)
+        let authResult = try await Auth.auth().createUser(withEmail: email, password: password)
+        try await authResult.user.sendEmailVerification()
     }
     func forgotPassword(for email: String) async throws {
         try await Auth.auth().sendPasswordReset(withEmail: email)
     }
-    
+    func sendEmailVerification() async throws {
+        try await Auth.auth().currentUser?.sendEmailVerification()
+    }
+    func signout() throws {
+        try Auth.auth().signOut()
+    }
     // MARK: - Login Async
     func loginAsync(with loginModel: LoginModel) async throws -> Users {
         let authResult = try await Auth.auth().signIn(withEmail: loginModel.email, password: loginModel.password)

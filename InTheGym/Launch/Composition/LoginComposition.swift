@@ -47,13 +47,31 @@ class UserObserver {
     
     private init() {}
     
+    var handle: DatabaseHandle?
+    
     func observeUser() {
         Auth.auth().addStateDidChangeListener { auth, user in
             if let user = user {
-                let userSearchModel = UserSearchModel(uid: user.uid)
-                self.loadUserModel(from: userSearchModel)
+                if user.isEmailVerified {
+                    let userSearchModel = UserSearchModel(uid: user.uid)
+                    self.loadUserModel(from: userSearchModel)
+                } else {
+                    self.verifyAccount()
+                }
             } else if user == nil {
                 self.logout()
+            }
+        }
+    }
+    func observeAccountCreation(for userUID: String) {
+        let ref = Database.database().reference().child("users").child(userUID)
+        handle = ref.observe(.value) { [weak self] snapshot in
+            do {
+                let data = try snapshot.data(as: Users.self)
+                self?.login(data)
+                ref.removeObserver(withHandle: (self?.handle)!)
+            } catch {
+                print(String(describing: error))
             }
         }
     }
@@ -122,7 +140,7 @@ class UserObserver {
 //                ViewController.admin = userModel.admin /// depreciated
                 await SubscriptionManager.shared.launch()
             } catch {
-                self.error = error
+                self.observeAccountCreation(for: model.uid)
             }
         }
     }
@@ -152,6 +170,13 @@ class UserObserver {
             } else {
                 appDelegate.loggedInPlayer()
             }
+        }
+    }
+    
+    func verifyAccount() {
+        DispatchQueue.main.async {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.verifyScreen()
         }
     }
     
