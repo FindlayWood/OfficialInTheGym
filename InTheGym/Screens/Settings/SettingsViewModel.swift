@@ -59,7 +59,7 @@ class SettingsViewModel {
                 try await firestoreService.upload(data: fcmTokenModel, at: "FCMTokens/\(UserDefaults.currentUser.uid)")
                 UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
                 try apiService.signout()
-                LikesAPIService.shared.LikedPostsCache.removeAll()
+                
                 LikeCache.shared.removeAll()
                 ClipCache.shared.removeAll()
             } catch {

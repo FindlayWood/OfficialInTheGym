@@ -198,7 +198,8 @@ class MyProfileViewModel {
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
             case .success(()):
-                LikesAPIService.shared.LikedPostsCache[post.id] = true
+                LikeCache.shared.upload(postID: post.id)
+                break
             case .failure(let error):
                 self?.errorLikingPost.send(error)
             }

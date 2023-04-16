@@ -228,7 +228,6 @@ class CommentSectionViewModel: ObservableObject {
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
             case .success(()):
-                LikesAPIService.shared.LikedPostsCache[post.id] = true
                 self?.groupListener?.send(post)
             case .failure(_):
                 self?.errorLiking.send(())
@@ -241,7 +240,7 @@ class CommentSectionViewModel: ObservableObject {
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
             case .success(()):
-                LikesAPIService.shared.LikedPostsCache[post.id] = true
+                LikeCache.shared.upload(postID: post.id)
                 self?.listener?.send(post)
             case .failure(_):
                 self?.errorLiking.send(())
