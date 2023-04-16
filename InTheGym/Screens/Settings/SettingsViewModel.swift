@@ -20,12 +20,14 @@ class SettingsViewModel {
     
     // MARK: - Properties
     var apiService: AuthManagerService = FirebaseAuthManager.shared
+    var firestoreService: FirestoreService
     
     let navigationTitle: String = "Settings"
     
     // MARK: - Initializer
-    init(apiService: AuthManagerService = FirebaseAuthManager.shared) {
+    init(apiService: AuthManagerService = FirebaseAuthManager.shared, firestoreService: FirestoreService = FirestoreManager.shared) {
         self.apiService = apiService
+        self.firestoreService = firestoreService
     }
     
     // MARK: - Actions
@@ -51,31 +53,49 @@ class SettingsViewModel {
     }
     // MARK: - Functions
     func logout() {
-        apiService.logout { [weak self] success in
-            if success {
+        Task {
+            do {
+                let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
+                try await firestoreService.upload(data: fcmTokenModel, at: "FCMTokens/\(UserDefaults.currentUser.uid)")
+                UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
+                try apiService.signout()
                 LikesAPIService.shared.LikedPostsCache.removeAll()
-                ViewController.admin = nil
-                ViewController.username = nil
                 LikeCache.shared.removeAll()
                 ClipCache.shared.removeAll()
-                let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
-                Task {
-                    do {
-                        try await FirestoreManager.shared.upload(fcmTokenModel)
-                        UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
-                    } catch {
-                        print(String(describing: error))
-                    }
-                }
-//                self?.loggedOut()
-            } else {
-                self?.errorLoggingOut.send(true)
+            } catch {
+                self.errorLoggingOut.send(true)
             }
         }
+//        apiService.logout { [weak self] success in
+//            if success {
+//                LikesAPIService.shared.LikedPostsCache.removeAll()
+//                ViewController.admin = nil
+//                ViewController.username = nil
+//                LikeCache.shared.removeAll()
+//                ClipCache.shared.removeAll()
+//                let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
+//                Task {
+//                    do {
+//                        try await FirestoreManager.shared.upload(fcmTokenModel)
+//                        UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
+//                    } catch {
+//                        print(String(describing: error))
+//                    }
+//                }
+////                self?.loggedOut()
+//            } else {
+//                self?.errorLoggingOut.send(true)
+//            }
+//        }
     }
     func resetPassword() {
-        apiService.sendResetPassword(to: UserDefaults.currentUser.email) { [weak self] success in
-            self?.successfullySentResetPassword.send(success)
+        Task {
+            do {
+                try await apiService.forgotPassword(for: UserDefaults.currentUser.email)
+                self.successfullySentResetPassword.send(true)
+            } catch {
+                self.successfullySentResetPassword.send(false)
+            }
         }
     }
     // MARK: - Success

@@ -17,7 +17,7 @@ class FollowersDisplayTableViewCell: UITableViewCell {
     var user: Users?{
         didSet{
             self.username.text = "@\(user!.username)"
-            self.fullname.text = "\(user!.firstName) \(user!.lastName)"
+            self.fullname.text = user?.displayName
             guard let userID = user?.uid else {return}
             ImageAPIService.shared.getProfileImage(for: userID) { [weak self] image in
                 guard let self = self else {return}

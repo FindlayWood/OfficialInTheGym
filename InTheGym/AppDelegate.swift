@@ -54,41 +54,65 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func launchScreen() {
         window = UIWindow(frame: UIScreen.main.bounds)
-        let vc = LaunchPageViewController.instantiate()
-        window?.rootViewController = vc
-        window?.makeKeyAndVisible()
+        let vc = LaunchPageViewController()
+        guard let window else {return}
+        window.rootViewController = vc
+        window.makeKeyAndVisible()
+        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {})
     }
     func loggedInPlayer() {
         let navController = UINavigationController()
         let mainPlayerCoordinator = MainPlayerCoordinator(navigationController: navController)
         mainPlayerCoordinator.start()
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = navController
-        window?.makeKeyAndVisible()
+        guard let window else {return}
+        window.rootViewController = navController
+        window.makeKeyAndVisible()
+        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {})
     }
     func loggedInCoach() {
         let navController = UINavigationController()
         let mainCoachCoordinator = MainCoachCoordinator(navigationController: navController)
         mainCoachCoordinator.start()
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = navController
-        window?.makeKeyAndVisible()
+        guard let window else {return}
+        window.rootViewController = navController
+        window.makeKeyAndVisible()
+        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
     }
     func nilUser() {
         let navController = UINavigationController()
         let _ = LoginComposition(navigationController: navController).loginKitInterface.compose()
-//        let signUpCoordinator = SignUpCoordinator(navigationController: navController)
-//        signUpCoordinator.start()
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = navController
-        window?.makeKeyAndVisible()
+        guard let window else {return}
+        window.rootViewController = navController
+        window.makeKeyAndVisible()
+        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
+    }
+    func accountCreation(email: String, uid: String) {
+        let navController = UINavigationController()
+        let _ = AccountCreationComposition(navigationController: navController, email: email, uid: uid).accountCreationKitInterface.compose()
+        window = UIWindow(frame: UIScreen.main.bounds)
+        guard let window else {return}
+        window.rootViewController = navController
+        window.makeKeyAndVisible()
+        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
     }
     func verifyScreen() {
         let vc = VerifyAccountViewController()
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = vc
-        window?.makeKeyAndVisible()
-        
+        guard let window else {return}
+        window.rootViewController = vc
+        window.makeKeyAndVisible()
+        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
+    }
+    func accountCreatedScreen() {
+        let vc = AccountCreatedViewController()
+        window = UIWindow(frame: UIScreen.main.bounds)
+        guard let window else {return}
+        window.rootViewController = vc
+        window.makeKeyAndVisible()
+        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

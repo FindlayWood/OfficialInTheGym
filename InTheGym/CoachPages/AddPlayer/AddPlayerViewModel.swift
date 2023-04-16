@@ -53,7 +53,7 @@ class AddPlayerViewModel: ObservableObject {
             Task { @MainActor in
                 do {
                     let models: [Users] = try await apiService.searchTextQueryModelAsync(model: searchModel)
-                    let filteredUsers = models.filter { !($0.admin) }
+                    let filteredUsers = models.filter { !($0.accountType == .coach) }
                     initCellModels(from: filteredUsers)
                 } catch {
                     isLoading = false

@@ -42,28 +42,28 @@ class SignUpUserViewModel:NSObject {
     
     func signUp(){
         // create new user
-        Auth.auth().createUser(withEmail: user.email, password: password) { (user, error) in
-            if error == nil{
-                self.haptic.prepare()
-                
-                // create new user tokens
-                let userID = Auth.auth().currentUser!.uid
-                let user = Auth.auth().currentUser!
-                
-                user.sendEmailVerification()
-                
-                // data to upload to firebase
-                let userData = ["email":self.user.email,
-                                "username":self.user.username,
-                                "admin": self.user.admin,
-                                "firstName": self.user.firstName,
-                "lastName": self.user.lastName] as [String:Any]
-                
-                self.userRef.child(userID).setValue(userData)
-                self.usernameRef.childByAutoId().setValue(self.user.username)
-                
-            }
-        }
+//        Auth.auth().createUser(withEmail: user.email, password: password) { (user, error) in
+//            if error == nil{
+//                self.haptic.prepare()
+//                
+//                // create new user tokens
+//                let userID = Auth.auth().currentUser!.uid
+//                let user = Auth.auth().currentUser!
+//                
+//                user.sendEmailVerification()
+//                
+//                // data to upload to firebase
+//                let userData = ["email":self.user.email,
+//                                "username":self.user.username,
+//                                "admin": self.user.admin,
+//                                "firstName": self.user.firstName,
+//                "lastName": self.user.lastName] as [String:Any]
+//                
+//                self.userRef.child(userID).setValue(userData)
+//                self.usernameRef.childByAutoId().setValue(self.user.username)
+//                
+//            }
+//        }
     }
     
     

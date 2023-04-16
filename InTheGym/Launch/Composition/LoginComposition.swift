@@ -48,13 +48,14 @@ class UserObserver {
     private init() {}
     
     var handle: DatabaseHandle?
+    var listenerRegistration: ListenerRegistration?
     
     func observeUser() {
         Auth.auth().addStateDidChangeListener { auth, user in
             if let user = user {
                 if user.isEmailVerified {
                     let userSearchModel = UserSearchModel(uid: user.uid)
-                    self.loadUserModel(from: userSearchModel)
+                    self.loadUserModel(from: userSearchModel, with: user.email)
                 } else {
                     self.verifyAccount()
                 }
@@ -64,14 +65,18 @@ class UserObserver {
         }
     }
     func observeAccountCreation(for userUID: String) {
-        let ref = Database.database().reference().child("users").child(userUID)
-        handle = ref.observe(.value) { [weak self] snapshot in
-            do {
-                let data = try snapshot.data(as: Users.self)
-                self?.login(data)
-                ref.removeObserver(withHandle: (self?.handle)!)
-            } catch {
+        let firestoreRef = Firestore.firestore().collection("Users").document(userUID)
+        listenerRegistration = firestoreRef.addSnapshotListener { [weak self] snapshot, error in
+            if let error {
                 print(String(describing: error))
+            } else if let snapshot {
+                do {
+                    let data = try snapshot.data(as: Users.self)
+                    self?.setCurrentUser(data)
+                    self?.accountCreated()
+                } catch {
+                    print(String(describing: error))
+                }
             }
         }
     }
@@ -80,6 +85,7 @@ class UserObserver {
     @Published var error: Error?
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
+    var firestoreService: FirestoreService = FirestoreManager.shared
     var authService: AuthManagerService = FirebaseAuthManager.shared
     var userService: CurrentUserService = CurrentUserManager.shared
     // MARK: - Initializer
@@ -106,8 +112,8 @@ class UserObserver {
         } else {
             login(UserDefaults.currentUser)
             FirebaseAuthManager.currentlyLoggedInUser = UserDefaults.currentUser
-            ViewController.admin = UserDefaults.currentUser.admin /// depreciated
-            ViewController.username = UserDefaults.currentUser.username /// depreciated
+//            ViewController.admin = UserDefaults.currentUser.accountType == .coach /// depreciated
+//            ViewController.username = UserDefaults.currentUser.username /// depreciated
             backgroundUpdate()
             Task {
                 await SubscriptionManager.shared.launch()
@@ -116,22 +122,22 @@ class UserObserver {
         }
     }
     private func checkFirebase() {
-        authService.checkForCurrentUser { [weak self] result in
-            switch result {
-            case .success(let firebaseUser):
+        Task {
+            do {
+                let firebaseUser = try await authService.checkForCurrentUser()
                 let userSearchModel = UserSearchModel(uid: firebaseUser.uid)
-                self?.loadUserModel(from: userSearchModel)
-                self?.observeUser()
-            case .failure(let error):
-                self?.checkingError = error
-                self?.observeUser()
+                self.loadUserModel(from: userSearchModel, with: firebaseUser.email)
+                self.observeUser()
+            } catch {
+                self.checkingError = .noUser
+                self.observeUser()
             }
         }
     }
-    private func loadUserModel(from model: UserSearchModel) {
+    private func loadUserModel(from model: UserSearchModel, with email: String?) {
         Task {
             do {
-                let userModel: Users = try await apiService.fetchSingleInstanceAsync(of: model)
+                let userModel: Users = try await firestoreService.read(at: "Users/\(model.uid)")
                 login(userModel)
                 UserDefaults.currentUser = userModel
                 userService.storeCurrentUser(userModel)
@@ -140,7 +146,8 @@ class UserObserver {
 //                ViewController.admin = userModel.admin /// depreciated
                 await SubscriptionManager.shared.launch()
             } catch {
-                self.observeAccountCreation(for: model.uid)
+                guard let email else { return }
+                self.createAccount(email: email, uid: model.uid)
             }
         }
     }
@@ -162,10 +169,25 @@ class UserObserver {
         }
     }
     
+    func setCurrentUser(_ userModel: Users) {
+        UserDefaults.currentUser = userModel
+        FirebaseAuthManager.currentlyLoggedInUser = userModel
+//        ViewController.admin = UserDefaults.currentUser.accountType == .coach /// depreciated
+//        ViewController.username = UserDefaults.currentUser.username /// depreciated
+        Task {
+            await SubscriptionManager.shared.launch()
+        }
+    }
+    
+    func toTheApp() {
+        listenerRegistration?.remove()
+        login(UserDefaults.currentUser)
+    }
+    
     func login(_ userModel: Users) {
         DispatchQueue.main.async {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            if userModel.admin {
+            if userModel.accountType == .coach {
                 appDelegate.loggedInCoach()
             } else {
                 appDelegate.loggedInPlayer()
@@ -177,6 +199,21 @@ class UserObserver {
         DispatchQueue.main.async {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.verifyScreen()
+        }
+    }
+    
+    func createAccount(email: String, uid: String) {
+        observeAccountCreation(for: uid)
+        DispatchQueue.main.async {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.accountCreation(email: email, uid: uid)
+        }
+    }
+    
+    func accountCreated() {
+        DispatchQueue.main.async {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.accountCreatedScreen()
         }
     }
     

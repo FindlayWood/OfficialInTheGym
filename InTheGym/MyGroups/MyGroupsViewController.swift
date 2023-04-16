@@ -48,7 +48,7 @@ class MyGroupsViewController: UIViewController {
     
     // MARK: - Nav Bar
     func initNavBar(){
-        if UserDefaults.currentUser.admin {
+        if UserDefaults.currentUser.accountType == .coach {
             let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewGroup(_:)))
             self.navigationItem.rightBarButtonItem = addButton
         }

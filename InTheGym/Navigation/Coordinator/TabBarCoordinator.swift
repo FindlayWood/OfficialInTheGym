@@ -69,7 +69,7 @@ class TabBarCoordinator: Coordinator {
         let myProfileCoord = MyProfileCoordinator(navigationController: myProfileNavigationController)
         
         
-        if UserDefaults.currentUser.admin {
+        if UserDefaults.currentUser.accountType == .coach {
             tabBarController.viewControllers = [timelineNavigationController,
                                                 discoverNavigationController,
                                                 playersNavigationController,
@@ -89,7 +89,7 @@ class TabBarCoordinator: Coordinator {
         coordinate(to: timeLineCoord)
         coordinate(to: discoverCoord)
         coordinate(to: myProfileCoord)
-        if UserDefaults.currentUser.admin {
+        if UserDefaults.currentUser.accountType == .coach {
             coordinate(to: playerCoord)
         } else {
             coordinate(to: workoutsCoord)

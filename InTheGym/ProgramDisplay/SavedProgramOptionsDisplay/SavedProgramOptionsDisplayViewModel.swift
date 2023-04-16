@@ -44,7 +44,7 @@ class SavedProgramOptionsDisplayViewModel {
     // MARK: - Functions
     func loadOptions() {
         isLoading = true
-        if UserDefaults.currentUser.admin { baseOptions.append(.assign) }
+        if UserDefaults.currentUser.accountType == .coach { baseOptions.append(.assign) }
         let refModel = MyProgramReferenceModel(id: savedProgram.id)
         apiService.checkExistence(of: refModel) { [weak self] result in
             guard let self = self else {return}

@@ -68,46 +68,46 @@ class CoachInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                 
                 
                 
-                self.DBRef.child("users").child(userID!).observeSingleEvent(of: .value) { (snapshot) in
-                            if let snap = snapshot.value as? [String:Any]{
-                                self.tabA.append(ViewController.username)
-                                let email = snap["email"] as? String
-                                self.tabA.append(email!)
-                                let numberOfWorkouts = snap["NumberOfWorkouts"] as? Int
-                                self.tabA.append("\(numberOfWorkouts ?? 0)")
-                                
-                                    
-                                    
-                                switch indexPath.row {
-                                            case 0:
-                                                cell.pic.image = UIImage(named: "benchpress_icon")
-                                                cell.QLabel.text = "AccountType:"
-                                                cell.ALabel.text = "Coach"
-                                            case 1:
-                                                cell.pic.image = UIImage(named: "name_icon")
-                                                cell.QLabel.text = "Username:"
-                                                cell.ALabel.text = ViewController.username
-                                            case 2:
-                                                cell.pic.image = UIImage(named: "email2_icon")
-                                                cell.QLabel.text = "Email:"
-                                                cell.ALabel.text = self.tabA[1]
-                                            case 3:
-                                                cell.pic.image = UIImage(named: "numbers_icon")
-                                                cell.QLabel.text = "Players:"
-                                                cell.ALabel.text = "\(self.playerCount ?? 0)"
-                                                cell.ALabel.textColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
-                                                cell.ALabel.font = UIFont.boldSystemFont(ofSize: 30)
-                                            case 4:
-                                                cell.pic.image = UIImage(named: "Set Workout")
-                                                cell.QLabel.text = "Number of Workouts:"
-                                                cell.ALabel.text = self.tabA[2]
-                                                cell.ALabel.textColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
-                                                cell.ALabel.font = UIFont.boldSystemFont(ofSize: 30)
-                                            default:
-                                                print("ouch")
-                                            }
-                                }
-                            }
+//                self.DBRef.child("users").child(userID!).observeSingleEvent(of: .value) { (snapshot) in
+//                            if let snap = snapshot.value as? [String:Any]{
+//                                self.tabA.append(ViewController.username)
+//                                let email = snap["email"] as? String
+//                                self.tabA.append(email!)
+//                                let numberOfWorkouts = snap["NumberOfWorkouts"] as? Int
+//                                self.tabA.append("\(numberOfWorkouts ?? 0)")
+//                                
+//                                    
+//                                    
+//                                switch indexPath.row {
+//                                            case 0:
+//                                                cell.pic.image = UIImage(named: "benchpress_icon")
+//                                                cell.QLabel.text = "AccountType:"
+//                                                cell.ALabel.text = "Coach"
+//                                            case 1:
+//                                                cell.pic.image = UIImage(named: "name_icon")
+//                                                cell.QLabel.text = "Username:"
+//                                                cell.ALabel.text = ViewController.username
+//                                            case 2:
+//                                                cell.pic.image = UIImage(named: "email2_icon")
+//                                                cell.QLabel.text = "Email:"
+//                                                cell.ALabel.text = self.tabA[1]
+//                                            case 3:
+//                                                cell.pic.image = UIImage(named: "numbers_icon")
+//                                                cell.QLabel.text = "Players:"
+//                                                cell.ALabel.text = "\(self.playerCount ?? 0)"
+//                                                cell.ALabel.textColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
+//                                                cell.ALabel.font = UIFont.boldSystemFont(ofSize: 30)
+//                                            case 4:
+//                                                cell.pic.image = UIImage(named: "Set Workout")
+//                                                cell.QLabel.text = "Number of Workouts:"
+//                                                cell.ALabel.text = self.tabA[2]
+//                                                cell.ALabel.textColor = #colorLiteral(red: 0, green: 0.4618991017, blue: 1, alpha: 1)
+//                                                cell.ALabel.font = UIFont.boldSystemFont(ofSize: 30)
+//                                            default:
+//                                                print("ouch")
+//                                            }
+//                                }
+//                            }
 
             }
             

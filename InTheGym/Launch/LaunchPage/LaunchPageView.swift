@@ -18,10 +18,21 @@ struct LaunchPageView: View {
             Image("inthegym_icon3")
                 .resizable()
                 .scaledToFit()
-                .frame(maxWidth: .infinity)
+                .frame(width: 240, height: 128)
             
             Spacer()
+            Text("UALLAS")
+                .font(.body.italic())
+                .foregroundColor(.secondary)
+                .frame(maxWidth: .infinity)
         }
         .padding()
+        .background(Color(.systemBackground).ignoresSafeArea())
+    }
+}
+
+struct LaunchPageView_Previews: PreviewProvider {
+    static var previews: some View {
+        LaunchPageView()
     }
 }

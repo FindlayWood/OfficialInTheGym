@@ -74,7 +74,7 @@ extension MyProfileCoordinator {
         child.start()
     }
     func showMoreInfo() {
-        if UserDefaults.currentUser.admin {
+        if UserDefaults.currentUser.accountType == .coach {
             let child = CoachProfileMoreCoordinator(navigationController: navigationController)
             childCoordinators.append(child)
             child.start()

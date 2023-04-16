@@ -222,7 +222,7 @@ class FirebaseAPIWorkoutManager {
         let workoutRef = baseRef.child("Workouts").child(userID).childByAutoId()
         let workoutID = workoutRef.key!
         let workoutData = ["completed":false,
-                           "createdBy":ViewController.username!,
+                           "createdBy":UserDefaults.currentUser.username,
                            "title":title,
                            "startTime":Date.timeIntervalSinceReferenceDate,
                            "liveWorkout": true,

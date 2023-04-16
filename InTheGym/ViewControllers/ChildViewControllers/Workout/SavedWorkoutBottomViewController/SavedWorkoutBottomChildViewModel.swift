@@ -74,7 +74,7 @@ class SavedWorkoutBottomChildViewModel: ObservableObject {
 //            options.insert(.viewWorkoutStats, at: 2)
 //            optionsList.insert(.viewWorkoutStats, at: 2)
 //        }
-        if UserDefaults.currentUser.admin {
+        if UserDefaults.currentUser.accountType == .coach {
             options.insert(.assign, at: 0)
             optionsList.insert(.assign, at: 0)
         }

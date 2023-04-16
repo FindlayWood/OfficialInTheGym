@@ -224,6 +224,10 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         let dbref = Database.database().reference().child(data.internalPath)
         try await dbref.setValue(data)
     }
+    func upload(data: Codable, at path: String) async throws {
+        let ref = Database.database().reference().child(path)
+        try await ref.setValue(data)
+    }
 
     
     func multiLocationUploadAsync(data: [FirebaseMultiUploadDataPoint]) async throws {
@@ -262,6 +266,11 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     func checkExistenceAsync<Model:FirebaseInstance>(of model: Model) async throws -> Bool {
         let dbref = Database.database().reference().child(model.internalPath)
         let (snapshot, _) = await dbref.observeSingleEventAndPreviousSiblingKey(of: .value)
+        return snapshot.exists()
+    }
+    func checkExistence(at path: String) async throws -> Bool {
+        let ref = Database.database().reference().child(path)
+        let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
         return snapshot.exists()
     }
     func childCountAsync<Model:FirebaseInstance>(of model: Model) async throws -> Int {
@@ -363,4 +372,8 @@ protocol FirebaseDatabaseManagerService {
     func searchTextQueryModelAsync<Model: FirebaseQueryModel, T: Decodable>(model: Model) async throws -> [T]
     func fetchSingleObjectInstanceAsync<M: FirebaseInstance, T: Decodable>(of model: M) async throws -> [T]
     func fetchLimitedInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model, limit: Int) async throws -> [T]
+    
+    // MARK: - Modular
+    func checkExistence(at path: String) async throws -> Bool
+    func upload(data: Codable, at path: String) async throws
  }
