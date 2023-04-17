@@ -45,14 +45,6 @@ class MyProfileView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    var notificationsButton: UIButton = {
-        let button = UIButton()
-        let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
-        button.setImage(UIImage(systemName: "bell.fill", withConfiguration: configuration), for: .normal)
-        button.tintColor = .darkColour
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
     
     var tableview: UITableView = {
         let view = UITableView()

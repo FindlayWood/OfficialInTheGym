@@ -47,7 +47,6 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
     // MARK: - Display
     func initDisplay(){
         display.moreButton.addTarget(self, action: #selector(showMore(_:)), for: .touchUpInside)
-        display.notificationsButton.addTarget(self, action: #selector(showNotifications(_:)), for: .touchUpInside)
         display.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         display.tableview.refreshControl = display.refreshControl
     }
@@ -157,9 +156,6 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
     
     @objc func showMore(_ sender: UIButton) {
         coordinator?.showMoreInfo()
-    }
-    @objc func showNotifications(_ sender: UIButton) {
-        coordinator?.showNotifications()
     }
     @objc func handleRefresh(_ sender: AnyObject) {
         viewModel.fetchPostRefs()

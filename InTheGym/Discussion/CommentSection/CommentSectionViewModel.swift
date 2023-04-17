@@ -183,10 +183,6 @@ class CommentSectionViewModel: ObservableObject {
         }
     }
     
-    func sendNotifications() {
-        
-    }
-    
     // MARK: - Retreive Functions
     func getWorkout(from tappedPost: PostModel) {
         if let workoutID = tappedPost.workoutID {
