@@ -42,7 +42,6 @@ extension DiscoverCoordinator {
     
     func workoutSelected(_ model: SavedWorkoutModel) {
         let child = WorkoutDiscoveryCoordinator(navigationController: navigationController, savedWorkoutModel: model)
-//        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
         childCoordinators.append(child)
         child.start()
     }
@@ -51,10 +50,6 @@ extension DiscoverCoordinator {
         let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: model)
         childCoordinators.append(child)
         child.start()
-    }
-    
-    func programSelected(_ model: SavedProgramModel) {
-        
     }
     
     func clipSelected(_ model: ClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC) {
@@ -93,11 +88,6 @@ extension DiscoverCoordinator {
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
-//    func userSelected(_ user: Users) {
-//        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
-//        childCoordinators.append(child)
-//        child.start()
-//    }
 }
 extension DiscoverCoordinator: UserSearchFlow {
     func userSelected(_ user: Users) {
