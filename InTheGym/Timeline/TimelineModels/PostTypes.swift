@@ -10,7 +10,7 @@ import Foundation
 
 enum PostTypes {
     case post(PostModel)
-    case groupPost(GroupPost)
+    
 }
 
 protocol DisplayablePost {

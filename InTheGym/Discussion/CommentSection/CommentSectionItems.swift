@@ -21,6 +21,5 @@ enum CommentItems: Hashable {
 
 enum GroupCommentItems: Hashable {
     case mainPost(PostModel)
-    case mainGroupPost(GroupPost)
     case comment(Comment)
 }

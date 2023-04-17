@@ -64,11 +64,6 @@ class DisplayNotificationsViewModel {
                 guard let user = try? result.get() else {return}
                 self?.destinationPublisher.send(.user(user))
             }
-        case .GroupLikedPost, .GroupReply:
-            // group post
-            guard let groupID = model.groupID,
-                  let postID = model.postID else {return}
-            let groupPostSearchModel = GroupPostSearchModel(groupID: groupID, postID: postID)
         case .NewRequest:
             // request page
             self.destinationPublisher.send(.newRequest)
@@ -88,7 +83,6 @@ class DisplayNotificationsViewModel {
 
 enum NotificationDestination {
     case post(PostModel)
-    case groupPost(GroupPost)
     case user(Users)
     case newRequest
     case acceptedRequest(Users)

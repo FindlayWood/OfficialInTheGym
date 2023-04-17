@@ -80,3 +80,6 @@ extension SavedWorkoutCoordinator {
     }
 
 }
+protocol SavedWorkoutsFlow: AnyObject {
+    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?)
+}

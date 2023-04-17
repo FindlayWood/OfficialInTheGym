@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 enum ProfileOptions: CaseIterable {
-    case groups
     case notifications
     case savedWorkouts
     case createdWorkouts
@@ -20,8 +19,6 @@ enum ProfileOptions: CaseIterable {
     
     var image: UIImage {
         switch self {
-        case .groups:
-            return UIImage(named: "groups_icon")!
         case .notifications:
             return UIImage(named: "bell_icon")!
         case .savedWorkouts:

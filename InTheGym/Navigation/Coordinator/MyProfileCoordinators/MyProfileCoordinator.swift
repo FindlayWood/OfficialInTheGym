@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 protocol MyProfileFlow: TimelineFlow {
-    func showGroups()
     func showNotifications()
     func showSavedWorkouts()
     func showCreatedWorkouts()
@@ -49,11 +48,6 @@ class MyProfileCoordinator: NSObject, Coordinator {
 
 //MARK: - Flow Methods
 extension MyProfileCoordinator {
-    func showGroups() {
-        let child = GroupCoordinator(navigationController: navigationController)
-        childCoordinators.append(child)
-        child.start()
-    }
     func showNotifications() {
         let child = NotificationsCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
@@ -179,10 +173,6 @@ extension MyProfileCoordinator: UINavigationControllerDelegate {
         
         if let UserViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(UserViewController.coordinator)
-        }
-        
-        if let GroupViewController = fromViewController as? MyGroupsViewController {
-            childDidFinish(GroupViewController.coordinator)
         }
         
         if let NotificationsController = fromViewController as? DisplayNotificationsViewController {

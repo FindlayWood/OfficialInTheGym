@@ -12,8 +12,6 @@ enum NotificationType: String, Codable {
     case LikedPost = "LikedPost"
     case Reply = "Reply"
     case Followed = "Followed"
-    case GroupLikedPost = "GroupLikedPost"
-    case GroupReply = "GroupReply"
     case NewRequest = "NewRequest"
     case AcceptedRequest = "AcceptedRequest"
     case NewWorkout = "NewWorkout"
@@ -26,10 +24,6 @@ enum NotificationType: String, Codable {
             return "replied to your post."
         case .Followed:
             return "started following you."
-        case .GroupLikedPost:
-            return "liked your group post."
-        case .GroupReply:
-            return "replied to your group post."
         case .NewRequest:
             return "sent you a coach request."
         case .AcceptedRequest:

@@ -43,7 +43,6 @@ class CreateNewPostViewController: UIViewController {
     func addChildView() {
         childContentView = .init(
             viewModel: viewModel,
-            isGroup: viewModel.postable is GroupPost,
             post: {
                 self.viewModel.postAction()
             }, addAttachments: {

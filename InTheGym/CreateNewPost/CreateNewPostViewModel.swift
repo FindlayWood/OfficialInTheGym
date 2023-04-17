@@ -83,8 +83,6 @@ class CreateNewPostViewModel {
         postable.time = Date().timeIntervalSince1970
         if let postModel = postable as? PostModel {
             post(postModel)
-        } else if let groupPost = postable as? GroupPost {
-            post(groupPost)
         }
     }
     

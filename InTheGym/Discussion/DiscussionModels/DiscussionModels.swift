@@ -44,24 +44,3 @@ extension UploadCommentModel {
         return "Posts/\(comment.postID)/replyCount"
     }
 }
-
-
-// MARK: - Group Comment Upload Model
-struct UploadGroupCommentModel {
-    var comment: Comment
-    var groupID: String
-    
-    func uploadPoints() -> [FirebaseMultiUploadDataPoint] {
-        var points = [FirebaseMultiUploadDataPoint]()
-        points.append(FirebaseMultiUploadDataPoint(value: ServerValue.increment(1), path: replyCountPath))
-        if let commentPoint = comment.toFirebaseJSON() {
-            points.append(commentPoint)
-        }
-        return points
-    }
-}
-extension UploadGroupCommentModel {
-    var replyCountPath: String {
-        return "GroupPosts/\(groupID)/\(comment.postID)/replyCount"
-    }
-}

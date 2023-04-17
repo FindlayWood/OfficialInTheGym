@@ -73,8 +73,6 @@ class DisplayNotificationsViewController: UIViewController {
         switch destination {
         case .post(let post):
             coordinator?.showPost(post: post)
-        case .groupPost(let groupPost):
-            coordinator?.showGroupPost(post: groupPost)
         case .user(let users):
             coordinator?.showUser(user: users)
         case .newRequest:
