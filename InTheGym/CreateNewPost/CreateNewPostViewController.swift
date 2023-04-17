@@ -16,8 +16,6 @@ class CreateNewPostViewController: UIViewController {
 
     var display = CreateNewPostView()
     
-    var assignee: Assignable!
-    
     var viewModel = NewPostViewModel()
     
     private var subscriptions = Set<AnyCancellable>()

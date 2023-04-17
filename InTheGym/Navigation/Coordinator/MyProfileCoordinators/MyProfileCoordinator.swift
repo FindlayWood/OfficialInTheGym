@@ -56,11 +56,6 @@ extension MyProfileCoordinator {
         let vc = StampsPreviewViewController()
         navigationController.present(vc, animated: true)
     }
-    func showCreatedWorkouts() {
-        let child = CreatedWorkoutsCoordinator(navigationController: navigationController)
-        childCoordinators.append(child)
-        child.start()
-    }
     func showMoreInfo() {
         if UserDefaults.currentUser.accountType == .coach {
             let child = CoachProfileMoreCoordinator(navigationController: navigationController)
@@ -169,6 +164,4 @@ extension MyProfileCoordinator: UINavigationControllerDelegate {
             childDidFinish(UserViewController.coordinator)
         }
     }
-    
-
 }

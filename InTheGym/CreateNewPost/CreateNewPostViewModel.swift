@@ -33,8 +33,6 @@ class CreateNewPostViewModel {
     var attachedPhoto: attachedPhoto?
     var attachedClip: attachedClip?
     
-    var assignee: Assignable!
-    
     var apiService: FirebaseDatabaseManagerService
     
     var successfullyPosted: Bool = false {

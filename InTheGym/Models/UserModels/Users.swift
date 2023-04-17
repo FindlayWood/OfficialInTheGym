@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Users Model
 /// users object containing all user profile info
-struct Users: Codable, Hashable, Assignable {
+struct Users: Codable, Hashable {
 //    var admin: Bool
     var email: String
     var username: String

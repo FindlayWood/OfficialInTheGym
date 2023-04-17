@@ -18,10 +18,6 @@ protocol CreationFlow: AnyObject {
     func completeExercise()
 }
 
-protocol RegularCreationFlow: CreationFlow {
-    func goToUploadPage(with uploadable: UploadableWorkout)
-}
-
 protocol LiveWorkoutDisplayFlow: AnyObject {
     func liveWorkoutCompleted()
     func addSet(_ exercise: exercise)
