@@ -49,7 +49,6 @@ class DisplayEMOMViewModel {
     var mainTimerVariable = 600
     
     // MARK: - Properties
-    var workout: workout!
     var position: Int!
     
     // MARK: - API Service

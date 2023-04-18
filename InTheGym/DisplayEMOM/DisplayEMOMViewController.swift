@@ -19,8 +19,6 @@ class DisplayEMOMViewController: UIViewController {
     var display = DisplayEMOMView()
     
     var viewModel = DisplayEMOMViewModel()
-    
-    var emom: EMOM!
 
     // MARK: - View
     override func loadView() {
@@ -33,11 +31,6 @@ class DisplayEMOMViewController: UIViewController {
         initViewModel()
         initDisplay()
     }
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        display.frame = getFullViewableFrame()
-//        view.addSubview(display)
-//    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         editNavBarColour(to: .darkColour)
@@ -51,7 +44,6 @@ class DisplayEMOMViewController: UIViewController {
     }
     // MARK: - Display
     func initDisplay() {
-//        navigationItem.rightBarButtonItem?.isEnabled = !viewModel.emomModel.completed
         let exerciseOne = viewModel.emomModel.exercises[viewModel.exerciseIndex]
         display.exerciseView.configure(with: exerciseOne)
         display.initialMainTime.text = viewModel.emomModel.timeLimit.convertToTime()

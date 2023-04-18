@@ -214,35 +214,6 @@ class FirebaseAPIWorkoutManager {
             return convertToKG(from: pounds)
         }
     }
-    
-    
-// MARK: LiveWorkout Methods
-    func startLiveWorkout(with title: String, completion: @escaping (liveWorkout?) -> Void) {
-        let userID = UserDefaults.currentUser.uid
-        let workoutRef = baseRef.child("Workouts").child(userID).childByAutoId()
-        let workoutID = workoutRef.key!
-        let workoutData = ["completed":false,
-                           "createdBy":UserDefaults.currentUser.username,
-                           "title":title,
-                           "startTime":Date.timeIntervalSinceReferenceDate,
-                           "liveWorkout": true,
-                           "creatorID":userID,
-                           "workoutID":workoutID,
-                           "fromDiscover":false,
-                           "assigned":false] as [String : AnyObject]
-        
-        workoutRef.setValue(workoutData) { error, snapshot in
-            if let error = error {
-                print(error.localizedDescription)
-                completion(nil)
-            } else {
-                guard let workoutModel = liveWorkout(data: workoutData) else {
-                    completion(nil)
-                    return}
-                completion(workoutModel)
-            }
-        }
-    }
 }
 
 enum Weight {

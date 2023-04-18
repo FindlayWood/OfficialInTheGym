@@ -9,12 +9,6 @@
 import Foundation
 import UIKit
 
-protocol DiscoverFlow {
-    func wodSelected(workout: WorkoutDelegate)
-    func workoutSelected(workout: WorkoutDelegate)
-    func search()
-}
-
 class DiscoverCoordinator: NSObject, Coordinator {
 
     var childCoordinators = [Coordinator]()

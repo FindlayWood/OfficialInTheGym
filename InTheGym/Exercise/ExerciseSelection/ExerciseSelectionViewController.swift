@@ -14,8 +14,6 @@ class ExerciseSelectionViewController: UIViewController {
     //MARK: - Properties
     weak var coordinator: ExerciseSelectionFlow?
     
-    var newExercise: exercise?
-    
     var display = ExerciseSelectionView()
     
     var viewModel = ExerciseSelectionViewModel()
@@ -117,11 +115,7 @@ extension ExerciseSelectionViewController: ExerciseSelectionProtocol {
         return viewModel.numberOfItems(at: section)
     }
     func numberOfSections() -> Int {
-        if coordinator is CircuitCoordinator || coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator {
-            return 4
-        } else {
-            return viewModel.numberOfSections()
-        }
+        return viewModel.numberOfSections()
     }
     func itemSelected(at indexPath: IndexPath) {
         let exercise = viewModel.getData(at: indexPath)
@@ -142,17 +136,11 @@ extension ExerciseSelectionViewController: UISearchBarDelegate {
         viewModel.filterExercises(with: searchText)
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-//        if coordinator is RegularWorkoutCreationCoordinator || coordinator is LiveWorkoutExerciseCreationCoordinator {
-//            display.searchBegins()
-//        }
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         display.searchBar.resignFirstResponder()
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         display.searchBar.resignFirstResponder()
-//        if coordinator is RegularWorkoutCreationCoordinator || coordinator is LiveWorkoutExerciseCreationCoordinator {
-//            display.searchEnded()
-//        }
     }
 }

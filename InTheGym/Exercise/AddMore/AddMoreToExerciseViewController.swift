@@ -11,12 +11,9 @@ import UIKit
 class AddMoreToExerciseViewController: UIViewController {
     
     // MARK: - Properties
-//    weak var coordinator: AddMoreToExerciseCoordinator?
     weak var coordinator: FinishedExerciseCreationFlow?
     
     var display = AddMoreToExerciseView()
-    
-    var newExercise: exercise?
     
     var adapter: AddMoreToExerciseAdapter!
     
