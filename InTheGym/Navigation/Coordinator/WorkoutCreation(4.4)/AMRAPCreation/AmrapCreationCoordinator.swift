@@ -67,9 +67,6 @@ extension AMRAPCreationCoordinator: ExerciseSelectionFlow {
     func addAmrap() {
         
     }
-    func addEmom() {
-        
-    }
 }
 // reps selection
 extension AMRAPCreationCoordinator: RepSelectionFlow {

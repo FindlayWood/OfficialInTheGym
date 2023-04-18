@@ -73,7 +73,6 @@ class WorkoutCreationViewController: UIViewController {
         coordinator?.completedExercise = viewModel.addedExercisePublisher
         coordinator?.completedCircuit = viewModel.addedCircuitPublisher
         coordinator?.completedAmrap = viewModel.addedAmrapPublisher
-        coordinator?.completedEMOM = viewModel.addedEmomPublisher
         
         viewModel.$exercises
             .dropFirst()
@@ -143,10 +142,6 @@ extension WorkoutCreationViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: CircuitCreationTableViewCell.cellID, for: indexPath) as! CircuitCreationTableViewCell
                 cell.configure(with: model)
                 return cell
-            case .emom(let model):
-                let cell = tableView.dequeueReusableCell(withIdentifier: EmomCreationTableViewCell.cellID, for: indexPath) as! EmomCreationTableViewCell
-                cell.configure(with: model)
-                return cell
             case .amrap(let model):
                 let cell = tableView.dequeueReusableCell(withIdentifier: AmrapCreationTableViewCell.cellID, for: indexPath) as! AmrapCreationTableViewCell
                 cell.configure(with: model)
@@ -173,8 +168,6 @@ extension WorkoutCreationViewController {
                 currentSnapshot.appendItems([.exercise(type as! ExerciseModel)], toSection: .main)
             case is CircuitModel:
                 currentSnapshot.appendItems([.circuit(type as! CircuitModel)], toSection: .main)
-            case is EMOMModel:
-                currentSnapshot.appendItems([.emom(type as! EMOMModel)], toSection: .main)
             case is AMRAPModel:
                 currentSnapshot.appendItems([.amrap(type as! AMRAPModel)], toSection: .main)
             default:
@@ -197,6 +190,5 @@ extension WorkoutCreationViewController {
 enum ExerciseRow: Hashable {
     case exercise(ExerciseModel)
     case circuit(CircuitModel)
-    case emom(EMOMModel)
     case amrap(AMRAPModel)
 }

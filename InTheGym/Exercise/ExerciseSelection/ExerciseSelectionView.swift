@@ -36,16 +36,6 @@ class ExerciseSelectionView: UIView {
         return view
     }()
     
-    var emomView: UIImageLabelView = {
-        let view = UIImageLabelView()
-        view.topImage.image = UIImage(named: "emom_icon")
-        view.bottomLabel.text = "EMOM"
-        view.bottomLabel.backgroundColor = .offWhiteColour
-        view.bottomLabel.textColor = .black
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     var topStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -109,7 +99,6 @@ private extension ExerciseSelectionView {
         backgroundColor = .secondarySystemBackground
         topStack.addArrangedSubview(circuitView)
         topStack.addArrangedSubview(amrapView)
-        topStack.addArrangedSubview(emomView)
 //        addSubview(topStack)
         addSubview(searchBar)
         addSubview(collectionView)
@@ -140,12 +129,10 @@ extension ExerciseSelectionView {
     public func hideStack() {
         circuitView.isHidden = true
         amrapView.isHidden = true
-        emomView.isHidden = true
     }
     public func showStack() {
         circuitView.isHidden = false
         amrapView.isHidden = false
-        emomView.isHidden = false
     }
     public func searchBegins() {
 //        UIView.animate(withDuration: 0.3) {

@@ -28,9 +28,8 @@ class SavedWorkoutModel: Codable, Hashable {
     var exercises: [ExerciseModel]?
     var circuits: [CircuitModel]?
     var amraps: [AMRAPModel]?
-    var emoms: [EMOMModel]?
     
-    init(title: String, isPrivate: Bool, exercises: [ExerciseModel], circuits: [CircuitModel], amraps: [AMRAPModel], emoms: [EMOMModel]) {
+    init(title: String, isPrivate: Bool, exercises: [ExerciseModel], circuits: [CircuitModel], amraps: [AMRAPModel]) {
         self.id = UUID().uuidString
         self.views = 0
         self.downloads = 0
@@ -45,7 +44,6 @@ class SavedWorkoutModel: Codable, Hashable {
         self.exercises = exercises
         self.circuits = circuits
         self.amraps = amraps
-        self.emoms = emoms
     }
     
     static func == (lhs: SavedWorkoutModel, rhs: SavedWorkoutModel) -> Bool {
@@ -75,7 +73,6 @@ extension SavedWorkoutModel {
         var totalExerciseCount = 0
         totalExerciseCount += exercises?.count ?? 0
         totalExerciseCount += circuits?.count ?? 0
-        totalExerciseCount += emoms?.count ?? 0
         totalExerciseCount += amraps?.count ?? 0
         return totalExerciseCount
     }
@@ -119,9 +116,8 @@ struct NewSavedWorkoutModel: Codable {
     var exercises: [ExerciseModel]?
     var circuits: [CircuitModel]?
     var amraps: [AMRAPModel]?
-    var emoms: [EMOMModel]?
     
-    init(title: String, isPrivate: Bool, exercises: [ExerciseModel], circuits: [CircuitModel], amraps: [AMRAPModel], emoms: [EMOMModel]) {
+    init(title: String, isPrivate: Bool, exercises: [ExerciseModel], circuits: [CircuitModel], amraps: [AMRAPModel]) {
         self.savedID = UUID().uuidString
         self.views = 0
         self.downloads = 0
@@ -135,7 +131,6 @@ struct NewSavedWorkoutModel: Codable {
         self.exercises = exercises
         self.circuits = circuits
         self.amraps = amraps
-        self.emoms = emoms
     }
 }
 extension NewSavedWorkoutModel: FirebaseInstance {

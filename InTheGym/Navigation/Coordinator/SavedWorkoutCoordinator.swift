@@ -53,11 +53,6 @@ extension SavedWorkoutCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func showEMOM(_ emom: EMOMModel) {
-        let vc = DisplayEMOMViewController()
-        vc.viewModel.emomModel = emom
-        navigationController.pushViewController(vc, animated: true)
-    }
     func showCircuit(_ circuit: CircuitModel) {
         let vc = DisplayCircuitViewController()
         vc.viewModel.circuitModel = circuit

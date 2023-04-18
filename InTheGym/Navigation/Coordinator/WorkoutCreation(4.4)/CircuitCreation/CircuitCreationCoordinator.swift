@@ -62,9 +62,6 @@ extension CircuitCreationCoordinator: ExerciseSelectionFlow {
     func addAmrap() {
         
     }
-    func addEmom() {
-        
-    }
 }
 // Set Selection
 extension CircuitCreationCoordinator: SetSelectionFlow {

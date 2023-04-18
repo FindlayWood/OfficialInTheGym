@@ -90,8 +90,6 @@ class ExerciseSelectionViewController: UIViewController {
         display.circuitView.addGestureRecognizer(circuitTap)
         let amrapTap = UITapGestureRecognizer(target: self, action: #selector(amrapTapped))
         display.amrapView.addGestureRecognizer(amrapTap)
-        let emomTap = UITapGestureRecognizer(target: self, action: #selector(emomTapped))
-        display.emomView.addGestureRecognizer(emomTap)
     }
     
     // MARK: - Actions
@@ -100,9 +98,6 @@ class ExerciseSelectionViewController: UIViewController {
     }
     @objc func amrapTapped() {
         coordinator?.addAmrap()
-    }
-    @objc func emomTapped() {
-        coordinator?.addEmom()
     }
 }
 

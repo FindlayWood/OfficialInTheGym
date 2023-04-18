@@ -30,7 +30,6 @@ class CoachPlayerWorkoutViewModel {
         exercises.append(contentsOf: workoutModel.exercises ?? [])
         exercises.append(contentsOf: workoutModel.circuits ?? [])
         exercises.append(contentsOf: workoutModel.amraps ?? [])
-        exercises.append(contentsOf: workoutModel.emoms ?? [])
         return exercises.sorted(by: { $0.workoutPosition < $1.workoutPosition} )
     }
     

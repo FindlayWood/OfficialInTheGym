@@ -100,10 +100,6 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
             .sink { [weak self] in self?.showDiscovery($0)}
             .store(in: &subscriptions)
         
-        childVC.dataSource.emomSelected
-            .sink { [weak self] in self?.emomSelected($0) }
-            .store(in: &subscriptions)
-        
         childVC.dataSource.circuitSelected
             .sink { [weak self] in self?.circuitSelected($0)}
             .store(in: &subscriptions)
@@ -192,9 +188,6 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
         viewModel.updatedAMRAP
             .sink { [weak self] in self?.childVC.dataSource.updateAMRAP($0)}
             .store(in: &subscriptions)
-        viewModel.updatedEMOM
-            .sink { [weak self] in self?.childVC.dataSource.updateEMOM($0)}
-            .store(in: &subscriptions)
     }
     // MARK: - RPE
     func rpe(index: IndexPath) {
@@ -257,8 +250,5 @@ extension WorkoutDisplayViewController {
     }
     func amrapSelected(_ amrap: AMRAPModel) {
         coordinator?.showAMRAP(amrap, viewModel.workout, viewModel.updatedAMRAP)
-    }
-    func emomSelected(_ emom: EMOMModel) {
-        coordinator?.showEMOM(emom, viewModel.workout, viewModel.updatedEMOM)
     }
 }

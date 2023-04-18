@@ -22,7 +22,6 @@ class SavedWorkoutDisplayViewModel {
         exercises.append(contentsOf: savedWorkout.exercises ?? [])
         exercises.append(contentsOf: savedWorkout.circuits ?? [])
         exercises.append(contentsOf: savedWorkout.amraps ?? [])
-        exercises.append(contentsOf: savedWorkout.emoms ?? [])
         return exercises.sorted(by: { $0.workoutPosition < $1.workoutPosition} )
     }()
     

@@ -31,7 +31,6 @@ class WorkoutModel: Codable, Hashable {
     var summary: String?
     var exercises: [ExerciseModel]?
     var circuits: [CircuitModel]?
-    var emoms: [EMOMModel]?
     var amraps: [AMRAPModel]?
     var liveWorkout: Bool?
 //    var id: String {
@@ -49,7 +48,6 @@ class WorkoutModel: Codable, Hashable {
         completed = false
         exercises = newSavedModel.exercises
         circuits = newSavedModel.circuits
-        emoms = newSavedModel.emoms
         amraps = newSavedModel.amraps
     }
     init(savedModel: SavedWorkoutModel, assignTo: String) {
@@ -63,7 +61,6 @@ class WorkoutModel: Codable, Hashable {
         completed = false
         exercises = savedModel.exercises
         circuits = savedModel.circuits
-        emoms = savedModel.emoms
         amraps = savedModel.amraps
     }
     
@@ -92,7 +89,6 @@ extension WorkoutModel {
         var totalExerciseCount = 0
         totalExerciseCount += exercises?.count ?? 0
         totalExerciseCount += circuits?.count ?? 0
-        totalExerciseCount += emoms?.count ?? 0
         totalExerciseCount += amraps?.count ?? 0
         return totalExerciseCount
     }

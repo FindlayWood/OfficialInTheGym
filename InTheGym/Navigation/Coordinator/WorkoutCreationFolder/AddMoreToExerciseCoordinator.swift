@@ -81,14 +81,6 @@ extension AddMoreToExerciseCoordinator {
                     break
                 }
             }
-        case .emom:
-            creationViewModel.addingDelegate.addExercise(creationViewModel.exercise)
-            for controller in viewControllers {
-                if controller.isKind(of: CreateEMOMViewController.self) {
-                    navigationController.popToViewController(controller, animated: true)
-                    break
-                }
-            }
         case .amrap:
             creationViewModel.addingDelegate.addExercise(creationViewModel.exercise)
             for controller in viewControllers {

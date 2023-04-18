@@ -14,7 +14,6 @@ class WorkoutExerciseCollectionDataSource: NSObject {
     
     // MARK: - Publisher
     var amrapSelected = PassthroughSubject<AMRAPModel,Never>()
-    var emomSelected = PassthroughSubject<EMOMModel,Never>()
     var circuitSelected = PassthroughSubject<CircuitModel,Never>()
     
     var rowSelected = PassthroughSubject<ExerciseRow,Never>()
@@ -76,10 +75,6 @@ class WorkoutExerciseCollectionDataSource: NSObject {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainWorkoutCircuitCollectionCell.reuseID, for: indexPath) as! MainWorkoutCircuitCollectionCell
                 cell.configure(with: model)
                 return cell
-            case .emom(let model):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainWorkoutEMOMCollectionCell.reuseID, for: indexPath) as! MainWorkoutEMOMCollectionCell
-                cell.configure(with: model)
-                return cell
             case .amrap(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainWorkoutAMRAPCollectionCell.reuseID, for: indexPath) as! MainWorkoutAMRAPCollectionCell
                 cell.configure(with: model)
@@ -104,8 +99,6 @@ class WorkoutExerciseCollectionDataSource: NSObject {
                 currentSnapshot.appendItems([.exercise(type as! ExerciseModel)], toSection: .main)
             case is CircuitModel:
                 currentSnapshot.appendItems([.circuit(type as! CircuitModel)], toSection: .main)
-            case is EMOMModel:
-                currentSnapshot.appendItems([.emom(type as! EMOMModel)], toSection: .main)
             case is AMRAPModel:
                 currentSnapshot.appendItems([.amrap(type as! AMRAPModel)], toSection: .main)
             default:
@@ -144,13 +137,6 @@ class WorkoutExerciseCollectionDataSource: NSObject {
         snapshot.deleteItems([item])
         dataDource.apply(snapshot, animatingDifferences: false)
     }
-    func updateEMOM(_ newEmom: EMOMModel) {
-        guard let item = dataDource.itemIdentifier(for: IndexPath(item: newEmom.workoutPosition, section: 0)) else {return}
-        var snapshot = dataDource.snapshot()
-        snapshot.insertItems([ExerciseRow.emom(newEmom)], afterItem: item)
-        snapshot.deleteItems([item])
-        dataDource.apply(snapshot, animatingDifferences: false)
-    }
     
     // MARK: - Retreive
     func getExercise(at indexPath: IndexPath) -> ExerciseModel? {
@@ -179,8 +165,6 @@ extension WorkoutExerciseCollectionDataSource: UICollectionViewDelegate {
             amrapSelected.send(amrapModel)
         case .circuit(let circuitModel):
             circuitSelected.send(circuitModel)
-        case .emom(let emomModel):
-            emomSelected.send(emomModel)
         }
     }
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

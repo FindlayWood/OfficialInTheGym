@@ -113,10 +113,6 @@ extension DiscoverCoordinator: ExerciseSelectionFlow {
     func addAmrap() {
         
     }
-    
-    func addEmom() {
-        
-    }
 }
 
 //MARK: - Navigation Delegate Method

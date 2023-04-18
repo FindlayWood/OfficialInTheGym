@@ -60,31 +60,6 @@ extension AMRAPUpdateModel: FirebaseInstance {
     }
 }
 
-// MARK: - EMOM
-///Update the completed value on emom
-struct EMOMUpdateModel {
-    var workout: WorkoutModel
-    var emom: EMOMModel
-    var type: EMOMUpdateType
-    
-    func uploadModel() -> FirebaseMultiUploadDataPoint {
-        return FirebaseMultiUploadDataPoint(value: true, path: internalPath)
-    }
-    func pathEnding() -> String {
-        switch type {
-        case .completed:
-            return "completed"
-        case .rpe(_):
-            return "rpe"
-        }
-    }
-}
-extension EMOMUpdateModel: FirebaseInstance {
-    var internalPath: String {
-        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workout.id)/emoms/\(emom.emomPosition)/\(pathEnding())"
-    }
-}
-
 // MARK: - Stats
 ///Update Exercise Stats
 struct ExerciseStatsUpdateModel {

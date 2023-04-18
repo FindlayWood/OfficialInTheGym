@@ -59,7 +59,4 @@ extension LiveWorkoutExerciseCreationCoordinator: ExerciseSelectionFlow {
     func addAmrap() {
         
     }
-    func addEmom() {
-        
-    }
 }

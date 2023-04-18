@@ -106,10 +106,6 @@ class SavedWorkoutDisplayViewController: UIViewController, AnimatingSingleSet {
             .sink { [weak self] in self?.coordinator?.showCircuit($0)}
             .store(in: &subscriptions)
         
-        childVC.dataSource.emomSelected
-            .sink { [weak self] in self?.coordinator?.showEMOM($0)}
-            .store(in: &subscriptions)
-        
         childVC.dataSource.setSelected
             .sink { [weak self] (setCellModel, exerciseModel) in
                 self?.selectedSetCell = setCellModel.cell

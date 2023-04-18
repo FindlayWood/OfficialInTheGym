@@ -31,12 +31,6 @@ class LiveWorkoutDisplayCoordinator: NSObject, Coordinator {
 }
 // MARK: - Flow
 extension LiveWorkoutDisplayCoordinator {
-    func showEMOM(_ emom: EMOMModel, _ workout: WorkoutModel) {
-        let vc = DisplayEMOMViewController()
-        vc.viewModel.emomModel = emom
-        vc.viewModel.workoutModel = workout
-        navigationController.pushViewController(vc, animated: true)
-    }
     func showCircuit(_ circuit: CircuitModel, _ workout: WorkoutModel) {
         let vc = DisplayCircuitViewController()
         vc.viewModel.circuitModel = circuit

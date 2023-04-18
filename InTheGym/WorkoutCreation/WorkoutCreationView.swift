@@ -69,7 +69,6 @@ class WorkoutCreationView: UIView {
         view.tableFooterView = UIView()
         view.register(ExerciseCreationTableViewCell.self, forCellReuseIdentifier: ExerciseCreationTableViewCell.cellID)
         view.register(CircuitCreationTableViewCell.self, forCellReuseIdentifier: CircuitCreationTableViewCell.cellID)
-        view.register(EmomCreationTableViewCell.self, forCellReuseIdentifier: EmomCreationTableViewCell.cellID)
         view.register(AmrapCreationTableViewCell.self, forCellReuseIdentifier: AmrapCreationTableViewCell.cellID)
         if #available(iOS 15.0, *) { view.sectionHeaderTopPadding = 0 }
         view.translatesAutoresizingMaskIntoConstraints = false
