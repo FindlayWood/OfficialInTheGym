@@ -817,6 +817,7 @@
 		9F84639C293E8F5B001E549F /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */; };
 		9F9F016629F2F0EB002B969B /* BodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016529F2F0EB002B969B /* BodyType.swift */; };
 		9F9F016829F2F116002B969B /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016729F2F116002B969B /* Observable.swift */; };
+		9F9F016B29F32EF2002B969B /* UserObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016A29F32EF2002B969B /* UserObserver.swift */; };
 		9FA4F1EB290EE7AF00757860 /* ViewJournalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */; };
 		9FA4F1EE290FECD800757860 /* PreviousJumpsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */; };
 		9FA4F1F0290FECF800757860 /* PreviousJumps+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */; };
@@ -1667,6 +1668,7 @@
 		9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		9F9F016529F2F0EB002B969B /* BodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyType.swift; sourceTree = "<group>"; };
 		9F9F016729F2F116002B969B /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		9F9F016A29F32EF2002B969B /* UserObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserObserver.swift; sourceTree = "<group>"; };
 		9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewJournalEntryView.swift; sourceTree = "<group>"; };
 		9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousJumpsView.swift; sourceTree = "<group>"; };
 		9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviousJumps+ViewModel.swift"; sourceTree = "<group>"; };
@@ -2066,6 +2068,7 @@
 		7416CCD4265C04310043B1C2 /* Launch */ = {
 			isa = PBXGroup;
 			children = (
+				9F9F016929F32EE0002B969B /* UserObserver */,
 				9FB4D1DD29EAD4910019CA57 /* AccountCreated */,
 				9FC11F6229E0B5020054D79A /* VerifyAccount */,
 				9FC11F5D29DDC9A20054D79A /* Composition */,
@@ -4460,6 +4463,14 @@
 			path = UserFollowing;
 			sourceTree = "<group>";
 		};
+		9F9F016929F32EE0002B969B /* UserObserver */ = {
+			isa = PBXGroup;
+			children = (
+				9F9F016A29F32EF2002B969B /* UserObserver.swift */,
+			);
+			path = UserObserver;
+			sourceTree = "<group>";
+		};
 		9FA4F1E9290EE79E00757860 /* ViewJournalEntry */ = {
 			isa = PBXGroup;
 			children = (
@@ -5133,6 +5144,7 @@
 				743E93412809AA2A0029F447 /* ProfileDataSource.swift in Sources */,
 				741EC128284BF6D1009B00AB /* ExerciseCommentsViewModel.swift in Sources */,
 				9F4FFD832953837E004853BD /* MainButton.swift in Sources */,
+				9F9F016B29F32EF2002B969B /* UserObserver.swift in Sources */,
 				742FD573283FAD350025E43C /* SearchTagsDataSource.swift in Sources */,
 				7425D4182545AE8000567DAB /* Constants.swift in Sources */,
 				741858FA283D70980042B81B /* DisplayWorkoutsCollectionHeader.swift in Sources */,
