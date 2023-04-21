@@ -21,7 +21,7 @@ struct PlayerProfileMoreView: View {
                         .resizable()
                         .frame(width: 30, height: 30)
                         .cornerRadius(4)
-                    Text(UserDefaults.currentUser.firstName + " " + UserDefaults.currentUser.lastName)
+                    Text(UserDefaults.currentUser.displayName)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                 }
@@ -44,11 +44,11 @@ struct PlayerProfileMoreView: View {
                         .foregroundColor(.primary)
                 }
                 HStack {
-                    Image(uiImage: UserDefaults.currentUser.admin ? UIImage(named: "coach_icon")! : UIImage(named: "player_icon")!)
+                    Image(uiImage: UserDefaults.currentUser.accountType == .coach ? UIImage(named: "coach_icon")! : UIImage(named: "player_icon")!)
                         .resizable()
                         .frame(width: 30, height: 30)
                         .cornerRadius(4)
-                    Text(UserDefaults.currentUser.admin ? "Coach Account" : "Player Account")
+                    Text(UserDefaults.currentUser.accountType == .coach ? "Coach Account" : "Player Account")
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                 }

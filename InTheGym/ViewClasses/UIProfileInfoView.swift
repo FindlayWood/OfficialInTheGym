@@ -99,9 +99,9 @@ private extension UIProfileInfoView {
 extension UIProfileInfoView {
     public func configure(with user: Users) {
         nameUsernameView.configure(with: user)
-        followerView.configure(admin: user.admin)
+        followerView.configure(admin: user.accountType == .coach)
         userStampsView.configure(with: user)
-        bioLabel.text = user.profileBio
+        bioLabel.text = user.bio
         let imageDownloader = ProfileImageDownloadModel(id: user.uid)
         ImageCache.shared.load(from: imageDownloader) { [weak self] result in
             guard let self = self else {return}

@@ -15,8 +15,6 @@ struct CommentWithAttachmentsView: View {
     @State var showAttachmentSheet: Bool = false
     @State var showPrivacySheet: Bool = false
     @State var profileImage: UIImage?
-    // MARK: - Variables
-    var isGroup: Bool
     // MARK: - Callback to ViewController
     var post: () -> ()
     var addAttachments: () -> ()
@@ -95,14 +93,12 @@ struct CommentWithAttachmentsView: View {
                         .foregroundColor(Color(.darkColour))
                 }
                 Spacer()
-                if !isGroup {
-                    Button {
-                        changePrivacy()
-                    } label: {
-                        Image(systemName: viewModel.isPrivate ? "lock.fill" : "globe")
-                            .font(.title)
-                            .foregroundColor(Color(.darkColour))
-                    }
+                Button {
+                    changePrivacy()
+                } label: {
+                    Image(systemName: viewModel.isPrivate ? "lock.fill" : "globe")
+                        .font(.title)
+                        .foregroundColor(Color(.darkColour))
                 }
             }
         }
@@ -122,6 +118,6 @@ struct CommentWithAttachmentsView: View {
 
 struct CommentWithAttachmentsView_Previews: PreviewProvider {
     static var previews: some View {
-        CommentWithAttachmentsView(viewModel: CommentSectionViewModel(), isGroup: false, post: {}, addAttachments: {}, changePrivacy: {}, cancel: {})
+        CommentWithAttachmentsView(viewModel: CommentSectionViewModel(), post: {}, addAttachments: {}, changePrivacy: {}, cancel: {})
     }
 }

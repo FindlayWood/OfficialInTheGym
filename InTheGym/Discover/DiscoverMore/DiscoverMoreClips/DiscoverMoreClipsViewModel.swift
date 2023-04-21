@@ -43,20 +43,20 @@ class DiscoverMoreClipsViewModel {
             .sink { [weak self] in self?.filterClips(with: $0)}
             .store(in: &subscriptions)
     }
-
+    
+    @MainActor
     func loadClips() {
         isLoading = true
-        apiService.fetch(ClipModel.self) { [weak self] result in
-            switch result {
-            case .success(let models):
+        Task {
+            do {
+                let models: [ClipModel] = try await apiService.fetchAsync()
                 let filteredModels = models.filter { !($0.isPrivate) }
-                self?.clips = filteredModels
-                self?.storedClips = filteredModels
-                self?.isLoading = false
-            case .failure(let error):
+                clips = filteredModels
+                storedClips = filteredModels
+                isLoading = false
+            } catch {
                 print(String(describing: error))
-                self?.isLoading = false
-                break
+                isLoading = false
             }
         }
     }

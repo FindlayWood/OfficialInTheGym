@@ -14,8 +14,6 @@ class PlayerTimelineViewModel {
     // MARK: - Publishers
     @Published var isLoading: Bool = false
     
-    var thinkingTimeActivePublisher = PassthroughSubject<Bool,Never>()
-    
     var postPublisher = CurrentValueSubject<[PostModel],Never>([])
     
     var workoutSelected = PassthroughSubject<WorkoutModel,Never>()
@@ -44,16 +42,16 @@ class PlayerTimelineViewModel {
     }
 
     // MARK: - Fetch Posts
+    @MainActor
     func fetchPosts() {
         isLoading = true
-        apiService.fetch(PostModel.self) { [weak self] result in
-            guard let self = self else {return}
+        Task {
             do {
-                let posts = try result.get()
-                self.filterPosts(posts)
+                let posts: [PostModel] = try await apiService.fetchAsync()
+                filterPosts(posts)
             } catch {
                 print(String(describing: error))
-                self.isLoading = false
+                isLoading = false
             }
         }
     }
@@ -131,7 +129,7 @@ class PlayerTimelineViewModel {
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
             case .success(()):
-                LikesAPIService.shared.LikedPostsCache[post.id] = true
+                LikeCache.shared.upload(postID: post.id)
             case .failure(let error):
                 self?.errorLikingPost.send(error)
             }
@@ -182,16 +180,4 @@ class PlayerTimelineViewModel {
             }
         }
     }
-    
-
- 
-    
-    // MARK: - Thinking Time Check
-    func checkForThinkingTime() {
-        FirebaseDatabaseManager.shared.fetchSingleModel(ThinkingTimeCheckModel.self) { [weak self] result in
-            guard let model = try? result.get() else {return}
-            self?.thinkingTimeActivePublisher.send(model.isActive)
-        }
-    }
-    
 }

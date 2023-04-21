@@ -21,16 +21,16 @@ class AllTimeStatsViewModel {
         self.apiService = apiService
     }
     // MARK: - Functions
+    @MainActor
     func loadStats() {
         isLoading = true
         let searchModel = MyWorkoutStatsSearchModel()
-        apiService.fetchSingleInstance(of: searchModel, returning: MyWorkoutStatsModel.self) { [weak self] result in
-            defer { self?.isLoading = false }
-            switch result {
-            case .success(let model):
-                self?.statsModel = model
-            case .failure(let error):
-                self?.error = error
+        Task {
+            do {
+                let model: MyWorkoutStatsModel = try await apiService.fetchSingleInstanceAsync(of: searchModel)
+                statsModel = model
+            } catch {
+                self.error = error
             }
         }
     }

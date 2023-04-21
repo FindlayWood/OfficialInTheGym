@@ -14,7 +14,7 @@ class TabBarCoordinator: Coordinator {
     
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
-    //var tabBarController: PlayerInitialViewController!
+    
     
     init(navigationController: UINavigationController){
         self.navigationController = navigationController
@@ -22,7 +22,7 @@ class TabBarCoordinator: Coordinator {
     
     func start() {
         let tabBarController = PlayerInitialViewController()
-        //tabBarController = PlayerInitialViewController.instantiate()
+        
         tabBarController.coordinator = self
         
         let timelineNavigationController = UINavigationController()
@@ -69,7 +69,7 @@ class TabBarCoordinator: Coordinator {
         let myProfileCoord = MyProfileCoordinator(navigationController: myProfileNavigationController)
         
         
-        if UserDefaults.currentUser.admin {
+        if UserDefaults.currentUser.accountType == .coach {
             tabBarController.viewControllers = [timelineNavigationController,
                                                 discoverNavigationController,
                                                 playersNavigationController,
@@ -83,18 +83,17 @@ class TabBarCoordinator: Coordinator {
         }
         
         
-//        tabBarController.modalPresentationStyle = .fullScreen
+
         navigationController.present(tabBarController, animated: true, completion: nil)
         
         coordinate(to: timeLineCoord)
         coordinate(to: discoverCoord)
         coordinate(to: myProfileCoord)
-        if UserDefaults.currentUser.admin {
+        if UserDefaults.currentUser.accountType == .coach {
             coordinate(to: playerCoord)
         } else {
             coordinate(to: workoutsCoord)
         }
-        //observeForNotifications()
     }
     
     func coordinateToMain(){
@@ -102,24 +101,4 @@ class TabBarCoordinator: Coordinator {
         coordinate(to: main)
     }
     
-//    func observeForNotifications() {
-//        NotificationCenter.default.addObserver(self, selector: #selector(setToUnseenNotifications), name: .unseenNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(setToSeenNotifications), name: .seenAllNotifications, object: nil)
-//    }
-//    
-//    @objc func setToUnseenNotifications() {
-//        if let tabItems = tabBarController?.tabBar.items {
-//            // In this case we want to modify the badge number of the third tab:
-//            let tabItem = tabItems[3]
-//            tabItem.badgeValue = "1"
-//        }
-//    }
-//    
-//    @objc func setToSeenNotifications() {
-//        if let tabItems = tabBarController?.tabBar.items {
-//            // In this case we want to modify the badge number of the third tab:
-//            let tabItem = tabItems[3]
-//            tabItem.badgeValue = "1"
-//        }
-//    }
 }

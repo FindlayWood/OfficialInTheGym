@@ -2,7 +2,10 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:TestLibrary">
+      location = "group:AccountCreationKit">
+   </FileRef>
+   <FileRef
+      location = "group:LoginKit">
    </FileRef>
    <FileRef
       location = "container:InTheGym.xcodeproj">

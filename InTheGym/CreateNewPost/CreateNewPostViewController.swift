@@ -16,8 +16,6 @@ class CreateNewPostViewController: UIViewController {
 
     var display = CreateNewPostView()
     
-    var assignee: Assignable!
-    
     var viewModel = NewPostViewModel()
     
     private var subscriptions = Set<AnyCancellable>()
@@ -43,7 +41,6 @@ class CreateNewPostViewController: UIViewController {
     func addChildView() {
         childContentView = .init(
             viewModel: viewModel,
-            isGroup: viewModel.postable is GroupPost,
             post: {
                 self.viewModel.postAction()
             }, addAttachments: {

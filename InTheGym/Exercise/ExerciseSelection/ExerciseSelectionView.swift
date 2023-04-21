@@ -16,35 +16,6 @@ class ExerciseSelectionView: UIView {
     // MARK: - Subviews
     
         // StackView Subviews
-    var circuitView: UIImageLabelView = {
-        let view = UIImageLabelView()
-        view.topImage.image = UIImage(named: "circuit_icon")
-        view.bottomLabel.text = "Circuit"
-        view.bottomLabel.backgroundColor = .offWhiteColour
-        view.bottomLabel.textColor = .black
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    var amrapView: UIImageLabelView = {
-        let view = UIImageLabelView()
-        view.topImage.image = UIImage(named: "amrap_icon")
-        view.bottomLabel.text = "AMRAP"
-        view.bottomLabel.backgroundColor = .offWhiteColour
-        view.bottomLabel.textColor = .black
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    var emomView: UIImageLabelView = {
-        let view = UIImageLabelView()
-        view.topImage.image = UIImage(named: "emom_icon")
-        view.bottomLabel.text = "EMOM"
-        view.bottomLabel.backgroundColor = .offWhiteColour
-        view.bottomLabel.textColor = .black
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
     
     var topStack: UIStackView = {
         let stack = UIStackView()
@@ -107,22 +78,12 @@ class ExerciseSelectionView: UIView {
 private extension ExerciseSelectionView {
     func setupUI() {
         backgroundColor = .secondarySystemBackground
-        topStack.addArrangedSubview(circuitView)
-        topStack.addArrangedSubview(amrapView)
-        topStack.addArrangedSubview(emomView)
-//        addSubview(topStack)
         addSubview(searchBar)
         addSubview(collectionView)
         constrainUI()
     }
     func constrainUI() {
-//        searchBarTopAnchor = searchBar.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: 8)
         NSLayoutConstraint.activate([
-//            topStack.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
-//            topStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-//            topStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            
-//            searchBarTopAnchor,
             searchBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -133,34 +94,5 @@ private extension ExerciseSelectionView {
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-    }
-}
-// MARK: - Configurations
-extension ExerciseSelectionView {
-    public func hideStack() {
-        circuitView.isHidden = true
-        amrapView.isHidden = true
-        emomView.isHidden = true
-    }
-    public func showStack() {
-        circuitView.isHidden = false
-        amrapView.isHidden = false
-        emomView.isHidden = false
-    }
-    public func searchBegins() {
-//        UIView.animate(withDuration: 0.3) {
-//            self.hideStack()
-//            self.searchBarTopAnchor.isActive = false
-//            self.searchBarTopAnchor = self.searchBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor)
-//            self.searchBarTopAnchor.isActive = true
-//        }
-    }
-    public func searchEnded() {
-//        UIView.animate(withDuration: 0.3) {
-//            self.showStack()
-//            self.searchBarTopAnchor.isActive = false
-//            self.searchBarTopAnchor = self.searchBar.topAnchor.constraint(equalTo: self.topStack.bottomAnchor, constant: 8)
-//            self.searchBarTopAnchor.isActive = true
-//        }
     }
 }

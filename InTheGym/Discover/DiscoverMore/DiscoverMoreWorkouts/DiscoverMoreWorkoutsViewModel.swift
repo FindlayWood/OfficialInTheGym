@@ -43,19 +43,19 @@ class DiscoverMoreWorkoutsViewModel {
             .sink { [weak self] in self?.filterWorkouts(with: $0)}
             .store(in: &subscriptions)
     }
+    @MainActor
     func loadWorkouts() {
         isLoading = true
-        apiService.fetch(SavedWorkoutModel.self) { [weak self] result in
-            switch result {
-            case.success(let models):
+        Task {
+            do {
+                let models: [SavedWorkoutModel] = try await apiService.fetchAsync()
                 let filteredModels = models.filter { !($0.isPrivate) }
-                self?.workouts = filteredModels
-                self?.storedWorkouts = filteredModels
-                self?.isLoading = false
-            case .failure(let error):
+                workouts = filteredModels
+                storedWorkouts = filteredModels
+                isLoading = false
+            } catch {
                 print(String(describing: error))
-                self?.isLoading = false
-                break
+                isLoading = false
             }
         }
     }

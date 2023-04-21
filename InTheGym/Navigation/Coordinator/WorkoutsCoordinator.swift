@@ -59,12 +59,6 @@ extension WorkoutsCoordinator: WorkoutsFlow {
         childCoordinators.append(child)
         child.start()
     }
-    func addProgram() {
-        let child = MyProgramsCoordinator(navigationController: navigationController)
-        childCoordinators.append(child)
-        child.start()
-    }
-
     
     func addLiveWorkout() {
         let vc = PreLiveWorkoutViewController.instantiate()

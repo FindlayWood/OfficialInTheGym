@@ -14,8 +14,6 @@ class ExerciseSelectionViewController: UIViewController {
     //MARK: - Properties
     weak var coordinator: ExerciseSelectionFlow?
     
-    var newExercise: exercise?
-    
     var display = ExerciseSelectionView()
     
     var viewModel = ExerciseSelectionViewModel()
@@ -34,7 +32,6 @@ class ExerciseSelectionViewController: UIViewController {
         initViewModel()
         initDisplay()
         initNavBar()
-        initViewTaps()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,11 +68,6 @@ class ExerciseSelectionViewController: UIViewController {
         display.collectionView.delegate = adapter
         display.collectionView.dataSource = adapter
         display.searchBar.delegate = self
-        if coordinator is RegularWorkoutCreationCoordinator {
-            display.showStack()
-        } else {
-            display.hideStack()
-        }
     }
     func initNavBar() {
         navigationItem.title = "Select Exercise"
@@ -85,26 +77,6 @@ class ExerciseSelectionViewController: UIViewController {
     
     @objc func otherTapped(_ sender: UIBarButtonItem) {
         coordinator?.otherSelected(viewModel.exercise)
-    }
-    
-    func initViewTaps() {
-        let circuitTap = UITapGestureRecognizer(target: self, action: #selector(circuitTapped))
-        display.circuitView.addGestureRecognizer(circuitTap)
-        let amrapTap = UITapGestureRecognizer(target: self, action: #selector(amrapTapped))
-        display.amrapView.addGestureRecognizer(amrapTap)
-        let emomTap = UITapGestureRecognizer(target: self, action: #selector(emomTapped))
-        display.emomView.addGestureRecognizer(emomTap)
-    }
-    
-    // MARK: - Actions
-    @objc func circuitTapped() {
-        coordinator?.addCircuit()
-    }
-    @objc func amrapTapped() {
-        coordinator?.addAmrap()
-    }
-    @objc func emomTapped() {
-        coordinator?.addEmom()
     }
 }
 
@@ -117,11 +89,7 @@ extension ExerciseSelectionViewController: ExerciseSelectionProtocol {
         return viewModel.numberOfItems(at: section)
     }
     func numberOfSections() -> Int {
-        if coordinator is CircuitCoordinator || coordinator is AMRAPCoordinator || coordinator is EMOMCoordinator {
-            return 4
-        } else {
-            return viewModel.numberOfSections()
-        }
+        return viewModel.numberOfSections()
     }
     func itemSelected(at indexPath: IndexPath) {
         let exercise = viewModel.getData(at: indexPath)
@@ -142,17 +110,11 @@ extension ExerciseSelectionViewController: UISearchBarDelegate {
         viewModel.filterExercises(with: searchText)
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-//        if coordinator is RegularWorkoutCreationCoordinator || coordinator is LiveWorkoutExerciseCreationCoordinator {
-//            display.searchBegins()
-//        }
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         display.searchBar.resignFirstResponder()
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         display.searchBar.resignFirstResponder()
-//        if coordinator is RegularWorkoutCreationCoordinator || coordinator is LiveWorkoutExerciseCreationCoordinator {
-//            display.searchEnded()
-//        }
     }
 }

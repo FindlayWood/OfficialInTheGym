@@ -28,13 +28,13 @@ struct CoachRequestRow: View {
             }
             VStack(alignment: .leading) {
                 HStack {
-                    Text("\(cellModel.user.firstName) \(cellModel.user.lastName)")
+                    Text(cellModel.user.displayName)
                         .font(.custom("Menlo-Bold", size: 22, relativeTo: .title))
                         .foregroundColor(Color(.darkColour))
-                    if cellModel.user.eliteAccount ?? false {
+                    if cellModel.user.eliteAccount {
                         Image(systemName: "checkmark.seal.fill")
                             .foregroundColor(Color(.goldColour))
-                    } else if cellModel.user.verifiedAccount ?? false {
+                    } else if cellModel.user.verifiedAccount {
                         Image(systemName: "checkmark.seal.fill")
                             .foregroundColor(Color(.lightColour))
                     }

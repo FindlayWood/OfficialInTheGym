@@ -9,8 +9,6 @@ import Foundation
 import UIKit
 
 protocol MyProfileFlow: TimelineFlow {
-    func showGroups()
-    func showNotifications()
     func showSavedWorkouts()
     func showCreatedWorkouts()
     func showScores()
@@ -49,16 +47,6 @@ class MyProfileCoordinator: NSObject, Coordinator {
 
 //MARK: - Flow Methods
 extension MyProfileCoordinator {
-    func showGroups() {
-        let child = GroupCoordinator(navigationController: navigationController)
-        childCoordinators.append(child)
-        child.start()
-    }
-    func showNotifications() {
-        let child = NotificationsCoordinator(navigationController: navigationController)
-        childCoordinators.append(child)
-        child.start()
-    }
     func showSavedWorkouts() {
         let vc = SavedWorkoutsViewController()
         vc.coordinator = self
@@ -68,13 +56,8 @@ extension MyProfileCoordinator {
         let vc = StampsPreviewViewController()
         navigationController.present(vc, animated: true)
     }
-    func showCreatedWorkouts() {
-        let child = CreatedWorkoutsCoordinator(navigationController: navigationController)
-        childCoordinators.append(child)
-        child.start()
-    }
     func showMoreInfo() {
-        if UserDefaults.currentUser.admin {
+        if UserDefaults.currentUser.accountType == .coach {
             let child = CoachProfileMoreCoordinator(navigationController: navigationController)
             childCoordinators.append(child)
             child.start()
@@ -180,15 +163,5 @@ extension MyProfileCoordinator: UINavigationControllerDelegate {
         if let UserViewController = fromViewController as? PublicTimelineViewController {
             childDidFinish(UserViewController.coordinator)
         }
-        
-        if let GroupViewController = fromViewController as? MyGroupsViewController {
-            childDidFinish(GroupViewController.coordinator)
-        }
-        
-        if let NotificationsController = fromViewController as? DisplayNotificationsViewController {
-            childDidFinish(NotificationsController.coordinator)
-        }
     }
-    
-
 }
