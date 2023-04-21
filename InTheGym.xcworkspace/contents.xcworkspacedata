@@ -8,9 +8,6 @@
       location = "group:LoginKit">
    </FileRef>
    <FileRef
-      location = "group:TestLibrary">
-   </FileRef>
-   <FileRef
       location = "container:InTheGym.xcodeproj">
    </FileRef>
 </Workspace>

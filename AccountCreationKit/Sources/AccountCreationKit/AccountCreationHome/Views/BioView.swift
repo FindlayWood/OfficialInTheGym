@@ -27,12 +27,6 @@ struct BioView: View {
                     .frame(maxHeight: 300)
                     .cornerRadius(8)
                     .opacity(viewModel.bio.isEmpty ? 0.3 : 1)
-//                if viewModel.bio.isEmpty {
-//                    Text("write something about you...")
-//                        .font(.body)
-//                        .fontWeight(.medium)
-//                        .foregroundColor(.secondary)
-//                }
             }
             
             HStack {

@@ -159,11 +159,11 @@ enum AccountType: String, CaseIterable, Identifiable, Codable {
     var message: String {
         switch self {
         case .individual:
-            return ""
+            return "Select this type if you are looking to use this app as an individual."
         case .athlete:
-            return "Select this type if you are an athlete, part of a team"
+            return "Select this type if you are an athlete playing sport, part of a team"
         case .coach:
-            return ""
+            return "Select this type if you are looking to manage teams, athlete's or clients."
         }
     }
 }
