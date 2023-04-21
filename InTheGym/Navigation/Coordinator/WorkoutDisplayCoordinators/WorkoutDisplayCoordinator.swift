@@ -37,18 +37,6 @@ extension WorkoutDisplayCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func showCircuit(_ circuit: CircuitModel, _ workout: WorkoutModel, _ publisher: PassthroughSubject<CircuitModel,Never>) {
-        let child = DisplayCircuitCoordinator(navigationController: navigationController, circuitModel: circuit, workoutModel: workout, publisher: publisher)
-        childCoordinators.append(child)
-        child.start()
-    }
-    func showAMRAP(_ amrap: AMRAPModel, _ workout: WorkoutModel, _ publisher: PassthroughSubject<AMRAPModel,Never>) {
-        let vc = DisplayAMRAPViewController()
-        vc.viewModel.amrapModel = amrap
-        vc.viewModel.workoutModel = workout
-        vc.viewModel.amrapUpdatedPublisher = publisher
-        navigationController.pushViewController(vc, animated: true)
-    }
     func addClip(for exercise: ExerciseModel, _ workout: WorkoutModel, on delegate: ClipAdding) {
         let child = ClipCoordinator(navigationController: navigationController, workout: workout, exercise: DiscoverExerciseModel(exerciseName: exercise.exercise), addingDelegate: delegate)
         childCoordinators.append(child)

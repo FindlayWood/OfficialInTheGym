@@ -59,12 +59,8 @@ extension ExerciseSelectionHeader {
             label.text = "Lower Body"
         case 2:
             label.text = "Core"
-        case 3:
-            label.text = "Cardio"
-        case 4:
-            label.text = "Circuit"
         default:
-            label.text = "AMRAP"
+            label.text = "Cardio"
         }
     }
 }

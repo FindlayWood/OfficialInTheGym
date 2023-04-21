@@ -16,9 +16,6 @@ class WorkoutDisplayViewModel {
     var updatedExercise = PassthroughSubject<ExerciseModel,Never>()
     var editedExercise = PassthroughSubject<ExerciseModel,Never>()
     var editAction = PassthroughSubject<ExerciseSet,Never>()
-    /// update publishers
-    var updatedCircuit = PassthroughSubject<CircuitModel,Never>()
-    var updatedAMRAP = PassthroughSubject<AMRAPModel,Never>()
     // MARK: - Properties
     var workout: WorkoutModel!
     var showExerciseDetail: ExerciseModel?
@@ -26,8 +23,6 @@ class WorkoutDisplayViewModel {
     lazy var exercises: [ExerciseType] = {
         var exercises = [ExerciseType]()
         exercises.append(contentsOf: workout.exercises ?? [])
-        exercises.append(contentsOf: workout.circuits ?? [])
-        exercises.append(contentsOf: workout.amraps ?? [])
         return exercises.sorted(by: { $0.workoutPosition < $1.workoutPosition} )
     }()
     func getClips() -> [WorkoutClipModel] {
@@ -50,12 +45,6 @@ class WorkoutDisplayViewModel {
     func initSubscriptions() {
         editedExercise
             .sink { [weak self] in self?.editedExercise($0)}
-            .store(in: &subscriptions)
-        updatedCircuit
-            .sink { [weak self] in self?.updateCircuit($0)}
-            .store(in: &subscriptions)
-        updatedAMRAP
-            .sink { [weak self] in self?.updateAMRAP($0)}
             .store(in: &subscriptions)
     }
     
@@ -114,19 +103,6 @@ class WorkoutDisplayViewModel {
         let exercises = exercises.filter { $0 is ExerciseModel }
         let exerciseModels = exercises.map { ($0 as! ExerciseModel)}
         workout.exercises = exerciseModels
-    }
-    // MARK: - Update Functions
-    func updateCircuit(_ circuit: CircuitModel) {
-        exercises[circuit.workoutPosition] = circuit
-        let circuits = exercises.filter { $0 is CircuitModel }
-        let circuitModels = circuits.map { ($0 as! CircuitModel) }
-        workout.circuits = circuitModels
-    }
-    func updateAMRAP(_ amrap: AMRAPModel) {
-        exercises[amrap.workoutPosition] = amrap
-        let amraps = exercises.filter { $0 is AMRAPModel }
-        let amrapModels = amraps.map { ($0 as! AMRAPModel) }
-        workout.amraps = amrapModels
     }
     // MARK: - Retreive Function
     func isInteractionEnabled() -> Bool {

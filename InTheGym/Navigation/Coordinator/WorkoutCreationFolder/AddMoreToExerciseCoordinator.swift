@@ -73,22 +73,6 @@ extension AddMoreToExerciseCoordinator {
                     break
                 }
             }
-        case .circuit:
-            creationViewModel.addingDelegate.addExercise(creationViewModel.exercise)
-            for controller in viewControllers {
-                if controller.isKind(of: CreateCircuitViewController.self) {
-                    navigationController.popToViewController(controller, animated: true)
-                    break
-                }
-            }
-        case .amrap:
-            creationViewModel.addingDelegate.addExercise(creationViewModel.exercise)
-            for controller in viewControllers {
-                if controller.isKind(of: CreateAMRAPViewController.self) {
-                    navigationController.popToViewController(controller, animated: true)
-                    break
-                }
-            }
         case .live:
             creationViewModel.addingDelegate.updatedExercise(creationViewModel.exercise)
             for controller in viewControllers {

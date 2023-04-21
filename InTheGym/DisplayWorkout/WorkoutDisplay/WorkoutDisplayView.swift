@@ -32,8 +32,6 @@ class WorkoutDisplayView: UIView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: generateExerciseCollectionLayout())
         view.backgroundColor = .lightColour
         view.register(ExerciseCollectionCell.self, forCellWithReuseIdentifier: ExerciseCollectionCell.reuseID)
-        view.register(MainWorkoutCircuitCollectionCell.self, forCellWithReuseIdentifier: MainWorkoutCircuitCollectionCell.reuseID)
-        view.register(MainWorkoutAMRAPCollectionCell.self, forCellWithReuseIdentifier: MainWorkoutAMRAPCollectionCell.reuseID)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

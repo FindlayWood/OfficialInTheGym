@@ -13,9 +13,6 @@ import Combine
 class WorkoutExerciseCollectionDataSource: NSObject {
     
     // MARK: - Publisher
-    var amrapSelected = PassthroughSubject<AMRAPModel,Never>()
-    var circuitSelected = PassthroughSubject<CircuitModel,Never>()
-    
     var rowSelected = PassthroughSubject<ExerciseRow,Never>()
     var completeButtonTapped = PassthroughSubject<IndexPath,Never>()
     var rpeButtonTapped = PassthroughSubject<IndexPath,Never>()
@@ -71,14 +68,6 @@ class WorkoutExerciseCollectionDataSource: NSObject {
                         }
                     })
                 return cell
-            case .circuit(let model):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainWorkoutCircuitCollectionCell.reuseID, for: indexPath) as! MainWorkoutCircuitCollectionCell
-                cell.configure(with: model)
-                return cell
-            case .amrap(let model):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainWorkoutAMRAPCollectionCell.reuseID, for: indexPath) as! MainWorkoutAMRAPCollectionCell
-                cell.configure(with: model)
-                return cell
             }
         }
     }
@@ -97,10 +86,6 @@ class WorkoutExerciseCollectionDataSource: NSObject {
             switch type {
             case is ExerciseModel:
                 currentSnapshot.appendItems([.exercise(type as! ExerciseModel)], toSection: .main)
-            case is CircuitModel:
-                currentSnapshot.appendItems([.circuit(type as! CircuitModel)], toSection: .main)
-            case is AMRAPModel:
-                currentSnapshot.appendItems([.amrap(type as! AMRAPModel)], toSection: .main)
             default:
                 break
             }
@@ -121,21 +106,6 @@ class WorkoutExerciseCollectionDataSource: NSObject {
         if let cell = collectionView.cellForItem(at: indexPath) as? ExerciseCollectionCell {
             cell.collectionView.setContentOffset(offset, animated: false)
         }
-    }
-    // MARK: - Update Functions
-    func updateCircuit(_ newCircuit: CircuitModel) {
-        guard let item = dataDource.itemIdentifier(for: IndexPath(item: newCircuit.workoutPosition, section: 0)) else {return}
-        var snapshot = dataDource.snapshot()
-        snapshot.insertItems([ExerciseRow.circuit(newCircuit)], afterItem: item)
-        snapshot.deleteItems([item])
-        dataDource.apply(snapshot, animatingDifferences: false)
-    }
-    func updateAMRAP(_ newAmrap: AMRAPModel) {
-        guard let item = dataDource.itemIdentifier(for: IndexPath(item: newAmrap.workoutPosition, section: 0)) else {return}
-        var snapshot = dataDource.snapshot()
-        snapshot.insertItems([ExerciseRow.amrap(newAmrap)], afterItem: item)
-        snapshot.deleteItems([item])
-        dataDource.apply(snapshot, animatingDifferences: false)
     }
     
     // MARK: - Retreive
@@ -161,10 +131,6 @@ extension WorkoutExerciseCollectionDataSource: UICollectionViewDelegate {
         switch rowSelected {
         case .exercise(_):
             break
-        case .amrap(let amrapModel):
-            amrapSelected.send(amrapModel)
-        case .circuit(let circuitModel):
-            circuitSelected.send(circuitModel)
         }
     }
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

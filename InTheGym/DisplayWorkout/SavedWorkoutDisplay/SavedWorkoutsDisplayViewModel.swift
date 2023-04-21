@@ -20,8 +20,6 @@ class SavedWorkoutDisplayViewModel {
     lazy var exercises: [ExerciseType] = {
         var exercises = [ExerciseType]()
         exercises.append(contentsOf: savedWorkout.exercises ?? [])
-        exercises.append(contentsOf: savedWorkout.circuits ?? [])
-        exercises.append(contentsOf: savedWorkout.amraps ?? [])
         return exercises.sorted(by: { $0.workoutPosition < $1.workoutPosition} )
     }()
     

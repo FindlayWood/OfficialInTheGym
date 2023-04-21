@@ -13,8 +13,6 @@ class RegularWorkoutCreationCoordinator: Coordinator {
     
     /// the publisher to publish the exercise when it is completed
     var completedExercise: PassthroughSubject<ExerciseModel,Never>?
-    var completedCircuit: PassthroughSubject<CircuitModel,Never>?
-    var completedAmrap: PassthroughSubject<AMRAPModel,Never>?
     
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
@@ -62,16 +60,6 @@ extension RegularWorkoutCreationCoordinator: ExerciseSelectionFlow {
     }
     func infoSelected(_ discoverModel: DiscoverExerciseModel) {
         let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: discoverModel)
-        childCoordinators.append(child)
-        child.start()
-    }
-    func addCircuit() {
-        let child = CircuitCreationCoordinator(navigationController: navigationController, publisher: completedCircuit)
-        childCoordinators.append(child)
-        child.start()
-    }
-    func addAmrap() {
-        let child = AMRAPCreationCoordinator(navigationController: navigationController, publisher: completedAmrap)
         childCoordinators.append(child)
         child.start()
     }

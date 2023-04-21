@@ -53,10 +53,4 @@ extension LiveWorkoutExerciseCreationCoordinator: ExerciseSelectionFlow {
         childCoordinators.append(child)
         child.start()
     }
-    func addCircuit() {
-        
-    }
-    func addAmrap() {
-        
-    }
 }

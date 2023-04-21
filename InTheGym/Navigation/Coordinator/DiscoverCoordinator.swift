@@ -106,13 +106,6 @@ extension DiscoverCoordinator: ExerciseSelectionFlow {
         childCoordinators.append(child)
         child.start()
     }
-    func addCircuit() {
-        
-    }
-    
-    func addAmrap() {
-        
-    }
 }
 
 //MARK: - Navigation Delegate Method

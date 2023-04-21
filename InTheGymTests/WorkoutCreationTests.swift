@@ -57,40 +57,4 @@ class WorkoutCreationTests: XCTestCase {
         wait(for: [exception], timeout: 5)
         
     }
-    
-    func testAddingCircuit() {
-        let exception = XCTestExpectation(description: "Waiting for publisher to emit values.")
-        let exampleCircuit = CircuitModel(circuitPosition: 0, workoutPosition: 0, exercises: [], completed: false, circuitName: "", createdBy: "", creatorID: "", integrated: true)
-        
-        sut.exercises
-            .dropFirst()
-            .sink { result in
-                XCTAssertEqual(result.count, 1)
-                exception.fulfill()
-            }
-            .store(in: &subscriptions)
-        
-        sut.addCircuit(exampleCircuit)
-        
-        wait(for: [exception], timeout: 5)
-        
-    }
-    
-    func testAddingAMRAP() {
-        let exception = XCTestExpectation(description: "Waiting for publisher to emit values.")
-        let exampleAmrap = AMRAPModel(amrapPosition: 0, workoutPosition: 0, timeLimit: 0, exercises: [], completed: false, roundsCompleted: 0, exercisesCompleted: 0, started: false)
-        
-        sut.exercises
-            .dropFirst()
-            .sink { result in
-                XCTAssertEqual(result.count, 1)
-                exception.fulfill()
-            }
-            .store(in: &subscriptions)
-        
-        sut.addAMRAP(exampleAmrap)
-        
-        wait(for: [exception], timeout: 5)
-        
-    }
 }

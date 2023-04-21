@@ -32,7 +32,6 @@ class ExerciseSelectionViewController: UIViewController {
         initViewModel()
         initDisplay()
         initNavBar()
-        initViewTaps()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,11 +68,6 @@ class ExerciseSelectionViewController: UIViewController {
         display.collectionView.delegate = adapter
         display.collectionView.dataSource = adapter
         display.searchBar.delegate = self
-        if coordinator is RegularWorkoutCreationCoordinator {
-            display.showStack()
-        } else {
-            display.hideStack()
-        }
     }
     func initNavBar() {
         navigationItem.title = "Select Exercise"
@@ -83,21 +77,6 @@ class ExerciseSelectionViewController: UIViewController {
     
     @objc func otherTapped(_ sender: UIBarButtonItem) {
         coordinator?.otherSelected(viewModel.exercise)
-    }
-    
-    func initViewTaps() {
-        let circuitTap = UITapGestureRecognizer(target: self, action: #selector(circuitTapped))
-        display.circuitView.addGestureRecognizer(circuitTap)
-        let amrapTap = UITapGestureRecognizer(target: self, action: #selector(amrapTapped))
-        display.amrapView.addGestureRecognizer(amrapTap)
-    }
-    
-    // MARK: - Actions
-    @objc func circuitTapped() {
-        coordinator?.addCircuit()
-    }
-    @objc func amrapTapped() {
-        coordinator?.addAmrap()
     }
 }
 

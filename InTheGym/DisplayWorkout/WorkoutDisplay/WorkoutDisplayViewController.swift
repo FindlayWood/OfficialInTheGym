@@ -100,14 +100,6 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
             .sink { [weak self] in self?.showDiscovery($0)}
             .store(in: &subscriptions)
         
-        childVC.dataSource.circuitSelected
-            .sink { [weak self] in self?.circuitSelected($0)}
-            .store(in: &subscriptions)
-        
-        childVC.dataSource.amrapSelected
-            .sink { [weak self] in self?.amrapSelected($0) }
-            .store(in: &subscriptions)
-        
         childVC.dataSource.rpeButtonTapped
             .sink { [weak self] in self?.rpe(index: $0)}
             .store(in: &subscriptions)
@@ -181,13 +173,6 @@ class WorkoutDisplayViewController: UIViewController, CustomAnimatingClipFromVC,
         viewModel.editAction
             .sink { [weak self] in self?.editSet($0)}
             .store(in: &subscriptions)
-        
-        viewModel.updatedCircuit
-            .sink { [weak self] in self?.childVC.dataSource.updateCircuit($0)}
-            .store(in: &subscriptions)
-        viewModel.updatedAMRAP
-            .sink { [weak self] in self?.childVC.dataSource.updateAMRAP($0)}
-            .store(in: &subscriptions)
     }
     // MARK: - RPE
     func rpe(index: IndexPath) {
@@ -244,11 +229,5 @@ extension WorkoutDisplayViewController {
     func editSet(_ set: ExerciseSet) {
         guard let exercise = viewModel.showExerciseDetail else {return}
         coordinator?.editSet(exerciseModel: exercise, publisher: viewModel.editedExercise, setNumber: set.set)
-    }
-    func circuitSelected(_ circuit: CircuitModel) {
-        coordinator?.showCircuit(circuit, viewModel.workout, viewModel.updatedCircuit)
-    }
-    func amrapSelected(_ amrap: AMRAPModel) {
-        coordinator?.showAMRAP(amrap, viewModel.workout, viewModel.updatedAMRAP)
     }
 }

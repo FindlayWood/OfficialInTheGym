@@ -28,8 +28,6 @@ class CoachPlayerWorkoutViewModel {
     func getAllExercises() -> [ExerciseType] {
         var exercises = [ExerciseType]()
         exercises.append(contentsOf: workoutModel.exercises ?? [])
-        exercises.append(contentsOf: workoutModel.circuits ?? [])
-        exercises.append(contentsOf: workoutModel.amraps ?? [])
         return exercises.sorted(by: { $0.workoutPosition < $1.workoutPosition} )
     }
     

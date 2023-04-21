@@ -27,16 +27,12 @@ class WorkoutCreationViewModel {
     var workoutListPublisher: WorkoutList!
     
     var addedExercisePublisher = PassthroughSubject<ExerciseModel,Never>()
-    var addedCircuitPublisher = PassthroughSubject<CircuitModel,Never>()
-    var addedAmrapPublisher = PassthroughSubject<AMRAPModel,Never>()
     
     var toggledSaving = PassthroughSubject<Void,Never>()
     var toggledPrivacy = PassthroughSubject<Void,Never>()
     var addedNewTag = PassthroughSubject<ExerciseTagReturnModel,Never>()
     // MARK: - Exercise Types
     var exerciseModels = [ExerciseModel]()
-    var circuitModels = [CircuitModel]()
-    var amrapModels = [AMRAPModel]()
     
     // MARK: - Properties
     var workoutList: WorkoutsList!
@@ -73,12 +69,6 @@ class WorkoutCreationViewModel {
         addedExercisePublisher
             .sink { [weak self] in self?.addExercise($0) }
             .store(in: &subscriptions)
-        addedCircuitPublisher
-            .sink { [weak self] in self?.addCircuit($0)}
-            .store(in: &subscriptions)
-        addedAmrapPublisher
-            .sink { [weak self] in self?.addAMRAP($0)}
-            .store(in: &subscriptions)
     }
     func optionSubscriptions() {
         toggledSaving
@@ -97,28 +87,12 @@ class WorkoutCreationViewModel {
         exercises.append(exercise)
         exerciseModels.append(exercise)
     }
-    func addCircuit(_ circuit: CircuitModel) {
-        var circuit = circuit
-        circuit.workoutPosition = exercises.count
-        circuit.circuitPosition = circuitModels.count
-        exercises.append(circuit)
-        circuitModels.append(circuit)
-    }
-    func addAMRAP(_ amrap: AMRAPModel) {
-        var amrap = amrap
-        amrap.workoutPosition = exercises.count
-        amrap.amrapPosition = amrapModels.count
-        exercises.append(amrap)
-        amrapModels.append(amrap)
-    }
     
     //MARK: - Actions
     func upload() {
         let newSavedWorkout = SavedWorkoutModel(title: workoutTitle,
                                                 isPrivate: isPrivate,
-                                                exercises: exerciseModels,
-                                                circuits: circuitModels,
-                                                amraps: amrapModels)
+                                                exercises: exerciseModels)
         
         apiService.uploadTimeOrderedModel(model: newSavedWorkout) { [weak self] result in
             switch result {
@@ -178,8 +152,6 @@ class WorkoutCreationViewModel {
     func reset() {
         exercises = []
         exerciseModels.removeAll()
-        circuitModels.removeAll()
-        amrapModels.removeAll()
         workoutTags.removeAll()
         isSaving = true
         isPrivate = false
@@ -197,8 +169,6 @@ class ExerciseCreationViewModel {
     
     enum exerciseKind {
         case regular
-        case circuit
-        case amrap
         case live
     }
     

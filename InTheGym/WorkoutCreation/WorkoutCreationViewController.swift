@@ -71,8 +71,6 @@ class WorkoutCreationViewController: UIViewController {
     func setupSubscribers() {
         
         coordinator?.completedExercise = viewModel.addedExercisePublisher
-        coordinator?.completedCircuit = viewModel.addedCircuitPublisher
-        coordinator?.completedAmrap = viewModel.addedAmrapPublisher
         
         viewModel.$exercises
             .dropFirst()
@@ -138,14 +136,6 @@ extension WorkoutCreationViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: ExerciseCreationTableViewCell.cellID, for: indexPath) as! ExerciseCreationTableViewCell
                 cell.configure(with: model)
                 return cell
-            case .circuit(let model):
-                let cell = tableView.dequeueReusableCell(withIdentifier: CircuitCreationTableViewCell.cellID, for: indexPath) as! CircuitCreationTableViewCell
-                cell.configure(with: model)
-                return cell
-            case .amrap(let model):
-                let cell = tableView.dequeueReusableCell(withIdentifier: AmrapCreationTableViewCell.cellID, for: indexPath) as! AmrapCreationTableViewCell
-                cell.configure(with: model)
-                return cell
             }
         }
     }
@@ -166,10 +156,6 @@ extension WorkoutCreationViewController {
             switch type {
             case is ExerciseModel:
                 currentSnapshot.appendItems([.exercise(type as! ExerciseModel)], toSection: .main)
-            case is CircuitModel:
-                currentSnapshot.appendItems([.circuit(type as! CircuitModel)], toSection: .main)
-            case is AMRAPModel:
-                currentSnapshot.appendItems([.amrap(type as! AMRAPModel)], toSection: .main)
             default:
                 break
             }
@@ -189,6 +175,4 @@ extension WorkoutCreationViewController {
 }
 enum ExerciseRow: Hashable {
     case exercise(ExerciseModel)
-    case circuit(CircuitModel)
-    case amrap(AMRAPModel)
 }

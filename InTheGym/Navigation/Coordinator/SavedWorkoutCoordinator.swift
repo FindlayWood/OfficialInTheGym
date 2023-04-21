@@ -53,16 +53,6 @@ extension SavedWorkoutCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func showCircuit(_ circuit: CircuitModel) {
-        let vc = DisplayCircuitViewController()
-        vc.viewModel.circuitModel = circuit
-        navigationController.pushViewController(vc, animated: true)
-    }
-    func showAMRAP(_ amrap: AMRAPModel) {
-        let vc = DisplayAMRAPViewController()
-        vc.viewModel.amrapModel = amrap
-        navigationController.pushViewController(vc, animated: true)
-    }
     func showAssign(_ model: SavedWorkoutModel) {
         let vc = AssigningSelectionViewController()
         vc.viewModel.savedWorkoutModel = model

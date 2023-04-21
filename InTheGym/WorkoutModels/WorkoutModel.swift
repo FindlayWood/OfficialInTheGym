@@ -30,8 +30,6 @@ class WorkoutModel: Codable, Hashable {
     var workload: Int?
     var summary: String?
     var exercises: [ExerciseModel]?
-    var circuits: [CircuitModel]?
-    var amraps: [AMRAPModel]?
     var liveWorkout: Bool?
 //    var id: String {
 //        return workoutID
@@ -47,8 +45,6 @@ class WorkoutModel: Codable, Hashable {
         isPrivate = newSavedModel.isPrivate
         completed = false
         exercises = newSavedModel.exercises
-        circuits = newSavedModel.circuits
-        amraps = newSavedModel.amraps
     }
     init(savedModel: SavedWorkoutModel, assignTo: String) {
         title = savedModel.title
@@ -60,8 +56,6 @@ class WorkoutModel: Codable, Hashable {
         isPrivate = savedModel.isPrivate
         completed = false
         exercises = savedModel.exercises
-        circuits = savedModel.circuits
-        amraps = savedModel.amraps
     }
     
     init(liveModel: LiveWorkoutModel) {
@@ -88,8 +82,6 @@ extension WorkoutModel {
     func totalExerciseCount() -> Int {
         var totalExerciseCount = 0
         totalExerciseCount += exercises?.count ?? 0
-        totalExerciseCount += circuits?.count ?? 0
-        totalExerciseCount += amraps?.count ?? 0
         return totalExerciseCount
     }
     func averageRPE() -> Double {

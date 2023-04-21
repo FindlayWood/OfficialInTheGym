@@ -39,27 +39,4 @@ extension UICollectionViewCell {
             }
         }
     }
-    // MARK: - Circuit Flash
-    func circuitFlash(completion: @escaping (() -> Void)) {
-        guard let self = self as? CircuitCollectionViewCell else {return}
-        guard let collection = self.superview as? UICollectionView else {return}
-        UIView.animate(withDuration: 0.3) {
-            self.contentView.backgroundColor = .darkColour
-            self.completeButton.setImage(UIImage(systemName: "checkmark.circle", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-        } completion: { _ in
-            UIView.animate(withDuration: 0.3) {
-                self.contentView.backgroundColor = .systemBackground
-            } completion: { _ in
-                guard let currentIndex = collection.indexPath(for: self)?.item else {return}
-                let lastIndexToScroll = collection.numberOfItems(inSection: 0) - 1
-                if currentIndex < lastIndexToScroll {
-                    let indexToScroll = IndexPath(item: currentIndex + 1, section: 0)
-                    collection.scrollToItem(at: indexToScroll, at: .top, animated: true)
-                    completion()
-                } else {
-                    completion()
-                }
-            }
-        }
-    }
 }
