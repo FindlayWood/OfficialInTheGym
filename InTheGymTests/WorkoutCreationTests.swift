@@ -93,37 +93,4 @@ class WorkoutCreationTests: XCTestCase {
         wait(for: [exception], timeout: 5)
         
     }
-    
-    func testAddingEMOM() {
-        let exception = XCTestExpectation(description: "Waiting for publisher to emit values.")
-        let exampleEMOM = EMOMModel(emomPosition: 0, workoutPosition: 0, exercises: [], timeLimit: 0, completed: false, started: false)
-        
-        sut.exercises
-            .dropFirst()
-            .sink { result in
-                XCTAssertEqual(result.count, 1)
-                exception.fulfill()
-            }
-            .store(in: &subscriptions)
-        
-        sut.addEMOM(exampleEMOM)
-        
-        wait(for: [exception], timeout: 5)
-        
-    }
-    
-//    func testUpload() {
-//        let exception = XCTestExpectation(description: "Waiting for publisher to emit values.")
-//        
-//        sut.successfullyUploadedWorkout
-//            .sink { result in
-//                XCTAssertEqual(result, true)
-//                exception.fulfill()
-//            }
-//            .store(in: &subscriptions)
-//        
-//        sut.upload(to: nil, with: WorkoutOptionsModel(isPrivate: true, save: false))
-//        
-//        wait(for: [exception], timeout: 5)
-//    }
 }

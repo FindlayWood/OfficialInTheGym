@@ -130,7 +130,6 @@
 		7423B51D279B93BD007AA889 /* HorizontallyFlushCollectionFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7423B51C279B93BD007AA889 /* HorizontallyFlushCollectionFlowLayout.swift */; };
 		7423B51F279C2E54007AA889 /* ExerciseCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7423B51E279C2E54007AA889 /* ExerciseCollectionCell.swift */; };
 		7423B521279EF677007AA889 /* AMRAPUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7423B520279EF677007AA889 /* AMRAPUpdate.swift */; };
-		7423B526279F116E007AA889 /* EMOMUpdates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7423B525279F116D007AA889 /* EMOMUpdates.swift */; };
 		7423B528279F4F93007AA889 /* UITopMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7423B527279F4F93007AA889 /* UITopMessageView.swift */; };
 		7425D4182545AE8000567DAB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7425D4172545AE8000567DAB /* Constants.swift */; };
 		7429784E26C1DCBE0023365E /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7429784D26C1DCBE0023365E /* UserTableViewCell.swift */; };
@@ -470,8 +469,6 @@
 		747E0C902862116F00D828A4 /* MyJumpsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E0C8F2862116F00D828A4 /* MyJumpsViewController.swift */; };
 		747E0C942862267800D828A4 /* RecordJumpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747E0C932862267800D828A4 /* RecordJumpViewModel.swift */; };
 		747FAFBB2727365100E2966E /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FAFBA2727365100E2966E /* UserDefaults+Extension.swift */; };
-		747FAFBF272853F000E2966E /* DisplayEMOMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FAFBE272853F000E2966E /* DisplayEMOMTests.swift */; };
-		747FAFC527298E5B00E2966E /* MockFirebaseEMOMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FAFC427298E5B00E2966E /* MockFirebaseEMOMService.swift */; };
 		7480907228287C4E00F32192 /* CompletedWorkoutCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7480907128287C4E00F32192 /* CompletedWorkoutCoordinator.swift */; };
 		7480EBB425F500DD00E4E768 /* DisplayWorkoutCellModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7480EBB325F500DD00E4E768 /* DisplayWorkoutCellModels.swift */; };
 		748613A827D69BC100D50506 /* SavedWorkoutBottomChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748613A727D69BC100D50506 /* SavedWorkoutBottomChildViewController.swift */; };
@@ -1022,7 +1019,6 @@
 		7423B51C279B93BD007AA889 /* HorizontallyFlushCollectionFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontallyFlushCollectionFlowLayout.swift; sourceTree = "<group>"; };
 		7423B51E279C2E54007AA889 /* ExerciseCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCollectionCell.swift; sourceTree = "<group>"; };
 		7423B520279EF677007AA889 /* AMRAPUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMRAPUpdate.swift; sourceTree = "<group>"; };
-		7423B525279F116D007AA889 /* EMOMUpdates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EMOMUpdates.swift; sourceTree = "<group>"; };
 		7423B527279F4F93007AA889 /* UITopMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITopMessageView.swift; sourceTree = "<group>"; };
 		7425D4172545AE8000567DAB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7429784D26C1DCBE0023365E /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
@@ -1361,8 +1357,6 @@
 		747E0C8F2862116F00D828A4 /* MyJumpsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyJumpsViewController.swift; sourceTree = "<group>"; };
 		747E0C932862267800D828A4 /* RecordJumpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordJumpViewModel.swift; sourceTree = "<group>"; };
 		747FAFBA2727365100E2966E /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
-		747FAFBE272853F000E2966E /* DisplayEMOMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayEMOMTests.swift; sourceTree = "<group>"; };
-		747FAFC427298E5B00E2966E /* MockFirebaseEMOMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFirebaseEMOMService.swift; sourceTree = "<group>"; };
 		7480907128287C4E00F32192 /* CompletedWorkoutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedWorkoutCoordinator.swift; sourceTree = "<group>"; };
 		7480EBB325F500DD00E4E768 /* DisplayWorkoutCellModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayWorkoutCellModels.swift; sourceTree = "<group>"; };
 		748613A727D69BC100D50506 /* SavedWorkoutBottomChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWorkoutBottomChildViewController.swift; sourceTree = "<group>"; };
@@ -1906,7 +1900,6 @@
 			isa = PBXGroup;
 			children = (
 				74F2CCF226E78F9600D7AD79 /* MockFirebaseManager.swift */,
-				747FAFC427298E5B00E2966E /* MockFirebaseEMOMService.swift */,
 				74B6F76C275FB81E00A72679 /* MockFirebaseAuthManager.swift */,
 				743330CE27909651005A0C45 /* MockFirebaseDatabaseManager.swift */,
 			);
@@ -2664,7 +2657,6 @@
 				743330EF279438F6005A0C45 /* PostActionEnum.swift */,
 				744AED31279860ED000D2D74 /* OptionsAction.swift */,
 				7423B520279EF677007AA889 /* AMRAPUpdate.swift */,
-				7423B525279F116D007AA889 /* EMOMUpdates.swift */,
 				74B48E0E27A442CD00BBFC16 /* ExerciseAction.swift */,
 				742C1C5827B4529100DD1BB0 /* ClipUploadError.swift */,
 				742C1C6B27B6A82700DD1BB0 /* ProfileOptions.swift */,
@@ -3336,7 +3328,6 @@
 				7403A5F226C42852000588CE /* MockServices */,
 				7479A920229F2B4D00D39E2E /* InTheGymTests.swift */,
 				7479A922229F2B4D00D39E2E /* Info.plist */,
-				747FAFBE272853F000E2966E /* DisplayEMOMTests.swift */,
 				74B6F76E275FB88800A72679 /* SignUpTests.swift */,
 				743330D0279096D7005A0C45 /* WorkoutCreationTests.swift */,
 				74DE6DAB27D62A26009FB44A /* WorkloadTests.swift */,
@@ -5055,7 +5046,6 @@
 				742FD569283EB1740025E43C /* ExerciseTagsViewController.swift in Sources */,
 				744B52BF27CA5CDA00B9D45B /* OptionsCell.swift in Sources */,
 				74FA60A528B03081007B2CD8 /* Calendar+Extension.swift in Sources */,
-				7423B526279F116E007AA889 /* EMOMUpdates.swift in Sources */,
 				74AF6D6826868D2B005C52A8 /* ExerciseStatsSectionCell.swift in Sources */,
 				7419B12E2857D10500E879DE /* PerformanceIntroView.swift in Sources */,
 				7431030F26FA3FFE00F7121B /* TimeSelectionPickerCoordinator.swift in Sources */,
@@ -5722,8 +5712,6 @@
 				7479A921229F2B4D00D39E2E /* InTheGymTests.swift in Sources */,
 				74B6F76F275FB88800A72679 /* SignUpTests.swift in Sources */,
 				74B6F76D275FB81E00A72679 /* MockFirebaseAuthManager.swift in Sources */,
-				747FAFBF272853F000E2966E /* DisplayEMOMTests.swift in Sources */,
-				747FAFC527298E5B00E2966E /* MockFirebaseEMOMService.swift in Sources */,
 				74F2CCF326E78F9600D7AD79 /* MockFirebaseManager.swift in Sources */,
 				743330CF27909651005A0C45 /* MockFirebaseDatabaseManager.swift in Sources */,
 			);
