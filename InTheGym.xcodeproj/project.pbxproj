@@ -785,6 +785,7 @@
 		9F24629A2933D8D3006C5656 /* NewPost+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2462992933D8D3006C5656 /* NewPost+ViewModel.swift */; };
 		9F24629D29340DEB006C5656 /* ClipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F24629C29340DEB006C5656 /* ClipsView.swift */; };
 		9F24629F29340FE6006C5656 /* ClipsView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F24629E29340FE6006C5656 /* ClipsView+ViewModel.swift */; };
+		9F3D3C3A29F45D8200CDACC0 /* WorkoutKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9F3D3C3929F45D8200CDACC0 /* WorkoutKit */; };
 		9F3F820D2935582700CC9980 /* ClipGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F820C2935582700CC9980 /* ClipGridView.swift */; };
 		9F3F8210293563B000CC9980 /* AttachmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F820F293563B000CC9980 /* AttachmentsViewController.swift */; };
 		9F3F8213293569A300CC9980 /* PrivacySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F8212293569A300CC9980 /* PrivacySettingsViewController.swift */; };
@@ -1707,6 +1708,7 @@
 				74330445289E962B00F2569A /* FirebaseDatabaseSwift in Frameworks */,
 				74A7EB65289EAE92007C2ECD /* SkyFloatingLabelTextField in Frameworks */,
 				9FC11F6A29E20CB60054D79A /* AccountCreationKit in Frameworks */,
+				9F3D3C3A29F45D8200CDACC0 /* WorkoutKit in Frameworks */,
 				74FA60B428B3E500007B2CD8 /* SCLAlertView in Frameworks */,
 				746061BD252547E9005B1480 /* AppTrackingTransparency.framework in Frameworks */,
 				7433044F289E962B00F2569A /* FirebaseStorageCombine-Community in Frameworks */,
@@ -4595,6 +4597,7 @@
 				74F664E728E8DA6D0086BA4E /* FirebaseMessaging */,
 				9FC11F6029DDCA8E0054D79A /* LoginKit */,
 				9FC11F6929E20CB60054D79A /* AccountCreationKit */,
+				9F3D3C3929F45D8200CDACC0 /* WorkoutKit */,
 			);
 			productName = InTheGym;
 			productReference = 7479A905229F2B4C00D39E2E /* InTheGym.app */;
@@ -6222,6 +6225,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 74FA60B228B3E4FF007B2CD8 /* XCRemoteSwiftPackageReference "SCLAlertView-Swift" */;
 			productName = SCLAlertView;
+		};
+		9F3D3C3929F45D8200CDACC0 /* WorkoutKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WorkoutKit;
 		};
 		9FC11F6029DDCA8E0054D79A /* LoginKit */ = {
 			isa = XCSwiftPackageProductDependency;
