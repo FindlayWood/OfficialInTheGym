@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WorkoutSetView: View {
     
-    var model: SetModel
+    @ObservedObject var model: SetController
     
     let namespace: Namespace.ID
     
@@ -37,13 +37,15 @@ struct WorkoutSetView: View {
                     .opacity(0)
             }
             Button {
-                
+                model.completed = true
             } label: {
                 Image(systemName: model.completed ? "checkmark.circle.fill" : "circle")
                     .font(.headline)
             }
+            .disabled(model.completed)
             .buttonStyle(.plain)
             .matchedGeometryEffect(id: "\(model.id)\(model.setNumber)button", in: namespace)
+            .animation(.easeIn, value: model.completed)
         }
         .foregroundColor(.white)
         .padding()
@@ -53,12 +55,13 @@ struct WorkoutSetView: View {
                 .foregroundColor(model.completed ? Color(.darkColour) : Color(.lightColour))
         )
         .shadow(radius: 4)
+        .animation(.easeIn, value: model.completed)
     }
 }
 
 struct WorkoutSetView_Previews: PreviewProvider {
     @Namespace static var namespace
     static var previews: some View {
-        WorkoutSetView(model: .example, namespace: namespace)
+        WorkoutSetView(model: .example, namespace: namespace) 
     }
 }

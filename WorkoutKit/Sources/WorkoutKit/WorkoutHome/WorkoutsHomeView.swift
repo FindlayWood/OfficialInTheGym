@@ -79,36 +79,55 @@ struct WorkoutsHomeView: View {
                 }
             }
             .padding(.top)
-            if viewModel.workouts.isEmpty {
-                VStack {
-                    ZStack {
-                        Image(systemName: "dumbbell.fill")
+            if viewModel.filteredResults.isEmpty {
+                if viewModel.isLoading {
+                    VStack {
+                        Image(systemName: "network")
                             .font(.largeTitle)
                             .foregroundColor(Color(.darkColour))
-                        Image(systemName: "nosign")
-                            .resizable()
-                            .frame(width: 80, height: 80)
-                            .foregroundColor(.red.opacity(0.5))
+                        Text("Loading Workouts")
+                            .font(.title.bold())
+                            .foregroundColor(Color(.darkColour))
+                        Text("Wait 1 second, we are just loading your workouts!")
+                            .font(.footnote.bold())
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                        ProgressView()
                     }
-                    Text("No Workouts")
-                        .font(.title.bold())
-                        .foregroundColor(Color(.darkColour))
-                    Text("You have no workouts in your list. You can add workouts from your Saved Workout List or by creating a new workout. Once you have added workouts to your list they will appear here.")
-                        .font(.footnote.bold())
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                    Button {
-                        viewModel.addAction()
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .foregroundColor(Color(.darkColour).opacity(0.8))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(.secondarySystemBackground))
+                } else {
+                    VStack {
+                        ZStack {
+                            Image(systemName: "dumbbell.fill")
+                                .font(.largeTitle)
+                                .foregroundColor(Color(.darkColour))
+                            Image(systemName: "nosign")
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                                .foregroundColor(.red.opacity(0.5))
+                        }
+                        Text("No Workouts")
+                            .font(.title.bold())
+                            .foregroundColor(Color(.darkColour))
+                        Text("You have no workouts in your list. You can add workouts from your Saved Workout List or by creating a new workout. Once you have added workouts to your list they will appear here.")
+                            .font(.footnote.bold())
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                        Button {
+                            viewModel.addAction()
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(Color(.darkColour).opacity(0.8))
+                        }
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(.secondarySystemBackground))
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(.secondarySystemBackground))
             } else {
                 SearchBar(searchText: $viewModel.searchText, placeholder: "search workouts...")
                 List {
@@ -127,6 +146,9 @@ struct WorkoutsHomeView: View {
             }
         }
         .background(Color(.systemBackground))
+        .task {
+            await viewModel.loadWorkouts()
+        }
     }
 }
 

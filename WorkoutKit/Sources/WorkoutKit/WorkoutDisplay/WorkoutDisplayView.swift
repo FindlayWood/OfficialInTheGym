@@ -11,24 +11,35 @@ struct WorkoutDisplayView: View {
     
     @ObservedObject var viewModel: WorkoutDisplayViewModel
     
-    @State private var selectedSet: SetModel?
-    
     @Namespace var namespace
     
     var body: some View {
-        ScrollView {
-            VStack {
-                ForEach(viewModel.exercises) { model in
-                    WorkoutExerciseView(exercise: model, selectedSet: $selectedSet, namespace: namespace)
+        VStack {
+            Rectangle()
+                .frame(height: 1)
+                .frame(maxWidth: .infinity)
+                .foregroundColor(.clear)
+            ScrollView {
+                VStack {
+                    ForEach(viewModel.exercises) { model in
+                        WorkoutExerciseView(exercise: model, selectedSet: $viewModel.selectedSet, namespace: namespace)
+                            .environmentObject(viewModel)
+                    }
                 }
+                .padding(6)
             }
-            .padding(6)
         }
         .background(Color(.lightColour))
-        .overlay(
-            ExpandedSetView(selectedSet: $selectedSet, namespace: namespace)
+        .overlay {
+            if let select = viewModel.selectedSet {
+                ExpandedSetView(selectedSet: select, namespace: namespace) {
+                    withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
+                        viewModel.selectedSet = nil
+                    }
+                }
                 .transition(.asymmetric(insertion: .identity, removal: .offset(y: 5)))
-        )   
+            }
+        }
     }
 }
 

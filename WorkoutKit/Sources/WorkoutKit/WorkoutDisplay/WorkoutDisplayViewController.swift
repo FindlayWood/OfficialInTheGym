@@ -16,7 +16,6 @@ class WorkoutDisplayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addDisplay()
-        view.backgroundColor = .lightColour
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -28,6 +27,6 @@ class WorkoutDisplayViewController: UIViewController {
     
     func addDisplay() {
         display = .init(viewModel: viewModel)
-        addSwiftUIViewWithNavBar(display)
+        addSwiftUIView(display)
     }
 }

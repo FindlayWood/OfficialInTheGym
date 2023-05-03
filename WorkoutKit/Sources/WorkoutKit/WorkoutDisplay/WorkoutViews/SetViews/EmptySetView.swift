@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EmptySetView: View {
     
-    var model: SetModel
+    @ObservedObject var model: SetController
     
     var body: some View {
         VStack {

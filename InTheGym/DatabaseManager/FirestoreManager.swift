@@ -30,10 +30,16 @@ class FirestoreManager: FirestoreService {
         let ref = Firestore.firestore().document(path)
         return try await ref.getDocument(as: T.self)
     }
+    
+    func readAll<T: Codable>(at path: String) async throws -> [T] {
+        let ref = Firestore.firestore().collection(path)
+        return try await ref.getDocuments().documents.map { try $0.data(as: T.self) }
+    }
 }
 
 
 protocol FirestoreService {
     func upload(data: Codable, at path: String) async throws
     func read<T: Codable>(at path: String) async throws -> T
+    func readAll<T: Codable>(at path: String) async throws -> [T]
 }

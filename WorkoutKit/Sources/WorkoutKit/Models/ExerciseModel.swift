@@ -19,3 +19,8 @@ struct ExerciseModel: Codable, Identifiable {
 extension ExerciseModel {
     static let example = ExerciseModel(id: UUID().uuidString, name: "Bench Press", workoutPosition: 0, type: .upperBody, sets: [.example])
 }
+extension ExerciseModel: Comparable {
+    static func < (lhs: ExerciseModel, rhs: ExerciseModel) -> Bool {
+        lhs.workoutPosition < rhs.workoutPosition
+    }
+}

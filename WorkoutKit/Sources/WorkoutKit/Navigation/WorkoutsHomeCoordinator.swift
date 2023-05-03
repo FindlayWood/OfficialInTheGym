@@ -10,20 +10,24 @@ import UIKit
 class WorkoutsHomeCoordinator {
     
     var navigationController: UINavigationController
+    var apiService: NetworkService
+    var currentUserService: CurrentUserServiceWorkoutKit
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, apiService: NetworkService, userService: CurrentUserServiceWorkoutKit) {
         self.navigationController = navigationController
+        self.apiService = apiService
+        self.currentUserService = userService
     }
     
     func start() {
         let vc = WorkoutsHomeViewController()
-        vc.viewModel = .init()
+        vc.viewModel = .init(apiService: apiService, userService: currentUserService)
         vc.viewModel.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
     
     func addNewWorkout(publisher: AddNewWorkoutPublisher) {
-        let childCooridnator = CreationCoordinator(navigationController: navigationController, addNewWorkoutPublisher: publisher)
+        let childCooridnator = CreationCoordinator(navigationController: navigationController, addNewWorkoutPublisher: publisher, apiService: apiService, userService: currentUserService)
         childCooridnator.start()
     }
     

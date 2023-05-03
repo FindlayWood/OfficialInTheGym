@@ -9,12 +9,14 @@ import Foundation
 
 class WorkoutDisplayViewModel: ObservableObject {
     
+    @Published var selectedSet: SetController?
+    
     var workoutModel: WorkoutModel
-    var exercises: [ExerciseModel]
+    var exercises: [ExerciseController]
 
     init(workoutModel: WorkoutModel, exercises: [ExerciseModel]) {
         self.workoutModel = workoutModel
-        self.exercises = exercises
+        self.exercises = exercises.map { ExerciseController(exerciseModel: $0) }
     }
     
 }

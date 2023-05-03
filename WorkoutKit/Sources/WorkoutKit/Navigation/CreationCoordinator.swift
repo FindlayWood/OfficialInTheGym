@@ -12,15 +12,19 @@ class CreationCoordinator {
     
     var navigationController: UINavigationController
     var addNewWorkoutPublisher: AddNewWorkoutPublisher
+    var apiService: NetworkService
+    var userService: CurrentUserServiceWorkoutKit
     
-    init(navigationController: UINavigationController, addNewWorkoutPublisher: AddNewWorkoutPublisher) {
+    init(navigationController: UINavigationController, addNewWorkoutPublisher: AddNewWorkoutPublisher, apiService: NetworkService, userService: CurrentUserServiceWorkoutKit) {
         self.navigationController = navigationController
         self.addNewWorkoutPublisher = addNewWorkoutPublisher
+        self.apiService = apiService
+        self.userService = userService
     }
     
     func start() {
         let vc = WorkoutCreationHomeViewController()
-        vc.viewModel = .init()
+        vc.viewModel = .init(apiService: apiService, userService: userService)
         vc.viewModel.coordinator = self
         vc.viewModel.addNewWorkoutPublisher = addNewWorkoutPublisher
         vc.hidesBottomBarWhenPushed = true

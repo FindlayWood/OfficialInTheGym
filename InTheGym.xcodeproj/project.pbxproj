@@ -774,6 +774,7 @@
 		9F1DA6FE2937EE8900F41089 /* UserSearchFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1DA6FD2937EE8900F41089 /* UserSearchFlow.swift */; };
 		9F1DA7012937F5B300F41089 /* TopMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1DA7002937F5B300F41089 /* TopMessageView.swift */; };
 		9F1DA704293804C000F41089 /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1DA703293804C000F41089 /* BannerView.swift */; };
+		9F2171032A016F4100443008 /* WorkoutKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2171022A016F4100443008 /* WorkoutKitComposition.swift */; };
 		9F2462882931782F006C5656 /* DiscoverSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2462872931782F006C5656 /* DiscoverSearchView.swift */; };
 		9F24628A2931790C006C5656 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2462892931790C006C5656 /* SearchBar.swift */; };
 		9F24628D293180BC006C5656 /* UserRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F24628C293180BC006C5656 /* UserRow.swift */; };
@@ -1626,6 +1627,7 @@
 		9F1DA6FD2937EE8900F41089 /* UserSearchFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchFlow.swift; sourceTree = "<group>"; };
 		9F1DA7002937F5B300F41089 /* TopMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopMessageView.swift; sourceTree = "<group>"; };
 		9F1DA703293804C000F41089 /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
+		9F2171022A016F4100443008 /* WorkoutKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutKitComposition.swift; sourceTree = "<group>"; };
 		9F2462872931782F006C5656 /* DiscoverSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSearchView.swift; sourceTree = "<group>"; };
 		9F2462892931790C006C5656 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		9F24628C293180BC006C5656 /* UserRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRow.swift; sourceTree = "<group>"; };
@@ -4527,6 +4529,7 @@
 			children = (
 				9FC11F5E29DDC9B80054D79A /* LoginComposition.swift */,
 				9FB4D1DB29E752AB0019CA57 /* AccountCreationComposition.swift */,
+				9F2171022A016F4100443008 /* WorkoutKitComposition.swift */,
 			);
 			path = Composition;
 			sourceTree = "<group>";
@@ -5513,6 +5516,7 @@
 				74B48DDF27A06E4400BBFC16 /* FirebaseStorageManager.swift in Sources */,
 				744AED4E279ADE2A000D2D74 /* CustomCache.swift in Sources */,
 				7444D09526D136890009C7A6 /* AddMoreToExerciseAdapter.swift in Sources */,
+				9F2171032A016F4100443008 /* WorkoutKitComposition.swift in Sources */,
 				74FA609F28AFF7E8007B2CD8 /* InjuryTrackerViewModel.swift in Sources */,
 				7444D09926D136AD0009C7A6 /* AddMoreToExerciseView.swift in Sources */,
 				744AED472799DA7E000D2D74 /* WorkoutBottomViewController.swift in Sources */,

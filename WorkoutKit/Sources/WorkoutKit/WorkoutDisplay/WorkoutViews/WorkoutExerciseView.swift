@@ -9,9 +9,9 @@ import SwiftUI
 
 struct WorkoutExerciseView: View {
 
-    var exercise: ExerciseModel
+    @ObservedObject var exercise: ExerciseController
     
-    @Binding var selectedSet: SetModel?
+    @Binding var selectedSet: SetController?
     
     let namespace: Namespace.ID
     

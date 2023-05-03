@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import WorkoutKit
 
 class PlayerInitialViewController: UITabBarController {
 
@@ -33,8 +32,8 @@ class PlayerInitialViewController: UITabBarController {
         // MARK: - Workout Kit
         let workoutKitNavigationController = UINavigationController()
         workoutKitNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 2)
-        let workoutKitBoundary = WorkoutKitBoundary(navigationController: workoutKitNavigationController)
-        workoutKitBoundary.compose()
+        let workoutKitComposition = WorkoutKitComposition(navigaitonController: workoutKitNavigationController)
+//        workoutKitComposition.compose()
         // MARK: - Profile
         let myProfileNavigationController = UINavigationController()
         myProfileNavigationController.tabBarItem = UITabBarItem(title: "MYPROFILE", image: UIImage(systemName: "person.fill"), tag: 3)
