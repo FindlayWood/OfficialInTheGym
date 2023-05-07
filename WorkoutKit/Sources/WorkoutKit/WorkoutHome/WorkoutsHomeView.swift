@@ -52,33 +52,33 @@ struct WorkoutsHomeView: View {
                 }
             }
             .padding(.horizontal)
-            HStack {
-                ForEach(WorkoutOption.allCases) { option in
-                    VStack {
-                        Text(option.title)
-                            .font(option == selectedOption ? .headline : .body)
-                            .foregroundColor(option == selectedOption ? Color(.darkColour) : .secondary)
-                        if option == selectedOption {
-                            Rectangle()
-                                .foregroundColor(Color(.darkColour))
-                                .frame(height: 2)
-                                .frame(maxWidth: .infinity)
-                                .matchedGeometryEffect(id: "line", in: namespace)
-                        } else {
-                            Rectangle()
-                                .foregroundColor(Color(.clear))
-                                .frame(height: 2)
-                                .frame(maxWidth: .infinity)
-                        }
-                    }
-                    .onTapGesture {
-                        withAnimation {
-                            selectedOption = option
-                        }
-                    }
-                }
-            }
-            .padding(.top)
+//            HStack {
+//                ForEach(WorkoutOption.allCases) { option in
+//                    VStack {
+//                        Text(option.title)
+//                            .font(option == selectedOption ? .headline : .body)
+//                            .foregroundColor(option == selectedOption ? Color(.darkColour) : .secondary)
+//                        if option == selectedOption {
+//                            Rectangle()
+//                                .foregroundColor(Color(.darkColour))
+//                                .frame(height: 2)
+//                                .frame(maxWidth: .infinity)
+//                                .matchedGeometryEffect(id: "line", in: namespace)
+//                        } else {
+//                            Rectangle()
+//                                .foregroundColor(Color(.clear))
+//                                .frame(height: 2)
+//                                .frame(maxWidth: .infinity)
+//                        }
+//                    }
+//                    .onTapGesture {
+//                        withAnimation {
+//                            selectedOption = option
+//                        }
+//                    }
+//                }
+//            }
+//            .padding(.top)
             if viewModel.filteredResults.isEmpty {
                 if viewModel.isLoading {
                     VStack {
@@ -145,6 +145,7 @@ struct WorkoutsHomeView: View {
                 }
             }
         }
+        .animation(.easeInOut, value: viewModel.workouts)
         .background(Color(.systemBackground))
         .task {
             await viewModel.loadWorkouts()
@@ -154,16 +155,16 @@ struct WorkoutsHomeView: View {
 
 struct WorkoutsHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutsHomeView(viewModel: WorkoutsHomeViewModel())
+        WorkoutsHomeView(viewModel: WorkoutsHomeViewModel(workoutManager: PreviewWorkoutManager()))
     }
 }
 
 struct WorkoutRow: View {
-    var model: WorkoutCardModel
+    var model: RemoteWorkoutModel
     
     var body: some View {
         VStack(spacing: 0) {
-            Text(model.workout.title)
+            Text(model.title)
                 .font(.title2.bold())
                 .foregroundColor(Color(.darkColour))
                 .minimumScaleFactor(0.1)
@@ -174,22 +175,22 @@ struct WorkoutRow: View {
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal)
             HStack {
-                if model.workout.completed {
+                if model.completed {
                     Text("COMPLETED")
                         .font(.callout.bold())
                         .foregroundColor(Color(.completedColour))
-                    if let date = model.workout.startDate {
+                    if let date = model.startDate {
                         Text(date, format: .dateTime.day().month().year())
                             .font(.callout)
                             .fontWeight(.semibold)
                             .foregroundColor(.primary)
                     }
-                } else if model.workout.liveWorkout ?? false {
+                } else if model.liveWorkout ?? false {
                     Text("LIVE")
                         .font(.callout)
                         .foregroundColor(Color(.liveColour))
                         .fontWeight(.semibold)
-                } else if model.workout.startDate != nil {
+                } else if model.startDate != nil {
                     Text("IN PROGRESS")
                         .font(.callout)
                         .foregroundColor(Color(.liveColour))
@@ -222,19 +223,19 @@ struct WorkoutRow: View {
 }
 
 struct WorkoutFiguresView: View {
-    var model: WorkoutCardModel
+    var model: RemoteWorkoutModel
     var body: some View {
         HStack(spacing: 16) {
             VStack {
-                Text(model.exercises.count, format: .number)
+                Text(model.exerciseCount, format: .number)
                     .font(.body.bold())
                     .foregroundColor(.primary)
                 Text("Exercises")
                     .font(.caption.weight(.medium))
                     .foregroundColor(.secondary)
             }
-            if model.workout.completed == true {
-                if let time = model.workout.secondsToComplete {
+            if model.completed == true {
+                if let time = model.secondsToComplete {
                     VStack {
                         Text(time, format: .number)
                             .font(.body.bold())
@@ -244,7 +245,7 @@ struct WorkoutFiguresView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                if let rpe = model.workout.rpe {
+                if let rpe = model.rpe {
                     VStack {
                         Text(rpe, format: .number)
                             .font(.body.bold())

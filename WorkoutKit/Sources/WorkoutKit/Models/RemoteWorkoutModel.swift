@@ -7,34 +7,43 @@
 
 import Foundation
 
-struct WorkoutModel: Codable, Identifiable {
-    var id: String
+protocol WorkoutModel {
+    var id: String { get }
+    var title: String { get }
+    var exerciseCount: Int { get }
+    var completed: Bool { get }
+    
+}
+
+struct RemoteWorkoutModel: Codable, Identifiable, Equatable {
+    var id: String = UUID().uuidString
     var title: String
-    var savedID: String? // if saved workout then id will link here
     var creatorID: String
     var assignedBy: String // the user ID of user who assigned this workout
+    var assignedTo: String // the user the workout is assigned to
     var isPrivate: Bool
-    var completed: Bool
-//    var clipData: [WorkoutClipModel]?
+    var completed: Bool = false
+    var exerciseCount: Int
+    var addedDate: Date = .now // date workout was added to list
+    var savedID: String? // if saved workout then id will link here
     var rpe: Int?
-    var startDate: Date?
-    var endDate: Date?
+    var startDate: Date? // date workout started
+    var endDate: Date? // date workout ended
     var secondsToComplete: Int? // time to complete workout in seconds
     var workload: Int?
     var summary: String?
-//    var exercises: [ExerciseModel]?
     var liveWorkout: Bool?
 }
-extension WorkoutModel {
-    static let example = WorkoutModel(id: UUID().uuidString, title: "Example", creatorID: "", assignedBy: "", isPrivate: false, completed: false)
+extension RemoteWorkoutModel {
+    static let example = RemoteWorkoutModel(id: UUID().uuidString, title: "Example", creatorID: "", assignedBy: "", assignedTo: "", isPrivate: false, completed: false, exerciseCount: 3, addedDate: .now)
 }
 
 struct WorkoutCardModel: Identifiable {
     var id: String {
         workout.id
     }
-    var workout: WorkoutModel
-    var exercises: [ExerciseModel]
+    var workout: RemoteWorkoutModel
+    var exercises: [RemoteExerciseModel]
 //    var clips: [WorkoutClipModel]?
 }
 
@@ -54,7 +63,7 @@ class WorkoutController: ObservableObject {
     @Published var summary: String?
     var liveWorkout: Bool?
     
-    init(workoutModel: WorkoutModel) {
+    init(workoutModel: RemoteWorkoutModel) {
         self.id = workoutModel.id
         self.title = workoutModel.title
         self.savedID = workoutModel.savedID
@@ -113,7 +122,7 @@ class ExerciseController: ObservableObject, Identifiable {
     @Published var rpe: Int?
     @Published var note: String?
     
-    init(exerciseModel: ExerciseModel) {
+    init(exerciseModel: RemoteExerciseModel) {
         self.id = exerciseModel.id
         self.name = exerciseModel.name
         self.workoutPosition = exerciseModel.workoutPosition
@@ -125,4 +134,9 @@ class ExerciseController: ObservableObject, Identifiable {
 }
 extension ExerciseController {
     static let example = ExerciseController(exerciseModel: .example)
+}
+extension ExerciseController: Equatable {
+    static func == (lhs: ExerciseController, rhs: ExerciseController) -> Bool {
+        lhs.id == rhs.id
+    }
 }

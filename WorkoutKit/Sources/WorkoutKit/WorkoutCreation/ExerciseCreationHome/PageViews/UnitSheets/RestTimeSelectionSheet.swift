@@ -125,6 +125,6 @@ struct RestTimeSelectionSheet: View {
 
 struct RestTimeSelectionSheet_Previews: PreviewProvider {
     static var previews: some View {
-        RestTimeSelectionSheet(viewModel: ExerciseCreationHomeViewModel(workoutViewModel: WorkoutCreationHomeViewModel()), selectedUnit: .constant(.restime))
+        RestTimeSelectionSheet(viewModel: ExerciseCreationHomeViewModel(workoutCreation: PreviewWorkoutCreation()), selectedUnit: .constant(.restime))
     }
 }

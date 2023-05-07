@@ -21,7 +21,7 @@ class WorkoutKitComposition {
     func compose() {
         let userService = CurrentUserModel()
         let networkService = WorkoutKitNetWorkService()
-        let workoutKitBoundary = WorkoutKitBoundary(navigationController: navigationController, apiService: networkService, userService: userService)
+        let workoutKitBoundary = WorkoutKitBoundary(navigationController: navigationController, networkService: networkService, userService: userService)
         workoutKitBoundary.compose()
     }
 }

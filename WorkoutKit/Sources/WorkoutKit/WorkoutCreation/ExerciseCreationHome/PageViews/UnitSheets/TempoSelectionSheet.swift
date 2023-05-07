@@ -190,6 +190,6 @@ struct TempoSelectionSheet: View {
 
 struct TempoSelectionSheet_Previews: PreviewProvider {
     static var previews: some View {
-        TempoSelectionSheet(viewModel: ExerciseCreationHomeViewModel(workoutViewModel: WorkoutCreationHomeViewModel()), selectedUnit: .constant(.tempo))
+        TempoSelectionSheet(viewModel: ExerciseCreationHomeViewModel(workoutCreation: PreviewWorkoutCreation()), selectedUnit: .constant(.tempo))
     }
 }

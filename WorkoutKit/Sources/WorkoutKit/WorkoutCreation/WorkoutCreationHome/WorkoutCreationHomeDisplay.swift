@@ -133,6 +133,6 @@ struct WorkoutCreationHomeDisplay: View {
 
 struct WorkoutCreationHomeDisplay_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutCreationHomeDisplay(viewModel: WorkoutCreationHomeViewModel())
+        WorkoutCreationHomeDisplay(viewModel: WorkoutCreationHomeViewModel(workoutManager: PreviewWorkoutManager(), factory: PreviewRemoteModelFactory()))
     }
 }

@@ -7,26 +7,30 @@
 
 import UIKit
 
-class DisplayCoordinator {
+class DisplayCoordinator: DisplayFlow {
     
-    var navigationController: UINavigationController
-    var workout: WorkoutModel
-    var exerccises: [ExerciseModel]
+    typealias Factory = HomeFactory & ViewModelFactory
     
-    init(navigationController: UINavigationController, workout: WorkoutModel, exercises: [ExerciseModel]) {
-        self.navigationController = navigationController
+    var factory: Factory
+    var workout: RemoteWorkoutModel
+    
+    init(factory: Factory, workout: RemoteWorkoutModel) {
+        self.factory = factory
         self.workout = workout
-        self.exerccises = exercises
     }
     
     func start() {
         let vc = WorkoutDisplayViewController()
-        vc.viewModel = .init(workoutModel: workout, exercises: exerccises)
+        vc.viewModel = factory.makeWorkoutDisplayViewModel(with: workout)
         vc.hidesBottomBarWhenPushed = true
-        navigationController.pushViewController(vc, animated: true)
+        factory.navigationController.pushViewController(vc, animated: true)
     }
     
     func popBack() {
-        navigationController.popViewController(animated: true)
+        factory.navigationController.popViewController(animated: true)
     }
+}
+
+protocol DisplayFlow: Coordinator {
+    func popBack()
 }

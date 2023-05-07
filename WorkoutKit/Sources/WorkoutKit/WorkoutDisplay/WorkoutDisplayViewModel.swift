@@ -11,12 +11,29 @@ class WorkoutDisplayViewModel: ObservableObject {
     
     @Published var selectedSet: SetController?
     
-    var workoutModel: WorkoutModel
-    var exercises: [ExerciseController]
+    var workoutManager: WorkoutManager
+    var workoutModel: RemoteWorkoutModel
+    @Published var exercises: [ExerciseController] = []
+    @Published var isLoadingExercises: Bool = false
 
-    init(workoutModel: WorkoutModel, exercises: [ExerciseModel]) {
+    init(workoutManager: WorkoutManager, workoutModel: RemoteWorkoutModel) {
+        self.workoutManager = workoutManager
         self.workoutModel = workoutModel
-        self.exercises = exercises.map { ExerciseController(exerciseModel: $0) }
     }
     
+    @MainActor
+    func loadExercises() async {
+        isLoadingExercises = true
+        do {
+            let exercises = try await workoutManager.loadExercises(for: workoutModel).sorted()
+            self.exercises = exercises.map { ExerciseController(exerciseModel: $0) }
+            isLoadingExercises = false
+        } catch {
+            print(String(describing: error))
+            isLoadingExercises = false
+        }
+    }
+    
+    func setCompleted(_ model: SetModel) {
+    }
 }

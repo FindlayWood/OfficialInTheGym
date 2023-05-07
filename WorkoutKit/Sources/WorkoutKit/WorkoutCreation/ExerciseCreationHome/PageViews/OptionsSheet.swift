@@ -110,6 +110,6 @@ struct OptionsSheet: View {
 
 struct OptionsSheet_Previews: PreviewProvider {
     static var previews: some View {
-        OptionsSheet(viewModel: WorkoutCreationHomeViewModel())
+        OptionsSheet(viewModel: .init(workoutManager: PreviewWorkoutManager(), factory: PreviewRemoteModelFactory()))
     }
 }

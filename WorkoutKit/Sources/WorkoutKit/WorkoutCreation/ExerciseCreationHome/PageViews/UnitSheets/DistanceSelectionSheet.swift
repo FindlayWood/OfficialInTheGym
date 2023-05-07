@@ -126,6 +126,6 @@ struct DistanceSelectionSheet: View {
 
 struct DistanceSelectionSheet_Previews: PreviewProvider {
     static var previews: some View {
-        DistanceSelectionSheet(viewModel: ExerciseCreationHomeViewModel(workoutViewModel: WorkoutCreationHomeViewModel()), selectedUnit: .constant(.distance))
+        DistanceSelectionSheet(viewModel: ExerciseCreationHomeViewModel(workoutCreation: PreviewWorkoutCreation()), selectedUnit: .constant(.distance))
     }
 }

@@ -12,86 +12,90 @@ class WorkoutsHomeViewModel: ObservableObject {
     
     var coordinator: WorkoutsHomeCoordinator?
     
-    var apiService: NetworkService
+    var workoutManager: WorkoutManager
     
-    var userService: CurrentUserServiceWorkoutKit
-    
-    var addNewWorkoutPublisher = AddNewWorkoutPublisher()
+    var hasLoaded: Bool = false
     
     private var subscriptions = Set<AnyCancellable>()
     
     @Published var isLoading: Bool = false
     @Published var searchText: String = ""
-    @Published var workouts: [WorkoutCardModel] = []
+    @Published var workouts: [RemoteWorkoutModel] = []
     
-    var filteredResults: [WorkoutCardModel] {
+    var filteredResults: [RemoteWorkoutModel] {
         if searchText.isEmpty {
             return workouts
         } else {
-            return workouts.filter { ($0.workout.title.lowercased().contains(searchText.lowercased()) || filterForExercises($0, text: searchText)) }
+            return workouts.filter { ($0.title.lowercased().contains(searchText.lowercased())) }
         }
     }
     
     // MARK: - Initializer
-    init(apiService: NetworkService = Mock.shared, userService: CurrentUserServiceWorkoutKit = MockUserService.shared) {
-        self.apiService = apiService
-        self.userService = userService
-        listener()
+    init(workoutManager: WorkoutManager) {
+        self.workoutManager = workoutManager
     }
     
-    func filterForExercises(_ workout: WorkoutCardModel, text: String) -> Bool {
-        for exercise in workout.exercises {
-            if exercise.name.lowercased().contains(text.lowercased()) {
-                return true
-            } else {
-                continue
-            }
-        }
-        return false
-    }
+//    func filterForExercises(_ workout: RemoteWorkoutModel, text: String) -> Bool {
+//        for exercise in workout.exercises {
+//            if exercise.name.lowercased().contains(text.lowercased()) {
+//                return true
+//            } else {
+//                continue
+//            }
+//        }
+//        return false
+//    }
     
     // MARK: - Load
     @MainActor
-    func loadWorkouts() async{
-        isLoading = true
-        do {
-            let workouts: [WorkoutModel] = try await apiService.readAll(at: "Users/\(userService.currentUserUID)/Workouts")
-            for workout in workouts {
-                let exercises: [ExerciseModel] = try await apiService.readAll(at: "Users/\(userService.currentUserUID)/Workouts/\(workout.id)/Exercises")
-                let newCard = WorkoutCardModel(workout: workout, exercises: exercises.sorted() )
-                newWorkoutLoaded(newCard)
+    func loadWorkouts() async {
+        if !hasLoaded {
+            isLoading = true
+            do {
+                try await workoutManager.loadWorkouts()
+                workouts = workoutManager.workouts
+                workoutListener()
+                isLoading = false
+                hasLoaded = true
+            } catch {
+                print(String(describing: error))
+                isLoading = false
             }
-            isLoading = false
-        } catch {
-            print(String(describing: error))
         }
     }
     
-    func newWorkoutLoaded(_ model: WorkoutCardModel) {
-        if let index = workouts.firstIndex(where: { $0.id == model.id }) {
-            workouts[index] = model
-        } else {
-            workouts.append(model)
-        }
-    }
-    
-    // MARK: - Listener
-    func listener() {
-        addNewWorkoutPublisher
-            .sink { [weak self] in self?.addNewWorkout($0) }
+    func workoutListener() {
+        workoutManager.workoutsPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in self?.workouts = $0 }
             .store(in: &subscriptions)
     }
     
+//    func newWorkoutLoaded(_ model: WorkoutCardModel) {
+//        if let index = workouts.firstIndex(where: { $0.id == model.id }) {
+//            workouts[index] = model
+//        } else {
+//            workouts.append(model)
+//        }
+//    }
+    
+    // MARK: - Listener
+//    func listener() {
+//        addNewWorkoutPublisher
+//            .sink { [weak self] in self?.addNewWorkout($0) }
+//            .store(in: &subscriptions)
+//    }
+    
     // MARK: - Actions
     func addAction() {
-        coordinator?.addNewWorkout(publisher: addNewWorkoutPublisher)
+        coordinator?.addNewWorkout()
     }
     
-    func showWorkoutAction(_ model: WorkoutCardModel) {
-        coordinator?.showWorkout(model.workout, exercises: model.exercises)
+    func showWorkoutAction(_ model: RemoteWorkoutModel) {
+        coordinator?.showWorkout(model)
     }
     
     func addNewWorkout(_ model: WorkoutCardModel) {
-        workouts.append(model)
+//        workouts.append(model)
     }
 }

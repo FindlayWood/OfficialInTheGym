@@ -142,6 +142,6 @@ struct WeightSelectionSheet: View {
 
 struct WeightSelectionSheet_Previews: PreviewProvider {
     static var previews: some View {
-        WeightSelectionSheet(viewModel: ExerciseCreationHomeViewModel(workoutViewModel: WorkoutCreationHomeViewModel()), selectedUnit: .constant(.weight))
+        WeightSelectionSheet(viewModel: ExerciseCreationHomeViewModel(workoutCreation: PreviewWorkoutCreation()), selectedUnit: .constant(.weight))
     }
 }

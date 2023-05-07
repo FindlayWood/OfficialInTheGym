@@ -42,6 +42,6 @@ struct ExerciseSelectionView: View {
 
 struct ExerciseSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        ExerciseSelectionView(viewModel: ExerciseCreationHomeViewModel(workoutViewModel: WorkoutCreationHomeViewModel()))
+        ExerciseSelectionView(viewModel: ExerciseCreationHomeViewModel(workoutCreation: PreviewWorkoutCreation()))
     }
 }

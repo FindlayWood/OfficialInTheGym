@@ -26,10 +26,12 @@ class ExerciseCreationHomeViewModel: ObservableObject {
     
     private var subscriptions = Set<AnyCancellable>()
     
-    private var workoutViewModel: WorkoutCreationHomeViewModel
+    var workoutCreation: WorkoutCreation
     
-    init(workoutViewModel: WorkoutCreationHomeViewModel) {
-        self.workoutViewModel = workoutViewModel
+//    private var workoutViewModel: WorkoutCreationHomeViewModel
+    
+    init(workoutCreation: WorkoutCreation) {
+        self.workoutCreation = workoutCreation
         setListener()
         repsListener()
     }
@@ -169,8 +171,8 @@ class ExerciseCreationHomeViewModel: ObservableObject {
     
     // MARK: - Actions
     func addExerciseAction() {
-        let exercise = ExerciseModel(id: UUID().uuidString, name: name, workoutPosition: workoutViewModel.exercises.count, type: .upperBody, sets: setModels)
-        workoutViewModel.addExercise(exercise)
+        let exercise = RemoteExerciseModel(name: name, workoutPosition: workoutCreation.exerciseCount, type: .upperBody, sets: setModels)
+        workoutCreation.addExercise(exercise)
         coordinator?.popBack()
     }
 }

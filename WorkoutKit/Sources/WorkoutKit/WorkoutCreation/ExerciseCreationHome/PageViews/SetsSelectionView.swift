@@ -80,6 +80,6 @@ struct SetsSelectionView: View {
 
 struct SetsSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        SetsSelectionView(viewModel: ExerciseCreationHomeViewModel(workoutViewModel: WorkoutCreationHomeViewModel()))
+        SetsSelectionView(viewModel: ExerciseCreationHomeViewModel(workoutCreation: PreviewWorkoutCreation()))
     }
 }

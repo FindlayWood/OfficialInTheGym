@@ -8,36 +8,36 @@
 import Combine
 import UIKit
 
-class CreationCoordinator {
+class CreationCoordinator: CreationFlow {
     
-    var navigationController: UINavigationController
-    var addNewWorkoutPublisher: AddNewWorkoutPublisher
-    var apiService: NetworkService
-    var userService: CurrentUserServiceWorkoutKit
+    typealias Factory = HomeFactory & ViewModelFactory
     
-    init(navigationController: UINavigationController, addNewWorkoutPublisher: AddNewWorkoutPublisher, apiService: NetworkService, userService: CurrentUserServiceWorkoutKit) {
-        self.navigationController = navigationController
-        self.addNewWorkoutPublisher = addNewWorkoutPublisher
-        self.apiService = apiService
-        self.userService = userService
+    var factory: Factory
+    
+    init(factory: Factory) {
+        self.factory = factory
     }
     
     func start() {
         let vc = WorkoutCreationHomeViewController()
-        vc.viewModel = .init(apiService: apiService, userService: userService)
+        vc.viewModel = factory.makeWorkoutCreationViewModel()
         vc.viewModel.coordinator = self
-        vc.viewModel.addNewWorkoutPublisher = addNewWorkoutPublisher
         vc.hidesBottomBarWhenPushed = true
-        navigationController.pushViewController(vc, animated: true)
+        factory.navigationController.pushViewController(vc, animated: true)
     }
     
-    func addNewExercise(_ viewModel: WorkoutCreationHomeViewModel) {
+    func addNewExercise(_ workoutCreation: WorkoutCreation) {
         let vc = ExerciseCreationHomeViewController()
-        vc.viewModel = ExerciseCreationHomeViewModel(workoutViewModel: viewModel)
+        vc.viewModel = ExerciseCreationHomeViewModel(workoutCreation: workoutCreation)
         vc.viewModel.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
+        factory.navigationController.pushViewController(vc, animated: true)
     }
     func popBack() {
-        navigationController.popViewController(animated: true)
+        factory.navigationController.popViewController(animated: true)
     }
+}
+
+protocol CreationFlow: Coordinator {
+    func addNewExercise(_ workoutCreation: WorkoutCreation)
+    func popBack()
 }

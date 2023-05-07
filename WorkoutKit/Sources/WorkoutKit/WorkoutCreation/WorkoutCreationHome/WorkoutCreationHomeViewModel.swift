@@ -7,18 +7,17 @@
 
 import Foundation
 
-class WorkoutCreationHomeViewModel: ObservableObject {
+class WorkoutCreationHomeViewModel: ObservableObject, WorkoutCreation {
     
-    @Published var exercises: [ExerciseModel] = []
+    @Published var exercises: [RemoteExerciseModel] = []
     @Published var tags: [TagModel] = []
     @Published var title: String = ""
     @Published var isPrivate: Bool = false
     @Published var isSaving: Bool = true
     
-    var apiService: NetworkService
-    var userService: CurrentUserServiceWorkoutKit
+    var factory: RemoteModelFactory
     
-    var addNewWorkoutPublisher: AddNewWorkoutPublisher?
+    var workoutManager: WorkoutManager
     
     var coordinator: CreationCoordinator?
     
@@ -26,16 +25,20 @@ class WorkoutCreationHomeViewModel: ObservableObject {
         !title.isEmpty && exercises.count > 0
     }
     
-    init(apiService: NetworkService = Mock.shared, userService: CurrentUserServiceWorkoutKit = MockUserService.shared) {
-        self.apiService = apiService
-        self.userService = userService
+    var exerciseCount: Int {
+        exercises.count
     }
     
+    init(workoutManager: WorkoutManager, factory: RemoteModelFactory) {
+        self.workoutManager = workoutManager
+        self.factory = factory
+    }
+   
     func addNewExerciseAction() {
         coordinator?.addNewExercise(self)
     }
     
-    func addExercise(_ model: ExerciseModel) {
+    func addExercise(_ model: RemoteExerciseModel) {
         exercises.append(model)
     }
     
@@ -44,19 +47,22 @@ class WorkoutCreationHomeViewModel: ObservableObject {
     }
     
     func createNewWorkoutAction() {
-        let newWorkout = WorkoutModel(id: UUID().uuidString, title: title, creatorID: userService.currentUserUID, assignedBy: userService.currentUserUID, isPrivate: isPrivate, completed: false)
-        let newWorkoutCard = WorkoutCardModel(workout: newWorkout, exercises: exercises)
-        Task {
-            do {
-                try await apiService.write(data: newWorkout, at: "Users/\(userService.currentUserUID)/Workouts/\(newWorkout.id)")
-                for exercise in exercises {
-                    try await apiService.write(data: exercise, at: "Users/\(userService.currentUserUID)/Workouts/\(newWorkout.id)/Exercises/\(exercise.id)")
-                }
-            } catch {
-                print(String(describing: error))
-            }
-        }
-        addNewWorkoutPublisher?.send(newWorkoutCard)
+        let newWorkout = factory.makeRemoteWorkoutModel(title: title, isPrivate: isPrivate, exerciseCount: exercises.count)
+        workoutManager.addNew(newWorkout)
         coordinator?.popBack()
+    }
+}
+
+protocol WorkoutCreation {
+    func addExercise(_ model: RemoteExerciseModel)
+    var exerciseCount: Int { get }
+}
+
+class PreviewWorkoutCreation: WorkoutCreation {
+    var exerciseCount: Int {
+        0
+    }
+    func addExercise(_ model: RemoteExerciseModel) {
+        
     }
 }

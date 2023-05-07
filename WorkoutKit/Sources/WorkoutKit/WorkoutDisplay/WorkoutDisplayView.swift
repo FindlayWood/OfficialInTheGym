@@ -15,20 +15,38 @@ struct WorkoutDisplayView: View {
     
     var body: some View {
         VStack {
-            Rectangle()
-                .frame(height: 1)
-                .frame(maxWidth: .infinity)
-                .foregroundColor(.clear)
-            ScrollView {
+            if viewModel.isLoadingExercises {
                 VStack {
-                    ForEach(viewModel.exercises) { model in
-                        WorkoutExerciseView(exercise: model, selectedSet: $viewModel.selectedSet, namespace: namespace)
-                            .environmentObject(viewModel)
-                    }
+                    Image(systemName: "network")
+                        .font(.largeTitle)
+                        .foregroundColor(Color(.white))
+                    Text("Loading Exercises")
+                        .font(.title.bold())
+                        .foregroundColor(Color(.white))
+                    Text("Wait 1 second, we are just loading the exercises for this workout!")
+                        .font(.footnote.bold())
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                    ProgressView()
                 }
-                .padding(6)
+            } else {
+                Rectangle()
+                    .frame(height: 1)
+                    .frame(maxWidth: .infinity)
+                    .foregroundColor(.clear)
+                ScrollView {
+                    VStack {
+                        ForEach(viewModel.exercises) { model in
+                            WorkoutExerciseView(exercise: model, selectedSet: $viewModel.selectedSet, namespace: namespace)
+                                .environmentObject(viewModel)
+                        }
+                    }
+                    .padding(6)
+                }
             }
         }
+        .animation(.easeInOut, value: viewModel.exercises)
         .background(Color(.lightColour))
         .overlay {
             if let select = viewModel.selectedSet {
@@ -40,11 +58,14 @@ struct WorkoutDisplayView: View {
                 .transition(.asymmetric(insertion: .identity, removal: .offset(y: 5)))
             }
         }
+        .task {
+            await viewModel.loadExercises()
+        }
     }
 }
 
 struct WorkoutDisplayView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutDisplayView(viewModel: WorkoutDisplayViewModel(workoutModel: .example, exercises: [.example]))
+        WorkoutDisplayView(viewModel: WorkoutDisplayViewModel(workoutManager: PreviewWorkoutManager(), workoutModel: .example))
     }
 }

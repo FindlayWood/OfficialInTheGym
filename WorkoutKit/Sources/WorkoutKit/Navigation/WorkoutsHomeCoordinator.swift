@@ -7,32 +7,40 @@
 
 import UIKit
 
-class WorkoutsHomeCoordinator {
+class WorkoutsHomeCoordinator: WorkoutsHomeFlow {
     
-    var navigationController: UINavigationController
-    var apiService: NetworkService
-    var currentUserService: CurrentUserServiceWorkoutKit
+    typealias Factory = HomeFactory & ViewModelFactory
     
-    init(navigationController: UINavigationController, apiService: NetworkService, userService: CurrentUserServiceWorkoutKit) {
-        self.navigationController = navigationController
-        self.apiService = apiService
-        self.currentUserService = userService
+    var factory: Factory
+    
+    init(factory: Factory) {
+        self.factory = factory
     }
     
     func start() {
         let vc = WorkoutsHomeViewController()
-        vc.viewModel = .init(apiService: apiService, userService: currentUserService)
+        vc.viewModel = factory.makeWorkoutHomeViewModel()
         vc.viewModel.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
+        factory.navigationController.pushViewController(vc, animated: true)
     }
     
-    func addNewWorkout(publisher: AddNewWorkoutPublisher) {
-        let childCooridnator = CreationCoordinator(navigationController: navigationController, addNewWorkoutPublisher: publisher, apiService: apiService, userService: currentUserService)
-        childCooridnator.start()
-    }
-    
-    func showWorkout(_ workout: WorkoutModel, exercises: [ExerciseModel]) {
-        let child = DisplayCoordinator(navigationController: navigationController, workout: workout, exercises: exercises)
+    func addNewWorkout() {
+        let child = factory.makeWorkoutCreationCoordinator()
         child.start()
     }
+    
+    func showWorkout(_ workout: RemoteWorkoutModel) {
+        let child = factory.makeDiplayWorkoutCoordinator(workout: workout)
+        child.start()
+    }
+}
+
+protocol Coordinator {
+//    var navigationController: UINavigationController { get }
+    func start()
+}
+
+protocol WorkoutsHomeFlow: Coordinator {
+    func addNewWorkout()
+    func showWorkout(_ workout: RemoteWorkoutModel)
 }
