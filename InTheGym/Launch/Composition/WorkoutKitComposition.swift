@@ -36,21 +36,23 @@ class CurrentUserModel: CurrentUserServiceWorkoutKit {
 
 class WorkoutKitNetWorkService: NetworkService {
     
+    var firebaseService: FirebaseDatabaseManagerService
     var firestoreService: FirestoreService
     
-    init(firestoreService: FirestoreService = FirestoreManager.shared) {
+    init(firestoreService: FirestoreService = FirestoreManager.shared, firebaseService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
         self.firestoreService = firestoreService
+        self.firebaseService = firebaseService
     }
     
     func write(data: Codable, at path: String) async throws {
-        try await firestoreService.upload(data: data, at: path)
+        try await firebaseService.upload(data: data, at: path)
     }
     
     func read<T: Codable>(at path: String) async throws -> T {
-        return try await firestoreService.read(at: path)
+        return try await firebaseService.read(at: path)
     }
     
     func readAll<T: Codable>(at path: String) async throws -> [T] {
-        return try await firestoreService.readAll(at: path)
+        return try await firebaseService.readAll(at: path)
     }
 }

@@ -25,6 +25,7 @@ struct RemoteWorkoutModel: Codable, Identifiable, Equatable {
     var completed: Bool = false
     var exerciseCount: Int
     var addedDate: Date = .now // date workout was added to list
+    var exercises: [RemoteExerciseModel] = []
     var savedID: String? // if saved workout then id will link here
     var rpe: Int?
     var startDate: Date? // date workout started
@@ -127,9 +128,9 @@ class ExerciseController: ObservableObject, Identifiable {
         self.name = exerciseModel.name
         self.workoutPosition = exerciseModel.workoutPosition
         self.type = exerciseModel.type
-        self.sets = exerciseModel.sets.map { SetController(setModel: $0) }
         self.rpe = exerciseModel.rpe
         self.note = exerciseModel.note
+        self.sets = exerciseModel.sets.map { SetController(setModel: $0) }
     }
 }
 extension ExerciseController {

@@ -38,6 +38,13 @@ class RemoteWorkoutManager: WorkoutManager {
     
     func addNew(_ workout: RemoteWorkoutModel) {
         workouts.insert(workout, at: 0)
+        Task {
+            do {
+                try await workoutLoader.writeNew(workout)
+            } catch {
+                print("Failed to upload new workout -> \(String(describing: error))")
+            }
+        }
     }
     
     func delete(_ workout: RemoteWorkoutModel) {

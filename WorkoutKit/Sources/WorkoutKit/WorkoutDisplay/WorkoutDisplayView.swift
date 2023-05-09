@@ -50,7 +50,7 @@ struct WorkoutDisplayView: View {
         .background(Color(.lightColour))
         .overlay {
             if let select = viewModel.selectedSet {
-                ExpandedSetView(selectedSet: select, namespace: namespace) {
+                ExpandedSetView(selectedSet: select.set, exercise: select.exercise, namespace: namespace) {
                     withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
                         viewModel.selectedSet = nil
                     }

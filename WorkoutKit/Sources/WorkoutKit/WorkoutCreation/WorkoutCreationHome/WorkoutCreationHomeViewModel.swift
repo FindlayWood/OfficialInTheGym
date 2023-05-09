@@ -47,7 +47,7 @@ class WorkoutCreationHomeViewModel: ObservableObject, WorkoutCreation {
     }
     
     func createNewWorkoutAction() {
-        let newWorkout = factory.makeRemoteWorkoutModel(title: title, isPrivate: isPrivate, exerciseCount: exercises.count)
+        let newWorkout = factory.makeRemoteWorkoutModel(title: title, isPrivate: isPrivate, exerciseCount: exercises.count, exercises: exercises)
         workoutManager.addNew(newWorkout)
         coordinator?.popBack()
     }

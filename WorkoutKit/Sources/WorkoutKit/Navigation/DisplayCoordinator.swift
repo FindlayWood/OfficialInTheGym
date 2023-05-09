@@ -9,12 +9,12 @@ import UIKit
 
 class DisplayCoordinator: DisplayFlow {
     
-    typealias Factory = HomeFactory & ViewModelFactory
+    typealias FactoryType = Factory & ViewModelFactory
     
-    var factory: Factory
+    var factory: FactoryType
     var workout: RemoteWorkoutModel
     
-    init(factory: Factory, workout: RemoteWorkoutModel) {
+    init(factory: FactoryType, workout: RemoteWorkoutModel) {
         self.factory = factory
         self.workout = workout
     }

@@ -9,6 +9,7 @@ import Foundation
 
 protocol WorkoutLoader {
     func loadAll() async throws -> [RemoteWorkoutModel]
+    func writeNew(_ model: RemoteWorkoutModel) async throws
 }
 
 class RemoteWorkoutLoader: WorkoutLoader {
@@ -21,7 +22,10 @@ class RemoteWorkoutLoader: WorkoutLoader {
     }
     
     func loadAll() async throws -> [RemoteWorkoutModel] {
-        let workouts: [RemoteWorkoutModel] = try await networkService.readAll(at: Constants.workoutPath(userService.currentUserUID))
+        let workouts: [RemoteWorkoutModel] = try await networkService.readAll(at: Constants.workoutsPath(userService.currentUserUID))
         return workouts
+    }
+    func writeNew(_ model: RemoteWorkoutModel) async throws {
+        try await networkService.write(data: model, at: Constants.workoutPath(userService.currentUserUID, workoutID: model.id))
     }
 }

@@ -39,7 +39,7 @@ struct WeightModel: Codable {
     var value: Double?
 }
 
-enum Weight: Codable, CaseIterable {
+enum Weight: String, Codable, CaseIterable {
     case kilograms
     case pounds
     case max
@@ -70,7 +70,7 @@ struct TimeModel: Codable {
     var value: Double
 }
 
-enum Time: Codable, CaseIterable {
+enum Time: String, Codable, CaseIterable {
     case seconds
     case minutes
     
@@ -88,7 +88,7 @@ struct DistanceModel: Codable {
     var unit: Distance
     var value: Double
 }
-enum Distance: Codable, CaseIterable {
+enum Distance: String, Codable, CaseIterable {
     
     case metres
     case kilometres

@@ -205,6 +205,7 @@ struct WorkoutRow: View {
             .padding(.top, 8)
             WorkoutFiguresView(model: model)
                 .padding(.top)
+            Text(model.addedDate, format: .dateTime.day().month())
 //            if let clipData = model.clipData {
 //                if clipData.count > 0 {
 //                    WorkoutClipThumbnailView(models: clipData)

@@ -8,18 +8,18 @@
 import Foundation
 
 protocol RemoteModelFactory {
-    func makeRemoteWorkoutModel(title: String, isPrivate: Bool, exerciseCount: Int) -> RemoteWorkoutModel
+    func makeRemoteWorkoutModel(title: String, isPrivate: Bool, exerciseCount: Int, exercises: [RemoteExerciseModel]) -> RemoteWorkoutModel
 }
 
 extension Factory: RemoteModelFactory {
-    func makeRemoteWorkoutModel(title: String, isPrivate: Bool, exerciseCount: Int) -> RemoteWorkoutModel {
-        return RemoteWorkoutModel(title: title, creatorID: userService.currentUserUID, assignedBy: userService.currentUserUID, assignedTo: userService.currentUserUID, isPrivate: isPrivate, exerciseCount: exerciseCount)
+    func makeRemoteWorkoutModel(title: String, isPrivate: Bool, exerciseCount: Int, exercises: [RemoteExerciseModel]) -> RemoteWorkoutModel {
+        return RemoteWorkoutModel(title: title, creatorID: userService.currentUserUID, assignedBy: userService.currentUserUID, assignedTo: userService.currentUserUID, isPrivate: isPrivate, exerciseCount: exerciseCount, exercises: exercises)
     }
 }
 
 // MARK: - Preview
 class PreviewRemoteModelFactory: RemoteModelFactory {
-    func makeRemoteWorkoutModel(title: String, isPrivate: Bool, exerciseCount: Int) -> RemoteWorkoutModel {
+    func makeRemoteWorkoutModel(title: String, isPrivate: Bool, exerciseCount: Int, exercises: [RemoteExerciseModel]) -> RemoteWorkoutModel {
         return RemoteWorkoutModel(title: title, creatorID: "", assignedBy: "", assignedTo: "", isPrivate: isPrivate, exerciseCount: exerciseCount)
     }
 }

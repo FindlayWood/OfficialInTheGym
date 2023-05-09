@@ -12,6 +12,8 @@ struct ExpandedSetView: View {
     @ObservedObject var selectedSet: SetController
     @State private var showing: Bool = true
     
+    var exercise: ExerciseController
+    
     let namespace: Namespace.ID
     
     var dismiss: () -> ()
@@ -83,6 +85,6 @@ struct ExpandedSetView: View {
 struct ExpandedSetView_Previews: PreviewProvider {
     @Namespace static var namespace
     static var previews: some View {
-        ExpandedSetView(selectedSet: .example, namespace: namespace) {}
+        ExpandedSetView(selectedSet: .example, exercise: .example, namespace: namespace) {}
     }
 }

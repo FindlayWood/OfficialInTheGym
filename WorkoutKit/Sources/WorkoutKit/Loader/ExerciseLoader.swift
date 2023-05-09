@@ -22,4 +22,9 @@ class RemoteExerciseLoader: ExerciseLoader {
         let exercises: [RemoteExerciseModel] = try await networkService.readAll(at: Constants.exercisePath(workout.id, workout.assignedTo))
         return exercises
     }
+//    func upload(_ exercises: [RemoteExerciseModel]) async throws {
+//        for exercise in exercises {
+//            try await networkService.write(data: exercise, at: Constants.newExercisePath(<#T##workoutID: String##String#>, <#T##userID: String##String#>, exerciseID: <#T##String#>)(<#T##workoutID: String##String#>, <#T##userID: String##String#>))
+//        }
+//    }
 }

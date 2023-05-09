@@ -226,7 +226,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     }
     func upload(data: Codable, at path: String) async throws {
         let ref = Database.database().reference().child(path)
-        try await ref.setValue(data)
+        try ref.setValue(from: data)
     }
 
     
@@ -333,6 +333,22 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         let data = children.compactMap { try? $0.data(as: T.self) }
         return data
     }
+    
+    func read<T: Codable>(at path: String) async throws -> T {
+        let ref = Database.database().reference().child(path)
+        let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
+        let data = try snapshot.data(as: T.self)
+        return data
+    }
+    func readAll<T: Codable>(at path: String) async throws -> [T] {
+        let ref = Database.database().reference().child(path)
+        let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
+        guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
+            throw NSError(domain: "No snapshot children", code: 0)
+        }
+        let data = children.compactMap { try? $0.data(as: T.self) }
+        return data
+    }
 }
 
 protocol FirebaseDatabaseManagerService {
@@ -376,4 +392,6 @@ protocol FirebaseDatabaseManagerService {
     // MARK: - Modular
     func checkExistence(at path: String) async throws -> Bool
     func upload(data: Codable, at path: String) async throws
+    func read<T:Codable>(at path: String) async throws -> T
+    func readAll<T:Codable>(at path: String) async throws -> [T]
  }

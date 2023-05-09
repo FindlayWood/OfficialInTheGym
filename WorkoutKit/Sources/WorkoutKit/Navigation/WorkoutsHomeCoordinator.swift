@@ -9,11 +9,11 @@ import UIKit
 
 class WorkoutsHomeCoordinator: WorkoutsHomeFlow {
     
-    typealias Factory = HomeFactory & ViewModelFactory
+    typealias FactoryType = Factory & ViewModelFactory
     
-    var factory: Factory
+    var factory: FactoryType
     
-    init(factory: Factory) {
+    init(factory: FactoryType) {
         self.factory = factory
     }
     

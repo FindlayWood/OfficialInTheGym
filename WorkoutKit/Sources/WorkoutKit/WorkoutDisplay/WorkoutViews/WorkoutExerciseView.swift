@@ -11,7 +11,7 @@ struct WorkoutExerciseView: View {
 
     @ObservedObject var exercise: ExerciseController
     
-    @Binding var selectedSet: SetController?
+    @Binding var selectedSet: SelectedSet?
     
     let namespace: Namespace.ID
     
@@ -50,13 +50,14 @@ struct WorkoutExerciseView: View {
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(exercise.sets) { setModel in
-                        if let selectedSet, selectedSet == setModel {
+                        if let selectedSet, selectedSet.set == setModel {
                             EmptySetView(model: setModel)
                         } else {
                             WorkoutSetView(model: setModel, namespace: namespace)
+                                .environmentObject(exercise)
                                 .onTapGesture {
                                     withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
-                                        selectedSet = setModel
+                                        selectedSet = .init(set: setModel, exercise: exercise)
                                     }
                                 }
                         }

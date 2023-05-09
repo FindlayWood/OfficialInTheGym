@@ -9,6 +9,8 @@ import SwiftUI
 
 struct WorkoutSetView: View {
     
+    @EnvironmentObject var viewModel: WorkoutDisplayViewModel
+    @EnvironmentObject var exercise: ExerciseController
     @ObservedObject var model: SetController
     
     let namespace: Namespace.ID
@@ -38,6 +40,7 @@ struct WorkoutSetView: View {
             }
             Button {
                 model.completed = true
+                viewModel.setCompleted(model, on: exercise)
             } label: {
                 Image(systemName: model.completed ? "checkmark.circle.fill" : "circle")
                     .font(.headline)
