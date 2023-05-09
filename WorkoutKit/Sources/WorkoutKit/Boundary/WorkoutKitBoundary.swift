@@ -9,7 +9,7 @@ import UIKit
 
 public class WorkoutKitBoundary {
     
-    private lazy var factory = CoordinatorFactory(
+    private lazy var factory = Factory(
         workoutManager: workoutManager,
         networkService: networkService,
         userService: userService,

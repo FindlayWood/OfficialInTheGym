@@ -35,17 +35,6 @@ class WorkoutsHomeViewModel: ObservableObject {
         self.workoutManager = workoutManager
     }
     
-//    func filterForExercises(_ workout: RemoteWorkoutModel, text: String) -> Bool {
-//        for exercise in workout.exercises {
-//            if exercise.name.lowercased().contains(text.lowercased()) {
-//                return true
-//            } else {
-//                continue
-//            }
-//        }
-//        return false
-//    }
-    
     // MARK: - Load
     @MainActor
     func loadWorkouts() async {
@@ -64,27 +53,13 @@ class WorkoutsHomeViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Listener
     func workoutListener() {
         workoutManager.workoutsPublisher
             .receive(on: RunLoop.main)
             .sink { [weak self] in self?.workouts = $0 }
             .store(in: &subscriptions)
     }
-    
-//    func newWorkoutLoaded(_ model: WorkoutCardModel) {
-//        if let index = workouts.firstIndex(where: { $0.id == model.id }) {
-//            workouts[index] = model
-//        } else {
-//            workouts.append(model)
-//        }
-//    }
-    
-    // MARK: - Listener
-//    func listener() {
-//        addNewWorkoutPublisher
-//            .sink { [weak self] in self?.addNewWorkout($0) }
-//            .store(in: &subscriptions)
-//    }
     
     // MARK: - Actions
     func addAction() {
@@ -93,9 +68,5 @@ class WorkoutsHomeViewModel: ObservableObject {
     
     func showWorkoutAction(_ model: RemoteWorkoutModel) {
         coordinator?.showWorkout(model)
-    }
-    
-    func addNewWorkout(_ model: WorkoutCardModel) {
-//        workouts.append(model)
     }
 }
