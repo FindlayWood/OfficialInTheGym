@@ -56,6 +56,7 @@ struct WorkoutDisplayView: View {
                     }
                 }
                 .transition(.asymmetric(insertion: .identity, removal: .offset(y: 5)))
+                .environmentObject(viewModel)
             }
         }
         .task {

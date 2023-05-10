@@ -14,7 +14,7 @@ protocol WorkoutManager {
     func loadWorkouts() async throws
     func addNew(_ workout: RemoteWorkoutModel)
     func delete(_ workout: RemoteWorkoutModel)
-    func loadExercises(for workout: RemoteWorkoutModel) async throws -> [RemoteExerciseModel]
+    func update(_ workout: RemoteWorkoutModel)
 }
 
 // MARK: - Remote
@@ -50,8 +50,10 @@ class RemoteWorkoutManager: WorkoutManager {
     func delete(_ workout: RemoteWorkoutModel) {
         workouts.removeAll(where: { $0 == workout })
     }
-    func loadExercises(for workout: RemoteWorkoutModel) async throws -> [RemoteExerciseModel] {
-        return try await exerciseLoader.loadAll(for: workout)
+    func update(_ workout: RemoteWorkoutModel) {
+        if let index = workouts.firstIndex(where: { workout == $0} ) {
+            workouts[index] = workout
+        }
     }
 }
 
@@ -75,5 +77,7 @@ class PreviewWorkoutManager: WorkoutManager {
     func loadExercises(for workout: RemoteWorkoutModel) async throws -> [RemoteExerciseModel] {
         return []
     }
-    
+    func update(_ workout: RemoteWorkoutModel) {
+        
+    }
 }

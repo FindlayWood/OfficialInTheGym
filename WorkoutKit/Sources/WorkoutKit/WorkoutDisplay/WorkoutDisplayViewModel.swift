@@ -26,20 +26,12 @@ class WorkoutDisplayViewModel: ObservableObject {
     @MainActor
     func loadExercises() async {
         exercises = workoutModel.exercises.map { ExerciseController(exerciseModel: $0) }
-//        isLoadingExercises = true
-//        do {
-//            let exercises = try await workoutManager.loadExercises(for: workoutModel).sorted()
-//            self.exercises = exercises.map { ExerciseController(exerciseModel: $0) }
-//            isLoadingExercises = false
-//        } catch {
-//            print(String(describing: error))
-//            isLoadingExercises = false
-//        }
     }
     
     func setCompleted(_ model: SetController, on exercise: ExerciseController) {
         let path = "Workouts/\(workoutModel.assignedTo)/\(workoutModel.id)/exercises/\(exercise.workoutPosition)/sets/\(model.setNumber)/completed"
-        print(path)
+        workoutModel.exercises[exercise.workoutPosition].sets[model.setNumber].completed = true
+        workoutManager.update(workoutModel)
         Task {
             do {
                 try await networkService.write(data: true, at: path)
@@ -47,12 +39,6 @@ class WorkoutDisplayViewModel: ObservableObject {
                 print(String(describing: error))
             }
         }
-//        let path = "Users/\(workoutModel.assignedTo)/Workouts/\(workoutModel.id)/Exercises/\(exercise.id)"
-//        
-//        print(exercise.id)
-//        print(exercise.workoutPosition)
-//        print(model.setNumber)
-//        print(model.id)
     }
 }
 

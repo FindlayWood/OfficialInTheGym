@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ExpandedSetView: View {
     
+    @EnvironmentObject var viewModel: WorkoutDisplayViewModel
     @ObservedObject var selectedSet: SetController
     @State private var showing: Bool = true
     
@@ -59,6 +60,7 @@ struct ExpandedSetView: View {
             Spacer()
             Button {
                 selectedSet.completed = true
+                viewModel.setCompleted(selectedSet, on: exercise)
             } label: {
                 Image(systemName: selectedSet.completed ? "checkmark.circle.fill" : "circle")
                     .font(.headline)
@@ -86,5 +88,6 @@ struct ExpandedSetView_Previews: PreviewProvider {
     @Namespace static var namespace
     static var previews: some View {
         ExpandedSetView(selectedSet: .example, exercise: .example, namespace: namespace) {}
+            .environmentObject(WorkoutDisplayViewModel(workoutManager: PreviewWorkoutManager(), workoutModel: .example, networkService: Mock.shared))
     }
 }

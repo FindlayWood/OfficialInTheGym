@@ -29,4 +29,25 @@ class WorkoutDisplayViewController: UIViewController {
         display = .init(viewModel: viewModel)
         addSwiftUIView(display)
     }
+    
+    func showMyViewControllerInACustomizedSheet() {
+        let viewControllerToPresent = BViewController()
+        if let sheet = viewControllerToPresent.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersEdgeAttachedInCompactHeight = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        }
+        present(viewControllerToPresent, animated: true, completion: nil)
+    }
+}
+
+
+class BViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .red
+    }
 }
