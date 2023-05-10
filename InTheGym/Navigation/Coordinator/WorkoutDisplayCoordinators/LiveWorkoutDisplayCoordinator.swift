@@ -31,24 +31,6 @@ class LiveWorkoutDisplayCoordinator: NSObject, Coordinator {
 }
 // MARK: - Flow
 extension LiveWorkoutDisplayCoordinator {
-    func showEMOM(_ emom: EMOMModel, _ workout: WorkoutModel) {
-        let vc = DisplayEMOMViewController()
-        vc.viewModel.emomModel = emom
-        vc.viewModel.workoutModel = workout
-        navigationController.pushViewController(vc, animated: true)
-    }
-    func showCircuit(_ circuit: CircuitModel, _ workout: WorkoutModel) {
-        let vc = DisplayCircuitViewController()
-        vc.viewModel.circuitModel = circuit
-        vc.viewModel.workoutModel = workout
-        navigationController.pushViewController(vc, animated: true)
-    }
-    func showAMRAP(_ amrap: AMRAPModel, _ workout: WorkoutModel) {
-        let vc = DisplayAMRAPViewController()
-        vc.viewModel.amrapModel = amrap
-        vc.viewModel.workoutModel = workout
-        navigationController.pushViewController(vc, animated: true)
-    }
     
     func addExercise(_ exercise: ExerciseModel, publisher: PassthroughSubject<ExerciseModel,Never>) {
         let child = LiveWorkoutExerciseCreationCoordinator(navigationController: navigationController, exercise: exercise, publisher: publisher)

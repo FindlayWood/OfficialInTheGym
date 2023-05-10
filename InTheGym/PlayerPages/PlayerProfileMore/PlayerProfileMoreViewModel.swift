@@ -44,11 +44,7 @@ class PlayerProfileMoreViewModel: ObservableObject {
         }
     }
     func getAccountCreated() -> String {
-        if let timeCreated = UserDefaults.currentUser.accountCreated {
-            return Date(timeIntervalSince1970: timeCreated).getYear()
-        } else {
-            return Constants.defaultAccountCreatedDate
-        }
+        return UserDefaults.currentUser.createdDate.getYear()
     }
 }
 

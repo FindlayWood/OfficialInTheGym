@@ -23,25 +23,27 @@ class PlayerInfoDetailSubviewViewModel {
         self.apiService = apiService
     }
     // MARK: - Functions
+    @MainActor
     func getFollowerCount() {
         let model = FollowersModel(id: user.uid)
-        apiService.childCount(of: model) { [weak self] result in
-            switch result {
-            case .success(let count):
-                self?.followerCount = count
-            case .failure(let error):
-                self?.error = error
+        Task {
+            do {
+                let count = try await apiService.childCountAsync(of: model)
+                followerCount = count
+            } catch {
+                self.error = error
             }
         }
     }
+    @MainActor
     func getFollowingCount() {
         let model = FollowingModel(id: user.uid)
-        apiService.childCount(of: model) { [weak self] result in
-            switch result {
-            case .success(let count):
-                self?.followingCount = count
-            case .failure(let error):
-                self?.error = error
+        Task {
+            do {
+                let count = try await apiService.childCountAsync(of: model)
+                followingCount = count
+            } catch {
+                self.error = error
             }
         }
     }

@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class PlayerInitialViewController: UITabBarController {
 
     weak var coordinator: TabBarCoordinator?
@@ -30,13 +29,18 @@ class PlayerInitialViewController: UITabBarController {
         workoutsNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 2)
         let workoutsCoordinator = WorkoutsCoordinator(navigationController: workoutsNavigationController)
         workoutsCoordinator.start()
+        // MARK: - Workout Kit
+        let workoutKitNavigationController = UINavigationController()
+        workoutKitNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 2)
+        let workoutKitComposition = WorkoutKitComposition(navigaitonController: workoutKitNavigationController)
+//        workoutKitComposition.compose()
         // MARK: - Profile
         let myProfileNavigationController = UINavigationController()
         myProfileNavigationController.tabBarItem = UITabBarItem(title: "MYPROFILE", image: UIImage(systemName: "person.fill"), tag: 3)
         let myProfileCoordinator = MyProfileCoordinator(navigationController: myProfileNavigationController)
         myProfileCoordinator.start()
         
-        viewControllers = [timelineNavigationController, discoverNavigationController, workoutsNavigationController, myProfileNavigationController]
+        viewControllers = [timelineNavigationController, discoverNavigationController, workoutKitNavigationController, myProfileNavigationController]
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

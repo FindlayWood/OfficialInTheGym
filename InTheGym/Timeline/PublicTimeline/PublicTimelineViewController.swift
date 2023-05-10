@@ -19,7 +19,6 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
     
     var viewModel = PublicTimelineViewModel()
     
-    //    var dataSource: ProfileDataSource!
     var dataSource: ProfileTableViewDataSource!
     
     private var subscriptions = Set<AnyCancellable>()
@@ -128,11 +127,6 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
     }
     func showCommentSection(for post: PostModel) {
         coordinator?.showCommentSection(for: post, with: viewModel.reloadListener)
-    }
-
-    @IBAction func showCreatedWorkouts(_ sender:UIButton){
-        coordinator?.showCreatedWorkouts(for: viewModel.user)
-
     }
     @objc func handleRefresh(_ sender: AnyObject) {
         viewModel.fetchPosts()

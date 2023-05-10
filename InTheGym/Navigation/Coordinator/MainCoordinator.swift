@@ -22,45 +22,12 @@ class MainCoordinator: Coordinator {
     }
     
     func start() {
-        let vc = LaunchPageViewController.instantiate()
-        vc.coordinator = self
+        let vc = LaunchPageViewController()
         navigationController.pushViewController(vc, animated: false)
     }
-    
-    func notLoggedIn() {
-        let vc = ViewController.instantiate()
-//        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func login() {
-        let vc = LoginViewController.instantiate()
-//        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func signUpStepOne() {
-        let vc = PlayerOrCoachViewController.instantiate()
-//        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func signUpStepTwo(isAdmin: Bool) {
-        let vc = SignUpViewController.instantiate()
-//        vc.coordinator = self
-        vc.admin = isAdmin
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
     
     func coordinateToTabBar() {
         let tabBar = TabBarCoordinator(navigationController: navigationController)
         coordinate(to: tabBar)
     }
-    
-    func forgotPassword() {
-        let vc = ResetPasswordViewController()
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
 }

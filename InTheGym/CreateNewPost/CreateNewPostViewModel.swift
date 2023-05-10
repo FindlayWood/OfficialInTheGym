@@ -33,8 +33,6 @@ class CreateNewPostViewModel {
     var attachedPhoto: attachedPhoto?
     var attachedClip: attachedClip?
     
-    var assignee: Assignable!
-    
     var apiService: FirebaseDatabaseManagerService
     
     var successfullyPosted: Bool = false {
@@ -83,8 +81,6 @@ class CreateNewPostViewModel {
         postable.time = Date().timeIntervalSince1970
         if let postModel = postable as? PostModel {
             post(postModel)
-        } else if let groupPost = postable as? GroupPost {
-            post(groupPost)
         }
     }
     

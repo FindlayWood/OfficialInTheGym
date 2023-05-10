@@ -12,9 +12,6 @@ protocol ExerciseSelectionFlow: AnyObject {
     func exerciseSelected(_ exercise: ExerciseModel)
     func otherSelected(_ exercise: ExerciseModel)
     func infoSelected(_ discoverModel: DiscoverExerciseModel)
-    func addCircuit()
-    func addAmrap()
-    func addEmom()
 }
 protocol SetSelectionFlow: AnyObject {
     func setSelected(_ exercise: ExerciseModel)

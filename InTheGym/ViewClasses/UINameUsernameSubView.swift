@@ -69,7 +69,7 @@ private extension UINameUsernameSubView {
 // MARK: - Public Configuration
 extension UINameUsernameSubView {
     public func configure(with user: Users) {
-        nameLabel.text = user.firstName + " " + user.lastName
+        nameLabel.text = user.displayName
         usernameLabel.text = "@" + user.username
     }
 }
