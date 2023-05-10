@@ -18,7 +18,7 @@ extension Factory: ViewModelFactory {
         return WorkoutsHomeViewModel(workoutManager: workoutManager)
     }
     func makeWorkoutDisplayViewModel(with workout: RemoteWorkoutModel) -> WorkoutDisplayViewModel {
-        return WorkoutDisplayViewModel(workoutManager: workoutManager, workoutModel: workout)
+        return WorkoutDisplayViewModel(workoutManager: workoutManager, workoutModel: workout, networkService: networkService)
     }
     func makeWorkoutCreationViewModel() -> WorkoutCreationHomeViewModel {
         return WorkoutCreationHomeViewModel(workoutManager: workoutManager, factory: self)

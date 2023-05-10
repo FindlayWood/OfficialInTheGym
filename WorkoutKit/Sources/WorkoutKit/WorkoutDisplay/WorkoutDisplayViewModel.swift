@@ -13,12 +13,14 @@ class WorkoutDisplayViewModel: ObservableObject {
     
     var workoutManager: WorkoutManager
     var workoutModel: RemoteWorkoutModel
+    var networkService: NetworkService
     @Published var exercises: [ExerciseController] = []
     @Published var isLoadingExercises: Bool = false
 
-    init(workoutManager: WorkoutManager, workoutModel: RemoteWorkoutModel) {
+    init(workoutManager: WorkoutManager, workoutModel: RemoteWorkoutModel, networkService: NetworkService) {
         self.workoutManager = workoutManager
         self.workoutModel = workoutModel
+        self.networkService = networkService
     }
     
     @MainActor
@@ -36,6 +38,15 @@ class WorkoutDisplayViewModel: ObservableObject {
     }
     
     func setCompleted(_ model: SetController, on exercise: ExerciseController) {
+        let path = "Workouts/\(workoutModel.assignedTo)/\(workoutModel.id)/exercises/\(exercise.workoutPosition)/sets/\(model.setNumber)/completed"
+        print(path)
+        Task {
+            do {
+                try await networkService.write(data: true, at: path)
+            } catch {
+                print(String(describing: error))
+            }
+        }
 //        let path = "Users/\(workoutModel.assignedTo)/Workouts/\(workoutModel.id)/Exercises/\(exercise.id)"
 //        
 //        print(exercise.id)

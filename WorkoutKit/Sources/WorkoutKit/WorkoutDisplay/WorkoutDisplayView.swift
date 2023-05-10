@@ -66,6 +66,6 @@ struct WorkoutDisplayView: View {
 
 struct WorkoutDisplayView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutDisplayView(viewModel: WorkoutDisplayViewModel(workoutManager: PreviewWorkoutManager(), workoutModel: .example))
+        WorkoutDisplayView(viewModel: WorkoutDisplayViewModel(workoutManager: PreviewWorkoutManager(), workoutModel: .example, networkService: Mock.shared))
     }
 }

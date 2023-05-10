@@ -38,7 +38,7 @@ class WorkoutsHomeViewModel: ObservableObject {
     // MARK: - Load
     @MainActor
     func loadWorkouts() async {
-        if !hasLoaded {
+//        if !hasLoaded {
             isLoading = true
             do {
                 try await workoutManager.loadWorkouts()
@@ -50,7 +50,7 @@ class WorkoutsHomeViewModel: ObservableObject {
                 print(String(describing: error))
                 isLoading = false
             }
-        }
+//        }
     }
     
     // MARK: - Listener
