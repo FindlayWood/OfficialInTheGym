@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CurrentUserManager: CurrentUserService {
+class CurrentUserManager: MainCurrentUserService {
     @Published var currentUser: Users = Users.nilUser
     static let shared = CurrentUserManager()
     private init() {}
@@ -34,7 +34,7 @@ class CurrentUserManager: CurrentUserService {
     }
 }
 
-protocol CurrentUserService {
+protocol MainCurrentUserService {
     var currentUser: Users { get }
     func launch()
     func storeCurrentUser(_ model: Users)

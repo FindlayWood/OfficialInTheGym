@@ -18,7 +18,7 @@ class UserObserver {
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     var firestoreService: FirestoreService = FirestoreManager.shared
     var authService: AuthManagerService = FirebaseAuthManager.shared
-    var userService: CurrentUserService = CurrentUserManager.shared
+    var userService: MainCurrentUserService = CurrentUserManager.shared
     
     static let shared = UserObserver()
     
