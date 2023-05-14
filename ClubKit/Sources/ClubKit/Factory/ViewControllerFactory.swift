@@ -8,7 +8,9 @@
 import Foundation
 
 protocol ViewControllerFactory {
-    func makeClubsViewController() -> ClubsViewController
+    func makeClubsViewController(flow: ClubsFlow) -> ClubsViewController
+    func makeClubCreationViewController() -> ClubCreationViewController
+    func makeClubHomeViewController(_ model: RemoteClubModel) -> ClubHomeViewController
 }
 
 class RegularViewControllerFactory: ViewControllerFactory {
@@ -18,8 +20,18 @@ class RegularViewControllerFactory: ViewControllerFactory {
         self.clubManager = clubManager
     }
     
-    func makeClubsViewController() -> ClubsViewController {
-        let vc = ClubsViewController(clubManager: clubManager)
+    func makeClubsViewController(flow: ClubsFlow) -> ClubsViewController {
+        let vc = ClubsViewController(clubManager: clubManager, coordinator: flow)
+        return vc
+    }
+    
+    func makeClubCreationViewController() -> ClubCreationViewController {
+        let vc = ClubCreationViewController()
+        return vc
+    }
+    
+    func makeClubHomeViewController(_ model: RemoteClubModel) -> ClubHomeViewController {
+        let vc = ClubHomeViewController(clubModel: model)
         return vc
     }
 }

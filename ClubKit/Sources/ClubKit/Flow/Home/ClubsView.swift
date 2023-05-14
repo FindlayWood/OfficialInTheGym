@@ -46,7 +46,7 @@ struct ClubsView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(.secondarySystemBackground))
-                } else {
+                } else if !viewModel.hasLoaded {
                     VStack {
                         ZStack {
                             Image(systemName: "person.3.fill")
@@ -76,6 +76,29 @@ struct ClubsView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(.secondarySystemBackground))
+                } else {
+                    SearchBar(searchText: $viewModel.searchText, placeholder: "search clubs...")
+                    VStack {
+                        ZStack {
+                            Image(systemName: "person.3.fill")
+                                .font(.largeTitle)
+                                .foregroundColor(Color(.darkColour))
+                            Image(systemName: "nosign")
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                                .foregroundColor(.red.opacity(0.5))
+                        }
+                        Text("No Clubs")
+                            .font(.title.bold())
+                            .foregroundColor(Color(.darkColour))
+                        Text("No clubs matching this search")
+                            .font(.footnote.bold())
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(.secondarySystemBackground))
                 }
             } else {
                 SearchBar(searchText: $viewModel.searchText, placeholder: "search clubs...")
@@ -83,10 +106,9 @@ struct ClubsView: View {
                     ForEach(viewModel.filteredResults) { model in
                         Section {
                             Button {
-                                
+                                viewModel.showClubAction(model)
                             } label: {
-                                Text(model.clubName)
-                                    .font(.title.bold())
+                                ClubRow(model: model)
                             }
                         }
                         .listRowBackground(Color.clear)
@@ -105,6 +127,6 @@ struct ClubsView: View {
 
 struct ClubsView_Previews: PreviewProvider {
     static var previews: some View {
-        ClubsView(viewModel: ClubsViewModel(clubManager: PreviewClubManager()))
+        ClubsView(viewModel: ClubsViewModel(clubManager: PreviewClubManager(), flow: nil))
     }
 }

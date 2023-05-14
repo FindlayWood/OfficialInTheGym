@@ -1,5 +1,5 @@
 //
-//  ClubsViewController.swift
+//  ClubHomeViewController.swift
 //  
 //
 //  Created by Findlay-Personal on 14/05/2023.
@@ -7,17 +7,15 @@
 
 import UIKit
 
-class ClubsViewController: UIViewController {
+class ClubHomeViewController: UIViewController {
     
-    var clubManager: ClubManager
-    var coordinator: ClubsFlow
+    var clubModel: RemoteClubModel
     
-    lazy var viewModel = ClubsViewModel(clubManager: clubManager, flow: coordinator)
-    lazy var display = ClubsView(viewModel: viewModel)
+    lazy var viewModel = ClubHomeViewModel(clubModel: clubModel)
+    lazy var display = ClubHomeView(viewModel: viewModel)
     
-    init(clubManager: ClubManager, coordinator: ClubsFlow) {
-        self.clubManager = clubManager
-        self.coordinator = coordinator
+    init(clubModel: RemoteClubModel) {
+        self.clubModel = clubModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -30,9 +28,12 @@ class ClubsViewController: UIViewController {
         super.viewDidLoad()
         addDisplay()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.isHidden = false
+        navigationItem.title = viewModel.clubModel.clubName
+        editNavBarColour(to: .darkColour)
     }
     func addDisplay() {
         addSwiftUIView(display)

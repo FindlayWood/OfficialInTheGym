@@ -10,7 +10,7 @@ import Foundation
 
 class ClubsViewModel: ObservableObject {
     
-//    var coordinator: WorkoutsHomeCoordinator?
+    var coordinator: ClubsFlow?
     
     var clubManager: ClubManager
     
@@ -31,8 +31,9 @@ class ClubsViewModel: ObservableObject {
     }
     
     // MARK: - Initializer
-    init(clubManager: ClubManager) {
+    init(clubManager: ClubManager, flow: ClubsFlow?) {
         self.clubManager = clubManager
+        self.coordinator = flow
     }
     
     // MARK: - Load
@@ -67,6 +68,6 @@ class ClubsViewModel: ObservableObject {
     }
     
     func showClubAction(_ model: RemoteClubModel) {
-//        coordinator?.showWorkout(model)
+        coordinator?.goToClub(model)
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 
 enum Constants {
     static func clubDataPath(_ userID: String) -> String {
-        "Users/\(userID)/clubData"
+        "Users/\(userID)/ClubData"
     }
     static func clubPath(_ clubID: String) -> String {
         "Clubs/\(clubID)"
