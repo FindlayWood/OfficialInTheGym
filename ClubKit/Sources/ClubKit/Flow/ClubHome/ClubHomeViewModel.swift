@@ -9,9 +9,19 @@ import Foundation
 
 class ClubHomeViewModel: ObservableObject {
     
+    var goToTeams: (() -> Void)?
+    var goToPlayers: (() -> Void)?
+    
     var clubModel: RemoteClubModel
     
     init(clubModel: RemoteClubModel) {
         self.clubModel = clubModel
+    }
+    
+    func teamsAction() {
+        goToTeams?()
+    }
+    func playersAction() {
+        goToPlayers?()
     }
 }

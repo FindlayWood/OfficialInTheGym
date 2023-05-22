@@ -10,6 +10,7 @@ import UIKit
 class ClubHomeViewController: UIViewController {
     
     var clubModel: RemoteClubModel
+    var coordinator: ClubHomeFlow?
     
     lazy var viewModel = ClubHomeViewModel(clubModel: clubModel)
     lazy var display = ClubHomeView(viewModel: viewModel)
@@ -27,6 +28,7 @@ class ClubHomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addDisplay()
+        initViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,5 +39,16 @@ class ClubHomeViewController: UIViewController {
     }
     func addDisplay() {
         addSwiftUIView(display)
+    }
+    
+    // MARK: - View Model
+    func initViewModel() {
+        
+        viewModel.goToTeams = { [weak self] in
+            self?.coordinator?.goToTeams()
+        }
+        viewModel.goToPlayers = { [weak self] in
+            self?.coordinator?.goToPlayers()
+        }
     }
 }

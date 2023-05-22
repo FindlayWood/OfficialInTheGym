@@ -22,10 +22,29 @@ class ClubHomeCoordinator: ClubHomeFlow {
     func start() {
         let vc = viewControllerFactoy.makeClubHomeViewController(clubModel)
         vc.hidesBottomBarWhenPushed = true
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToTeams() {
+        let vc = viewControllerFactoy.makeTeamsHomeViewController(clubModel)
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToPlayers() {
+        let vc = viewControllerFactoy.makePlayersViewController(clubModel)
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToCreatePlayer() {
+        let vc = viewControllerFactoy.makeCreatePlayerViewController(clubModel)
         navigationController.pushViewController(vc, animated: true)
     }
 }
 
 protocol ClubHomeFlow: Coordinator {
-    
+    func goToTeams()
+    func goToPlayers()
+    func goToCreatePlayer()
 }

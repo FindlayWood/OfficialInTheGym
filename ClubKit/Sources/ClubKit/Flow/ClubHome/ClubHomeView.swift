@@ -12,7 +12,72 @@ struct ClubHomeView: View {
     @ObservedObject var viewModel: ClubHomeViewModel
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            
+            Section {
+                Button {
+                    viewModel.teamsAction()
+                } label: {
+                    HStack {
+                        Image(systemName: "shield")
+                        Text("Teams")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                }
+                
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Image(systemName: "calendar")
+                        Text("Schedule")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                }
+            }
+            
+            Section {
+                Button {
+                    viewModel.playersAction()
+                } label: {
+                    HStack {
+                        Image(systemName: "person")
+                        Text("Players")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                }
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Image(systemName: "person.crop.artframe")
+                        Text("Staff")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                }
+            } header: {
+                Text("People")
+            }
+            
+            Section {
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Image(systemName: "gear")
+                        Text("Settings")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                }
+            } header: {
+                Text("Settings")
+            }
+        }
     }
 }
 

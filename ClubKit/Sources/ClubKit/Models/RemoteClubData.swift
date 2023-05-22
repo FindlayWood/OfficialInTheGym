@@ -13,3 +13,7 @@ struct RemoteClubData: Codable {
     var role: ClubRole
     var dateJoined: Date
 }
+
+extension RemoteClubData {
+    static let example = RemoteClubData(id: "testID", clubID: "clubID", role: .player, dateJoined: .now)
+}

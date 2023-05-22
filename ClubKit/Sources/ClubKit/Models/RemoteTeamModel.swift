@@ -7,12 +7,15 @@
 
 import Foundation
 
-struct RemoteTeamModel: Codable {
+struct RemoteTeamModel: Codable, Identifiable {
     var id: String
-    var clubName: String
-    var tagline: String
+    var teamName: String
     var createdBy: String
-    var createdDate: String
+    var createdDate: Date
     var sport: Sport
-    var verified: Bool
+    var athleteCount: Int
+}
+
+extension RemoteTeamModel {
+    static let example = RemoteTeamModel(id: UUID().uuidString, teamName: "Bears", createdBy: "", createdDate: .now, sport: .rugby, athleteCount: 23)
 }

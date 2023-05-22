@@ -10,43 +10,60 @@ import SwiftUI
 struct ClubRow: View {
     var model: RemoteClubModel
     var body: some View {
-        VStack {
-            HStack(alignment: .top) {
-                RoundedRectangle(cornerRadius: 4)
-                    .frame(width: 50, height: 50)
-                    .foregroundColor(.gray)
+        HStack(alignment: .top) {
+            RoundedRectangle(cornerRadius: 4)
+                .frame(width: 50, height: 50)
+                .foregroundColor(.gray)
+            VStack {
                 VStack(alignment: .leading) {
-                    Text(model.clubName)
-                        .font(.title.bold())
-                        .foregroundColor(.primary)
+                    HStack {
+                        Text(model.clubName)
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                        
+                        if model.verified {
+                            Image(systemName: "checkmark.seal.fill")
+                                .foregroundColor(Color(.darkColour))
+                        }
+                        Spacer()
+                    }
                     Text(model.tagline)
                         .font(.footnote.bold())
                         .foregroundColor(.secondary)
                 }
-                if model.verified {
-                    Image(systemName: "checkmark.seal.fill")
-                        .foregroundColor(Color(.darkColour))
+//                HStack(alignment: .top) {
+//                    VStack(alignment: .leading) {
+//                        Text(model.clubName)
+//                            .font(.title.bold())
+//                            .foregroundColor(.primary)
+//                        Text(model.tagline)
+//                            .font(.footnote.bold())
+//                            .foregroundColor(.secondary)
+//                    }
+//                    if model.verified {
+//                        Image(systemName: "checkmark.seal.fill")
+//                            .foregroundColor(Color(.darkColour))
+//                    }
+//                    Spacer()
+//                }
+                Rectangle()
+                    .fill(.black)
+                    .frame(height: 1)
+                    .frame(maxWidth: .infinity)
+                HStack {
+                    Image(systemName: "shield.fill")
+                    Text(model.teamCount, format: .number)
+                        .font(.footnote.bold())
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Image(systemName: "person.3.fill")
+                    Text(model.athleteCount, format: .number)
+                        .font(.footnote.bold())
+                        .foregroundColor(.secondary)
                 }
-                Spacer()
+                .foregroundColor(Color(.darkColour))
+                .padding(.vertical)
             }
-            Rectangle()
-                .fill(.black)
-                .frame(height: 1)
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal)
-            HStack {
-                Image(systemName: "shield.fill")
-                Text(model.teamCount, format: .number)
-                    .font(.footnote.bold())
-                    .foregroundColor(.secondary)
-                Spacer()
-                Image(systemName: "person.3.fill")
-                Text(model.athleteCount, format: .number)
-                    .font(.footnote.bold())
-                    .foregroundColor(.secondary)
-            }
-            .foregroundColor(Color(.darkColour))
-            .padding()
         }
         .padding()
         .frame(maxWidth: .infinity)
