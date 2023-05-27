@@ -19,10 +19,12 @@ protocol ViewControllerFactory {
 class RegularViewControllerFactory: ViewControllerFactory {
     var clubManager: ClubManager
     var teamLoader: TeamLoader
+    var playerLoader: PlayerLoader
     
-    init(clubManager: ClubManager, teamLoader: TeamLoader) {
+    init(clubManager: ClubManager, teamLoader: TeamLoader, playerLoader: PlayerLoader) {
         self.clubManager = clubManager
         self.teamLoader = teamLoader
+        self.playerLoader = playerLoader
     }
     
     func makeClubsViewController(flow: ClubsFlow) -> ClubsViewController {
@@ -46,12 +48,12 @@ class RegularViewControllerFactory: ViewControllerFactory {
     }
     
     func makePlayersViewController(_ model: RemoteClubModel) -> PlayersViewController {
-        let vc = PlayersViewController(clubModel: model)
+        let vc = PlayersViewController(clubModel: model, playerLoader: playerLoader)
         return vc
     }
     
     func makeCreatePlayerViewController(_ model: RemoteClubModel) -> CreatePlayerViewController {
-        let vc = CreatePlayerViewController(clubModel: model)
+        let vc = CreatePlayerViewController(clubModel: model, loader: playerLoader, teamLoader: teamLoader)
         return vc
     }
 }

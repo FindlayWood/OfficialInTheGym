@@ -17,7 +17,10 @@ enum Constants {
     static func teamsPath(_ clubID: String) -> String {
         "Clubs/\(clubID)/Teams"
     }
-    static func playerPath(in clubID: String, _ playerID: String) -> String {
+    static func playerPath(_ clubID: String, _ playerID: String) -> String {
         "Clubs/\(clubID)/Players/\(playerID)"
+    }
+    static func playersPath(for clubID: String) -> String {
+        "Clubs/\(clubID)/Players"
     }
 }

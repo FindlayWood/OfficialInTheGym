@@ -9,8 +9,9 @@ import UIKit
 
 public class ClubKitBoundary {
     
+    private lazy var playerLoader = RemotePlayerLoader(networkService: networkService)
     private lazy var teamLoader = RemoteTeamLoader(networkService: networkService)
-    private lazy var viewControllerFactory = RegularViewControllerFactory(clubManager: clubManager, teamLoader: teamLoader)
+    private lazy var viewControllerFactory = RegularViewControllerFactory(clubManager: clubManager, teamLoader: teamLoader, playerLoader: playerLoader)
     private lazy var coordinatorFactory = RegularCoordinatorFactory(navigationController: navigationController, viewControllerFactory: viewControllerFactory)
     private lazy var clubLoader = RemoteClubLoader(networkService: networkService, userService: userService)
     private lazy var clubManager = RemoteClubManager(clubLoader: clubLoader)

@@ -7,12 +7,14 @@
 
 import Foundation
 
-struct RemotePlayerModel: Codable {
+struct RemotePlayerModel: Codable, Identifiable {
     var id: String
+    var clubID: String
     var displayName: String
+    var positions: [Positions]
     var linkedAccountUID: String?
 }
 
 extension RemotePlayerModel {
-    static let example = RemotePlayerModel(id: UUID().uuidString, displayName: "Example Player")
+    static let example = RemotePlayerModel(id: UUID().uuidString, clubID: "example", displayName: "Example Player", positions: [.pointGuard])
 }

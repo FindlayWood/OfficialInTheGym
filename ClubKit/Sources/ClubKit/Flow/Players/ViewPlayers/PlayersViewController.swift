@@ -11,9 +11,14 @@ class PlayersViewController: UIViewController {
     
     var clubModel: RemoteClubModel
     var coordinator: ClubHomeFlow?
+    var playerLoader: PlayerLoader
     
-    init(clubModel: RemoteClubModel) {
+    private lazy var viewModel = PlayersViewModel(clubModel: clubModel, playerLoader: playerLoader)
+    private lazy var display = PlayersView(viewModel: viewModel)
+    
+    init(clubModel: RemoteClubModel, playerLoader: PlayerLoader) {
         self.clubModel = clubModel
+        self.playerLoader = playerLoader
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -26,11 +31,12 @@ class PlayersViewController: UIViewController {
         super.viewDidLoad()
         initNavBar()
         view.backgroundColor = .systemBackground
+        addDisplay()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
-        navigationItem.title = clubModel.clubName + "'s Players'"
+        navigationItem.title = clubModel.clubName + "'s Players"
         editNavBarColour(to: .darkColour)
     }
     
@@ -43,5 +49,10 @@ class PlayersViewController: UIViewController {
     // MARK: - Actions
     @objc func addNewPlayer(_ sender: UIBarButtonItem) {
         coordinator?.goToCreatePlayer()
+    }
+    
+    // MARK: - Display
+    func addDisplay() {
+        addSwiftUIView(display)
     }
 }
