@@ -25,6 +25,7 @@ class RemotePlayerLoader: PlayerLoader {
     }
     
     func uploadNewPlayer(_ model: RemotePlayerModel) async throws {
-        try await networkService.write(data: model, at: Constants.playerPath(model.clubID, model.id))
+        try await networkService.write(dataPoints: [Constants.playerPath(model.clubID, model.id): model])
+//        try await networkService.write(data: model, at: Constants.playerPath(model.clubID, model.id))
     }
 }

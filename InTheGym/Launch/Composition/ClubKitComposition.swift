@@ -44,8 +44,8 @@ class ClubKitNetWorkService: NetworkService {
         self.firebaseService = firebaseService
     }
     
-    func write(data: Codable, at path: String) async throws {
-        try await firestoreService.upload(data: data, at: path)
+    func write(dataPoints: [String: Codable]) async throws {
+        try await firestoreService.upload(dataPoints: dataPoints)
     }
     
     func read<T: Codable>(at path: String) async throws -> T {

@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol NetworkService {
-    func write(data: Codable, at path: String) async throws
+    func write(dataPoints: [String: Codable]) async throws
     func read<T: Codable>(at path: String) async throws -> T
     func readAll<T:Codable>(at path: String) async throws -> [T]
 }

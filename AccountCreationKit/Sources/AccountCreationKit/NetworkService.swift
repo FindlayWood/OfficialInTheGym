@@ -9,7 +9,7 @@ import Foundation
 
 public protocol NetworkService {
     func signout() async throws
-    func upload(data: Codable, at path: String) async throws
+    func upload(dataPoints: [String: Codable]) async throws
     func uploadRealtime(data: Codable, at path: String) async throws
     func dataUpload(data: Data, at path: String) async throws
     func checkExistence(at path: String) async throws -> Bool
@@ -24,7 +24,7 @@ class MockNetworkService: NetworkService {
     func signout() async throws {
         
     }
-    func upload(data: Codable, at path: String) async throws {
+    func upload(dataPoints: [String: Codable]) async throws {
         
     }
     func uploadRealtime(data: Codable, at path: String) async throws {

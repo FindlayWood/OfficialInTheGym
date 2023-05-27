@@ -56,7 +56,7 @@ class SettingsViewModel {
         Task {
             do {
                 let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
-                try await firestoreService.upload(data: fcmTokenModel, at: "FCMTokens/\(UserDefaults.currentUser.uid)")
+                try await firestoreService.upload(dataPoints: ["FCMTokens/\(UserDefaults.currentUser.uid)": fcmTokenModel])
                 UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
                 try apiService.signout()
                 
