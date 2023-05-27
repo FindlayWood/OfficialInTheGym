@@ -9,28 +9,27 @@ import Foundation
 
 class CreatePlayerViewModel: ObservableObject {
     
+    // MARK: - Dependencies
     var clubModel: RemoteClubModel
     var loader: PlayerLoader
     var teamLoader: TeamLoader
+    // MARK: - Loading Variables
     @Published var isLoadingTeams: Bool = false
-    @Published var isUplaoding: Bool = false
+    @Published var isUploading: Bool = false
+    @Published var uploaded: Bool = false
+    @Published var errorUploading: Bool = false
+    // MARK: - New Model Variables
     @Published var displayName: String = ""
-    @Published var selectedSport: Sport {
-        willSet {
-            if newValue != selectedSport {
-                playerPositions.removeAll()
-            }
-        }
-    }
     @Published var playerPositions: [Positions] = []
     @Published var teams: [RemoteTeamModel] = []
     @Published var selectedTeams: [RemoteTeamModel] = []
+    var selectedSport: Sport
     
     init(clubModel: RemoteClubModel, loader: PlayerLoader, teamLoader: TeamLoader) {
         self.clubModel = clubModel
-        self.selectedSport = clubModel.sport
         self.loader = loader
         self.teamLoader = teamLoader
+        self.selectedSport = clubModel.sport
     }
     
     @MainActor
@@ -58,18 +57,29 @@ class CreatePlayerViewModel: ObservableObject {
     
     @MainActor
     func create() async {
-        isUplaoding = true
+        isUploading = true
         let newModel = RemotePlayerModel(id: UUID().uuidString, clubID: clubModel.id, displayName: displayName, positions: playerPositions)
         do {
-            try await loader.uploadNewPlayer(newModel)
+            try await loader.uploadNewPlayer(newModel, to: selectedTeams.map { $0.id })
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.displayName = ""
                 self.playerPositions.removeAll()
-                self.isUplaoding = false
+                self.selectedTeams.removeAll()
+                self.isUploading = false
+                self.uploaded = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.uploaded = false
+                }
             }
         } catch {
             print(String(describing: error))
-            isUplaoding = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.isUploading = false
+                self.errorUploading = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.errorUploading = false
+                }
+            }
         }
     }
     

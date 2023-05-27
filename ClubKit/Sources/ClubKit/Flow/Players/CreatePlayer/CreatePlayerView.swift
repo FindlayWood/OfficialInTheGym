@@ -89,7 +89,7 @@ struct CreatePlayerView: View {
                 .listRowBackground(Color.clear)
                 .listRowInsets(.init(top: 2, leading: 2, bottom: 2, trailing: 2))
             }
-            if viewModel.isUplaoding {
+            if viewModel.isUploading {
                 ZStack {
                     Color.black.opacity(0.3)
                         .ignoresSafeArea()
@@ -97,6 +97,40 @@ struct CreatePlayerView: View {
                         .frame(width: 100, height: 100)
                         .foregroundColor(.white)
                     ProgressView()
+                }
+            }
+            if viewModel.uploaded {
+                ZStack {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                    VStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .resizable()
+                            .frame(width: 70, height: 70)
+                            .foregroundColor(.green)
+                        Text("Created New Player")
+                            .font(.headline)
+                    }
+                    .padding()
+                    .background(Color(.systemBackground))
+                    .cornerRadius(4)
+                }
+            }
+            if viewModel.errorUploading {
+                ZStack {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                    VStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .resizable()
+                            .frame(width: 70, height: 70)
+                            .foregroundColor(.red)
+                        Text("Error, please try again!")
+                            .font(.headline)
+                    }
+                    .padding()
+                    .background(Color(.systemBackground))
+                    .cornerRadius(4)
                 }
             }
         }
@@ -109,7 +143,7 @@ struct CreatePlayerView: View {
 struct CreatePlayerView_Previews: PreviewProvider {
     private class PreviewPlayerLoader: PlayerLoader {
         func loadAllPlayers(for clubID: String) async throws -> [RemotePlayerModel] { return [] }
-        func uploadNewPlayer(_ model: RemotePlayerModel) async throws {}
+        func uploadNewPlayer(_ model: RemotePlayerModel, to teams: [String]) async throws {}
     }
     private class PreviewTeamLoader: TeamLoader {
         func loadAllTeams(for clubID: String) async throws -> [RemoteTeamModel] { return [] }

@@ -31,7 +31,11 @@ struct PlayersView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.secondarySystemBackground))
             } else {
-                if viewModel.players.isEmpty {
+                SearchBar(searchText: $viewModel.searchText, placeholder: "search players...")
+                    .background(Capsule()
+                        .foregroundColor(Color(.systemBackground)))
+                
+                if viewModel.searchedPlayers.isEmpty {
                     VStack {
                         ZStack {
                             Image(systemName: "person.3.fill")
@@ -45,52 +49,53 @@ struct PlayersView: View {
                         Text("No Players")
                             .font(.title.bold())
                             .foregroundColor(Color(.darkColour))
-                        Text("This club currently has no players. You can create a team for this club. Once you have created a team it will appear here.")
-                            .font(.footnote.bold())
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                            .padding()
-                        Button {
-                            
-                        } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .resizable()
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(Color(.darkColour).opacity(0.8))
+                        if viewModel.searchText.isEmpty {
+                            Text("This club currently has no players. You can create a team for this club. Once you have created a team it will appear here.")
+                                .font(.footnote.bold())
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                            Button {
+                                
+                            } label: {
+                                Image(systemName: "plus.circle.fill")
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .foregroundColor(Color(.darkColour).opacity(0.8))
+                            }
+                        } else {
+                            Text("No Players. Change your search term.")
+                                .font(.footnote.bold())
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                                .padding()
                         }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(.secondarySystemBackground))
                 } else {
-                    SearchBar(searchText: $viewModel.searchText, placeholder: "search players...")
-                        .background(Capsule()
-                            .foregroundColor(Color(.systemBackground)))
-                    HStack {
-                        Button("Sort") {}
-                        Spacer()
-                        Button("Filter") {}
-                    }
-                    .foregroundColor(.primary)
-                    .padding([.top, .leading, .trailing])
-                    
                     List {
-                        ForEach(viewModel.players) { model in
-                            PlayerRow(model: model)
+                        Section {
+                            ForEach(viewModel.searchedPlayers) { model in
+                                PlayerRow(model: model)
+                            }
+                        } header: {
+                            Text("Players")
                         }
                     }
                 }
             }
         }
+        .background(Color(.systemBackground))
         .task {
             await viewModel.load()
         }
-
     }
 }
 
 struct PlayersView_Previews: PreviewProvider {
     class PreviewPlayerLoader: PlayerLoader {
-        func uploadNewPlayer(_ model: RemotePlayerModel) async throws {}
+        func uploadNewPlayer(_ model: RemotePlayerModel, to teams: [String]) async throws {}
         func loadAllPlayers(for clubID: String) async throws -> [RemotePlayerModel] { return [] }
     }
     static var previews: some View {
