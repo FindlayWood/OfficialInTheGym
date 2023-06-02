@@ -13,6 +13,8 @@ class TeamsViewModel: ObservableObject {
     @Published var teams: [RemoteTeamModel] = []
     @Published var isLoading: Bool = false
     
+    var selectedTeam: ((RemoteTeamModel) -> ())?
+    
     var clubModel: RemoteClubModel
     var teamLoader: TeamLoader
     
@@ -33,5 +35,7 @@ class TeamsViewModel: ObservableObject {
             isLoading = false
         }
     }
-    
+    func selectedTeamAction(_ model: RemoteTeamModel) {
+        selectedTeam?(model)
+    }
 }

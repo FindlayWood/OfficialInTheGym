@@ -55,7 +55,7 @@ struct CreatePlayerView: View {
                 
                 Section {
                     ForEach(viewModel.playerPositions, id: \.self) { position in
-                        Text(position.rawValue.capitalized)
+                        Text(position.title)
                     }
                     Menu {
                         ForEach(viewModel.selectedSport.positions, id: \.self) { position in

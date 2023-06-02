@@ -11,7 +11,8 @@ protocol ViewControllerFactory {
     func makeClubsViewController(flow: ClubsFlow) -> ClubsViewController
     func makeClubCreationViewController() -> ClubCreationViewController
     func makeClubHomeViewController(_ model: RemoteClubModel) -> ClubHomeViewController
-    func makeTeamsHomeViewController(_ model: RemoteClubModel) -> TeamsViewController
+    func makeTeamsViewController(_ model: RemoteClubModel, flow: ClubHomeFlow) -> TeamsViewController
+    func makeTeamHomeViewController(_ model: RemoteTeamModel) -> TeamHomeViewController
     func makePlayersViewController(_ model: RemoteClubModel) -> PlayersViewController
     func makeCreatePlayerViewController(_ model: RemoteClubModel) -> CreatePlayerViewController
 }
@@ -42,8 +43,13 @@ class RegularViewControllerFactory: ViewControllerFactory {
         return vc
     }
     
-    func makeTeamsHomeViewController(_ model: RemoteClubModel) -> TeamsViewController {
-        let vc = TeamsViewController(clubModel: model, teamLoader: teamLoader)
+    func makeTeamsViewController(_ model: RemoteClubModel, flow: ClubHomeFlow) -> TeamsViewController {
+        let vc = TeamsViewController(clubModel: model, teamLoader: teamLoader, coordinator: flow)
+        return vc
+    }
+    
+    func makeTeamHomeViewController(_ model: RemoteTeamModel) -> TeamHomeViewController {
+        let vc = TeamHomeViewController()
         return vc
     }
     

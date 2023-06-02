@@ -19,6 +19,7 @@ struct TeamRow: View {
             Spacer()
             
             Image(systemName: "person.3.fill")
+                .foregroundColor(Color(.darkColour))
             Text(model.athleteCount, format: .number)
                 .font(.footnote.bold())
                 .foregroundColor(.secondary)

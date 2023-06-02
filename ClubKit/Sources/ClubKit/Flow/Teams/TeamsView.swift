@@ -64,9 +64,11 @@ struct TeamsView: View {
                 } else {
                     List {
                         ForEach(viewModel.teams) { model in
-//                            Section {
+                            Button {
+                                viewModel.selectedTeamAction(model)
+                            } label: {
                                 TeamRow(model: model)
-//                            }
+                            }
                         }
                         .listRowBackground(Color.clear)
                         .listRowInsets(EdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1))

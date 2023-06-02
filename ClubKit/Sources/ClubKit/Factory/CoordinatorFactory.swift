@@ -12,6 +12,7 @@ protocol CoordinatorFactory {
     var viewControllerFactory: ViewControllerFactory { get }
     func makeClubsCoordinator() -> ClubsFlow
     func makeClubHomeCoordinator(with model: RemoteClubModel) -> ClubHomeFlow
+    func makeTeamCoordinator(for model: RemoteTeamModel) -> TeamFlow
 }
 
 class RegularCoordinatorFactory: CoordinatorFactory {
@@ -29,7 +30,12 @@ class RegularCoordinatorFactory: CoordinatorFactory {
     }
     
     func makeClubHomeCoordinator(with model: RemoteClubModel) -> ClubHomeFlow {
-        let child = ClubHomeCoordinator(navigationController: navigationController, viewControllerFactory: viewControllerFactory, clubModel: model)
+        let child = ClubHomeCoordinator(navigationController: navigationController, viewControllerFactory: viewControllerFactory, coordinatorFactory: self, clubModel: model)
+        return child
+    }
+    
+    func makeTeamCoordinator(for model: RemoteTeamModel) -> TeamFlow {
+        let child = TeamCoordinator(navigationController: navigationController, viewControllerFactory: viewControllerFactory, teamModel: model)
         return child
     }
 }

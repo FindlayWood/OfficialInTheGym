@@ -11,13 +11,15 @@ class TeamsViewController: UIViewController {
     
     var clubModel: RemoteClubModel
     var teamLoader: TeamLoader
+    var coordinator: ClubHomeFlow
     
     private lazy var viewModel: TeamsViewModel = TeamsViewModel(clubModel: clubModel, teamLoader: teamLoader)
     private lazy var display: TeamsView = TeamsView(viewModel: viewModel)
     
-    init(clubModel: RemoteClubModel, teamLoader: TeamLoader) {
+    init(clubModel: RemoteClubModel, teamLoader: TeamLoader, coordinator: ClubHomeFlow) {
         self.clubModel = clubModel
         self.teamLoader = teamLoader
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -30,6 +32,7 @@ class TeamsViewController: UIViewController {
         super.viewDidLoad()
         addDisplay()
         initNavBar()
+        initViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,5 +56,12 @@ class TeamsViewController: UIViewController {
     // MARK: - Actions
     @objc func addNewTeam(_ sender: UIBarButtonItem) {
         
+    }
+    
+    // MARK: - View Model
+    func initViewModel() {
+        viewModel.selectedTeam = { [weak self] selected in
+            self?.coordinator.goToTeam(selected)
+        }
     }
 }

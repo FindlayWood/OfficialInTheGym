@@ -11,11 +11,13 @@ class ClubHomeCoordinator: ClubHomeFlow {
     
     var navigationController: UINavigationController
     var viewControllerFactoy: ViewControllerFactory
+    var coordinatorFactory: CoordinatorFactory
     var clubModel: RemoteClubModel
     
-    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactory, clubModel: RemoteClubModel) {
+    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactory, coordinatorFactory: CoordinatorFactory, clubModel: RemoteClubModel) {
         self.navigationController = navigationController
         self.viewControllerFactoy = viewControllerFactory
+        self.coordinatorFactory = coordinatorFactory
         self.clubModel = clubModel
     }
     
@@ -27,8 +29,13 @@ class ClubHomeCoordinator: ClubHomeFlow {
     }
     
     func goToTeams() {
-        let vc = viewControllerFactoy.makeTeamsHomeViewController(clubModel)
+        let vc = viewControllerFactoy.makeTeamsViewController(clubModel, flow: self)
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToTeam(_ model: RemoteTeamModel) {
+        let child = coordinatorFactory.makeTeamCoordinator(for: model)
+        child.start()
     }
     
     func goToPlayers() {
@@ -45,6 +52,7 @@ class ClubHomeCoordinator: ClubHomeFlow {
 
 protocol ClubHomeFlow: Coordinator {
     func goToTeams()
+    func goToTeam(_ model: RemoteTeamModel)
     func goToPlayers()
     func goToCreatePlayer()
 }

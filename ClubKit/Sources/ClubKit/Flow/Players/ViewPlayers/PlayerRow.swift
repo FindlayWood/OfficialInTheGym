@@ -27,7 +27,7 @@ struct PlayerRow: View {
                     .foregroundColor(.primary)
                 HStack {
                     ForEach(model.positions, id: \.self) { position in
-                        Text(position.rawValue.capitalized)
+                        Text(position.title)
                             .font(.footnote.bold())
                             .foregroundColor(.secondary)
                     }
