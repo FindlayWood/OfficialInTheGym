@@ -47,10 +47,6 @@ class AccountCreationKitNetworkService: NetworkService {
         try await firestoreService.upload(data: data, at: path)
     }
     
-    func uploadRealtime(data: Codable, at path: String) async throws {
-        try await apiService.upload(data: data, at: path)
-    }
-    
     func dataUpload(data: Data, at path: String) async throws {
         try await storageService.dataUploadAsync(data: data, at: path)
     }
