@@ -101,7 +101,6 @@ class AccountCreationHomeViewModel: ObservableObject {
         Task {
             do {
                 try await apiService.upload(data: newAccountModel, at: "Users/\(uid)")
-                try await apiService.uploadRealtime(data: true, at: "Usernames/\(username)")
                 if profileImage != nil {
                     uploadProfileImage()
                 } else {
