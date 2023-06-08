@@ -13,50 +13,67 @@ struct TeamHomeView: View {
     
     var body: some View {
         List {
-            Button {
-                
-            } label: {
-                HStack {
-                    Image(systemName: "")
-                    Text("Players")
+            Section {
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Image(systemName: "person")
+                        Text("Players")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.primary)
                 }
-                .foregroundColor(.primary)
+            } header: {
+                Text("Players")
             }
-            Button {
-                
-            } label: {
-                HStack {
-                    Image(systemName: "")
-                    Text("Default Lineup")
+            Section {
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Image(systemName: "text.badge.star")
+                        Text("Default Lineup")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.primary)
                 }
-                .foregroundColor(.primary)
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Image(systemName: "line.3.horizontal")
+                        Text("Lineups")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                }
+            } header: {
+                Text("Lineups")
             }
-            Button {
-                
-            } label: {
-                HStack {
-                    Image(systemName: "")
-                    Text("Lineups")
+            Section {
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Image(systemName: "calendar")
+                        Text("Fixtures")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.primary)
                 }
-                .foregroundColor(.primary)
-            }
-            Button {
-                
-            } label: {
-                HStack {
-                    Image(systemName: "")
-                    Text("Fixtures")
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Image(systemName: "calendar.badge.clock")
+                        Text("Results")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.primary)
                 }
-                .foregroundColor(.primary)
-            }
-            Button {
-                
-            } label: {
-                HStack {
-                    Image(systemName: "")
-                    Text("Results")
-                }
-                .foregroundColor(.primary)
+            } header: {
+                Text("Results")
             }
         }
     }
