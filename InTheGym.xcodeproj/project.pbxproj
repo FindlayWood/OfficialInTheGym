@@ -816,6 +816,8 @@
 		9F612BD0291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BCF291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift */; };
 		9F612BD229197DF900B5AE5A /* UserFollowingSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */; };
 		9F612BD529197E6400B5AE5A /* UserFollowing+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */; };
+		9F7444872A33D058007422CC /* BaseControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7444862A33D058007422CC /* BaseControllerViewController.swift */; };
+		9F7444892A33D1E7007422CC /* BaseControllerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7444882A33D1E7007422CC /* BaseControllerCoordinator.swift */; };
 		9F84639C293E8F5B001E549F /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */; };
 		9F9F016629F2F0EB002B969B /* BodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016529F2F0EB002B969B /* BodyType.swift */; };
 		9F9F016829F2F116002B969B /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016729F2F116002B969B /* Observable.swift */; };
@@ -1668,6 +1670,8 @@
 		9F612BCF291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailViewSwiftUI.swift; sourceTree = "<group>"; };
 		9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFollowingSwiftUI.swift; sourceTree = "<group>"; };
 		9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserFollowing+ViewModel.swift"; sourceTree = "<group>"; };
+		9F7444862A33D058007422CC /* BaseControllerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseControllerViewController.swift; sourceTree = "<group>"; };
+		9F7444882A33D1E7007422CC /* BaseControllerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseControllerCoordinator.swift; sourceTree = "<group>"; };
 		9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		9F9F016529F2F0EB002B969B /* BodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyType.swift; sourceTree = "<group>"; };
 		9F9F016729F2F116002B969B /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
@@ -2072,6 +2076,7 @@
 		7416CCD4265C04310043B1C2 /* Launch */ = {
 			isa = PBXGroup;
 			children = (
+				9F7444852A33D043007422CC /* BaseController */,
 				9F9F016929F32EE0002B969B /* UserObserver */,
 				9FB4D1DD29EAD4910019CA57 /* AccountCreated */,
 				9FC11F6229E0B5020054D79A /* VerifyAccount */,
@@ -2894,6 +2899,7 @@
 				742FD586284004040025E43C /* SearchTagCoordinator.swift */,
 				74A602AE2850D20D00AFA236 /* WorkoutDiscoveryCoordinator.swift */,
 				9F4DFB4629BD111C00363AE8 /* TaggedUsersCoordinator.swift */,
+				9F7444882A33D1E7007422CC /* BaseControllerCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -4467,6 +4473,14 @@
 			path = UserFollowing;
 			sourceTree = "<group>";
 		};
+		9F7444852A33D043007422CC /* BaseController */ = {
+			isa = PBXGroup;
+			children = (
+				9F7444862A33D058007422CC /* BaseControllerViewController.swift */,
+			);
+			path = BaseController;
+			sourceTree = "<group>";
+		};
 		9F9F016929F32EE0002B969B /* UserObserver */ = {
 			isa = PBXGroup;
 			children = (
@@ -4649,7 +4663,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1020;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = FindlayWood;
 				TargetAttributes = {
 					7479A904229F2B4C00D39E2E = {
@@ -5140,6 +5154,7 @@
 				742C1CA527BEA15B00DD1BB0 /* ExerciseClipsModel.swift in Sources */,
 				7472C87627E0B557004836B8 /* DiscoverPageDataSource.swift in Sources */,
 				74104508285D197800A9FF4E /* OnBoardSecondViewController.swift in Sources */,
+				9F7444892A33D1E7007422CC /* BaseControllerCoordinator.swift in Sources */,
 				74DC3B7128A0524800DCEAF7 /* UpdateTrainingStatusView.swift in Sources */,
 				746D62562858EF600056A46A /* StampsPreviewViewController.swift in Sources */,
 				742039A52832B16100074ECB /* PublicWorkoutsViewModel.swift in Sources */,
@@ -5454,6 +5469,7 @@
 				74F18ADB27D65CE80043551F /* CoachPlayerWorkoutsView.swift in Sources */,
 				9F1416C8294145A600D02F69 /* PostCellView.swift in Sources */,
 				749B37AE2846732300ADF33D /* AddPlayerCoordinator.swift in Sources */,
+				9F7444872A33D058007422CC /* BaseControllerViewController.swift in Sources */,
 				742C1C5527B4001C00DD1BB0 /* ClipCoordinator.swift in Sources */,
 				7431030B26FA30EA00F7121B /* TimeSelectionAdapter.swift in Sources */,
 				74B6F6982751536E00A72679 /* DisplayWorkoutsView.swift in Sources */,

@@ -30,7 +30,8 @@ class Coordinator {
         vc.viewModel.coordinator = self
         vc.colour = colour
         vc.image = image
-        navigationController.pushViewController(vc, animated: true)
+        navigationController.setViewControllers([vc], animated: true)
+//        navigationController.pushViewController(vc, animated: true)
     }
     
     func presentLogin() {

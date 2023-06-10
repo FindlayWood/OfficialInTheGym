@@ -20,6 +20,13 @@ class UserObserver {
     var authService: AuthManagerService = FirebaseAuthManager.shared
     var userService: CurrentUserService = CurrentUserManager.shared
     
+    var nilUser: (() -> ())?
+    var loggedInPlayer: (() -> ())?
+    var loggedInCoach: (() -> ())?
+    var accountNoProfile: (() -> ())?
+    var emailVerifiedNoAccount: (() -> ())?
+    
+    
     static let shared = UserObserver()
     
     private init() {}
@@ -54,7 +61,7 @@ class UserObserver {
                     self.verifyAccount()
                 }
             } else if user == nil {
-                self.logout()
+                self.nilUser?()
             }
         }
     }
@@ -138,9 +145,11 @@ class UserObserver {
         DispatchQueue.main.async {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             if userModel.accountType == .coach {
-                appDelegate.loggedInCoach()
+//                appDelegate.loggedInCoach()
+                self.loggedInCoach?()
             } else {
-                appDelegate.loggedInPlayer()
+//                appDelegate.loggedInPlayer()
+                self.loggedInPlayer?()
             }
         }
     }
@@ -148,7 +157,8 @@ class UserObserver {
     func verifyAccount() {
         DispatchQueue.main.async {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.verifyScreen()
+//            appDelegate.verifyScreen()
+            self.accountNoProfile?()
         }
     }
     
@@ -156,7 +166,8 @@ class UserObserver {
         observeAccountCreation(for: uid)
         DispatchQueue.main.async {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.accountCreation(email: email, uid: uid)
+//            appDelegate.accountCreation(email: email, uid: uid)
+            self.emailVerifiedNoAccount?()
         }
     }
     
@@ -170,7 +181,8 @@ class UserObserver {
     func logout() {
         DispatchQueue.main.async {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.nilUser()
+//            appDelegate.nilUser()
+            self.nilUser?()
         }
     }
 }

@@ -16,6 +16,8 @@ import FirebaseMessaging
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var coordinator: MainCoordinator?
+    var baseController: BaseControllerCoordinator?
+    var navigationController: UINavigationController = UINavigationController()
     var window: UIWindow?
     
     let gcmMessageIDKey = "gcm.MessageID_Key"
@@ -26,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         launchScreen()
         // setup revenue cat
         Purchases.logLevel = .debug
-        UserObserver.shared.checkForUserDefault()
+//        UserObserver.shared.checkForUserDefault()
 //        Purchases.configure(withAPIKey: Constants.revenueCatAPIKey)
         
         // For iOS 10 display notification (sent via APNS)
@@ -53,12 +55,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
     }
     func launchScreen() {
+        navigationController = UINavigationController()
+        baseController = makeBaseCoordinator()
+        baseController?.start()
         window = UIWindow(frame: UIScreen.main.bounds)
-        let vc = LaunchPageViewController()
         guard let window else {return}
-        window.rootViewController = vc
+        window.rootViewController = navigationController
         window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {})
+//        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {})
     }
     func loggedInPlayer() {
         let navController = UINavigationController()
@@ -114,6 +118,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.makeKeyAndVisible()
         UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
     }
+    
+    func makeBaseCoordinator() -> BaseControllerCoordinator {
+
+        let coordinator = BaseControllerCoordinator(navigationController: navigationController)
+        
+        let cache = UserCacheServiceAdapter()
+        
+        let api = UserAPIServiceAdapter(
+            authService: FirebaseAuthManager.shared,
+            firestoreService: FirestoreManager.shared)
+                
+        let observer = UserChangeAPIServiceAdapter(
+            authService: FirebaseAuthManager.shared,
+            firestoreService: FirestoreManager.shared)
+
+        coordinator.userService = cache.fallback(api)
+        coordinator.observerService = observer
+        
+        return coordinator
+    }
+    
+    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -256,4 +282,95 @@ extension AppDelegate: MessagingDelegate {
       // Note: This callback is fired at each app startup and whenever a new token is generated.
     }
 
+}
+
+
+protocol UserService {
+    func loadUser() async throws -> Users
+}
+
+extension UserService {
+    func fallback(_ fallback: UserService) -> UserService {
+        UserServiceWithFallback(primary: self, fallback: fallback)
+    }
+}
+
+struct UserServiceWithFallback: UserService {
+    var primary: UserService
+    var fallback: UserService
+    
+    func loadUser() async throws -> Users {
+        do {
+            let primary = try await primary.loadUser()
+            return primary
+        } catch {
+            return try await fallback.loadUser()
+        }
+    }
+}
+
+protocol ObserveUserService {
+    func observeChange(completion: @escaping (Result<Users,UserStateError>) -> Void)
+}
+
+struct UserCacheServiceAdapter: UserService {
+    
+    func loadUser() async throws -> Users {
+        if UserDefaults.currentUser == Users.nilUser {
+            throw NSError(domain: "No user in UserDefaults", code: 0)
+        } else {
+            return UserDefaults.currentUser
+        }
+    }
+}
+
+struct UserAPIServiceAdapter: UserService {
+    
+    var authService: AuthManagerService
+    var firestoreService: FirestoreService
+    
+    func loadUser() async throws -> Users {
+        let firebaseUser = try await authService.checkForCurrentUser()
+        let userModel: Users = try await firestoreService.read(at: "Users/\(firebaseUser.uid)")
+        UserDefaults.currentUser = userModel
+        return userModel
+    }
+}
+
+struct UserChangeAPIServiceAdapter: ObserveUserService {
+    
+    var authService: AuthManagerService
+    var firestoreService: FirestoreService
+    
+    func observeChange(completion: @escaping (Result<Users,UserStateError>) -> Void) {
+        authService.observeCurrentUser { auth, user in
+            guard let user else {
+                completion(.failure(.noUser))
+                return
+            }
+            if user.isEmailVerified {
+                loadUserModel(from: user.uid, completion: completion)
+            } else {
+                completion(.failure(.notVerified))
+            }
+        }
+    }
+    
+    private func loadUserModel(from uid: String, completion: @escaping (Result<Users,UserStateError>) -> Void) {
+        Task {
+            do {
+                let userModel: Users = try await firestoreService.read(at: "Users/\(uid)")
+                completion(.success(userModel))
+            } catch {
+                completion(.failure(.noAccount))
+            }
+        }
+        
+    }
+}
+
+enum UserStateError: Error {
+    case noUser
+    case notVerified
+    case noAccount
 }
