@@ -124,6 +124,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let coordinator = BaseControllerCoordinator(navigationController: navigationController)
         
         let cache = UserCacheServiceAdapter()
+        let cacheSaver = UserDefaultsCacheUserSaver()
         
         let api = UserAPIServiceAdapter(
             authService: FirebaseAuthManager.shared,
@@ -135,6 +136,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         coordinator.userService = cache.fallback(api)
         coordinator.observerService = observer
+        coordinator.cacheSaver = cacheSaver
         
         return coordinator
     }
@@ -332,7 +334,6 @@ struct UserAPIServiceAdapter: UserService {
     func loadUser() async throws -> Users {
         let firebaseUser = try await authService.checkForCurrentUser()
         let userModel: Users = try await firestoreService.read(at: "Users/\(firebaseUser.uid)")
-        UserDefaults.currentUser = userModel
         return userModel
     }
 }
@@ -373,4 +374,18 @@ enum UserStateError: Error {
     case noUser
     case notVerified
     case noAccount
+}
+
+
+protocol CacheUserSaver {
+    func save(_ user: Users)
+}
+
+struct UserDefaultsCacheUserSaver: CacheUserSaver {
+    
+    /// save given user model to cache - UserDefaults
+    /// - Parameter user: optional user model to save - nil to remove
+    func save(_ user: Users) {
+        UserDefaults.currentUser = user
+    }
 }

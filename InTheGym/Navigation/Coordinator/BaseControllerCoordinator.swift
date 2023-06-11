@@ -14,8 +14,8 @@ class BaseControllerCoordinator: Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var userService: UserService?
-    
     var observerService: ObserveUserService?
+    var cacheSaver: CacheUserSaver?
     
     init(navigationController: UINavigationController){
         self.navigationController = navigationController
@@ -46,6 +46,7 @@ class BaseControllerCoordinator: Coordinator {
     }
     
     func handleUser(_ user: Users) {
+        cacheSaver?.save(user)
         DispatchQueue.main.async {
             if user.accountType == .coach {
                 self.showLoggedInCoach()
@@ -74,10 +75,9 @@ class BaseControllerCoordinator: Coordinator {
             switch result {
             case .success(let userModel):
                 if UserDefaults.currentUser == Users.nilUser {
-                    UserDefaults.currentUser = userModel
                     self?.handleUser(userModel)
                 } else {
-                    UserDefaults.currentUser = userModel
+                    self?.cacheSaver?.save(userModel)
                 }
             case .failure(let error):
                 self?.handleUserStateError(error)
