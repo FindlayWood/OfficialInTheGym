@@ -98,11 +98,6 @@ class SettingsViewModel {
             }
         }
     }
-    // MARK: - Success
-    func loggedOut() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.nilUser()
-    }
 }
 
 enum SettingsAction {

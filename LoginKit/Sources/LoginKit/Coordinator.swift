@@ -41,7 +41,6 @@ class Coordinator {
     
     func presentSignup() {
         let vc = SignupViewController()
-//        let nav = UINavigationController(rootViewController: vc)
         vc.colour = colour
         vc.viewModel = .init(networkService: networkService)
         navigationController.pushViewController(vc, animated: true)

@@ -16,7 +16,7 @@ import FirebaseMessaging
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var coordinator: MainCoordinator?
-    var baseController: BaseControllerCoordinator?
+    var baseController: BaseController?
     var navigationController: UINavigationController = UINavigationController()
     var window: UIWindow?
     
@@ -62,54 +62,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard let window else {return}
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
-//        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {})
     }
-    func loggedInPlayer() {
-        let navController = UINavigationController()
-        let mainPlayerCoordinator = MainPlayerCoordinator(navigationController: navController)
-        mainPlayerCoordinator.start()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        guard let window else {return}
-        window.rootViewController = navController
-        window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {})
-    }
-    func loggedInCoach() {
-        let navController = UINavigationController()
-        let mainCoachCoordinator = MainCoachCoordinator(navigationController: navController)
-        mainCoachCoordinator.start()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        guard let window else {return}
-        window.rootViewController = navController
-        window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
-    }
-    func nilUser() {
-        let navController = UINavigationController()
-        let _ = LoginComposition(navigationController: navController).loginKitInterface.compose()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        guard let window else {return}
-        window.rootViewController = navController
-        window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
-    }
-    func accountCreation(email: String, uid: String) {
-        let navController = UINavigationController()
-        let _ = AccountCreationComposition(navigationController: navController, email: email, uid: uid).accountCreationKitInterface.compose()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        guard let window else {return}
-        window.rootViewController = navController
-        window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
-    }
-    func verifyScreen() {
-        let vc = VerifyAccountViewController()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        guard let window else {return}
-        window.rootViewController = vc
-        window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
-    }
+ 
+
     func accountCreatedScreen() {
         let vc = AccountCreatedViewController()
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -119,9 +74,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
     }
     
-    func makeBaseCoordinator() -> BaseControllerCoordinator {
+    func makeBaseCoordinator() -> BaseController {
 
-        let coordinator = BaseControllerCoordinator(navigationController: navigationController)
+        let coordinator = BaseController(navigationController: navigationController)
         
         let cache = UserCacheServiceAdapter()
         let cacheSaver = UserDefaultsCacheUserSaver()
@@ -287,113 +242,4 @@ extension AppDelegate: MessagingDelegate {
       // Note: This callback is fired at each app startup and whenever a new token is generated.
     }
 
-}
-
-
-protocol UserService {
-    func loadUser() async throws -> Users
-}
-
-extension UserService {
-    func fallback(_ fallback: UserService) -> UserService {
-        UserServiceWithFallback(primary: self, fallback: fallback)
-    }
-}
-
-struct UserServiceWithFallback: UserService {
-    var primary: UserService
-    var fallback: UserService
-    
-    func loadUser() async throws -> Users {
-        do {
-            let primary = try await primary.loadUser()
-            return primary
-        } catch {
-            return try await fallback.loadUser()
-        }
-    }
-}
-
-protocol ObserveUserService {
-    func observeChange(completion: @escaping (Result<Users,UserStateError>) -> Void)
-}
-
-struct UserCacheServiceAdapter: UserService {
-    
-    func loadUser() async throws -> Users {
-        if UserDefaults.currentUser == Users.nilUser {
-            throw NSError(domain: "No user in UserDefaults", code: 0)
-        } else {
-            return UserDefaults.currentUser
-        }
-    }
-}
-
-struct UserAPIServiceAdapter: UserService {
-    
-    var authService: AuthManagerService
-    var firestoreService: FirestoreService
-    
-    func loadUser() async throws -> Users {
-        let firebaseUser = try await authService.checkForCurrentUser()
-        let userModel: Users = try await firestoreService.read(at: "Users/\(firebaseUser.uid)")
-        return userModel
-    }
-}
-
-struct UserChangeAPIServiceAdapter: ObserveUserService {
-    
-    var authService: AuthManagerService
-    var firestoreService: FirestoreService
-    
-    func observeChange(completion: @escaping (Result<Users,UserStateError>) -> Void) {
-        authService.observeCurrentUser { auth, user in
-            guard let user else {
-                completion(.failure(.noUser))
-                return
-            }
-            guard let email = user.email
-            else {
-                completion(.failure(.noUser))
-                return
-            }
-            if user.isEmailVerified {
-                loadUserModel(with: email, from: user.uid, completion: completion)
-            } else {
-                completion(.failure(.notVerified))
-            }
-        }
-    }
-    
-    private func loadUserModel(with email: String, from uid: String, completion: @escaping (Result<Users,UserStateError>) -> Void) {
-        Task {
-            do {
-                let userModel: Users = try await firestoreService.read(at: "Users/\(uid)")
-                completion(.success(userModel))
-            } catch {
-                completion(.failure(.noAccount(email: email, uid: uid)))
-            }
-        }
-        
-    }
-}
-
-enum UserStateError: Error {
-    case noUser
-    case notVerified
-    case noAccount(email: String, uid: String)
-}
-
-
-protocol CacheUserSaver {
-    func save(_ user: Users)
-}
-
-struct UserDefaultsCacheUserSaver: CacheUserSaver {
-    
-    /// save given user model to cache - UserDefaults
-    /// - Parameter user: optional user model to save - nil to remove
-    func save(_ user: Users) {
-        UserDefaults.currentUser = user
-    }
 }

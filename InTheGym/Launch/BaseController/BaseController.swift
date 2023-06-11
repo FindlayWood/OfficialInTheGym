@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class BaseControllerCoordinator {
+class BaseController {
     
     var navigationController: UINavigationController
     var userService: UserService?

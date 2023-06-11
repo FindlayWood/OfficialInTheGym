@@ -817,7 +817,8 @@
 		9F612BD229197DF900B5AE5A /* UserFollowingSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */; };
 		9F612BD529197E6400B5AE5A /* UserFollowing+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */; };
 		9F7444872A33D058007422CC /* BaseControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7444862A33D058007422CC /* BaseControllerViewController.swift */; };
-		9F7444892A33D1E7007422CC /* BaseControllerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7444882A33D1E7007422CC /* BaseControllerCoordinator.swift */; };
+		9F7444892A33D1E7007422CC /* BaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7444882A33D1E7007422CC /* BaseController.swift */; };
+		9F74448B2A36722C007422CC /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F74448A2A36722C007422CC /* UserService.swift */; };
 		9F84639C293E8F5B001E549F /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */; };
 		9F9F016629F2F0EB002B969B /* BodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016529F2F0EB002B969B /* BodyType.swift */; };
 		9F9F016829F2F116002B969B /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016729F2F116002B969B /* Observable.swift */; };
@@ -1671,7 +1672,8 @@
 		9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFollowingSwiftUI.swift; sourceTree = "<group>"; };
 		9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserFollowing+ViewModel.swift"; sourceTree = "<group>"; };
 		9F7444862A33D058007422CC /* BaseControllerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseControllerViewController.swift; sourceTree = "<group>"; };
-		9F7444882A33D1E7007422CC /* BaseControllerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseControllerCoordinator.swift; sourceTree = "<group>"; };
+		9F7444882A33D1E7007422CC /* BaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseController.swift; sourceTree = "<group>"; };
+		9F74448A2A36722C007422CC /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		9F9F016529F2F0EB002B969B /* BodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyType.swift; sourceTree = "<group>"; };
 		9F9F016729F2F116002B969B /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
@@ -2899,7 +2901,6 @@
 				742FD586284004040025E43C /* SearchTagCoordinator.swift */,
 				74A602AE2850D20D00AFA236 /* WorkoutDiscoveryCoordinator.swift */,
 				9F4DFB4629BD111C00363AE8 /* TaggedUsersCoordinator.swift */,
-				9F7444882A33D1E7007422CC /* BaseControllerCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -4476,7 +4477,9 @@
 		9F7444852A33D043007422CC /* BaseController */ = {
 			isa = PBXGroup;
 			children = (
+				9F7444882A33D1E7007422CC /* BaseController.swift */,
 				9F7444862A33D058007422CC /* BaseControllerViewController.swift */,
+				9F74448A2A36722C007422CC /* UserService.swift */,
 			);
 			path = BaseController;
 			sourceTree = "<group>";
@@ -5148,13 +5151,14 @@
 				7466A8C725F0307F00F4050F /* SavedWorkoutsViewController.swift in Sources */,
 				742C1C8A27BD43D700DD1BB0 /* ExerciseDescriptionView.swift in Sources */,
 				74F2CCC926DE748300D7AD79 /* AttachingClipView.swift in Sources */,
+				9F74448B2A36722C007422CC /* UserService.swift in Sources */,
 				743330DE2791EAEB005A0C45 /* WorkoutsList.swift in Sources */,
 				74F0C712284F9D1000FE3A01 /* AddWorkoutTagsNavigationModel.swift in Sources */,
 				7431030726FA30D200F7121B /* TimeSelectionViewController.swift in Sources */,
 				742C1CA527BEA15B00DD1BB0 /* ExerciseClipsModel.swift in Sources */,
 				7472C87627E0B557004836B8 /* DiscoverPageDataSource.swift in Sources */,
 				74104508285D197800A9FF4E /* OnBoardSecondViewController.swift in Sources */,
-				9F7444892A33D1E7007422CC /* BaseControllerCoordinator.swift in Sources */,
+				9F7444892A33D1E7007422CC /* BaseController.swift in Sources */,
 				74DC3B7128A0524800DCEAF7 /* UpdateTrainingStatusView.swift in Sources */,
 				746D62562858EF600056A46A /* StampsPreviewViewController.swift in Sources */,
 				742039A52832B16100074ECB /* PublicWorkoutsViewModel.swift in Sources */,
