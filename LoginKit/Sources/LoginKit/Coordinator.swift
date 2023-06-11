@@ -10,7 +10,6 @@ import UIKit
 class Coordinator {
     
     var navigationController: UINavigationController
-    var loginNavigationController: UINavigationController?
     var networkService: NetworkService
     var colour: UIColor
     var title: String
@@ -31,16 +30,13 @@ class Coordinator {
         vc.colour = colour
         vc.image = image
         navigationController.setViewControllers([vc], animated: true)
-//        navigationController.pushViewController(vc, animated: true)
     }
     
     func presentLogin() {
         let vc = LoginViewController()
-        loginNavigationController = UINavigationController(rootViewController: vc)
         vc.colour = colour
         vc.viewModel = .init(networkService: networkService, coordinator: self)
-        guard let loginNavigationController else {return}
-        navigationController.present(loginNavigationController, animated: true)
+        navigationController.pushViewController(vc, animated: true)
     }
     
     func presentSignup() {
@@ -52,11 +48,10 @@ class Coordinator {
     }
     
     func forgotPassword() {
-        guard let loginNavigationController else {return}
         let vc = ForgotPasswordViewController()
         let nav = UINavigationController(rootViewController: vc)
         vc.viewModel = .init(networkService: networkService)
         vc.colour = colour
-        loginNavigationController.present(nav, animated: true)
+        navigationController.present(nav, animated: true)
     }
 }

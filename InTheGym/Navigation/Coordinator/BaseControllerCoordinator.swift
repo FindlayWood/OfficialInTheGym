@@ -46,22 +46,27 @@ class BaseControllerCoordinator: Coordinator {
     }
     
     func handleUser(_ user: Users) {
-        if user.accountType == .coach {
-            showLoggedInCoach()
-        } else {
-            showLoggedInPlayer()
+        DispatchQueue.main.async {
+            if user.accountType == .coach {
+                self.showLoggedInCoach()
+            } else {
+                self.showLoggedInPlayer()
+            }
         }
     }
     
     func handleUserStateError(_ state: UserStateError) {
-        switch state {
-        case .noUser:
-            showLogin()
-        case .notVerified:
-            showVerifyEmail()
-        case .noAccount:
-            showAccountCreation()
+        DispatchQueue.main.async {
+            switch state {
+            case .noUser:
+                self.showLogin()
+            case .notVerified:
+                self.showVerifyEmail()
+            case .noAccount:
+                self.showAccountCreation()
+            }
         }
+       
     }
     
     func observe() {
@@ -81,9 +86,7 @@ class BaseControllerCoordinator: Coordinator {
     }
     
     func showLogin() {
-        DispatchQueue.main.async {
-            let _ = LoginComposition(navigationController: self.navigationController).loginKitInterface.compose()
-        }
+        let _ = LoginComposition(navigationController: self.navigationController).loginKitInterface.compose()
     }
     
     func showVerifyEmail() {
@@ -96,17 +99,12 @@ class BaseControllerCoordinator: Coordinator {
     }
     
     func showLoggedInPlayer() {
-        DispatchQueue.main.async {
-            self.navigationController.dismiss(animated: true)
-            let mainPlayerCoordinator = MainPlayerCoordinator(navigationController: self.navigationController)
-            mainPlayerCoordinator.start()
-        }
+        let mainPlayerCoordinator = MainPlayerCoordinator(navigationController: self.navigationController)
+        mainPlayerCoordinator.start()
     }
     
     func showLoggedInCoach() {
-        DispatchQueue.main.async {
-            let mainCoachCoordinator = MainCoachCoordinator(navigationController: self.navigationController)
-            mainCoachCoordinator.start()
-        }
+        let mainCoachCoordinator = MainCoachCoordinator(navigationController: self.navigationController)
+        mainCoachCoordinator.start()
     }
 }
