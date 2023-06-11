@@ -63,8 +63,8 @@ class BaseControllerCoordinator {
                 self.showLogin()
             case .notVerified:
                 self.showVerifyEmail()
-            case .noAccount:
-                self.showAccountCreation()
+            case .noAccount(let email, let uid):
+                self.showAccountCreation(email: email, uid: uid)
             }
         }
        
@@ -90,12 +90,11 @@ class BaseControllerCoordinator {
     }
     
     func showVerifyEmail() {
-        let vc = VerifyAccountViewController()
-        navigationController.setViewControllers([vc], animated: true)
+        baseFlow?.showVerifyEmail()
     }
     
-    func showAccountCreation() {
-//        let _ = AccountCreationComposition(navigationController: navigationController, email: email, uid: uid).accountCreationKitInterface.compose()
+    func showAccountCreation(email: String, uid: String) {
+        baseFlow?.showAccountCreation(email: email, uid: uid)
     }
     
     func showLoggedInPlayer() {
@@ -103,8 +102,7 @@ class BaseControllerCoordinator {
     }
     
     func showLoggedInCoach() {
-        let mainCoachCoordinator = MainCoachCoordinator(navigationController: self.navigationController)
-        mainCoachCoordinator.start()
+        baseFlow?.showLoggedInCoach()
     }
 }
 
@@ -114,14 +112,14 @@ protocol BaseFlow {
     func showLoggedInPlayer()
     func showLoggedInCoach()
     func showVerifyEmail()
-    func showAccountCreation()
+    func showAccountCreation(email: String, uid: String)
 }
 
 struct BasicBaseFlow: BaseFlow {
     var navigationController: UINavigationController
     
     func showLogin() {
-        let _ = LoginComposition(navigationController: navigationController).loginKitInterface.compose()
+        LoginComposition(navigationController: navigationController).loginKitInterface.compose()
     }
     
     func showLoggedInPlayer() {
@@ -130,15 +128,18 @@ struct BasicBaseFlow: BaseFlow {
     }
     
     func showLoggedInCoach() {
-        
+        let mainCoachCoordinator = MainCoachCoordinator(navigationController: self.navigationController)
+        mainCoachCoordinator.start()
     }
     
     func showVerifyEmail() {
-        
+        let vc = VerifyAccountViewController()
+        vc.viewModel.baseFlow = self
+        navigationController.setViewControllers([vc], animated: true)
     }
     
-    func showAccountCreation() {
-        
+    func showAccountCreation(email: String, uid: String) {
+        AccountCreationComposition(navigationController: navigationController, email: email, uid: uid).accountCreationKitInterface.compose()
     }
 }
 

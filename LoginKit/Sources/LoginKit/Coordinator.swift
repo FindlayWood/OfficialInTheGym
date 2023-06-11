@@ -41,10 +41,10 @@ class Coordinator {
     
     func presentSignup() {
         let vc = SignupViewController()
-        let nav = UINavigationController(rootViewController: vc)
+//        let nav = UINavigationController(rootViewController: vc)
         vc.colour = colour
         vc.viewModel = .init(networkService: networkService)
-        navigationController.present(nav, animated: true)
+        navigationController.pushViewController(vc, animated: true)
     }
     
     func forgotPassword() {

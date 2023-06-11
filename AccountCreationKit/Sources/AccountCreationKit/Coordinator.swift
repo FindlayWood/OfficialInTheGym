@@ -30,7 +30,7 @@ class Coordinator {
         vc.viewModel = .init(apiService: networkService, email: email, uid: uid)
         vc.colour = colour
         vc.image = image
-        navigationController.pushViewController(vc, animated: true)
+        navigationController.setViewControllers([vc], animated: true)
     }
 }
 

@@ -15,6 +15,7 @@ class VerifyAccountViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var error: Error?
     
+    var baseFlow: BaseFlow?
     var apiService: AuthManagerService
     
     init(apiService: AuthManagerService = FirebaseAuthManager.shared) {
@@ -68,6 +69,6 @@ class VerifyAccountViewModel: ObservableObject {
         else {
             return
         }
-        UserObserver.shared.createAccount(email: email, uid: uid)
+        baseFlow?.showAccountCreation(email: email, uid: uid)
     }
 }

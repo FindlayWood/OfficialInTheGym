@@ -352,21 +352,26 @@ struct UserChangeAPIServiceAdapter: ObserveUserService {
                 completion(.failure(.noUser))
                 return
             }
+            guard let email = user.email
+            else {
+                completion(.failure(.noUser))
+                return
+            }
             if user.isEmailVerified {
-                loadUserModel(from: user.uid, completion: completion)
+                loadUserModel(with: email, from: user.uid, completion: completion)
             } else {
                 completion(.failure(.notVerified))
             }
         }
     }
     
-    private func loadUserModel(from uid: String, completion: @escaping (Result<Users,UserStateError>) -> Void) {
+    private func loadUserModel(with email: String, from uid: String, completion: @escaping (Result<Users,UserStateError>) -> Void) {
         Task {
             do {
                 let userModel: Users = try await firestoreService.read(at: "Users/\(uid)")
                 completion(.success(userModel))
             } catch {
-                completion(.failure(.noAccount))
+                completion(.failure(.noAccount(email: email, uid: uid)))
             }
         }
         
@@ -376,7 +381,7 @@ struct UserChangeAPIServiceAdapter: ObserveUserService {
 enum UserStateError: Error {
     case noUser
     case notVerified
-    case noAccount
+    case noAccount(email: String, uid: String)
 }
 
 
