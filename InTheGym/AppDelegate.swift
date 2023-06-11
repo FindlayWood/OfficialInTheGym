@@ -133,10 +133,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let observer = UserChangeAPIServiceAdapter(
             authService: FirebaseAuthManager.shared,
             firestoreService: FirestoreManager.shared)
+        
+        let flow = BasicBaseFlow(navigationController: navigationController)
 
         coordinator.userService = cache.fallback(api)
         coordinator.observerService = observer
         coordinator.cacheSaver = cacheSaver
+        coordinator.baseFlow = flow
         
         return coordinator
     }

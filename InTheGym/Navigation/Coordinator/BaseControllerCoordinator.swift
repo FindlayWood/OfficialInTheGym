@@ -9,13 +9,13 @@
 import Foundation
 import UIKit
 
-class BaseControllerCoordinator: Coordinator {
+class BaseControllerCoordinator {
     
-    var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var userService: UserService?
     var observerService: ObserveUserService?
     var cacheSaver: CacheUserSaver?
+    var baseFlow: BaseFlow?
     
     init(navigationController: UINavigationController){
         self.navigationController = navigationController
@@ -86,7 +86,7 @@ class BaseControllerCoordinator: Coordinator {
     }
     
     func showLogin() {
-        let _ = LoginComposition(navigationController: self.navigationController).loginKitInterface.compose()
+        baseFlow?.showLogin()
     }
     
     func showVerifyEmail() {
@@ -99,8 +99,7 @@ class BaseControllerCoordinator: Coordinator {
     }
     
     func showLoggedInPlayer() {
-        let mainPlayerCoordinator = MainPlayerCoordinator(navigationController: self.navigationController)
-        mainPlayerCoordinator.start()
+        baseFlow?.showLoggedInPlayer()
     }
     
     func showLoggedInCoach() {
@@ -108,3 +107,38 @@ class BaseControllerCoordinator: Coordinator {
         mainCoachCoordinator.start()
     }
 }
+
+
+protocol BaseFlow {
+    func showLogin()
+    func showLoggedInPlayer()
+    func showLoggedInCoach()
+    func showVerifyEmail()
+    func showAccountCreation()
+}
+
+struct BasicBaseFlow: BaseFlow {
+    var navigationController: UINavigationController
+    
+    func showLogin() {
+        let _ = LoginComposition(navigationController: navigationController).loginKitInterface.compose()
+    }
+    
+    func showLoggedInPlayer() {
+        let mainPlayerCoordinator = MainPlayerCoordinator(navigationController: navigationController)
+        mainPlayerCoordinator.start()
+    }
+    
+    func showLoggedInCoach() {
+        
+    }
+    
+    func showVerifyEmail() {
+        
+    }
+    
+    func showAccountCreation() {
+        
+    }
+}
+
