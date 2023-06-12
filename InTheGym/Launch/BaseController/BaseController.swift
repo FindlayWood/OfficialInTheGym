@@ -45,6 +45,17 @@ class BaseController {
         }
     }
     
+    func reloadUser() {
+        Task {
+            if let user = try? await userService?.loadUser() {
+                cacheSaver?.save(user)
+                DispatchQueue.main.async {
+                    self.baseFlow?.showAccountCreated(for: user)
+                }
+            }
+        }
+    }
+    
     func handleUser(_ user: Users) {
         cacheSaver?.save(user)
         DispatchQueue.main.async {
@@ -113,10 +124,12 @@ protocol BaseFlow {
     func showLoggedInCoach()
     func showVerifyEmail()
     func showAccountCreation(email: String, uid: String)
+    func showAccountCreated(for user: Users)
 }
 
 struct BasicBaseFlow: BaseFlow {
     var navigationController: UINavigationController
+    var accountCreatedCallback: () -> Void
     
     func showLogin() {
         LoginComposition(navigationController: navigationController).loginKitInterface.compose()
@@ -139,7 +152,13 @@ struct BasicBaseFlow: BaseFlow {
     }
     
     func showAccountCreation(email: String, uid: String) {
-        AccountCreationComposition(navigationController: navigationController, email: email, uid: uid).accountCreationKitInterface.compose()
+        AccountCreationComposition(navigationController: navigationController, email: email, uid: uid, completion: accountCreatedCallback).accountCreationKitInterface.compose()
+    }
+    func showAccountCreated(for user: Users) {
+        let vc = AccountCreatedViewController()
+        vc.baseFlow = self
+        vc.user = user
+        navigationController.setViewControllers([vc], animated: true)
     }
 }
 

@@ -816,13 +816,11 @@
 		9F612BD0291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BCF291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift */; };
 		9F612BD229197DF900B5AE5A /* UserFollowingSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */; };
 		9F612BD529197E6400B5AE5A /* UserFollowing+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */; };
-		9F7444872A33D058007422CC /* BaseControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7444862A33D058007422CC /* BaseControllerViewController.swift */; };
 		9F7444892A33D1E7007422CC /* BaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7444882A33D1E7007422CC /* BaseController.swift */; };
 		9F74448B2A36722C007422CC /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F74448A2A36722C007422CC /* UserService.swift */; };
 		9F84639C293E8F5B001E549F /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */; };
 		9F9F016629F2F0EB002B969B /* BodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016529F2F0EB002B969B /* BodyType.swift */; };
 		9F9F016829F2F116002B969B /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016729F2F116002B969B /* Observable.swift */; };
-		9F9F016B29F32EF2002B969B /* UserObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016A29F32EF2002B969B /* UserObserver.swift */; };
 		9FA4F1EB290EE7AF00757860 /* ViewJournalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */; };
 		9FA4F1EE290FECD800757860 /* PreviousJumpsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */; };
 		9FA4F1F0290FECF800757860 /* PreviousJumps+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */; };
@@ -1671,13 +1669,11 @@
 		9F612BCF291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailViewSwiftUI.swift; sourceTree = "<group>"; };
 		9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFollowingSwiftUI.swift; sourceTree = "<group>"; };
 		9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserFollowing+ViewModel.swift"; sourceTree = "<group>"; };
-		9F7444862A33D058007422CC /* BaseControllerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseControllerViewController.swift; sourceTree = "<group>"; };
 		9F7444882A33D1E7007422CC /* BaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseController.swift; sourceTree = "<group>"; };
 		9F74448A2A36722C007422CC /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		9F9F016529F2F0EB002B969B /* BodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyType.swift; sourceTree = "<group>"; };
 		9F9F016729F2F116002B969B /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
-		9F9F016A29F32EF2002B969B /* UserObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserObserver.swift; sourceTree = "<group>"; };
 		9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewJournalEntryView.swift; sourceTree = "<group>"; };
 		9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousJumpsView.swift; sourceTree = "<group>"; };
 		9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviousJumps+ViewModel.swift"; sourceTree = "<group>"; };
@@ -2079,7 +2075,6 @@
 			isa = PBXGroup;
 			children = (
 				9F7444852A33D043007422CC /* BaseController */,
-				9F9F016929F32EE0002B969B /* UserObserver */,
 				9FB4D1DD29EAD4910019CA57 /* AccountCreated */,
 				9FC11F6229E0B5020054D79A /* VerifyAccount */,
 				9FC11F5D29DDC9A20054D79A /* Composition */,
@@ -4478,18 +4473,9 @@
 			isa = PBXGroup;
 			children = (
 				9F7444882A33D1E7007422CC /* BaseController.swift */,
-				9F7444862A33D058007422CC /* BaseControllerViewController.swift */,
 				9F74448A2A36722C007422CC /* UserService.swift */,
 			);
 			path = BaseController;
-			sourceTree = "<group>";
-		};
-		9F9F016929F32EE0002B969B /* UserObserver */ = {
-			isa = PBXGroup;
-			children = (
-				9F9F016A29F32EF2002B969B /* UserObserver.swift */,
-			);
-			path = UserObserver;
 			sourceTree = "<group>";
 		};
 		9FA4F1E9290EE79E00757860 /* ViewJournalEntry */ = {
@@ -5169,7 +5155,6 @@
 				743E93412809AA2A0029F447 /* ProfileDataSource.swift in Sources */,
 				741EC128284BF6D1009B00AB /* ExerciseCommentsViewModel.swift in Sources */,
 				9F4FFD832953837E004853BD /* MainButton.swift in Sources */,
-				9F9F016B29F32EF2002B969B /* UserObserver.swift in Sources */,
 				742FD573283FAD350025E43C /* SearchTagsDataSource.swift in Sources */,
 				7425D4182545AE8000567DAB /* Constants.swift in Sources */,
 				741858FA283D70980042B81B /* DisplayWorkoutsCollectionHeader.swift in Sources */,
@@ -5473,7 +5458,6 @@
 				74F18ADB27D65CE80043551F /* CoachPlayerWorkoutsView.swift in Sources */,
 				9F1416C8294145A600D02F69 /* PostCellView.swift in Sources */,
 				749B37AE2846732300ADF33D /* AddPlayerCoordinator.swift in Sources */,
-				9F7444872A33D058007422CC /* BaseControllerViewController.swift in Sources */,
 				742C1C5527B4001C00DD1BB0 /* ClipCoordinator.swift in Sources */,
 				7431030B26FA30EA00F7121B /* TimeSelectionAdapter.swift in Sources */,
 				74B6F6982751536E00A72679 /* DisplayWorkoutsView.swift in Sources */,

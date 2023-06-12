@@ -63,20 +63,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
- 
-
-    func accountCreatedScreen() {
-        let vc = AccountCreatedViewController()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        guard let window else {return}
-        window.rootViewController = vc
-        window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
-    }
     
     func makeBaseCoordinator() -> BaseController {
 
-        let coordinator = BaseController(navigationController: navigationController)
+        let controller = BaseController(navigationController: navigationController)
         
         let cache = UserCacheServiceAdapter()
         let cacheSaver = UserDefaultsCacheUserSaver()
@@ -89,14 +79,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             authService: FirebaseAuthManager.shared,
             firestoreService: FirestoreManager.shared)
         
-        let flow = BasicBaseFlow(navigationController: navigationController)
+        let flow = BasicBaseFlow(navigationController: navigationController) { [weak controller] in
+            controller?.reloadUser()
+        }
 
-        coordinator.userService = cache.fallback(api)
-        coordinator.observerService = observer
-        coordinator.cacheSaver = cacheSaver
-        coordinator.baseFlow = flow
+        controller.userService = cache.fallback(api)
+        controller.observerService = observer
+        controller.cacheSaver = cacheSaver
+        controller.baseFlow = flow
         
-        return coordinator
+        return controller
     }
     
     

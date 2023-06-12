@@ -56,12 +56,15 @@ class AccountCreationHomeViewModel: ObservableObject {
     
     private var subscriptions = Set<AnyCancellable>()
     
+    var createdCallback: () -> Void
+    
     var apiService: NetworkService
     
-    init(apiService: NetworkService = MockNetworkService.shared, email: String, uid: String) {
+    init(apiService: NetworkService = MockNetworkService.shared, email: String, uid: String, callback: @escaping () -> Void) {
         self.apiService = apiService
         self.email = email
         self.uid = uid
+        self.createdCallback = callback
         usernameListener()
     }
     
@@ -101,10 +104,9 @@ class AccountCreationHomeViewModel: ObservableObject {
         Task {
             do {
                 try await apiService.upload(data: newAccountModel, at: "Users/\(uid)")
+                createdCallback()
                 if profileImage != nil {
                     uploadProfileImage()
-                } else {
-                    uploading = false
                 }
             } catch {
                 print(String(describing: error))

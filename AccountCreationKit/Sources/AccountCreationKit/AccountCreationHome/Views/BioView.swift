@@ -45,6 +45,6 @@ struct BioView: View {
 
 struct BioView_Previews: PreviewProvider {
     static var previews: some View {
-        BioView(viewModel: AccountCreationHomeViewModel(email: "", uid: ""), colour: .blue)
+        BioView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}), colour: .blue)
     }
 }

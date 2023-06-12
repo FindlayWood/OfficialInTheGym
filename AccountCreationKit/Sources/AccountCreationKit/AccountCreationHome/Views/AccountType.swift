@@ -50,6 +50,6 @@ struct AccountTypeView: View {
 
 struct AccountTypeView_Previews: PreviewProvider {
     static var previews: some View {
-        AccountTypeView(viewModel: AccountCreationHomeViewModel(email: "", uid: ""), colour: .blue)
+        AccountTypeView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}), colour: .blue)
     }
 }

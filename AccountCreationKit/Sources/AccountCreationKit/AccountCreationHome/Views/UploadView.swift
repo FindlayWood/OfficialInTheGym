@@ -76,6 +76,6 @@ struct UploadView: View {
 
 struct UploadView_Previews: PreviewProvider {
     static var previews: some View {
-        UploadView(viewModel: AccountCreationHomeViewModel(email: "", uid: ""), colour: .blue)
+        UploadView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}), colour: .blue)
     }
 }

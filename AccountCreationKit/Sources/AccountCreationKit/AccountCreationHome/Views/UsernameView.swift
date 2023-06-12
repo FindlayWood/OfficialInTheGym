@@ -74,6 +74,6 @@ struct UsernameView: View {
 
 struct UsernameView_Previews: PreviewProvider {
     static var previews: some View {
-        UsernameView(viewModel: AccountCreationHomeViewModel(email: "", uid: ""), colour: .blue)
+        UsernameView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}), colour: .blue)
     }
 }

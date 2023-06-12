@@ -92,7 +92,6 @@ struct UserChangeAPIServiceAdapter: ObserveUserService {
                 completion(.failure(.noAccount(email: email, uid: uid)))
             }
         }
-        
     }
 }
 
