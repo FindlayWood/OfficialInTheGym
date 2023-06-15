@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct UserServiceWithFallback: UserService {
-    var primary: UserService
-    var fallback: UserService
+struct UserServiceWithFallback: UserLoader {
+    var primary: UserLoader
+    var fallback: UserLoader
     
     func loadUser() async throws -> Users {
         do {

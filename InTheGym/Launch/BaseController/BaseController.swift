@@ -12,7 +12,7 @@ import UIKit
 class BaseController {
     
     var navigationController: UINavigationController
-    var userService: UserService?
+    var userService: UserLoader?
     var observerService: ObserveUserService?
     var cacheSaver: CacheUserSaver?
     var baseFlow: BaseFlow?
@@ -37,10 +37,9 @@ class BaseController {
     func loadUser() {
         Task {
             if let user = try? await userService?.loadUser() {
-               handleUser(user)
-                observe()
+                handleUser(user)
             } else {
-                observe()
+                handleUserStateError(.noUser)
             }
         }
     }
@@ -81,20 +80,20 @@ class BaseController {
        
     }
     
-    func observe() {
-        observerService?.observeChange(completion: { [weak self] result in
-            switch result {
-            case .success(let userModel):
-                if UserDefaults.currentUser == Users.nilUser {
-                    self?.handleUser(userModel)
-                } else {
-                    self?.cacheSaver?.save(userModel)
-                }
-            case .failure(let error):
-                self?.handleUserStateError(error)
-            }
-        })
-    }
+//    func observe() {
+//        observerService?.observeChange(completion: { [weak self] result in
+//            switch result {
+//            case .success(let userModel):
+//                if UserDefaults.currentUser == Users.nilUser {
+//                    self?.handleUser(userModel)
+//                } else {
+//                    self?.cacheSaver?.save(userModel)
+//                }
+//            case .failure(let error):
+//                self?.handleUserStateError(error)
+//            }
+//        })
+//    }
     
     func showLogin() {
         baseFlow?.showLogin()
@@ -130,9 +129,10 @@ protocol BaseFlow {
 struct BasicBaseFlow: BaseFlow {
     var navigationController: UINavigationController
     var accountCreatedCallback: () -> Void
+    var userLoggedIn: () -> Void
     
     func showLogin() {
-        LoginComposition(navigationController: navigationController).loginKitInterface.compose()
+        LoginComposition(navigationController: navigationController, completion: userLoggedIn).loginKitInterface.compose()
     }
     
     func showLoggedInPlayer() {

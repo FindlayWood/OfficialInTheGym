@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct UserAPIServiceAdapter: UserService {
+struct UserAPIServiceAdapter: UserLoader {
     
     var authService: AuthManagerService
     var firestoreService: FirestoreService

@@ -14,13 +14,15 @@ class Coordinator {
     var colour: UIColor
     var title: String
     var image: UIImage
+    var completion: () -> Void
     
-    init(navigationController: UINavigationController, networkService: NetworkService, colour: UIColor, title: String, image: UIImage) {
+    init(navigationController: UINavigationController, networkService: NetworkService, colour: UIColor, title: String, image: UIImage, completion: @escaping () -> Void) {
         self.navigationController = navigationController
         self.networkService = networkService
         self.colour = colour
         self.title = title
         self.image = image
+        self.completion = completion
     }
     
     func start() {
@@ -42,7 +44,7 @@ class Coordinator {
     func presentSignup() {
         let vc = SignupViewController()
         vc.colour = colour
-        vc.viewModel = .init(networkService: networkService)
+        vc.viewModel = .init(networkService: networkService, completion: completion)
         navigationController.pushViewController(vc, animated: true)
     }
     

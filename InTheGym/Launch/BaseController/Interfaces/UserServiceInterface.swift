@@ -9,12 +9,12 @@
 import Foundation
 
 // MARK: - Load Service
-protocol UserService {
+protocol UserLoader {
     func loadUser() async throws -> Users
 }
 
-extension UserService {
-    func fallback(_ fallback: UserService) -> UserService {
+extension UserLoader {
+    func fallback(_ fallback: UserLoader) -> UserLoader {
         UserServiceWithFallback(primary: self, fallback: fallback)
     }
 }

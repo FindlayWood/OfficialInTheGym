@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct UserCacheServiceAdapter: UserService {
+struct UserCacheServiceAdapter: UserLoader {
     
     func loadUser() async throws -> Users {
         if UserDefaults.currentUser == Users.nilUser {

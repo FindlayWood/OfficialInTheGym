@@ -81,6 +81,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let flow = BasicBaseFlow(navigationController: navigationController) { [weak controller] in
             controller?.reloadUser()
+        } userLoggedIn: { [weak controller] in
+            controller?.loadUser()
         }
 
         controller.userService = cache.fallback(api)
