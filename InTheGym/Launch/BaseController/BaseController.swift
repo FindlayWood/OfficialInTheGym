@@ -6,10 +6,13 @@
 //  Copyright © 2023 FindlayWood. All rights reserved.
 //
 
+import Combine
 import Foundation
 import UIKit
 
 class BaseController {
+    
+    private var subscriptions = Set<AnyCancellable>()
     
     var navigationController: UINavigationController
     var userService: UserLoader?
@@ -32,6 +35,11 @@ class BaseController {
         let vc = LaunchPageViewController()
         navigationController.setViewControllers([vc], animated: false)
         loadUser()
+        NotificationCenter.default.publisher(for: Notification.signOut)
+            .sink { [weak self] _ in
+                self?.loadUser()
+            }
+            .store(in: &subscriptions)
     }
     
     func loadUser() {

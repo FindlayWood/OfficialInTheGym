@@ -40,7 +40,7 @@ class PlayerInitialViewController: UITabBarController {
         let myProfileCoordinator = MyProfileCoordinator(navigationController: myProfileNavigationController)
         myProfileCoordinator.start()
         
-        viewControllers = [timelineNavigationController, discoverNavigationController, workoutKitNavigationController, myProfileNavigationController]
+        viewControllers = [timelineNavigationController, discoverNavigationController, workoutsNavigationController, myProfileNavigationController]
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
