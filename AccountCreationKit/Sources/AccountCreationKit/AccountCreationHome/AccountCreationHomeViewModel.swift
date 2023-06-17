@@ -103,7 +103,10 @@ class AccountCreationHomeViewModel: ObservableObject {
         
         Task {
             do {
-                try await apiService.upload(data: newAccountModel, at: "Users/\(uid)")
+                let uploadedUsername = await uploadUsername()
+                if uploadedUsername {
+                    try await apiService.upload(data: newAccountModel, at: "Users/\(uid)")
+                }
                 createdCallback()
                 if profileImage != nil {
                     uploadProfileImage()
@@ -112,6 +115,16 @@ class AccountCreationHomeViewModel: ObservableObject {
                 print(String(describing: error))
                 uploading = false
             }
+        }
+    }
+    func uploadUsername() async -> Bool {
+        let usernameModel = UsernameModel(username: username, uid: uid)
+        do {
+            try await apiService.upload(data: usernameModel, at: "Usernames/\(username)")
+            return true
+        } catch {
+            print(String(describing: error))
+            return false
         }
     }
     func uploadProfileImage() {
@@ -188,4 +201,10 @@ struct CreateAccountModel: Codable {
     var createdDate: Date = .now
     var verifiedAccount: Bool = false
     var eliteAccount: Bool = false
+}
+
+struct UsernameModel: Codable {
+    var username: String
+    var uid: String
+    var dateTaken: Date = .now
 }

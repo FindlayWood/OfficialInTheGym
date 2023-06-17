@@ -36,17 +36,28 @@ class BaseController {
     
     func loadUser() {
         Task {
-            if let user = try? await userService?.loadUser() {
-                handleUser(user)
-            } else {
-                handleUserStateError(.noUser)
-            }
+            guard let userResult = await userService?.loadUser() else { return }
+            handleResult(userResult)
+//            if let user = try? await userService?.loadUser() {
+//                handleUser(user)
+//            } else {
+//                handleUserStateError(.noUser)
+//            }
+        }
+    }
+    
+    func handleResult(_ result: Result<Users,UserStateError>) {
+        switch result {
+        case .success(let user):
+            handleUser(user)
+        case .failure(let error):
+            handleUserStateError(error)
         }
     }
     
     func reloadUser() {
         Task {
-            if let user = try? await userService?.loadUser() {
+            if let user = try? await userService?.loadUser().get() {
                 cacheSaver?.save(user)
                 DispatchQueue.main.async {
                     self.baseFlow?.showAccountCreated(for: user)
@@ -130,6 +141,7 @@ struct BasicBaseFlow: BaseFlow {
     var navigationController: UINavigationController
     var accountCreatedCallback: () -> Void
     var userLoggedIn: () -> Void
+    var userSignedOut: () -> Void
     
     func showLogin() {
         LoginComposition(navigationController: navigationController, completion: userLoggedIn).loginKitInterface.compose()
@@ -147,6 +159,7 @@ struct BasicBaseFlow: BaseFlow {
     
     func showVerifyEmail() {
         let vc = VerifyAccountViewController()
+        vc.viewModel.signOutAction = userSignedOut
         vc.viewModel.baseFlow = self
         navigationController.setViewControllers([vc], animated: true)
     }

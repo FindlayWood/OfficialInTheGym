@@ -12,12 +12,12 @@ struct UserServiceWithFallback: UserLoader {
     var primary: UserLoader
     var fallback: UserLoader
     
-    func loadUser() async throws -> Users {
+    func loadUser() async -> Result<Users,UserStateError> {
         do {
-            let primary = try await primary.loadUser()
-            return primary
+            let primary = try await primary.loadUser().get()
+            return .success(primary)
         } catch {
-            return try await fallback.loadUser()
+            return await fallback.loadUser()
         }
     }
 }

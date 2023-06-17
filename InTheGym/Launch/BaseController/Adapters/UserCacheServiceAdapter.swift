@@ -10,11 +10,11 @@ import Foundation
 
 struct UserCacheServiceAdapter: UserLoader {
     
-    func loadUser() async throws -> Users {
+    func loadUser() async -> Result<Users,UserStateError> {
         if UserDefaults.currentUser == Users.nilUser {
-            throw NSError(domain: "No user in UserDefaults", code: 0)
+            return .failure(.noUser)
         } else {
-            return UserDefaults.currentUser
+            return .success(UserDefaults.currentUser)
         }
     }
 }

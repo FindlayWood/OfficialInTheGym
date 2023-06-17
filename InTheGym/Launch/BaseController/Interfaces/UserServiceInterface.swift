@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Load Service
 protocol UserLoader {
-    func loadUser() async throws -> Users
+    func loadUser() async -> Result<Users,UserStateError>
 }
 
 extension UserLoader {

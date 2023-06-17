@@ -83,6 +83,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             controller?.reloadUser()
         } userLoggedIn: { [weak controller] in
             controller?.loadUser()
+        } userSignedOut: { [weak controller] in
+            controller?.loadUser()
         }
 
         controller.userService = cache.fallback(api)

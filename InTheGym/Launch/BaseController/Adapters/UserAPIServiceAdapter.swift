@@ -13,9 +13,21 @@ struct UserAPIServiceAdapter: UserLoader {
     var authService: AuthManagerService
     var firestoreService: FirestoreService
     
-    func loadUser() async throws -> Users {
-        let firebaseUser = try await authService.checkForCurrentUser()
-        let userModel: Users = try await firestoreService.read(at: "Users/\(firebaseUser.uid)")
-        return userModel
+    func loadUser() async -> Result<Users,UserStateError> {
+        if let firebaseUser = try? await authService.checkForCurrentUser() {
+            if let userModel: Users = try? await firestoreService.read(at: "Users/\(firebaseUser.uid)") {
+                return .success(userModel)
+            } else {
+                if firebaseUser.isEmailVerified {
+                    guard let email = firebaseUser.email else {
+                        return .failure(.noUser)
+                    }
+                    return .failure(.noAccount(email: email, uid: firebaseUser.uid))
+                } else {
+                    return .failure(.notVerified)
+                }
+            }
+        }
+        return .failure(.noUser)
     }
 }

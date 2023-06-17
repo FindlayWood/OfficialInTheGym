@@ -17,6 +17,7 @@ class VerifyAccountViewModel: ObservableObject {
     
     var baseFlow: BaseFlow?
     var apiService: AuthManagerService
+    var signOutAction: (() -> Void)?
     
     init(apiService: AuthManagerService = FirebaseAuthManager.shared) {
         self.apiService = apiService
@@ -59,6 +60,7 @@ class VerifyAccountViewModel: ObservableObject {
     func logoutAction() {
         do {
             try apiService.signout()
+            signOutAction?()
         } catch {
             print(String(describing: error))
         }
