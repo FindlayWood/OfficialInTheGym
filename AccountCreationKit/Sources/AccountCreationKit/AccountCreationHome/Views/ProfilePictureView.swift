@@ -67,7 +67,7 @@ struct ProfilePictureView: View {
 
 struct ProfilePictureView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfilePictureView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}), colour: .blue)
+        ProfilePictureView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}, signOutCallback: {}), colour: .blue)
     }
 }
 

@@ -165,7 +165,7 @@ struct BasicBaseFlow: BaseFlow {
     }
     
     func showAccountCreation(email: String, uid: String) {
-        AccountCreationComposition(navigationController: navigationController, email: email, uid: uid, completion: accountCreatedCallback).accountCreationKitInterface.compose()
+        AccountCreationComposition(navigationController: navigationController, email: email, uid: uid, completion: accountCreatedCallback, signOut: userSignedOut).accountCreationKitInterface.compose()
     }
     func showAccountCreated(for user: Users) {
         let vc = AccountCreatedViewController()

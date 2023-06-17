@@ -13,14 +13,15 @@ class AccountCreationComposition {
     
     var accountCreationKitInterface: Boundary
     
-    init(navigationController: UINavigationController, email: String, uid: String, completion: @escaping () -> Void) {
+    init(navigationController: UINavigationController, email: String, uid: String, completion: @escaping () -> Void, signOut: @escaping () -> Void) {
         accountCreationKitInterface = .init(navigationController: navigationController,
                                             apiService: AccountCreationKitNetworkService(),
                                             colour: .darkColour,
                                             image: UIImage(named: "inthegym_icon3")!,
                                             email: email,
                                             uid: uid,
-                                            callback: completion)
+                                            callback: completion,
+                                            signOut: signOut)
     }
     
 }

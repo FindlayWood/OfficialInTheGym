@@ -43,6 +43,6 @@ struct DisplayNameView: View {
 
 struct DisplayNameView_Previews: PreviewProvider {
     static var previews: some View {
-        DisplayNameView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}), colour: .blue)
+        DisplayNameView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}, signOutCallback: {}), colour: .blue)
     }
 }

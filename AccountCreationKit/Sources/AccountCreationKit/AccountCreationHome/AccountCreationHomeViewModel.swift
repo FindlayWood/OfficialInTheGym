@@ -57,14 +57,16 @@ class AccountCreationHomeViewModel: ObservableObject {
     private var subscriptions = Set<AnyCancellable>()
     
     var createdCallback: () -> Void
+    var signOutCallback: () -> Void
     
     var apiService: NetworkService
     
-    init(apiService: NetworkService = MockNetworkService.shared, email: String, uid: String, callback: @escaping () -> Void) {
+    init(apiService: NetworkService = MockNetworkService.shared, email: String, uid: String, callback: @escaping () -> Void, signOutCallback: @escaping () -> Void) {
         self.apiService = apiService
         self.email = email
         self.uid = uid
         self.createdCallback = callback
+        self.signOutCallback = signOutCallback
         usernameListener()
     }
     
@@ -143,6 +145,7 @@ class AccountCreationHomeViewModel: ObservableObject {
         Task {
             do {
                 try await apiService.signout()
+                signOutCallback()
             } catch {
                 print(String(describing: error))
             }
