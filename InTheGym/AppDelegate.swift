@@ -74,10 +74,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let api = UserAPIServiceAdapter(
             authService: FirebaseAuthManager.shared,
             firestoreService: FirestoreManager.shared)
-                
-        let observer = UserChangeAPIServiceAdapter(
-            authService: FirebaseAuthManager.shared,
-            firestoreService: FirestoreManager.shared)
         
         let flow = BasicBaseFlow(navigationController: navigationController) { [weak controller] in
             controller?.reloadUser()
@@ -88,7 +84,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         controller.userService = cache.fallback(api)
-        controller.observerService = observer
         controller.cacheSaver = cacheSaver
         controller.baseFlow = flow
         

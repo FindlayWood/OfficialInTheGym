@@ -820,11 +820,12 @@
 		9F84639C293E8F5B001E549F /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */; };
 		9F89DD872A38D13D0018E124 /* UserCacheServiceAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89DD862A38D13D0018E124 /* UserCacheServiceAdapter.swift */; };
 		9F89DD892A38D1610018E124 /* UserAPIServiceAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89DD882A38D1610018E124 /* UserAPIServiceAdapter.swift */; };
-		9F89DD8B2A38D1A70018E124 /* UserChangeAPIServiceAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89DD8A2A38D1A70018E124 /* UserChangeAPIServiceAdapter.swift */; };
 		9F89DD8E2A38D1E20018E124 /* UserServiceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89DD8D2A38D1E20018E124 /* UserServiceInterface.swift */; };
 		9F89DD912A38D2690018E124 /* UserStateError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89DD902A38D2690018E124 /* UserStateError.swift */; };
 		9F89DD942A38D2E90018E124 /* UserDefaultsCacheSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89DD932A38D2E90018E124 /* UserDefaultsCacheSaver.swift */; };
 		9F89DD962A38D31C0018E124 /* UserServiceWithFallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89DD952A38D31C0018E124 /* UserServiceWithFallback.swift */; };
+		9F89DD992A3E59560018E124 /* BaseFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89DD982A3E59560018E124 /* BaseFlow.swift */; };
+		9F89DD9B2A3E596A0018E124 /* BasicBaseFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89DD9A2A3E596A0018E124 /* BasicBaseFlow.swift */; };
 		9F9F016629F2F0EB002B969B /* BodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016529F2F0EB002B969B /* BodyType.swift */; };
 		9F9F016829F2F116002B969B /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016729F2F116002B969B /* Observable.swift */; };
 		9FA4F1EB290EE7AF00757860 /* ViewJournalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */; };
@@ -1679,11 +1680,12 @@
 		9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		9F89DD862A38D13D0018E124 /* UserCacheServiceAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCacheServiceAdapter.swift; sourceTree = "<group>"; };
 		9F89DD882A38D1610018E124 /* UserAPIServiceAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPIServiceAdapter.swift; sourceTree = "<group>"; };
-		9F89DD8A2A38D1A70018E124 /* UserChangeAPIServiceAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChangeAPIServiceAdapter.swift; sourceTree = "<group>"; };
 		9F89DD8D2A38D1E20018E124 /* UserServiceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserServiceInterface.swift; sourceTree = "<group>"; };
 		9F89DD902A38D2690018E124 /* UserStateError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStateError.swift; sourceTree = "<group>"; };
 		9F89DD932A38D2E90018E124 /* UserDefaultsCacheSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsCacheSaver.swift; sourceTree = "<group>"; };
 		9F89DD952A38D31C0018E124 /* UserServiceWithFallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserServiceWithFallback.swift; sourceTree = "<group>"; };
+		9F89DD982A3E59560018E124 /* BaseFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFlow.swift; sourceTree = "<group>"; };
+		9F89DD9A2A3E596A0018E124 /* BasicBaseFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicBaseFlow.swift; sourceTree = "<group>"; };
 		9F9F016529F2F0EB002B969B /* BodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyType.swift; sourceTree = "<group>"; };
 		9F9F016729F2F116002B969B /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewJournalEntryView.swift; sourceTree = "<group>"; };
@@ -4484,6 +4486,7 @@
 		9F7444852A33D043007422CC /* BaseController */ = {
 			isa = PBXGroup;
 			children = (
+				9F89DD972A3E59490018E124 /* Flow */,
 				9F89DD922A38D2DB0018E124 /* CacheSaver */,
 				9F89DD8F2A38D25D0018E124 /* Errors */,
 				9F89DD8C2A38D1D30018E124 /* Interfaces */,
@@ -4498,7 +4501,6 @@
 			children = (
 				9F89DD862A38D13D0018E124 /* UserCacheServiceAdapter.swift */,
 				9F89DD882A38D1610018E124 /* UserAPIServiceAdapter.swift */,
-				9F89DD8A2A38D1A70018E124 /* UserChangeAPIServiceAdapter.swift */,
 				9F89DD952A38D31C0018E124 /* UserServiceWithFallback.swift */,
 			);
 			path = Adapters;
@@ -4526,6 +4528,15 @@
 				9F89DD932A38D2E90018E124 /* UserDefaultsCacheSaver.swift */,
 			);
 			path = CacheSaver;
+			sourceTree = "<group>";
+		};
+		9F89DD972A3E59490018E124 /* Flow */ = {
+			isa = PBXGroup;
+			children = (
+				9F89DD982A3E59560018E124 /* BaseFlow.swift */,
+				9F89DD9A2A3E596A0018E124 /* BasicBaseFlow.swift */,
+			);
+			path = Flow;
 			sourceTree = "<group>";
 		};
 		9FA4F1E9290EE79E00757860 /* ViewJournalEntry */ = {
@@ -5308,7 +5319,6 @@
 				743330F627959F87005A0C45 /* UICollectionView+Extension.swift in Sources */,
 				9F612BC62917DD1500B5AE5A /* CustomSecureTextField.swift in Sources */,
 				74BAB7EE28CCE70B00E5CEFE /* ImagePicker.swift in Sources */,
-				9F89DD8B2A38D1A70018E124 /* UserChangeAPIServiceAdapter.swift in Sources */,
 				74C426892829A4E9009ADB70 /* LiveWorkoutExerciseCreationCoordinator.swift in Sources */,
 				742C1C9227BD877200DD1BB0 /* ExerciseClipsViewController.swift in Sources */,
 				744AED50279B022C000D2D74 /* WorkoutDisplayCoordinator.swift in Sources */,
@@ -5432,6 +5442,7 @@
 				742C1C4927AC43EC00DD1BB0 /* LiveWorkoutExerciseModel.swift in Sources */,
 				745F89D4286DCF59000070B2 /* ErrorPopover.swift in Sources */,
 				74220899256FFE2C00B42563 /* LaunchPageViewController.swift in Sources */,
+				9F89DD992A3E59560018E124 /* BaseFlow.swift in Sources */,
 				742FCD1328450B9E007ED1C6 /* ExerciseMaxHistoryViewController.swift in Sources */,
 				74EE4ECC27E7AD9B00051451 /* PostsChildViewController.swift in Sources */,
 				743E92AE280705460029F447 /* BoxBreathingViewController.swift in Sources */,
@@ -5471,6 +5482,7 @@
 				9F4DFB3A29AA802800363AE8 /* CommentAttachmentSheet.swift in Sources */,
 				742C1C4B27AD9BED00DD1BB0 /* ClipDataSource.swift in Sources */,
 				742FD56D283EB18F0025E43C /* ExerciseTagsView.swift in Sources */,
+				9F89DD9B2A3E596A0018E124 /* BasicBaseFlow.swift in Sources */,
 				74A602AB2850D1AF00AFA236 /* WorkoutDiscoveryCommentsViewController.swift in Sources */,
 				74318F4226B6EC4B009EDFAC /* PreLiveWorkoutViewModel.swift in Sources */,
 				9F4DFB4129BCE6ED00363AE8 /* TaggedUsersViewController.swift in Sources */,

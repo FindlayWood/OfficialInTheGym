@@ -19,11 +19,6 @@ extension UserLoader {
     }
 }
 
-// MARK: - Change Observer
-protocol ObserveUserService {
-    func observeChange(completion: @escaping (Result<Users,UserStateError>) -> Void)
-}
-
 // MARK: - Cache Saver
 protocol CacheUserSaver {
     func save(_ user: Users)

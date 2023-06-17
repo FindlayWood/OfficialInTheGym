@@ -16,7 +16,6 @@ class BaseController {
     
     var navigationController: UINavigationController
     var userService: UserLoader?
-    var observerService: ObserveUserService?
     var cacheSaver: CacheUserSaver?
     var baseFlow: BaseFlow?
     
@@ -27,9 +26,6 @@ class BaseController {
         self.navigationController.navigationBar.tintColor = .white
     }
     
-    deinit {
-        print("this is gone!!! --------- ")
-    }
     
     func start() {
         let vc = LaunchPageViewController()
@@ -46,11 +42,6 @@ class BaseController {
         Task {
             guard let userResult = await userService?.loadUser() else { return }
             handleResult(userResult)
-//            if let user = try? await userService?.loadUser() {
-//                handleUser(user)
-//            } else {
-//                handleUserStateError(.noUser)
-//            }
         }
     }
     
@@ -99,21 +90,6 @@ class BaseController {
        
     }
     
-//    func observe() {
-//        observerService?.observeChange(completion: { [weak self] result in
-//            switch result {
-//            case .success(let userModel):
-//                if UserDefaults.currentUser == Users.nilUser {
-//                    self?.handleUser(userModel)
-//                } else {
-//                    self?.cacheSaver?.save(userModel)
-//                }
-//            case .failure(let error):
-//                self?.handleUserStateError(error)
-//            }
-//        })
-//    }
-    
     func showLogin() {
         baseFlow?.showLogin()
     }
@@ -134,52 +110,3 @@ class BaseController {
         baseFlow?.showLoggedInCoach()
     }
 }
-
-
-protocol BaseFlow {
-    func showLogin()
-    func showLoggedInPlayer()
-    func showLoggedInCoach()
-    func showVerifyEmail()
-    func showAccountCreation(email: String, uid: String)
-    func showAccountCreated(for user: Users)
-}
-
-struct BasicBaseFlow: BaseFlow {
-    var navigationController: UINavigationController
-    var accountCreatedCallback: () -> Void
-    var userLoggedIn: () -> Void
-    var userSignedOut: () -> Void
-    
-    func showLogin() {
-        LoginComposition(navigationController: navigationController, completion: userLoggedIn).loginKitInterface.compose()
-    }
-    
-    func showLoggedInPlayer() {
-        let mainPlayerCoordinator = MainPlayerCoordinator(navigationController: navigationController)
-        mainPlayerCoordinator.start()
-    }
-    
-    func showLoggedInCoach() {
-        let mainCoachCoordinator = MainCoachCoordinator(navigationController: self.navigationController)
-        mainCoachCoordinator.start()
-    }
-    
-    func showVerifyEmail() {
-        let vc = VerifyAccountViewController()
-        vc.viewModel.signOutAction = userSignedOut
-        vc.viewModel.baseFlow = self
-        navigationController.setViewControllers([vc], animated: true)
-    }
-    
-    func showAccountCreation(email: String, uid: String) {
-        AccountCreationComposition(navigationController: navigationController, email: email, uid: uid, completion: accountCreatedCallback, signOut: userSignedOut).accountCreationKitInterface.compose()
-    }
-    func showAccountCreated(for user: Users) {
-        let vc = AccountCreatedViewController()
-        vc.baseFlow = self
-        vc.user = user
-        navigationController.setViewControllers([vc], animated: true)
-    }
-}
-
