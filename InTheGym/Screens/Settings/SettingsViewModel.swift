@@ -21,6 +21,7 @@ class SettingsViewModel {
     // MARK: - Properties
     var apiService: AuthManagerService = FirebaseAuthManager.shared
     var firestoreService: FirestoreService
+    var userSignedOut: (() -> Void)?
     
     let navigationTitle: String = "Settings"
     
@@ -59,7 +60,7 @@ class SettingsViewModel {
                 try await firestoreService.upload(data: fcmTokenModel, at: "FCMTokens/\(UserDefaults.currentUser.uid)")
                 UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
                 try apiService.signout()
-                
+                NotificationCenter.default.post(name: Notification.signOut, object: nil)
                 LikeCache.shared.removeAll()
                 ClipCache.shared.removeAll()
             } catch {
@@ -97,11 +98,6 @@ class SettingsViewModel {
                 self.successfullySentResetPassword.send(false)
             }
         }
-    }
-    // MARK: - Success
-    func loggedOut() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.nilUser()
     }
 }
 

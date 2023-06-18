@@ -20,6 +20,6 @@ class MainCoachCoordinator: Coordinator {
     func start() {
         let vc = CoachInitialViewController()
         vc.navigationController?.setNavigationBarHidden(true, animated: false)
-        navigationController.pushViewController(vc, animated: false)
+        navigationController.setViewControllers([vc], animated: false)
     }
 }

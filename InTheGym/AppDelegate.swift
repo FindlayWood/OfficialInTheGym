@@ -16,6 +16,8 @@ import FirebaseMessaging
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var coordinator: MainCoordinator?
+    var baseController: BaseController?
+    var navigationController: UINavigationController = UINavigationController()
     var window: UIWindow?
     
     let gcmMessageIDKey = "gcm.MessageID_Key"
@@ -26,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         launchScreen()
         // setup revenue cat
         Purchases.logLevel = .debug
-        UserObserver.shared.checkForUserDefault()
+//        UserObserver.shared.checkForUserDefault()
 //        Purchases.configure(withAPIKey: Constants.revenueCatAPIKey)
         
         // For iOS 10 display notification (sent via APNS)
@@ -53,67 +55,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
     }
     func launchScreen() {
-        window = UIWindow(frame: UIScreen.main.bounds)
-        let vc = LaunchPageViewController()
-        guard let window else {return}
-        window.rootViewController = vc
-        window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {})
-    }
-    func loggedInPlayer() {
-        let navController = UINavigationController()
-        let mainPlayerCoordinator = MainPlayerCoordinator(navigationController: navController)
-        mainPlayerCoordinator.start()
+        navigationController = UINavigationController()
+        baseController = makeBaseCoordinator()
+        baseController?.start()
         window = UIWindow(frame: UIScreen.main.bounds)
         guard let window else {return}
-        window.rootViewController = navController
+        window.rootViewController = navigationController
         window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {})
     }
-    func loggedInCoach() {
-        let navController = UINavigationController()
-        let mainCoachCoordinator = MainCoachCoordinator(navigationController: navController)
-        mainCoachCoordinator.start()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        guard let window else {return}
-        window.rootViewController = navController
-        window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
+    
+    func makeBaseCoordinator() -> BaseController {
+
+        let controller = BaseController(navigationController: navigationController)
+        
+        let cache = UserCacheServiceAdapter()
+        let cacheSaver = UserDefaultsCacheUserSaver()
+        
+        let api = UserAPIServiceAdapter(
+            authService: FirebaseAuthManager.shared,
+            firestoreService: FirestoreManager.shared)
+        
+        let flow = BasicBaseFlow(navigationController: navigationController) { [weak controller] in
+            controller?.reloadUser()
+        } userLoggedIn: { [weak controller] in
+            controller?.loadUser()
+        } userSignedOut: { [weak controller] in
+            controller?.loadUser()
+        }
+
+        controller.userService = cache.fallback(api)
+        controller.cacheSaver = cacheSaver
+        controller.baseFlow = flow
+        
+        return controller
     }
-    func nilUser() {
-        let navController = UINavigationController()
-        let _ = LoginComposition(navigationController: navController).loginKitInterface.compose()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        guard let window else {return}
-        window.rootViewController = navController
-        window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
-    }
-    func accountCreation(email: String, uid: String) {
-        let navController = UINavigationController()
-        let _ = AccountCreationComposition(navigationController: navController, email: email, uid: uid).accountCreationKitInterface.compose()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        guard let window else {return}
-        window.rootViewController = navController
-        window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
-    }
-    func verifyScreen() {
-        let vc = VerifyAccountViewController()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        guard let window else {return}
-        window.rootViewController = vc
-        window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
-    }
-    func accountCreatedScreen() {
-        let vc = AccountCreatedViewController()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        guard let window else {return}
-        window.rootViewController = vc
-        window.makeKeyAndVisible()
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {})
-    }
+    
+    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

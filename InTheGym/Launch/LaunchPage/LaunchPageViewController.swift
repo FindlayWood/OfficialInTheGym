@@ -12,7 +12,6 @@ import Combine
 import Firebase
 
 class LaunchPageViewController: UIViewController {
-    // MARK: - Outlets
     // MARK: - Properties
     var display: LaunchPageView!
     // MARK: - Lifecycle

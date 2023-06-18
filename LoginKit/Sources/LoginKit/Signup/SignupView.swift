@@ -95,6 +95,6 @@ struct SignupView: View {
 
 struct SwiftUIView_Previews: PreviewProvider {
     static var previews: some View {
-        SignupView(viewModel: SignupViewModel(), colour: .blue)
+        SignupView(viewModel: SignupViewModel(completion: {}), colour: .blue)
     }
 }

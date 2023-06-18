@@ -13,8 +13,8 @@ class LoginComposition {
     
     var loginKitInterface: Boundary
 
-    init(navigationController: UINavigationController) {
-        loginKitInterface = .init(navigationController: navigationController, apiService: LoginKitNetworkService(), colour: .darkColour, title: "INTHEGYM", image: UIImage(named: "inthegym_icon3")!)
+    init(navigationController: UINavigationController, completion: @escaping () -> Void) {
+        loginKitInterface = .init(navigationController: navigationController, apiService: LoginKitNetworkService(), colour: .darkColour, title: "INTHEGYM", image: UIImage(named: "inthegym_icon3")!, completion: completion)
     }
 }
 

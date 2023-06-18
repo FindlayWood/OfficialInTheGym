@@ -107,6 +107,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(viewModel: AccountCreationHomeViewModel(email: "", uid: ""), colour: .blue, image: UIImage(systemName: "person")!)
+        HomeView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}, signOutCallback: {}), colour: .blue, image: UIImage(systemName: "person")!)
     }
 }

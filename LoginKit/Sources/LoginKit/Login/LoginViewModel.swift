@@ -61,9 +61,8 @@ class LoginViewModel: ObservableObject {
         isLoading = true
         do {
             try await networkService.login(with: email, password: password)
-            isLoading = false
-        }
-        catch {
+            coordinator?.completion()
+        } catch {
             print(String(describing: error))
             self.error = error
             isLoading = false

@@ -56,12 +56,17 @@ class AccountCreationHomeViewModel: ObservableObject {
     
     private var subscriptions = Set<AnyCancellable>()
     
+    var createdCallback: () -> Void
+    var signOutCallback: () -> Void
+    
     var apiService: NetworkService
     
-    init(apiService: NetworkService = MockNetworkService.shared, email: String, uid: String) {
+    init(apiService: NetworkService = MockNetworkService.shared, email: String, uid: String, callback: @escaping () -> Void, signOutCallback: @escaping () -> Void) {
         self.apiService = apiService
         self.email = email
         self.uid = uid
+        self.createdCallback = callback
+        self.signOutCallback = signOutCallback
         usernameListener()
     }
     
@@ -100,16 +105,28 @@ class AccountCreationHomeViewModel: ObservableObject {
         
         Task {
             do {
-                try await apiService.upload(data: newAccountModel, at: "Users/\(uid)")
+                let uploadedUsername = await uploadUsername()
+                if uploadedUsername {
+                    try await apiService.upload(data: newAccountModel, at: "Users/\(uid)")
+                }
+                createdCallback()
                 if profileImage != nil {
                     uploadProfileImage()
-                } else {
-                    uploading = false
                 }
             } catch {
                 print(String(describing: error))
                 uploading = false
             }
+        }
+    }
+    func uploadUsername() async -> Bool {
+        let usernameModel = UsernameModel(username: username, uid: uid)
+        do {
+            try await apiService.upload(data: usernameModel, at: "Usernames/\(username)")
+            return true
+        } catch {
+            print(String(describing: error))
+            return false
         }
     }
     func uploadProfileImage() {
@@ -128,6 +145,7 @@ class AccountCreationHomeViewModel: ObservableObject {
         Task {
             do {
                 try await apiService.signout()
+                signOutCallback()
             } catch {
                 print(String(describing: error))
             }
@@ -186,4 +204,10 @@ struct CreateAccountModel: Codable {
     var createdDate: Date = .now
     var verifiedAccount: Bool = false
     var eliteAccount: Bool = false
+}
+
+struct UsernameModel: Codable {
+    var username: String
+    var uid: String
+    var dateTaken: Date = .now
 }
