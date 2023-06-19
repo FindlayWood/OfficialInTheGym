@@ -178,7 +178,7 @@ enum AccountType: String, CaseIterable, Identifiable, Codable {
         case .individual:
             return "Select this type if you are looking to use this app as an individual."
         case .athlete:
-            return "Select this type if you are an athlete playing sport, part of a team"
+            return "Select this type if you are an athlete playing sport / part of a team"
         case .coach:
             return "Select this type if you are looking to manage teams, athlete's or clients."
         }
