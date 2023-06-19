@@ -63,7 +63,8 @@ struct HomeView: View {
                             viewModel.signOutAction()
                         } label: {
                             Text("Sign Out")
-                                .font(.headline)
+                                .font(.footnote.weight(.medium))
+                                .foregroundColor(.red)
                         }
                     }
                     Spacer()
