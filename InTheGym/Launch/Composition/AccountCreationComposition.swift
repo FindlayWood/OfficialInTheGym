@@ -17,7 +17,6 @@ class AccountCreationComposition {
         accountCreationKitInterface = .init(navigationController: navigationController,
                                             apiService: AccountCreationKitNetworkService(),
                                             colour: .darkColour,
-                                            image: UIImage(named: "inthegym_icon3")!,
                                             email: email,
                                             uid: uid,
                                             callback: completion,
@@ -28,17 +27,17 @@ class AccountCreationComposition {
 
 class AccountCreationKitNetworkService: NetworkService {
     
-    var apiService: FirebaseDatabaseManagerService
     var authService: AuthManagerService
     var firestoreService: FirestoreService
     var storageService = FirebaseStorageManager.shared
+    var functionsService: FunctionsManager
     
-    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared,
-         authService: AuthManagerService = FirebaseAuthManager.shared,
-         firestoreService: FirestoreService = FirestoreManager.shared) {
-        self.apiService = apiService
+    init(authService: AuthManagerService = FirebaseAuthManager.shared,
+         firestoreService: FirestoreService = FirestoreManager.shared,
+         functionsService: FunctionsManager = FirebaseFunctionsManager()) {
         self.authService = authService
         self.firestoreService = firestoreService
+        self.functionsService = functionsService
     }
     
     func signout() async throws {
@@ -52,8 +51,10 @@ class AccountCreationKitNetworkService: NetworkService {
     func dataUpload(data: Data, at path: String) async throws {
         try await storageService.dataUploadAsync(data: data, at: path)
     }
-    
-    func checkExistence(at path: String) async throws -> Bool {
-        try await apiService.checkExistence(at: path)
+    func read<T:Codable>(at path: String) async throws -> T {
+        return try await firestoreService.read(at: path)
+    }
+    func callFunction(named: String, with data: Any) async throws {
+        try await functionsService.callable(named: named, data: data)
     }
 }

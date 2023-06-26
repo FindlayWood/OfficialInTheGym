@@ -387,6 +387,8 @@
 		745F89EB286F4494000070B2 /* PerformanceHomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745F89EA286F4494000070B2 /* PerformanceHomeCoordinator.swift */; };
 		746061BD252547E9005B1480 /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746061BC252547E9005B1480 /* AppTrackingTransparency.framework */; };
 		746062712528C35D005B1480 /* COACHESViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746062702528C35D005B1480 /* COACHESViewController.swift */; };
+		74616AB22A40E34400007752 /* FirebaseFunctionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74616AB12A40E34400007752 /* FirebaseFunctionsManager.swift */; };
+		74616AB42A40E8D100007752 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 74616AB32A40E8D100007752 /* FirebaseFunctions */; };
 		7465596F282FDBC800E1CA9A /* DiscoverMoreWorkoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7465596E282FDBC800E1CA9A /* DiscoverMoreWorkoutsViewController.swift */; };
 		74655972282FDC9A00E1CA9A /* DiscoverMoreWorkoutsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74655971282FDC9A00E1CA9A /* DiscoverMoreWorkoutsViewModel.swift */; };
 		74655975282FE0FC00E1CA9A /* DiscoverMoreClipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74655974282FE0FB00E1CA9A /* DiscoverMoreClipsViewController.swift */; };
@@ -1248,6 +1250,7 @@
 		745F89EA286F4494000070B2 /* PerformanceHomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceHomeCoordinator.swift; sourceTree = "<group>"; };
 		746061BC252547E9005B1480 /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
 		746062702528C35D005B1480 /* COACHESViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = COACHESViewController.swift; sourceTree = "<group>"; };
+		74616AB12A40E34400007752 /* FirebaseFunctionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseFunctionsManager.swift; sourceTree = "<group>"; };
 		7465596E282FDBC800E1CA9A /* DiscoverMoreWorkoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverMoreWorkoutsViewController.swift; sourceTree = "<group>"; };
 		74655971282FDC9A00E1CA9A /* DiscoverMoreWorkoutsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverMoreWorkoutsViewModel.swift; sourceTree = "<group>"; };
 		74655974282FE0FB00E1CA9A /* DiscoverMoreClipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverMoreClipsViewController.swift; sourceTree = "<group>"; };
@@ -1730,6 +1733,7 @@
 				74FA60B428B3E500007B2CD8 /* SCLAlertView in Frameworks */,
 				746061BD252547E9005B1480 /* AppTrackingTransparency.framework in Frameworks */,
 				7433044F289E962B00F2569A /* FirebaseStorageCombine-Community in Frameworks */,
+				74616AB42A40E8D100007752 /* FirebaseFunctions in Frameworks */,
 				7433044D289E962B00F2569A /* FirebaseStorage in Frameworks */,
 				74A7EB6D289EB145007C2ECD /* Algorithms in Frameworks */,
 				74EB1E49289EB2B200C4502A /* Algorithms in Frameworks */,
@@ -3300,6 +3304,7 @@
 				74B6F7642759212B00A72679 /* FirebaseDatabaseManager.swift */,
 				74B48DDE27A06E4400BBFC16 /* FirebaseStorageManager.swift */,
 				74F664EC28EA0B3F0086BA4E /* FirestoreManager.swift */,
+				74616AB12A40E34400007752 /* FirebaseFunctionsManager.swift */,
 			);
 			path = DatabaseManager;
 			sourceTree = "<group>";
@@ -4665,6 +4670,7 @@
 				9FC11F6029DDCA8E0054D79A /* LoginKit */,
 				9FC11F6929E20CB60054D79A /* AccountCreationKit */,
 				9F3D3C3929F45D8200CDACC0 /* WorkoutKit */,
+				74616AB32A40E8D100007752 /* FirebaseFunctions */,
 			);
 			productName = InTheGym;
 			productReference = 7479A905229F2B4C00D39E2E /* InTheGym.app */;
@@ -4914,6 +4920,7 @@
 				74EE4EC727E536AE00051451 /* LastThreeScoresView.swift in Sources */,
 				7444D0A826D19C590009C7A6 /* UITextfield+Extension.swift in Sources */,
 				7423B51D279B93BD007AA889 /* HorizontallyFlushCollectionFlowLayout.swift in Sources */,
+				74616AB22A40E34400007752 /* FirebaseFunctionsManager.swift in Sources */,
 				74EA156A28C54936000669A8 /* JournalEntryViewModel.swift in Sources */,
 				7412D621282C5D3C009B3EFA /* SingleSetCoordinator.swift in Sources */,
 				741FB1BF2667DF560039EB29 /* WorkoutModel.swift in Sources */,
@@ -6271,6 +6278,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7433043F289E962B00F2569A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		74616AB32A40E8D100007752 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7433043F289E962B00F2569A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
 		};
 		74A7EB64289EAE92007C2ECD /* SkyFloatingLabelTextField */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -10,7 +10,6 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var viewModel: AccountCreationHomeViewModel
     var colour: UIColor
-    var image: UIImage
     
     var body: some View {
         ZStack {
@@ -122,6 +121,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}, signOutCallback: {}), colour: .blue, image: UIImage(systemName: "person")!)
+        HomeView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}, signOutCallback: {}), colour: .blue)
     }
 }
