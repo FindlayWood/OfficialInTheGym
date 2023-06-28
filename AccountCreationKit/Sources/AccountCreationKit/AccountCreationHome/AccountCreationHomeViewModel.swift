@@ -79,9 +79,10 @@ class AccountCreationHomeViewModel: ObservableObject {
     
     func checkUsername(_ text: String) {
         isUsernameValid = .checking
-        if text.count < 3 {
-            isUsernameValid = .tooShort
-        } else {
+        let usernameRegEx = "[A-Za-z0-9_]{3,50}$"
+        
+        let usernamePred = NSPredicate(format:"SELF MATCHES %@", usernameRegEx)
+        if usernamePred.evaluate(with: text) {
             Task { @MainActor in
                 do {
                     if let _: UsernameModel = try await apiService.read(at: "Usernames/\(text)") {
@@ -93,6 +94,14 @@ class AccountCreationHomeViewModel: ObservableObject {
                     print(String(describing: error))
                     isUsernameValid = .taken
                 }
+            }
+        } else {
+            if text.count == 0 {
+                isUsernameValid = .idle
+            } else if text.count < 3 {
+                isUsernameValid = .tooShort
+            } else {
+                isUsernameValid = .invalid
             }
         }
     }

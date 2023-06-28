@@ -24,6 +24,8 @@ struct UsernameView: View {
                     .foregroundColor(Color(colour))
                 TextField("username", text: $viewModel.username)
                     .tint(Color(.blue))
+                    .keyboardType(.alphabet)
+                    .autocorrectionDisabled(true)
                 switch viewModel.isUsernameValid {
                 case .checking:
                     ProgressView()
@@ -57,6 +59,9 @@ struct UsernameView: View {
                     .foregroundColor(.red)
             case .invalid:
                 Text("This username is invalid.")
+                    .font(.footnote.bold())
+                    .foregroundColor(.red)
+                Text("Usernames must only contain letters, numbers, _ or .")
                     .font(.footnote.bold())
                     .foregroundColor(.red)
             }
