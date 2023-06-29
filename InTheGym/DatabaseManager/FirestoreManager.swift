@@ -18,12 +18,12 @@ class FirestoreManager: FirestoreService {
     
     func upload<Model: FirestoreResource>(_ model: Model) async throws {
         let ref = Firestore.firestore().collection(model.collectionPath).document(model.documentID)
-        try ref.setData(from: model)
+        try await ref.setData(from: model)
     }
     
     func upload(data: Codable, at path: String) async throws {
         let ref = Firestore.firestore().document(path)
-        try ref.setData(from: data)
+        try await ref.setData(from: data)
     }
     
     func read<T: Codable>(at path: String) async throws -> T {
@@ -34,6 +34,14 @@ class FirestoreManager: FirestoreService {
     func readAll<T: Codable>(at path: String) async throws -> [T] {
         let ref = Firestore.firestore().collection(path)
         return try await ref.getDocuments().documents.map { try $0.data(as: T.self) }
+    }
+}
+
+extension FirebaseFirestore.DocumentReference {
+    func setData<T: Encodable>(from: T, merge: Bool = false) async throws {
+        let encoder = Firestore.Encoder()
+        let data = try encoder.encode(from)
+        try await setData(data, merge: merge)
     }
 }
 

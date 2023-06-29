@@ -15,8 +15,6 @@ class AccountCreationHomeViewController: UIViewController {
     
     var colour: UIColor!
     
-    var image: UIImage!
-
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +23,7 @@ class AccountCreationHomeViewController: UIViewController {
     
     // MARK: - Display
     func addDisplay() {
-        display = .init(viewModel: viewModel, colour: colour, image: image)
+        display = .init(viewModel: viewModel, colour: colour)
         addSwiftUIView(display)
     }
 }

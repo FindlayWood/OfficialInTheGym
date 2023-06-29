@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import Firebase
+import FirebaseStorage
 import RevenueCat
 import FirebaseMessaging
 
@@ -25,6 +26,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
+        
+        // MARK: - Use for emulator
+//        Auth.auth().useEmulator(withHost:"127.0.0.1", port:9099)
+//        // In almost all cases the ns (namespace) is your project ID.
+//        Database.database(url:"http://127.0.0.1:9000?ns=inthegym-2353b")
+//        let settings = Firestore.firestore().settings
+//        settings.host = "127.0.0.1:8080"
+//        settings.isPersistenceEnabled = false
+//        settings.isSSLEnabled = false
+//        Firestore.firestore().settings = settings
+//        Storage.storage().useEmulator(withHost:"127.0.0.1", port:9199)
+        
         launchScreen()
         // setup revenue cat
         Purchases.logLevel = .debug
