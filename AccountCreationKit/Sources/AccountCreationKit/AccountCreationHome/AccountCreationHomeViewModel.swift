@@ -155,10 +155,8 @@ class AccountCreationHomeViewModel: ObservableObject {
         Task {
             do {
                 try await apiService.dataUpload(data: data, at: "ProfilePhotos/\(uid)")
-                uploading = false
             } catch {
                 print(String(describing: error))
-                uploading = false
             }
         }
     }
