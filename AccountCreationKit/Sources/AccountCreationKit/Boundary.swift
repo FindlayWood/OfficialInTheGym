@@ -7,15 +7,57 @@
 
 import UIKit
 
-public class Boundary {
+public protocol AccountCreationKitInterface {
+    func launch()
+}
+
+public struct MainAccountCreationKitInterface: AccountCreationKitInterface {
     
-    var coordinator: Coordinator?
+    var navigationController: UINavigationController
+    var networkService: NetworkService
+    var userModel: AccountCreationUserModel
+    var colour: UIColor
+    var completedCallback: () -> Void
+    var signOutCallback: () -> Void
     
-    public init(navigationController: UINavigationController, apiService: NetworkService, colour: UIColor, email: String, uid: String, callback: @escaping () -> Void, signOut: @escaping () -> Void) {
-        coordinator = .init(navigationController: navigationController, networkService: apiService, colour: colour, email: email, uid: uid, callback: callback, signOutCallback: signOut)
+    public init(navigationController: UINavigationController, networkService: NetworkService, userModel: AccountCreationUserModel, colour: UIColor, completedCallback: @escaping () -> Void, signOutCallback: @escaping () -> Void) {
+        self.navigationController = navigationController
+        self.networkService = networkService
+        self.userModel = userModel
+        self.colour = colour
+        self.completedCallback = completedCallback
+        self.signOutCallback = signOutCallback
     }
     
-    public func compose() {
-        coordinator?.start()
+    
+    public func launch() {
+        let coordinator = makeBaseController()
+        coordinator.start()
+    }
+    
+    func makeBaseController() -> AccountCreationFlow {
+        let flow = BasicAccountCreationFlow(navigationController: navigationController)
+        
+        let viewControllerFactory = BasicViewControllerFactory(
+            networkService: networkService,
+            userModel: userModel,
+            colour: colour,
+            callback: completedCallback,
+            signOutCallback: signOutCallback)
+        
+        flow.viewControllerFactory = viewControllerFactory
+        
+        return flow
+    }
+}
+
+
+public struct AccountCreationUserModel {
+    let email: String
+    let uid: String
+    
+    public init(email: String, uid: String) {
+        self.email = email
+        self.uid = uid
     }
 }

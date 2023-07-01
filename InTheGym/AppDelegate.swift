@@ -93,7 +93,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             authService: FirebaseAuthManager.shared,
             firestoreService: FirestoreManager.shared)
         
-        let flow = BasicBaseFlow(navigationController: navigationController) { [weak controller] in
+        let accountCreationComposer = AccountCreationComposerAdapter(
+            navigationController: navigationController) {
+                [weak controller] in
+                controller?.reloadUser()
+            } signedOut: { [ weak controller] in
+                controller?.loadUser()
+            }
+
+        
+        let flow = BasicBaseFlow(navigationController: navigationController,
+                                 accountCreationComposer: accountCreationComposer) { [weak controller] in
             controller?.reloadUser()
         } userLoggedIn: { [weak controller] in
             controller?.loadUser()

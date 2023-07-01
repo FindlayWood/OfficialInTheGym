@@ -10,6 +10,7 @@ import UIKit
 
 struct BasicBaseFlow: BaseFlow {
     var navigationController: UINavigationController
+    var accountCreationComposer: AccountCreationComposer
     var accountCreatedCallback: () -> Void
     var userLoggedIn: () -> Void
     var userSignedOut: () -> Void
@@ -36,7 +37,8 @@ struct BasicBaseFlow: BaseFlow {
     }
     
     func showAccountCreation(email: String, uid: String) {
-        AccountCreationComposition(navigationController: navigationController, email: email, uid: uid, completion: accountCreatedCallback, signOut: userSignedOut).accountCreationKitInterface.compose()
+        let interface = accountCreationComposer.makeAccountCreationInterface(with: email, uid: uid)
+        interface.launch()
     }
     func showAccountCreated(for user: Users) {
         let vc = AccountCreatedViewController()

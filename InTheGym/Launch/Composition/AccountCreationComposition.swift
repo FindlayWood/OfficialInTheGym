@@ -11,16 +11,38 @@ import UIKit
 
 class AccountCreationComposition {
     
-    var accountCreationKitInterface: Boundary
+    var navigationController: UINavigationController
+    var email: String
+    var uid: String
+    var completedCallback: () -> Void
+    var signOutCallback: () -> Void
     
     init(navigationController: UINavigationController, email: String, uid: String, completion: @escaping () -> Void, signOut: @escaping () -> Void) {
-        accountCreationKitInterface = .init(navigationController: navigationController,
-                                            apiService: AccountCreationKitNetworkService(),
-                                            colour: .darkColour,
-                                            email: email,
-                                            uid: uid,
-                                            callback: completion,
-                                            signOut: signOut)
+        self.navigationController = navigationController
+        self.email = email
+        self.uid = uid
+        self.completedCallback = completion
+        self.signOutCallback = signOut
+    }
+    
+    func makeInterface() -> AccountCreationKitInterface {
+        
+        let userModel = AccountCreationUserModel(
+            email: email,
+            uid: uid
+        )
+        
+        let mainInterface = MainAccountCreationKitInterface(
+            navigationController: navigationController,
+            networkService: AccountCreationKitNetworkService(),
+            userModel: userModel,
+            colour: .darkColour,
+            completedCallback: completedCallback,
+            signOutCallback: signOutCallback
+        )
+        
+        
+        return mainInterface
     }
     
 }
@@ -56,5 +78,27 @@ class AccountCreationKitNetworkService: NetworkService {
     }
     func callFunction(named: String, with data: Any) async throws {
         try await functionsService.callable(named: named, data: data)
+    }
+}
+
+
+protocol AccountCreationComposer {
+    func makeAccountCreationInterface(with email: String, uid: String) -> AccountCreationKitInterface
+}
+
+struct AccountCreationComposerAdapter: AccountCreationComposer {
+    var navigationController: UINavigationController
+    var completion: () -> Void
+    var signedOut: () -> Void
+    
+    func makeAccountCreationInterface(with email: String, uid: String) -> AccountCreationKitInterface {
+        let comp = AccountCreationComposition(
+            navigationController: navigationController,
+            email: email,
+            uid: uid,
+            completion: completion,
+            signOut: signedOut)
+        let interface = comp.makeInterface()
+        return interface
     }
 }

@@ -7,31 +7,41 @@
 
 import UIKit
 
-class Coordinator {
+class BasicAccountCreationFlow: AccountCreationFlow {
     
     var navigationController: UINavigationController
-    var networkService: NetworkService
-    var colour: UIColor
-    var email: String
-    var uid: String
-    var callback: () -> ()
-    var signOutCallback: () -> Void
+    var viewControllerFactory: ViewControllerFactory?
     
-    init(navigationController: UINavigationController, networkService: NetworkService, colour: UIColor, email: String, uid: String, callback: @escaping () -> Void, signOutCallback: @escaping () -> Void) {
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.networkService = networkService
-        self.colour = colour
-        self.email = email
-        self.uid = uid
-        self.callback = callback
-        self.signOutCallback = signOutCallback
     }
     
     func start() {
-        let vc = AccountCreationHomeViewController()
-        vc.viewModel = .init(apiService: networkService, email: email, uid: uid, callback: callback, signOutCallback: signOutCallback)
-        vc.colour = colour
+        guard let vc = viewControllerFactory?.makeAccountCreationHomeViewController() else { return }
         navigationController.setViewControllers([vc], animated: true)
     }
 }
 
+protocol AccountCreationFlow {
+    func start()
+}
+
+protocol ViewControllerFactory {
+    func makeAccountCreationHomeViewController() -> AccountCreationHomeViewController
+}
+
+struct BasicViewControllerFactory: ViewControllerFactory {
+    
+    var networkService: NetworkService
+    var userModel: AccountCreationUserModel
+    var colour: UIColor
+    var callback: () -> Void
+    var signOutCallback: () -> Void
+    
+    func makeAccountCreationHomeViewController() -> AccountCreationHomeViewController {
+        let vc = AccountCreationHomeViewController()
+        vc.viewModel = .init(apiService: networkService, email: userModel.email, uid: userModel.uid, callback: callback, signOutCallback: signOutCallback)
+        vc.colour = colour
+        return vc
+    }
+}

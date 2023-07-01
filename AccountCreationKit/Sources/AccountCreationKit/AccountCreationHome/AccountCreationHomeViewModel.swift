@@ -79,7 +79,7 @@ class AccountCreationHomeViewModel: ObservableObject {
     
     func checkUsername(_ text: String) {
         isUsernameValid = .checking
-        let usernameRegEx = "[A-Za-z0-9_]{3,50}$"
+        let usernameRegEx = "[A-Za-z0-9_.]{3,50}$"
         
         let usernamePred = NSPredicate(format:"SELF MATCHES %@", usernameRegEx)
         if usernamePred.evaluate(with: text) {
