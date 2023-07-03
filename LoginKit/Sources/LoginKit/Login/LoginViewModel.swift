@@ -27,11 +27,13 @@ class LoginViewModel: ObservableObject {
     
     var networkService: NetworkService
     
-    var coordinator: Coordinator?
+    var coordinator: LoginFlow?
     
-    init(networkService: NetworkService = MockNetworkService.shared, coordinator: Coordinator?) {
+    var completion: () -> Void
+    
+    init(networkService: NetworkService, completion: @escaping () -> Void) {
         self.networkService = networkService
-        self.coordinator = coordinator
+        self.completion = completion
         detailsObserver()
     }
     
@@ -61,7 +63,7 @@ class LoginViewModel: ObservableObject {
         isLoading = true
         do {
             try await networkService.login(with: email, password: password)
-            coordinator?.completion()
+            completion()
         } catch {
             print(String(describing: error))
             self.error = error

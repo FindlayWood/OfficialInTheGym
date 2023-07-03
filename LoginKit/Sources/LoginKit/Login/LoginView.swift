@@ -96,7 +96,12 @@ struct LoginView: View {
 }
 
 struct LoginView_Previews: PreviewProvider {
+    struct PreviewNetworkService: NetworkService {
+        func login(with email: String, password: String) async throws {}
+        func signup(with email: String, password: String) async throws {}
+        func forgotPassword(for email: String) async throws {}
+    }
     static var previews: some View {
-        LoginView(viewModel: LoginViewModel(coordinator: nil), colour: .blue)
+        LoginView(viewModel: LoginViewModel(networkService: PreviewNetworkService(), completion: {}), colour: .blue)
     }
 }

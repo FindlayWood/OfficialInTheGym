@@ -31,7 +31,7 @@ class SignupViewModel: ObservableObject {
     
     var completion: () -> Void
     
-    init(networkService: NetworkService = MockNetworkService.shared, completion: @escaping () -> Void) {
+    init(networkService: NetworkService, completion: @escaping () -> Void) {
         self.networkService = networkService
         self.completion = completion
         detailsObserver()

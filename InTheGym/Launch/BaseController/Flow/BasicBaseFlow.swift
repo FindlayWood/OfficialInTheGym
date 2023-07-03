@@ -10,13 +10,15 @@ import UIKit
 
 struct BasicBaseFlow: BaseFlow {
     var navigationController: UINavigationController
+    var loginKitComposer: LoginComposer
     var accountCreationComposer: AccountCreationComposer
     var accountCreatedCallback: () -> Void
     var userLoggedIn: () -> Void
     var userSignedOut: () -> Void
     
     func showLogin() {
-        LoginComposition(navigationController: navigationController, completion: userLoggedIn).loginKitInterface.compose()
+        let interface = loginKitComposer.makeLoginInterface()
+        interface.launch()
     }
     
     func showLoggedInPlayer() {

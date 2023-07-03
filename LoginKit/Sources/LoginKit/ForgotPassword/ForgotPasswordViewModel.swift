@@ -23,7 +23,7 @@ class ForgotPasswordViewModel: ObservableObject {
     
     var networkService: NetworkService
     
-    init(networkService: NetworkService = MockNetworkService.shared) {
+    init(networkService: NetworkService) {
         self.networkService = networkService
         detailsObserver()
     }

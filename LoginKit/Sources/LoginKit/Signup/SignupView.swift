@@ -94,7 +94,12 @@ struct SignupView: View {
 }
 
 struct SwiftUIView_Previews: PreviewProvider {
+    struct PreviewNetworkService: NetworkService {
+        func login(with email: String, password: String) async throws {}
+        func signup(with email: String, password: String) async throws {}
+        func forgotPassword(for email: String) async throws {}
+    }
     static var previews: some View {
-        SignupView(viewModel: SignupViewModel(completion: {}), colour: .blue)
+        SignupView(viewModel: SignupViewModel(networkService: PreviewNetworkService(),completion: {}), colour: .blue)
     }
 }

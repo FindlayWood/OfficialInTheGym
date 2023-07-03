@@ -93,6 +93,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             authService: FirebaseAuthManager.shared,
             firestoreService: FirestoreManager.shared)
         
+        let loginKitComposer = LoginComposerAdapter(
+            navigationController: navigationController) { [weak controller] in
+                controller?.loadUser()
+            }
+        
         let accountCreationComposer = AccountCreationComposerAdapter(
             navigationController: navigationController) {
                 [weak controller] in
@@ -102,14 +107,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
 
         
-        let flow = BasicBaseFlow(navigationController: navigationController,
-                                 accountCreationComposer: accountCreationComposer) { [weak controller] in
-            controller?.reloadUser()
-        } userLoggedIn: { [weak controller] in
-            controller?.loadUser()
-        } userSignedOut: { [weak controller] in
-            controller?.loadUser()
-        }
+        let flow = BasicBaseFlow(
+            navigationController: navigationController,
+            loginKitComposer: loginKitComposer,
+            accountCreationComposer: accountCreationComposer) { [weak controller] in
+                controller?.reloadUser()
+            } userLoggedIn: { [weak controller] in
+                controller?.loadUser()
+            } userSignedOut: { [weak controller] in
+                controller?.loadUser()
+            }
 
         controller.userService = cache.fallback(api)
         controller.cacheSaver = cacheSaver
