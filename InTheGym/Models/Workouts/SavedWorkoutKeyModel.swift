@@ -16,7 +16,7 @@ struct SavedWorkoutKeyModel {
 }
 extension SavedWorkoutKeyModel: FirebaseResource {
     static var path: String {
-        return "SavedWorkoutReferences/\(FirebaseAuthManager.currentlyLoggedInUser.uid)"
+        return "SavedWorkoutReferences/\(UserDefaults.currentUser.uid)"
     }
     var internalPath: String {
         return "SavedWorkouts/\(id)"

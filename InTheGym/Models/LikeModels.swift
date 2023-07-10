@@ -18,7 +18,7 @@ struct PostLikesModel {
 }
 extension PostLikesModel: FirebaseInstance {
     var internalPath: String {
-        return "PostLikes/\(postID)/\(FirebaseAuthManager.currentlyLoggedInUser.uid)"
+        return "PostLikes/\(postID)/\(UserDefaults.currentUser.uid)"
     }
 }
 
@@ -43,7 +43,7 @@ struct LikedCommentsModel {
 }
 extension LikedCommentsModel {
     var internalPath: String {
-        "LikedComments/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(commentID)"
+        "LikedComments/\(UserDefaults.currentUser.uid)/\(commentID)"
     }
 }
 struct LikesModel {
@@ -55,7 +55,7 @@ struct LikesModel {
 }
 extension LikesModel: FirebaseInstance {
     var internalPath: String {
-        return "Likes/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(postID)"
+        return "Likes/\(UserDefaults.currentUser.uid)/\(postID)"
     }
 }
 
