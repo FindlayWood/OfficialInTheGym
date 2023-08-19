@@ -10,7 +10,6 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var viewModel: AccountCreationHomeViewModel
     var colour: UIColor
-    var image: UIImage
     
     var body: some View {
         ZStack {
@@ -28,7 +27,7 @@ struct HomeView: View {
                 }
                 .padding(.horizontal)
                 TabView(selection: $viewModel.page) {
-                    WelcomeView(colour: colour, image: image)
+                    WelcomeView(colour: colour)
                         .tag(0)
                     UsernameView(viewModel: viewModel, colour: colour)
                         .tag(1)
@@ -43,7 +42,7 @@ struct HomeView: View {
                     UploadView(viewModel: viewModel, colour: colour)
                         .tag(6)
                 }
-                .tabViewStyle(.page)
+                .tabViewStyle(.page(indexDisplayMode: .never))
                 HStack {
                     if viewModel.page > 0 {
                         Button {
@@ -57,13 +56,6 @@ struct HomeView: View {
                                     .font(.headline)
                                     .foregroundColor(.white)
                             }
-                        }
-                    } else {
-                        Button {
-                            viewModel.signOutAction()
-                        } label: {
-                            Text("Sign Out")
-                                .font(.headline)
                         }
                     }
                     Spacer()
@@ -81,6 +73,28 @@ struct HomeView: View {
                                 .shadow(radius: viewModel.canCreateAccount ? 4 : 0)
                         }
                         .disabled(!viewModel.canCreateAccount)
+                    } else if viewModel.page == 0 {
+                        VStack {
+                            Button {
+                                viewModel.page += 1
+                            } label: {
+                                Text("Get Started")
+                                    .padding()
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color(colour))
+                                    .clipShape(Capsule())
+                                    .shadow(radius: 4)
+                            }
+                            Button {
+                                viewModel.signOutAction()
+                            } label: {
+                                Text("Sign Out")
+                                    .font(.footnote.weight(.medium))
+                                    .foregroundColor(.red)
+                            }
+                        }
                     } else {
                         Button {
                             viewModel.page += 1
@@ -96,7 +110,7 @@ struct HomeView: View {
                         }
                     }
                 }
-                .padding()
+                .padding([.horizontal, .bottom])
             }
             if viewModel.uploading {
                 LoadingView(colour: colour)
@@ -107,6 +121,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(viewModel: AccountCreationHomeViewModel(email: "", uid: ""), colour: .blue, image: UIImage(systemName: "person")!)
+        HomeView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}, signOutCallback: {}), colour: .blue)
     }
 }

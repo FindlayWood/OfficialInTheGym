@@ -24,6 +24,8 @@ struct UsernameView: View {
                     .foregroundColor(Color(colour))
                 TextField("username", text: $viewModel.username)
                     .tint(Color(.blue))
+                    .keyboardType(.alphabet)
+                    .autocorrectionDisabled(true)
                 switch viewModel.isUsernameValid {
                 case .checking:
                     ProgressView()
@@ -59,6 +61,9 @@ struct UsernameView: View {
                 Text("This username is invalid.")
                     .font(.footnote.bold())
                     .foregroundColor(.red)
+                Text("Usernames must only contain letters, numbers, _ or .")
+                    .font(.footnote.bold())
+                    .foregroundColor(.red)
             }
             
             Text("Enter your username above. Your username must be unique and is a way to identify yourself to other users in the app.")
@@ -74,6 +79,6 @@ struct UsernameView: View {
 
 struct UsernameView_Previews: PreviewProvider {
     static var previews: some View {
-        UsernameView(viewModel: AccountCreationHomeViewModel(email: "", uid: ""), colour: .blue)
+        UsernameView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}, signOutCallback: {}), colour: .blue)
     }
 }

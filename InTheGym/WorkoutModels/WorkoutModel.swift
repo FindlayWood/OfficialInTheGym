@@ -19,7 +19,6 @@ class WorkoutModel: Codable, Hashable {
     var id: String
     var savedID: String?
     var creatorID: String
-    var createdBy: String
     var assignedTo: String
     var isPrivate: Bool
     var completed: Bool
@@ -40,7 +39,6 @@ class WorkoutModel: Codable, Hashable {
         id = UUID().uuidString
         savedID = newSavedModel.savedID
         creatorID = newSavedModel.creatorID
-        createdBy = newSavedModel.createdBy
         assignedTo = assignTo
         isPrivate = newSavedModel.isPrivate
         completed = false
@@ -51,7 +49,6 @@ class WorkoutModel: Codable, Hashable {
         id = UUID().uuidString
         savedID = savedModel.id
         creatorID = savedModel.creatorID
-        createdBy = savedModel.createdBy
         assignedTo = assignTo
         isPrivate = savedModel.isPrivate
         completed = false
@@ -62,7 +59,6 @@ class WorkoutModel: Codable, Hashable {
         title = liveModel.title
         id = liveModel.id
         creatorID = liveModel.creatorID
-        createdBy = liveModel.createdBy
         assignedTo = liveModel.assignedTo
         isPrivate = liveModel.isPrivate
         completed = liveModel.completed

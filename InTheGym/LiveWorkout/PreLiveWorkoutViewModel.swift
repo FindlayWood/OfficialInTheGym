@@ -47,7 +47,6 @@ class PreLiveWorkoutViewModel {
         let newLiveWorkout = LiveWorkoutModel(id: UUID().uuidString,
                                               title: title,
                                               creatorID: UserDefaults.currentUser.uid,
-                                              createdBy: UserDefaults.currentUser.username,
                                               assignedTo: UserDefaults.currentUser.uid,
                                               isPrivate: false,
                                               completed: false,

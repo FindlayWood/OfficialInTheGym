@@ -77,7 +77,7 @@ class MyMeasurementsViewModel: ObservableObject {
         let ref = Firestore.firestore().collection("AthleteMeasurements").document(UserDefaults.currentUser.uid)
         
         do {
-            try ref.setData(from: measurementModel)
+            try await ref.setData(from: measurementModel)
             self.successfulUpload = true
             self.isLoading = false
         } catch {

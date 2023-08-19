@@ -9,7 +9,7 @@ import Foundation
 
 class WelcomeViewModel: ObservableObject {
     
-    var coordinator: Coordinator?
+    var coordinator: LoginFlow?
     
     var title: String
     

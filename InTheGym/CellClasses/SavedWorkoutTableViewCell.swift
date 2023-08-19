@@ -177,7 +177,6 @@ extension SavedWorkoutTableViewCell {
     
     public func configure(with data: SavedWorkoutModel) {
         titleLabel.text = data.title
-        creatorLabel.text = data.createdBy
         averageTimeLabel.text = data.averageTime()
         averageRPEScoreLabel.text = data.averageScore().description
         exerciseCountLabel.text = data.totalExerciseCount().description

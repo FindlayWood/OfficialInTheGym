@@ -29,8 +29,11 @@ class SignupViewModel: ObservableObject {
     
     var networkService: NetworkService
     
-    init(networkService: NetworkService = MockNetworkService.shared) {
+    var completion: () -> Void
+    
+    init(networkService: NetworkService, completion: @escaping () -> Void) {
         self.networkService = networkService
+        self.completion = completion
         detailsObserver()
     }
     
@@ -61,7 +64,7 @@ class SignupViewModel: ObservableObject {
         isLoading = true
         do {
             try await networkService.signup(with: email, password: password)
-            isLoading = false
+            completion()
         }
         catch {
             print(String(describing: error))

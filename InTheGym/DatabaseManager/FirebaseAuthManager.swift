@@ -23,6 +23,7 @@ protocol AuthManagerService {
     func forgotPassword(for email: String) async throws
     func sendEmailVerification() async throws
     func checkForCurrentUser() async throws -> User
+    func observeCurrentUser(completion: @escaping (Auth, User?) -> Void)
     func signout() throws
 }
 
@@ -49,6 +50,9 @@ class FirebaseAuthManager: AuthManagerService {
     }
     func signout() throws {
         try Auth.auth().signOut()
+    }
+    func observeCurrentUser(completion: @escaping (Auth, User?) -> Void) {
+        Auth.auth().addStateDidChangeListener(completion)
     }
 
     func checkForCurrentUser() async throws -> User {

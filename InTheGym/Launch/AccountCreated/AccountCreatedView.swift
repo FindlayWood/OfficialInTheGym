@@ -9,6 +9,9 @@
 import SwiftUI
 
 struct AccountCreatedView: View {
+    
+    var toTheAppAction: () -> ()
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text("Account Created")
@@ -24,7 +27,7 @@ struct AccountCreatedView: View {
             
             Spacer()
             MainButton(text: "To the App") {
-                UserObserver.shared.toTheApp()
+                toTheAppAction()
             } 
         }
         .padding()
@@ -33,6 +36,6 @@ struct AccountCreatedView: View {
 
 struct AccountCreatedView_Previews: PreviewProvider {
     static var previews: some View {
-        AccountCreatedView()
+        AccountCreatedView(toTheAppAction: {})
     }
 }

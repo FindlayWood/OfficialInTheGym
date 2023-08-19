@@ -11,32 +11,55 @@ import UIKit
 
 class AccountCreationComposition {
     
-    var accountCreationKitInterface: Boundary
-
-    init(navigationController: UINavigationController, email: String, uid: String) {
-        accountCreationKitInterface = .init(navigationController: navigationController,
-                                            apiService: AccountCreationKitNetworkService(),
-                                            colour: .darkColour,
-                                            image: UIImage(named: "inthegym_icon3")!,
-                                            email: email,
-                                            uid: uid)
+    var navigationController: UINavigationController
+    var email: String
+    var uid: String
+    var completedCallback: () -> Void
+    var signOutCallback: () -> Void
+    
+    init(navigationController: UINavigationController, email: String, uid: String, completion: @escaping () -> Void, signOut: @escaping () -> Void) {
+        self.navigationController = navigationController
+        self.email = email
+        self.uid = uid
+        self.completedCallback = completion
+        self.signOutCallback = signOut
+    }
+    
+    func makeInterface() -> AccountCreationKitInterface {
+        
+        let userModel = AccountCreationUserModel(
+            email: email,
+            uid: uid
+        )
+        
+        let mainInterface = MainAccountCreationKitInterface(
+            navigationController: navigationController,
+            networkService: AccountCreationKitNetworkService(),
+            userModel: userModel,
+            colour: .darkColour,
+            completedCallback: completedCallback,
+            signOutCallback: signOutCallback
+        )
+        
+        
+        return mainInterface
     }
     
 }
 
 class AccountCreationKitNetworkService: NetworkService {
     
-    var apiService: FirebaseDatabaseManagerService
     var authService: AuthManagerService
     var firestoreService: FirestoreService
     var storageService = FirebaseStorageManager.shared
+    var functionsService: FunctionsManager
     
-    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared,
-         authService: AuthManagerService = FirebaseAuthManager.shared,
-         firestoreService: FirestoreService = FirestoreManager.shared) {
-        self.apiService = apiService
+    init(authService: AuthManagerService = FirebaseAuthManager.shared,
+         firestoreService: FirestoreService = FirestoreManager.shared,
+         functionsService: FunctionsManager = FirebaseFunctionsManager()) {
         self.authService = authService
         self.firestoreService = firestoreService
+        self.functionsService = functionsService
     }
     
     func signout() async throws {
@@ -47,15 +70,35 @@ class AccountCreationKitNetworkService: NetworkService {
         try await firestoreService.upload(dataPoints: dataPoints)
     }
     
-    func uploadRealtime(data: Codable, at path: String) async throws {
-        try await apiService.upload(data: data, at: path)
-    }
-    
     func dataUpload(data: Data, at path: String) async throws {
         try await storageService.dataUploadAsync(data: data, at: path)
     }
+    func read<T:Codable>(at path: String) async throws -> T {
+        return try await firestoreService.read(at: path)
+    }
+    func callFunction(named: String, with data: Any) async throws {
+        try await functionsService.callable(named: named, data: data)
+    }
+}
+
+
+protocol AccountCreationComposer {
+    func makeAccountCreationInterface(with email: String, uid: String) -> AccountCreationKitInterface
+}
+
+struct AccountCreationComposerAdapter: AccountCreationComposer {
+    var navigationController: UINavigationController
+    var completion: () -> Void
+    var signedOut: () -> Void
     
-    func checkExistence(at path: String) async throws -> Bool {
-        try await apiService.checkExistence(at: path)
+    func makeAccountCreationInterface(with email: String, uid: String) -> AccountCreationKitInterface {
+        let comp = AccountCreationComposition(
+            navigationController: navigationController,
+            email: email,
+            uid: uid,
+            completion: completion,
+            signOut: signedOut)
+        let interface = comp.makeInterface()
+        return interface
     }
 }
