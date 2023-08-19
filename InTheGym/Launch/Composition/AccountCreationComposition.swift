@@ -69,6 +69,9 @@ class AccountCreationKitNetworkService: NetworkService {
     func upload(dataPoints: [String: Codable]) async throws {
         try await firestoreService.upload(dataPoints: dataPoints)
     }
+    func upload(data: Codable, at path: String) async throws {
+        try await firestoreService.upload(data: data, at: path)
+    }
     
     func dataUpload(data: Data, at path: String) async throws {
         try await storageService.dataUploadAsync(data: data, at: path)

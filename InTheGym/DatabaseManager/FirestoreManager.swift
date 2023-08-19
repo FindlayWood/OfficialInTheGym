@@ -31,6 +31,10 @@ class FirestoreManager: FirestoreService {
 //        let ref = Firestore.firestore().document(path)
 //        try ref.setData(from: data)
     }
+    func upload(data: Codable, at path: String) async throws {
+            let ref = Firestore.firestore().document(path)
+            try await ref.setData(from: data)
+        }
     
     func read<T: Codable>(at path: String) async throws -> T {
         let ref = Firestore.firestore().document(path)
@@ -54,6 +58,7 @@ extension FirebaseFirestore.DocumentReference {
 
 protocol FirestoreService {
     func upload(dataPoints: [String: Codable]) async throws
+    func upload(data: Codable, at path: String) async throws
     func read<T: Codable>(at path: String) async throws -> T
     func readAll<T: Codable>(at path: String) async throws -> [T]
 }
