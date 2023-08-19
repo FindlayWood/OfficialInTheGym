@@ -89,6 +89,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let cache = UserCacheServiceAdapter()
         let cacheSaver = UserDefaultsCacheUserSaver()
         
+        let subscriptionManager = SubscriptionManager.shared
+        
         let api = UserAPIServiceAdapter(
             authService: FirebaseAuthManager.shared,
             firestoreService: FirestoreManager.shared)
@@ -121,6 +123,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         controller.userService = cache.fallback(api)
         controller.cacheSaver = cacheSaver
         controller.baseFlow = flow
+        controller.subscriptionManager = subscriptionManager
         
         return controller
     }

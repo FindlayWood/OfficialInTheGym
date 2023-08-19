@@ -18,6 +18,7 @@ class BaseController {
     var userService: UserLoader?
     var cacheSaver: CacheUserSaver?
     var baseFlow: BaseFlow?
+    var subscriptionManager: SubscriptionManager?
     
     init(navigationController: UINavigationController){
         self.navigationController = navigationController
@@ -42,6 +43,7 @@ class BaseController {
         Task {
             guard let userResult = await userService?.loadUser() else { return }
             handleResult(userResult)
+            await subscriptionManager?.launch()
         }
     }
     
