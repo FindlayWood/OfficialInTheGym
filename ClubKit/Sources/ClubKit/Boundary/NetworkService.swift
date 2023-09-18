@@ -11,4 +11,5 @@ public protocol NetworkService {
     func write(dataPoints: [String: Codable]) async throws
     func read<T: Codable>(at path: String) async throws -> T
     func readAll<T:Codable>(at path: String) async throws -> [T]
+    func callFunction(named: String, with data: Any) async throws
 }

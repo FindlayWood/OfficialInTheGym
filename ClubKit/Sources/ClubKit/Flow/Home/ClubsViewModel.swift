@@ -64,10 +64,11 @@ class ClubsViewModel: ObservableObject {
     
     // MARK: - Actions
     func addAction() {
+        coordinator?.goToCreationAction()
 //        coordinator?.addNewWorkout()
     }
     
     func showClubAction(_ model: RemoteClubModel) {
-        coordinator?.goToClub(model)
+//        coordinator?.goToClub(model)
     }
 }

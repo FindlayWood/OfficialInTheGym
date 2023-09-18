@@ -10,7 +10,7 @@ import UIKit
 protocol CoordinatorFactory {
     var navigationController: UINavigationController { get }
     var viewControllerFactory: ViewControllerFactory { get }
-    func makeClubsCoordinator() -> ClubsFlow
+//    func makeClubsCoordinator() -> ClubsFlow
     func makeClubHomeCoordinator(with model: RemoteClubModel) -> ClubHomeFlow
     func makeTeamCoordinator(for model: RemoteTeamModel) -> TeamFlow
 }
@@ -24,10 +24,10 @@ class RegularCoordinatorFactory: CoordinatorFactory {
         self.viewControllerFactory = viewControllerFactory
     }
     
-    func makeClubsCoordinator() -> ClubsFlow {
-        let child = ClubsCoordinator(navigationController: navigationController, viewControllerFactory: viewControllerFactory, coordinatorFactory: self)
-        return child
-    }
+//    func makeClubsCoordinator() -> ClubsFlow {
+//        let child = ClubsCoordinator(navigationController: navigationController, viewControllerFactory: viewControllerFactory, coordinatorFactory: self)
+//        return child
+//    }
     
     func makeClubHomeCoordinator(with model: RemoteClubModel) -> ClubHomeFlow {
         let child = ClubHomeCoordinator(navigationController: navigationController, viewControllerFactory: viewControllerFactory, coordinatorFactory: self, clubModel: model)
@@ -37,5 +37,23 @@ class RegularCoordinatorFactory: CoordinatorFactory {
     func makeTeamCoordinator(for model: RemoteTeamModel) -> TeamFlow {
         let child = TeamCoordinator(navigationController: navigationController, viewControllerFactory: viewControllerFactory, teamModel: model)
         return child
+    }
+}
+
+
+class BaseCoordinatorFactory {
+    
+    var navigationController: UINavigationController
+    
+    init(navigationController: UINavigationController) {
+        self.navigationController = navigationController
+    }
+    
+    func makeCreationCoordinator() {
+        
+    }
+    
+    func makeClubHomeCoordinator() {
+        
     }
 }

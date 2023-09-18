@@ -9,14 +9,14 @@ import UIKit
 
 class ClubsViewController: UIViewController {
     
-    var clubManager: ClubManager
-    var coordinator: ClubsFlow
+//    var clubManager: ClubManager
+    weak var coordinator: ClubsFlow?
     
-    lazy var viewModel = ClubsViewModel(clubManager: clubManager, flow: coordinator)
-    lazy var display = ClubsView(viewModel: viewModel)
+    var viewModel: ClubsViewModel
+    var display: ClubsView!
     
-    init(clubManager: ClubManager, coordinator: ClubsFlow) {
-        self.clubManager = clubManager
+    init(viewModel: ClubsViewModel, coordinator: ClubsFlow) {
+        self.viewModel = viewModel
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
@@ -35,6 +35,7 @@ class ClubsViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
     }
     func addDisplay() {
+        display = .init(viewModel: viewModel)
         addSwiftUIView(display)
     }
 }

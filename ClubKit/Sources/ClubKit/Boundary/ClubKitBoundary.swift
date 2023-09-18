@@ -26,7 +26,23 @@ public class ClubKitBoundary {
     }
     
     public func compose() {
-        let coordinator = coordinatorFactory.makeClubsCoordinator()
-        coordinator.start()
+        let base = makeBase()
+        base.start()
+    }
+    
+    func makeBase() -> ClubsFlow {
+        
+        let viewControllerFactory = BaseViewControllerFactory(clubManager: clubManager)
+        
+        let clubCreationViewControllerFactory = BasicClubCreationViewControllerFactory(networkService: networkService)
+        
+        let baseCoordinatorFactory = BasicClubsCoordinatorFactory(navigationController: navigationController,
+                                                                  clubCreationViewControllerFactory: clubCreationViewControllerFactory)
+        
+        let flow = ClubsCoordinator(navigationController: navigationController,
+                                    viewControllerFactory: viewControllerFactory,
+                                    coordinatorFactory: baseCoordinatorFactory)
+        
+        return flow
     }
 }

@@ -8,13 +8,28 @@
 import Foundation
 
 protocol ViewControllerFactory {
-    func makeClubsViewController(flow: ClubsFlow) -> ClubsViewController
+//    func makeClubsViewController(flow: ClubsFlow) -> ClubsViewController
     func makeClubCreationViewController() -> ClubCreationViewController
     func makeClubHomeViewController(_ model: RemoteClubModel) -> ClubHomeViewController
     func makeTeamsViewController(_ model: RemoteClubModel, flow: ClubHomeFlow) -> TeamsViewController
     func makeTeamHomeViewController(_ model: RemoteTeamModel) -> TeamHomeViewController
     func makePlayersViewController(_ model: RemoteClubModel) -> PlayersViewController
     func makeCreatePlayerViewController(_ model: RemoteClubModel) -> CreatePlayerViewController
+}
+
+class BaseViewControllerFactory {
+    
+    var clubManager: ClubManager
+    
+    init(clubManager: ClubManager) {
+        self.clubManager = clubManager
+    }
+    
+    func makeBaseViewController(with flow: ClubsFlow) -> ClubsViewController {
+        let viewModel = ClubsViewModel(clubManager: clubManager, flow: flow)
+        let vc = ClubsViewController(viewModel: viewModel, coordinator: flow)
+        return vc
+    }
 }
 
 class RegularViewControllerFactory: ViewControllerFactory {
@@ -28,10 +43,10 @@ class RegularViewControllerFactory: ViewControllerFactory {
         self.playerLoader = playerLoader
     }
     
-    func makeClubsViewController(flow: ClubsFlow) -> ClubsViewController {
-        let vc = ClubsViewController(clubManager: clubManager, coordinator: flow)
-        return vc
-    }
+//    func makeClubsViewController(flow: ClubsFlow) -> ClubsViewController {
+//        let vc = ClubsViewController(clubManager: clubManager, coordinator: flow)
+//        return vc
+//    }
     
     func makeClubCreationViewController() -> ClubCreationViewController {
         let vc = ClubCreationViewController()
@@ -60,6 +75,23 @@ class RegularViewControllerFactory: ViewControllerFactory {
     
     func makeCreatePlayerViewController(_ model: RemoteClubModel) -> CreatePlayerViewController {
         let vc = CreatePlayerViewController(clubModel: model, loader: playerLoader, teamLoader: teamLoader)
+        return vc
+    }
+}
+
+protocol ClubCreationViewControllerFactory {
+    func makeClubCreationViewController() -> ClubCreationViewController
+}
+
+struct BasicClubCreationViewControllerFactory: ClubCreationViewControllerFactory {
+    
+    var networkService: NetworkService
+    
+    func makeClubCreationViewController() -> ClubCreationViewController {
+        let client = FirebaseClient(service: networkService)
+        let creationService = RemoteCreationService(client: client)
+        let viewModel = ClubCreationViewModel(service: creationService)
+        let vc = ClubCreationViewController(viewModel: viewModel)
         return vc
     }
 }

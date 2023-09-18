@@ -38,10 +38,14 @@ class ClubKitNetWorkService: NetworkService {
     
     var firebaseService: FirebaseDatabaseManagerService
     var firestoreService: FirestoreService
+    var functionsService: FunctionsManager
     
-    init(firestoreService: FirestoreService = FirestoreManager.shared, firebaseService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
+    init(firestoreService: FirestoreService = FirestoreManager.shared,
+         firebaseService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared,
+         functionsService: FunctionsManager = FirebaseFunctionsManager()) {
         self.firestoreService = firestoreService
         self.firebaseService = firebaseService
+        self.functionsService = functionsService
     }
     
     func write(dataPoints: [String: Codable]) async throws {
@@ -54,5 +58,9 @@ class ClubKitNetWorkService: NetworkService {
     
     func readAll<T: Codable>(at path: String) async throws -> [T] {
         return try await firestoreService.readAll(at: path)
+    }
+    
+    func callFunction(named: String, with data: Any) async throws {
+        try await functionsService.callable(named: named, data: data)
     }
 }
