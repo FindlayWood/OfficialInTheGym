@@ -56,3 +56,37 @@ protocol ClubHomeFlow: Coordinator {
     func goToPlayers()
     func goToCreatePlayer()
 }
+
+class BasicClubHomeFlow: ClubHomeFlow {
+    
+    var navigationController: UINavigationController
+    var viewControllerFactory: ClubHomeViewControllerFactory
+    var clubModel: RemoteClubModel
+    
+    init(navigationController: UINavigationController, viewControllerFactory: ClubHomeViewControllerFactory, clubModel: RemoteClubModel) {
+        self.navigationController = navigationController
+        self.viewControllerFactory = viewControllerFactory
+        self.clubModel = clubModel
+    }
+    
+    func start() {
+        let vc = viewControllerFactory.makeClubHomeViewController(with: clubModel)
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToTeams() {
+        
+    }
+    
+    func goToTeam(_ model: RemoteTeamModel) {
+        
+    }
+    
+    func goToPlayers() {
+        
+    }
+    
+    func goToCreatePlayer() {
+        
+    }
+}

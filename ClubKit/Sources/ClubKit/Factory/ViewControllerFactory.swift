@@ -78,32 +78,3 @@ class RegularViewControllerFactory: ViewControllerFactory {
         return vc
     }
 }
-
-protocol ClubCreationViewControllerFactory {
-    func makeClubCreationViewController() -> ClubCreationViewController
-}
-
-struct BasicClubCreationViewControllerFactory: ClubCreationViewControllerFactory {
-    
-    var networkService: NetworkService
-    
-    func makeClubCreationViewController() -> ClubCreationViewController {
-        let client = FirebaseClient(service: networkService)
-        let creationService = RemoteCreationService(client: client)
-        let viewModel = ClubCreationViewModel(service: creationService)
-        let vc = ClubCreationViewController(viewModel: viewModel)
-        return vc
-    }
-}
-
-protocol ClubHomeViewControllerFactory {
-    func makeClubHomeViewController(with model: RemoteClubModel) -> ClubHomeViewController
-}
-
-struct BasicClubHomeViewControllerFactory: ClubHomeViewControllerFactory {
-    
-    func makeClubHomeViewController(with model: RemoteClubModel) -> ClubHomeViewController {
-        let vc = ClubHomeViewController(clubModel: model)
-        return vc
-    }
-}

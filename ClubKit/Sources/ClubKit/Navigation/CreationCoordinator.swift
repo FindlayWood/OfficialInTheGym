@@ -7,17 +7,26 @@
 
 import UIKit
 
-class CreationCoordinator: Coordinator {
+protocol ClubCreationFlow: Coordinator {
+    func successfullyCreatedNewClub()
+}
+
+class BasicClubCreationFlow: ClubCreationFlow {
     
     var navigationController: UINavigationController
-    var viewControllerFactoy: ViewControllerFactory
+    var viewControllerFactory: ClubCreationViewControllerFactory
     
-    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactory) {
+    init(navigationController: UINavigationController, viewControllerFactory: ClubCreationViewControllerFactory) {
         self.navigationController = navigationController
-        self.viewControllerFactoy = viewControllerFactory
+        self.viewControllerFactory = viewControllerFactory
     }
     
     func start() {
-
+        let vc = viewControllerFactory.makeClubCreationViewController()
+        navigationController.present(vc, animated: true)
+    }
+    
+    func successfullyCreatedNewClub() {
+        
     }
 }
