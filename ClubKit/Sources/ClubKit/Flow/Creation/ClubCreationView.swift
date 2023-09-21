@@ -12,9 +12,39 @@ struct ClubCreationView: View {
     @ObservedObject var viewModel: ClubCreationViewModel
     
     var body: some View {
-        VStack {
-            TextField("Display Name", text: $viewModel.displayName)
-            TextField("Tag Line", text: $viewModel.tagline)
+        NavigationStack {
+            List {
+                Section {
+                    VStack {
+                        Text("Create a new club")
+                            .font(.headline)
+                            .multilineTextAlignment(.center)
+                    }
+                }
+                Section {
+                    TextField("Display Name", text: $viewModel.displayName)
+                }
+                Section {
+                    TextField("Tag Line", text: $viewModel.tagline)
+                }
+                Section {
+                    Button {
+                        
+                    } label: {
+                        Text("Create Club")
+                            .padding()
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .background(Color(.darkColour))
+                            .clipShape(Capsule())
+                            .shadow(radius: 4)
+                    }
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                }
+            }
+            .navigationTitle("Club Creation")
         }
     }
 }

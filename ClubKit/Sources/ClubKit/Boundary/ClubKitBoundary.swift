@@ -36,8 +36,11 @@ public class ClubKitBoundary {
         
         let clubCreationViewControllerFactory = BasicClubCreationViewControllerFactory(networkService: networkService)
         
+        let clubHomeViewControllerFactory = BasicClubHomeViewControllerFactory()
+        
         let baseCoordinatorFactory = BasicClubsCoordinatorFactory(navigationController: navigationController,
-                                                                  clubCreationViewControllerFactory: clubCreationViewControllerFactory)
+                                                                  clubCreationViewControllerFactory: clubCreationViewControllerFactory,
+                                                                  clubHomeViewControllerFactory: clubHomeViewControllerFactory)
         
         let flow = ClubsCoordinator(navigationController: navigationController,
                                     viewControllerFactory: viewControllerFactory,

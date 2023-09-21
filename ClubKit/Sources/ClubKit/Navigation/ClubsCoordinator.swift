@@ -27,10 +27,15 @@ class ClubsCoordinator: ClubsFlow {
         let flow = coordinatorFactory.makeCeationCoordinator()
         flow.start()
     }
+    func goToClubAction(_ clubModel: RemoteClubModel) {
+        let flow = coordinatorFactory.makeClubHomeCoordinator(with: clubModel)
+        flow.start()
+    }
 }
 
 protocol ClubsFlow: Coordinator {
     func goToCreationAction()
+    func goToClubAction(_ clubModel: RemoteClubModel)
 }
 
 
@@ -50,7 +55,7 @@ class BasicClubCreationFlow: ClubCreationFlow {
     
     func start() {
         let vc = viewControllerFactory.makeClubCreationViewController()
-        navigationController.pushViewController(vc, animated: true)
+        navigationController.present(vc, animated: true)
     }
     
     func successfullyCreatedNewClub() {
@@ -58,17 +63,58 @@ class BasicClubCreationFlow: ClubCreationFlow {
     }
 }
 
+class BasicClubHomeFlow: ClubHomeFlow {
+    
+    var navigationController: UINavigationController
+    var viewControllerFactory: ClubHomeViewControllerFactory
+    var clubModel: RemoteClubModel
+    
+    init(navigationController: UINavigationController, viewControllerFactory: ClubHomeViewControllerFactory, clubModel: RemoteClubModel) {
+        self.navigationController = navigationController
+        self.viewControllerFactory = viewControllerFactory
+        self.clubModel = clubModel
+    }
+    
+    func start() {
+        let vc = viewControllerFactory.makeClubHomeViewController(with: clubModel)
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToTeams() {
+        
+    }
+    
+    func goToTeam(_ model: RemoteTeamModel) {
+        
+    }
+    
+    func goToPlayers() {
+        
+    }
+    
+    func goToCreatePlayer() {
+        
+    }
+}
+
 protocol ClubsCoordinatorFactory {
     func makeCeationCoordinator() -> ClubCreationFlow
+    func makeClubHomeCoordinator(with model: RemoteClubModel) -> ClubHomeFlow
 }
 
 struct BasicClubsCoordinatorFactory: ClubsCoordinatorFactory {
     
     var navigationController: UINavigationController
     var clubCreationViewControllerFactory: ClubCreationViewControllerFactory
+    var clubHomeViewControllerFactory: ClubHomeViewControllerFactory
     
     func makeCeationCoordinator() -> ClubCreationFlow {
         let flow = BasicClubCreationFlow(navigationController: navigationController, viewControllerFactory: clubCreationViewControllerFactory)
+        return flow
+    }
+    
+    func makeClubHomeCoordinator(with model: RemoteClubModel) -> ClubHomeFlow {
+        let flow = BasicClubHomeFlow(navigationController: navigationController, viewControllerFactory: clubHomeViewControllerFactory, clubModel: model)
         return flow
     }
 }

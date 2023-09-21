@@ -19,7 +19,7 @@ struct ClubsView: View {
                     .foregroundColor(Color(.darkColour))
                 Spacer()
                 Button {
-                    
+                    viewModel.addAction()
                 } label: {
                     Image(systemName: "plus.circle.fill")
                         .foregroundColor(Color(.darkColour))

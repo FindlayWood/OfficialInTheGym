@@ -9,7 +9,7 @@ import Foundation
 
 protocol ViewControllerFactory {
 //    func makeClubsViewController(flow: ClubsFlow) -> ClubsViewController
-    func makeClubCreationViewController() -> ClubCreationViewController
+//    func makeClubCreationViewController() -> ClubCreationViewController
     func makeClubHomeViewController(_ model: RemoteClubModel) -> ClubHomeViewController
     func makeTeamsViewController(_ model: RemoteClubModel, flow: ClubHomeFlow) -> TeamsViewController
     func makeTeamHomeViewController(_ model: RemoteTeamModel) -> TeamHomeViewController
@@ -48,10 +48,10 @@ class RegularViewControllerFactory: ViewControllerFactory {
 //        return vc
 //    }
     
-    func makeClubCreationViewController() -> ClubCreationViewController {
-        let vc = ClubCreationViewController()
-        return vc
-    }
+//    func makeClubCreationViewController() -> ClubCreationViewController {
+//        let vc = ClubCreationViewController(viewModel: <#ClubCreationViewModel#>)
+//        return vc
+//    }
     
     func makeClubHomeViewController(_ model: RemoteClubModel) -> ClubHomeViewController {
         let vc = ClubHomeViewController(clubModel: model)
@@ -92,6 +92,18 @@ struct BasicClubCreationViewControllerFactory: ClubCreationViewControllerFactory
         let creationService = RemoteCreationService(client: client)
         let viewModel = ClubCreationViewModel(service: creationService)
         let vc = ClubCreationViewController(viewModel: viewModel)
+        return vc
+    }
+}
+
+protocol ClubHomeViewControllerFactory {
+    func makeClubHomeViewController(with model: RemoteClubModel) -> ClubHomeViewController
+}
+
+struct BasicClubHomeViewControllerFactory: ClubHomeViewControllerFactory {
+    
+    func makeClubHomeViewController(with model: RemoteClubModel) -> ClubHomeViewController {
+        let vc = ClubHomeViewController(clubModel: model)
         return vc
     }
 }

@@ -9,7 +9,6 @@ import UIKit
 
 class ClubsViewController: UIViewController {
     
-//    var clubManager: ClubManager
     weak var coordinator: ClubsFlow?
     
     var viewModel: ClubsViewModel
