@@ -71,6 +71,7 @@ class BasicClubHomeFlow: ClubHomeFlow {
     
     func start() {
         let vc = viewControllerFactory.makeClubHomeViewController(with: clubModel)
+        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
     
@@ -83,7 +84,8 @@ class BasicClubHomeFlow: ClubHomeFlow {
     }
     
     func goToPlayers() {
-        
+        let vc = viewControllerFactory.makePlayersViewController(with: clubModel)
+        navigationController.pushViewController(vc, animated: true)
     }
     
     func goToCreatePlayer() {
