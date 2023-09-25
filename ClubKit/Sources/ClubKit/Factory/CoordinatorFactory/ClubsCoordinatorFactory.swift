@@ -17,6 +17,7 @@ struct BasicClubsCoordinatorFactory: ClubsCoordinatorFactory {
     var navigationController: UINavigationController
     var clubCreationViewControllerFactory: ClubCreationViewControllerFactory
     var clubHomeViewControllerFactory: ClubHomeViewControllerFactory
+    var clubHomeCoordinatorFactory: ClubHomeCoordinatorFactory
     
     func makeCeationCoordinator() -> ClubCreationFlow {
         let flow = BasicClubCreationFlow(navigationController: navigationController, viewControllerFactory: clubCreationViewControllerFactory)
@@ -24,7 +25,7 @@ struct BasicClubsCoordinatorFactory: ClubsCoordinatorFactory {
     }
     
     func makeClubHomeCoordinator(with model: RemoteClubModel) -> ClubHomeFlow {
-        let flow = BasicClubHomeFlow(navigationController: navigationController, viewControllerFactory: clubHomeViewControllerFactory, clubModel: model)
+        let flow = BasicClubHomeFlow(navigationController: navigationController, viewControllerFactory: clubHomeViewControllerFactory, clubHomeCoordinatorFactory: clubHomeCoordinatorFactory, clubModel: model)
         return flow
     }
 }

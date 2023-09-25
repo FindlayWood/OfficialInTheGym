@@ -61,11 +61,13 @@ class BasicClubHomeFlow: ClubHomeFlow {
     
     var navigationController: UINavigationController
     var viewControllerFactory: ClubHomeViewControllerFactory
+    var coordinatorFactory: ClubHomeCoordinatorFactory
     var clubModel: RemoteClubModel
     
-    init(navigationController: UINavigationController, viewControllerFactory: ClubHomeViewControllerFactory, clubModel: RemoteClubModel) {
+    init(navigationController: UINavigationController, viewControllerFactory: ClubHomeViewControllerFactory, clubHomeCoordinatorFactory: ClubHomeCoordinatorFactory, clubModel: RemoteClubModel) {
         self.navigationController = navigationController
         self.viewControllerFactory = viewControllerFactory
+        self.coordinatorFactory = clubHomeCoordinatorFactory
         self.clubModel = clubModel
     }
     
@@ -84,8 +86,8 @@ class BasicClubHomeFlow: ClubHomeFlow {
     }
     
     func goToPlayers() {
-        let vc = viewControllerFactory.makePlayersViewController(with: clubModel)
-        navigationController.pushViewController(vc, animated: true)
+        let flow = coordinatorFactory.makePlayersCoordinator(with: clubModel)
+        flow.start()
     }
     
     func goToCreatePlayer() {
