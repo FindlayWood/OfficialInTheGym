@@ -29,7 +29,7 @@ struct ClubCreationView: View {
                 }
                 Section {
                     Button {
-                        
+                        viewModel.createAction()
                     } label: {
                         Text("Create Club")
                             .padding()
@@ -50,12 +50,12 @@ struct ClubCreationView: View {
 }
 
 struct ClubCreationView_Previews: PreviewProvider {
-    private struct PreviewService: CreationService {
+    private struct PreviewService: ClubCreationService {
         func createNewClub(with data: NewClubData) async -> Result<NewClubData, RemoteCreationService.Error> {
             return .failure(.failed)
         }
     }
     static var previews: some View {
-        ClubCreationView(viewModel: ClubCreationViewModel(service: PreviewService()))
+        ClubCreationView(viewModel: ClubCreationViewModel(service: PreviewService(), clubManager: PreviewClubManager()))
     }
 }

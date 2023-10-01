@@ -8,12 +8,12 @@
 import Foundation
 
 struct RemoteClubData: Codable {
-    var id: String
+//    var id: String
     var clubID: String
     var role: ClubRole
     var dateJoined: Date
 }
 
 extension RemoteClubData {
-    static let example = RemoteClubData(id: "testID", clubID: "clubID", role: .player, dateJoined: .now)
+    static let example = RemoteClubData(clubID: "clubID", role: .player, dateJoined: .now)
 }

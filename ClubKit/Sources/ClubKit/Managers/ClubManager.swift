@@ -14,13 +14,14 @@ protocol ClubManager {
     func loadClubData() async throws -> [RemoteClubData]
     func loadClubs() async throws
     func loadTeams(for club: RemoteClubModel) async throws -> [RemoteTeamModel]
+    func createdNewClub(_ model: RemoteClubModel)
 }
 
 class RemoteClubManager: ClubManager {
     
     var clubLoader: ClubLoader
     
-    @Published var clubs: [RemoteClubModel] = []
+    @Published private(set) var clubs: [RemoteClubModel] = []
     var clubsPublished: Published<[RemoteClubModel]> { _clubs }
     var clubsPublisher: Published<[RemoteClubModel]>.Publisher { $clubs }
     
@@ -42,7 +43,9 @@ class RemoteClubManager: ClubManager {
         return []
     }
     
-    
+    func createdNewClub(_ model: RemoteClubModel) {
+        clubs.append(model)
+    }
 }
 
 class PreviewClubManager: ClubManager {
@@ -60,5 +63,8 @@ class PreviewClubManager: ClubManager {
     
     func loadTeams(for club: RemoteClubModel) async throws -> [RemoteTeamModel] {
         return []
+    }
+    func createdNewClub(_ model: RemoteClubModel) {
+        
     }
 }

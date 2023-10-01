@@ -119,8 +119,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } userSignedOut: { [weak controller] in
                 controller?.loadUser()
             }
-
+        
+        #if EMULATOR
+        controller.userService = api
+        #else
         controller.userService = cache.fallback(api)
+        #endif
+//        controller.userService = cache.fallback(api)
         controller.cacheSaver = cacheSaver
         controller.baseFlow = flow
         controller.subscriptionManager = subscriptionManager

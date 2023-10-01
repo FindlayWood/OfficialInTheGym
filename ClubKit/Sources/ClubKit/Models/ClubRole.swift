@@ -9,4 +9,5 @@ import Foundation
 
 enum ClubRole: String, Codable, CaseIterable {
     case player
+    case manager
 }

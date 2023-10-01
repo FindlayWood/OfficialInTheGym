@@ -10,7 +10,7 @@ import UIKit
 class PlayersViewController: UIViewController {
     
     var clubModel: RemoteClubModel
-    var coordinator: ClubHomeFlow?
+    var coordinator: PlayersFlow?
     var playerLoader: PlayerLoader
     
     private lazy var viewModel = PlayersViewModel(clubModel: clubModel, playerLoader: playerLoader)
@@ -48,7 +48,7 @@ class PlayersViewController: UIViewController {
     
     // MARK: - Actions
     @objc func addNewPlayer(_ sender: UIBarButtonItem) {
-        coordinator?.goToCreatePlayer()
+        coordinator?.addNewPlayer()
     }
     
     // MARK: - Display

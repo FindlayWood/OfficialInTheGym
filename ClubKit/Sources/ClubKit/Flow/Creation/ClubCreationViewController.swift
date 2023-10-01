@@ -42,16 +42,16 @@ struct ClubCreationUIComposer {
     
     private init() {}
     
-    static func composeCreation(with networkService: NetworkService) -> ClubCreationViewController {
+    static func composeCreation(with networkService: NetworkService, clubManager: ClubManager) -> ClubCreationViewController {
         let service = RemoteCreationService(client: FirebaseClient(service: networkService))
-        let viewModel = ClubCreationViewModel(service: service)
+        let viewModel = ClubCreationViewModel(service: service, clubManager: clubManager)
         let vc = ClubCreationViewController(viewModel: viewModel)
         return vc
     }
 }
 
 
-protocol CreationService {
+protocol ClubCreationService {
     func createNewClub(with data: NewClubData) async -> Result<NewClubData,RemoteCreationService.Error>
 }
 
@@ -76,7 +76,7 @@ struct NewClubData {
     let isPrivate: Bool
 }
 
-struct RemoteCreationService: CreationService {
+struct RemoteCreationService: ClubCreationService {
     
     var client: Client
     
@@ -85,8 +85,15 @@ struct RemoteCreationService: CreationService {
     }
     
     func createNewClub(with data: NewClubData) async -> Result<NewClubData,Error> {
+        let functionData: [String: Any] = [
+            "id": data.id,
+            "clubName": data.displayName,
+            "sport": data.sport.rawValue,
+            "tagline": data.tagline,
+            "isPrivate": data.isPrivate
+        ]
         do {
-            try await client.callFunction(named: "createClub", with: data)
+            try await client.callFunction(named: "createClub", with: functionData)
             return .success(data)
         } catch {
             return .failure(.failed)

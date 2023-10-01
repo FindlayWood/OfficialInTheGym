@@ -29,8 +29,8 @@ class ClubHomeCoordinator: ClubHomeFlow {
     }
     
     func goToTeams() {
-        let vc = viewControllerFactoy.makeTeamsViewController(clubModel, flow: self)
-        navigationController.pushViewController(vc, animated: true)
+//        let vc = viewControllerFactoy.makeTeamsViewController(clubModel, flow: self)
+//        navigationController.pushViewController(vc, animated: true)
     }
     
     func goToTeam(_ model: RemoteTeamModel) {
@@ -39,14 +39,14 @@ class ClubHomeCoordinator: ClubHomeFlow {
     }
     
     func goToPlayers() {
-        let vc = viewControllerFactoy.makePlayersViewController(clubModel)
-        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
+//        let vc = viewControllerFactoy.makePlayersViewController(clubModel)
+//        vc.coordinator = self
+//        navigationController.pushViewController(vc, animated: true)
     }
     
     func goToCreatePlayer() {
-        let vc = viewControllerFactoy.makeCreatePlayerViewController(clubModel)
-        navigationController.pushViewController(vc, animated: true)
+//        let vc = viewControllerFactoy.makeCreatePlayerViewController(clubModel)
+//        navigationController.pushViewController(vc, animated: true)
     }
 }
 
@@ -78,7 +78,8 @@ class BasicClubHomeFlow: ClubHomeFlow {
     }
     
     func goToTeams() {
-        
+        let flow = coordinatorFactory.makeTeamsCoordinator(with: clubModel)
+        flow.start()
     }
     
     func goToTeam(_ model: RemoteTeamModel) {

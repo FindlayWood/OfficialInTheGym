@@ -9,17 +9,15 @@ import UIKit
 
 class TeamsViewController: UIViewController {
     
-    var clubModel: RemoteClubModel
-    var teamLoader: TeamLoader
-    var coordinator: ClubHomeFlow
+//    var clubModel: RemoteClubModel
+//    var teamLoader: TeamLoader
+    var coordinator: ClubHomeFlow?
     
-    private lazy var viewModel: TeamsViewModel = TeamsViewModel(clubModel: clubModel, teamLoader: teamLoader)
-    private lazy var display: TeamsView = TeamsView(viewModel: viewModel)
+    var viewModel: TeamsViewModel
+    var display: TeamsView!
     
-    init(clubModel: RemoteClubModel, teamLoader: TeamLoader, coordinator: ClubHomeFlow) {
-        self.clubModel = clubModel
-        self.teamLoader = teamLoader
-        self.coordinator = coordinator
+    init(viewModel: TeamsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -50,6 +48,7 @@ class TeamsViewController: UIViewController {
     
     // MARK: - Display
     func addDisplay() {
+        display = .init(viewModel: viewModel)
         addSwiftUIView(display)
     }
     
@@ -61,7 +60,7 @@ class TeamsViewController: UIViewController {
     // MARK: - View Model
     func initViewModel() {
         viewModel.selectedTeam = { [weak self] selected in
-            self?.coordinator.goToTeam(selected)
+            self?.coordinator?.goToTeam(selected)
         }
     }
 }

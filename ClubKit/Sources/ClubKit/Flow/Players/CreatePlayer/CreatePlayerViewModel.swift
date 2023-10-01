@@ -13,6 +13,7 @@ class CreatePlayerViewModel: ObservableObject {
     var clubModel: RemoteClubModel
     var loader: PlayerLoader
     var teamLoader: TeamLoader
+    var creationService: PlayerCreationService
     // MARK: - Loading Variables
     @Published var isLoadingTeams: Bool = false
     @Published var isUploading: Bool = false
@@ -25,11 +26,12 @@ class CreatePlayerViewModel: ObservableObject {
     @Published var selectedTeams: [RemoteTeamModel] = []
     var selectedSport: Sport
     
-    init(clubModel: RemoteClubModel, loader: PlayerLoader, teamLoader: TeamLoader) {
+    init(clubModel: RemoteClubModel, loader: PlayerLoader, teamLoader: TeamLoader, creationService: PlayerCreationService) {
         self.clubModel = clubModel
         self.loader = loader
         self.teamLoader = teamLoader
         self.selectedSport = clubModel.sport
+        self.creationService = creationService
     }
     
     @MainActor
@@ -58,9 +60,10 @@ class CreatePlayerViewModel: ObservableObject {
     @MainActor
     func create() async {
         isUploading = true
-        let newModel = RemotePlayerModel(id: UUID().uuidString, clubID: clubModel.id, displayName: displayName, positions: playerPositions)
-        do {
-            try await loader.uploadNewPlayer(newModel, to: selectedTeams.map { $0.id })
+        let newPlayerData = NewPlayerData(displayName: displayName, clubID: clubModel.id, positions: playerPositions.map { $0.rawValue }, selectedTeams: selectedTeams.map { $0.id })
+        let result = await creationService.createNewPlayer(with: newPlayerData)
+        switch result {
+        case .success:
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.displayName = ""
                 self.playerPositions.removeAll()
@@ -71,8 +74,8 @@ class CreatePlayerViewModel: ObservableObject {
                     self.uploaded = false
                 }
             }
-        } catch {
-            print(String(describing: error))
+        case .failure(let failure):
+            print(String(describing: failure))
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.isUploading = false
                 self.errorUploading = true

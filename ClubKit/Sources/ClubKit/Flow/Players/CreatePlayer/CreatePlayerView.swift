@@ -20,7 +20,7 @@ struct CreatePlayerView: View {
                         Text("Create New Player")
                             .font(.title3.bold())
                             .foregroundColor(.primary)
-                        Text("Creating a new player will add them to them to the club. They can then be added and removed from team's within the club as you wish. If the player already has an InTheGym account then you can use QR code to add them immediately and they can get access theough their account. You can link created players with any InTheGym account at a later date.")
+                        Text("Creating a new player will add them to them to the club. They can then be added and removed from team's within the club as you wish. If the player already has an InTheGym account then you can use QR code to add them immediately and they can get access through their account. You can link created players with any InTheGym account at a later date.")
                             .font(.footnote.bold())
                             .foregroundColor(.secondary)
                     }
@@ -148,7 +148,10 @@ struct CreatePlayerView_Previews: PreviewProvider {
     private class PreviewTeamLoader: TeamLoader {
         func loadAllTeams(for clubID: String) async throws -> [RemoteTeamModel] { return [] }
     }
+    private class PreviewService: PlayerCreationService {
+        func createNewPlayer(with data: NewPlayerData) async -> Result<NewPlayerData, RemotePlayerCreationService.Error> { return .failure(.failed)}
+    }
     static var previews: some View {
-        CreatePlayerView(viewModel: CreatePlayerViewModel(clubModel: .example, loader: PreviewPlayerLoader(), teamLoader: PreviewTeamLoader()))
+        CreatePlayerView(viewModel: CreatePlayerViewModel(clubModel: .example, loader: PreviewPlayerLoader(), teamLoader: PreviewTeamLoader(), creationService: PreviewService()))
     }
 }

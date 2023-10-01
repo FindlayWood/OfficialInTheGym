@@ -29,3 +29,21 @@ class TeamCoordinator: TeamFlow {
 protocol TeamFlow: Coordinator {
     
 }
+
+class BasicTeamFlow: TeamFlow {
+
+    var navigationController: UINavigationController
+    var viewControllerFactory: TeamViewControllerFactory
+    var clubModel: RemoteClubModel
+    
+    init(navigationController: UINavigationController, viewControllerFactory: TeamViewControllerFactory, clubModel: RemoteClubModel) {
+        self.navigationController = navigationController
+        self.viewControllerFactory = viewControllerFactory
+        self.clubModel = clubModel
+    }
+    
+    func start() {
+        let vc = viewControllerFactory.makeTeamsViewController(for: clubModel)
+        navigationController.pushViewController(vc, animated: true)
+    }
+}

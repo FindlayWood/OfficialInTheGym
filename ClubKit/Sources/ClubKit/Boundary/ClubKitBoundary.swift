@@ -34,14 +34,23 @@ public class ClubKitBoundary {
         
         let viewControllerFactory = BaseViewControllerFactory(clubManager: clubManager)
         
-        let clubCreationViewControllerFactory = BasicClubCreationViewControllerFactory(networkService: networkService)
+        let clubCreationViewControllerFactory = BasicClubCreationViewControllerFactory(networkService: networkService, clubManager: clubManager)
         
         let clubHomeViewControllerFactory = BasicClubHomeViewControllerFactory()
         
-        let playersViewControllerFactory = BasicPlayersViewControllerFactory(playerLoader: playerLoader)
+        let client = FirebaseClient(service: networkService)
+        
+        let playerCreationService = RemotePlayerCreationService(client: client)
+        
+        let playersViewControllerFactory = BasicPlayersViewControllerFactory(playerLoader: playerLoader,
+                                                                             teamLoader: teamLoader,
+                                                                             creationService: playerCreationService)
+        
+        let teamViewControllerFactory = BasicTeamViewControllerFactory(teamLoader: teamLoader)
         
         let clubHomeCoordinatorFactory = BasicClubHomeCoordinatorFactory(navigationController: navigationController,
-                                                                         playersViewControllerFactory: playersViewControllerFactory)
+                                                                         playersViewControllerFactory: playersViewControllerFactory,
+                                                                         teamViewControllerFactory: teamViewControllerFactory)
         
         let baseCoordinatorFactory = BasicClubsCoordinatorFactory(navigationController: navigationController,
                                                                   clubCreationViewControllerFactory: clubCreationViewControllerFactory,

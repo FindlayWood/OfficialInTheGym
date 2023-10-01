@@ -26,10 +26,12 @@ class BasicPlayersFlow: PlayersFlow {
     
     func start() {
         let vc = viewControllerFactory.makePlayersViewController(with: clubModel)
+        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
     
     func addNewPlayer() {
-        
+        let vc = viewControllerFactory.makeCreatePlayerViewController(with: clubModel)
+        navigationController.pushViewController(vc, animated: true)
     }
 }
