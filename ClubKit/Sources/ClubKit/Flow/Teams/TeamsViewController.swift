@@ -11,7 +11,7 @@ class TeamsViewController: UIViewController {
     
 //    var clubModel: RemoteClubModel
 //    var teamLoader: TeamLoader
-    var coordinator: ClubHomeFlow?
+    var coordinator: TeamFlow?
     
     var viewModel: TeamsViewModel
     var display: TeamsView!
@@ -54,13 +54,13 @@ class TeamsViewController: UIViewController {
     
     // MARK: - Actions
     @objc func addNewTeam(_ sender: UIBarButtonItem) {
-        
+        coordinator?.addNewTeam()
     }
     
     // MARK: - View Model
     func initViewModel() {
-        viewModel.selectedTeam = { [weak self] selected in
-            self?.coordinator?.goToTeam(selected)
-        }
+//        viewModel.selectedTeam = { [weak self] selected in
+//            self?.coordinator?.goToTeam(selected)
+//        }
     }
 }

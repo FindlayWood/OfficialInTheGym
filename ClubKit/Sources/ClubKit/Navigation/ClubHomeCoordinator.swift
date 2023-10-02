@@ -34,8 +34,8 @@ class ClubHomeCoordinator: ClubHomeFlow {
     }
     
     func goToTeam(_ model: RemoteTeamModel) {
-        let child = coordinatorFactory.makeTeamCoordinator(for: model)
-        child.start()
+//        let child = coordinatorFactory.makeTeamCoordinator(for: model)
+//        child.start()
     }
     
     func goToPlayers() {

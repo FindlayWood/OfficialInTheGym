@@ -9,15 +9,24 @@ import Foundation
 
 protocol TeamViewControllerFactory {
     func makeTeamsViewController(for club: RemoteClubModel) -> TeamsViewController
+    func makeCreateTeamViewController(for club: RemoteClubModel) -> CreateTeamViewController
 }
 
 struct BasicTeamViewControllerFactory: TeamViewControllerFactory {
     
     var teamLoader: TeamLoader
+    var playerLoader: PlayerLoader
+    var teamCreationService: TeamCreationService
     
     func makeTeamsViewController(for club: RemoteClubModel) -> TeamsViewController {
         let viewModel = TeamsViewModel(clubModel: club, teamLoader: teamLoader)
         let vc = TeamsViewController(viewModel: viewModel)
+        return vc
+    }
+    
+    func makeCreateTeamViewController(for club: RemoteClubModel) -> CreateTeamViewController {
+        let viewModel = CreateTeamViewModel(playerLoader: playerLoader, teamCreationService: teamCreationService, clubModel: club)
+        let vc = CreateTeamViewController(viewModel: viewModel)
         return vc
     }
 }

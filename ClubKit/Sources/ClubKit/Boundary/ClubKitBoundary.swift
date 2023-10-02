@@ -46,7 +46,11 @@ public class ClubKitBoundary {
                                                                              teamLoader: teamLoader,
                                                                              creationService: playerCreationService)
         
-        let teamViewControllerFactory = BasicTeamViewControllerFactory(teamLoader: teamLoader)
+        let teamCreationService = RemoteTeamCreationService(client: client)
+        
+        let teamViewControllerFactory = BasicTeamViewControllerFactory(teamLoader: teamLoader,
+                                                                       playerLoader: playerLoader,
+                                                                       teamCreationService: teamCreationService)
         
         let clubHomeCoordinatorFactory = BasicClubHomeCoordinatorFactory(navigationController: navigationController,
                                                                          playersViewControllerFactory: playersViewControllerFactory,
