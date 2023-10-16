@@ -13,6 +13,16 @@ class TeamsViewModel: ObservableObject {
     @Published var teams: [RemoteTeamModel] = []
     @Published var isLoading: Bool = false
     
+    @Published var searchText: String = ""
+    
+    var searchedTeams: [RemoteTeamModel] {
+        if searchText.isEmpty {
+            return teams
+        } else {
+            return teams.filter { $0.teamName.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+    
     var selectedTeam: ((RemoteTeamModel) -> ())?
     
     var clubModel: RemoteClubModel

@@ -33,7 +33,7 @@ class ClubCreationViewController: UIViewController {
     }
     func addDisplay() {
         display = .init(viewModel: viewModel)
-        addSwiftUIView(display)
+        addSwiftUIViewWithNavBar(display)
     }
 }
 
@@ -74,6 +74,8 @@ struct NewClubData {
     let tagline: String
     let sport: Sport
     let isPrivate: Bool
+    let currentUserRole: ClubRole
+    let positions: [Positions]
 }
 
 struct RemoteCreationService: ClubCreationService {
@@ -90,7 +92,9 @@ struct RemoteCreationService: ClubCreationService {
             "clubName": data.displayName,
             "sport": data.sport.rawValue,
             "tagline": data.tagline,
-            "isPrivate": data.isPrivate
+            "isPrivate": data.isPrivate,
+            "currentUserRole": data.currentUserRole.rawValue,
+            "positions": data.positions.map { $0.rawValue }
         ]
         do {
             try await client.callFunction(named: "createClub", with: functionData)

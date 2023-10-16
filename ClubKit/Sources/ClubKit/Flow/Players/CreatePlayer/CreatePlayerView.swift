@@ -59,7 +59,7 @@ struct CreatePlayerView: View {
                     }
                     Menu {
                         ForEach(viewModel.selectedSport.positions, id: \.self) { position in
-                            Button(position.rawValue) { viewModel.playerPositions.append(position)}
+                            Button(position.title) { viewModel.playerPositions.append(position)}
                         }
                     } label: {
                         Image(systemName: "plus.circle.fill")

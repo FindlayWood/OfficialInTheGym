@@ -25,16 +25,22 @@ struct PlayerRow: View {
                 Text(model.displayName)
                     .font(.headline)
                     .foregroundColor(.primary)
-                HStack {
-                    ForEach(model.positions, id: \.self) { position in
-                        Text(position.title)
-                            .font(.footnote.bold())
-                            .foregroundColor(.secondary)
-                    }
-                }
+                Text(positionString)
+                    .font(.footnote.bold())
+                    .foregroundColor(.secondary)
             }
             Spacer()
         }
+    }
+    
+    var positionString: String {
+        var string = ""
+        for position in model.positions {
+            string.append(position.title)
+            string.append(", ")
+        }
+        string.removeLast(2)
+        return string
     }
 }
 

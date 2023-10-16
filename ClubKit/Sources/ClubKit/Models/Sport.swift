@@ -11,6 +11,14 @@ enum Sport: String, Codable, CaseIterable {
     case rugby
     case basketball
     
+    var title: String {
+        switch self {
+        case .rugby:
+            return "Rugby"
+        case .basketball:
+            return "Basketball"
+        }
+    }
     var positions: [Positions] {
         switch self {
         case .rugby:
@@ -56,20 +64,23 @@ enum Positions: String, Codable, CaseIterable {
     
     case pointGuard
     case shootingGuard
+    case smallForward
+    case powerForward
+    case center
     
     var sport: Sport {
         switch self {
         case .looseheadProp, .hooker, .tightheadProp, .secondRow, .blindsideFlanker, .opensideFlanker, .numberEight,
                 .scrumHalf, .flyHalf, .winger, .insideCentre, .outsideCentre, .fullback:
             return .rugby
-        case .pointGuard, .shootingGuard:
+        case .pointGuard, .shootingGuard, .smallForward, .powerForward, .center:
             return .basketball
         }
     }
     
     var title: String {
         switch self {
-        case .hooker, .winger, .fullback , .scrumHalf, .flyHalf:
+        case .hooker, .winger, .fullback , .scrumHalf, .flyHalf, .center:
             return self.rawValue.capitalized
         case .secondRow:
             return "Second Row"
@@ -91,6 +102,10 @@ enum Positions: String, Codable, CaseIterable {
             return "Inside Centre"
         case .outsideCentre:
             return "Outside Centre"
+        case .smallForward:
+            return "Small Forward"
+        case .powerForward:
+            return "Power Forward"
         }
     }
 }

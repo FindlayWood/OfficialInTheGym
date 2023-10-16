@@ -30,13 +30,14 @@ class TeamsViewController: UIViewController {
         super.viewDidLoad()
         addDisplay()
         initNavBar()
+        view.backgroundColor = .systemBackground
         initViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
-        navigationItem.title = viewModel.clubModel.clubName
+        navigationItem.title = "\(viewModel.clubModel.clubName)'s teams"
         editNavBarColour(to: .darkColour)
     }
     
