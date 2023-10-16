@@ -28,6 +28,7 @@ struct PlayerRow: View {
                 Text(positionString)
                     .font(.footnote.bold())
                     .foregroundColor(.secondary)
+                    .lineLimit(1)
             }
             Spacer()
         }

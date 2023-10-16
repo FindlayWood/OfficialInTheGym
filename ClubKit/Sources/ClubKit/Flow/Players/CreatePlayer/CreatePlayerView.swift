@@ -30,6 +30,8 @@ struct CreatePlayerView: View {
                     VStack(alignment: .leading) {
                         Text("Display Name")
                         TextField("enter display name...", text: $viewModel.displayName)
+                            .tint(Color(.darkColour))
+                            .autocorrectionDisabled()
                     }
                 } header: {
                     Text("Name")
