@@ -81,6 +81,6 @@ struct TeamHomeView: View {
 
 struct TeamHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        TeamHomeView(viewModel: TeamHomeViewModel())
+        TeamHomeView(viewModel: TeamHomeViewModel(team: .example))
     }
 }

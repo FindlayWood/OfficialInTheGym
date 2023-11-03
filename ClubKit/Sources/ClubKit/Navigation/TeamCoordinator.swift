@@ -28,6 +28,7 @@ import UIKit
 
 protocol TeamFlow: Coordinator {
     func addNewTeam()
+    func goToTeam(_ model: RemoteTeamModel)
 }
 
 class BasicTeamFlow: TeamFlow {
@@ -50,6 +51,11 @@ class BasicTeamFlow: TeamFlow {
     
     func addNewTeam() {
         let vc = viewControllerFactory.makeCreateTeamViewController(for: clubModel)
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToTeam(_ model: RemoteTeamModel) {
+        let vc = viewControllerFactory.makeTeamHomeViewController(for: model)
         navigationController.pushViewController(vc, animated: true)
     }
 }

@@ -9,8 +9,6 @@ import UIKit
 
 class TeamsViewController: UIViewController {
     
-//    var clubModel: RemoteClubModel
-//    var teamLoader: TeamLoader
     var coordinator: TeamFlow?
     
     var viewModel: TeamsViewModel
@@ -60,8 +58,8 @@ class TeamsViewController: UIViewController {
     
     // MARK: - View Model
     func initViewModel() {
-//        viewModel.selectedTeam = { [weak self] selected in
-//            self?.coordinator?.goToTeam(selected)
-//        }
+        viewModel.selectedTeam = { [weak self] selected in
+            self?.coordinator?.goToTeam(selected)
+        }
     }
 }

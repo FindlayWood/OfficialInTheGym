@@ -9,4 +9,9 @@ import Foundation
 
 class TeamHomeViewModel: ObservableObject {
     
+    var team: RemoteTeamModel
+    
+    init(team: RemoteTeamModel) {
+        self.team = team
+    }
 }

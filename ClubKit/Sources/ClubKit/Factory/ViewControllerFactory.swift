@@ -8,13 +8,8 @@
 import Foundation
 
 protocol ViewControllerFactory {
-//    func makeClubsViewController(flow: ClubsFlow) -> ClubsViewController
-//    func makeClubCreationViewController() -> ClubCreationViewController
     func makeClubHomeViewController(_ model: RemoteClubModel) -> ClubHomeViewController
-//    func makeTeamsViewController(_ model: RemoteClubModel, flow: ClubHomeFlow) -> TeamsViewController
-    func makeTeamHomeViewController(_ model: RemoteTeamModel) -> TeamHomeViewController
     func makePlayersViewController(_ model: RemoteClubModel) -> PlayersViewController
-//    func makeCreatePlayerViewController(_ model: RemoteClubModel) -> CreatePlayerViewController
 }
 
 class BaseViewControllerFactory {
@@ -42,39 +37,12 @@ class RegularViewControllerFactory: ViewControllerFactory {
         self.teamLoader = teamLoader
         self.playerLoader = playerLoader
     }
-    
-//    func makeClubsViewController(flow: ClubsFlow) -> ClubsViewController {
-//        let vc = ClubsViewController(clubManager: clubManager, coordinator: flow)
-//        return vc
-//    }
-    
-//    func makeClubCreationViewController() -> ClubCreationViewController {
-//        let vc = ClubCreationViewController(viewModel: <#ClubCreationViewModel#>)
-//        return vc
-//    }
-    
     func makeClubHomeViewController(_ model: RemoteClubModel) -> ClubHomeViewController {
         let vc = ClubHomeViewController(clubModel: model)
         return vc
     }
-    
-//    func makeTeamsViewController(_ model: RemoteClubModel, flow: ClubHomeFlow) -> TeamsViewController {
-//        let vc = TeamsViewController(clubModel: model, teamLoader: teamLoader, coordinator: flow)
-//        return vc
-//    }
-    
-    func makeTeamHomeViewController(_ model: RemoteTeamModel) -> TeamHomeViewController {
-        let vc = TeamHomeViewController()
-        return vc
-    }
-    
     func makePlayersViewController(_ model: RemoteClubModel) -> PlayersViewController {
         let vc = PlayersViewController(clubModel: model, playerLoader: playerLoader)
         return vc
     }
-    
-//    func makeCreatePlayerViewController(_ model: RemoteClubModel) -> CreatePlayerViewController {
-//        let vc = CreatePlayerViewController(clubModel: model, loader: playerLoader, teamLoader: teamLoader)
-//        return vc
-//    }
 }
