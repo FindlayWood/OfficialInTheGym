@@ -7,28 +7,10 @@
 
 import UIKit
 
-//class TeamCoordinator: TeamFlow {
-//     
-//    var navigationController: UINavigationController
-//    var viewControllerFactory: ViewControllerFactory
-//    var teamModel: RemoteTeamModel
-//    
-//    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactory, teamModel: RemoteTeamModel) {
-//        self.navigationController = navigationController
-//        self.viewControllerFactory = viewControllerFactory
-//        self.teamModel = teamModel
-//    }
-//    
-//    func start() {
-//        let vc = viewControllerFactory.makeTeamHomeViewController(teamModel)
-//        navigationController.pushViewController(vc, animated: true)
-//    }
-//    
-//}
-
 protocol TeamFlow: Coordinator {
     func addNewTeam()
     func goToTeam(_ model: RemoteTeamModel)
+    func goToDefaultLineup(_ model: RemoteTeamModel)
 }
 
 class BasicTeamFlow: TeamFlow {
@@ -56,6 +38,12 @@ class BasicTeamFlow: TeamFlow {
     
     func goToTeam(_ model: RemoteTeamModel) {
         let vc = viewControllerFactory.makeTeamHomeViewController(for: model)
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToDefaultLineup(_ model: RemoteTeamModel) {
+        let vc = viewControllerFactory.makeTeamDefaultLineupViewController(for: model)
         navigationController.pushViewController(vc, animated: true)
     }
 }

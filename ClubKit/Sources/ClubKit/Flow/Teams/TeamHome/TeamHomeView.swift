@@ -29,7 +29,7 @@ struct TeamHomeView: View {
             }
             Section {
                 Button {
-                    
+                    viewModel.selectedAction?(.defaultLineup)
                 } label: {
                     HStack {
                         Image(systemName: "text.badge.star")

@@ -14,6 +14,7 @@ struct RemoteTeamModel: Codable, Identifiable {
     var createdDate: Date
     var sport: Sport
     var athleteCount: Int
+    var defaultLineup: String?
 }
 
 extension RemoteTeamModel {

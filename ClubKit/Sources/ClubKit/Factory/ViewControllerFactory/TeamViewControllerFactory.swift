@@ -11,6 +11,7 @@ protocol TeamViewControllerFactory {
     func makeTeamsViewController(for club: RemoteClubModel) -> TeamsViewController
     func makeCreateTeamViewController(for club: RemoteClubModel) -> CreateTeamViewController
     func makeTeamHomeViewController(for team: RemoteTeamModel) -> TeamHomeViewController
+    func makeTeamDefaultLineupViewController(for team: RemoteTeamModel) -> TeamDefaultLineupViewController
 }
 
 struct BasicTeamViewControllerFactory: TeamViewControllerFactory {
@@ -34,6 +35,12 @@ struct BasicTeamViewControllerFactory: TeamViewControllerFactory {
     func makeTeamHomeViewController(for team: RemoteTeamModel) -> TeamHomeViewController {
         let viewModel = TeamHomeViewModel(team: team)
         let vc = TeamHomeViewController(viewModel: viewModel)
+        return vc
+    }
+    
+    func makeTeamDefaultLineupViewController(for team: RemoteTeamModel) -> TeamDefaultLineupViewController {
+        let viewModel = TeamDefaultLineupViewModel(team: team)
+        let vc = TeamDefaultLineupViewController(viewModel: viewModel)
         return vc
     }
 }

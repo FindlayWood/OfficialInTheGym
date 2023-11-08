@@ -11,7 +11,13 @@ class TeamHomeViewModel: ObservableObject {
     
     var team: RemoteTeamModel
     
+    var selectedAction: ((Action) -> ())?
+    
     init(team: RemoteTeamModel) {
         self.team = team
+    }
+    
+    enum Action {
+        case defaultLineup
     }
 }

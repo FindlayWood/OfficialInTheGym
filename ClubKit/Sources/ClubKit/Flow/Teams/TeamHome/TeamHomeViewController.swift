@@ -9,6 +9,8 @@ import UIKit
 
 class TeamHomeViewController: UIViewController {
 
+    var coordinator: TeamFlow?
+    
     var viewModel: TeamHomeViewModel
     var display: TeamHomeView!
     
@@ -25,18 +27,30 @@ class TeamHomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addDisplay()
+        initViewModel()
         view.backgroundColor = .systemBackground
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
-        navigationItem.title = "Team Home"
+        navigationItem.title = viewModel.team.teamName
         editNavBarColour(to: .darkColour)
     }
     
     func addDisplay() {
         display = .init(viewModel: viewModel)
         addSwiftUIView(display)
+    }
+    
+    // MARK: - View Model
+    func initViewModel() {
+        viewModel.selectedAction = { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .defaultLineup:
+                self.coordinator?.goToDefaultLineup(self.viewModel.team)
+            }
+        }
     }
 }

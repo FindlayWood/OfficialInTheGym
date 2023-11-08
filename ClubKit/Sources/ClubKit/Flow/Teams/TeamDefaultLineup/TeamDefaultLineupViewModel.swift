@@ -9,4 +9,11 @@ import Foundation
 
 class TeamDefaultLineupViewModel: ObservableObject {
     
+    @Published var isEditing: Bool = false
+    
+    var team: RemoteTeamModel
+    
+    init(team: RemoteTeamModel) {
+        self.team = team
+    }
 }
