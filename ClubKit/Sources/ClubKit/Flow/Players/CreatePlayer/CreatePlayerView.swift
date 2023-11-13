@@ -144,6 +144,8 @@ struct CreatePlayerView: View {
 
 struct CreatePlayerView_Previews: PreviewProvider {
     private class PreviewPlayerLoader: PlayerLoader {
+        func loadAllPlayers(for teamID: String, in clubID: String) async throws -> [RemotePlayerModel] { return [] }
+        func loadPlayer(with uid: String, from clubID: String) async throws -> RemotePlayerModel { return .example }
         func loadAllPlayers(for clubID: String) async throws -> [RemotePlayerModel] { return [] }
         func uploadNewPlayer(_ model: RemotePlayerModel, to teams: [String]) async throws {}
     }

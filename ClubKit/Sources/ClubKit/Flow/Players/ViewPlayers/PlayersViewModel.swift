@@ -28,21 +28,38 @@ class PlayersViewModel: ObservableObject {
     var clubModel: RemoteClubModel
     var playerLoader: PlayerLoader
     
+    var selectedPlayer: ((RemotePlayerModel) -> ())?
+    
     init(clubModel: RemoteClubModel, playerLoader: PlayerLoader) {
         self.clubModel = clubModel
         self.playerLoader = playerLoader
     }
     
-    @MainActor
-    func load() async {
-        isLoading = true
-        do {
-            players = try await playerLoader.loadAllPlayers(for: clubModel.id)
-            isLoading = false
-        } catch {
-            errorLoading = error
-            print(String(describing: error))
-            isLoading = false
+    func loadFromClub() {
+        Task { @MainActor in
+            isLoading = true
+            do {
+                players = try await playerLoader.loadAllPlayers(for: clubModel.id)
+                isLoading = false
+            } catch {
+                errorLoading = error
+                print(String(describing: error))
+                isLoading = false
+            }
+        }
+    }
+    
+    func loadFromTeam(with teamID: String) {
+        Task { @MainActor in
+            isLoading = true
+            do {
+                players = try await playerLoader.loadAllPlayers(for: teamID, in: clubModel.id)
+                isLoading = false
+            } catch {
+                errorLoading = error
+                print(String(describing: error))
+                isLoading = false
+            }
         }
     }
 }

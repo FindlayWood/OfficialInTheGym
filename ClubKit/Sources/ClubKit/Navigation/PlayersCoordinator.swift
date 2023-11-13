@@ -27,6 +27,7 @@ class BasicPlayersFlow: PlayersFlow {
     func start() {
         let vc = viewControllerFactory.makePlayersViewController(with: clubModel)
         vc.coordinator = self
+        vc.viewModel.loadFromClub()
         navigationController.pushViewController(vc, animated: true)
     }
     

@@ -9,6 +9,8 @@ import Foundation
 
 protocol PlayerLoader {
     func loadAllPlayers(for clubID: String) async throws -> [RemotePlayerModel]
+    func loadPlayer(with uid: String, from clubID: String) async throws -> RemotePlayerModel
+    func loadAllPlayers(for teamID: String, in clubID: String) async throws -> [RemotePlayerModel]
     func uploadNewPlayer(_ model: RemotePlayerModel, to teams: [String]) async throws
 }
 
@@ -28,6 +30,16 @@ class RemotePlayerLoader: PlayerLoader {
         return try await networkService.readAll(at: Constants.playersPath(for: clubID))
     }
     
+    func loadAllPlayers(for teamID: String, in clubID: String) async throws -> [RemotePlayerModel] {
+        let playerID: [TeamPlayerModel] = try await networkService.readAll(at: Constants.teamPlayersPath(for: teamID, in: clubID))
+        var playerModels: [RemotePlayerModel] = []
+        for model in playerID {
+            let player: RemotePlayerModel = try await loadPlayer(with: model.playerUID, from: clubID)
+            playerModels.append(player)
+        }
+        return playerModels
+    }
+    
     func uploadNewPlayer(_ model: RemotePlayerModel, to teams: [String]) async throws {
         var data: [String: Codable] = [:]
         for team in teams {
@@ -43,4 +55,8 @@ class RemotePlayerLoader: PlayerLoader {
 struct PlayerIDUpload: Codable {
     var playerUID: String
     var clubID: String
+}
+
+struct TeamPlayerModel: Codable {
+    let playerUID: String
 }

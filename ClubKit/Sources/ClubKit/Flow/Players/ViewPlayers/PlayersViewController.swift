@@ -9,16 +9,15 @@ import UIKit
 
 class PlayersViewController: UIViewController {
     
-    var clubModel: RemoteClubModel
+//    var clubModel: RemoteClubModel
     var coordinator: PlayersFlow?
-    var playerLoader: PlayerLoader
+//    var playerLoader: PlayerLoader
     
-    private lazy var viewModel = PlayersViewModel(clubModel: clubModel, playerLoader: playerLoader)
+    var viewModel: PlayersViewModel
     private lazy var display = PlayersView(viewModel: viewModel)
     
-    init(clubModel: RemoteClubModel, playerLoader: PlayerLoader) {
-        self.clubModel = clubModel
-        self.playerLoader = playerLoader
+    init(viewModel: PlayersViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -26,7 +25,7 @@ class PlayersViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initNavBar()
@@ -36,7 +35,7 @@ class PlayersViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
-        navigationItem.title = clubModel.clubName + "'s Players"
+        navigationItem.title = viewModel.clubModel.clubName + "'s Players"
         editNavBarColour(to: .darkColour)
     }
     

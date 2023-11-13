@@ -22,13 +22,26 @@ struct TeamDefaultLineupView: View {
                 ForEach(0..<viewModel.team.sport.starters, id: \.self) { number in
                     HStack {
                         Text("\(number + 1).")
-                        Spacer()
-                        if viewModel.isEditing {
-                            Button {
-                                
-                            } label: {
-                                Image(systemName: "plus.circle")
-                                    .foregroundColor(Color(.darkColour))
+                        if let model = viewModel.checkNumber(number + 1) {
+                            Text(model.playerModel.displayName)
+                            Spacer()
+                            if viewModel.isEditing {
+                                Button {
+                                    viewModel.removePlayer(number + 1)
+                                } label: {
+                                    Image(systemName: "minus.circle")
+                                        .foregroundColor(.red)
+                                }
+                            }
+                        } else {
+                            Spacer()
+                            if viewModel.isEditing {
+                                Button {
+                                    viewModel.addNewPlayer?(number + 1)
+                                } label: {
+                                    Image(systemName: "plus.circle")
+                                        .foregroundColor(Color(.darkColour))
+                                }
                             }
                         }
                     }
@@ -41,13 +54,26 @@ struct TeamDefaultLineupView: View {
                 ForEach(0..<viewModel.team.sport.subs, id: \.self) { number in
                     HStack {
                         Text("\(number + viewModel.team.sport.starters + 1).")
-                        Spacer()
-                        if viewModel.isEditing {
-                            Button {
-                                
-                            } label: {
-                                Image(systemName: "plus.circle")
-                                    .foregroundColor(Color(.darkColour))
+                        if let model = viewModel.checkNumber(viewModel.team.sport.starters + number + 1) {
+                            Text(model.playerModel.displayName)
+                            Spacer()
+                            if viewModel.isEditing {
+                                Button {
+                                    viewModel.removePlayer(viewModel.team.sport.starters + number + 1)
+                                } label: {
+                                    Image(systemName: "minus.circle")
+                                        .foregroundColor(.red)
+                                }
+                            }
+                        } else {
+                            Spacer()
+                            if viewModel.isEditing {
+                                Button {
+                                    viewModel.addNewPlayer?(viewModel.team.sport.starters + number + 1)
+                                } label: {
+                                    Image(systemName: "plus.circle")
+                                        .foregroundColor(Color(.darkColour))
+                                }
                             }
                         }
                     }
@@ -59,6 +85,9 @@ struct TeamDefaultLineupView: View {
             if viewModel.isEditing {
                 Section {
                     Button {
+                        Task {
+                            await viewModel.uploadAction()
+                        }
                         viewModel.isEditing = false
                     } label: {
                         Text("Submit Lineup")
@@ -79,7 +108,20 @@ struct TeamDefaultLineupView: View {
 }
 
 struct TeamDefaultLineupView_Previews: PreviewProvider {
+    class PreviewLineupLoader: LineupLoader {
+        func loadAllLineups(for teamID: String, in clubID: String) async throws -> [RemoteLineupModel] { return [] }
+        func loadAllLineupPlayerModels(with lineupID: String, for teamID: String, in clubID: String) async throws -> [RemoteLineupPlayerModel] { return [] }
+    }
+    class PreviewPlayerLoader: PlayerLoader {
+        func loadAllPlayers(for teamID: String, in clubID: String) async throws -> [RemotePlayerModel] { return [] }
+        func loadPlayer(with uid: String, from clubID: String) async throws -> RemotePlayerModel { return .example }
+        func uploadNewPlayer(_ model: RemotePlayerModel, to teams: [String]) async throws {}
+        func loadAllPlayers(for clubID: String) async throws -> [RemotePlayerModel] { return [] }
+    }
+    class PreviewUploadService: UploadLineupService {
+        func uploadLineup(with data: UploadLineupModel) async -> Result<UploadLineupModel, RemoteUploadLineupService.Error> { return .failure(.failed) }
+    }
     static var previews: some View {
-        TeamDefaultLineupView(viewModel: TeamDefaultLineupViewModel(team: .example))
+        TeamDefaultLineupView(viewModel: TeamDefaultLineupViewModel(team: .example, lineupLoader: PreviewLineupLoader(), playerLoader: PreviewPlayerLoader(), lineupUploadService: PreviewUploadService()))
     }
 }

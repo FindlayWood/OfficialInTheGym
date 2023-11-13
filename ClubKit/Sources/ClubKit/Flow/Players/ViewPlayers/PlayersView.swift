@@ -78,6 +78,9 @@ struct PlayersView: View {
                         Section {
                             ForEach(viewModel.searchedPlayers) { model in
                                 PlayerRow(model: model)
+                                    .onTapGesture {
+                                        viewModel.selectedPlayer?(model)
+                                    }
                             }
                         } header: {
                             Text("Players")
@@ -87,14 +90,13 @@ struct PlayersView: View {
             }
         }
         .background(Color(.systemBackground))
-        .task {
-            await viewModel.load()
-        }
     }
 }
 
 struct PlayersView_Previews: PreviewProvider {
     class PreviewPlayerLoader: PlayerLoader {
+        func loadAllPlayers(for teamID: String, in clubID: String) async throws -> [RemotePlayerModel] { return [] }
+        func loadPlayer(with uid: String, from clubID: String) async throws -> RemotePlayerModel { return .example }
         func uploadNewPlayer(_ model: RemotePlayerModel, to teams: [String]) async throws {}
         func loadAllPlayers(for clubID: String) async throws -> [RemotePlayerModel] { return [] }
     }

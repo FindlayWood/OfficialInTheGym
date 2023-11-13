@@ -9,6 +9,8 @@ import UIKit
 
 class TeamDefaultLineupViewController: UIViewController {
 
+    var coordinator: TeamFlow?
+    
     var viewModel: TeamDefaultLineupViewModel
     var display: TeamDefaultLineupView!
     
@@ -27,6 +29,7 @@ class TeamDefaultLineupViewController: UIViewController {
         addDisplay()
         initNavBar()
         view.backgroundColor = .systemBackground
+        initViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,5 +53,56 @@ class TeamDefaultLineupViewController: UIViewController {
     func addDisplay() {
         display = .init(viewModel: viewModel)
         addSwiftUIView(display)
+    }
+    
+    // MARK: - View Model
+    func initViewModel() {
+        viewModel.loadDefaultLineup()
+        
+        viewModel.addNewPlayer = { [weak self] index in
+            guard let self else { return }
+            self.addPlayer(at: index)
+//            self.navigationController?.dismiss(animated: true)
+        }
+    }
+    
+    func addPlayer(at index: Int) {
+        coordinator?.showPlayersList(for: viewModel.team, selectedAction: { [weak self] selectedPlayer in
+            guard let self else { return }
+            self.viewModel.addPlayerToLineup(selectedPlayer, at: index)
+            self.navigationController?.dismiss(animated: true)
+        })
+    }
+}
+
+protocol UploadLineupService {
+    func uploadLineup(with data: UploadLineupModel) async -> Result<UploadLineupModel,RemoteUploadLineupService.Error>
+}
+
+struct RemoteUploadLineupService: UploadLineupService {
+    
+    var client: Client
+    
+    public enum Error: Swift.Error {
+        case failed
+    }
+    
+    func uploadLineup(with data: UploadLineupModel) async -> Result<UploadLineupModel,Error> {
+        
+        do {
+            let jsonData = try JSONEncoder().encode(data.selectedPlayers)
+            guard let json = String(data: jsonData, encoding: .utf8) else { return .failure(.failed) }
+            let functionData: [String: Any] = [
+                "clubID": data.clubID,
+                "teamID": data.teamID,
+                "name": data.name,
+                "selectedPlayers": json,
+                "lineupID": data.lineupID
+            ]
+            try await client.callFunction(named: "uploadDefaultLineup", with: functionData)
+            return .success(data)
+        } catch {
+            return .failure(.failed)
+        }
     }
 }

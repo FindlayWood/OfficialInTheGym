@@ -9,7 +9,6 @@ import Foundation
 
 protocol ViewControllerFactory {
     func makeClubHomeViewController(_ model: RemoteClubModel) -> ClubHomeViewController
-    func makePlayersViewController(_ model: RemoteClubModel) -> PlayersViewController
 }
 
 class BaseViewControllerFactory {
@@ -39,10 +38,6 @@ class RegularViewControllerFactory: ViewControllerFactory {
     }
     func makeClubHomeViewController(_ model: RemoteClubModel) -> ClubHomeViewController {
         let vc = ClubHomeViewController(clubModel: model)
-        return vc
-    }
-    func makePlayersViewController(_ model: RemoteClubModel) -> PlayersViewController {
-        let vc = PlayersViewController(clubModel: model, playerLoader: playerLoader)
         return vc
     }
 }

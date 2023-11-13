@@ -9,6 +9,7 @@ import Foundation
 
 struct RemoteTeamModel: Codable, Identifiable {
     var id: String
+    let clubID: String
     var teamName: String
     var createdBy: String
     var createdDate: Date
@@ -18,5 +19,5 @@ struct RemoteTeamModel: Codable, Identifiable {
 }
 
 extension RemoteTeamModel {
-    static let example = RemoteTeamModel(id: UUID().uuidString, teamName: "Bears", createdBy: "", createdDate: .now, sport: .rugby, athleteCount: 23)
+    static let example = RemoteTeamModel(id: UUID().uuidString, clubID: "BRFC", teamName: "Bears", createdBy: "", createdDate: .now, sport: .rugby, athleteCount: 23)
 }

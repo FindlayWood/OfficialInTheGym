@@ -11,6 +11,7 @@ protocol TeamFlow: Coordinator {
     func addNewTeam()
     func goToTeam(_ model: RemoteTeamModel)
     func goToDefaultLineup(_ model: RemoteTeamModel)
+    func showPlayersList(for team: RemoteTeamModel, selectedAction: @escaping (RemotePlayerModel) -> ())
 }
 
 class BasicTeamFlow: TeamFlow {
@@ -44,6 +45,14 @@ class BasicTeamFlow: TeamFlow {
     
     func goToDefaultLineup(_ model: RemoteTeamModel) {
         let vc = viewControllerFactory.makeTeamDefaultLineupViewController(for: model)
+        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showPlayersList(for team: RemoteTeamModel, selectedAction: @escaping (RemotePlayerModel) -> ()) {
+        let vc = viewControllerFactory.makePlayersViewController(for: clubModel)
+        vc.viewModel.loadFromTeam(with: team.id)
+        vc.viewModel.selectedPlayer = selectedAction
+        navigationController.present(vc, animated: true)
     }
 }

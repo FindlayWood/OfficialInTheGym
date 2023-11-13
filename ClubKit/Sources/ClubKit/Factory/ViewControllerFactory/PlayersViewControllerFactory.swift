@@ -19,7 +19,8 @@ struct BasicPlayersViewControllerFactory: PlayersViewControllerFactory {
     var creationService: PlayerCreationService
     
     func makePlayersViewController(with model: RemoteClubModel) -> PlayersViewController {
-        let vc = PlayersViewController(clubModel: model, playerLoader: playerLoader)
+        let viewModel = PlayersViewModel(clubModel: model, playerLoader: playerLoader)
+        let vc = PlayersViewController(viewModel: viewModel)
         return vc
     }
     
