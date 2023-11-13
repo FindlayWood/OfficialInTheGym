@@ -62,12 +62,12 @@ class TeamDefaultLineupViewController: UIViewController {
         viewModel.addNewPlayer = { [weak self] index in
             guard let self else { return }
             self.addPlayer(at: index)
-//            self.navigationController?.dismiss(animated: true)
         }
     }
     
     func addPlayer(at index: Int) {
-        coordinator?.showPlayersList(for: viewModel.team, selectedAction: { [weak self] selectedPlayer in
+        let excludedPlayers = viewModel.playerModels.map { $0.playerModel }
+        coordinator?.showPlayersList(for: viewModel.team, excluding: excludedPlayers, selectedAction: { [weak self] selectedPlayer in
             guard let self else { return }
             self.viewModel.addPlayerToLineup(selectedPlayer, at: index)
             self.navigationController?.dismiss(animated: true)

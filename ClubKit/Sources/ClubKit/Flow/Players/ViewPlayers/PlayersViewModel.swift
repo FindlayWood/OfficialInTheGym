@@ -25,6 +25,8 @@ class PlayersViewModel: ObservableObject {
         }
     }
     
+    var excludedPlayers: [RemotePlayerModel] = []
+    
     var clubModel: RemoteClubModel
     var playerLoader: PlayerLoader
     
@@ -39,7 +41,7 @@ class PlayersViewModel: ObservableObject {
         Task { @MainActor in
             isLoading = true
             do {
-                players = try await playerLoader.loadAllPlayers(for: clubModel.id)
+                players = try await playerLoader.loadAllPlayers(for: clubModel.id).filter(checkForExclusion)
                 isLoading = false
             } catch {
                 errorLoading = error
@@ -53,7 +55,7 @@ class PlayersViewModel: ObservableObject {
         Task { @MainActor in
             isLoading = true
             do {
-                players = try await playerLoader.loadAllPlayers(for: teamID, in: clubModel.id)
+                players = try await playerLoader.loadAllPlayers(for: teamID, in: clubModel.id).filter(checkForExclusion)
                 isLoading = false
             } catch {
                 errorLoading = error
@@ -61,5 +63,9 @@ class PlayersViewModel: ObservableObject {
                 isLoading = false
             }
         }
+    }
+    
+    func checkForExclusion(_ model: RemotePlayerModel) -> Bool {
+        !(excludedPlayers.contains(where: { $0.id == model.id }))
     }
 }

@@ -18,6 +18,7 @@ class TeamHomeViewModel: ObservableObject {
     }
     
     enum Action {
+        case players
         case defaultLineup
     }
 }

@@ -48,6 +48,8 @@ class TeamHomeViewController: UIViewController {
         viewModel.selectedAction = { [weak self] action in
             guard let self else { return }
             switch action {
+            case .players:
+                self.coordinator?.goToPlayers(self.viewModel.team)
             case .defaultLineup:
                 self.coordinator?.goToDefaultLineup(self.viewModel.team)
             }

@@ -15,7 +15,7 @@ struct TeamHomeView: View {
         List {
             Section {
                 Button {
-                    
+                    viewModel.selectedAction?(.players)
                 } label: {
                     HStack {
                         Image(systemName: "person")
