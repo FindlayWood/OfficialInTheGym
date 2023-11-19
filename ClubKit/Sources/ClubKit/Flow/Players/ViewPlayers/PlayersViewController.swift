@@ -9,9 +9,7 @@ import UIKit
 
 class PlayersViewController: UIViewController {
     
-//    var clubModel: RemoteClubModel
     var coordinator: PlayersFlow?
-//    var playerLoader: PlayerLoader
     
     var viewModel: PlayersViewModel
     private lazy var display = PlayersView(viewModel: viewModel)
@@ -52,6 +50,6 @@ class PlayersViewController: UIViewController {
     
     // MARK: - Display
     func addDisplay() {
-        addSwiftUIView(display)
+        addSwiftUIViewWithNavBar(display)
     }
 }

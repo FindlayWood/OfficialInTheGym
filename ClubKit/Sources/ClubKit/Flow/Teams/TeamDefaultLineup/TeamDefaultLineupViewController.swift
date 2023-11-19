@@ -41,13 +41,24 @@ class TeamDefaultLineupViewController: UIViewController {
     
     // MARK: - Nav bar
     func initNavBar() {
-        let barButton = UIBarButtonItem(image: UIImage(systemName: "plus.circle.fill"), style: .done, target: self, action: #selector(editLineup))
+        let barButton = UIBarButtonItem(image: UIImage(systemName: "pencil.circle.fill"), style: .done, target: self, action: #selector(editLineup))
+        navigationItem.rightBarButtonItem = barButton
+    }
+    
+    func cancelNavBar() {
+        let barButton = UIBarButtonItem(title: "cancel", style: .done, target: self, action: #selector(cancelEdit))
         navigationItem.rightBarButtonItem = barButton
     }
     
     // MARK: - Actions
     @objc func editLineup(_ sender: UIBarButtonItem) {
         viewModel.isEditing = true
+        cancelNavBar()
+    }
+    
+    @objc func cancelEdit(_ sender: UIBarButtonItem) {
+        viewModel.isEditing = false
+        initNavBar()
     }
     
     func addDisplay() {

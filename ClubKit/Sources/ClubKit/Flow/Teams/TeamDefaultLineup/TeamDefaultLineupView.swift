@@ -12,96 +12,132 @@ struct TeamDefaultLineupView: View {
     @ObservedObject var viewModel: TeamDefaultLineupViewModel
     
     var body: some View {
-        List {
-            if viewModel.team.defaultLineup == nil {
+        if viewModel.isLoading {
+            VStack {
+                Image(systemName: "network")
+                    .font(.largeTitle)
+                    .foregroundColor(Color(.darkColour))
+                Text("Loading Lineup")
+                    .font(.title.bold())
+                    .foregroundColor(Color(.darkColour))
+                Text("Wait 1 second, we are just loading your lineup!")
+                    .font(.footnote.bold())
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                ProgressView()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(.secondarySystemBackground))
+        } else if viewModel.isUploading {
+            VStack {
+                Image(systemName: "network")
+                    .font(.largeTitle)
+                    .foregroundColor(Color(.darkColour))
+                Text("Uploading")
+                    .font(.title.bold())
+                    .foregroundColor(Color(.darkColour))
+                Text("Wait 1 second, we are just uploading your lineup!")
+                    .font(.footnote.bold())
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                ProgressView()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(.secondarySystemBackground))
+        } else {
+            List {
+                if viewModel.team.defaultLineup == nil {
+                    Section {
+                        Text("This team has no Default Lineup. Add it now!")
+                    }
+                }
                 Section {
-                    Text("This team has no Default Lineup. Add it now!")
-                }
-            }
-            Section {
-                ForEach(0..<viewModel.team.sport.starters, id: \.self) { number in
-                    HStack {
-                        Text("\(number + 1).")
-                        if let model = viewModel.checkNumber(number + 1) {
-                            Text(model.playerModel.displayName)
-                            Spacer()
-                            if viewModel.isEditing {
-                                Button {
-                                    viewModel.removePlayer(number + 1)
-                                } label: {
-                                    Image(systemName: "minus.circle")
-                                        .foregroundColor(.red)
+                    ForEach(0..<viewModel.team.sport.starters, id: \.self) { number in
+                        HStack {
+                            Text("\(number + 1).")
+                            if let model = viewModel.checkNumber(number + 1) {
+                                Text(model.playerModel.displayName)
+                                Spacer()
+                                if viewModel.isEditing {
+                                    Button {
+                                        viewModel.removePlayer(number + 1)
+                                    } label: {
+                                        Image(systemName: "minus.circle")
+                                            .foregroundColor(.red)
+                                    }
                                 }
-                            }
-                        } else {
-                            Spacer()
-                            if viewModel.isEditing {
-                                Button {
-                                    viewModel.addNewPlayer?(number + 1)
-                                } label: {
-                                    Image(systemName: "plus.circle")
-                                        .foregroundColor(Color(.darkColour))
+                            } else {
+                                Spacer()
+                                if viewModel.isEditing {
+                                    Button {
+                                        viewModel.addNewPlayer?(number + 1)
+                                    } label: {
+                                        Image(systemName: "plus.circle")
+                                            .foregroundColor(Color(.darkColour))
+                                    }
                                 }
                             }
                         }
                     }
+                } header: {
+                    Text("Starters")
                 }
-            } header: {
-                Text("Starters")
-            }
-            
-            Section {
-                ForEach(0..<viewModel.team.sport.subs, id: \.self) { number in
-                    HStack {
-                        Text("\(number + viewModel.team.sport.starters + 1).")
-                        if let model = viewModel.checkNumber(viewModel.team.sport.starters + number + 1) {
-                            Text(model.playerModel.displayName)
-                            Spacer()
-                            if viewModel.isEditing {
-                                Button {
-                                    viewModel.removePlayer(viewModel.team.sport.starters + number + 1)
-                                } label: {
-                                    Image(systemName: "minus.circle")
-                                        .foregroundColor(.red)
-                                }
-                            }
-                        } else {
-                            Spacer()
-                            if viewModel.isEditing {
-                                Button {
-                                    viewModel.addNewPlayer?(viewModel.team.sport.starters + number + 1)
-                                } label: {
-                                    Image(systemName: "plus.circle")
-                                        .foregroundColor(Color(.darkColour))
-                                }
-                            }
-                        }
-                    }
-                }
-            } header: {
-                Text("Subs")
-            }
-            
-            if viewModel.isEditing {
+                
                 Section {
-                    Button {
-                        Task {
-                            await viewModel.uploadAction()
+                    ForEach(0..<viewModel.team.sport.subs, id: \.self) { number in
+                        HStack {
+                            Text("\(number + viewModel.team.sport.starters + 1).")
+                            if let model = viewModel.checkNumber(viewModel.team.sport.starters + number + 1) {
+                                Text(model.playerModel.displayName)
+                                Spacer()
+                                if viewModel.isEditing {
+                                    Button {
+                                        viewModel.removePlayer(viewModel.team.sport.starters + number + 1)
+                                    } label: {
+                                        Image(systemName: "minus.circle")
+                                            .foregroundColor(.red)
+                                    }
+                                }
+                            } else {
+                                Spacer()
+                                if viewModel.isEditing {
+                                    Button {
+                                        viewModel.addNewPlayer?(viewModel.team.sport.starters + number + 1)
+                                    } label: {
+                                        Image(systemName: "plus.circle")
+                                            .foregroundColor(Color(.darkColour))
+                                    }
+                                }
+                            }
                         }
-                        viewModel.isEditing = false
-                    } label: {
-                        Text("Submit Lineup")
-                            .padding()
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .background(Color(.darkColour))
-                            .clipShape(Capsule())
-                            .shadow(radius: 2, y: 2)
                     }
+                } header: {
+                    Text("Subs")
                 }
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
+                
+                if viewModel.isEditing {
+                    Section {
+                        Button {
+                            Task {
+                                await viewModel.uploadAction()
+                            }
+                            viewModel.isEditing = false
+                        } label: {
+                            Text("Submit Lineup")
+                                .padding()
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .background(Color(.darkColour))
+                                .clipShape(Capsule())
+                                .shadow(radius: 2, y: 2)
+                        }
+                    }
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                }
             }
         }
     }
