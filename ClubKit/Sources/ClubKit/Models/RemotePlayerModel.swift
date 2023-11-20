@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RemotePlayerModel: Codable, Identifiable {
+struct RemotePlayerModel: Codable, Identifiable, Equatable {
     var id: String
     var clubID: String
     var displayName: String

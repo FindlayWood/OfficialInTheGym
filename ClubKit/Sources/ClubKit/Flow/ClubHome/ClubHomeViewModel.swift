@@ -11,6 +11,7 @@ class ClubHomeViewModel: ObservableObject {
     
     var goToTeams: (() -> Void)?
     var goToPlayers: (() -> Void)?
+    var goToGroups: (() -> Void)?
     
     var clubModel: RemoteClubModel
     
@@ -23,5 +24,8 @@ class ClubHomeViewModel: ObservableObject {
     }
     func playersAction() {
         goToPlayers?()
+    }
+    func groupsAction() {
+        goToGroups?()
     }
 }

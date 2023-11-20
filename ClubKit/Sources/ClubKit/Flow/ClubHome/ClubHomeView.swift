@@ -27,6 +27,17 @@ struct ClubHomeView: View {
                 }
                 
                 Button {
+                    viewModel.groupsAction()
+                } label: {
+                    HStack {
+                        Image(systemName: "person.3.sequence.fill")
+                        Text("Workout Groups")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                }
+                
+                Button {
                     
                 } label: {
                     HStack {

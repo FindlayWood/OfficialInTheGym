@@ -48,6 +48,10 @@ class ClubHomeCoordinator: ClubHomeFlow {
 //        let vc = viewControllerFactoy.makeCreatePlayerViewController(clubModel)
 //        navigationController.pushViewController(vc, animated: true)
     }
+    
+    func goToGroups() {
+        
+    }
 }
 
 protocol ClubHomeFlow: Coordinator {
@@ -55,6 +59,7 @@ protocol ClubHomeFlow: Coordinator {
     func goToTeam(_ model: RemoteTeamModel)
     func goToPlayers()
     func goToCreatePlayer()
+    func goToGroups()
 }
 
 class BasicClubHomeFlow: ClubHomeFlow {
@@ -93,5 +98,10 @@ class BasicClubHomeFlow: ClubHomeFlow {
     
     func goToCreatePlayer() {
         
+    }
+    
+    func goToGroups() {
+        let flow = coordinatorFactory.makeGroupsCoordinator(with: clubModel)
+        flow.start()
     }
 }
