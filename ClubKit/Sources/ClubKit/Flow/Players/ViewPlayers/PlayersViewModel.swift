@@ -11,6 +11,7 @@ class PlayersViewModel: ObservableObject {
     
     @Published var errorLoading: Error?
     @Published var players: [RemotePlayerModel] = []
+    @Published var selectedPlayers: [RemotePlayerModel] = []
     @Published var isLoading: Bool = false
     
     @Published var searchText: String = ""
@@ -29,12 +30,15 @@ class PlayersViewModel: ObservableObject {
     
     var clubModel: RemoteClubModel
     var playerLoader: PlayerLoader
+    let selectable: Bool
     
     var selectedPlayer: ((RemotePlayerModel) -> ())?
+    var selectedPlayersConfirmed: (([RemotePlayerModel]) -> ())?
     
-    init(clubModel: RemoteClubModel, playerLoader: PlayerLoader) {
+    init(clubModel: RemoteClubModel, playerLoader: PlayerLoader, selectable: Bool = false) {
         self.clubModel = clubModel
         self.playerLoader = playerLoader
+        self.selectable = selectable
     }
     
     func loadFromClub() {
@@ -67,5 +71,21 @@ class PlayersViewModel: ObservableObject {
     
     func checkForExclusion(_ model: RemotePlayerModel) -> Bool {
         !(excludedPlayers.contains(where: { $0.id == model.id }))
+    }
+    
+    func toggleSelection(of model: RemotePlayerModel) {
+        if selectedPlayers.contains(where: { $0 == model }) {
+            selectedPlayers.removeAll(where: { $0 == model })
+        } else {
+            selectedPlayers.append(model)
+        }
+    }
+    
+    func checkSelection(of model: RemotePlayerModel) -> Bool {
+        selectedPlayers.contains(model)
+    }
+    
+    func confirmSelectionAction() {
+        selectedPlayersConfirmed?(selectedPlayers)
     }
 }

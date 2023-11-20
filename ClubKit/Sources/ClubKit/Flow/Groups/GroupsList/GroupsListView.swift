@@ -128,8 +128,8 @@ struct GroupsListView: View {
     }
 }
 
-//struct GroupsListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        GroupsListView(viewModel: <#GroupsListViewModel#>)
-//    }
-//}
+struct GroupsListView_Previews: PreviewProvider {
+    static var previews: some View {
+        GroupsListView(viewModel: .init(groupLoader: PreviewGroupLoader(), clubModel: .example))
+    }
+}

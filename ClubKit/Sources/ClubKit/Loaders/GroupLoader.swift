@@ -23,3 +23,9 @@ class RemoteGroupLoader: GroupLoader {
         return try await networkService.readAll(at: Constants.groupsPath(clubID))
     }
 }
+
+class PreviewGroupLoader: GroupLoader {
+    func loadAllGroups(for clubID: String) async throws -> [RemoteGroupModel] {
+        return []
+    }
+}

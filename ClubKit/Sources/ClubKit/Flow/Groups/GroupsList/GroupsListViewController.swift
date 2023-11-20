@@ -41,7 +41,7 @@ class GroupsListViewController: UIViewController {
     
     // MARK: - Nav bar
     func initNavBar() {
-        let barButton = UIBarButtonItem(image: UIImage(systemName: "plus.circle.fill"), style: .done, target: self, action: #selector(addNewTeam))
+        let barButton = UIBarButtonItem(image: UIImage(systemName: "plus.circle.fill"), style: .done, target: self, action: #selector(addNewGroup))
         navigationItem.rightBarButtonItem = barButton
     }
     
@@ -52,8 +52,8 @@ class GroupsListViewController: UIViewController {
     }
     
     // MARK: - Actions
-    @objc func addNewTeam(_ sender: UIBarButtonItem) {
-
+    @objc func addNewGroup(_ sender: UIBarButtonItem) {
+        coordinator?.createNewGroup()
     }
     
     // MARK: - View Model

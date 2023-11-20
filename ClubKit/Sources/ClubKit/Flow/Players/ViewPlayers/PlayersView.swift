@@ -77,10 +77,12 @@ struct PlayersView: View {
                     List {
                         Section {
                             ForEach(viewModel.searchedPlayers) { model in
-                                PlayerRow(model: model)
-                                    .onTapGesture {
-                                        viewModel.selectedPlayer?(model)
-                                    }
+                                PlayerRow(model: model, selectable: viewModel.selectable, selected: viewModel.checkSelection(of: model)) {
+                                    viewModel.toggleSelection(of: model)
+                                }
+                                .onTapGesture {
+                                    viewModel.selectedPlayer?(model)
+                                }
                             }
                         } header: {
                             Text("Players")

@@ -58,7 +58,8 @@ public class ClubKitBoundary {
         
         let groupLoader = RemoteGroupLoader(networkService: networkService)
         
-        let groupViewControllerFactory = BasicGroupsViewControllerFactory(groupLoader: groupLoader)
+        let groupViewControllerFactory = BasicGroupsViewControllerFactory(groupLoader: groupLoader,
+                                                                          playerLoader: playerLoader)
         
         let clubHomeCoordinatorFactory = BasicClubHomeCoordinatorFactory(navigationController: navigationController,
                                                                          playersViewControllerFactory: playersViewControllerFactory,

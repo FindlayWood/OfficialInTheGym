@@ -9,10 +9,43 @@ import UIKit
 
 class CreateGroupViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    var coordinator: GroupFlow?
+    
+    var viewModel: CreateGroupViewModel
+    var display: CreateGroupView!
+    
+    init(viewModel: CreateGroupViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        addDisplay()
+        view.backgroundColor = .systemBackground
+        initViewModel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
+        navigationItem.title = "Create Group"
+        editNavBarColour(to: .darkColour)
+    }
+    
+    // MARK: - Display
+    func addDisplay() {
+        display = .init(viewModel: viewModel)
+        addSwiftUIView(display)
+    }
+    
+    // MARK: - View Model
+    func initViewModel() {
+        
+    }
 }
