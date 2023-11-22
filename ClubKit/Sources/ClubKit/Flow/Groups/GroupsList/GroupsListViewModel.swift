@@ -26,6 +26,8 @@ class GroupsListViewModel: ObservableObject {
         }
     }
     
+    var addActionSelected: (() -> ())?
+    
     init(groupLoader: GroupLoader, clubModel: RemoteClubModel) {
         self.groupLoader = groupLoader
         self.clubModel = clubModel

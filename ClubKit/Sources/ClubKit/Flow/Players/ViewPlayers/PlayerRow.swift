@@ -12,7 +12,6 @@ struct PlayerRow: View {
     let model: RemotePlayerModel
     var selectable: Bool = false
     var selected: Bool = false
-    var selectedAction: () -> ()
     
     var body: some View {
         HStack(alignment: .bottom) {
@@ -35,14 +34,11 @@ struct PlayerRow: View {
             }
             Spacer()
             if selectable {
-                Button {
-                    selectedAction()
-                } label: {
-                    Image(systemName: selected ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(Color(.darkColour))
-                }
+                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
+                    .foregroundColor(Color(.darkColour))
             }
         }
+        .contentShape(Rectangle())
     }
     
     var positionString: String {
@@ -58,6 +54,6 @@ struct PlayerRow: View {
 
 struct PlayerRow_Previews: PreviewProvider {
     static var previews: some View {
-        PlayerRow(model: .example, selectedAction: {})
+        PlayerRow(model: .example)
     }
 }

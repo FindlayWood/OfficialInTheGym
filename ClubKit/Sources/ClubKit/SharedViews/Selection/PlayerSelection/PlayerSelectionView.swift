@@ -22,9 +22,7 @@ struct PlayerSelectionView: View {
             List {
                 Section {
                     ForEach(viewModel.searchedPlayers) { model in
-                        PlayerRow(model: model) {
-                            
-                        }
+                        PlayerRow(model: model)
                     }
                 } header: {
                     Text("Players")

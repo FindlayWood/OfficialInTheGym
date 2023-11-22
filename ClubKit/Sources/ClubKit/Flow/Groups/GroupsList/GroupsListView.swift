@@ -51,7 +51,7 @@ struct GroupsListView: View {
                             .multilineTextAlignment(.center)
                             .padding()
                         Button {
-                            
+                            viewModel.addActionSelected?()
                         } label: {
                             Image(systemName: "plus.circle.fill")
                                 .resizable()
@@ -87,7 +87,7 @@ struct GroupsListView: View {
                                     .multilineTextAlignment(.center)
                                     .padding()
                                 Button {
-                                    
+                                    viewModel.addActionSelected?()
                                 } label: {
                                     Image(systemName: "plus.circle.fill")
                                         .resizable()

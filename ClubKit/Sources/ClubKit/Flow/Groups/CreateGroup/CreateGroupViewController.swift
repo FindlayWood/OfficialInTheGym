@@ -46,6 +46,16 @@ class CreateGroupViewController: UIViewController {
     
     // MARK: - View Model
     func initViewModel() {
-        
+        viewModel.selectedPlayers = { [weak self] in
+            guard let self else { return }
+            self.selectPlayers()
+        }
+    }
+    
+    func selectPlayers() {
+        coordinator?.selectPlayersForNewGroup(alreadySelected: viewModel.selectedPlayersList) { [weak self] selectedPlayers in
+            self?.viewModel.addPlayers(selectedPlayers)
+            self?.navigationController?.dismiss(animated: true)
+        }
     }
 }

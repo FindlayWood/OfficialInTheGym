@@ -42,6 +42,6 @@ enum Constants {
         "Clubs/\(clubID)/Teams/\(teamID)/Lineups/\(id)/Lineup"
     }
     static func groupsPath(_ clubID: String) -> String {
-        "Clubs/\(clubID)/Groups"
+        "Clubs/\(clubID)/WorkoutGroups"
     }
 }

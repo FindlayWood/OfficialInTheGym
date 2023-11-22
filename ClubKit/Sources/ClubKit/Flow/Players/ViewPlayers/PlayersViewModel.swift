@@ -88,4 +88,8 @@ class PlayersViewModel: ObservableObject {
     func confirmSelectionAction() {
         selectedPlayersConfirmed?(selectedPlayers)
     }
+    
+    func tappedOn(_ model: RemotePlayerModel) {
+        selectable ? toggleSelection(of: model) : selectedPlayer?(model)
+    }
 }

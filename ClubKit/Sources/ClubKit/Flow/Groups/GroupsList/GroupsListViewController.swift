@@ -58,7 +58,9 @@ class GroupsListViewController: UIViewController {
     
     // MARK: - View Model
     func initViewModel() {
-        
+        viewModel.addActionSelected = { [weak self] in
+            self?.coordinator?.createNewGroup()
+        }
     }
 
 }

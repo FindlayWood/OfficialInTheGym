@@ -77,16 +77,29 @@ struct PlayersView: View {
                     List {
                         Section {
                             ForEach(viewModel.searchedPlayers) { model in
-                                PlayerRow(model: model, selectable: viewModel.selectable, selected: viewModel.checkSelection(of: model)) {
-                                    viewModel.toggleSelection(of: model)
-                                }
+                                PlayerRow(model: model, selectable: viewModel.selectable, selected: viewModel.checkSelection(of: model))
                                 .onTapGesture {
-                                    viewModel.selectedPlayer?(model)
+                                    viewModel.tappedOn(model)
                                 }
                             }
                         } header: {
                             Text("Players")
                         }
+                    }
+                    if viewModel.selectable {
+                        Button {
+                            viewModel.confirmSelectionAction()
+                        } label: {
+                            Text("Confirm Selection")
+                                .padding()
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .background(Color(.darkColour))
+                                .clipShape(Capsule())
+                                .shadow(radius: 4)
+                        }
+                        .padding()
                     }
                 }
             }

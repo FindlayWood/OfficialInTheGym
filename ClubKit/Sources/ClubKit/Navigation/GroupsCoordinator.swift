@@ -9,7 +9,7 @@ import UIKit
 
 protocol GroupFlow: Coordinator {
     func createNewGroup()
-    func selectPlayersForNewGroup(_ selectedAction: @escaping ([RemotePlayerModel]) -> ())
+    func selectPlayersForNewGroup(alreadySelected: [RemotePlayerModel], _ selectedAction: @escaping ([RemotePlayerModel]) -> ())
 }
 
 class BasicGroupFlow: GroupFlow {
@@ -36,9 +36,10 @@ class BasicGroupFlow: GroupFlow {
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func selectPlayersForNewGroup(_ selectedAction: @escaping ([RemotePlayerModel]) -> ()) {
+    func selectPlayersForNewGroup(alreadySelected: [RemotePlayerModel], _ selectedAction: @escaping ([RemotePlayerModel]) -> ()) {
         let vc = viewControllerFactory.makePlayersViewController(for: clubModel)
         vc.viewModel.loadFromClub()
+        vc.viewModel.selectedPlayers = alreadySelected
         vc.viewModel.selectedPlayersConfirmed = selectedAction
         navigationController.present(vc, animated: true)
     }
