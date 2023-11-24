@@ -106,7 +106,7 @@ struct GroupsListView: View {
                         .background(Color(.secondarySystemBackground))
                     } else {
                         List {
-                            ForEach(viewModel.groups) { model in
+                            ForEach(viewModel.searchedGroups) { model in
                                 Button {
                                     viewModel.selectedGroupAction(model)
                                 } label: {
