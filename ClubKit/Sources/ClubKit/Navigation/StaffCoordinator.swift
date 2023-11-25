@@ -32,6 +32,7 @@ class BasicStaffFlow: StaffFlow {
     }
     
     func addNewStaffMember() {
-        
+        let vc = viewControllerFactory.makeCreateStaffViewController(with: clubModel)
+        navigationController.present(vc, animated: true)
     }
 }

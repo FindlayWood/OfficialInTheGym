@@ -23,3 +23,9 @@ class RemoteTeamLoader: TeamLoader {
         return try await networkService.readAll(at: Constants.teamsPath(clubID))
     }
 }
+
+struct PreviewTeamLoader: TeamLoader {
+    func loadAllTeams(for clubID: String) async throws -> [RemoteTeamModel] {
+        return []
+    }
+}
