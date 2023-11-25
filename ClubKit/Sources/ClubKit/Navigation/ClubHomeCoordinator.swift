@@ -7,52 +7,52 @@
 
 import UIKit
 
-class ClubHomeCoordinator: ClubHomeFlow {
-    
-    var navigationController: UINavigationController
-    var viewControllerFactoy: ViewControllerFactory
-    var coordinatorFactory: CoordinatorFactory
-    var clubModel: RemoteClubModel
-    
-    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactory, coordinatorFactory: CoordinatorFactory, clubModel: RemoteClubModel) {
-        self.navigationController = navigationController
-        self.viewControllerFactoy = viewControllerFactory
-        self.coordinatorFactory = coordinatorFactory
-        self.clubModel = clubModel
-    }
-    
-    func start() {
-        let vc = viewControllerFactoy.makeClubHomeViewController(clubModel)
-        vc.hidesBottomBarWhenPushed = true
-        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func goToTeams() {
-//        let vc = viewControllerFactoy.makeTeamsViewController(clubModel, flow: self)
-//        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func goToTeam(_ model: RemoteTeamModel) {
-//        let child = coordinatorFactory.makeTeamCoordinator(for: model)
-//        child.start()
-    }
-    
-    func goToPlayers() {
-//        let vc = viewControllerFactoy.makePlayersViewController(clubModel)
+//class ClubHomeCoordinator: ClubHomeFlow {
+//    
+//    var navigationController: UINavigationController
+//    var viewControllerFactoy: ViewControllerFactory
+//    var coordinatorFactory: CoordinatorFactory
+//    var clubModel: RemoteClubModel
+//    
+//    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactory, coordinatorFactory: CoordinatorFactory, clubModel: RemoteClubModel) {
+//        self.navigationController = navigationController
+//        self.viewControllerFactoy = viewControllerFactory
+//        self.coordinatorFactory = coordinatorFactory
+//        self.clubModel = clubModel
+//    }
+//    
+//    func start() {
+//        let vc = viewControllerFactoy.makeClubHomeViewController(clubModel)
+//        vc.hidesBottomBarWhenPushed = true
 //        vc.coordinator = self
 //        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func goToCreatePlayer() {
-//        let vc = viewControllerFactoy.makeCreatePlayerViewController(clubModel)
-//        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func goToGroups() {
-        
-    }
-}
+//    }
+//    
+//    func goToTeams() {
+////        let vc = viewControllerFactoy.makeTeamsViewController(clubModel, flow: self)
+////        navigationController.pushViewController(vc, animated: true)
+//    }
+//    
+//    func goToTeam(_ model: RemoteTeamModel) {
+////        let child = coordinatorFactory.makeTeamCoordinator(for: model)
+////        child.start()
+//    }
+//    
+//    func goToPlayers() {
+////        let vc = viewControllerFactoy.makePlayersViewController(clubModel)
+////        vc.coordinator = self
+////        navigationController.pushViewController(vc, animated: true)
+//    }
+//    
+//    func goToCreatePlayer() {
+////        let vc = viewControllerFactoy.makeCreatePlayerViewController(clubModel)
+////        navigationController.pushViewController(vc, animated: true)
+//    }
+//    
+//    func goToGroups() {
+//        
+//    }
+//}
 
 protocol ClubHomeFlow: Coordinator {
     func goToTeams()
@@ -60,6 +60,7 @@ protocol ClubHomeFlow: Coordinator {
     func goToPlayers()
     func goToCreatePlayer()
     func goToGroups()
+    func goToStaff()
 }
 
 class BasicClubHomeFlow: ClubHomeFlow {
@@ -102,6 +103,11 @@ class BasicClubHomeFlow: ClubHomeFlow {
     
     func goToGroups() {
         let flow = coordinatorFactory.makeGroupsCoordinator(with: clubModel)
+        flow.start()
+    }
+    
+    func goToStaff() {
+        let flow = coordinatorFactory.makeStaffCoordinator(with: clubModel)
         flow.start()
     }
 }

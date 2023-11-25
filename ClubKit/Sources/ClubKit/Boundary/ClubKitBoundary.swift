@@ -62,10 +62,14 @@ public class ClubKitBoundary {
                                                                           playerLoader: playerLoader,
                                                                           groupCreationService: groupCreationService)
         
+        let staffLoader = RemoteStaffLoader(networkService: networkService)
+        let staffViewControllerFactory = BasicStaffViewControllerFactory(staffLoader: staffLoader)
+        
         let clubHomeCoordinatorFactory = BasicClubHomeCoordinatorFactory(navigationController: navigationController,
                                                                          playersViewControllerFactory: playersViewControllerFactory,
                                                                          teamViewControllerFactory: teamViewControllerFactory,
-                                                                         groupsViewControllerFactory: groupViewControllerFactory)
+                                                                         groupsViewControllerFactory: groupViewControllerFactory,
+                                                                         staffViewControllerFactory: staffViewControllerFactory)
         
         let baseCoordinatorFactory = BasicClubsCoordinatorFactory(navigationController: navigationController,
                                                                   clubCreationViewControllerFactory: clubCreationViewControllerFactory,

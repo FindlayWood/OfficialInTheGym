@@ -61,7 +61,7 @@ struct ClubHomeView: View {
                     .foregroundColor(.primary)
                 }
                 Button {
-                    
+                    viewModel.staffAction()
                 } label: {
                     HStack {
                         Image(systemName: "person.crop.artframe")

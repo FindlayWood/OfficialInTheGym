@@ -11,6 +11,7 @@ protocol ClubHomeCoordinatorFactory {
     func makePlayersCoordinator(with model: RemoteClubModel) -> PlayersFlow
     func makeTeamsCoordinator(with model: RemoteClubModel) -> TeamFlow
     func makeGroupsCoordinator(with model: RemoteClubModel) -> GroupFlow
+    func makeStaffCoordinator(with model: RemoteClubModel) -> StaffFlow
 }
 
 struct BasicClubHomeCoordinatorFactory: ClubHomeCoordinatorFactory {
@@ -19,6 +20,7 @@ struct BasicClubHomeCoordinatorFactory: ClubHomeCoordinatorFactory {
     var playersViewControllerFactory: PlayersViewControllerFactory
     var teamViewControllerFactory: TeamViewControllerFactory
     var groupsViewControllerFactory: GroupsViewControllerFactory
+    var staffViewControllerFactory: StaffViewControllerFactory
     
     func makePlayersCoordinator(with model: RemoteClubModel) -> PlayersFlow {
         let flow = BasicPlayersFlow(navigationController: navigationController, viewControllerFactory: playersViewControllerFactory, clubModel: model)
@@ -32,6 +34,11 @@ struct BasicClubHomeCoordinatorFactory: ClubHomeCoordinatorFactory {
     
     func makeGroupsCoordinator(with model: RemoteClubModel) -> GroupFlow {
         let flow = BasicGroupFlow(navigationController: navigationController, viewControllerFactory: groupsViewControllerFactory, clubModel: model)
+        return flow
+    }
+    
+    func makeStaffCoordinator(with model: RemoteClubModel) -> StaffFlow {
+        let flow = BasicStaffFlow(navigationController: navigationController, viewControllerFactory: staffViewControllerFactory, clubModel: model)
         return flow
     }
 }

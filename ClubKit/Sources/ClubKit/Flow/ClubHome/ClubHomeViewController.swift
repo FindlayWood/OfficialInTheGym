@@ -53,5 +53,8 @@ class ClubHomeViewController: UIViewController {
         viewModel.goToGroups = { [weak self] in
             self?.coordinator?.goToGroups()
         }
+        viewModel.goToStaff = { [weak self] in
+            self?.coordinator?.goToStaff()
+        }
     }
 }
