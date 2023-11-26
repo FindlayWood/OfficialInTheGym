@@ -67,6 +67,10 @@ class ClubsViewModel: ObservableObject {
         coordinator?.goToCreationAction()
     }
     
+    func qrAction() {
+        coordinator?.goToQRCode()
+    }
+    
     func showClubAction(_ model: RemoteClubModel) {
         coordinator?.goToClubAction(model)
     }

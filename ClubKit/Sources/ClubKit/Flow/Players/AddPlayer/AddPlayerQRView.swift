@@ -20,6 +20,7 @@ struct AddPlayerQRView: View {
     
     var body: some View {
         Image(uiImage: generateQRCode(from: "\(name)\n\(emailAddress)"))
+            .interpolation(.none)
             .resizable()
             .scaledToFit()
             .frame(width: 200, height: 200)

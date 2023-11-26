@@ -9,10 +9,13 @@ import Foundation
 
 class ClubHomeViewModel: ObservableObject {
     
+    @Published var isShowingScanner: Bool = false
+    
     var goToTeams: (() -> Void)?
     var goToPlayers: (() -> Void)?
     var goToGroups: (() -> Void)?
     var goToStaff: (() -> Void)?
+    var goToQRScanner: (() -> Void)?
     
     var clubModel: RemoteClubModel
     
@@ -31,5 +34,8 @@ class ClubHomeViewModel: ObservableObject {
     }
     func staffAction() {
         goToStaff?()
+    }
+    func qrScannerAction() {
+        goToQRScanner?()
     }
 }

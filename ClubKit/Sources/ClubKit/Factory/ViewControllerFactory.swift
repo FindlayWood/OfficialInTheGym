@@ -24,6 +24,12 @@ class BaseViewControllerFactory {
         let vc = ClubsViewController(viewModel: viewModel, coordinator: flow)
         return vc
     }
+    
+    func makeQRViewController() -> AddPlayerQRViewController {
+        let viewModel = AddPlayerQRViewModel()
+        let vc = AddPlayerQRViewController(viewModel: viewModel)
+        return vc
+    }
 }
 
 class RegularViewControllerFactory: ViewControllerFactory {

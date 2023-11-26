@@ -1,18 +1,18 @@
 //
-//  AddPlayerQRViewController.swift
+//  QRScannerViewController.swift
 //  
 //
-//  Created by Findlay Wood on 26/11/2023.
+//  Created by Findlay-Personal on 26/11/2023.
 //
 
 import UIKit
 
-class AddPlayerQRViewController: UIViewController {
+class QRScannerViewController: UIViewController {
 
-    var viewModel: AddPlayerQRViewModel
-    private lazy var display = AddPlayerQRView(viewModel: viewModel)
+    var viewModel: QRScannerViewModel
+    private lazy var display = QRScannerView(viewModel: viewModel)
     
-    init(viewModel: AddPlayerQRViewModel) {
+    init(viewModel: QRScannerViewModel) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
@@ -31,7 +31,7 @@ class AddPlayerQRViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
-        navigationItem.title = "Create New Player"
+        navigationItem.title = "Scan QR"
         editNavBarColour(to: .darkColour)
     }
     func addDisplay() {

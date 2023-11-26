@@ -36,7 +36,9 @@ public class ClubKitBoundary {
         
         let clubCreationViewControllerFactory = BasicClubCreationViewControllerFactory(networkService: networkService, clubManager: clubManager)
         
-        let clubHomeViewControllerFactory = BasicClubHomeViewControllerFactory()
+        let scannerService = RemoteQRScannerService(networkService: networkService)
+        
+        let clubHomeViewControllerFactory = BasicClubHomeViewControllerFactory(qrScannerService: scannerService)
         
         let client = FirebaseClient(service: networkService)
         

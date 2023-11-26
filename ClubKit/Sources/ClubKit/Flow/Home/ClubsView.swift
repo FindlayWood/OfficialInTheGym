@@ -19,6 +19,13 @@ struct ClubsView: View {
                     .foregroundColor(Color(.darkColour))
                 Spacer()
                 Button {
+                    viewModel.qrAction()
+                } label: {
+                    Image(systemName: "qrcode")
+                        .foregroundColor(Color(.darkColour))
+                        .font(.title2)
+                }
+                Button {
                     viewModel.addAction()
                 } label: {
                     Image(systemName: "plus.circle.fill")

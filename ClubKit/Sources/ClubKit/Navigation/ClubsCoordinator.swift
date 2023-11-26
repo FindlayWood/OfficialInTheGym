@@ -31,9 +31,14 @@ class ClubsCoordinator: ClubsFlow {
         let flow = coordinatorFactory.makeClubHomeCoordinator(with: clubModel)
         flow.start()
     }
+    func goToQRCode() {
+        let vc = viewControllerFactoy.makeQRViewController()
+        navigationController.present(vc, animated: true)
+    }
 }
 
 protocol ClubsFlow: Coordinator {
     func goToCreationAction()
     func goToClubAction(_ clubModel: RemoteClubModel)
+    func goToQRCode()
 }

@@ -70,6 +70,16 @@ struct ClubHomeView: View {
                     .font(.headline)
                     .foregroundColor(.primary)
                 }
+                Button {
+                    viewModel.qrScannerAction()
+                } label: {
+                    HStack {
+                        Image(systemName: "qrcode.viewfinder")
+                        Text("QR Scanner")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                }
             } header: {
                 Text("People")
             }
@@ -90,6 +100,8 @@ struct ClubHomeView: View {
             }
         }
     }
+    
+
 }
 
 struct ClubHomeView_Previews: PreviewProvider {
