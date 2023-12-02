@@ -12,18 +12,31 @@ struct AddPlayerQRView: View {
     
     @ObservedObject var viewModel: AddPlayerQRViewModel
     
-    @State private var name = "Anonymous"
-    @State private var emailAddress = "you@yoursite.com"
-    
     let context = CIContext()
     let filter = CIFilter.qrCodeGenerator()
     
     var body: some View {
-        Image(uiImage: generateQRCode(from: "\(name)\n\(emailAddress)"))
-            .interpolation(.none)
-            .resizable()
-            .scaledToFit()
-            .frame(width: 200, height: 200)
+        VStack {
+            HStack {
+                Spacer()
+                VStack {
+                    Text("Your QR Code")
+                    Text("Display Name")
+                    Text("UserName")
+                }
+                Spacer()
+            }
+            Image(uiImage: generateQRCode(from: viewModel.userID))
+                .interpolation(.none)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 200, height: 200)
+            HStack {
+                Spacer()
+                Text("If you want to join a club quickly have an admin of the club scan this QR code.")
+                Spacer()
+            }
+        }
     }
     
     func generateQRCode(from string: String) -> UIImage {
@@ -40,5 +53,5 @@ struct AddPlayerQRView: View {
 }
 
 #Preview {
-    AddPlayerQRView(viewModel: AddPlayerQRViewModel())
+    AddPlayerQRView(viewModel: AddPlayerQRViewModel(userService: PreviewCurrentUserService()))
 }

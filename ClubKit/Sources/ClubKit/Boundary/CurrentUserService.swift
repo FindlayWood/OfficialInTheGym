@@ -10,3 +10,7 @@ import Foundation
 public protocol CurrentUserService {
     var currentUserUID: String { get }
 }
+
+struct PreviewCurrentUserService: CurrentUserService {
+    var currentUserUID: String = "previewUID"
+}

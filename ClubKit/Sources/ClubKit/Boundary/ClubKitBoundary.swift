@@ -32,7 +32,7 @@ public class ClubKitBoundary {
     
     func makeBase() -> ClubsFlow {
         
-        let viewControllerFactory = BaseViewControllerFactory(clubManager: clubManager)
+        let viewControllerFactory = BaseViewControllerFactory(clubManager: clubManager, userService: userService)
         
         let clubCreationViewControllerFactory = BasicClubCreationViewControllerFactory(networkService: networkService, clubManager: clubManager)
         

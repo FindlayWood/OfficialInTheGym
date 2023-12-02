@@ -14,9 +14,11 @@ protocol ViewControllerFactory {
 class BaseViewControllerFactory {
     
     var clubManager: ClubManager
+    var userService: CurrentUserService
     
-    init(clubManager: ClubManager) {
+    init(clubManager: ClubManager, userService: CurrentUserService) {
         self.clubManager = clubManager
+        self.userService = userService
     }
     
     func makeBaseViewController(with flow: ClubsFlow) -> ClubsViewController {
@@ -26,7 +28,7 @@ class BaseViewControllerFactory {
     }
     
     func makeQRViewController() -> AddPlayerQRViewController {
-        let viewModel = AddPlayerQRViewModel()
+        let viewModel = AddPlayerQRViewModel(userService: userService)
         let vc = AddPlayerQRViewController(viewModel: viewModel)
         return vc
     }
