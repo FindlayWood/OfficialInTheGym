@@ -11,8 +11,20 @@ class AddPlayerQRViewModel: ObservableObject {
     
     private let userService: CurrentUserService
     
-    var userID: String {
+    private var userID: String {
         userService.currentUserUID
+    }
+    
+    var displayName: String {
+        userService.displayName
+    }
+    
+    var username: String {
+        userService.username
+    }
+    
+    var qrCodeString: String {
+        QRConstants.startCode + QRConstants.separatingCode + userID + QRConstants.separatingCode + displayName + QRConstants.separatingCode + username + QRConstants.separatingCode + QRConstants.endCode
     }
     
     init(userService: CurrentUserService) {

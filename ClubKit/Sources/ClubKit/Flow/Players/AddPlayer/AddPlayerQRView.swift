@@ -16,26 +16,75 @@ struct AddPlayerQRView: View {
     let filter = CIFilter.qrCodeGenerator()
     
     var body: some View {
-        VStack {
-            HStack {
-                Spacer()
-                VStack {
-                    Text("Your QR Code")
-                    Text("Display Name")
-                    Text("UserName")
+        NavigationStack {
+            VStack {
+                HStack {
+                    Spacer()
+                    VStack {
+                        Text(viewModel.displayName)
+                            .font(.headline)
+                        Text("@")
+                            .font(.subheadline.weight(.medium))
+                            .foregroundColor(Color.secondary)
+                        + Text(viewModel.username)
+                            .font(.subheadline.weight(.medium))
+                            .foregroundColor(.primary)
+                    }
+                    Spacer()
                 }
-                Spacer()
+                .padding()
+                .background(Color.white.cornerRadius(12)
+                    .shadow(radius: 2, y: 2)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color(.darkColour), lineWidth: 1.0)
+                )
+                .padding()
+                
+                
+                VStack {
+                    Image(uiImage: generateQRCode(from: viewModel.qrCodeString))
+                        .interpolation(.none)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200, height: 200)
+                        .padding()
+                        .padding(.vertical)
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.white.cornerRadius(12)
+                    .shadow(radius: 2, y: 2)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color(.darkColour), lineWidth: 1.0)
+                )
+                .padding()
+                
+                
+                HStack {
+                    Spacer()
+                    Text("If you want to join a club quickly have an admin of the club scan this QR code.")
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                    Spacer()
+                }
+                .padding()
+                .background(Color.white.cornerRadius(12)
+                    .shadow(radius: 2, y: 2)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color(.darkColour), lineWidth: 1.0)
+                )
+                .padding()
             }
-            Image(uiImage: generateQRCode(from: viewModel.userID))
-                .interpolation(.none)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 200, height: 200)
-            HStack {
-                Spacer()
-                Text("If you want to join a club quickly have an admin of the club scan this QR code.")
-                Spacer()
-            }
+            .frame(maxHeight: .infinity)
+            .background(Color(.secondarySystemBackground))
+            .navigationTitle("QR Code")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
     

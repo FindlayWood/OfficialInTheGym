@@ -60,3 +60,17 @@ struct PlayerIDUpload: Codable {
 struct TeamPlayerModel: Codable {
     let playerUID: String
 }
+
+
+struct PreviewPlayerLoader: PlayerLoader {
+    func loadAllPlayers(for clubID: String) async throws -> [RemotePlayerModel] {
+        return []
+    }
+    func loadPlayer(with uid: String, from clubID: String) async throws -> RemotePlayerModel {
+        return .example
+    }
+    func loadAllPlayers(for teamID: String, in clubID: String) async throws -> [RemotePlayerModel] {
+        return []
+    }
+    func uploadNewPlayer(_ model: RemotePlayerModel, to teams: [String]) async throws {}
+}

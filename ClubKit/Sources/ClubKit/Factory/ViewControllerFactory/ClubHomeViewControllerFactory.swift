@@ -15,6 +15,9 @@ protocol ClubHomeViewControllerFactory {
 struct BasicClubHomeViewControllerFactory: ClubHomeViewControllerFactory {
     
     let qrScannerService: QRScannerService
+    let playerLoader: PlayerLoader
+    let teamLoader: TeamLoader
+    let creationService: PlayerCreationService
     
     func makeClubHomeViewController(with model: RemoteClubModel) -> ClubHomeViewController {
         let vc = ClubHomeViewController(clubModel: model)
@@ -22,7 +25,11 @@ struct BasicClubHomeViewControllerFactory: ClubHomeViewControllerFactory {
     }
     
     func makeQRScannerViewController(with model: RemoteClubModel) -> QRScannerViewController {
-        let viewModel = QRScannerViewModel(scannerService: qrScannerService)
+        let viewModel = QRScannerViewModel(scannerService: qrScannerService,
+                                           clubModel: model,
+                                           loader: playerLoader,
+                                           teamLoader: teamLoader,
+                                           creationService: creationService)
         let vc = QRScannerViewController(viewModel: viewModel)
         return vc
     }

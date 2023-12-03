@@ -31,6 +31,12 @@ class ClubKitCurrentUserModel: CurrentUserService {
     var currentUserUID: String {
         return UserDefaults.currentUser.uid
     }
+    var displayName: String {
+        return UserDefaults.currentUser.displayName
+    }
+    var username: String {
+        return UserDefaults.currentUser.username
+    }
 }
 
 
