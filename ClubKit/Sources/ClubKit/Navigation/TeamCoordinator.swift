@@ -53,6 +53,11 @@ class BasicTeamFlow: TeamFlow {
     func goToPlayers(_ model: RemoteTeamModel) {
         let vc = viewControllerFactory.makePlayersViewController(for: clubModel)
         vc.viewModel.loadFromTeam(with: model.id)
+        vc.viewModel.selectedPlayer = { [weak self] in self?.goToDetail(for: $0) }
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func goToDetail(for model: RemotePlayerModel) {
+        let vc = viewControllerFactory.makePlayerDetailViewController(with: model)
         navigationController.pushViewController(vc, animated: true)
     }
     

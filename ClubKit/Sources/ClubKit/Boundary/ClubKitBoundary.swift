@@ -42,6 +42,9 @@ public class ClubKitBoundary {
         
         let playerCreationService = RemotePlayerCreationService(client: client)
         
+        let groupLoader = RemoteGroupLoader(networkService: networkService)
+        let groupCreationService = RemoteGroupCreationService(client: client)
+        
         let clubHomeViewControllerFactory = BasicClubHomeViewControllerFactory(qrScannerService: scannerService,
                                                                                playerLoader: playerLoader,
                                                                                teamLoader: teamLoader,
@@ -49,6 +52,7 @@ public class ClubKitBoundary {
         
         
         let playersViewControllerFactory = BasicPlayersViewControllerFactory(playerLoader: playerLoader,
+                                                                             groupLoader: groupLoader,
                                                                              teamLoader: teamLoader,
                                                                              creationService: playerCreationService)
         
@@ -56,14 +60,14 @@ public class ClubKitBoundary {
         let uploadLineupService = RemoteUploadLineupService(client: client)
         let lineupLoader = RemoteLineupLoader(networkService: networkService)
         
-        let teamViewControllerFactory = BasicTeamViewControllerFactory(teamLoader: teamLoader,
+        let teamViewControllerFactory = BasicTeamViewControllerFactory(groupLoader: groupLoader,
+                                                                       teamLoader: teamLoader,
                                                                        playerLoader: playerLoader,
                                                                        teamCreationService: teamCreationService,
                                                                        lineupUploadService: uploadLineupService,
                                                                        lineupLoader: lineupLoader)
         
-        let groupLoader = RemoteGroupLoader(networkService: networkService)
-        let groupCreationService = RemoteGroupCreationService(client: client)
+        
         let groupViewControllerFactory = BasicGroupsViewControllerFactory(groupLoader: groupLoader,
                                                                           playerLoader: playerLoader,
                                                                           groupCreationService: groupCreationService)

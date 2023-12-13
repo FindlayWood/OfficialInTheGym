@@ -13,10 +13,12 @@ protocol TeamViewControllerFactory {
     func makeTeamHomeViewController(for team: RemoteTeamModel) -> TeamHomeViewController
     func makeTeamDefaultLineupViewController(for team: RemoteTeamModel) -> TeamDefaultLineupViewController
     func makePlayersViewController(for club: RemoteClubModel) -> PlayersViewController
+    func makePlayerDetailViewController(with model: RemotePlayerModel) -> PlayerDetailViewController
 }
 
 struct BasicTeamViewControllerFactory: TeamViewControllerFactory {
     
+    var groupLoader: GroupLoader
     var teamLoader: TeamLoader
     var playerLoader: PlayerLoader
     var teamCreationService: TeamCreationService
@@ -50,6 +52,12 @@ struct BasicTeamViewControllerFactory: TeamViewControllerFactory {
     func makePlayersViewController(for club: RemoteClubModel) -> PlayersViewController {
         let viewModel = PlayersViewModel(clubModel: club, playerLoader: playerLoader)
         let vc = PlayersViewController(viewModel: viewModel)
+        return vc
+    }
+    
+    func makePlayerDetailViewController(with model: RemotePlayerModel) -> PlayerDetailViewController {
+        let viewModel = PlayerDetailViewModel(playerModel: model, groupLoader: groupLoader, teamLoader: teamLoader)
+        let vc = PlayerDetailViewController(viewModel: viewModel)
         return vc
     }
 }

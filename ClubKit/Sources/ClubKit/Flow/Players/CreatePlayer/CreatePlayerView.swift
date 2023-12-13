@@ -151,6 +151,9 @@ struct CreatePlayerView_Previews: PreviewProvider {
     }
     private class PreviewTeamLoader: TeamLoader {
         func loadAllTeams(for clubID: String) async throws -> [RemoteTeamModel] { return [] }
+        func loadTeam(with teamID: String, from clubID: String) async throws -> RemoteTeamModel {
+            return .example
+        }
     }
     private class PreviewService: PlayerCreationService {
         func createNewPlayer(with data: NewPlayerData) async -> Result<NewPlayerData, RemotePlayerCreationService.Error> { return .failure(.failed)}

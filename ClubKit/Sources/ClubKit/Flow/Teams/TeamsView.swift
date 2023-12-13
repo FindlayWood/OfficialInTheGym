@@ -134,6 +134,9 @@ struct TeamsView_Previews: PreviewProvider {
         func loadAllTeams(for clubID: String) async throws -> [RemoteTeamModel] {
             return []
         }
+        func loadTeam(with teamID: String, from clubID: String) async throws -> RemoteTeamModel {
+            return .example
+        }
     }
     
     static var previews: some View {

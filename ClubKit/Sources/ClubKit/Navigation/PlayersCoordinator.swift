@@ -9,6 +9,7 @@ import UIKit
 
 protocol PlayersFlow: Coordinator {
     func addNewPlayer()
+    func goToDetail(for model: RemotePlayerModel)
 }
 
 
@@ -28,11 +29,19 @@ class BasicPlayersFlow: PlayersFlow {
         let vc = viewControllerFactory.makePlayersViewController(with: clubModel)
         vc.coordinator = self
         vc.viewModel.loadFromClub()
+        vc.viewModel.selectedPlayer = { [weak self] in self?.goToDetail(for: $0) }
         navigationController.pushViewController(vc, animated: true)
     }
     
     func addNewPlayer() {
         let vc = viewControllerFactory.makeCreatePlayerViewController(with: clubModel)
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToDetail(for model: RemotePlayerModel) {
+        let vc = viewControllerFactory.makePlayerDetailViewController(with: model)
+        vc.viewModel.loadTeams()
+        vc.viewModel.loadGroups()
         navigationController.pushViewController(vc, animated: true)
     }
 }
