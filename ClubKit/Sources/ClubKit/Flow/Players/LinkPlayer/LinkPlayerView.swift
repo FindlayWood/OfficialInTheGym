@@ -19,8 +19,17 @@ struct LinkPlayerView: View {
             Text("Scan Error")
         case .loadingScan:
             Text("Loading Scan")
-        case .gotUserProfile(_):
+        case let .gotUserProfile(model):
             List {
+                
+                Section {
+                    VStack {
+                        Text(model.displayName)
+                        Text("@\(model.username)")
+                    }
+                } header: {
+                    Text("User Model")
+                }
                 
                 Section {
                     Button {
@@ -28,7 +37,7 @@ struct LinkPlayerView: View {
                             await viewModel.create()
                         }
                     } label: {
-                        Text("Create Player")
+                        Text("Link to this user")
                             .padding()
                             .font(.headline)
                             .foregroundColor(.white)
