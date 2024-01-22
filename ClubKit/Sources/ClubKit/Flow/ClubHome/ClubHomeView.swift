@@ -36,17 +36,6 @@ struct ClubHomeView: View {
                     .font(.headline)
                     .foregroundColor(.primary)
                 }
-                
-                Button {
-                    
-                } label: {
-                    HStack {
-                        Image(systemName: "calendar")
-                        Text("Schedule")
-                    }
-                    .font(.headline)
-                    .foregroundColor(.primary)
-                }
             }
             
             Section {
