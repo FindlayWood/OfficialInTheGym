@@ -13,7 +13,10 @@ class LinkPlayerViewModel: ObservableObject {
         case scanning
         case scanError
         case loadingScan
+        case linking
         case gotUserProfile(UserModel)
+        case success
+        case error
     }
     
     @Published var viewState: QRScannerViewState = .scanning
@@ -22,7 +25,7 @@ class LinkPlayerViewModel: ObservableObject {
     var clubModel: RemoteClubModel
     let playerModel: RemotePlayerModel
     var loader: PlayerLoader
-    var creationService: PlayerCreationService
+    var linkService: LinkPlayerService
     // MARK: - Loading Variables
     @Published var isUploading: Bool = false
     @Published var uploaded: Bool = false
@@ -30,12 +33,12 @@ class LinkPlayerViewModel: ObservableObject {
     
     let scannerService: QRScannerService
     
-    init(scannerService: QRScannerService, clubModel: RemoteClubModel, loader: PlayerLoader, playerModel: RemotePlayerModel, creationService: PlayerCreationService) {
+    init(scannerService: QRScannerService, clubModel: RemoteClubModel, loader: PlayerLoader, playerModel: RemotePlayerModel, linkService: LinkPlayerService) {
         self.scannerService = scannerService
         self.clubModel = clubModel
         self.loader = loader
         self.playerModel = playerModel
-        self.creationService = creationService
+        self.linkService = linkService
     }
     
     func handleScan(result: Result<ScanResult, ScanError>) {
@@ -63,8 +66,18 @@ class LinkPlayerViewModel: ObservableObject {
     }
     
     @MainActor
-    func create() async {
+    func link(to model: UserModel) async {
         isUploading = true
-
+        viewState = .linking
+        let linkData = LinkPlayerQRData(clubID: clubModel.id, userUID: model.id, playerID: playerModel.id)
+        let result = await linkService.linkPlayer(with: linkData)
+        switch result {
+        case .success(let success):
+            print("Success")
+            self.viewState = .success
+        case .failure(let failure):
+            print("failure")
+            self.viewState = .error
+        }
     }
 }

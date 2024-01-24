@@ -19,6 +19,8 @@ class PlayerDetailViewModel: ObservableObject {
     let groupLoader: GroupLoader
     let teamLoader: TeamLoader
     
+    var linkActionCallback: (() -> ())?
+    
     init(playerModel: RemotePlayerModel, groupLoader: GroupLoader, teamLoader: TeamLoader) {
         self.playerModel = playerModel
         self.groupLoader = groupLoader
@@ -51,6 +53,6 @@ class PlayerDetailViewModel: ObservableObject {
     
     // MARK: - Actions
     func linkAction() {
-        
+        linkActionCallback?()
     }
 }

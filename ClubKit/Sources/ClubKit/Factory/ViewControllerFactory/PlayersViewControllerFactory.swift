@@ -11,6 +11,7 @@ protocol PlayersViewControllerFactory {
     func makePlayersViewController(with model: RemoteClubModel) -> PlayersViewController
     func makeCreatePlayerViewController(with model: RemoteClubModel) -> CreatePlayerViewController
     func makePlayerDetailViewController(with model: RemotePlayerModel) -> PlayerDetailViewController
+    func makeLinkPlayerViewController(in club: RemoteClubModel, for player: RemotePlayerModel) -> LinkPlayerViewController
 }
 
 struct BasicPlayersViewControllerFactory: PlayersViewControllerFactory {
@@ -19,6 +20,8 @@ struct BasicPlayersViewControllerFactory: PlayersViewControllerFactory {
     var groupLoader: GroupLoader
     var teamLoader: TeamLoader
     var creationService: PlayerCreationService
+    var qrScannerService: QRScannerService
+    var linkPlayerService: LinkPlayerService
     
     func makePlayersViewController(with model: RemoteClubModel) -> PlayersViewController {
         let viewModel = PlayersViewModel(clubModel: model, playerLoader: playerLoader)
@@ -35,6 +38,12 @@ struct BasicPlayersViewControllerFactory: PlayersViewControllerFactory {
     func makePlayerDetailViewController(with model: RemotePlayerModel) -> PlayerDetailViewController {
         let viewModel = PlayerDetailViewModel(playerModel: model, groupLoader: groupLoader, teamLoader: teamLoader)
         let vc = PlayerDetailViewController(viewModel: viewModel)
+        return vc
+    }
+    
+    func makeLinkPlayerViewController(in club: RemoteClubModel, for player: RemotePlayerModel) -> LinkPlayerViewController {
+        let viewModel = LinkPlayerViewModel(scannerService: qrScannerService, clubModel: club, loader: playerLoader, playerModel: player, linkService: linkPlayerService)
+        let vc = LinkPlayerViewController(viewModel: viewModel)
         return vc
     }
 }

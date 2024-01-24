@@ -10,6 +10,7 @@ import UIKit
 protocol PlayersFlow: Coordinator {
     func addNewPlayer()
     func goToDetail(for model: RemotePlayerModel)
+    func goToLinkPlayer(for model: RemotePlayerModel)
 }
 
 
@@ -42,6 +43,12 @@ class BasicPlayersFlow: PlayersFlow {
         let vc = viewControllerFactory.makePlayerDetailViewController(with: model)
         vc.viewModel.loadTeams()
         vc.viewModel.loadGroups()
+        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToLinkPlayer(for model: RemotePlayerModel) {
+        let vc = viewControllerFactory.makeLinkPlayerViewController(in: clubModel, for: model)
+        navigationController.present(vc, animated: true)
     }
 }

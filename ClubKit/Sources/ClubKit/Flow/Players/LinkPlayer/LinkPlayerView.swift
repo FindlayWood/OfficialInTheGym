@@ -18,38 +18,96 @@ struct LinkPlayerView: View {
         case .scanError:
             Text("Scan Error")
         case .loadingScan:
-            Text("Loading Scan")
+            VStack {
+                Text("Loading Scan")
+                ProgressView()
+            }
         case let .gotUserProfile(model):
             List {
                 
                 Section {
-                    VStack {
-                        Text(model.displayName)
-                        Text("@\(model.username)")
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Text("Scan Complete")
+                                .font(.headline)
+                            Image(systemName: "checkmark.circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(.green)
+                                .frame(width: 50)
+                                .padding(.bottom)
+                        }
+                        Spacer()
                     }
-                } header: {
-                    Text("User Model")
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.white.cornerRadius(10).shadow(radius: 2, y: 2))
                 }
+                .listRowBackground(Color.clear)
+                .listRowInsets(.init(top: 2, leading: 2, bottom: 2, trailing: 2))
                 
                 Section {
-                    Button {
-                        Task {
-                            await viewModel.create()
+                    VStack {
+                        VStack(alignment: .leading) {
+                            Text("User Account")
+                                .font(.headline)
+                            HStack {
+                                Spacer()
+                                VStack {
+                                    Text(model.displayName)
+                                        .font(.headline)
+                                    Text("@")
+                                        .font(.subheadline.weight(.medium))
+                                        .foregroundColor(Color.secondary)
+                                    + Text(model.username)
+                                        .font(.subheadline.weight(.medium))
+                                        .foregroundColor(.primary)
+                                }
+                                Spacer()
+                            }
+                            
+                            Button {
+                                Task {
+                                    await viewModel.link(to: model)
+                                }
+                            } label: {
+                                Text("Link to this user")
+                                    .padding()
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color(.darkColour))
+                                    .clipShape(Capsule())
+                                    .shadow(radius: 4)
+                            }
+                            .padding(.vertical)
                         }
-                    } label: {
-                        Text("Link to this user")
-                            .padding()
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .background(Color(.darkColour))
-                            .clipShape(Capsule())
-                            .shadow(radius: 4)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.white.cornerRadius(10).shadow(radius: 2, y: 2))
+                        
+                        
                     }
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(.init(top: 2, leading: 2, bottom: 2, trailing: 2))
                 
+            }
+        case .linking:
+            VStack {
+                Text("Linking")
+                ProgressView()
+            }
+            
+        case .success:
+            VStack {
+                Text("Success")
+            }
+            
+        case .error:
+            VStack {
+                Text("Error")
             }
         }
     }
@@ -60,5 +118,5 @@ struct LinkPlayerView: View {
                                                   clubModel: .example,
                                                   loader: PreviewPlayerLoader(),
                                                   playerModel: .example,
-                                                  creationService: PreviewPlayerCreationService()))
+                                                  linkService: PreviewLinkPlayerService()))
 }

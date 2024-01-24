@@ -8,15 +8,13 @@
 import Foundation
 
 protocol LinkPlayerService {
-    func addPlayer(with data: AddPlayerQRData) async -> Result<AddPlayerQRData,RemoteQRScannerService.Error>
+    func linkPlayer(with data: LinkPlayerQRData) async -> Result<LinkPlayerQRData,RemoteQRScannerService.Error>
 }
 
 struct LinkPlayerQRData {
     let clubID: String
     let userUID: String
-    let displayName: String
-    let positions: [String]
-    let selectedTeams: [String]
+    let playerID: String
 }
 
 struct RemoteLinkPlayerService: LinkPlayerService {
@@ -27,17 +25,15 @@ struct RemoteLinkPlayerService: LinkPlayerService {
         case failed
     }
     
-    func addPlayer(with data: AddPlayerQRData) async -> Result<AddPlayerQRData,RemoteQRScannerService.Error> {
+    func linkPlayer(with data: LinkPlayerQRData) async -> Result<LinkPlayerQRData,RemoteQRScannerService.Error> {
         
         let functionData: [String: Any] = [
             "clubID": data.clubID,
-            "uid": data.userUID,
-            "displayName": data.displayName,
-            "positions": data.positions,
-            "selectedTeams": data.selectedTeams
+            "userUID": data.userUID,
+            "playerID": data.playerID
         ]
         do {
-            try await networkService.callFunction(named: "linkPlayer", with: functionData)
+            try await networkService.callFunction(named: "linkPlayerAccount", with: functionData)
             return .success(data)
         } catch {
             return .failure(.failed)
@@ -46,7 +42,7 @@ struct RemoteLinkPlayerService: LinkPlayerService {
 }
 
 struct PreviewLinkPlayerService: LinkPlayerService {
-    func addPlayer(with data: AddPlayerQRData) async -> Result<AddPlayerQRData, RemoteQRScannerService.Error> {
+    func linkPlayer(with data: LinkPlayerQRData) async -> Result<LinkPlayerQRData, RemoteQRScannerService.Error> {
         return .failure(.failed)
     }
 }

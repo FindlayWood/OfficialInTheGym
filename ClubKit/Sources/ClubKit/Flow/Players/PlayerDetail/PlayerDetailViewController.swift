@@ -8,6 +8,8 @@
 import UIKit
 
 class PlayerDetailViewController: UIViewController {
+    
+    var coordinator: PlayersFlow?
 
     var viewModel: PlayerDetailViewModel
     private lazy var display = PlayerDetailView(viewModel: viewModel)
@@ -27,6 +29,7 @@ class PlayerDetailViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         addDisplay()
+        initViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -36,5 +39,11 @@ class PlayerDetailViewController: UIViewController {
     }
     func addDisplay() {
         addSwiftUIView(display)
+    }
+    func initViewModel() {
+        viewModel.linkActionCallback = { [weak self] in
+            guard let self else { return }
+            self.coordinator?.goToLinkPlayer(for: self.viewModel.playerModel)
+        }
     }
 }
