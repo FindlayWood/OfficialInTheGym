@@ -113,6 +113,6 @@ class BasicClubHomeFlow: ClubHomeFlow {
     }
     func goToQRScanner() {
         let vc = viewControllerFactory.makeQRScannerViewController(with: clubModel)
-        navigationController.pushViewController(vc, animated: true)
+        navigationController.present(vc, animated: true)
     }
 }

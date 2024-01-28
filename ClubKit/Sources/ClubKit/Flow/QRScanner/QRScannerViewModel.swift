@@ -14,6 +14,9 @@ class QRScannerViewModel: ObservableObject {
         case scanError
         case loadingScan
         case gotUserProfile(UserModel)
+        case loadingAdd
+        case addSuccess
+        case addFail
     }
     
     @Published var viewState: QRScannerViewState = .scanning
@@ -95,32 +98,35 @@ class QRScannerViewModel: ObservableObject {
     }
     
     @MainActor
-    func create() async {
+    func addPlayer(_ model: UserModel) async {
         isUploading = true
-//        let newPlayerData = NewPlayerData(displayName: displayName, clubID: clubModel.id, positions: playerPositions.map { $0.rawValue }, selectedTeams: selectedTeams.map { $0.id })
-//        let result = await creationService.createNewPlayer(with: newPlayerData)
-//        switch result {
-//        case .success:
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                self.displayName = ""
-//                self.playerPositions.removeAll()
-//                self.selectedTeams.removeAll()
-//                self.isUploading = false
-//                self.uploaded = true
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//                    self.uploaded = false
-//                }
-//            }
-//        case .failure(let failure):
-//            print(String(describing: failure))
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                self.isUploading = false
-//                self.errorUploading = true
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//                    self.errorUploading = false
-//                }
-//            }
-//        }
+        viewState = .loadingAdd
+        let qrPlayerData = AddPlayerQRData(clubID: clubModel.id, userUID: model.id, displayName: model.displayName, positions: playerPositions.map { $0.rawValue }, selectedTeams: selectedTeams.map { $0.id })
+        let result = await scannerService.addPlayer(with: qrPlayerData)
+        switch result {
+        case .success:
+            viewState = .addSuccess
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.displayName = ""
+                self.playerPositions.removeAll()
+                self.selectedTeams.removeAll()
+                self.isUploading = false
+                self.uploaded = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.uploaded = false
+                }
+            }
+        case .failure(let failure):
+            print(String(describing: failure))
+            viewState = .addSuccess
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.isUploading = false
+                self.errorUploading = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.errorUploading = false
+                }
+            }
+        }
     }
     
     var buttonDisabled: Bool {
