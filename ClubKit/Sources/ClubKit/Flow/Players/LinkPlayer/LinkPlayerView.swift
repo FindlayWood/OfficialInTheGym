@@ -14,13 +14,85 @@ struct LinkPlayerView: View {
     var body: some View {
         switch viewModel.viewState {
         case .scanning:
-            CodeScannerView(codeTypes: [.qr], simulatedData: QRConstants.simulatedData, completion: viewModel.handleScan)
+            ZStack {
+                CodeScannerView(codeTypes: [.qr], simulatedData: QRConstants.simulatedData, completion: viewModel.handleScan)
+                
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button {
+                            
+                        } label: {
+                            Image(systemName: "photo.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40, height: 40)
+                                .foregroundStyle(Color(.lightColour))
+                        }
+                    }
+                    .padding()
+                }
+                
+                ZStack {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                    
+                    RoundedRectangle(cornerRadius: 20)
+                        .frame(width: 305, height: 305)
+                        .foregroundStyle(Color(.darkColour))
+                    
+                    RoundedRectangle(cornerRadius: 17.5)
+                        .frame(width: 300, height: 300)
+                        .blendMode(.destinationOut)
+                        
+                }
+                .compositingGroup()
+            }
         case .scanError:
-            Text("Scan Error")
+            VStack {
+                Spacer()
+                VStack(alignment: .leading) {
+                    Text("Oops!")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(Color(.darkColour))
+                    Text("It seems like there was an error. Please try scanning the image again. Make sure that the QR code is one from inside the InTheGym app.")
+                        .font(.footnote.weight(.medium))
+                        .foregroundStyle(Color(.darkColour))
+                }
+                .padding()
+                Spacer()
+                Button {
+                    viewModel.viewState = .scanning
+                } label: {
+                    Text("Try Again")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Color(.darkColour))
+                }
+            }
         case .loadingScan:
             VStack {
-                Text("Loading Scan")
-                ProgressView()
+                Spacer()
+                VStack {
+                    Text("Got it!")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(Color(.darkColour))
+                    ProgressView()
+                        .tint(Color(.darkColour))
+                        .padding()
+                    Text("Just loading the image")
+                        .font(.footnote.weight(.medium))
+                        .foregroundStyle(Color(.darkColour))
+                }
+                .padding()
+                Spacer()
+                Button {
+                    viewModel.viewState = .scanning
+                } label: {
+                    Text("cancel")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Color(.darkColour))
+                }
             }
         case let .gotUserProfile(model):
             List {
@@ -96,27 +168,67 @@ struct LinkPlayerView: View {
             }
         case .linking:
             VStack {
-                Text("Linking")
-                ProgressView()
+                Spacer()
+                VStack(alignment: .leading) {
+                    Text("Linking Player!")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(Color(.darkColour))
+                    Text("We are just linking this account to the player account in your club. It should not take long.")
+                        .font(.footnote.weight(.medium))
+                        .foregroundStyle(Color(.darkColour))
+                    ProgressView()
+                        .tint(Color(.darkColour))
+                        .padding()
+                }
+                .padding()
+                Spacer()
             }
-            
         case .success:
             VStack {
-                Text("Success")
+                Spacer()
+                VStack(alignment: .leading) {
+                    Text("Player Added!")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(Color(.darkColour))
+                    Text("Great! Your new player has been added to the club!")
+                        .font(.footnote.weight(.medium))
+                        .foregroundStyle(Color(.darkColour))
+                }
+                .padding()
+                Spacer()
             }
-            
         case .error:
             VStack {
-                Text("Error")
+                Spacer()
+                VStack(alignment: .leading) {
+                    Text("Oops!")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(Color(.darkColour))
+                    Text("It seems like there was an error. Please try scanning the image again. Make sure that the QR code is one from inside the InTheGym app.")
+                        .font(.footnote.weight(.medium))
+                        .foregroundStyle(Color(.darkColour))
+                }
+                .padding()
+                Spacer()
+                Button {
+                    viewModel.viewState = .scanning
+                } label: {
+                    Text("Try Again")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Color(.darkColour))
+                }
             }
         }
     }
 }
 
 #Preview {
-    LinkPlayerView(viewModel: LinkPlayerViewModel(scannerService: PreviewScannerService(),
-                                                  clubModel: .example,
-                                                  loader: PreviewPlayerLoader(),
-                                                  playerModel: .example,
-                                                  linkService: PreviewLinkPlayerService()))
+    let vm = LinkPlayerViewModel(scannerService: PreviewScannerService(),
+                                 clubModel: .example,
+                                 loader: PreviewPlayerLoader(),
+                                 playerModel: .example,
+                                 linkService: PreviewLinkPlayerService())
+    vm.viewState = .scanning
+    
+    return LinkPlayerView(viewModel: vm)
 }
