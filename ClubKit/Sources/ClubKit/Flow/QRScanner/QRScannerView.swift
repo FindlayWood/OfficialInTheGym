@@ -63,13 +63,23 @@ struct QRScannerView: View {
                 }
                 .padding()
                 Spacer()
-                Button {
-                    viewModel.viewState = .scanning
-                } label: {
-                    Text("Try Again")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Color(.darkColour))
+                VStack {
+                    Button {
+                        viewModel.viewState = .scanning
+                    } label: {
+                        Text("Try Again")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(Color.white)
+                            .padding(.top)
+                    }
                 }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    Color(.lightColour)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .ignoresSafeArea()
+                )
             }
         case .loadingScan:
             VStack {
@@ -87,13 +97,23 @@ struct QRScannerView: View {
                 }
                 .padding()
                 Spacer()
-                Button {
-                    viewModel.viewState = .scanning
-                } label: {
-                    Text("cancel")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Color(.darkColour))
+                VStack {
+                    Button {
+                        viewModel.viewState = .scanning
+                    } label: {
+                        Text("cancel")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(Color.white)
+                            .padding(.top)
+                    }
                 }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    Color(.lightColour)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .ignoresSafeArea()
+                )
             }
         case let .gotUserProfile(userModel):
             List {
@@ -211,13 +231,54 @@ struct QRScannerView: View {
                 }
                 .padding()
                 Spacer()
-                Button {
-                    viewModel.viewState = .scanning
-                } label: {
-                    Text("Try Again")
-                        .font(.subheadline.weight(.semibold))
+                VStack {
+                    Button {
+                        viewModel.viewState = .scanning
+                    } label: {
+                        Text("Try Again")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(Color.white)
+                            .padding(.top)
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    Color(.lightColour)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .ignoresSafeArea()
+                )
+            }
+        case .alreadyJoined:
+            VStack {
+                Spacer()
+                VStack(alignment: .leading) {
+                    Text("Already Joined!")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(Color(.darkColour))
+                    Text("This user is already part of this club.")
+                        .font(.footnote.weight(.medium))
                         .foregroundStyle(Color(.darkColour))
                 }
+                .padding()
+                Spacer()
+                VStack {
+                    Button {
+                        viewModel.viewState = .scanning
+                    } label: {
+                        Text("ok")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(Color.white)
+                            .padding(.top)
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    Color(.lightColour)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .ignoresSafeArea()
+                )
             }
         }
     }
@@ -225,11 +286,8 @@ struct QRScannerView: View {
 
 #Preview {
     let vm = QRScannerViewModel(scannerService: PreviewScannerService(), clubModel: .example, loader: PreviewPlayerLoader(), teamLoader: PreviewTeamLoader(), creationService: PreviewPlayerCreationService())
-    vm.viewState = .scanning
+    
+    vm.viewState = .loadingScan
+    
     return QRScannerView(viewModel: vm)
-//    QRScannerView(viewModel: .init(scannerService: PreviewScannerService(),
-//                                   clubModel: .example,
-//                                   loader: PreviewPlayerLoader(),
-//                                   teamLoader: PreviewTeamLoader(),
-//                                   creationService: PreviewPlayerCreationService()))
 }

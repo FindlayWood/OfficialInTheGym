@@ -14,6 +14,7 @@ class LinkPlayerViewModel: ObservableObject {
         case scanError
         case loadingScan
         case linking
+        case alreadyJoined
         case gotUserProfile(UserModel)
         case success
         case error
@@ -57,8 +58,12 @@ class LinkPlayerViewModel: ObservableObject {
             let username = details[3]
             
             let newUserModel = UserModel(id: userUID, displayName: displayName, username: username)
-            viewState = .gotUserProfile(newUserModel)
             
+            if clubModel.linkedUserUIDs.contains(userUID) {
+                viewState = .alreadyJoined
+            } else {
+                viewState = .gotUserProfile(newUserModel)
+            }
             
         case .failure(let failure):
             print(failure.localizedDescription)

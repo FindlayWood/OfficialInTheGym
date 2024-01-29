@@ -62,13 +62,23 @@ struct LinkPlayerView: View {
                 }
                 .padding()
                 Spacer()
-                Button {
-                    viewModel.viewState = .scanning
-                } label: {
-                    Text("Try Again")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Color(.darkColour))
+                VStack {
+                    Button {
+                        viewModel.viewState = .scanning
+                    } label: {
+                        Text("Try Again")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(Color.white)
+                            .padding(.top)
+                    }
                 }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    Color(.lightColour)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .ignoresSafeArea()
+                )
             }
         case .loadingScan:
             VStack {
@@ -86,13 +96,23 @@ struct LinkPlayerView: View {
                 }
                 .padding()
                 Spacer()
-                Button {
-                    viewModel.viewState = .scanning
-                } label: {
-                    Text("cancel")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Color(.darkColour))
+                VStack {
+                    Button {
+                        viewModel.viewState = .scanning
+                    } label: {
+                        Text("cancel")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(Color.white)
+                            .padding(.top)
+                    }
                 }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    Color(.lightColour)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .ignoresSafeArea()
+                )
             }
         case let .gotUserProfile(model):
             List {
@@ -210,13 +230,54 @@ struct LinkPlayerView: View {
                 }
                 .padding()
                 Spacer()
-                Button {
-                    viewModel.viewState = .scanning
-                } label: {
-                    Text("Try Again")
-                        .font(.subheadline.weight(.semibold))
+                VStack {
+                    Button {
+                        viewModel.viewState = .scanning
+                    } label: {
+                        Text("Try Again")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(Color.white)
+                            .padding(.top)
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    Color(.lightColour)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .ignoresSafeArea()
+                )
+            }
+        case .alreadyJoined:
+            VStack {
+                Spacer()
+                VStack(alignment: .leading) {
+                    Text("Already Joined!")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(Color(.darkColour))
+                    Text("A player in this club is already linked to this InTheGym account. You can only link a player to one account.")
+                        .font(.footnote.weight(.medium))
                         .foregroundStyle(Color(.darkColour))
                 }
+                .padding()
+                Spacer()
+                VStack {
+                    Button {
+                        viewModel.viewState = .scanning
+                    } label: {
+                        Text("ok")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(Color.white)
+                            .padding(.top)
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    Color(.lightColour)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .ignoresSafeArea()
+                )
             }
         }
     }
@@ -228,7 +289,7 @@ struct LinkPlayerView: View {
                                  loader: PreviewPlayerLoader(),
                                  playerModel: .example,
                                  linkService: PreviewLinkPlayerService())
-    vm.viewState = .scanning
+    vm.viewState = .scanError
     
     return LinkPlayerView(viewModel: vm)
 }

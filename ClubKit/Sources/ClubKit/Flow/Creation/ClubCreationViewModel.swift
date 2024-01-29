@@ -72,7 +72,7 @@ class ClubCreationViewModel: ObservableObject {
     }
     
     func mapClubDataToClubModel(_ data: NewClubData) {
-        let newClubModel = RemoteClubModel(id: data.id, clubName: data.displayName, tagline: data.tagline, createdBy: "", createdDate: .now, sport: data.sport, verified: false, teamCount: 0, athleteCount: 0)
+        let newClubModel = RemoteClubModel(id: data.id, clubName: data.displayName, tagline: data.tagline, createdBy: "", createdDate: .now, sport: data.sport, verified: false, teamCount: 0, athleteCount: 0, linkedUserUIDs: [])
         clubManager.createdNewClub(newClubModel)
     }
     

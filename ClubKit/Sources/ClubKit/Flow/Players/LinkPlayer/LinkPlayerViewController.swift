@@ -35,6 +35,6 @@ class LinkPlayerViewController: UIViewController {
         editNavBarColour(to: .darkColour)
     }
     func addDisplay() {
-        addSwiftUIView(display)
+        addSwiftUIViewWithNavBar(display)
     }
 }

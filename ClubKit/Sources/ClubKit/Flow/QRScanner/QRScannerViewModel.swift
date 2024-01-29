@@ -13,6 +13,7 @@ class QRScannerViewModel: ObservableObject {
         case scanning
         case scanError
         case loadingScan
+        case alreadyJoined
         case gotUserProfile(UserModel)
         case loadingAdd
         case addSuccess
@@ -89,7 +90,12 @@ class QRScannerViewModel: ObservableObject {
             
             let newUserModel = UserModel(id: userUID, displayName: displayName, username: username)
             self.displayName = newUserModel.displayName
-            viewState = .gotUserProfile(newUserModel)
+            
+            if clubModel.linkedUserUIDs.contains(userUID) {
+                viewState = .alreadyJoined
+            } else {
+                viewState = .gotUserProfile(newUserModel)
+            }
             
             
         case .failure(let failure):

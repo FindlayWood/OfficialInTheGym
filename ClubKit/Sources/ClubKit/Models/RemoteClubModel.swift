@@ -17,7 +17,8 @@ struct RemoteClubModel: Codable, Identifiable, Equatable {
     var verified: Bool
     var teamCount: Int
     var athleteCount: Int
+    let linkedUserUIDs: [String]
 }
 extension RemoteClubModel {
-    static let example = RemoteClubModel(id: UUID().uuidString, clubName: "Example", tagline: "this is an example", createdBy: "", createdDate: .now, sport: .rugby, verified: true, teamCount: 3, athleteCount: 29)
+    static let example = RemoteClubModel(id: UUID().uuidString, clubName: "Example", tagline: "this is an example", createdBy: "", createdDate: .now, sport: .rugby, verified: true, teamCount: 3, athleteCount: 29, linkedUserUIDs: [])
 }
