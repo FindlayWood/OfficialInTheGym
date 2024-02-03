@@ -5,27 +5,49 @@
 //  Created by Findlay-Personal on 14/05/2023.
 //
 
+import PhotosUI
 import SwiftUI
 
 struct ClubCreationView: View {
     
     @ObservedObject var viewModel: ClubCreationViewModel
     
+    @State private var libraryImage: UIImage?
+    @State private var selectedPhotos: [PhotosPickerItem] = []
+    @State private var loadingImageData: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 List {
-                    
                     Section {
-                        VStack(alignment: .leading) {
-                            Text("Create New Club")
-                                .font(.title3.bold())
-                                .foregroundColor(.primary)
-                            Text("Creating a new player will add them to them to the club. They can then be added and removed from team's within the club as you wish. If the player already has an InTheGym account then you can use QR code to add them immediately and they can get access through their account. You can link created players with any InTheGym account at a later date.")
-                                .font(.footnote.bold())
-                                .foregroundColor(.secondary)
+                        ZStack {
+                            VStack {
+                                if let libraryImage {
+                                    Image(uiImage: libraryImage)
+                                        .resizable()
+                                        .frame(width: 100, height: 100)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                    
+                                } else {
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .foregroundStyle(Color.gray)
+                                        .frame(width: 100, height: 100)
+                                }
+                                PhotosPicker(selection: $selectedPhotos,
+                                             maxSelectionCount: 1,
+                                             matching: .images,
+                                             label: {
+                                    Text("Select Photo")
+                                })
+                            }
+                            .onChange(of: selectedPhotos) { _ in
+                                convertDataToImage()
+                            }
                         }
+                        .frame(maxWidth: .infinity)
                     }
+                    .listRowBackground(Color.clear)
                     
                     Section {
                         VStack(alignment: .leading) {
@@ -157,6 +179,27 @@ struct ClubCreationView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
 
+    }
+    
+    func convertDataToImage() {
+        // reset the images array before adding more/new photos
+        libraryImage = nil
+        loadingImageData = true
+        
+        if !selectedPhotos.isEmpty {
+            for eachItem in selectedPhotos {
+                Task {
+                    if let imageData = try? await eachItem.loadTransferable(type: Data.self) {
+                        if let image = UIImage(data: imageData) {
+                            libraryImage = image
+                        }
+                    }
+                }
+            }
+        }
+        
+        // uncheck the images in the system photo picker
+        selectedPhotos.removeAll()
     }
 }
 
