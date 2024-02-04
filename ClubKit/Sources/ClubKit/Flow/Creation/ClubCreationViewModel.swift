@@ -5,10 +5,11 @@
 //  Created by Findlay-Personal on 14/05/2023.
 //
 
-import Foundation
+import UIKit
 
 class ClubCreationViewModel: ObservableObject {
     
+    @Published var libraryImage: UIImage?
     @Published var displayName: String = ""
     @Published var tagline: String = ""
     @Published var sport: Sport = .rugby
@@ -33,7 +34,9 @@ class ClubCreationViewModel: ObservableObject {
         if userRole == .manager {
             selectedPositions = []
         }
-        let newData = NewClubData(displayName: displayName, tagline: tagline, sport: sport, isPrivate: isPrivate, currentUserRole: userRole, positions: selectedPositions)
+        let imageData = libraryImage?.jpegData(compressionQuality: 0.1)
+        let strBase64 = imageData?.base64EncodedString(options: .lineLength64Characters)
+        let newData = NewClubData(displayName: displayName, tagline: tagline, sport: sport, isPrivate: isPrivate, currentUserRole: userRole, positions: selectedPositions, imageData: strBase64)
         Task {
             let result = await service.createNewClub(with: newData)
             switch result {

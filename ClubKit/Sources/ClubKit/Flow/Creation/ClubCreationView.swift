@@ -12,7 +12,6 @@ struct ClubCreationView: View {
     
     @ObservedObject var viewModel: ClubCreationViewModel
     
-    @State private var libraryImage: UIImage?
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var loadingImageData: Bool = false
     
@@ -23,7 +22,7 @@ struct ClubCreationView: View {
                     Section {
                         ZStack {
                             VStack {
-                                if let libraryImage {
+                                if let libraryImage = viewModel.libraryImage {
                                     Image(uiImage: libraryImage)
                                         .resizable()
                                         .frame(width: 100, height: 100)
@@ -183,7 +182,7 @@ struct ClubCreationView: View {
     
     func convertDataToImage() {
         // reset the images array before adding more/new photos
-        libraryImage = nil
+        viewModel.libraryImage = nil
         loadingImageData = true
         
         if !selectedPhotos.isEmpty {
@@ -191,7 +190,7 @@ struct ClubCreationView: View {
                 Task {
                     if let imageData = try? await eachItem.loadTransferable(type: Data.self) {
                         if let image = UIImage(data: imageData) {
-                            libraryImage = image
+                            viewModel.libraryImage = image
                         }
                     }
                 }
