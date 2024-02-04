@@ -19,6 +19,14 @@ enum Sport: String, Codable, CaseIterable {
             return "Basketball"
         }
     }
+    var iconName: String {
+        switch self {
+        case .rugby:
+            return "figure.rugby"
+        case .basketball:
+            return "figure.basketball"
+        }
+    }
     var positions: [Positions] {
         switch self {
         case .rugby:

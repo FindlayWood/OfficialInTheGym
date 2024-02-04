@@ -51,83 +51,117 @@ struct ClubCreationView: View {
                     Section {
                         VStack(alignment: .leading) {
                             Text("Display Name")
-                            TextField("enter display name...", text: $viewModel.displayName)
+                                .font(.headline)
+                                .foregroundStyle(Color.primary)
+                            TextField("enter club display name...", text: $viewModel.displayName)
                         }
-                    } header: {
-                        Text("Name")
+                        .padding()
+                        .background(
+                            LinearGradient(colors: [Color(.offWhiteColour), .white], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .shadow(color: .black.opacity(0.3), radius: 4, y: 4)
+                        )
+                        .padding(.bottom)
+                        .padding(.horizontal, 4)
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets())
                     }
+                    
                 
                     Section {
                         VStack(alignment: .leading) {
                             Text("Tag Line")
-                            TextField("enter tag line...", text: $viewModel.tagline)
+                                .font(.headline)
+                                .foregroundStyle(Color.primary)
+                            TextField("enter club tag line...", text: $viewModel.tagline)
+                        }
+                        .padding()
+                        .background(
+                            LinearGradient(colors: [Color(.offWhiteColour), .white], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .shadow(color: .black.opacity(0.3), radius: 4, y: 4)
+                        )
+                        .padding(.bottom)
+                        .padding(.horizontal, 4)
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets())
+                    }
+                    
+                    Section {
+                        LazyVGrid(columns: [.init(.flexible()), .init(.flexible())]) {
+                            ForEach(Sport.allCases, id: \.self) { sport in
+                                SelectSportRow(sport: sport, selected: viewModel.sport == sport) {
+                                    withAnimation {
+                                        viewModel.sport = sport
+                                    }
+                                }
+                            }
                         }
                     } header: {
-                        Text("Tag")
+                        Text("Club Sport")
+                    } footer: {
+                        Text("\(viewModel.sport.title) selected")
                     }
+                    .listRowBackground(Color.clear)
                     
                     Section {
-                        Picker("What is the club sport?", selection: $viewModel.sport) {
-                            ForEach(Sport.allCases, id: \.self) { sport in
-                                Text(sport.title)
-                                    .tag(sport)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                        .onChange(of: viewModel.sport) { newValue in
-                            viewModel.updateSport(to: newValue)
-                        }
-                    }
-                    
-                    Section {
-                        Picker("What is your role?", selection: $viewModel.userRole) {
+                        LazyVGrid(columns: [.init(.flexible()), .init(.flexible())]) {
                             ForEach(ClubRole.allCases, id: \.self) { role in
-                                Text(role.rawValue)
-                                    .tag(role)
+                                SelectRoleRow(role: role, selected: viewModel.userRole == role) {
+                                    withAnimation {
+                                        viewModel.userRole = role
+                                    }
+                                }
                             }
                         }
-                        .pickerStyle(.segmented)
                     } header: {
                         Text("Your Role")
+                    } footer: {
+                        Text("\(viewModel.userRole.rawValue.capitalized) selected")
                     }
+                    .listRowBackground(Color.clear)
                     
                     if viewModel.userRole == .player {
                         Section {
-                            ForEach(viewModel.selectedPositions, id: \.self) { position in
-                                Text(position.title)
-                            }
-                            Menu {
-                                ForEach(viewModel.sport.positions, id: \.self) { position in
-                                    Button(position.title) { viewModel.addSelectedPosition(position) }
+                            ForEach(viewModel.sport.positions, id: \.self) { position in
+                                SelectPositionRow(selected: viewModel.isPositionSelected(position), position: position) {
+                                    viewModel.toggleSelectedPosition(position)
                                 }
-                            } label: {
-                                Image(systemName: "plus.circle.fill")
-                                    .foregroundColor(Color(.darkColour))
+                                .padding(.bottom)
+                                .padding(.horizontal, 4)
                             }
+                            .listRowInsets(EdgeInsets())
+                            .listRowBackground(Color.clear)
                         } header: {
-                            Text("All Positions")
+                            Text("Select Positions")
                         }
                     }
                     
                     Section {
-                        Button {
-                            viewModel.createAction()
-                        } label: {
-                            Text("Create Club")
-                                .padding()
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .background(Color(.darkColour).opacity(viewModel.buttonDisabled ? 0.3 : 1))
-                                .clipShape(Capsule())
-                                .shadow(radius: viewModel.buttonDisabled ? 0 : 4)
-                        }
-                        .disabled(viewModel.buttonDisabled)
+                        Spacer()
+                            .frame(height: 100)
+                            .listRowBackground(Color.clear)
                     }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 2, leading: 2, bottom: 2, trailing: 2))
                 }
                 .edgesIgnoringSafeArea(.bottom)
+                
+                VStack {
+                    Spacer()
+                    Button {
+                        viewModel.createAction()
+                    } label: {
+                        Text("Create Club")
+                            .padding()
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .background(Color(.darkColour).opacity(viewModel.buttonDisabled ? 0.3 : 1))
+                            .clipShape(Capsule())
+                            .shadow(radius: viewModel.buttonDisabled ? 0 : 4)
+                    }
+                    .disabled(viewModel.buttonDisabled)
+                    .padding()
+                }
 
                 if viewModel.isUploading {
                     ZStack {
@@ -209,6 +243,6 @@ struct ClubCreationView_Previews: PreviewProvider {
         }
     }
     static var previews: some View {
-        ClubCreationView(viewModel: ClubCreationViewModel(service: PreviewService(), clubManager: PreviewClubManager()))
+        ClubCreationView(viewModel: ClubCreationViewModel(service: PreviewClubCreationService(), clubManager: PreviewClubManager()))
     }
 }

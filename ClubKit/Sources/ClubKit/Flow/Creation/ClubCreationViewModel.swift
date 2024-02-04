@@ -68,6 +68,18 @@ class ClubCreationViewModel: ObservableObject {
         sport = newSport
     }
     
+    func toggleSelectedPosition(_ position: Positions) {
+        if let index = selectedPositions.firstIndex(of: position) {
+            selectedPositions.remove(at: index)
+        } else {
+            selectedPositions.append(position)
+        }
+    }
+    
+    func isPositionSelected(_ postion: Positions) -> Bool {
+        selectedPositions.contains(postion)
+    }
+    
     func addSelectedPosition(_ position: Positions) {
         if !selectedPositions.contains(position) {
             selectedPositions.append(position)
@@ -80,6 +92,6 @@ class ClubCreationViewModel: ObservableObject {
     }
     
     var buttonDisabled: Bool {
-        displayName.isEmpty
+        displayName.isEmpty || (userRole == .player && selectedPositions.isEmpty)
     }
 }
