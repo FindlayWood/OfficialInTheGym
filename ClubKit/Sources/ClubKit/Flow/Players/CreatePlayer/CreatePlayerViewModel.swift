@@ -5,7 +5,7 @@
 //  Created by Findlay-Personal on 22/05/2023.
 //
 
-import Foundation
+import UIKit
 
 class CreatePlayerViewModel: ObservableObject {
     
@@ -20,6 +20,7 @@ class CreatePlayerViewModel: ObservableObject {
     @Published var uploaded: Bool = false
     @Published var errorUploading: Bool = false
     // MARK: - New Model Variables
+    @Published var libraryImage: UIImage?
     @Published var displayName: String = ""
     @Published var playerPositions: [Positions] = []
     @Published var teams: [RemoteTeamModel] = []
@@ -60,7 +61,9 @@ class CreatePlayerViewModel: ObservableObject {
     @MainActor
     func create() async {
         isUploading = true
-        let newPlayerData = NewPlayerData(displayName: displayName, clubID: clubModel.id, positions: playerPositions.map { $0.rawValue }, selectedTeams: selectedTeams.map { $0.id })
+        let imageData = libraryImage?.jpegData(compressionQuality: 0.1)
+        let strBase64 = imageData?.base64EncodedString(options: .lineLength64Characters)
+        let newPlayerData = NewPlayerData(displayName: displayName, clubID: clubModel.id, positions: playerPositions.map { $0.rawValue }, selectedTeams: selectedTeams.map { $0.id }, imageData: strBase64)
         let result = await creationService.createNewPlayer(with: newPlayerData)
         switch result {
         case .success:

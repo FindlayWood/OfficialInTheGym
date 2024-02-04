@@ -17,6 +17,7 @@ struct NewPlayerData {
     let clubID: String
     let positions: [String]
     let selectedTeams: [String]
+    let imageData: String?
 }
 
 struct RemotePlayerCreationService: PlayerCreationService {
@@ -28,13 +29,16 @@ struct RemotePlayerCreationService: PlayerCreationService {
     }
     
     func createNewPlayer(with data: NewPlayerData) async -> Result<NewPlayerData,Error> {
-        let functionData: [String: Any] = [
+        var functionData: [String: Any] = [
             "clubID": data.clubID,
             "playerID": data.playerID,
             "displayName": data.displayName,
             "positions": data.positions,
             "selectedTeams": data.selectedTeams
         ]
+        if let imageData = data.imageData {
+            functionData["imageData"] = imageData
+        }
         do {
             try await client.callFunction(named: "createPlayer", with: functionData)
             return .success(data)
