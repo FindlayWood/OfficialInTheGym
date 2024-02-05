@@ -17,22 +17,21 @@ struct CreateTeamView: View {
                 
                 Section {
                     VStack(alignment: .leading) {
-                        Text("Create New Team")
-                            .font(.title3.bold())
-                            .foregroundColor(.primary)
-                        Text("Creating a new player will add them to them to the club. They can then be added and removed from team's within the club as you wish. If the player already has an InTheGym account then you can use QR code to add them immediately and they can get access through their account. You can link created players with any InTheGym account at a later date.")
-                            .font(.footnote.bold())
-                            .foregroundColor(.secondary)
-                    }
-                }
-                
-                Section {
-                    VStack(alignment: .leading) {
                         Text("Display Name")
+                            .font(.headline)
+                            .foregroundStyle(Color.primary)
                         TextField("enter team name...", text: $viewModel.displayName)
                     }
-                } header: {
-                    Text("Name")
+                    .padding()
+                    .background(
+                        LinearGradient(colors: [Color(.offWhiteColour), .white], startPoint: .topLeading, endPoint: .bottomTrailing)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .shadow(color: .black.opacity(0.3), radius: 4, y: 4)
+                    )
+                    .padding(.bottom)
+                    .padding(.horizontal, 4)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
                 }
                 
                 
