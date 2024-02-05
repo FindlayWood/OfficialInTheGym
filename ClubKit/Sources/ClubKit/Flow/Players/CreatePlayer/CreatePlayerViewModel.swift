@@ -58,6 +58,18 @@ class CreatePlayerViewModel: ObservableObject {
         }
     }
     
+    func toggleSelectedPosition(_ position: Positions) {
+        if let index = playerPositions.firstIndex(of: position) {
+            playerPositions.remove(at: index)
+        } else {
+            playerPositions.append(position)
+        }
+    }
+    
+    func isPositionSelected(_ postion: Positions) -> Bool {
+        playerPositions.contains(postion)
+    }
+    
     @MainActor
     func create() async {
         isUploading = true

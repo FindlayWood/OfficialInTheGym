@@ -52,25 +52,44 @@ struct CreatePlayerView: View {
                 Section {
                     VStack(alignment: .leading) {
                         Text("Display Name")
+                            .font(.headline)
+                            .foregroundStyle(Color.primary)
                         TextField("enter display name...", text: $viewModel.displayName)
                             .tint(Color(.darkColour))
                             .autocorrectionDisabled()
                     }
-                } header: {
-                    Text("Name")
-                }
+                    .padding()
+                    .background(
+                        LinearGradient(colors: [Color(.offWhiteColour), .white], startPoint: .topLeading, endPoint: .bottomTrailing)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .shadow(color: .black.opacity(0.3), radius: 4, y: 4)
+                    )
+                    .padding(.bottom)
+                    .padding(.horizontal, 4)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
+                } 
                 
                 Section {
-                    ForEach(viewModel.teams, id: \.id) { model in
-                        HStack {
-                            Text(model.teamName)
-                                .font(.headline)
-                            Spacer()
-                            Button {
-                                viewModel.toggleSelectedTeam(model)
-                            } label: {
-                                Image(systemName: (viewModel.selectedTeams.contains(where: { $0.id == model.id })) ? "checkmark.circle.fill" : "circle")
-                                    .foregroundColor(Color(.darkColour))
+                    if viewModel.teams.isEmpty {
+                        VStack {
+                            Text("There are no teams in this club at the moment. Create a team by navigating to the Teams list within the club. You can add players to Teams at a later date as well.")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(Color.primary)
+                                .multilineTextAlignment(.center)
+                        }
+                    } else {
+                        ForEach(viewModel.teams, id: \.id) { model in
+                            HStack {
+                                Text(model.teamName)
+                                    .font(.headline)
+                                Spacer()
+                                Button {
+                                    viewModel.toggleSelectedTeam(model)
+                                } label: {
+                                    Image(systemName: (viewModel.selectedTeams.contains(where: { $0.id == model.id })) ? "checkmark.circle.fill" : "circle")
+                                        .foregroundColor(Color(.darkColour))
+                                }
                             }
                         }
                     }
@@ -79,41 +98,49 @@ struct CreatePlayerView: View {
                 }
                 
                 Section {
-                    ForEach(viewModel.playerPositions, id: \.self) { position in
-                        Text(position.title)
-                    }
-                    Menu {
-                        ForEach(viewModel.selectedSport.positions, id: \.self) { position in
-                            Button(position.title) { viewModel.playerPositions.append(position)}
+                    
+                    ForEach(viewModel.selectedSport.positions, id: \.self) { position in
+                        SelectPositionRow(selected: viewModel.isPositionSelected(position), position: position) {
+                            viewModel.toggleSelectedPosition(position)
                         }
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(Color(.darkColour))
+                        .padding(.bottom)
+                        .padding(.horizontal, 4)
                     }
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                    
                 } header: {
-                    Text("All Positions")
+                    Text("Select Positions")
                 }
                 
                 Section {
-                    Button {
-                        Task {
-                            await viewModel.create()
-                        }
-                    } label: {
-                        Text("Create Player")
-                            .padding()
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .background(Color(.darkColour).opacity(viewModel.buttonDisabled ? 0.3 : 1))
-                            .clipShape(Capsule())
-                            .shadow(radius: viewModel.buttonDisabled ? 0 : 4)
-                    }
-                    .disabled(viewModel.buttonDisabled)
+                    Spacer()
+                        .frame(height: 100)
                 }
                 .listRowBackground(Color.clear)
-                .listRowInsets(.init(top: 2, leading: 2, bottom: 2, trailing: 2))
             }
+            
+            VStack {
+                Spacer()
+                Button {
+                    Task {
+                        await viewModel.create()
+                    }
+                } label: {
+                    Text("Create Player")
+                        .padding()
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .background(Color(.darkColour).opacity(viewModel.buttonDisabled ? 0.3 : 1))
+                        .clipShape(Capsule())
+                        .shadow(radius: viewModel.buttonDisabled ? 0 : 4)
+                }
+                .disabled(viewModel.buttonDisabled)
+                .padding()
+            }
+            
+            
             if viewModel.isUploading {
                 ZStack {
                     Color.black.opacity(0.3)
