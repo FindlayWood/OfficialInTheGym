@@ -18,24 +18,21 @@ struct CreateGroupView: View {
                     
                     Section {
                         VStack(alignment: .leading) {
-                            Text("Create New Workout Group")
-                                .font(.title3.bold())
-                                .foregroundColor(.primary)
-                            Text("Creating a new Workout Group will add it to the club. Groups are great for assigning workoust to specific players.")
-                                .font(.footnote.bold())
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    
-                    Section {
-                        VStack(alignment: .leading) {
                             Text("Group Name")
                             TextField("enter group name...", text: $viewModel.groupName)
                                 .tint(Color(.darkColour))
                                 .autocorrectionDisabled()
                         }
-                    } header: {
-                        Text("Name")
+                        .padding()
+                        .background(
+                            LinearGradient(colors: [Color(.offWhiteColour), .white], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .shadow(color: .black.opacity(0.3), radius: 4, y: 4)
+                        )
+                        .padding(.bottom)
+                        .padding(.horizontal, 4)
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets())
                     }
                     
                     Section {
@@ -52,7 +49,17 @@ struct CreateGroupView: View {
                         Text("Players")
                     }
                     
+                    Section {
+                        Spacer()
+                            .frame(height: 100)
+                    }
+                    .listRowBackground(Color.clear)
+                    
                 }
+            }
+            
+            VStack {
+                Spacer()
                 Button {
                     viewModel.create()
                 } label: {
