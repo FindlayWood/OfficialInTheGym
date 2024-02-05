@@ -54,3 +54,9 @@ enum Constants {
         "Users/\(userUID)"
     }
 }
+
+enum ImageConstants {
+    static func clubPath(_ clubID: String) -> String {
+        "ClubProfilePhotos/\(clubID)"
+    }
+}

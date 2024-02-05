@@ -14,6 +14,8 @@ class ClubsViewModel: ObservableObject {
     
     var clubManager: ClubManager
     
+    let imageCache: ImageCache
+    
     var hasLoaded: Bool = false
     
     private var subscriptions = Set<AnyCancellable>()
@@ -31,9 +33,10 @@ class ClubsViewModel: ObservableObject {
     }
     
     // MARK: - Initializer
-    init(clubManager: ClubManager, flow: ClubsFlow?) {
+    init(clubManager: ClubManager, flow: ClubsFlow?, imageCache: ImageCache) {
         self.clubManager = clubManager
         self.coordinator = flow
+        self.imageCache = imageCache
     }
     
     // MARK: - Load

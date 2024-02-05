@@ -8,12 +8,24 @@
 import SwiftUI
 
 struct ClubRow: View {
+    
+    @State private var profileImage: UIImage?
     var model: RemoteClubModel
+    let imageCache: ImageCache
+    
     var body: some View {
         HStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: 4)
-                .frame(width: 50, height: 50)
-                .foregroundColor(.gray)
+            if let profileImage {
+                Image(uiImage: profileImage)
+                    .resizable()
+                    .frame(width: 50, height: 50)
+                    .scaledToFill()
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
+            } else {
+                RoundedRectangle(cornerRadius: 4)
+                    .frame(width: 50, height: 50)
+                    .foregroundColor(.gray)
+            }
             VStack {
                 VStack(alignment: .leading) {
                     HStack {
@@ -73,11 +85,16 @@ struct ClubRow: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color(.darkColour), lineWidth: 1)
         )
+        .onAppear {
+            imageCache.getImage(for: ImageConstants.clubPath(model.id)) { image in
+                self.profileImage = image
+            }
+        }
     }
 }
 
 struct ClubRow_Previews: PreviewProvider {
     static var previews: some View {
-        ClubRow(model: .example)
+        ClubRow(model: .example, imageCache: PreviewImageCache())
     }
 }

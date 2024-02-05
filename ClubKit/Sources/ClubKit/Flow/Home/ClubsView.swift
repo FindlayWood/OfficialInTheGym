@@ -115,7 +115,7 @@ struct ClubsView: View {
                             Button {
                                 viewModel.showClubAction(model)
                             } label: {
-                                ClubRow(model: model)
+                                ClubRow(model: model, imageCache: viewModel.imageCache)
                             }
                         }
                         .listRowBackground(Color.clear)
@@ -134,6 +134,6 @@ struct ClubsView: View {
 
 struct ClubsView_Previews: PreviewProvider {
     static var previews: some View {
-        ClubsView(viewModel: ClubsViewModel(clubManager: PreviewClubManager(), flow: nil))
+        ClubsView(viewModel: ClubsViewModel(clubManager: PreviewClubManager(), flow: nil, imageCache: PreviewImageCache()))
     }
 }

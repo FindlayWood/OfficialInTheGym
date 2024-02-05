@@ -21,7 +21,8 @@ class ClubKitComposition {
     func compose() {
         let userService = ClubKitCurrentUserModel()
         let networkService = ClubKitNetWorkService()
-        let clubKitBoundary = ClubKitBoundary(navigationController: navigationController, networkService: networkService, userService: userService)
+        let storageService = ClubKitStorageService()
+        let clubKitBoundary = ClubKitBoundary(navigationController: navigationController, networkService: networkService, storageService: storageService, userService: userService)
         clubKitBoundary.compose()
     }
 }
@@ -68,5 +69,19 @@ class ClubKitNetWorkService: NetworkService {
     
     func callFunction(named: String, with data: Any) async throws {
         try await functionsService.callable(named: named, data: data)
+    }
+}
+
+
+struct ClubKitStorageService: StorageService {
+    
+    var firebaseStorageService: FirebaseStorageManager
+    
+    init(firebaseStorageService: FirebaseStorageManager = FirebaseStorageManager.shared) {
+        self.firebaseStorageService = firebaseStorageService
+    }
+    
+    func getData(at path: String, maxSize: Int64, completion: @escaping (Result<Data, Error>) -> Void) {
+        firebaseStorageService.dataDownload(from: path, maxSize: maxSize, completion: completion)
     }
 }

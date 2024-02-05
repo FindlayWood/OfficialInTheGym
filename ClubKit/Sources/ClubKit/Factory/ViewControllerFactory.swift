@@ -15,14 +15,16 @@ class BaseViewControllerFactory {
     
     var clubManager: ClubManager
     var userService: CurrentUserService
+    let imageCache: ImageCache
     
-    init(clubManager: ClubManager, userService: CurrentUserService) {
+    init(clubManager: ClubManager, userService: CurrentUserService, imageCache: ImageCache) {
         self.clubManager = clubManager
         self.userService = userService
+        self.imageCache = imageCache
     }
     
     func makeBaseViewController(with flow: ClubsFlow) -> ClubsViewController {
-        let viewModel = ClubsViewModel(clubManager: clubManager, flow: flow)
+        let viewModel = ClubsViewModel(clubManager: clubManager, flow: flow, imageCache: imageCache)
         let vc = ClubsViewController(viewModel: viewModel, coordinator: flow)
         return vc
     }
