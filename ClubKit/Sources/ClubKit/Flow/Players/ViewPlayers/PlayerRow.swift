@@ -9,19 +9,29 @@ import SwiftUI
 
 struct PlayerRow: View {
     
+    @State private var profileImage: UIImage?
     let model: RemotePlayerModel
+    let imageCache: ImageCache
     var selectable: Bool = false
     var selected: Bool = false
     
     var body: some View {
         HStack(alignment: .bottom) {
-            ZStack(alignment: .bottom) {
-                RoundedRectangle(cornerRadius: 4)
-                    .foregroundColor(.secondary)
+            if let profileImage {
+                Image(uiImage: profileImage)
+                    .resizable()
                     .frame(width: 50, height: 50)
-                Image(systemName: "person.fill")
-                    .foregroundColor(.white)
-                    .font(.title)
+                    .scaledToFill()
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
+            } else {
+                ZStack(alignment: .bottom) {
+                    RoundedRectangle(cornerRadius: 4)
+                        .foregroundColor(.secondary)
+                        .frame(width: 50, height: 50)
+                    Image(systemName: "person.fill")
+                        .foregroundColor(.white)
+                        .font(.title)
+                }
             }
             VStack(alignment: .leading) {
                 Text(model.displayName)
@@ -39,6 +49,11 @@ struct PlayerRow: View {
             }
         }
         .contentShape(Rectangle())
+        .onAppear {
+            imageCache.getImage(for: ImageConstants.playerPath(model.id, in: model.clubID)) { image in
+                self.profileImage = image
+            }
+        }
     }
     
     var positionString: String {
@@ -54,6 +69,6 @@ struct PlayerRow: View {
 
 struct PlayerRow_Previews: PreviewProvider {
     static var previews: some View {
-        PlayerRow(model: .example)
+        PlayerRow(model: .example, imageCache: PreviewImageCache())
     }
 }

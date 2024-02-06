@@ -62,7 +62,8 @@ public class ClubKitBoundary {
                                                                              teamLoader: teamLoader,
                                                                              creationService: playerCreationService,
                                                                              qrScannerService: scannerService,
-                                                                             linkPlayerService: linkPlayerService)
+                                                                             linkPlayerService: linkPlayerService,
+                                                                             imageCache: imageCache)
         
         let teamCreationService = RemoteTeamCreationService(client: client)
         let uploadLineupService = RemoteUploadLineupService(client: client)
@@ -73,12 +74,14 @@ public class ClubKitBoundary {
                                                                        playerLoader: playerLoader,
                                                                        teamCreationService: teamCreationService,
                                                                        lineupUploadService: uploadLineupService,
-                                                                       lineupLoader: lineupLoader)
+                                                                       lineupLoader: lineupLoader,
+                                                                       imageCache: imageCache)
         
         
         let groupViewControllerFactory = BasicGroupsViewControllerFactory(groupLoader: groupLoader,
                                                                           playerLoader: playerLoader,
-                                                                          groupCreationService: groupCreationService)
+                                                                          groupCreationService: groupCreationService,
+                                                                          imageCache: imageCache)
         
         let staffLoader = RemoteStaffLoader(networkService: networkService)
         let staffCreationservice = RemoteStaffCreationService(client: client)

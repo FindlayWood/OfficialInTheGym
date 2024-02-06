@@ -18,6 +18,7 @@ struct BasicGroupsViewControllerFactory: GroupsViewControllerFactory {
     var groupLoader: GroupLoader
     var playerLoader: PlayerLoader
     var groupCreationService: GroupCreationService
+    var imageCache: ImageCache
     
     func makeGroupsViewController(for club: RemoteClubModel) -> GroupsListViewController {
         let viewModel = GroupsListViewModel(groupLoader: groupLoader, clubModel: club)
@@ -26,13 +27,13 @@ struct BasicGroupsViewControllerFactory: GroupsViewControllerFactory {
     }
     
     func makeCreateGroupViewController(for club: RemoteClubModel) -> CreateGroupViewController {
-        let viewModel = CreateGroupViewModel(clubModel: club, creationService: groupCreationService)
+        let viewModel = CreateGroupViewModel(clubModel: club, creationService: groupCreationService, imageCache: imageCache)
         let vc = CreateGroupViewController(viewModel: viewModel)
         return vc
     }
     
     func makePlayersViewController(for club: RemoteClubModel) -> PlayersViewController {
-        let viewModel = PlayersViewModel(clubModel: club, playerLoader: playerLoader, selectable: true)
+        let viewModel = PlayersViewModel(clubModel: club, playerLoader: playerLoader, selectable: true, imageCache: imageCache)
         let vc = PlayersViewController(viewModel: viewModel)
         return vc
     }

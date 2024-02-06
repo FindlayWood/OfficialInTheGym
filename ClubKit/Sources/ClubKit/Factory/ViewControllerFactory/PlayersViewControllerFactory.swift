@@ -22,9 +22,10 @@ struct BasicPlayersViewControllerFactory: PlayersViewControllerFactory {
     var creationService: PlayerCreationService
     var qrScannerService: QRScannerService
     var linkPlayerService: LinkPlayerService
+    var imageCache: ImageCache
     
     func makePlayersViewController(with model: RemoteClubModel) -> PlayersViewController {
-        let viewModel = PlayersViewModel(clubModel: model, playerLoader: playerLoader)
+        let viewModel = PlayersViewModel(clubModel: model, playerLoader: playerLoader, imageCache: imageCache)
         let vc = PlayersViewController(viewModel: viewModel)
         return vc
     }

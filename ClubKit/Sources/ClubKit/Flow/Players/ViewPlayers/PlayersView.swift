@@ -77,7 +77,7 @@ struct PlayersView: View {
                     List {
                         Section {
                             ForEach(viewModel.searchedPlayers) { model in
-                                PlayerRow(model: model, selectable: viewModel.selectable, selected: viewModel.checkSelection(of: model))
+                                PlayerRow(model: model, imageCache: viewModel.imageCache, selectable: viewModel.selectable, selected: viewModel.checkSelection(of: model))
                                 .onTapGesture {
                                     viewModel.tappedOn(model)
                                 }
@@ -116,6 +116,6 @@ struct PlayersView_Previews: PreviewProvider {
         func loadAllPlayers(for clubID: String) async throws -> [RemotePlayerModel] { return [] }
     }
     static var previews: some View {
-        PlayersView(viewModel: PlayersViewModel(clubModel: .example, playerLoader: PreviewPlayerLoader()))
+        PlayersView(viewModel: PlayersViewModel(clubModel: .example, playerLoader: PreviewPlayerLoader(), imageCache: PreviewImageCache()))
     }
 }

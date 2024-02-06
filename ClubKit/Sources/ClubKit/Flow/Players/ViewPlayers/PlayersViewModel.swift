@@ -31,14 +31,16 @@ class PlayersViewModel: ObservableObject {
     var clubModel: RemoteClubModel
     var playerLoader: PlayerLoader
     let selectable: Bool
+    let imageCache: ImageCache
     
     var selectedPlayer: ((RemotePlayerModel) -> ())?
     var selectedPlayersConfirmed: (([RemotePlayerModel]) -> ())?
     
-    init(clubModel: RemoteClubModel, playerLoader: PlayerLoader, selectable: Bool = false) {
+    init(clubModel: RemoteClubModel, playerLoader: PlayerLoader, selectable: Bool = false, imageCache: ImageCache) {
         self.clubModel = clubModel
         self.playerLoader = playerLoader
         self.selectable = selectable
+        self.imageCache = imageCache
     }
     
     func loadFromClub() {

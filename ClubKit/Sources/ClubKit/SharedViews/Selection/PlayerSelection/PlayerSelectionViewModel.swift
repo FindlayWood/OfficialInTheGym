@@ -27,9 +27,11 @@ class PlayerSelectionViewModel: ObservableObject {
     
     var clubModel: RemoteClubModel
     var playerLoader: PlayerLoader
+    var imageCache: ImageCache
     
-    init(clubModel: RemoteClubModel, playerLoader: PlayerLoader) {
+    init(clubModel: RemoteClubModel, playerLoader: PlayerLoader, imageCache: ImageCache) {
         self.clubModel = clubModel
         self.playerLoader = playerLoader
+        self.imageCache = imageCache
     }
 }

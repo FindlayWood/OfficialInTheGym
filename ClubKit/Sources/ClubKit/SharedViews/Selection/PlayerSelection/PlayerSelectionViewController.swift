@@ -11,13 +11,15 @@ class PlayerSelectionViewController: UIViewController {
     
     var clubModel: RemoteClubModel
     var playerLoader: PlayerLoader
+    var imageCache: ImageCache
     
-    private lazy var viewModel = PlayerSelectionViewModel(clubModel: clubModel, playerLoader: playerLoader)
+    private lazy var viewModel = PlayerSelectionViewModel(clubModel: clubModel, playerLoader: playerLoader, imageCache: imageCache)
     private lazy var display = PlayerSelectionView(viewModel: viewModel)
     
-    init(clubModel: RemoteClubModel, playerLoader: PlayerLoader) {
+    init(clubModel: RemoteClubModel, playerLoader: PlayerLoader, imageCache: ImageCache) {
         self.clubModel = clubModel
         self.playerLoader = playerLoader
+        self.imageCache = imageCache
         super.init(nibName: nil, bundle: nil)
     }
     

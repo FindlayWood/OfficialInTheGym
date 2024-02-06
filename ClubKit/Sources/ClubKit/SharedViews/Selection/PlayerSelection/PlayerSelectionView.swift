@@ -22,7 +22,7 @@ struct PlayerSelectionView: View {
             List {
                 Section {
                     ForEach(viewModel.searchedPlayers) { model in
-                        PlayerRow(model: model)
+                        PlayerRow(model: model, imageCache: viewModel.imageCache)
                     }
                 } header: {
                     Text("Players")
@@ -40,6 +40,6 @@ struct PlayerSelectionView_Previews: PreviewProvider {
         func loadAllPlayers(for clubID: String) async throws -> [RemotePlayerModel] { return [] }
     }
     static var previews: some View {
-        PlayerSelectionView(viewModel: PlayerSelectionViewModel(clubModel: .example, playerLoader: PreviewPlayerLoader()))
+        PlayerSelectionView(viewModel: PlayerSelectionViewModel(clubModel: .example, playerLoader: PreviewPlayerLoader(), imageCache: PreviewImageCache()))
     }
 }

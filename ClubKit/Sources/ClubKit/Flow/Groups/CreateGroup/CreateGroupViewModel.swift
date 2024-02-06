@@ -24,10 +24,12 @@ class CreateGroupViewModel: ObservableObject {
     
     let clubModel: RemoteClubModel
     let creationService: GroupCreationService
+    let imageCache: ImageCache
     
-    init(clubModel: RemoteClubModel, creationService: GroupCreationService) {
+    init(clubModel: RemoteClubModel, creationService: GroupCreationService, imageCache: ImageCache) {
         self.clubModel = clubModel
         self.creationService = creationService
+        self.imageCache = imageCache
     }
     
     func create() {

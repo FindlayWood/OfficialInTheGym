@@ -42,7 +42,7 @@ struct CreateGroupView: View {
                             Text("Add Players")
                         }
                         ForEach(viewModel.selectedPlayersList) { model in
-                            PlayerRow(model: model)
+                            PlayerRow(model: model, imageCache: viewModel.imageCache)
                         }
                         .onDelete(perform: delete)
                     } header: {
@@ -130,6 +130,6 @@ struct CreateGroupView: View {
 
 struct CreateGroupView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateGroupView(viewModel: .init(clubModel: .example, creationService: PreviewGroupService()))
+        CreateGroupView(viewModel: .init(clubModel: .example, creationService: PreviewGroupService(), imageCache: PreviewImageCache()))
     }
 }

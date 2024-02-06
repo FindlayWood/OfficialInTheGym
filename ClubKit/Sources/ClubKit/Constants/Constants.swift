@@ -59,4 +59,7 @@ enum ImageConstants {
     static func clubPath(_ clubID: String) -> String {
         "ClubProfilePhotos/\(clubID)"
     }
+    static func playerPath(_ playerID: String, in clubID: String) -> String {
+        "PlayerProfilePhotos/\(clubID)/\(playerID)"
+    }
 }

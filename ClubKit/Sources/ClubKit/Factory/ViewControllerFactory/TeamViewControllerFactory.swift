@@ -24,6 +24,7 @@ struct BasicTeamViewControllerFactory: TeamViewControllerFactory {
     var teamCreationService: TeamCreationService
     var lineupUploadService: UploadLineupService
     var lineupLoader: LineupLoader
+    var imageCache: ImageCache
     
     func makeTeamsViewController(for club: RemoteClubModel) -> TeamsViewController {
         let viewModel = TeamsViewModel(clubModel: club, teamLoader: teamLoader)
@@ -50,7 +51,7 @@ struct BasicTeamViewControllerFactory: TeamViewControllerFactory {
     }
     
     func makePlayersViewController(for club: RemoteClubModel) -> PlayersViewController {
-        let viewModel = PlayersViewModel(clubModel: club, playerLoader: playerLoader)
+        let viewModel = PlayersViewModel(clubModel: club, playerLoader: playerLoader, imageCache: imageCache)
         let vc = PlayersViewController(viewModel: viewModel)
         return vc
     }
