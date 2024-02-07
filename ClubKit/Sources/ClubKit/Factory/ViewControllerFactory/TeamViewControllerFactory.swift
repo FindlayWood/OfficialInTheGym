@@ -57,7 +57,7 @@ struct BasicTeamViewControllerFactory: TeamViewControllerFactory {
     }
     
     func makePlayerDetailViewController(with model: RemotePlayerModel) -> PlayerDetailViewController {
-        let viewModel = PlayerDetailViewModel(playerModel: model, groupLoader: groupLoader, teamLoader: teamLoader)
+        let viewModel = PlayerDetailViewModel(playerModel: model, groupLoader: groupLoader, teamLoader: teamLoader, imageCache: imageCache)
         let vc = PlayerDetailViewController(viewModel: viewModel)
         return vc
     }

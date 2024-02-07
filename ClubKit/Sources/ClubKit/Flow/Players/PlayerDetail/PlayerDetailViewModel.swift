@@ -18,13 +18,15 @@ class PlayerDetailViewModel: ObservableObject {
     let playerModel: RemotePlayerModel
     let groupLoader: GroupLoader
     let teamLoader: TeamLoader
+    var imageCache: ImageCache
     
     var linkActionCallback: (() -> ())?
     
-    init(playerModel: RemotePlayerModel, groupLoader: GroupLoader, teamLoader: TeamLoader) {
+    init(playerModel: RemotePlayerModel, groupLoader: GroupLoader, teamLoader: TeamLoader, imageCache: ImageCache) {
         self.playerModel = playerModel
         self.groupLoader = groupLoader
         self.teamLoader = teamLoader
+        self.imageCache = imageCache
     }
     
     func loadTeams() {

@@ -11,19 +11,30 @@ struct PlayerDetailView: View {
     
     @ObservedObject var viewModel: PlayerDetailViewModel
     
+    @State private var profileImage: UIImage?
+    
     var body: some View {
         ScrollView {
             VStack {
-                ZStack(alignment: .bottom) {
-                    RoundedRectangle(cornerRadius: 4)
-                        .foregroundColor(.secondary)
-                        .frame(width: 100, height: 100)
-                    Image(systemName: "person.fill")
+                
+                if let profileImage {
+                    Image(uiImage: profileImage)
                         .resizable()
-                        .scaledToFit()
-                        .foregroundColor(.white)
-                        .frame(width: 50)
-                        .padding(.bottom)
+                        .scaledToFill()
+                        .frame(width: 100, height: 100)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                } else {
+                    ZStack(alignment: .bottom) {
+                        RoundedRectangle(cornerRadius: 4)
+                            .foregroundColor(.secondary)
+                            .frame(width: 100, height: 100)
+                        Image(systemName: "person.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(.white)
+                            .frame(width: 50)
+                            .padding(.bottom)
+                    }
                 }
                 
                 Text(viewModel.playerModel.displayName)
@@ -138,9 +149,14 @@ struct PlayerDetailView: View {
             .padding()
 
         }
+        .onAppear {
+            viewModel.imageCache.getImage(for: ImageConstants.playerPath(viewModel.playerModel.id, in: viewModel.playerModel.clubID)) { image in
+                profileImage = image
+            }
+        }
     }
 }
 
 #Preview {
-    PlayerDetailView(viewModel: .init(playerModel: .example, groupLoader: PreviewGroupLoader(), teamLoader: PreviewTeamLoader()))
+    PlayerDetailView(viewModel: .init(playerModel: .example, groupLoader: PreviewGroupLoader(), teamLoader: PreviewTeamLoader(), imageCache: PreviewImageCache()))
 }
