@@ -62,6 +62,7 @@ protocol ClubHomeFlow: Coordinator {
     func goToGroups()
     func goToStaff()
     func goToQRScanner()
+    func goToSettings()
 }
 
 class BasicClubHomeFlow: ClubHomeFlow {
@@ -114,5 +115,9 @@ class BasicClubHomeFlow: ClubHomeFlow {
     func goToQRScanner() {
         let vc = viewControllerFactory.makeQRScannerViewController(with: clubModel)
         navigationController.present(vc, animated: true)
+    }
+    func goToSettings() {
+        let vc = viewControllerFactory.makeSettingsViewController(for: clubModel)
+        navigationController.pushViewController(vc, animated: true)
     }
 }

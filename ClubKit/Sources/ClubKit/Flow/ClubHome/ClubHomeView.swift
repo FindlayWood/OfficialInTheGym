@@ -75,7 +75,7 @@ struct ClubHomeView: View {
             
             Section {
                 Button {
-                    
+                    viewModel.settingsAction()
                 } label: {
                     HStack {
                         Image(systemName: "gear")

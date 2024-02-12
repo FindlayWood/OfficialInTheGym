@@ -16,6 +16,7 @@ class ClubHomeViewModel: ObservableObject {
     var goToGroups: (() -> Void)?
     var goToStaff: (() -> Void)?
     var goToQRScanner: (() -> Void)?
+    var goToSettings: (() -> Void)?
     
     var clubModel: RemoteClubModel
     
@@ -37,5 +38,8 @@ class ClubHomeViewModel: ObservableObject {
     }
     func qrScannerAction() {
         goToQRScanner?()
+    }
+    func settingsAction() {
+        goToSettings?()
     }
 }

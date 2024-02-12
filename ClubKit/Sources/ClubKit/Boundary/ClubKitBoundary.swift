@@ -54,7 +54,8 @@ public class ClubKitBoundary {
         let clubHomeViewControllerFactory = BasicClubHomeViewControllerFactory(qrScannerService: scannerService,
                                                                                playerLoader: playerLoader,
                                                                                teamLoader: teamLoader,
-                                                                               creationService: playerCreationService)
+                                                                               creationService: playerCreationService,
+                                                                               imageCache: imageCache)
         
         
         let playersViewControllerFactory = BasicPlayersViewControllerFactory(playerLoader: playerLoader,

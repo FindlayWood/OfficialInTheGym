@@ -10,6 +10,7 @@ import Foundation
 protocol ClubHomeViewControllerFactory {
     func makeClubHomeViewController(with model: RemoteClubModel) -> ClubHomeViewController
     func makeQRScannerViewController(with model: RemoteClubModel) -> QRScannerViewController
+    func makeSettingsViewController(for model: RemoteClubModel) -> ClubSettingsViewController
 }
 
 struct BasicClubHomeViewControllerFactory: ClubHomeViewControllerFactory {
@@ -18,6 +19,7 @@ struct BasicClubHomeViewControllerFactory: ClubHomeViewControllerFactory {
     let playerLoader: PlayerLoader
     let teamLoader: TeamLoader
     let creationService: PlayerCreationService
+    let imageCache: ImageCache
     
     func makeClubHomeViewController(with model: RemoteClubModel) -> ClubHomeViewController {
         let vc = ClubHomeViewController(clubModel: model)
@@ -31,6 +33,12 @@ struct BasicClubHomeViewControllerFactory: ClubHomeViewControllerFactory {
                                            teamLoader: teamLoader,
                                            creationService: creationService)
         let vc = QRScannerViewController(viewModel: viewModel)
+        return vc
+    }
+    
+    func makeSettingsViewController(for model: RemoteClubModel) -> ClubSettingsViewController {
+        let viewModel = ClubSettingsViewModel(clubModel: model, imageCache: imageCache)
+        let vc = ClubSettingsViewController(viewModel: viewModel)
         return vc
     }
 }

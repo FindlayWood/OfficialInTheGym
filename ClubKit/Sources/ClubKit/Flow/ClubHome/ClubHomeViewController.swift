@@ -59,5 +59,8 @@ class ClubHomeViewController: UIViewController {
         viewModel.goToQRScanner = { [weak self] in
             self?.coordinator?.goToQRScanner()
         }
+        viewModel.goToSettings = { [weak self] in
+            self?.coordinator?.goToSettings()
+        }
     }
 }
