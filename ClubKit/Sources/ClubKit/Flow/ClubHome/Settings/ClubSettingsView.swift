@@ -11,6 +11,7 @@ struct ClubSettingsView: View {
     
     @ObservedObject var viewModel: ClubSettingsViewModel
     @State private var profileImage: UIImage?
+    @State private var isShowingDeleteSheet: Bool = false
     
     var body: some View {
         List {
@@ -40,6 +41,7 @@ struct ClubSettingsView: View {
                 VStack {
                     Text(viewModel.clubModel.clubName)
                         .font(.title.bold())
+                        .multilineTextAlignment(.center)
                     Text(viewModel.clubModel.tagline)
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(Color.secondary)
@@ -64,7 +66,7 @@ struct ClubSettingsView: View {
                         .foregroundStyle(Color.red)
                 }
                 Button {
-                    
+                    isShowingDeleteSheet.toggle()
                 } label: {
                     Text("Delete club")
                         .foregroundStyle(Color.red)
@@ -72,6 +74,9 @@ struct ClubSettingsView: View {
             }
             
         }
+        .sheet(isPresented: $isShowingDeleteSheet, content: {
+            DeleteClubConfirmSheet(viewModel: viewModel)
+        })
         .onAppear {
             viewModel.imageCache.getImage(for: ImageConstants.clubPath(viewModel.clubModel.id)) { image in
                 self.profileImage = image
