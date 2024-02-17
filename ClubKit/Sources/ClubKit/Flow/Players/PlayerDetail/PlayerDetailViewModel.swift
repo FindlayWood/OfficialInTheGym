@@ -15,6 +15,8 @@ class PlayerDetailViewModel: ObservableObject {
     @Published var isLoadingGroups: Bool = false
     @Published var isLoadingTeams: Bool = false
     
+    @Published var isEditing: Bool = false
+    
     let playerModel: RemotePlayerModel
     let groupLoader: GroupLoader
     let teamLoader: TeamLoader
@@ -27,6 +29,8 @@ class PlayerDetailViewModel: ObservableObject {
         self.groupLoader = groupLoader
         self.teamLoader = teamLoader
         self.imageCache = imageCache
+        self.playerPositions = playerModel.positions
+        self.newName = playerModel.displayName
     }
     
     func loadTeams() {
@@ -56,5 +60,22 @@ class PlayerDetailViewModel: ObservableObject {
     // MARK: - Actions
     func linkAction() {
         linkActionCallback?()
+    }
+    
+    // MARK: - Edit Vars
+    @Published var playerPositions: [Positions] = []
+    @Published var newName: String = ""
+    
+    // MARK: - Edit Functions
+    func toggleSelectedPosition(_ position: Positions) {
+        if let index = playerPositions.firstIndex(of: position) {
+            playerPositions.remove(at: index)
+        } else {
+            playerPositions.append(position)
+        }
+    }
+    
+    func isPositionSelected(_ postion: Positions) -> Bool {
+        playerPositions.contains(postion)
     }
 }
