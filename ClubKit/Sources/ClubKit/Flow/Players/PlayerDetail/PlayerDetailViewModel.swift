@@ -18,14 +18,16 @@ class PlayerDetailViewModel: ObservableObject {
     @Published var isEditing: Bool = false
     
     let playerModel: RemotePlayerModel
+    let clubModel: RemoteClubModel
     let groupLoader: GroupLoader
     let teamLoader: TeamLoader
     var imageCache: ImageCache
     
     var linkActionCallback: (() -> ())?
     
-    init(playerModel: RemotePlayerModel, groupLoader: GroupLoader, teamLoader: TeamLoader, imageCache: ImageCache) {
+    init(playerModel: RemotePlayerModel, clubModel: RemoteClubModel, groupLoader: GroupLoader, teamLoader: TeamLoader, imageCache: ImageCache) {
         self.playerModel = playerModel
+        self.clubModel = clubModel
         self.groupLoader = groupLoader
         self.teamLoader = teamLoader
         self.imageCache = imageCache
@@ -77,5 +79,8 @@ class PlayerDetailViewModel: ObservableObject {
     
     func isPositionSelected(_ postion: Positions) -> Bool {
         playerPositions.contains(postion)
+    }
+    var isSaveButtonDisabled: Bool {
+        playerPositions == playerModel.positions && newName == playerModel.displayName
     }
 }

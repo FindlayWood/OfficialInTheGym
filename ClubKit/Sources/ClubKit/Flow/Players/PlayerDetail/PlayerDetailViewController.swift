@@ -30,6 +30,7 @@ class PlayerDetailViewController: UIViewController {
         view.backgroundColor = .systemBackground
         addDisplay()
         initViewModel()
+        initNavBar(to: false)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -39,6 +40,26 @@ class PlayerDetailViewController: UIViewController {
     }
     func addDisplay() {
         addSwiftUIView(display)
+    }
+    // MARK: - Nav bar
+    func initNavBar(to cancel: Bool) {
+        if cancel {
+            let barButton = UIBarButtonItem(title: "cancel", style: .plain, target: self, action: #selector(cancelAction))
+            navigationItem.rightBarButtonItem = barButton
+        } else {
+            let barButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(edit))
+            navigationItem.rightBarButtonItem = barButton
+        }
+    }
+    
+    // MARK: - Actions
+    @objc func edit(_ sender: UIBarButtonItem) {
+        viewModel.isEditing = true
+        initNavBar(to: true)
+    }
+    @objc func cancelAction(_ sender: UIBarButtonItem) {
+        viewModel.isEditing = false
+        initNavBar(to: false)
     }
     func initViewModel() {
         viewModel.linkActionCallback = { [weak self] in

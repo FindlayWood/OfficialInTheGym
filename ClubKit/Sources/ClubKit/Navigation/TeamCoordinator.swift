@@ -59,7 +59,7 @@ class BasicTeamFlow: TeamFlow {
         navigationController.pushViewController(vc, animated: true)
     }
     func goToDetail(for model: RemotePlayerModel) {
-        let vc = viewControllerFactory.makePlayerDetailViewController(with: model)
+        let vc = viewControllerFactory.makePlayerDetailViewController(with: model, in: clubModel)
         navigationController.pushViewController(vc, animated: true)
     }
     

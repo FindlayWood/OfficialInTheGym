@@ -40,7 +40,7 @@ class BasicPlayersFlow: PlayersFlow {
     }
     
     func goToDetail(for model: RemotePlayerModel) {
-        let vc = viewControllerFactory.makePlayerDetailViewController(with: model)
+        let vc = viewControllerFactory.makePlayerDetailViewController(with: model, in: clubModel)
         vc.viewModel.loadTeams()
         vc.viewModel.loadGroups()
         vc.coordinator = self

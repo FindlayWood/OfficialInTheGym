@@ -13,8 +13,7 @@ struct EditPlayerSubview: View {
     @ObservedObject var viewModel: PlayerDetailViewModel
     
     @State private var profileImage: UIImage?
-    
-    @State private var newName: String = ""
+    @State private var newProfileImage: UIImage?
     
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var loadingImageData: Bool = false
@@ -49,11 +48,12 @@ struct EditPlayerSubview: View {
                                       label: {
                              Text("Select Photo")
                          })
-                         .onChange(of: selectedPhotos) { _ in
-                             convertDataToImage()
-                         }
+                         
                      }
                      .frame(maxWidth: .infinity)
+                     .onChange(of: selectedPhotos) { _ in
+                         convertDataToImage()
+                     }
                  } header: {
                      Text("Edit Profile Image")
                  }
@@ -71,7 +71,7 @@ struct EditPlayerSubview: View {
                 
                 Section {
                     
-                    ForEach(Sport.rugby.positions, id: \.self) { position in
+                    ForEach(viewModel.clubModel.sport.positions, id: \.self) { position in
                         SelectPositionRow(selected: viewModel.isPositionSelected(position), position: position) {
                             viewModel.toggleSelectedPosition(position)
                         }
@@ -93,17 +93,10 @@ struct EditPlayerSubview: View {
          }
             VStack {
                 Spacer()
-                MainButton(text: "Save", disabled: true) {
+                MainButton(text: "Save", disabled: viewModel.isSaveButtonDisabled || newProfileImage != nil) {
                     
                 }
                 .padding()
-                
-                Button {
-                    
-                } label: {
-                    Text("cancel")
-                        .foregroundStyle(Color.red)
-                }
             }
         }
         .onAppear {
@@ -115,7 +108,7 @@ struct EditPlayerSubview: View {
     
     func convertDataToImage() {
         // reset the images array before adding more/new photos
-        profileImage = nil
+        newProfileImage = nil
         loadingImageData = true
         
         if !selectedPhotos.isEmpty {
@@ -123,7 +116,7 @@ struct EditPlayerSubview: View {
                 Task {
                     if let imageData = try? await eachItem.loadTransferable(type: Data.self) {
                         if let image = UIImage(data: imageData) {
-                            profileImage = image
+                            newProfileImage = image
                         }
                     }
                 }
@@ -136,5 +129,5 @@ struct EditPlayerSubview: View {
 }
 
 #Preview {
-    EditPlayerSubview(viewModel: .init(playerModel: .example, groupLoader: PreviewGroupLoader(), teamLoader: PreviewTeamLoader(), imageCache: PreviewImageCache()))
+    EditPlayerSubview(viewModel: .init(playerModel: .example, clubModel: .example, groupLoader: PreviewGroupLoader(), teamLoader: PreviewTeamLoader(), imageCache: PreviewImageCache()))
 }

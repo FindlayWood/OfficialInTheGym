@@ -10,7 +10,7 @@ import Foundation
 protocol PlayersViewControllerFactory {
     func makePlayersViewController(with model: RemoteClubModel) -> PlayersViewController
     func makeCreatePlayerViewController(with model: RemoteClubModel) -> CreatePlayerViewController
-    func makePlayerDetailViewController(with model: RemotePlayerModel) -> PlayerDetailViewController
+    func makePlayerDetailViewController(with model: RemotePlayerModel, in clubModel: RemoteClubModel) -> PlayerDetailViewController
     func makeLinkPlayerViewController(in club: RemoteClubModel, for player: RemotePlayerModel) -> LinkPlayerViewController
 }
 
@@ -36,8 +36,8 @@ struct BasicPlayersViewControllerFactory: PlayersViewControllerFactory {
         return vc
     }
     
-    func makePlayerDetailViewController(with model: RemotePlayerModel) -> PlayerDetailViewController {
-        let viewModel = PlayerDetailViewModel(playerModel: model, groupLoader: groupLoader, teamLoader: teamLoader, imageCache: imageCache)
+    func makePlayerDetailViewController(with model: RemotePlayerModel, in clubModel: RemoteClubModel) -> PlayerDetailViewController {
+        let viewModel = PlayerDetailViewModel(playerModel: model, clubModel: clubModel, groupLoader: groupLoader, teamLoader: teamLoader, imageCache: imageCache)
         let vc = PlayerDetailViewController(viewModel: viewModel)
         return vc
     }
