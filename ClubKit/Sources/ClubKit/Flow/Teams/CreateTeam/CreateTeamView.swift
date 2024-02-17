@@ -34,26 +34,47 @@ struct CreateTeamView: View {
                     .listRowInsets(EdgeInsets())
                 }
                 
-                
                 Section {
                     Button {
-                        Task {
-                            await viewModel.create()
-                        }
+                        viewModel.selectedPlayers?()
                     } label: {
-                        Text("Create Team")
-                            .padding()
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .background(Color(.darkColour).opacity(viewModel.buttonDisabled ? 0.3 : 1))
-                            .clipShape(Capsule())
-                            .shadow(radius: viewModel.buttonDisabled ? 0 : 4)
+                        Text("Add Players")
                     }
-                    .disabled(viewModel.buttonDisabled)
+                    ForEach(viewModel.selectedPlayersList) { model in
+                        PlayerRow(model: model, imageCache: viewModel.imageCache)
+                    }
+                    .onDelete(perform: delete)
+                } header: {
+                    Text("Players")
+                }
+                
+                Section {
+                    Spacer()
+                        .frame(height: 100)
                 }
                 .listRowBackground(Color.clear)
-                .listRowInsets(.init(top: 2, leading: 2, bottom: 2, trailing: 2))
+                
+                
+            }
+            
+            VStack {
+                Spacer()
+                Button {
+                    Task {
+                        await viewModel.create()
+                    }
+                } label: {
+                    Text("Create Team")
+                        .padding()
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .background(Color(.darkColour).opacity(viewModel.buttonDisabled ? 0.3 : 1))
+                        .clipShape(Capsule())
+                        .shadow(radius: viewModel.buttonDisabled ? 0 : 4)
+                }
+                .disabled(viewModel.buttonDisabled)
+                .padding()
             }
             
             if viewModel.isUploading {
@@ -103,9 +124,9 @@ struct CreateTeamView: View {
                 }
             }
         }
-        .task {
-            await viewModel.loadPlayers()
-        }
+    }
+    func delete(at offsets: IndexSet) {
+        viewModel.selectedPlayersList.remove(atOffsets: offsets)
     }
 }
 
@@ -122,6 +143,6 @@ struct CreateTeamView_Previews: PreviewProvider {
         }
     }
     static var previews: some View {
-        CreateTeamView(viewModel: CreateTeamViewModel(playerLoader: PreviewPlayerLoader(), teamCreationService: PreviewService(), clubModel: .example))
+        CreateTeamView(viewModel: CreateTeamViewModel(playerLoader: PreviewPlayerLoader(), teamCreationService: PreviewService(), clubModel: .example, imageCache: PreviewImageCache()))
     }
 }

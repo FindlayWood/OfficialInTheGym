@@ -9,8 +9,11 @@ import UIKit
 
 class CreateTeamViewController: UIViewController {
     
+    var coordinator: TeamFlow?
+    
     var viewModel: CreateTeamViewModel
     var display: CreateTeamView!
+    
     
     init(viewModel: CreateTeamViewModel) {
         self.viewModel = viewModel
@@ -27,6 +30,7 @@ class CreateTeamViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         addDisplay()
+        initViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -38,42 +42,18 @@ class CreateTeamViewController: UIViewController {
         display = .init(viewModel: viewModel)
         addSwiftUIView(display)
     }
-}
-
-
-protocol TeamCreationService {
-    func createNewTeam(with data: NewTeamData) async -> Result<NewTeamData,RemoteTeamCreationService.Error>
-}
-
-struct NewTeamData {
-    let displayName: String
-    let clubID: String
-    let teamID: String = UUID().uuidString
-    let isPrivate: Bool
-    let sport: Sport
-}
-
-struct RemoteTeamCreationService: TeamCreationService {
-    
-    var client: Client
-    
-    public enum Error: Swift.Error {
-        case failed
+    // MARK: - View Model
+    func initViewModel() {
+        viewModel.selectedPlayers = { [weak self] in
+            guard let self else { return }
+            self.selectPlayers()
+        }
     }
     
-    func createNewTeam(with data: NewTeamData) async -> Result<NewTeamData,Error> {
-        let functionData: [String: Any] = [
-            "clubID": data.clubID,
-            "teamID": data.teamID,
-            "teamName": data.displayName,
-            "isPrivate": data.isPrivate,
-            "sport": data.sport.rawValue
-        ]
-        do {
-            try await client.callFunction(named: "createTeam", with: functionData)
-            return .success(data)
-        } catch {
-            return .failure(.failed)
+    func selectPlayers() {
+        coordinator?.selectPlayersForNewTeam(alreadySelected: viewModel.selectedPlayersList) { [weak self] selectedPlayers in
+            self?.viewModel.addPlayers(selectedPlayers)
+            self?.navigationController?.dismiss(animated: true)
         }
     }
 }

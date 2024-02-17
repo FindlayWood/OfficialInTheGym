@@ -13,6 +13,7 @@ protocol TeamFlow: Coordinator {
     func goToDefaultLineup(_ model: RemoteTeamModel)
     func goToPlayers(_ model: RemoteTeamModel)
     func showPlayersList(for team: RemoteTeamModel, excluding: [RemotePlayerModel], selectedAction: @escaping (RemotePlayerModel) -> ())
+    func selectPlayersForNewTeam(alreadySelected: [RemotePlayerModel], _ selectedAction: @escaping ([RemotePlayerModel]) -> ())
 }
 
 class BasicTeamFlow: TeamFlow {
@@ -35,6 +36,7 @@ class BasicTeamFlow: TeamFlow {
     
     func addNewTeam() {
         let vc = viewControllerFactory.makeCreateTeamViewController(for: clubModel)
+        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
     
@@ -51,7 +53,7 @@ class BasicTeamFlow: TeamFlow {
     }
     
     func goToPlayers(_ model: RemoteTeamModel) {
-        let vc = viewControllerFactory.makePlayersViewController(for: clubModel)
+        let vc = viewControllerFactory.makePlayersViewController(for: clubModel, selectable: false)
         vc.viewModel.loadFromTeam(with: model.id)
         vc.viewModel.selectedPlayer = { [weak self] in self?.goToDetail(for: $0) }
         navigationController.pushViewController(vc, animated: true)
@@ -62,10 +64,18 @@ class BasicTeamFlow: TeamFlow {
     }
     
     func showPlayersList(for team: RemoteTeamModel, excluding: [RemotePlayerModel], selectedAction: @escaping (RemotePlayerModel) -> ()) {
-        let vc = viewControllerFactory.makePlayersViewController(for: clubModel)
+        let vc = viewControllerFactory.makePlayersViewController(for: clubModel, selectable: false)
         vc.viewModel.excludedPlayers = excluding
         vc.viewModel.loadFromTeam(with: team.id)
         vc.viewModel.selectedPlayer = selectedAction
+        navigationController.present(vc, animated: true)
+    }
+    
+    func selectPlayersForNewTeam(alreadySelected: [RemotePlayerModel], _ selectedAction: @escaping ([RemotePlayerModel]) -> ()) {
+        let vc = viewControllerFactory.makePlayersViewController(for: clubModel, selectable: true)
+        vc.viewModel.loadFromClub()
+        vc.viewModel.selectedPlayers = alreadySelected
+        vc.viewModel.selectedPlayersConfirmed = selectedAction
         navigationController.present(vc, animated: true)
     }
 }

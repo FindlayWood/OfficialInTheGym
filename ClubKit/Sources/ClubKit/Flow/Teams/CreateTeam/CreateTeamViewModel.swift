@@ -12,6 +12,7 @@ class CreateTeamViewModel: ObservableObject {
     var playerLoader: PlayerLoader
     var teamCreationService: TeamCreationService
     var clubModel: RemoteClubModel
+    let imageCache: ImageCache
     
     // MARK: - Loading Variables
     @Published var isLoadingPlayers: Bool = false
@@ -20,28 +21,32 @@ class CreateTeamViewModel: ObservableObject {
     @Published var uploaded: Bool = false
     @Published var errorUploading: Bool = false
     @Published var errorLoading: Error?
-    @Published var players: [RemotePlayerModel] = []
+    @Published var selectedPlayersList: [RemotePlayerModel] = []
     // MARK: - New Model Variables
     @Published var displayName: String = ""
     var selectedSport: Sport
     
-    init(playerLoader: PlayerLoader, teamCreationService: TeamCreationService, clubModel: RemoteClubModel) {
+    var selectedPlayers: (() -> ())?
+    
+    init(playerLoader: PlayerLoader, teamCreationService: TeamCreationService, clubModel: RemoteClubModel, imageCache: ImageCache) {
         self.playerLoader = playerLoader
         self.teamCreationService = teamCreationService
         self.clubModel = clubModel
         self.selectedSport = clubModel.sport
+        self.imageCache = imageCache
     }
     
     
     @MainActor
     func create() async {
         isUploading = true
-        let newTeamData = NewTeamData(displayName: displayName, clubID: clubModel.id, isPrivate: false, sport: selectedSport)
+        let newTeamData = NewTeamData(displayName: displayName, clubID: clubModel.id, isPrivate: false, sport: selectedSport, players: selectedPlayersList.map { $0.id } )
         let result = await teamCreationService.createNewTeam(with: newTeamData)
         switch result {
         case .success:
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.displayName = ""
+                self.selectedPlayersList.removeAll()
                 self.isUploading = false
                 self.uploaded = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -60,17 +65,8 @@ class CreateTeamViewModel: ObservableObject {
         }
     }
     
-    @MainActor
-    func loadPlayers() async {
-        isLoadingPlayers = true
-        do {
-            players = try await playerLoader.loadAllPlayers(for: clubModel.id)
-            isLoadingPlayers = false
-        } catch {
-            errorLoading = error
-            print(String(describing: error))
-            isLoadingPlayers = false
-        }
+    func addPlayers(_ players: [RemotePlayerModel]) {
+        selectedPlayersList = players
     }
     
     var buttonDisabled: Bool {

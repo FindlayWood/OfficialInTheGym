@@ -34,7 +34,7 @@ class RemotePlayerLoader: PlayerLoader {
         let playerID: [TeamPlayerModel] = try await networkService.readAll(at: Constants.teamPlayersPath(for: teamID, in: clubID))
         var playerModels: [RemotePlayerModel] = []
         for model in playerID {
-            let player: RemotePlayerModel = try await loadPlayer(with: model.playerUID, from: clubID)
+            let player: RemotePlayerModel = try await loadPlayer(with: model.id, from: clubID)
             playerModels.append(player)
         }
         return playerModels
@@ -58,7 +58,7 @@ struct PlayerIDUpload: Codable {
 }
 
 struct TeamPlayerModel: Codable {
-    let playerUID: String
+    let id: String
 }
 
 
