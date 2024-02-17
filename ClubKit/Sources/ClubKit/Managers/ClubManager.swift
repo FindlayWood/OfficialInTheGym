@@ -15,6 +15,7 @@ protocol ClubManager {
     func loadClubs() async throws
     func loadTeams(for club: RemoteClubModel) async throws -> [RemoteTeamModel]
     func createdNewClub(_ model: RemoteClubModel)
+    func deleteClub(_ model: RemoteClubModel)
 }
 
 class RemoteClubManager: ClubManager {
@@ -46,6 +47,10 @@ class RemoteClubManager: ClubManager {
     func createdNewClub(_ model: RemoteClubModel) {
         clubs.append(model)
     }
+    
+    func deleteClub(_ model: RemoteClubModel) {
+        clubs.removeAll(where: { $0.id == model.id })
+    }
 }
 
 class PreviewClubManager: ClubManager {
@@ -67,4 +72,5 @@ class PreviewClubManager: ClubManager {
     func createdNewClub(_ model: RemoteClubModel) {
         
     }
+    func deleteClub(_ model: RemoteClubModel) { }
 }

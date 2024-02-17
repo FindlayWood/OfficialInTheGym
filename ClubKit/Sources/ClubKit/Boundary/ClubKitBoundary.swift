@@ -51,11 +51,15 @@ public class ClubKitBoundary {
         let groupLoader = RemoteGroupLoader(networkService: networkService)
         let groupCreationService = RemoteGroupCreationService(client: client)
         
+        let deleteClubService = RemoteDeleteClubService(client: client)
+        
         let clubHomeViewControllerFactory = BasicClubHomeViewControllerFactory(qrScannerService: scannerService,
                                                                                playerLoader: playerLoader,
                                                                                teamLoader: teamLoader,
                                                                                creationService: playerCreationService,
-                                                                               imageCache: imageCache)
+                                                                               imageCache: imageCache,
+                                                                               deleteClubService: deleteClubService,
+                                                                               clubManager: clubManager)
         
         
         let playersViewControllerFactory = BasicPlayersViewControllerFactory(playerLoader: playerLoader,

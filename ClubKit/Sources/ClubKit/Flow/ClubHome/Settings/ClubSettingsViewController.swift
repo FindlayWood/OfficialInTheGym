@@ -11,6 +11,7 @@ class ClubSettingsViewController: UIViewController {
     
     var viewModel: ClubSettingsViewModel
     var display: ClubSettingsView!
+    var coordinator: ClubHomeFlow?
     
     init(viewModel: ClubSettingsViewModel) {
         self.viewModel = viewModel
@@ -27,6 +28,7 @@ class ClubSettingsViewController: UIViewController {
         addDisplay()
         initNavBar()
         view.backgroundColor = .systemBackground
+        initViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -43,6 +45,14 @@ class ClubSettingsViewController: UIViewController {
     func addDisplay() {
         display = .init(viewModel: viewModel)
         addSwiftUIViewWithNavBar(display)
+    }
+    
+    func initViewModel() {
+        
+        viewModel.successfulDelete = { [weak self] in
+            guard let self else { return }
+            self.coordinator?.popToRoot()
+        }
     }
 
 }

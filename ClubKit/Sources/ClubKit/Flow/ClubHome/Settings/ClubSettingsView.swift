@@ -86,5 +86,5 @@ struct ClubSettingsView: View {
 }
 
 #Preview {
-    ClubSettingsView(viewModel: .init(clubModel: .example, imageCache: PreviewImageCache()))
+    ClubSettingsView(viewModel: .init(clubModel: .example, imageCache: PreviewImageCache(), deletionService: PreviewDeleteClubService(), clubManager: PreviewClubManager()))
 }

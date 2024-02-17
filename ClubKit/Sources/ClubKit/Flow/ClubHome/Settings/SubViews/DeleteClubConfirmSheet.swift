@@ -43,8 +43,23 @@ struct DeleteClubConfirmSheet: View {
                     
                     Spacer()
                     
-                    MainButton(text: "Confirm Delete", disabled: text != viewModel.clubModel.clubName) {
-                        showFinalWarning.toggle()
+                    if viewModel.errorDeleteing {
+                        Text("There was an error deleting this club. Please try again in a few moments.")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(Color.red)
+                            .multilineTextAlignment(.center)
+                            .padding(.bottom)
+                        Button {
+                            viewModel.errorDeleteing = false
+                        } label: {
+                            Text("OK")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundStyle(Color(.darkColour))
+                        }
+                    } else {
+                        MainButton(text: "Confirm Delete", disabled: text != viewModel.clubModel.clubName) {
+                            showFinalWarning.toggle()
+                        }
                     }
                 }
                 .padding()
@@ -65,5 +80,5 @@ struct DeleteClubConfirmSheet: View {
 }
 
 #Preview {
-    DeleteClubConfirmSheet(viewModel: ClubSettingsViewModel(clubModel: .example, imageCache: PreviewImageCache()))
+    DeleteClubConfirmSheet(viewModel: ClubSettingsViewModel(clubModel: .example, imageCache: PreviewImageCache(), deletionService: PreviewDeleteClubService(), clubManager: PreviewClubManager()))
 }

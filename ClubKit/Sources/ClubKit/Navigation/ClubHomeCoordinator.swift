@@ -63,6 +63,7 @@ protocol ClubHomeFlow: Coordinator {
     func goToStaff()
     func goToQRScanner()
     func goToSettings()
+    func popToRoot()
 }
 
 class BasicClubHomeFlow: ClubHomeFlow {
@@ -118,6 +119,11 @@ class BasicClubHomeFlow: ClubHomeFlow {
     }
     func goToSettings() {
         let vc = viewControllerFactory.makeSettingsViewController(for: clubModel)
+        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func popToRoot() {
+        self.navigationController.popToRootViewController(animated: true)
     }
 }

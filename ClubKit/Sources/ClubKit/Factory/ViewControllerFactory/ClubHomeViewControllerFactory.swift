@@ -20,6 +20,8 @@ struct BasicClubHomeViewControllerFactory: ClubHomeViewControllerFactory {
     let teamLoader: TeamLoader
     let creationService: PlayerCreationService
     let imageCache: ImageCache
+    let deleteClubService: DeleteClubService
+    let clubManager: ClubManager
     
     func makeClubHomeViewController(with model: RemoteClubModel) -> ClubHomeViewController {
         let vc = ClubHomeViewController(clubModel: model)
@@ -37,7 +39,7 @@ struct BasicClubHomeViewControllerFactory: ClubHomeViewControllerFactory {
     }
     
     func makeSettingsViewController(for model: RemoteClubModel) -> ClubSettingsViewController {
-        let viewModel = ClubSettingsViewModel(clubModel: model, imageCache: imageCache)
+        let viewModel = ClubSettingsViewModel(clubModel: model, imageCache: imageCache, deletionService: deleteClubService, clubManager: clubManager)
         let vc = ClubSettingsViewController(viewModel: viewModel)
         return vc
     }
