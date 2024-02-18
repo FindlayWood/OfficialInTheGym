@@ -13,7 +13,6 @@ struct EditPlayerSubview: View {
     @ObservedObject var viewModel: PlayerDetailViewModel
     
     @State private var profileImage: UIImage?
-    @State private var newProfileImage: UIImage?
     
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var loadingImageData: Bool = false
@@ -23,7 +22,13 @@ struct EditPlayerSubview: View {
             List {
                  Section {
                      VStack {
-                         if let profileImage {
+                         if let newImage = viewModel.libraryImage {
+                             Image(uiImage: newImage)
+                                 .resizable()
+                                 .scaledToFill()
+                                 .frame(width: 100, height: 100)
+                                 .clipShape(RoundedRectangle(cornerRadius: 4))
+                         } else if let profileImage {
                              Image(uiImage: profileImage)
                                  .resizable()
                                  .scaledToFill()
@@ -93,10 +98,14 @@ struct EditPlayerSubview: View {
          }
             VStack {
                 Spacer()
-                MainButton(text: "Save", disabled: viewModel.isSaveButtonDisabled || newProfileImage != nil) {
-                    
+                MainButton(text: "Save", disabled: viewModel.isSaveButtonDisabled && viewModel.libraryImage == nil) {
+                    viewModel.saveEdit()
                 }
                 .padding()
+            }
+            
+            if viewModel.isSavingEdit {
+                LoadingView(colour: .darkColour)
             }
         }
         .onAppear {
@@ -108,7 +117,7 @@ struct EditPlayerSubview: View {
     
     func convertDataToImage() {
         // reset the images array before adding more/new photos
-        newProfileImage = nil
+        viewModel.libraryImage = nil
         loadingImageData = true
         
         if !selectedPhotos.isEmpty {
@@ -116,7 +125,7 @@ struct EditPlayerSubview: View {
                 Task {
                     if let imageData = try? await eachItem.loadTransferable(type: Data.self) {
                         if let image = UIImage(data: imageData) {
-                            newProfileImage = image
+                            viewModel.libraryImage = image
                         }
                     }
                 }
@@ -129,5 +138,5 @@ struct EditPlayerSubview: View {
 }
 
 #Preview {
-    EditPlayerSubview(viewModel: .init(playerModel: .example, clubModel: .example, groupLoader: PreviewGroupLoader(), teamLoader: PreviewTeamLoader(), imageCache: PreviewImageCache()))
+    EditPlayerSubview(viewModel: .init(playerModel: .example, clubModel: .example, groupLoader: PreviewGroupLoader(), teamLoader: PreviewTeamLoader(), imageCache: PreviewImageCache(), updateService: PreviewUpdatePlayerDetailService()))
 }

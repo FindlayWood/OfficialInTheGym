@@ -23,6 +23,7 @@ struct BasicPlayersViewControllerFactory: PlayersViewControllerFactory {
     var qrScannerService: QRScannerService
     var linkPlayerService: LinkPlayerService
     var imageCache: ImageCache
+    let updateService: UpdatePlayerDetailService
     
     func makePlayersViewController(with model: RemoteClubModel) -> PlayersViewController {
         let viewModel = PlayersViewModel(clubModel: model, playerLoader: playerLoader, imageCache: imageCache)
@@ -37,7 +38,7 @@ struct BasicPlayersViewControllerFactory: PlayersViewControllerFactory {
     }
     
     func makePlayerDetailViewController(with model: RemotePlayerModel, in clubModel: RemoteClubModel) -> PlayerDetailViewController {
-        let viewModel = PlayerDetailViewModel(playerModel: model, clubModel: clubModel, groupLoader: groupLoader, teamLoader: teamLoader, imageCache: imageCache)
+        let viewModel = PlayerDetailViewModel(playerModel: model, clubModel: clubModel, groupLoader: groupLoader, teamLoader: teamLoader, imageCache: imageCache, updateService: updateService)
         let vc = PlayerDetailViewController(viewModel: viewModel)
         return vc
     }

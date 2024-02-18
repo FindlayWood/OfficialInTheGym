@@ -53,6 +53,8 @@ public class ClubKitBoundary {
         
         let deleteClubService = RemoteDeleteClubService(client: client)
         
+        let updateService = RemoteUpdatePlayerDetailService(client: client)
+        
         let clubHomeViewControllerFactory = BasicClubHomeViewControllerFactory(qrScannerService: scannerService,
                                                                                playerLoader: playerLoader,
                                                                                teamLoader: teamLoader,
@@ -68,7 +70,8 @@ public class ClubKitBoundary {
                                                                              creationService: playerCreationService,
                                                                              qrScannerService: scannerService,
                                                                              linkPlayerService: linkPlayerService,
-                                                                             imageCache: imageCache)
+                                                                             imageCache: imageCache,
+                                                                             updateService: updateService)
         
         let teamCreationService = RemoteTeamCreationService(client: client)
         let uploadLineupService = RemoteUploadLineupService(client: client)
@@ -80,7 +83,8 @@ public class ClubKitBoundary {
                                                                        teamCreationService: teamCreationService,
                                                                        lineupUploadService: uploadLineupService,
                                                                        lineupLoader: lineupLoader,
-                                                                       imageCache: imageCache)
+                                                                       imageCache: imageCache,
+                                                                       updateService: updateService)
         
         
         let groupViewControllerFactory = BasicGroupsViewControllerFactory(groupLoader: groupLoader,

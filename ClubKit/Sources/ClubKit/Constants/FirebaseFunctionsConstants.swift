@@ -11,6 +11,7 @@ enum FirebaseFunctionsConstants {
     
     static let deleteClub: String = "deleteClub"
     static let createTeam: String = "createTeam"
+    static let updatePlayerDetail: String = "updatePlayerDetail"
 }
 
 enum FunctionKeys {
@@ -27,5 +28,13 @@ enum FunctionKeys {
         static let isPrivate: String = "isPrivate"
         static let sport: String = "sport"
         static let players: String = "players"
+    }
+    
+    enum UpdatePlayerDetailFunction {
+        static let playerID: String = "playerID"
+        static let clubID: String = "clubID"
+        static let displayName: String = "displayName"
+        static let positions: String = "positions"
+        static let imageData: String = "imageData"
     }
 }

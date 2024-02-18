@@ -5,7 +5,7 @@
 //  Created by Findlay Wood on 10/12/2023.
 //
 
-import Foundation
+import UIKit
 
 class PlayerDetailViewModel: ObservableObject {
     
@@ -22,15 +22,17 @@ class PlayerDetailViewModel: ObservableObject {
     let groupLoader: GroupLoader
     let teamLoader: TeamLoader
     var imageCache: ImageCache
+    let updateService: UpdatePlayerDetailService
     
     var linkActionCallback: (() -> ())?
     
-    init(playerModel: RemotePlayerModel, clubModel: RemoteClubModel, groupLoader: GroupLoader, teamLoader: TeamLoader, imageCache: ImageCache) {
+    init(playerModel: RemotePlayerModel, clubModel: RemoteClubModel, groupLoader: GroupLoader, teamLoader: TeamLoader, imageCache: ImageCache, updateService: UpdatePlayerDetailService) {
         self.playerModel = playerModel
         self.clubModel = clubModel
         self.groupLoader = groupLoader
         self.teamLoader = teamLoader
         self.imageCache = imageCache
+        self.updateService = updateService
         self.playerPositions = playerModel.positions
         self.newName = playerModel.displayName
     }
@@ -67,6 +69,8 @@ class PlayerDetailViewModel: ObservableObject {
     // MARK: - Edit Vars
     @Published var playerPositions: [Positions] = []
     @Published var newName: String = ""
+    @Published var libraryImage: UIImage?
+    @Published var isSavingEdit: Bool = false
     
     // MARK: - Edit Functions
     func toggleSelectedPosition(_ position: Positions) {
@@ -82,5 +86,28 @@ class PlayerDetailViewModel: ObservableObject {
     }
     var isSaveButtonDisabled: Bool {
         playerPositions == playerModel.positions && newName == playerModel.displayName
+    }
+    
+    func saveEdit() {
+        isSavingEdit = true
+        Task {
+            let imageData = libraryImage?.jpegData(compressionQuality: 0.1)
+            let strBase64 = imageData?.base64EncodedString(options: .lineLength64Characters)
+            let updateData = UpdatePlayerData(playerID: playerModel.id, displayName: newName, clubID: clubModel.id, positions: playerPositions.map { $0.rawValue }, imageData: strBase64)
+            let result = await updateService.updatePlayer(with: updateData)
+            switch result {
+            case .success:
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.isSavingEdit = false
+                    self.isEditing = false
+                }
+            case .failure(let failure):
+                print(String(describing: failure))
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.isSavingEdit = false
+                    self.isEditing = false
+                }
+            }
+        }
     }
 }

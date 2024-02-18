@@ -82,5 +82,5 @@ struct PlayerDetailView: View {
 }
 
 #Preview {
-    PlayerDetailView(viewModel: .init(playerModel: .example, clubModel: .example, groupLoader: PreviewGroupLoader(), teamLoader: PreviewTeamLoader(), imageCache: PreviewImageCache()))
+    PlayerDetailView(viewModel: .init(playerModel: .example, clubModel: .example, groupLoader: PreviewGroupLoader(), teamLoader: PreviewTeamLoader(), imageCache: PreviewImageCache(), updateService: PreviewUpdatePlayerDetailService()))
 }
