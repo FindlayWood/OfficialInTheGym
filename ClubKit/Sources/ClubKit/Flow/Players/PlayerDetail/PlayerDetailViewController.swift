@@ -59,6 +59,7 @@ class PlayerDetailViewController: UIViewController {
     }
     @objc func cancelAction(_ sender: UIBarButtonItem) {
         viewModel.isEditing = false
+        viewModel.cancelEdit()
         initNavBar(to: false)
     }
     func initViewModel() {

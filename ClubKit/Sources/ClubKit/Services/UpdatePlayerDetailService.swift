@@ -17,6 +17,8 @@ struct UpdatePlayerData {
     let clubID: String
     let positions: [String]
     let imageData: String?
+    let addedToTeams: [String]?
+    let removedFromTeams: [String]?
 }
 
 struct RemoteUpdatePlayerDetailService: UpdatePlayerDetailService {
@@ -36,6 +38,12 @@ struct RemoteUpdatePlayerDetailService: UpdatePlayerDetailService {
         ]
         if let imageData = data.imageData {
             functionData[FunctionKeys.UpdatePlayerDetailFunction.imageData] = imageData
+        }
+        if let addedToTeams = data.addedToTeams {
+            functionData[FunctionKeys.UpdatePlayerDetailFunction.addedToTeamsIDs] = addedToTeams
+        }
+        if let removedFromTeams = data.removedFromTeams {
+            functionData[FunctionKeys.UpdatePlayerDetailFunction.removedFromTeamIDs] = removedFromTeams
         }
         do {
             try await client.callFunction(named: FirebaseFunctionsConstants.updatePlayerDetail, with: functionData)

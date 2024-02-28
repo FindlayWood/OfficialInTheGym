@@ -72,6 +72,29 @@ struct EditPlayerSubview: View {
                 } header: {
                     Text("Edit Display Name")
                 }
+                
+                Section {
+                    if viewModel.teams.isEmpty {
+                        VStack {
+                            Text("There are no teams in this club at the moment. Create a team by navigating to the Teams list within the club. You can add players to Teams at a later date as well.")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(Color.primary)
+                                .multilineTextAlignment(.center)
+                        }
+                    } else {
+                        ForEach(viewModel.teams, id: \.id) { model in
+                            SelectTeamRow(selected: viewModel.isTeamSelected(model.id), team: model) {
+                                viewModel.toggleSelectedTeam(model)
+                            }
+                            .padding(.bottom)
+                            .padding(.horizontal, 4)
+                        }
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                    }
+                } header: {
+                    Text("Teams")
+                }
                  
                 
                 Section {

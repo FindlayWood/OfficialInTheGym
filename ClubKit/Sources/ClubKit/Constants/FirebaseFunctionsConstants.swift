@@ -36,5 +36,7 @@ enum FunctionKeys {
         static let displayName: String = "displayName"
         static let positions: String = "positions"
         static let imageData: String = "imageData"
+        static let removedFromTeamIDs: String = "removedTeamIDs"
+        static let addedToTeamsIDs: String = "addedTeamIDs"
     }
 }

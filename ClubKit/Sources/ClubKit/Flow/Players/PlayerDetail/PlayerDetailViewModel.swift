@@ -33,17 +33,17 @@ class PlayerDetailViewModel: ObservableObject {
         self.teamLoader = teamLoader
         self.imageCache = imageCache
         self.updateService = updateService
+        self.originalPositions = playerModel.positions
         self.playerPositions = playerModel.positions
         self.newName = playerModel.displayName
+        self.selectedTeams = playerModel.teams
+        self.originalPlayerTeams = playerModel.teams
     }
     
     func loadTeams() {
         isLoadingTeams = true
         Task { @MainActor in
-            for teamID in playerModel.teams {
-                let team = try await teamLoader.loadTeam(with: teamID, from: playerModel.clubID)
-                teams.append(team)
-            }
+            teams = try await teamLoader.loadAllTeams(for: clubModel.id)
             isLoadingTeams = false
         }
     }
@@ -67,7 +67,12 @@ class PlayerDetailViewModel: ObservableObject {
     }
     
     // MARK: - Edit Vars
+    let originalPositions: [Positions]
     @Published var playerPositions: [Positions] = []
+    let originalPlayerTeams: [String]
+    @Published var selectedTeams: [String] = []
+    @Published var removedFromTeams: [String] = []
+    @Published var addedToTeams: [String] = []
     @Published var newName: String = ""
     @Published var libraryImage: UIImage?
     @Published var isSavingEdit: Bool = false
@@ -84,8 +89,32 @@ class PlayerDetailViewModel: ObservableObject {
     func isPositionSelected(_ postion: Positions) -> Bool {
         playerPositions.contains(postion)
     }
+    
+    func toggleSelectedTeam(_ model: RemoteTeamModel) {
+        if let index = selectedTeams.firstIndex(where: { $0 == model.id }) {
+            selectedTeams.remove(at: index)
+            if originalPlayerTeams.contains(model.id) {
+                removedFromTeams.append(model.id)
+            } else {
+                selectedTeams.removeAll(where: { $0 == model.id })
+                addedToTeams.removeAll(where: { $0 == model.id })
+            }
+        } else {
+            selectedTeams.append(model.id)
+            if originalPlayerTeams.contains(model.id) {
+                removedFromTeams.removeAll(where: { $0 == model.id })
+            } else {
+                selectedTeams.append(model.id)
+                addedToTeams.append(model.id)
+            }
+        }
+    }
+    
+    func isTeamSelected(_ id: String) -> Bool {
+        selectedTeams.contains(id)
+    }
     var isSaveButtonDisabled: Bool {
-        playerPositions == playerModel.positions && newName == playerModel.displayName
+        playerPositions == playerModel.positions && newName == playerModel.displayName && selectedTeams == originalPlayerTeams && removedFromTeams.isEmpty
     }
     
     func saveEdit() {
@@ -93,7 +122,9 @@ class PlayerDetailViewModel: ObservableObject {
         Task {
             let imageData = libraryImage?.jpegData(compressionQuality: 0.1)
             let strBase64 = imageData?.base64EncodedString(options: .lineLength64Characters)
-            let updateData = UpdatePlayerData(playerID: playerModel.id, displayName: newName, clubID: clubModel.id, positions: playerPositions.map { $0.rawValue }, imageData: strBase64)
+            let addedTeams = addedToTeams.isEmpty ? nil : addedToTeams
+            let removedTeams = removedFromTeams.isEmpty ? nil : removedFromTeams
+            let updateData = UpdatePlayerData(playerID: playerModel.id, displayName: newName, clubID: clubModel.id, positions: playerPositions.map { $0.rawValue }, imageData: strBase64, addedToTeams: addedTeams, removedFromTeams: removedTeams)
             let result = await updateService.updatePlayer(with: updateData)
             switch result {
             case .success:
@@ -109,5 +140,11 @@ class PlayerDetailViewModel: ObservableObject {
                 }
             }
         }
+    }
+    
+    func cancelEdit() {
+        selectedTeams = originalPlayerTeams
+        removedFromTeams.removeAll()
+        playerPositions = originalPositions
     }
 }
