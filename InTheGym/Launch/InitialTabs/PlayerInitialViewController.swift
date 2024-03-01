@@ -24,6 +24,10 @@ class PlayerInitialViewController: UITabBarController {
         discoverNavigationController.tabBarItem = UITabBarItem(title: "DISCOVER", image: UIImage(systemName: "magnifyingglass"), tag: 1)
         let discoverCoordinator = DiscoverCoordinator(navigationController: discoverNavigationController)
         discoverCoordinator.start()
+        // MARK: - ClubKit
+        let clubKitNavigationController = UINavigationController()
+        clubKitNavigationController.tabBarItem = UITabBarItem(title: "CLUBS", image: UIImage(systemName: "person.3.fill"), tag: 2)
+        let clubKitComposition = ClubKitComposition(navigaitonController: clubKitNavigationController)
         // MARK: - Workouts
         let workoutsNavigationController = UINavigationController()
         workoutsNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 2)
@@ -31,16 +35,16 @@ class PlayerInitialViewController: UITabBarController {
         workoutsCoordinator.start()
         // MARK: - Workout Kit
         let workoutKitNavigationController = UINavigationController()
-        workoutKitNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 2)
+        workoutKitNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 3)
         let workoutKitComposition = WorkoutKitComposition(navigaitonController: workoutKitNavigationController)
 //        workoutKitComposition.compose()
         // MARK: - Profile
         let myProfileNavigationController = UINavigationController()
-        myProfileNavigationController.tabBarItem = UITabBarItem(title: "MYPROFILE", image: UIImage(systemName: "person.fill"), tag: 3)
+        myProfileNavigationController.tabBarItem = UITabBarItem(title: "MYPROFILE", image: UIImage(systemName: "person.fill"), tag: 4)
         let myProfileCoordinator = MyProfileCoordinator(navigationController: myProfileNavigationController)
         myProfileCoordinator.start()
         
-        viewControllers = [timelineNavigationController, discoverNavigationController, workoutsNavigationController, myProfileNavigationController]
+        viewControllers = [timelineNavigationController, discoverNavigationController, clubKitNavigationController, workoutsNavigationController, myProfileNavigationController]
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

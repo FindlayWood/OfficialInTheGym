@@ -66,6 +66,9 @@ class AccountCreationKitNetworkService: NetworkService {
         try authService.signout()
     }
     
+    func upload(dataPoints: [String: Codable]) async throws {
+        try await firestoreService.upload(dataPoints: dataPoints)
+    }
     func upload(data: Codable, at path: String) async throws {
         try await firestoreService.upload(data: data, at: path)
     }

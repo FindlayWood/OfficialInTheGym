@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -818,6 +818,8 @@
 		9F612BD0291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BCF291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift */; };
 		9F612BD229197DF900B5AE5A /* UserFollowingSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */; };
 		9F612BD529197E6400B5AE5A /* UserFollowing+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */; };
+		9F72F9402A114B0800BF040C /* ClubKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F72F93F2A114B0800BF040C /* ClubKitComposition.swift */; };
+		9F72F9422A114BE200BF040C /* ClubKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9F72F9412A114BE200BF040C /* ClubKit */; };
 		9F7444892A33D1E7007422CC /* BaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7444882A33D1E7007422CC /* BaseController.swift */; };
 		9F84639C293E8F5B001E549F /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */; };
 		9F89DD872A38D13D0018E124 /* UserCacheServiceAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89DD862A38D13D0018E124 /* UserCacheServiceAdapter.swift */; };
@@ -1679,6 +1681,7 @@
 		9F612BCF291955A100B5AE5A /* PlayerDetailViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailViewSwiftUI.swift; sourceTree = "<group>"; };
 		9F612BD129197DF900B5AE5A /* UserFollowingSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFollowingSwiftUI.swift; sourceTree = "<group>"; };
 		9F612BD429197E6400B5AE5A /* UserFollowing+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserFollowing+ViewModel.swift"; sourceTree = "<group>"; };
+		9F72F93F2A114B0800BF040C /* ClubKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubKitComposition.swift; sourceTree = "<group>"; };
 		9F7444882A33D1E7007422CC /* BaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseController.swift; sourceTree = "<group>"; };
 		9F84639B293E8F5B001E549F /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		9F89DD862A38D13D0018E124 /* UserCacheServiceAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCacheServiceAdapter.swift; sourceTree = "<group>"; };
@@ -1746,6 +1749,7 @@
 				74330449289E962B00F2569A /* FirebaseFirestoreCombine-Community in Frameworks */,
 				9FC11F6129DDCA8E0054D79A /* LoginKit in Frameworks */,
 				7433044B289E962B00F2569A /* FirebaseFirestoreSwift in Frameworks */,
+				9F72F9422A114BE200BF040C /* ClubKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4599,6 +4603,7 @@
 				9FC11F5E29DDC9B80054D79A /* LoginComposition.swift */,
 				9FB4D1DB29E752AB0019CA57 /* AccountCreationComposition.swift */,
 				9F2171022A016F4100443008 /* WorkoutKitComposition.swift */,
+				9F72F93F2A114B0800BF040C /* ClubKitComposition.swift */,
 			);
 			path = Composition;
 			sourceTree = "<group>";
@@ -4670,6 +4675,7 @@
 				9FC11F6029DDCA8E0054D79A /* LoginKit */,
 				9FC11F6929E20CB60054D79A /* AccountCreationKit */,
 				9F3D3C3929F45D8200CDACC0 /* WorkoutKit */,
+				9F72F9412A114BE200BF040C /* ClubKit */,
 				74616AB32A40E8D100007752 /* FirebaseFunctions */,
 			);
 			productName = InTheGym;
@@ -5131,6 +5137,7 @@
 				9FB0F29429142D8C00BF222E /* PracticeTrackerHomeView.swift in Sources */,
 				74DA1AF1290091B000F4DB9E /* MatchTrackerDetailView.swift in Sources */,
 				749B37B12847A2BE00ADF33D /* EditExerciseCoordinator.swift in Sources */,
+				9F72F9402A114B0800BF040C /* ClubKitComposition.swift in Sources */,
 				74F664EB28EA09320086BA4E /* FCMTokenModel.swift in Sources */,
 				74B48DF927A2DCA300BBFC16 /* ThinkingTimeMessages.swift in Sources */,
 				740E5B7B28328965005B03FF /* MyWorkoutsViewController.swift in Sources */,
@@ -6438,7 +6445,7 @@
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 9.0.0;
+				minimumVersion = 10.0.0;
 			};
 		};
 		74A7EB63289EAE92007C2ECD /* XCRemoteSwiftPackageReference "SkyFloatingLabelTextField" */ = {
@@ -6559,6 +6566,10 @@
 		9F3D3C3929F45D8200CDACC0 /* WorkoutKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WorkoutKit;
+		};
+		9F72F9412A114BE200BF040C /* ClubKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ClubKit;
 		};
 		9FC11F6029DDCA8E0054D79A /* LoginKit */ = {
 			isa = XCSwiftPackageProductDependency;
