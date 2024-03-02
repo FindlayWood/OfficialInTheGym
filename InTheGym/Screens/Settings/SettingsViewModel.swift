@@ -54,7 +54,7 @@ class SettingsViewModel {
     }
     // MARK: - Functions
     func logout() {
-        Task {
+        Task { @MainActor in
             do {
                 let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
                 try await firestoreService.upload(dataPoints: ["FCMTokens/\(UserDefaults.currentUser.uid)": fcmTokenModel])
@@ -67,27 +67,6 @@ class SettingsViewModel {
                 self.errorLoggingOut.send(true)
             }
         }
-//        apiService.logout { [weak self] success in
-//            if success {
-//                LikesAPIService.shared.LikedPostsCache.removeAll()
-//                ViewController.admin = nil
-//                ViewController.username = nil
-//                LikeCache.shared.removeAll()
-//                ClipCache.shared.removeAll()
-//                let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
-//                Task {
-//                    do {
-//                        try await FirestoreManager.shared.upload(fcmTokenModel)
-//                        UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
-//                    } catch {
-//                        print(String(describing: error))
-//                    }
-//                }
-////                self?.loggedOut()
-//            } else {
-//                self?.errorLoggingOut.send(true)
-//            }
-//        }
     }
     func resetPassword() {
         Task {
