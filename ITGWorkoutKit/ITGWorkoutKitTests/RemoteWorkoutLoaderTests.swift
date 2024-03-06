@@ -39,14 +39,11 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        var capturedErrors = [RemoteWorkoutLoader.Error]()
-        sut.load { capturedErrors.append($0) }
-        
-        let clientError = NSError(domain: "Test", code: 0)
-        
-        client.complete(with: clientError)
-        
-        XCTAssertEqual(capturedErrors, [.connectivity])
+        expect(sut, toCompleteWithError: .connectivity) {
+            let clientError = NSError(domain: "Test", code: 0)
+            
+            client.complete(with: clientError)
+        }
     }
     
     func test_load_deliversErrorOnNon200HTTPResponse() {
@@ -56,28 +53,19 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         
         samples.enumerated().forEach { index, code in
             
-            var capturedErrors = [RemoteWorkoutLoader.Error]()
-            sut.load { capturedErrors.append($0) }
-            
-            client.complete(withStatusCode: code, at: index)
-            
-            XCTAssertEqual(capturedErrors, [.invalidData])
-            
-            capturedErrors = []
+            expect(sut, toCompleteWithError: .invalidData) {
+                client.complete(withStatusCode: code, at: index)
+            }
         }
     }
     
     func test_load_deliversErrorOnResponseWithInvalidJson() {
         let (sut, client) = makeSUT()
         
-        var capturedErrors = [RemoteWorkoutLoader.Error]()
-        sut.load { capturedErrors.append($0) }
-        
-        let invalidJSON = Data("Invalid json".utf8)
-        client.complete(withStatusCode: 200, data: invalidJSON)
-        
-        XCTAssertEqual(capturedErrors, [.invalidData])
-            
+        expect(sut, toCompleteWithError: .invalidData) {
+            let invalidJSON = Data("Invalid json".utf8)
+            client.complete(withStatusCode: 200, data: invalidJSON)
+        }
     }
     
     // MARK: - Helpers
@@ -86,6 +74,17 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         let client = ClientSpy()
         let sut = RemoteWorkoutLoader(client: client, path: path)
         return (sut, client)
+    }
+    
+    private func expect(_ sut: RemoteWorkoutLoader, toCompleteWithError error: RemoteWorkoutLoader.Error, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+        
+        var capturedErrors = [RemoteWorkoutLoader.Error]()
+        sut.load { capturedErrors.append($0) }
+        
+        action()
+        
+        XCTAssertEqual(capturedErrors, [error], file: file, line: line)
+        
     }
     
     private class ClientSpy: Client {
