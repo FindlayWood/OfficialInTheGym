@@ -58,16 +58,21 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     }
     
     private class FirestoreClientSpy: FirestoreClient {
-        var requestedPaths: [String] = []
-        var completions = [(Error) -> Void]()
+        
+        
+        private var messages = [(path: String, completion: (Error) -> Void)]()
+        
+        var requestedPaths: [String] {
+            messages.map { $0.path }
+        }
+        
         
         func get(from path: String, completion: @escaping (Error) -> Void) {
-            completions.append(completion)
-            requestedPaths.append(path)
+            messages.append((path, completion))
         }
         
         func complete(with error: Error, at index: Int = 0) {
-            completions[index](error)
+            messages[index].completion(error)
         }
     }
     
