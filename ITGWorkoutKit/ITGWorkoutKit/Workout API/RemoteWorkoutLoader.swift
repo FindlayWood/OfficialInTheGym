@@ -7,17 +7,17 @@
 
 import Foundation
 
-public enum HTTPClientResult {
+public enum ClientResult {
     case success(HTTPURLResponse)
     case failure(Error)
 }
-public protocol FirestoreClient {
-    func get(from path: String, completion: @escaping (HTTPClientResult) -> Void)
+public protocol Client {
+    func get(from path: String, completion: @escaping (ClientResult) -> Void)
 }
 
 public final class RemoteWorkoutLoader {
     
-    private let client: FirestoreClient
+    private let client: Client
     private let path: String
     
     public enum Error: Swift.Error {
@@ -25,7 +25,7 @@ public final class RemoteWorkoutLoader {
         case invalidData
     }
     
-    public init(client: FirestoreClient, path: String) {
+    public init(client: Client, path: String) {
         self.client = client
         self.path = path
     }

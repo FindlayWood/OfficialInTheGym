@@ -69,21 +69,21 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(path: String = "example/path") -> (sut: RemoteWorkoutLoader, client: FirestoreClientSpy) {
-        let client = FirestoreClientSpy()
+    private func makeSUT(path: String = "example/path") -> (sut: RemoteWorkoutLoader, client: ClientSpy) {
+        let client = ClientSpy()
         let sut = RemoteWorkoutLoader(client: client, path: path)
         return (sut, client)
     }
     
-    private class FirestoreClientSpy: FirestoreClient {
+    private class ClientSpy: Client {
         
-        private var messages = [(path: String, completion: (HTTPClientResult) -> Void)]()
+        private var messages = [(path: String, completion: (ClientResult) -> Void)]()
         
         var requestedPaths: [String] {
             messages.map { $0.path }
         }
         
-        func get(from path: String, completion: @escaping (HTTPClientResult) -> Void) {
+        func get(from path: String, completion: @escaping (ClientResult) -> Void) {
             messages.append((path, completion))
         }
         
