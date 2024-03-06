@@ -44,7 +44,7 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         
         let clientError = NSError(domain: "Test", code: 0)
         
-        client.completions[0](clientError)
+        client.complete(with: clientError)
         
         XCTAssertEqual(capturedErrors, [.connectivity])
     }
@@ -64,6 +64,10 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         func get(from path: String, completion: @escaping (Error) -> Void) {
             completions.append(completion)
             requestedPaths.append(path)
+        }
+        
+        func complete(with error: Error, at index: Int = 0) {
+            completions[index](error)
         }
     }
     
