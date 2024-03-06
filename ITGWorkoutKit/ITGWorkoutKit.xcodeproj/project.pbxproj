@@ -13,6 +13,7 @@
 		7460AB6D2B94D0A2000FDF22 /* WorkoutItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB6C2B94D0A2000FDF22 /* WorkoutItem.swift */; };
 		7460AB702B94E3E7000FDF22 /* WorkoutLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB6F2B94E3E7000FDF22 /* WorkoutLoader.swift */; };
 		7460AB722B94E82C000FDF22 /* RemoteWorkoutLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB712B94E82C000FDF22 /* RemoteWorkoutLoaderTests.swift */; };
+		74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +34,7 @@
 		7460AB6C2B94D0A2000FDF22 /* WorkoutItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutItem.swift; sourceTree = "<group>"; };
 		7460AB6F2B94E3E7000FDF22 /* WorkoutLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLoader.swift; sourceTree = "<group>"; };
 		7460AB712B94E82C000FDF22 /* RemoteWorkoutLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWorkoutLoaderTests.swift; sourceTree = "<group>"; };
+		74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWorkoutLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 		7460AB542B94D040000FDF22 /* ITGWorkoutKit */ = {
 			isa = PBXGroup;
 			children = (
+				74AEA5D22B98D060008CAC0A /* Workout API */,
 				7460AB6E2B94E3BA000FDF22 /* WorkoutFeature */,
 				7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */,
 				7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */,
@@ -97,6 +100,14 @@
 				7460AB6F2B94E3E7000FDF22 /* WorkoutLoader.swift */,
 			);
 			path = WorkoutFeature;
+			sourceTree = "<group>";
+		};
+		74AEA5D22B98D060008CAC0A /* Workout API */ = {
+			isa = PBXGroup;
+			children = (
+				74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */,
+			);
+			path = "Workout API";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,6 +221,7 @@
 			files = (
 				7460AB6D2B94D0A2000FDF22 /* WorkoutItem.swift in Sources */,
 				7460AB702B94E3E7000FDF22 /* WorkoutLoader.swift in Sources */,
+				74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */,
 				7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

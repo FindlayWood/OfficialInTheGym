@@ -6,27 +6,7 @@
 //
 
 import XCTest
-
-class RemoteWorkoutLoader {
-    
-    let client: FirestoreClient
-    let path: String
-    
-    init(client: FirestoreClient, path: String) {
-        self.client = client
-        self.path = path
-    }
-    
-    func load() {
-        client.get(from: path)
-    }
-}
-
-protocol FirestoreClient {
-    func get(from path: String)
-}
-
-
+import ITGWorkoutKit
 
 class RemoteWorkoutLoaderTests: XCTestCase {
     
