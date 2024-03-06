@@ -14,7 +14,7 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     func test_init_doesNotRequestDataFromPath() {
         let (_, client) = makeSUT()
         
-        XCTAssertNil(client.requestedPath)
+        XCTAssertTrue(client.requestedPaths.isEmpty)
     }
     
     func test_load_requestDataFromPath() {
@@ -23,7 +23,7 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         
         sut.load()
         
-        XCTAssertEqual(client.requestedPath, path)
+        XCTAssertEqual(client.requestedPaths, [path])
     }
     
     func test_loadTwice_requestDataFromPathTwice() {
@@ -45,11 +45,9 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     }
     
     private class FirestoreClientSpy: FirestoreClient {
-        var requestedPath: String?
         var requestedPaths: [String] = []
         
         func get(from path: String) {
-            requestedPath = path
             requestedPaths.append(path)
         }
     }
