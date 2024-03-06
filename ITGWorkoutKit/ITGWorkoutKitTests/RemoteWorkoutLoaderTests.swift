@@ -26,33 +26,40 @@ protocol FirestoreClient {
     func get(from path: String)
 }
 
-class FirestoreClientSpy: FirestoreClient {
-    var requestedPath: String?
-    
-    func get(from path: String) {
-        requestedPath = path
-    }
-}
+
 
 class RemoteWorkoutLoaderTests: XCTestCase {
     
     
     func test_init_doesNotRequestDataFromPath() {
-        let path = "example/path"
-        let client = FirestoreClientSpy()
-        let sut = RemoteWorkoutLoader(client: client, path: path)
-        
+        let (_, client) = makeSUT()
         
         XCTAssertNil(client.requestedPath)
     }
     
     func test_load_requestDataFromPath() {
         let path = "example/firestore/path"
-        let client = FirestoreClientSpy()
-        let sut = RemoteWorkoutLoader(client: client, path: path)
+        let (sut, client) = makeSUT(path: path)
         
         sut.load()
         
         XCTAssertEqual(client.requestedPath, path)
     }
+    
+    // MARK: - Helpers
+    
+    private func makeSUT(path: String = "example/path") -> (sut: RemoteWorkoutLoader, client: FirestoreClientSpy) {
+        let client = FirestoreClientSpy()
+        let sut = RemoteWorkoutLoader(client: client, path: path)
+        return (sut, client)
+    }
+    
+    private class FirestoreClientSpy: FirestoreClient {
+        var requestedPath: String?
+        
+        func get(from path: String) {
+            requestedPath = path
+        }
+    }
+    
 }
