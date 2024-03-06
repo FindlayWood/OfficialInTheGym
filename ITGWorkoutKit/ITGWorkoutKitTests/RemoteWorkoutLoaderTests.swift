@@ -38,10 +38,13 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-        client.error = NSError(domain: "Test", code: 0)
         
         var capturedErrors = [RemoteWorkoutLoader.Error]()
         sut.load { capturedErrors.append($0) }
+        
+        let clientError = NSError(domain: "Test", code: 0)
+        
+        client.completions[0](clientError)
         
         XCTAssertEqual(capturedErrors, [.connectivity])
     }
@@ -56,12 +59,10 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     
     private class FirestoreClientSpy: FirestoreClient {
         var requestedPaths: [String] = []
-        var error: Error?
+        var completions = [(Error) -> Void]()
         
         func get(from path: String, completion: @escaping (Error) -> Void) {
-            if let error {
-                completion(error)
-            }
+            completions.append(completion)
             requestedPaths.append(path)
         }
     }
