@@ -78,12 +78,12 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     
     private func expect(_ sut: RemoteWorkoutLoader, toCompleteWithError error: RemoteWorkoutLoader.Error, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         
-        var capturedErrors = [RemoteWorkoutLoader.Error]()
-        sut.load { capturedErrors.append($0) }
+        var capturedResults = [RemoteWorkoutLoader.Result]()
+        sut.load { capturedResults.append($0) }
         
         action()
         
-        XCTAssertEqual(capturedErrors, [error], file: file, line: line)
+        XCTAssertEqual(capturedResults, [.failure(error)], file: file, line: line)
         
     }
     

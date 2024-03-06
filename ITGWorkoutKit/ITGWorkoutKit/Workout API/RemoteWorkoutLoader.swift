@@ -25,18 +25,23 @@ public final class RemoteWorkoutLoader {
         case invalidData
     }
     
+    public enum Result: Equatable {
+        case success([WorkoutItem])
+        case failure(Error)
+    }
+    
     public init(client: Client, path: String) {
         self.client = client
         self.path = path
     }
     
-    public func load(completion: @escaping (Error) -> Void) {
+    public func load(completion: @escaping (Result) -> Void) {
         client.get(from: path) { result  in
             switch result {
             case .success:
-                completion(.invalidData)
+                completion(.failure(.invalidData))
             case .failure:
-                completion(.connectivity)
+                completion(.failure(.connectivity))
             }
         }
     }

@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct WorkoutItem {
-    
+public struct WorkoutItem: Equatable {
     let id: String
     let title: String
 }
