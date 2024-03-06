@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol FirestoreClient {
-    func get(from path: String, completion: @escaping (Error) -> Void)
+    func get(from path: String, completion: @escaping (Error?, HTTPURLResponse?) -> Void)
 }
 
 public final class RemoteWorkoutLoader {
@@ -18,6 +18,7 @@ public final class RemoteWorkoutLoader {
     
     public enum Error: Swift.Error {
         case connectivity
+        case invalidData
     }
     
     public init(client: FirestoreClient, path: String) {
@@ -26,8 +27,12 @@ public final class RemoteWorkoutLoader {
     }
     
     public func load(completion: @escaping (Error) -> Void) {
-        client.get(from: path) { error in
-            completion(.connectivity)
+        client.get(from: path) { error, response  in
+            if response != nil {
+                completion(.invalidData)
+            } else {
+                completion(.connectivity)
+            }
         }
     }
 }
