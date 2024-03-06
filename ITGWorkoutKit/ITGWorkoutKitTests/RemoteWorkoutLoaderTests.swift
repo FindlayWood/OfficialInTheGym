@@ -67,6 +67,19 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         }
     }
     
+    func test_load_deliversErrorOnResponseWithInvalidJson() {
+        let (sut, client) = makeSUT()
+        
+        var capturedErrors = [RemoteWorkoutLoader.Error]()
+        sut.load { capturedErrors.append($0) }
+        
+        let invalidJSON = Data("Invalid json".utf8)
+        client.complete(withStatusCode: 200, data: invalidJSON)
+        
+        XCTAssertEqual(capturedErrors, [.invalidData])
+            
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(path: String = "example/path") -> (sut: RemoteWorkoutLoader, client: ClientSpy) {
@@ -91,12 +104,12 @@ class RemoteWorkoutLoaderTests: XCTestCase {
             messages[index].completion(.failure(error))
         }
         
-        func complete(withStatusCode statusCode: Int, at index: Int = 0) {
+        func complete(withStatusCode statusCode: Int, data: Data = Data(), at index: Int = 0) {
             let response = HTTPURLResponse(url: URL(string: "Example.com")!,
                                            statusCode: statusCode,
                                            httpVersion: nil,
                                            headerFields: nil)!
-            messages[index].completion(.success(response))
+            messages[index].completion(.success(data, response))
         }
     }
     
