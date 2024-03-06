@@ -21,7 +21,7 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         let path = "example/firestore/path"
         let (sut, client) = makeSUT(path: path)
         
-        sut.load()
+        sut.load { _ in }
         
         XCTAssertEqual(client.requestedPaths, [path])
     }
@@ -30,8 +30,8 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         let path = "example/firestore/path"
         let (sut, client) = makeSUT(path: path)
         
-        sut.load()
-        sut.load()
+        sut.load { _ in }
+        sut.load { _ in }
         
         XCTAssertEqual(client.requestedPaths, [path, path])
     }

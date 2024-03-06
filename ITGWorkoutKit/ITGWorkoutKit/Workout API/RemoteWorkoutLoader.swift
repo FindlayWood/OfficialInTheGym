@@ -25,7 +25,7 @@ public final class RemoteWorkoutLoader {
         self.path = path
     }
     
-    public func load(completion: @escaping (Error) -> Void = { _ in }) {
+    public func load(completion: @escaping (Error) -> Void) {
         client.get(from: path) { error in
             completion(.connectivity)
         }
