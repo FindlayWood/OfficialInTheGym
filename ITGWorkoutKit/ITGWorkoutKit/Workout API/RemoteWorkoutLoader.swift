@@ -7,8 +7,12 @@
 
 import Foundation
 
+public enum HTTPClientResult {
+    case success(HTTPURLResponse)
+    case failure(Error)
+}
 public protocol FirestoreClient {
-    func get(from path: String, completion: @escaping (Error?, HTTPURLResponse?) -> Void)
+    func get(from path: String, completion: @escaping (HTTPClientResult) -> Void)
 }
 
 public final class RemoteWorkoutLoader {
@@ -27,10 +31,11 @@ public final class RemoteWorkoutLoader {
     }
     
     public func load(completion: @escaping (Error) -> Void) {
-        client.get(from: path) { error, response  in
-            if response != nil {
+        client.get(from: path) { result  in
+            switch result {
+            case .success:
                 completion(.invalidData)
-            } else {
+            case .failure:
                 completion(.connectivity)
             }
         }

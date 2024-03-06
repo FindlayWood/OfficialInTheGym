@@ -77,26 +77,26 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     
     private class FirestoreClientSpy: FirestoreClient {
         
-        private var messages = [(path: String, completion: (Error?, HTTPURLResponse?) -> Void)]()
+        private var messages = [(path: String, completion: (HTTPClientResult) -> Void)]()
         
         var requestedPaths: [String] {
             messages.map { $0.path }
         }
         
-        func get(from path: String, completion: @escaping (Error?, HTTPURLResponse?) -> Void) {
+        func get(from path: String, completion: @escaping (HTTPClientResult) -> Void) {
             messages.append((path, completion))
         }
         
         func complete(with error: Error, at index: Int = 0) {
-            messages[index].completion(error, nil)
+            messages[index].completion(.failure(error))
         }
         
         func complete(withStatusCode statusCode: Int, at index: Int = 0) {
             let response = HTTPURLResponse(url: URL(string: "Example.com")!,
                                            statusCode: statusCode,
                                            httpVersion: nil,
-                                           headerFields: nil)
-            messages[index].completion(nil, response)
+                                           headerFields: nil)!
+            messages[index].completion(.success(response))
         }
     }
     
