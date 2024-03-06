@@ -10,13 +10,15 @@ import XCTest
 class RemoteWorkoutLoader {
     
     let client: FirestoreClient
+    let path: String
     
-    init(client: FirestoreClient) {
+    init(client: FirestoreClient, path: String) {
         self.client = client
+        self.path = path
     }
     
     func load() {
-        client.get(from: "examplepath")
+        client.get(from: path)
     }
 }
 
@@ -36,21 +38,21 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     
     
     func test_init_doesNotRequestDataFromPath() {
-        
+        let path = "example/path"
         let client = FirestoreClientSpy()
-        let sut = RemoteWorkoutLoader(client: client)
+        let sut = RemoteWorkoutLoader(client: client, path: path)
         
         
         XCTAssertNil(client.requestedPath)
     }
     
     func test_load_requestDataFromPath() {
-        
+        let path = "example/firestore/path"
         let client = FirestoreClientSpy()
-        let sut = RemoteWorkoutLoader(client: client)
+        let sut = RemoteWorkoutLoader(client: client, path: path)
         
         sut.load()
         
-        XCTAssertNotNil(client.requestedPath)
+        XCTAssertEqual(client.requestedPath, path)
     }
 }
