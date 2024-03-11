@@ -100,6 +100,19 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+        let client = ClientSpy()
+        var sut: RemoteWorkoutLoader? = RemoteWorkoutLoader(client: client, path: "path/example")
+
+        var capturedResults = [RemoteWorkoutLoader.Result]()
+        sut?.load { capturedResults.append($0) }
+
+        sut = nil
+        client.complete(withStatusCode: 200, data: makeItemsJSON([]))
+
+        XCTAssertTrue(capturedResults.isEmpty)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(path: String = "example/path", file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteWorkoutLoader, client: ClientSpy) {
