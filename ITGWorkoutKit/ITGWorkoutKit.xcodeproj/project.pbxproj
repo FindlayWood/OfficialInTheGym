@@ -15,6 +15,7 @@
 		7460AB722B94E82C000FDF22 /* RemoteWorkoutLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB712B94E82C000FDF22 /* RemoteWorkoutLoaderTests.swift */; };
 		74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */; };
 		74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D52B9F9F1B008CAC0A /* Client.swift */; };
+		74AEA5D82B9F9F6D008CAC0A /* WorkoutItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		7460AB712B94E82C000FDF22 /* RemoteWorkoutLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWorkoutLoaderTests.swift; sourceTree = "<group>"; };
 		74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWorkoutLoader.swift; sourceTree = "<group>"; };
 		74AEA5D52B9F9F1B008CAC0A /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+		74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutItemsMapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 			children = (
 				74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */,
 				74AEA5D52B9F9F1B008CAC0A /* Client.swift */,
+				74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */,
 			);
 			path = "Workout API";
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7460AB6D2B94D0A2000FDF22 /* WorkoutItem.swift in Sources */,
+				74AEA5D82B9F9F6D008CAC0A /* WorkoutItemsMapper.swift in Sources */,
 				7460AB702B94E3E7000FDF22 /* WorkoutLoader.swift in Sources */,
 				74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */,
 				74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */,
