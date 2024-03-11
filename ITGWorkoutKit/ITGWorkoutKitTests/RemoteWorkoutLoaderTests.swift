@@ -82,30 +82,19 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         
         let (sut, client) = makeSUT()
         
-        let item1 = WorkoutItem(
+        let item1 = makeItem(
             id: UUID().uuidString,
             title: "example 1")
         
-        let item1JSON = [
-            "id": item1.id,
-            "title": item1.title
-        ]
-        
-        let item2 = WorkoutItem(
+        let item2 = makeItem(
             id: UUID().uuidString,
             title: "example 2")
         
-        let item2JSON = [
-            "id": item2.id,
-            "title": item2.title
-        ]
         
-        let itemsJSON = [
-            "items": [item1JSON, item2JSON]
-        ]
+        let items = [item1.model, item2.model]
 
-        expect(sut, toCompleteWith: .success([item1, item2]), when: {
-            let json = try! JSONSerialization.data(withJSONObject: itemsJSON)
+        expect(sut, toCompleteWith: .success(items), when: {
+            let json = makeItemsJSON([item1.json, item2.json])
             client.complete(withStatusCode: 200, data: json)
         })
     }
@@ -116,6 +105,23 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         let client = ClientSpy()
         let sut = RemoteWorkoutLoader(client: client, path: path)
         return (sut, client)
+    }
+    
+    private func makeItem(id: String, title: String) -> (model: WorkoutItem, json: [String: Any]) {
+        
+        let item = WorkoutItem(id: id, title: title)
+
+        let json = [
+            "id": id,
+            "title": title
+        ]
+
+        return (item, json)
+    }
+    
+    private func makeItemsJSON(_ items: [[String: Any]]) -> Data {
+        let json = ["items": items]
+        return try! JSONSerialization.data(withJSONObject: json)
     }
     
     private func expect(_ sut: RemoteWorkoutLoader, toCompleteWith result: RemoteWorkoutLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
