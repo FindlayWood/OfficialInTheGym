@@ -31,12 +31,7 @@ public final class RemoteWorkoutLoader {
         client.get(from: path) { result  in
             switch result {
             case let .success(data, response):
-                do {
-                    let items = try WorkoutItemsMapper.map(data, from: response)
-                    completion(.success(items))
-                } catch {
-                    completion(.failure(.invalidData))
-                }
+                completion(WorkoutItemsMapper.map(data, from: response))
             case .failure:
                 completion(.failure(.connectivity))
             }
