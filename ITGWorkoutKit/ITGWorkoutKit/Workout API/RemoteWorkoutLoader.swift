@@ -39,9 +39,10 @@ public final class RemoteWorkoutLoader {
         client.get(from: path) { result  in
             switch result {
             case let .success(data, response):
-                if response.statusCode == 200, let root = try? JSONDecoder().decode(Root.self, from: data) {
-                    completion(.success(root.items.map { $0.item }))
-                } else {
+                do {
+                    let items = try FeedItemsMapper.map(data, from: response)
+                    completion(.success(items))
+                } catch {
                     completion(.failure(.invalidData))
                 }
             case .failure:
@@ -51,20 +52,33 @@ public final class RemoteWorkoutLoader {
     }
 }
 
-private struct Root: Decodable {
-    let items: [Item]
-}
-
-struct Item: Decodable {
-    let id: String
-    let title: String
-    
-    init(id: String, title: String) {
-        self.id = id
-        self.title = title
+class FeedItemsMapper {
+    private struct Root: Decodable {
+        let items: [Item]
+        
+        var feed: [WorkoutItem] {
+            return items.map { $0.item }
+        }
     }
     
-    var item: WorkoutItem {
-        WorkoutItem(id: id, title: title)
+    private struct Item: Decodable {
+        let id: String
+        let title: String
+        
+        var item: WorkoutItem {
+            return WorkoutItem(id: id, title: title)
+        }
+    }
+    
+    static var OK_200: Int { return 200 }
+    
+    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [WorkoutItem] {
+        guard response.statusCode == OK_200 else {
+            throw RemoteWorkoutLoader.Error.invalidData
+        }
+        
+        let root = try JSONDecoder().decode(Root.self, from: data)
+
+        return root.feed
     }
 }
