@@ -102,10 +102,18 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(path: String = "example/path") -> (sut: RemoteWorkoutLoader, client: ClientSpy) {
+    private func makeSUT(path: String = "example/path", file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteWorkoutLoader, client: ClientSpy) {
         let client = ClientSpy()
         let sut = RemoteWorkoutLoader(client: client, path: path)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(client, file: file, line: line)
         return (sut, client)
+    }
+    
+    private func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
+        }
     }
     
     private func makeItem(id: String, title: String) -> (model: WorkoutItem, json: [String: Any]) {
