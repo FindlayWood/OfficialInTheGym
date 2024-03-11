@@ -7,14 +7,6 @@
 
 import Foundation
 
-public enum ClientResult {
-    case success(Data, HTTPURLResponse)
-    case failure(Error)
-}
-public protocol Client {
-    func get(from path: String, completion: @escaping (ClientResult) -> Void)
-}
-
 public final class RemoteWorkoutLoader {
     
     private let client: Client
