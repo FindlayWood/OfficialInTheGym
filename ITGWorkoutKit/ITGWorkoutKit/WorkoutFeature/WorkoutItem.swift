@@ -8,6 +8,15 @@
 import Foundation
 
 public struct WorkoutItem: Equatable {
-    let id: String
-    let title: String
+    public let id: String
+    public let title: String
+    
+    public init(id: String, title: String) {
+        self.id = id
+        self.title = title
+    }
+}
+
+extension WorkoutItem : Decodable {
+    
 }

@@ -78,6 +78,38 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_deliversItemsOn200HTTPResponseWithJSONItems() {
+        
+        let (sut, client) = makeSUT()
+        
+        let item1 = WorkoutItem(
+            id: UUID().uuidString,
+            title: "example 1")
+        
+        let item1JSON = [
+            "id": item1.id,
+            "title": item1.title
+        ]
+        
+        let item2 = WorkoutItem(
+            id: UUID().uuidString,
+            title: "example 2")
+        
+        let item2JSON = [
+            "id": item2.id,
+            "title": item2.title
+        ]
+        
+        let itemsJSON = [
+            "items": [item1JSON, item2JSON]
+        ]
+
+        expect(sut, toCompleteWith: .success([item1, item2]), when: {
+            let json = try! JSONSerialization.data(withJSONObject: itemsJSON)
+            client.complete(withStatusCode: 200, data: json)
+        })
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(path: String = "example/path") -> (sut: RemoteWorkoutLoader, client: ClientSpy) {
