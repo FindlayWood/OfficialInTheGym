@@ -92,7 +92,7 @@
 		7460AB602B94D040000FDF22 /* ITGWorkoutKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				7460AB712B94E82C000FDF22 /* RemoteWorkoutLoaderTests.swift */,
+				74AEA5D92B9FA963008CAC0A /* Workout API */,
 			);
 			path = ITGWorkoutKitTests;
 			sourceTree = "<group>";
@@ -112,6 +112,14 @@
 				74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */,
 				74AEA5D52B9F9F1B008CAC0A /* Client.swift */,
 				74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */,
+			);
+			path = "Workout API";
+			sourceTree = "<group>";
+		};
+		74AEA5D92B9FA963008CAC0A /* Workout API */ = {
+			isa = PBXGroup;
+			children = (
+				7460AB712B94E82C000FDF22 /* RemoteWorkoutLoaderTests.swift */,
 			);
 			path = "Workout API";
 			sourceTree = "<group>";
