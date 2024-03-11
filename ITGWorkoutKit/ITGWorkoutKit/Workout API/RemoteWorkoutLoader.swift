@@ -40,7 +40,7 @@ public final class RemoteWorkoutLoader {
             switch result {
             case let .success(data, response):
                 if response.statusCode == 200, let root = try? JSONDecoder().decode(Root.self, from: data) {
-                    completion(.success(root.items))
+                    completion(.success(root.items.map { $0.item }))
                 } else {
                     completion(.failure(.invalidData))
                 }
@@ -52,5 +52,19 @@ public final class RemoteWorkoutLoader {
 }
 
 private struct Root: Decodable {
-    let items: [WorkoutItem]
+    let items: [Item]
+}
+
+struct Item: Decodable {
+    let id: String
+    let title: String
+    
+    init(id: String, title: String) {
+        self.id = id
+        self.title = title
+    }
+    
+    var item: WorkoutItem {
+        WorkoutItem(id: id, title: title)
+    }
 }

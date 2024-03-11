@@ -16,7 +16,3 @@ public struct WorkoutItem: Equatable {
         self.title = title
     }
 }
-
-extension WorkoutItem : Decodable {
-    
-}
