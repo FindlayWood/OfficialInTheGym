@@ -39,7 +39,7 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWith: .failure(RemoteWorkoutLoader.Error.connectivity)) {
+        expect(sut, toCompleteWith: failure(.connectivity)) {
             let clientError = NSError(domain: "Test", code: 0)
             
             client.complete(with: clientError)
@@ -53,7 +53,7 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         
         samples.enumerated().forEach { index, code in
             
-            expect(sut, toCompleteWith: .failure(RemoteWorkoutLoader.Error.invalidData)) {
+            expect(sut, toCompleteWith: failure(.invalidData)) {
                 let json = makeItemsJSON([])
                 client.complete(withStatusCode: code, data: json, at: index)
             }
@@ -63,7 +63,7 @@ class RemoteWorkoutLoaderTests: XCTestCase {
     func test_load_deliversErrorOnResponseWithInvalidJson() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWith: .failure(RemoteWorkoutLoader.Error.invalidData)) {
+        expect(sut, toCompleteWith: failure(.invalidData)) {
             let invalidJSON = Data("Invalid json".utf8)
             client.complete(withStatusCode: 200, data: invalidJSON)
         }
@@ -121,6 +121,10 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(client, file: file, line: line)
         return (sut, client)
+    }
+    
+    private func failure(_ error: RemoteWorkoutLoader.Error) -> RemoteWorkoutLoader.Result {
+        return .failure(error)
     }
     
     private func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
