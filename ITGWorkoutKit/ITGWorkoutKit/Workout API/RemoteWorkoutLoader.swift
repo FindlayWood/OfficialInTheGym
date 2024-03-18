@@ -17,7 +17,7 @@ public final class RemoteWorkoutLoader: WorkoutLoader {
         case invalidData
     }
     
-    public typealias Result = LoadWorkoutsResult<Error>
+    public typealias Result = LoadWorkoutsResult
     
     public init(client: Client, path: String) {
         self.client = client
@@ -32,7 +32,7 @@ public final class RemoteWorkoutLoader: WorkoutLoader {
             case let .success(data, response):
                 completion(WorkoutItemsMapper.map(data, from: response))
             case .failure:
-                completion(.failure(.connectivity))
+                completion(.failure(Error.connectivity))
             }
         }
     }
