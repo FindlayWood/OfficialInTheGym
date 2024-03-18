@@ -17,10 +17,7 @@ public final class RemoteWorkoutLoader {
         case invalidData
     }
     
-    public enum Result: Equatable {
-        case success([WorkoutItem])
-        case failure(Error)
-    }
+    public typealias Result = LoadWorkoutsResult<Error>
     
     public init(client: Client, path: String) {
         self.client = client
