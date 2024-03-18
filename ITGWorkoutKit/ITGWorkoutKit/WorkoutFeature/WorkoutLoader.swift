@@ -12,6 +12,6 @@ public enum LoadWorkoutsResult {
     case failure(Error)
 }
 
-protocol WorkoutLoader {
+public protocol WorkoutLoader {
     func load(completion: @escaping (LoadWorkoutsResult) -> Void)
 }
