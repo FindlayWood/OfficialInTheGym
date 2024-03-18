@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class RemoteWorkoutLoader {
+public final class RemoteWorkoutLoader: WorkoutLoader {
     
     private let client: Client
     private let path: String
