@@ -8,32 +8,6 @@
 import XCTest
 import ITGWorkoutKit
 
-
-class URLSessionHTTPClient: Client {
-    private let session: URLSession
-
-    init(session: URLSession = .shared) {
-        self.session = session
-    }
-
-    struct UnexpectedValuesRepresentation: Error {}
-    
-    func get(from path: String, completion: @escaping (ClientResult) -> Void) {
-        guard let url = URL(string: path) else {
-            completion(.failure(UnexpectedValuesRepresentation()))
-            return }
-        session.dataTask(with: url) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-            } else if let data = data, let response = response as? HTTPURLResponse {
-                completion(.success(data, response))
-            } else {
-                completion(.failure(UnexpectedValuesRepresentation()))
-            }
-        }.resume()
-    }
-}
-
 class URLSessionHTTPClientTests: XCTestCase {
     
     override func setUp() {
