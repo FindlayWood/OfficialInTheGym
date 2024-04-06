@@ -9,7 +9,7 @@ import XCTest
 import ITGWorkoutKit
 
 
-class URLSessionHTTPClient {
+class URLSessionHTTPClient: Client {
     private let session: URLSession
 
     init(session: URLSession = .shared) {
@@ -18,7 +18,10 @@ class URLSessionHTTPClient {
 
     struct UnexpectedValuesRepresentation: Error {}
     
-    func get(from url: URL, completion: @escaping (ClientResult) -> Void) {
+    func get(from path: String, completion: @escaping (ClientResult) -> Void) {
+        guard let url = URL(string: path) else {
+            completion(.failure(UnexpectedValuesRepresentation()))
+            return }
         session.dataTask(with: url) { data, response, error in
             if let error = error {
                 completion(.failure(error))
@@ -59,7 +62,7 @@ class URLSessionHTTPClientTests: XCTestCase {
 
         let exp = expectation(description: "Wait for completion")
 
-        makeSUT().get(from: anyURL()) { result in
+        makeSUT().get(from: anyURLString()) { result in
             switch result {
             case let .failure(receivedError as NSError):
                 XCTAssertEqual(receivedError.domain, error.domain)
@@ -109,7 +112,7 @@ class URLSessionHTTPClientTests: XCTestCase {
 
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> URLSessionHTTPClient {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> Client {
         let sut = URLSessionHTTPClient()
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
@@ -145,7 +148,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         let exp = expectation(description: "Wait for completion")
 
         var receivedResult: ClientResult!
-        sut.get(from: anyURL()) { result in
+        sut.get(from: anyURLString()) { result in
             receivedResult = result
             exp.fulfill()
         }
@@ -154,8 +157,8 @@ class URLSessionHTTPClientTests: XCTestCase {
         return receivedResult
     }
     
-    private func anyURL() -> URL {
-        return URL(string: "http://any-url.com")!
+    private func anyURLString() -> String {
+        return "http://any-url.com"
     }
     
     private func anyData() -> Data {
@@ -167,11 +170,13 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
 
     private func anyHTTPURLResponse() -> HTTPURLResponse {
-        return HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
+        let url = URL(string: "http://any-url.com")!
+        return HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
     }
 
     private func nonHTTPURLResponse() -> URLResponse {
-        return URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+        let url = URL(string: "http://any-url.com")!
+        return URLResponse(url: url, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
     }
     
     private class URLProtocolStub: URLProtocol {
