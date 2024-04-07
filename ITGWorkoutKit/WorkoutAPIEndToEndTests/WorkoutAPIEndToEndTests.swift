@@ -11,20 +11,7 @@ import ITGWorkoutKit
 final class WorkoutAPIEndToEndTests: XCTestCase {
 
     func test_endToEndTestServerGETFeedResult_matchesFixedTestAccountData() {
-        let testServerString = "https://essentialdeveloper.com/feed-case-study/test-api/feed"
-        let client = URLSessionHTTPClient()
-        let loader = RemoteWorkoutLoader(client: client, path: testServerString)
-
-        let exp = expectation(description: "Wait for load completion")
-
-        var receivedResult: LoadWorkoutsResult?
-        loader.load { result in
-            receivedResult = result
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 5.0)
-
-        switch receivedResult {
+        switch getFeedResult() {
         case let .success(items)?:
             XCTAssertEqual(items.count, 8, "Expected 8 items in the test account feed")
             XCTAssertEqual(items[0], expectedItem(at: 0))
@@ -45,6 +32,23 @@ final class WorkoutAPIEndToEndTests: XCTestCase {
     }
 
     // MARK: - Helpers
+    
+    private func getFeedResult() -> LoadWorkoutsResult? {
+        let testServerString = "https://essentialdeveloper.com/feed-case-study/test-api/feed"
+        let client = URLSessionHTTPClient()
+        let loader = RemoteWorkoutLoader(client: client, path: testServerString)
+
+        let exp = expectation(description: "Wait for load completion")
+
+        var receivedResult: LoadWorkoutsResult?
+        loader.load { result in
+            receivedResult = result
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 5.0)
+
+        return receivedResult
+    }
 
     private func expectedItem(at index: Int) -> WorkoutItem {
         return WorkoutItem(
