@@ -23,31 +23,27 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_getFromURL_performsGETRequestWithURL() {
-        let requestError = anyNSError()
-        
-        let receivedError = resultErrorFor(data: nil, response: nil, error: requestError)
-        
-        XCTAssertEqual((receivedError as? NSError)?.domain, requestError.domain)
-    }
+        let url = anyURLString()
+        let exp = expectation(description: "Wait for request")
 
-    func test_getFromURL_failsOnRequestError() {
-        let error = NSError(domain: "any error", code: 1)
-        URLProtocolStub.stub(data: nil, response: nil, error: error)
-
-        let exp = expectation(description: "Wait for completion")
-
-        makeSUT().get(from: anyURLString()) { result in
-            switch result {
-            case let .failure(receivedError as NSError):
-                XCTAssertEqual(receivedError.domain, error.domain)
-            default:
-                XCTFail("Expected failure with error \(error), got \(result) instead")
-            }
-
+        URLProtocolStub.observeRequests { request in
+            XCTAssertEqual(request.url?.absoluteString, url)
+            XCTAssertEqual(request.httpMethod, "GET")
             exp.fulfill()
         }
 
+        makeSUT().get(from: url) { _ in }
+
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_getFromURL_failsOnRequestError() {
+        
+        let requestError = anyNSError()
+
+        let receivedError = resultErrorFor(data: nil, response: nil, error: requestError)
+
+        XCTAssertEqual((receivedError as? NSError)?.domain, requestError.domain)
     }
     
     func test_getFromURL_failsOnAllInvalidRepresentationCases() {
