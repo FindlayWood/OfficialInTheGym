@@ -84,12 +84,14 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         let (sut, client) = makeSUT()
         
         let item1 = makeItem(
-            id: UUID().uuidString,
-            title: "example 1")
+            id: UUID(),
+            image: URL(string: "http://a-url.com")!)
         
         let item2 = makeItem(
-            id: UUID().uuidString,
-            title: "example 2")
+            id: UUID(),
+            description: "example 2",
+            location: "a location",
+            image: URL(string: "http://another-url.com")!)
         
         
         let items = [item1.model, item2.model]
@@ -127,14 +129,16 @@ class RemoteWorkoutLoaderTests: XCTestCase {
         return .failure(error)
     }
     
-    private func makeItem(id: String, title: String) -> (model: WorkoutItem, json: [String: Any]) {
+    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, image: URL) -> (model: WorkoutItem, json: [String: Any]) {
         
-        let item = WorkoutItem(id: id, title: title)
+        let item = WorkoutItem(id: id, description: description, location: location, image: image)
 
         let json = [
-            "id": id,
-            "title": title
-        ]
+            "id": id.uuidString,
+            "description": description,
+            "location": location,
+            "image": image.absoluteString
+        ].compactMapValues { $0 }
 
         return (item, json)
     }
