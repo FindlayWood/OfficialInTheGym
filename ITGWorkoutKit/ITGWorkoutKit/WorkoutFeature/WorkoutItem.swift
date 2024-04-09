@@ -8,11 +8,15 @@
 import Foundation
 
 public struct WorkoutItem: Equatable {
-    public let id: String
-    public let title: String
+    public let id: UUID
+    public let description: String?
+    public let location: String?
+    public let image: URL?
     
-    public init(id: String, title: String) {
+    public init(id: UUID, description: String?, location: String?, image: URL?) {
         self.id = id
-        self.title = title
+        self.description = description
+        self.location = location
+        self.image = image
     }
 }

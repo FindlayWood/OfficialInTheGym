@@ -24,8 +24,7 @@ final class WorkoutAPIEndToEndTests: XCTestCase {
             XCTAssertEqual(items[7], expectedItem(at: 7))
 
         case let .failure(error)?:
-            XCTAssertNotNil(error)
-//            XCTFail("Expected successful feed result, got \(error) instead")
+            XCTFail("Expected successful feed result, got \(error) instead")
 
         default:
             XCTFail("Expected successful feed result, got no result instead")
@@ -35,7 +34,7 @@ final class WorkoutAPIEndToEndTests: XCTestCase {
     // MARK: - Helpers
     
     private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> LoadWorkoutsResult? {
-        let testServerString = "https://essentialdeveloper.com/feed-case-study/test-api/feed"
+        let testServerString = "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5c52cdd0b8a045df091d2fff/1548930512083/feed-case-study-test-api-feed.json"
         let client = URLSessionHTTPClient()
         let loader = RemoteWorkoutLoader(client: client, path: testServerString)
         trackForMemoryLeaks(client, file: file, line: line)
@@ -55,9 +54,11 @@ final class WorkoutAPIEndToEndTests: XCTestCase {
 
     private func expectedItem(at index: Int) -> WorkoutItem {
         return WorkoutItem(
-            id: stringid(at: index),
-            title: description(at: index)
-            )
+            id: id(at: index),
+            description: description(at: index),
+            location: location(at: index),
+            image: imageURL(at: index)
+        )
     }
 
     private func id(at index: Int) -> UUID {
@@ -86,12 +87,12 @@ final class WorkoutAPIEndToEndTests: XCTestCase {
         ][index]
     }
 
-    private func description(at index: Int) -> String {
+    private func description(at index: Int) -> String? {
         return [
             "Description 1",
-            "Description 2",
+            nil,
             "Description 3",
-            "Description 4",
+            nil,
             "Description 5",
             "Description 6",
             "Description 7",
