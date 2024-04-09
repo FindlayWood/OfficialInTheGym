@@ -8,7 +8,7 @@
 import XCTest
 import ITGWorkoutKit
 
-class RemoteWorkoutLoaderTests: XCTestCase {
+class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     
     
     func test_init_doesNotRequestDataFromPath() {
