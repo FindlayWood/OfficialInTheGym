@@ -139,6 +139,7 @@
 		7460AB602B94D040000FDF22 /* ITGWorkoutKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				74730B912BC0AB9000B54778 /* Helpers */,
 				74A6DC992BC5E92F002A420C /* Workout Cache */,
 				74AEA5D92B9FA963008CAC0A /* Workout API */,
 			);
@@ -208,7 +209,6 @@
 		74AEA5D92B9FA963008CAC0A /* Workout API */ = {
 			isa = PBXGroup;
 			children = (
-				74730B912BC0AB9000B54778 /* Helpers */,
 				7460AB712B94E82C000FDF22 /* LoadFeedFromRemoteUseCaseTests.swift */,
 				74730B522BBDE02500B54778 /* URLSessionHTTPClientTests.swift */,
 			);
