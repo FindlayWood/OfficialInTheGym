@@ -29,6 +29,7 @@
 		74A6DCAB2BCC06AE002A420C /* ValidateFeedCacheUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCAA2BCC06AE002A420C /* ValidateFeedCacheUseCaseTests.swift */; };
 		74A6DCAD2BCC0866002A420C /* FeedCacheTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCAC2BCC0866002A420C /* FeedCacheTestHelpers.swift */; };
 		74A6DCAF2BCC08CB002A420C /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCAE2BCC08CB002A420C /* SharedTestHelpers.swift */; };
+		74A6DCB12BCC3FEC002A420C /* FeedCachePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCB02BCC3FEC002A420C /* FeedCachePolicy.swift */; };
 		74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */; };
 		74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D52B9F9F1B008CAC0A /* Client.swift */; };
 		74AEA5D82B9F9F6D008CAC0A /* WorkoutItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */; };
@@ -89,6 +90,7 @@
 		74A6DCAA2BCC06AE002A420C /* ValidateFeedCacheUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateFeedCacheUseCaseTests.swift; sourceTree = "<group>"; };
 		74A6DCAC2BCC0866002A420C /* FeedCacheTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCacheTestHelpers.swift; sourceTree = "<group>"; };
 		74A6DCAE2BCC08CB002A420C /* SharedTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTestHelpers.swift; sourceTree = "<group>"; };
+		74A6DCB02BCC3FEC002A420C /* FeedCachePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCachePolicy.swift; sourceTree = "<group>"; };
 		74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWorkoutLoader.swift; sourceTree = "<group>"; };
 		74AEA5D52B9F9F1B008CAC0A /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutItemsMapper.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				74A6DC9D2BC867A5002A420C /* LocalFeedLoader.swift */,
 				74A6DC9F2BC8681B002A420C /* FeedStore.swift */,
 				74A6DCA32BC87076002A420C /* LocalWorkoutItem.swift */,
+				74A6DCB02BCC3FEC002A420C /* FeedCachePolicy.swift */,
 			);
 			path = "Workout Cache";
 			sourceTree = "<group>";
@@ -405,6 +408,7 @@
 				74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */,
 				74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */,
 				74A6DC9E2BC867A5002A420C /* LocalFeedLoader.swift in Sources */,
+				74A6DCB12BCC3FEC002A420C /* FeedCachePolicy.swift in Sources */,
 				74A6DCA22BC87032002A420C /* RemoteWorkoutItem.swift in Sources */,
 				7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */,
 				74A6DCA42BC87076002A420C /* LocalWorkoutItem.swift in Sources */,
