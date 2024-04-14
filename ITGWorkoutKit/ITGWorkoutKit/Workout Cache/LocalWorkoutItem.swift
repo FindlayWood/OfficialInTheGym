@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct LocalWorkoutItem: Equatable, Codable {
+public struct LocalWorkoutItem: Equatable {
     public let id: UUID
     public let description: String?
     public let location: String?
