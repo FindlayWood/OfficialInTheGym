@@ -35,6 +35,13 @@
         "identifier" : "74730B992BC1DC2D00B54778",
         "name" : "WorkoutAPIEndToEndTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:ITGWorkoutKit.xcodeproj",
+        "identifier" : "74A6DCD42BCF09A1002A420C",
+        "name" : "ITGWorkoutKitCacheIntegrationTests"
+      }
     }
   ],
   "version" : 1
