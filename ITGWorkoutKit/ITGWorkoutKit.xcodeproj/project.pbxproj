@@ -246,13 +246,12 @@
 		74A6DC9C2BC8678F002A420C /* Workout Cache */ = {
 			isa = PBXGroup;
 			children = (
+				74A6DCC82BCF0208002A420C /* Infrastructure */,
 				74A6DC9D2BC867A5002A420C /* LocalFeedLoader.swift */,
 				74A6DC9F2BC8681B002A420C /* FeedStore.swift */,
 				74A6DCA32BC87076002A420C /* LocalWorkoutItem.swift */,
 				74A6DCB02BCC3FEC002A420C /* FeedCachePolicy.swift */,
 				74A6DCB42BCC76C4002A420C /* CodableFeedStore.swift */,
-				74A6DCC32BCEE1F8002A420C /* CoreDataFeedStore.swift */,
-				74A6DCC52BCEE469002A420C /* FeedStore.xcdatamodeld */,
 			);
 			path = "Workout Cache";
 			sourceTree = "<group>";
@@ -276,6 +275,23 @@
 				74A6DCBE2BCDD303002A420C /* XCTestCase+FailableDeleteFeedStoreSpecs.swift */,
 			);
 			path = FeedStoreSpecs;
+			sourceTree = "<group>";
+		};
+		74A6DCC82BCF0208002A420C /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				74A6DCC92BCF0212002A420C /* CoreData */,
+			);
+			path = Infrastructure;
+			sourceTree = "<group>";
+		};
+		74A6DCC92BCF0212002A420C /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				74A6DCC32BCEE1F8002A420C /* CoreDataFeedStore.swift */,
+				74A6DCC52BCEE469002A420C /* FeedStore.xcdatamodeld */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		74AEA5D22B98D060008CAC0A /* Workout API */ = {
@@ -802,8 +818,7 @@
 				74A6DCC62BCEE469002A420C /* FeedStore.xcdatamodel */,
 			);
 			currentVersion = 74A6DCC62BCEE469002A420C /* FeedStore.xcdatamodel */;
-			name = FeedStore.xcdatamodeld;
-			path = "/Users/findlaywood/Documents/Xcode work/InTheGym/ITGWorkoutKit/ITGWorkoutKit/Workout Cache/FeedStore.xcdatamodeld";
+			path = FeedStore.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
