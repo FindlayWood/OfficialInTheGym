@@ -43,6 +43,8 @@
 		74A6DCCB2BCF050D002A420C /* CoreDataHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCCA2BCF050D002A420C /* CoreDataHelpers.swift */; };
 		74A6DCCE2BCF05EB002A420C /* ManagedCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCCD2BCF05EB002A420C /* ManagedCache.swift */; };
 		74A6DCD02BCF0632002A420C /* ManagedWorkoutItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCCF2BCF0632002A420C /* ManagedWorkoutItem.swift */; };
+		74A6DCD82BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCD72BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.swift */; };
+		74A6DCD92BCF09A1002A420C /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
 		74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */; };
 		74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D52B9F9F1B008CAC0A /* Client.swift */; };
 		74AEA5D82B9F9F6D008CAC0A /* WorkoutItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */; };
@@ -57,6 +59,13 @@
 			remoteInfo = ITGWorkoutKit;
 		};
 		74730B9F2BC1DC2D00B54778 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7460AB492B94D040000FDF22 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7460AB512B94D040000FDF22;
+			remoteInfo = ITGWorkoutKit;
+		};
+		74A6DCDA2BCF09A1002A420C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7460AB492B94D040000FDF22 /* Project object */;
 			proxyType = 1;
@@ -117,6 +126,9 @@
 		74A6DCCA2BCF050D002A420C /* CoreDataHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelpers.swift; sourceTree = "<group>"; };
 		74A6DCCD2BCF05EB002A420C /* ManagedCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedCache.swift; sourceTree = "<group>"; };
 		74A6DCCF2BCF0632002A420C /* ManagedWorkoutItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedWorkoutItem.swift; sourceTree = "<group>"; };
+		74A6DCD52BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ITGWorkoutKitCacheIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		74A6DCD72BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ITGWorkoutKitCacheIntegrationTests.swift; sourceTree = "<group>"; };
+		74A6DCDF2BCF0A0A002A420C /* ITGWorkoutKitCacheIntegrationTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ITGWorkoutKitCacheIntegrationTests.xctestplan; sourceTree = "<group>"; };
 		74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWorkoutLoader.swift; sourceTree = "<group>"; };
 		74AEA5D52B9F9F1B008CAC0A /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutItemsMapper.swift; sourceTree = "<group>"; };
@@ -146,6 +158,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		74A6DCD22BCF09A1002A420C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74A6DCD92BCF09A1002A420C /* ITGWorkoutKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -155,6 +175,7 @@
 				7460AB542B94D040000FDF22 /* ITGWorkoutKit */,
 				7460AB602B94D040000FDF22 /* ITGWorkoutKitTests */,
 				74730B9B2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests */,
+				74A6DCD62BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests */,
 				7460AB532B94D040000FDF22 /* Products */,
 				74730BF82BC1E44700B54778 /* Frameworks */,
 			);
@@ -166,6 +187,7 @@
 				7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */,
 				7460AB5C2B94D040000FDF22 /* ITGWorkoutKitTests.xctest */,
 				74730B9A2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.xctest */,
+				74A6DCD52BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -311,6 +333,15 @@
 			path = Codable;
 			sourceTree = "<group>";
 		};
+		74A6DCD62BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests */ = {
+			isa = PBXGroup;
+			children = (
+				74A6DCDF2BCF0A0A002A420C /* ITGWorkoutKitCacheIntegrationTests.xctestplan */,
+				74A6DCD72BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.swift */,
+			);
+			path = ITGWorkoutKitCacheIntegrationTests;
+			sourceTree = "<group>";
+		};
 		74AEA5D22B98D060008CAC0A /* Workout API */ = {
 			isa = PBXGroup;
 			children = (
@@ -401,6 +432,24 @@
 			productReference = 74730B9A2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		74A6DCD42BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 74A6DCDC2BCF09A1002A420C /* Build configuration list for PBXNativeTarget "ITGWorkoutKitCacheIntegrationTests" */;
+			buildPhases = (
+				74A6DCD12BCF09A1002A420C /* Sources */,
+				74A6DCD22BCF09A1002A420C /* Frameworks */,
+				74A6DCD32BCF09A1002A420C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				74A6DCDB2BCF09A1002A420C /* PBXTargetDependency */,
+			);
+			name = ITGWorkoutKitCacheIntegrationTests;
+			productName = ITGWorkoutKitCacheIntegrationTests;
+			productReference = 74A6DCD52BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -418,6 +467,9 @@
 						CreatedOnToolsVersion = 15.2;
 					};
 					74730B992BC1DC2D00B54778 = {
+						CreatedOnToolsVersion = 15.3;
+					};
+					74A6DCD42BCF09A1002A420C = {
 						CreatedOnToolsVersion = 15.3;
 					};
 				};
@@ -438,6 +490,7 @@
 				7460AB512B94D040000FDF22 /* ITGWorkoutKit */,
 				7460AB5B2B94D040000FDF22 /* ITGWorkoutKitTests */,
 				74730B992BC1DC2D00B54778 /* WorkoutAPIEndToEndTests */,
+				74A6DCD42BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests */,
 			);
 		};
 /* End PBXProject section */
@@ -458,6 +511,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		74730B982BC1DC2D00B54778 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		74A6DCD32BCF09A1002A420C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -524,6 +584,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		74A6DCD12BCF09A1002A420C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74A6DCD82BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -536,6 +604,11 @@
 			isa = PBXTargetDependency;
 			target = 7460AB512B94D040000FDF22 /* ITGWorkoutKit */;
 			targetProxy = 74730B9F2BC1DC2D00B54778 /* PBXContainerItemProxy */;
+		};
+		74A6DCDB2BCF09A1002A420C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7460AB512B94D040000FDF22 /* ITGWorkoutKit */;
+			targetProxy = 74A6DCDA2BCF09A1002A420C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -790,6 +863,38 @@
 			};
 			name = Release;
 		};
+		74A6DCDD2BCF09A1002A420C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = H6WZPTFL8D;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.ITGWorkoutKitCacheIntegrationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		74A6DCDE2BCF09A1002A420C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = H6WZPTFL8D;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.ITGWorkoutKitCacheIntegrationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -825,6 +930,15 @@
 			buildConfigurations = (
 				74730BA22BC1DC2D00B54778 /* Debug */,
 				74730BA32BC1DC2D00B54778 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		74A6DCDC2BCF09A1002A420C /* Build configuration list for PBXNativeTarget "ITGWorkoutKitCacheIntegrationTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				74A6DCDD2BCF09A1002A420C /* Debug */,
+				74A6DCDE2BCF09A1002A420C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
