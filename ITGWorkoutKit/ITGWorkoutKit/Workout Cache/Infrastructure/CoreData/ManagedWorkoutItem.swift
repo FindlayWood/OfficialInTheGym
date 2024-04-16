@@ -14,7 +14,9 @@ internal class ManagedWorkoutItem: NSManagedObject {
     @NSManaged var location: String?
     @NSManaged var url: URL?
     @NSManaged var cache: ManagedCache
-    
+}
+
+extension ManagedWorkoutItem {
     internal static func workouts(from localFeed: [LocalWorkoutItem], in context: NSManagedObjectContext) -> NSOrderedSet {
         return NSOrderedSet(array: localFeed.map { local in
             let managed = ManagedWorkoutItem(context: context)
