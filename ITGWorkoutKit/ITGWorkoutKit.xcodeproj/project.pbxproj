@@ -39,6 +39,7 @@
 		74A6DCBF2BCDD303002A420C /* XCTestCase+FailableDeleteFeedStoreSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCBE2BCDD303002A420C /* XCTestCase+FailableDeleteFeedStoreSpecs.swift */; };
 		74A6DCC22BCEE166002A420C /* CoreDataFeedStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCC12BCEE166002A420C /* CoreDataFeedStoreTests.swift */; };
 		74A6DCC42BCEE1F8002A420C /* CoreDataFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCC32BCEE1F8002A420C /* CoreDataFeedStore.swift */; };
+		74A6DCC72BCEE46A002A420C /* FeedStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCC52BCEE469002A420C /* FeedStore.xcdatamodeld */; };
 		74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */; };
 		74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D52B9F9F1B008CAC0A /* Client.swift */; };
 		74AEA5D82B9F9F6D008CAC0A /* WorkoutItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */; };
@@ -109,6 +110,7 @@
 		74A6DCBE2BCDD303002A420C /* XCTestCase+FailableDeleteFeedStoreSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FailableDeleteFeedStoreSpecs.swift"; sourceTree = "<group>"; };
 		74A6DCC12BCEE166002A420C /* CoreDataFeedStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedStoreTests.swift; sourceTree = "<group>"; };
 		74A6DCC32BCEE1F8002A420C /* CoreDataFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedStore.swift; sourceTree = "<group>"; };
+		74A6DCC62BCEE469002A420C /* FeedStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FeedStore.xcdatamodel; sourceTree = "<group>"; };
 		74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWorkoutLoader.swift; sourceTree = "<group>"; };
 		74AEA5D52B9F9F1B008CAC0A /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutItemsMapper.swift; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 				74A6DCB02BCC3FEC002A420C /* FeedCachePolicy.swift */,
 				74A6DCB42BCC76C4002A420C /* CodableFeedStore.swift */,
 				74A6DCC32BCEE1F8002A420C /* CoreDataFeedStore.swift */,
+				74A6DCC52BCEE469002A420C /* FeedStore.xcdatamodeld */,
 			);
 			path = "Workout Cache";
 			sourceTree = "<group>";
@@ -436,6 +439,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74A6DCA02BC8681C002A420C /* FeedStore.swift in Sources */,
+				74A6DCC72BCEE46A002A420C /* FeedStore.xcdatamodeld in Sources */,
 				74730B952BC19F8500B54778 /* URLSessionHTTPClient.swift in Sources */,
 				7460AB6D2B94D0A2000FDF22 /* WorkoutItem.swift in Sources */,
 				74AEA5D82B9F9F6D008CAC0A /* WorkoutItemsMapper.swift in Sources */,
@@ -790,6 +794,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		74A6DCC52BCEE469002A420C /* FeedStore.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				74A6DCC62BCEE469002A420C /* FeedStore.xcdatamodel */,
+			);
+			currentVersion = 74A6DCC62BCEE469002A420C /* FeedStore.xcdatamodel */;
+			name = FeedStore.xcdatamodeld;
+			path = "/Users/findlaywood/Documents/Xcode work/InTheGym/ITGWorkoutKit/ITGWorkoutKit/Workout Cache/FeedStore.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 7460AB492B94D040000FDF22 /* Project object */;
 }
