@@ -46,6 +46,8 @@
 		74A6DCD82BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCD72BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.swift */; };
 		74A6DCD92BCF09A1002A420C /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
 		74A6DCE02BCF0B7F002A420C /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B922BC0ABBE00B54778 /* XCTestCase+MemoryLeakTracking.swift */; };
+		74A6DCE12BCF0DA9002A420C /* FeedCacheTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCAC2BCC0866002A420C /* FeedCacheTestHelpers.swift */; };
+		74A6DCE22BCF0DB2002A420C /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCAE2BCC08CB002A420C /* SharedTestHelpers.swift */; };
 		74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */; };
 		74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D52B9F9F1B008CAC0A /* Client.swift */; };
 		74AEA5D82B9F9F6D008CAC0A /* WorkoutItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */; };
@@ -589,7 +591,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74A6DCE22BCF0DB2002A420C /* SharedTestHelpers.swift in Sources */,
 				74A6DCD82BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.swift in Sources */,
+				74A6DCE12BCF0DA9002A420C /* FeedCacheTestHelpers.swift in Sources */,
 				74A6DCE02BCF0B7F002A420C /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
