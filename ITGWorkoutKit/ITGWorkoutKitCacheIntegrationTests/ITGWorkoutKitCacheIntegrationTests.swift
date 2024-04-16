@@ -22,15 +22,15 @@ final class ITGWorkoutKitCacheIntegrationTests: XCTestCase {
         undoStoreSideEffects()
     }
 
-    func test_load_deliversNoItemsOnEmptyCache() {
-        let sut = makeSUT()
+    func test_load_deliversNoItemsOnEmptyCache() throws {
+        let sut = try makeSUT()
 
         expect(sut, toLoad: [])
     }
     
-    func test_load_deliversItemsSavedOnASeparateInstance() {
-        let sutToPerformSave = makeSUT()
-        let sutToPerformLoad = makeSUT()
+    func test_load_deliversItemsSavedOnASeparateInstance() throws {
+        let sutToPerformSave = try makeSUT()
+        let sutToPerformLoad = try makeSUT()
         let feed = uniqueImageFeed().models
 
         save(feed, with: sutToPerformSave)
@@ -38,10 +38,10 @@ final class ITGWorkoutKitCacheIntegrationTests: XCTestCase {
         expect(sutToPerformLoad, toLoad: feed)
     }
     
-    func test_save_overridesItemsSavedOnASeparateInstance() {
-        let sutToPerformFirstSave = makeSUT()
-        let sutToPerformLastSave = makeSUT()
-        let sutToPerformLoad = makeSUT()
+    func test_save_overridesItemsSavedOnASeparateInstance() throws {
+        let sutToPerformFirstSave = try makeSUT()
+        let sutToPerformLastSave = try makeSUT()
+        let sutToPerformLoad = try makeSUT()
         let firstFeed = uniqueImageFeed().models
         let latestFeed = uniqueImageFeed().models
 
@@ -53,10 +53,10 @@ final class ITGWorkoutKitCacheIntegrationTests: XCTestCase {
 
     // MARK: Helpers
 
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) throws -> LocalFeedLoader {
         let storeBundle = Bundle(for: CoreDataFeedStore.self)
         let storeURL = testSpecificStoreURL()
-        let store = try! CoreDataFeedStore(storeURL: storeURL, bundle: storeBundle)
+        let store = try CoreDataFeedStore(storeURL: storeURL, bundle: storeBundle)
         let sut = LocalFeedLoader(store: store, currentDate: Date.init)
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
