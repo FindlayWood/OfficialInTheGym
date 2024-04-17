@@ -17,7 +17,7 @@ public final class RemoteWorkoutLoader: WorkoutLoader {
         case invalidData
     }
     
-    public typealias Result = LoadWorkoutsResult
+    public typealias Result = WorkoutLoader.Result
     
     public init(client: Client, path: String) {
         self.client = client

@@ -7,8 +7,8 @@
 
 import Foundation
 
-public typealias LoadWorkoutsResult = Result<[WorkoutItem],Error>
-
 public protocol WorkoutLoader {
-    func load(completion: @escaping (LoadWorkoutsResult) -> Void)
+    typealias Result = Swift.Result<[WorkoutItem],Error>
+    
+    func load(completion: @escaping (Result) -> Void)
 }
