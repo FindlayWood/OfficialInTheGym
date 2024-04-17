@@ -7,10 +7,7 @@
 
 import Foundation
 
-public enum LoadWorkoutsResult {
-    case success([WorkoutItem])
-    case failure(Error)
-}
+public typealias LoadWorkoutsResult = Result<[WorkoutItem],Error>
 
 public protocol WorkoutLoader {
     func load(completion: @escaping (LoadWorkoutsResult) -> Void)
