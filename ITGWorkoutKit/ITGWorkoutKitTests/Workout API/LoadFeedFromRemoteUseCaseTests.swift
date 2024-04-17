@@ -174,13 +174,13 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     
     private class ClientSpy: Client {
         
-        private var messages = [(path: String, completion: (ClientResult) -> Void)]()
+        private var messages = [(path: String, completion: (Client.Result) -> Void)]()
         
         var requestedPaths: [String] {
             messages.map { $0.path }
         }
         
-        func get(from path: String, completion: @escaping (ClientResult) -> Void) {
+        func get(from path: String, completion: @escaping (Client.Result) -> Void) {
             messages.append((path, completion))
         }
         
@@ -193,7 +193,7 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
                                            statusCode: statusCode,
                                            httpVersion: nil,
                                            headerFields: nil)!
-            messages[index].completion(.success(data, response))
+            messages[index].completion(.success((data, response)))
         }
     }
     
