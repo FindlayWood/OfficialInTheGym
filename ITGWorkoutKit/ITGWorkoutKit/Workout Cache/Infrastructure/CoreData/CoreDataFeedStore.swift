@@ -58,9 +58,9 @@ public final class CoreDataFeedStore: FeedStore {
                 managedCache.feed = ManagedWorkoutItem.workouts(from: feed, in: context)
 
                 try context.save()
-                completion(nil)
+                completion(.success(()))
             } catch {
-                completion(error)
+                completion(.failure(error))
             }
         }
     }
@@ -69,9 +69,9 @@ public final class CoreDataFeedStore: FeedStore {
         perform { context in
             do {
                 try ManagedCache.find(in: context).map(context.delete).map(context.save)
-                completion(nil)
+                completion(.success(()))
             } catch {
-                completion(error)
+                    completion(.failure(error))
             }
         }
     }
