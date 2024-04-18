@@ -112,7 +112,7 @@
 		74730B942BC19F8500B54778 /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		74730B9A2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkoutAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		74730B9C2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutAPIEndToEndTests.swift; sourceTree = "<group>"; };
-		74A6DC972BC316A9002A420C /* CI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI.xctestplan; sourceTree = "<group>"; };
+		74A6DC972BC316A9002A420C /* CI_macOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI_macOS.xctestplan; sourceTree = "<group>"; };
 		74A6DC982BC46CB0002A420C /* ITGWorkoutKit.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ITGWorkoutKit.xctestplan; sourceTree = "<group>"; };
 		74A6DC9A2BC5E955002A420C /* CacheFeedUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheFeedUseCaseTests.swift; sourceTree = "<group>"; };
 		74A6DC9D2BC867A5002A420C /* LocalFeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFeedLoader.swift; sourceTree = "<group>"; };
@@ -146,6 +146,7 @@
 		74A6DCF02BD1A46B002A420C /* ITGWorkoutKitiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ITGWorkoutKitiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		74A6DCF52BD1A46C002A420C /* ITGWorkoutKitiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ITGWorkoutKitiOSTests.swift; sourceTree = "<group>"; };
 		74A6DCFE2BD1A4F0002A420C /* ITGWorkoutKitiOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ITGWorkoutKitiOS.xctestplan; sourceTree = "<group>"; };
+		74A6DCFF2BD1A82E002A420C /* CI_iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI_iOS.xctestplan; sourceTree = "<group>"; };
 		74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWorkoutLoader.swift; sourceTree = "<group>"; };
 		74AEA5D52B9F9F1B008CAC0A /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutItemsMapper.swift; sourceTree = "<group>"; };
@@ -289,7 +290,8 @@
 			isa = PBXGroup;
 			children = (
 				74A6DC982BC46CB0002A420C /* ITGWorkoutKit.xctestplan */,
-				74A6DC972BC316A9002A420C /* CI.xctestplan */,
+				74A6DC972BC316A9002A420C /* CI_macOS.xctestplan */,
+				74A6DCFF2BD1A82E002A420C /* CI_iOS.xctestplan */,
 			);
 			path = TestPlans;
 			sourceTree = "<group>";
