@@ -1,0 +1,34 @@
+{
+  "configurations" : [
+    {
+      "id" : "D0A8A25A-9111-416A-8FF5-C8236DD7641E",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:ITGWorkoutKit.xcodeproj",
+          "identifier" : "7460AB512B94D040000FDF22",
+          "name" : "ITGWorkoutKit"
+        }
+      ]
+    },
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:ITGWorkoutKit.xcodeproj",
+        "identifier" : "74730B992BC1DC2D00B54778",
+        "name" : "WorkoutAPIEndToEndTests"
+      }
+    }
+  ],
+  "version" : 1
+}

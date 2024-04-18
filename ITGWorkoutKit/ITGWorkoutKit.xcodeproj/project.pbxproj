@@ -132,6 +132,7 @@
 		74A6DCD52BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ITGWorkoutKitCacheIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		74A6DCD72BCF09A1002A420C /* ITGWorkoutKitCacheIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ITGWorkoutKitCacheIntegrationTests.swift; sourceTree = "<group>"; };
 		74A6DCDF2BCF0A0A002A420C /* ITGWorkoutKitCacheIntegrationTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ITGWorkoutKitCacheIntegrationTests.xctestplan; sourceTree = "<group>"; };
+		74A6DCE32BD1A2A4002A420C /* WorkoutAPIEndToEndTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = WorkoutAPIEndToEndTests.xctestplan; sourceTree = "<group>"; };
 		74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWorkoutLoader.swift; sourceTree = "<group>"; };
 		74AEA5D52B9F9F1B008CAC0A /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutItemsMapper.swift; sourceTree = "<group>"; };
@@ -239,6 +240,7 @@
 		74730B9B2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests */ = {
 			isa = PBXGroup;
 			children = (
+				74A6DCE32BD1A2A4002A420C /* WorkoutAPIEndToEndTests.xctestplan */,
 				74730B9C2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.swift */,
 			);
 			path = WorkoutAPIEndToEndTests;
@@ -852,6 +854,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.WorkoutAPIEndToEndTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 			};
@@ -868,6 +871,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.WorkoutAPIEndToEndTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 			};
