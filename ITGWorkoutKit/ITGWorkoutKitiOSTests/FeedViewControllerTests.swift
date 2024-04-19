@@ -7,11 +7,12 @@
 
 import XCTest
 import UIKit
+import ITGWorkoutKit
 
 final class FeedViewController: UIViewController {
-    private var loader: FeedViewControllerTests.LoaderSpy?
+    private var loader: WorkoutLoader?
 
-    convenience init(loader: FeedViewControllerTests.LoaderSpy) {
+    convenience init(loader: WorkoutLoader) {
         self.init()
         self.loader = loader
     }
@@ -19,7 +20,7 @@ final class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        loader?.load()
+        loader?.load { _ in }
     }
 }
 
@@ -45,10 +46,10 @@ final class FeedViewControllerTests: XCTestCase {
 
     // MARK: - Helpers
 
-    class LoaderSpy {
+    class LoaderSpy: WorkoutLoader {
         private(set) var loadCallCount: Int = 0
         
-        func load() {
+        func load(completion: @escaping (WorkoutLoader.Result) -> Void) {
             loadCallCount += 1
         }
     }

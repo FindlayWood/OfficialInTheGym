@@ -50,6 +50,8 @@
 		74A6DCE22BCF0DB2002A420C /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCAE2BCC08CB002A420C /* SharedTestHelpers.swift */; };
 		74A6DCF12BD1A46C002A420C /* ITGWorkoutKitiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74A6DCE92BD1A46B002A420C /* ITGWorkoutKitiOS.framework */; };
 		74A6DD012BD2D150002A420C /* FeedViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DD002BD2D14F002A420C /* FeedViewControllerTests.swift */; };
+		74A6DD022BD2D473002A420C /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; platformFilter = ios; };
+		74A6DD032BD2D473002A420C /* ITGWorkoutKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */; };
 		74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D52B9F9F1B008CAC0A /* Client.swift */; };
 		74AEA5D82B9F9F6D008CAC0A /* WorkoutItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */; };
@@ -84,6 +86,13 @@
 			remoteGlobalIDString = 74A6DCE82BD1A46B002A420C;
 			remoteInfo = ITGWorkoutKitiOS;
 		};
+		74A6DD042BD2D473002A420C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7460AB492B94D040000FDF22 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7460AB512B94D040000FDF22;
+			remoteInfo = ITGWorkoutKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -93,6 +102,17 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		74A6DD062BD2D474002A420C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				74A6DD032BD2D473002A420C /* ITGWorkoutKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -188,6 +208,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74A6DD022BD2D473002A420C /* ITGWorkoutKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,10 +541,12 @@
 				74A6DCE52BD1A46B002A420C /* Sources */,
 				74A6DCE62BD1A46B002A420C /* Frameworks */,
 				74A6DCE72BD1A46B002A420C /* Resources */,
+				74A6DD062BD2D474002A420C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				74A6DD052BD2D473002A420C /* PBXTargetDependency */,
 			);
 			name = ITGWorkoutKitiOS;
 			productName = ITGWorkoutKitiOS;
@@ -752,6 +775,12 @@
 			isa = PBXTargetDependency;
 			target = 74A6DCE82BD1A46B002A420C /* ITGWorkoutKitiOS */;
 			targetProxy = 74A6DCF22BD1A46C002A420C /* PBXContainerItemProxy */;
+		};
+		74A6DD052BD2D473002A420C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 7460AB512B94D040000FDF22 /* ITGWorkoutKit */;
+			targetProxy = 74A6DD042BD2D473002A420C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
