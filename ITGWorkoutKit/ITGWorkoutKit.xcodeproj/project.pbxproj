@@ -53,6 +53,8 @@
 		74A6DD022BD2D473002A420C /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; platformFilter = ios; };
 		74A6DD032BD2D473002A420C /* ITGWorkoutKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		74A6DD072BD2D7A8002A420C /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B922BC0ABBE00B54778 /* XCTestCase+MemoryLeakTracking.swift */; };
+		74A6DD092BD31827002A420C /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DD082BD31827002A420C /* FeedViewController.swift */; };
+		74A6DD0C2BD31ABD002A420C /* ITGWorkoutKitiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 74A6DD0B2BD31ABD002A420C /* ITGWorkoutKitiOS.h */; };
 		74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */; };
 		74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D52B9F9F1B008CAC0A /* Client.swift */; };
 		74AEA5D82B9F9F6D008CAC0A /* WorkoutItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */; };
@@ -168,6 +170,8 @@
 		74A6DCFE2BD1A4F0002A420C /* ITGWorkoutKitiOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ITGWorkoutKitiOS.xctestplan; sourceTree = "<group>"; };
 		74A6DCFF2BD1A82E002A420C /* CI_iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI_iOS.xctestplan; sourceTree = "<group>"; };
 		74A6DD002BD2D14F002A420C /* FeedViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTests.swift; sourceTree = "<group>"; };
+		74A6DD082BD31827002A420C /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		74A6DD0B2BD31ABD002A420C /* ITGWorkoutKitiOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITGWorkoutKitiOS.h; sourceTree = "<group>"; };
 		74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWorkoutLoader.swift; sourceTree = "<group>"; };
 		74AEA5D52B9F9F1B008CAC0A /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutItemsMapper.swift; sourceTree = "<group>"; };
@@ -406,6 +410,8 @@
 		74A6DCEA2BD1A46B002A420C /* ITGWorkoutKitiOS */ = {
 			isa = PBXGroup;
 			children = (
+				74A6DD0B2BD31ABD002A420C /* ITGWorkoutKitiOS.h */,
+				74A6DD082BD31827002A420C /* FeedViewController.swift */,
 			);
 			path = ITGWorkoutKitiOS;
 			sourceTree = "<group>";
@@ -455,6 +461,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74A6DD0C2BD31ABD002A420C /* ITGWorkoutKitiOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -596,6 +603,7 @@
 					};
 					74A6DCE82BD1A46B002A420C = {
 						CreatedOnToolsVersion = 15.3;
+						LastSwiftMigration = 1530;
 					};
 					74A6DCEF2BD1A46B002A420C = {
 						CreatedOnToolsVersion = 15.3;
@@ -743,6 +751,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74A6DD092BD31827002A420C /* FeedViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1080,10 +1089,11 @@
 		74A6DCF92BD1A46C002A420C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = H6WZPTFL8D;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1107,6 +1117,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1115,10 +1126,11 @@
 		74A6DCFA2BD1A46C002A420C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = H6WZPTFL8D;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1151,6 +1163,7 @@
 		74A6DCFC2BD1A46C002A420C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = H6WZPTFL8D;
@@ -1169,6 +1182,7 @@
 		74A6DCFD2BD1A46C002A420C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = H6WZPTFL8D;
