@@ -29,7 +29,7 @@ public final class RemoteWorkoutLoader: WorkoutLoader {
             guard self != nil else { return }
             
             switch result {
-            case let .success(data, response):
+            case let .success((data, response)):
                 completion(RemoteWorkoutLoader.map(data, from: response))
             case .failure:
                 completion(.failure(Error.connectivity))
