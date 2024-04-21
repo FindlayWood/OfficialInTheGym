@@ -251,6 +251,31 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		7418332D2BD540EC00EEA9C0 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				74A6DD082BD31827002A420C /* FeedViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		7418332E2BD5410D00EEA9C0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				741833202BD4255100EEA9C0 /* FeedImageCell.swift */,
+				741833222BD4695600EEA9C0 /* UIView+Shimmering.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7418332F2BD5413400EEA9C0 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				74A6DD002BD2D14F002A420C /* FeedViewControllerTests.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		7460AB482B94D040000FDF22 = {
 			isa = PBXGroup;
 			children = (
@@ -433,10 +458,9 @@
 		74A6DCEA2BD1A46B002A420C /* ITGWorkoutKitiOS */ = {
 			isa = PBXGroup;
 			children = (
+				7418332D2BD540EC00EEA9C0 /* Controllers */,
+				7418332E2BD5410D00EEA9C0 /* Views */,
 				74A6DD0B2BD31ABD002A420C /* ITGWorkoutKitiOS.h */,
-				74A6DD082BD31827002A420C /* FeedViewController.swift */,
-				741833202BD4255100EEA9C0 /* FeedImageCell.swift */,
-				741833222BD4695600EEA9C0 /* UIView+Shimmering.swift */,
 			);
 			path = ITGWorkoutKitiOS;
 			sourceTree = "<group>";
@@ -444,9 +468,9 @@
 		74A6DCF42BD1A46C002A420C /* ITGWorkoutKitiOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				7418332F2BD5413400EEA9C0 /* Controllers */,
 				741833242BD53F6300EEA9C0 /* Helpers */,
 				74A6DCFE2BD1A4F0002A420C /* ITGWorkoutKitiOS.xctestplan */,
-				74A6DD002BD2D14F002A420C /* FeedViewControllerTests.swift */,
 			);
 			path = ITGWorkoutKitiOSTests;
 			sourceTree = "<group>";
