@@ -14,6 +14,7 @@
 		7418332A2BD5402000EEA9C0 /* UIButton+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833292BD5402000EEA9C0 /* UIButton+TestHelpers.swift */; };
 		7418332C2BD5407800EEA9C0 /* UIControl+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7418332B2BD5407800EEA9C0 /* UIControl+TestHelpers.swift */; };
 		741833312BD5417300EEA9C0 /* FeedViewController+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833302BD5417300EEA9C0 /* FeedViewController+TestHelpers.swift */; };
+		741833332BD543F600EEA9C0 /* FeedImageCell+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833322BD543F600EEA9C0 /* FeedImageCell+TestHelpers.swift */; };
 		7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */; };
 		7460AB5D2B94D040000FDF22 /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
 		7460AB632B94D040000FDF22 /* ITGWorkoutKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -137,6 +138,7 @@
 		741833292BD5402000EEA9C0 /* UIButton+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+TestHelpers.swift"; sourceTree = "<group>"; };
 		7418332B2BD5407800EEA9C0 /* UIControl+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+TestHelpers.swift"; sourceTree = "<group>"; };
 		741833302BD5417300EEA9C0 /* FeedViewController+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedViewController+TestHelpers.swift"; sourceTree = "<group>"; };
+		741833322BD543F600EEA9C0 /* FeedImageCell+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedImageCell+TestHelpers.swift"; sourceTree = "<group>"; };
 		7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ITGWorkoutKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITGWorkoutKit.h; sourceTree = "<group>"; };
 		7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = ITGWorkoutKit.docc; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 				741833292BD5402000EEA9C0 /* UIButton+TestHelpers.swift */,
 				7418332B2BD5407800EEA9C0 /* UIControl+TestHelpers.swift */,
 				741833302BD5417300EEA9C0 /* FeedViewController+TestHelpers.swift */,
+				741833322BD543F600EEA9C0 /* FeedImageCell+TestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -821,6 +824,7 @@
 				741833312BD5417300EEA9C0 /* FeedViewController+TestHelpers.swift in Sources */,
 				74A6DD072BD2D7A8002A420C /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 				741833262BD53F7700EEA9C0 /* UIImage+TestHelpers.swift in Sources */,
+				741833332BD543F600EEA9C0 /* FeedImageCell+TestHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
