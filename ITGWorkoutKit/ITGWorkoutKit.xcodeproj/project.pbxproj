@@ -20,6 +20,7 @@
 		7418333C2BD5462900EEA9C0 /* FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7418333B2BD5462900EEA9C0 /* FeedImageDataLoader.swift */; };
 		7418333E2BD554D200EEA9C0 /* FeedRefreshViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7418333D2BD554D200EEA9C0 /* FeedRefreshViewController.swift */; };
 		741833402BD5709600EEA9C0 /* FeedImageCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7418333F2BD5709600EEA9C0 /* FeedImageCellController.swift */; };
+		741833432BD572C400EEA9C0 /* FeedUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833422BD572C400EEA9C0 /* FeedUIComposer.swift */; };
 		7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */; };
 		7460AB5D2B94D040000FDF22 /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
 		7460AB632B94D040000FDF22 /* ITGWorkoutKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -149,6 +150,7 @@
 		7418333B2BD5462900EEA9C0 /* FeedImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoader.swift; sourceTree = "<group>"; };
 		7418333D2BD554D200EEA9C0 /* FeedRefreshViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRefreshViewController.swift; sourceTree = "<group>"; };
 		7418333F2BD5709600EEA9C0 /* FeedImageCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageCellController.swift; sourceTree = "<group>"; };
+		741833422BD572C400EEA9C0 /* FeedUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIComposer.swift; sourceTree = "<group>"; };
 		7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ITGWorkoutKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITGWorkoutKit.h; sourceTree = "<group>"; };
 		7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = ITGWorkoutKit.docc; sourceTree = "<group>"; };
@@ -299,6 +301,7 @@
 		741833382BD5459200EEA9C0 /* FeedUI */ = {
 			isa = PBXGroup;
 			children = (
+				741833412BD572B200EEA9C0 /* Composers */,
 				7418332D2BD540EC00EEA9C0 /* Controllers */,
 				7418332E2BD5410D00EEA9C0 /* Views */,
 			);
@@ -320,6 +323,14 @@
 				7418333B2BD5462900EEA9C0 /* FeedImageDataLoader.swift */,
 			);
 			path = "Feed Image Loader";
+			sourceTree = "<group>";
+		};
+		741833412BD572B200EEA9C0 /* Composers */ = {
+			isa = PBXGroup;
+			children = (
+				741833422BD572C400EEA9C0 /* FeedUIComposer.swift */,
+			);
+			path = Composers;
 			sourceTree = "<group>";
 		};
 		7460AB482B94D040000FDF22 = {
@@ -852,6 +863,7 @@
 				74A6DD092BD31827002A420C /* FeedViewController.swift in Sources */,
 				741833212BD4255100EEA9C0 /* FeedImageCell.swift in Sources */,
 				741833402BD5709600EEA9C0 /* FeedImageCellController.swift in Sources */,
+				741833432BD572C400EEA9C0 /* FeedUIComposer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
