@@ -260,13 +260,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		740ED8372BD6F04D005B09BA /* Models */ = {
+		740ED8372BD6F04D005B09BA /* Feed Presentation */ = {
 			isa = PBXGroup;
 			children = (
 				740ED8382BD6F05F005B09BA /* FeedViewModel.swift */,
 				740ED83A2BD6F4EE005B09BA /* FeedImageViewModel.swift */,
 			);
-			path = Models;
+			path = "Feed Presentation";
 			sourceTree = "<group>";
 		};
 		741833242BD53F6300EEA9C0 /* Helpers */ = {
@@ -314,7 +314,7 @@
 		741833382BD5459200EEA9C0 /* FeedUI */ = {
 			isa = PBXGroup;
 			children = (
-				740ED8372BD6F04D005B09BA /* Models */,
+				740ED8372BD6F04D005B09BA /* Feed Presentation */,
 				741833412BD572B200EEA9C0 /* Composers */,
 				7418332D2BD540EC00EEA9C0 /* Controllers */,
 				7418332E2BD5410D00EEA9C0 /* Views */,

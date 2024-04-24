@@ -5,7 +5,6 @@
 //  Created by Findlay Wood on 22/04/2024.
 //
 
-import Foundation
 import ITGWorkoutKit
 
 final class FeedViewModel {
