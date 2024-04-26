@@ -131,19 +131,11 @@
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="bRh-00-Z6T">
                         <autoresizingMask key="autoresizingMask"/>
                         <connections>
-                            <action selector="refresh" destination="VPU-aX-oxv" eventType="valueChanged" id="yeV-jw-JQa"/>
+                            <action selector="refresh" destination="lv0-eQ-0U1" eventType="valueChanged" id="4lO-Dm-bGc"/>
                         </connections>
                     </refreshControl>
-                    <connections>
-                        <outlet property="refreshController" destination="VPU-aX-oxv" id="6iP-96-zwq"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ia8-2C-HUW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <customObject id="VPU-aX-oxv" customClass="FeedRefreshViewController" customModule="ITGWorkoutKitiOS" customModuleProvider="target">
-                    <connections>
-                        <outlet property="view" destination="bRh-00-Z6T" id="EQY-La-aG7"/>
-                    </connections>
-                </customObject>
             </objects>
             <point key="canvasLocation" x="162.59541984732823" y="-132.3943661971831"/>
         </scene>
