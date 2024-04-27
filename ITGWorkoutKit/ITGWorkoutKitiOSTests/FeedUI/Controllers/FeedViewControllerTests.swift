@@ -343,6 +343,28 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(view0.renderedImage, .none, "Expected no image state change for reused view once image loading completes successfully")
     }
     
+    func test_feedImageView_showsDataForNewViewRequestAfterPreviousViewIsReused() throws {
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        sut.replaceRefreshControlWithFakeForiOS17PlusSupport()
+        
+        sut.beginAppearanceTransition(true, animated: false)
+        sut.endAppearanceTransition()
+        
+        loader.completeFeedLoading(with: [makeImage(), makeImage()])
+
+        let previousView = try XCTUnwrap(sut.simulateFeedImageViewNotVisible(at: 0))
+
+        let newView = try XCTUnwrap(sut.simulateFeedImageViewVisible(at: 0))
+        previousView.prepareForReuse()
+
+        let imageData = UIImage.make(withColor: .red).pngData()!
+        loader.completeImageLoading(with: imageData, at: 1)
+
+        XCTAssertEqual(newView.renderedImage, imageData)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
