@@ -23,7 +23,6 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = FeedPresenter.title
         onViewIsAppearing = { vc in
             vc.refresh()
             vc.onViewIsAppearing = nil
