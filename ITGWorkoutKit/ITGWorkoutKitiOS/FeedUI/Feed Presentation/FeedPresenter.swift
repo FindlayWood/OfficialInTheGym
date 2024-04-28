@@ -5,6 +5,7 @@
 //  Created by Findlay Wood on 24/04/2024.
 //
 
+import Foundation
 import ITGWorkoutKit
 
 protocol FeedLoadingView {
@@ -25,7 +26,10 @@ final class FeedPresenter {
     }
     
     static var title: String {
-        "My Feed"
+        return NSLocalizedString("FEED_VIEW_TITLE",
+                                 tableName: "Feed",
+                                 bundle: Bundle(for: FeedPresenter.self),
+                                 comment: "Title for the feed view")
     }
     
     func didStartLoadingFeed() {
