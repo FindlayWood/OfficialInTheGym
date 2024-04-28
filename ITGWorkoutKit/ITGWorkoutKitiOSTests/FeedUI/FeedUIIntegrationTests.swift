@@ -373,6 +373,22 @@ final class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(newView.renderedImage, imageData)
     }
     
+    func test_loadFeedCompletion_dispatchesFromBackgroundToMainThread() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        sut.replaceRefreshControlWithFakeForiOS17PlusSupport()
+        
+        sut.beginAppearanceTransition(true, animated: false)
+        sut.endAppearanceTransition()
+
+        let exp = expectation(description: "Wait for background queue")
+        DispatchQueue.global().async {
+            loader.completeFeedLoading(at: 0)
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
