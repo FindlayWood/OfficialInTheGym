@@ -9,7 +9,7 @@ import XCTest
 import ITGWorkoutKit
 import ITGWorkoutKitiOS
 
-extension FeedViewControllerTests {
+extension FeedUIIntegrationTests {
     
     func assertThat(_ sut: FeedViewController, isRendering feed: [WorkoutItem], file: StaticString = #file, line: UInt = #line) {
         guard sut.numberOfRenderedFeedImageViews() == feed.count else {

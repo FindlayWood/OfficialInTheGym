@@ -9,7 +9,7 @@ import Foundation
 import ITGWorkoutKit
 import ITGWorkoutKitiOS
 
-extension FeedViewControllerTests {
+extension FeedUIIntegrationTests {
     
     class LoaderSpy: WorkoutLoader, FeedImageDataLoader {
         
