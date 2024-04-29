@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct WorkoutItem: Equatable {
+public struct WorkoutItem: Hashable {
     public let id: UUID
     public let description: String?
     public let location: String?
