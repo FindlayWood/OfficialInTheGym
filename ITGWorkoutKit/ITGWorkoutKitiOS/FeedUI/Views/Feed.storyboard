@@ -17,18 +17,41 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="OBp-tG-Uc2" customClass="ErrorView" customModule="ITGWorkoutKitiOS" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="16"/>
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="41"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iWL-MU-RlJ">
+                                    <rect key="frame" x="0.0" y="8" width="393" height="25"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Error Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGh-Ni-J6P">
+                                            <rect key="frame" x="0.0" y="4" width="393" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" red="0.999" green="0.41699999999999998" blue="0.41499999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstItem="iWL-MU-RlJ" firstAttribute="leading" secondItem="OBp-tG-Uc2" secondAttribute="leading" id="6ju-8p-QCg"/>
+                                <constraint firstAttribute="bottom" secondItem="iWL-MU-RlJ" secondAttribute="bottom" constant="8" id="DxZ-7D-H1l"/>
+                                <constraint firstAttribute="trailing" secondItem="iWL-MU-RlJ" secondAttribute="trailing" id="dqv-2L-W3H"/>
+                                <constraint firstItem="iWL-MU-RlJ" firstAttribute="top" secondItem="OBp-tG-Uc2" secondAttribute="top" constant="8" id="mz9-ey-4qR"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="label" destination="ZGh-Ni-J6P" id="6Z8-Rf-yyZ"/>
+                            </connections>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="EUN-rY-j0b">
-                            <rect key="frame" x="0.0" y="674" width="393" height="16"/>
+                            <rect key="frame" x="0.0" y="699" width="393" height="16"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="580" id="cr9-u0-GEl" customClass="FeedImageCell" customModule="ITGWorkoutKitiOS" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="66" width="393" height="580"/>
+                                <rect key="frame" x="0.0" y="91" width="393" height="580"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cr9-u0-GEl" id="WDD-HZ-BwA">
                                     <rect key="frame" x="0.0" y="0.0" width="393" height="580"/>
@@ -147,7 +170,7 @@
                         </connections>
                     </refreshControl>
                     <connections>
-                        <outlet property="errorView" destination="OBp-tG-Uc2" id="t46-Cb-GmB"/>
+                        <outlet property="errorView" destination="OBp-tG-Uc2" id="PTZ-O9-UHQ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ia8-2C-HUW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
