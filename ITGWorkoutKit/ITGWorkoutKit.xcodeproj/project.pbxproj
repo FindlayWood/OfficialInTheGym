@@ -28,6 +28,7 @@
 		740ED8642BE0326D005B09BA /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740ED8632BE0326D005B09BA /* ErrorView.swift */; };
 		740ED8672BE03BB6005B09BA /* FeedErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740ED8662BE03BB6005B09BA /* FeedErrorViewModel.swift */; };
 		740ED8692BE03BFD005B09BA /* UIRefreshControl+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740ED8682BE03BFD005B09BA /* UIRefreshControl+Helpers.swift */; };
+		740ED86C2BE03D9C005B09BA /* Feed.strings in Resources */ = {isa = PBXBuildFile; fileRef = 740ED86A2BE03D9C005B09BA /* Feed.strings */; };
 		741833212BD4255100EEA9C0 /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833202BD4255100EEA9C0 /* FeedImageCell.swift */; };
 		741833232BD4695600EEA9C0 /* UIView+Shimmering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833222BD4695600EEA9C0 /* UIView+Shimmering.swift */; };
 		741833262BD53F7700EEA9C0 /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833252BD53F7700EEA9C0 /* UIImage+TestHelpers.swift */; };
@@ -180,6 +181,9 @@
 		740ED8632BE0326D005B09BA /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		740ED8662BE03BB6005B09BA /* FeedErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedErrorViewModel.swift; sourceTree = "<group>"; };
 		740ED8682BE03BFD005B09BA /* UIRefreshControl+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+Helpers.swift"; sourceTree = "<group>"; };
+		740ED86B2BE03D9C005B09BA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Feed.strings; sourceTree = "<group>"; };
+		740ED86D2BE03DA0005B09BA /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Feed.strings; sourceTree = "<group>"; };
+		740ED86E2BE03DA2005B09BA /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Feed.strings"; sourceTree = "<group>"; };
 		741833202BD4255100EEA9C0 /* FeedImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageCell.swift; sourceTree = "<group>"; };
 		741833222BD4695600EEA9C0 /* UIView+Shimmering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shimmering.swift"; sourceTree = "<group>"; };
 		741833252BD53F7700EEA9C0 /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
@@ -324,6 +328,7 @@
 			isa = PBXGroup;
 			children = (
 				740ED8612BE026EF005B09BA /* FeedPresenterTests.swift */,
+				740ED86A2BE03D9C005B09BA /* Feed.strings */,
 			);
 			path = "Feed Presentation";
 			sourceTree = "<group>";
@@ -839,6 +844,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				740ED86C2BE03D9C005B09BA /* Feed.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1030,6 +1036,16 @@
 				740ED84D2BDE9B3A005B09BA /* en */,
 				740ED8512BDEC1C7005B09BA /* pt-BR */,
 				740ED8522BDEC245005B09BA /* el */,
+			);
+			name = Feed.strings;
+			sourceTree = "<group>";
+		};
+		740ED86A2BE03D9C005B09BA /* Feed.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				740ED86B2BE03D9C005B09BA /* en */,
+				740ED86D2BE03DA0005B09BA /* el */,
+				740ED86E2BE03DA2005B09BA /* pt-BR */,
 			);
 			name = Feed.strings;
 			sourceTree = "<group>";
