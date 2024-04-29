@@ -8,10 +8,6 @@
 import Foundation
 import ITGWorkoutKit
 
-struct FeedErrorViewModel {
-    let message: String?
-}
-
 protocol FeedErrorView {
     func display(_ viewModel: FeedErrorViewModel)
 }
