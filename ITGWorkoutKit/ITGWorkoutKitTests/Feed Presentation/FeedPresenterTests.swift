@@ -25,7 +25,10 @@ class FeedPresenterTests: XCTestCase {
 
         sut.didStartLoadingFeed()
 
-        XCTAssertEqual(view.messages, [.display(errorMessage: .none)])
+        XCTAssertEqual(view.messages, [
+                    .display(errorMessage: .none),
+                    .display(isLoading: true)
+                ])
     }
     
     func test_didFinishLoadingFeed_displaysFeedAndStopsLoading() {
