@@ -28,7 +28,8 @@
 		740ED8642BE0326D005B09BA /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740ED8632BE0326D005B09BA /* ErrorView.swift */; };
 		740ED8672BE03BB6005B09BA /* FeedErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740ED8662BE03BB6005B09BA /* FeedErrorViewModel.swift */; };
 		740ED8692BE03BFD005B09BA /* UIRefreshControl+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740ED8682BE03BFD005B09BA /* UIRefreshControl+Helpers.swift */; };
-		740ED86C2BE03D9C005B09BA /* Feed.strings in Resources */ = {isa = PBXBuildFile; fileRef = 740ED86A2BE03D9C005B09BA /* Feed.strings */; };
+		740ED8712BE166B7005B09BA /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740ED8702BE166B7005B09BA /* FeedPresenter.swift */; };
+		740ED8722BE16744005B09BA /* Feed.strings in Resources */ = {isa = PBXBuildFile; fileRef = 740ED86A2BE03D9C005B09BA /* Feed.strings */; };
 		741833212BD4255100EEA9C0 /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833202BD4255100EEA9C0 /* FeedImageCell.swift */; };
 		741833232BD4695600EEA9C0 /* UIView+Shimmering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833222BD4695600EEA9C0 /* UIView+Shimmering.swift */; };
 		741833262BD53F7700EEA9C0 /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833252BD53F7700EEA9C0 /* UIImage+TestHelpers.swift */; };
@@ -184,6 +185,7 @@
 		740ED86B2BE03D9C005B09BA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Feed.strings; sourceTree = "<group>"; };
 		740ED86D2BE03DA0005B09BA /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Feed.strings; sourceTree = "<group>"; };
 		740ED86E2BE03DA2005B09BA /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Feed.strings"; sourceTree = "<group>"; };
+		740ED8702BE166B7005B09BA /* FeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenter.swift; sourceTree = "<group>"; };
 		741833202BD4255100EEA9C0 /* FeedImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageCell.swift; sourceTree = "<group>"; };
 		741833222BD4695600EEA9C0 /* UIView+Shimmering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shimmering.swift"; sourceTree = "<group>"; };
 		741833252BD53F7700EEA9C0 /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
@@ -328,7 +330,6 @@
 			isa = PBXGroup;
 			children = (
 				740ED8612BE026EF005B09BA /* FeedPresenterTests.swift */,
-				740ED86A2BE03D9C005B09BA /* Feed.strings */,
 			);
 			path = "Feed Presentation";
 			sourceTree = "<group>";
@@ -342,6 +343,15 @@
 				740ED8682BE03BFD005B09BA /* UIRefreshControl+Helpers.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		740ED86F2BE166A5005B09BA /* Feed Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				740ED8702BE166B7005B09BA /* FeedPresenter.swift */,
+				740ED86A2BE03D9C005B09BA /* Feed.strings */,
+			);
+			path = "Feed Presentation";
 			sourceTree = "<group>";
 		};
 		741833242BD53F6300EEA9C0 /* Helpers */ = {
@@ -452,6 +462,7 @@
 		7460AB542B94D040000FDF22 /* ITGWorkoutKit */ = {
 			isa = PBXGroup;
 			children = (
+				740ED86F2BE166A5005B09BA /* Feed Presentation */,
 				74A6DC9C2BC8678F002A420C /* Workout Cache */,
 				74A6DC962BC31689002A420C /* TestPlans */,
 				74AEA5D22B98D060008CAC0A /* Workout API */,
@@ -837,6 +848,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				740ED8722BE16744005B09BA /* Feed.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -844,7 +856,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				740ED86C2BE03D9C005B09BA /* Feed.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -900,6 +911,7 @@
 				74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */,
 				74A6DC9E2BC867A5002A420C /* LocalFeedLoader.swift in Sources */,
 				74A6DCB52BCC76C4002A420C /* CodableFeedStore.swift in Sources */,
+				740ED8712BE166B7005B09BA /* FeedPresenter.swift in Sources */,
 				74A6DCB12BCC3FEC002A420C /* FeedCachePolicy.swift in Sources */,
 				74A6DCA22BC87032002A420C /* RemoteWorkoutItem.swift in Sources */,
 				7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */,
