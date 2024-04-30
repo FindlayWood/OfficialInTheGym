@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import ITGWorkoutKitiOS
+import ITGWorkoutKit
 
 final class FeedLocalizationTests: XCTestCase {
 

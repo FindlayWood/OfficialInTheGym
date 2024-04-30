@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ITGWorkoutKit
 
 final class WeakRefVirtualProxy<T: AnyObject> {
     private weak var object: T?

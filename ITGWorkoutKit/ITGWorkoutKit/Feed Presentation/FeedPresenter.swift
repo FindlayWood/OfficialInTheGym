@@ -46,6 +46,7 @@ public final class FeedPresenter {
     
     public func didStartLoadingFeed() {
         errorView.display(.noError)
+        loadingView.display(FeedLoadingViewModel(isLoading: true))
     }
     
     public func didFinishLoadingFeed(with feed: [WorkoutItem]) {

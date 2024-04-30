@@ -16,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="OBp-tG-Uc2" customClass="ErrorView" customModule="ITGWorkoutKitiOS" customModuleProvider="target">
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="OBp-tG-Uc2" customClass="ErrorView" customModule="ITGWorkoutKitiOS">
                             <rect key="frame" x="0.0" y="0.0" width="393" height="41"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
