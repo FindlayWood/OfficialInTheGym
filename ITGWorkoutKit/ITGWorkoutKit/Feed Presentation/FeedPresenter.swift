@@ -7,10 +7,6 @@
 
 import Foundation
 
-public struct FeedViewModel {
-    public let feed: [WorkoutItem]
-}
-
 public protocol FeedView {
     func display(_ viewModel: FeedViewModel)
 }
