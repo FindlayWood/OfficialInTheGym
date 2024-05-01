@@ -29,6 +29,7 @@
 		740ED8782BE1682C005B09BA /* FeedErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740ED8772BE1682C005B09BA /* FeedErrorViewModel.swift */; };
 		740ED8792BE16D34005B09BA /* FeedLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740ED8542BDEC30F005B09BA /* FeedLocalizationTests.swift */; };
 		740ED87B2BE2CDF2005B09BA /* FeedImagePresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740ED87A2BE2CDF2005B09BA /* FeedImagePresenterTests.swift */; };
+		740ED87D2BE2D900005B09BA /* FeedImagePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740ED87C2BE2D900005B09BA /* FeedImagePresenter.swift */; };
 		741833212BD4255100EEA9C0 /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833202BD4255100EEA9C0 /* FeedImageCell.swift */; };
 		741833232BD4695600EEA9C0 /* UIView+Shimmering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833222BD4695600EEA9C0 /* UIView+Shimmering.swift */; };
 		741833262BD53F7700EEA9C0 /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833252BD53F7700EEA9C0 /* UIImage+TestHelpers.swift */; };
@@ -182,6 +183,7 @@
 		740ED8752BE167F2005B09BA /* FeedLoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoadingViewModel.swift; sourceTree = "<group>"; };
 		740ED8772BE1682C005B09BA /* FeedErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedErrorViewModel.swift; sourceTree = "<group>"; };
 		740ED87A2BE2CDF2005B09BA /* FeedImagePresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImagePresenterTests.swift; sourceTree = "<group>"; };
+		740ED87C2BE2D900005B09BA /* FeedImagePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImagePresenter.swift; sourceTree = "<group>"; };
 		741833202BD4255100EEA9C0 /* FeedImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageCell.swift; sourceTree = "<group>"; };
 		741833222BD4695600EEA9C0 /* UIView+Shimmering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shimmering.swift"; sourceTree = "<group>"; };
 		741833252BD53F7700EEA9C0 /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 				740ED8732BE167B8005B09BA /* FeedViewModel.swift */,
 				740ED8772BE1682C005B09BA /* FeedErrorViewModel.swift */,
 				740ED86A2BE03D9C005B09BA /* Feed.strings */,
+				740ED87C2BE2D900005B09BA /* FeedImagePresenter.swift */,
 			);
 			path = "Feed Presentation";
 			sourceTree = "<group>";
@@ -889,6 +892,7 @@
 				740ED8782BE1682C005B09BA /* FeedErrorViewModel.swift in Sources */,
 				7460AB6D2B94D0A2000FDF22 /* WorkoutItem.swift in Sources */,
 				74AEA5D82B9F9F6D008CAC0A /* WorkoutItemsMapper.swift in Sources */,
+				740ED87D2BE2D900005B09BA /* FeedImagePresenter.swift in Sources */,
 				7460AB702B94E3E7000FDF22 /* WorkoutLoader.swift in Sources */,
 				74A6DCCB2BCF050D002A420C /* CoreDataHelpers.swift in Sources */,
 				740ED8762BE167F2005B09BA /* FeedLoadingViewModel.swift in Sources */,
