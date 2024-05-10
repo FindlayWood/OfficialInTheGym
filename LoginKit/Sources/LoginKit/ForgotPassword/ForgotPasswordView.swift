@@ -65,7 +65,12 @@ struct ForgotPasswordView: View {
 }
 
 struct ForgotPasswordView_Previews: PreviewProvider {
+    struct PreviewNetworkService: NetworkService {
+        func login(with email: String, password: String) async throws {}
+        func signup(with email: String, password: String) async throws {}
+        func forgotPassword(for email: String) async throws {}
+    }
     static var previews: some View {
-        ForgotPasswordView(viewModel: ForgotPasswordViewModel(), colour: .blue)
+        ForgotPasswordView(viewModel: ForgotPasswordViewModel(networkService: PreviewNetworkService()), colour: .blue)
     }
 }

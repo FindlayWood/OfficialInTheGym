@@ -15,7 +15,9 @@ class VerifyAccountViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var error: Error?
     
+    var baseFlow: BaseFlow?
     var apiService: AuthManagerService
+    var signOutAction: (() -> Void)?
     
     init(apiService: AuthManagerService = FirebaseAuthManager.shared) {
         self.apiService = apiService
@@ -58,6 +60,7 @@ class VerifyAccountViewModel: ObservableObject {
     func logoutAction() {
         do {
             try apiService.signout()
+            signOutAction?()
         } catch {
             print(String(describing: error))
         }
@@ -68,6 +71,6 @@ class VerifyAccountViewModel: ObservableObject {
         else {
             return
         }
-        UserObserver.shared.createAccount(email: email, uid: uid)
+        baseFlow?.showAccountCreation(email: email, uid: uid)
     }
 }

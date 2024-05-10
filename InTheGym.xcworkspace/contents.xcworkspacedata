@@ -5,6 +5,9 @@
       location = "group:ITGWorkoutKit/ITGWorkoutKit.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:ClubKit">
+   </FileRef>
+   <FileRef
       location = "group:WorkoutKit">
    </FileRef>
    <FileRef

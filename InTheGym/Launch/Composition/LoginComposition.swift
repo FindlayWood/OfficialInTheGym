@@ -11,10 +11,25 @@ import UIKit
 
 class LoginComposition {
     
-    var loginKitInterface: Boundary
-
-    init(navigationController: UINavigationController) {
-        loginKitInterface = .init(navigationController: navigationController, apiService: LoginKitNetworkService(), colour: .darkColour, title: "INTHEGYM", image: UIImage(named: "inthegym_icon3")!)
+    var navigationController: UINavigationController
+    var completion: () -> Void
+    
+    init(navigationController: UINavigationController, completion: @escaping () -> Void) {
+        self.navigationController = navigationController
+        self.completion = completion
+    }
+    
+    func makeInterface() -> LoginKitInterface {
+        
+        let mainInterface = MainLoginKitInterface(
+            navigationController: navigationController,
+            networkService: LoginKitNetworkService(),
+            colour: .darkColour,
+            title: "INTHEGYM",
+            image: UIImage(named: "inthegym_icon3")!,
+            completion: completion)
+        
+        return mainInterface
     }
 }
 
@@ -39,3 +54,21 @@ class LoginKitNetworkService: NetworkService {
     }
 }
 
+protocol LoginComposer {
+    func makeLoginInterface() -> LoginKitInterface
+}
+
+struct LoginComposerAdapter: LoginComposer {
+    var navigationController: UINavigationController
+    var completion: () -> Void
+    
+    func makeLoginInterface() -> LoginKitInterface {
+        
+        let comp = LoginComposition(
+            navigationController: navigationController,
+            completion: completion)
+        
+        let interface = comp.makeInterface()
+        return interface
+    }
+}
