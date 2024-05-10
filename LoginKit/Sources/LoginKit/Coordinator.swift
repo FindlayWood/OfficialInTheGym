@@ -7,55 +7,88 @@
 
 import UIKit
 
-class Coordinator {
+class BasicLoginFlow: LoginFlow {
     
     var navigationController: UINavigationController
-    var loginNavigationController: UINavigationController?
+    var viewControllerFactory: ViewControllerFactory
+    
+    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactory) {
+        self.navigationController = navigationController
+        self.viewControllerFactory = viewControllerFactory
+    }
+    
+    func start() {
+        let vc = viewControllerFactory.makeWelcomeViewController()
+        vc.viewModel.coordinator = self
+        navigationController.setViewControllers([vc], animated: true)
+    }
+    
+    func presentLogin() {
+        let vc = viewControllerFactory.makeLoginViewController()
+        vc.viewModel.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func presentSignup() {
+        let vc = viewControllerFactory.makeSignUpViewController()
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func forgotPassword() {
+        let vc = viewControllerFactory.makeForgotPasswordViewController()
+        let nav = UINavigationController(rootViewController: vc)
+        navigationController.present(nav, animated: true)
+    }
+}
+
+protocol LoginFlow {
+    func start()
+    func presentLogin()
+    func presentSignup()
+    func forgotPassword()
+}
+
+protocol ViewControllerFactory {
+    func makeWelcomeViewController() -> WelcomeViewController
+    func makeLoginViewController() -> LoginViewController
+    func makeSignUpViewController() -> SignupViewController
+    func makeForgotPasswordViewController() -> ForgotPasswordViewController
+}
+
+struct BasicViewControllerFactory: ViewControllerFactory {
+    
     var networkService: NetworkService
     var colour: UIColor
     var title: String
     var image: UIImage
-    
-    init(navigationController: UINavigationController, networkService: NetworkService, colour: UIColor, title: String, image: UIImage) {
-        self.navigationController = navigationController
-        self.networkService = networkService
-        self.colour = colour
-        self.title = title
-        self.image = image
-    }
-    
-    func start() {
+    var completion: () -> Void
+        
+    func makeWelcomeViewController() -> WelcomeViewController {
         let vc = WelcomeViewController()
         vc.viewModel = .init(title: title)
-        vc.viewModel.coordinator = self
         vc.colour = colour
         vc.image = image
-        navigationController.pushViewController(vc, animated: true)
+        return vc
     }
     
-    func presentLogin() {
+    func makeLoginViewController() -> LoginViewController {
         let vc = LoginViewController()
-        loginNavigationController = UINavigationController(rootViewController: vc)
         vc.colour = colour
-        vc.viewModel = .init(networkService: networkService, coordinator: self)
-        guard let loginNavigationController else {return}
-        navigationController.present(loginNavigationController, animated: true)
+        vc.viewModel = .init(networkService: networkService, completion: completion)
+        return vc
     }
     
-    func presentSignup() {
+    func makeSignUpViewController() -> SignupViewController {
         let vc = SignupViewController()
-        let nav = UINavigationController(rootViewController: vc)
         vc.colour = colour
-        vc.viewModel = .init(networkService: networkService)
-        navigationController.present(nav, animated: true)
+        vc.viewModel = .init(networkService: networkService, completion: completion)
+        return vc
     }
     
-    func forgotPassword() {
-        guard let loginNavigationController else {return}
+    func makeForgotPasswordViewController() -> ForgotPasswordViewController {
         let vc = ForgotPasswordViewController()
-        let nav = UINavigationController(rootViewController: vc)
         vc.viewModel = .init(networkService: networkService)
         vc.colour = colour
-        loginNavigationController.present(nav, animated: true)
+        return vc
     }
 }

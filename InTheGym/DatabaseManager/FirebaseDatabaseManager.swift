@@ -36,7 +36,13 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     
     private var databaseHandles = Set<DatabaseHandle>()
     
-    let databaseReference: DatabaseReference = Database.database().reference()
+    var databaseReference: DatabaseReference {
+        #if EMULATOR
+        return Database.database(url:"http://127.0.0.1:9000?ns=inthegym-2353b").reference()
+        #else
+        return Database.database().reference()
+        #endif
+    }
     
     func removeObserver(with handle: DatabaseHandle) {
         databaseHandles.remove(handle)
@@ -44,7 +50,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     }
     
     func fetchInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
-        let DBRef = Database.database().reference().child(model.internalPath)
+        let DBRef = databaseReference.child(model.internalPath)
         DBRef.observeSingleEvent(of: .value) { snapshot in
             guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
                 completion(.failure(NSError()))
@@ -60,7 +66,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     }
     
     func fetchSingleObjectInstance<M: FirebaseInstance, T: Decodable>(of model: M, returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
-        let DBRef = Database.database().reference().child(model.internalPath)
+        let DBRef = databaseReference.child(model.internalPath)
         DBRef.observeSingleEvent(of: .value) { snapshot in
             guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
                 completion(.failure(NSError()))
@@ -80,7 +86,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     func fetchRange<M: FirebaseInstance, T: Decodable>(from models: [M], returning returnType: T.Type, completion: @escaping (Result<[T],Error>) -> Void) {
         var tempModels = [T]()
         let dispatchGroup = DispatchGroup()
-        let dbref = Database.database().reference()
+        let dbref = databaseReference
         for model in models {
             dispatchGroup.enter()
             dbref.child(model.internalPath).observeSingleEvent(of: .value) { snapshot in
@@ -104,7 +110,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     // MARK: - Fetch Keys
     func fetchKeys<M: FirebaseInstance>(from model: M, completion: @escaping (Result<[String],Error>) -> Void) {
         var tempKeys = [String]()
-        let dbref = Database.database().reference().child(model.internalPath)
+        let dbref = databaseReference.child(model.internalPath)
         dbref.observeSingleEvent(of: .value) { snapshot in
             for child in snapshot.children.allObjects as! [DataSnapshot] {
                 tempKeys.insert(child.key, at: 0)
@@ -116,7 +122,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
 
     
     func upload<Model: FirebaseInstance>(data: Model, autoID: Bool, completion: @escaping (Result<Void,Error>) -> Void) {
-        let dbref = Database.database().reference().child(data.internalPath)
+        let dbref = databaseReference.child(data.internalPath)
         if autoID {
             dbref.childByAutoId()
         }
@@ -136,7 +142,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     
     // MARK: - Check Existence
     func checkExistence<Model:FirebaseInstance>(of model: Model, completion: @escaping(Result<Bool,Error>) -> Void) {
-        let dbref = Database.database().reference().child(model.internalPath)
+        let dbref = databaseReference.child(model.internalPath)
         dbref.observeSingleEvent(of: .value) { snapshot in
             if snapshot.exists() {
                 completion(.success(true))
@@ -149,7 +155,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     // MARK: - Time Ordered Upload
     func uploadTimeOrderedModel<Model: FirebaseTimeOrderedModel>(model: Model, completion: @escaping (Result<Model,Error>) -> Void) {
         print(model.internalPath)
-        let dbref = Database.database().reference().child(model.internalPath).childByAutoId()
+        let dbref = databaseReference.child(model.internalPath).childByAutoId()
         let autoID = dbref.key
         var uploadModel = model
         uploadModel.id = autoID!
@@ -164,7 +170,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     
     
     func fetchLimited<Model: FirebaseModel>(model: Model.Type, limit: Int, completion: @escaping (Result<[Model],Error>) -> Void) {
-        let dbref = Database.database().reference().child(model.path).queryLimited(toLast: UInt(limit))
+        let dbref = databaseReference.child(model.path).queryLimited(toLast: UInt(limit))
         dbref.observeSingleEvent(of: .value) { snapshot in
             guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
                 completion(.failure(NSError()))
@@ -179,7 +185,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         }
     }
     func fetchLimitedInstance<Model: FirebaseInstance, T: Decodable>(of model: Model, returning returnType: T.Type, limit: Int, completion: @escaping (Result<[T],Error>) -> Void) {
-        let dbRef = Database.database().reference().child(model.internalPath).queryLimited(toLast: UInt(limit))
+        let dbRef = databaseReference.child(model.internalPath).queryLimited(toLast: UInt(limit))
         dbRef.observeSingleEvent(of: .value) { snapshot in
             guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
                 completion(.failure(NSError()))
@@ -196,7 +202,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     
     // MARK: - Async Functions
     func fetchAsync<Model: FirebaseModel>() async throws -> [Model] {
-        let ref = Database.database().reference().child(Model.path)
+        let ref = databaseReference.child(Model.path)
         let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
         guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
             throw NSError(domain: "No snapshto children", code: 0)
@@ -205,7 +211,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         return data
     }
     func fetchInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model) async throws -> [T] {
-        let ref = Database.database().reference().child(model.internalPath)
+        let ref = databaseReference.child(model.internalPath)
         let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
         guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
             throw NSError(domain: "No snapshto children", code: 0)
@@ -214,19 +220,19 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         return data
     }
     func fetchSingleInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model) async throws -> T {
-        let ref = Database.database().reference().child(model.internalPath)
+        let ref = databaseReference.child(model.internalPath)
         let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
         let data = try snapshot.data(as: T.self)
         return data
     }
     
     func uploadAsync<Model: FirebaseInstance>(data: Model) async throws {
-        let dbref = Database.database().reference().child(data.internalPath)
+        let dbref = databaseReference.child(data.internalPath)
         try await dbref.setValue(data)
     }
     func upload(data: Codable, at path: String) async throws {
-        let ref = Database.database().reference().child(path)
-        try await ref.setValue(data)
+        let ref = databaseReference.child(path)
+        try ref.setValue(from: data)
     }
 
     
@@ -235,12 +241,12 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         for datum in data {
             keyPaths[datum.path] = datum.value
         }
-        let ref = Database.database().reference()
+        let ref = databaseReference
         try await ref.updateChildValues(keyPaths as [AnyHashable : Any])
     }
     
     func fetchKeysAsync<M: FirebaseInstance>(from model: M) async throws -> [String] {
-        let ref = Database.database().reference().child(model.internalPath)
+        let ref = databaseReference.child(model.internalPath)
         let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
         guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
             throw NSError(domain: "No snapshot children", code: 0)
@@ -250,7 +256,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     }
     func fetchRangeAsync<M: FirebaseInstance, T: Decodable>(from models: [M]) async throws -> [T] {
         var tempModels = [T]()
-        let dbref = Database.database().reference()
+        let dbref = databaseReference
         for model in models {
             let (snapshot, _) = await dbref.child(model.internalPath).observeSingleEventAndPreviousSiblingKey(of: .value)
             do {
@@ -264,17 +270,17 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     }
     
     func checkExistenceAsync<Model:FirebaseInstance>(of model: Model) async throws -> Bool {
-        let dbref = Database.database().reference().child(model.internalPath)
+        let dbref = databaseReference.child(model.internalPath)
         let (snapshot, _) = await dbref.observeSingleEventAndPreviousSiblingKey(of: .value)
         return snapshot.exists()
     }
     func checkExistence(at path: String) async throws -> Bool {
-        let ref = Database.database().reference().child(path)
+        let ref = databaseReference.child(path)
         let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
         return snapshot.exists()
     }
     func childCountAsync<Model:FirebaseInstance>(of model: Model) async throws -> Int {
-        let dbref = Database.database().reference().child(model.internalPath)
+        let dbref = databaseReference.child(model.internalPath)
         let (snapshot, _) = await dbref.observeSingleEventAndPreviousSiblingKey(of: .value)
         if snapshot.exists() {
             return Int(snapshot.childrenCount)
@@ -284,7 +290,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     }
     
     func uploadTimeOrderedModelAsync<Model: FirebaseTimeOrderedModel>(data: inout Model) async throws -> Model {
-        let ref = Database.database().reference().child(data.internalPath).childByAutoId()
+        let ref = databaseReference.child(data.internalPath).childByAutoId()
         guard let autoID = ref.key else {
             throw NSError(domain: "Cant generate auto ID", code: -1)
         }
@@ -294,7 +300,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     }
     
     func fetchLimitedAsync<Model: FirebaseModel>(model: Model.Type, limit: Int) async throws -> [Model] {
-        let ref = Database.database().reference().child(model.path).queryLimited(toLast: UInt(limit))
+        let ref = databaseReference.child(model.path).queryLimited(toLast: UInt(limit))
         let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
         guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
             throw NSError(domain: "No snapshto children", code: 0)
@@ -304,7 +310,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
     }
     
     func searchTextQueryModelAsync<Model: FirebaseQueryModel, T: Decodable>(model: Model) async throws -> [T] {
-        let ref = Database.database().reference().child(model.internalPath)
+        let ref = databaseReference.child(model.internalPath)
             .queryOrdered(byChild: model.orderedBy)
             .queryStarting(atValue: model.equalTo)
             .queryEnding(atValue: model.equalTo+"\u{f8ff}")
@@ -316,7 +322,7 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         return data
     }
     func fetchSingleObjectInstanceAsync<M: FirebaseInstance, T: Decodable>(of model: M) async throws -> [T] {
-        let ref = Database.database().reference().child(model.internalPath)
+        let ref = databaseReference.child(model.internalPath)
         let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
         guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
             throw NSError(domain: "No snapshto children", code: 0)
@@ -325,7 +331,23 @@ final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {
         return data
     }
     func fetchLimitedInstanceAsync<Model: FirebaseInstance, T: Decodable>(of model: Model, limit: Int) async throws -> [T] {
-        let ref = Database.database().reference().child(model.internalPath).queryLimited(toLast: UInt(limit))
+        let ref = databaseReference.child(model.internalPath).queryLimited(toLast: UInt(limit))
+        let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
+        guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
+            throw NSError(domain: "No snapshot children", code: 0)
+        }
+        let data = children.compactMap { try? $0.data(as: T.self) }
+        return data
+    }
+    
+    func read<T: Codable>(at path: String) async throws -> T {
+        let ref = databaseReference.child(path)
+        let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
+        let data = try snapshot.data(as: T.self)
+        return data
+    }
+    func readAll<T: Codable>(at path: String) async throws -> [T] {
+        let ref = databaseReference.child(path)
         let (snapshot, _) = await ref.observeSingleEventAndPreviousSiblingKey(of: .value)
         guard let children = snapshot.children.allObjects as? [DataSnapshot] else {
             throw NSError(domain: "No snapshot children", code: 0)
@@ -376,4 +398,6 @@ protocol FirebaseDatabaseManagerService {
     // MARK: - Modular
     func checkExistence(at path: String) async throws -> Bool
     func upload(data: Codable, at path: String) async throws
+    func read<T:Codable>(at path: String) async throws -> T
+    func readAll<T:Codable>(at path: String) async throws -> [T]
  }

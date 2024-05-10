@@ -56,12 +56,17 @@ class AccountCreationHomeViewModel: ObservableObject {
     
     private var subscriptions = Set<AnyCancellable>()
     
+    var createdCallback: () -> Void
+    var signOutCallback: () -> Void
+    
     var apiService: NetworkService
     
-    init(apiService: NetworkService = MockNetworkService.shared, email: String, uid: String) {
+    init(apiService: NetworkService = MockNetworkService.shared, email: String, uid: String, callback: @escaping () -> Void, signOutCallback: @escaping () -> Void) {
         self.apiService = apiService
         self.email = email
         self.uid = uid
+        self.createdCallback = callback
+        self.signOutCallback = signOutCallback
         usernameListener()
     }
     
@@ -74,16 +79,29 @@ class AccountCreationHomeViewModel: ObservableObject {
     
     func checkUsername(_ text: String) {
         isUsernameValid = .checking
-        if text.count < 3 {
-            isUsernameValid = .tooShort
-        } else {
+        let usernameRegEx = "[A-Za-z0-9_.]{3,50}$"
+        
+        let usernamePred = NSPredicate(format:"SELF MATCHES %@", usernameRegEx)
+        if usernamePred.evaluate(with: text) {
             Task { @MainActor in
                 do {
-                    let exists = try await apiService.checkExistence(at: "Usernames/\(text)")
-                    isUsernameValid = exists ? .taken : .valid
+                    if let _: UsernameModel = try await apiService.read(at: "Usernames/\(text)") {
+                        isUsernameValid = .taken
+                    } else {
+                        isUsernameValid = .valid
+                    }
                 } catch {
                     print(String(describing: error))
+                    isUsernameValid = .taken
                 }
+            }
+        } else {
+            if text.count == 0 {
+                isUsernameValid = .idle
+            } else if text.count < 3 {
+                isUsernameValid = .tooShort
+            } else {
+                isUsernameValid = .invalid
             }
         }
     }
@@ -99,29 +117,46 @@ class AccountCreationHomeViewModel: ObservableObject {
                                                  accountType: selectedAccountType)
         
         Task {
-            do {
-                try await apiService.upload(data: newAccountModel, at: "Users/\(uid)")
-                try await apiService.uploadRealtime(data: true, at: "Usernames/\(username)")
-                if profileImage != nil {
-                    uploadProfileImage()
-                } else {
+            let uploadedUsername = await uploadUsername()
+            if uploadedUsername {
+                do {
+                    try await apiService.callFunction(named: "createAccount", with: newAccountModel.toJSONData())
+                    if profileImage != nil {
+                        uploadProfileImage()
+                    }
+                    createdCallback()
+                } catch {
+                    // failed to upload account
+                    print(String(describing: error))
                     uploading = false
                 }
-            } catch {
-                print(String(describing: error))
+                // carry on with upload of account
+            } else {
+                // error with username already being taken
+                username.removeAll()
                 uploading = false
             }
+        }
+    }
+    func uploadUsername() async -> Bool {
+        do {
+            let usernameModel = UsernameModel(username: username, uid: uid)
+            try await apiService.upload(data: usernameModel, at: "Usernames/\(username)")
+            print("success")
+            return true
+        } catch {
+            print("error uploading username")
+            print(String(describing: error))
+            return false
         }
     }
     func uploadProfileImage() {
         guard let data = profileImage?.jpegData(compressionQuality: 0.1) else {return}
         Task {
             do {
-                try await apiService.dataUpload(data: data, at: "")
-                uploading = false
+                try await apiService.dataUpload(data: data, at: "ProfilePhotos/\(uid)")
             } catch {
                 print(String(describing: error))
-                uploading = false
             }
         }
     }
@@ -129,6 +164,7 @@ class AccountCreationHomeViewModel: ObservableObject {
         Task {
             do {
                 try await apiService.signout()
+                signOutCallback()
             } catch {
                 print(String(describing: error))
             }
@@ -161,7 +197,7 @@ enum AccountType: String, CaseIterable, Identifiable, Codable {
         case .individual:
             return "Select this type if you are looking to use this app as an individual."
         case .athlete:
-            return "Select this type if you are an athlete playing sport, part of a team"
+            return "Select this type if you are an athlete playing sport / part of a team"
         case .coach:
             return "Select this type if you are looking to manage teams, athlete's or clients."
         }
@@ -187,4 +223,23 @@ struct CreateAccountModel: Codable {
     var createdDate: Date = .now
     var verifiedAccount: Bool = false
     var eliteAccount: Bool = false
+    var isPrivate: Bool = false
+}
+
+extension CreateAccountModel {
+    func toJSONData() -> [String: Any] {
+        var data: [String: Any] = [String:Any]()
+        data["username"] = username
+        data["displayName"] = displayName
+        data["bio"] = bio
+        data["accountType"] = accountType.rawValue
+        data["isPrivate"] = isPrivate
+        return data
+    }
+}
+
+struct UsernameModel: Codable {
+    var username: String
+    var uid: String
+    var dateTaken: Date = .now
 }

@@ -11,6 +11,8 @@ import UIKit
 class AccountCreatedViewController: UIViewController {
     
     var display: AccountCreatedView!
+    var baseFlow: BaseFlow?
+    var user: Users!
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -19,7 +21,13 @@ class AccountCreatedViewController: UIViewController {
     }
     // MARK: - Display
     func addDisplay() {
-        display = .init()
+        display = .init { [weak self] in
+            if self?.user.accountType == .coach {
+                self?.baseFlow?.showLoggedInCoach()
+            } else {
+                self?.baseFlow?.showLoggedInPlayer()
+            }
+        }
         addSwiftUIView(display)
     }
 }

@@ -31,9 +31,9 @@ struct AccountTypeView: View {
                         .foregroundColor(Color(colour))
                 }
                 .padding()
-                .background(viewModel.selectedAccountType == model ? Color(.systemBackground) : .clear)
-                .overlay(RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color(colour), lineWidth: 2))
+                .background(Color(.systemBackground))
+                .cornerRadius(8)
+                .shadow(radius: viewModel.selectedAccountType == model ? 4 : 0)
                 .contentShape(Rectangle())
                 .onTapGesture {
                     viewModel.selectedAccountType = model
@@ -50,6 +50,6 @@ struct AccountTypeView: View {
 
 struct AccountTypeView_Previews: PreviewProvider {
     static var previews: some View {
-        AccountTypeView(viewModel: AccountCreationHomeViewModel(email: "", uid: ""), colour: .blue)
+        AccountTypeView(viewModel: AccountCreationHomeViewModel(email: "", uid: "", callback: {}, signOutCallback: {}), colour: .blue)
     }
 }

@@ -9,10 +9,11 @@ import Foundation
 
 public protocol NetworkService {
     func signout() async throws
+    func upload(dataPoints: [String: Codable]) async throws
     func upload(data: Codable, at path: String) async throws
-    func uploadRealtime(data: Codable, at path: String) async throws
     func dataUpload(data: Data, at path: String) async throws
-    func checkExistence(at path: String) async throws -> Bool
+    func read<T:Codable>(at path: String) async throws -> T
+    func callFunction(named: String, with data: Any) async throws
 }
 
 class MockNetworkService: NetworkService {
@@ -24,16 +25,19 @@ class MockNetworkService: NetworkService {
     func signout() async throws {
         
     }
-    func upload(data: Codable, at path: String) async throws {
+    func upload(dataPoints: [String: Codable]) async throws {
         
     }
-    func uploadRealtime(data: Codable, at path: String) async throws {
+    func upload(data: Codable, at path: String) async throws {
         
     }
     func dataUpload(data: Data, at path: String) async throws {
         
     }
-    func checkExistence(at path: String) async throws -> Bool {
-        return false
+    func read<T:Codable>(at path: String) async throws -> T {
+        return T.self as! T
+    }
+    func callFunction(named: String, with data: Any) async throws {
+        
     }
 }

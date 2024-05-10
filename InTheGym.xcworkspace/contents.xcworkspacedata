@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:ClubKit">
+   </FileRef>
+   <FileRef
+      location = "group:WorkoutKit">
+   </FileRef>
+   <FileRef
       location = "group:AccountCreationKit">
    </FileRef>
    <FileRef

@@ -20,7 +20,6 @@ class SavedWorkoutModel: Codable, Hashable {
     var completions: Int
     var totalRPE: Int
     var totalTime: Int
-    var createdBy: String
     var creatorID: String
     var timeCreated: TimeInterval?
     var title: String
@@ -34,8 +33,7 @@ class SavedWorkoutModel: Codable, Hashable {
         self.completions = 0
         self.totalRPE = 0
         self.totalTime = 0
-        self.createdBy = FirebaseAuthManager.currentlyLoggedInUser.username
-        self.creatorID = FirebaseAuthManager.currentlyLoggedInUser.uid
+        self.creatorID = UserDefaults.currentUser.uid
         self.timeCreated = Date().timeIntervalSince1970
         self.title = title
         self.isPrivate = isPrivate
@@ -103,7 +101,6 @@ struct NewSavedWorkoutModel: Codable {
     var completions: Int
     var totalRPE: Int
     var totalTime: Int
-    var createdBy: String
     var creatorID: String
     var title: String
     var isPrivate: Bool
@@ -116,8 +113,7 @@ struct NewSavedWorkoutModel: Codable {
         self.completions = 0
         self.totalRPE = 0
         self.totalTime = 0
-        self.createdBy = FirebaseAuthManager.currentlyLoggedInUser.username
-        self.creatorID = FirebaseAuthManager.currentlyLoggedInUser.uid
+        self.creatorID = UserDefaults.currentUser.uid
         self.title = title
         self.isPrivate = isPrivate
         self.exercises = exercises

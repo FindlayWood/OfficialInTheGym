@@ -27,7 +27,7 @@ struct SetUpdateModel {
 }
 extension SetUpdateModel: FirebaseInstance {
     var internalPath: String {
-        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workoutID)/exercises/\(exercise.workoutPosition)/completedSets/\(setNumber)"
+        return "Workouts/\(UserDefaults.currentUser.uid)/\(workoutID)/exercises/\(exercise.workoutPosition)/completedSets/\(setNumber)"
     }
 }
 
@@ -37,6 +37,6 @@ struct StartWorkoutModel {
 }
 extension StartWorkoutModel: FirebaseInstance {
     var internalPath: String {
-        return "Workouts/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(workout.id)/startTime"
+        return "Workouts/\(UserDefaults.currentUser.uid)/\(workout.id)/startTime"
     }
 }
