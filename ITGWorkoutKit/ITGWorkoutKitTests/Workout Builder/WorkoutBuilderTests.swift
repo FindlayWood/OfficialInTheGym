@@ -18,12 +18,16 @@ struct TagModel {
 class WorkoutBuilder {
     var title: String = ""
     let exercises: [ExerciseModel] = []
-    let tags: [TagModel] = []
+    var tags: [TagModel] = []
     let isSaving: Bool = true
     let isPublic: Bool = true
     
     func updateTitle(_ newTitle: String) {
         title = newTitle
+    }
+    
+    func addTag(_ newTag: TagModel) {
+        tags.append(newTag)
     }
 }
 
@@ -67,6 +71,16 @@ final class WorkoutBuilderTests: XCTestCase {
         sut.updateTitle(newTitle)
         
         XCTAssertEqual(sut.title, newTitle)
+    }
+    
+    func test_addTag_addsTagToList() {
+        let sut = WorkoutBuilder()
+        
+        let newTag = TagModel()
+        
+        sut.addTag(newTag)
+        
+        XCTAssertEqual(sut.tags.count, 1)
     }
 
 }
