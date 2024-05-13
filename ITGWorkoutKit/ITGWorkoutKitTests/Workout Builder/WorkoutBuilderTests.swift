@@ -15,7 +15,7 @@ class WorkoutBuilder {
     var title: String = ""
     let exercises: [ExerciseModel] = []
     let isSaving: Bool = true
-    
+    let isPublic: Bool = true
 }
 
 final class WorkoutBuilderTests: XCTestCase {
@@ -36,6 +36,12 @@ final class WorkoutBuilderTests: XCTestCase {
         let sut = WorkoutBuilder()
         
         XCTAssertTrue(sut.isSaving)
+    }
+    
+    func test_init_privacySetToPublicByDefault() {
+        let sut = WorkoutBuilder()
+        
+        XCTAssertTrue(sut.isPublic)
     }
 
 }
