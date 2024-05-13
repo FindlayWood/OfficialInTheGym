@@ -14,6 +14,7 @@ struct ExerciseModel {
 class WorkoutBuilder {
     var title: String = ""
     let exercises: [ExerciseModel] = []
+    let isSaving: Bool = true
     
 }
 
@@ -29,6 +30,12 @@ final class WorkoutBuilderTests: XCTestCase {
         let sut = WorkoutBuilder()
         
         XCTAssertEqual(sut.exercises.count, 0)
+    }
+    
+    func test_init_savingSelectedByDefault() {
+        let sut = WorkoutBuilder()
+        
+        XCTAssertTrue(sut.isSaving)
     }
 
 }
