@@ -7,8 +7,13 @@
 
 import XCTest
 
+struct ExerciseModel {
+    
+}
+
 class WorkoutBuilder {
     var title: String = ""
+    let exercises: [ExerciseModel] = []
     
 }
 
@@ -18,6 +23,12 @@ final class WorkoutBuilderTests: XCTestCase {
         let sut = WorkoutBuilder()
         
         XCTAssertEqual(sut.title, "")
+    }
+    
+    func test_init_exerciseListIsEmpty() {
+        let sut = WorkoutBuilder()
+        
+        XCTAssertEqual(sut.exercises.count, 0)
     }
 
 }
