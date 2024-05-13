@@ -21,6 +21,10 @@ class WorkoutBuilder {
     let tags: [TagModel] = []
     let isSaving: Bool = true
     let isPublic: Bool = true
+    
+    func updateTitle(_ newTitle: String) {
+        title = newTitle
+    }
 }
 
 final class WorkoutBuilderTests: XCTestCase {
@@ -53,6 +57,16 @@ final class WorkoutBuilderTests: XCTestCase {
         let sut = WorkoutBuilder()
         
         XCTAssertEqual(sut.tags.count, 0)
+    }
+    
+    func test_updateTitle_updatesTitle() {
+        let sut = WorkoutBuilder()
+        
+        let newTitle = "New Title"
+        
+        sut.updateTitle(newTitle)
+        
+        XCTAssertEqual(sut.title, newTitle)
     }
 
 }
