@@ -20,7 +20,7 @@ class WorkoutBuilder {
     let exercises: [ExerciseModel] = []
     var tags: [TagModel] = []
     let isSaving: Bool = true
-    let isPublic: Bool = true
+    var isPublic: Bool = true
     
     func updateTitle(_ newTitle: String) {
         title = newTitle
@@ -34,6 +34,10 @@ class WorkoutBuilder {
         if tags.count < maxTagCount {
             tags.append(newTag)
         }
+    }
+    
+    func updatePrivacy(_ newIsPublic: Bool) {
+        isPublic = newIsPublic
     }
 
 }
@@ -100,5 +104,17 @@ final class WorkoutBuilderTests: XCTestCase {
         }
 
         XCTAssertEqual(sut.tags.count, sut.maxTagCount)
+    }
+    
+    func test_updatePrivacy_willUpdatePrivacyToSelected() {
+        let sut = WorkoutBuilder()
+        
+        sut.updatePrivacy(false)
+        
+        XCTAssertFalse(sut.isPublic)
+        
+        sut.updatePrivacy(true)
+        
+        XCTAssertTrue(sut.isPublic)
     }
 }
