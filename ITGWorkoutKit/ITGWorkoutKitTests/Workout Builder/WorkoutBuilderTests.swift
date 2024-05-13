@@ -25,10 +25,17 @@ class WorkoutBuilder {
     func updateTitle(_ newTitle: String) {
         title = newTitle
     }
+        
+    var maxTagCount: Int {
+        10
+    }
     
     func addTag(_ newTag: TagModel) {
-        tags.append(newTag)
+        if tags.count < maxTagCount {
+            tags.append(newTag)
+        }
     }
+
 }
 
 final class WorkoutBuilderTests: XCTestCase {
@@ -83,4 +90,15 @@ final class WorkoutBuilderTests: XCTestCase {
         XCTAssertEqual(sut.tags.count, 1)
     }
 
+    func test_addTag_willNotAddMoreThanMaxLimit() {
+        let sut = WorkoutBuilder()
+        
+        for num in (0..<sut.maxTagCount + 1) {
+            let newTag = TagModel()
+            
+            sut.addTag(newTag)
+        }
+
+        XCTAssertEqual(sut.tags.count, sut.maxTagCount)
+    }
 }
