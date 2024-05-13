@@ -11,9 +11,14 @@ struct ExerciseModel {
     
 }
 
+struct TagModel {
+    
+}
+
 class WorkoutBuilder {
     var title: String = ""
     let exercises: [ExerciseModel] = []
+    let tags: [TagModel] = []
     let isSaving: Bool = true
     let isPublic: Bool = true
 }
@@ -42,6 +47,12 @@ final class WorkoutBuilderTests: XCTestCase {
         let sut = WorkoutBuilder()
         
         XCTAssertTrue(sut.isPublic)
+    }
+    
+    func test_init_tagListIsEmpty() {
+        let sut = WorkoutBuilder()
+        
+        XCTAssertEqual(sut.tags.count, 0)
     }
 
 }
