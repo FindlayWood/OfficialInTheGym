@@ -18,37 +18,37 @@ struct TagModel {
 final class WorkoutBuilderTests: XCTestCase {
 
     func test_init_titleIsEmpty() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         XCTAssertEqual(sut.title, "")
     }
     
     func test_init_exerciseListIsEmpty() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         XCTAssertEqual(sut.exercises.count, 0)
     }
     
     func test_init_savingSelectedByDefault() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         XCTAssertTrue(sut.isSaving)
     }
     
     func test_init_privacySetToPublicByDefault() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         XCTAssertTrue(sut.isPublic)
     }
     
     func test_init_tagListIsEmpty() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         XCTAssertEqual(sut.tags.count, 0)
     }
     
     func test_updateTitle_updatesTitle() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         let newTitle = "New Title"
         
@@ -58,7 +58,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_addTag_addsTagToList() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         let newTag = TagModel()
         
@@ -68,7 +68,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
 
     func test_addTag_willNotAddMoreThanMaxLimit() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         for _ in (0..<sut.maxTagCount + 1) {
             let newTag = TagModel()
@@ -80,7 +80,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_addExercise_addsExerciseToExerciseList() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         sut.addExercise(ExerciseModel())
         
@@ -88,7 +88,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_updatePrivacy_willUpdatePrivacyToSelected() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         sut.updatePrivacy(false)
         
@@ -100,7 +100,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_updateSaving_willUpdateSavingToSelected() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         sut.updateSaving(false)
         
@@ -112,7 +112,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_createWorkout_returnsErrorofNoExercises() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         sut.createWorkout()
         
@@ -120,7 +120,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_createWorkout_returnsNoErrorWhenExerciseListIsNotEmpty() {
-        let sut = WorkoutBuilder()
+        let sut = makeSUT()
         
         sut.addExercise(ExerciseModel())
         
@@ -130,6 +130,10 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     // MARK: - Helpers
+    
+    private func makeSUT() -> WorkoutBuilder {
+        return WorkoutBuilder()
+    }
     
     private class WorkoutBuilder {
         var title: String = ""
