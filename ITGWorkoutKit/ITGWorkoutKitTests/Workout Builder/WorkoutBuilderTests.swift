@@ -97,7 +97,7 @@ final class WorkoutBuilderTests: XCTestCase {
     func test_addTag_willNotAddMoreThanMaxLimit() {
         let sut = WorkoutBuilder()
         
-        for num in (0..<sut.maxTagCount + 1) {
+        for _ in (0..<sut.maxTagCount + 1) {
             let newTag = TagModel()
             
             sut.addTag(newTag)
