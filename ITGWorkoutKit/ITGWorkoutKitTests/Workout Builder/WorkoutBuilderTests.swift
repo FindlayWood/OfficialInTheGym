@@ -116,17 +116,40 @@ final class WorkoutBuilderTests: XCTestCase {
         
         sut.createWorkout()
         
-        XCTAssertEqual(sut.creationError, .noExercises)
+        XCTAssertTrue(sut.creationErrors.contains(.noExercises))
     }
     
-    func test_createWorkout_returnsNoErrorWhenExerciseListIsNotEmpty() {
+    func test_createWorkout_returnsNonoExerciseErrorWhenExerciseListIsNotEmpty() {
         let sut = makeSUT()
         
         sut.addExercise(ExerciseModel())
         
         sut.createWorkout()
         
-        XCTAssertNil(sut.creationError)
+        XCTAssertFalse(sut.creationErrors.contains(.noExercises))
+    }
+    
+    func test_createWorkout_returnsErrorWhenTitleIsEmpty() {
+        let sut = makeSUT()
+        
+        sut.createWorkout()
+        
+        XCTAssertTrue(sut.creationErrors.contains(.noTitle))
+    }
+    
+    func test_createWorkout_doesNotReturnsNoTitleErrorWhenTitleIsFourCharacters() {
+        let sut = makeSUT()
+        
+        let samples = ["abcd", "    ", "a bc", "title long"]
+        
+        samples.enumerated().forEach { _, title in
+            
+            sut.updateTitle(title)
+            
+            sut.createWorkout()
+            
+            XCTAssertFalse(sut.creationErrors.contains(.noTitle))
+        }
     }
     
     // MARK: - Helpers
@@ -142,10 +165,11 @@ final class WorkoutBuilderTests: XCTestCase {
         var isSaving: Bool = true
         var isPublic: Bool = true
         
-        var creationError: CreateWorkoutError?
+        var creationErrors: [CreateWorkoutError] = []
         
         enum CreateWorkoutError {
             case noExercises
+            case noTitle
         }
         
         func updateTitle(_ newTitle: String) {
@@ -176,7 +200,10 @@ final class WorkoutBuilderTests: XCTestCase {
         
         func createWorkout() {
             if exercises.isEmpty {
-                creationError = .noExercises
+                creationErrors.append(.noExercises)
+            }
+            if title.isEmpty {
+                creationErrors.append(.noTitle)
             }
         }
     }
