@@ -79,6 +79,14 @@ final class WorkoutBuilderTests: XCTestCase {
         XCTAssertEqual(sut.tags.count, sut.maxTagCount)
     }
     
+    func test_addExercise_addsExerciseToExerciseList() {
+        let sut = WorkoutBuilder()
+        
+        sut.addExercise(ExerciseModel())
+        
+        XCTAssertEqual(sut.exercises.count, 1)
+    }
+    
     func test_updatePrivacy_willUpdatePrivacyToSelected() {
         let sut = WorkoutBuilder()
         
