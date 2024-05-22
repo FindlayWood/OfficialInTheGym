@@ -15,36 +15,6 @@ struct TagModel {
     
 }
 
-class WorkoutBuilder {
-    var title: String = ""
-    let exercises: [ExerciseModel] = []
-    var tags: [TagModel] = []
-    var isSaving: Bool = true
-    var isPublic: Bool = true
-    
-    func updateTitle(_ newTitle: String) {
-        title = newTitle
-    }
-        
-    var maxTagCount: Int {
-        10
-    }
-    
-    func addTag(_ newTag: TagModel) {
-        if tags.count < maxTagCount {
-            tags.append(newTag)
-        }
-    }
-    
-    func updatePrivacy(_ newIsPublic: Bool) {
-        isPublic = newIsPublic
-    }
-
-    func updateSaving(_ newIsSaving: Bool) {
-        isSaving = newIsSaving
-    }
-}
-
 final class WorkoutBuilderTests: XCTestCase {
 
     func test_init_titleIsEmpty() {
@@ -131,5 +101,55 @@ final class WorkoutBuilderTests: XCTestCase {
         sut.updateSaving(true)
         
         XCTAssertTrue(sut.isSaving)
+    }
+    
+    func test_createWorkout_returnsErrorofNoExercises() {
+        let sut = WorkoutBuilder()
+        
+        sut.createWorkout()
+        
+        XCTAssertEqual(sut.creationError, .noExercises)
+    }
+    
+    // MARK: - Helpers
+    
+    private class WorkoutBuilder {
+        var title: String = ""
+        let exercises: [ExerciseModel] = []
+        var tags: [TagModel] = []
+        var isSaving: Bool = true
+        var isPublic: Bool = true
+        
+        var creationError: CreateWorkoutError?
+        
+        enum CreateWorkoutError {
+            case noExercises
+        }
+        
+        func updateTitle(_ newTitle: String) {
+            title = newTitle
+        }
+            
+        var maxTagCount: Int {
+            10
+        }
+        
+        func addTag(_ newTag: TagModel) {
+            if tags.count < maxTagCount {
+                tags.append(newTag)
+            }
+        }
+        
+        func updatePrivacy(_ newIsPublic: Bool) {
+            isPublic = newIsPublic
+        }
+
+        func updateSaving(_ newIsSaving: Bool) {
+            isSaving = newIsSaving
+        }
+        
+        func createWorkout() {
+            creationError = .noExercises
+        }
     }
 }
