@@ -130,19 +130,28 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_createWorkout_returnsErrorWhenTitleIsEmpty() {
-        let sut = makeSUT()
         
-        sut.createWorkout()
+        let samples = ["a", "  ", "a b", ""]
         
-        XCTAssertTrue(sut.creationErrors.contains(.noTitle))
+        samples.enumerated().forEach { _, title in
+            
+            let sut = makeSUT()
+            
+            sut.updateTitle(title)
+            
+            sut.createWorkout()
+            
+            XCTAssertTrue(sut.creationErrors.contains(.noTitle))
+        }
     }
     
     func test_createWorkout_doesNotReturnsNoTitleErrorWhenTitleIsFourCharacters() {
-        let sut = makeSUT()
         
         let samples = ["abcd", "    ", "a bc", "title long"]
         
         samples.enumerated().forEach { _, title in
+            
+            let sut = makeSUT()
             
             sut.updateTitle(title)
             
@@ -202,7 +211,7 @@ final class WorkoutBuilderTests: XCTestCase {
             if exercises.isEmpty {
                 creationErrors.append(.noExercises)
             }
-            if title.isEmpty {
+            if title.count < 4 {
                 creationErrors.append(.noTitle)
             }
         }
