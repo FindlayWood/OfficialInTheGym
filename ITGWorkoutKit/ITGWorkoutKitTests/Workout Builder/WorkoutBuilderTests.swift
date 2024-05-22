@@ -111,11 +111,21 @@ final class WorkoutBuilderTests: XCTestCase {
         XCTAssertEqual(sut.creationError, .noExercises)
     }
     
+    func test_createWorkout_returnsNoErrorWhenExerciseListIsNotEmpty() {
+        let sut = WorkoutBuilder()
+        
+        sut.addExercise(ExerciseModel())
+        
+        sut.createWorkout()
+        
+        XCTAssertNil(sut.creationError)
+    }
+    
     // MARK: - Helpers
     
     private class WorkoutBuilder {
         var title: String = ""
-        let exercises: [ExerciseModel] = []
+        var exercises: [ExerciseModel] = []
         var tags: [TagModel] = []
         var isSaving: Bool = true
         var isPublic: Bool = true
@@ -148,8 +158,14 @@ final class WorkoutBuilderTests: XCTestCase {
             isSaving = newIsSaving
         }
         
+        func addExercise(_ model: ExerciseModel) {
+            exercises.append(model)
+        }
+        
         func createWorkout() {
-            creationError = .noExercises
+            if exercises.isEmpty {
+                creationError = .noExercises
+            }
         }
     }
 }
