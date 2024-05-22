@@ -161,6 +161,18 @@ final class WorkoutBuilderTests: XCTestCase {
         }
     }
     
+    func test_createWorkout_returnsNoErrorsWhenCriteriaMet() {
+        let sut = makeSUT()
+        
+        sut.addExercise(ExerciseModel())
+        
+        sut.updateTitle("title")
+        
+        sut.createWorkout()
+        
+        XCTAssertTrue(sut.creationErrors.isEmpty)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT() -> WorkoutBuilder {
