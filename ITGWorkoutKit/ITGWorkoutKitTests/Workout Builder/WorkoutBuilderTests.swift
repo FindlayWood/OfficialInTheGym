@@ -19,7 +19,7 @@ class WorkoutBuilder {
     var title: String = ""
     let exercises: [ExerciseModel] = []
     var tags: [TagModel] = []
-    let isSaving: Bool = true
+    var isSaving: Bool = true
     var isPublic: Bool = true
     
     func updateTitle(_ newTitle: String) {
@@ -40,6 +40,9 @@ class WorkoutBuilder {
         isPublic = newIsPublic
     }
 
+    func updateSaving(_ newIsSaving: Bool) {
+        isSaving = newIsSaving
+    }
 }
 
 final class WorkoutBuilderTests: XCTestCase {
@@ -116,5 +119,17 @@ final class WorkoutBuilderTests: XCTestCase {
         sut.updatePrivacy(true)
         
         XCTAssertTrue(sut.isPublic)
+    }
+    
+    func test_updateSaving_willUpdateSavingToSelected() {
+        let sut = WorkoutBuilder()
+        
+        sut.updateSaving(false)
+        
+        XCTAssertFalse(sut.isSaving)
+        
+        sut.updateSaving(true)
+        
+        XCTAssertTrue(sut.isSaving)
     }
 }
