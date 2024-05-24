@@ -16,9 +16,9 @@ struct TagModel {
 }
 
 protocol WorkoutUploader {
-    typealias Result = Swift.Result<UploadWorkoutModel, Error>
+    typealias Result = Swift.Result<Bool, Error>
     
-    func upload(_ model: UploadWorkoutModel, completion: @escaping (Error?) -> Void)
+    func upload(_ model: UploadWorkoutModel, completion: @escaping (Result) -> Void)
 }
 
 struct UploadWorkoutModel {
@@ -214,6 +214,16 @@ final class WorkoutBuilderTests: XCTestCase {
         XCTAssertEqual(client.requestedPaths, [model.id, model.id])
     }
     
+    func test_upload_deliversErrorOnClientError() {
+        let (client, sut) = makeSUT()
+        let model = makeUploadModel()
+        
+        expect(sut, toCompleteWith: failure(.connectivity), uploading: model) {
+            let clientError = NSError(domain: "Test", code: 0)
+            
+            client.complete(with: clientError)
+        }
+    }
     // MARK: - Helpers
     
     private func makeSUT() -> (WorkoutUploaderSpy, WorkoutBuilder) {
@@ -222,27 +232,56 @@ final class WorkoutBuilderTests: XCTestCase {
         return (uploader, workoutBuilder)
     }
     
+    private func failure(_ error: WorkoutBuilder.Error) -> WorkoutBuilder.Result {
+        return .failure(error)
+    }
+    
     private func makeUploadModel() -> UploadWorkoutModel {
         UploadWorkoutModel(title: "Title", exercises: [], tags: [], isPublic: true, savedID: UUID().uuidString, createdByID: UUID().uuidString, id: UUID().uuidString)
     }
     
+    private func expect(_ sut: WorkoutBuilder, toCompleteWith expectedResult: WorkoutUploader.Result, uploading model: UploadWorkoutModel, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+        
+        let exp = expectation(description: "Wait for load completion")
+        
+        sut.upload(model: model) { receivedResult in
+            
+            switch (receivedResult, expectedResult) {
+            case let (.success(receivedItems), .success(expectedItems)):
+                XCTAssertEqual(receivedItems, expectedItems, file: file, line: line)
+                
+            case let (.failure(receivedError as WorkoutBuilder.Error), .failure(expectedError as WorkoutBuilder.Error)):
+                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+                
+            default:
+                XCTFail("Expected result \(expectedResult) got \(receivedResult) instead", file: file, line: line)
+            }
+            
+            exp.fulfill()
+        }
+        
+        action()
+        wait(for: [exp], timeout: 1.0)
+        
+    }
+    
     private class WorkoutUploaderSpy: WorkoutUploader {
         
-        private var messages = [(model: UploadWorkoutModel, completion: (Error?) -> Void)]()
+        private var messages = [(model: UploadWorkoutModel, completion: (WorkoutUploader.Result) -> Void)]()
         
         var requestedPaths: [String] {
             messages.map { $0.model.id }
         }
         
         func complete(with error: Error, at index: Int = 0) {
-            messages[index].completion(error)
+            messages[index].completion(.failure(error))
         }
         
         func complete(withModel model: UploadWorkoutModel, at index: Int = 0) {
-            messages[index].completion(nil)
+            messages[index].completion(.success(true))
         }
         
-        func upload(_ model: UploadWorkoutModel, completion: @escaping (Error?) -> Void) {
+        func upload(_ model: UploadWorkoutModel, completion: @escaping (WorkoutUploader.Result) -> Void) {
             messages.append((model, completion))
         }
     }
@@ -251,6 +290,11 @@ final class WorkoutBuilderTests: XCTestCase {
 
 private class WorkoutBuilder {
     let uploader: WorkoutUploader
+    
+    public enum Error: Swift.Error {
+        case connectivity
+        case invalidData
+    }
     
     init(uploader: WorkoutUploader) {
         self.uploader = uploader
@@ -304,7 +348,19 @@ private class WorkoutBuilder {
         }
     }
     
-    func upload(model: UploadWorkoutModel, completion: @escaping (Error?) -> Void) {
-        uploader.upload(model, completion: completion)
+    public typealias Result = WorkoutUploader.Result
+    
+    func upload(model: UploadWorkoutModel, completion: @escaping (Result) -> Void) {
+        uploader.upload(model) { [weak self] result in
+            
+            guard let self else { return }
+            
+            switch result {
+            case .failure:
+                completion(.failure(Error.connectivity))
+            default:
+                break
+            }
+        }
     }
 }
