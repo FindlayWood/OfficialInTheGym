@@ -204,6 +204,16 @@ final class WorkoutBuilderTests: XCTestCase {
         XCTAssertEqual(client.requestedPaths, [model.id])
     }
     
+    func test_uploadTwice_requestsToCreateWorkoutTwice() {
+        let model = makeUploadModel()
+        let (client, sut) = makeSUT()
+        
+        sut.upload(model: model) { _ in }
+        sut.upload(model: model) { _ in }
+        
+        XCTAssertEqual(client.requestedPaths, [model.id, model.id])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT() -> (WorkoutUploaderSpy, WorkoutBuilder) {
