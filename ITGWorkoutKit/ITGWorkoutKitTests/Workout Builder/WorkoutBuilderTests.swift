@@ -15,40 +15,56 @@ struct TagModel {
     
 }
 
+protocol WorkoutUploader {
+    typealias Result = Swift.Result<UploadWorkoutModel, Error>
+    
+    func upload(_ model: UploadWorkoutModel, completion: @escaping (Error?) -> Void)
+}
+
+struct UploadWorkoutModel {
+    let title: String
+    let exercises: [ExerciseModel]
+    let tags: [TagModel]
+    let isPublic: Bool
+    let savedID: String
+    let createdByID: String
+    let id: String
+}
+
 final class WorkoutBuilderTests: XCTestCase {
 
     func test_init_titleIsEmpty() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         XCTAssertEqual(sut.title, "")
     }
     
     func test_init_exerciseListIsEmpty() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         XCTAssertEqual(sut.exercises.count, 0)
     }
     
     func test_init_savingSelectedByDefault() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         XCTAssertTrue(sut.isSaving)
     }
     
     func test_init_privacySetToPublicByDefault() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         XCTAssertTrue(sut.isPublic)
     }
     
     func test_init_tagListIsEmpty() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         XCTAssertEqual(sut.tags.count, 0)
     }
     
     func test_updateTitle_updatesTitle() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         let newTitle = "New Title"
         
@@ -58,7 +74,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_addTag_addsTagToList() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         let newTag = TagModel()
         
@@ -68,7 +84,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
 
     func test_addTag_willNotAddMoreThanMaxLimit() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         for _ in (0..<sut.maxTagCount + 1) {
             let newTag = TagModel()
@@ -80,7 +96,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_addExercise_addsExerciseToExerciseList() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         sut.addExercise(ExerciseModel())
         
@@ -88,7 +104,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_updatePrivacy_willUpdatePrivacyToSelected() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         sut.updatePrivacy(false)
         
@@ -100,7 +116,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_updateSaving_willUpdateSavingToSelected() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         sut.updateSaving(false)
         
@@ -112,7 +128,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_createWorkout_returnsErrorofNoExercises() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         sut.createWorkout()
         
@@ -120,7 +136,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_createWorkout_returnsNonoExerciseErrorWhenExerciseListIsNotEmpty() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         sut.addExercise(ExerciseModel())
         
@@ -135,7 +151,7 @@ final class WorkoutBuilderTests: XCTestCase {
         
         samples.enumerated().forEach { _, title in
             
-            let sut = makeSUT()
+            let (_, sut) = makeSUT()
             
             sut.updateTitle(title)
             
@@ -151,7 +167,7 @@ final class WorkoutBuilderTests: XCTestCase {
         
         samples.enumerated().forEach { _, title in
             
-            let sut = makeSUT()
+            let (_, sut) = makeSUT()
             
             sut.updateTitle(title)
             
@@ -162,7 +178,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_createWorkout_returnsNoErrorsWhenCriteriaMet() {
-        let sut = makeSUT()
+        let (_, sut) = makeSUT()
         
         sut.addExercise(ExerciseModel())
         
@@ -173,59 +189,95 @@ final class WorkoutBuilderTests: XCTestCase {
         XCTAssertTrue(sut.creationErrors.isEmpty)
     }
     
-    // MARK: - Helpers
-    
-    private func makeSUT() -> WorkoutBuilder {
-        return WorkoutBuilder()
+    func test_init_doesNotRequestToCreateWorkout() {
+        let (client, _) = makeSUT()
+        
+        XCTAssertTrue(client.requestedPaths.isEmpty)
     }
     
-    private class WorkoutBuilder {
-        var title: String = ""
-        var exercises: [ExerciseModel] = []
-        var tags: [TagModel] = []
-        var isSaving: Bool = true
-        var isPublic: Bool = true
+    // MARK: - Helpers
+    
+    private func makeSUT() -> (WorkoutUploaderSpy, WorkoutBuilder) {
+        let uploader = WorkoutUploaderSpy()
+        let workoutBuilder = WorkoutBuilder(uploader: uploader)
+        return (uploader, workoutBuilder)
+    }
+    
+    private class WorkoutUploaderSpy: WorkoutUploader {
         
-        var creationErrors: [CreateWorkoutError] = []
+        private var messages = [(model: UploadWorkoutModel, completion: (Error?) -> Void)]()
         
-        enum CreateWorkoutError {
-            case noExercises
-            case noTitle
+        var requestedPaths: [String] {
+            messages.map { $0.model.id }
         }
         
-        func updateTitle(_ newTitle: String) {
-            title = newTitle
-        }
-            
-        var maxTagCount: Int {
-            10
+        func complete(with error: Error, at index: Int = 0) {
+            messages[index].completion(error)
         }
         
-        func addTag(_ newTag: TagModel) {
-            if tags.count < maxTagCount {
-                tags.append(newTag)
-            }
+        func complete(withModel model: UploadWorkoutModel, at index: Int = 0) {
+            messages[index].completion(nil)
         }
         
-        func updatePrivacy(_ newIsPublic: Bool) {
-            isPublic = newIsPublic
+        func upload(_ model: UploadWorkoutModel, completion: @escaping (Error?) -> Void) {
+            messages.append((model, completion))
         }
+    }
+}
 
-        func updateSaving(_ newIsSaving: Bool) {
-            isSaving = newIsSaving
-        }
+
+private class WorkoutBuilder {
+    let uploader: WorkoutUploader
+    
+    init(uploader: WorkoutUploader) {
+        self.uploader = uploader
+    }
+    
+    var title: String = ""
+    var exercises: [ExerciseModel] = []
+    var tags: [TagModel] = []
+    var isSaving: Bool = true
+    var isPublic: Bool = true
+    
+    var creationErrors: [CreateWorkoutError] = []
+    
+    enum CreateWorkoutError {
+        case noExercises
+        case noTitle
+    }
+    
+    func updateTitle(_ newTitle: String) {
+        title = newTitle
+    }
         
-        func addExercise(_ model: ExerciseModel) {
-            exercises.append(model)
+    var maxTagCount: Int {
+        10
+    }
+    
+    func addTag(_ newTag: TagModel) {
+        if tags.count < maxTagCount {
+            tags.append(newTag)
         }
-        
-        func createWorkout() {
-            if exercises.isEmpty {
-                creationErrors.append(.noExercises)
-            }
-            if title.count < 4 {
-                creationErrors.append(.noTitle)
-            }
+    }
+    
+    func updatePrivacy(_ newIsPublic: Bool) {
+        isPublic = newIsPublic
+    }
+
+    func updateSaving(_ newIsSaving: Bool) {
+        isSaving = newIsSaving
+    }
+    
+    func addExercise(_ model: ExerciseModel) {
+        exercises.append(model)
+    }
+    
+    func createWorkout() {
+        if exercises.isEmpty {
+            creationErrors.append(.noExercises)
+        }
+        if title.count < 4 {
+            creationErrors.append(.noTitle)
         }
     }
 }
