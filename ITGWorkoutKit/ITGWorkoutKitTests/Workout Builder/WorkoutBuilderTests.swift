@@ -195,12 +195,25 @@ final class WorkoutBuilderTests: XCTestCase {
         XCTAssertTrue(client.requestedPaths.isEmpty)
     }
     
+    func test_upload_requestsToCreateWorkout() {
+        let model = makeUploadModel()
+        let (client, sut) = makeSUT()
+        
+        sut.upload(model: model) { _ in }
+        
+        XCTAssertEqual(client.requestedPaths, [model.id])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT() -> (WorkoutUploaderSpy, WorkoutBuilder) {
         let uploader = WorkoutUploaderSpy()
         let workoutBuilder = WorkoutBuilder(uploader: uploader)
         return (uploader, workoutBuilder)
+    }
+    
+    private func makeUploadModel() -> UploadWorkoutModel {
+        UploadWorkoutModel(title: "Title", exercises: [], tags: [], isPublic: true, savedID: UUID().uuidString, createdByID: UUID().uuidString, id: UUID().uuidString)
     }
     
     private class WorkoutUploaderSpy: WorkoutUploader {
@@ -279,5 +292,9 @@ private class WorkoutBuilder {
         if title.count < 4 {
             creationErrors.append(.noTitle)
         }
+    }
+    
+    func upload(model: UploadWorkoutModel, completion: @escaping (Error?) -> Void) {
+        uploader.upload(model, completion: completion)
     }
 }
