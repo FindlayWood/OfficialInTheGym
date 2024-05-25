@@ -224,6 +224,18 @@ final class WorkoutBuilderTests: XCTestCase {
             client.complete(with: clientError)
         }
     }
+    
+    func test_upload_deliversTrueOnSuccessfulUpload() {
+        
+        let (client, sut) = makeSUT()
+        
+        let model = makeUploadModel()
+
+        expect(sut, toCompleteWith: .success(true), uploading: model) {
+            client.complete(withModel: model)
+        }
+    }
+    
     func test_upload_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let uploader = WorkoutUploaderSpy()
         let model = makeUploadModel()
@@ -372,8 +384,8 @@ private class WorkoutBuilder {
             switch result {
             case .failure:
                 completion(.failure(Error.connectivity))
-            default:
-                break
+            case .success:
+                completion(.success(true))
             }
         }
     }
