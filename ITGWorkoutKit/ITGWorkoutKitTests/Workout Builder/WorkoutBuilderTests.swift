@@ -34,37 +34,37 @@ struct UploadWorkoutModel {
 final class WorkoutBuilderTests: XCTestCase {
 
     func test_init_titleIsEmpty() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         XCTAssertEqual(sut.title, "")
     }
     
     func test_init_exerciseListIsEmpty() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         XCTAssertEqual(sut.exercises.count, 0)
     }
     
     func test_init_savingSelectedByDefault() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         XCTAssertTrue(sut.isSaving)
     }
     
     func test_init_privacySetToPublicByDefault() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         XCTAssertTrue(sut.isPublic)
     }
     
     func test_init_tagListIsEmpty() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         XCTAssertEqual(sut.tags.count, 0)
     }
     
     func test_updateTitle_updatesTitle() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         let newTitle = "New Title"
         
@@ -74,7 +74,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_addTag_addsTagToList() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         let newTag = TagModel()
         
@@ -84,7 +84,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
 
     func test_addTag_willNotAddMoreThanMaxLimit() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         for _ in (0..<sut.maxTagCount + 1) {
             let newTag = TagModel()
@@ -96,7 +96,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_addExercise_addsExerciseToExerciseList() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         sut.addExercise(ExerciseModel())
         
@@ -104,7 +104,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_updatePrivacy_willUpdatePrivacyToSelected() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         sut.updatePrivacy(false)
         
@@ -116,7 +116,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_updateSaving_willUpdateSavingToSelected() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         sut.updateSaving(false)
         
@@ -128,7 +128,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_createWorkout_returnsErrorofNoExercises() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         sut.createWorkout()
         
@@ -136,7 +136,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_createWorkout_returnsNonoExerciseErrorWhenExerciseListIsNotEmpty() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         sut.addExercise(ExerciseModel())
         
@@ -151,7 +151,7 @@ final class WorkoutBuilderTests: XCTestCase {
         
         samples.enumerated().forEach { _, title in
             
-            let (_, sut) = makeSUT()
+            let sut = makeSUT()
             
             sut.updateTitle(title)
             
@@ -167,7 +167,7 @@ final class WorkoutBuilderTests: XCTestCase {
         
         samples.enumerated().forEach { _, title in
             
-            let (_, sut) = makeSUT()
+            let sut = makeSUT()
             
             sut.updateTitle(title)
             
@@ -178,7 +178,7 @@ final class WorkoutBuilderTests: XCTestCase {
     }
     
     func test_createWorkout_returnsNoErrorsWhenCriteriaMet() {
-        let (_, sut) = makeSUT()
+        let sut = makeSUT()
         
         sut.addExercise(ExerciseModel())
         
@@ -189,142 +189,22 @@ final class WorkoutBuilderTests: XCTestCase {
         XCTAssertTrue(sut.creationErrors.isEmpty)
     }
     
-    func test_init_doesNotRequestToCreateWorkout() {
-        let (client, _) = makeSUT()
-        
-        XCTAssertTrue(client.requestedPaths.isEmpty)
-    }
-    
-    func test_upload_requestsToCreateWorkout() {
-        let model = makeUploadModel()
-        let (client, sut) = makeSUT()
-        
-        sut.upload(model: model) { _ in }
-        
-        XCTAssertEqual(client.requestedPaths, [model.id])
-    }
-    
-    func test_uploadTwice_requestsToCreateWorkoutTwice() {
-        let model = makeUploadModel()
-        let (client, sut) = makeSUT()
-        
-        sut.upload(model: model) { _ in }
-        sut.upload(model: model) { _ in }
-        
-        XCTAssertEqual(client.requestedPaths, [model.id, model.id])
-    }
-    
-    func test_upload_deliversErrorOnClientError() {
-        let (client, sut) = makeSUT()
-        let model = makeUploadModel()
-        
-        expect(sut, toCompleteWith: failure(.connectivity), uploading: model) {
-            let clientError = NSError(domain: "Test", code: 0)
-            
-            client.complete(with: clientError)
-        }
-    }
-    
-    func test_upload_deliversTrueOnSuccessfulUpload() {
-        
-        let (client, sut) = makeSUT()
-        
-        let model = makeUploadModel()
-
-        expect(sut, toCompleteWith: .success(true), uploading: model) {
-            client.complete(withModel: model)
-        }
-    }
-    
-    func test_upload_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
-        let uploader = WorkoutUploaderSpy()
-        let model = makeUploadModel()
-        var sut: WorkoutBuilder? = WorkoutBuilder(uploader: uploader)
-
-        var capturedResults = [WorkoutBuilder.Result]()
-        sut?.upload(model: model) { capturedResults.append($0) }
-
-        sut = nil
-        uploader.complete(withModel: model)
-
-        XCTAssertTrue(capturedResults.isEmpty)
-    }
+   
     
     // MARK: - Helpers
     
-    private func makeSUT() -> (WorkoutUploaderSpy, WorkoutBuilder) {
-        let uploader = WorkoutUploaderSpy()
-        let workoutBuilder = WorkoutBuilder(uploader: uploader)
-        return (uploader, workoutBuilder)
-    }
-    
-    private func failure(_ error: WorkoutBuilder.Error) -> WorkoutBuilder.Result {
-        return .failure(error)
+    private func makeSUT() -> WorkoutBuilder {
+        let workoutBuilder = WorkoutBuilder()
+        return workoutBuilder
     }
     
     private func makeUploadModel() -> UploadWorkoutModel {
         UploadWorkoutModel(title: "Title", exercises: [], tags: [], isPublic: true, savedID: UUID().uuidString, createdByID: UUID().uuidString, id: UUID().uuidString)
     }
-    
-    private func expect(_ sut: WorkoutBuilder, toCompleteWith expectedResult: WorkoutUploader.Result, uploading model: UploadWorkoutModel, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
-        
-        let exp = expectation(description: "Wait for load completion")
-        
-        sut.upload(model: model) { receivedResult in
-            
-            switch (receivedResult, expectedResult) {
-            case let (.success(receivedItems), .success(expectedItems)):
-                XCTAssertEqual(receivedItems, expectedItems, file: file, line: line)
-                
-            case let (.failure(receivedError as WorkoutBuilder.Error), .failure(expectedError as WorkoutBuilder.Error)):
-                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
-                
-            default:
-                XCTFail("Expected result \(expectedResult) got \(receivedResult) instead", file: file, line: line)
-            }
-            
-            exp.fulfill()
-        }
-        
-        action()
-        wait(for: [exp], timeout: 1.0)
-        
-    }
-    
-    private class WorkoutUploaderSpy: WorkoutUploader {
-        
-        private var messages = [(model: UploadWorkoutModel, completion: (WorkoutUploader.Result) -> Void)]()
-        
-        var requestedPaths: [String] {
-            messages.map { $0.model.id }
-        }
-        
-        func complete(with error: Error, at index: Int = 0) {
-            messages[index].completion(.failure(error))
-        }
-        
-        func complete(withModel model: UploadWorkoutModel, at index: Int = 0) {
-            messages[index].completion(.success(true))
-        }
-        
-        func upload(_ model: UploadWorkoutModel, completion: @escaping (WorkoutUploader.Result) -> Void) {
-            messages.append((model, completion))
-        }
-    }
 }
 
 
 private class WorkoutBuilder {
-    let uploader: WorkoutUploader
-    
-    public enum Error: Swift.Error {
-        case connectivity
-        case invalidData
-    }
-    
-    init(uploader: WorkoutUploader) {
-        self.uploader = uploader
-    }
     
     var title: String = ""
     var exercises: [ExerciseModel] = []
@@ -371,22 +251,6 @@ private class WorkoutBuilder {
         }
         if title.count < 4 {
             creationErrors.append(.noTitle)
-        }
-    }
-    
-    public typealias Result = WorkoutUploader.Result
-    
-    func upload(model: UploadWorkoutModel, completion: @escaping (Result) -> Void) {
-        uploader.upload(model) { [weak self] result in
-            
-            guard let self else { return }
-            
-            switch result {
-            case .failure:
-                completion(.failure(Error.connectivity))
-            case .success:
-                completion(.success(true))
-            }
         }
     }
 }
