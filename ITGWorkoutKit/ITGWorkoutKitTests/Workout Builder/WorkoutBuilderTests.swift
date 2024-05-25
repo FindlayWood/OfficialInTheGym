@@ -224,6 +224,20 @@ final class WorkoutBuilderTests: XCTestCase {
             client.complete(with: clientError)
         }
     }
+    func test_upload_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+        let uploader = WorkoutUploaderSpy()
+        let model = makeUploadModel()
+        var sut: WorkoutBuilder? = WorkoutBuilder(uploader: uploader)
+
+        var capturedResults = [WorkoutBuilder.Result]()
+        sut?.upload(model: model) { capturedResults.append($0) }
+
+        sut = nil
+        uploader.complete(withModel: model)
+
+        XCTAssertTrue(capturedResults.isEmpty)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT() -> (WorkoutUploaderSpy, WorkoutBuilder) {
