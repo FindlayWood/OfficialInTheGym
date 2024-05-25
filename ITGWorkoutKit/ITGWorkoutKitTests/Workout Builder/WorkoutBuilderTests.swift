@@ -6,14 +6,7 @@
 //
 
 import XCTest
-
-struct ExerciseModel {
-    
-}
-
-struct TagModel {
-    
-}
+import ITGWorkoutKit
 
 protocol WorkoutUploader {
     typealias Result = Swift.Result<Bool, Error>
@@ -200,57 +193,5 @@ final class WorkoutBuilderTests: XCTestCase {
     
     private func makeUploadModel() -> UploadWorkoutModel {
         UploadWorkoutModel(title: "Title", exercises: [], tags: [], isPublic: true, savedID: UUID().uuidString, createdByID: UUID().uuidString, id: UUID().uuidString)
-    }
-}
-
-
-private class WorkoutBuilder {
-    
-    var title: String = ""
-    var exercises: [ExerciseModel] = []
-    var tags: [TagModel] = []
-    var isSaving: Bool = true
-    var isPublic: Bool = true
-    
-    var creationErrors: [CreateWorkoutError] = []
-    
-    enum CreateWorkoutError {
-        case noExercises
-        case noTitle
-    }
-    
-    func updateTitle(_ newTitle: String) {
-        title = newTitle
-    }
-        
-    var maxTagCount: Int {
-        10
-    }
-    
-    func addTag(_ newTag: TagModel) {
-        if tags.count < maxTagCount {
-            tags.append(newTag)
-        }
-    }
-    
-    func updatePrivacy(_ newIsPublic: Bool) {
-        isPublic = newIsPublic
-    }
-
-    func updateSaving(_ newIsSaving: Bool) {
-        isSaving = newIsSaving
-    }
-    
-    func addExercise(_ model: ExerciseModel) {
-        exercises.append(model)
-    }
-    
-    func createWorkout() {
-        if exercises.isEmpty {
-            creationErrors.append(.noExercises)
-        }
-        if title.count < 4 {
-            creationErrors.append(.noTitle)
-        }
     }
 }

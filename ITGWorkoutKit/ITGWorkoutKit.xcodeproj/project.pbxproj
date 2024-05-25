@@ -51,6 +51,9 @@
 		741833432BD572C400EEA9C0 /* FeedUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833422BD572C400EEA9C0 /* FeedUIComposer.swift */; };
 		741C2B6A2BF2973600D2914F /* WorkoutBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741C2B692BF2973600D2914F /* WorkoutBuilderTests.swift */; };
 		7454E9482C021F690082BD47 /* WorkoutUploaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9472C021F690082BD47 /* WorkoutUploaderTests.swift */; };
+		7454E94A2C0260F90082BD47 /* WorkoutBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9492C0260F90082BD47 /* WorkoutBuilder.swift */; };
+		7454E94C2C0261440082BD47 /* ExerciseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E94B2C0261440082BD47 /* ExerciseModel.swift */; };
+		7454E94E2C02615C0082BD47 /* TagModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E94D2C02615C0082BD47 /* TagModel.swift */; };
 		7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */; };
 		7460AB5D2B94D040000FDF22 /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
 		7460AB632B94D040000FDF22 /* ITGWorkoutKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -213,6 +216,9 @@
 		741833422BD572C400EEA9C0 /* FeedUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIComposer.swift; sourceTree = "<group>"; };
 		741C2B692BF2973600D2914F /* WorkoutBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutBuilderTests.swift; sourceTree = "<group>"; };
 		7454E9472C021F690082BD47 /* WorkoutUploaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutUploaderTests.swift; sourceTree = "<group>"; };
+		7454E9492C0260F90082BD47 /* WorkoutBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutBuilder.swift; sourceTree = "<group>"; };
+		7454E94B2C0261440082BD47 /* ExerciseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseModel.swift; sourceTree = "<group>"; };
+		7454E94D2C02615C0082BD47 /* TagModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagModel.swift; sourceTree = "<group>"; };
 		7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ITGWorkoutKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITGWorkoutKit.h; sourceTree = "<group>"; };
 		7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = ITGWorkoutKit.docc; sourceTree = "<group>"; };
@@ -461,6 +467,7 @@
 		7454E9462C021C6E0082BD47 /* Workout Builder */ = {
 			isa = PBXGroup;
 			children = (
+				7454E9492C0260F90082BD47 /* WorkoutBuilder.swift */,
 			);
 			path = "Workout Builder";
 			sourceTree = "<group>";
@@ -528,6 +535,8 @@
 				7460AB6F2B94E3E7000FDF22 /* WorkoutLoader.swift */,
 				740ED88B2BE7BAFE005B09BA /* WorkoutItem2.swift */,
 				740ED88D2BE7BB0F005B09BA /* WorkoutLoader2.swift */,
+				7454E94B2C0261440082BD47 /* ExerciseModel.swift */,
+				7454E94D2C02615C0082BD47 /* TagModel.swift */,
 			);
 			path = WorkoutFeature;
 			sourceTree = "<group>";
@@ -946,16 +955,19 @@
 				740ED87D2BE2D900005B09BA /* FeedImagePresenter.swift in Sources */,
 				7460AB702B94E3E7000FDF22 /* WorkoutLoader.swift in Sources */,
 				74A6DCCB2BCF050D002A420C /* CoreDataHelpers.swift in Sources */,
+				7454E94E2C02615C0082BD47 /* TagModel.swift in Sources */,
 				740ED8862BE7BAA7005B09BA /* WorkoutClient.swift in Sources */,
 				740ED8762BE167F2005B09BA /* FeedLoadingViewModel.swift in Sources */,
 				74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */,
 				74A6DCC42BCEE1F8002A420C /* CoreDataFeedStore.swift in Sources */,
+				7454E94A2C0260F90082BD47 /* WorkoutBuilder.swift in Sources */,
 				740ED88C2BE7BAFE005B09BA /* WorkoutItem2.swift in Sources */,
 				74A6DCCE2BCF05EB002A420C /* ManagedCache.swift in Sources */,
 				740ED8742BE167B8005B09BA /* FeedViewModel.swift in Sources */,
 				740ED87F2BE2DB0A005B09BA /* FeedImageViewModel.swift in Sources */,
 				74A6DCD02BCF0632002A420C /* ManagedWorkoutItem.swift in Sources */,
 				74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */,
+				7454E94C2C0261440082BD47 /* ExerciseModel.swift in Sources */,
 				74A6DC9E2BC867A5002A420C /* LocalFeedLoader.swift in Sources */,
 				740ED8882BE7BAC0005B09BA /* WorkoutItemsMapper2.swift in Sources */,
 				74A6DCB52BCC76C4002A420C /* CodableFeedStore.swift in Sources */,
