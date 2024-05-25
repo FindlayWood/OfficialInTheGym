@@ -6,37 +6,7 @@
 //
 
 import XCTest
-
-private class RemoteWorkoutUploader {
-    
-    let uploader: WorkoutUploader
-    let model: UploadWorkoutModel
-    
-    init(uploader: WorkoutUploader, model: UploadWorkoutModel) {
-        self.uploader = uploader
-        self.model = model
-    }
-    
-    public enum Error: Swift.Error {
-        case connectivity
-    }
-    
-    public typealias Result = WorkoutUploader.Result
-    
-    func upload(completion: @escaping (Result) -> Void) {
-        uploader.upload(model) { [weak self] result in
-            
-            guard self != nil else { return }
-            
-            switch result {
-            case .failure:
-                completion(.failure(Error.connectivity))
-            case .success:
-                completion(.success(true))
-            }
-        }
-    }
-}
+import ITGWorkoutKit
 
 final class WorkoutUploaderTests: XCTestCase {
 

@@ -8,22 +8,6 @@
 import XCTest
 import ITGWorkoutKit
 
-protocol WorkoutUploader {
-    typealias Result = Swift.Result<Bool, Error>
-    
-    func upload(_ model: UploadWorkoutModel, completion: @escaping (Result) -> Void)
-}
-
-struct UploadWorkoutModel {
-    let title: String
-    let exercises: [ExerciseModel]
-    let tags: [TagModel]
-    let isPublic: Bool
-    let savedID: String
-    let createdByID: String
-    let id: String
-}
-
 final class WorkoutBuilderTests: XCTestCase {
 
     func test_init_titleIsEmpty() {

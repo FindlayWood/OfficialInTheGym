@@ -54,6 +54,9 @@
 		7454E94A2C0260F90082BD47 /* WorkoutBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9492C0260F90082BD47 /* WorkoutBuilder.swift */; };
 		7454E94C2C0261440082BD47 /* ExerciseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E94B2C0261440082BD47 /* ExerciseModel.swift */; };
 		7454E94E2C02615C0082BD47 /* TagModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E94D2C02615C0082BD47 /* TagModel.swift */; };
+		7454E9512C0264070082BD47 /* WorkoutUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9502C0264070082BD47 /* WorkoutUploader.swift */; };
+		7454E9532C02641B0082BD47 /* UploadWorkoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9522C02641B0082BD47 /* UploadWorkoutModel.swift */; };
+		7454E9552C0264760082BD47 /* RemoteWorkoutUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9542C0264760082BD47 /* RemoteWorkoutUploader.swift */; };
 		7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */; };
 		7460AB5D2B94D040000FDF22 /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
 		7460AB632B94D040000FDF22 /* ITGWorkoutKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -219,6 +222,9 @@
 		7454E9492C0260F90082BD47 /* WorkoutBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutBuilder.swift; sourceTree = "<group>"; };
 		7454E94B2C0261440082BD47 /* ExerciseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseModel.swift; sourceTree = "<group>"; };
 		7454E94D2C02615C0082BD47 /* TagModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagModel.swift; sourceTree = "<group>"; };
+		7454E9502C0264070082BD47 /* WorkoutUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutUploader.swift; sourceTree = "<group>"; };
+		7454E9522C02641B0082BD47 /* UploadWorkoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadWorkoutModel.swift; sourceTree = "<group>"; };
+		7454E9542C0264760082BD47 /* RemoteWorkoutUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWorkoutUploader.swift; sourceTree = "<group>"; };
 		7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ITGWorkoutKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITGWorkoutKit.h; sourceTree = "<group>"; };
 		7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = ITGWorkoutKit.docc; sourceTree = "<group>"; };
@@ -472,6 +478,16 @@
 			path = "Workout Builder";
 			sourceTree = "<group>";
 		};
+		7454E94F2C0263F10082BD47 /* Workout Uploader */ = {
+			isa = PBXGroup;
+			children = (
+				7454E9502C0264070082BD47 /* WorkoutUploader.swift */,
+				7454E9522C02641B0082BD47 /* UploadWorkoutModel.swift */,
+				7454E9542C0264760082BD47 /* RemoteWorkoutUploader.swift */,
+			);
+			path = "Workout Uploader";
+			sourceTree = "<group>";
+		};
 		7460AB482B94D040000FDF22 = {
 			isa = PBXGroup;
 			children = (
@@ -502,6 +518,7 @@
 		7460AB542B94D040000FDF22 /* ITGWorkoutKit */ = {
 			isa = PBXGroup;
 			children = (
+				7454E94F2C0263F10082BD47 /* Workout Uploader */,
 				7454E9462C021C6E0082BD47 /* Workout Builder */,
 				740ED8822BE7BA5B005B09BA /* Firebase Workout API */,
 				740ED86F2BE166A5005B09BA /* Feed Presentation */,
@@ -956,6 +973,7 @@
 				7460AB702B94E3E7000FDF22 /* WorkoutLoader.swift in Sources */,
 				74A6DCCB2BCF050D002A420C /* CoreDataHelpers.swift in Sources */,
 				7454E94E2C02615C0082BD47 /* TagModel.swift in Sources */,
+				7454E9512C0264070082BD47 /* WorkoutUploader.swift in Sources */,
 				740ED8862BE7BAA7005B09BA /* WorkoutClient.swift in Sources */,
 				740ED8762BE167F2005B09BA /* FeedLoadingViewModel.swift in Sources */,
 				74AEA5D42B98D074008CAC0A /* RemoteWorkoutLoader.swift in Sources */,
@@ -968,12 +986,14 @@
 				74A6DCD02BCF0632002A420C /* ManagedWorkoutItem.swift in Sources */,
 				74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */,
 				7454E94C2C0261440082BD47 /* ExerciseModel.swift in Sources */,
+				7454E9532C02641B0082BD47 /* UploadWorkoutModel.swift in Sources */,
 				74A6DC9E2BC867A5002A420C /* LocalFeedLoader.swift in Sources */,
 				740ED8882BE7BAC0005B09BA /* WorkoutItemsMapper2.swift in Sources */,
 				74A6DCB52BCC76C4002A420C /* CodableFeedStore.swift in Sources */,
 				740ED8712BE166B7005B09BA /* FeedPresenter.swift in Sources */,
 				74A6DCB12BCC3FEC002A420C /* FeedCachePolicy.swift in Sources */,
 				74A6DCA22BC87032002A420C /* RemoteWorkoutItem.swift in Sources */,
+				7454E9552C0264760082BD47 /* RemoteWorkoutUploader.swift in Sources */,
 				7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */,
 				74A6DCA42BC87076002A420C /* LocalWorkoutItem.swift in Sources */,
 			);
