@@ -84,6 +84,8 @@
 		7454E9932C0394200082BD47 /* ManagedExerciseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9922C0394200082BD47 /* ManagedExerciseItem.swift */; };
 		7454E9992C03D4770082BD47 /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9982C03D4770082BD47 /* URLProtocolStub.swift */; };
 		7454E99D2C03D4FE0082BD47 /* ClientSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E99C2C03D4FE0082BD47 /* ClientSpy.swift */; };
+		7454E99F2C03D7F40082BD47 /* RemoteLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E99E2C03D7F40082BD47 /* RemoteLoader.swift */; };
+		7454E9A12C03D8330082BD47 /* RemoteLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9A02C03D8330082BD47 /* RemoteLoaderTests.swift */; };
 		7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */; };
 		7460AB5D2B94D040000FDF22 /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
 		7460AB632B94D040000FDF22 /* ITGWorkoutKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -278,6 +280,8 @@
 		7454E9922C0394200082BD47 /* ManagedExerciseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedExerciseItem.swift; sourceTree = "<group>"; };
 		7454E9982C03D4770082BD47 /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
 		7454E99C2C03D4FE0082BD47 /* ClientSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientSpy.swift; sourceTree = "<group>"; };
+		7454E99E2C03D7F40082BD47 /* RemoteLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteLoader.swift; sourceTree = "<group>"; };
+		7454E9A02C03D8330082BD47 /* RemoteLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteLoaderTests.swift; sourceTree = "<group>"; };
 		7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ITGWorkoutKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITGWorkoutKit.h; sourceTree = "<group>"; };
 		7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = ITGWorkoutKit.docc; sourceTree = "<group>"; };
@@ -629,6 +633,7 @@
 			isa = PBXGroup;
 			children = (
 				74AEA5D52B9F9F1B008CAC0A /* Client.swift */,
+				7454E99E2C03D7F40082BD47 /* RemoteLoader.swift */,
 			);
 			path = "Shared API";
 			sourceTree = "<group>";
@@ -662,6 +667,7 @@
 			isa = PBXGroup;
 			children = (
 				7454E99B2C03D4EE0082BD47 /* Helpers */,
+				7454E9A02C03D8330082BD47 /* RemoteLoaderTests.swift */,
 			);
 			path = "Shared API";
 			sourceTree = "<group>";
@@ -1168,6 +1174,7 @@
 				7460AB702B94E3E7000FDF22 /* WorkoutLoader.swift in Sources */,
 				74A6DCCB2BCF050D002A420C /* CoreDataHelpers.swift in Sources */,
 				7454E94E2C02615C0082BD47 /* TagModel.swift in Sources */,
+				7454E99F2C03D7F40082BD47 /* RemoteLoader.swift in Sources */,
 				7454E9512C0264070082BD47 /* WorkoutUploader.swift in Sources */,
 				740ED8862BE7BAA7005B09BA /* WorkoutClient.swift in Sources */,
 				740ED8762BE167F2005B09BA /* FeedLoadingViewModel.swift in Sources */,
@@ -1221,6 +1228,7 @@
 				74730B532BBDE02500B54778 /* URLSessionHTTPClientTests.swift in Sources */,
 				74A6DCBD2BCDD289002A420C /* XCTestCase+FailableInsertFeedStoreSpecs.swift in Sources */,
 				74A6DCA92BC92627002A420C /* FeedStoreSpy.swift in Sources */,
+				7454E9A12C03D8330082BD47 /* RemoteLoaderTests.swift in Sources */,
 				7454E9862C0364A30082BD47 /* XCTestCase+FailableDeleteExerciseStoreSpecs.swift in Sources */,
 				740ED8622BE026EF005B09BA /* FeedPresenterTests.swift in Sources */,
 				7454E9882C03656C0082BD47 /* CoreDataExerciseStoreTests.swift in Sources */,
