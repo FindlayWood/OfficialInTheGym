@@ -78,6 +78,11 @@
 		7454E9822C0364340082BD47 /* XCTestCase+FailableRetrieveExerciseStoreSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9812C0364340082BD47 /* XCTestCase+FailableRetrieveExerciseStoreSpecs.swift */; };
 		7454E9842C0364680082BD47 /* XCTestCase+FailableInsertExerciseStoreSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9832C0364680082BD47 /* XCTestCase+FailableInsertExerciseStoreSpecs.swift */; };
 		7454E9862C0364A30082BD47 /* XCTestCase+FailableDeleteExerciseStoreSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9852C0364A30082BD47 /* XCTestCase+FailableDeleteExerciseStoreSpecs.swift */; };
+		7454E9882C03656C0082BD47 /* CoreDataExerciseStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9872C03656C0082BD47 /* CoreDataExerciseStoreTests.swift */; };
+		7454E98C2C0365CE0082BD47 /* CoreDataExerciseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E98B2C0365CE0082BD47 /* CoreDataExerciseStore.swift */; };
+		7454E98F2C0393350082BD47 /* ExerciseStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7454E98D2C0393350082BD47 /* ExerciseStore.xcdatamodeld */; };
+		7454E9912C0393D10082BD47 /* ManagedExerciseCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9902C0393D10082BD47 /* ManagedExerciseCache.swift */; };
+		7454E9932C0394200082BD47 /* ManagedExerciseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9922C0394200082BD47 /* ManagedExerciseItem.swift */; };
 		7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */; };
 		7460AB5D2B94D040000FDF22 /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
 		7460AB632B94D040000FDF22 /* ITGWorkoutKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -267,6 +272,11 @@
 		7454E9812C0364340082BD47 /* XCTestCase+FailableRetrieveExerciseStoreSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FailableRetrieveExerciseStoreSpecs.swift"; sourceTree = "<group>"; };
 		7454E9832C0364680082BD47 /* XCTestCase+FailableInsertExerciseStoreSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FailableInsertExerciseStoreSpecs.swift"; sourceTree = "<group>"; };
 		7454E9852C0364A30082BD47 /* XCTestCase+FailableDeleteExerciseStoreSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FailableDeleteExerciseStoreSpecs.swift"; sourceTree = "<group>"; };
+		7454E9872C03656C0082BD47 /* CoreDataExerciseStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataExerciseStoreTests.swift; sourceTree = "<group>"; };
+		7454E98B2C0365CE0082BD47 /* CoreDataExerciseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataExerciseStore.swift; sourceTree = "<group>"; };
+		7454E98E2C0393350082BD47 /* ExerciseStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ExerciseStore.xcdatamodel; sourceTree = "<group>"; };
+		7454E9902C0393D10082BD47 /* ManagedExerciseCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedExerciseCache.swift; sourceTree = "<group>"; };
+		7454E9922C0394200082BD47 /* ManagedExerciseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedExerciseItem.swift; sourceTree = "<group>"; };
 		7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ITGWorkoutKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITGWorkoutKit.h; sourceTree = "<group>"; };
 		7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = ITGWorkoutKit.docc; sourceTree = "<group>"; };
@@ -559,6 +569,7 @@
 				7454E9672C029BD70082BD47 /* CacheExerciseListUseCaseTests.swift */,
 				7454E9752C0357370082BD47 /* LoadExerciseListFromCacheUseCaseTests.swift */,
 				7454E9792C035C930082BD47 /* ValidateExerciseListCacheUseCaseTests.swift */,
+				7454E9872C03656C0082BD47 /* CoreDataExerciseStoreTests.swift */,
 			);
 			path = "Exercise Cache";
 			sourceTree = "<group>";
@@ -566,6 +577,7 @@
 		7454E9692C029CB80082BD47 /* Exercise Cache */ = {
 			isa = PBXGroup;
 			children = (
+				7454E9892C03659C0082BD47 /* Infrastructure */,
 				7454E96A2C029CCA0082BD47 /* LocalExerciseLoader.swift */,
 				7454E96C2C029CF70082BD47 /* ExerciseStore.swift */,
 				7454E96E2C029D370082BD47 /* LocalExerciseItem.swift */,
@@ -593,6 +605,25 @@
 				7454E9852C0364A30082BD47 /* XCTestCase+FailableDeleteExerciseStoreSpecs.swift */,
 			);
 			path = ExerciseStoreSpecs;
+			sourceTree = "<group>";
+		};
+		7454E9892C03659C0082BD47 /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				7454E98A2C0365A90082BD47 /* CoreData */,
+			);
+			path = Infrastructure;
+			sourceTree = "<group>";
+		};
+		7454E98A2C0365A90082BD47 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				7454E98B2C0365CE0082BD47 /* CoreDataExerciseStore.swift */,
+				7454E98D2C0393350082BD47 /* ExerciseStore.xcdatamodeld */,
+				7454E9902C0393D10082BD47 /* ManagedExerciseCache.swift */,
+				7454E9922C0394200082BD47 /* ManagedExerciseItem.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		7460AB482B94D040000FDF22 = {
@@ -1078,6 +1109,7 @@
 				740ED88E2BE7BB0F005B09BA /* WorkoutLoader2.swift in Sources */,
 				7454E96F2C029D370082BD47 /* LocalExerciseItem.swift in Sources */,
 				740ED88A2BE7BADF005B09BA /* RemoteWorkoutItem2.swift in Sources */,
+				7454E98F2C0393350082BD47 /* ExerciseStore.xcdatamodeld in Sources */,
 				74730B952BC19F8500B54778 /* URLSessionHTTPClient.swift in Sources */,
 				7454E96D2C029CF70082BD47 /* ExerciseStore.swift in Sources */,
 				740ED8782BE1682C005B09BA /* FeedErrorViewModel.swift in Sources */,
@@ -1096,9 +1128,11 @@
 				74A6DCC42BCEE1F8002A420C /* CoreDataFeedStore.swift in Sources */,
 				7454E94A2C0260F90082BD47 /* WorkoutBuilder.swift in Sources */,
 				740ED88C2BE7BAFE005B09BA /* WorkoutItem2.swift in Sources */,
+				7454E9912C0393D10082BD47 /* ManagedExerciseCache.swift in Sources */,
 				7454E9612C0294B60082BD47 /* RemoteExerciseItem.swift in Sources */,
 				74A6DCCE2BCF05EB002A420C /* ManagedCache.swift in Sources */,
 				740ED8742BE167B8005B09BA /* FeedViewModel.swift in Sources */,
+				7454E98C2C0365CE0082BD47 /* CoreDataExerciseStore.swift in Sources */,
 				740ED87F2BE2DB0A005B09BA /* FeedImageViewModel.swift in Sources */,
 				7454E96B2C029CCA0082BD47 /* LocalExerciseLoader.swift in Sources */,
 				74A6DCD02BCF0632002A420C /* ManagedWorkoutItem.swift in Sources */,
@@ -1110,6 +1144,7 @@
 				740ED8882BE7BAC0005B09BA /* WorkoutItemsMapper2.swift in Sources */,
 				7454E9632C0294CD0082BD47 /* ExerciseItemsMapper.swift in Sources */,
 				74A6DCB52BCC76C4002A420C /* CodableFeedStore.swift in Sources */,
+				7454E9932C0394200082BD47 /* ManagedExerciseItem.swift in Sources */,
 				740ED8712BE166B7005B09BA /* FeedPresenter.swift in Sources */,
 				74A6DCB12BCC3FEC002A420C /* FeedCachePolicy.swift in Sources */,
 				74A6DCA22BC87032002A420C /* RemoteWorkoutItem.swift in Sources */,
@@ -1142,6 +1177,7 @@
 				74A6DCA92BC92627002A420C /* FeedStoreSpy.swift in Sources */,
 				7454E9862C0364A30082BD47 /* XCTestCase+FailableDeleteExerciseStoreSpecs.swift in Sources */,
 				740ED8622BE026EF005B09BA /* FeedPresenterTests.swift in Sources */,
+				7454E9882C03656C0082BD47 /* CoreDataExerciseStoreTests.swift in Sources */,
 				74A6DCAD2BCC0866002A420C /* FeedCacheTestHelpers.swift in Sources */,
 				74A6DCAF2BCC08CB002A420C /* SharedTestHelpers.swift in Sources */,
 				74A6DC9B2BC5E955002A420C /* CacheFeedUseCaseTests.swift in Sources */,
@@ -1753,6 +1789,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
+		7454E98D2C0393350082BD47 /* ExerciseStore.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7454E98E2C0393350082BD47 /* ExerciseStore.xcdatamodel */,
+			);
+			currentVersion = 7454E98E2C0393350082BD47 /* ExerciseStore.xcdatamodel */;
+			name = ExerciseStore.xcdatamodeld;
+			path = "/Users/findlaywood/Documents/Xcode work/InTheGym/ITGWorkoutKit/ITGWorkoutKit/Exercise Cache/Infrastructure/CoreData/ExerciseStore.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
 		74A6DCC52BCEE469002A420C /* FeedStore.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
