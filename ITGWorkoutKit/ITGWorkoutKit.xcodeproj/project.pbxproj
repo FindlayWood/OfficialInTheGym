@@ -72,6 +72,7 @@
 		7454E9742C029F270082BD47 /* ExerciseStoreSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9732C029F270082BD47 /* ExerciseStoreSpy.swift */; };
 		7454E9762C0357370082BD47 /* LoadExerciseListFromCacheUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9752C0357370082BD47 /* LoadExerciseListFromCacheUseCaseTests.swift */; };
 		7454E9782C0357D60082BD47 /* ExerciseCacheTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9772C0357D60082BD47 /* ExerciseCacheTestHelpers.swift */; };
+		7454E97A2C035C930082BD47 /* ValidateExerciseListCacheUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9792C035C930082BD47 /* ValidateExerciseListCacheUseCaseTests.swift */; };
 		7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */; };
 		7460AB5D2B94D040000FDF22 /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
 		7460AB632B94D040000FDF22 /* ITGWorkoutKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -255,6 +256,7 @@
 		7454E9732C029F270082BD47 /* ExerciseStoreSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStoreSpy.swift; sourceTree = "<group>"; };
 		7454E9752C0357370082BD47 /* LoadExerciseListFromCacheUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadExerciseListFromCacheUseCaseTests.swift; sourceTree = "<group>"; };
 		7454E9772C0357D60082BD47 /* ExerciseCacheTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCacheTestHelpers.swift; sourceTree = "<group>"; };
+		7454E9792C035C930082BD47 /* ValidateExerciseListCacheUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateExerciseListCacheUseCaseTests.swift; sourceTree = "<group>"; };
 		7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ITGWorkoutKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITGWorkoutKit.h; sourceTree = "<group>"; };
 		7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = ITGWorkoutKit.docc; sourceTree = "<group>"; };
@@ -545,6 +547,7 @@
 				7454E9722C029F190082BD47 /* Helpers */,
 				7454E9672C029BD70082BD47 /* CacheExerciseListUseCaseTests.swift */,
 				7454E9752C0357370082BD47 /* LoadExerciseListFromCacheUseCaseTests.swift */,
+				7454E9792C035C930082BD47 /* ValidateExerciseListCacheUseCaseTests.swift */,
 			);
 			path = "Exercise Cache";
 			sourceTree = "<group>";
@@ -1101,6 +1104,7 @@
 				74A6DCB32BCC4E20002A420C /* CodableFeedStoreTests.swift in Sources */,
 				7454E9782C0357D60082BD47 /* ExerciseCacheTestHelpers.swift in Sources */,
 				740ED8812BE55B81005B09BA /* LoadWorkoutsFromRemoteUseCaseTests.swift in Sources */,
+				7454E97A2C035C930082BD47 /* ValidateExerciseListCacheUseCaseTests.swift in Sources */,
 				7454E9582C028FFD0082BD47 /* LoadExercisesFromRemoteUseCaseTests.swift in Sources */,
 				74A6DCAB2BCC06AE002A420C /* ValidateFeedCacheUseCaseTests.swift in Sources */,
 				740ED8792BE16D34005B09BA /* FeedLocalizationTests.swift in Sources */,
