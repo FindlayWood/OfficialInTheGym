@@ -21,7 +21,7 @@ class ExerciseStoreSpy: ExerciseStore {
     private var insertionCompletions = [InsertionCompletion]()
     private var retrievalCompletions = [RetrievalCompletion]()
 
-    func deleteCachedFeed(completion: @escaping DeletionCompletion) {
+    func deleteCachedList(completion: @escaping DeletionCompletion) {
         deletionCompletions.append(completion)
         receivedMessages.append(.deleteCachedFeed)
     }
@@ -34,9 +34,9 @@ class ExerciseStoreSpy: ExerciseStore {
         deletionCompletions[index](.success(()))
     }
 
-    func insert(_ feed: [LocalExerciseItem], timestamp: Date, completion: @escaping InsertionCompletion) {
+    func insert(_ list: [LocalExerciseItem], timestamp: Date, completion: @escaping InsertionCompletion) {
         insertionCompletions.append(completion)
-        receivedMessages.append(.insert(feed, timestamp))
+        receivedMessages.append(.insert(list, timestamp))
     }
 
     func completeInsertion(with error: Error, at index: Int = 0) {

@@ -24,7 +24,7 @@ extension LocalExerciseLoader {
     public typealias SaveResult = Result<Void, Error>
     
     public func save(_ list: [ExerciseItem], completion: @escaping (SaveResult) -> Void) {
-        store.deleteCachedFeed { [weak self] deletionResult in
+        store.deleteCachedList { [weak self] deletionResult in
             guard let self = self else { return }
             
             switch deletionResult {
@@ -75,10 +75,10 @@ extension LocalExerciseLoader {
             
             switch result {
             case .failure:
-                self.store.deleteCachedFeed { _ in }
+                self.store.deleteCachedList { _ in }
             
             case let .success(.some(cache)) where !ExerciseCachePolicy.validate(cache.timestamp, against: self.currentDate()):
-                self.store.deleteCachedFeed { _ in }
+                self.store.deleteCachedList { _ in }
 
             case .success: break
             }

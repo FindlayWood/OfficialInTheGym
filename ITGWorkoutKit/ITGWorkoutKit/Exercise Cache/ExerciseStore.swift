@@ -22,11 +22,11 @@ public protocol ExerciseStore {
     
     /// The completion handler can be invoked in any thread.
     /// Clients are responsible to dispatch to appropriate threads, if needed.
-    func deleteCachedFeed(completion: @escaping DeletionCompletion)
+    func deleteCachedList(completion: @escaping DeletionCompletion)
     
     /// The completion handler can be invoked in any thread.
     /// Clients are responsible to dispatch to appropriate threads, if needed.
-    func insert(_ feed: [LocalExerciseItem], timestamp: Date, completion: @escaping InsertionCompletion)
+    func insert(_ list: [LocalExerciseItem], timestamp: Date, completion: @escaping InsertionCompletion)
     
     /// The completion handler can be invoked in any thread.
     /// Clients are responsible to dispatch to appropriate threads, if needed.
