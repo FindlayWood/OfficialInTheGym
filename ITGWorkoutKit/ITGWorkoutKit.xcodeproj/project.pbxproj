@@ -61,7 +61,6 @@
 		7454E95B2C0294520082BD47 /* ExerciseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E95A2C0294520082BD47 /* ExerciseItem.swift */; };
 		7454E95D2C0294700082BD47 /* ExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E95C2C0294700082BD47 /* ExerciseLoader.swift */; };
 		7454E95F2C0294860082BD47 /* RemoteExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E95E2C0294860082BD47 /* RemoteExerciseLoader.swift */; };
-		7454E9612C0294B60082BD47 /* RemoteExerciseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9602C0294B60082BD47 /* RemoteExerciseItem.swift */; };
 		7454E9632C0294CD0082BD47 /* ExerciseItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9622C0294CD0082BD47 /* ExerciseItemsMapper.swift */; };
 		7454E9652C0294E40082BD47 /* ExerciseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9642C0294E40082BD47 /* ExerciseClient.swift */; };
 		7454E9682C029BD70082BD47 /* CacheExerciseListUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9672C029BD70082BD47 /* CacheExerciseListUseCaseTests.swift */; };
@@ -256,7 +255,6 @@
 		7454E95A2C0294520082BD47 /* ExerciseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseItem.swift; sourceTree = "<group>"; };
 		7454E95C2C0294700082BD47 /* ExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLoader.swift; sourceTree = "<group>"; };
 		7454E95E2C0294860082BD47 /* RemoteExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteExerciseLoader.swift; sourceTree = "<group>"; };
-		7454E9602C0294B60082BD47 /* RemoteExerciseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteExerciseItem.swift; sourceTree = "<group>"; };
 		7454E9622C0294CD0082BD47 /* ExerciseItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseItemsMapper.swift; sourceTree = "<group>"; };
 		7454E9642C0294E40082BD47 /* ExerciseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseClient.swift; sourceTree = "<group>"; };
 		7454E9672C029BD70082BD47 /* CacheExerciseListUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheExerciseListUseCaseTests.swift; sourceTree = "<group>"; };
@@ -556,7 +554,6 @@
 				7454E95A2C0294520082BD47 /* ExerciseItem.swift */,
 				7454E95C2C0294700082BD47 /* ExerciseLoader.swift */,
 				7454E95E2C0294860082BD47 /* RemoteExerciseLoader.swift */,
-				7454E9602C0294B60082BD47 /* RemoteExerciseItem.swift */,
 				7454E9622C0294CD0082BD47 /* ExerciseItemsMapper.swift */,
 				7454E9642C0294E40082BD47 /* ExerciseClient.swift */,
 			);
@@ -1180,7 +1177,6 @@
 				7454E94A2C0260F90082BD47 /* WorkoutBuilder.swift in Sources */,
 				740ED88C2BE7BAFE005B09BA /* WorkoutItem2.swift in Sources */,
 				7454E9912C0393D10082BD47 /* ManagedExerciseCache.swift in Sources */,
-				7454E9612C0294B60082BD47 /* RemoteExerciseItem.swift in Sources */,
 				74A6DCCE2BCF05EB002A420C /* ManagedCache.swift in Sources */,
 				740ED8742BE167B8005B09BA /* FeedViewModel.swift in Sources */,
 				7454E98C2C0365CE0082BD47 /* CoreDataExerciseStore.swift in Sources */,

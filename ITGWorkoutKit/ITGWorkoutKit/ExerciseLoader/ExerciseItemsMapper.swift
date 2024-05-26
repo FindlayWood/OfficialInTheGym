@@ -9,12 +9,23 @@ import Foundation
 
 final class ExerciseItemsMapper {
     private struct Root: Decodable {
-        let exercises: [RemoteExerciseItem]
+        private let exercises: [RemoteExerciseItem]
+        
+        private struct RemoteExerciseItem: Decodable {
+            let id: UUID
+            let name: String
+            let bodyArea: String
+        }
+        
+        var items: [ExerciseItem] {
+            exercises.map { ExerciseItem(id: $0.id, name: $0.name, bodyArea: $0.bodyArea) }
+        }
+        
     }
     
     private static var OK_200: Int { return 200 }
     
-    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [RemoteExerciseItem] {
+    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [ExerciseItem] {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         guard response.statusCode == OK_200,
@@ -22,6 +33,6 @@ final class ExerciseItemsMapper {
             throw RemoteExerciseLoader.Error.invalidData
         }
 
-        return root.exercises
+        return root.items
     }
 }
