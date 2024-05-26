@@ -83,6 +83,8 @@
 		7454E98F2C0393350082BD47 /* ExerciseStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7454E98D2C0393350082BD47 /* ExerciseStore.xcdatamodeld */; };
 		7454E9912C0393D10082BD47 /* ManagedExerciseCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9902C0393D10082BD47 /* ManagedExerciseCache.swift */; };
 		7454E9932C0394200082BD47 /* ManagedExerciseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9922C0394200082BD47 /* ManagedExerciseItem.swift */; };
+		7454E9992C03D4770082BD47 /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9982C03D4770082BD47 /* URLProtocolStub.swift */; };
+		7454E99D2C03D4FE0082BD47 /* ClientSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E99C2C03D4FE0082BD47 /* ClientSpy.swift */; };
 		7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */; };
 		7460AB5D2B94D040000FDF22 /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
 		7460AB632B94D040000FDF22 /* ITGWorkoutKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -277,6 +279,8 @@
 		7454E98E2C0393350082BD47 /* ExerciseStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ExerciseStore.xcdatamodel; sourceTree = "<group>"; };
 		7454E9902C0393D10082BD47 /* ManagedExerciseCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedExerciseCache.swift; sourceTree = "<group>"; };
 		7454E9922C0394200082BD47 /* ManagedExerciseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedExerciseItem.swift; sourceTree = "<group>"; };
+		7454E9982C03D4770082BD47 /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
+		7454E99C2C03D4FE0082BD47 /* ClientSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientSpy.swift; sourceTree = "<group>"; };
 		7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ITGWorkoutKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITGWorkoutKit.h; sourceTree = "<group>"; };
 		7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = ITGWorkoutKit.docc; sourceTree = "<group>"; };
@@ -626,6 +630,55 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
+		7454E9942C03D3250082BD47 /* Shared API */ = {
+			isa = PBXGroup;
+			children = (
+				74AEA5D52B9F9F1B008CAC0A /* Client.swift */,
+			);
+			path = "Shared API";
+			sourceTree = "<group>";
+		};
+		7454E9952C03D3620082BD47 /* Shared API Infra */ = {
+			isa = PBXGroup;
+			children = (
+				74730B942BC19F8500B54778 /* URLSessionHTTPClient.swift */,
+			);
+			path = "Shared API Infra";
+			sourceTree = "<group>";
+		};
+		7454E9962C03D4470082BD47 /* Shared API Infra */ = {
+			isa = PBXGroup;
+			children = (
+				7454E9972C03D4600082BD47 /* Helpers */,
+				74730B522BBDE02500B54778 /* URLSessionHTTPClientTests.swift */,
+			);
+			path = "Shared API Infra";
+			sourceTree = "<group>";
+		};
+		7454E9972C03D4600082BD47 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				7454E9982C03D4770082BD47 /* URLProtocolStub.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		7454E99A2C03D4E40082BD47 /* Shared API */ = {
+			isa = PBXGroup;
+			children = (
+				7454E99B2C03D4EE0082BD47 /* Helpers */,
+			);
+			path = "Shared API";
+			sourceTree = "<group>";
+		};
+		7454E99B2C03D4EE0082BD47 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				7454E99C2C03D4FE0082BD47 /* ClientSpy.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		7460AB482B94D040000FDF22 = {
 			isa = PBXGroup;
 			children = (
@@ -656,6 +709,8 @@
 		7460AB542B94D040000FDF22 /* ITGWorkoutKit */ = {
 			isa = PBXGroup;
 			children = (
+				7454E9952C03D3620082BD47 /* Shared API Infra */,
+				7454E9942C03D3250082BD47 /* Shared API */,
 				7454E9692C029CB80082BD47 /* Exercise Cache */,
 				7454E9592C0294400082BD47 /* ExerciseLoader */,
 				7454E94F2C0263F10082BD47 /* Workout Uploader */,
@@ -675,6 +730,8 @@
 		7460AB602B94D040000FDF22 /* ITGWorkoutKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				7454E99A2C03D4E40082BD47 /* Shared API */,
+				7454E9962C03D4470082BD47 /* Shared API Infra */,
 				7454E9662C029BB30082BD47 /* Exercise Cache */,
 				7454E9562C028FCC0082BD47 /* Exercise API */,
 				741C2B682BF2970800D2914F /* Workout Builder */,
@@ -843,9 +900,7 @@
 			isa = PBXGroup;
 			children = (
 				74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */,
-				74AEA5D52B9F9F1B008CAC0A /* Client.swift */,
 				74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */,
-				74730B942BC19F8500B54778 /* URLSessionHTTPClient.swift */,
 				74A6DCA12BC87032002A420C /* RemoteWorkoutItem.swift */,
 			);
 			path = "Workout API";
@@ -855,7 +910,6 @@
 			isa = PBXGroup;
 			children = (
 				7460AB712B94E82C000FDF22 /* LoadFeedFromRemoteUseCaseTests.swift */,
-				74730B522BBDE02500B54778 /* URLSessionHTTPClientTests.swift */,
 			);
 			path = "Workout API";
 			sourceTree = "<group>";
@@ -1184,10 +1238,12 @@
 				74A6DCBF2BCDD303002A420C /* XCTestCase+FailableDeleteFeedStoreSpecs.swift in Sources */,
 				74A6DCBB2BCDD21D002A420C /* XCTestCase+FailableRetrieveFeedStoreSpecs.swift in Sources */,
 				7454E9842C0364680082BD47 /* XCTestCase+FailableInsertExerciseStoreSpecs.swift in Sources */,
+				7454E99D2C03D4FE0082BD47 /* ClientSpy.swift in Sources */,
 				7454E9802C035FBD0082BD47 /* XCTestCase+ExerciseStoreSpecs.swift in Sources */,
 				7454E9682C029BD70082BD47 /* CacheExerciseListUseCaseTests.swift in Sources */,
 				74A6DCA62BC92526002A420C /* LoadFeedFromCacheUseCaseTests.swift in Sources */,
 				74A6DCB72BCDCF42002A420C /* FeedStoreSpecs.swift in Sources */,
+				7454E9992C03D4770082BD47 /* URLProtocolStub.swift in Sources */,
 				74730B932BC0ABBF00B54778 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 				74A6DCC22BCEE166002A420C /* CoreDataFeedStoreTests.swift in Sources */,
 				74A6DCB92BCDCFE6002A420C /* XCTestCase+FeedStoreSpecs.swift in Sources */,
