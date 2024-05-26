@@ -40,15 +40,9 @@ public final class RemoteWorkoutLoader: WorkoutLoader {
     private static func map(_ data: Data, from response: HTTPURLResponse) -> Result {
         do {
             let items = try WorkoutItemsMapper.map(data, from: response)
-            return .success(items.toModels())
+            return .success(items)
         } catch {
             return .failure(error)
         }
-    }
-}
-
-private extension Array where Element == RemoteWorkoutItem {
-    func toModels() -> [WorkoutItem] {
-        return map { WorkoutItem(id: $0.id, description: $0.description, location: $0.location, image: $0.image) }
     }
 }

@@ -100,7 +100,6 @@
 		74A6DC9B2BC5E955002A420C /* CacheFeedUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DC9A2BC5E955002A420C /* CacheFeedUseCaseTests.swift */; };
 		74A6DC9E2BC867A5002A420C /* LocalFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DC9D2BC867A5002A420C /* LocalFeedLoader.swift */; };
 		74A6DCA02BC8681C002A420C /* FeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DC9F2BC8681B002A420C /* FeedStore.swift */; };
-		74A6DCA22BC87032002A420C /* RemoteWorkoutItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCA12BC87032002A420C /* RemoteWorkoutItem.swift */; };
 		74A6DCA42BC87076002A420C /* LocalWorkoutItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCA32BC87076002A420C /* LocalWorkoutItem.swift */; };
 		74A6DCA62BC92526002A420C /* LoadFeedFromCacheUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCA52BC92526002A420C /* LoadFeedFromCacheUseCaseTests.swift */; };
 		74A6DCA92BC92627002A420C /* FeedStoreSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DCA82BC92627002A420C /* FeedStoreSpy.swift */; };
@@ -298,7 +297,6 @@
 		74A6DC9A2BC5E955002A420C /* CacheFeedUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheFeedUseCaseTests.swift; sourceTree = "<group>"; };
 		74A6DC9D2BC867A5002A420C /* LocalFeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFeedLoader.swift; sourceTree = "<group>"; };
 		74A6DC9F2BC8681B002A420C /* FeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStore.swift; sourceTree = "<group>"; };
-		74A6DCA12BC87032002A420C /* RemoteWorkoutItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWorkoutItem.swift; sourceTree = "<group>"; };
 		74A6DCA32BC87076002A420C /* LocalWorkoutItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWorkoutItem.swift; sourceTree = "<group>"; };
 		74A6DCA52BC92526002A420C /* LoadFeedFromCacheUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadFeedFromCacheUseCaseTests.swift; sourceTree = "<group>"; };
 		74A6DCA82BC92627002A420C /* FeedStoreSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStoreSpy.swift; sourceTree = "<group>"; };
@@ -901,7 +899,6 @@
 			children = (
 				74AEA5D32B98D074008CAC0A /* RemoteWorkoutLoader.swift */,
 				74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */,
-				74A6DCA12BC87032002A420C /* RemoteWorkoutItem.swift */,
 			);
 			path = "Workout API";
 			sourceTree = "<group>";
@@ -1201,7 +1198,6 @@
 				7454E9932C0394200082BD47 /* ManagedExerciseItem.swift in Sources */,
 				740ED8712BE166B7005B09BA /* FeedPresenter.swift in Sources */,
 				74A6DCB12BCC3FEC002A420C /* FeedCachePolicy.swift in Sources */,
-				74A6DCA22BC87032002A420C /* RemoteWorkoutItem.swift in Sources */,
 				7454E9552C0264760082BD47 /* RemoteWorkoutUploader.swift in Sources */,
 				7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */,
 				74A6DCA42BC87076002A420C /* LocalWorkoutItem.swift in Sources */,
