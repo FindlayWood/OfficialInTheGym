@@ -75,6 +75,9 @@
 		7454E97A2C035C930082BD47 /* ValidateExerciseListCacheUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9792C035C930082BD47 /* ValidateExerciseListCacheUseCaseTests.swift */; };
 		7454E97E2C035F490082BD47 /* ExerciseStoreSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E97D2C035F490082BD47 /* ExerciseStoreSpecs.swift */; };
 		7454E9802C035FBD0082BD47 /* XCTestCase+ExerciseStoreSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E97F2C035FBD0082BD47 /* XCTestCase+ExerciseStoreSpecs.swift */; };
+		7454E9822C0364340082BD47 /* XCTestCase+FailableRetrieveExerciseStoreSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9812C0364340082BD47 /* XCTestCase+FailableRetrieveExerciseStoreSpecs.swift */; };
+		7454E9842C0364680082BD47 /* XCTestCase+FailableInsertExerciseStoreSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9832C0364680082BD47 /* XCTestCase+FailableInsertExerciseStoreSpecs.swift */; };
+		7454E9862C0364A30082BD47 /* XCTestCase+FailableDeleteExerciseStoreSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9852C0364A30082BD47 /* XCTestCase+FailableDeleteExerciseStoreSpecs.swift */; };
 		7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */; };
 		7460AB5D2B94D040000FDF22 /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
 		7460AB632B94D040000FDF22 /* ITGWorkoutKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -261,6 +264,9 @@
 		7454E9792C035C930082BD47 /* ValidateExerciseListCacheUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateExerciseListCacheUseCaseTests.swift; sourceTree = "<group>"; };
 		7454E97D2C035F490082BD47 /* ExerciseStoreSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStoreSpecs.swift; sourceTree = "<group>"; };
 		7454E97F2C035FBD0082BD47 /* XCTestCase+ExerciseStoreSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+ExerciseStoreSpecs.swift"; sourceTree = "<group>"; };
+		7454E9812C0364340082BD47 /* XCTestCase+FailableRetrieveExerciseStoreSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FailableRetrieveExerciseStoreSpecs.swift"; sourceTree = "<group>"; };
+		7454E9832C0364680082BD47 /* XCTestCase+FailableInsertExerciseStoreSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FailableInsertExerciseStoreSpecs.swift"; sourceTree = "<group>"; };
+		7454E9852C0364A30082BD47 /* XCTestCase+FailableDeleteExerciseStoreSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FailableDeleteExerciseStoreSpecs.swift"; sourceTree = "<group>"; };
 		7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ITGWorkoutKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITGWorkoutKit.h; sourceTree = "<group>"; };
 		7460AB562B94D040000FDF22 /* ITGWorkoutKit.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = ITGWorkoutKit.docc; sourceTree = "<group>"; };
@@ -582,6 +588,9 @@
 			children = (
 				7454E97D2C035F490082BD47 /* ExerciseStoreSpecs.swift */,
 				7454E97F2C035FBD0082BD47 /* XCTestCase+ExerciseStoreSpecs.swift */,
+				7454E9812C0364340082BD47 /* XCTestCase+FailableRetrieveExerciseStoreSpecs.swift */,
+				7454E9832C0364680082BD47 /* XCTestCase+FailableInsertExerciseStoreSpecs.swift */,
+				7454E9852C0364A30082BD47 /* XCTestCase+FailableDeleteExerciseStoreSpecs.swift */,
 			);
 			path = ExerciseStoreSpecs;
 			sourceTree = "<group>";
@@ -1126,16 +1135,19 @@
 				740ED87B2BE2CDF2005B09BA /* FeedImagePresenterTests.swift in Sources */,
 				7460AB722B94E82C000FDF22 /* LoadFeedFromRemoteUseCaseTests.swift in Sources */,
 				7454E9762C0357370082BD47 /* LoadExerciseListFromCacheUseCaseTests.swift in Sources */,
+				7454E9822C0364340082BD47 /* XCTestCase+FailableRetrieveExerciseStoreSpecs.swift in Sources */,
 				7454E9482C021F690082BD47 /* WorkoutUploaderTests.swift in Sources */,
 				74730B532BBDE02500B54778 /* URLSessionHTTPClientTests.swift in Sources */,
 				74A6DCBD2BCDD289002A420C /* XCTestCase+FailableInsertFeedStoreSpecs.swift in Sources */,
 				74A6DCA92BC92627002A420C /* FeedStoreSpy.swift in Sources */,
+				7454E9862C0364A30082BD47 /* XCTestCase+FailableDeleteExerciseStoreSpecs.swift in Sources */,
 				740ED8622BE026EF005B09BA /* FeedPresenterTests.swift in Sources */,
 				74A6DCAD2BCC0866002A420C /* FeedCacheTestHelpers.swift in Sources */,
 				74A6DCAF2BCC08CB002A420C /* SharedTestHelpers.swift in Sources */,
 				74A6DC9B2BC5E955002A420C /* CacheFeedUseCaseTests.swift in Sources */,
 				74A6DCBF2BCDD303002A420C /* XCTestCase+FailableDeleteFeedStoreSpecs.swift in Sources */,
 				74A6DCBB2BCDD21D002A420C /* XCTestCase+FailableRetrieveFeedStoreSpecs.swift in Sources */,
+				7454E9842C0364680082BD47 /* XCTestCase+FailableInsertExerciseStoreSpecs.swift in Sources */,
 				7454E9802C035FBD0082BD47 /* XCTestCase+ExerciseStoreSpecs.swift in Sources */,
 				7454E9682C029BD70082BD47 /* CacheExerciseListUseCaseTests.swift in Sources */,
 				74A6DCA62BC92526002A420C /* LoadFeedFromCacheUseCaseTests.swift in Sources */,
