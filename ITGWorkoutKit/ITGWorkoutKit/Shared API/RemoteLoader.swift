@@ -7,40 +7,42 @@
 
 import Foundation
 
-public final class RemoteLoader: WorkoutLoader {
+public final class RemoteLoader<Resource> {
     
     private let client: Client
     private let path: String
+    private let mapper: Mapper
     
     public enum Error: Swift.Error {
         case connectivity
         case invalidData
     }
     
-    public typealias Result = WorkoutLoader.Result
+    public typealias Result = Swift.Result<Resource, Swift.Error>
+    public typealias Mapper = (Data, HTTPURLResponse) throws -> Resource
     
-    public init(client: Client, path: String) {
+    public init(client: Client, path: String, mapper: @escaping Mapper) {
         self.client = client
         self.path = path
+        self.mapper = mapper
     }
     
     public func load(completion: @escaping (Result) -> Void) {
         client.get(from: path) { [weak self] result  in
-            guard self != nil else { return }
+            guard let self = self else { return }
             
             switch result {
             case let .success((data, response)):
-                completion(RemoteLoader.map(data, from: response))
+                completion(self.map(data, from: response))
             case .failure:
                 completion(.failure(Error.connectivity))
             }
         }
     }
     
-    private static func map(_ data: Data, from response: HTTPURLResponse) -> Result {
+    private func map(_ data: Data, from response: HTTPURLResponse) -> Result {
         do {
-            let items = try WorkoutItemsMapper.map(data, from: response)
-            return .success(items)
+            return .success(try mapper(data, response))
         } catch {
             return .failure(Error.invalidData)
         }
