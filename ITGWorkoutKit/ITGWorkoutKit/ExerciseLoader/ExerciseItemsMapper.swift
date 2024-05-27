@@ -7,9 +7,9 @@
 
 import Foundation
 
-final class ExerciseItemsMapper {
+public final class ExerciseItemsMapper {
     private struct Root: Decodable {
-        private let exercises: [RemoteExerciseItem]
+        private let items: [RemoteExerciseItem]
         
         private struct RemoteExerciseItem: Decodable {
             let id: UUID
@@ -17,22 +17,24 @@ final class ExerciseItemsMapper {
             let bodyArea: String
         }
         
-        var items: [ExerciseItem] {
-            exercises.map { ExerciseItem(id: $0.id, name: $0.name, bodyArea: $0.bodyArea) }
+        var publicItems: [ExerciseItem] {
+            items.map { ExerciseItem(id: $0.id, name: $0.name, bodyArea: $0.bodyArea) }
         }
         
     }
     
-    private static var OK_200: Int { return 200 }
+    private static func isOK(_ response: HTTPURLResponse) -> Bool {
+        (200...299).contains(response.statusCode)
+    }
     
-    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [ExerciseItem] {
+    public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [ExerciseItem] {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        guard response.statusCode == OK_200,
+        guard isOK(response),
               let root = try? decoder.decode(Root.self, from: data) else {
             throw RemoteExerciseLoader.Error.invalidData
         }
 
-        return root.items
+        return root.publicItems
     }
 }
