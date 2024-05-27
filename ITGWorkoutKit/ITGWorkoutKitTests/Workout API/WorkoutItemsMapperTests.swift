@@ -57,10 +57,6 @@ class WorkoutItemsMapperTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func failure(_ error: RemoteWorkoutLoader.Error) -> RemoteWorkoutLoader.Result {
-        return .failure(error)
-    }
-
     private func makeItem(id: UUID, description: String? = nil, location: String? = nil, image: URL) -> (model: WorkoutItem, json: [String: Any]) {
         
         let item = WorkoutItem(id: id, description: description, location: location, image: image)
