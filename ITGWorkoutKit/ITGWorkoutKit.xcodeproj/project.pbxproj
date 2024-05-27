@@ -46,7 +46,6 @@
 		741833332BD543F600EEA9C0 /* FeedImageCell+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833322BD543F600EEA9C0 /* FeedImageCell+TestHelpers.swift */; };
 		741833352BD5446200EEA9C0 /* FeedViewControllerTests+LoaderSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833342BD5446100EEA9C0 /* FeedViewControllerTests+LoaderSpy.swift */; };
 		741833372BD544F200EEA9C0 /* FeedViewControllerTests+Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833362BD544F200EEA9C0 /* FeedViewControllerTests+Assertions.swift */; };
-		7418333C2BD5462900EEA9C0 /* FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7418333B2BD5462900EEA9C0 /* FeedImageDataLoader.swift */; };
 		741833402BD5709600EEA9C0 /* FeedImageCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7418333F2BD5709600EEA9C0 /* FeedImageCellController.swift */; };
 		741833432BD572C400EEA9C0 /* FeedUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741833422BD572C400EEA9C0 /* FeedUIComposer.swift */; };
 		741C2B6A2BF2973600D2914F /* WorkoutBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741C2B692BF2973600D2914F /* WorkoutBuilderTests.swift */; };
@@ -91,6 +90,7 @@
 		7460AB632B94D040000FDF22 /* ITGWorkoutKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 7460AB552B94D040000FDF22 /* ITGWorkoutKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7460AB6D2B94D0A2000FDF22 /* WorkoutItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB6C2B94D0A2000FDF22 /* WorkoutItem.swift */; };
 		7460AB702B94E3E7000FDF22 /* WorkoutLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460AB6F2B94E3E7000FDF22 /* WorkoutLoader.swift */; };
+		746DA0B72C0522D60094EA3B /* FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7418333B2BD5462900EEA9C0 /* FeedImageDataLoader.swift */; };
 		74730B532BBDE02500B54778 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B522BBDE02500B54778 /* URLSessionHTTPClientTests.swift */; };
 		74730B932BC0ABBF00B54778 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B922BC0ABBE00B54778 /* XCTestCase+MemoryLeakTracking.swift */; };
 		74730B952BC19F8500B54778 /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B942BC19F8500B54778 /* URLSessionHTTPClient.swift */; };
@@ -494,14 +494,6 @@
 			path = FeedUI;
 			sourceTree = "<group>";
 		};
-		7418333A2BD5461400EEA9C0 /* Feed Image Loader */ = {
-			isa = PBXGroup;
-			children = (
-				7418333B2BD5462900EEA9C0 /* FeedImageDataLoader.swift */,
-			);
-			path = "Feed Image Loader";
-			sourceTree = "<group>";
-		};
 		741833412BD572B200EEA9C0 /* Composers */ = {
 			isa = PBXGroup;
 			children = (
@@ -747,6 +739,7 @@
 			children = (
 				7460AB6C2B94D0A2000FDF22 /* WorkoutItem.swift */,
 				7460AB6F2B94E3E7000FDF22 /* WorkoutLoader.swift */,
+				7418333B2BD5462900EEA9C0 /* FeedImageDataLoader.swift */,
 				740ED88B2BE7BAFE005B09BA /* WorkoutItem2.swift */,
 				740ED88D2BE7BB0F005B09BA /* WorkoutLoader2.swift */,
 				7454E94B2C0261440082BD47 /* ExerciseModel.swift */,
@@ -878,7 +871,6 @@
 		74A6DCEA2BD1A46B002A420C /* ITGWorkoutKitiOS */ = {
 			isa = PBXGroup;
 			children = (
-				7418333A2BD5461400EEA9C0 /* Feed Image Loader */,
 				741833382BD5459200EEA9C0 /* FeedUI */,
 				74A6DD0B2BD31ABD002A420C /* ITGWorkoutKitiOS.h */,
 			);
@@ -1192,6 +1184,7 @@
 				7454E9712C029E200082BD47 /* ExerciseCachePolicy.swift in Sources */,
 				74A6DC9E2BC867A5002A420C /* LocalFeedLoader.swift in Sources */,
 				740ED8882BE7BAC0005B09BA /* WorkoutItemsMapper2.swift in Sources */,
+				746DA0B72C0522D60094EA3B /* FeedImageDataLoader.swift in Sources */,
 				7454E9632C0294CD0082BD47 /* ExerciseItemsMapper.swift in Sources */,
 				74A6DCB52BCC76C4002A420C /* CodableFeedStore.swift in Sources */,
 				7454E9932C0394200082BD47 /* ManagedExerciseItem.swift in Sources */,
@@ -1272,7 +1265,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7418333C2BD5462900EEA9C0 /* FeedImageDataLoader.swift in Sources */,
 				740ED8642BE0326D005B09BA /* ErrorView.swift in Sources */,
 				740ED8692BE03BFD005B09BA /* UIRefreshControl+Helpers.swift in Sources */,
 				740ED8492BDD252B005B09BA /* UITableView+Dequeueing.swift in Sources */,
