@@ -61,7 +61,6 @@
 		7454E95D2C0294700082BD47 /* ExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E95C2C0294700082BD47 /* ExerciseLoader.swift */; };
 		7454E95F2C0294860082BD47 /* RemoteExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E95E2C0294860082BD47 /* RemoteExerciseLoader.swift */; };
 		7454E9632C0294CD0082BD47 /* ExerciseItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9622C0294CD0082BD47 /* ExerciseItemsMapper.swift */; };
-		7454E9652C0294E40082BD47 /* ExerciseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9642C0294E40082BD47 /* ExerciseClient.swift */; };
 		7454E9682C029BD70082BD47 /* CacheExerciseListUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9672C029BD70082BD47 /* CacheExerciseListUseCaseTests.swift */; };
 		7454E96B2C029CCA0082BD47 /* LocalExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E96A2C029CCA0082BD47 /* LocalExerciseLoader.swift */; };
 		7454E96D2C029CF70082BD47 /* ExerciseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E96C2C029CF70082BD47 /* ExerciseStore.swift */; };
@@ -257,7 +256,6 @@
 		7454E95C2C0294700082BD47 /* ExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLoader.swift; sourceTree = "<group>"; };
 		7454E95E2C0294860082BD47 /* RemoteExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteExerciseLoader.swift; sourceTree = "<group>"; };
 		7454E9622C0294CD0082BD47 /* ExerciseItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseItemsMapper.swift; sourceTree = "<group>"; };
-		7454E9642C0294E40082BD47 /* ExerciseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseClient.swift; sourceTree = "<group>"; };
 		7454E9672C029BD70082BD47 /* CacheExerciseListUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheExerciseListUseCaseTests.swift; sourceTree = "<group>"; };
 		7454E96A2C029CCA0082BD47 /* LocalExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalExerciseLoader.swift; sourceTree = "<group>"; };
 		7454E96C2C029CF70082BD47 /* ExerciseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStore.swift; sourceTree = "<group>"; };
@@ -559,7 +557,6 @@
 				7454E95C2C0294700082BD47 /* ExerciseLoader.swift */,
 				7454E95E2C0294860082BD47 /* RemoteExerciseLoader.swift */,
 				7454E9622C0294CD0082BD47 /* ExerciseItemsMapper.swift */,
-				7454E9642C0294E40082BD47 /* ExerciseClient.swift */,
 			);
 			path = ExerciseLoader;
 			sourceTree = "<group>";
@@ -1156,7 +1153,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7454E9652C0294E40082BD47 /* ExerciseClient.swift in Sources */,
 				740ED8842BE7BA78005B09BA /* FirestoreWorkoutLoader.swift in Sources */,
 				74A6DCA02BC8681C002A420C /* FeedStore.swift in Sources */,
 				74A6DCC72BCEE46A002A420C /* FeedStore.xcdatamodeld in Sources */,
