@@ -23,6 +23,10 @@ public final class ExerciseItemsMapper {
         
     }
     
+    public enum Error: Swift.Error {
+         case invalidData
+     }
+    
     private static func isOK(_ response: HTTPURLResponse) -> Bool {
         (200...299).contains(response.statusCode)
     }
@@ -32,7 +36,7 @@ public final class ExerciseItemsMapper {
         decoder.dateDecodingStrategy = .iso8601
         guard isOK(response),
               let root = try? decoder.decode(Root.self, from: data) else {
-            throw RemoteExerciseLoader.Error.invalidData
+            throw Error.invalidData
         }
 
         return root.publicItems
