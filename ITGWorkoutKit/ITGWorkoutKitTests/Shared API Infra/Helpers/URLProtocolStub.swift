@@ -32,12 +32,7 @@ class URLProtocolStub: URLProtocol {
         stub = Stub(data: data, response: response, error: error, requestObserver: nil)
     }
 
-    static func startInterceptingRequests() {
-        URLProtocol.registerClass(URLProtocolStub.self)
-    }
-
-    static func stopInterceptingRequests() {
-        URLProtocol.unregisterClass(URLProtocolStub.self)
+    static func removeStub() {
         stub = nil
     }
 
