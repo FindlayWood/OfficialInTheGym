@@ -11,10 +11,12 @@ import ITGWorkoutKit
 class ClientSpy: Client {
     
     private struct Task: HTTPClientTask {
-        func cancel() {}
+        let callback: () -> Void
+        func cancel() { callback() }
     }
     
     private var messages = [(path: String, completion: (Client.Result) -> Void)]()
+    private(set) var cancelledPaths = [String]()
     
     var requestedPaths: [String] {
         messages.map { $0.path }
@@ -22,18 +24,22 @@ class ClientSpy: Client {
     
     func get(from path: String, completion: @escaping (Client.Result) -> Void) -> HTTPClientTask {
         messages.append((path, completion))
-        return Task()
+        return Task { [weak self] in
+            self?.cancelledPaths.append(path)
+        }
     }
     
     func complete(with error: Error, at index: Int = 0) {
         messages[index].completion(.failure(error))
     }
     
-    func complete(withStatusCode statusCode: Int, data: Data, at index: Int = 0) {
-        let response = HTTPURLResponse(url: URL(string: "Example.com")!,
-                                       statusCode: statusCode,
-                                       httpVersion: nil,
-                                       headerFields: nil)!
+    func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
+        let response = HTTPURLResponse(
+            url: URL(string: requestedPaths[index])!,
+            statusCode: code,
+            httpVersion: nil,
+            headerFields: nil
+        )!
         messages[index].completion(.success((data, response)))
     }
 }
