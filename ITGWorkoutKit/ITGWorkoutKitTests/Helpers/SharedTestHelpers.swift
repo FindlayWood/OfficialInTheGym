@@ -16,7 +16,7 @@ func anyURL() -> URL {
 }
 
 func anyData() -> Data {
-    return Data("Invalid json".utf8)
+    return Data("any data".utf8)
 }
 
 func makeItemsJSON(_ items: [[String: Any]]) -> Data {
