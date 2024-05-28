@@ -10,14 +10,19 @@ import ITGWorkoutKit
 
 class ClientSpy: Client {
     
+    private struct Task: HTTPClientTask {
+        func cancel() {}
+    }
+    
     private var messages = [(path: String, completion: (Client.Result) -> Void)]()
     
     var requestedPaths: [String] {
         messages.map { $0.path }
     }
     
-    func get(from path: String, completion: @escaping (Client.Result) -> Void) {
+    func get(from path: String, completion: @escaping (Client.Result) -> Void) -> HTTPClientTask {
         messages.append((path, completion))
+        return Task()
     }
     
     func complete(with error: Error, at index: Int = 0) {
