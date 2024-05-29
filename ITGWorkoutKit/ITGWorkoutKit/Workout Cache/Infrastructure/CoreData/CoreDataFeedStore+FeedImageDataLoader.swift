@@ -12,9 +12,9 @@ extension CoreDataFeedStore: FeedImageDataStore {
     public func insert(_ data: Data, for path: String, completion: @escaping (FeedImageDataStore.InsertionResult) -> Void) {
         perform { context in
             completion(Result {
-                let image = try ManagedWorkoutItem.first(with: path, in: context)
-                image?.data = data
-                try context.save()
+                try ManagedWorkoutItem.first(with: path, in: context)
+                    .map { $0.data = data }
+                    .map(context.save)
             })
         }
     }
