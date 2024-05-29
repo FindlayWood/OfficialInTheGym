@@ -18,6 +18,14 @@ internal class ManagedWorkoutItem: NSManagedObject {
 }
 
 extension ManagedWorkoutItem {
+    static func first(with path: String, in context: NSManagedObjectContext) throws -> ManagedWorkoutItem? {
+        let request = NSFetchRequest<ManagedWorkoutItem>(entityName: entity().name!)
+        request.predicate = NSPredicate(format: "%K = %@", argumentArray: [#keyPath(ManagedWorkoutItem.url), path])
+        request.returnsObjectsAsFaults = false
+        request.fetchLimit = 1
+        return try context.fetch(request).first
+    }
+    
     internal static func workouts(from localFeed: [LocalWorkoutItem], in context: NSManagedObjectContext) -> NSOrderedSet {
         return NSOrderedSet(array: localFeed.map { local in
             let managed = ManagedWorkoutItem(context: context)

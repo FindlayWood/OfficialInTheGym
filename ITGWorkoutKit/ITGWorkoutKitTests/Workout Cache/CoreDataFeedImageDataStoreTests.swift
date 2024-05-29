@@ -25,6 +25,17 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
 
         expect(sut, toCompleteRetrievalWith: notFound(), for: nonMatchingPath)
     }
+    
+    
+    func test_retrieveImageData_deliversFoundDataWhenThereIsAStoredImageDataMatchingURL() {
+        let sut = makeSUT()
+        let storedData = anyData()
+        let matchingPath = "http://a-url.com"
+
+        insert(storedData, for: matchingPath, into: sut)
+
+        expect(sut, toCompleteRetrievalWith: found(storedData), for: matchingPath)
+    }
 
     // - MARK: Helpers
 
@@ -38,6 +49,10 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
 
     private func notFound() -> FeedImageDataStore.RetrievalResult {
         return .success(.none)
+    }
+    
+    private func found(_ data: Data) -> FeedImageDataStore.RetrievalResult {
+        return .success(data)
     }
     
     private func localImage(path: String) -> LocalWorkoutItem {
