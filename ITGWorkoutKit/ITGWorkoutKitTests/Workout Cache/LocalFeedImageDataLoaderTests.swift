@@ -78,6 +78,16 @@ class LocalFeedImageDataLoaderTests: XCTestCase {
 
         XCTAssertTrue(received.isEmpty, "Expected no received results after instance has been deallocated")
     }
+    
+    func test_saveImageDataForURL_requestsImageDataInsertionForURL() {
+        let (sut, store) = makeSUT()
+        let path = anyPath()
+        let data = anyData()
+
+        sut.save(data, for: path) { _ in }
+
+        XCTAssertEqual(store.receivedMessages, [.insert(data: data, for: path)])
+    }
 
     // MARK: - Helpers
 
@@ -126,12 +136,17 @@ class LocalFeedImageDataLoaderTests: XCTestCase {
 
     private class StoreSpy: FeedImageDataStore {
         enum Message: Equatable {
+            case insert(data: Data, for: String)
             case retrieve(dataFor: String)
         }
         
         private var completions = [(FeedImageDataStore.Result) -> Void]()
 
         private(set) var receivedMessages = [Message]()
+        
+        func insert(_ data: Data, for path: String, completion: @escaping (FeedImageDataStore.InsertionResult) -> Void) {
+            receivedMessages.append(.insert(data: data, for: path))
+        }
 
         func retrieve(dataForPath path: String, completion: @escaping (FeedImageDataStore.Result) -> Void) {
             receivedMessages.append(.retrieve(dataFor: path))
