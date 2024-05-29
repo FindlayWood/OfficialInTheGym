@@ -8,18 +8,6 @@
 import XCTest
 import ITGWorkoutKit
 
-extension CoreDataFeedStore: FeedImageDataStore {
-
-    public func insert(_ data: Data, for path: String, completion: @escaping (FeedImageDataStore.InsertionResult) -> Void) {
-
-    }
-
-    public func retrieve(dataForPath path: String, completion: @escaping (FeedImageDataStore.RetrievalResult) -> Void) {
-        completion(.success(.none))
-    }
-
-}
-
 class CoreDataFeedImageDataStoreTests: XCTestCase {
 
     func test_retrieveImageData_deliversNotFoundWhenEmpty() {
