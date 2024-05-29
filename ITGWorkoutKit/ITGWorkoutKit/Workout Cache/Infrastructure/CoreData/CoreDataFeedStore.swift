@@ -21,7 +21,7 @@ public final class CoreDataFeedStore {
     }
 
     public init(storeURL: URL) throws {
-        let bundle = Bundle(for: CoreDataFeedStore.self)
+        
         guard let model = CoreDataFeedStore.model else {
             throw StoreError.modelNotFound
         }
