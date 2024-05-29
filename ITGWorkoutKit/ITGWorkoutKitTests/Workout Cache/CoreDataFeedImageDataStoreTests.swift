@@ -27,6 +27,16 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
 
         expect(sut, toCompleteRetrievalWith: notFound(), for: anyPath())
     }
+    
+    func test_retrieveImageData_deliversNotFoundWhenStoredDataURLDoesNotMatch() {
+        let sut = makeSUT()
+        let path = "http://a-url.com"
+        let nonMatchingPath = "http://another-url.com"
+
+        insert(anyData(), for: path, into: sut)
+
+        expect(sut, toCompleteRetrievalWith: notFound(), for: nonMatchingPath)
+    }
 
     // - MARK: Helpers
 
@@ -41,6 +51,10 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
     private func notFound() -> FeedImageDataStore.RetrievalResult {
         return .success(.none)
     }
+    
+    private func localImage(path: String) -> LocalWorkoutItem {
+        return LocalWorkoutItem(id: UUID(), description: "any", location: "any", image: URL(string: path))
+    }
 
     private func expect(_ sut: CoreDataFeedStore, toCompleteRetrievalWith expectedResult: FeedImageDataStore.RetrievalResult, for path: String,  file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
@@ -51,6 +65,26 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
 
             default:
                 XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    private func insert(_ data: Data, for path: String, into sut: CoreDataFeedStore, file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "Wait for cache insertion")
+        let image = localImage(path: path)
+        sut.insert([image], timestamp: Date()) { result in
+            switch result {
+            case let .failure(error):
+                XCTFail("Failed to save \(image) with error \(error)", file: file, line: line)
+
+            case .success:
+                sut.insert(data, for: path) { result in
+                    if case let Result.failure(error) = result {
+                        XCTFail("Failed to insert \(data) with error \(error)", file: file, line: line)
+                    }
+                }
             }
             exp.fulfill()
         }
