@@ -68,6 +68,23 @@ final class ITGWorkoutKitCacheIntegrationTests: XCTestCase {
         expect(imageLoaderToPerformLoad, toLoad: dataToSave, for: image.image!.absoluteString)
     }
     
+    
+    func test_saveImageData_overridesSavedImageDataOnASeparateInstance() {
+        let imageLoaderToPerformFirstSave = makeImageLoader()
+        let imageLoaderToPerformLastSave = makeImageLoader()
+        let imageLoaderToPerformLoad = makeImageLoader()
+        let feedLoader = makeFeedLoader()
+        let image = uniqueImage()
+        let firstImageData = Data("first".utf8)
+        let lastImageData = Data("last".utf8)
+
+        save([image], with: feedLoader)
+        save(firstImageData, for: image.image!.absoluteString, with: imageLoaderToPerformFirstSave)
+        save(lastImageData, for: image.image!.absoluteString, with: imageLoaderToPerformLastSave)
+
+        expect(imageLoaderToPerformLoad, toLoad: lastImageData, for: image.image!.absoluteString)
+    }
+    
     // MARK: - Helpers
     
     private func makeFeedLoader(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
