@@ -22,7 +22,7 @@ extension CoreDataFeedStore: FeedImageDataStore {
     public func retrieve(dataForPath path: String, completion: @escaping (FeedImageDataStore.RetrievalResult) -> Void) {
         perform { context in
             completion(Result {
-                return try ManagedWorkoutItem.first(with: path, in: context)?.data
+                try ManagedWorkoutItem.first(with: path, in: context)?.data
             })
         }
     }
