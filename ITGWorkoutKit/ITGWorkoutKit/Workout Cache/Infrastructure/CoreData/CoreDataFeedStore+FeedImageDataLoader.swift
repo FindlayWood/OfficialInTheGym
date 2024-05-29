@@ -11,10 +11,11 @@ extension CoreDataFeedStore: FeedImageDataStore {
 
     public func insert(_ data: Data, for path: String, completion: @escaping (FeedImageDataStore.InsertionResult) -> Void) {
         perform { context in
-            guard let image = try? ManagedWorkoutItem.first(with: path, in: context) else { return }
-            
-            image.data = data
-            try? context.save()
+            completion(Result {
+                let image = try ManagedWorkoutItem.first(with: path, in: context)
+                image?.data = data
+                try context.save()
+            })
         }
     }
 
