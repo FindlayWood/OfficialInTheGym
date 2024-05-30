@@ -86,9 +86,9 @@ final class ITGWorkoutKitCacheIntegrationTests: XCTestCase {
         let dataToSave = anyData()
 
         save([image], with: feedLoader)
-        save(dataToSave, for: image.image!.absoluteString, with: imageLoaderToPerformSave)
+        save(dataToSave, for: image.image!, with: imageLoaderToPerformSave)
 
-        expect(imageLoaderToPerformLoad, toLoad: dataToSave, for: image.image!.absoluteString)
+        expect(imageLoaderToPerformLoad, toLoad: dataToSave, for: image.image!)
     }
     
     
@@ -102,10 +102,10 @@ final class ITGWorkoutKitCacheIntegrationTests: XCTestCase {
         let lastImageData = Data("last".utf8)
 
         save([image], with: feedLoader)
-        save(firstImageData, for: image.image!.absoluteString, with: imageLoaderToPerformFirstSave)
-        save(lastImageData, for: image.image!.absoluteString, with: imageLoaderToPerformLastSave)
+        save(firstImageData, for: image.image!, with: imageLoaderToPerformFirstSave)
+        save(lastImageData, for: image.image!, with: imageLoaderToPerformLastSave)
 
-        expect(imageLoaderToPerformLoad, toLoad: lastImageData, for: image.image!.absoluteString)
+        expect(imageLoaderToPerformLoad, toLoad: lastImageData, for: image.image!)
     }
     
     // MARK: - Helpers
@@ -166,9 +166,9 @@ final class ITGWorkoutKitCacheIntegrationTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
-    private func save(_ data: Data, for path: String, with loader: LocalFeedImageDataLoader, file: StaticString = #file, line: UInt = #line) {
+    private func save(_ data: Data, for url: URL, with loader: LocalFeedImageDataLoader, file: StaticString = #file, line: UInt = #line) {
         let saveExp = expectation(description: "Wait for save completion")
-        loader.save(data, for: path) { result in
+        loader.save(data, for: url) { result in
             if case let Result.failure(error) = result {
                 XCTFail("Expected to save image data successfully, got error: \(error)", file: file, line: line)
             }
@@ -177,9 +177,9 @@ final class ITGWorkoutKitCacheIntegrationTests: XCTestCase {
         wait(for: [saveExp], timeout: 1.0)
     }
 
-    private func expect(_ sut: LocalFeedImageDataLoader, toLoad expectedData: Data, for path: String, file: StaticString = #file, line: UInt = #line) {
+    private func expect(_ sut: LocalFeedImageDataLoader, toLoad expectedData: Data, for url: URL, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Wait for load completion")
-        _ = sut.loadImageData(from: path) { result in
+        _ = sut.loadImageData(from: url) { result in
             switch result {
             case let .success(loadedData):
                 XCTAssertEqual(loadedData, expectedData, file: file, line: line)
