@@ -23,8 +23,8 @@ extension LocalFeedImageDataLoader {
         case failed
     }
 
-    public func save(_ data: Data, for path: String, completion: @escaping (SaveResult) -> Void) {
-        store.insert(data, for: path) { [weak self] result in
+    public func save(_ data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
+        store.insert(data, for: url) { [weak self] result in
             guard self != nil else { return }
             completion(result.mapError { _ in SaveError.failed })
         }
@@ -60,9 +60,9 @@ extension LocalFeedImageDataLoader: FeedImageDataLoader {
         }
     }
     
-    public func loadImageData(from path: String, completion: @escaping (LoadResult) -> Void) -> FeedImageDataLoaderTask {
+    public func loadImageData(from url: URL, completion: @escaping (LoadResult) -> Void) -> FeedImageDataLoaderTask {
         let task = LoadImageDataTask(completion)
-        store.retrieve(dataForPath: path) { [weak self] result in
+        store.retrieve(dataForURL: url) { [weak self] result in
             guard self != nil else { return }
             
             task.complete(with: result

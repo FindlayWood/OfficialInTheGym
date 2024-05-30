@@ -13,26 +13,26 @@ class LoadFeedImageDataFromRemoteUseCaseTests: XCTestCase {
     func test_init_doesNotPerformAnyURLRequest() {
         let (_, client) = makeSUT()
 
-        XCTAssertTrue(client.requestedPaths.isEmpty)
+        XCTAssertTrue(client.requestedURLs.isEmpty)
     }
     
     func test_loadImageDataFromURL_requestsDataFromURL() {
-        let path =  "https://a-given-url.com"
-        let (sut, client) = makeSUT(path: path)
+        let url = anyURL()
+        let (sut, client) = makeSUT(url: url)
 
-        _ = sut.loadImageData(from: path) { _ in }
+        _ = sut.loadImageData(from: url) { _ in }
 
-        XCTAssertEqual(client.requestedPaths, [path])
+        XCTAssertEqual(client.requestedURLs, [url])
     }
     
     func test_loadImageDataFromURLTwice_requestsDataFromURLTwice() {
-        let path =  "https://a-given-url.com"
-        let (sut, client) = makeSUT(path: path)
+        let url = anyURL()
+        let (sut, client) = makeSUT(url: url)
 
-        _ = sut.loadImageData(from: path) { _ in }
-        _ = sut.loadImageData(from: path) { _ in }
+        _ = sut.loadImageData(from: url) { _ in }
+        _ = sut.loadImageData(from: url) { _ in }
 
-        XCTAssertEqual(client.requestedPaths, [path, path])
+        XCTAssertEqual(client.requestedURLs, [url, url])
     }
     
     func test_loadImageDataFromURL_deliversConnectivityErrorOnClientError() {
@@ -76,22 +76,22 @@ class LoadFeedImageDataFromRemoteUseCaseTests: XCTestCase {
     
     func test_cancelLoadImageDataURLTask_cancelsClientURLRequest() {
         let (sut, client) = makeSUT()
-        let path =  "https://a-given-url.com"
+        let url = anyURL()
 
-        let task = sut.loadImageData(from: path) { _ in }
-        XCTAssertTrue(client.cancelledPaths.isEmpty, "Expected no cancelled URL request until task is cancelled")
+        let task = sut.loadImageData(from: url) { _ in }
+        XCTAssertTrue(client.cancelledURLs.isEmpty, "Expected no cancelled URL request until task is cancelled")
 
         task.cancel()
-        XCTAssertEqual(client.cancelledPaths, [path], "Expected cancelled URL request after task is cancelled")
+        XCTAssertEqual(client.cancelledURLs, [url], "Expected cancelled URL request after task is cancelled")
     }
     
     func test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask() {
-        let path =  "https://a-given-url.com"
+        let url = anyURL()
         let (sut, client) = makeSUT()
         let nonEmptyData = Data("non-empty data".utf8)
 
         var received = [FeedImageDataLoader.Result]()
-        let task = sut.loadImageData(from: path) { received.append($0) }
+        let task = sut.loadImageData(from: url) { received.append($0) }
         task.cancel()
 
         client.complete(withStatusCode: 404, data: anyData())
@@ -102,12 +102,12 @@ class LoadFeedImageDataFromRemoteUseCaseTests: XCTestCase {
     }
     
     func test_loadImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
-        let path =  "https://a-given-url.com"
-        let client = ClientSpy()
+        let url = anyURL()
+        let client = HTTPClientSpy()
         var sut: RemoteFeedImageDataLoader? = RemoteFeedImageDataLoader(client: client)
 
         var capturedResults = [FeedImageDataLoader.Result]()
-        _ = sut?.loadImageData(from: path) { capturedResults.append($0) }
+        _ = sut?.loadImageData(from: url) { capturedResults.append($0) }
 
         sut = nil
         client.complete(withStatusCode: 200, data: anyData())
@@ -116,8 +116,8 @@ class LoadFeedImageDataFromRemoteUseCaseTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func makeSUT(path: String = "Any String", file: StaticString = #file, line: UInt = #line) -> (sut: RemoteFeedImageDataLoader, client: ClientSpy) {
-        let client = ClientSpy()
+    private func makeSUT(url: URL = anyURL(), file: StaticString = #file, line: UInt = #line) -> (sut: RemoteFeedImageDataLoader, client: HTTPClientSpy) {
+        let client = HTTPClientSpy()
         let sut = RemoteFeedImageDataLoader(client: client)
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(client, file: file, line: line)
@@ -125,10 +125,10 @@ class LoadFeedImageDataFromRemoteUseCaseTests: XCTestCase {
     }
     
     private func expect(_ sut: RemoteFeedImageDataLoader, toCompleteWith expectedResult: FeedImageDataLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
-        let path =  "https://a-given-url.com"
+        let url = anyURL()
         let exp = expectation(description: "Wait for load completion")
 
-        _ = sut.loadImageData(from: path) { receivedResult in
+        _ = sut.loadImageData(from: url) { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedData), .success(expectedData)):
                 XCTAssertEqual(receivedData, expectedData, file: file, line: line)

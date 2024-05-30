@@ -9,14 +9,14 @@ import Foundation
 
 public final class RemoteFeedImageDataLoader: FeedImageDataLoader {
     
-    private let client: Client
+    private let client: HTTPClient
     
     public enum Error: Swift.Error {
         case invalidData
         case connectivity
     }
 
-    public init(client: Client) {
+    public init(client: HTTPClient) {
         self.client = client
     }
     
@@ -45,10 +45,10 @@ public final class RemoteFeedImageDataLoader: FeedImageDataLoader {
         }
     }
 
-    public func loadImageData(from path: String, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
+    public func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
         let task = HTTPClientTaskWrapper(completion)
         
-        task.wrapped = client.get(from: path) { [weak self] result in
+        task.wrapped = client.get(from: url) { [weak self] result in
             guard self != nil else { return }
             
             task.complete(with: result
