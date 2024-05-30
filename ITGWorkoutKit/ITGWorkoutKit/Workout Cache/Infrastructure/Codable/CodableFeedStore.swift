@@ -22,7 +22,7 @@ public final class CodableFeedStore: FeedStore {
         private let id: UUID
         private let description: String?
         private let location: String?
-        private let image: URL?
+        private let image: URL
 
         init(_ item: LocalWorkoutItem) {
             id = item.id
