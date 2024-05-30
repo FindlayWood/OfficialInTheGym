@@ -47,7 +47,7 @@ final class WorkoutAPIEndToEndTests: XCTestCase {
     // MARK: - Helpers
     
     private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> WorkoutLoader.Result? {
-        let loader = RemoteLoader(client: ephemeralClient(), path: feedTestServerURL, mapper: WorkoutItemsMapper.map)
+        let loader = RemoteLoader(client: ephemeralClient(), path: feedTestServerString, mapper: WorkoutItemsMapper.map)
         trackForMemoryLeaks(loader, file: file, line: line)
 
         let exp = expectation(description: "Wait for load completion")
@@ -63,7 +63,7 @@ final class WorkoutAPIEndToEndTests: XCTestCase {
     }
     
     private func getFeedImageDataResult(file: StaticString = #file, line: UInt = #line) -> FeedImageDataLoader.Result? {
-        let loader = RemoteFeedImageDataLoader(client: ephemeralClient())
+        let loader = RemoteFeedImageDataLoader(client: ephemeralHTTPClient())
         trackForMemoryLeaks(loader, file: file, line: line)
 
         let exp = expectation(description: "Wait for load completion")
@@ -78,12 +78,22 @@ final class WorkoutAPIEndToEndTests: XCTestCase {
         return receivedResult
     }
     
-    private var feedTestServerURL: String {
+    private var feedTestServerString: String {
         "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5c52cdd0b8a045df091d2fff/1548930512083/feed-case-study-test-api-feed.json"
+    }
+    
+    private var feedTestServerURL: URL {
+        URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5c52cdd0b8a045df091d2fff/1548930512083/feed-case-study-test-api-feed.json")!
     }
     
     private func ephemeralClient(file: StaticString = #file, line: UInt = #line) -> Client {
         let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        trackForMemoryLeaks(client, file: file, line: line)
+        return client
+    }
+    
+    private func ephemeralHTTPClient(file: StaticString = #file, line: UInt = #line) -> HTTPClient {
+        let client = URLSessionHTTPClient2(session: URLSession(configuration: .ephemeral))
         trackForMemoryLeaks(client, file: file, line: line)
         return client
     }
