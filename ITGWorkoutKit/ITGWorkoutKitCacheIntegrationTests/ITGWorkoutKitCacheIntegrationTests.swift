@@ -86,9 +86,9 @@ final class ITGWorkoutKitCacheIntegrationTests: XCTestCase {
         let dataToSave = anyData()
 
         save([image], with: feedLoader)
-        save(dataToSave, for: image.image!, with: imageLoaderToPerformSave)
+        save(dataToSave, for: image.image, with: imageLoaderToPerformSave)
 
-        expect(imageLoaderToPerformLoad, toLoad: dataToSave, for: image.image!)
+        expect(imageLoaderToPerformLoad, toLoad: dataToSave, for: image.image)
     }
     
     
@@ -102,10 +102,10 @@ final class ITGWorkoutKitCacheIntegrationTests: XCTestCase {
         let lastImageData = Data("last".utf8)
 
         save([image], with: feedLoader)
-        save(firstImageData, for: image.image!, with: imageLoaderToPerformFirstSave)
-        save(lastImageData, for: image.image!, with: imageLoaderToPerformLastSave)
+        save(firstImageData, for: image.image, with: imageLoaderToPerformFirstSave)
+        save(lastImageData, for: image.image, with: imageLoaderToPerformLastSave)
 
-        expect(imageLoaderToPerformLoad, toLoad: lastImageData, for: image.image!)
+        expect(imageLoaderToPerformLoad, toLoad: lastImageData, for: image.image)
     }
     
     // MARK: - Helpers
