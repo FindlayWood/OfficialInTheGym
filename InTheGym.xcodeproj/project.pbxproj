@@ -406,6 +406,7 @@
 		746DA0D32C090AD10094EA3B /* ITGWorkoutKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		746DA0D42C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */; };
 		746DA0D52C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		746DA0D92C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA0D82C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift */; };
 		7470FD70281968DA003DB256 /* PlayerProfileMoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */; };
 		7472C87227DFF628004836B8 /* DiscoverPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87127DFF628004836B8 /* DiscoverPageView.swift */; };
 		7472C87427E0B4B7004836B8 /* DiscoverSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */; };
@@ -1280,6 +1281,8 @@
 		746D62572858EF6E0056A46A /* StampsPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampsPreviewView.swift; sourceTree = "<group>"; };
 		746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ITGWorkoutKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ITGWorkoutKitiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		746DA0D72C0A615C0094EA3B /* InTheGymTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "InTheGymTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		746DA0D82C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
 		7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreViewModel.swift; sourceTree = "<group>"; };
 		7472C87127DFF628004836B8 /* DiscoverPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageView.swift; sourceTree = "<group>"; };
 		7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSectionHeader.swift; sourceTree = "<group>"; };
@@ -3226,6 +3229,8 @@
 			isa = PBXGroup;
 			children = (
 				7479A922229F2B4D00D39E2E /* Info.plist */,
+				746DA0D82C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift */,
+				746DA0D72C0A615C0094EA3B /* InTheGymTests-Bridging-Header.h */,
 			);
 			path = InTheGymTests;
 			sourceTree = "<group>";
@@ -4731,6 +4736,7 @@
 					};
 					7479A91B229F2B4D00D39E2E = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1540;
 						TestTargetID = 7479A904229F2B4C00D39E2E;
 					};
 					7479A926229F2B4D00D39E2E = {
@@ -5625,6 +5631,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				746DA0D92C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6061,6 +6068,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H6WZPTFL8D;
 				INFOPLIST_FILE = InTheGymTests/Info.plist;
@@ -6071,6 +6079,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.InTheGymTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "InTheGymTests/InTheGymTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InTheGym.app/InTheGym";
@@ -6082,6 +6092,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H6WZPTFL8D;
 				INFOPLIST_FILE = InTheGymTests/Info.plist;
@@ -6092,6 +6103,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.InTheGymTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "InTheGymTests/InTheGymTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InTheGym.app/InTheGym";
@@ -6340,6 +6352,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H6WZPTFL8D;
 				INFOPLIST_FILE = InTheGymTests/Info.plist;
@@ -6350,6 +6363,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.InTheGymTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "InTheGymTests/InTheGymTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InTheGym.app/InTheGym";
