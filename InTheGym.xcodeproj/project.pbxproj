@@ -404,6 +404,10 @@
 		746D62532858D6850056A46A /* UserStampsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D62522858D6850056A46A /* UserStampsView.swift */; };
 		746D62562858EF600056A46A /* StampsPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D62552858EF600056A46A /* StampsPreviewViewController.swift */; };
 		746D62582858EF6E0056A46A /* StampsPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D62572858EF6E0056A46A /* StampsPreviewView.swift */; };
+		746DA0D22C090AD10094EA3B /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */; };
+		746DA0D32C090AD10094EA3B /* ITGWorkoutKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		746DA0D42C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */; };
+		746DA0D52C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7470FD70281968DA003DB256 /* PlayerProfileMoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */; };
 		7472C87227DFF628004836B8 /* DiscoverPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87127DFF628004836B8 /* DiscoverPageView.swift */; };
 		7472C87427E0B4B7004836B8 /* DiscoverSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */; };
@@ -879,6 +883,21 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		746DA0D62C090AD10094EA3B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				746DA0D52C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Embed Frameworks */,
+				746DA0D32C090AD10094EA3B /* ITGWorkoutKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		74028E5B25E693FB005A1D21 /* TopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
 		74028E6325E69B52005A1D21 /* TextFieldReturning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldReturning.swift; sourceTree = "<group>"; };
@@ -1268,6 +1287,8 @@
 		746D62522858D6850056A46A /* UserStampsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStampsView.swift; sourceTree = "<group>"; };
 		746D62552858EF600056A46A /* StampsPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampsPreviewViewController.swift; sourceTree = "<group>"; };
 		746D62572858EF6E0056A46A /* StampsPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampsPreviewView.swift; sourceTree = "<group>"; };
+		746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ITGWorkoutKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ITGWorkoutKitiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreViewModel.swift; sourceTree = "<group>"; };
 		7472C87127DFF628004836B8 /* DiscoverPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageView.swift; sourceTree = "<group>"; };
 		7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSectionHeader.swift; sourceTree = "<group>"; };
@@ -1729,6 +1750,7 @@
 			files = (
 				74F664E828E8DA6D0086BA4E /* FirebaseMessaging in Frameworks */,
 				74FA60B128B2DBDF007B2CD8 /* Charts in Frameworks */,
+				746DA0D22C090AD10094EA3B /* ITGWorkoutKit.framework in Frameworks */,
 				74330445289E962B00F2569A /* FirebaseDatabaseSwift in Frameworks */,
 				74A7EB65289EAE92007C2ECD /* SkyFloatingLabelTextField in Frameworks */,
 				9FC11F6A29E20CB60054D79A /* AccountCreationKit in Frameworks */,
@@ -1737,6 +1759,7 @@
 				746061BD252547E9005B1480 /* AppTrackingTransparency.framework in Frameworks */,
 				7433044F289E962B00F2569A /* FirebaseStorageCombine-Community in Frameworks */,
 				74616AB42A40E8D100007752 /* FirebaseFunctions in Frameworks */,
+				746DA0D42C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Frameworks */,
 				7433044D289E962B00F2569A /* FirebaseStorage in Frameworks */,
 				74A7EB6D289EB145007C2ECD /* Algorithms in Frameworks */,
 				74EB1E49289EB2B200C4502A /* Algorithms in Frameworks */,
@@ -4633,6 +4656,8 @@
 		D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */,
+				746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */,
 				74F664E028DF5A930086BA4E /* AuthenticationServices.framework */,
 				7404A4AC28C903270034AADC /* StoreKit.framework */,
 				746061BC252547E9005B1480 /* AppTrackingTransparency.framework */,
@@ -4650,6 +4675,7 @@
 				7479A901229F2B4C00D39E2E /* Sources */,
 				7479A902229F2B4C00D39E2E /* Frameworks */,
 				7479A903229F2B4C00D39E2E /* Resources */,
+				746DA0D62C090AD10094EA3B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
