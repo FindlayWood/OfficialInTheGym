@@ -409,6 +409,7 @@
 		746DA0D92C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA0D82C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift */; };
 		746DA0DC2C0A67C60094EA3B /* FeedLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA0DB2C0A67C60094EA3B /* FeedLoaderWithFallbackComposite.swift */; };
 		746DA0DE2C0A79330094EA3B /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA0DD2C0A79330094EA3B /* FeedImageDataLoaderWithFallbackCompositeTests.swift */; };
+		746DA0E02C0A7F240094EA3B /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA0DF2C0A7F240094EA3B /* FeedImageDataLoaderWithFallbackComposite.swift */; };
 		7470FD70281968DA003DB256 /* PlayerProfileMoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */; };
 		7472C87227DFF628004836B8 /* DiscoverPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87127DFF628004836B8 /* DiscoverPageView.swift */; };
 		7472C87427E0B4B7004836B8 /* DiscoverSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */; };
@@ -1279,6 +1280,7 @@
 		746DA0D82C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
 		746DA0DB2C0A67C60094EA3B /* FeedLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 		746DA0DD2C0A79330094EA3B /* FeedImageDataLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
+		746DA0DF2C0A7F240094EA3B /* FeedImageDataLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 		7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreViewModel.swift; sourceTree = "<group>"; };
 		7472C87127DFF628004836B8 /* DiscoverPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageView.swift; sourceTree = "<group>"; };
 		7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSectionHeader.swift; sourceTree = "<group>"; };
@@ -3100,6 +3102,7 @@
 			isa = PBXGroup;
 			children = (
 				746DA0DB2C0A67C60094EA3B /* FeedLoaderWithFallbackComposite.swift */,
+				746DA0DF2C0A7F240094EA3B /* FeedImageDataLoaderWithFallbackComposite.swift */,
 			);
 			path = "Feed Feature";
 			sourceTree = "<group>";
@@ -5185,6 +5188,7 @@
 				742039A52832B16100074ECB /* PublicWorkoutsViewModel.swift in Sources */,
 				742C1CB427C3DB7500DD1BB0 /* TypeAlias.swift in Sources */,
 				74B6F68C2747E2E900A72679 /* UIViewController+Extension.swift in Sources */,
+				746DA0E02C0A7F240094EA3B /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */,
 				742FCD1728450BBA007ED1C6 /* ExerciseMaxHistoryView.swift in Sources */,
 				74F664DF28DF40EF0086BA4E /* CMJMyJumpsViewModel.swift in Sources */,
 				743E93412809AA2A0029F447 /* ProfileDataSource.swift in Sources */,
