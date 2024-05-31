@@ -8,27 +8,7 @@
 
 import XCTest
 import ITGWorkoutKit
-
-class FeedLoaderWithFallbackComposite: WorkoutLoader {
-    private let primary: WorkoutLoader
-    private let fallback: WorkoutLoader
-
-    init(primary: WorkoutLoader, fallback: WorkoutLoader) {
-        self.primary = primary
-        self.fallback = fallback
-    }
-
-    func load(completion: @escaping (WorkoutLoader.Result) -> Void) {
-        primary.load { [weak self] result in
-            switch result {
-            case .success:
-                completion(result)
-            case .failure:
-                self?.fallback.load(completion: completion)
-            }
-        }
-    }
-}
+import InTheGym
 
 class FeedLoaderWithFallbackCompositeTests: XCTestCase {
 
@@ -55,7 +35,7 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
     
     // MARK: - Helpers
 
-    private func makeSUT(primaryResult: WorkoutLoader.Result, fallbackResult: WorkoutLoader.Result, file: StaticString = #file, line: UInt = #line) -> WorkoutLoader {
+    private func makeSUT(primaryResult: ITGWorkoutKit.WorkoutLoader.Result, fallbackResult: ITGWorkoutKit.WorkoutLoader.Result, file: StaticString = #file, line: UInt = #line) -> WorkoutLoader {
         let primaryLoader = LoaderStub(result: primaryResult)
         let fallbackLoader = LoaderStub(result: fallbackResult)
         let sut = FeedLoaderWithFallbackComposite(primary: primaryLoader, fallback: fallbackLoader)
