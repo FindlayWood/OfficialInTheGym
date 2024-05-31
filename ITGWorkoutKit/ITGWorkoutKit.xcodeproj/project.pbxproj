@@ -1895,7 +1895,7 @@
 			);
 			currentVersion = 7454E98E2C0393350082BD47 /* ExerciseStore.xcdatamodel */;
 			name = ExerciseStore.xcdatamodeld;
-			path = "/Users/findlaywood/Documents/Xcode work/InTheGym/ITGWorkoutKit/ITGWorkoutKit/Exercise Cache/Infrastructure/CoreData/ExerciseStore.xcdatamodeld";
+			path = "ExerciseStore.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
