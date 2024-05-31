@@ -408,6 +408,7 @@
 		746DA0D52C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		746DA0D92C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA0D82C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift */; };
 		746DA0DC2C0A67C60094EA3B /* FeedLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA0DB2C0A67C60094EA3B /* FeedLoaderWithFallbackComposite.swift */; };
+		746DA0DE2C0A79330094EA3B /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA0DD2C0A79330094EA3B /* FeedImageDataLoaderWithFallbackCompositeTests.swift */; };
 		7470FD70281968DA003DB256 /* PlayerProfileMoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */; };
 		7472C87227DFF628004836B8 /* DiscoverPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87127DFF628004836B8 /* DiscoverPageView.swift */; };
 		7472C87427E0B4B7004836B8 /* DiscoverSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */; };
@@ -1277,6 +1278,7 @@
 		746DA0D72C0A615C0094EA3B /* InTheGymTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "InTheGymTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		746DA0D82C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
 		746DA0DB2C0A67C60094EA3B /* FeedLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
+		746DA0DD2C0A79330094EA3B /* FeedImageDataLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
 		7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreViewModel.swift; sourceTree = "<group>"; };
 		7472C87127DFF628004836B8 /* DiscoverPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageView.swift; sourceTree = "<group>"; };
 		7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSectionHeader.swift; sourceTree = "<group>"; };
@@ -3222,6 +3224,7 @@
 				7479A922229F2B4D00D39E2E /* Info.plist */,
 				746DA0D82C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift */,
 				746DA0D72C0A615C0094EA3B /* InTheGymTests-Bridging-Header.h */,
+				746DA0DD2C0A79330094EA3B /* FeedImageDataLoaderWithFallbackCompositeTests.swift */,
 			);
 			path = InTheGymTests;
 			sourceTree = "<group>";
@@ -5584,6 +5587,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				746DA0DE2C0A79330094EA3B /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */,
 				746DA0D92C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
