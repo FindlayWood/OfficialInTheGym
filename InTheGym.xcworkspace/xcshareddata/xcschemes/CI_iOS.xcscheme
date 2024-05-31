@@ -18,7 +18,7 @@
                BlueprintIdentifier = "7460AB512B94D040000FDF22"
                BuildableName = "ITGWorkoutKit.framework"
                BlueprintName = "ITGWorkoutKit"
-               ReferencedContainer = "container:ITGWorkoutKit.xcodeproj">
+               ReferencedContainer = "container:ITGWorkoutKit/ITGWorkoutKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -58,7 +58,7 @@
             BlueprintIdentifier = "7460AB512B94D040000FDF22"
             BuildableName = "ITGWorkoutKit.framework"
             BlueprintName = "ITGWorkoutKit"
-            ReferencedContainer = "container:ITGWorkoutKit.xcodeproj">
+            ReferencedContainer = "container:ITGWorkoutKit/ITGWorkoutKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

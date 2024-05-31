@@ -12,12 +12,17 @@
     "codeCoverage" : {
       "targets" : [
         {
-          "containerPath" : "container:ITGWorkoutKit.xcodeproj",
+          "containerPath" : "container:InTheGym.xcodeproj",
+          "identifier" : "7479A904229F2B4C00D39E2E",
+          "name" : "InTheGym"
+        },
+        {
+          "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
           "identifier" : "7460AB512B94D040000FDF22",
           "name" : "ITGWorkoutKit"
         },
         {
-          "containerPath" : "container:ITGWorkoutKit.xcodeproj",
+          "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
           "identifier" : "74A6DCE82BD1A46B002A420C",
           "name" : "ITGWorkoutKitiOS"
         }
@@ -28,28 +33,35 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:ITGWorkoutKit.xcodeproj",
+        "containerPath" : "container:InTheGym.xcodeproj",
+        "identifier" : "7479A91B229F2B4D00D39E2E",
+        "name" : "InTheGymTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
         "identifier" : "74A6DCD42BCF09A1002A420C",
         "name" : "ITGWorkoutKitCacheIntegrationTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:ITGWorkoutKit.xcodeproj",
+        "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
         "identifier" : "7460AB5B2B94D040000FDF22",
         "name" : "ITGWorkoutKitTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:ITGWorkoutKit.xcodeproj",
+        "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
         "identifier" : "74A6DCEF2BD1A46B002A420C",
         "name" : "ITGWorkoutKitiOSTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:ITGWorkoutKit.xcodeproj",
+        "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
         "identifier" : "74730B992BC1DC2D00B54778",
         "name" : "WorkoutAPIEndToEndTests"
       }
