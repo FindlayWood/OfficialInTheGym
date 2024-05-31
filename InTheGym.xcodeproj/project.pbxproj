@@ -239,8 +239,6 @@
 		743330C9278F39FD005A0C45 /* AssignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330C8278F39FD005A0C45 /* AssignView.swift */; };
 		743330CB278F657F005A0C45 /* WorkoutOptionsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330CA278F657F005A0C45 /* WorkoutOptionsModel.swift */; };
 		743330CD27906535005A0C45 /* FirebaseMultiUploadBoolean.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330CC27906535005A0C45 /* FirebaseMultiUploadBoolean.swift */; };
-		743330CF27909651005A0C45 /* MockFirebaseDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330CE27909651005A0C45 /* MockFirebaseDatabaseManager.swift */; };
-		743330D1279096D7005A0C45 /* WorkoutCreationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330D0279096D7005A0C45 /* WorkoutCreationTests.swift */; };
 		743330DE2791EAEB005A0C45 /* WorkoutsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330DD2791EAEB005A0C45 /* WorkoutsList.swift */; };
 		743330E02791F1F3005A0C45 /* SavedWorkoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330DF2791F1F2005A0C45 /* SavedWorkoutTableViewCell.swift */; };
 		743330E227930DBE005A0C45 /* SavedWorkoutKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743330E127930DBE005A0C45 /* SavedWorkoutKeyModel.swift */; };
@@ -433,7 +431,6 @@
 		7479A911229F2B4C00D39E2E /* InTheGym.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7479A90F229F2B4C00D39E2E /* InTheGym.xcdatamodeld */; };
 		7479A913229F2B4D00D39E2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7479A912229F2B4D00D39E2E /* Assets.xcassets */; };
 		7479A916229F2B4D00D39E2E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7479A914229F2B4D00D39E2E /* LaunchScreen.storyboard */; };
-		7479A921229F2B4D00D39E2E /* InTheGymTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479A920229F2B4D00D39E2E /* InTheGymTests.swift */; };
 		7479A92C229F2B4D00D39E2E /* InTheGymUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479A92B229F2B4D00D39E2E /* InTheGymUITests.swift */; };
 		747AE923283E54FF0037FBEF /* NewWorkoutSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747AE922283E54FF0037FBEF /* NewWorkoutSelectionView.swift */; };
 		747AE925283E5AD10037FBEF /* NewWorkoutSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747AE924283E5AD10037FBEF /* NewWorkoutSelectionViewModel.swift */; };
@@ -571,8 +568,6 @@
 		74B6F7652759212B00A72679 /* FirebaseDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F7642759212B00A72679 /* FirebaseDatabaseManager.swift */; };
 		74B6F767275A526E00A72679 /* SignUpTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F766275A526D00A72679 /* SignUpTextFieldView.swift */; };
 		74B6F76B275A5BF700A72679 /* SkyFloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F76A275A5BF700A72679 /* SkyFloatingTextField.swift */; };
-		74B6F76D275FB81E00A72679 /* MockFirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F76C275FB81E00A72679 /* MockFirebaseAuthManager.swift */; };
-		74B6F76F275FB88800A72679 /* SignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B6F76E275FB88800A72679 /* SignUpTests.swift */; };
 		74BA1641281752D900E10E8A /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BA1640281752D900E10E8A /* SettingsViewModel.swift */; };
 		74BA1643281856A400E10E8A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BA1642281856A400E10E8A /* SettingsViewController.swift */; };
 		74BAB7EE28CCE70B00E5CEFE /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BAB7ED28CCE70B00E5CEFE /* ImagePicker.swift */; };
@@ -644,7 +639,6 @@
 		74DE6DA527D58C2A009FB44A /* WorkloadChildView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6DA427D58C2A009FB44A /* WorkloadChildView.swift */; };
 		74DE6DA827D628F6009FB44A /* WorkloadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6DA727D628F6009FB44A /* WorkloadModel.swift */; };
 		74DE6DAA27D6299E009FB44A /* WorkloadSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6DA927D6299D009FB44A /* WorkloadSearchModel.swift */; };
-		74DE6DAC27D62A26009FB44A /* WorkloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6DAB27D62A26009FB44A /* WorkloadTests.swift */; };
 		74DE6DAE27D636A4009FB44A /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE6DAD27D636A4009FB44A /* TimeInterval+Extension.swift */; };
 		74E08A762840F345009D0DCB /* OtherExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E08A752840F345009D0DCB /* OtherExerciseViewModel.swift */; };
 		74E08A7B2841542D009D0DCB /* MyWorkoutStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E08A7A2841542D009D0DCB /* MyWorkoutStatsViewController.swift */; };
@@ -731,7 +725,6 @@
 		74F2CCE626E2E98700D7AD79 /* AddMoreNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2CCE526E2E98700D7AD79 /* AddMoreNoteViewController.swift */; };
 		74F2CCE826E3817000D7AD79 /* AddMoreNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2CCE726E3817000D7AD79 /* AddMoreNoteView.swift */; };
 		74F2CCED26E3D47800D7AD79 /* DisplaySingleSetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2CCEC26E3D47800D7AD79 /* DisplaySingleSetViewController.swift */; };
-		74F2CCF326E78F9600D7AD79 /* MockFirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2CCF226E78F9600D7AD79 /* MockFirebaseManager.swift */; };
 		74F2CCF926EA640000D7AD79 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2CCF826EA640000D7AD79 /* UILabel+Extension.swift */; };
 		74F45CC1260A9CB700AF16DF /* PublicTimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F45CC0260A9CB600AF16DF /* PublicTimelineViewController.swift */; };
 		74F45CC9260A9D0400AF16DF /* PublicTimelineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F45CC8260A9D0400AF16DF /* PublicTimelineViewModel.swift */; };
@@ -1122,8 +1115,6 @@
 		743330C8278F39FD005A0C45 /* AssignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignView.swift; sourceTree = "<group>"; };
 		743330CA278F657F005A0C45 /* WorkoutOptionsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutOptionsModel.swift; sourceTree = "<group>"; };
 		743330CC27906535005A0C45 /* FirebaseMultiUploadBoolean.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseMultiUploadBoolean.swift; sourceTree = "<group>"; };
-		743330CE27909651005A0C45 /* MockFirebaseDatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFirebaseDatabaseManager.swift; sourceTree = "<group>"; };
-		743330D0279096D7005A0C45 /* WorkoutCreationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCreationTests.swift; sourceTree = "<group>"; };
 		743330DD2791EAEB005A0C45 /* WorkoutsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutsList.swift; sourceTree = "<group>"; };
 		743330DF2791F1F2005A0C45 /* SavedWorkoutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWorkoutTableViewCell.swift; sourceTree = "<group>"; };
 		743330E127930DBE005A0C45 /* SavedWorkoutKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedWorkoutKeyModel.swift; sourceTree = "<group>"; };
@@ -1317,7 +1308,6 @@
 		7479A915229F2B4D00D39E2E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7479A917229F2B4D00D39E2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7479A91C229F2B4D00D39E2E /* InTheGymTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InTheGymTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7479A920229F2B4D00D39E2E /* InTheGymTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InTheGymTests.swift; sourceTree = "<group>"; };
 		7479A922229F2B4D00D39E2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7479A927229F2B4D00D39E2E /* InTheGymUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InTheGymUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7479A92B229F2B4D00D39E2E /* InTheGymUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InTheGymUITests.swift; sourceTree = "<group>"; };
@@ -1456,8 +1446,6 @@
 		74B6F7642759212B00A72679 /* FirebaseDatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDatabaseManager.swift; sourceTree = "<group>"; };
 		74B6F766275A526D00A72679 /* SignUpTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTextFieldView.swift; sourceTree = "<group>"; };
 		74B6F76A275A5BF700A72679 /* SkyFloatingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyFloatingTextField.swift; sourceTree = "<group>"; };
-		74B6F76C275FB81E00A72679 /* MockFirebaseAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFirebaseAuthManager.swift; sourceTree = "<group>"; };
-		74B6F76E275FB88800A72679 /* SignUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTests.swift; sourceTree = "<group>"; };
 		74BA1640281752D900E10E8A /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		74BA1642281856A400E10E8A /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		74BAB7ED28CCE70B00E5CEFE /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -1529,7 +1517,6 @@
 		74DE6DA427D58C2A009FB44A /* WorkloadChildView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkloadChildView.swift; sourceTree = "<group>"; };
 		74DE6DA727D628F6009FB44A /* WorkloadModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkloadModel.swift; sourceTree = "<group>"; };
 		74DE6DA927D6299D009FB44A /* WorkloadSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkloadSearchModel.swift; sourceTree = "<group>"; };
-		74DE6DAB27D62A26009FB44A /* WorkloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkloadTests.swift; sourceTree = "<group>"; };
 		74DE6DAD27D636A4009FB44A /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
 		74E08A752840F345009D0DCB /* OtherExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherExerciseViewModel.swift; sourceTree = "<group>"; };
 		74E08A7A2841542D009D0DCB /* MyWorkoutStatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorkoutStatsViewController.swift; sourceTree = "<group>"; };
@@ -1615,7 +1602,6 @@
 		74F2CCE526E2E98700D7AD79 /* AddMoreNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoreNoteViewController.swift; sourceTree = "<group>"; };
 		74F2CCE726E3817000D7AD79 /* AddMoreNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoreNoteView.swift; sourceTree = "<group>"; };
 		74F2CCEC26E3D47800D7AD79 /* DisplaySingleSetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySingleSetViewController.swift; sourceTree = "<group>"; };
-		74F2CCF226E78F9600D7AD79 /* MockFirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFirebaseManager.swift; sourceTree = "<group>"; };
 		74F2CCF826EA640000D7AD79 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		74F45CC0260A9CB600AF16DF /* PublicTimelineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicTimelineViewController.swift; sourceTree = "<group>"; };
 		74F45CC8260A9D0400AF16DF /* PublicTimelineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicTimelineViewModel.swift; sourceTree = "<group>"; };
@@ -1884,16 +1870,6 @@
 				9F9F016729F2F116002B969B /* Observable.swift */,
 			);
 			path = Helper;
-			sourceTree = "<group>";
-		};
-		7403A5F226C42852000588CE /* MockServices */ = {
-			isa = PBXGroup;
-			children = (
-				74F2CCF226E78F9600D7AD79 /* MockFirebaseManager.swift */,
-				74B6F76C275FB81E00A72679 /* MockFirebaseAuthManager.swift */,
-				743330CE27909651005A0C45 /* MockFirebaseDatabaseManager.swift */,
-			);
-			path = MockServices;
 			sourceTree = "<group>";
 		};
 		7403A61926C9B3A9000588CE /* ViewClasses */ = {
@@ -3249,12 +3225,7 @@
 		7479A91F229F2B4D00D39E2E /* InTheGymTests */ = {
 			isa = PBXGroup;
 			children = (
-				7403A5F226C42852000588CE /* MockServices */,
-				7479A920229F2B4D00D39E2E /* InTheGymTests.swift */,
 				7479A922229F2B4D00D39E2E /* Info.plist */,
-				74B6F76E275FB88800A72679 /* SignUpTests.swift */,
-				743330D0279096D7005A0C45 /* WorkoutCreationTests.swift */,
-				74DE6DAB27D62A26009FB44A /* WorkloadTests.swift */,
 			);
 			path = InTheGymTests;
 			sourceTree = "<group>";
@@ -5654,13 +5625,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74DE6DAC27D62A26009FB44A /* WorkloadTests.swift in Sources */,
-				743330D1279096D7005A0C45 /* WorkoutCreationTests.swift in Sources */,
-				7479A921229F2B4D00D39E2E /* InTheGymTests.swift in Sources */,
-				74B6F76F275FB88800A72679 /* SignUpTests.swift in Sources */,
-				74B6F76D275FB81E00A72679 /* MockFirebaseAuthManager.swift in Sources */,
-				74F2CCF326E78F9600D7AD79 /* MockFirebaseManager.swift in Sources */,
-				743330CF27909651005A0C45 /* MockFirebaseDatabaseManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
