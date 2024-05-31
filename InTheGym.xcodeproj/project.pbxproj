@@ -432,7 +432,6 @@
 		7479A911229F2B4C00D39E2E /* InTheGym.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7479A90F229F2B4C00D39E2E /* InTheGym.xcdatamodeld */; };
 		7479A913229F2B4D00D39E2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7479A912229F2B4D00D39E2E /* Assets.xcassets */; };
 		7479A916229F2B4D00D39E2E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7479A914229F2B4D00D39E2E /* LaunchScreen.storyboard */; };
-		7479A92C229F2B4D00D39E2E /* InTheGymUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479A92B229F2B4D00D39E2E /* InTheGymUITests.swift */; };
 		747AE923283E54FF0037FBEF /* NewWorkoutSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747AE922283E54FF0037FBEF /* NewWorkoutSelectionView.swift */; };
 		747AE925283E5AD10037FBEF /* NewWorkoutSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747AE924283E5AD10037FBEF /* NewWorkoutSelectionViewModel.swift */; };
 		747B676A2600071C000AD6B7 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747B67692600071C000AD6B7 /* DateExtension.swift */; };
@@ -862,13 +861,6 @@
 
 /* Begin PBXContainerItemProxy section */
 		7479A91D229F2B4D00D39E2E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7479A8FD229F2B4C00D39E2E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7479A904229F2B4C00D39E2E;
-			remoteInfo = InTheGym;
-		};
-		7479A928229F2B4D00D39E2E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7479A8FD229F2B4C00D39E2E /* Project object */;
 			proxyType = 1;
@@ -1312,9 +1304,6 @@
 		7479A917229F2B4D00D39E2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7479A91C229F2B4D00D39E2E /* InTheGymTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InTheGymTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7479A922229F2B4D00D39E2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7479A927229F2B4D00D39E2E /* InTheGymUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InTheGymUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7479A92B229F2B4D00D39E2E /* InTheGymUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InTheGymUITests.swift; sourceTree = "<group>"; };
-		7479A92D229F2B4D00D39E2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		747AE922283E54FF0037FBEF /* NewWorkoutSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWorkoutSelectionView.swift; sourceTree = "<group>"; };
 		747AE924283E5AD10037FBEF /* NewWorkoutSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWorkoutSelectionViewModel.swift; sourceTree = "<group>"; };
 		747B67692600071C000AD6B7 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
@@ -1766,13 +1755,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7479A919229F2B4D00D39E2E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7479A924229F2B4D00D39E2E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3133,7 +3115,6 @@
 			children = (
 				7479A907229F2B4C00D39E2E /* InTheGym */,
 				7479A91F229F2B4D00D39E2E /* InTheGymTests */,
-				7479A92A229F2B4D00D39E2E /* InTheGymUITests */,
 				7479A906229F2B4C00D39E2E /* Products */,
 				D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */,
 			);
@@ -3144,7 +3125,6 @@
 			children = (
 				7479A905229F2B4C00D39E2E /* InTheGym.app */,
 				7479A91C229F2B4D00D39E2E /* InTheGymTests.xctest */,
-				7479A927229F2B4D00D39E2E /* InTheGymUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3233,15 +3213,6 @@
 				746DA0D72C0A615C0094EA3B /* InTheGymTests-Bridging-Header.h */,
 			);
 			path = InTheGymTests;
-			sourceTree = "<group>";
-		};
-		7479A92A229F2B4D00D39E2E /* InTheGymUITests */ = {
-			isa = PBXGroup;
-			children = (
-				7479A92B229F2B4D00D39E2E /* InTheGymUITests.swift */,
-				7479A92D229F2B4D00D39E2E /* Info.plist */,
-			);
-			path = InTheGymUITests;
 			sourceTree = "<group>";
 		};
 		747AE921283E54E30037FBEF /* AddNewWorkout */ = {
@@ -4702,24 +4673,6 @@
 			productReference = 7479A91C229F2B4D00D39E2E /* InTheGymTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		7479A926229F2B4D00D39E2E /* InTheGymUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7479A936229F2B4D00D39E2E /* Build configuration list for PBXNativeTarget "InTheGymUITests" */;
-			buildPhases = (
-				7479A923229F2B4D00D39E2E /* Sources */,
-				7479A924229F2B4D00D39E2E /* Frameworks */,
-				7479A925229F2B4D00D39E2E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				7479A929229F2B4D00D39E2E /* PBXTargetDependency */,
-			);
-			name = InTheGymUITests;
-			productName = InTheGymUITests;
-			productReference = 7479A927229F2B4D00D39E2E /* InTheGymUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -4737,10 +4690,6 @@
 					7479A91B229F2B4D00D39E2E = {
 						CreatedOnToolsVersion = 10.2.1;
 						LastSwiftMigration = 1540;
-						TestTargetID = 7479A904229F2B4C00D39E2E;
-					};
-					7479A926229F2B4D00D39E2E = {
-						CreatedOnToolsVersion = 10.2.1;
 						TestTargetID = 7479A904229F2B4C00D39E2E;
 					};
 				};
@@ -4768,7 +4717,6 @@
 			targets = (
 				7479A904229F2B4C00D39E2E /* InTheGym */,
 				7479A91B229F2B4D00D39E2E /* InTheGymTests */,
-				7479A926229F2B4D00D39E2E /* InTheGymUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -4786,13 +4734,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7479A91A229F2B4D00D39E2E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7479A925229F2B4D00D39E2E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -5635,14 +5576,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7479A923229F2B4D00D39E2E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7479A92C229F2B4D00D39E2E /* InTheGymUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -5650,11 +5583,6 @@
 			isa = PBXTargetDependency;
 			target = 7479A904229F2B4C00D39E2E /* InTheGym */;
 			targetProxy = 7479A91D229F2B4D00D39E2E /* PBXContainerItemProxy */;
-		};
-		7479A929229F2B4D00D39E2E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7479A904229F2B4C00D39E2E /* InTheGym */;
-			targetProxy = 7479A928229F2B4D00D39E2E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -6110,46 +6038,6 @@
 			};
 			name = Release;
 		};
-		7479A937229F2B4D00D39E2E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = H6WZPTFL8D;
-				INFOPLIST_FILE = InTheGymUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.InTheGymUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = InTheGym;
-			};
-			name = Debug;
-		};
-		7479A938229F2B4D00D39E2E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = H6WZPTFL8D;
-				INFOPLIST_FILE = InTheGymUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.InTheGymUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = InTheGym;
-			};
-			name = Release;
-		};
 		74DFB6E02A4F418D0030491B /* Emulator */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -6371,26 +6259,6 @@
 			};
 			name = Emulator;
 		};
-		74DFB6E32A4F418D0030491B /* Emulator */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = H6WZPTFL8D;
-				INFOPLIST_FILE = InTheGymUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.InTheGymUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = InTheGym;
-			};
-			name = Emulator;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -6420,16 +6288,6 @@
 				7479A934229F2B4D00D39E2E /* Debug */,
 				74DFB6E22A4F418D0030491B /* Emulator */,
 				7479A935229F2B4D00D39E2E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7479A936229F2B4D00D39E2E /* Build configuration list for PBXNativeTarget "InTheGymUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7479A937229F2B4D00D39E2E /* Debug */,
-				74DFB6E32A4F418D0030491B /* Emulator */,
-				7479A938229F2B4D00D39E2E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
