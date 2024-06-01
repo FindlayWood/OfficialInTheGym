@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:CI_iOS_TestPlan.xctestplan">
+   </FileRef>
+   <FileRef
       location = "group:ITGWorkoutKit/ITGWorkoutKit.xcodeproj">
    </FileRef>
    <FileRef

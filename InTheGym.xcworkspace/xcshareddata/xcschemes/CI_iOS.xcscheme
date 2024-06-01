@@ -30,7 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:ITGWorkoutKit/ITGWorkoutKit/TestPlans/CI_iOS.xctestplan"
+            reference = "container:CI_iOS_TestPlan.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
