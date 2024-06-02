@@ -9,12 +9,6 @@
 import XCTest
 import ITGWorkoutKit
 
-protocol FeedCache {
-    typealias Result = Swift.Result<Void, Error>
-
-    func save(_ feed: [WorkoutItem], completion: @escaping (Result) -> Void)
-}
-
 final class FeedLoaderCacheDecorator: WorkoutLoader {
     private let decoratee: WorkoutLoader
     private let cache: FeedCache
