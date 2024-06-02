@@ -20,9 +20,15 @@ public final class FeedLoaderCacheDecorator: ITGWorkoutKit.WorkoutLoader {
     public func load(completion: @escaping (ITGWorkoutKit.WorkoutLoader.Result) -> Void) {
         decoratee.load { [weak self] result in
             completion(result.map { feed in
-                self?.cache.save(feed) { _ in }
+                self?.cache.saveIgnoringResult(feed)
                 return feed
             })
         }
+    }
+}
+
+private extension FeedCache {
+    func saveIgnoringResult(_ feed: [WorkoutItem]) {
+        save(feed) { _ in }
     }
 }
