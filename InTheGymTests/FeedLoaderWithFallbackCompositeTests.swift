@@ -36,8 +36,8 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
     // MARK: - Helpers
 
     private func makeSUT(primaryResult: ITGWorkoutKit.WorkoutLoader.Result, fallbackResult: ITGWorkoutKit.WorkoutLoader.Result, file: StaticString = #file, line: UInt = #line) -> WorkoutLoader {
-        let primaryLoader = LoaderStub(result: primaryResult)
-        let fallbackLoader = LoaderStub(result: fallbackResult)
+        let primaryLoader = FeedLoaderStub(result: primaryResult)
+        let fallbackLoader = FeedLoaderStub(result: fallbackResult)
         let sut = FeedLoaderWithFallbackComposite(primary: primaryLoader, fallback: fallbackLoader)
         trackForMemoryLeaks(primaryLoader, file: file, line: line)
         trackForMemoryLeaks(fallbackLoader, file: file, line: line)
@@ -69,17 +69,4 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
     private func uniqueFeed() -> [WorkoutItem] {
         return [WorkoutItem(id: UUID(), description: "any", location: "any", image: URL(string: "http://any-url.com")!)]
     }
-
-    private class LoaderStub: WorkoutLoader {
-        private let result: WorkoutLoader.Result
-
-        init(result: WorkoutLoader.Result) {
-            self.result = result
-        }
-
-        func load(completion: @escaping (WorkoutLoader.Result) -> Void) {
-            completion(result)
-        }
-    }
-
 }
