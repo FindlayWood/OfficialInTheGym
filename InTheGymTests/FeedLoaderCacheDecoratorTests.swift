@@ -8,25 +8,7 @@
 
 import XCTest
 import ITGWorkoutKit
-
-final class FeedLoaderCacheDecorator: WorkoutLoader {
-    private let decoratee: WorkoutLoader
-    private let cache: FeedCache
-
-    init(decoratee: WorkoutLoader, cache: FeedCache) {
-        self.decoratee = decoratee
-        self.cache = cache
-    }
-
-    func load(completion: @escaping (WorkoutLoader.Result) -> Void) {
-        decoratee.load { [weak self] result in
-            completion(result.map { feed in
-                self?.cache.save(feed) { _ in }
-                return feed
-            })
-        }
-    }
-}
+import InTheGym
 
 class FeedLoaderCacheDecoratorTests: XCTestCase, FeedLoaderTestCase {
 
