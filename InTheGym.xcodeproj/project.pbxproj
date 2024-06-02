@@ -419,6 +419,7 @@
 		746DA0F92C0CCF620094EA3B /* FeedImageDataLoaderCacheDecoratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA0F82C0CCF610094EA3B /* FeedImageDataLoaderCacheDecoratorTests.swift */; };
 		746DA0FB2C0CCFCA0094EA3B /* FeedImageDataLoaderSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA0FA2C0CCFCA0094EA3B /* FeedImageDataLoaderSpy.swift */; };
 		746DA0FD2C0CD0810094EA3B /* XCTestCase+FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA0FC2C0CD0810094EA3B /* XCTestCase+FeedImageDataLoader.swift */; };
+		746DA1012C0CD5D80094EA3B /* FeedImageDataLoaderCacheDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA1002C0CD5D80094EA3B /* FeedImageDataLoaderCacheDecorator.swift */; };
 		7470FD70281968DA003DB256 /* PlayerProfileMoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */; };
 		7472C87227DFF628004836B8 /* DiscoverPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87127DFF628004836B8 /* DiscoverPageView.swift */; };
 		7472C87427E0B4B7004836B8 /* DiscoverSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */; };
@@ -1299,6 +1300,7 @@
 		746DA0F82C0CCF610094EA3B /* FeedImageDataLoaderCacheDecoratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderCacheDecoratorTests.swift; sourceTree = "<group>"; };
 		746DA0FA2C0CCFCA0094EA3B /* FeedImageDataLoaderSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderSpy.swift; sourceTree = "<group>"; };
 		746DA0FC2C0CD0810094EA3B /* XCTestCase+FeedImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FeedImageDataLoader.swift"; sourceTree = "<group>"; };
+		746DA1002C0CD5D80094EA3B /* FeedImageDataLoaderCacheDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderCacheDecorator.swift; sourceTree = "<group>"; };
 		7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreViewModel.swift; sourceTree = "<group>"; };
 		7472C87127DFF628004836B8 /* DiscoverPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageView.swift; sourceTree = "<group>"; };
 		7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSectionHeader.swift; sourceTree = "<group>"; };
@@ -3122,6 +3124,7 @@
 				746DA0DB2C0A67C60094EA3B /* FeedLoaderWithFallbackComposite.swift */,
 				746DA0DF2C0A7F240094EA3B /* FeedImageDataLoaderWithFallbackComposite.swift */,
 				746DA0F62C0CCAC60094EA3B /* FeedLoaderCacheDecorator.swift */,
+				746DA1002C0CD5D80094EA3B /* FeedImageDataLoaderCacheDecorator.swift */,
 			);
 			path = "Feed Feature";
 			sourceTree = "<group>";
@@ -5528,6 +5531,7 @@
 				742C1CA727BEA6DA00DD1BB0 /* ExerciseClipsDataSource.swift in Sources */,
 				74E08A762840F345009D0DCB /* OtherExerciseViewModel.swift in Sources */,
 				7479813827DB9AC200CF3F9B /* RequestsTableViewCellViewModel.swift in Sources */,
+				746DA1012C0CD5D80094EA3B /* FeedImageDataLoaderCacheDecorator.swift in Sources */,
 				747E0C902862116F00D828A4 /* MyJumpsViewController.swift in Sources */,
 				7419B1252857A9C400E879DE /* PerformanceMonitorViewController.swift in Sources */,
 				744AED162796F449000D2D74 /* WorkoutCollectionDataSource.swift in Sources */,
