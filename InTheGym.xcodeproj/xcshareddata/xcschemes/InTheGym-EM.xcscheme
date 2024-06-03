@@ -48,6 +48,17 @@
                ReferencedContainer = "container:InTheGym.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "746DA1052C0E56E00094EA3B"
+               BuildableName = "InTheGymUIAcceptanceTests.xctest"
+               BlueprintName = "InTheGymUIAcceptanceTests"
+               ReferencedContainer = "container:InTheGym.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

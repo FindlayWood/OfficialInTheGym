@@ -66,6 +66,13 @@
         "identifier" : "74730B992BC1DC2D00B54778",
         "name" : "WorkoutAPIEndToEndTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:InTheGym.xcodeproj",
+        "identifier" : "746DA1052C0E56E00094EA3B",
+        "name" : "InTheGymUIAcceptanceTests"
+      }
     }
   ],
   "version" : 1
