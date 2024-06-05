@@ -6,6 +6,7 @@
 //  Copyright © 2024 FindlayWood. All rights reserved.
 //
 
+import Foundation
 import ITGWorkoutKit
 
 public class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
