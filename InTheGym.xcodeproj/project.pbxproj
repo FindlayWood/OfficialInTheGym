@@ -424,6 +424,7 @@
 		746DA10B2C0E56E00094EA3B /* InTheGymUIAcceptanceTestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA10A2C0E56E00094EA3B /* InTheGymUIAcceptanceTestsLaunchTests.swift */; };
 		746F88C92C123F8400E8E25C /* StoreKitConfig.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 746F88C82C123F8400E8E25C /* StoreKitConfig.storekit */; };
 		746F88CB2C12405400E8E25C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 746F88CA2C12405400E8E25C /* StoreKitTestCertificate.cer */; };
+		746F88CD2C124A7200E8E25C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746F88CC2C124A7200E8E25C /* SceneDelegate.swift */; };
 		7470FD70281968DA003DB256 /* PlayerProfileMoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */; };
 		7472C87227DFF628004836B8 /* DiscoverPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87127DFF628004836B8 /* DiscoverPageView.swift */; };
 		7472C87427E0B4B7004836B8 /* DiscoverSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */; };
@@ -1317,6 +1318,7 @@
 		746DA10A2C0E56E00094EA3B /* InTheGymUIAcceptanceTestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InTheGymUIAcceptanceTestsLaunchTests.swift; sourceTree = "<group>"; };
 		746F88C82C123F8400E8E25C /* StoreKitConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitConfig.storekit; sourceTree = "<group>"; };
 		746F88CA2C12405400E8E25C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
+		746F88CC2C124A7200E8E25C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreViewModel.swift; sourceTree = "<group>"; };
 		7472C87127DFF628004836B8 /* DiscoverPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageView.swift; sourceTree = "<group>"; };
 		7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSectionHeader.swift; sourceTree = "<group>"; };
@@ -3272,6 +3274,7 @@
 				74F546F425ED4D0300C1A6A9 /* Messages */,
 				7445503A256C613600E4E4CC /* InTheGym.entitlements */,
 				7479A908229F2B4C00D39E2E /* AppDelegate.swift */,
+				746F88CC2C124A7200E8E25C /* SceneDelegate.swift */,
 				7479A90C229F2B4C00D39E2E /* Main.storyboard */,
 				7479A912229F2B4D00D39E2E /* Assets.xcassets */,
 				7479A914229F2B4D00D39E2E /* LaunchScreen.storyboard */,
@@ -5494,6 +5497,7 @@
 				7423B51F279C2E54007AA889 /* ExerciseCollectionCell.swift in Sources */,
 				74F0C705284F66DB00FE3A01 /* WorkoutCreationOptionsView.swift in Sources */,
 				74AF6D4D2684ED09005C52A8 /* DisplayWorkoutStatsViewController.swift in Sources */,
+				746F88CD2C124A7200E8E25C /* SceneDelegate.swift in Sources */,
 				74B6F767275A526E00A72679 /* SignUpTextFieldView.swift in Sources */,
 				7412D61F282C5C03009B3EFA /* ShowSingleSetCustomTransition.swift in Sources */,
 				74EE4EC927E7A74C00051451 /* CustomUnderlineSegmentControl.swift in Sources */,

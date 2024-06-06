@@ -43,7 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Firestore.firestore().settings = settings
         
         #endif
-        launchScreen()
         // setup revenue cat
         Purchases.logLevel = .debug
 //        UserObserver.shared.checkForUserDefault()
@@ -66,74 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return true
     }
-    func onBoard() {
-        window = UIWindow(frame: UIScreen.main.bounds)
-        let vc = OnBoardMainViewController()
-        window?.rootViewController = vc
-        window?.makeKeyAndVisible()
-    }
-    func launchScreen() {
-        navigationController = UINavigationController()
-        baseController = makeBaseCoordinator()
-        baseController?.start()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        guard let window else {return}
-        window.rootViewController = navigationController
-        window.makeKeyAndVisible()
-    }
-    
-    func makeBaseCoordinator() -> BaseController {
-
-        let controller = BaseController(navigationController: navigationController)
-        
-        let cache = UserCacheServiceAdapter()
-        let cacheSaver = UserDefaultsCacheUserSaver()
-        
-        let subscriptionManager = SubscriptionManager.shared
-        
-        let api = UserAPIServiceAdapter(
-            authService: FirebaseAuthManager.shared,
-            firestoreService: FirestoreManager.shared)
-        
-        let loginKitComposer = LoginComposerAdapter(
-            navigationController: navigationController) { [weak controller] in
-                controller?.loadUser()
-            }
-        
-        let accountCreationComposer = AccountCreationComposerAdapter(
-            navigationController: navigationController) {
-                [weak controller] in
-                controller?.reloadUser()
-            } signedOut: { [ weak controller] in
-                controller?.loadUser()
-            }
-
-        
-        let flow = BasicBaseFlow(
-            navigationController: navigationController,
-            loginKitComposer: loginKitComposer,
-            accountCreationComposer: accountCreationComposer) { [weak controller] in
-                controller?.reloadUser()
-            } userLoggedIn: { [weak controller] in
-                controller?.loadUser()
-            } userSignedOut: { [weak controller] in
-                controller?.loadUser()
-            }
-        
-        #if EMULATOR
-        controller.userService = api
-        #else
-        controller.userService = cache.fallback(api)
-        #endif
-//        controller.userService = cache.fallback(api)
-        controller.cacheSaver = cacheSaver
-        controller.baseFlow = flow
-        controller.subscriptionManager = subscriptionManager
-        
-        return controller
-    }
-    
-    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
