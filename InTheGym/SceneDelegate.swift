@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import ITGWorkoutKit
+import ITGWorkoutKitiOS
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -20,9 +22,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let _ = (scene as? UIWindowScene) else { return }
         if let windowScene = scene as? UIWindowScene {
             self.window = UIWindow(windowScene: windowScene)
-            launchScreen()
+            launchEssentialFeed()
         }
         
+    }
+    
+    func launchEssentialFeed() {
+        let remoteURL = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed")!
+
+        let remoteClient = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        let imageClient = URLSessionHTTPClient2(session: URLSession(configuration: .ephemeral))
+        let remoteFeedLoader = RemoteLoader(client: remoteClient, path: remoteURL.absoluteString, mapper: WorkoutItemsMapper.map)
+        let remoteImageLoader = RemoteFeedImageDataLoader(client: imageClient)
+
+        window?.rootViewController = FeedUIComposer.feedComposedWith(
+            feedLoader: remoteFeedLoader,
+            imageLoader: remoteImageLoader)
+        window?.makeKeyAndVisible()
     }
     
     func onBoard() {
@@ -93,3 +109,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
+extension RemoteLoader: ITGWorkoutKit.WorkoutLoader where Resource == [WorkoutItem] {}

@@ -421,7 +421,6 @@
 		746DA0FD2C0CD0810094EA3B /* XCTestCase+FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA0FC2C0CD0810094EA3B /* XCTestCase+FeedImageDataLoader.swift */; };
 		746DA1012C0CD5D80094EA3B /* FeedImageDataLoaderCacheDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA1002C0CD5D80094EA3B /* FeedImageDataLoaderCacheDecorator.swift */; };
 		746DA1092C0E56E00094EA3B /* InTheGymUIAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA1082C0E56E00094EA3B /* InTheGymUIAcceptanceTests.swift */; };
-		746DA10B2C0E56E00094EA3B /* InTheGymUIAcceptanceTestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA10A2C0E56E00094EA3B /* InTheGymUIAcceptanceTestsLaunchTests.swift */; };
 		746F88C92C123F8400E8E25C /* StoreKitConfig.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 746F88C82C123F8400E8E25C /* StoreKitConfig.storekit */; };
 		746F88CB2C12405400E8E25C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 746F88CA2C12405400E8E25C /* StoreKitTestCertificate.cer */; };
 		746F88CD2C124A7200E8E25C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746F88CC2C124A7200E8E25C /* SceneDelegate.swift */; };
@@ -1315,7 +1314,6 @@
 		746DA1002C0CD5D80094EA3B /* FeedImageDataLoaderCacheDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderCacheDecorator.swift; sourceTree = "<group>"; };
 		746DA1062C0E56E00094EA3B /* InTheGymUIAcceptanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InTheGymUIAcceptanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		746DA1082C0E56E00094EA3B /* InTheGymUIAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InTheGymUIAcceptanceTests.swift; sourceTree = "<group>"; };
-		746DA10A2C0E56E00094EA3B /* InTheGymUIAcceptanceTestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InTheGymUIAcceptanceTestsLaunchTests.swift; sourceTree = "<group>"; };
 		746F88C82C123F8400E8E25C /* StoreKitConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitConfig.storekit; sourceTree = "<group>"; };
 		746F88CA2C12405400E8E25C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		746F88CC2C124A7200E8E25C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -3171,7 +3169,6 @@
 			isa = PBXGroup;
 			children = (
 				746DA1082C0E56E00094EA3B /* InTheGymUIAcceptanceTests.swift */,
-				746DA10A2C0E56E00094EA3B /* InTheGymUIAcceptanceTestsLaunchTests.swift */,
 			);
 			path = InTheGymUIAcceptanceTests;
 			sourceTree = "<group>";
@@ -4874,7 +4871,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				746DA10B2C0E56E00094EA3B /* InTheGymUIAcceptanceTestsLaunchTests.swift in Sources */,
 				746DA1092C0E56E00094EA3B /* InTheGymUIAcceptanceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
