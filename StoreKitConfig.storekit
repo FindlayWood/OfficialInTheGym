@@ -1,0 +1,133 @@
+{
+  "identifier" : "B7AE9BD0",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1510109526",
+    "_developerTeamID" : "H6WZPTFL8D",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 739393425.42073405,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "20974953",
+      "localizations" : [
+
+      ],
+      "name" : "Premium Account",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "48.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "1643968845",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Premium Account",
+              "displayName" : "Premium Account",
+              "locale" : "en_GB"
+            }
+          ],
+          "productID" : "itg_4999_1y",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Annual £49.99",
+          "subscriptionGroupID" : "20974953",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "1643968127",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Premium Account",
+              "displayName" : "Premium Account",
+              "locale" : "en_GB"
+            }
+          ],
+          "productID" : "itg_499_1m",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly £4.99",
+          "subscriptionGroupID" : "20974953",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "subscriptionOffersKeyPair" : {
+    "id" : "C55A0CCF",
+    "privateKey" : "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgHJE05JbhWfN942d+kaVL9y/Ro5YcekrPSyERrJlYYhGgCgYIKoZIzj0DAQehRANCAASLW4Spf5A48hdsogGeTwXdXStpomwta9D/rMdsX6RZWRgAkbX/71cgluVZWNf5G7uUsLm2hu4qXmwbfibb5M3M"
+  },
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

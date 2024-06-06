@@ -422,6 +422,8 @@
 		746DA1012C0CD5D80094EA3B /* FeedImageDataLoaderCacheDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA1002C0CD5D80094EA3B /* FeedImageDataLoaderCacheDecorator.swift */; };
 		746DA1092C0E56E00094EA3B /* InTheGymUIAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA1082C0E56E00094EA3B /* InTheGymUIAcceptanceTests.swift */; };
 		746DA10B2C0E56E00094EA3B /* InTheGymUIAcceptanceTestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746DA10A2C0E56E00094EA3B /* InTheGymUIAcceptanceTestsLaunchTests.swift */; };
+		746F88C92C123F8400E8E25C /* StoreKitConfig.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 746F88C82C123F8400E8E25C /* StoreKitConfig.storekit */; };
+		746F88CB2C12405400E8E25C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 746F88CA2C12405400E8E25C /* StoreKitTestCertificate.cer */; };
 		7470FD70281968DA003DB256 /* PlayerProfileMoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */; };
 		7472C87227DFF628004836B8 /* DiscoverPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87127DFF628004836B8 /* DiscoverPageView.swift */; };
 		7472C87427E0B4B7004836B8 /* DiscoverSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */; };
@@ -1313,6 +1315,8 @@
 		746DA1062C0E56E00094EA3B /* InTheGymUIAcceptanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InTheGymUIAcceptanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		746DA1082C0E56E00094EA3B /* InTheGymUIAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InTheGymUIAcceptanceTests.swift; sourceTree = "<group>"; };
 		746DA10A2C0E56E00094EA3B /* InTheGymUIAcceptanceTestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InTheGymUIAcceptanceTestsLaunchTests.swift; sourceTree = "<group>"; };
+		746F88C82C123F8400E8E25C /* StoreKitConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitConfig.storekit; sourceTree = "<group>"; };
+		746F88CA2C12405400E8E25C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		7470FD6F281968DA003DB256 /* PlayerProfileMoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreViewModel.swift; sourceTree = "<group>"; };
 		7472C87127DFF628004836B8 /* DiscoverPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPageView.swift; sourceTree = "<group>"; };
 		7472C87327E0B4B7004836B8 /* DiscoverSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSectionHeader.swift; sourceTree = "<group>"; };
@@ -3191,6 +3195,8 @@
 		7479A8FC229F2B4C00D39E2E = {
 			isa = PBXGroup;
 			children = (
+				746F88C82C123F8400E8E25C /* StoreKitConfig.storekit */,
+				746F88CA2C12405400E8E25C /* StoreKitTestCertificate.cer */,
 				7479A907229F2B4C00D39E2E /* InTheGym */,
 				7479A91F229F2B4D00D39E2E /* InTheGymTests */,
 				746DA1072C0E56E00094EA3B /* InTheGymUIAcceptanceTests */,
@@ -4843,9 +4849,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				7479A916229F2B4D00D39E2E /* LaunchScreen.storyboard in Resources */,
+				746F88C92C123F8400E8E25C /* StoreKitConfig.storekit in Resources */,
 				7479A913229F2B4D00D39E2E /* Assets.xcassets in Resources */,
 				740CEF32290C22B800AADBBA /* GoogleService-Info.plist in Resources */,
 				7479A90E229F2B4C00D39E2E /* Main.storyboard in Resources */,
+				746F88CB2C12405400E8E25C /* StoreKitTestCertificate.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

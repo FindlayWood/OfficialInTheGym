@@ -67,6 +67,6 @@ extension UIViewController {
     func showButtonAlert(title: String, subtitle: String, buttonAction: @escaping () -> Void) {
         let alert = SCLAlertView()
         alert.addButton("Yes", action: buttonAction)
-        alert.showWarning(title, subTitle: subtitle, closeButtonTitle: "No", colorStyle: 0xe01212, colorTextButton: 0xfcfcfc)
+        alert.showWarning(title, subTitle: subtitle, closeButtonTitle: "No", colorStyle: .red, colorTextButton: .white)
     }
 }
