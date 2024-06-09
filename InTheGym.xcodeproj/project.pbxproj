@@ -339,6 +339,8 @@
 		7446E2382C15DFC20060CEE6 /* FeedViewController+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E22E2C15DFC20060CEE6 /* FeedViewController+TestHelpers.swift */; };
 		7446E23A2C15DFE40060CEE6 /* FeedUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E2392C15DFE30060CEE6 /* FeedUIIntegrationTests.swift */; };
 		7446E23C2C15F0490060CEE6 /* FeedAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E23B2C15F0490060CEE6 /* FeedAcceptanceTests.swift */; };
+		7446E23E2C1652660060CEE6 /* HTTPClientStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E23D2C1652660060CEE6 /* HTTPClientStub.swift */; };
+		7446E2402C16529A0060CEE6 /* ClientStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E23F2C16529A0060CEE6 /* ClientStub.swift */; };
 		744AED0D27960A51000D2D74 /* WorkoutDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744AED0C27960A51000D2D74 /* WorkoutDisplayViewController.swift */; };
 		744AED1027960B8D000D2D74 /* MainWorkoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744AED0F27960B8D000D2D74 /* MainWorkoutTableViewCell.swift */; };
 		744AED12279615CE000D2D74 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744AED11279615CE000D2D74 /* Array+Extension.swift */; };
@@ -1243,6 +1245,8 @@
 		7446E22F2C15DFC20060CEE6 /* UIRefreshControl+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+TestHelpers.swift"; sourceTree = "<group>"; };
 		7446E2392C15DFE30060CEE6 /* FeedUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIIntegrationTests.swift; sourceTree = "<group>"; };
 		7446E23B2C15F0490060CEE6 /* FeedAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedAcceptanceTests.swift; sourceTree = "<group>"; };
+		7446E23D2C1652660060CEE6 /* HTTPClientStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientStub.swift; sourceTree = "<group>"; };
+		7446E23F2C16529A0060CEE6 /* ClientStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientStub.swift; sourceTree = "<group>"; };
 		744AED0C27960A51000D2D74 /* WorkoutDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDisplayViewController.swift; sourceTree = "<group>"; };
 		744AED0F27960B8D000D2D74 /* MainWorkoutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWorkoutTableViewCell.swift; sourceTree = "<group>"; };
 		744AED11279615CE000D2D74 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
@@ -3195,6 +3199,8 @@
 				746DA0F22C0CBC3A0094EA3B /* XCTestCase+FeedLoader.swift */,
 				746DA0FA2C0CCFCA0094EA3B /* FeedImageDataLoaderSpy.swift */,
 				746DA0FC2C0CD0810094EA3B /* XCTestCase+FeedImageDataLoader.swift */,
+				7446E23D2C1652660060CEE6 /* HTTPClientStub.swift */,
+				7446E23F2C16529A0060CEE6 /* ClientStub.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -5704,6 +5710,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7446E2402C16529A0060CEE6 /* ClientStub.swift in Sources */,
 				7446E2322C15DFC20060CEE6 /* FeedViewControllerTests+LoaderSpy.swift in Sources */,
 				7446E2312C15DFC20060CEE6 /* FeedViewControllerTests+Localization.swift in Sources */,
 				746DA0E52C0A80420094EA3B /* SharedTestHelpers.swift in Sources */,
@@ -5719,6 +5726,7 @@
 				7446E2372C15DFC20060CEE6 /* FeedImageCell+TestHelpers.swift in Sources */,
 				746DA0DE2C0A79330094EA3B /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */,
 				746DA0D92C0A615D0094EA3B /* FeedLoaderWithFallbackCompositeTests.swift in Sources */,
+				7446E23E2C1652660060CEE6 /* HTTPClientStub.swift in Sources */,
 				7446E2362C15DFC20060CEE6 /* UIRefreshControl+TestHelpers.swift in Sources */,
 				746DA0F12C0CB6D20094EA3B /* FeedLoaderStub.swift in Sources */,
 				746DA0E32C0A7FAE0094EA3B /* XCTestCase+MemoryLeakTracking.swift in Sources */,
