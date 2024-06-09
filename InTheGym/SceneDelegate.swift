@@ -25,11 +25,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else { return }
+        
         if let windowScene = scene as? UIWindowScene {
             self.window = UIWindow(windowScene: windowScene)
-            launchEssentialFeed()
+            
+            configureWindow()
         }
-        
+    }
+    
+    func configureWindow() {
+        launchEssentialFeed()
+
     }
     
     func launchEssentialFeed() {
@@ -45,17 +51,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let localFeedLoader = LocalFeedLoader(store: localStore, currentDate: Date.init)
         let localImageLoader = LocalFeedImageDataLoader(store: localStore)
 
-        window?.rootViewController = FeedUIComposer.feedComposedWith(
-            feedLoader: FeedLoaderWithFallbackComposite(
-                primary: FeedLoaderCacheDecorator(
-                    decoratee: remoteFeedLoader,
-                    cache: localFeedLoader),
-                fallback: localFeedLoader),
-            imageLoader: FeedImageDataLoaderWithFallbackComposite(
-                primary: localImageLoader,
-                fallback: FeedImageDataLoaderCacheDecorator(
-                    decoratee: remoteImageLoader,
-                    cache: localImageLoader)))
+        window?.rootViewController = UINavigationController(
+            rootViewController:
+                FeedUIComposer.feedComposedWith(
+                    feedLoader: FeedLoaderWithFallbackComposite(
+                        primary: FeedLoaderCacheDecorator(
+                            decoratee: remoteFeedLoader,
+                            cache: localFeedLoader),
+                        fallback: localFeedLoader),
+                    imageLoader: FeedImageDataLoaderWithFallbackComposite(
+                        primary: localImageLoader,
+                        fallback: FeedImageDataLoaderCacheDecorator(
+                            decoratee: remoteImageLoader,
+                            cache: localImageLoader))))
         
         
         window?.makeKeyAndVisible()
