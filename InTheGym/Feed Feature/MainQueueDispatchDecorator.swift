@@ -24,9 +24,9 @@ final class MainQueueDispatchDecorator<T> {
     }
 }
 
-extension MainQueueDispatchDecorator: WorkoutLoader where T == WorkoutLoader {
+extension MainQueueDispatchDecorator: ITGWorkoutKit.WorkoutLoader where T == ITGWorkoutKit.WorkoutLoader {
 
-    func load(completion: @escaping (WorkoutLoader.Result) -> Void) {
+    func load(completion: @escaping (ITGWorkoutKit.WorkoutLoader.Result) -> Void) {
         decoratee.load { [weak self] result in
             self?.dispatch { completion(result) }
         }

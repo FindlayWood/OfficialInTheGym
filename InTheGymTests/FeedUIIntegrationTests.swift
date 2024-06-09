@@ -7,6 +7,7 @@
 
 import XCTest
 import UIKit
+import InTheGym
 import ITGWorkoutKit
 import ITGWorkoutKitiOS
 

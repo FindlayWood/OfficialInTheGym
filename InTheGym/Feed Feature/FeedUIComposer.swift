@@ -7,11 +7,12 @@
 
 import UIKit
 import ITGWorkoutKit
+import ITGWorkoutKitiOS
 
 public final class FeedUIComposer {
     private init() {}
 
-    public static func feedComposedWith(feedLoader: WorkoutLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
+    public static func feedComposedWith(feedLoader: ITGWorkoutKit.WorkoutLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
         let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: MainQueueDispatchDecorator(decoratee: feedLoader))
         
         let feedController = makeFeedViewController(

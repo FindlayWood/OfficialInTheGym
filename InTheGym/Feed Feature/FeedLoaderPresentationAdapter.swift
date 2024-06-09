@@ -6,12 +6,13 @@
 //
 
 import ITGWorkoutKit
+import ITGWorkoutKitiOS
 
 final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
-    private let feedLoader: WorkoutLoader
+    private let feedLoader: ITGWorkoutKit.WorkoutLoader
     var presenter: FeedPresenter?
 
-    init(feedLoader: WorkoutLoader) {
+    init(feedLoader: ITGWorkoutKit.WorkoutLoader) {
         self.feedLoader = feedLoader
     }
 
