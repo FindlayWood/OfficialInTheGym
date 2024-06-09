@@ -19,10 +19,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     
-    let localStoreURL = NSPersistentContainer
-        .defaultDirectoryURL()
-        .appendingPathComponent("feed-store.sqlite")
-    
     private lazy var client: Client = {
         URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }()
@@ -32,7 +28,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }()
 
     private lazy var store: FeedStore & FeedImageDataStore = {
-        try! CoreDataFeedStore(storeURL: localStoreURL)
+        try! CoreDataFeedStore(
+            storeURL: NSPersistentContainer
+                .defaultDirectoryURL()
+                .appendingPathComponent("feed-store.sqlite"))
     }()
     
     convenience init(client: Client, httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
@@ -152,16 +151,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         controller.subscriptionManager = subscriptionManager
         
         return controller
-    }
-    
-    
-    func makeRemoteHTTPClient() -> HTTPClient {
-        return httpClient
-    }
-    
-    
-    func makeRemoteClient() -> Client {
-        return client
     }
 }
 

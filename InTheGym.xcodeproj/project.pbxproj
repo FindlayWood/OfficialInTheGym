@@ -321,7 +321,6 @@
 		7444D0F026D8524C0009C7A6 /* CreateNewPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7444D0EF26D8524C0009C7A6 /* CreateNewPostViewModel.swift */; };
 		7444D0F226D8525F0009C7A6 /* CreateNewPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7444D0F126D8525F0009C7A6 /* CreateNewPostView.swift */; };
 		7444D0F426DD3DB20009C7A6 /* CreateNewPostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7444D0F326DD3DB10009C7A6 /* CreateNewPostModel.swift */; };
-		7446E2182C126C6E0060CEE6 /* DebuggingSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E2172C126C6E0060CEE6 /* DebuggingSceneDelegate.swift */; };
 		7446E21A2C15D5A00060CEE6 /* SceneDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E2192C15D5A00060CEE6 /* SceneDelegateTests.swift */; };
 		7446E2212C15DF820060CEE6 /* WeakRefVirtualProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E2202C15DF820060CEE6 /* WeakRefVirtualProxy.swift */; };
 		7446E2222C15DF820060CEE6 /* FeedImageDataLoaderPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E21E2C15DF820060CEE6 /* FeedImageDataLoaderPresentationAdapter.swift */; };
@@ -1226,7 +1225,6 @@
 		7444D0F126D8525F0009C7A6 /* CreateNewPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewPostView.swift; sourceTree = "<group>"; };
 		7444D0F326DD3DB10009C7A6 /* CreateNewPostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewPostModel.swift; sourceTree = "<group>"; };
 		7445503A256C613600E4E4CC /* InTheGym.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InTheGym.entitlements; sourceTree = "<group>"; };
-		7446E2172C126C6E0060CEE6 /* DebuggingSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebuggingSceneDelegate.swift; sourceTree = "<group>"; };
 		7446E2192C15D5A00060CEE6 /* SceneDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegateTests.swift; sourceTree = "<group>"; };
 		7446E21B2C15DF810060CEE6 /* MainQueueDispatchDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainQueueDispatchDecorator.swift; sourceTree = "<group>"; };
 		7446E21C2C15DF820060CEE6 /* FeedUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIComposer.swift; sourceTree = "<group>"; };
@@ -3298,7 +3296,6 @@
 				7445503A256C613600E4E4CC /* InTheGym.entitlements */,
 				7479A908229F2B4C00D39E2E /* AppDelegate.swift */,
 				746F88CC2C124A7200E8E25C /* SceneDelegate.swift */,
-				7446E2172C126C6E0060CEE6 /* DebuggingSceneDelegate.swift */,
 				7479A90C229F2B4C00D39E2E /* Main.storyboard */,
 				7479A912229F2B4D00D39E2E /* Assets.xcassets */,
 				7479A914229F2B4D00D39E2E /* LaunchScreen.storyboard */,
@@ -4979,7 +4976,6 @@
 				7403D068280DD63900268CEC /* Queue.swift in Sources */,
 				743330CB278F657F005A0C45 /* WorkoutOptionsModel.swift in Sources */,
 				7444D07526CE96BF0009C7A6 /* WorkoutView.swift in Sources */,
-				7446E2182C126C6E0060CEE6 /* DebuggingSceneDelegate.swift in Sources */,
 				9F2462962932D001006C5656 /* PrivacySheet.swift in Sources */,
 				742A8715286A786200DE843C /* MyMeasurementsViewModel.swift in Sources */,
 				74F2CCCB26DE86BC00D7AD79 /* AttachingClipCoordinator.swift in Sources */,
