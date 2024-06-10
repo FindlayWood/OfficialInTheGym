@@ -36,6 +36,7 @@
 		741C2B6A2BF2973600D2914F /* WorkoutBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741C2B692BF2973600D2914F /* WorkoutBuilderTests.swift */; };
 		7446E2442C179C550060CEE6 /* FeedSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E2432C179C550060CEE6 /* FeedSnapshotTests.swift */; };
 		7446E2472C179E1E0060CEE6 /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E2462C179E1E0060CEE6 /* UIImage+TestHelpers.swift */; };
+		7446E2492C179F7D0060CEE6 /* UITableView+HeaderResizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E2482C179F7D0060CEE6 /* UITableView+HeaderResizing.swift */; };
 		7454E9482C021F690082BD47 /* WorkoutUploaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9472C021F690082BD47 /* WorkoutUploaderTests.swift */; };
 		7454E94A2C0260F90082BD47 /* WorkoutBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E9492C0260F90082BD47 /* WorkoutBuilder.swift */; };
 		7454E94C2C0261440082BD47 /* ExerciseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7454E94B2C0261440082BD47 /* ExerciseModel.swift */; };
@@ -231,6 +232,7 @@
 		741C2B692BF2973600D2914F /* WorkoutBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutBuilderTests.swift; sourceTree = "<group>"; };
 		7446E2432C179C550060CEE6 /* FeedSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSnapshotTests.swift; sourceTree = "<group>"; };
 		7446E2462C179E1E0060CEE6 /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
+		7446E2482C179F7D0060CEE6 /* UITableView+HeaderResizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+HeaderResizing.swift"; sourceTree = "<group>"; };
 		7454E9472C021F690082BD47 /* WorkoutUploaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutUploaderTests.swift; sourceTree = "<group>"; };
 		7454E9492C0260F90082BD47 /* WorkoutBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutBuilder.swift; sourceTree = "<group>"; };
 		7454E94B2C0261440082BD47 /* ExerciseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseModel.swift; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 				740ED84A2BDD260C005B09BA /* UIImageView+Animations.swift */,
 				741833222BD4695600EEA9C0 /* UIView+Shimmering.swift */,
 				740ED8682BE03BFD005B09BA /* UIRefreshControl+Helpers.swift */,
+				7446E2482C179F7D0060CEE6 /* UITableView+HeaderResizing.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1270,6 +1273,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7446E2492C179F7D0060CEE6 /* UITableView+HeaderResizing.swift in Sources */,
 				740ED8642BE0326D005B09BA /* ErrorView.swift in Sources */,
 				740ED8692BE03BFD005B09BA /* UIRefreshControl+Helpers.swift in Sources */,
 				740ED8492BDD252B005B09BA /* UITableView+Dequeueing.swift in Sources */,
