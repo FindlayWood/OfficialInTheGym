@@ -342,6 +342,7 @@
 		7446E23E2C1652660060CEE6 /* HTTPClientStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E23D2C1652660060CEE6 /* HTTPClientStub.swift */; };
 		7446E2402C16529A0060CEE6 /* ClientStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E23F2C16529A0060CEE6 /* ClientStub.swift */; };
 		7446E2422C1653A10060CEE6 /* InMemoryFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E2412C1653A10060CEE6 /* InMemoryFeedStore.swift */; };
+		7446E24F2C1A28530060CEE6 /* UIView+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E24E2C1A28530060CEE6 /* UIView+TestHelpers.swift */; };
 		744AED0D27960A51000D2D74 /* WorkoutDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744AED0C27960A51000D2D74 /* WorkoutDisplayViewController.swift */; };
 		744AED1027960B8D000D2D74 /* MainWorkoutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744AED0F27960B8D000D2D74 /* MainWorkoutTableViewCell.swift */; };
 		744AED12279615CE000D2D74 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744AED11279615CE000D2D74 /* Array+Extension.swift */; };
@@ -1249,6 +1250,7 @@
 		7446E23D2C1652660060CEE6 /* HTTPClientStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientStub.swift; sourceTree = "<group>"; };
 		7446E23F2C16529A0060CEE6 /* ClientStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientStub.swift; sourceTree = "<group>"; };
 		7446E2412C1653A10060CEE6 /* InMemoryFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryFeedStore.swift; sourceTree = "<group>"; };
+		7446E24E2C1A28530060CEE6 /* UIView+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+TestHelpers.swift"; sourceTree = "<group>"; };
 		744AED0C27960A51000D2D74 /* WorkoutDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDisplayViewController.swift; sourceTree = "<group>"; };
 		744AED0F27960B8D000D2D74 /* MainWorkoutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWorkoutTableViewCell.swift; sourceTree = "<group>"; };
 		744AED11279615CE000D2D74 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
@@ -3204,6 +3206,7 @@
 				7446E23D2C1652660060CEE6 /* HTTPClientStub.swift */,
 				7446E23F2C16529A0060CEE6 /* ClientStub.swift */,
 				7446E2412C1653A10060CEE6 /* InMemoryFeedStore.swift */,
+				7446E24E2C1A28530060CEE6 /* UIView+TestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -5733,6 +5736,7 @@
 				7446E2362C15DFC20060CEE6 /* UIRefreshControl+TestHelpers.swift in Sources */,
 				746DA0F12C0CB6D20094EA3B /* FeedLoaderStub.swift in Sources */,
 				746DA0E32C0A7FAE0094EA3B /* XCTestCase+MemoryLeakTracking.swift in Sources */,
+				7446E24F2C1A28530060CEE6 /* UIView+TestHelpers.swift in Sources */,
 				7446E23C2C15F0490060CEE6 /* FeedAcceptanceTests.swift in Sources */,
 				7446E2352C15DFC20060CEE6 /* UIButton+TestHelpers.swift in Sources */,
 				7446E23A2C15DFE40060CEE6 /* FeedUIIntegrationTests.swift in Sources */,
