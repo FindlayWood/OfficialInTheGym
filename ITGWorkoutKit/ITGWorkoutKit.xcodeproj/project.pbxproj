@@ -98,6 +98,11 @@
 		74730B952BC19F8500B54778 /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B942BC19F8500B54778 /* URLSessionHTTPClient.swift */; };
 		74730B9D2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B9C2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.swift */; };
 		74730B9E2BC1DC2D00B54778 /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
+		74990BB92C1B86AE006D1F06 /* WorkoutFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */; };
+		74990BBB2C1B8928006D1F06 /* WorkoutFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BBA2C1B8928006D1F06 /* WorkoutFeedViewController.swift */; };
+		74990BBD2C1B89DE006D1F06 /* WorkoutFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */; };
+		74990BBF2C1DE33D006D1F06 /* WorkoutCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */; };
+		74990BC22C1DE3BB006D1F06 /* FeedWorkoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BC12C1DE3BB006D1F06 /* FeedWorkoutViewModel.swift */; };
 		74A6DC952BC31475002A420C /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B922BC0ABBE00B54778 /* XCTestCase+MemoryLeakTracking.swift */; };
 		74A6DC9B2BC5E955002A420C /* CacheFeedUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DC9A2BC5E955002A420C /* CacheFeedUseCaseTests.swift */; };
 		74A6DC9E2BC867A5002A420C /* LocalFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DC9D2BC867A5002A420C /* LocalFeedLoader.swift */; };
@@ -298,6 +303,11 @@
 		74730B942BC19F8500B54778 /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		74730B9A2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkoutAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		74730B9C2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutAPIEndToEndTests.swift; sourceTree = "<group>"; };
+		74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedCell.swift; sourceTree = "<group>"; };
+		74990BBA2C1B8928006D1F06 /* WorkoutFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedViewController.swift; sourceTree = "<group>"; };
+		74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WorkoutFeed.storyboard; sourceTree = "<group>"; };
+		74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCellController.swift; sourceTree = "<group>"; };
+		74990BC12C1DE3BB006D1F06 /* FeedWorkoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWorkoutViewModel.swift; sourceTree = "<group>"; };
 		74A6DC972BC316A9002A420C /* CI_macOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI_macOS.xctestplan; sourceTree = "<group>"; };
 		74A6DC982BC46CB0002A420C /* ITGWorkoutKit.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ITGWorkoutKit.xctestplan; sourceTree = "<group>"; };
 		74A6DC9A2BC5E955002A420C /* CacheFeedUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheFeedUseCaseTests.swift; sourceTree = "<group>"; };
@@ -677,6 +687,7 @@
 		7460AB542B94D040000FDF22 /* ITGWorkoutKit */ = {
 			isa = PBXGroup;
 			children = (
+				74990BC02C1DE3AC006D1F06 /* Workout Presentation */,
 				7454E9952C03D3620082BD47 /* Shared API Infra */,
 				7454E9942C03D3250082BD47 /* Shared API */,
 				7454E9692C029CB80082BD47 /* Exercise Cache */,
@@ -760,6 +771,41 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		74990BB32C1B82D1006D1F06 /* WorkoutUI */ = {
+			isa = PBXGroup;
+			children = (
+				74990BB52C1B82F4006D1F06 /* Views */,
+				74990BB42C1B82E2006D1F06 /* Controllers */,
+			);
+			path = WorkoutUI;
+			sourceTree = "<group>";
+		};
+		74990BB42C1B82E2006D1F06 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				74990BBA2C1B8928006D1F06 /* WorkoutFeedViewController.swift */,
+				74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		74990BB52C1B82F4006D1F06 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */,
+				74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		74990BC02C1DE3AC006D1F06 /* Workout Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				74990BC12C1DE3BB006D1F06 /* FeedWorkoutViewModel.swift */,
+			);
+			path = "Workout Presentation";
 			sourceTree = "<group>";
 		};
 		74A6DC962BC31689002A420C /* TestPlans */ = {
@@ -868,6 +914,7 @@
 		74A6DCEA2BD1A46B002A420C /* ITGWorkoutKitiOS */ = {
 			isa = PBXGroup;
 			children = (
+				74990BB32C1B82D1006D1F06 /* WorkoutUI */,
 				741833382BD5459200EEA9C0 /* FeedUI */,
 				74A6DD0B2BD31ABD002A420C /* ITGWorkoutKitiOS.h */,
 			);
@@ -1128,6 +1175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				740ED8452BDC14E2005B09BA /* Feed.storyboard in Resources */,
+				74990BBD2C1B89DE006D1F06 /* WorkoutFeed.storyboard in Resources */,
 				740ED8472BDC1EC6005B09BA /* Feed.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1202,6 +1250,7 @@
 				746DA0BB2C06447E0094EA3B /* RemoteFeedImageDataLoader.swift in Sources */,
 				7460AB572B94D040000FDF22 /* ITGWorkoutKit.docc in Sources */,
 				74A6DCA42BC87076002A420C /* LocalWorkoutItem.swift in Sources */,
+				74990BC22C1DE3BB006D1F06 /* FeedWorkoutViewModel.swift in Sources */,
 				7454E95F2C0294860082BD47 /* RemoteExerciseLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1282,11 +1331,14 @@
 				7446E2492C179F7D0060CEE6 /* UITableView+HeaderResizing.swift in Sources */,
 				740ED8642BE0326D005B09BA /* ErrorView.swift in Sources */,
 				740ED8692BE03BFD005B09BA /* UIRefreshControl+Helpers.swift in Sources */,
+				74990BB92C1B86AE006D1F06 /* WorkoutFeedCell.swift in Sources */,
 				740ED8492BDD252B005B09BA /* UITableView+Dequeueing.swift in Sources */,
 				741833232BD4695600EEA9C0 /* UIView+Shimmering.swift in Sources */,
 				740ED84B2BDD260C005B09BA /* UIImageView+Animations.swift in Sources */,
 				74A6DD092BD31827002A420C /* FeedViewController.swift in Sources */,
 				741833212BD4255100EEA9C0 /* FeedImageCell.swift in Sources */,
+				74990BBF2C1DE33D006D1F06 /* WorkoutCellController.swift in Sources */,
+				74990BBB2C1B8928006D1F06 /* WorkoutFeedViewController.swift in Sources */,
 				741833402BD5709600EEA9C0 /* FeedImageCellController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

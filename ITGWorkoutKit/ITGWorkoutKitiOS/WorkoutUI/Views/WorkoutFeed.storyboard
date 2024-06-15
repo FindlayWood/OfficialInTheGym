@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Table View Controller-->
+        <scene sceneID="s3p-Js-0Xr">
+            <objects>
+                <tableViewController id="rBk-1e-5TY" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="na5-8c-g8m">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="190" id="169-S4-jwT" customClass="WorkoutFeedCell" customModule="ITGWorkoutKitiOS" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="50" width="393" height="190"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="169-S4-jwT" id="yQz-xn-EiQ">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="190"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aif-Hs-VMs">
+                                            <rect key="frame" x="76" y="31" width="240" height="128"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="01l-oS-gnV">
+                                                    <rect key="frame" x="99" y="53.666666666666671" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kHj-g2-ImF">
+                                                    <rect key="frame" x="94" y="77" width="54" height="35"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="arrow.triangle.2.circlepath" catalog="system">
+                                                        <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="retryButtonTapped" destination="169-S4-jwT" eventType="touchUpInside" id="XPO-Fx-VY1"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" name="babyBlue"/>
+                                            <constraints>
+                                                <constraint firstItem="01l-oS-gnV" firstAttribute="centerX" secondItem="Aif-Hs-VMs" secondAttribute="centerX" id="Wl5-hp-w8d"/>
+                                                <constraint firstItem="01l-oS-gnV" firstAttribute="centerY" secondItem="Aif-Hs-VMs" secondAttribute="centerY" id="aEb-2G-frZ"/>
+                                            </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerradius">
+                                                    <integer key="value" value="20"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </view>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Aif-Hs-VMs" secondAttribute="trailing" constant="57" id="7hd-gY-cBW"/>
+                                        <constraint firstItem="Aif-Hs-VMs" firstAttribute="top" secondItem="yQz-xn-EiQ" secondAttribute="topMargin" constant="20" id="VmC-vU-ffs"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="Aif-Hs-VMs" secondAttribute="bottom" constant="20" id="sLc-DA-qKT"/>
+                                        <constraint firstItem="Aif-Hs-VMs" firstAttribute="leading" secondItem="yQz-xn-EiQ" secondAttribute="leadingMargin" constant="56" id="xjJ-oH-kXv"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="feedWorkoutRetryButton" destination="kHj-g2-ImF" id="XcC-uP-12H"/>
+                                    <outlet property="titleLabel" destination="01l-oS-gnV" id="O4R-CM-c1K"/>
+                                    <outlet property="workoutContainer" destination="Aif-Hs-VMs" id="bje-ep-D33"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="rBk-1e-5TY" id="dga-UU-xDG"/>
+                            <outlet property="delegate" destination="rBk-1e-5TY" id="WWS-fH-W4T"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Af7-3W-q2P" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="333.58778625954199" y="-160.56338028169014"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="arrow.triangle.2.circlepath" catalog="system" width="128" height="104"/>
+        <namedColor name="babyBlue">
+            <color red="0.74900001287460327" green="0.84299999475479126" blue="0.92900002002716064" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

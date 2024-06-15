@@ -9,7 +9,7 @@ import Foundation
 
 public final class FirestoreWorkoutLoader: WorkoutLoader2 {
     
-    private let client: WorkoutClient
+    private let client: Client
     private let path: String
     
     public enum Error: Swift.Error {
@@ -19,7 +19,7 @@ public final class FirestoreWorkoutLoader: WorkoutLoader2 {
     
     public typealias Result = WorkoutLoader2.Result
     
-    public init(client: WorkoutClient, path: String) {
+    public init(client: Client, path: String) {
         self.client = client
         self.path = path
     }
