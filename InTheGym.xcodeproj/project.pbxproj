@@ -500,6 +500,7 @@
 		7492263622CBD66600EAD386 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492263522CBD66600EAD386 /* Users.swift */; };
 		7492265622DA43BB00EAD386 /* RequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492265522DA43BB00EAD386 /* RequestsViewController.swift */; };
 		7492265822DA49E500EAD386 /* RequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492265722DA49E500EAD386 /* RequestTableViewCell.swift */; };
+		74990BC42C1E420B006D1F06 /* CombineHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BC32C1E420B006D1F06 /* CombineHelpers.swift */; };
 		749B37A62846410A00ADF33D /* AddPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749B37A52846410A00ADF33D /* AddPlayerView.swift */; };
 		749B37A8284646E000ADF33D /* CoachRequestCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749B37A7284646E000ADF33D /* CoachRequestCellModel.swift */; };
 		749B37AA2846487000ADF33D /* CoachRequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749B37A92846487000ADF33D /* CoachRequestTableViewCell.swift */; };
@@ -1397,6 +1398,7 @@
 		7492263522CBD66600EAD386 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		7492265522DA43BB00EAD386 /* RequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RequestsViewController.swift; path = "../New Group/RequestsViewController.swift"; sourceTree = "<group>"; };
 		7492265722DA49E500EAD386 /* RequestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTableViewCell.swift; sourceTree = "<group>"; };
+		74990BC32C1E420B006D1F06 /* CombineHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineHelpers.swift; sourceTree = "<group>"; };
 		749B37A52846410A00ADF33D /* AddPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerView.swift; sourceTree = "<group>"; };
 		749B37A7284646E000ADF33D /* CoachRequestCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachRequestCellModel.swift; sourceTree = "<group>"; };
 		749B37A92846487000ADF33D /* CoachRequestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachRequestTableViewCell.swift; sourceTree = "<group>"; };
@@ -3150,6 +3152,7 @@
 				7446E21E2C15DF820060CEE6 /* FeedImageDataLoaderPresentationAdapter.swift */,
 				7446E21D2C15DF820060CEE6 /* FeedLoaderPresentationAdapter.swift */,
 				7446E21F2C15DF820060CEE6 /* FeedViewAdapter.swift */,
+				74990BC32C1E420B006D1F06 /* CombineHelpers.swift */,
 			);
 			path = "Feed Feature";
 			sourceTree = "<group>";
@@ -4999,6 +5002,7 @@
 				742C1C7027B6B09B00DD1BB0 /* OptionsCollectionCell.swift in Sources */,
 				74B48DFB27A41E0200BBFC16 /* LiveWorkoutDataSource.swift in Sources */,
 				7444D0F026D8524C0009C7A6 /* CreateNewPostViewModel.swift in Sources */,
+				74990BC42C1E420B006D1F06 /* CombineHelpers.swift in Sources */,
 				74A602B52850D4F200AFA236 /* WorkoutDiscoveryCommentsView.swift in Sources */,
 				7446E2232C15DF820060CEE6 /* FeedLoaderPresentationAdapter.swift in Sources */,
 				9FF8B30429283D8A00C47313 /* WorkoutListView.swift in Sources */,
