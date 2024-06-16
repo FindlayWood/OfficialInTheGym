@@ -24,6 +24,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }()
     
+    private lazy var firebaseClient: Client = {
+        FirebaseFunctionsClient()
+    }()
+    
     private lazy var httpClient: HTTPClient = {
         URLSessionHTTPClient2(session: URLSession(configuration: .ephemeral))
     }()
@@ -144,10 +148,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<[WorkoutItem], Error> {
         
-        let remoteURL = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed")!
+        let remoteURL =  "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed"
         
         return client
-            .getPublisher(url: remoteURL)
+            .getPublisher(path: remoteURL)
             .tryMap(WorkoutItemsMapper.map)
             .caching(to: localFeedLoader)
             .fallback(to: localFeedLoader.loadPublisher)
