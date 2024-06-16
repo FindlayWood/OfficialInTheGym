@@ -60,10 +60,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func launchEssentialFeed() {
-        
-        let remoteImageLoader = RemoteFeedImageDataLoader(client: httpClient)
-
-        let localImageLoader = LocalFeedImageDataLoader(store: store)
 
         window?.rootViewController = UINavigationController(
             rootViewController:
@@ -170,5 +166,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             })
     }
 }
-
-extension RemoteLoader: ITGWorkoutKit.WorkoutLoader where Resource == [WorkoutItem] {}

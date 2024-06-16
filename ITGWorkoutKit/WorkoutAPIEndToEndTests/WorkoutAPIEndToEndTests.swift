@@ -47,14 +47,20 @@ final class WorkoutAPIEndToEndTests: XCTestCase {
     // MARK: - Helpers
     
     private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> WorkoutLoader.Result? {
-        let loader = RemoteLoader(client: ephemeralClient(), path: feedTestServerString, mapper: WorkoutItemsMapper.map)
-        trackForMemoryLeaks(loader, file: file, line: line)
-
+        
+        let client = ephemeralClient()
+        
         let exp = expectation(description: "Wait for load completion")
 
         var receivedResult: WorkoutLoader.Result?
-        loader.load { result in
-            receivedResult = result
+        client.get(from: feedTestServerString) { result in
+            receivedResult = result.flatMap { (data, response) in
+                do {
+                    return .success(try WorkoutItemsMapper.map(data, from: response))
+                } catch {
+                    return .failure(error)
+                }
+            }
             exp.fulfill()
         }
         wait(for: [exp], timeout: 5.0)
