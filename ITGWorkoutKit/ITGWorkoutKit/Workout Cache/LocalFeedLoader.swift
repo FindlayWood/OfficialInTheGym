@@ -46,9 +46,9 @@ extension LocalFeedLoader: FeedCache {
     }
 }
 
-extension LocalFeedLoader: WorkoutLoader {
+extension LocalFeedLoader {
     
-    public typealias LoadResult = WorkoutLoader.Result
+    public typealias LoadResult = Swift.Result<[WorkoutItem], Error>
     
     public func load(completion: @escaping (LoadResult) -> Void) {
         store.retrieve { [weak self] result in

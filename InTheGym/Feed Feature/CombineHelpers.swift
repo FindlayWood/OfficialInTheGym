@@ -26,7 +26,7 @@ public extension Client {
     }
 }
 
-public extension ITGWorkoutKit.WorkoutLoader {
+public extension LocalFeedLoader {
     typealias Publisher = AnyPublisher<[WorkoutItem], Error>
 
     func loadPublisher() -> Publisher {

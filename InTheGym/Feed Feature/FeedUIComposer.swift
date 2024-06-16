@@ -13,7 +13,7 @@ import ITGWorkoutKitiOS
 public final class FeedUIComposer {
     private init() {}
 
-    public static func feedComposedWith(feedLoader: @escaping () ->  ITGWorkoutKit.WorkoutLoader.Publisher, imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher) -> FeedViewController {
+    public static func feedComposedWith(feedLoader: @escaping () -> AnyPublisher<[WorkoutItem], Error>, imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher) -> FeedViewController {
         let presentationAdapter = FeedLoaderPresentationAdapter(
             feedLoader: feedLoader)
         

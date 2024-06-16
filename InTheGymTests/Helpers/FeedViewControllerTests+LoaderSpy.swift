@@ -5,33 +5,36 @@
 //  Created by Findlay Wood on 21/04/2024.
 //
 
+import Combine
 import Foundation
 import ITGWorkoutKit
 import ITGWorkoutKitiOS
 
 extension FeedUIIntegrationTests {
     
-    class LoaderSpy: WorkoutLoader, FeedImageDataLoader {
+    class LoaderSpy: FeedImageDataLoader {
         
         // MARK: - FeedLoader
         
-        private var feedRequests = [(WorkoutLoader.Result) -> Void]()
+        private var feedRequests = [PassthroughSubject<[WorkoutItem], Error>]()
         
         var loadFeedCallCount: Int {
             return feedRequests.count
         }
         
-        func load(completion: @escaping (WorkoutLoader.Result) -> Void) {
-            feedRequests.append(completion)
-        }
+        func loadPublisher() -> AnyPublisher<[WorkoutItem], Error> {
+             let publisher = PassthroughSubject<[WorkoutItem], Error>()
+             feedRequests.append(publisher)
+             return publisher.eraseToAnyPublisher()
+         }
         
         func completeFeedLoading(with feed: [WorkoutItem] = [], at index: Int = 0) {
-            feedRequests[index](.success(feed))
+            feedRequests[index].send(feed)
         }
         
         func completeFeedLoadingWithError(at index: Int = 0) {
             let error = NSError(domain: "an error", code: 0)
-            feedRequests[index](.failure(error))
+            feedRequests[index].send(completion: .failure(error))
         }
         
         // MARK: - FeedImageDataLoader

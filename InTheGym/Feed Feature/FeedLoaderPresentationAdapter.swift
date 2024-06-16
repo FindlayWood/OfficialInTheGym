@@ -10,11 +10,11 @@ import ITGWorkoutKit
 import ITGWorkoutKitiOS
 
 final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
-    private let feedLoader: () -> ITGWorkoutKit.WorkoutLoader.Publisher
+    private let feedLoader: () -> AnyPublisher<[WorkoutItem], Error>
     private var cancellable: Cancellable?
     var presenter: FeedPresenter?
 
-    init(feedLoader: @escaping () -> ITGWorkoutKit.WorkoutLoader.Publisher) {
+    init(feedLoader: @escaping () -> AnyPublisher<[WorkoutItem], Error>) {
         self.feedLoader = feedLoader
     }
 

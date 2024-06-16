@@ -46,13 +46,14 @@ final class WorkoutAPIEndToEndTests: XCTestCase {
 
     // MARK: - Helpers
     
-    private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> WorkoutLoader.Result? {
+    private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> Swift.Result<[WorkoutItem], Error>? {
         
         let client = ephemeralClient()
         
         let exp = expectation(description: "Wait for load completion")
 
-        var receivedResult: WorkoutLoader.Result?
+        var receivedResult: Swift.Result<[WorkoutItem], Error>?
+        
         client.get(from: feedTestServerString) { result in
             receivedResult = result.flatMap { (data, response) in
                 do {
