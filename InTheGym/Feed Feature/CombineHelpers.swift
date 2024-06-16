@@ -10,6 +10,22 @@ import Combine
 import Foundation
 import ITGWorkoutKit
 
+public extension Client {
+    typealias Publisher = AnyPublisher<(Data, HTTPURLResponse), Error>
+
+    func getPublisher(url: URL) -> Publisher {
+        var task: HTTPClientTask?
+
+        return Deferred {
+            Future { completion in
+                task = self.get(from: url.absoluteString, completion: completion)
+            }
+        }
+        .handleEvents(receiveCancel: { task?.cancel() })
+        .eraseToAnyPublisher()
+    }
+}
+
 public extension ITGWorkoutKit.WorkoutLoader {
     typealias Publisher = AnyPublisher<[WorkoutItem], Error>
 

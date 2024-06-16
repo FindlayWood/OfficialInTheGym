@@ -35,10 +35,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 .appendingPathComponent("feed-store.sqlite"))
     }()
     
-    let remoteURL = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed")!
-    
-    private lazy var remoteFeedLoader = RemoteLoader(client: client, path: remoteURL.absoluteString, mapper: WorkoutItemsMapper.map)
-    
     private lazy var localFeedLoader: LocalFeedLoader = {
         LocalFeedLoader(store: store, currentDate: Date.init)
     }()
@@ -151,12 +147,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func makeRemoteFeedLoaderWithLocalFallback() -> ITGWorkoutKit.WorkoutLoader.Publisher {
-
-         return remoteFeedLoader
-             .loadPublisher()
-             .caching(to: localFeedLoader)
-             .fallback(to: localFeedLoader.loadPublisher)
-     }
+        
+        let remoteURL = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed")!
+        
+        return client
+            .getPublisher(url: remoteURL)
+            .tryMap(WorkoutItemsMapper.map)
+            .caching(to: localFeedLoader)
+            .fallback(to: localFeedLoader.loadPublisher)
+    }
     
     private func makeLocalImageLoaderWithRemoteFallback(url: URL) -> FeedImageDataLoader.Publisher {
         let remoteImageLoader = RemoteFeedImageDataLoader(client: httpClient)
