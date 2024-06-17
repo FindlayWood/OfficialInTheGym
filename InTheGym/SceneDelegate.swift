@@ -24,10 +24,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }()
     
-    private lazy var firebaseClient: Client = {
-        FirebaseFunctionsClient()
-    }()
-    
     private lazy var httpClient: HTTPClient = {
         URLSessionHTTPClient2(session: URLSession(configuration: .ephemeral))
     }()
