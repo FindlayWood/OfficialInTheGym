@@ -324,7 +324,7 @@
 		7446E21A2C15D5A00060CEE6 /* SceneDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E2192C15D5A00060CEE6 /* SceneDelegateTests.swift */; };
 		7446E2212C15DF820060CEE6 /* WeakRefVirtualProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E2202C15DF820060CEE6 /* WeakRefVirtualProxy.swift */; };
 		7446E2222C15DF820060CEE6 /* FeedImageDataLoaderPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E21E2C15DF820060CEE6 /* FeedImageDataLoaderPresentationAdapter.swift */; };
-		7446E2232C15DF820060CEE6 /* FeedLoaderPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E21D2C15DF820060CEE6 /* FeedLoaderPresentationAdapter.swift */; };
+		7446E2232C15DF820060CEE6 /* LoadResourcePresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E21D2C15DF820060CEE6 /* LoadResourcePresentationAdapter.swift */; };
 		7446E2242C15DF820060CEE6 /* FeedUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E21C2C15DF820060CEE6 /* FeedUIComposer.swift */; };
 		7446E2262C15DF820060CEE6 /* FeedViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E21F2C15DF820060CEE6 /* FeedViewAdapter.swift */; };
 		7446E2302C15DFC20060CEE6 /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446E22A2C15DFC10060CEE6 /* UIImage+TestHelpers.swift */; };
@@ -1219,7 +1219,7 @@
 		7445503A256C613600E4E4CC /* InTheGym.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InTheGym.entitlements; sourceTree = "<group>"; };
 		7446E2192C15D5A00060CEE6 /* SceneDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegateTests.swift; sourceTree = "<group>"; };
 		7446E21C2C15DF820060CEE6 /* FeedUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIComposer.swift; sourceTree = "<group>"; };
-		7446E21D2C15DF820060CEE6 /* FeedLoaderPresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderPresentationAdapter.swift; sourceTree = "<group>"; };
+		7446E21D2C15DF820060CEE6 /* LoadResourcePresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadResourcePresentationAdapter.swift; sourceTree = "<group>"; };
 		7446E21E2C15DF820060CEE6 /* FeedImageDataLoaderPresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderPresentationAdapter.swift; sourceTree = "<group>"; };
 		7446E21F2C15DF820060CEE6 /* FeedViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewAdapter.swift; sourceTree = "<group>"; };
 		7446E2202C15DF820060CEE6 /* WeakRefVirtualProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakRefVirtualProxy.swift; sourceTree = "<group>"; };
@@ -3150,7 +3150,7 @@
 				7446E21C2C15DF820060CEE6 /* FeedUIComposer.swift */,
 				7446E2202C15DF820060CEE6 /* WeakRefVirtualProxy.swift */,
 				7446E21E2C15DF820060CEE6 /* FeedImageDataLoaderPresentationAdapter.swift */,
-				7446E21D2C15DF820060CEE6 /* FeedLoaderPresentationAdapter.swift */,
+				7446E21D2C15DF820060CEE6 /* LoadResourcePresentationAdapter.swift */,
 				7446E21F2C15DF820060CEE6 /* FeedViewAdapter.swift */,
 				74990BC32C1E420B006D1F06 /* CombineHelpers.swift */,
 			);
@@ -5004,7 +5004,7 @@
 				7444D0F026D8524C0009C7A6 /* CreateNewPostViewModel.swift in Sources */,
 				74990BC42C1E420B006D1F06 /* CombineHelpers.swift in Sources */,
 				74A602B52850D4F200AFA236 /* WorkoutDiscoveryCommentsView.swift in Sources */,
-				7446E2232C15DF820060CEE6 /* FeedLoaderPresentationAdapter.swift in Sources */,
+				7446E2232C15DF820060CEE6 /* LoadResourcePresentationAdapter.swift in Sources */,
 				9FF8B30429283D8A00C47313 /* WorkoutListView.swift in Sources */,
 				742D8BEB2819752E003682A2 /* PlayerProfileMoreViewController.swift in Sources */,
 				742C1C6E27B6AE4100DD1BB0 /* ProfileOptionsCell.swift in Sources */,
