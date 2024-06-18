@@ -8,7 +8,7 @@
 import UIKit
 import ITGWorkoutKit
 
-public final class WorkoutFeedViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, FeedErrorView {
+public final class WorkoutFeedViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
     public var delegate: FeedViewControllerDelegate?
     
     @IBOutlet private(set) public var errorView: ErrorView?
@@ -55,7 +55,7 @@ public final class WorkoutFeedViewController: UITableViewController, UITableView
         onViewIsAppearing?(self)
     }
     
-    public func display(_ viewModel: FeedErrorViewModel) {
+    public func display(_ viewModel: ResourceErrorViewModel) {
         errorView?.message = viewModel.message
     }
     
