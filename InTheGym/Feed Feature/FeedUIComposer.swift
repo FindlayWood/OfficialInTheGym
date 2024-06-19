@@ -11,10 +11,13 @@ import ITGWorkoutKit
 import ITGWorkoutKitiOS
 
 public final class FeedUIComposer {
+    
     private init() {}
+    
+    private typealias FeedPresentationAdapter = LoadResourcePresentationAdapter<[WorkoutItem], FeedViewAdapter>
 
     public static func feedComposedWith(feedLoader: @escaping () -> AnyPublisher<[WorkoutItem], Error>, imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher) -> FeedViewController {
-        let presentationAdapter = LoadResourcePresentationAdapter<[WorkoutItem], FeedViewAdapter>(
+        let presentationAdapter = FeedPresentationAdapter(
             loader: feedLoader)
         
         let feedController = makeFeedViewController(
