@@ -111,6 +111,9 @@
 		74990BE32C24AFB3006D1F06 /* ImageCommentsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BE22C24AFB2006D1F06 /* ImageCommentsPresenter.swift */; };
 		74990BE52C24B025006D1F06 /* ImageComments.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 74990BE42C24B025006D1F06 /* ImageComments.xcstrings */; };
 		74990BE72C24B0D4006D1F06 /* ImageCommentsLocalisationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BE62C24B0D4006D1F06 /* ImageCommentsLocalisationTests.swift */; };
+		74990BEA2C24B1F6006D1F06 /* ImageComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BE92C24B1F6006D1F06 /* ImageComment.swift */; };
+		74990BED2C24B23C006D1F06 /* ImageCommentsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BEC2C24B23C006D1F06 /* ImageCommentsMapper.swift */; };
+		74990BF02C24B333006D1F06 /* ImageCommentsMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BEF2C24B333006D1F06 /* ImageCommentsMapperTests.swift */; };
 		74A6DC952BC31475002A420C /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B922BC0ABBE00B54778 /* XCTestCase+MemoryLeakTracking.swift */; };
 		74A6DC9B2BC5E955002A420C /* CacheFeedUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DC9A2BC5E955002A420C /* CacheFeedUseCaseTests.swift */; };
 		74A6DC9E2BC867A5002A420C /* LocalFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DC9D2BC867A5002A420C /* LocalFeedLoader.swift */; };
@@ -325,6 +328,9 @@
 		74990BE22C24AFB2006D1F06 /* ImageCommentsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsPresenter.swift; sourceTree = "<group>"; };
 		74990BE42C24B025006D1F06 /* ImageComments.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = ImageComments.xcstrings; sourceTree = "<group>"; };
 		74990BE62C24B0D4006D1F06 /* ImageCommentsLocalisationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsLocalisationTests.swift; sourceTree = "<group>"; };
+		74990BE92C24B1F6006D1F06 /* ImageComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageComment.swift; sourceTree = "<group>"; };
+		74990BEC2C24B23C006D1F06 /* ImageCommentsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsMapper.swift; sourceTree = "<group>"; };
+		74990BEF2C24B333006D1F06 /* ImageCommentsMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsMapperTests.swift; sourceTree = "<group>"; };
 		74A6DC972BC316A9002A420C /* CI_macOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI_macOS.xctestplan; sourceTree = "<group>"; };
 		74A6DC982BC46CB0002A420C /* ITGWorkoutKit.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ITGWorkoutKit.xctestplan; sourceTree = "<group>"; };
 		74A6DC9A2BC5E955002A420C /* CacheFeedUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheFeedUseCaseTests.swift; sourceTree = "<group>"; };
@@ -698,6 +704,8 @@
 		7460AB542B94D040000FDF22 /* ITGWorkoutKit */ = {
 			isa = PBXGroup;
 			children = (
+				74990BEB2C24B22B006D1F06 /* Image Comments API */,
+				74990BE82C24B1E7006D1F06 /* Image Comments Feature */,
 				74990BE12C24AFA3006D1F06 /* Image Commetns Presentation */,
 				74990BCE2C20BAC1006D1F06 /* Shared Presentation */,
 				74990BC02C1DE3AC006D1F06 /* Workout Presentation */,
@@ -722,6 +730,7 @@
 		7460AB602B94D040000FDF22 /* ITGWorkoutKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				74990BEE2C24B31E006D1F06 /* Image Comments API */,
 				74990BDE2C24AF56006D1F06 /* Image Comments Presentation */,
 				74990BCB2C20BA5E006D1F06 /* Shared Presentation */,
 				7454E99A2C03D4E40082BD47 /* Shared API */,
@@ -862,6 +871,30 @@
 				74990BE42C24B025006D1F06 /* ImageComments.xcstrings */,
 			);
 			path = "Image Commetns Presentation";
+			sourceTree = "<group>";
+		};
+		74990BE82C24B1E7006D1F06 /* Image Comments Feature */ = {
+			isa = PBXGroup;
+			children = (
+				74990BE92C24B1F6006D1F06 /* ImageComment.swift */,
+			);
+			path = "Image Comments Feature";
+			sourceTree = "<group>";
+		};
+		74990BEB2C24B22B006D1F06 /* Image Comments API */ = {
+			isa = PBXGroup;
+			children = (
+				74990BEC2C24B23C006D1F06 /* ImageCommentsMapper.swift */,
+			);
+			path = "Image Comments API";
+			sourceTree = "<group>";
+		};
+		74990BEE2C24B31E006D1F06 /* Image Comments API */ = {
+			isa = PBXGroup;
+			children = (
+				74990BEF2C24B333006D1F06 /* ImageCommentsMapperTests.swift */,
+			);
+			path = "Image Comments API";
 			sourceTree = "<group>";
 		};
 		74A6DC962BC31689002A420C /* TestPlans */ = {
@@ -1283,9 +1316,11 @@
 				7454E94A2C0260F90082BD47 /* WorkoutBuilder.swift in Sources */,
 				740ED88C2BE7BAFE005B09BA /* WorkoutItem2.swift in Sources */,
 				7454E9912C0393D10082BD47 /* ManagedExerciseCache.swift in Sources */,
+				74990BED2C24B23C006D1F06 /* ImageCommentsMapper.swift in Sources */,
 				74A6DCCE2BCF05EB002A420C /* ManagedCache.swift in Sources */,
 				740ED8742BE167B8005B09BA /* FeedViewModel.swift in Sources */,
 				7454E98C2C0365CE0082BD47 /* CoreDataExerciseStore.swift in Sources */,
+				74990BEA2C24B1F6006D1F06 /* ImageComment.swift in Sources */,
 				740ED87F2BE2DB0A005B09BA /* FeedImageViewModel.swift in Sources */,
 				7454E96B2C029CCA0082BD47 /* LocalExerciseLoader.swift in Sources */,
 				74A6DCD02BCF0632002A420C /* ManagedWorkoutItem.swift in Sources */,
@@ -1359,6 +1394,7 @@
 				746DA0C82C07B0700094EA3B /* CacheFeedImageDataUseCaseTests.swift in Sources */,
 				7454E9A52C0507580082BD47 /* ExerciseItemsMapperTests.swift in Sources */,
 				7454E9742C029F270082BD47 /* ExerciseStoreSpy.swift in Sources */,
+				74990BF02C24B333006D1F06 /* ImageCommentsMapperTests.swift in Sources */,
 				746DA0C02C071ABA0094EA3B /* LoadFeedImageDataFromCacheUseCaseTests.swift in Sources */,
 				74990BD92C20C83C006D1F06 /* SharedLocalizationTestHelpers.swift in Sources */,
 				7454E97E2C035F490082BD47 /* ExerciseStoreSpecs.swift in Sources */,
