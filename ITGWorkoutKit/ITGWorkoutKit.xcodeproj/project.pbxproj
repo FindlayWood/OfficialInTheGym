@@ -706,7 +706,7 @@
 			children = (
 				74990BEB2C24B22B006D1F06 /* Image Comments API */,
 				74990BE82C24B1E7006D1F06 /* Image Comments Feature */,
-				74990BE12C24AFA3006D1F06 /* Image Commetns Presentation */,
+				74990BE12C24AFA3006D1F06 /* Image Comments Presentation */,
 				74990BCE2C20BAC1006D1F06 /* Shared Presentation */,
 				74990BC02C1DE3AC006D1F06 /* Workout Presentation */,
 				7454E9952C03D3620082BD47 /* Shared API Infra */,
@@ -864,13 +864,13 @@
 			path = "Image Comments Presentation";
 			sourceTree = "<group>";
 		};
-		74990BE12C24AFA3006D1F06 /* Image Commetns Presentation */ = {
+		74990BE12C24AFA3006D1F06 /* Image Comments Presentation */ = {
 			isa = PBXGroup;
 			children = (
 				74990BE22C24AFB2006D1F06 /* ImageCommentsPresenter.swift */,
 				74990BE42C24B025006D1F06 /* ImageComments.xcstrings */,
 			);
-			path = "Image Commetns Presentation";
+			path = "Image Comments Presentation";
 			sourceTree = "<group>";
 		};
 		74990BE82C24B1E7006D1F06 /* Image Comments Feature */ = {
