@@ -27,8 +27,4 @@ extension Date {
     private var exerciseCacheMaxAgeInDays: Int {
         return 7
     }
-    
-    private func adding(days: Int) -> Date {
-        return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
-    }
 }
