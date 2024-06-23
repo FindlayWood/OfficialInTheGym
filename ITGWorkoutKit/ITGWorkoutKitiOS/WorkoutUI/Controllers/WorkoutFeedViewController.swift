@@ -9,7 +9,7 @@ import UIKit
 import ITGWorkoutKit
 
 public final class WorkoutFeedViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
-    public var delegate: FeedViewControllerDelegate?
+    public var onRefresh: (() -> Void)?
     
     @IBOutlet private(set) public var errorView: ErrorView?
     
@@ -37,7 +37,7 @@ public final class WorkoutFeedViewController: UITableViewController, UITableView
     }
     
     @IBAction private func refresh() {
-        delegate?.didRequestFeedRefresh()
+        onRefresh?()
     }
     
     public func display(_ cellControllers: [FeedImageCellController]) {
