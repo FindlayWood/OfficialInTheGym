@@ -8,7 +8,7 @@
 import UIKit
 import ITGWorkoutKitiOS
 
-extension FeedViewController {
+extension ListViewController {
     
     func simulateAppearance() {
         if !isViewLoaded {
@@ -94,7 +94,7 @@ extension FeedViewController {
 }
 
 // MARK: - Fake UI Refresh Control
-extension FeedViewController {
+extension ListViewController {
     func replaceRefreshControlWithFakeForiOS17PlusSupport() {
         let fakeRefreshControl = FakeUIRefreshControl()
 

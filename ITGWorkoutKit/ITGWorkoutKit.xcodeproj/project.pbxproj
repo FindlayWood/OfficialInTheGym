@@ -147,7 +147,7 @@
 		74A6DD022BD2D473002A420C /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; platformFilter = ios; };
 		74A6DD032BD2D473002A420C /* ITGWorkoutKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		74A6DD072BD2D7A8002A420C /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B922BC0ABBE00B54778 /* XCTestCase+MemoryLeakTracking.swift */; };
-		74A6DD092BD31827002A420C /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DD082BD31827002A420C /* FeedViewController.swift */; };
+		74A6DD092BD31827002A420C /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A6DD082BD31827002A420C /* ListViewController.swift */; };
 		74A6DD0C2BD31ABD002A420C /* ITGWorkoutKitiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 74A6DD0B2BD31ABD002A420C /* ITGWorkoutKitiOS.h */; };
 		74AEA5D62B9F9F1B008CAC0A /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D52B9F9F1B008CAC0A /* Client.swift */; };
 		74AEA5D82B9F9F6D008CAC0A /* WorkoutItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */; };
@@ -364,7 +364,7 @@
 		74A6DCF02BD1A46B002A420C /* ITGWorkoutKitiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ITGWorkoutKitiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		74A6DCFE2BD1A4F0002A420C /* ITGWorkoutKitiOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ITGWorkoutKitiOS.xctestplan; sourceTree = "<group>"; };
 		74A6DCFF2BD1A82E002A420C /* CI_iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI_iOS.xctestplan; sourceTree = "<group>"; };
-		74A6DD082BD31827002A420C /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		74A6DD082BD31827002A420C /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		74A6DD0B2BD31ABD002A420C /* ITGWorkoutKitiOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITGWorkoutKitiOS.h; sourceTree = "<group>"; };
 		74AEA5D52B9F9F1B008CAC0A /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutItemsMapper.swift; sourceTree = "<group>"; };
@@ -478,7 +478,7 @@
 		7418332D2BD540EC00EEA9C0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				74A6DD082BD31827002A420C /* FeedViewController.swift */,
+				74A6DD082BD31827002A420C /* ListViewController.swift */,
 				7418333F2BD5709600EEA9C0 /* FeedImageCellController.swift */,
 			);
 			path = Controllers;
@@ -1433,7 +1433,7 @@
 				740ED8492BDD252B005B09BA /* UITableView+Dequeueing.swift in Sources */,
 				741833232BD4695600EEA9C0 /* UIView+Shimmering.swift in Sources */,
 				740ED84B2BDD260C005B09BA /* UIImageView+Animations.swift in Sources */,
-				74A6DD092BD31827002A420C /* FeedViewController.swift in Sources */,
+				74A6DD092BD31827002A420C /* ListViewController.swift in Sources */,
 				741833212BD4255100EEA9C0 /* FeedImageCell.swift in Sources */,
 				74990BBF2C1DE33D006D1F06 /* WorkoutCellController.swift in Sources */,
 				74990BBB2C1B8928006D1F06 /* WorkoutFeedViewController.swift in Sources */,

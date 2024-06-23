@@ -11,7 +11,7 @@ import ITGWorkoutKitiOS
 
 extension FeedUIIntegrationTests {
     
-    func assertThat(_ sut: FeedViewController, isRendering feed: [WorkoutItem], file: StaticString = #file, line: UInt = #line) {
+    func assertThat(_ sut: ListViewController, isRendering feed: [WorkoutItem], file: StaticString = #file, line: UInt = #line) {
         sut.view.enforceLayoutCycle()
         
         guard sut.numberOfRenderedFeedImageViews() == feed.count else {
@@ -23,7 +23,7 @@ extension FeedUIIntegrationTests {
         }
     }
 
-    func assertThat(_ sut: FeedViewController, hasViewConfiguredFor image: WorkoutItem, at index: Int, file: StaticString = #file, line: UInt = #line) {
+    func assertThat(_ sut: ListViewController, hasViewConfiguredFor image: WorkoutItem, at index: Int, file: StaticString = #file, line: UInt = #line) {
         let view = sut.feedImageView(at: index)
 
         guard let cell = view as? FeedImageCell else {
