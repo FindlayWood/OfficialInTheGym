@@ -435,11 +435,8 @@
 		740ED8652BE03A6F005B09BA /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				740ED8482BDD252B005B09BA /* UITableView+Dequeueing.swift */,
 				740ED84A2BDD260C005B09BA /* UIImageView+Animations.swift */,
 				741833222BD4695600EEA9C0 /* UIView+Shimmering.swift */,
-				740ED8682BE03BFD005B09BA /* UIRefreshControl+Helpers.swift */,
-				7446E2482C179F7D0060CEE6 /* UITableView+HeaderResizing.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -478,7 +475,6 @@
 		7418332D2BD540EC00EEA9C0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				74A6DD082BD31827002A420C /* ListViewController.swift */,
 				7418333F2BD5709600EEA9C0 /* FeedImageCellController.swift */,
 			);
 			path = Controllers;
@@ -491,7 +487,6 @@
 				740ED8442BDC14E2005B09BA /* Feed.storyboard */,
 				741833202BD4255100EEA9C0 /* FeedImageCell.swift */,
 				740ED8462BDC1EC6005B09BA /* Feed.xcassets */,
-				740ED8632BE0326D005B09BA /* ErrorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -897,6 +892,42 @@
 			path = "Image Comments API";
 			sourceTree = "<group>";
 		};
+		74990BF12C28913A006D1F06 /* Shared UI */ = {
+			isa = PBXGroup;
+			children = (
+				74990BF22C289156006D1F06 /* Controllers */,
+				74990BF32C289183006D1F06 /* Views */,
+			);
+			path = "Shared UI";
+			sourceTree = "<group>";
+		};
+		74990BF22C289156006D1F06 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				74A6DD082BD31827002A420C /* ListViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		74990BF32C289183006D1F06 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				740ED8632BE0326D005B09BA /* ErrorView.swift */,
+				74990BF42C289192006D1F06 /* Helpers */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		74990BF42C289192006D1F06 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				7446E2482C179F7D0060CEE6 /* UITableView+HeaderResizing.swift */,
+				740ED8682BE03BFD005B09BA /* UIRefreshControl+Helpers.swift */,
+				740ED8482BDD252B005B09BA /* UITableView+Dequeueing.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		74A6DC962BC31689002A420C /* TestPlans */ = {
 			isa = PBXGroup;
 			children = (
@@ -1003,6 +1034,7 @@
 		74A6DCEA2BD1A46B002A420C /* ITGWorkoutKitiOS */ = {
 			isa = PBXGroup;
 			children = (
+				74990BF12C28913A006D1F06 /* Shared UI */,
 				74990BB32C1B82D1006D1F06 /* WorkoutUI */,
 				741833382BD5459200EEA9C0 /* FeedUI */,
 				74A6DD0B2BD31ABD002A420C /* ITGWorkoutKitiOS.h */,
