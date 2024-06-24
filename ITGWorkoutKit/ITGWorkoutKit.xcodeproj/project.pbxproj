@@ -93,7 +93,6 @@
 		74730B9D2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B9C2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.swift */; };
 		74730B9E2BC1DC2D00B54778 /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
 		74990BB92C1B86AE006D1F06 /* WorkoutFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */; };
-		74990BBB2C1B8928006D1F06 /* WorkoutFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BBA2C1B8928006D1F06 /* WorkoutFeedViewController.swift */; };
 		74990BBD2C1B89DE006D1F06 /* WorkoutFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */; };
 		74990BBF2C1DE33D006D1F06 /* WorkoutCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */; };
 		74990BC22C1DE3BB006D1F06 /* FeedWorkoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BC12C1DE3BB006D1F06 /* FeedWorkoutViewModel.swift */; };
@@ -323,7 +322,6 @@
 		74730B9A2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkoutAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		74730B9C2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutAPIEndToEndTests.swift; sourceTree = "<group>"; };
 		74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedCell.swift; sourceTree = "<group>"; };
-		74990BBA2C1B8928006D1F06 /* WorkoutFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedViewController.swift; sourceTree = "<group>"; };
 		74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WorkoutFeed.storyboard; sourceTree = "<group>"; };
 		74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCellController.swift; sourceTree = "<group>"; };
 		74990BC12C1DE3BB006D1F06 /* FeedWorkoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWorkoutViewModel.swift; sourceTree = "<group>"; };
@@ -835,7 +833,6 @@
 		74990BB42C1B82E2006D1F06 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				74990BBA2C1B8928006D1F06 /* WorkoutFeedViewController.swift */,
 				74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */,
 			);
 			path = Controllers;
@@ -1598,7 +1595,6 @@
 				741833212BD4255100EEA9C0 /* FeedImageCell.swift in Sources */,
 				74990BBF2C1DE33D006D1F06 /* WorkoutCellController.swift in Sources */,
 				74990C242C29F23D006D1F06 /* ImageCommentCell.swift in Sources */,
-				74990BBB2C1B8928006D1F06 /* WorkoutFeedViewController.swift in Sources */,
 				741833402BD5709600EEA9C0 /* FeedImageCellController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
