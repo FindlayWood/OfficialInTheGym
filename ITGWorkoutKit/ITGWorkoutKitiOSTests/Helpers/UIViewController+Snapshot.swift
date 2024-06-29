@@ -52,21 +52,11 @@ private final class SnapshotWindow: UIWindow {
     }
     
     override var safeAreaInsets: UIEdgeInsets {
-        return configuration.safeAreaInsets
+        configuration.safeAreaInsets
     }
     
     override var traitCollection: UITraitCollection {
-        return UITraitCollection(mutations: { mutableTraits in
-            mutableTraits.forceTouchCapability = configuration.traitCollection.forceTouchCapability
-            mutableTraits.layoutDirection = configuration.traitCollection.layoutDirection
-            mutableTraits.preferredContentSizeCategory = configuration.traitCollection.preferredContentSizeCategory
-            mutableTraits.userInterfaceIdiom = configuration.traitCollection.userInterfaceIdiom
-            mutableTraits.horizontalSizeClass = configuration.traitCollection.horizontalSizeClass
-            mutableTraits.verticalSizeClass = configuration.traitCollection.verticalSizeClass
-            mutableTraits.displayScale = configuration.traitCollection.displayScale
-            mutableTraits.displayGamut = configuration.traitCollection.displayGamut
-            mutableTraits.userInterfaceStyle = configuration.traitCollection.userInterfaceStyle
-        })
+        configuration.traitCollection
     }
     
     
