@@ -92,6 +92,10 @@
 		74730B952BC19F8500B54778 /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B942BC19F8500B54778 /* URLSessionHTTPClient.swift */; };
 		74730B9D2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74730B9C2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.swift */; };
 		74730B9E2BC1DC2D00B54778 /* ITGWorkoutKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7460AB522B94D040000FDF22 /* ITGWorkoutKit.framework */; };
+		7493966B2C431C4300C1B792 /* ImageCommentsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7493966A2C431C4300C1B792 /* ImageCommentsEndpoint.swift */; };
+		7493966D2C431C6500C1B792 /* ImageCommentsEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7493966C2C431C6500C1B792 /* ImageCommentsEndpointTests.swift */; };
+		7493966F2C431D3800C1B792 /* FeedEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7493966E2C431D3800C1B792 /* FeedEndpointTests.swift */; };
+		749396712C431D5900C1B792 /* FeedEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749396702C431D5900C1B792 /* FeedEndpoint.swift */; };
 		74990BB92C1B86AE006D1F06 /* WorkoutFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */; };
 		74990BBD2C1B89DE006D1F06 /* WorkoutFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */; };
 		74990BBF2C1DE33D006D1F06 /* WorkoutCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */; };
@@ -326,6 +330,10 @@
 		74730B942BC19F8500B54778 /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		74730B9A2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkoutAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		74730B9C2BC1DC2D00B54778 /* WorkoutAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutAPIEndToEndTests.swift; sourceTree = "<group>"; };
+		7493966A2C431C4300C1B792 /* ImageCommentsEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsEndpoint.swift; sourceTree = "<group>"; };
+		7493966C2C431C6500C1B792 /* ImageCommentsEndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsEndpointTests.swift; sourceTree = "<group>"; };
+		7493966E2C431D3800C1B792 /* FeedEndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEndpointTests.swift; sourceTree = "<group>"; };
+		749396702C431D5900C1B792 /* FeedEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEndpoint.swift; sourceTree = "<group>"; };
 		74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedCell.swift; sourceTree = "<group>"; };
 		74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WorkoutFeed.storyboard; sourceTree = "<group>"; };
 		74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCellController.swift; sourceTree = "<group>"; };
@@ -917,6 +925,7 @@
 			isa = PBXGroup;
 			children = (
 				74990BEC2C24B23C006D1F06 /* ImageCommentsMapper.swift */,
+				7493966A2C431C4300C1B792 /* ImageCommentsEndpoint.swift */,
 			);
 			path = "Image Comments API";
 			sourceTree = "<group>";
@@ -925,6 +934,7 @@
 			isa = PBXGroup;
 			children = (
 				74990BEF2C24B333006D1F06 /* ImageCommentsMapperTests.swift */,
+				7493966C2C431C6500C1B792 /* ImageCommentsEndpointTests.swift */,
 			);
 			path = "Image Comments API";
 			sourceTree = "<group>";
@@ -1187,6 +1197,7 @@
 				746DA0BC2C0650C20094EA3B /* Helpers */,
 				74AEA5D72B9F9F6D008CAC0A /* WorkoutItemsMapper.swift */,
 				74990BC52C1F6AB5006D1F06 /* FeedImageDataMapper.swift */,
+				749396702C431D5900C1B792 /* FeedEndpoint.swift */,
 			);
 			path = "Workout API";
 			sourceTree = "<group>";
@@ -1196,6 +1207,7 @@
 			children = (
 				7454E9A22C0505700082BD47 /* WorkoutItemsMapperTests.swift */,
 				74990BC72C1F6AD7006D1F06 /* FeedImageDataMapperTests.swift */,
+				7493966E2C431D3800C1B792 /* FeedEndpointTests.swift */,
 			);
 			path = "Workout API";
 			sourceTree = "<group>";
@@ -1459,6 +1471,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				749396712C431D5900C1B792 /* FeedEndpoint.swift in Sources */,
 				740ED8842BE7BA78005B09BA /* FirestoreWorkoutLoader.swift in Sources */,
 				74A6DCA02BC8681C002A420C /* FeedStore.swift in Sources */,
 				74A6DCC72BCEE46A002A420C /* FeedStore.xcdatamodeld in Sources */,
@@ -1483,6 +1496,7 @@
 				746DA0F52C0CC8060094EA3B /* FeedCache.swift in Sources */,
 				7454E94E2C02615C0082BD47 /* TagModel.swift in Sources */,
 				7454E9512C0264070082BD47 /* WorkoutUploader.swift in Sources */,
+				7493966B2C431C4300C1B792 /* ImageCommentsEndpoint.swift in Sources */,
 				74990BE32C24AFB3006D1F06 /* ImageCommentsPresenter.swift in Sources */,
 				740ED8862BE7BAA7005B09BA /* WorkoutClient.swift in Sources */,
 				740ED8762BE167F2005B09BA /* ResourceLoadingViewModel.swift in Sources */,
@@ -1530,6 +1544,7 @@
 				74A6DCB32BCC4E20002A420C /* CodableFeedStoreTests.swift in Sources */,
 				7454E9782C0357D60082BD47 /* ExerciseCacheTestHelpers.swift in Sources */,
 				740ED8812BE55B81005B09BA /* LoadWorkoutsFromRemoteUseCaseTests.swift in Sources */,
+				7493966F2C431D3800C1B792 /* FeedEndpointTests.swift in Sources */,
 				7454E97A2C035C930082BD47 /* ValidateExerciseListCacheUseCaseTests.swift in Sources */,
 				74A6DCAB2BCC06AE002A420C /* ValidateFeedCacheUseCaseTests.swift in Sources */,
 				740ED8792BE16D34005B09BA /* FeedLocalizationTests.swift in Sources */,
@@ -1543,6 +1558,7 @@
 				74A6DCBD2BCDD289002A420C /* XCTestCase+FailableInsertFeedStoreSpecs.swift in Sources */,
 				74A6DCA92BC92627002A420C /* FeedStoreSpy.swift in Sources */,
 				7454E9862C0364A30082BD47 /* XCTestCase+FailableDeleteExerciseStoreSpecs.swift in Sources */,
+				7493966D2C431C6500C1B792 /* ImageCommentsEndpointTests.swift in Sources */,
 				746DA0CA2C07B2D60094EA3B /* CoreDataFeedImageDataStoreTests.swift in Sources */,
 				740ED8622BE026EF005B09BA /* FeedPresenterTests.swift in Sources */,
 				7454E9882C03656C0082BD47 /* CoreDataExerciseStoreTests.swift in Sources */,
