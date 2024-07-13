@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var coordinator: MainCoordinator?
     var baseController: BaseController?
-    var navigationController: UINavigationController = UINavigationController()
+//    var navigationController: UINavigationController = UINavigationController()
     
     var window: UIWindow?
     
@@ -39,6 +39,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         LocalFeedLoader(store: store, currentDate: Date.init)
     }()
     
+    private lazy var baseURL = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed")!
+
+    private lazy var navigationController = UINavigationController(
+        rootViewController: FeedUIComposer.feedComposedWith(
+            feedLoader: makeRemoteFeedLoaderWithLocalFallback,
+            imageLoader: makeLocalImageLoaderWithRemoteFallback,
+            selection: showComments))
+    
     convenience init(client: Client, httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
         self.init()
         self.client = client
@@ -55,20 +63,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func configureWindow() {
-        launchEssentialFeed()
+        
+        window?.rootViewController = navigationController
+        
+        window?.makeKeyAndVisible()
+//        launchEssentialFeed()
 
     }
     
     func launchEssentialFeed() {
 
-        window?.rootViewController = UINavigationController(
-            rootViewController:
-                FeedUIComposer.feedComposedWith(
-                    feedLoader: makeRemoteFeedLoaderWithLocalFallback,
-                    imageLoader: makeLocalImageLoaderWithRemoteFallback)
-            )
-        
-        window?.makeKeyAndVisible()
+
     }
     
     func onBoard() {
@@ -142,9 +147,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         localFeedLoader.validateCache { _ in }
     }
     
+    private func showComments(for image: WorkoutItem) {
+        let url = baseURL.appendingPathComponent("/v1/image/\(image.id)/comments")
+        let comments = CommentsUIComposer.commentsComposedWith(commentsLoader: makeRemoteCommentsLoader(url: url))
+        navigationController.pushViewController(comments, animated: true)
+    }
+
+    private func makeRemoteCommentsLoader(url: URL) -> () -> AnyPublisher<[ImageComment], Error> {
+        return { [httpClient] in
+            return httpClient
+                .getPublisher(url: url)
+                .tryMap(ImageCommentsMapper.map)
+                .eraseToAnyPublisher()
+        }
+    }
+    
     private func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<[WorkoutItem], Error> {
         
-        let remoteURL =  "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed"
+        let remoteURL =  baseURL.appendingPathComponent("/v1/feed").absoluteString
         
         return client
             .getPublisher(path: remoteURL)

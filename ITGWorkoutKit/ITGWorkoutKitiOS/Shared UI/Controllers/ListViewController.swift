@@ -30,8 +30,9 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
         configureTraitCollectionObservers()
         
         onViewIsAppearing = { vc in
-            vc.refresh()
             vc.onViewIsAppearing = nil
+            vc.refresh()
+            
         }
     }
     
