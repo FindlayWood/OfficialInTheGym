@@ -96,6 +96,9 @@
 		7493966D2C431C6500C1B792 /* ImageCommentsEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7493966C2C431C6500C1B792 /* ImageCommentsEndpointTests.swift */; };
 		7493966F2C431D3800C1B792 /* FeedEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7493966E2C431D3800C1B792 /* FeedEndpointTests.swift */; };
 		749396712C431D5900C1B792 /* FeedEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749396702C431D5900C1B792 /* FeedEndpoint.swift */; };
+		749396752C432CFB00C1B792 /* WorkoutFeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749396742C432CFB00C1B792 /* WorkoutFeedItem.swift */; };
+		749396782C432D9500C1B792 /* WorkoutFeedItemsMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749396772C432D9500C1B792 /* WorkoutFeedItemsMapperTests.swift */; };
+		7493967A2C43310900C1B792 /* WorkoutFeedItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749396792C43310900C1B792 /* WorkoutFeedItemsMapper.swift */; };
 		74990BB92C1B86AE006D1F06 /* WorkoutFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */; };
 		74990BBD2C1B89DE006D1F06 /* WorkoutFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */; };
 		74990BBF2C1DE33D006D1F06 /* WorkoutCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */; };
@@ -334,6 +337,9 @@
 		7493966C2C431C6500C1B792 /* ImageCommentsEndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommentsEndpointTests.swift; sourceTree = "<group>"; };
 		7493966E2C431D3800C1B792 /* FeedEndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEndpointTests.swift; sourceTree = "<group>"; };
 		749396702C431D5900C1B792 /* FeedEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEndpoint.swift; sourceTree = "<group>"; };
+		749396742C432CFB00C1B792 /* WorkoutFeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedItem.swift; sourceTree = "<group>"; };
+		749396772C432D9500C1B792 /* WorkoutFeedItemsMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedItemsMapperTests.swift; sourceTree = "<group>"; };
+		749396792C43310900C1B792 /* WorkoutFeedItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedItemsMapper.swift; sourceTree = "<group>"; };
 		74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedCell.swift; sourceTree = "<group>"; };
 		74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WorkoutFeed.storyboard; sourceTree = "<group>"; };
 		74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCellController.swift; sourceTree = "<group>"; };
@@ -745,6 +751,8 @@
 		7460AB542B94D040000FDF22 /* ITGWorkoutKit */ = {
 			isa = PBXGroup;
 			children = (
+				749396732C432CB600C1B792 /* Workout Feed API */,
+				749396722C432CA900C1B792 /* Workout Feed Feature */,
 				74990BEB2C24B22B006D1F06 /* Image Comments API */,
 				74990BE82C24B1E7006D1F06 /* Image Comments Feature */,
 				74990BE12C24AFA3006D1F06 /* Image Comments Presentation */,
@@ -771,6 +779,7 @@
 		7460AB602B94D040000FDF22 /* ITGWorkoutKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				749396762C432D7000C1B792 /* Workout Feed API */,
 				74990BEE2C24B31E006D1F06 /* Image Comments API */,
 				74990BDE2C24AF56006D1F06 /* Image Comments Presentation */,
 				74990BCB2C20BA5E006D1F06 /* Shared Presentation */,
@@ -837,6 +846,30 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		749396722C432CA900C1B792 /* Workout Feed Feature */ = {
+			isa = PBXGroup;
+			children = (
+				749396742C432CFB00C1B792 /* WorkoutFeedItem.swift */,
+			);
+			path = "Workout Feed Feature";
+			sourceTree = "<group>";
+		};
+		749396732C432CB600C1B792 /* Workout Feed API */ = {
+			isa = PBXGroup;
+			children = (
+				749396792C43310900C1B792 /* WorkoutFeedItemsMapper.swift */,
+			);
+			path = "Workout Feed API";
+			sourceTree = "<group>";
+		};
+		749396762C432D7000C1B792 /* Workout Feed API */ = {
+			isa = PBXGroup;
+			children = (
+				749396772C432D9500C1B792 /* WorkoutFeedItemsMapperTests.swift */,
+			);
+			path = "Workout Feed API";
 			sourceTree = "<group>";
 		};
 		74990BB32C1B82D1006D1F06 /* WorkoutUI */ = {
@@ -1475,6 +1508,7 @@
 				740ED8842BE7BA78005B09BA /* FirestoreWorkoutLoader.swift in Sources */,
 				74A6DCA02BC8681C002A420C /* FeedStore.swift in Sources */,
 				74A6DCC72BCEE46A002A420C /* FeedStore.xcdatamodeld in Sources */,
+				7493967A2C43310900C1B792 /* WorkoutFeedItemsMapper.swift in Sources */,
 				740ED88E2BE7BB0F005B09BA /* WorkoutLoader2.swift in Sources */,
 				74990BCA2C1F6FA1006D1F06 /* FeedImageDataLoader.swift in Sources */,
 				7454E96F2C029D370082BD47 /* LocalExerciseItem.swift in Sources */,
@@ -1517,6 +1551,7 @@
 				7454E94C2C0261440082BD47 /* ExerciseModel.swift in Sources */,
 				7454E9532C02641B0082BD47 /* UploadWorkoutModel.swift in Sources */,
 				7454E9712C029E200082BD47 /* ExerciseCachePolicy.swift in Sources */,
+				749396752C432CFB00C1B792 /* WorkoutFeedItem.swift in Sources */,
 				746DA0C42C07A9290094EA3B /* LocalFeedImageDataLoader.swift in Sources */,
 				74A6DC9E2BC867A5002A420C /* LocalFeedLoader.swift in Sources */,
 				740ED8882BE7BAC0005B09BA /* WorkoutItemsMapper2.swift in Sources */,
@@ -1569,6 +1604,7 @@
 				74990BE72C24B0D4006D1F06 /* ImageCommentsLocalisationTests.swift in Sources */,
 				74990BE02C24AF76006D1F06 /* ImageCommentsPresenterTests.swift in Sources */,
 				74A6DCBB2BCDD21D002A420C /* XCTestCase+FailableRetrieveFeedStoreSpecs.swift in Sources */,
+				749396782C432D9500C1B792 /* WorkoutFeedItemsMapperTests.swift in Sources */,
 				7454E9842C0364680082BD47 /* XCTestCase+FailableInsertExerciseStoreSpecs.swift in Sources */,
 				7454E99D2C03D4FE0082BD47 /* ClientSpy.swift in Sources */,
 				7454E9802C035FBD0082BD47 /* XCTestCase+ExerciseStoreSpecs.swift in Sources */,
