@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SwiftUI
 import ITGWorkoutKit
 
 public class WorkoutFeedCellController: NSObject, UITableViewDataSource {
@@ -21,13 +20,9 @@ public class WorkoutFeedCellController: NSObject, UITableViewDataSource {
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = UITableViewCell()
+        let cell: WorkoutFeedCell = tableView.dequeueReusableCell()
         
-        tableView.separatorStyle = .none
-        
-        cell.contentConfiguration = UIHostingConfiguration {
-            WorkoutFeedCellView(model: model)
-        }
+        cell.configure(with: model)
         
         return cell
     }

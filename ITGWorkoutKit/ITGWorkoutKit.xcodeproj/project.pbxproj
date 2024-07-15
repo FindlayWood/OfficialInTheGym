@@ -108,9 +108,8 @@
 		749396932C455CAF00C1B792 /* WORKOUT_FEED_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 7493968F2C455CAF00C1B792 /* WORKOUT_FEED_dark.png */; };
 		749396942C455CAF00C1B792 /* WORKOUT_FEED_light_extraExtraExtraLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = 749396902C455CAF00C1B792 /* WORKOUT_FEED_light_extraExtraExtraLarge.png */; };
 		749396952C455CAF00C1B792 /* WORKOUT_FEED_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 749396912C455CAF00C1B792 /* WORKOUT_FEED_light.png */; };
-		74990BB92C1B86AE006D1F06 /* WorkoutFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */; };
-		74990BBD2C1B89DE006D1F06 /* WorkoutFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */; };
-		74990BBF2C1DE33D006D1F06 /* WorkoutCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */; };
+		7493969E2C457A8F00C1B792 /* WorkoutFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7493969D2C457A8E00C1B792 /* WorkoutFeed.storyboard */; };
+		749396A02C458FB000C1B792 /* WorkoutFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7493969F2C458FB000C1B792 /* WorkoutFeedCell.swift */; };
 		74990BC22C1DE3BB006D1F06 /* FeedWorkoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BC12C1DE3BB006D1F06 /* FeedWorkoutViewModel.swift */; };
 		74990BC62C1F6AB5006D1F06 /* FeedImageDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BC52C1F6AB5006D1F06 /* FeedImageDataMapper.swift */; };
 		74990BC82C1F6AD7006D1F06 /* FeedImageDataMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BC72C1F6AD7006D1F06 /* FeedImageDataMapperTests.swift */; };
@@ -358,9 +357,8 @@
 		7493968F2C455CAF00C1B792 /* WORKOUT_FEED_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WORKOUT_FEED_dark.png; sourceTree = "<group>"; };
 		749396902C455CAF00C1B792 /* WORKOUT_FEED_light_extraExtraExtraLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WORKOUT_FEED_light_extraExtraExtraLarge.png; sourceTree = "<group>"; };
 		749396912C455CAF00C1B792 /* WORKOUT_FEED_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WORKOUT_FEED_light.png; sourceTree = "<group>"; };
-		74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedCell.swift; sourceTree = "<group>"; };
-		74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WorkoutFeed.storyboard; sourceTree = "<group>"; };
-		74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCellController.swift; sourceTree = "<group>"; };
+		7493969D2C457A8E00C1B792 /* WorkoutFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WorkoutFeed.storyboard; sourceTree = "<group>"; };
+		7493969F2C458FB000C1B792 /* WorkoutFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedCell.swift; sourceTree = "<group>"; };
 		74990BC12C1DE3BB006D1F06 /* FeedWorkoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedWorkoutViewModel.swift; sourceTree = "<group>"; };
 		74990BC52C1F6AB5006D1F06 /* FeedImageDataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataMapper.swift; sourceTree = "<group>"; };
 		74990BC72C1F6AD7006D1F06 /* FeedImageDataMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataMapperTests.swift; sourceTree = "<group>"; };
@@ -913,6 +911,8 @@
 			isa = PBXGroup;
 			children = (
 				7493968A2C4555CE00C1B792 /* WorkoutFeedCellView.swift */,
+				7493969F2C458FB000C1B792 /* WorkoutFeedCell.swift */,
+				7493969D2C457A8E00C1B792 /* WorkoutFeed.storyboard */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -951,32 +951,6 @@
 				749396912C455CAF00C1B792 /* WORKOUT_FEED_light.png */,
 			);
 			path = snapshots;
-			sourceTree = "<group>";
-		};
-		74990BB32C1B82D1006D1F06 /* WorkoutUI */ = {
-			isa = PBXGroup;
-			children = (
-				74990BB52C1B82F4006D1F06 /* Views */,
-				74990BB42C1B82E2006D1F06 /* Controllers */,
-			);
-			path = WorkoutUI;
-			sourceTree = "<group>";
-		};
-		74990BB42C1B82E2006D1F06 /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */,
-			);
-			path = Controllers;
-			sourceTree = "<group>";
-		};
-		74990BB52C1B82F4006D1F06 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */,
-				74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		74990BC02C1DE3AC006D1F06 /* Workout Presentation */ = {
@@ -1287,7 +1261,6 @@
 				7493967B2C43FD1800C1B792 /* Workout Feed UI */,
 				74990C1C2C29F10A006D1F06 /* Image Comments UI */,
 				74990BF12C28913A006D1F06 /* Shared UI */,
-				74990BB32C1B82D1006D1F06 /* WorkoutUI */,
 				741833382BD5459200EEA9C0 /* FeedUI */,
 				74A6DD0B2BD31ABD002A420C /* ITGWorkoutKitiOS.h */,
 			);
@@ -1556,7 +1529,7 @@
 			files = (
 				74990C1F2C29F143006D1F06 /* ImageComments.storyboard in Resources */,
 				740ED8452BDC14E2005B09BA /* Feed.storyboard in Resources */,
-				74990BBD2C1B89DE006D1F06 /* WorkoutFeed.storyboard in Resources */,
+				7493969E2C457A8F00C1B792 /* WorkoutFeed.storyboard in Resources */,
 				740ED8472BDC1EC6005B09BA /* Feed.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1747,7 +1720,6 @@
 				740ED8642BE0326D005B09BA /* ErrorView.swift in Sources */,
 				740ED8692BE03BFD005B09BA /* UIRefreshControl+Helpers.swift in Sources */,
 				7493968B2C4555CE00C1B792 /* WorkoutFeedCellView.swift in Sources */,
-				74990BB92C1B86AE006D1F06 /* WorkoutFeedCell.swift in Sources */,
 				740ED8492BDD252B005B09BA /* UITableView+Dequeueing.swift in Sources */,
 				741833232BD4695600EEA9C0 /* UIView+Shimmering.swift in Sources */,
 				74990C2E2C2A051E006D1F06 /* CellController.swift in Sources */,
@@ -1755,10 +1727,10 @@
 				74A6DD092BD31827002A420C /* ListViewController.swift in Sources */,
 				74990C362C2F673F006D1F06 /* UIView+Container.swift in Sources */,
 				741833212BD4255100EEA9C0 /* FeedImageCell.swift in Sources */,
-				74990BBF2C1DE33D006D1F06 /* WorkoutCellController.swift in Sources */,
 				7493967F2C43FD8A00C1B792 /* WorkoutFeedCellController.swift in Sources */,
 				74990C242C29F23D006D1F06 /* ImageCommentCell.swift in Sources */,
 				741833402BD5709600EEA9C0 /* FeedImageCellController.swift in Sources */,
+				749396A02C458FB000C1B792 /* WorkoutFeedCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

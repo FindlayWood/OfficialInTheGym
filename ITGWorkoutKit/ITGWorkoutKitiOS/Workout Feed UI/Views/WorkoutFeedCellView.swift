@@ -8,19 +8,19 @@
 import SwiftUI
 import ITGWorkoutKit
 
-struct WorkoutFeedCellView: View {
+public struct WorkoutFeedCellView: View {
     
     let model: WorkoutFeedItemViewModel
     
-    var body: some View {
+    public var body: some View {
         VStack {
-            Text(model.title)
+            Text(workoutTitle)
                 .font(.title.weight(.medium))
                 .foregroundStyle(Color.primary)
                 .lineLimit(1)
                 .padding(.horizontal)
             
-            Text("\(model.exerciseCount) exercises")
+            Text("\(exerciseCount) exercises")
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(Color.secondary)
         }
@@ -31,6 +31,14 @@ struct WorkoutFeedCellView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .shadow(radius: 4)
         }
+    }
+    
+    public var workoutTitle: String {
+        model.title
+    }
+    
+    public var exerciseCount: String {
+        model.exerciseCount
     }
 }
 

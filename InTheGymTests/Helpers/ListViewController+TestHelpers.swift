@@ -7,6 +7,7 @@
 
 import UIKit
 import ITGWorkoutKitiOS
+import SwiftUI
 
 extension ListViewController {
     
@@ -77,6 +78,26 @@ extension ListViewController {
     }
     
     private var commentsSection: Int { 0 }
+}
+
+extension ListViewController {
+    func numberOfRenderedWorkouts() -> Int {
+        numberOfRows(in: workoutsSection)
+    }
+    
+    func workoutTitle(at row: Int) -> String? {
+        workoutView(at: row)?.view?.workoutTitle
+    }
+    
+    func workoutExerciseCount(at row: Int) -> String? {
+        workoutView(at: row)?.view?.exerciseCount
+    }
+    
+    private func workoutView(at row: Int) -> WorkoutFeedCell? {
+        cell(row: row, section: workoutsSection) as? WorkoutFeedCell
+    }
+    
+    private var workoutsSection: Int { 0 }
 }
 
 extension ListViewController {

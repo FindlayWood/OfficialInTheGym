@@ -16,7 +16,7 @@ public final class WorkoutFeedUIComposer {
 
     private typealias WorkoutFeedPresentationAdapter = LoadResourcePresentationAdapter<[WorkoutFeedItem], WorkoutFeedViewAdapter>
 
-    public static func workoutssComposedWith(
+    public static func workoutsComposedWith(
         workoutsLoader: @escaping () -> AnyPublisher<[WorkoutFeedItem], Error>
     ) -> ListViewController {
         let presentationAdapter = WorkoutFeedPresentationAdapter(loader: workoutsLoader)
@@ -34,7 +34,9 @@ public final class WorkoutFeedUIComposer {
     }
 
     private static func makeWorkoutFeedViewController(title: String) -> ListViewController {
-        let controller = ListViewController()
+        let bundle = Bundle(for: ListViewController.self)
+        let storyboard = UIStoryboard(name: "WorkoutFeed", bundle: bundle)
+        let controller = storyboard.instantiateInitialViewController() as! ListViewController
         controller.title = title
         return controller
     }
