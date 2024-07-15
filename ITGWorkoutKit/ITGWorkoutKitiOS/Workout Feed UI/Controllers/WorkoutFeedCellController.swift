@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import SwiftUI
 import ITGWorkoutKit
 
 public class WorkoutFeedCellController: NSObject, UITableViewDataSource {
-    private let model: ImageCommentViewModel
+    private let model: WorkoutFeedItemViewModel
 
-    public init(model: ImageCommentViewModel) {
+    public init(model: WorkoutFeedItemViewModel) {
         self.model = model
     }
     
@@ -20,10 +21,14 @@ public class WorkoutFeedCellController: NSObject, UITableViewDataSource {
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: ImageCommentCell = tableView.dequeueReusableCell()
-        cell.messageLabel.text = model.message
-        cell.usernameLabel.text = model.username
-        cell.dateLabel.text = model.date
+        let cell: UITableViewCell = UITableViewCell()
+        
+        tableView.separatorStyle = .none
+        
+        cell.contentConfiguration = UIHostingConfiguration {
+            WorkoutFeedCellView(model: model)
+        }
+        
         return cell
     }
 }

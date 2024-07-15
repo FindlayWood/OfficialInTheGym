@@ -103,6 +103,11 @@
 		749396822C44053300C1B792 /* WorkoutFeedPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749396812C44053300C1B792 /* WorkoutFeedPresenterTests.swift */; };
 		749396852C4547D900C1B792 /* WorkoutFeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749396842C4547D900C1B792 /* WorkoutFeedPresenter.swift */; };
 		749396872C45489B00C1B792 /* WorkoutFeed.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 749396862C45489B00C1B792 /* WorkoutFeed.xcstrings */; };
+		7493968B2C4555CE00C1B792 /* WorkoutFeedCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7493968A2C4555CE00C1B792 /* WorkoutFeedCellView.swift */; };
+		7493968E2C4558C600C1B792 /* WorkoutFeedSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7493968D2C4558C600C1B792 /* WorkoutFeedSnapshotTests.swift */; };
+		749396932C455CAF00C1B792 /* WORKOUT_FEED_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 7493968F2C455CAF00C1B792 /* WORKOUT_FEED_dark.png */; };
+		749396942C455CAF00C1B792 /* WORKOUT_FEED_light_extraExtraExtraLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = 749396902C455CAF00C1B792 /* WORKOUT_FEED_light_extraExtraExtraLarge.png */; };
+		749396952C455CAF00C1B792 /* WORKOUT_FEED_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 749396912C455CAF00C1B792 /* WORKOUT_FEED_light.png */; };
 		74990BB92C1B86AE006D1F06 /* WorkoutFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */; };
 		74990BBD2C1B89DE006D1F06 /* WorkoutFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */; };
 		74990BBF2C1DE33D006D1F06 /* WorkoutCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */; };
@@ -348,6 +353,11 @@
 		749396812C44053300C1B792 /* WorkoutFeedPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedPresenterTests.swift; sourceTree = "<group>"; };
 		749396842C4547D900C1B792 /* WorkoutFeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedPresenter.swift; sourceTree = "<group>"; };
 		749396862C45489B00C1B792 /* WorkoutFeed.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = WorkoutFeed.xcstrings; sourceTree = "<group>"; };
+		7493968A2C4555CE00C1B792 /* WorkoutFeedCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedCellView.swift; sourceTree = "<group>"; };
+		7493968D2C4558C600C1B792 /* WorkoutFeedSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedSnapshotTests.swift; sourceTree = "<group>"; };
+		7493968F2C455CAF00C1B792 /* WORKOUT_FEED_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WORKOUT_FEED_dark.png; sourceTree = "<group>"; };
+		749396902C455CAF00C1B792 /* WORKOUT_FEED_light_extraExtraExtraLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WORKOUT_FEED_light_extraExtraExtraLarge.png; sourceTree = "<group>"; };
+		749396912C455CAF00C1B792 /* WORKOUT_FEED_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WORKOUT_FEED_light.png; sourceTree = "<group>"; };
 		74990BB82C1B86AE006D1F06 /* WorkoutFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFeedCell.swift; sourceTree = "<group>"; };
 		74990BBC2C1B89DE006D1F06 /* WorkoutFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WorkoutFeed.storyboard; sourceTree = "<group>"; };
 		74990BBE2C1DE33D006D1F06 /* WorkoutCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCellController.swift; sourceTree = "<group>"; };
@@ -788,8 +798,8 @@
 		7460AB602B94D040000FDF22 /* ITGWorkoutKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				749396802C44050100C1B792 /* Workout Feed Presentation */,
 				749396762C432D7000C1B792 /* Workout Feed API */,
+				749396802C44050100C1B792 /* Workout Feed Presentation */,
 				74990BEE2C24B31E006D1F06 /* Image Comments API */,
 				74990BDE2C24AF56006D1F06 /* Image Comments Presentation */,
 				74990BCB2C20BA5E006D1F06 /* Shared Presentation */,
@@ -902,6 +912,7 @@
 		7493967D2C43FD3000C1B792 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7493968A2C4555CE00C1B792 /* WorkoutFeedCellView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -921,6 +932,25 @@
 				749396862C45489B00C1B792 /* WorkoutFeed.xcstrings */,
 			);
 			path = "Workout Feed Presentation";
+			sourceTree = "<group>";
+		};
+		7493968C2C4558A600C1B792 /* Workout Feed UI */ = {
+			isa = PBXGroup;
+			children = (
+				749396922C455CAF00C1B792 /* snapshots */,
+				7493968D2C4558C600C1B792 /* WorkoutFeedSnapshotTests.swift */,
+			);
+			path = "Workout Feed UI";
+			sourceTree = "<group>";
+		};
+		749396922C455CAF00C1B792 /* snapshots */ = {
+			isa = PBXGroup;
+			children = (
+				7493968F2C455CAF00C1B792 /* WORKOUT_FEED_dark.png */,
+				749396902C455CAF00C1B792 /* WORKOUT_FEED_light_extraExtraExtraLarge.png */,
+				749396912C455CAF00C1B792 /* WORKOUT_FEED_light.png */,
+			);
+			path = snapshots;
 			sourceTree = "<group>";
 		};
 		74990BB32C1B82D1006D1F06 /* WorkoutUI */ = {
@@ -1267,6 +1297,7 @@
 		74A6DCF42BD1A46C002A420C /* ITGWorkoutKitiOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				7493968C2C4558A600C1B792 /* Workout Feed UI */,
 				74990C252C29F291006D1F06 /* Image Comments UI */,
 				74990BF92C29EBB2006D1F06 /* Feed UI */,
 				74990BF52C29EAC7006D1F06 /* Shared UI */,
@@ -1537,6 +1568,7 @@
 				74990C1A2C29ECBC006D1F06 /* FEED_WITH_FAILED_IMAGE_LOADING_dark.png in Resources */,
 				74990C182C29ECBC006D1F06 /* LIST_WITH_ERROR_MESSAGE_dark.png in Resources */,
 				74990C192C29ECBC006D1F06 /* LIST_WITH_ERROR_MESSAGE_light.png in Resources */,
+				749396932C455CAF00C1B792 /* WORKOUT_FEED_dark.png in Resources */,
 				74990C152C29ECBC006D1F06 /* EMPTY_LIST_light.png in Resources */,
 				74990C2C2C29F353006D1F06 /* IMAGE_COMMENTS_light.png in Resources */,
 				74990C1B2C29ECBC006D1F06 /* FEED_WITH_FAILED_IMAGE_LOADING_light.png in Resources */,
@@ -1544,8 +1576,10 @@
 				74990C172C29ECBC006D1F06 /* FEED_WITH_CONTENT_light.png in Resources */,
 				74990C142C29ECBC006D1F06 /* EMPTY_LIST_dark.png in Resources */,
 				74990C322C2DF888006D1F06 /* IMAGE_COMMENTS_light_extraExtraExtraLarge.png in Resources */,
+				749396942C455CAF00C1B792 /* WORKOUT_FEED_light_extraExtraExtraLarge.png in Resources */,
 				74990C2B2C29F353006D1F06 /* IMAGE_COMMENTS_dark.png in Resources */,
 				74990C302C2DF7B8006D1F06 /* LIST_WITH_ERROR_MESSAGE_light_extraExtraExtraLarge.png in Resources */,
+				749396952C455CAF00C1B792 /* WORKOUT_FEED_light.png in Resources */,
 				74990C342C2DF9AF006D1F06 /* FEED_WITH_CONTENT_light_extraExtraExtraLarge.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1712,6 +1746,7 @@
 				7446E2492C179F7D0060CEE6 /* UITableView+HeaderResizing.swift in Sources */,
 				740ED8642BE0326D005B09BA /* ErrorView.swift in Sources */,
 				740ED8692BE03BFD005B09BA /* UIRefreshControl+Helpers.swift in Sources */,
+				7493968B2C4555CE00C1B792 /* WorkoutFeedCellView.swift in Sources */,
 				74990BB92C1B86AE006D1F06 /* WorkoutFeedCell.swift in Sources */,
 				740ED8492BDD252B005B09BA /* UITableView+Dequeueing.swift in Sources */,
 				741833232BD4695600EEA9C0 /* UIView+Shimmering.swift in Sources */,
@@ -1734,6 +1769,7 @@
 				74990C272C29F2AF006D1F06 /* ImageCommentsSnapshotTests.swift in Sources */,
 				74A6DD072BD2D7A8002A420C /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 				74990BF72C29EAF3006D1F06 /* ListSnapshotTests.swift in Sources */,
+				7493968E2C4558C600C1B792 /* WorkoutFeedSnapshotTests.swift in Sources */,
 				7446E2442C179C550060CEE6 /* FeedSnapshotTests.swift in Sources */,
 				7446E24D2C17AEB50060CEE6 /* XCTestCase+Snapshot.swift in Sources */,
 				7446E24B2C17AE530060CEE6 /* UIViewController+Snapshot.swift in Sources */,
