@@ -7,6 +7,20 @@
 
 import Foundation
 
+public struct WorkoutFeedViewModel {
+    public let workouts: [WorkoutFeedItemViewModel]
+}
+
+public struct WorkoutFeedItemViewModel: Hashable {
+    public let title: String
+    public let exerciseCount: String
+
+    public init(title: String, exerciseCount: String) {
+        self.title = title
+        self.exerciseCount = exerciseCount
+    }
+}
+
 public final class WorkoutFeedPresenter {
     public static var title: String {
         NSLocalizedString("WORKOUT_FEED_VIEW_TITLE",
@@ -15,21 +29,20 @@ public final class WorkoutFeedPresenter {
             comment: "Title for the workout feed view")
     }
     
-//    public static func map(
-//        _ comments: [ImageComment],
-//        currentDate: Date = Date(),
-//        calendar: Calendar = .current,
-//        locale: Locale = .current
-//    ) -> ImageCommentsViewModel {
-//        let formatter = RelativeDateTimeFormatter()
-//        formatter.calendar = calendar
-//        formatter.locale = locale
-//
-//        return ImageCommentsViewModel(comments: comments.map { comment in
-//            ImageCommentViewModel(
-//                message: comment.message,
-//                date: formatter.localizedString(for: comment.createdAt, relativeTo: currentDate),
-//                username: comment.username)
-//        })
-//    }
+    public static func map(
+        _ workouts: [WorkoutFeedItem],
+        currentDate: Date = Date(),
+        calendar: Calendar = .current,
+        locale: Locale = .current
+    ) -> WorkoutFeedViewModel {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.calendar = calendar
+        formatter.locale = locale
+
+        return WorkoutFeedViewModel(workouts: workouts.map { workout in
+            WorkoutFeedItemViewModel(
+                title: workout.title,
+                exerciseCount: String(workout.exerciseCount))
+        })
+    }
 }
