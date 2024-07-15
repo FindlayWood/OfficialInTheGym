@@ -40,3 +40,7 @@ var feedTitle: String {
 var commentsTitle: String {
     ImageCommentsPresenter.title
 }
+
+var workoutFeedTitle: String {
+    WorkoutFeedPresenter.title
+}
