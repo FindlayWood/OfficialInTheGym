@@ -21,11 +21,7 @@ public final class WorkoutFeedItemsMapper {
             let title: String
         }
 
-        private struct Author: Decodable {
-            let username: String
-        }
-
-        var comments: [WorkoutFeedItem] {
+        var workouts: [WorkoutFeedItem] {
             items.map { WorkoutFeedItem(id: $0.id, addedToListDate: $0.addedToListDate, createdDate: $0.createdDate, creatorID: $0.creatorID, exerciseCount: $0.exerciseCount, savedWorkoutID: $0.savedWorkoutID, title: $0.title) }
         }
     }
@@ -42,6 +38,6 @@ public final class WorkoutFeedItemsMapper {
             throw Error.invalidData
         }
         
-        return root.comments
+        return root.workouts
     }
 }

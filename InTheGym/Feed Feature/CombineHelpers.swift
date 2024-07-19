@@ -26,6 +26,22 @@ public extension Client {
     }
 }
 
+public extension FunctionClient {
+    typealias Publisher = AnyPublisher<Data, Error>
+
+    func getPublisher(path: String) -> Publisher {
+        var task: HTTPClientTask?
+
+        return Deferred {
+            Future { completion in
+                task = self.get(from: path, completion: completion)
+            }
+        }
+        .handleEvents(receiveCancel: { task?.cancel() })
+        .eraseToAnyPublisher()
+    }
+}
+
 public extension HTTPClient {
     typealias Publisher = AnyPublisher<(Data, HTTPURLResponse), Error>
 

@@ -27,6 +27,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private lazy var httpClient: HTTPClient = {
         URLSessionHTTPClient2(session: URLSession(configuration: .ephemeral))
     }()
+    
+    private lazy var firebaseFunctionsClient: FunctionClient = {
+        FirebaseFunctionsClient()
+    }()
 
     private lazy var store: FeedStore & FeedImageDataStore = {
         try! CoreDataFeedStore(
@@ -41,11 +45,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private lazy var baseURL = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed")!
 
+//    private lazy var navigationController = UINavigationController(
+//        rootViewController: FeedUIComposer.feedComposedWith(
+//            feedLoader: makeRemoteFeedLoaderWithLocalFallback,
+//            imageLoader: makeLocalImageLoaderWithRemoteFallback,
+//            selection: showComments))
+    
     private lazy var navigationController = UINavigationController(
-        rootViewController: FeedUIComposer.feedComposedWith(
-            feedLoader: makeRemoteFeedLoaderWithLocalFallback,
-            imageLoader: makeLocalImageLoaderWithRemoteFallback,
-            selection: showComments))
+        rootViewController: WorkoutFeedUIComposer.workoutsComposedWith(workoutsLoader: makeRemoteWorkoutsLoader(path: "workoutList")))
     
     convenience init(client: Client, httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
         self.init()
@@ -162,6 +169,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
+    private func makeRemoteWorkoutsLoader(path: String) -> () -> AnyPublisher<[WorkoutFeedItem], Error> {
+        
+        return { [firebaseFunctionsClient] in
+            return firebaseFunctionsClient
+                .getPublisher(path: path)
+                .tryMap(WorkoutFeedItemsMapper.map)
+                .eraseToAnyPublisher()
+        }
+    }
+    
     private func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<[WorkoutItem], Error> {
         
         let url = FeedEndpoint.get.url(baseURL: baseURL).absoluteString
@@ -185,4 +202,42 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     .caching(to: localImageLoader, using: url)
             })
     }
+}
+
+import FirebaseFunctions
+
+class FirebaseFunctionsClient: FunctionClient {
+    
+    private struct URLSessionTaskWrapper: HTTPClientTask {
+
+        func cancel() {}
+    }
+
+    private struct UnexpectedValuesRepresentation: Error {}
+    
+    lazy var functions: Functions = Functions.functions()
+    
+    public func get(from path: String, completion: @escaping (FunctionClient.Result) -> Void) -> HTTPClientTask {
+        
+        functions.httpsCallable(path).call { result, error in
+            completion(Result {
+                if let error = error {
+                    print(String(describing: error))
+                    throw error
+                } else if let json = result?.data as? [String: Any] {
+                    print(json)
+                    if let data = try? JSONSerialization.data(withJSONObject: json) {
+                        return data
+                    } else {
+                        throw UnexpectedValuesRepresentation()
+                    }
+                } else {
+                    throw UnexpectedValuesRepresentation()
+                }
+            })
+        }
+        
+        return URLSessionTaskWrapper()
+    }
+    
 }

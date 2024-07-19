@@ -28,3 +28,12 @@ public protocol HTTPClient {
     @discardableResult
     func get(from url: URL, completion: @escaping (Result) -> Void) -> HTTPClientTask
 }
+
+public protocol FunctionClient {
+    typealias Result = Swift.Result<Data, Error>
+    
+    /// The completion handler can be invoked in any thread.
+    /// Clients are responsible to dispatch to appropriate threads, if needed.
+    @discardableResult
+    func get(from path: String, completion: @escaping (Result) -> Void) -> HTTPClientTask
+}

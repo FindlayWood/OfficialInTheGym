@@ -12,6 +12,7 @@ public struct WorkoutFeedViewModel {
 }
 
 public struct WorkoutFeedItemViewModel: Hashable {
+    private let id = UUID()
     public let title: String
     public let exerciseCount: String
 
