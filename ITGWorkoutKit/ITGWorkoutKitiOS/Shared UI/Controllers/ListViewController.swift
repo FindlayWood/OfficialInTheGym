@@ -10,8 +10,10 @@ import  ITGWorkoutKit
 
 public final class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
     public var onRefresh: (() -> Void)?
+    public var cells: [UITableViewCell.Type] = [UITableViewCell.Type]()
     
     private(set) public var errorView = ErrorView()
+    public var refreshController = RefreshViewController()
     
     private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {
          .init(tableView: tableView) { (tableView, index, controller) in
@@ -24,14 +26,19 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        dataSource.defaultRowAnimation = .fade
-        tableView.dataSource = dataSource
         configureTableView()
         configureTraitCollectionObservers()
         
+        refreshControl = refreshController.view
+        
+        refreshController.onRefresh = { [weak self] in
+            self?.onRefresh?()
+        }
+        
         onViewIsAppearing = { vc in
             vc.onViewIsAppearing = nil
-            vc.refresh()
+//            vc.refresh()
+            vc.refreshController.refresh()
             
         }
     }
@@ -54,11 +61,18 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
         dataSource.defaultRowAnimation = .fade
         tableView.dataSource = dataSource
         tableView.tableHeaderView = errorView.makeContainer()
+        registerCells()
 
         errorView.onHide = { [weak self] in
             self?.tableView.beginUpdates()
             self?.tableView.sizeTableHeaderToFit()
             self?.tableView.endUpdates()
+        }
+    }
+    
+    private func registerCells() {
+        cells.forEach { cell in
+            tableView.register(cell.self, forCellReuseIdentifier: String(describing: cell.self))
         }
     }
     
@@ -120,5 +134,19 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     
     private func cellController(at indexPath: IndexPath) -> CellController? {
         dataSource.itemIdentifier(for: indexPath)
+    }
+}
+
+final public class RefreshViewController: NSObject {
+   public lazy var view: UIRefreshControl = {
+        let view = UIRefreshControl()
+        view.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return view
+    }()
+
+    public var onRefresh: (() -> ())?
+
+    @objc func refresh() {
+        onRefresh?()
     }
 }

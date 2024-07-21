@@ -181,6 +181,7 @@ extension ListViewController {
         }
 
         refreshControl = fakeRefreshControl
+        refreshController.view = fakeRefreshControl
     }
     
     private class FakeUIRefreshControl: UIRefreshControl {

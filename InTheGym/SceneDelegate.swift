@@ -45,14 +45,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private lazy var baseURL = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed")!
 
-//    private lazy var navigationController = UINavigationController(
-//        rootViewController: FeedUIComposer.feedComposedWith(
-//            feedLoader: makeRemoteFeedLoaderWithLocalFallback,
-//            imageLoader: makeLocalImageLoaderWithRemoteFallback,
-//            selection: showComments))
-    
     private lazy var navigationController = UINavigationController(
-        rootViewController: WorkoutFeedUIComposer.workoutsComposedWith(workoutsLoader: makeRemoteWorkoutsLoader(path: "workoutList")))
+        rootViewController: FeedUIComposer.feedComposedWith(
+            feedLoader: makeRemoteFeedLoaderWithLocalFallback,
+            imageLoader: makeLocalImageLoaderWithRemoteFallback,
+            selection: showComments))
+    
+//    private lazy var navigationController = UINavigationController(
+//        rootViewController: WorkoutFeedUIComposer.workoutsComposedWith(workoutsLoader: makeRemoteWorkoutsLoader(path: "workoutList")))
     
     convenience init(client: Client, httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
         self.init()

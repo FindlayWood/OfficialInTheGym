@@ -34,10 +34,9 @@ public final class WorkoutFeedUIComposer {
     }
 
     private static func makeWorkoutFeedViewController(title: String) -> ListViewController {
-        let bundle = Bundle(for: ListViewController.self)
-        let storyboard = UIStoryboard(name: "WorkoutFeed", bundle: bundle)
-        let controller = storyboard.instantiateInitialViewController() as! ListViewController
+        let controller = ListViewController()
         controller.title = title
+        controller.cells.append(WorkoutFeedCell.self)
         return controller
     }
 }
