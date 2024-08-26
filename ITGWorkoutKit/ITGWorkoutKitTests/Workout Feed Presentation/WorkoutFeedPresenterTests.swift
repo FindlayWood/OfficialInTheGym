@@ -18,10 +18,13 @@ final class WorkoutFeedPresenterTests: XCTestCase {
         let now = Date()
         let calendar = Calendar(identifier: .gregorian)
         let locale = Locale(identifier: "en_US_POSIX")
+        
+        let id1 = UUID()
+        let id2 = UUID()
 
         let workouts = [
             WorkoutFeedItem(
-                id: UUID(),
+                id: id1,
                 addedToListDate: now.adding(days: -1, calendar: calendar),
                 createdDate: now.adding(days: -1, calendar: calendar),
                 creatorID: UUID().uuidString,
@@ -29,7 +32,7 @@ final class WorkoutFeedPresenterTests: XCTestCase {
                 savedWorkoutID: UUID(),
                 title: "a title"),
             WorkoutFeedItem(
-                id: UUID(),
+                id: id2,
                 addedToListDate: now.adding(days: -1, calendar: calendar),
                 createdDate: now.adding(days: -1, calendar: calendar),
                 creatorID: UUID().uuidString,
@@ -47,10 +50,12 @@ final class WorkoutFeedPresenterTests: XCTestCase {
 
         XCTAssertEqual(viewModel.workouts, [
             WorkoutFeedItemViewModel(
+                id: id1,
                 title: "a title",
                 exerciseCount: "4"
             ),
             WorkoutFeedItemViewModel(
+                id: id2,
                 title: "another title",
                 exerciseCount: "18"
             )
