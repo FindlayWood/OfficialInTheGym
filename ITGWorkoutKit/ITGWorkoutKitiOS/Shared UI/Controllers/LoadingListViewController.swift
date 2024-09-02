@@ -1,19 +1,23 @@
 //
-//  FeedViewController.swift
+//  LoadingListViewController.swift
 //  ITGWorkoutKitiOS
 //
-//  Created by Findlay Wood on 19/04/2024.
+//  Created by Findlay Wood on 21/07/2024.
 //
 
 import UIKit
 import ITGWorkoutKit
 
-public final class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
+public final class LoadingListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
     public var onRefresh: (() -> Void)?
     public var cells: [UITableViewCell.Type] = [UITableViewCell.Type]()
+    public var rightBarButtons: [UIBarButtonItem] = [UIBarButtonItem]()
     
-    private(set) public var errorView = ErrorView()
     public var refreshController = RefreshViewController()
+    public var errorView: LoadingView = DefaultErrorUIView()
+    public var loadingView: LoadingView = DefaultLoadingUIView()
+    var emptyListView: LoadingView = DefaultEmptyListUIView()
+    
     
     private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {
          .init(tableView: tableView) { (tableView, index, controller) in
@@ -21,15 +25,17 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
          }
      }()
     
-    private var onViewIsAppearing: ((ListViewController) -> ())?
-
+    private var onViewIsAppearing: ((LoadingListViewController) -> ())?
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         
         configureTableView()
         configureTraitCollectionObservers()
+        configureBarButtons()
         
-        refreshControl = refreshController.view
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         refreshController.onRefresh = { [weak self] in
             self?.onRefresh?()
@@ -37,7 +43,6 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
         
         onViewIsAppearing = { vc in
             vc.onViewIsAppearing = nil
-//            vc.refresh()
             vc.refreshController.refresh()
             
         }
@@ -55,19 +60,30 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
         super.viewDidLayoutSubviews()
 
         tableView.sizeTableHeaderToFit()
+        configureErrorView()
+        configureLoadingView()
+        configureEmptyListView()
+    }
+    
+    private func configureErrorView() {
+        view.addSubview(errorView)
+        errorView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top)
+    }
+    
+    private func configureLoadingView() {
+        view.addSubview(loadingView)
+        loadingView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top)
+    }
+    
+    private func configureEmptyListView() {
+        view.addSubview(emptyListView)
+        emptyListView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.top)
     }
     
     private func configureTableView() {
         dataSource.defaultRowAnimation = .fade
         tableView.dataSource = dataSource
-        tableView.tableHeaderView = errorView.makeContainer()
         registerCells()
-
-        errorView.onHide = { [weak self] in
-            self?.tableView.beginUpdates()
-            self?.tableView.sizeTableHeaderToFit()
-            self?.tableView.endUpdates()
-        }
     }
     
     private func registerCells() {
@@ -76,22 +92,34 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
         }
     }
     
-    @IBAction private func refresh() {
+    private func configureBarButtons() {
+        navigationController?.navigationItem.rightBarButtonItems = rightBarButtons
+//        navigationItem.rightBarButtonItems = rightBarButtons
+    }
+    
+    @objc private func refresh() {
         onRefresh?()
     }
     
     public func display(_ cellControllers: [CellController]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, CellController>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(cellControllers, toSection: 0)
-        dataSource.applySnapshotUsingReloadData(snapshot)
+        if cellControllers.isEmpty {
+            emptyListView.showAnimated()
+        } else {
+            emptyListView.hide()
+            var snapshot = NSDiffableDataSourceSnapshot<Int, CellController>()
+            snapshot.appendSections([0])
+            snapshot.appendItems(cellControllers, toSection: 0)
+            dataSource.applySnapshotUsingReloadData(snapshot)
+        }
     }
 
     public func display(_ viewModel: ResourceLoadingViewModel) {
         if tableView.numberOfSections == 0 {
-         print("empty")
+            loadingView.showAnimated()
+        } else {
+            loadingView.hide()
+            refreshControl?.update(isRefreshing: viewModel.isLoading)
         }
-        refreshControl?.update(isRefreshing: viewModel.isLoading)
     }
     
     public override func viewIsAppearing(_ animated: Bool) {
@@ -101,7 +129,11 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     }
     
     public func display(_ viewModel: ResourceErrorViewModel) {
-        errorView.message = viewModel.message
+        if let _ = viewModel.message {
+            errorView.showAnimated()
+        } else {
+            errorView.hide()
+        }
     }
     
     public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -137,19 +169,5 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     
     private func cellController(at indexPath: IndexPath) -> CellController? {
         dataSource.itemIdentifier(for: indexPath)
-    }
-}
-
-final public class RefreshViewController: NSObject {
-   public lazy var view: UIRefreshControl = {
-        let view = UIRefreshControl()
-        view.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        return view
-    }()
-
-    public var onRefresh: (() -> ())?
-
-    @objc func refresh() {
-        onRefresh?()
     }
 }

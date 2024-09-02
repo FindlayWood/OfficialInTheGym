@@ -16,9 +16,9 @@ final class WorkoutFeedSnapshotTests: XCTestCase {
 
         sut.display(workouts())
 
-        record(snapshot: nav.snapshot(for: .iPhone(style: .light)), named: "WORKOUT_FEED_light")
-        record(snapshot: nav.snapshot(for: .iPhone(style: .dark)), named: "WORKOUT_FEED_dark")
-        record(snapshot: nav.snapshot(for: .iPhone(style: .light, contentSize: .extraExtraExtraLarge)), named: "WORKOUT_FEED_light_extraExtraExtraLarge")
+        assert(snapshot: nav.snapshot(for: .iPhone(style: .light)), named: "WORKOUT_FEED_light")
+        assert(snapshot: nav.snapshot(for: .iPhone(style: .dark)), named: "WORKOUT_FEED_dark")
+        assert(snapshot: nav.snapshot(for: .iPhone(style: .light, contentSize: .extraExtraExtraLarge)), named: "WORKOUT_FEED_light_extraExtraExtraLarge")
     }
     
     func test_emptyList() {
@@ -26,8 +26,8 @@ final class WorkoutFeedSnapshotTests: XCTestCase {
         
         sut.display(emptyList())
         
-        record(snapshot: nav.snapshot(for: .iPhone(style: .light)), named: "EMPTY_WORKOUT_FEED_WITH_NAV_BAR_light")
-        record(snapshot: nav.snapshot(for: .iPhone(style: .dark)), named: "EMPTY_WORKOUT_FEED_WITH_NAV_BAR_dark")
+        assert(snapshot: nav.snapshot(for: .iPhone(style: .light)), named: "EMPTY_WORKOUT_FEED_WITH_NAV_BAR_light")
+        assert(snapshot: nav.snapshot(for: .iPhone(style: .dark)), named: "EMPTY_WORKOUT_FEED_WITH_NAV_BAR_dark")
     }
     
     func test_listWithErrorMessage() {
@@ -35,9 +35,9 @@ final class WorkoutFeedSnapshotTests: XCTestCase {
         
         sut.display(.error(message: "This is a\nmulti-line\nerror message"))
         
-        record(snapshot: nav.snapshot(for: .iPhone(style: .light)), named: "WORKOUT_FEED_WITH_NAV_BAR_WITH_ERROR_MESSAGE_light")
-        record(snapshot: nav.snapshot(for: .iPhone(style: .dark)), named: "WORKOUT_FEED_WITH_NAV_BAR_WITH_ERROR_MESSAGE_dark")
-        record(snapshot: nav.snapshot(for: .iPhone(style: .light, contentSize: .extraExtraExtraLarge)), named: "WORKOUT_FEED_WITH_NAV_BAR_WITH_ERROR_MESSAGE_light_extraExtraExtraLarge")
+        assert(snapshot: nav.snapshot(for: .iPhone(style: .light)), named: "WORKOUT_FEED_WITH_NAV_BAR_WITH_ERROR_MESSAGE_light")
+        assert(snapshot: nav.snapshot(for: .iPhone(style: .dark)), named: "WORKOUT_FEED_WITH_NAV_BAR_WITH_ERROR_MESSAGE_dark")
+        assert(snapshot: nav.snapshot(for: .iPhone(style: .light, contentSize: .extraExtraExtraLarge)), named: "WORKOUT_FEED_WITH_NAV_BAR_WITH_ERROR_MESSAGE_light_extraExtraExtraLarge")
     }
     
     func test_initialLoadinglist() {
@@ -45,9 +45,9 @@ final class WorkoutFeedSnapshotTests: XCTestCase {
         
         sut.display(.init(isLoading: true))
         
-        record(snapshot: nav.snapshot(for: .iPhone(style: .light)), named: "WORKOUT_FEED_WITH_NAV_BAR_INITIAL_LOAD_light")
-        record(snapshot: nav.snapshot(for: .iPhone(style: .dark)), named: "WORKOUT_FEED_WITH_NAV_BAR_INITIAL_LOAD_dark")
-        record(snapshot: nav.snapshot(for: .iPhone(style: .light, contentSize: .extraExtraExtraLarge)), named: "WORKOUT_FEED_WITH_NAV_BAR_INITIAL_LOAD_light_extraExtraExtraLarge")
+        assert(snapshot: nav.snapshot(for: .iPhone(style: .light)), named: "WORKOUT_FEED_WITH_NAV_BAR_INITIAL_LOAD_light")
+        assert(snapshot: nav.snapshot(for: .iPhone(style: .dark)), named: "WORKOUT_FEED_WITH_NAV_BAR_INITIAL_LOAD_dark")
+        assert(snapshot: nav.snapshot(for: .iPhone(style: .light, contentSize: .extraExtraExtraLarge)), named: "WORKOUT_FEED_WITH_NAV_BAR_INITIAL_LOAD_light_extraExtraExtraLarge")
     }
 
     // MARK: - Helpers
@@ -87,18 +87,21 @@ final class WorkoutFeedSnapshotTests: XCTestCase {
         return [
             WorkoutFeedCellController(
                 model: WorkoutFeedItemViewModel(
+                    id: UUID(),
                     title: "workout title",
                     exerciseCount: "12"
                 )
             ),
             WorkoutFeedCellController(
                 model: WorkoutFeedItemViewModel(
+                    id: UUID(),
                     title: "a different length title that should be more than 1 line",
                     exerciseCount: "100"
                 )
             ),
             WorkoutFeedCellController(
                 model: WorkoutFeedItemViewModel(
+                    id: UUID(),
                     title: "t",
                     exerciseCount: "0"
                 )

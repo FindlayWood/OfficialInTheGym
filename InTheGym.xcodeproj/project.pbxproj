@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		74003C6F2C738D2C00C13B22 /* LoadingListViewController+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74003C6E2C738D2C00C13B22 /* LoadingListViewController+TestHelpers.swift */; };
 		74028E5C25E693FB005A1D21 /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E5B25E693FB005A1D21 /* TopView.swift */; };
 		74028E6425E69B52005A1D21 /* TextFieldReturning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E6325E69B52005A1D21 /* TextFieldReturning.swift */; };
 		7403A5FA26C54F6B000588CE /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5F926C54F6B000588CE /* UIColor+Extension.swift */; };
@@ -913,6 +914,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		74003C6E2C738D2C00C13B22 /* LoadingListViewController+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoadingListViewController+TestHelpers.swift"; sourceTree = "<group>"; };
 		74028E5B25E693FB005A1D21 /* TopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
 		74028E6325E69B52005A1D21 /* TextFieldReturning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldReturning.swift; sourceTree = "<group>"; };
 		7403A5F926C54F6B000588CE /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
@@ -3178,6 +3180,7 @@
 				7446E23F2C16529A0060CEE6 /* ClientStub.swift */,
 				7446E2412C1653A10060CEE6 /* InMemoryFeedStore.swift */,
 				7446E24E2C1A28530060CEE6 /* UIView+TestHelpers.swift */,
+				74003C6E2C738D2C00C13B22 /* LoadingListViewController+TestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -5708,6 +5711,7 @@
 				7446E23A2C15DFE40060CEE6 /* FeedUIIntegrationTests.swift in Sources */,
 				7446E2302C15DFC20060CEE6 /* UIImage+TestHelpers.swift in Sources */,
 				7493969A2C456C4A00C1B792 /* WorkoutFeedUIIntegrationTests.swift in Sources */,
+				74003C6F2C738D2C00C13B22 /* LoadingListViewController+TestHelpers.swift in Sources */,
 				7446E2422C1653A10060CEE6 /* InMemoryFeedStore.swift in Sources */,
 				749396672C3F092F00C1B792 /* CommentsUIIntegrationTests.swift in Sources */,
 			);

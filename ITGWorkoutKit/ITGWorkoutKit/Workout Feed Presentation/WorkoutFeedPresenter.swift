@@ -12,11 +12,12 @@ public struct WorkoutFeedViewModel {
 }
 
 public struct WorkoutFeedItemViewModel: Hashable {
-    private let id = UUID()
+    public let id: UUID
     public let title: String
     public let exerciseCount: String
 
-    public init(title: String, exerciseCount: String) {
+    public init(id: UUID, title: String, exerciseCount: String) {
+        self.id = id
         self.title = title
         self.exerciseCount = exerciseCount
     }
@@ -42,6 +43,7 @@ public final class WorkoutFeedPresenter {
 
         return WorkoutFeedViewModel(workouts: workouts.map { workout in
             WorkoutFeedItemViewModel(
+                id: workout.id,
                 title: workout.title,
                 exerciseCount: String(workout.exerciseCount))
         })

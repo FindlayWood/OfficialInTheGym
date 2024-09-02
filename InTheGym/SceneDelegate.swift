@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var coordinator: MainCoordinator?
     var baseController: BaseController?
-//    var navigationController: UINavigationController = UINavigationController()
+    var navigationController: UINavigationController = UINavigationController()
     
     var window: UIWindow?
     
@@ -45,14 +45,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private lazy var baseURL = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed")!
 
-    private lazy var navigationController = UINavigationController(
+    private lazy var feedNavigationController = UINavigationController(
         rootViewController: FeedUIComposer.feedComposedWith(
             feedLoader: makeRemoteFeedLoaderWithLocalFallback,
             imageLoader: makeLocalImageLoaderWithRemoteFallback,
             selection: showComments))
     
-//    private lazy var navigationController = UINavigationController(
-//        rootViewController: WorkoutFeedUIComposer.workoutsComposedWith(workoutsLoader: makeRemoteWorkoutsLoader(path: "workoutList")))
+    private lazy var workoutFeedNavigationController = UINavigationController(
+        rootViewController: WorkoutFeedUIComposer.workoutsComposedWith(workoutsLoader: makeRemoteWorkoutsLoader(path: "workoutList")))
     
     convenience init(client: Client, httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
         self.init()
@@ -66,12 +66,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         self.window = UIWindow(windowScene: scene)
         
-        configureWindow()
+        launchScreen()
+//        configureWindow()
+    }
+    
+    func configureWorkoutFeedWindow() {
+        workoutFeedNavigationController.navigationBar.prefersLargeTitles = true
+        window?.rootViewController = workoutFeedNavigationController
+        
+        window?.makeKeyAndVisible()
     }
     
     func configureWindow() {
-        
-        window?.rootViewController = navigationController
+        feedNavigationController.navigationBar.prefersLargeTitles = true
+        window?.rootViewController = feedNavigationController
         
         window?.makeKeyAndVisible()
 //        launchEssentialFeed()

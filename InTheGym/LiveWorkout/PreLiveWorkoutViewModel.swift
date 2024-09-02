@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class PreLiveWorkoutViewModel {
+class PreLiveWorkoutViewModel: ObservableObject {
     
     // MARK: - Publishers
     @Published var title: String = ""
@@ -89,6 +89,10 @@ class PreLiveWorkoutViewModel {
     
     func updateTitle(with newTitle: String) {
         self.title = newTitle
+    }
+    
+    func getItems() -> [String] {
+        suggestions.map { getDay() + separator + $0 }
     }
 
 }

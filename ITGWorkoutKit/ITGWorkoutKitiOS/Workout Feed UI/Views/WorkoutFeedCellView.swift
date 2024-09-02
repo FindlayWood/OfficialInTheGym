@@ -43,5 +43,5 @@ public struct WorkoutFeedCellView: View {
 }
 
 #Preview {
-    WorkoutFeedCellView(model: .init(title: "a title", exerciseCount: "5"))
+    WorkoutFeedCellView(model: .init(id: UUID(), title: "a title", exerciseCount: "5"))
 }

@@ -61,8 +61,9 @@ extension WorkoutsCoordinator: WorkoutsFlow {
     }
     
     func addLiveWorkout() {
-        let vc = PreLiveWorkoutViewController.instantiate()
+        let vc = PreLiveWorkoutViewController()
         vc.coordinator = self
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
     

@@ -18,7 +18,7 @@ public final class WorkoutFeedUIComposer {
 
     public static func workoutsComposedWith(
         workoutsLoader: @escaping () -> AnyPublisher<[WorkoutFeedItem], Error>
-    ) -> ListViewController {
+    ) -> LoadingListViewController {
         let presentationAdapter = WorkoutFeedPresentationAdapter(loader: workoutsLoader)
 
         let workoutFeedController = makeWorkoutFeedViewController(title: WorkoutFeedPresenter.title)
@@ -33,8 +33,8 @@ public final class WorkoutFeedUIComposer {
         return workoutFeedController
     }
 
-    private static func makeWorkoutFeedViewController(title: String) -> ListViewController {
-        let controller = ListViewController()
+    private static func makeWorkoutFeedViewController(title: String) -> LoadingListViewController {
+        let controller = LoadingListViewController()
         controller.title = title
         controller.cells.append(WorkoutFeedCell.self)
         return controller
@@ -42,11 +42,11 @@ public final class WorkoutFeedUIComposer {
 }
 
 final class WorkoutFeedViewAdapter: ResourceView {
-    private weak var controller: ListViewController?
+    private weak var controller: LoadingListViewController?
     
     private typealias ImageDataPresentationAdapter = LoadResourcePresentationAdapter<Data, WeakRefVirtualProxy<FeedImageCellController>>
 
-    init(controller: ListViewController) {
+    init(controller: LoadingListViewController) {
         self.controller = controller
     }
     
