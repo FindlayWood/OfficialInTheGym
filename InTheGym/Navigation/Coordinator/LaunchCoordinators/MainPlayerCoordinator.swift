@@ -20,6 +20,6 @@ class MainPlayerCoordinator: Coordinator {
     func start() {
         let vc = PlayerInitialViewController()
         vc.navigationController?.setNavigationBarHidden(true, animated: false)
-        navigationController.pushViewController(vc, animated: false)
+        navigationController.setViewControllers([vc], animated: true)
     }
 }

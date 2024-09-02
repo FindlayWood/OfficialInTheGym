@@ -166,7 +166,7 @@ private extension RequestTableViewCell {
 extension RequestTableViewCell {
     
     public func configure(with model: RequestCellModel) {
-        usernameButton.setTitle("\(model.user.firstName) \(model.user.lastName)", for: .normal)
+        usernameButton.setTitle(model.user.displayName, for: .normal)
         messageLabel.text = "\(model.user.username) would like to become one of your coaches."
         
         let profileImageDownloadModel = ProfileImageDownloadModel(id: model.user.uid)

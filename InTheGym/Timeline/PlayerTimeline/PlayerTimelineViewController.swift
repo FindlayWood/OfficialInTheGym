@@ -109,18 +109,6 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
             .sink { [weak self] in self?.dataSource.updateTable(with: $0) }
             .store(in: &subscriptions)
         
-        viewModel.thinkingTimeActivePublisher
-            .sink { [weak self] active in
-                guard let self = self else {return}
-                if active {
-                    let vc = ThinkingTimeViewController()
-                    vc.modalPresentationStyle = .fullScreen
-                    vc.modalTransitionStyle = .coverVertical
-                    self.navigationController?.present(vc, animated: true)
-                }
-            }
-            .store(in: &subscriptions)
-        
         viewModel.workoutSelected
             .sink { [weak self] in self?.coordinator?.showWorkout($0) }
             .store(in: &subscriptions)
@@ -151,7 +139,6 @@ class PlayerTimelineViewController: UIViewController, UITabBarControllerDelegate
             .store(in: &subscriptions)
         
         
-        viewModel.checkForThinkingTime()
         viewModel.fetchPosts()
         
     }

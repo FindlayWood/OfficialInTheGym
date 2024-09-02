@@ -10,20 +10,24 @@ import Foundation
 
 // MARK: - Users Model
 /// users object containing all user profile info
-struct Users: Codable, Hashable, Assignable {
-    var admin: Bool
+struct Users: Codable, Hashable {
+//    var admin: Bool
     var email: String
     var username: String
-    var firstName: String
-    var lastName: String
-    var premiumAccount: Bool?
-    var numberOfCompletes: Int?
+//    var firstName: String
+//    var lastName: String
+    var displayName: String
+    var createdDate: Date
+    var accountType: AccountType
+    var bio: String
+//    var premiumAccount: Bool?
+//    var numberOfCompletes: Int?
     var uid: String
-    var profilePhotoURL: String?
-    var profileBio: String?
-    var accountCreated: TimeInterval?
-    var verifiedAccount: Bool?
-    var eliteAccount: Bool?
+//    var profilePhotoURL: String?
+//    var profileBio: String?
+//    var accountCreated: TimeInterval?
+    var verifiedAccount: Bool
+    var eliteAccount: Bool
     
     var id: String {
         return uid
@@ -35,6 +39,12 @@ struct Users: Codable, Hashable, Assignable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(uid)
+    }
+    
+    enum AccountType: String, Codable {
+        case individual
+        case athlete
+        case coach
     }
 }
 /// Allows a user model to be decoded from Firebase
@@ -60,7 +70,7 @@ extension UserSearchModel: FirebaseInstance {
 
 // MARK: - Nil User
 extension Users {
-    static let nilUser = Users(admin: false, email: "", username: "", firstName: "", lastName: "", uid: "")
+    static let nilUser = Users(email: "", username: "", displayName: "", createdDate: .now, accountType: .individual, bio: "", uid: "", verifiedAccount: false, eliteAccount: false)
 }
 
 

@@ -13,9 +13,6 @@ class RegularWorkoutCreationCoordinator: Coordinator {
     
     /// the publisher to publish the exercise when it is completed
     var completedExercise: PassthroughSubject<ExerciseModel,Never>?
-    var completedCircuit: PassthroughSubject<CircuitModel,Never>?
-    var completedAmrap: PassthroughSubject<AMRAPModel,Never>?
-    var completedEMOM: PassthroughSubject<EMOMModel,Never>?
     
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
@@ -66,21 +63,6 @@ extension RegularWorkoutCreationCoordinator: ExerciseSelectionFlow {
         childCoordinators.append(child)
         child.start()
     }
-    func addCircuit() {
-        let child = CircuitCreationCoordinator(navigationController: navigationController, publisher: completedCircuit)
-        childCoordinators.append(child)
-        child.start()
-    }
-    func addAmrap() {
-        let child = AMRAPCreationCoordinator(navigationController: navigationController, publisher: completedAmrap)
-        childCoordinators.append(child)
-        child.start()
-    }
-    func addEmom() {
-        let child = EmomCreationCoordinator(navigationController: navigationController, publisher: completedEMOM)
-        childCoordinators.append(child)
-        child.start()
-    }
 }
 // Sets Selection Flow
 extension RegularWorkoutCreationCoordinator: SetSelectionFlow {
@@ -112,7 +94,6 @@ extension RegularWorkoutCreationCoordinator: WeightSelectionFlow {
 // Finished
 extension RegularWorkoutCreationCoordinator: FinishedExerciseCreationFlow {
     func finishedExercise(_ exercise: ExerciseModel) {
-        // completedexercise.send exercise
         completedExercise?.send(exercise)
         let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
         for viewController in viewControllers {

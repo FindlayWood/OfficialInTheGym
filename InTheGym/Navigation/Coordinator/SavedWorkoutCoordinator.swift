@@ -53,21 +53,6 @@ extension SavedWorkoutCoordinator {
         childCoordinators.append(child)
         child.start()
     }
-    func showEMOM(_ emom: EMOMModel) {
-        let vc = DisplayEMOMViewController()
-        vc.viewModel.emomModel = emom
-        navigationController.pushViewController(vc, animated: true)
-    }
-    func showCircuit(_ circuit: CircuitModel) {
-        let vc = DisplayCircuitViewController()
-        vc.viewModel.circuitModel = circuit
-        navigationController.pushViewController(vc, animated: true)
-    }
-    func showAMRAP(_ amrap: AMRAPModel) {
-        let vc = DisplayAMRAPViewController()
-        vc.viewModel.amrapModel = amrap
-        navigationController.pushViewController(vc, animated: true)
-    }
     func showAssign(_ model: SavedWorkoutModel) {
         let vc = AssigningSelectionViewController()
         vc.viewModel.savedWorkoutModel = model
@@ -79,4 +64,7 @@ extension SavedWorkoutCoordinator {
         child.start()
     }
 
+}
+protocol SavedWorkoutsFlow: AnyObject {
+    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?)
 }

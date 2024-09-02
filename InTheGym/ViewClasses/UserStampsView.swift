@@ -82,16 +82,9 @@ private extension UserStampsView {
 // MARK: - Public Config
 extension UserStampsView {
     public func configure(with user: Users) {
-        if let verifiedAccount = user.verifiedAccount {
-            verifiedImageView.isHidden = !verifiedAccount
-        } else {
-            verifiedImageView.isHidden = true
-        }
-        if let eliteTrainerAccount = user.eliteAccount {
-            eliteImageView.isHidden = !eliteTrainerAccount
-        } else {
-            eliteImageView.isHidden = true
-        }
+        verifiedImageView.isHidden = !user.verifiedAccount
+        eliteImageView.isHidden = !user.eliteAccount
+        
         if user == UserDefaults.currentUser && SubscriptionManager.shared.isSubscribed {
             premiumImageView.isHidden = false
         } else {
@@ -99,12 +92,13 @@ extension UserStampsView {
         }
     }
     public func configureForPost(with user: Users) {
-        if let eliteTrainerAccount = user.eliteAccount {
-            eliteImageView.isHidden = !eliteTrainerAccount
+        
+        if user.eliteAccount {
+            eliteImageView.isHidden = !user.eliteAccount
             verifiedImageView.isHidden = true
             premiumImageView.isHidden = true
-        } else if let verifiedAccount = user.verifiedAccount {
-            verifiedImageView.isHidden = !verifiedAccount
+        } else if user.verifiedAccount {
+            verifiedImageView.isHidden = !user.verifiedAccount
             eliteImageView.isHidden = true
             premiumImageView.isHidden = true
         } else {

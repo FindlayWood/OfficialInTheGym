@@ -39,13 +39,6 @@ class UserProfileCoordinator: NSObject, Coordinator {
 
 //MARK: - Flow Methods
 extension UserProfileCoordinator {
-    
-    func showCreatedWorkouts(for user: Users){
-        let child = PublicCreatedWorkoutsCoordinator(navigationController: navigationController, user: user)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
     func showCommentSection(for post: PostModel, with listener: PostListener) {
         let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener, deleteListener: nil)
         childCoordinators.append(child)
@@ -130,10 +123,5 @@ extension UserProfileCoordinator: UINavigationControllerDelegate {
         if navigationController.viewControllers.contains(fromViewController){
             return
         }
-        
-        if let createdWorkoutsViewController = fromViewController as? PublicCreatedWorkoutsViewController {
-            childDidFinish(createdWorkoutsViewController.coordinator)
-        }
-        
     }
 }

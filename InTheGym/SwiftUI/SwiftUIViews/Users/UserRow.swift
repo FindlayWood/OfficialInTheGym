@@ -26,13 +26,13 @@ struct UserRow: View {
             }
             VStack(alignment: .leading) {
                 HStack {
-                    Text("\(user.firstName) \(user.lastName)")
+                    Text(user.displayName)
                         .font(.custom("Menlo-Bold", size: 22, relativeTo: .title))
                         .foregroundColor(Color(.darkColour))
-                    if user.eliteAccount ?? false {
+                    if user.eliteAccount {
                         Image(systemName: "checkmark.seal.fill")
                             .foregroundColor(Color(.goldColour))
-                    } else if user.verifiedAccount ?? false {
+                    } else if user.verifiedAccount {
                         Image(systemName: "checkmark.seal.fill")
                             .foregroundColor(Color(.lightColour))
                     }

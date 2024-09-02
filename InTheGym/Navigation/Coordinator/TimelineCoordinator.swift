@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol TimelineFlow: AnyObject {
-    func showWorkouts(with workout: WorkoutDelegate)
+//    func showWorkouts(with workout: WorkoutDelegate)
     func showUser(user: Users)
 }
 

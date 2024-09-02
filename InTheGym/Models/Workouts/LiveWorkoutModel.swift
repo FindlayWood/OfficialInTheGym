@@ -16,7 +16,6 @@ struct LiveWorkoutModel: Codable {
     var id: String
     var title: String
     var creatorID: String
-    var createdBy: String
     var assignedTo: String
     var isPrivate: Bool
     var completed: Bool

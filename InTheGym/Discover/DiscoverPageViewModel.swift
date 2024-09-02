@@ -20,15 +20,11 @@ class DiscoverPageViewModel {
     
     var clipsPublisher = CurrentValueSubject<[ClipModel],Never>([])
     
-    var programPublisher = CurrentValueSubject<[SavedProgramModel],Never>([])
-    
     var errorPublisher = PassthroughSubject<Error,Never>()
     
     var workoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
     
     var exerciseSelected = PassthroughSubject<DiscoverExerciseModel,Never>()
-    
-    var programSelected = PassthroughSubject<SavedProgramModel,Never>()
     
     var clipSelected = PassthroughSubject<ClipModel,Never>()
     
@@ -72,16 +68,6 @@ class DiscoverPageViewModel {
                 print(String(describing: error))
             }
         }
-    }
-    func loadPrograms() {
-//        apiService.fetchLimited(model: SavedProgramModel.self, limit: 10) { [weak self] result in
-//            switch result {
-//            case .success(let models):
-//                self?.programPublisher.send(models)
-//            case .failure(let error):
-//                self?.errorPublisher.send(error)
-//            }
-//        }
     }
     
     func loadTags() {

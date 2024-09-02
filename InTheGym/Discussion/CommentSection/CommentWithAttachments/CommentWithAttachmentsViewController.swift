@@ -53,7 +53,6 @@ class CommentWithAttachmentsViewController: UIViewController {
     
     func addChildView() {
         childContentView = .init(viewModel: viewModel,
-                                 isGroup: false,
                                  post: {
             
         }, addAttachments: {

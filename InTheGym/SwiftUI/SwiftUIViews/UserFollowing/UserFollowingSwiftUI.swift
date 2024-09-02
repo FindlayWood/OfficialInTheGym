@@ -29,10 +29,10 @@ struct UserFollowingSwiftUI: View {
             }
             Spacer()
             VStack {
-                Image(user.admin ? "coach_icon" : "player_icon")
+                Image(user.accountType == .coach ? "coach_icon" : "player_icon")
                     .resizable()
                     .frame(width: 30, height: 30)
-                Text(user.admin ? "Coach" : "Player")
+                Text(user.accountType == .coach ? "Coach" : "Player")
                     .font(.subheadline.weight(.medium))
             }
             Spacer()

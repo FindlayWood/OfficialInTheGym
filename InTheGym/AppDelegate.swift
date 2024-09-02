@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import Firebase
+import FirebaseStorage
 import RevenueCat
 import FirebaseMessaging
 
@@ -16,6 +17,8 @@ import FirebaseMessaging
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var coordinator: MainCoordinator?
+    var baseController: BaseController?
+    var navigationController: UINavigationController = UINavigationController()
     var window: UIWindow?
     
     let gcmMessageIDKey = "gcm.MessageID_Key"
@@ -23,9 +26,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
-        launchScreen()
+        
+        // MARK: - Use for emulator
+        #if EMULATOR
+        print("""
+        --------------------------------
+        Using Emulator
+        -------------------------------
+        """)
+        Auth.auth().useEmulator(withHost:"127.0.0.1", port:9099)
+        Storage.storage().useEmulator(withHost:"127.0.0.1", port: 9199)
+        let settings = Firestore.firestore().settings
+        settings.host = "127.0.0.1:8080"
+        settings.isPersistenceEnabled = false
+        settings.isSSLEnabled = false
+        Firestore.firestore().settings = settings
+        
+        #endif
         // setup revenue cat
         Purchases.logLevel = .debug
+//        UserObserver.shared.checkForUserDefault()
 //        Purchases.configure(withAPIKey: Constants.revenueCatAPIKey)
         
         // For iOS 10 display notification (sent via APNS)
@@ -44,42 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Messaging.messaging().delegate = self
 
         return true
-    }
-    func onBoard() {
-        window = UIWindow(frame: UIScreen.main.bounds)
-        let vc = OnBoardMainViewController()
-        window?.rootViewController = vc
-        window?.makeKeyAndVisible()
-    }
-    func launchScreen() {
-        window = UIWindow(frame: UIScreen.main.bounds)
-        let vc = LaunchPageViewController.instantiate()
-        window?.rootViewController = vc
-        window?.makeKeyAndVisible()
-    }
-    func loggedInPlayer() {
-        let navController = UINavigationController()
-        let mainPlayerCoordinator = MainPlayerCoordinator(navigationController: navController)
-        mainPlayerCoordinator.start()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = navController
-        window?.makeKeyAndVisible()
-    }
-    func loggedInCoach() {
-        let navController = UINavigationController()
-        let mainCoachCoordinator = MainCoachCoordinator(navigationController: navController)
-        mainCoachCoordinator.start()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = navController
-        window?.makeKeyAndVisible()
-    }
-    func nilUser() {
-        let navController = UINavigationController()
-        let signUpCoordinator = SignUpCoordinator(navigationController: navController)
-        signUpCoordinator.start()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = navController
-        window?.makeKeyAndVisible()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

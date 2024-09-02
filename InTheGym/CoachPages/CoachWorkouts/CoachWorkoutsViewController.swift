@@ -108,9 +108,6 @@ class CoachWorkoutsViewController: UIViewController {
     @objc func plusButtonTapped(_ sender: UIButton) {
         coordinator?.plusPressed()
     }
-    @objc func programButtonTapped(_ sender: UIButton) {
-        coordinator?.addProgram()
-    }
     
     @objc func didPullToRefresh(_ sender: Any) {
         viewModel.fetchWorkouts()

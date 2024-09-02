@@ -18,7 +18,8 @@ class PreLiveWorkoutViewController: UIViewController, Storyboarded {
     // MARK: - Properties
     var apiService = FirebaseAPIWorkoutManager.shared
     
-    var display = PreLiveWorkoutView()
+//    var display = PreLiveWorkoutView()
+    lazy var display = LiveWorkoutTitleView(viewModel: viewModel)
     
     var adapter: PreLiveWorkoutAdapter!
     
@@ -30,9 +31,8 @@ class PreLiveWorkoutViewController: UIViewController, Storyboarded {
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        display.titleField.delegate = self
-        hideKeyboardWhenTappedAround()
+//        display.titleField.delegate = self
+//        hideKeyboardWhenTappedAround()
         initDisplay()
         initNavBarButton()
         initViewModel()
@@ -40,8 +40,8 @@ class PreLiveWorkoutViewController: UIViewController, Storyboarded {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        display.frame = getFullViewableFrame()
-        view.addSubview(display)
+//        display.frame = getFullViewableFrame()
+//        view.addSubview(display)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,11 +51,13 @@ class PreLiveWorkoutViewController: UIViewController, Storyboarded {
     
     // MARK: - Display
     func initDisplay() {
-        adapter = PreLiveWorkoutAdapter(delegate: self)
-        display.tableview.delegate = adapter
-        display.tableview.dataSource = adapter
-        display.tableview.backgroundColor = .white
-        display.titleField.delegate = self
+        view.backgroundColor = .systemBackground
+        addSwiftUIViewWithNavBar(display)
+//        adapter = PreLiveWorkoutAdapter(delegate: self)
+//        display.tableview.delegate = adapter
+//        display.tableview.dataSource = adapter
+//        display.tableview.backgroundColor = .white
+//        display.titleField.delegate = self
     }
     
     // MARK: - Nav Bar
@@ -80,7 +82,7 @@ class PreLiveWorkoutViewController: UIViewController, Storyboarded {
         
         viewModel.$isLoading
             .sink { [weak self] loading in
-                self?.display.setInteraction(to: !loading)
+//                self?.display.setInteraction(to: !loading)
                 self?.setToLoading(loading)
             }
             .store(in: &subscriptions)
@@ -111,40 +113,12 @@ private extension PreLiveWorkoutViewController {
         }
     }
     @objc func continuePressed(_ sender: UIBarButtonItem) {
-        if display.titleField.text?.trimmingCharacters(in: .whitespaces) == "" {
+        if viewModel.title.trimmingCharacters(in: .whitespaces) == "" {
 //            let alert = SCLAlertView()
 //            alert.showError("Enter a title!", subTitle: "You must enter a title to begin the workout. The title can be anything you want.")
         } else {
             viewModel.startLiveWorkout()
         }
         
-    }
-}
-
-// MARK: - Tableview Protocol
-extension PreLiveWorkoutViewController: PreLiveWorkoutProtocol {
-    func getData(at indexPath: IndexPath) -> String {
-        return viewModel.getData(at: indexPath)
-    }
-    
-    func numberOfRows() -> Int {
-        return viewModel.numberOfItems
-    }
-    
-    func itemSelected(at indexPath: IndexPath) {
-        let newTitle = viewModel.getData(at: indexPath)
-        display.titleField.text = newTitle
-        viewModel.updateTitle(with: newTitle)
-    } 
-}
-
-// MARK: - Textfield Delegation
-extension PreLiveWorkoutViewController: UITextViewDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string).trimTrailingWhiteSpaces()
-        if textField == display.titleField {
-            viewModel.updateTitle(with: newString)
-        }
-        return true
     }
 }

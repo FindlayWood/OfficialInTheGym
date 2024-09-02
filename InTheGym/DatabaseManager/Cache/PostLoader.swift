@@ -28,13 +28,12 @@ class PostLoader {
         if let cached = cache[searchModel.id] {
             completion(.success(cached))
         } else {
-            apiService.fetchSingleInstance(of: searchModel, returning: PostModel.self) { [weak self] result in
-                guard let self = self else {return}
-                switch result {
-                case .success(let post):
-                    self.cache[post.id] = post
-                    completion(.success(post))
-                case .failure(let error):
+            Task {
+                do {
+                    let model: PostModel = try await apiService.fetchSingleInstanceAsync(of: searchModel)
+                    cache[searchModel.id] = model
+                    completion(.success(model))
+                } catch {
                     completion(.failure(error))
                 }
             }

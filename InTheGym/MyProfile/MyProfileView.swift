@@ -45,22 +45,6 @@ class MyProfileView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    var notificationsButton: UIButton = {
-        let button = UIButton()
-        let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
-        button.setImage(UIImage(systemName: "bell.fill", withConfiguration: configuration), for: .normal)
-        button.tintColor = .darkColour
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    var groupsButton: UIButton = {
-        let button = UIButton()
-        let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
-        button.setImage(UIImage(systemName: "person.3.fill", withConfiguration: configuration), for: .normal)
-        button.tintColor = .darkColour
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
     
     var tableview: UITableView = {
         let view = UITableView()
@@ -115,9 +99,6 @@ private extension MyProfileView {
         addSubview(topBackgroundView)
         addSubview(iconLabel)
         addSubview(moreButton)
-        // MARK: - Commented out Till Working
-//        addSubview(notificationsButton)
-//        addSubview(groupsButton)
         addSubview(tableview)
         configureUI()
     }
@@ -134,13 +115,6 @@ private extension MyProfileView {
             
             moreButton.centerYAnchor.constraint(equalTo: iconLabel.centerYAnchor),
             moreButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            
-            // MARK: - Commented out Till Working
-//            notificationsButton.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -12),
-//            notificationsButton.topAnchor.constraint(equalTo: moreButton.topAnchor),
-            
-//            groupsButton.trailingAnchor.constraint(equalTo: notificationsButton.leadingAnchor, constant: -12),
-//            groupsButton.topAnchor.constraint(equalTo: moreButton.topAnchor),
             
             tableview.topAnchor.constraint(equalTo: topBackgroundView.bottomAnchor),
             tableview.leadingAnchor.constraint(equalTo: leadingAnchor),
