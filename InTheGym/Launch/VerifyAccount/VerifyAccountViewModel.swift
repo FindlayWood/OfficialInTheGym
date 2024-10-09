@@ -12,8 +12,6 @@ import Firebase
 class VerifyAccountViewModel: ObservableObject {
     
     @Published var user: User?
-    @Published var isLoading: Bool = false
-    @Published var error: Error?
     
     var baseFlow: BaseFlow?
     var apiService: AuthManagerService
@@ -22,27 +20,29 @@ class VerifyAccountViewModel: ObservableObject {
     init(apiService: AuthManagerService = FirebaseAuthManager.shared) {
         self.apiService = apiService
         user = Auth.auth().currentUser
+        initTimer()
     }
     
-    @MainActor
+    var timer = Timer()
+
+    func initTimer() {
+        self.timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { [weak self] _ in
+            self?.verifiedEmailAction()
+        })
+    }
+
     func verifiedEmailAction() {
-        error = nil
-        isLoading = true
         guard let user else {return}
         Task {
             do {
                 try await user.reload()
                 if user.isEmailVerified {
-                    goToAccountCreation()
-                    isLoading = false
-                } else {
-                    error = NSError(domain: "not verified", code: -1)
-                    isLoading = false
+                    DispatchQueue.main.async {
+                        self.goToAccountCreation()
+                    }
                 }
             } catch {
                 print(String(describing: error))
-                self.error = error
-                isLoading = false
             }
         }
     }
