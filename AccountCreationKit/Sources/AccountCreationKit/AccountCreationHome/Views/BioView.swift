@@ -19,14 +19,14 @@ struct BioView: View {
                 .foregroundColor(.primary)
             
             ZStack(alignment: .topLeading) {
+                TextEditor(text: $viewModel.bio)
+                    .frame(maxHeight: 300)
+                    .cornerRadius(8)
                 TextEditor(text: $placeholder)
                     .foregroundColor(.secondary)
                     .frame(maxHeight: 300)
                     .cornerRadius(8)
-                TextEditor(text: $viewModel.bio)
-                    .frame(maxHeight: 300)
-                    .cornerRadius(8)
-                    .opacity(viewModel.bio.isEmpty ? 0.3 : 1)
+                    .opacity(viewModel.bio.isEmpty ? 0.4 : 0)
             }
             
             HStack {
