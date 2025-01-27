@@ -13,12 +13,14 @@ class DiscoverCoordinator: NSObject, Coordinator {
 
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController){
+    init(navigationController: UINavigationController, subscriptionManager: PurchaseManager){
         self.navigationController = navigationController
         self.navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController.navigationBar.shadowImage = UIImage()
         self.navigationController.navigationBar.tintColor = .white
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -35,20 +37,20 @@ class DiscoverCoordinator: NSObject, Coordinator {
 extension DiscoverCoordinator {
     
     func workoutSelected(_ model: SavedWorkoutModel) {
-        let child = WorkoutDiscoveryCoordinator(navigationController: navigationController, savedWorkoutModel: model)
+        let child = WorkoutDiscoveryCoordinator(navigationController: navigationController, savedWorkoutModel: model, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     
     func exerciseSelected(_ model: DiscoverExerciseModel) {
-        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: model)
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: model, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     
     func clipSelected(_ model: ClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC) {
         let keyClipModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
-        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate)
+        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -72,7 +74,7 @@ extension DiscoverCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func moreTagsSelected(text: String?) {
-        let child = SearchTagCoordinator(navigationController: navigationController, searchText: text)
+        let child = SearchTagCoordinator(navigationController: navigationController, searchText: text, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -85,7 +87,7 @@ extension DiscoverCoordinator {
 }
 extension DiscoverCoordinator: UserSearchFlow {
     func userSelected(_ user: Users) {
-        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -102,7 +104,7 @@ extension DiscoverCoordinator: ExerciseSelectionFlow {
         navigationController.present(vc, animated: true)
     }
     func infoSelected(_ discoverModel: DiscoverExerciseModel) {
-        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: discoverModel)
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: discoverModel, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

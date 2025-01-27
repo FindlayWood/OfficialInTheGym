@@ -21,12 +21,14 @@ class CommentSectionCoordinator: NSObject, Coordinator {
     var savedWorkoutSelected = PassthroughSubject<SavedWorkoutModel,Never>()
     var listener: PostListener?
     var deleteListener: PostListener?
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController, mainPost: PostModel, listener: PostListener?, deleteListener: PostListener?) {
+    init(navigationController: UINavigationController, mainPost: PostModel, listener: PostListener?, deleteListener: PostListener?, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.mainPost = mainPost
         self.listener = listener
         self.deleteListener = deleteListener
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -42,17 +44,17 @@ class CommentSectionCoordinator: NSObject, Coordinator {
 
 extension CommentSectionCoordinator {
     func showUser(_ user: Users) {
-        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showWorkout(_ workout: WorkoutModel) {
-        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: workout)
+        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: workout, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showSavedWorkout(_ model: SavedWorkoutModel) {
-        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -105,7 +107,7 @@ extension CommentSectionCoordinator {
         attachmentsModal.present(nav, animated: true)
     }
     func showTaggedUsers(_ ids: [String]) {
-        let child = TaggedUsersCoordinator(navigationController: navigationController, ids: ids)
+        let child = TaggedUsersCoordinator(navigationController: navigationController, ids: ids, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

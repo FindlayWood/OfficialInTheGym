@@ -13,12 +13,14 @@ class MainCoordinator: Coordinator {
     
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController){
+    init(navigationController: UINavigationController, subscriptionManager: PurchaseManager){
         self.navigationController = navigationController
         self.navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController.navigationBar.shadowImage = UIImage()
         self.navigationController.navigationBar.tintColor = .white
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -27,7 +29,7 @@ class MainCoordinator: Coordinator {
     }
     
     func coordinateToTabBar() {
-        let tabBar = TabBarCoordinator(navigationController: navigationController)
+        let tabBar = TabBarCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
         coordinate(to: tabBar)
     }
 }

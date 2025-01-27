@@ -12,15 +12,18 @@ class CoachProfileMoreCoordinator: Coordinator {
     // MARK: - Properties
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var subscriptionManager: PurchaseManager
     // MARK: - Initializer
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
+        self.subscriptionManager = subscriptionManager
     }
     // MARK: - Start
     func start() {
          let vc = CoachProfileMoreViewController()
         vc.hidesBottomBarWhenPushed = true
         vc.coordinator = self
+        vc.viewModel = CoachProfileMoreViewModel(purchaseManager: subscriptionManager)
         navigationController.pushViewController(vc, animated: true)
     }
 }
@@ -33,6 +36,8 @@ extension CoachProfileMoreCoordinator {
     }
     func showMySubscriptions() {
         let vc = PremiumAccountViewController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.viewModel = AccountCreatedViewModel(purchaseManager: subscriptionManager)
         navigationController.present(vc, animated: true)
     }
     func showMyMeasurements() {
@@ -41,7 +46,7 @@ extension CoachProfileMoreCoordinator {
         navigationController.present(vc, animated: true)
     }
     func showMyWorkouts() {
-        let child = CoachWorkoutsCoordinator(navigationController: navigationController)
+        let child = CoachWorkoutsCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

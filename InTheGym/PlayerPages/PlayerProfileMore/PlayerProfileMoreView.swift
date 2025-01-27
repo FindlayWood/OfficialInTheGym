@@ -212,6 +212,6 @@ struct PlayerProfileMoreView: View {
 
 struct PlayerProfileMoreView_Previews: PreviewProvider {
     static var previews: some View {
-        PlayerProfileMoreView(viewModel: PlayerProfileMoreViewModel())
+        PlayerProfileMoreView(viewModel: PlayerProfileMoreViewModel(purchaseManager: PreviewPurchaseManager()))
     }
 }

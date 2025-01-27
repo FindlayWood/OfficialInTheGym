@@ -54,6 +54,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private lazy var workoutFeedNavigationController = UINavigationController(
         rootViewController: WorkoutFeedUIComposer.workoutsComposedWith(workoutsLoader: makeRemoteWorkoutsLoader(path: "workoutList")))
     
+    private lazy var purchaseManager: PurchaseManager = {
+#if EMULATOR
+        return PreviewPurchaseManager()
+#else
+        return StoreKitPurchaseManager()
+#endif
+    }()
+    
     convenience init(client: Client, httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
         self.init()
         self.client = client
@@ -114,7 +122,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let cache = UserCacheServiceAdapter()
         let cacheSaver = UserDefaultsCacheUserSaver()
         
-        let subscriptionManager = SubscriptionManager.shared
+//        let subscriptionManager = SubscriptionManager.shared
         
         let api = UserAPIServiceAdapter(
             authService: FirebaseAuthManager.shared,
@@ -137,7 +145,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let flow = BasicBaseFlow(
             navigationController: navigationController,
             loginKitComposer: loginKitComposer,
-            accountCreationComposer: accountCreationComposer) { [weak controller] in
+            accountCreationComposer: accountCreationComposer,
+            subscriptionManager: purchaseManager) { [weak controller] in
                 controller?.reloadUser()
             } userLoggedIn: { [weak controller] in
                 controller?.loadUser()
@@ -153,7 +162,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        controller.userService = cache.fallback(api)
         controller.cacheSaver = cacheSaver
         controller.baseFlow = flow
-        controller.subscriptionManager = subscriptionManager
+//        controller.subscriptionManager = subscriptionManager
         
         return controller
     }

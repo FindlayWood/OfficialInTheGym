@@ -12,9 +12,11 @@ import UIKit
 class CoachWorkoutsCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -42,7 +44,7 @@ extension CoachWorkoutsCoordinator: WorkoutsFlow {
         navigationController.pushViewController(vc, animated: true)
     }
     func addNewWorkout(_ assignTo: Users?) {
-        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: assignTo)
+        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: assignTo, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -52,7 +54,7 @@ extension CoachWorkoutsCoordinator: WorkoutsFlow {
         navigationController.pushViewController(vc, animated: true)
     }
     func addSavedWorkout() {
-        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: nil)
+        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: nil, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -62,12 +64,12 @@ extension CoachWorkoutsCoordinator: WorkoutsFlow {
 //MARK: - Child Coordinators
 extension CoachWorkoutsCoordinator: PreLiveWorkoutFlow {
     func show(_ workout: WorkoutModel) {
-        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: workout)
+        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: workout, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showLiveWorkout(_ workout: WorkoutModel) {
-        let child = LiveWorkoutDisplayCoordinator(navigationController: navigationController, workout: workout)
+        let child = LiveWorkoutDisplayCoordinator(navigationController: navigationController, workout: workout, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

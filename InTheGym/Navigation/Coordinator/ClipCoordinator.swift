@@ -16,16 +16,18 @@ class ClipCoordinator: NSObject, Coordinator {
     var workout: WorkoutModel
     var exercise: DiscoverExerciseModel
     var addingDelegate: ClipAdding
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController, workout: WorkoutModel, exercise: DiscoverExerciseModel, addingDelegate: ClipAdding) {
+    init(navigationController: UINavigationController, workout: WorkoutModel, exercise: DiscoverExerciseModel, addingDelegate: ClipAdding, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.workout = workout
         self.exercise = exercise
         self.addingDelegate = addingDelegate
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
-        if SubscriptionManager.shared.isSubscribed {
+        if subscriptionManager.hasUnlockedPro {
             let vc = RecordClipViewController()
             vc.coordinator = self
             vc.viewModel.workoutModel = workout
@@ -36,7 +38,9 @@ class ClipCoordinator: NSObject, Coordinator {
             navigationController.present(vc, animated: true)
         } else {
             let vc = PremiumAccountViewController()
-            navigationController.present(vc, animated: true)   
+            vc.modalPresentationStyle = .fullScreen
+            vc.viewModel = AccountCreatedViewModel(purchaseManager: subscriptionManager)
+            navigationController.present(vc, animated: true)
         }
     }
 }

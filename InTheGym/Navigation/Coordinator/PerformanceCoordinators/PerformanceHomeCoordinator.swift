@@ -14,14 +14,16 @@ class PerformanceHomeCoordinator: Coordinator {
     var navigationController: UINavigationController
     var modalNavigationController: UINavigationController!
     var user: Users
+    var subscriptionManager: PurchaseManager
     // MARK: - Initializer
-    init(navigationController: UINavigationController, user: Users) {
+    init(navigationController: UINavigationController, user: Users, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.user = user
+        self.subscriptionManager = subscriptionManager
     }
     // MARK: - Start
     func start() {
-        if SubscriptionManager.shared.isSubscribed {
+        if subscriptionManager.hasUnlockedPro {
             let vc = PerformanceIntroViewController()
             vc.coordinator = self
             vc.viewModel.user = user
@@ -30,6 +32,8 @@ class PerformanceHomeCoordinator: Coordinator {
             navigationController.present(modalNavigationController, animated: true)
         } else {
             let vc = PremiumAccountViewController()
+            vc.modalPresentationStyle = .fullScreen
+            vc.viewModel = AccountCreatedViewModel(purchaseManager: subscriptionManager)
             navigationController.present(vc, animated: true)
         }
 
@@ -64,7 +68,7 @@ extension PerformanceHomeCoordinator {
         modalNavigationController.pushViewController(vc, animated: true)
     }
     func showVerticalJump() {
-        let child = JumpCoordinator(navigationController: modalNavigationController)
+        let child = JumpCoordinator(navigationController: modalNavigationController, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

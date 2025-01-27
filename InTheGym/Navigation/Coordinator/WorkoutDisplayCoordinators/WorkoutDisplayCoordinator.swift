@@ -16,10 +16,12 @@ class WorkoutDisplayCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     var modalNavigationController: UINavigationController?
     var workout: WorkoutModel
+    var subscriptionManager: PurchaseManager
     // MARK: - Initializer
-    init(navigationController: UINavigationController, workout: WorkoutModel) {
+    init(navigationController: UINavigationController, workout: WorkoutModel, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.workout = workout
+        self.subscriptionManager = subscriptionManager
     }
     // MARK: - Start
     func start() {
@@ -38,18 +40,18 @@ extension WorkoutDisplayCoordinator {
         child.start()
     }
     func addClip(for exercise: ExerciseModel, _ workout: WorkoutModel, on delegate: ClipAdding) {
-        let child = ClipCoordinator(navigationController: navigationController, workout: workout, exercise: DiscoverExerciseModel(exerciseName: exercise.exercise), addingDelegate: delegate)
+        let child = ClipCoordinator(navigationController: navigationController, workout: workout, exercise: DiscoverExerciseModel(exerciseName: exercise.exercise), addingDelegate: delegate, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showDescriptions(_ exercise: DiscoverExerciseModel) {
-        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise)
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func viewClip(_ clipModel: WorkoutClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC) {
         let keyClipModel = KeyClipModel(clipKey: clipModel.clipKey, storageURL: clipModel.storageURL)
-        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate)
+        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

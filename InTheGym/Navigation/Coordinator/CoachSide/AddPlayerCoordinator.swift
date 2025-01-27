@@ -13,10 +13,12 @@ class AddPlayerCoordinator: Coordinator {
     var navigationController: UINavigationController
     var modalNavigationController: UINavigationController!
     var currentPlayers: [Users]
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController, currentPlayers: [Users]) {
+    init(navigationController: UINavigationController, currentPlayers: [Users], subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.currentPlayers = currentPlayers
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -30,7 +32,7 @@ class AddPlayerCoordinator: Coordinator {
 }
 extension AddPlayerCoordinator {
     func showUser(_ user: Users) {
-        let child = UserProfileCoordinator(navigationController: modalNavigationController, user: user)
+        let child = UserProfileCoordinator(navigationController: modalNavigationController, user: user, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

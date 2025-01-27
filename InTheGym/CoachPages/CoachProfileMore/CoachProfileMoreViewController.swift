@@ -14,7 +14,7 @@ class CoachProfileMoreViewController: UIViewController {
     // MARK: - Properties
     weak var coordinator: CoachProfileMoreCoordinator?
     var childContentView: CoachProfileMoreView!
-    var viewModel = CoachProfileMoreViewModel()
+    var viewModel: CoachProfileMoreViewModel!
     private var subscriptions = Set<AnyCancellable>()
     // MARK: - View
     override func viewDidLoad() {

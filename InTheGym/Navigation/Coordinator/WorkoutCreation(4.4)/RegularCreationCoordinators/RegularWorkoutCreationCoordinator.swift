@@ -17,10 +17,12 @@ class RegularWorkoutCreationCoordinator: Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var assignTo: Users?
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController, assignTo: Users?) {
+    init(navigationController: UINavigationController, assignTo: Users?, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.assignTo = assignTo
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -59,7 +61,7 @@ extension RegularWorkoutCreationCoordinator: ExerciseSelectionFlow {
         navigationController.present(vc, animated: true)
     }
     func infoSelected(_ discoverModel: DiscoverExerciseModel) {
-        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: discoverModel)
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: discoverModel, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

@@ -20,12 +20,14 @@ class MyProfileCoordinator: NSObject, Coordinator {
     // MARK: - Properties
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var subscriptionManager: PurchaseManager
     // MARK: - Initializer
-    init(navigationController: UINavigationController){
+    init(navigationController: UINavigationController, subscriptionManager: PurchaseManager){
         self.navigationController = navigationController
         self.navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController.navigationBar.shadowImage = UIImage()
         self.navigationController.navigationBar.tintColor = .white
+        self.subscriptionManager = subscriptionManager
     }
     // MARK: - Start
     func start() {
@@ -58,27 +60,27 @@ extension MyProfileCoordinator {
     }
     func showMoreInfo() {
         if UserDefaults.currentUser.accountType == .coach {
-            let child = CoachProfileMoreCoordinator(navigationController: navigationController)
+            let child = CoachProfileMoreCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
             childCoordinators.append(child)
             child.start()
         } else {
-            let child = PlayerProfileMoreCoordinator(navigationController: navigationController)
+            let child = PlayerProfileMoreCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
             childCoordinators.append(child)
             child.start()
         }
     }
     func showWorkout(_ model: WorkoutModel) {
-        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: model)
+        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: model, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showSavedWorkout(_ model: SavedWorkoutModel) {
-        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showCommentSection(post: PostModel, with listener: PostListener) {
-        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener, deleteListener: nil)
+        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener, deleteListener: nil, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -101,7 +103,7 @@ extension MyProfileCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func showTaggedUsers(_ ids: [String]) {
-        let child = TaggedUsersCoordinator(navigationController: navigationController, ids: ids)
+        let child = TaggedUsersCoordinator(navigationController: navigationController, ids: ids, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -111,7 +113,7 @@ extension MyProfileCoordinator {
 extension MyProfileCoordinator {
     func clipSelected(_  model: ClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC) {
         let keyClipModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
-        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate)
+        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -130,7 +132,7 @@ extension MyProfileCoordinator: UIViewControllerTransitioningDelegate {
 // MARK: - Saved WorkoutFlow
 extension MyProfileCoordinator: SavedWorkoutsFlow {
     func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?) {
-        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: selectedWorkout, listener: listener)
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: selectedWorkout, listener: listener, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -141,7 +143,7 @@ extension MyProfileCoordinator: SavedWorkoutsFlow {
 extension MyProfileCoordinator {
     
     func showUser(user: Users) {
-        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

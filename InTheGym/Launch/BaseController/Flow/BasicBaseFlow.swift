@@ -12,6 +12,7 @@ struct BasicBaseFlow: BaseFlow {
     var navigationController: UINavigationController
     var loginKitComposer: LoginComposer
     var accountCreationComposer: AccountCreationComposer
+    var subscriptionManager: PurchaseManager
     var accountCreatedCallback: () -> Void
     var userLoggedIn: () -> Void
     var userSignedOut: () -> Void
@@ -22,7 +23,7 @@ struct BasicBaseFlow: BaseFlow {
     }
     
     func showLoggedInPlayer() {
-        let mainPlayerCoordinator = MainPlayerCoordinator(navigationController: navigationController)
+        let mainPlayerCoordinator = MainPlayerCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
         mainPlayerCoordinator.start()
     }
     
@@ -44,6 +45,7 @@ struct BasicBaseFlow: BaseFlow {
     }
     func showAccountCreated(for user: Users) {
         let vc = AccountCreatedViewController()
+        vc.viewModel = AccountCreatedViewModel(purchaseManager: subscriptionManager)
         vc.baseFlow = self
         vc.user = user
         navigationController.setViewControllers([vc], animated: true)

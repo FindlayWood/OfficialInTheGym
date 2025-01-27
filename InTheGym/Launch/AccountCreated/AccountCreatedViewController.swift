@@ -10,7 +10,8 @@ import UIKit
 
 class AccountCreatedViewController: UIViewController {
     
-    var display: AccountCreatedView!
+    var display: AccountCreatedSubscriptionView!
+    var viewModel: AccountCreatedViewModel!
     var baseFlow: BaseFlow?
     var user: Users!
 
@@ -21,7 +22,7 @@ class AccountCreatedViewController: UIViewController {
     }
     // MARK: - Display
     func addDisplay() {
-        display = .init { [weak self] in
+        display = .init(viewModel: viewModel) { [weak self] in
             if self?.user.accountType == .coach {
                 self?.baseFlow?.showLoggedInCoach()
             } else {

@@ -14,10 +14,12 @@ class WorkoutDiscoveryCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = [Coordinator]()
     var navigationController: UINavigationController
     var savedWorkoutModel: SavedWorkoutModel
+    var subscriptionManager: PurchaseManager
     // MARK: - Initializer
-    init(navigationController: UINavigationController, savedWorkoutModel: SavedWorkoutModel) {
+    init(navigationController: UINavigationController, savedWorkoutModel: SavedWorkoutModel, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.savedWorkoutModel = savedWorkoutModel
+        self.subscriptionManager = subscriptionManager
     }
     // MARK: - Start
     func start() {
@@ -33,7 +35,7 @@ class WorkoutDiscoveryCoordinator: Coordinator {
 // MARK: - Flow
 extension WorkoutDiscoveryCoordinator {
     func showSavedWorkout() {
-        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: savedWorkoutModel)
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: savedWorkoutModel, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

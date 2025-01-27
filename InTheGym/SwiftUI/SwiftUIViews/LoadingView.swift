@@ -35,3 +35,24 @@ struct LoadingView: View {
         .edgesIgnoringSafeArea(.all)
     }
 }
+
+struct CircularLoader: View {
+    @State private var isAnimating = false
+    var size: CGFloat = 48
+    var lineWidth: CGFloat = 8
+    var animation: Animation {
+        Animation.linear(duration: 2)
+        .repeatForever(autoreverses: false)
+    }
+    var body: some View {
+        Circle()
+            .trim(from: 0.2, to: 1)
+            .stroke(Color(.darkColour), style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
+            .frame(width: size, height: size)
+            .rotationEffect(.degrees(isAnimating ? 360 : 0))
+            .animation(animation, value: isAnimating)
+            .onAppear {
+                isAnimating = true
+            }
+    }
+}

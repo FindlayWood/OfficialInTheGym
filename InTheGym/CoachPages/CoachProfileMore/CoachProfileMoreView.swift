@@ -199,6 +199,6 @@ struct CoachProfileMoreView: View {
 
 struct CoachProfileMoreView_Previews: PreviewProvider {
     static var previews: some View {
-        CoachProfileMoreView(viewModel: CoachProfileMoreViewModel())
+        CoachProfileMoreView(viewModel: CoachProfileMoreViewModel(purchaseManager: PreviewPurchaseManager()))
     }
 }

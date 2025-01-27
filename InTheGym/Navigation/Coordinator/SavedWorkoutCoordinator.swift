@@ -14,11 +14,13 @@ class SavedWorkoutCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     var savedWorkoutModel: SavedWorkoutModel
     var listener: SavedWorkoutRemoveListener?
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController, savedWorkoutModel: SavedWorkoutModel, listener: SavedWorkoutRemoveListener? = nil) {
+    init(navigationController: UINavigationController, savedWorkoutModel: SavedWorkoutModel, listener: SavedWorkoutRemoveListener? = nil, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.savedWorkoutModel = savedWorkoutModel
         self.listener = listener
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -39,17 +41,17 @@ extension SavedWorkoutCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func showUser(_ user: Users) {
-        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showDescriptions(_ exercise: DiscoverExerciseModel) {
-        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise)
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showWorkoutDiscovery() {
-        let child = WorkoutDiscoveryCoordinator(navigationController: navigationController, savedWorkoutModel: savedWorkoutModel)
+        let child = WorkoutDiscoveryCoordinator(navigationController: navigationController, savedWorkoutModel: savedWorkoutModel, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

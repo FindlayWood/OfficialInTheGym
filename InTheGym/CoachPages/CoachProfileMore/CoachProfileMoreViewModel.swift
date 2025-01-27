@@ -15,19 +15,21 @@ class CoachProfileMoreViewModel: ObservableObject {
     // MARK: - Publishers
     @Published var profileImage: UIImage?
     var actionPublisher = PassthroughSubject<CoachProfileMoreAction,Never>()
+    var purchaseManager: PurchaseManager
     
     // MARK: - Properties
     var apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared
     var subscriptionType: String {
-        if SubscriptionManager.shared.isSubscribed {
+        if purchaseManager.hasUnlockedPro {
             return "Premium Account"
         } else {
             return "None"
         }
     }
     // MARK: - Initializer
-    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared) {
+    init(apiService: FirebaseDatabaseManagerService = FirebaseDatabaseManager.shared, purchaseManager: PurchaseManager) {
         self.apiService = apiService
+        self.purchaseManager = purchaseManager
     }
     
     // MARK: - Actions
