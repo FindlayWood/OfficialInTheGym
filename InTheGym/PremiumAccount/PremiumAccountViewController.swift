@@ -10,7 +10,8 @@ import UIKit
 
 class PremiumAccountViewController: UIViewController {
     // MARK: - Properties
-    var childContentView: PremiumAccountViewSwiftUI!
+    var display: PremiumAccountView!
+    var viewModel: PremiumAccountViewModel!
     // MARK: - View
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,9 +19,9 @@ class PremiumAccountViewController: UIViewController {
     }
     // MARK: - Swift UI Child View
     func addChildView() {
-        childContentView = .init { [weak self] in
+        display = .init(viewModel: viewModel) { [weak self] in
             self?.dismiss(animated: true)
         }
-        addSwiftUIView(childContentView)
+        addSwiftUIView(display)
     }
 }

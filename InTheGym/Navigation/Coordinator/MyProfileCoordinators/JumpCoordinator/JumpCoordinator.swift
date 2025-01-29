@@ -30,7 +30,7 @@ class JumpCoordinator: Coordinator {
         } else {
             let vc = PremiumAccountViewController()
             vc.modalPresentationStyle = .fullScreen
-            vc.viewModel = AccountCreatedViewModel(purchaseManager: subscriptionManager)
+            vc.viewModel = PremiumAccountViewModel(purchaseManager: subscriptionManager)
             navigationController.present(vc, animated: true)
         }
 
