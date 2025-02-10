@@ -699,6 +699,12 @@
 		74EA156828C54871000669A8 /* JournalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA156728C54871000669A8 /* JournalEntryView.swift */; };
 		74EA156A28C54936000669A8 /* JournalEntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA156928C54936000669A8 /* JournalEntryViewModel.swift */; };
 		74EB1E49289EB2B200C4502A /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 74EB1E48289EB2B200C4502A /* Algorithms */; };
+		74ECD4ED2D5A974E00E66EAA /* PurchaseManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECD4EC2D5A974E00E66EAA /* PurchaseManagerProtocol.swift */; };
+		74ECD4EF2D5A976800E66EAA /* PurchaseableProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECD4EE2D5A976800E66EAA /* PurchaseableProduct.swift */; };
+		74ECD4F12D5A98BE00E66EAA /* Product+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECD4F02D5A98BE00E66EAA /* Product+Extension.swift */; };
+		74ECD4F32D5A98DF00E66EAA /* Package+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECD4F22D5A98DF00E66EAA /* Package+Extension.swift */; };
+		74ECD4F72D5A990400E66EAA /* DisplayableProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECD4F62D5A990400E66EAA /* DisplayableProduct.swift */; };
+		74ECD4F92D5A991800E66EAA /* RemoteUploadPurchaseTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECD4F82D5A991800E66EAA /* RemoteUploadPurchaseTransaction.swift */; };
 		74EE4EB827E3AAAF00051451 /* DescriptionUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EB727E3AAAF00051451 /* DescriptionUploadViewController.swift */; };
 		74EE4EBA27E3AAD200051451 /* DescriptionUploadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EB927E3AAD100051451 /* DescriptionUploadViewModel.swift */; };
 		74EE4EBC27E3AADE00051451 /* DescriptionUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EE4EBB27E3AADE00051451 /* DescriptionUploadView.swift */; };
@@ -1600,6 +1606,12 @@
 		74EA156428C544F2000669A8 /* JournalHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalHomeViewController.swift; sourceTree = "<group>"; };
 		74EA156728C54871000669A8 /* JournalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntryView.swift; sourceTree = "<group>"; };
 		74EA156928C54936000669A8 /* JournalEntryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntryViewModel.swift; sourceTree = "<group>"; };
+		74ECD4EC2D5A974E00E66EAA /* PurchaseManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManagerProtocol.swift; sourceTree = "<group>"; };
+		74ECD4EE2D5A976800E66EAA /* PurchaseableProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseableProduct.swift; sourceTree = "<group>"; };
+		74ECD4F02D5A98BE00E66EAA /* Product+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+Extension.swift"; sourceTree = "<group>"; };
+		74ECD4F22D5A98DF00E66EAA /* Package+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Package+Extension.swift"; sourceTree = "<group>"; };
+		74ECD4F62D5A990400E66EAA /* DisplayableProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableProduct.swift; sourceTree = "<group>"; };
+		74ECD4F82D5A991800E66EAA /* RemoteUploadPurchaseTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteUploadPurchaseTransaction.swift; sourceTree = "<group>"; };
 		74EE4EB727E3AAAF00051451 /* DescriptionUploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionUploadViewController.swift; sourceTree = "<group>"; };
 		74EE4EB927E3AAD100051451 /* DescriptionUploadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionUploadViewModel.swift; sourceTree = "<group>"; };
 		74EE4EBB27E3AADE00051451 /* DescriptionUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionUploadView.swift; sourceTree = "<group>"; };
@@ -4042,6 +4054,12 @@
 			isa = PBXGroup;
 			children = (
 				74E338CF28CE863200A85E8E /* SubscriptionManager.swift */,
+				74ECD4EC2D5A974E00E66EAA /* PurchaseManagerProtocol.swift */,
+				74ECD4EE2D5A976800E66EAA /* PurchaseableProduct.swift */,
+				74ECD4F02D5A98BE00E66EAA /* Product+Extension.swift */,
+				74ECD4F22D5A98DF00E66EAA /* Package+Extension.swift */,
+				74ECD4F62D5A990400E66EAA /* DisplayableProduct.swift */,
+				74ECD4F82D5A991800E66EAA /* RemoteUploadPurchaseTransaction.swift */,
 			);
 			path = PurchaseManager;
 			sourceTree = "<group>";
@@ -4881,6 +4899,7 @@
 				7420399728329A1D00074ECB /* MyFollowersViewController.swift in Sources */,
 				74E79E63283ABFB7002578BB /* PostUserSubview.swift in Sources */,
 				74DE6D8627D2496D009FB44A /* AdminPlayersView.swift in Sources */,
+				74ECD4EF2D5A976800E66EAA /* PurchaseableProduct.swift in Sources */,
 				74A602AF2850D20D00AFA236 /* WorkoutDiscoveryCoordinator.swift in Sources */,
 				741044F3285BC9B900A9FF4E /* LaunchPageView.swift in Sources */,
 				74F2CCE426E2883400D7AD79 /* AddMoreCellModel.swift in Sources */,
@@ -5131,6 +5150,7 @@
 				742C1C4F27B2B4DF00DD1BB0 /* RecordedClipPlayerViewModel.swift in Sources */,
 				7444D0D626D432D50009C7A6 /* UploadCellProtocol.swift in Sources */,
 				74F45CC9260A9D0400AF16DF /* PublicTimelineViewModel.swift in Sources */,
+				74ECD4F72D5A990400E66EAA /* DisplayableProduct.swift in Sources */,
 				742C1C5727B41E9D00DD1BB0 /* ClipThumbnailModel.swift in Sources */,
 				74B48DE827A1E0F400BBFC16 /* WorkoutLoader.swift in Sources */,
 				7444D07E26CEB80F0009C7A6 /* UIImageLabelView.swift in Sources */,
@@ -5178,6 +5198,7 @@
 				744AED12279615CE000D2D74 /* Array+Extension.swift in Sources */,
 				74B48DF227A2D22600BBFC16 /* ThinkingTimeCheck.swift in Sources */,
 				742C1C7427BAB81A00DD1BB0 /* UserProfileModel.swift in Sources */,
+				74ECD4ED2D5A974E00E66EAA /* PurchaseManagerProtocol.swift in Sources */,
 				74F0C708284F8DF300FE3A01 /* AddWorkoutTagsViewController.swift in Sources */,
 				742FCD24284567A6007ED1C6 /* MyCoachesModel.swift in Sources */,
 				74221B3F2642E38500D05527 /* DiscoverCoordinator.swift in Sources */,
@@ -5223,6 +5244,7 @@
 				74F664EB28EA09320086BA4E /* FCMTokenModel.swift in Sources */,
 				74B48DF927A2DCA300BBFC16 /* ThinkingTimeMessages.swift in Sources */,
 				740E5B7B28328965005B03FF /* MyWorkoutsViewController.swift in Sources */,
+				74ECD4F32D5A98DF00E66EAA /* Package+Extension.swift in Sources */,
 				743E933B28099E3F0029F447 /* ProfileHeaderView.swift in Sources */,
 				74B647A728135CA300ADDB7A /* ExerciseStatsDetailDataSource.swift in Sources */,
 				7486C2092677BD75008A1E21 /* FirebaseAPIWorkoutManager.swift in Sources */,
@@ -5667,6 +5689,7 @@
 				747E0C942862267800D828A4 /* RecordJumpViewModel.swift in Sources */,
 				7444D0AC26D2B2C50009C7A6 /* CardCollectionViewCell.swift in Sources */,
 				742C1C9827BD91D500DD1BB0 /* ExerciseCommentModel.swift in Sources */,
+				74ECD4F92D5A991800E66EAA /* RemoteUploadPurchaseTransaction.swift in Sources */,
 				742CCDC02649CA630070D0A5 /* ProfilePhotoAlert.swift in Sources */,
 				743330E02791F1F3005A0C45 /* SavedWorkoutTableViewCell.swift in Sources */,
 				9F1DA6FE2937EE8900F41089 /* UserSearchFlow.swift in Sources */,
@@ -5703,6 +5726,7 @@
 				742C1C5D27B571F800DD1BB0 /* MyProfileView.swift in Sources */,
 				7444D0F426DD3DB20009C7A6 /* CreateNewPostModel.swift in Sources */,
 				74DA1AE228F1A99500F4DB9E /* MatchTrackerViewController.swift in Sources */,
+				74ECD4F12D5A98BE00E66EAA /* Product+Extension.swift in Sources */,
 				74221B3D2642D9ED00D05527 /* TimelineCoordinator.swift in Sources */,
 				743A04FF276A87330027B752 /* CommentSectionView.swift in Sources */,
 				74DE6D8327D2473A009FB44A /* AdminPlayersViewModel.swift in Sources */,
