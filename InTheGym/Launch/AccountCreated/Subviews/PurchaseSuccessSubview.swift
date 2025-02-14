@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import RevenueCat
 
 struct PurchaseSuccessSubview: View {
     var action: (() -> ())
@@ -39,7 +40,23 @@ struct PurchaseSuccessSubview: View {
                     }
             }
             .padding()
+            
+            
+            Button {
+                openManageSubscriptions()
+            } label: {
+                Text("Manage Subscription")
+                    .foregroundStyle(Color.primary)
+            }
         }
+    }
+    
+    private func openManageSubscriptions() {
+        Purchases.shared.showManageSubscriptions(completion: { error in
+            if let error {
+                print("Failed to open subscriptions: \(error)")
+            }
+        })
     }
 }
 

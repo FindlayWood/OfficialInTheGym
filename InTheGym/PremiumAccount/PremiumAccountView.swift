@@ -20,6 +20,10 @@ struct PremiumAccountView: View {
             PurchaseSuccessSubview(action: {
                 next?()
             })
+        } else if viewModel.success {
+            PurchaseSuccessSubview(action: {
+                next?()
+            })
         } else {
             VStack {
                 HStack(alignment: .lastTextBaseline) {
