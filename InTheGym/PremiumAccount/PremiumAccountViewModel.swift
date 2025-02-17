@@ -34,6 +34,7 @@ class PremiumAccountViewModel: ObservableObject {
         }
     }
     
+    @MainActor
     func purchaseProduct(_ product: PurchaseableProduct) async {
         isLoading = true
         do {
@@ -65,7 +66,9 @@ class PremiumAccountViewModel: ObservableObject {
             // write to firebase
             let modelToUpload = mapTransactionModel(purchaseTransaction)
             writeSuccessfulPurchase(modelToUpload)
-            success = true
+            DispatchQueue.main.async {
+                self.success = true
+            }
         case .successUnverified:
             print("success unverified")
         case .pending:
