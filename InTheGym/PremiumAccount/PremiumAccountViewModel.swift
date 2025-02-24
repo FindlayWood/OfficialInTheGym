@@ -81,13 +81,13 @@ class PremiumAccountViewModel: ObservableObject {
     }
     
     func mapTransactionModel(_ model: PurchaseTransaction) -> RemoteUploadPurchaseTransaction {
-        RemoteUploadPurchaseTransaction(id: model.id, userID: UserDefaults.currentUser.uid, productID: model.productID, purchaseDate: model.purchaseDate)
+        RemoteUploadPurchaseTransaction(userID: UserDefaults.currentUser.uid, productID: model.productID, purchaseDate: model.purchaseDate, transactionID: model.transactionID)
     }
 
     func writeSuccessfulPurchase(_ transaction: RemoteUploadPurchaseTransaction) {
         Task {
             do {
-                try await backendService.upload(data: transaction, at: "SubscriptionTransactions")
+                try await backendService.upload(data: transaction, at: "SubscriptionTransactions/\(transaction.id)")
             } catch {
                 print(String(describing: error))
             }

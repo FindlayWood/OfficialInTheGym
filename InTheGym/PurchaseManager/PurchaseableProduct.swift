@@ -22,7 +22,7 @@ enum PurchaseProductResult {
 }
 
 struct PurchaseTransaction {
-    let id: String
     let productID: String
     let purchaseDate: Date
+    let transactionID: String
 }

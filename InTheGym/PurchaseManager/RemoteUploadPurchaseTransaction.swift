@@ -9,8 +9,9 @@
 import Foundation
 
 struct RemoteUploadPurchaseTransaction: Codable {
-    let id: String
+    var id: String = UUID().uuidString
     let userID: String
     let productID: String
     let purchaseDate: Date
+    let transactionID: String
 }

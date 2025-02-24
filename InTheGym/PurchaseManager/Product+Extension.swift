@@ -18,9 +18,9 @@ extension Product: PurchaseableProduct {
            // Successful purhcase
             await transaction.finish()
             let t = PurchaseTransaction(
-                id: "\(transaction.id)",
                 productID: transaction.productID,
-                purchaseDate: transaction.purchaseDate
+                purchaseDate: transaction.purchaseDate,
+                transactionID: "\(transaction.id)"
             )
             return .successVerified(t)
         case .success(.unverified(_, _)):

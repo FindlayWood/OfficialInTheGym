@@ -49,7 +49,7 @@ extension Package: DisplayAndPurchaseProduct {
         if userCancelled {
             return .userCancelled
         } else if let transaction {
-            return .successVerified(.init(id: transaction.id, productID: transaction.productIdentifier, purchaseDate: transaction.purchaseDate))
+            return .successVerified(.init(productID: transaction.productIdentifier, purchaseDate: transaction.purchaseDate, transactionID: transaction.id))
         } else {
             return .failed
         }
