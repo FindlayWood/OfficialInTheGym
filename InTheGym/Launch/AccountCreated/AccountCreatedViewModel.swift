@@ -14,6 +14,7 @@ class AccountCreatedViewModel: ObservableObject {
     @Published var products: [DisplayAndPurchaseProduct] = []
     @Published var isLoading: Bool = false
     @Published var success: Bool = false
+    @Published var error: PurchaseError?
     
     var purchaseManager: PurchaseManager
     var backendService: FirestoreService
@@ -30,6 +31,7 @@ class AccountCreatedViewModel: ObservableObject {
             products = p
         } catch {
             print(String(describing: error))
+            self.error = .loadingProducts
         }
     }
     
@@ -41,6 +43,7 @@ class AccountCreatedViewModel: ObservableObject {
             isLoading = false
         } catch {
             print(String(describing: error))
+            self.error = .purchasingProduct
             isLoading = true
         }
     }
@@ -54,6 +57,7 @@ class AccountCreatedViewModel: ObservableObject {
         } catch {
             print(String(describing: error))
             print("---- restore was un successful")
+            self.error = .restorePurchases
             isLoading = true
         }
     }
@@ -73,6 +77,7 @@ class AccountCreatedViewModel: ObservableObject {
             print("user cancelled")
         case .failed:
             print("failed")
+            self.error = .handleResult
         }
     }
     

@@ -198,7 +198,86 @@ struct PremiumAccountView: View {
                     }
                 }
                 
-                if viewModel.isLoading {
+                if let error = viewModel.error {
+                    switch error {
+                    case .loadingProducts:
+                        Text("Failed to load products. Please try again.")
+                            .font(.system(size: 15, weight: .semibold))
+                        Button {
+                            viewModel.error = nil
+                            Task {
+                                await viewModel.loadProducts()
+                                selectedProduct = viewModel.products.first
+                            }
+                        } label: {
+                            Text("Try Again")
+                                .font(.headline)
+                                .foregroundStyle(Color.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                    Color(.redColour)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .shadow(color: .black.opacity(0.5), radius: 2, y: 2)
+                                }
+                        }
+                        .padding()
+                    case .purchasingProduct:
+                        Text("Failed to purchase.")
+                            .font(.system(size: 15, weight: .semibold))
+                        Button {
+                            viewModel.error = nil
+                        } label: {
+                            Text("Try Again")
+                                .font(.headline)
+                                .foregroundStyle(Color.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                    Color(.redColour)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .shadow(color: .black.opacity(0.5), radius: 2, y: 2)
+                                }
+                        }
+                        .padding()
+                    case .restorePurchases:
+                        Text("Failed to restore purchase. Please try again")
+                            .font(.system(size: 15, weight: .semibold))
+                        Button {
+                            viewModel.error = nil
+                        } label: {
+                            Text("Try Again")
+                                .font(.headline)
+                                .foregroundStyle(Color.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                    Color(.redColour)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .shadow(color: .black.opacity(0.5), radius: 2, y: 2)
+                                }
+                        }
+                        .padding()
+                    case .handleResult:
+                        Text("There was an error. Please try again.")
+                            .font(.system(size: 15, weight: .semibold))
+                        Button {
+                            viewModel.error = nil
+                        } label: {
+                            Text("Try Again")
+                                .font(.headline)
+                                .foregroundStyle(Color.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                    Color(.redColour)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .shadow(color: .black.opacity(0.5), radius: 2, y: 2)
+                                }
+                        }
+                        .padding()
+                    }
+                } else if viewModel.isLoading {
                     CircularLoader(size: 40, lineWidth: 6)
                         .padding()
                 } else {
@@ -233,6 +312,10 @@ struct PremiumAccountView: View {
 
         }
     }
+}
+
+#Preview {
+    PremiumAccountView(viewModel: PremiumAccountViewModel(purchaseManager: PreviewPurchaseManager(), backendService: PreviewFirestoreService()))
 }
 
 struct SubscribedView: View {
