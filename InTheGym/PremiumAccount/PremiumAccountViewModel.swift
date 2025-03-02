@@ -15,6 +15,7 @@ class PremiumAccountViewModel: ObservableObject {
     @Published var products: [DisplayAndPurchaseProduct] = []
     @Published var isLoading: Bool = false
     @Published var success: Bool = false
+    @Published var error: PurchaseError?
     
     var purchaseManager: PurchaseManager
     var backendService: FirestoreService
@@ -31,6 +32,7 @@ class PremiumAccountViewModel: ObservableObject {
             products = p
         } catch {
             print(String(describing: error))
+            self.error = .loadingProducts
         }
     }
     
@@ -43,6 +45,7 @@ class PremiumAccountViewModel: ObservableObject {
             isLoading = false
         } catch {
             print(String(describing: error))
+            self.error = .purchasingProduct
             isLoading = true
         }
     }
@@ -56,6 +59,7 @@ class PremiumAccountViewModel: ObservableObject {
         } catch {
             print(String(describing: error))
             print("---- restore was un successful")
+            self.error = .restorePurchases
             isLoading = true
         }
     }
@@ -77,6 +81,7 @@ class PremiumAccountViewModel: ObservableObject {
             print("user cancelled")
         case .failed:
             print("failed")
+            self.error = .handleResult
         }
     }
     
@@ -116,4 +121,24 @@ extension SubscriptionPeriod {
 enum SubscriptionError: Error {
     case failedFetchOfferings
     case failedPurchase
+}
+
+enum PurchaseError {
+    case loadingProducts
+    case purchasingProduct
+    case restorePurchases
+    case handleResult
+    
+    var description: String {
+        switch self {
+        case .loadingProducts:
+            return "Failed to load products. Try again later."
+        case .purchasingProduct:
+            return "Failed to purchase product. Try again later."
+        case .restorePurchases:
+            return "Failed to restore purchases. Try again later."
+        case .handleResult:
+            return "Failed to handle purchase result. Try again later"
+        }
+    }
 }

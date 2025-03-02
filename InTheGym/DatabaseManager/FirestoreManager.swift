@@ -62,3 +62,17 @@ protocol FirestoreService {
     func read<T: Codable>(at path: String) async throws -> T
     func readAll<T: Codable>(at path: String) async throws -> [T]
 }
+
+class PreviewFirestoreService: FirestoreService {
+    func upload(dataPoints: [String : any Codable]) async throws {}
+    
+    func upload(data: any Codable, at path: String) async throws {}
+    
+    func read<T>(at path: String) async throws -> T where T : Decodable, T : Encodable {
+        return 0 as! T
+    }
+    
+    func readAll<T>(at path: String) async throws -> [T] where T : Decodable, T : Encodable {
+        return [0] as! [T]
+    }
+}
