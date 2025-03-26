@@ -41,9 +41,12 @@ class ProfileTableViewDataSource: NSObject {
     
     var actionSubscriptions = [IndexPath: AnyCancellable]()
     
+    let purchaseManager: PurchaseManager
+    
     // MARK: - Initializer
-    init(tableView: UITableView) {
+    init(tableView: UITableView, purchaseManager: PurchaseManager) {
         self.tableView = tableView
+        self.purchaseManager = purchaseManager
         super.init()
         self.tableView.dataSource = makeDataSource()
         self.tableView.delegate = self
@@ -56,7 +59,7 @@ class ProfileTableViewDataSource: NSObject {
             switch itemIdentifier {
             case .profileInfo(let user):
                 let cell = tableView.dequeueReusableCell(withIdentifier: ProfileInfoTableViewCell.cellID, for: indexPath) as? ProfileInfoTableViewCell
-                cell?.configure(with: user)
+                cell?.configure(with: user, purchaseManager: self.purchaseManager)
                 if self.publicProfile {
                     cell?.infoView.setFollowButton(to: .loading)
                 }

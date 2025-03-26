@@ -34,6 +34,7 @@ class MyProfileCoordinator: NSObject, Coordinator {
         navigationController.delegate = self
         let vc = MyProfileViewController()
         vc.coordinator = self
+        vc.purchaseManager = subscriptionManager
         navigationController.pushViewController(vc, animated: true)
     }
     

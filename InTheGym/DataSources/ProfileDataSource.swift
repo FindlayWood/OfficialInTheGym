@@ -33,9 +33,12 @@ class ProfileDataSource: NSObject {
     
     var actionSubscriptions = [IndexPath: AnyCancellable]()
     
+    let purchaseManager: PurchaseManager
+    
     // MARK: - Initializer
-    init(collectionView: UICollectionView) {
+    init(collectionView: UICollectionView, purchaseManager: PurchaseManager) {
         self.collectionView = collectionView
+        self.purchaseManager = purchaseManager
         super.init()
         self.collectionView.dataSource = makeDataSource()
         self.collectionView.delegate = self
@@ -52,7 +55,7 @@ class ProfileDataSource: NSObject {
                 return cell
             case .profileInfo(let model):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileInfoCollectionViewCell.reuseID, for: indexPath) as! ProfileInfoCollectionViewCell
-                cell.configure(with: model)
+                cell.configure(with: model, purchaseManager: self.purchaseManager)
                 if self.publicProfile {
                     cell.infoView.setFollowButton(to: .loading)
                 }

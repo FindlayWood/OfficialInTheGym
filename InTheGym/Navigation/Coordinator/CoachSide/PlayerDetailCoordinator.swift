@@ -23,6 +23,7 @@ class PlayerDetailCoordinator: NSObject, Coordinator {
     
     func start() {
         let vc = PlayerDetailViewController()
+        vc.purchaseManager = subscriptionManager
         vc.viewModel.user = player
         vc.coordinator = self
         vc.hidesBottomBarWhenPushed = true
