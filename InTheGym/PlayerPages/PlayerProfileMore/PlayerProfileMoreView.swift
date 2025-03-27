@@ -43,15 +43,15 @@ struct PlayerProfileMoreView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                 }
-                HStack {
-                    Image(uiImage: UserDefaults.currentUser.accountType == .coach ? UIImage(named: "coach_icon")! : UIImage(named: "player_icon")!)
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .cornerRadius(4)
-                    Text(UserDefaults.currentUser.accountType == .coach ? "Coach Account" : "Player Account")
-                        .fontWeight(.semibold)
-                        .foregroundColor(.primary)
-                }
+//                HStack {
+//                    Image(uiImage: UserDefaults.currentUser.accountType == .coach ? UIImage(named: "coach_icon")! : UIImage(named: "player_icon")!)
+//                        .resizable()
+//                        .frame(width: 30, height: 30)
+//                        .cornerRadius(4)
+//                    Text(UserDefaults.currentUser.accountType == .coach ? "Coach Account" : "Player Account")
+//                        .fontWeight(.semibold)
+//                        .foregroundColor(.primary)
+//                }
                 HStack {
                     Image(uiImage: UIImage(named: "hammer_icon")!)
                         .resizable()
@@ -93,53 +93,53 @@ struct PlayerProfileMoreView: View {
             } header: {
                 Text("Subscription")
             }
-            Section {
-                Button {
-                    viewModel.action(.measurements)
-                } label: {
-                    HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "ruler_icon")!)
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .cornerRadius(4)
-                        Text("My Measurments")
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                    }
-                }
-            } header: {
-                Text("My Measurements")
-            }
-            Section {
-                Button {
-                    viewModel.action(.myCoaches)
-                } label: {
-                    HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "coach_icon")!)
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .cornerRadius(4)
-                        Text("My Coaches")
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                    }
-                }
-                Button {
-                    viewModel.action(.requests)
-                } label: {
-                    HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "trainer_icon")!)
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .cornerRadius(4)
-                        Text("Requests")
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                    }
-                }
-            } header: {
-                Text("Coaches")
-            }
+//            Section {
+//                Button {
+//                    viewModel.action(.measurements)
+//                } label: {
+//                    HStack(spacing: 16) {
+//                        Image(uiImage: UIImage(named: "ruler_icon")!)
+//                            .resizable()
+//                            .frame(width: 30, height: 30)
+//                            .cornerRadius(4)
+//                        Text("My Measurments")
+//                            .fontWeight(.bold)
+//                            .foregroundColor(.primary)
+//                    }
+//                }
+//            } header: {
+//                Text("My Measurements")
+//            }
+//            Section {
+//                Button {
+//                    viewModel.action(.myCoaches)
+//                } label: {
+//                    HStack(spacing: 16) {
+//                        Image(uiImage: UIImage(named: "coach_icon")!)
+//                            .resizable()
+//                            .frame(width: 30, height: 30)
+//                            .cornerRadius(4)
+//                        Text("My Coaches")
+//                            .fontWeight(.bold)
+//                            .foregroundColor(.primary)
+//                    }
+//                }
+//                Button {
+//                    viewModel.action(.requests)
+//                } label: {
+//                    HStack(spacing: 16) {
+//                        Image(uiImage: UIImage(named: "trainer_icon")!)
+//                            .resizable()
+//                            .frame(width: 30, height: 30)
+//                            .cornerRadius(4)
+//                        Text("Requests")
+//                            .fontWeight(.bold)
+//                            .foregroundColor(.primary)
+//                    }
+//                }
+//            } header: {
+//                Text("Coaches")
+//            }
             
             Section {
                 Button {
