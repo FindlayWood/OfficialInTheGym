@@ -20,11 +20,11 @@ class PerformanceIntroViewController: UIViewController {
     var matchTrackerView = PerformanceIntroSubview(option: .matchTracker)
     var practiceTrackerView = PerformanceIntroSubview(option: .practiceTracker)
     var workloadView = PerformanceIntroSubview(option: .workload)
-    var wellnessView = PerformanceIntroSubview(option: .wellness)
-    var trainingStatusView = PerformanceIntroSubview(option: .trainingStatus)
+//    var wellnessView = PerformanceIntroSubview(option: .wellness)
+//    var trainingStatusView = PerformanceIntroSubview(option: .trainingStatus)
     var verticalJumpView = PerformanceIntroSubview(option: .verticalJump)
-    var cmjView = PerformanceIntroSubview(option: .cmj)
-    var injuryView = PerformanceIntroSubview(option: .injury)
+//    var cmjView = PerformanceIntroSubview(option: .cmj)
+//    var injuryView = PerformanceIntroSubview(option: .injury)
     
     // MARK: - Properties
     var childContentView: PerformanceCenterView!
@@ -54,11 +54,11 @@ class PerformanceIntroViewController: UIViewController {
     // MARK: - Targets
     func initTargets() {
         workloadView.actionButton.addTarget(self, action: #selector(workloadButtonAction(_:)), for: .touchUpInside)
-        wellnessView.actionButton.addTarget(self, action: #selector(wellnessButtonAction(_:)), for: .touchUpInside)
-        trainingStatusView.actionButton.addTarget(self, action: #selector(trainingStatusButtonAction(_:)), for: .touchUpInside)
+//        wellnessView.actionButton.addTarget(self, action: #selector(wellnessButtonAction(_:)), for: .touchUpInside)
+//        trainingStatusView.actionButton.addTarget(self, action: #selector(trainingStatusButtonAction(_:)), for: .touchUpInside)
         verticalJumpView.actionButton.addTarget(self, action: #selector(verticalJumpButtonAction(_:)), for: .touchUpInside)
-        cmjView.actionButton.addTarget(self, action: #selector(cmjButtonAction(_:)), for: .touchUpInside)
-        injuryView.actionButton.addTarget(self, action: #selector(injuryTrackerButtonAction(_:)), for: .touchUpInside)
+//        cmjView.actionButton.addTarget(self, action: #selector(cmjButtonAction(_:)), for: .touchUpInside)
+//        injuryView.actionButton.addTarget(self, action: #selector(injuryTrackerButtonAction(_:)), for: .touchUpInside)
     }
     // MARK: - Swift UI Child View
     func addChildView() {
@@ -81,11 +81,11 @@ class PerformanceIntroViewController: UIViewController {
         addToStack(mainView)
         addToStack(matchTrackerView)
         addToStack(workloadView)
-        addToStack(wellnessView)
-        addToStack(trainingStatusView)
+//        addToStack(wellnessView)
+//        addToStack(trainingStatusView)
         addToStack(verticalJumpView)
-        addToStack(cmjView)
-        addToStack(injuryView)
+//        addToStack(cmjView)
+//        addToStack(injuryView)
     }
     func addToStack(_ viewController: UIView) {
         display.stack.addArrangedSubview(viewController)
@@ -106,16 +106,16 @@ private extension PerformanceIntroViewController {
             coordinator?.showMatchTracker()
         case .workload:
             coordinator?.showWorkload()
-        case .wellness:
-            coordinator?.showWellness()
-        case .trainingStatus:
-            coordinator?.showTrainingStatus()
+//        case .wellness:
+//            coordinator?.showWellness()
+//        case .trainingStatus:
+//            coordinator?.showTrainingStatus()
         case .verticalJump:
             coordinator?.showVerticalJump()
-        case .cmj:
-            coordinator?.showCMJ()
-        case .injury:
-            coordinator?.showInjuryTracker()
+//        case .cmj:
+//            coordinator?.showCMJ()
+//        case .injury:
+//            coordinator?.showInjuryTracker()
         case .journal:
             coordinator?.showJournalHome()
         case .practiceTracker:

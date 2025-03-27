@@ -60,15 +60,18 @@ extension MyProfileCoordinator {
         navigationController.present(vc, animated: true)
     }
     func showMoreInfo() {
-        if UserDefaults.currentUser.accountType == .coach {
-            let child = CoachProfileMoreCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
-            childCoordinators.append(child)
-            child.start()
-        } else {
-            let child = PlayerProfileMoreCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
-            childCoordinators.append(child)
-            child.start()
-        }
+        let child = PlayerProfileMoreCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
+        childCoordinators.append(child)
+        child.start()
+//        if UserDefaults.currentUser.accountType == .coach {
+//            let child = CoachProfileMoreCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
+//            childCoordinators.append(child)
+//            child.start()
+//        } else {
+//            let child = PlayerProfileMoreCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
+//            childCoordinators.append(child)
+//            child.start()
+//        }
     }
     func showWorkout(_ model: WorkoutModel) {
         let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: model, subscriptionManager: subscriptionManager)
