@@ -85,10 +85,10 @@ private extension ProfileInfoCollectionViewCell {
 
 // MARK: - Public Configuration
 extension ProfileInfoCollectionViewCell {
-    func configure(with user: Users) {
+    func configure(with user: Users, purchaseManager: PurchaseManager) {
 //        infoView.configure(with: user)
         viewModel.user = user
-        infoView.configure(with: user)
+        infoView.configure(with: user, purchaseManager: purchaseManager)
         initViewModel()
     }
 }

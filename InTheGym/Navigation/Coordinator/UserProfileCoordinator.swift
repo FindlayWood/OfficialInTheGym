@@ -24,6 +24,7 @@ class UserProfileCoordinator: NSObject, Coordinator {
     func start() {
         let vc = PublicTimelineViewController()
         vc.coordinator = self
+        vc.purchaseManager = subscriptionManager
         vc.viewModel.user = userToShow
         navigationController.pushViewController(vc, animated: true)
     }

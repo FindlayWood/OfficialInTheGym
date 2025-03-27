@@ -17,6 +17,7 @@ class PlayerDetailViewController: UIViewController {
     var display = PlayerDetailView()
     var viewModel = PlayerDetailViewModel()
     private var subscriptions = Set<AnyCancellable>()
+    var purchaseManager: PurchaseManager!
     // MARK: - Subviews
     var infoVC = PlayerInfoDetailSubviewViewController()
     var performanceVC = PlayerPerformanceSubviewViewController()
@@ -45,6 +46,7 @@ class PlayerDetailViewController: UIViewController {
     // MARK: - Child VC
     func addSubViews() {
         infoVC.viewModel.user = viewModel.user
+        infoVC.purchaseManager = purchaseManager
         addToStack(infoVC)
         addToStack(performanceVC)
         addToStack(buttonVC)

@@ -20,6 +20,7 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
     var viewModel = PublicTimelineViewModel()
     
     var dataSource: ProfileTableViewDataSource!
+    var purchaseManager: PurchaseManager!
     
     private var subscriptions = Set<AnyCancellable>()
     
@@ -54,7 +55,7 @@ class PublicTimelineViewController: UIViewController, CustomAnimatingClipFromVC 
     
     // MARK: - Data Source
     func initDataSource() {
-        dataSource = .init(tableView: display.tableview)
+        dataSource = .init(tableView: display.tableview, purchaseManager: purchaseManager)
         dataSource.updatePublicUserInfo(with: viewModel.user)
         
         dataSource.profileInfoAction

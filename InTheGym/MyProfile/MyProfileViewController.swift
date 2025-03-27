@@ -20,6 +20,7 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
     var viewModel = MyProfileViewModel()
     
     var dataSource: ProfileTableViewDataSource!
+    var purchaseManager: PurchaseManager!
     
     var subscriptions = Set<AnyCancellable>()
     
@@ -54,7 +55,7 @@ class MyProfileViewController: UIViewController, CustomAnimatingClipFromVC {
     
     // MARK: - Data Source
     func initDataSource() {
-        dataSource = .init(tableView: display.tableview)
+        dataSource = .init(tableView: display.tableview, purchaseManager: purchaseManager)
         dataSource.updateUserInfo(with: UserDefaults.currentUser)
         
         dataSource.postSelected

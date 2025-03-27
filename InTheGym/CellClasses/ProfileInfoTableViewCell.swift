@@ -143,9 +143,9 @@ private extension ProfileInfoTableViewCell {
 }
 // MARK: - Public Configuration
 extension ProfileInfoTableViewCell {
-    func configure(with user: Users) {
+    func configure(with user: Users, purchaseManager: PurchaseManager) {
         viewModel.user = user
-        infoView.configure(with: user)
+        infoView.configure(with: user, purchaseManager: purchaseManager)
         initViewModel()
     }
 }

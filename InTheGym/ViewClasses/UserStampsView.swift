@@ -81,11 +81,11 @@ private extension UserStampsView {
 }
 // MARK: - Public Config
 extension UserStampsView {
-    public func configure(with user: Users) {
+    public func configure(with user: Users, purchaseManager: PurchaseManager) {
         verifiedImageView.isHidden = !user.verifiedAccount
         eliteImageView.isHidden = !user.eliteAccount
         
-        if user == UserDefaults.currentUser && SubscriptionManager.shared.isSubscribed {
+        if user == UserDefaults.currentUser && purchaseManager.hasUnlockedPro {
             premiumImageView.isHidden = false
         } else {
             premiumImageView.isHidden = true
