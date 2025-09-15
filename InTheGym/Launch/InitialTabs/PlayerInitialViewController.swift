@@ -54,7 +54,12 @@ class PlayerInitialViewController: UITabBarController {
         let myProfileCoordinator = MyProfileCoordinator(navigationController: myProfileNavigationController, subscriptionManager: subscriptionManager)
         myProfileCoordinator.start()
         
-        viewControllers = [timelineNavigationController, discoverNavigationController, workoutsNavigationController, myProfileNavigationController]
+        // MARK: - MyDay
+        let myDayKit = MyDayKitComposition()
+        let hostedViewController = myDayKit.compose()
+        hostedViewController.tabBarItem = UITabBarItem(title: "EXERCISES", image: UIImage(systemName: "list.bullet"), tag: 5)
+        
+        viewControllers = [timelineNavigationController, discoverNavigationController, workoutsNavigationController, myProfileNavigationController, hostedViewController]
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

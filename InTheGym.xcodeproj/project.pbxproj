@@ -895,6 +895,9 @@
 		9FF8B30429283D8A00C47313 /* WorkoutListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B30329283D8A00C47313 /* WorkoutListView.swift */; };
 		9FF8B3062928422A00C47313 /* WorkoutFiguresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */; };
 		9FF8B3082928459E00C47313 /* WorkoutClipThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */; };
+		F0F608342E42A5350015F260 /* MyDayKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F608332E42A5350015F260 /* MyDayKitComposition.swift */; };
+		F0F608362E42A5A70015F260 /* MyDayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0F608352E42A5A70015F260 /* MyDayKit.framework */; };
+		F0F608372E42A5A70015F260 /* MyDayKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0F608352E42A5A70015F260 /* MyDayKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -914,6 +917,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				F0F608372E42A5A70015F260 /* MyDayKit.framework in Embed Frameworks */,
 				746DA0D52C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Embed Frameworks */,
 				746DA0D32C090AD10094EA3B /* ITGWorkoutKit.framework in Embed Frameworks */,
 			);
@@ -1795,6 +1799,8 @@
 		9FF8B30329283D8A00C47313 /* WorkoutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListView.swift; sourceTree = "<group>"; };
 		9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFiguresView.swift; sourceTree = "<group>"; };
 		9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutClipThumbnailView.swift; sourceTree = "<group>"; };
+		F0F608332E42A5350015F260 /* MyDayKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitComposition.swift; sourceTree = "<group>"; };
+		F0F608352E42A5A70015F260 /* MyDayKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MyDayKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1818,6 +1824,7 @@
 				74A7EB6D289EB145007C2ECD /* Algorithms in Frameworks */,
 				74EB1E49289EB2B200C4502A /* Algorithms in Frameworks */,
 				74330441289E962B00F2569A /* FirebaseAuth in Frameworks */,
+				F0F608362E42A5A70015F260 /* MyDayKit.framework in Frameworks */,
 				74330443289E962B00F2569A /* FirebaseDatabase in Frameworks */,
 				74330447289E962B00F2569A /* FirebaseFirestore in Frameworks */,
 				74F664E128DF5A930086BA4E /* AuthenticationServices.framework in Frameworks */,
@@ -4720,6 +4727,7 @@
 				9FB4D1DB29E752AB0019CA57 /* AccountCreationComposition.swift */,
 				9F2171022A016F4100443008 /* WorkoutKitComposition.swift */,
 				9F72F93F2A114B0800BF040C /* ClubKitComposition.swift */,
+				F0F608332E42A5350015F260 /* MyDayKitComposition.swift */,
 			);
 			path = Composition;
 			sourceTree = "<group>";
@@ -4749,6 +4757,7 @@
 		D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F0F608352E42A5A70015F260 /* MyDayKit.framework */,
 				746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */,
 				746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */,
 				74F664E028DF5A930086BA4E /* AuthenticationServices.framework */,
@@ -5400,6 +5409,7 @@
 				74F2CCDA26E1291B00D7AD79 /* ExerciseSelectionCell.swift in Sources */,
 				7416CCCB265467DE0043B1C2 /* RepsTopCollectionAdapter.swift in Sources */,
 				743330E227930DBE005A0C45 /* SavedWorkoutKeyModel.swift in Sources */,
+				F0F608342E42A5350015F260 /* MyDayKitComposition.swift in Sources */,
 				742FCD202845658B007ED1C6 /* MyCoachesViewModel.swift in Sources */,
 				748FFA2E285397D0001DDE69 /* OptimalWorkloadRatioView.swift in Sources */,
 				74EE4EDB28009CFE00051451 /* UIProfileInfoView.swift in Sources */,
