@@ -52,8 +52,8 @@ struct ExerciseCompletions: Identifiable, Codable {
     let dateCompleted: Date
 }
 
-struct MyDayFullDayModel: Identifiable, Codable {
-    let id: String
+public struct MyDayFullDayModel: Identifiable, Codable {
+    public let id: String
     let date: Date
     var exercises: [MyDayExerciseModel]
 }

@@ -37,6 +37,7 @@ struct MyDayHomeScreen: View {
     
     var addButtonAction: (() -> ())?
     var addSpecificExercise: ((MyDayNewExerciseManager) -> ())?
+    var recordClip: (() -> ())?
     
     var body: some View {
         VStack {
@@ -157,6 +158,9 @@ struct MyDayHomeScreen: View {
                                     addAction: {
                                         let newExercise = MyDayNewExerciseManager(exercise: exercise.exercise)
                                         addSpecificExercise?(newExercise)
+                                    },
+                                    addClipButtonAction: {
+                                        recordClip?()
                                     }
                                 )
                                 .listRowInsets(EdgeInsets())
@@ -176,7 +180,7 @@ struct MyDayHomeScreen: View {
 }
 
 #Preview {
-    MyDayHomeScreen(dayManager: MyDayManager())
+    MyDayHomeScreen(dayManager: MyDayManager(saver: PreviewSaver(), loader: PreviewLoader()))
 }
 
 import SwiftUI
@@ -241,6 +245,7 @@ struct TakeView: View {
                         .resizable()
                         .frame(width: 25, height: 25)
                 }
+                .buttonStyle(.borderless)
                 .disabled(disabled)
                 .opacity(disabled ? 0.3 : 1)
             }
@@ -275,6 +280,7 @@ struct TakeView: View {
                     Text("Add Clip")
                     Image(systemName: "plus.circle.fill")
                 }
+                .buttonStyle(.plain)
             }
         }
         .padding()

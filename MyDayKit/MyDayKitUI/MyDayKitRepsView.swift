@@ -67,5 +67,5 @@ struct MyDayKitRepsView: View {
 }
 
 #Preview {
-    MyDayKitRepsView(dayManager: MyDayManager(), exercise: MyDayNewExerciseManager(exercise: .pressUps))
+    MyDayKitRepsView(dayManager: MyDayManager(saver: PreviewSaver(), loader: PreviewLoader()), exercise: MyDayNewExerciseManager(exercise: .pressUps))
 }

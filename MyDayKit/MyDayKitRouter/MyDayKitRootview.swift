@@ -26,6 +26,9 @@ public struct MyDayKitRootview: View {
                 }) { sheet in
                     router.sheet(for: sheet)
                 }
+                .fullScreenCover(item: $router.fullScreenCover) { cover in
+                    router.fullScreenCover(for: cover)
+                }
         }
     }
 }
@@ -34,7 +37,7 @@ public struct MyDayKitRootview: View {
     MyDayKitRootview(
         router: MyDayKitRouter(
             exerciseManager: ExerciseManager(loader: PreviewExerciseLoader()),
-            dayManager: MyDayManager()
+            dayManager: MyDayManager(saver: PreviewSaver(), loader: PreviewLoader())
         )
     )
 }

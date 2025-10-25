@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		F00CD1722E4D2DBB0051042A /* MyDayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CD1712E4D2DBB0051042A /* MyDayManager.swift */; };
+		F01E0E932E78A9D6008C1547 /* RecordClipScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0E922E78A9D6008C1547 /* RecordClipScreen.swift */; };
+		F01E0E972E7A01E8008C1547 /* ClipPlaybackScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0E962E7A01E8008C1547 /* ClipPlaybackScreen.swift */; };
+		F01E0E9A2E7A110A008C1547 /* LoopingVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0E992E7A110A008C1547 /* LoopingVideoPlayer.swift */; };
+		F01E0E9C2E7A1158008C1547 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0E9B2E7A1158008C1547 /* CameraPreview.swift */; };
+		F01E0E9F2E7A11B7008C1547 /* VideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0E9E2E7A11B7008C1547 /* VideoRecorder.swift */; };
+		F01E0EA12E7A1242008C1547 /* RecordingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0EA02E7A1242008C1547 /* RecordingOverlay.swift */; };
+		F01E0EA32E7A15FC008C1547 /* PlaybackOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */; };
 		F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06004842E37E17F000B279F /* MyDayExerciseListView.swift */; };
 		F0B38C622E5B9C570096234C /* MyDayUnitsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */; };
 		F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */; };
@@ -18,6 +25,9 @@
 		F0D6C2422E358B0400FEFEF1 /* MyDayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */; };
 		F0D6C24E2E358C0900FEFEF1 /* MyDayHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */; };
 		F0D6C2552E36C12A00FEFEF1 /* MyDayExerciseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C2542E36C12A00FEFEF1 /* MyDayExerciseModel.swift */; };
+		F0F4B2AE2E855707007E2469 /* MyDayUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F4B2AD2E855707007E2469 /* MyDayUploader.swift */; };
+		F0F4B2B22E85620B007E2469 /* MyDaySaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F4B2B12E85620B007E2469 /* MyDaySaver.swift */; };
+		F0F4B2B62E85622E007E2469 /* MyDayLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F4B2B52E85622E007E2469 /* MyDayLoader.swift */; };
 		F0F608282E42A1B50015F260 /* ExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F608272E42A1B50015F260 /* ExerciseLoader.swift */; };
 		F0F6082E2E42A1F50015F260 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6082D2E42A1F50015F260 /* Exercise.swift */; };
 		F0F608302E42A20B0015F260 /* ExerciseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6082F2E42A20B0015F260 /* ExerciseCategory.swift */; };
@@ -37,6 +47,13 @@
 
 /* Begin PBXFileReference section */
 		F00CD1712E4D2DBB0051042A /* MyDayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayManager.swift; sourceTree = "<group>"; };
+		F01E0E922E78A9D6008C1547 /* RecordClipScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordClipScreen.swift; sourceTree = "<group>"; };
+		F01E0E962E7A01E8008C1547 /* ClipPlaybackScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipPlaybackScreen.swift; sourceTree = "<group>"; };
+		F01E0E992E7A110A008C1547 /* LoopingVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoPlayer.swift; sourceTree = "<group>"; };
+		F01E0E9B2E7A1158008C1547 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		F01E0E9E2E7A11B7008C1547 /* VideoRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRecorder.swift; sourceTree = "<group>"; };
+		F01E0EA02E7A1242008C1547 /* RecordingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingOverlay.swift; sourceTree = "<group>"; };
+		F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackOverlay.swift; sourceTree = "<group>"; };
 		F06004842E37E17F000B279F /* MyDayExerciseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExerciseListView.swift; sourceTree = "<group>"; };
 		F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayUnitsHomeView.swift; sourceTree = "<group>"; };
 		F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWeightSelectorView.swift; sourceTree = "<group>"; };
@@ -48,6 +65,9 @@
 		F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MyDayKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0D6C2412E358B0400FEFEF1 /* MyDayKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyDayKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0D6C2542E36C12A00FEFEF1 /* MyDayExerciseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExerciseModel.swift; sourceTree = "<group>"; };
+		F0F4B2AD2E855707007E2469 /* MyDayUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayUploader.swift; sourceTree = "<group>"; };
+		F0F4B2B12E85620B007E2469 /* MyDaySaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDaySaver.swift; sourceTree = "<group>"; };
+		F0F4B2B52E85622E007E2469 /* MyDayLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayLoader.swift; sourceTree = "<group>"; };
 		F0F608272E42A1B50015F260 /* ExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLoader.swift; sourceTree = "<group>"; };
 		F0F6082D2E42A1F50015F260 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
 		F0F6082F2E42A20B0015F260 /* ExerciseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCategory.swift; sourceTree = "<group>"; };
@@ -87,9 +107,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F01E0E902E78A9BA008C1547 /* Clips */ = {
+			isa = PBXGroup;
+			children = (
+				F01E0E9D2E7A11A9008C1547 /* Managers */,
+				F01E0E982E7A10F8008C1547 /* UIViewRepresentable */,
+				F01E0E912E78A9C7008C1547 /* UI */,
+			);
+			path = Clips;
+			sourceTree = "<group>";
+		};
+		F01E0E912E78A9C7008C1547 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				F01E0E922E78A9D6008C1547 /* RecordClipScreen.swift */,
+				F01E0E962E7A01E8008C1547 /* ClipPlaybackScreen.swift */,
+				F01E0EA02E7A1242008C1547 /* RecordingOverlay.swift */,
+				F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		F01E0E982E7A10F8008C1547 /* UIViewRepresentable */ = {
+			isa = PBXGroup;
+			children = (
+				F01E0E992E7A110A008C1547 /* LoopingVideoPlayer.swift */,
+				F01E0E9B2E7A1158008C1547 /* CameraPreview.swift */,
+			);
+			path = UIViewRepresentable;
+			sourceTree = "<group>";
+		};
+		F01E0E9D2E7A11A9008C1547 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				F01E0E9E2E7A11B7008C1547 /* VideoRecorder.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		F0D6C20A2E3574EF00FEFEF1 = {
 			isa = PBXGroup;
 			children = (
+				F01E0E902E78A9BA008C1547 /* Clips */,
 				F0F6083F2E4405990015F260 /* MyDayKitRouter */,
 				F0D6C22F2E3588EF00FEFEF1 /* MyDayKitUI */,
 				F0D6C22E2E35754E00FEFEF1 /* MyDayKit */,
@@ -111,6 +170,7 @@
 		F0D6C22E2E35754E00FEFEF1 /* MyDayKit */ = {
 			isa = PBXGroup;
 			children = (
+				F0F4B2AB2E8556CA007E2469 /* Uploader */,
 				F0F608242E42A1A10015F260 /* ExerciseLoader */,
 				F0D6C2502E36B7AA00FEFEF1 /* Models */,
 			);
@@ -141,6 +201,16 @@
 				F0B38C792E5F94D00096234C /* MyDayNewExerciseManager.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		F0F4B2AB2E8556CA007E2469 /* Uploader */ = {
+			isa = PBXGroup;
+			children = (
+				F0F4B2AD2E855707007E2469 /* MyDayUploader.swift */,
+				F0F4B2B12E85620B007E2469 /* MyDaySaver.swift */,
+				F0F4B2B52E85622E007E2469 /* MyDayLoader.swift */,
+			);
+			path = Uploader;
 			sourceTree = "<group>";
 		};
 		F0F608242E42A1A10015F260 /* ExerciseLoader */ = {
@@ -279,6 +349,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F01E0EA32E7A15FC008C1547 /* PlaybackOverlay.swift in Sources */,
 				F0D6C2552E36C12A00FEFEF1 /* MyDayExerciseModel.swift in Sources */,
 				F0B38C762E5F93600096234C /* WeightUnit.swift in Sources */,
 				F0F608302E42A20B0015F260 /* ExerciseCategory.swift in Sources */,
@@ -287,12 +358,21 @@
 				F0C102C72E4A65AB0062C8A2 /* MyDayKitRootview.swift in Sources */,
 				F0B38C7A2E5F94D00096234C /* MyDayNewExerciseManager.swift in Sources */,
 				F00CD1722E4D2DBB0051042A /* MyDayManager.swift in Sources */,
+				F01E0E9C2E7A1158008C1547 /* CameraPreview.swift in Sources */,
+				F01E0E9A2E7A110A008C1547 /* LoopingVideoPlayer.swift in Sources */,
 				F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */,
+				F01E0EA12E7A1242008C1547 /* RecordingOverlay.swift in Sources */,
+				F0F4B2B62E85622E007E2469 /* MyDayLoader.swift in Sources */,
+				F01E0E9F2E7A11B7008C1547 /* VideoRecorder.swift in Sources */,
+				F0F4B2AE2E855707007E2469 /* MyDayUploader.swift in Sources */,
+				F01E0E932E78A9D6008C1547 /* RecordClipScreen.swift in Sources */,
 				F0B38C622E5B9C570096234C /* MyDayUnitsHomeView.swift in Sources */,
 				F0F6082E2E42A1F50015F260 /* Exercise.swift in Sources */,
 				F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */,
+				F01E0E972E7A01E8008C1547 /* ClipPlaybackScreen.swift in Sources */,
 				F0D6C24E2E358C0900FEFEF1 /* MyDayHomeScreen.swift in Sources */,
 				F0F6083E2E44034E0015F260 /* MyDayContentView.swift in Sources */,
+				F0F4B2B22E85620B007E2469 /* MyDaySaver.swift in Sources */,
 				F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

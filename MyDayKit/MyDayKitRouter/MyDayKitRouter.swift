@@ -27,10 +27,21 @@ enum MyDaySheets: Identifiable {
     case add
 }
 
+enum MyDayFullScreenCover: Identifiable {
+    var id: String {
+        switch self {
+        case .recordClip:
+            return "recordClip"
+        }
+    }
+    case recordClip
+}
+
 public class MyDayKitRouter: ObservableObject {
     
     @Published var path = NavigationPath()
     @Published var presentedSheet: MyDaySheets?
+    @Published var fullScreenCover: MyDayFullScreenCover?
     
     let exerciseManager: ExerciseManager
     let dayManager: MyDayManager
@@ -50,6 +61,9 @@ public class MyDayKitRouter: ObservableObject {
                 },
                 addSpecificExercise: { [weak self] exercise in
                     self?.navigate(to: .reps(exercise))
+                },
+                recordClip: { [weak self] in
+                    self?.coverFullScreen(with: .recordClip)
                 }
             )
         case .add:
@@ -93,6 +107,16 @@ public class MyDayKitRouter: ObservableObject {
             MyDayExerciseListView(exerciseManager: exerciseManager)
         }
     }
+    @ViewBuilder func fullScreenCover(for cover: MyDayFullScreenCover) -> some View {
+        switch cover {
+        case .recordClip:
+            RecordClipScreen(
+                dismiss: { [weak self] in
+                    self?.fullScreenCover = nil
+                }
+            )
+        }
+    }
     
     func optionSelected(_ option: ExerciseOptions, exercise: MyDayNewExerciseManager) {
         switch option {
@@ -115,6 +139,10 @@ public class MyDayKitRouter: ObservableObject {
     
     func presentSheet(_ sheet: MyDaySheets) {
         presentedSheet = sheet
+    }
+    
+    func coverFullScreen(with cover: MyDayFullScreenCover) {
+        fullScreenCover = cover
     }
     
     func popBack() {
