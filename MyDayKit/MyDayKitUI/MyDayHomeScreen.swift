@@ -265,6 +265,10 @@ struct TakeView: View {
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
                                     .shadow(radius: 2)
                             }
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.black, lineWidth: 1)
+                            }
                             
                             
                         }

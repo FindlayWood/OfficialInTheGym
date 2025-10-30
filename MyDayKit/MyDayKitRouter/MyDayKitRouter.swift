@@ -14,6 +14,7 @@ enum MyDayRoutes: Hashable {
     case reps(MyDayNewExerciseManager)
     case units(MyDayNewExerciseManager)
     case weight(MyDayNewExerciseManager)
+    case distance(MyDayNewExerciseManager)
 }
 
 enum MyDaySheets: Identifiable {
@@ -98,6 +99,13 @@ public class MyDayKitRouter: ObservableObject {
                 continueAction: { [weak self] in
                     self?.popBack()
             })
+        case .distance(let exercise):
+            MyDayDistanceSelectorView(
+                newExercise: exercise,
+                continueAction: { [weak self] in
+                    self?.popBack()
+                }
+            )
         }
     }
     
@@ -123,7 +131,7 @@ public class MyDayKitRouter: ObservableObject {
         case .weight:
             navigate(to: .weight(exercise))
         case .distance:
-            navigate(to: .weight(exercise))
+            navigate(to: .distance(exercise))
         case .time:
             navigate(to: .weight(exercise))
         case .tempo:
