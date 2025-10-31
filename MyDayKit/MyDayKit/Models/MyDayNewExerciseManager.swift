@@ -73,6 +73,23 @@ class MyDayNewExerciseManager: ObservableObject, Hashable {
         self.note = note
     }
     
+    func clear(_ option: ExerciseOptions) {
+        switch option {
+        case .weight:
+            weight = nil
+            weightUnits = nil
+        case .distance:
+            distance = nil
+            distanceUnits = nil
+        case .time:
+            time = nil
+        case .tempo:
+            tempo = nil
+        case .note:
+            note = nil
+        }
+    }
+    
     func getCompletion() -> ExerciseCompletions? {
         guard let reps else { return nil }
         

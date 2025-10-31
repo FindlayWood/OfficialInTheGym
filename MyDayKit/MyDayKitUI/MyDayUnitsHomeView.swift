@@ -39,7 +39,7 @@ struct MyDayUnitsHomeView: View {
                                         .padding(.top)
                                     
                                     Button {
-                                        
+                                        newExercise.clear(option)
                                     } label: {
                                         Text("Clear")
                                     }
