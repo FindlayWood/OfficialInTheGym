@@ -22,6 +22,7 @@
 		F0B38C7A2E5F94D00096234C /* MyDayNewExerciseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C792E5F94D00096234C /* MyDayNewExerciseManager.swift */; };
 		F0BE5BED2EB402DC009677F5 /* MyDayDistanceSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5BEC2EB402DC009677F5 /* MyDayDistanceSelectorView.swift */; };
 		F0BE5BEF2EB40657009677F5 /* MyDayTimeSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5BEE2EB40657009677F5 /* MyDayTimeSelectorView.swift */; };
+		F0BE5C122EB553B6009677F5 /* MyDayTempoSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C112EB553B6009677F5 /* MyDayTempoSelectorView.swift */; };
 		F0C102C72E4A65AB0062C8A2 /* MyDayKitRootview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */; };
 		F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */; };
 		F0D6C2422E358B0400FEFEF1 /* MyDayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */; };
@@ -63,6 +64,7 @@
 		F0B38C792E5F94D00096234C /* MyDayNewExerciseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayNewExerciseManager.swift; sourceTree = "<group>"; };
 		F0BE5BEC2EB402DC009677F5 /* MyDayDistanceSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDistanceSelectorView.swift; sourceTree = "<group>"; };
 		F0BE5BEE2EB40657009677F5 /* MyDayTimeSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimeSelectorView.swift; sourceTree = "<group>"; };
+		F0BE5C112EB553B6009677F5 /* MyDayTempoSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTempoSelectorView.swift; sourceTree = "<group>"; };
 		F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRootview.swift; sourceTree = "<group>"; };
 		F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRepsView.swift; sourceTree = "<group>"; };
 		F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayHomeScreen.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */,
 				F0BE5BEC2EB402DC009677F5 /* MyDayDistanceSelectorView.swift */,
 				F0BE5BEE2EB40657009677F5 /* MyDayTimeSelectorView.swift */,
+				F0BE5C112EB553B6009677F5 /* MyDayTempoSelectorView.swift */,
 			);
 			path = MyDayKitUI;
 			sourceTree = "<group>";
@@ -371,6 +374,7 @@
 				F01E0EA12E7A1242008C1547 /* RecordingOverlay.swift in Sources */,
 				F0F4B2B62E85622E007E2469 /* MyDayLoader.swift in Sources */,
 				F01E0E9F2E7A11B7008C1547 /* VideoRecorder.swift in Sources */,
+				F0BE5C122EB553B6009677F5 /* MyDayTempoSelectorView.swift in Sources */,
 				F0F4B2AE2E855707007E2469 /* MyDayUploader.swift in Sources */,
 				F0BE5BED2EB402DC009677F5 /* MyDayDistanceSelectorView.swift in Sources */,
 				F01E0E932E78A9D6008C1547 /* RecordClipScreen.swift in Sources */,
