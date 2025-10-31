@@ -15,11 +15,11 @@ enum DistanceUnit: String, CaseIterable {
 
 struct MyDayDistanceSelectorView: View {
     
-    @State private var selectedUnit: DistanceUnit? = nil
-    @State private var value: Int = 0
+    @State private var selectedUnit: DistanceUnit?
+    @State private var value: Int
     
     private var isValidSelection: Bool {
-        guard let selectedUnit else { return false }
+        guard selectedUnit != nil else { return false }
         // All distance units require a numeric value
         return value > 0
     }
@@ -33,6 +33,13 @@ struct MyDayDistanceSelectorView: View {
     let newExercise: MyDayNewExerciseManager
     
     var continueAction: (() -> ())?
+    
+    init(newExercise: MyDayNewExerciseManager, continueAction: (() -> ())? = nil) {
+        self.newExercise = newExercise
+        self.continueAction = continueAction
+        self._selectedUnit = State(initialValue: newExercise.distanceUnits)
+        self._value = State(initialValue: newExercise.distance ?? 0)
+    }
     
     var body: some View {
         VStack(spacing: 24) {

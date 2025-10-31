@@ -9,10 +9,16 @@ import SwiftUI
 
 struct MyDayNoteSelectorView: View {
     
-    @State private var noteText: String = ""
+    @State private var noteText: String
     
     let newExercise: MyDayNewExerciseManager
     var continueAction: (() -> ())?
+    
+    init(newExercise: MyDayNewExerciseManager, continueAction: (() -> ())? = nil) {
+        self.newExercise = newExercise
+        self.continueAction = continueAction
+        self._noteText = State(initialValue: newExercise.note ?? "")
+    }
     
     var body: some View {
         VStack(spacing: 24) {

@@ -9,8 +9,8 @@ import SwiftUI
 
 struct MyDayWeightSelectorView: View {
     
-    @State private var selectedUnit: WeightUnit? = nil
-    @State private var value: Int = 0
+    @State private var selectedUnit: WeightUnit?
+    @State private var value: Int
     
     private var isValidSelection: Bool {
         guard let unit = selectedUnit else { return false }
@@ -30,6 +30,13 @@ struct MyDayWeightSelectorView: View {
     let newExercise: MyDayNewExerciseManager
     
     var continueAction: (() -> ())?
+    
+    init(newExercise: MyDayNewExerciseManager, continueAction: (() -> ())? = nil) {
+        self.newExercise = newExercise
+        self.continueAction = continueAction
+        self._selectedUnit = State(initialValue: newExercise.weightUnits)
+        self._value = State(initialValue: newExercise.weight ?? 0)
+    }
     
     var body: some View {
         VStack(spacing: 24) {

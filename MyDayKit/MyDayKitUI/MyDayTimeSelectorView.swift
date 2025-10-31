@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MyDayTimeSelectorView: View {
     
-    @State private var value: Int = 0
+    @State private var value: Int
     
     private var isValidSelection: Bool {
         value > 0
@@ -25,6 +25,12 @@ struct MyDayTimeSelectorView: View {
     let newExercise: MyDayNewExerciseManager
     
     var continueAction: (() -> ())?
+    
+    init(newExercise: MyDayNewExerciseManager, continueAction: (() -> ())? = nil) {
+        self.newExercise = newExercise
+        self.continueAction = continueAction
+        self._value = State(initialValue: newExercise.time ?? 0)
+    }
     
     var body: some View {
         VStack(spacing: 24) {

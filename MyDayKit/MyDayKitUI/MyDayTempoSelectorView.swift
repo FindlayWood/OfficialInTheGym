@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MyDayTempoSelectorView: View {
     
-    @State private var tempo: Tempo = Tempo(eccentric: 0, eccentricHold: 0, concentric: 0, concentricHold: 0)
+    @State private var tempo: Tempo
     
     private var isValidSelection: Bool {
         tempo.eccentric > 0 || tempo.eccentricHold > 0 || tempo.concentric > 0 || tempo.concentricHold > 0
@@ -17,6 +17,12 @@ struct MyDayTempoSelectorView: View {
     
     let newExercise: MyDayNewExerciseManager
     var continueAction: (() -> ())?
+    
+    init(newExercise: MyDayNewExerciseManager, continueAction: (() -> ())? = nil) {
+        self.newExercise = newExercise
+        self.continueAction = continueAction
+        self._tempo = State(initialValue: newExercise.tempo ?? .init())
+    }
     
     var body: some View {
         VStack(spacing: 24) {
@@ -26,16 +32,16 @@ struct MyDayTempoSelectorView: View {
             
             HStack(spacing: 16) {
                 // Eccentric
-                tempoColumn(label: "Down", value: $tempo.eccentric)
+                tempoColumn(label: "Eccentric", value: $tempo.eccentric)
                 
                 // Eccentric Hold
-                tempoColumn(label: "Hold1", value: $tempo.eccentricHold)
+                tempoColumn(label: "Eccentric Hold", value: $tempo.eccentricHold)
                 
                 // Concentric
-                tempoColumn(label: "Up", value: $tempo.concentric)
+                tempoColumn(label: "Concentric", value: $tempo.concentric)
                 
                 // Concentric Hold
-                tempoColumn(label: "Hold2", value: $tempo.concentricHold)
+                tempoColumn(label: "Concentric Hold", value: $tempo.concentricHold)
             }
             
             Spacer()
@@ -107,4 +113,10 @@ struct Tempo {
     var concentric: Int
     var concentricHold: Int
     
+    init() {
+        self.eccentric = 0
+        self.eccentricHold = 0
+        self.concentric = 0
+        self.concentricHold = 0
+    }
 }
