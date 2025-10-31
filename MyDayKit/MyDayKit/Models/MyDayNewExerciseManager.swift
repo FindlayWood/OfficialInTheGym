@@ -99,7 +99,12 @@ class MyDayNewExerciseManager: ObservableObject, Hashable {
             reps: reps,
             weight: weight,
             weightUnit: weightUnits,
-            dateCompleted: .now
+            dateCompleted: .now,
+            distance: distance,
+            distanceUnits: distanceUnits,
+            time: time,
+            tempo: tempo,
+            note: note
         )
         
         return completion

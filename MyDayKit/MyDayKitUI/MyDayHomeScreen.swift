@@ -161,6 +161,9 @@ struct MyDayHomeScreen: View {
                                     },
                                     addClipButtonAction: {
                                         recordClip?()
+                                    },
+                                    repeatSet: { model in
+                                        dayManager.addNewCompletion(model)
                                     }
                                 )
                                 .listRowInsets(EdgeInsets())
@@ -229,6 +232,7 @@ struct TakeView: View {
     
     var addAction: (() -> ())?
     var addClipButtonAction: (() -> ())?
+    var repeatSet: ((ExerciseCompletions) -> ())?
     
     var body: some View {
         VStack {
@@ -271,6 +275,36 @@ struct TakeView: View {
                             }
                             
                             
+                        }
+                        
+                        if model.completions.count > 0 {
+                            Button {
+                                guard let last = model.completions.last else { return }
+                                let newCompleteion = ExerciseCompletions(
+                                    id: UUID().uuidString,
+                                    exercise: model.exercise,
+                                    reps: last.reps,
+                                    weight: last.weight,
+                                    weightUnit: last.weightUnit,
+                                    dateCompleted: .now,
+                                    distance: last.distance,
+                                    distanceUnits: last.distanceUnits,
+                                    time: last.time,
+                                    tempo: last.tempo,
+                                    note: last.note
+                                )
+                                repeatSet?(newCompleteion)
+                            } label: {
+                                VStack {
+                                    Image(systemName: "arrow.counterclockwise")
+                                    Text("Repeat")
+                                }
+                                .padding()
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color.black, lineWidth: 1)
+                                }
+                            }
                         }
                     }
                     .padding()

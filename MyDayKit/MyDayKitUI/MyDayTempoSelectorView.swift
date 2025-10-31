@@ -107,7 +107,7 @@ struct MyDayTempoSelectorView: View {
     MyDayTempoSelectorView(newExercise: .init(exercise: .squat))
 }
 
-struct Tempo {
+struct Tempo: Codable {
     var eccentric: Int
     var eccentricHold: Int
     var concentric: Int
