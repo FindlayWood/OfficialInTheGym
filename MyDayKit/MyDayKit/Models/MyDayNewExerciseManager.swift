@@ -17,6 +17,7 @@ class MyDayNewExerciseManager: ObservableObject, Hashable {
     @Published var distanceUnits: DistanceUnit?
     @Published var time: Int?
     @Published var tempo: Tempo?
+    @Published var note: String?
     
     init(exercise: Exercise, reps: Int? = nil, weight: Int? = nil, weightUnits: WeightUnit? = nil) {
         self.exercise = exercise
@@ -35,8 +36,8 @@ class MyDayNewExerciseManager: ObservableObject, Hashable {
             return (time != nil)
         case .tempo:
             return (tempo != nil)
-        default:
-            return false
+        case .note:
+            return (note != nil)
         }
     }
     
@@ -66,6 +67,10 @@ class MyDayNewExerciseManager: ObservableObject, Hashable {
     
     func setTempo(_ tempo: Tempo) {
         self.tempo = tempo
+    }
+    
+    func setNote(_ note: String) {
+        self.note = note
     }
     
     func getCompletion() -> ExerciseCompletions? {
