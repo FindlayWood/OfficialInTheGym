@@ -242,16 +242,16 @@ struct TakeView: View {
                     .fontWeight(.bold)
                     .foregroundStyle(Color.primary)
                 Spacer()
-                Button {
-                    addAction?()
-                } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .resizable()
-                        .frame(width: 25, height: 25)
+                if !disabled {
+                    Button {
+                        addAction?()
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                    }
+                    .buttonStyle(.borderless)
                 }
-                .buttonStyle(.borderless)
-                .disabled(disabled)
-                .opacity(disabled ? 0.3 : 1)
             }
             HStack {
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -277,7 +277,7 @@ struct TakeView: View {
                             
                         }
                         
-                        if model.completions.count > 0 {
+                        if model.completions.count > 0 && !disabled {
                             Button {
                                 guard let last = model.completions.last else { return }
                                 let newCompleteion = ExerciseCompletions(
@@ -311,14 +311,16 @@ struct TakeView: View {
                 }
             }
             
-            VStack {
-                Button {
-                    addClipButtonAction?()
-                } label: {
-                    Text("Add Clip")
-                    Image(systemName: "plus.circle.fill")
+            if !disabled {
+                VStack {
+                    Button {
+                        addClipButtonAction?()
+                    } label: {
+                        Text("Add Clip")
+                        Image(systemName: "plus.circle.fill")
+                    }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
             }
         }
         .padding()
