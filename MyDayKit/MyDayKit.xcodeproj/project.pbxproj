@@ -35,7 +35,6 @@
 		F0F608282E42A1B50015F260 /* ExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F608272E42A1B50015F260 /* ExerciseLoader.swift */; };
 		F0F6082E2E42A1F50015F260 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6082D2E42A1F50015F260 /* Exercise.swift */; };
 		F0F608302E42A20B0015F260 /* ExerciseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6082F2E42A20B0015F260 /* ExerciseCategory.swift */; };
-		F0F6083E2E44034E0015F260 /* MyDayContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6083D2E44034E0015F260 /* MyDayContentView.swift */; };
 		F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F608402E4405B50015F260 /* MyDayKitRouter.swift */; };
 /* End PBXBuildFile section */
 
@@ -79,7 +78,6 @@
 		F0F608272E42A1B50015F260 /* ExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLoader.swift; sourceTree = "<group>"; };
 		F0F6082D2E42A1F50015F260 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
 		F0F6082F2E42A20B0015F260 /* ExerciseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCategory.swift; sourceTree = "<group>"; };
-		F0F6083D2E44034E0015F260 /* MyDayContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayContentView.swift; sourceTree = "<group>"; };
 		F0F608402E4405B50015F260 /* MyDayKitRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRouter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -205,7 +203,6 @@
 			isa = PBXGroup;
 			children = (
 				F0BE5C152EB7ABFB009677F5 /* Screens */,
-				F0F6083D2E44034E0015F260 /* MyDayContentView.swift */,
 			);
 			path = MyDayKitUI;
 			sourceTree = "<group>";
@@ -395,7 +392,6 @@
 				F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */,
 				F01E0E972E7A01E8008C1547 /* ClipPlaybackScreen.swift in Sources */,
 				F0D6C24E2E358C0900FEFEF1 /* MyDayHomeScreen.swift in Sources */,
-				F0F6083E2E44034E0015F260 /* MyDayContentView.swift in Sources */,
 				F0F4B2B22E85620B007E2469 /* MyDaySaver.swift in Sources */,
 				F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */,
 			);
