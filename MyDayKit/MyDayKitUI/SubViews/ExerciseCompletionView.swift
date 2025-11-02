@@ -40,54 +40,28 @@ struct ExerciseCompletionView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         ForEach(model.completions) { completion in
-                            VStack {
-                                Text("\(completion.reps)")
-                                if let weight = completion.weight, let unit = completion.weightUnit {
-                                    Text("\(weight) \(unit.rawValue)")
-                                }
-                            }
-                            .padding()
-                            .background {
-                                Color.white
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    .shadow(radius: 2)
-                            }
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.black, lineWidth: 1)
-                            }
-                            
-                            
+                            CompletedSetView(model: completion)
                         }
                         
                         if model.completions.count > 0 && !disabled {
-                            Button {
-                                guard let last = model.completions.last else { return }
-                                let newCompleteion = ExerciseCompletions(
-                                    id: UUID().uuidString,
-                                    exercise: model.exercise,
-                                    reps: last.reps,
-                                    weight: last.weight,
-                                    weightUnit: last.weightUnit,
-                                    dateCompleted: .now,
-                                    distance: last.distance,
-                                    distanceUnits: last.distanceUnits,
-                                    time: last.time,
-                                    tempo: last.tempo,
-                                    note: last.note
-                                )
-                                repeatSet?(newCompleteion)
-                            } label: {
-                                VStack {
-                                    Image(systemName: "arrow.counterclockwise")
-                                    Text("Repeat")
-                                }
-                                .padding()
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color.black, lineWidth: 1)
-                                }
-                            }
+                            RepeatSetView(
+                                action: {
+                                    guard let last = model.completions.last else { return }
+                                    let newCompleteion = ExerciseCompletions(
+                                        id: UUID().uuidString,
+                                        exercise: model.exercise,
+                                        reps: last.reps,
+                                        weight: last.weight,
+                                        weightUnit: last.weightUnit,
+                                        dateCompleted: .now,
+                                        distance: last.distance,
+                                        distanceUnits: last.distanceUnits,
+                                        time: last.time,
+                                        tempo: last.tempo,
+                                        note: last.note
+                                    )
+                                    repeatSet?(newCompleteion)
+                                })
                         }
                     }
                     .padding()

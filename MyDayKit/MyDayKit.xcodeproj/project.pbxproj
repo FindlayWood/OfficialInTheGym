@@ -26,6 +26,8 @@
 		F0BE5C142EB55C29009677F5 /* MyDayNoteSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C132EB55C29009677F5 /* MyDayNoteSelectorView.swift */; };
 		F0BE5C182EB7AC71009677F5 /* ExerciseCompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C172EB7AC71009677F5 /* ExerciseCompletionView.swift */; };
 		F0BE5C1A2EB7ACB0009677F5 /* ProgressRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */; };
+		F0BE5C1C2EB7C981009677F5 /* CompletedSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C1B2EB7C981009677F5 /* CompletedSetView.swift */; };
+		F0BE5C1E2EB7CBF1009677F5 /* RepeatSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C1D2EB7CBF1009677F5 /* RepeatSetView.swift */; };
 		F0C102C72E4A65AB0062C8A2 /* MyDayKitRootview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */; };
 		F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */; };
 		F0D6C2422E358B0400FEFEF1 /* MyDayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */; };
@@ -70,6 +72,8 @@
 		F0BE5C132EB55C29009677F5 /* MyDayNoteSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayNoteSelectorView.swift; sourceTree = "<group>"; };
 		F0BE5C172EB7AC71009677F5 /* ExerciseCompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCompletionView.swift; sourceTree = "<group>"; };
 		F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRingView.swift; sourceTree = "<group>"; };
+		F0BE5C1B2EB7C981009677F5 /* CompletedSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedSetView.swift; sourceTree = "<group>"; };
+		F0BE5C1D2EB7CBF1009677F5 /* RepeatSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatSetView.swift; sourceTree = "<group>"; };
 		F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRootview.swift; sourceTree = "<group>"; };
 		F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRepsView.swift; sourceTree = "<group>"; };
 		F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayHomeScreen.swift; sourceTree = "<group>"; };
@@ -176,6 +180,8 @@
 			children = (
 				F0BE5C172EB7AC71009677F5 /* ExerciseCompletionView.swift */,
 				F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */,
+				F0BE5C1B2EB7C981009677F5 /* CompletedSetView.swift */,
+				F0BE5C1D2EB7CBF1009677F5 /* RepeatSetView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -393,6 +399,8 @@
 				F0B38C7A2E5F94D00096234C /* MyDayNewExerciseManager.swift in Sources */,
 				F00CD1722E4D2DBB0051042A /* MyDayManager.swift in Sources */,
 				F01E0E9C2E7A1158008C1547 /* CameraPreview.swift in Sources */,
+				F0BE5C1C2EB7C981009677F5 /* CompletedSetView.swift in Sources */,
+				F0BE5C1E2EB7CBF1009677F5 /* RepeatSetView.swift in Sources */,
 				F01E0E9A2E7A110A008C1547 /* LoopingVideoPlayer.swift in Sources */,
 				F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */,
 				F01E0EA12E7A1242008C1547 /* RecordingOverlay.swift in Sources */,

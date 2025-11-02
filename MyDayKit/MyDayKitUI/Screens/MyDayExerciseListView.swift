@@ -18,9 +18,9 @@ struct MyDayExerciseListView: View {
     
     var filteredExercises: [Exercise] {
         if searchText.isEmpty {
-            exerciseManager.exercises.filter { $0.category == selectedCategory }
+            exerciseManager.exercises.filter { $0.category == selectedCategory }.sorted(by: { $0.name < $1.name })
         } else {
-            exerciseManager.exercises.filter { $0.category == selectedCategory && $0.name.contains(searchText) }
+            exerciseManager.exercises.filter { $0.category == selectedCategory && $0.name.contains(searchText) }.sorted(by: { $0.name < $1.name })
         }
     }
     
@@ -72,10 +72,14 @@ struct MyDayExerciseListView: View {
                 }
             }
             .padding()
-            .background {
-                Color.black.opacity(0.2)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+            .overlay {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.black.opacity(0.2), lineWidth: 1)
             }
+//            .background {
+//                Color.black.opacity(0.2)
+//                    .clipShape(RoundedRectangle(cornerRadius: 10))
+//            }
             .padding()
             
             if exerciseManager.isLoading {
@@ -91,12 +95,20 @@ struct MyDayExerciseListView: View {
                             let newExercise = MyDayNewExerciseManager(exercise: exercise)
                             selectedExercise?(newExercise)
                         } label: {
-                            Text(exercise.name)
+                            HStack {
+                                Text(exercise.name)
+                                    .font(.system(size: 16, weight: .medium))
+                                    .foregroundStyle(Color.black)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundStyle(Color.black)
+                            }
                         }
                     }
                 }
             }
         }
+        .navigationTitle("Select Exercise")
         .task {
             await exerciseManager.load()
         }
