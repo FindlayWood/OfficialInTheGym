@@ -153,6 +153,22 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
+		F0BE5C152EB7ABFB009677F5 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */,
+				F06004842E37E17F000B279F /* MyDayExerciseListView.swift */,
+				F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */,
+				F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */,
+				F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */,
+				F0BE5BEC2EB402DC009677F5 /* MyDayDistanceSelectorView.swift */,
+				F0BE5BEE2EB40657009677F5 /* MyDayTimeSelectorView.swift */,
+				F0BE5C112EB553B6009677F5 /* MyDayTempoSelectorView.swift */,
+				F0BE5C132EB55C29009677F5 /* MyDayNoteSelectorView.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
 		F0D6C20A2E3574EF00FEFEF1 = {
 			isa = PBXGroup;
 			children = (
@@ -188,16 +204,8 @@
 		F0D6C22F2E3588EF00FEFEF1 /* MyDayKitUI */ = {
 			isa = PBXGroup;
 			children = (
-				F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */,
-				F06004842E37E17F000B279F /* MyDayExerciseListView.swift */,
+				F0BE5C152EB7ABFB009677F5 /* Screens */,
 				F0F6083D2E44034E0015F260 /* MyDayContentView.swift */,
-				F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */,
-				F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */,
-				F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */,
-				F0BE5BEC2EB402DC009677F5 /* MyDayDistanceSelectorView.swift */,
-				F0BE5BEE2EB40657009677F5 /* MyDayTimeSelectorView.swift */,
-				F0BE5C112EB553B6009677F5 /* MyDayTempoSelectorView.swift */,
-				F0BE5C132EB55C29009677F5 /* MyDayNoteSelectorView.swift */,
 			);
 			path = MyDayKitUI;
 			sourceTree = "<group>";
