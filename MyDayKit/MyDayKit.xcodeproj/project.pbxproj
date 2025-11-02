@@ -24,7 +24,7 @@
 		F0BE5BEF2EB40657009677F5 /* MyDayTimeSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5BEE2EB40657009677F5 /* MyDayTimeSelectorView.swift */; };
 		F0BE5C122EB553B6009677F5 /* MyDayTempoSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C112EB553B6009677F5 /* MyDayTempoSelectorView.swift */; };
 		F0BE5C142EB55C29009677F5 /* MyDayNoteSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C132EB55C29009677F5 /* MyDayNoteSelectorView.swift */; };
-		F0BE5C182EB7AC71009677F5 /* TakeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C172EB7AC71009677F5 /* TakeView.swift */; };
+		F0BE5C182EB7AC71009677F5 /* ExerciseCompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C172EB7AC71009677F5 /* ExerciseCompletionView.swift */; };
 		F0BE5C1A2EB7ACB0009677F5 /* ProgressRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */; };
 		F0C102C72E4A65AB0062C8A2 /* MyDayKitRootview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */; };
 		F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */; };
@@ -68,7 +68,7 @@
 		F0BE5BEE2EB40657009677F5 /* MyDayTimeSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimeSelectorView.swift; sourceTree = "<group>"; };
 		F0BE5C112EB553B6009677F5 /* MyDayTempoSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTempoSelectorView.swift; sourceTree = "<group>"; };
 		F0BE5C132EB55C29009677F5 /* MyDayNoteSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayNoteSelectorView.swift; sourceTree = "<group>"; };
-		F0BE5C172EB7AC71009677F5 /* TakeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeView.swift; sourceTree = "<group>"; };
+		F0BE5C172EB7AC71009677F5 /* ExerciseCompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCompletionView.swift; sourceTree = "<group>"; };
 		F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRingView.swift; sourceTree = "<group>"; };
 		F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRootview.swift; sourceTree = "<group>"; };
 		F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRepsView.swift; sourceTree = "<group>"; };
@@ -174,7 +174,7 @@
 		F0BE5C162EB7AC65009677F5 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
-				F0BE5C172EB7AC71009677F5 /* TakeView.swift */,
+				F0BE5C172EB7AC71009677F5 /* ExerciseCompletionView.swift */,
 				F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */,
 			);
 			path = SubViews;
@@ -386,7 +386,7 @@
 				F0B38C762E5F93600096234C /* WeightUnit.swift in Sources */,
 				F0F608302E42A20B0015F260 /* ExerciseCategory.swift in Sources */,
 				F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */,
-				F0BE5C182EB7AC71009677F5 /* TakeView.swift in Sources */,
+				F0BE5C182EB7AC71009677F5 /* ExerciseCompletionView.swift in Sources */,
 				F0F608282E42A1B50015F260 /* ExerciseLoader.swift in Sources */,
 				F0C102C72E4A65AB0062C8A2 /* MyDayKitRootview.swift in Sources */,
 				F0BE5C142EB55C29009677F5 /* MyDayNoteSelectorView.swift in Sources */,

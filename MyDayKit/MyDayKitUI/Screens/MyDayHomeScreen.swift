@@ -152,7 +152,7 @@ struct MyDayHomeScreen: View {
                     List {
                         ForEach(selectedDay.exercises) { exercise in
                             Section {
-                                TakeView(
+                                ExerciseCompletionView(
                                     model: exercise,
                                     disabled: !dayManager.isTodaySelected(),
                                     addAction: {
