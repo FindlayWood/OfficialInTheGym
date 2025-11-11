@@ -28,6 +28,7 @@
 		F0BE5C1A2EB7ACB0009677F5 /* ProgressRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */; };
 		F0BE5C1C2EB7C981009677F5 /* CompletedSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C1B2EB7C981009677F5 /* CompletedSetView.swift */; };
 		F0BE5C1E2EB7CBF1009677F5 /* RepeatSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C1D2EB7CBF1009677F5 /* RepeatSetView.swift */; };
+		F0BE5C202EB7CD30009677F5 /* SetDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C1F2EB7CD30009677F5 /* SetDetailView.swift */; };
 		F0C102C72E4A65AB0062C8A2 /* MyDayKitRootview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */; };
 		F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */; };
 		F0D6C2422E358B0400FEFEF1 /* MyDayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */; };
@@ -74,6 +75,7 @@
 		F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRingView.swift; sourceTree = "<group>"; };
 		F0BE5C1B2EB7C981009677F5 /* CompletedSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedSetView.swift; sourceTree = "<group>"; };
 		F0BE5C1D2EB7CBF1009677F5 /* RepeatSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatSetView.swift; sourceTree = "<group>"; };
+		F0BE5C1F2EB7CD30009677F5 /* SetDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetDetailView.swift; sourceTree = "<group>"; };
 		F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRootview.swift; sourceTree = "<group>"; };
 		F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRepsView.swift; sourceTree = "<group>"; };
 		F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayHomeScreen.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */,
 				F0BE5C1B2EB7C981009677F5 /* CompletedSetView.swift */,
 				F0BE5C1D2EB7CBF1009677F5 /* RepeatSetView.swift */,
+				F0BE5C1F2EB7CD30009677F5 /* SetDetailView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -390,6 +393,7 @@
 				F0D6C2552E36C12A00FEFEF1 /* MyDayExerciseModel.swift in Sources */,
 				F0BE5BEF2EB40657009677F5 /* MyDayTimeSelectorView.swift in Sources */,
 				F0B38C762E5F93600096234C /* WeightUnit.swift in Sources */,
+				F0BE5C202EB7CD30009677F5 /* SetDetailView.swift in Sources */,
 				F0F608302E42A20B0015F260 /* ExerciseCategory.swift in Sources */,
 				F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */,
 				F0BE5C182EB7AC71009677F5 /* ExerciseCompletionView.swift in Sources */,

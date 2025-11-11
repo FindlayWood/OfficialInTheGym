@@ -10,6 +10,7 @@ import SwiftUI
 struct CompletedSetView: View {
     
     let model: ExerciseCompletions
+    let animation: Namespace.ID
     
     var body: some View {
         VStack {
@@ -25,18 +26,23 @@ struct CompletedSetView: View {
         .padding()
         .frame(width: 100, height: 100)
         .background {
-            Color.white
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .shadow(radius: 2)
-        }
-        .overlay {
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.black, lineWidth: 1)
+                .matchedGeometryEffect(id: "\(model.id)background", in: animation)
+                .foregroundStyle(Color.white)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .inset(by: 0.5)
+                        .stroke(Color.black, lineWidth: 1)
+                        .matchedGeometryEffect(id: "\(model.id)overlay", in: animation)
+                }
         }
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .shadow(radius: 2)
     }
 }
 
 #Preview {
+    @Previewable @Namespace var animation
     CompletedSetView(
         model: .init(
             id: "1",
@@ -50,6 +56,7 @@ struct CompletedSetView: View {
             time: nil,
             tempo: nil,
             note: nil
-        )
+        ),
+        animation: animation
     )
 }

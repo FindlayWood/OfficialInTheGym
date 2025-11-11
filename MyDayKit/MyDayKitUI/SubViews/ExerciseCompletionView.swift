@@ -11,11 +11,15 @@ struct ExerciseCompletionView: View {
     
     @ObservedObject var model: MyDayExerciseModel
     
+    var selected: ExerciseCompletions?
+    
     let disabled: Bool
+    let animation: Namespace.ID
     
     var addAction: (() -> ())?
     var addClipButtonAction: (() -> ())?
     var repeatSet: ((ExerciseCompletions) -> ())?
+    var onTap: ((ExerciseCompletions) -> ())?
     
     var body: some View {
         VStack {
@@ -40,7 +44,19 @@ struct ExerciseCompletionView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         ForEach(model.completions) { completion in
-                            CompletedSetView(model: completion)
+                            if let selected, selected.id == completion.id {
+                                Color
+                                    .white
+                                    .frame(width: 100, height: 100)
+                            } else {
+                                CompletedSetView(
+                                    model: completion,
+                                    animation: animation
+                                )
+                                .onTapGesture {
+                                    onTap?(completion)
+                                }
+                            }
                         }
                         
                         if model.completions.count > 0 && !disabled {
@@ -90,6 +106,7 @@ struct ExerciseCompletionView: View {
 }
 
 #Preview {
+    @Previewable @Namespace var animation
     ExerciseCompletionView(
         model: .init(
             id: "",
@@ -97,6 +114,8 @@ struct ExerciseCompletionView: View {
             exercise: .pressUps,
             completions: []
         ),
-        disabled: false
+        selected: nil,
+        disabled: false,
+        animation: animation
     )
 }

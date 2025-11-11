@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MyDayHomeScreen: View {
     
+    @Namespace var animation
+    
     let calendar = Calendar.current
     // Generate past 30 days including today
     let dates: [Date] = {
@@ -20,6 +22,7 @@ struct MyDayHomeScreen: View {
     }()
     
     @State private var dateDropDown: Bool = false
+    @State private var selectedSet: ExerciseCompletions?
     
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -40,6 +43,7 @@ struct MyDayHomeScreen: View {
     var recordClip: (() -> ())?
     
     var body: some View {
+        
         VStack {
             HStack(alignment: .firstTextBaseline) {
                 
@@ -117,9 +121,7 @@ struct MyDayHomeScreen: View {
                         // Scroll to today
                         if let today = dates.last {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-//                                withAnimation {
-                                    proxy.scrollTo(today, anchor: .trailing)
-//                                }
+                                proxy.scrollTo(today, anchor: .trailing)
                             }
                         }
                     }
@@ -154,7 +156,9 @@ struct MyDayHomeScreen: View {
                             Section {
                                 ExerciseCompletionView(
                                     model: exercise,
+                                    selected: selectedSet,
                                     disabled: !dayManager.isTodaySelected(),
+                                    animation: animation,
                                     addAction: {
                                         let newExercise = MyDayNewExerciseManager(exercise: exercise.exercise)
                                         addSpecificExercise?(newExercise)
@@ -164,6 +168,11 @@ struct MyDayHomeScreen: View {
                                     },
                                     repeatSet: { model in
                                         dayManager.addNewCompletion(model)
+                                    },
+                                    onTap: { model in
+                                        withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
+                                            selectedSet = model
+                                        }
                                     }
                                 )
                                 .listRowInsets(EdgeInsets())
@@ -173,6 +182,27 @@ struct MyDayHomeScreen: View {
                 }
             } else {
                 Text("loading...")
+            }
+        }
+        .overlay {
+            if let selectedSet {
+                Color
+                    .black
+                    .opacity(0.7)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+                
+                SetDetailView(
+                    model: selectedSet,
+                    animation: animation,
+                    close: {
+                        withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
+                            self.selectedSet = nil
+                        }
+                    }
+                )
+                .transition(.asymmetric(insertion: .identity, removal: .offset(y: 5)))
+                .padding()
             }
         }
     }
