@@ -19,11 +19,17 @@ class MyDayKitComposition {
         let localSaver = MyDayFileManagerSaver()
         let remoteSaver = MyDayFirestoreSaver()
         let localAndRemoteMyDaySaver: MyDaySaver = LocalAndRemoteMyDaySaver(local: localSaver, remote: remoteSaver)
+        // Stats
+        let topLevelRemoteStatsSaver: ExerciseStatsSaver = FirestoreExerciseStatsSaver()
+        let rawLogRemoteStatsSaver: ExerciseStatsSaver = FirestoreExerciseStatsLogSaver()
+        let topLevelAndRawLogRemoteStatsSaver: ExerciseStatsSaver = TopLevelAndRawLogExerciseStatsSaver(topLevel: topLevelRemoteStatsSaver, rawLog: rawLogRemoteStatsSaver)
+        
+        let localAndRemoteMyDayAndExerciseStatsSaver = LocalAndRemoteMyDayAndRemoteStatSaver(myDaySaver: localAndRemoteMyDaySaver, statSaver: topLevelAndRawLogRemoteStatsSaver)
         let weekPolicy = MyDayOneWeekPolicy()
         let localLoader: MyDayLoader = MyDayFileManagerLoader(policy: weekPolicy)
         let remoteLoader = MyDayFirestoreLoader()
         let policyLoader = MyDayPolicyDayLoader(localLoader: localLoader, remoteLoader: remoteLoader, policy: weekPolicy)
-        let dayManager = MyDayManager(saver: localAndRemoteMyDaySaver, loader: policyLoader)
+        let dayManager = MyDayManager(saver: localAndRemoteMyDayAndExerciseStatsSaver, loader: policyLoader)
         
         let router = MyDayKitRouter(exerciseManager: exerciseManager, dayManager: dayManager)
         let view = MyDayKitRootview(router: router)
@@ -89,6 +95,36 @@ class LocalAndRemoteMyDaySaver: MyDaySaver {
     func save<T: Codable>(data: T) async throws {
         try await local.save(data: data)
         try await remote.save(data: data)
+    }
+}
+
+class TopLevelAndRawLogExerciseStatsSaver: ExerciseStatsSaver {
+    let topLevel: ExerciseStatsSaver
+    let rawLog: ExerciseStatsSaver
+    
+    init(topLevel: ExerciseStatsSaver, rawLog: ExerciseStatsSaver) {
+        self.topLevel = topLevel
+        self.rawLog = rawLog
+    }
+    
+    func save(_ stats: ExerciseStatsSaveModel) async throws {
+        try await topLevel.save(stats)
+        try await rawLog.save(stats)
+    }
+}
+
+class LocalAndRemoteMyDayAndRemoteStatSaver: MyDayAndStatSaver {
+    let myDaySaver: MyDaySaver
+    let statSaver: ExerciseStatsSaver
+    
+    init(myDaySaver: MyDaySaver, statSaver: ExerciseStatsSaver) {
+        self.myDaySaver = myDaySaver
+        self.statSaver = statSaver
+    }
+    
+    func save<T: Codable>(data: T, stats: ExerciseStatsSaveModel) async throws {
+        try await myDaySaver.save(data: data)
+        try await statSaver.save(stats)
     }
 }
 
@@ -289,3 +325,72 @@ class MyDayFirestoreLoader: MyDayLoader {
         
     }
 }
+
+struct FirestoreExerciseStatsLogSaver: ExerciseStatsSaver {
+    
+    func save(_ model: ExerciseStatsSaveModel) async throws {
+        let db = Firestore.firestore()
+        let userID = UserDefaults.currentUser.uid
+        let exerciseID = model.exerciseID
+        let exerciseDocRef = db.collection("Users/\(userID)/ExerciseStats/\(exerciseID)/RawLogs").document(model.id)
+        try await exerciseDocRef.setData(from: model)
+    }
+}
+
+
+struct FirestoreExerciseStatsSaver: ExerciseStatsSaver {
+    
+    func save(_ model: ExerciseStatsSaveModel) async throws {
+        let db = Firestore.firestore()
+        let userID = UserDefaults.currentUser.uid
+        
+        let exerciseDocRef = db.collection("Users/\(userID)/ExerciseStats").document(model.exerciseID)
+        
+        do {
+            let _ = try await db.runTransaction({ (transaction, errorPointer) -> Any? in
+                
+                let snapshot: DocumentSnapshot
+                
+                do {
+                    try snapshot = transaction.getDocument(exerciseDocRef)
+                } catch let fetchError as NSError {
+                    errorPointer?.pointee = fetchError
+                    return nil
+                }
+                
+                var data: [String:Any] = [
+                    "exerciseID": model.exerciseID,
+                    "exerciseName": model.exerciseName,
+                    "totalReps": FieldValue.increment(Double(model.reps)),
+                    "totalWeight": FieldValue.increment(model.weight),
+                    "lastRecordDate": model.dateComplete,
+                    "userID": userID
+                ]
+                
+                // 3️⃣ Handle firstRecordDate
+                if snapshot.data()?["firstRecordDate"] == nil {
+                    data["firstRecordDate"] = model.dateComplete
+                }
+                
+                // 4️⃣ Handle maxWeight
+                if let maxWeight = snapshot.data()?["maxWeight"] as? Double {
+                    if maxWeight < model.weight {
+                        data["maxWeight"] = model.weight
+                    }
+                } else {
+                    data["maxWeight"] = model.weight
+                }
+                
+                // 5️⃣ Update the document
+                transaction.setData(data, forDocument: exerciseDocRef, merge: true)
+                
+                return nil
+            })
+            print("Transaction successfully committed!")
+        } catch {
+            print("Transaction failed: \(error)")
+        }
+    }
+
+}
+

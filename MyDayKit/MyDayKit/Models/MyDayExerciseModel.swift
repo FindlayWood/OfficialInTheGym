@@ -55,6 +55,17 @@ struct ExerciseCompletions: Identifiable, Codable {
     let time: Int?
     let tempo: Tempo?
     let note: String?
+    
+    func getStats() -> ExerciseStatsSaveModel {
+        var w: Double = 0
+        if weightUnit == .kg {
+            w = Double(weight ?? 0)
+        }
+        if weightUnit == .lbs {
+            w = Double(weight ?? 0) * 0.453592
+        }
+        return ExerciseStatsSaveModel(id: UUID().uuidString, exerciseID: exercise.id, exerciseName: exercise.name, dateComplete: dateCompleted, reps: reps, weight: w)
+    }
 }
 
 public struct MyDayFullDayModel: Identifiable, Codable {

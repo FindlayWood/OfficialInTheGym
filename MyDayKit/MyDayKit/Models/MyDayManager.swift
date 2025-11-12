@@ -14,10 +14,10 @@ public class MyDayManager: ObservableObject {
     
     @Published var selectedDay: MyDayFullDayModel?
     
-    let saver: MyDaySaver
+    let saver: MyDayAndStatSaver
     let loader: MyDayLoader
     
-    public init(saver: MyDaySaver, loader: MyDayLoader) {
+    public init(saver: MyDayAndStatSaver, loader: MyDayLoader) {
         self.saver = saver
         self.loader = loader
         initialLoad()
@@ -39,11 +39,12 @@ public class MyDayManager: ObservableObject {
     
     func addNewCompletion(_ newCompletion: ExerciseCompletions) {
         guard var selectedDay else { return }
+        let stats = newCompletion.getStats()
         if let existingCompletion = selectedDay.exercises.first(where: { $0.exercise.id == newCompletion.exercise.id }) {
             existingCompletion.completions.append(newCompletion)
             self.selectedDay = selectedDay
             Task {
-                try await saver.save(data: selectedDay)
+                try await saver.save(data: selectedDay, stats: stats)
             }
         } else {
             let newExercise = MyDayExerciseModel(
@@ -55,7 +56,7 @@ public class MyDayManager: ObservableObject {
             selectedDay.exercises.append(newExercise)
             self.selectedDay = selectedDay
             Task {
-                try await saver.save(data: selectedDay)
+                try await saver.save(data: selectedDay, stats: stats)
             }
         }
     }
