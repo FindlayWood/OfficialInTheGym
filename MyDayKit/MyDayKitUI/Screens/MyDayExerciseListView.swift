@@ -20,7 +20,7 @@ struct MyDayExerciseListView: View {
         if searchText.isEmpty {
             exerciseManager.exercises.filter { $0.category == selectedCategory }.sorted(by: { $0.name < $1.name })
         } else {
-            exerciseManager.exercises.filter { $0.category == selectedCategory && $0.name.contains(searchText) }.sorted(by: { $0.name < $1.name })
+            exerciseManager.exercises.filter { $0.category == selectedCategory && $0.name.lowercased().contains(searchText.lowercased()) }.sorted(by: { $0.name < $1.name })
         }
     }
     
