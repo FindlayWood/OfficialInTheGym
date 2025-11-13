@@ -364,7 +364,8 @@ struct FirestoreExerciseStatsSaver: ExerciseStatsSaver {
                     "totalReps": FieldValue.increment(Double(model.reps)),
                     "totalWeight": FieldValue.increment(model.weight),
                     "lastRecordDate": model.dateComplete,
-                    "userID": userID
+                    "userID": userID,
+                    "totalTime": FieldValue.increment(Double(model.time))
                 ]
                 
                 // 3️⃣ Handle firstRecordDate
@@ -379,6 +380,14 @@ struct FirestoreExerciseStatsSaver: ExerciseStatsSaver {
                     }
                 } else {
                     data["maxWeight"] = model.weight
+                }
+                
+                if let maxTime = snapshot.data()?["maxTime"] as? Double {
+                    if maxTime < Double(model.time) {
+                        data["maxTime"] = Double(model.time)
+                    }
+                } else {
+                    data["maxTime"] = Double(model.time)
                 }
                 
                 // 5️⃣ Update the document

@@ -14,4 +14,5 @@ public struct ExerciseStatsSaveModel: Codable {
     public let dateComplete: Date
     public let reps: Int
     public let weight: Double
+    public let time: Int
 }

@@ -64,7 +64,15 @@ struct ExerciseCompletions: Identifiable, Codable {
         if weightUnit == .lbs {
             w = Double(weight ?? 0) * 0.453592
         }
-        return ExerciseStatsSaveModel(id: UUID().uuidString, exerciseID: exercise.id, exerciseName: exercise.name, dateComplete: dateCompleted, reps: reps, weight: w)
+        return ExerciseStatsSaveModel(
+            id: UUID().uuidString,
+            exerciseID: exercise.id,
+            exerciseName: exercise.name,
+            dateComplete: dateCompleted,
+            reps: reps,
+            weight: w,
+            time: time ?? 0
+        )
     }
 }
 
