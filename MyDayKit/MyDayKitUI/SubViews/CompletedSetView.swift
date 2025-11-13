@@ -14,11 +14,27 @@ struct CompletedSetView: View {
     
     var body: some View {
         VStack {
-            Text("\(model.reps)")
-                .font(.system(size: 20, weight: .bold))
-                .foregroundStyle(Color.black)
+            HStack(alignment: .lastTextBaseline, spacing: 0) {
+                Text("\(model.reps)")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundStyle(Color.black)
+                Text("\(model.reps > 1 ? "reps" : "rep")")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(Color.black.opacity(0.5))
+            }
             if let weight = model.weight, let unit = model.weightUnit {
-                Text("\(weight) \(unit.rawValue)")
+                if unit != .max, unit != .bw {
+                    Text("\(weight) \(unit.rawValue)")
+                        .font(.system(size: 17, weight: .medium))
+                        .foregroundStyle(Color.black)
+                } else {
+                    Text("\(unit.rawValue)")
+                        .font(.system(size: 17, weight: .medium))
+                        .foregroundStyle(Color.black)
+                }
+            }
+            if let time = model.time {
+                Text("\(time)s")
                     .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(Color.black)
             }
