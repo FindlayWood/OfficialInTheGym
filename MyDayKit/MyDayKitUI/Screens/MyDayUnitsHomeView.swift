@@ -12,48 +12,115 @@ struct MyDayUnitsHomeView: View {
     @ObservedObject var dayManager: MyDayManager
     @ObservedObject var newExercise: MyDayNewExerciseManager
     
+    let columns: [GridItem] = Array(repeating: .init(), count: 2)
+    
+    
     var optionSelected: ((ExerciseOptions) -> ())?
     
     var addedAction:(() -> ())?
     
     var body: some View {
         VStack {
+            VStack {
+                Text(newExercise.exercise.name)
+                    .font(.system(size: 30, weight: .bold))
+                    .foregroundStyle(Color.primary)
+                    .padding(.bottom)
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background {
+                Color
+                    .white
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .shadow(radius: 4)
+            }
+            .padding()
+            
             ScrollView {
-                VStack {
+                LazyVGrid(columns: columns) {
                     ForEach(ExerciseOptions.allCases) { option in
-                        Button {
-                            optionSelected?(option)
-                        } label: {
-                            let added = newExercise.isOptionAdded(option)
-                            HStack {
-                                Text(option.title)
-                                    .font(.headline)
-                                    .foregroundStyle(Color.black.opacity(added ? 1 : 0.5))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                        let added = newExercise.isOptionAdded(option)
+                        VStack {
+                            Text(option.title)
+                                .font(.headline)
+                                .foregroundStyle(Color.black.opacity(added ? 1 : 0.5))
+                            
+                            Spacer()
+                            
+                            if added {
+                                switch option {
+                                case .weight:
+                                    if let weight = newExercise.weight, let unit = newExercise.weightUnits {
+                                        if unit != .max, unit != .bw {
+                                            Text("\(weight) \(unit.rawValue)")
+                                                .font(.system(size: 20, weight: .semibold))
+                                                .foregroundStyle(Color.black)
+                                        } else {
+                                            Text("\(unit.rawValue)")
+                                                .font(.system(size: 20, weight: .semibold))
+                                                .foregroundStyle(Color.black)
+                                        }
+                                    }
+                                case .distance:
+                                    HStack {
+                                        if let distance = newExercise.distance {
+                                            Text("\(distance)")
+                                                .font(.system(size: 20, weight: .semibold))
+                                        }
+                                        if let distanceUnit = newExercise.distanceUnits {
+                                            Text("\(distanceUnit.rawValue)")
+                                                .font(.system(size: 16, weight: .medium))
+                                        }
+                                    }
+                                case .time:
+                                    if let time = newExercise.time {
+                                        Text(displayTime(for: time))
+                                            .font(.system(size: 20, weight: .semibold))
+                                            .foregroundStyle(Color.black)
+                                    }
+                                case .tempo:
+                                    if let tempo = newExercise.tempo {
+                                        Text("\(tempo.eccentric)-\(tempo.eccentricHold)-\(tempo.concentric)-\(tempo.concentricHold)")
+                                            .font(.system(size: 20, weight: .semibold))
+                                    }
+                                case .note:
+                                    Text("Added")
+                                        .font(.system(size: 20, weight: .semibold))
+                                }
                                 
                                 Spacer()
+                            }
                             
-                                if added {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundStyle(Color.green)
-                                        .padding(.top)
-                                    
-                                    Button {
-                                        newExercise.clear(option)
-                                    } label: {
-                                        Text("Clear")
-                                    }
+                            
+                            if added {
+                                Button {
+                                    newExercise.clear(option)
+                                } label: {
+                                    Text("Clear")
+                                }
+                            } else {
+                                Button {
+                                    optionSelected?(option)
+                                } label: {
+                                    Image(systemName: "plus.circle.fill")
                                 }
                                 
                             }
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background {
-                                Color
-                                    .white
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    .shadow(radius: 4)
-                            }
+                            
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 120)
+                        .background {
+                            Color
+                                .white
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .shadow(radius: 4)
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            optionSelected?(option)
                         }
                     }
                 }
@@ -84,6 +151,13 @@ struct MyDayUnitsHomeView: View {
             addedAction?()
         }
     }
+    
+    func displayTime(for totalSeconds: Int) -> String {
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        
+        return String(format: "%dm %02ds", minutes, seconds)
+    }
 }
 
 #Preview {
@@ -113,6 +187,21 @@ enum ExerciseOptions: String, Identifiable, CaseIterable {
             return "Tempo"
         case .note:
             return "Note"
+        }
+    }
+    
+    var systemImageName: String {
+        switch self {
+        case .weight:
+            return "dumbbell"
+        case .distance:
+            return "ruler"
+        case .time:
+            return "timer"
+        case .tempo:
+            return "music.note"
+        case .note:
+            return "pencil"
         }
     }
 }
