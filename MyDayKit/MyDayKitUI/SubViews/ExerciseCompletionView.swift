@@ -45,9 +45,9 @@ struct ExerciseCompletionView: View {
                     HStack {
                         ForEach(model.completions) { completion in
                             if let selected, selected.id == completion.id {
-                                Color
-                                    .white
-                                    .frame(width: 100, height: 100)
+                                PlaceholderSetView(
+                                    model: completion
+                                )
                             } else {
                                 CompletedSetView(
                                     model: completion,
