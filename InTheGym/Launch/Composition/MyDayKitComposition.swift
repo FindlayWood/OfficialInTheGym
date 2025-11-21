@@ -36,6 +36,29 @@ class MyDayKitComposition {
         let hostingController = UIHostingController(rootView: view)
         return hostingController
     }
+    
+    func composeUIKit() -> UIViewController {
+        let loader: ExerciseLoader = FirebaseExerciseLoader()
+        let mainThreadLoader: ExerciseLoader = MainThreadExerciseLoaderDecorator(decoratee: loader)
+        let exerciseManager = ExerciseManager(loader: mainThreadLoader)
+        let localSaver = MyDayFileManagerSaver()
+        let remoteSaver = MyDayFirestoreSaver()
+        let localAndRemoteMyDaySaver: MyDaySaver = LocalAndRemoteMyDaySaver(local: localSaver, remote: remoteSaver)
+        // Stats
+        let topLevelRemoteStatsSaver: ExerciseStatsSaver = FirestoreExerciseStatsSaver()
+        let rawLogRemoteStatsSaver: ExerciseStatsSaver = FirestoreExerciseStatsLogSaver()
+        let topLevelAndRawLogRemoteStatsSaver: ExerciseStatsSaver = TopLevelAndRawLogExerciseStatsSaver(topLevel: topLevelRemoteStatsSaver, rawLog: rawLogRemoteStatsSaver)
+        
+        let localAndRemoteMyDayAndExerciseStatsSaver = LocalAndRemoteMyDayAndRemoteStatSaver(myDaySaver: localAndRemoteMyDaySaver, statSaver: topLevelAndRawLogRemoteStatsSaver)
+        let weekPolicy = MyDayOneWeekPolicy()
+        let localLoader: MyDayLoader = MyDayFileManagerLoader(policy: weekPolicy)
+        let remoteLoader = MyDayFirestoreLoader()
+        let policyLoader = MyDayPolicyDayLoader(localLoader: localLoader, remoteLoader: remoteLoader, policy: weekPolicy)
+        let dayManager = MyDayManager(saver: localAndRemoteMyDayAndExerciseStatsSaver, loader: policyLoader)
+        
+        let vc = MyDayHomeViewController(dayManager: dayManager)
+        return vc
+    }
 }
 
 class MainThreadExerciseLoaderDecorator: ExerciseLoader {

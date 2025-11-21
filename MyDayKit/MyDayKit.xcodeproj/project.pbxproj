@@ -32,6 +32,7 @@
 		F0C102C72E4A65AB0062C8A2 /* MyDayKitRootview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */; };
 		F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */; };
 		F0C8EC162ECE77E8002213C7 /* PlaceholderSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C8EC152ECE77E8002213C7 /* PlaceholderSetView.swift */; };
+		F0C8EC192ECF7F32002213C7 /* MyDayHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C8EC182ECF7F32002213C7 /* MyDayHomeViewController.swift */; };
 		F0D6C2422E358B0400FEFEF1 /* MyDayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */; };
 		F0D6C24E2E358C0900FEFEF1 /* MyDayHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */; };
 		F0D6C2552E36C12A00FEFEF1 /* MyDayExerciseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C2542E36C12A00FEFEF1 /* MyDayExerciseModel.swift */; };
@@ -83,6 +84,7 @@
 		F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRootview.swift; sourceTree = "<group>"; };
 		F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRepsView.swift; sourceTree = "<group>"; };
 		F0C8EC152ECE77E8002213C7 /* PlaceholderSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderSetView.swift; sourceTree = "<group>"; };
+		F0C8EC182ECF7F32002213C7 /* MyDayHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayHomeViewController.swift; sourceTree = "<group>"; };
 		F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayHomeScreen.swift; sourceTree = "<group>"; };
 		F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MyDayKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0D6C2412E358B0400FEFEF1 /* MyDayKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyDayKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -198,6 +200,14 @@
 			path = SubViews;
 			sourceTree = "<group>";
 		};
+		F0C8EC172ECF7F16002213C7 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				F0C8EC182ECF7F32002213C7 /* MyDayHomeViewController.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
 		F0D6C20A2E3574EF00FEFEF1 = {
 			isa = PBXGroup;
 			children = (
@@ -234,6 +244,7 @@
 		F0D6C22F2E3588EF00FEFEF1 /* MyDayKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				F0C8EC172ECF7F16002213C7 /* UIKit */,
 				F0BE5C162EB7AC65009677F5 /* SubViews */,
 				F0BE5C152EB7ABFB009677F5 /* Screens */,
 			);
@@ -451,6 +462,7 @@
 				F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */,
 				F01E0E972E7A01E8008C1547 /* ClipPlaybackScreen.swift in Sources */,
 				F0D6C24E2E358C0900FEFEF1 /* MyDayHomeScreen.swift in Sources */,
+				F0C8EC192ECF7F32002213C7 /* MyDayHomeViewController.swift in Sources */,
 				F0F4B2B22E85620B007E2469 /* MyDaySaver.swift in Sources */,
 				F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */,
 				F0C8EC162ECE77E8002213C7 /* PlaceholderSetView.swift in Sources */,
