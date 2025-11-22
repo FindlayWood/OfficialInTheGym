@@ -26,6 +26,14 @@ struct MyDayUnitsHomeView: View {
                     .font(.system(size: 30, weight: .bold))
                     .foregroundStyle(Color.primary)
                     .padding(.bottom)
+                HStack(alignment: .lastTextBaseline) {
+                    Text("\(newExercise.reps ?? 0) \(newExercise.eachSide ? "(e)" : "")")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(Color.primary)
+                    Text("reps")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundStyle(Color.primary.opacity(0.5))
+                }
             }
             .padding()
             .frame(maxWidth: .infinity)

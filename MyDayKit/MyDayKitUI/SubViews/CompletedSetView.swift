@@ -22,6 +22,11 @@ struct CompletedSetView: View {
                     .font(.system(size: 16, weight: .medium))
                     .foregroundStyle(Color.black.opacity(0.5))
             }
+            if model.eachSide ?? false {
+                Text("(e)")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(Color.black.opacity(0.5))
+            }
             if let weight = model.weight, let unit = model.weightUnit {
                 if unit != .max, unit != .bw {
                     Text("\(weight) \(unit.rawValue)")
