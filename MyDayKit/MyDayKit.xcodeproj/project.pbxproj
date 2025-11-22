@@ -16,6 +16,7 @@
 		F01E0EA12E7A1242008C1547 /* RecordingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0EA02E7A1242008C1547 /* RecordingOverlay.swift */; };
 		F01E0EA32E7A15FC008C1547 /* PlaybackOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */; };
 		F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06004842E37E17F000B279F /* MyDayExerciseListView.swift */; };
+		F0622F012ED260CF00260A5B /* CustomNumberPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0622F002ED260CF00260A5B /* CustomNumberPad.swift */; };
 		F0B38C622E5B9C570096234C /* MyDayUnitsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */; };
 		F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */; };
 		F0B38C762E5F93600096234C /* WeightUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C752E5F93600096234C /* WeightUnit.swift */; };
@@ -68,6 +69,7 @@
 		F01E0EA02E7A1242008C1547 /* RecordingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingOverlay.swift; sourceTree = "<group>"; };
 		F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackOverlay.swift; sourceTree = "<group>"; };
 		F06004842E37E17F000B279F /* MyDayExerciseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExerciseListView.swift; sourceTree = "<group>"; };
+		F0622F002ED260CF00260A5B /* CustomNumberPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNumberPad.swift; sourceTree = "<group>"; };
 		F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayUnitsHomeView.swift; sourceTree = "<group>"; };
 		F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWeightSelectorView.swift; sourceTree = "<group>"; };
 		F0B38C752E5F93600096234C /* WeightUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightUnit.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 				F0BE5C1D2EB7CBF1009677F5 /* RepeatSetView.swift */,
 				F0BE5C1F2EB7CD30009677F5 /* SetDetailView.swift */,
 				F0C8EC152ECE77E8002213C7 /* PlaceholderSetView.swift */,
+				F0622F002ED260CF00260A5B /* CustomNumberPad.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -445,6 +448,7 @@
 				F0BE5C1C2EB7C981009677F5 /* CompletedSetView.swift in Sources */,
 				F0BE5C1E2EB7CBF1009677F5 /* RepeatSetView.swift in Sources */,
 				F01E0E9A2E7A110A008C1547 /* LoopingVideoPlayer.swift in Sources */,
+				F0622F012ED260CF00260A5B /* CustomNumberPad.swift in Sources */,
 				F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */,
 				F0E2CC4F2EC5389B00993165 /* MyDayAndStatSaver.swift in Sources */,
 				F01E0EA12E7A1242008C1547 /* RecordingOverlay.swift in Sources */,

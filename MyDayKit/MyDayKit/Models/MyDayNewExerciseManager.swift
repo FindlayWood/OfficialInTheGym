@@ -18,6 +18,7 @@ class MyDayNewExerciseManager: ObservableObject, Hashable {
     @Published var time: Int?
     @Published var tempo: Tempo?
     @Published var note: String?
+    @Published var eachSide: Bool = false
     
     init(exercise: Exercise, reps: Int? = nil, weight: Int? = nil, weightUnits: WeightUnit? = nil) {
         self.exercise = exercise
@@ -104,7 +105,8 @@ class MyDayNewExerciseManager: ObservableObject, Hashable {
             distanceUnits: distanceUnits,
             time: time,
             tempo: tempo,
-            note: note
+            note: note,
+            eachSide: eachSide
         )
         
         return completion

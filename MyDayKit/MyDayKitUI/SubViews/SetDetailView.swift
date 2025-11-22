@@ -288,7 +288,8 @@ struct SetDetailView: View {
             distanceUnits: .metres,
             time: 45,
             tempo: Tempo(),
-            note: "This is s test note"
+            note: "This is s test note",
+            eachSide: false
         ),
         animation: namespace
     )

@@ -55,6 +55,7 @@ struct ExerciseCompletions: Identifiable, Codable {
     let time: Int?
     let tempo: Tempo?
     let note: String?
+    let eachSide: Bool?
     
     func getStats() -> ExerciseStatsSaveModel {
         var w: Double = 0

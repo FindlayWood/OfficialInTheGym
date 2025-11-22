@@ -74,7 +74,8 @@ struct ExerciseCompletionView: View {
                                         distanceUnits: last.distanceUnits,
                                         time: last.time,
                                         tempo: last.tempo,
-                                        note: last.note
+                                        note: last.note,
+                                        eachSide: last.eachSide
                                     )
                                     repeatSet?(newCompleteion)
                                 })

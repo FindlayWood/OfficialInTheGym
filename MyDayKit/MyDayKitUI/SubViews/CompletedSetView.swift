@@ -71,7 +71,8 @@ struct CompletedSetView: View {
             distanceUnits: nil,
             time: nil,
             tempo: nil,
-            note: nil
+            note: nil,
+            eachSide: nil
         ),
         animation: animation
     )

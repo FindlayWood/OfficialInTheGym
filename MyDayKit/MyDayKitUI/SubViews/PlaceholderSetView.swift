@@ -67,7 +67,8 @@ struct PlaceholderSetView: View {
             distanceUnits: nil,
             time: nil,
             tempo: nil,
-            note: nil
+            note: nil,
+            eachSide: nil
         )
     )
 }

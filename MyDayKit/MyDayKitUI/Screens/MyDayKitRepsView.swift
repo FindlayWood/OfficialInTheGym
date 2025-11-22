@@ -11,112 +11,82 @@ struct MyDayKitRepsView: View {
     
     @ObservedObject var dayManager: MyDayManager
     
-    let exercise: MyDayNewExerciseManager
-    @State var reps: Int = 1
+    @ObservedObject var exercise: MyDayNewExerciseManager
+    @State var reps: Int = 0
+    @State private var stringInput: String = ""
     
     var add: (() -> ())?
     
     var body: some View {
-        VStack(spacing: 20) {
-            Text("How many reps did you complete?")
+        VStack {
+            Text("How many reps of \(exercise.exercise.name) did you complete?")
                 .font(.headline)
+                .multilineTextAlignment(.center)
                 .padding()
-            
-            Text(exercise.exercise.name)
-                .font(.title2)
-                .bold()
             
             Spacer()
             
-            HStack {
-                Spacer()
-                Button {
-                    guard reps > 0 else { return }
-                    reps -= 1
-                } label: {
-                    Image(systemName: "minus.circle.fill")
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .opacity(reps > 0 ? 1 : 0.3)
+            Text("\(stringInput.isEmpty ? "-" : "\(reps)")")
+                .font(.system(size: 60, weight: .bold))
+                .foregroundStyle(Color.black)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
+                .background {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.black.opacity(0.1))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.black, lineWidth: 1)
+                        }
                 }
-                .disabled(reps < 2)
-                Spacer()
-                Text("\(reps)")
-                    .font(.system(size: 100, weight: .bold))
-                    .foregroundStyle(Color.black)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .minimumScaleFactor(0.5)
-                    .lineLimit(1)
-                Spacer()
-                Button {
-                    guard reps < 99 else { return }
-                    reps += 1
-                } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .opacity(reps < 99 ? 1 : 0.3)
-                }
-                .disabled(reps > 98)
-                Spacer()
+                .padding()
+            
+            Spacer()
+            
+            VStack(alignment: .leading) {
+                Toggle("Each Side", isOn: $exercise.eachSide)
+                    .tint(Color.blue)
+                    .font(.system(size: 16, weight: .medium))
+                Text("Mark this if the exercise was completed each side.")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(Color.black.opacity(0.5))
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.horizontal)
             
+            CustomNumberPad(
+                backspaceDisabled: stringInput.isEmpty,
+                zeroDisabled: stringInput.isEmpty,
+                selection: { number in
+                    stringInput.append("\(number)")
+                    reps = Int(stringInput) ?? 1
+                },
+                backspace:  {
+                    stringInput.removeLast()
+                    reps = Int(stringInput) ?? 1
+                }
+            )
             
-            ScrollViewReader { proxy in
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(1..<100, id: \.self) { num in
-                            Button {
-                                reps = num
-                                withAnimation {
-                                    proxy.scrollTo("\(num)", anchor: .center)
-                                }
-                            } label: {
-                                Text("\(num)")
-                                    .font(.system(size: 30, weight: .bold))
-                                    .foregroundStyle(num == reps ? Color.white : Color.black.opacity(0.5))
-                                    .frame(width: 80, height: 80)
-                                    .background {
-                                        Circle()
-                                            .foregroundStyle(Color.blue.opacity(num == reps ? 1 : 0.3))
-                                    }
-                                    .overlay {
-                                        Circle()
-                                            .inset(by: 1)
-                                            .stroke(Color.black, lineWidth: 1)
-                                    }
-                            }
-                            .padding(.vertical)
-                            .id("\(num)")
-                        }
-                    }
-                    .padding(.leading)
-                }
-                .onChange(of: reps) { _, newValue in
-                    withAnimation {
-                        proxy.scrollTo("\(newValue)", anchor: .center)
-                    }
-                }
-            }
-
-            Spacer()
             
             Button {
                 addAction()
             } label: {
                 Text("Add")
                     .font(.headline)
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(Color.white.opacity(stringInput.isEmpty ? 0.3 : 1))
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background {
-                        Color.blue
+                        Color
+                            .blue.opacity(stringInput.isEmpty ? 0.3 : 1)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
             }
             .padding()
+            .disabled(stringInput.isEmpty)
         }
+        .navigationTitle("Reps")
     }
     
     func addAction() {
