@@ -266,7 +266,8 @@ extension MyDayFileManagerLoader {
     func deleteOldDays() {
         let calendar = Calendar.current
         let now = Date()
-        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -policy.dayLimit, to: now) else { return }
+        let timescale = policy.dayLimit + 1 // this is so the same day is not deleted
+        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -timescale, to: now) else { return }
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
