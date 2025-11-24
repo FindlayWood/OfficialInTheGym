@@ -29,7 +29,7 @@ struct CompletedSetView: View {
             }
             if let weight = model.weight, let unit = model.weightUnit {
                 if unit != .max, unit != .bw {
-                    Text("\(weight) \(unit.rawValue)")
+                    Text("\(weight.formatted(.number.precision(.fractionLength(0...6)))) \(unit.rawValue)")
                         .font(.system(size: 17, weight: .medium))
                         .foregroundStyle(Color.black)
                 } else {

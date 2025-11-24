@@ -73,7 +73,7 @@ struct SetDetailView: View {
                         HStack(spacing: 0) {
                             if model.weight != nil || model.weightUnit != nil {
                                 if let weight = model.weight {
-                                    Text("\(weight)")
+                                    Text("\(weight.formatted(.number.precision(.fractionLength(0...6))))")
                                 }
                                 if let weightUnit = model.weightUnit {
                                     Text("\(weightUnit.rawValue)")

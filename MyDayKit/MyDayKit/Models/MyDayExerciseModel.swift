@@ -47,7 +47,7 @@ struct ExerciseCompletions: Identifiable, Codable {
     let id: String
     let exercise: Exercise
     let reps: Int
-    let weight: Int?
+    let weight: Double?
     let weightUnit: WeightUnit?
     let dateCompleted: Date
     let distance: Int?

@@ -10,7 +10,8 @@ import SwiftUI
 struct MyDayWeightSelectorView: View {
     
     @State private var selectedUnit: WeightUnit?
-    @State private var value: Int
+    @State private var value: Double
+    @State private var stringInput: String = ""
     
     private var isValidSelection: Bool {
         guard let unit = selectedUnit else { return false }
@@ -70,42 +71,27 @@ struct MyDayWeightSelectorView: View {
             // Numeric input controls
             if let unit = selectedUnit, unit != .max, unit != .bw {
                 VStack(spacing: 16) {
-                    Text(" \(value) \(unit.rawValue)")
+                    Text("\(stringInput.isEmpty ? "0" : stringInput) \(unit.rawValue)")
                         .font(.system(size: 30, weight: .bold))
                     
-                    HStack(spacing: 24) {
-                        // Negative side
-                        LazyVGrid(columns: columns, spacing: 8) {
-                            ForEach(steps, id: \.self) { step in
-                                Button(action: {
-                                    value = max(0, value - step)
-                                }) {
-                                    Text("-\(step)")
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 8)
-                                        .background(Color.red.opacity(0.2))
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                                }
-                            }
+                    CustomNumberPad(
+                        showingDecimalPoint: true,
+                        decimalDisabled: decimalDisabled,
+                        backspaceDisabled: stringInput.isEmpty,
+                        zeroDisabled: stringInput.isEmpty,
+                        decimalSelected: {
+                            stringInput.append(".")
+                            value = Double(stringInput) ?? 0
+                        },
+                        selection: { number in
+                            stringInput.append("\(number)")
+                            value = Double(stringInput) ?? 0
+                        },
+                        backspace: {
+                            stringInput.removeLast()
+                            value = Double(stringInput) ?? 0
                         }
-                        .frame(maxWidth: .infinity)
-                        
-                        // Positive side
-                        LazyVGrid(columns: columns, spacing: 8) {
-                            ForEach(steps, id: \.self) { step in
-                                Button(action: {
-                                    value = min(9999, value + step)
-                                }) {
-                                    Text("+\(step)")
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 8)
-                                        .background(Color.green.opacity(0.2))
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                                }
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                    }
+                    )
                 }
             } else if selectedUnit == .max {
                 Text("MAX")
@@ -140,6 +126,10 @@ struct MyDayWeightSelectorView: View {
             newExercise.setWeightUnits(selectedUnit)
             continueAction?()
         }
+    }
+    
+    var decimalDisabled: Bool {
+        stringInput.isEmpty || stringInput.contains(".")
     }
 }
 

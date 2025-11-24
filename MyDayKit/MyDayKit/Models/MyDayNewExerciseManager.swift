@@ -11,7 +11,7 @@ class MyDayNewExerciseManager: ObservableObject, Hashable {
     
     let exercise: Exercise
     @Published var reps: Int?
-    @Published var weight: Int?
+    @Published var weight: Double?
     @Published var weightUnits: WeightUnit?
     @Published var distance: Int?
     @Published var distanceUnits: DistanceUnit?
@@ -20,7 +20,7 @@ class MyDayNewExerciseManager: ObservableObject, Hashable {
     @Published var note: String?
     @Published var eachSide: Bool = false
     
-    init(exercise: Exercise, reps: Int? = nil, weight: Int? = nil, weightUnits: WeightUnit? = nil) {
+    init(exercise: Exercise, reps: Int? = nil, weight: Double? = nil, weightUnits: WeightUnit? = nil) {
         self.exercise = exercise
         self.reps = reps
         self.weight = weight
@@ -46,7 +46,7 @@ class MyDayNewExerciseManager: ObservableObject, Hashable {
         self.reps = reps
     }
     
-    func setWeight(_ weight: Int) {
+    func setWeight(_ weight: Double) {
         self.weight = weight
     }
     

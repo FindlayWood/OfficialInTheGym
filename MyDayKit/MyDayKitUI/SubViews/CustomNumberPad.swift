@@ -10,9 +10,11 @@ import SwiftUI
 struct CustomNumberPad: View {
     
     var showingDecimalPoint: Bool = false
+    var decimalDisabled: Bool = true
     let backspaceDisabled: Bool
     let zeroDisabled: Bool
     
+    var decimalSelected: (() -> ())?
     var selection: ((Int) -> ())?
     var backspace: (() -> ())?
     
@@ -28,8 +30,15 @@ struct CustomNumberPad: View {
                 }
             }
             HStack(spacing: 10) {
-                Spacer()
-                    .frame(width: 60)
+                if showingDecimalPoint {
+                    NumberButton(label: ".", disabled: decimalDisabled) {
+                        decimalSelected?()
+                    }
+                    .disabled(decimalDisabled)
+                } else {
+                    Spacer()
+                        .frame(width: 60)
+                }
                 NumberButton(label: "0", disabled: zeroDisabled) {
                     selection?(0)
                 }

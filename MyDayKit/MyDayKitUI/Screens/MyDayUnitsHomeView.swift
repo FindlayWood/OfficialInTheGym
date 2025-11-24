@@ -61,7 +61,7 @@ struct MyDayUnitsHomeView: View {
                                 case .weight:
                                     if let weight = newExercise.weight, let unit = newExercise.weightUnits {
                                         if unit != .max, unit != .bw {
-                                            Text("\(weight) \(unit.rawValue)")
+                                            Text("\(weight.formatted(.number.precision(.fractionLength(0...6)))) \(unit.rawValue)")
                                                 .font(.system(size: 20, weight: .semibold))
                                                 .foregroundStyle(Color.black)
                                         } else {
