@@ -50,7 +50,7 @@ struct ExerciseCompletions: Identifiable, Codable {
     let weight: Double?
     let weightUnit: WeightUnit?
     let dateCompleted: Date
-    let distance: Int?
+    let distance: Double?
     let distanceUnits: DistanceUnit?
     let time: Int?
     let tempo: Tempo?

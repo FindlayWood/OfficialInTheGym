@@ -106,7 +106,7 @@ struct SetDetailView: View {
                         if model.distance != nil || model.distanceUnits != nil {
                             HStack(spacing: 0) {
                                 if let distance = model.distance {
-                                    Text("\(distance)")
+                                    Text("\(distance.formatted(.number.precision(.fractionLength(0...6))))")
                                 }
                                 if let distanceUnit = model.distanceUnits {
                                     Text("\(distanceUnit.rawValue)")

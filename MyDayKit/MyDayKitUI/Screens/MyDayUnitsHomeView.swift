@@ -73,7 +73,7 @@ struct MyDayUnitsHomeView: View {
                                 case .distance:
                                     HStack {
                                         if let distance = newExercise.distance {
-                                            Text("\(distance)")
+                                            Text("\(distance.formatted(.number.precision(.fractionLength(0...6))))")
                                                 .font(.system(size: 20, weight: .semibold))
                                         }
                                         if let distanceUnit = newExercise.distanceUnits {
