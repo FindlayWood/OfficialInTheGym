@@ -28,7 +28,8 @@ class MyDayKitComposition {
         let weekPolicy = MyDayOneWeekPolicy()
         let localLoader: MyDayLoader = MyDayFileManagerLoader(policy: weekPolicy)
         let remoteLoader = MyDayFirestoreLoader()
-        let policyLoader = MyDayPolicyDayLoader(localLoader: localLoader, remoteLoader: remoteLoader, policy: weekPolicy)
+        let localWithRemoteFallbackLoader = LocalWithRemoteFallBackMyDayLoader(localLoader: localLoader, remoteLoader: remoteLoader)
+        let policyLoader = MyDayPolicyDayLoader(localLoader: localWithRemoteFallbackLoader, remoteLoader: remoteLoader, policy: weekPolicy)
         let dayManager = MyDayManager(saver: localAndRemoteMyDayAndExerciseStatsSaver, loader: policyLoader)
         
         let router = MyDayKitRouter(exerciseManager: exerciseManager, dayManager: dayManager)
@@ -278,6 +279,19 @@ extension MyDayFileManagerLoader {
                 try? FileManager.default.removeItem(at: file)
                 print("🗑 Deleted old day file: \(filename)")
             }
+        }
+    }
+}
+
+struct LocalWithRemoteFallBackMyDayLoader: MyDayLoader {
+    let localLoader: MyDayLoader
+    let remoteLoader: MyDayLoader
+    
+    func load<T: Codable>(for date: Date) async throws -> T? {
+        if let data: T = try? await localLoader.load(for: date) {
+            return data
+        } else {
+            return try await remoteLoader.load(for: date)
         }
     }
 }
