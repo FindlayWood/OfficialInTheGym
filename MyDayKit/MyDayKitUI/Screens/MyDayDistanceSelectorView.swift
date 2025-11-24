@@ -58,6 +58,7 @@ struct MyDayDistanceSelectorView: View {
                             selectedUnit = unit
                         }
                         value = 0 // reset when changing unit
+                        stringInput = ""
                     }) {
                         Text(unit.rawValue.uppercased())
                             .frame(maxWidth: .infinity)
