@@ -66,7 +66,7 @@ struct ExerciseCompletions: Identifiable, Codable {
             w = Double(weight ?? 0) * 0.453592
         }
         return ExerciseStatsSaveModel(
-            id: UUID().uuidString,
+            id: id,
             exerciseID: exercise.id,
             exerciseName: exercise.name,
             dateComplete: dateCompleted,
