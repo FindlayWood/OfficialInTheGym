@@ -87,6 +87,11 @@ struct MyDayKitRepsView: View {
             .disabled(stringInput.isEmpty)
         }
         .navigationTitle("Reps")
+        .onAppear {
+            guard let currentReps = exercise.reps else { return }
+            stringInput = "\(currentReps)"
+            reps = currentReps
+        }
     }
     
     func addAction() {

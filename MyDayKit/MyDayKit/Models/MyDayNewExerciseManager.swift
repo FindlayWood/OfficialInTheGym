@@ -9,6 +9,8 @@ import Foundation
 
 class MyDayNewExerciseManager: ObservableObject, Hashable {
     
+    var editingCompletion: ExerciseCompletions?
+    
     let exercise: Exercise
     @Published var reps: Int?
     @Published var weight: Double?
@@ -20,11 +22,28 @@ class MyDayNewExerciseManager: ObservableObject, Hashable {
     @Published var note: String?
     @Published var eachSide: Bool = false
     
-    init(exercise: Exercise, reps: Int? = nil, weight: Double? = nil, weightUnits: WeightUnit? = nil) {
+    init(
+        exercise: Exercise,
+        reps: Int? = nil,
+        weight: Double? = nil,
+        weightUnits: WeightUnit? = nil,
+        distance: Double? = nil,
+        distanceUnits: DistanceUnit? = nil,
+        time: Int? = nil,
+        tempo: Tempo? = nil,
+        note: String? = nil,
+        eachSide: Bool? = false
+    ) {
         self.exercise = exercise
         self.reps = reps
         self.weight = weight
         self.weightUnits = weightUnits
+        self.distance = distance
+        self.distanceUnits = distanceUnits
+        self.time = time
+        self.tempo = tempo
+        self.note = note
+        self.eachSide = eachSide ?? false
     }
     
     func isOptionAdded(_ option: ExerciseOptions) -> Bool {
@@ -94,22 +113,41 @@ class MyDayNewExerciseManager: ObservableObject, Hashable {
     func getCompletion() -> ExerciseCompletions? {
         guard let reps else { return nil }
         
-        let completion = ExerciseCompletions(
-            id: UUID().uuidString,
-            exercise: exercise,
-            reps: reps,
-            weight: weight,
-            weightUnit: weightUnits,
-            dateCompleted: .now,
-            distance: distance,
-            distanceUnits: distanceUnits,
-            time: time,
-            tempo: tempo,
-            note: note,
-            eachSide: eachSide
-        )
-        
-        return completion
+        if let editingCompletion {
+            let completion = ExerciseCompletions(
+                id: editingCompletion.id,
+                exercise: exercise,
+                reps: reps,
+                weight: weight,
+                weightUnit: weightUnits,
+                dateCompleted: .now,
+                distance: distance,
+                distanceUnits: distanceUnits,
+                time: time,
+                tempo: tempo,
+                note: note,
+                eachSide: eachSide
+            )
+            self.editingCompletion = nil
+            return completion
+        } else {
+            let completion = ExerciseCompletions(
+                id: UUID().uuidString,
+                exercise: exercise,
+                reps: reps,
+                weight: weight,
+                weightUnit: weightUnits,
+                dateCompleted: .now,
+                distance: distance,
+                distanceUnits: distanceUnits,
+                time: time,
+                tempo: tempo,
+                note: note,
+                eachSide: eachSide
+            )
+            
+            return completion
+        }
     }
     
     func reset() {

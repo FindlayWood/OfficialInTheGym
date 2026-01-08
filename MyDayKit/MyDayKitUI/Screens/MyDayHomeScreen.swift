@@ -23,6 +23,7 @@ struct MyDayHomeScreen: View {
     
     @State private var dateDropDown: Bool = false
     @State private var selectedSet: ExerciseCompletions?
+    @State private var selectedActivity: MyDayActivity = .exercises
     
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -41,6 +42,7 @@ struct MyDayHomeScreen: View {
     var addButtonAction: (() -> ())?
     var addSpecificExercise: ((MyDayNewExerciseManager) -> ())?
     var recordClip: (() -> ())?
+    var edit: ((MyDayNewExerciseManager) -> ())?
     
     var body: some View {
         
@@ -128,6 +130,31 @@ struct MyDayHomeScreen: View {
                 }
             }
             
+            HStack {
+                ForEach(MyDayActivity.allCases, id: \.self) { activity in
+                    Button {
+                        selectedActivity = activity
+                    } label: {
+                        VStack {
+                            Text(activity.title)
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(Color.primary.opacity(selectedActivity == activity ? 1 : 0.4))
+                            if activity == selectedActivity {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .matchedGeometryEffect(id: "activityUnderline", in: animation)
+                                    .frame(height: 2)
+                                    .foregroundStyle(Color.blue)
+                            } else {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .frame(height: 2)
+                                    .foregroundStyle(Color.clear)
+                            }
+                        }
+                    }
+                }
+            }
+            .animation(.easeIn, value: selectedActivity)
+            
             if let selectedDay = dayManager.selectedDay {
                 if selectedDay.exercises.isEmpty {
                     if dayManager.isTodaySelected() {
@@ -199,6 +226,26 @@ struct MyDayHomeScreen: View {
                         withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
                             self.selectedSet = nil
                         }
+                    },
+                    edit: {
+                        let new = MyDayNewExerciseManager(
+                            exercise: selectedSet.exercise,
+                            reps: selectedSet.reps,
+                            weight: selectedSet.weight,
+                            weightUnits: selectedSet.weightUnit,
+                            distance: selectedSet.distance,
+                            distanceUnits: selectedSet.distanceUnits,
+                            time: selectedSet.time,
+                            tempo: selectedSet.tempo,
+                            note: selectedSet.note,
+                            eachSide: selectedSet.eachSide
+                        )
+                        new.editingCompletion = selectedSet
+                        edit?(new)
+                        self.selectedSet = nil
+                    },
+                    delete: {
+                       
                     }
                 )
                 .transition(.asymmetric(insertion: .identity, removal: .offset(y: 5)))
@@ -214,4 +261,21 @@ struct MyDayHomeScreen: View {
 
 #Preview {
     MyDayHomeScreen(dayManager: MyDayManager(saver: PreviewSaver(), loader: PreviewLoader()))
+}
+
+enum MyDayActivity: CaseIterable {
+    case exercises
+    case fitness
+    case sports
+    
+    var title: String {
+        switch self {
+        case .exercises:
+            return "Exercises"
+        case .fitness:
+            return "Fitness"
+        case .sports:
+            return "Sports"
+        }
+    }
 }

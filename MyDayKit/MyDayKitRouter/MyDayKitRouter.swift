@@ -68,6 +68,9 @@ public class MyDayKitRouter: ObservableObject {
                 },
                 recordClip: { [weak self] in
                     self?.coverFullScreen(with: .recordClip)
+                },
+                edit: { [weak self] exerciseManager in
+                    self?.navigate(to: .reps(exerciseManager))
                 }
             )
         case .add:

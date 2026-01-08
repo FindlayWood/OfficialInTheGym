@@ -14,6 +14,8 @@ struct SetDetailView: View {
     let model: ExerciseCompletions
     let animation: Namespace.ID
     var close: (() -> ())?
+    var edit: (() -> ())?
+    var delete: (() -> ())?
     
     var body: some View {
         VStack {
@@ -203,9 +205,7 @@ struct SetDetailView: View {
                 
                 HStack {
                     Button {
-                        withAnimation {
-                            close?()
-                        }
+                        edit?()
                     } label: {
                         Text("Edit")
                             .foregroundStyle(Color.white)
@@ -219,7 +219,7 @@ struct SetDetailView: View {
                     }
                     
                     Button {
-                        close?()
+                        delete?()
                     } label: {
                         Text("Delete")
                             .foregroundStyle(Color.white)
