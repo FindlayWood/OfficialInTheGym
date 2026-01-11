@@ -10,9 +10,11 @@ import SwiftUI
 struct SetDetailView: View {
     
     @State private var isShowing: Bool = false
+    @State private var isShowingDelete: Bool = false
     
     let model: ExerciseCompletions
     let animation: Namespace.ID
+    let isToday: Bool
     var close: (() -> ())?
     var edit: (() -> ())?
     var delete: (() -> ())?
@@ -20,102 +22,204 @@ struct SetDetailView: View {
     var body: some View {
         VStack {
             if isShowing {
-                Text(model.exercise.name)
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundStyle(Color.primary)
-                    .transition(.scale(scale: 1.1))
-                
-                Text(formattedTime(from: model.dateCompleted))
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.black.opacity(0.5))
-                
-                Button {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isShowing = false
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                        close?()
-                    }
-                } label: {
-                    Text("Close")
-                }
-            
-            Text("\(model.reps)")
-                .font(.system(size: 20, weight: .bold))
-                .foregroundStyle(Color.black)
-            
-                HStack {
-                    VStack {
-                        Text("reps")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(Color.black.opacity(0.5))
-                            .underline()
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        Text("\(model.reps)")
-                            
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background {
-                        Color
-                            .white
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .shadow(radius: 4)
-                    }
+                if isShowingDelete {
+                    Text(model.exercise.name)
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundStyle(Color.primary)
+                        .transition(.scale(scale: 1.1))
                     
+                    Text(formattedTime(from: model.dateCompleted))
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(Color.black.opacity(0.5))
                     
-                    
-                    VStack {
-                        Text("weight")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(Color.black.opacity(0.5))
-                            .underline()
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        HStack(spacing: 0) {
-                            if model.weight != nil || model.weightUnit != nil {
-                                if let weight = model.weight {
-                                    Text("\(weight.formatted(.number.precision(.fractionLength(0...6))))")
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isShowing = false
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                            close?()
+                        }
+                    } label: {
+                        Text("Close")
+                    }
+                    Spacer()
+                    Text("Are you sure you want to delete this completion? This action cannot be undone.")
+                        .multilineTextAlignment(.center)
+                    Spacer()
+                    HStack {
+                        Button {
+                            isShowingDelete = false
+                        } label: {
+                            Text("Cancel")
+                                .foregroundStyle(Color.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                    Color
+                                        .blue
+                                        .clipShape(RoundedRectangle(cornerRadius: 10))
                                 }
-                                if let weightUnit = model.weightUnit {
-                                    Text("\(weightUnit.rawValue)")
+                        }
+                        
+                        Button {
+                            delete?()
+                        } label: {
+                            Text("Delete")
+                                .foregroundStyle(Color.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                    Color
+                                        .red
+                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                }
+                        }
+                    }
+                    .transition(.opacity)
+                } else {
+                    Text(model.exercise.name)
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundStyle(Color.primary)
+                        .transition(.scale(scale: 1.1))
+                    
+                    Text(formattedTime(from: model.dateCompleted))
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(Color.black.opacity(0.5))
+                    
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isShowing = false
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                            close?()
+                        }
+                    } label: {
+                        Text("Close")
+                    }
+                    
+                    Text("\(model.reps)")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(Color.black)
+                    
+                    HStack {
+                        VStack {
+                            Text("reps")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(Color.black.opacity(0.5))
+                                .underline()
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            Text("\(model.reps)")
+                            
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background {
+                            Color
+                                .white
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .shadow(radius: 4)
+                        }
+                        
+                        VStack {
+                            Text("weight")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(Color.black.opacity(0.5))
+                                .underline()
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            HStack(spacing: 0) {
+                                if model.weight != nil || model.weightUnit != nil {
+                                    if let weight = model.weight {
+                                        Text("\(weight.formatted(.number.precision(.fractionLength(0...6))))")
+                                    }
+                                    if let weightUnit = model.weightUnit {
+                                        Text("\(weightUnit.rawValue)")
+                                    } else {
+                                        Text("-")
+                                    }
                                 } else {
                                     Text("-")
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background {
+                            Color
+                                .white
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .shadow(radius: 4)
+                        }
+                    }
+                    .transition(.opacity)
+                    
+                    HStack {
+                        VStack {
+                            Text("distance")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(Color.black.opacity(0.5))
+                                .underline()
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            if model.distance != nil || model.distanceUnits != nil {
+                                HStack(spacing: 0) {
+                                    if let distance = model.distance {
+                                        Text("\(distance.formatted(.number.precision(.fractionLength(0...6))))")
+                                    }
+                                    if let distanceUnit = model.distanceUnits {
+                                        Text("\(distanceUnit.rawValue)")
+                                    } else {
+                                        Text("-")
+                                    }
                                 }
                             } else {
                                 Text("-")
                             }
                         }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background {
-                        Color
-                            .white
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .shadow(radius: 4)
-                    }
-                }
-                .transition(.opacity)
-                
-                HStack {
-                    VStack {
-                        Text("distance")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(Color.black.opacity(0.5))
-                            .underline()
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        if model.distance != nil || model.distanceUnits != nil {
-                            HStack(spacing: 0) {
-                                if let distance = model.distance {
-                                    Text("\(distance.formatted(.number.precision(.fractionLength(0...6))))")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background {
+                            Color
+                                .white
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .shadow(radius: 4)
+                        }
+                        
+                        VStack {
+                            Text("time")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(Color.black.opacity(0.5))
+                                .underline()
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            if let time = model.time {
+                                HStack {
+                                    Text(displayTime(for: time))
                                 }
-                                if let distanceUnit = model.distanceUnits {
-                                    Text("\(distanceUnit.rawValue)")
-                                } else {
-                                    Text("-")
-                                }
+                            } else {
+                                Text("-")
                             }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background {
+                            Color
+                                .white
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .shadow(radius: 4)
+                        }
+                    }
+                    .transition(.opacity)
+
+                    
+                    VStack {
+                        if let tempo = model.tempo {
+                            Text("tempo")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(Color.black.opacity(0.5))
+                                .underline()
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            
+                            Text("\(tempo.eccentric)-\(tempo.eccentricHold)-\(tempo.concentric)-\(tempo.concentricHold)")
                         } else {
                             Text("-")
                         }
@@ -128,111 +232,67 @@ struct SetDetailView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                             .shadow(radius: 4)
                     }
+                    .transition(.opacity)
                     
-                    VStack {
-                        Text("time")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(Color.black.opacity(0.5))
-                            .underline()
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        if let time = model.time {
-                            HStack {
-                                Text(displayTime(for: time))
-                            }
-                        } else {
-                            Text("-")
+                    
+                    if let note = model.note {
+                        VStack {
+                            Text("note")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(Color.black.opacity(0.5))
+                                .underline()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Text(note)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding()
+                        .background {
+                            Color
+                                .white
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .shadow(radius: 4)
                         }
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background {
-                        Color
-                            .white
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .shadow(radius: 4)
-                    }
-                }
-                .transition(.opacity)
-                
-                
-                VStack {
-                    if let tempo = model.tempo {
-                        Text("tempo")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(Color.black.opacity(0.5))
-                            .underline()
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        
-                        Text("\(tempo.eccentric)-\(tempo.eccentricHold)-\(tempo.concentric)-\(tempo.concentricHold)")
-                    } else {
-                        Text("-")
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background {
-                    Color
-                        .white
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .shadow(radius: 4)
-                }
-                .transition(.opacity)
-                
-                if let note = model.note {
-                    VStack {
-                        Text("note")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(Color.black.opacity(0.5))
-                            .underline()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        Text(note)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        Spacer()
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding()
-                    .background {
-                        Color
-                            .white
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .shadow(radius: 4)
-                    }
-                }
-                
-                Spacer()
-                
-                HStack {
-                    Button {
-                        edit?()
-                    } label: {
-                        Text("Edit")
-                            .foregroundStyle(Color.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background {
-                                Color
-                                    .blue
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                            }
-                    }
                     
-                    Button {
-                        delete?()
-                    } label: {
-                        Text("Delete")
-                            .foregroundStyle(Color.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background {
-                                Color
-                                    .red
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    Spacer()
+                    
+                    if isToday {
+                        HStack {
+                            Button {
+                                edit?()
+                            } label: {
+                                Text("Edit")
+                                    .foregroundStyle(Color.white)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background {
+                                        Color
+                                            .blue
+                                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    }
                             }
+                            
+                            Button {
+                                isShowingDelete = true
+                            } label: {
+                                Text("Delete")
+                                    .foregroundStyle(Color.white)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background {
+                                        Color
+                                            .red
+                                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    }
+                            }
+                        }
+                        .transition(.opacity)
                     }
                 }
-                .transition(.opacity)
             } else {
                 Spacer()
             }
@@ -291,7 +351,8 @@ struct SetDetailView: View {
             note: "This is s test note",
             eachSide: false
         ),
-        animation: namespace
+        animation: namespace,
+        isToday: true
     )
     .padding()
 }

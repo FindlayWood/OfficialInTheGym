@@ -222,6 +222,7 @@ struct MyDayHomeScreen: View {
                 SetDetailView(
                     model: selectedSet,
                     animation: animation,
+                    isToday: dayManager.isTodaySelected(),
                     close: {
                         withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
                             self.selectedSet = nil
