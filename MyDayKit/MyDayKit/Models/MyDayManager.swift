@@ -15,11 +15,15 @@ public class MyDayManager: ObservableObject {
     @Published var selectedDay: MyDayFullDayModel?
     
     let saver: MyDayAndStatSaver
+    let deleteSaver: MyDaySaver
     let loader: MyDayLoader
+    let deleter: MyDayDeleter
     
-    public init(saver: MyDayAndStatSaver, loader: MyDayLoader) {
+    public init(saver: MyDayAndStatSaver, deleteSaver: MyDaySaver, loader: MyDayLoader, deleter: MyDayDeleter) {
         self.saver = saver
+        self.deleteSaver = deleteSaver
         self.loader = loader
+        self.deleter = deleter
         initialLoad()
     }
     
@@ -77,39 +81,39 @@ public class MyDayManager: ObservableObject {
         }
     }
     
-//    func deleteCompletion(_ completion: ExerciseCompletions) {
-//        guard var selectedDay else { return }
-//
-//        // 1. Find the exercise that contains this completion
-//        guard let exerciseIndex = selectedDay.exercises.firstIndex(where: {
-//            $0.exercise.id == completion.exercise.id
-//        }) else {
-//            return
-//        }
-//
-//        // 2. Find the specific completion inside that exercise
-//        guard let completionIndex = selectedDay.exercises[exerciseIndex]
-//            .completions
-//            .firstIndex(where: { $0.id == completion.id }) else {
-//            return
-//        }
-//
-//        // 3. Remove the completion
-//        selectedDay.exercises[exerciseIndex].completions.remove(at: completionIndex)
-//
-//        // 4. If the exercise is now empty, remove the entire exercise
-//        if selectedDay.exercises[exerciseIndex].completions.isEmpty {
-//            selectedDay.exercises.remove(at: exerciseIndex)
-//        }
-//
-//        // 5. Save new state
-//        self.selectedDay = selectedDay
-//
-//        let stats = completion.getStats()   // usually you still want to update totals
-//        Task {
-//            try await saver.save(data: selectedDay, stats: stats)
-//        }
-//    }
+    func deleteCompletion(_ completion: ExerciseCompletions) {
+        guard var selectedDay else { return }
+
+        // 1. Find the exercise that contains this completion
+        guard let exerciseIndex = selectedDay.exercises.firstIndex(where: {
+            $0.exercise.id == completion.exercise.id
+        }) else {
+            return
+        }
+
+        // 2. Find the specific completion inside that exercise
+        guard let completionIndex = selectedDay.exercises[exerciseIndex]
+            .completions
+            .firstIndex(where: { $0.id == completion.id }) else {
+            return
+        }
+
+        // 3. Remove the completion
+        selectedDay.exercises[exerciseIndex].completions.remove(at: completionIndex)
+
+        // 4. If the exercise is now empty, remove the entire exercise
+        if selectedDay.exercises[exerciseIndex].completions.isEmpty {
+            selectedDay.exercises.remove(at: exerciseIndex)
+        }
+
+        // 5. Save new state
+        self.selectedDay = selectedDay
+
+        Task {
+            try await deleter.delete(at: "\(completion.exercise.id)/RawLogs/\(completion.id)")
+            try await deleteSaver.save(data: selectedDay)
+        }
+    }
     
     
     func initialLoad() {

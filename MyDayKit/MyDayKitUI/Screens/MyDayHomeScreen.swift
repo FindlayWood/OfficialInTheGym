@@ -245,7 +245,10 @@ struct MyDayHomeScreen: View {
                         self.selectedSet = nil
                     },
                     delete: {
-                       
+                        dayManager.deleteCompletion(selectedSet)
+                        withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
+                            self.selectedSet = nil
+                        }
                     }
                 )
                 .transition(.asymmetric(insertion: .identity, removal: .offset(y: 5)))
@@ -260,7 +263,14 @@ struct MyDayHomeScreen: View {
 }
 
 #Preview {
-    MyDayHomeScreen(dayManager: MyDayManager(saver: PreviewSaver(), loader: PreviewLoader()))
+    MyDayHomeScreen(
+        dayManager: MyDayManager(
+            saver: PreviewSaver(),
+            deleteSaver: PreviewMyDaySaver(),
+            loader: PreviewLoader(),
+            deleter: PreviewMyDayDeleter()
+        )
+    )
 }
 
 enum MyDayActivity: CaseIterable {

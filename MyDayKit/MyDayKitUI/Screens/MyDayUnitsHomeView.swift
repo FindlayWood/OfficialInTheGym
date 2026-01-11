@@ -169,7 +169,15 @@ struct MyDayUnitsHomeView: View {
 }
 
 #Preview {
-    MyDayUnitsHomeView(dayManager: MyDayManager(saver: PreviewSaver(), loader: PreviewLoader()), newExercise: .init(exercise: .pressUps))
+    MyDayUnitsHomeView(
+        dayManager: MyDayManager(
+            saver: PreviewSaver(),
+            deleteSaver: PreviewMyDaySaver(),
+            loader: PreviewLoader(),
+            deleter: PreviewMyDayDeleter()
+        ),
+        newExercise: .init(exercise: .pressUps)
+    )
 }
 
 enum ExerciseOptions: String, Identifiable, CaseIterable {

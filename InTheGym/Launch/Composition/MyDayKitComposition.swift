@@ -19,16 +19,22 @@ class MyDayKitComposition {
         let localSaver = MyDayFileManagerSaver()
         let remoteSaver = MyDayFirestoreSaver()
         let localAndRemoteMyDaySaver: MyDaySaver = LocalAndRemoteMyDaySaver(local: localSaver, remote: remoteSaver)
+        
         // Stats
         let rawLogRemoteStatsSaver: ExerciseStatsSaver = FirestoreExerciseStatsLogSaver()
-        
         let localAndRemoteMyDayAndExerciseStatsSaver = LocalAndRemoteMyDayAndRemoteStatSaver(myDaySaver: localAndRemoteMyDaySaver, statSaver: rawLogRemoteStatsSaver)
+        
+        // Loader
         let weekPolicy = MyDayOneWeekPolicy()
         let localLoader: MyDayLoader = MyDayFileManagerLoader(policy: weekPolicy)
         let remoteLoader = MyDayFirestoreLoader()
         let localWithRemoteFallbackLoader = LocalWithRemoteFallBackMyDayLoader(localLoader: localLoader, remoteLoader: remoteLoader)
         let policyLoader = MyDayPolicyDayLoader(localLoader: localWithRemoteFallbackLoader, remoteLoader: remoteLoader, policy: weekPolicy)
-        let dayManager = MyDayManager(saver: localAndRemoteMyDayAndExerciseStatsSaver, loader: policyLoader)
+        
+        // Deleter
+        let deleter = FirestoreRawLogDeleter()
+        
+        let dayManager = MyDayManager(saver: localAndRemoteMyDayAndExerciseStatsSaver, deleteSaver: localAndRemoteMyDaySaver, loader: policyLoader, deleter: deleter)
         
         let router = MyDayKitRouter(exerciseManager: exerciseManager, dayManager: dayManager)
         let view = MyDayKitRootview(router: router)
@@ -43,15 +49,21 @@ class MyDayKitComposition {
         let localSaver = MyDayFileManagerSaver()
         let remoteSaver = MyDayFirestoreSaver()
         let localAndRemoteMyDaySaver: MyDaySaver = LocalAndRemoteMyDaySaver(local: localSaver, remote: remoteSaver)
+        
         // Stats
         let rawLogRemoteStatsSaver: ExerciseStatsSaver = FirestoreExerciseStatsLogSaver()
-        
         let localAndRemoteMyDayAndExerciseStatsSaver = LocalAndRemoteMyDayAndRemoteStatSaver(myDaySaver: localAndRemoteMyDaySaver, statSaver: rawLogRemoteStatsSaver)
+        
+        // Loader
         let weekPolicy = MyDayOneWeekPolicy()
         let localLoader: MyDayLoader = MyDayFileManagerLoader(policy: weekPolicy)
         let remoteLoader = MyDayFirestoreLoader()
         let policyLoader = MyDayPolicyDayLoader(localLoader: localLoader, remoteLoader: remoteLoader, policy: weekPolicy)
-        let dayManager = MyDayManager(saver: localAndRemoteMyDayAndExerciseStatsSaver, loader: policyLoader)
+        
+        // Deleter
+        let deleter = FirestoreRawLogDeleter()
+        
+        let dayManager = MyDayManager(saver: localAndRemoteMyDayAndExerciseStatsSaver, deleteSaver: localAndRemoteMyDaySaver, loader: policyLoader, deleter: deleter)
         
         let vc = MyDayHomeViewController(dayManager: dayManager)
         return vc
@@ -353,5 +365,15 @@ struct FirestoreExerciseStatsLogSaver: ExerciseStatsSaver {
         let exerciseID = model.exerciseID
         let exerciseDocRef = db.collection("Users/\(userID)/ExerciseStats/\(exerciseID)/RawLogs").document(model.id)
         try await exerciseDocRef.setData(from: model)
+    }
+}
+
+struct FirestoreRawLogDeleter: MyDayDeleter {
+    
+    func delete(at path: String) async throws {
+        let db = Firestore.firestore()
+        let userID = UserDefaults.currentUser.uid
+        let logRef = db.collection("Users/\(userID)/ExerciseStats").document(path)
+        try await logRef.delete()
     }
 }

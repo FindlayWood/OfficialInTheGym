@@ -11,6 +11,12 @@ public protocol MyDaySaver {
     func save<T:Codable>(data: T) async throws
 }
 
+struct PreviewMyDaySaver: MyDaySaver {
+    func save<T:Codable>(data: T) async throws {
+        print("Saving: \(data)")
+    }
+}
+
 struct PreviewSaver: MyDayAndStatSaver {
     func save<T:Codable>(data: T, stats: ExerciseStatsSaveModel) async throws {
         print("Saving: \(data)")

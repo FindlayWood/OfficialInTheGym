@@ -37,7 +37,12 @@ public struct MyDayKitRootview: View {
     MyDayKitRootview(
         router: MyDayKitRouter(
             exerciseManager: ExerciseManager(loader: PreviewExerciseLoader()),
-            dayManager: MyDayManager(saver: PreviewSaver(), loader: PreviewLoader())
+            dayManager: MyDayManager(
+                saver: PreviewSaver(),
+                deleteSaver: PreviewMyDaySaver(),
+                loader: PreviewLoader(),
+                deleter: PreviewMyDayDeleter()
+            )
         )
     )
 }

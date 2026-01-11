@@ -101,5 +101,13 @@ struct MyDayKitRepsView: View {
 }
 
 #Preview {
-    MyDayKitRepsView(dayManager: MyDayManager(saver: PreviewSaver(), loader: PreviewLoader()), exercise: MyDayNewExerciseManager(exercise: .pressUps))
+    MyDayKitRepsView(
+        dayManager: MyDayManager(
+            saver: PreviewSaver(),
+            deleteSaver: PreviewMyDaySaver(),
+            loader: PreviewLoader(),
+            deleter: PreviewMyDayDeleter()
+        ),
+        exercise: MyDayNewExerciseManager(exercise: .pressUps)
+    )
 }
