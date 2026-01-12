@@ -48,18 +48,19 @@ class PlayerInitialViewController: UITabBarController {
         workoutKitNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 3)
         let workoutKitComposition = WorkoutKitComposition(navigaitonController: workoutKitNavigationController)
 //        workoutKitComposition.compose()
-        // MARK: - Profile
-        let myProfileNavigationController = UINavigationController()
-        myProfileNavigationController.tabBarItem = UITabBarItem(title: "MYPROFILE", image: UIImage(systemName: "person.fill"), tag: 4)
-        let myProfileCoordinator = MyProfileCoordinator(navigationController: myProfileNavigationController, subscriptionManager: subscriptionManager)
-        myProfileCoordinator.start()
         
         // MARK: - MyDay
         let myDayKit = MyDayKitComposition()
         let hostedViewController = myDayKit.compose()
-        hostedViewController.tabBarItem = UITabBarItem(title: "EXERCISES", image: UIImage(systemName: "list.bullet"), tag: 5)
+        hostedViewController.tabBarItem = UITabBarItem(title: "MYDAY", image: UIImage(systemName: "list.dash"), tag: 4)
         
-        viewControllers = [timelineNavigationController, discoverNavigationController, workoutsNavigationController, myProfileNavigationController, hostedViewController]
+        // MARK: - Profile
+        let myProfileNavigationController = UINavigationController()
+        myProfileNavigationController.tabBarItem = UITabBarItem(title: "MYPROFILE", image: UIImage(systemName: "person.fill"), tag: 5)
+        let myProfileCoordinator = MyProfileCoordinator(navigationController: myProfileNavigationController, subscriptionManager: subscriptionManager)
+        myProfileCoordinator.start()
+        
+        viewControllers = [timelineNavigationController, discoverNavigationController, workoutsNavigationController,  hostedViewController, myProfileNavigationController]
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
