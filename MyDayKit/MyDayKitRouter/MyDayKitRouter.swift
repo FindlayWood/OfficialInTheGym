@@ -25,10 +25,13 @@ enum MyDaySheets: Identifiable {
         switch self {
         case .add:
             return "add"
+        case .option:
+            return "option"
         }
     }
     
     case add
+    case option
 }
 
 enum MyDayFullScreenCover: Identifiable {
@@ -61,7 +64,8 @@ public class MyDayKitRouter: ObservableObject {
             MyDayHomeScreen(
                 dayManager: dayManager,
                 addButtonAction: { [weak self] in
-                    self?.navigate(to: .add)
+                    self?.presentSheet(.option)
+//                    self?.navigate(to: .add)
                 },
                 addSpecificExercise: { [weak self] exercise in
                     self?.navigate(to: .reps(exercise))
@@ -140,6 +144,15 @@ public class MyDayKitRouter: ObservableObject {
         switch route {
         case .add:
             MyDayExerciseListView(exerciseManager: exerciseManager)
+        case .option:
+            SelectOptionSheet(
+                exerciseSelected: { [weak self] in
+                    self?.presentedSheet = nil
+                    self?.navigate(to: .add)
+                }
+            )
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
         }
     }
     @ViewBuilder func fullScreenCover(for cover: MyDayFullScreenCover) -> some View {
