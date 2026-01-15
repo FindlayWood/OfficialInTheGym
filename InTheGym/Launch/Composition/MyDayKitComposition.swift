@@ -42,6 +42,34 @@ class MyDayKitComposition {
         return hostingController
     }
     
+    func composeCombination(_ navigationController: UINavigationController) {
+        let loader: ExerciseLoader = FirebaseExerciseLoader()
+        let mainThreadLoader: ExerciseLoader = MainThreadExerciseLoaderDecorator(decoratee: loader)
+        let exerciseManager = ExerciseManager(loader: mainThreadLoader)
+        let localSaver = MyDayFileManagerSaver()
+        let remoteSaver = MyDayFirestoreSaver()
+        let localAndRemoteMyDaySaver: MyDaySaver = LocalAndRemoteMyDaySaver(local: localSaver, remote: remoteSaver)
+        
+        // Stats
+        let rawLogRemoteStatsSaver: ExerciseStatsSaver = FirestoreExerciseStatsLogSaver()
+        let localAndRemoteMyDayAndExerciseStatsSaver = LocalAndRemoteMyDayAndRemoteStatSaver(myDaySaver: localAndRemoteMyDaySaver, statSaver: rawLogRemoteStatsSaver)
+        
+        // Loader
+        let weekPolicy = MyDayOneWeekPolicy()
+        let localLoader: MyDayLoader = MyDayFileManagerLoader(policy: weekPolicy)
+        let remoteLoader = MyDayFirestoreLoader()
+        let localWithRemoteFallbackLoader = LocalWithRemoteFallBackMyDayLoader(localLoader: localLoader, remoteLoader: remoteLoader)
+        let policyLoader = MyDayPolicyDayLoader(localLoader: localWithRemoteFallbackLoader, remoteLoader: remoteLoader, policy: weekPolicy)
+        
+        // Deleter
+        let deleter = FirestoreRawLogDeleter()
+        
+        let dayManager = MyDayManager(saver: localAndRemoteMyDayAndExerciseStatsSaver, deleteSaver: localAndRemoteMyDaySaver, loader: policyLoader, deleter: deleter)
+        
+        let coordinator = MyDayCoordinator(navigationController: navigationController, exerciseManager: exerciseManager, dayManager: dayManager)
+        coordinator.start()
+    }
+    
     func composeUIKit() -> UIViewController {
         let loader: ExerciseLoader = FirebaseExerciseLoader()
         let mainThreadLoader: ExerciseLoader = MainThreadExerciseLoaderDecorator(decoratee: loader)

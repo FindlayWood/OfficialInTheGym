@@ -109,6 +109,7 @@ struct MyDayExerciseListView: View {
             }
         }
         .navigationTitle("Select Exercise")
+        .navigationBarTitleDisplayMode(.inline)
         .task {
             await exerciseManager.load()
         }

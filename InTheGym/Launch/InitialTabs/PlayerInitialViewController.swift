@@ -51,8 +51,9 @@ class PlayerInitialViewController: UITabBarController {
         
         // MARK: - MyDay
         let myDayKit = MyDayKitComposition()
-        let hostedViewController = myDayKit.compose()
-        hostedViewController.tabBarItem = UITabBarItem(title: "MYDAY", image: UIImage(systemName: "list.dash"), tag: 4)
+        let myDayNavigationController = UINavigationController()
+        myDayKit.composeCombination(myDayNavigationController)
+        myDayNavigationController.tabBarItem = UITabBarItem(title: "MYDAY", image: UIImage(systemName: "list.dash"), tag: 4)
         
         // MARK: - Profile
         let myProfileNavigationController = UINavigationController()
@@ -60,7 +61,7 @@ class PlayerInitialViewController: UITabBarController {
         let myProfileCoordinator = MyProfileCoordinator(navigationController: myProfileNavigationController, subscriptionManager: subscriptionManager)
         myProfileCoordinator.start()
         
-        viewControllers = [timelineNavigationController, discoverNavigationController, workoutsNavigationController,  hostedViewController, myProfileNavigationController]
+        viewControllers = [timelineNavigationController, discoverNavigationController, workoutsNavigationController, myDayNavigationController, myProfileNavigationController]
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
