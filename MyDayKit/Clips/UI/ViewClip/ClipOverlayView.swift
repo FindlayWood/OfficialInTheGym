@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ClipOverlayView: View {
     
-    let onClose: (() -> ())?
-    let onTogglePlayPause: (() -> ())?
+    var onClose: (() -> ())?
+    var onTogglePlayPause: (() -> ())?
     
     var body: some View {
         ZStack {
