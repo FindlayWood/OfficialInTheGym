@@ -34,9 +34,34 @@ class MyDayKitComposition {
         // Deleter
         let deleter = FirestoreRawLogDeleter()
         
-        let dayManager = MyDayManager(saver: localAndRemoteMyDayAndExerciseStatsSaver, deleteSaver: localAndRemoteMyDaySaver, loader: policyLoader, deleter: deleter)
+        let dayManager = MyDayManager(
+            saver: localAndRemoteMyDayAndExerciseStatsSaver,
+            clipSaver: localAndRemoteMyDaySaver,
+            deleteSaver: localAndRemoteMyDaySaver,
+            loader: policyLoader,
+            deleter: deleter
+        )
         
-        let router = MyDayKitRouter(exerciseManager: exerciseManager, dayManager: dayManager)
+        
+        
+        // Clip
+        let thumbnailGenerator = VideoThumbnailGenerator()
+        let converter = VideoConverter(
+            userID: UserDefaults.currentUser.uid,
+            thumbnailGenerator: thumbnailGenerator
+        )
+        let storageClipUploader = FirebaseStorageClipUploader()
+        let thumnbailUploader = ThumbnailUploadDecorator(wrapping: storageClipUploader)
+        let wrappedClipUploader = FirestoreMetadataDecorator(wrapped: thumnbailUploader)
+        let uploadManager = UploadManager(clipUploader: wrappedClipUploader)
+        
+        let router = MyDayKitRouter(
+            exerciseManager: exerciseManager,
+            dayManager: dayManager,
+            videoConverter: converter,
+            uploadManager: uploadManager
+        )
+        
         let view = MyDayKitRootview(router: router)
         let hostingController = UIHostingController(rootView: view)
         return hostingController
@@ -64,9 +89,36 @@ class MyDayKitComposition {
         // Deleter
         let deleter = FirestoreRawLogDeleter()
         
-        let dayManager = MyDayManager(saver: localAndRemoteMyDayAndExerciseStatsSaver, deleteSaver: localAndRemoteMyDaySaver, loader: policyLoader, deleter: deleter)
+        let dayManager = MyDayManager(
+            saver: localAndRemoteMyDayAndExerciseStatsSaver,
+            clipSaver: localAndRemoteMyDaySaver,
+            deleteSaver: localAndRemoteMyDaySaver,
+            loader: MyDayExampleLoader(),
+            deleter: deleter
+        )
         
-        let coordinator = MyDayCoordinator(navigationController: navigationController, exerciseManager: exerciseManager, dayManager: dayManager)
+        // Clip
+        let thumbnailGenerator = VideoThumbnailGenerator()
+        let converter = VideoConverter(
+            userID: UserDefaults.currentUser.uid,
+            thumbnailGenerator: thumbnailGenerator
+        )
+        let storageClipUploader = FirebaseStorageClipUploader()
+        let thumnbailUploader = ThumbnailUploadDecorator(wrapping: storageClipUploader)
+        let wrappedClipUploader = FirestoreMetadataDecorator(wrapped: thumnbailUploader)
+        let uploadManager = UploadManager(clipUploader: wrappedClipUploader)
+        let clipLoader = FirestoreClipLoader()
+        let viewClipRecorder = FirebaseFunctionsViewClipRecorder()
+        
+        let coordinator = MyDayCoordinator(
+            navigationController: navigationController,
+            exerciseManager: exerciseManager,
+            dayManager: dayManager,
+            videoConverter: converter,
+            uploadManager: uploadManager,
+            clipLoader: clipLoader,
+            clipViewRecorder: viewClipRecorder
+        )
         coordinator.start()
     }
     
@@ -91,7 +143,13 @@ class MyDayKitComposition {
         // Deleter
         let deleter = FirestoreRawLogDeleter()
         
-        let dayManager = MyDayManager(saver: localAndRemoteMyDayAndExerciseStatsSaver, deleteSaver: localAndRemoteMyDaySaver, loader: policyLoader, deleter: deleter)
+        let dayManager = MyDayManager(
+            saver: localAndRemoteMyDayAndExerciseStatsSaver,
+            clipSaver: localAndRemoteMyDaySaver,
+            deleteSaver: localAndRemoteMyDaySaver,
+            loader: policyLoader,
+            deleter: deleter
+        )
         
         let vc = MyDayHomeViewController(dayManager: dayManager)
         return vc
@@ -128,6 +186,7 @@ class FirebaseExerciseLoader: ExerciseLoader {
 
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import FirebaseFunctions
 
 class MyDayFirestoreSaver: MyDaySaver {
     
@@ -403,5 +462,42 @@ struct FirestoreRawLogDeleter: MyDayDeleter {
         let userID = UserDefaults.currentUser.uid
         let logRef = db.collection("Users/\(userID)/ExerciseStats").document(path)
         try await logRef.delete()
+    }
+}
+
+struct FirestoreClipLoader: ClipLoader {
+    
+    func loadClip(with id: String) async throws -> Clip {
+        let path = "TestClips/\(id)"
+        let ref = Firestore.firestore().document(path)
+        return try await ref.getDocument(as: Clip.self)
+    }
+}
+
+struct FirebaseFunctionsViewClipRecorder: ViewClipRecorder {
+    
+    func recordClipWatch(
+        clipID: String,
+        watchedMoreThanThreeSeconds: Bool,
+        watchedFullVideo: Bool,
+        closePosition: Double,
+        loopCount: Int
+    ) {
+        let data: [String: Any] = [
+            "clipID": clipID,
+            "watchedMoreThanThreeSeconds": watchedMoreThanThreeSeconds,
+            "watchedFullVideo": watchedFullVideo,
+            "closePosition": closePosition,
+            "loopCount": loopCount
+        ]
+        
+        let functions = Functions.functions()
+#if EMULATOR
+        print("using emulator")
+        functions.useEmulator(withHost: "127.0.0.1", port: 5001)
+#endif
+        Task {
+            try? await functions.httpsCallable("recordClipWatch").call(data)
+        }
     }
 }

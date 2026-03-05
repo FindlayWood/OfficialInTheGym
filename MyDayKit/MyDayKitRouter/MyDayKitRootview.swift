@@ -39,10 +39,16 @@ public struct MyDayKitRootview: View {
             exerciseManager: ExerciseManager(loader: PreviewExerciseLoader()),
             dayManager: MyDayManager(
                 saver: PreviewSaver(),
+                clipSaver: PreviewMyDaySaver(),
                 deleteSaver: PreviewMyDaySaver(),
                 loader: PreviewLoader(),
                 deleter: PreviewMyDayDeleter()
-            )
+            ),
+            videoConverter: VideoConverter(
+                userID: "user123",
+                thumbnailGenerator: MockThumbnailGenerator()
+            ),
+            uploadManager: UploadManager(clipUploader: MockClipUploader())
         )
     )
 }

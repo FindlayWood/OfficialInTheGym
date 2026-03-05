@@ -15,12 +15,14 @@ public class MyDayManager: ObservableObject {
     @Published var selectedDay: MyDayFullDayModel?
     
     let saver: MyDayAndStatSaver
+    let clipSaver: MyDaySaver
     let deleteSaver: MyDaySaver
     let loader: MyDayLoader
     let deleter: MyDayDeleter
     
-    public init(saver: MyDayAndStatSaver, deleteSaver: MyDaySaver, loader: MyDayLoader, deleter: MyDayDeleter) {
+    public init(saver: MyDayAndStatSaver, clipSaver: MyDaySaver, deleteSaver: MyDaySaver, loader: MyDayLoader, deleter: MyDayDeleter) {
         self.saver = saver
+        self.clipSaver = clipSaver
         self.deleteSaver = deleteSaver
         self.loader = loader
         self.deleter = deleter
@@ -66,7 +68,8 @@ public class MyDayManager: ObservableObject {
                 id: UUID().uuidString,
                 date: .now,
                 exercise: completion.exercise,
-                completions: [completion]
+                completions: [completion],
+                clips: []
             )
 
             selectedDay.exercises.append(newExercise)
@@ -78,6 +81,27 @@ public class MyDayManager: ObservableObject {
         let stats = completion.getStats()
         Task {
             try await saver.save(data: selectedDay, stats: stats)
+        }
+    }
+    
+    func addClipData(_ result: ClipUploadResult) {
+        guard let selectedDay else { return }
+        
+        let clipData = MyDayClipModel(id: UUID().uuidString, clipID: result.clipID, exerciseID: result.exerciseID, dateUploaded: .now, thumbnailURL: result.thumbnailURL)
+
+        // 1. Try to find the exercise
+        if let exerciseIndex = selectedDay.exercises.firstIndex(where: { $0.exercise.id == result.exerciseID }) {
+            
+            // 2. If the exercise exists, add clip data
+            selectedDay.exercises[exerciseIndex].clips.append(clipData)
+            
+        }
+
+        // 3. Save updated state
+        self.selectedDay = selectedDay
+
+        Task {
+            try await clipSaver.save(data: selectedDay)
         }
     }
     

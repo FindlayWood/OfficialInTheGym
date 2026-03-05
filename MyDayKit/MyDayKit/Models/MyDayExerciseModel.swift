@@ -12,17 +12,18 @@ class MyDayExerciseModel: Identifiable, ObservableObject, Codable {
     let date: Date
     let exercise: Exercise
     @Published var completions: [ExerciseCompletions]
-    let clips: [MyDayClipModel] = []
+    @Published var clips: [MyDayClipModel]
     
     enum CodingKeys: String, CodingKey {
-        case id, date, exercise, completions
+        case id, date, exercise, completions, clips
     }
     
-    init(id: String, date: Date, exercise: Exercise, completions: [ExerciseCompletions]) {
+    init(id: String, date: Date, exercise: Exercise, completions: [ExerciseCompletions], clips: [MyDayClipModel]) {
         self.id = id
         self.date = date
         self.exercise = exercise
         self.completions = completions
+        self.clips = clips
     }
     
     // Codable conformance
@@ -32,6 +33,7 @@ class MyDayExerciseModel: Identifiable, ObservableObject, Codable {
         date = try container.decode(Date.self, forKey: .date)
         exercise = try container.decode(Exercise.self, forKey: .exercise)
         completions = try container.decode([ExerciseCompletions].self, forKey: .completions)
+        clips = try container.decodeIfPresent([MyDayClipModel].self, forKey: .clips) ?? []
     }
     
     func encode(to encoder: Encoder) throws {
@@ -40,6 +42,7 @@ class MyDayExerciseModel: Identifiable, ObservableObject, Codable {
         try container.encode(date, forKey: .date)
         try container.encode(exercise, forKey: .exercise)
         try container.encode(completions, forKey: .completions)
+        try container.encode(clips, forKey: .clips)
     }
 }
 
@@ -85,7 +88,8 @@ public struct MyDayFullDayModel: Identifiable, Codable {
 
 struct MyDayClipModel: Identifiable, Codable {
     let id: String
-    let dateRecorded: Date
-    let completionID: String
-    let url: URL
+    let clipID: String
+    let exerciseID: String
+    let dateUploaded: Date
+    let thumbnailURL: URL?
 }

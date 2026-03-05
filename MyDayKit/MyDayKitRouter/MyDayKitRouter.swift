@@ -39,9 +39,12 @@ enum MyDayFullScreenCover: Identifiable {
         switch self {
         case .recordClip:
             return "recordClip"
+        case .viewClip:
+            return "viewClip"
         }
     }
-    case recordClip
+    case recordClip(String)
+    case viewClip(MyDayClipModel, UIImage, CGRect)
 }
 
 public class MyDayKitRouter: ObservableObject {
@@ -52,10 +55,14 @@ public class MyDayKitRouter: ObservableObject {
     
     let exerciseManager: ExerciseManager
     let dayManager: MyDayManager
+    let videoConverter: VideoConverter
+    let uploadManager: UploadManager
     
-    public init(exerciseManager: ExerciseManager, dayManager: MyDayManager) {
+    public init(exerciseManager: ExerciseManager, dayManager: MyDayManager, videoConverter: VideoConverter, uploadManager: UploadManager) {
         self.exerciseManager = exerciseManager
         self.dayManager = dayManager
+        self.videoConverter = videoConverter
+        self.uploadManager = uploadManager
     }
     
     @ViewBuilder func view(for route: MyDayRoutes) -> some View {
@@ -70,8 +77,8 @@ public class MyDayKitRouter: ObservableObject {
                 addSpecificExercise: { [weak self] exercise in
                     self?.navigate(to: .reps(exercise))
                 },
-                recordClip: { [weak self] in
-                    self?.coverFullScreen(with: .recordClip)
+                recordClip: { [weak self] exerciseID in
+                    self?.coverFullScreen(with: .recordClip(exerciseID))
                 },
                 edit: { [weak self] exerciseManager in
                     self?.navigate(to: .reps(exerciseManager))
@@ -157,12 +164,21 @@ public class MyDayKitRouter: ObservableObject {
     }
     @ViewBuilder func fullScreenCover(for cover: MyDayFullScreenCover) -> some View {
         switch cover {
-        case .recordClip:
+        case .recordClip(let exerciseID):
             RecordClipScreen(
+                uploadManager: uploadManager,
+                videoConverter: videoConverter,
+                myDayManager: dayManager,
+                exerciseID: exerciseID,
                 dismiss: { [weak self] in
+                    self?.fullScreenCover = nil
+                },
+                uploadComplete: { [weak self] in
                     self?.fullScreenCover = nil
                 }
             )
+        case let .viewClip(model, image, frame):
+            Text("")
         }
     }
     

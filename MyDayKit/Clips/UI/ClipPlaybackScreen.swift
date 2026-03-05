@@ -9,45 +9,67 @@ import SwiftUI
 
 struct ClipPlaybackScreen: View {
     
-    var dismiss: (() -> ())?
+    @Binding var isVideoPlaying: Bool
+    @Binding var playbackProgress: Double
+    
+    let processedVideo: ProcessedVideoData
+    
+    var didTapOptions: (() -> ())?
+    var dismissRecordedVideo: (() -> ())?
+    var didTapUpload: (() -> ())?
     
     var body: some View {
-        VStack {
-            HStack {
-                Button {
-                    dismiss?()
-                } label: {
-                    Image(systemName: "x.circle")
-                        .foregroundStyle(Color.white)
-                        .padding()
-                        .background {
-                            Circle()
-                                .frame(width: 30)
-                                .foregroundStyle(Color.blue)
-                        }
-                }
-                Spacer()
+        ZStack {
+            LoopingVideoPlayer(
+                url: processedVideo.url,
+                isPlaying: $isVideoPlaying,
+                progress: $playbackProgress
+            )
+            .ignoresSafeArea()
+            .onTapGesture {
+                isVideoPlaying.toggle()
             }
-            Spacer()
             
-            HStack {
-                Button {
-                    
-                } label: {
-                    Text("Upload")
+            PlaybackOverlay(
+                progress: playbackProgress,
+                isPlaying: isVideoPlaying,
+                options: {
+                    didTapOptions?()
+                },
+                dismiss: {
+                    dismissRecordedVideo?()
+                },
+                upload: {
+                    didTapUpload?()
                 }
-                
-                Button {
-                    
-                } label: {
-                    Text("Save")
-                }
-            }
+            )
         }
     }
 }
 
 
 #Preview {
-    ClipPlaybackScreen()
+    ClipPlaybackScreen(
+        isVideoPlaying: .constant(true),
+        playbackProgress: .constant(50),
+        processedVideo: ProcessedVideoData(
+            url: URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!,
+            clipData: ClipUploadData(
+                videoData: .init(),
+                thumbnailData: nil,
+                userID: "user",
+                clipID: "clipid",
+                exerciseID: "exerciseID",
+                isPrivate: true,
+                videoMetadata: ClipUploadData.VideoMetadata(
+                    contentType: "content-type",
+                    duration: TimeInterval(),
+                    width: 10,
+                    height: 10,
+                    fileSize: 1,
+                    codec: "codec"
+                )
+            )
+        )
+    )
 }

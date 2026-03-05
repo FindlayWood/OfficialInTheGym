@@ -20,6 +20,7 @@ struct ExerciseCompletionView: View {
     var addClipButtonAction: (() -> ())?
     var repeatSet: ((ExerciseCompletions) -> ())?
     var onTap: ((ExerciseCompletions) -> ())?
+    var clipSelected: ((MyDayClipModel, UIImage, CGRect) -> ())?
     
     var body: some View {
         VStack {
@@ -33,9 +34,17 @@ struct ExerciseCompletionView: View {
                     Button {
                         addAction?()
                     } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .resizable()
-                            .frame(width: 25, height: 25)
+                        HStack(spacing: 4) {
+                            Image(systemName: "plus")
+                                .font(.system(size: 12, weight: .bold))
+                            Text("Add Set")
+                                .font(.system(size: 13, weight: .semibold))
+                        }
+                        .foregroundStyle(Color.blue)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.blue.opacity(0.1))
+                        .clipShape(Capsule())
                     }
                     .buttonStyle(.borderless)
                 }
@@ -85,17 +94,14 @@ struct ExerciseCompletionView: View {
                 }
             }
             
-            if !disabled {
-                VStack {
-                    Button {
-                        addClipButtonAction?()
-                    } label: {
-                        Text("Add Clip")
-                        Image(systemName: "plus.circle.fill")
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
+            ExerciseClipsSubView(
+                clips: model.clips,
+                canAdd: !disabled,
+                addAction: {
+                    addClipButtonAction?()
+                },
+                selectedClip: clipSelected
+            )
         }
         .padding()
         .background {
@@ -113,7 +119,27 @@ struct ExerciseCompletionView: View {
             id: "",
             date: .now,
             exercise: .pressUps,
-            completions: []
+            completions: [.init(
+                id: UUID().uuidString,
+                exercise: .pressUps,
+                reps: 25,
+                weight: nil,
+                weightUnit: .bw,
+                dateCompleted: .now,
+                distance: nil,
+                distanceUnits: nil,
+                time: nil,
+                tempo: nil,
+                note: nil,
+                eachSide: false
+            )],
+            clips: [.init(
+                id: UUID().uuidString,
+                clipID: UUID().uuidString,
+                exerciseID: UUID().uuidString,
+                dateUploaded: .now,
+                thumbnailURL: URL(string: "https://firebasestorage.googleapis.com:443/v0/b/inthegym-2353b.appspot.com/o/TestClipThumbnails%2FfZKSEr4e6yWdYqt0P6BXbnyg1pf2%2F810FB504-DADF-4E76-9B6E-89A1FE2DC827?alt=media&token=59c6f5f7-a153-4c5b-ab16-aa8c7bf8f56a")
+            )]
         ),
         selected: nil,
         disabled: false,

@@ -23,6 +23,9 @@ struct MyDayHomeScreen: View {
     
     @State private var dateDropDown: Bool = false
     @State private var selectedSet: ExerciseCompletions?
+    @State private var selectedClip: MyDayClipModel?
+    
+    
     @State private var selectedActivity: MyDayActivity = .exercises
     
     let dateFormatter: DateFormatter = {
@@ -41,8 +44,9 @@ struct MyDayHomeScreen: View {
     
     var addButtonAction: (() -> ())?
     var addSpecificExercise: ((MyDayNewExerciseManager) -> ())?
-    var recordClip: (() -> ())?
+    var recordClip: ((String) -> ())?
     var edit: ((MyDayNewExerciseManager) -> ())?
+    var clipSelected: ((MyDayClipModel, UIImage, CGRect) -> ())?
     
     var body: some View {
         
@@ -191,7 +195,7 @@ struct MyDayHomeScreen: View {
                                         addSpecificExercise?(newExercise)
                                     },
                                     addClipButtonAction: {
-                                        recordClip?()
+                                        recordClip?(exercise.exercise.id)
                                     },
                                     repeatSet: { model in
                                         dayManager.addNewCompletion(model)
@@ -200,7 +204,8 @@ struct MyDayHomeScreen: View {
                                         withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
                                             selectedSet = model
                                         }
-                                    }
+                                    },
+                                    clipSelected: clipSelected
                                 )
                                 .listRowInsets(EdgeInsets())
                             }
@@ -267,6 +272,7 @@ struct MyDayHomeScreen: View {
     MyDayHomeScreen(
         dayManager: MyDayManager(
             saver: PreviewSaver(),
+            clipSaver: PreviewMyDaySaver(),
             deleteSaver: PreviewMyDaySaver(),
             loader: PreviewLoader(),
             deleter: PreviewMyDayDeleter()

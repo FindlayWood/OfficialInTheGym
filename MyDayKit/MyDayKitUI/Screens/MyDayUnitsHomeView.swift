@@ -172,6 +172,7 @@ struct MyDayUnitsHomeView: View {
     MyDayUnitsHomeView(
         dayManager: MyDayManager(
             saver: PreviewSaver(),
+            clipSaver: PreviewMyDaySaver(),
             deleteSaver: PreviewMyDaySaver(),
             loader: PreviewLoader(),
             deleter: PreviewMyDayDeleter()

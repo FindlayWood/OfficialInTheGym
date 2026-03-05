@@ -15,17 +15,24 @@ struct RepeatSetView: View {
         Button {
             action?()
         } label: {
-            VStack {
+            VStack(spacing: 4) {
                 Image(systemName: "arrow.counterclockwise")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(Color.blue)
+                
                 Text("Repeat")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(Color.blue)
             }
-            .padding()
-            .frame(width: 100, height: 100)
+            .frame(width: 60, height: 60)
+            .background(Color.blue.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.black, lineWidth: 1)
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.blue.opacity(0.3), lineWidth: 1)
             }
         }
+        .buttonStyle(.borderless)
     }
 }
 

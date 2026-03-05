@@ -18,17 +18,29 @@ public final class MyDayCoordinator {
 
     let exerciseManager: ExerciseManager
     let dayManager: MyDayManager
+    let videoConverter: VideoConverter
+    let uploadManager: UploadManager
+    let clipLoader: ClipLoader
+    let clipViewRecorder: ViewClipRecorder
 
     // MARK: - Init
 
     public init(
         navigationController: UINavigationController,
         exerciseManager: ExerciseManager,
-        dayManager: MyDayManager
+        dayManager: MyDayManager,
+        videoConverter: VideoConverter,
+        uploadManager: UploadManager,
+        clipLoader: ClipLoader,
+        clipViewRecorder: ViewClipRecorder
     ) {
         self.navigationController = navigationController
         self.exerciseManager = exerciseManager
         self.dayManager = dayManager
+        self.videoConverter = videoConverter
+        self.uploadManager = uploadManager
+        self.clipLoader = clipLoader
+        self.clipViewRecorder = clipViewRecorder
     }
 
     // MARK: - Root
@@ -54,11 +66,14 @@ extension MyDayCoordinator {
                 addSpecificExercise: { [weak self] exercise in
                     self?.navigate(to: .reps(exercise))
                 },
-                recordClip: { [weak self] in
-                    self?.presentFullScreen(.recordClip)
+                recordClip: { [weak self] exerciseID in
+                    self?.presentFullScreen(.recordClip(exerciseID))
                 },
                 edit: { [weak self] exerciseManager in
                     self?.navigate(to: .reps(exerciseManager))
+                },
+                clipSelected: { [weak self] model, thumbnail, frame in
+                    self?.presentFullScreen(.viewClip(model, thumbnail, frame))
                 }
             )
             let vc = MyDayBoundaryViewController()
@@ -211,19 +226,69 @@ extension MyDayCoordinator {
         let vc: UIViewController
 
         switch cover {
-        case .recordClip:
+        case .recordClip(let exerciseID):
             vc = UIHostingController(
                 rootView: RecordClipScreen(
+                    uploadManager: uploadManager,
+                    videoConverter: videoConverter,
+                    myDayManager: dayManager,
+                    exerciseID: exerciseID,
                     dismiss: { [weak self] in
+                        self?.navigationController.dismiss(animated: true)
+                    },
+                    uploadComplete: { [weak self] in
                         self?.navigationController.dismiss(animated: true)
                     }
                 )
             )
             vc.modalPresentationStyle = .fullScreen
+        
+        case let .viewClip(clip, thumbnail, thumbnailFrame):
+            // View Model
+            let viewModel = ViewClipViewModel(
+                loader: clipLoader,
+                clipModel: clip,
+                clipViewRecorder: clipViewRecorder,
+                dismissAction: { [weak self] in
+                    self?.navigationController.dismiss(animated: true)
+                    
+                }
+            )
+            // Your existing ViewClipViewController
+            let viewClipVC = ViewClipViewController()
+            viewClipVC.clipModel = clip
+            viewClipVC.thumbnail = thumbnail
+            viewClipVC.viewModel = viewModel
+            
+            // Create custom transition
+            let transitionDelegate = ClipFromSwiftUITransitionDelegate(
+                thumbnail: thumbnail,
+                thumbnailFrame: thumbnailFrame,
+                destinationVC: viewClipVC
+            )
+            
+            viewClipVC.modalPresentationStyle = .custom
+            viewClipVC.transitioningDelegate = transitionDelegate
+            
+            // Keep the delegate alive
+            objc_setAssociatedObject(
+                viewClipVC,
+                &AssociatedKeys.transitionDelegate,
+                transitionDelegate,
+                .OBJC_ASSOCIATION_RETAIN_NONATOMIC
+            )
+            
+            vc = viewClipVC
+            vc.modalPresentationStyle = .fullScreen
         }
-
+        
         navigationController.present(vc, animated: true)
     }
+}
+
+// To this:
+private enum AssociatedKeys {
+    static var transitionDelegate: UInt8 = 0
 }
 
 extension MyDayCoordinator {
@@ -243,4 +308,3 @@ extension MyDayCoordinator {
         }
     }
 }
-

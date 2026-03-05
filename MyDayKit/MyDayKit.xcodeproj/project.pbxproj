@@ -15,8 +15,14 @@
 		F01E0E9F2E7A11B7008C1547 /* VideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0E9E2E7A11B7008C1547 /* VideoRecorder.swift */; };
 		F01E0EA12E7A1242008C1547 /* RecordingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0EA02E7A1242008C1547 /* RecordingOverlay.swift */; };
 		F01E0EA32E7A15FC008C1547 /* PlaybackOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */; };
+		F03334612F1ED3EC004102AC /* ClipUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03334602F1ED3EC004102AC /* ClipUploader.swift */; };
+		F03334632F1FF2E2004102AC /* RecordingProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03334622F1FF2E2004102AC /* RecordingProgressRing.swift */; };
 		F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06004842E37E17F000B279F /* MyDayExerciseListView.swift */; };
 		F0622F012ED260CF00260A5B /* CustomNumberPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0622F002ED260CF00260A5B /* CustomNumberPad.swift */; };
+		F07508DA2F5380E10026D021 /* ViewClipRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07508D92F5380E10026D021 /* ViewClipRecorder.swift */; };
+		F07509C42F5A22EC0026D021 /* ClipOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07509C32F5A22EC0026D021 /* ClipOverlayView.swift */; };
+		F07509C62F5A23630026D021 /* ViewClipDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07509C52F5A23630026D021 /* ViewClipDisplayView.swift */; };
+		F07509C82F5A23820026D021 /* ViewClipViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07509C72F5A23820026D021 /* ViewClipViewModel.swift */; };
 		F0B38C622E5B9C570096234C /* MyDayUnitsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */; };
 		F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */; };
 		F0B38C762E5F93600096234C /* WeightUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C752E5F93600096234C /* WeightUnit.swift */; };
@@ -34,6 +40,21 @@
 		F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */; };
 		F0C8EC162ECE77E8002213C7 /* PlaceholderSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C8EC152ECE77E8002213C7 /* PlaceholderSetView.swift */; };
 		F0C8EC192ECF7F32002213C7 /* MyDayHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C8EC182ECF7F32002213C7 /* MyDayHomeViewController.swift */; };
+		F0D3443E2F25123500AB6121 /* PlayBackSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D3443D2F25123500AB6121 /* PlayBackSheet.swift */; };
+		F0D3444B2F2582E900AB6121 /* UploadProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D3444A2F2582E900AB6121 /* UploadProgressView.swift */; };
+		F0D3456A2F27E24F00AB6121 /* UploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D345692F27E24F00AB6121 /* UploadManager.swift */; };
+		F0D348522F2A7A5400AB6121 /* ClipUploadResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D348512F2A7A5400AB6121 /* ClipUploadResult.swift */; };
+		F0D348542F2A7A6500AB6121 /* ClipManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D348532F2A7A6500AB6121 /* ClipManagerError.swift */; };
+		F0D348562F2A7A7D00AB6121 /* ClipUploadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D348552F2A7A7D00AB6121 /* ClipUploadData.swift */; };
+		F0D348582F2A7A8E00AB6121 /* UploadError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D348572F2A7A8E00AB6121 /* UploadError.swift */; };
+		F0D5278D2F2F905900FA0636 /* VideoConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D5278C2F2F905900FA0636 /* VideoConverter.swift */; };
+		F0D5278F2F2F90D700FA0636 /* ProcessedVideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D5278E2F2F90D700FA0636 /* ProcessedVideoData.swift */; };
+		F0D527912F3007E100FA0636 /* ExerciseClipsSubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D527902F3007E100FA0636 /* ExerciseClipsSubView.swift */; };
+		F0D528532F34012700FA0636 /* ThumbnailGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D528522F34012700FA0636 /* ThumbnailGenerator.swift */; };
+		F0D528C92F37D2E200FA0636 /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D528C82F37D2E200FA0636 /* Transition.swift */; };
+		F0D528CD2F37E80500FA0636 /* MyDayExampleUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D528CC2F37E80500FA0636 /* MyDayExampleUploader.swift */; };
+		F0D528D22F38C4BA00FA0636 /* ViewClipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D528D12F38C4BA00FA0636 /* ViewClipViewController.swift */; };
+		F0D528D52F392A5900FA0636 /* ClipLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D528D42F392A5900FA0636 /* ClipLoader.swift */; };
 		F0D6C2422E358B0400FEFEF1 /* MyDayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */; };
 		F0D6C24E2E358C0900FEFEF1 /* MyDayHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */; };
 		F0D6C2552E36C12A00FEFEF1 /* MyDayExerciseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C2542E36C12A00FEFEF1 /* MyDayExerciseModel.swift */; };
@@ -72,8 +93,14 @@
 		F01E0E9E2E7A11B7008C1547 /* VideoRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRecorder.swift; sourceTree = "<group>"; };
 		F01E0EA02E7A1242008C1547 /* RecordingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingOverlay.swift; sourceTree = "<group>"; };
 		F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackOverlay.swift; sourceTree = "<group>"; };
+		F03334602F1ED3EC004102AC /* ClipUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipUploader.swift; sourceTree = "<group>"; };
+		F03334622F1FF2E2004102AC /* RecordingProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingProgressRing.swift; sourceTree = "<group>"; };
 		F06004842E37E17F000B279F /* MyDayExerciseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExerciseListView.swift; sourceTree = "<group>"; };
 		F0622F002ED260CF00260A5B /* CustomNumberPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNumberPad.swift; sourceTree = "<group>"; };
+		F07508D92F5380E10026D021 /* ViewClipRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipRecorder.swift; sourceTree = "<group>"; };
+		F07509C32F5A22EC0026D021 /* ClipOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipOverlayView.swift; sourceTree = "<group>"; };
+		F07509C52F5A23630026D021 /* ViewClipDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipDisplayView.swift; sourceTree = "<group>"; };
+		F07509C72F5A23820026D021 /* ViewClipViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewClipViewModel.swift; path = Clips/UI/ViewClip/ViewClipViewModel.swift; sourceTree = SOURCE_ROOT; };
 		F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayUnitsHomeView.swift; sourceTree = "<group>"; };
 		F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWeightSelectorView.swift; sourceTree = "<group>"; };
 		F0B38C752E5F93600096234C /* WeightUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightUnit.swift; sourceTree = "<group>"; };
@@ -91,6 +118,21 @@
 		F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRepsView.swift; sourceTree = "<group>"; };
 		F0C8EC152ECE77E8002213C7 /* PlaceholderSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderSetView.swift; sourceTree = "<group>"; };
 		F0C8EC182ECF7F32002213C7 /* MyDayHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayHomeViewController.swift; sourceTree = "<group>"; };
+		F0D3443D2F25123500AB6121 /* PlayBackSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayBackSheet.swift; sourceTree = "<group>"; };
+		F0D3444A2F2582E900AB6121 /* UploadProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadProgressView.swift; sourceTree = "<group>"; };
+		F0D345692F27E24F00AB6121 /* UploadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadManager.swift; sourceTree = "<group>"; };
+		F0D348512F2A7A5400AB6121 /* ClipUploadResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipUploadResult.swift; sourceTree = "<group>"; };
+		F0D348532F2A7A6500AB6121 /* ClipManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipManagerError.swift; sourceTree = "<group>"; };
+		F0D348552F2A7A7D00AB6121 /* ClipUploadData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipUploadData.swift; sourceTree = "<group>"; };
+		F0D348572F2A7A8E00AB6121 /* UploadError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadError.swift; sourceTree = "<group>"; };
+		F0D5278C2F2F905900FA0636 /* VideoConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoConverter.swift; sourceTree = "<group>"; };
+		F0D5278E2F2F90D700FA0636 /* ProcessedVideoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessedVideoData.swift; sourceTree = "<group>"; };
+		F0D527902F3007E100FA0636 /* ExerciseClipsSubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseClipsSubView.swift; sourceTree = "<group>"; };
+		F0D528522F34012700FA0636 /* ThumbnailGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailGenerator.swift; sourceTree = "<group>"; };
+		F0D528C82F37D2E200FA0636 /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
+		F0D528CC2F37E80500FA0636 /* MyDayExampleUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExampleUploader.swift; sourceTree = "<group>"; };
+		F0D528D12F38C4BA00FA0636 /* ViewClipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipViewController.swift; sourceTree = "<group>"; };
+		F0D528D42F392A5900FA0636 /* ClipLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipLoader.swift; sourceTree = "<group>"; };
 		F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayHomeScreen.swift; sourceTree = "<group>"; };
 		F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MyDayKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0D6C2412E358B0400FEFEF1 /* MyDayKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyDayKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,6 +188,11 @@
 		F01E0E902E78A9BA008C1547 /* Clips */ = {
 			isa = PBXGroup;
 			children = (
+				F07508D82F5380870026D021 /* ViewAnalytics */,
+				F0D528D32F392A4C00FA0636 /* Loader */,
+				F0D528512F34011800FA0636 /* Helpers */,
+				F0D348502F2A7A4800AB6121 /* Models */,
+				F033345F2F1ED3E2004102AC /* Uploader */,
 				F01E0E9D2E7A11A9008C1547 /* Managers */,
 				F01E0E982E7A10F8008C1547 /* UIViewRepresentable */,
 				F01E0E912E78A9C7008C1547 /* UI */,
@@ -156,10 +203,15 @@
 		F01E0E912E78A9C7008C1547 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				F07509C22F5A22DE0026D021 /* ViewClip */,
+				F0D528D02F38C4A900FA0636 /* ViewControllers */,
 				F01E0E922E78A9D6008C1547 /* RecordClipScreen.swift */,
 				F01E0E962E7A01E8008C1547 /* ClipPlaybackScreen.swift */,
 				F01E0EA02E7A1242008C1547 /* RecordingOverlay.swift */,
 				F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */,
+				F03334622F1FF2E2004102AC /* RecordingProgressRing.swift */,
+				F0D3443D2F25123500AB6121 /* PlayBackSheet.swift */,
+				F0D3444A2F2582E900AB6121 /* UploadProgressView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -177,8 +229,35 @@
 			isa = PBXGroup;
 			children = (
 				F01E0E9E2E7A11B7008C1547 /* VideoRecorder.swift */,
+				F0D345692F27E24F00AB6121 /* UploadManager.swift */,
+				F0D5278C2F2F905900FA0636 /* VideoConverter.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		F033345F2F1ED3E2004102AC /* Uploader */ = {
+			isa = PBXGroup;
+			children = (
+				F03334602F1ED3EC004102AC /* ClipUploader.swift */,
+			);
+			path = Uploader;
+			sourceTree = "<group>";
+		};
+		F07508D82F5380870026D021 /* ViewAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				F07508D92F5380E10026D021 /* ViewClipRecorder.swift */,
+			);
+			path = ViewAnalytics;
+			sourceTree = "<group>";
+		};
+		F07509C22F5A22DE0026D021 /* ViewClip */ = {
+			isa = PBXGroup;
+			children = (
+				F07509C32F5A22EC0026D021 /* ClipOverlayView.swift */,
+				F07509C52F5A23630026D021 /* ViewClipDisplayView.swift */,
+			);
+			path = ViewClip;
 			sourceTree = "<group>";
 		};
 		F0BE5C152EB7ABFB009677F5 /* Screens */ = {
@@ -207,6 +286,7 @@
 				F0BE5C1F2EB7CD30009677F5 /* SetDetailView.swift */,
 				F0C8EC152ECE77E8002213C7 /* PlaceholderSetView.swift */,
 				F0622F002ED260CF00260A5B /* CustomNumberPad.swift */,
+				F0D527902F3007E100FA0636 /* ExerciseClipsSubView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -218,6 +298,43 @@
 				F0F35C442F16ADC700ACB11E /* MyDayBoundaryViewController.swift */,
 			);
 			path = UIKit;
+			sourceTree = "<group>";
+		};
+		F0D348502F2A7A4800AB6121 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F0D348512F2A7A5400AB6121 /* ClipUploadResult.swift */,
+				F0D348532F2A7A6500AB6121 /* ClipManagerError.swift */,
+				F0D348552F2A7A7D00AB6121 /* ClipUploadData.swift */,
+				F0D348572F2A7A8E00AB6121 /* UploadError.swift */,
+				F0D5278E2F2F90D700FA0636 /* ProcessedVideoData.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F0D528512F34011800FA0636 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				F0D528522F34012700FA0636 /* ThumbnailGenerator.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		F0D528D02F38C4A900FA0636 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				F0D528D12F38C4BA00FA0636 /* ViewClipViewController.swift */,
+				F07509C72F5A23820026D021 /* ViewClipViewModel.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		F0D528D32F392A4C00FA0636 /* Loader */ = {
+			isa = PBXGroup;
+			children = (
+				F0D528D42F392A5900FA0636 /* ClipLoader.swift */,
+			);
+			path = Loader;
 			sourceTree = "<group>";
 		};
 		F0D6C20A2E3574EF00FEFEF1 = {
@@ -316,6 +433,7 @@
 			isa = PBXGroup;
 			children = (
 				F0F35C472F16AEF600ACB11E /* MyDayCoordinator.swift */,
+				F0D528C82F37D2E200FA0636 /* Transition.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -327,6 +445,7 @@
 				F0F4B2B12E85620B007E2469 /* MyDaySaver.swift */,
 				F0F4B2B52E85622E007E2469 /* MyDayLoader.swift */,
 				F0E2CC4E2EC5389B00993165 /* MyDayAndStatSaver.swift */,
+				F0D528CC2F37E80500FA0636 /* MyDayExampleUploader.swift */,
 			);
 			path = Uploader;
 			sourceTree = "<group>";
@@ -474,29 +593,46 @@
 				F0BE5C202EB7CD30009677F5 /* SetDetailView.swift in Sources */,
 				F0F608302E42A20B0015F260 /* ExerciseCategory.swift in Sources */,
 				F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */,
+				F0D527912F3007E100FA0636 /* ExerciseClipsSubView.swift in Sources */,
+				F0D528D22F38C4BA00FA0636 /* ViewClipViewController.swift in Sources */,
 				F0F35C452F16ADC700ACB11E /* MyDayBoundaryViewController.swift in Sources */,
+				F0D528D52F392A5900FA0636 /* ClipLoader.swift in Sources */,
+				F0D3456A2F27E24F00AB6121 /* UploadManager.swift in Sources */,
+				F0D5278F2F2F90D700FA0636 /* ProcessedVideoData.swift in Sources */,
+				F0D3444B2F2582E900AB6121 /* UploadProgressView.swift in Sources */,
+				F03334632F1FF2E2004102AC /* RecordingProgressRing.swift in Sources */,
 				F0BE5C182EB7AC71009677F5 /* ExerciseCompletionView.swift in Sources */,
 				F0F608282E42A1B50015F260 /* ExerciseLoader.swift in Sources */,
 				F0C102C72E4A65AB0062C8A2 /* MyDayKitRootview.swift in Sources */,
 				F0BE5C142EB55C29009677F5 /* MyDayNoteSelectorView.swift in Sources */,
+				F0D528532F34012700FA0636 /* ThumbnailGenerator.swift in Sources */,
 				F0B38C7A2E5F94D00096234C /* MyDayNewExerciseManager.swift in Sources */,
 				F00CD1722E4D2DBB0051042A /* MyDayManager.swift in Sources */,
 				F01E0E9C2E7A1158008C1547 /* CameraPreview.swift in Sources */,
 				F0BE5C1C2EB7C981009677F5 /* CompletedSetView.swift in Sources */,
+				F0D528CD2F37E80500FA0636 /* MyDayExampleUploader.swift in Sources */,
+				F0D348542F2A7A6500AB6121 /* ClipManagerError.swift in Sources */,
 				F0BE5C1E2EB7CBF1009677F5 /* RepeatSetView.swift in Sources */,
 				F01E0E9A2E7A110A008C1547 /* LoopingVideoPlayer.swift in Sources */,
 				F0622F012ED260CF00260A5B /* CustomNumberPad.swift in Sources */,
+				F0D348562F2A7A7D00AB6121 /* ClipUploadData.swift in Sources */,
+				F03334612F1ED3EC004102AC /* ClipUploader.swift in Sources */,
 				F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */,
+				F0D348522F2A7A5400AB6121 /* ClipUploadResult.swift in Sources */,
+				F07508DA2F5380E10026D021 /* ViewClipRecorder.swift in Sources */,
 				F0E2CC4F2EC5389B00993165 /* MyDayAndStatSaver.swift in Sources */,
 				F01E0EA12E7A1242008C1547 /* RecordingOverlay.swift in Sources */,
 				F0F4B2B62E85622E007E2469 /* MyDayLoader.swift in Sources */,
 				F01E0E9F2E7A11B7008C1547 /* VideoRecorder.swift in Sources */,
 				F0BE5C122EB553B6009677F5 /* MyDayTempoSelectorView.swift in Sources */,
+				F07509C62F5A23630026D021 /* ViewClipDisplayView.swift in Sources */,
 				F0E2CC532EC538C800993165 /* ExerciseStatsSaveModel.swift in Sources */,
 				F0F4B2AE2E855707007E2469 /* MyDayUploader.swift in Sources */,
 				F0E2CC4D2EC5297D00993165 /* ExerciseStatsSaver.swift in Sources */,
 				F0BE5BED2EB402DC009677F5 /* MyDayDistanceSelectorView.swift in Sources */,
+				F0D528C92F37D2E200FA0636 /* Transition.swift in Sources */,
 				F0F35C012F10216D00ACB11E /* MyDayDeleter.swift in Sources */,
+				F0D3443E2F25123500AB6121 /* PlayBackSheet.swift in Sources */,
 				F0F35C062F15837C00ACB11E /* SelectOptionSheet.swift in Sources */,
 				F01E0E932E78A9D6008C1547 /* RecordClipScreen.swift in Sources */,
 				F0B38C622E5B9C570096234C /* MyDayUnitsHomeView.swift in Sources */,
@@ -504,7 +640,11 @@
 				F0F6082E2E42A1F50015F260 /* Exercise.swift in Sources */,
 				F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */,
 				F01E0E972E7A01E8008C1547 /* ClipPlaybackScreen.swift in Sources */,
+				F0D348582F2A7A8E00AB6121 /* UploadError.swift in Sources */,
 				F0D6C24E2E358C0900FEFEF1 /* MyDayHomeScreen.swift in Sources */,
+				F07509C42F5A22EC0026D021 /* ClipOverlayView.swift in Sources */,
+				F07509C82F5A23820026D021 /* ViewClipViewModel.swift in Sources */,
+				F0D5278D2F2F905900FA0636 /* VideoConverter.swift in Sources */,
 				F0F35C482F16AEF600ACB11E /* MyDayCoordinator.swift in Sources */,
 				F0C8EC192ECF7F32002213C7 /* MyDayHomeViewController.swift in Sources */,
 				F0F4B2B22E85620B007E2469 /* MyDaySaver.swift in Sources */,
