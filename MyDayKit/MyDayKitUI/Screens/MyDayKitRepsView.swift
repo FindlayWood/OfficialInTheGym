@@ -10,51 +10,85 @@ import SwiftUI
 struct MyDayKitRepsView: View {
     
     @ObservedObject var dayManager: MyDayManager
-    
     @ObservedObject var exercise: MyDayNewExerciseManager
     @State var reps: Int = 0
     @State private var stringInput: String = ""
     
     var add: (() -> ())?
     
+    private var hasInput: Bool { !stringInput.isEmpty }
+    
     var body: some View {
-        VStack {
-            Text("How many reps of \(exercise.exercise.name) did you complete?")
-                .font(.headline)
-                .multilineTextAlignment(.center)
-                .padding()
+        VStack(spacing: 0) {
             
-            Spacer()
-            
-            Text("\(stringInput.isEmpty ? "-" : "\(reps)")")
-                .font(.system(size: 60, weight: .bold))
-                .foregroundStyle(Color.black)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .minimumScaleFactor(0.5)
-                .lineLimit(1)
-                .background {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.black.opacity(0.1))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.black, lineWidth: 1)
-                        }
+            // ── Rep display ────────────────────────────────────────────
+            VStack(spacing: 8) {
+                Text(exercise.exercise.name)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(Color.secondary)
+                    .multilineTextAlignment(.center)
+                
+                HStack(alignment: .lastTextBaseline, spacing: 6) {
+                    Text(hasInput ? "\(reps)" : "–")
+                        .font(.system(size: 72, weight: .bold, design: .rounded))
+                        .foregroundStyle(hasInput ? Color.primary : Color(UIColor.tertiaryLabel))
+                        .contentTransition(.numericText())
+                        .animation(.easeInOut(duration: 0.15), value: reps)
+                    
+                    if hasInput {
+                        Text(reps == 1 ? "rep" : "reps")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundStyle(Color.secondary)
+                            .padding(.bottom, 8)
+                            .transition(.opacity.combined(with: .scale(scale: 0.8)))
+                    }
                 }
-                .padding()
-            
-            Spacer()
-            
-            VStack(alignment: .leading) {
-                Toggle("Each Side", isOn: $exercise.eachSide)
-                    .tint(Color.blue)
-                    .font(.system(size: 16, weight: .medium))
-                Text("Mark this if the exercise was completed each side.")
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundStyle(Color.black.opacity(0.5))
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity)
+                .animation(.easeInOut(duration: 0.15), value: hasInput)
+                
+                // Each side toggle
+                Button {
+                    exercise.eachSide.toggle()
+                } label: {
+                    HStack(spacing: 8) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(exercise.eachSide ? Color.blue.opacity(0.12) : Color(UIColor.tertiarySystemBackground))
+                                .frame(width: 28, height: 28)
+                            Image(systemName: exercise.eachSide ? "checkmark" : "arrow.left.arrow.right")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(exercise.eachSide ? Color.blue : Color.secondary)
+                        }
+                        
+                        Text("Each side")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(Color.primary)
+                        
+                        if exercise.eachSide {
+                            Text("· \(reps * 2) total reps")
+                                .font(.system(size: 13, weight: .regular))
+                                .foregroundStyle(Color.secondary)
+                                .transition(.opacity.combined(with: .move(edge: .leading)))
+                        }
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(Color(UIColor.secondarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .animation(.easeInOut(duration: 0.2), value: exercise.eachSide)
+                }
+                .buttonStyle(.plain)
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 24)
+            .padding(.top, 24)
+            .padding(.bottom, 20)
             
+            Divider()
+                .padding(.bottom, 8)
+            
+            // ── Number pad ─────────────────────────────────────────────
             CustomNumberPad(
                 backspaceDisabled: stringInput.isEmpty,
                 zeroDisabled: stringInput.isEmpty,
@@ -62,29 +96,28 @@ struct MyDayKitRepsView: View {
                     stringInput.append("\(number)")
                     reps = Int(stringInput) ?? 1
                 },
-                backspace:  {
+                backspace: {
                     stringInput.removeLast()
                     reps = Int(stringInput) ?? 1
                 }
             )
             
-            
+            // ── Add button ─────────────────────────────────────────────
             Button {
                 addAction()
             } label: {
-                Text("Add")
-                    .font(.headline)
-                    .foregroundStyle(Color.white.opacity(stringInput.isEmpty ? 0.3 : 1))
-                    .padding()
+                Text(hasInput ? "Add \(reps) \(reps == 1 ? "rep" : "reps")" : "Enter reps")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(hasInput ? Color.white : Color.secondary)
                     .frame(maxWidth: .infinity)
-                    .background {
-                        Color
-                            .blue.opacity(stringInput.isEmpty ? 0.3 : 1)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                    }
+                    .frame(height: 52)
+                    .background(hasInput ? Color.blue : Color(UIColor.secondarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .animation(.easeInOut(duration: 0.2), value: hasInput)
             }
-            .padding()
-            .disabled(stringInput.isEmpty)
+            .disabled(!hasInput)
+            .padding(.horizontal, 24)
+            .padding(.bottom, 16)
         }
         .navigationTitle("Reps")
         .onAppear {
