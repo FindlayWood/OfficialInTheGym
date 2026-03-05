@@ -15,21 +15,28 @@ struct MyDayWeightSelectorView: View {
     
     private var isValidSelection: Bool {
         guard let unit = selectedUnit else { return false }
-        if unit == .max || unit == .bw {
-            return true
-        } else {
-            return value > 0
-        }
+        return (unit == .max || unit == .bw) ? true : value > 0
     }
     
-    let columns = [
-        GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
-    ]
+    private var isBodyweightUnit: Bool {
+        selectedUnit == .max || selectedUnit == .bw
+    }
     
-    let steps: [Int] = [1, 2, 5, 10, 15, 20]
+    private var displayValue: String {
+        guard let unit = selectedUnit else { return "–" }
+        if unit == .max { return "Max" }
+        if unit == .bw  { return "BW" }
+        return stringInput.isEmpty ? "0" : stringInput
+    }
     
+    private var unitLabel: String {
+        guard let unit = selectedUnit,
+              unit != .max, unit != .bw else { return "" }
+        return unit.rawValue
+    }
+    
+    let columns = Array(repeating: GridItem(.flexible()), count: 3)
     let newExercise: MyDayNewExerciseManager
-    
     var continueAction: (() -> ())?
     
     init(newExercise: MyDayNewExerciseManager, continueAction: (() -> ())? = nil) {
@@ -37,95 +44,179 @@ struct MyDayWeightSelectorView: View {
         self.continueAction = continueAction
         self._selectedUnit = State(initialValue: newExercise.weightUnits)
         self._value = State(initialValue: newExercise.weight ?? 0)
+        if let existing = newExercise.weight, existing > 0 {
+            self._stringInput = State(initialValue: "\(existing.formatted(.number.precision(.fractionLength(0...2))))")
+        }
     }
     
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 0) {
             
-            // Unit selection grid
-            Text("Select Weight Unit")
-                .font(.headline)
+            // ── Header ─────────────────────────────────────────────────
+            VStack(spacing: 6) {
+                Text("Weight")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundStyle(Color.primary)
+                Text("Select a unit and enter a value")
+                    .font(.system(size: 13, weight: .regular))
+                    .foregroundStyle(Color.secondary)
+            }
+            .padding(.top, 24)
+            .padding(.bottom, 20)
             
-            LazyVGrid(columns: columns, spacing: 12) {
-                ForEach(WeightUnit.allCases, id: \.self) { unit in
-                    Button(action: {
-                        if unit == selectedUnit {
-                            selectedUnit = nil
-                        } else {
-                            selectedUnit = unit
-                        }
-                        if unit == .max || unit == .bw {
-                            value = 0 // reset value if Max or BW
-                        }
-                    }) {
-                        Text(unit.rawValue)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 12)
-                            .background(selectedUnit == unit ? Color.blue : Color.gray.opacity(0.1))
-                            .foregroundColor(selectedUnit == unit ? .white : .primary)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                    }
+            // ── Live value display ─────────────────────────────────────
+            HStack(alignment: .lastTextBaseline, spacing: 6) {
+                Text(displayValue)
+                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .foregroundStyle(
+                        isValidSelection
+                            ? Color.primary
+                            : Color(UIColor.tertiaryLabel)
+                    )
+                    .contentTransition(.numericText())
+                    .animation(.easeInOut(duration: 0.15), value: stringInput)
+                
+                if !unitLabel.isEmpty {
+                    Text(unitLabel)
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(Color.secondary)
+                        .padding(.bottom, 6)
+                        .transition(.opacity)
                 }
             }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 20)
+            .background(Color(UIColor.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .padding(.horizontal, 16)
+            .padding(.bottom, 24)
+            .animation(.easeInOut(duration: 0.2), value: selectedUnit)
             
-            // Numeric input controls
-            if let unit = selectedUnit, unit != .max, unit != .bw {
-                VStack(spacing: 16) {
-                    Text("\(stringInput.isEmpty ? "0" : stringInput) \(unit.rawValue)")
-                        .font(.system(size: 30, weight: .bold))
-                    
-                    CustomNumberPad(
-                        showingDecimalPoint: true,
-                        decimalDisabled: decimalDisabled,
-                        backspaceDisabled: stringInput.isEmpty,
-                        zeroDisabled: stringInput.isEmpty,
-                        decimalSelected: {
-                            stringInput.append(".")
-                            value = Double(stringInput) ?? 0
-                        },
-                        selection: { number in
-                            stringInput.append("\(number)")
-                            value = Double(stringInput) ?? 0
-                        },
-                        backspace: {
-                            stringInput.removeLast()
-                            value = Double(stringInput) ?? 0
-                        }
-                    )
+            // ── Unit selector ──────────────────────────────────────────
+            LazyVGrid(columns: columns, spacing: 10) {
+                ForEach(WeightUnit.allCases, id: \.self) { unit in
+                    unitButton(unit)
                 }
-            } else if selectedUnit == .max {
-                Text("MAX")
-                    .font(.system(size: 30, weight: .bold))
-            } else if selectedUnit == .bw {
-                Text("BW")
-                    .font(.system(size: 30, weight: .bold))
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 20)
+            
+            // ── Number pad ─────────────────────────────────────────────
+            if let unit = selectedUnit, unit != .max, unit != .bw {
+                Divider()
+                    .padding(.bottom, 8)
+                
+                CustomNumberPad(
+                    showingDecimalPoint: true,
+                    decimalDisabled: decimalDisabled,
+                    backspaceDisabled: stringInput.isEmpty,
+                    zeroDisabled: stringInput.isEmpty,
+                    decimalSelected: {
+                        stringInput.append(".")
+                        value = Double(stringInput) ?? 0
+                    },
+                    selection: { number in
+                        stringInput.append("\(number)")
+                        value = Double(stringInput) ?? 0
+                    },
+                    backspace: {
+                        stringInput.removeLast()
+                        value = Double(stringInput) ?? 0
+                    }
+                )
+                .transition(.opacity.combined(with: .move(edge: .bottom)))
+                .animation(.easeInOut(duration: 0.2), value: unit)
             }
             
             Spacer()
             
-            // Continue button
+            // ── Add button ─────────────────────────────────────────────
             Button {
                 addAction()
             } label: {
-                Text("Add")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(isValidSelection ? Color.blue : Color.gray.opacity(0.4))
-                    .foregroundColor(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                Group {
+                    if isValidSelection, let unit = selectedUnit {
+                        if unit == .max || unit == .bw {
+                            Text("Add \(unit.rawValue)")
+                        } else {
+                            Text("Add \(stringInput) \(unit.rawValue)")
+                        }
+                    } else {
+                        Text("Select a unit")
+                    }
+                }
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(isValidSelection ? Color.white : Color.secondary)
+                .frame(maxWidth: .infinity)
+                .frame(height: 52)
+                .background(
+                    isValidSelection
+                        ? Color.blue
+                        : Color(UIColor.secondarySystemBackground)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+                .animation(.easeInOut(duration: 0.2), value: isValidSelection)
             }
             .disabled(!isValidSelection)
-            
+            .padding(.horizontal, 16)
+            .padding(.bottom, 16)
         }
-        .padding()
     }
     
-    func addAction() {
-        if let selectedUnit {
-            newExercise.setWeight(value)
-            newExercise.setWeightUnits(selectedUnit)
-            continueAction?()
+    // MARK: - Unit Button
+    
+    @ViewBuilder
+    private func unitButton(_ unit: WeightUnit) -> some View {
+        let isSelected = selectedUnit == unit
+        let isBodyweight = unit == .max || unit == .bw
+        
+        Button {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                if unit == selectedUnit {
+                    selectedUnit = nil
+                } else {
+                    selectedUnit = unit
+                }
+                if isBodyweight {
+                    value = 0
+                    stringInput = ""
+                }
+            }
+        } label: {
+            VStack(spacing: 4) {
+                Text(unit.rawValue)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(isSelected ? Color.white : Color.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                
+                if isBodyweight {
+                    Text("no value")
+                        .font(.system(size: 9, weight: .medium))
+                        .foregroundStyle(isSelected ? Color.white.opacity(0.7) : Color.secondary)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 52)
+            .background(isSelected ? Color.blue : Color(UIColor.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay {
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(
+                        isSelected ? Color.blue : Color(UIColor.separator),
+                        lineWidth: isSelected ? 0 : 0.5
+                    )
+            }
         }
+    }
+    
+    // MARK: - Helpers
+    
+    func addAction() {
+        guard let selectedUnit else { return }
+        newExercise.setWeight(value)
+        newExercise.setWeightUnits(selectedUnit)
+        continueAction?()
     }
     
     var decimalDisabled: Bool {
