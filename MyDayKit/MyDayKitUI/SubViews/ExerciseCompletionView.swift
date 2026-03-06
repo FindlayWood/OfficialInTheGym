@@ -23,13 +23,18 @@ struct ExerciseCompletionView: View {
     var clipSelected: ((MyDayClipModel, UIImage, CGRect) -> ())?
     
     var body: some View {
-        VStack {
-            HStack {
+        VStack(spacing: 0) {
+            
+            // ── Header ─────────────────────────────────────────────────
+            HStack(alignment: .center) {
                 Text(model.exercise.name)
-                    .font(.title)
-                    .fontWeight(.bold)
+                    .font(.system(size: 18, weight: .bold))
                     .foregroundStyle(Color.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                
                 Spacer()
+                
                 if !disabled {
                     Button {
                         addAction?()
@@ -49,14 +54,26 @@ struct ExerciseCompletionView: View {
                     .buttonStyle(.borderless)
                 }
             }
-            HStack {
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .padding(.bottom, 12)
+            
+            // ── Sets scroll ────────────────────────────────────────────
+            if model.completions.isEmpty {
+                HStack {
+                    Text("No sets recorded yet")
+                        .font(.system(size: 13, weight: .regular))
+                        .foregroundStyle(Color.secondary)
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 12)
+            } else {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
+                    HStack(spacing: 8) {
                         ForEach(model.completions) { completion in
                             if let selected, selected.id == completion.id {
-                                PlaceholderSetView(
-                                    model: completion
-                                )
+                                PlaceholderSetView(model: completion)
                             } else {
                                 CompletedSetView(
                                     model: completion,
@@ -68,11 +85,14 @@ struct ExerciseCompletionView: View {
                             }
                         }
                         
-                        if model.completions.count > 0 && !disabled {
+                        if !model.completions.isEmpty && !disabled {
                             RepeatSetView(
+                                lastReps: model.completions.last?.reps,
+                                lastWeight: model.completions.last?.weight,
+                                lastWeightUnit: model.completions.last?.weightUnit,
                                 action: {
                                     guard let last = model.completions.last else { return }
-                                    let newCompleteion = ExerciseCompletions(
+                                    let newCompletion = ExerciseCompletions(
                                         id: UUID().uuidString,
                                         exercise: model.exercise,
                                         reps: last.reps,
@@ -86,29 +106,36 @@ struct ExerciseCompletionView: View {
                                         note: last.note,
                                         eachSide: last.eachSide
                                     )
-                                    repeatSet?(newCompleteion)
-                                })
+                                    repeatSet?(newCompletion)
+                                }
+                            )
                         }
                     }
-                    .padding()
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 4)
                 }
+                .padding(.bottom, 8)
             }
             
-            ExerciseClipsSubView(
-                clips: model.clips,
-                canAdd: !disabled,
-                addAction: {
-                    addClipButtonAction?()
-                },
-                selectedClip: clipSelected
-            )
+            // ── Clips ──────────────────────────────────────────────────
+            if !model.clips.isEmpty || !disabled {
+                Divider()
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 12)
+                
+                ExerciseClipsSubView(
+                    clips: model.clips,
+                    canAdd: !disabled,
+                    addAction: { addClipButtonAction?() },
+                    selectedClip: clipSelected
+                )
+                .padding(.horizontal, 16)
+                .padding(.bottom, 16)
+            }
         }
-        .padding()
-        .background {
-            Color
-                .white
-                .shadow(radius: 4)
-        }
+        .background(Color(UIColor.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: Color.black.opacity(0.06), radius: 8, x: 0, y: 2)
     }
 }
 

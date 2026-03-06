@@ -5,7 +5,7 @@
 //  Created by Findlay Wood on 05/08/2025.
 //
 
-import Foundation
+import SwiftUI
 
 enum ExerciseCategory: String, CaseIterable, Codable {
     case upperBody
@@ -23,6 +23,15 @@ enum ExerciseCategory: String, CaseIterable, Codable {
             return "Core"
         case .cardio:
             return "Cardio"
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .upperBody:  return .blue
+        case .lowerBody:  return .green
+        case .core:       return .orange
+        case .cardio:     return .red
         }
     }
 }
