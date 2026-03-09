@@ -23,6 +23,10 @@
 		F07509C42F5A22EC0026D021 /* ClipOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07509C32F5A22EC0026D021 /* ClipOverlayView.swift */; };
 		F07509C62F5A23630026D021 /* ViewClipDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07509C52F5A23630026D021 /* ViewClipDisplayView.swift */; };
 		F07509C82F5A23820026D021 /* ViewClipViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07509C72F5A23820026D021 /* ViewClipViewModel.swift */; };
+		F0750B102F5E22780026D021 /* FitnessActivityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B0F2F5E22780026D021 /* FitnessActivityPickerView.swift */; };
+		F0750B122F5E24380026D021 /* FitnessSessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B112F5E24380026D021 /* FitnessSessionDetailView.swift */; };
+		F0750B192F5E252F0026D021 /* TimeSettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B182F5E252F0026D021 /* TimeSettable.swift */; };
+		F0750B1B2F5E258D0026D021 /* FitnessTimeSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B1A2F5E258D0026D021 /* FitnessTimeSelectorView.swift */; };
 		F0B38C622E5B9C570096234C /* MyDayUnitsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */; };
 		F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */; };
 		F0B38C762E5F93600096234C /* WeightUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C752E5F93600096234C /* WeightUnit.swift */; };
@@ -101,6 +105,10 @@
 		F07509C32F5A22EC0026D021 /* ClipOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipOverlayView.swift; sourceTree = "<group>"; };
 		F07509C52F5A23630026D021 /* ViewClipDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipDisplayView.swift; sourceTree = "<group>"; };
 		F07509C72F5A23820026D021 /* ViewClipViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewClipViewModel.swift; path = Clips/UI/ViewClip/ViewClipViewModel.swift; sourceTree = SOURCE_ROOT; };
+		F0750B0F2F5E22780026D021 /* FitnessActivityPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessActivityPickerView.swift; sourceTree = "<group>"; };
+		F0750B112F5E24380026D021 /* FitnessSessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessSessionDetailView.swift; sourceTree = "<group>"; };
+		F0750B182F5E252F0026D021 /* TimeSettable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSettable.swift; sourceTree = "<group>"; };
+		F0750B1A2F5E258D0026D021 /* FitnessTimeSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessTimeSelectorView.swift; sourceTree = "<group>"; };
 		F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayUnitsHomeView.swift; sourceTree = "<group>"; };
 		F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWeightSelectorView.swift; sourceTree = "<group>"; };
 		F0B38C752E5F93600096234C /* WeightUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightUnit.swift; sourceTree = "<group>"; };
@@ -260,9 +268,28 @@
 			path = ViewClip;
 			sourceTree = "<group>";
 		};
+		F0750B0E2F5E226C0026D021 /* Fitness */ = {
+			isa = PBXGroup;
+			children = (
+				F0750B0F2F5E22780026D021 /* FitnessActivityPickerView.swift */,
+				F0750B112F5E24380026D021 /* FitnessSessionDetailView.swift */,
+				F0750B1A2F5E258D0026D021 /* FitnessTimeSelectorView.swift */,
+			);
+			path = Fitness;
+			sourceTree = "<group>";
+		};
+		F0750B142F5E25220026D021 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				F0750B182F5E252F0026D021 /* TimeSettable.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		F0BE5C152EB7ABFB009677F5 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				F0750B0E2F5E226C0026D021 /* Fitness */,
 				F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */,
 				F06004842E37E17F000B279F /* MyDayExerciseListView.swift */,
 				F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */,
@@ -364,6 +391,7 @@
 		F0D6C22E2E35754E00FEFEF1 /* MyDayKit */ = {
 			isa = PBXGroup;
 			children = (
+				F0750B142F5E25220026D021 /* Protocols */,
 				F0F35BFE2F10215C00ACB11E /* Deleter */,
 				F0F4B2AB2E8556CA007E2469 /* Uploader */,
 				F0F608242E42A1A10015F260 /* ExerciseLoader */,
@@ -615,6 +643,7 @@
 				F0BE5C1E2EB7CBF1009677F5 /* RepeatSetView.swift in Sources */,
 				F01E0E9A2E7A110A008C1547 /* LoopingVideoPlayer.swift in Sources */,
 				F0622F012ED260CF00260A5B /* CustomNumberPad.swift in Sources */,
+				F0750B122F5E24380026D021 /* FitnessSessionDetailView.swift in Sources */,
 				F0D348562F2A7A7D00AB6121 /* ClipUploadData.swift in Sources */,
 				F03334612F1ED3EC004102AC /* ClipUploader.swift in Sources */,
 				F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */,
@@ -627,9 +656,12 @@
 				F0BE5C122EB553B6009677F5 /* MyDayTempoSelectorView.swift in Sources */,
 				F07509C62F5A23630026D021 /* ViewClipDisplayView.swift in Sources */,
 				F0E2CC532EC538C800993165 /* ExerciseStatsSaveModel.swift in Sources */,
+				F0750B1B2F5E258D0026D021 /* FitnessTimeSelectorView.swift in Sources */,
 				F0F4B2AE2E855707007E2469 /* MyDayUploader.swift in Sources */,
 				F0E2CC4D2EC5297D00993165 /* ExerciseStatsSaver.swift in Sources */,
+				F0750B192F5E252F0026D021 /* TimeSettable.swift in Sources */,
 				F0BE5BED2EB402DC009677F5 /* MyDayDistanceSelectorView.swift in Sources */,
+				F0750B102F5E22780026D021 /* FitnessActivityPickerView.swift in Sources */,
 				F0D528C92F37D2E200FA0636 /* Transition.swift in Sources */,
 				F0F35C012F10216D00ACB11E /* MyDayDeleter.swift in Sources */,
 				F0D3443E2F25123500AB6121 /* PlayBackSheet.swift in Sources */,

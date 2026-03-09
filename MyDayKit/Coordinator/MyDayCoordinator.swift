@@ -159,6 +159,23 @@ extension MyDayCoordinator {
                     continueAction: { [weak self] in self?.popBack() }
                 )
             )
+        case .fitnessPicker:
+            let vc = selectorVC(
+                FitnessActivityPickerView(
+                    activitySelected: { [weak self] activity in
+                        let ama = MyDayNewFitnessManager(activity: activity)
+                        self?.navigate(to: .fitnessDetail(ama))
+                    }
+                )
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+        case .fitnessDetail(let manager):
+            return selectorVC(
+                FitnessSessionDetailView(
+                    manager: manager
+                )
+            )
         }
     }
 
@@ -204,6 +221,10 @@ extension MyDayCoordinator {
                     exerciseSelected: { [weak self] in
                         self?.navigationController.dismiss(animated: true)
                         self?.navigate(to: .add)
+                    },
+                    fitnessSelected: { [weak self] in
+                        self?.navigationController.dismiss(animated: true)
+                        self?.navigate(to: .fitnessPicker)
                     }
                 )
             )

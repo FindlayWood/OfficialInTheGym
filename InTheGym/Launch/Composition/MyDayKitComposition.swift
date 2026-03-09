@@ -93,7 +93,7 @@ class MyDayKitComposition {
             saver: localAndRemoteMyDayAndExerciseStatsSaver,
             clipSaver: localAndRemoteMyDaySaver,
             deleteSaver: localAndRemoteMyDaySaver,
-            loader: MyDayExampleLoader(),
+            loader: policyLoader,
             deleter: deleter
         )
         

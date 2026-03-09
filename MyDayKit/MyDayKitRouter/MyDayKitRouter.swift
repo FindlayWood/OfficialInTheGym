@@ -18,6 +18,9 @@ enum MyDayRoutes: Hashable {
     case time(MyDayNewExerciseManager)
     case tempo(MyDayNewExerciseManager)
     case note(MyDayNewExerciseManager)
+    
+    case fitnessPicker
+    case fitnessDetail(MyDayNewFitnessManager)
 }
 
 enum MyDaySheets: Identifiable {
@@ -144,6 +147,10 @@ public class MyDayKitRouter: ObservableObject {
                     self?.popBack()
                 }
             )
+        case .fitnessPicker:
+            FitnessActivityPickerView()
+        case .fitnessDetail(let manager):
+            FitnessSessionDetailView(manager: manager)
         }
     }
     
