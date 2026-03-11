@@ -176,6 +176,24 @@ extension MyDayCoordinator {
                     manager: manager
                 )
             )
+        case .sportPicker:
+            let vc = selectorVC(
+                SportPickerView(
+                    sportSelected: { [weak self] sport in
+                        let manager = MyDayNewSportManager(sport: sport)
+                        self?.navigate(to: .sportDetail(manager))
+                    }
+                )
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+        case .sportDetail(let manager):
+            let vc = selectorVC(
+                SportSessionDetailView(
+                    manager: manager
+                )
+            )
+            return vc
         }
     }
 
@@ -225,6 +243,10 @@ extension MyDayCoordinator {
                     fitnessSelected: { [weak self] in
                         self?.navigationController.dismiss(animated: true)
                         self?.navigate(to: .fitnessPicker)
+                    },
+                    sportSelected: { [weak self] in
+                        self?.navigationController.dismiss(animated: true)
+                        self?.navigate(to: .sportPicker)
                     }
                 )
             )

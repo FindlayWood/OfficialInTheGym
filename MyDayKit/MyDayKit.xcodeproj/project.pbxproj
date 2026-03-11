@@ -27,6 +27,12 @@
 		F0750B122F5E24380026D021 /* FitnessSessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B112F5E24380026D021 /* FitnessSessionDetailView.swift */; };
 		F0750B192F5E252F0026D021 /* TimeSettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B182F5E252F0026D021 /* TimeSettable.swift */; };
 		F0750B1B2F5E258D0026D021 /* FitnessTimeSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B1A2F5E258D0026D021 /* FitnessTimeSelectorView.swift */; };
+		F0750B492F5F7B2D0026D021 /* SportType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B482F5F7B2D0026D021 /* SportType.swift */; };
+		F0750BB52F621A7E0026D021 /* SportPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750BB42F621A7E0026D021 /* SportPickerView.swift */; };
+		F0750BB72F621AA70026D021 /* SportSessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750BB62F621AA70026D021 /* SportSessionDetailView.swift */; };
+		F0750BB92F621ACC0026D021 /* SportTimeSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750BB82F621ACC0026D021 /* SportTimeSelectorView.swift */; };
+		F0750BBB2F621AF40026D021 /* SportNoteSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750BBA2F621AF40026D021 /* SportNoteSelectorView.swift */; };
+		F0750BBD2F621B4F0026D021 /* MyDayNewSportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750BBC2F621B4F0026D021 /* MyDayNewSportManager.swift */; };
 		F0B38C622E5B9C570096234C /* MyDayUnitsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */; };
 		F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */; };
 		F0B38C762E5F93600096234C /* WeightUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C752E5F93600096234C /* WeightUnit.swift */; };
@@ -109,6 +115,12 @@
 		F0750B112F5E24380026D021 /* FitnessSessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessSessionDetailView.swift; sourceTree = "<group>"; };
 		F0750B182F5E252F0026D021 /* TimeSettable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSettable.swift; sourceTree = "<group>"; };
 		F0750B1A2F5E258D0026D021 /* FitnessTimeSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessTimeSelectorView.swift; sourceTree = "<group>"; };
+		F0750B482F5F7B2D0026D021 /* SportType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportType.swift; sourceTree = "<group>"; };
+		F0750BB42F621A7E0026D021 /* SportPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportPickerView.swift; sourceTree = "<group>"; };
+		F0750BB62F621AA70026D021 /* SportSessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportSessionDetailView.swift; sourceTree = "<group>"; };
+		F0750BB82F621ACC0026D021 /* SportTimeSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportTimeSelectorView.swift; sourceTree = "<group>"; };
+		F0750BBA2F621AF40026D021 /* SportNoteSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportNoteSelectorView.swift; sourceTree = "<group>"; };
+		F0750BBC2F621B4F0026D021 /* MyDayNewSportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayNewSportManager.swift; sourceTree = "<group>"; };
 		F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayUnitsHomeView.swift; sourceTree = "<group>"; };
 		F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWeightSelectorView.swift; sourceTree = "<group>"; };
 		F0B38C752E5F93600096234C /* WeightUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightUnit.swift; sourceTree = "<group>"; };
@@ -286,9 +298,30 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		F0750B462F5F7B1E0026D021 /* Sports */ = {
+			isa = PBXGroup;
+			children = (
+				F0750B482F5F7B2D0026D021 /* SportType.swift */,
+				F0750BBC2F621B4F0026D021 /* MyDayNewSportManager.swift */,
+			);
+			path = Sports;
+			sourceTree = "<group>";
+		};
+		F0750BB32F621A700026D021 /* Sports */ = {
+			isa = PBXGroup;
+			children = (
+				F0750BB42F621A7E0026D021 /* SportPickerView.swift */,
+				F0750BB62F621AA70026D021 /* SportSessionDetailView.swift */,
+				F0750BB82F621ACC0026D021 /* SportTimeSelectorView.swift */,
+				F0750BBA2F621AF40026D021 /* SportNoteSelectorView.swift */,
+			);
+			path = Sports;
+			sourceTree = "<group>";
+		};
 		F0BE5C152EB7ABFB009677F5 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				F0750BB32F621A700026D021 /* Sports */,
 				F0750B0E2F5E226C0026D021 /* Fitness */,
 				F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */,
 				F06004842E37E17F000B279F /* MyDayExerciseListView.swift */,
@@ -414,6 +447,7 @@
 		F0D6C2502E36B7AA00FEFEF1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F0750B462F5F7B1E0026D021 /* Sports */,
 				F0D6C2542E36C12A00FEFEF1 /* MyDayExerciseModel.swift */,
 				F0F6082D2E42A1F50015F260 /* Exercise.swift */,
 				F0F6082F2E42A20B0015F260 /* ExerciseCategory.swift */,
@@ -623,9 +657,11 @@
 				F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */,
 				F0D527912F3007E100FA0636 /* ExerciseClipsSubView.swift in Sources */,
 				F0D528D22F38C4BA00FA0636 /* ViewClipViewController.swift in Sources */,
+				F0750BB72F621AA70026D021 /* SportSessionDetailView.swift in Sources */,
 				F0F35C452F16ADC700ACB11E /* MyDayBoundaryViewController.swift in Sources */,
 				F0D528D52F392A5900FA0636 /* ClipLoader.swift in Sources */,
 				F0D3456A2F27E24F00AB6121 /* UploadManager.swift in Sources */,
+				F0750B492F5F7B2D0026D021 /* SportType.swift in Sources */,
 				F0D5278F2F2F90D700FA0636 /* ProcessedVideoData.swift in Sources */,
 				F0D3444B2F2582E900AB6121 /* UploadProgressView.swift in Sources */,
 				F03334632F1FF2E2004102AC /* RecordingProgressRing.swift in Sources */,
@@ -650,6 +686,7 @@
 				F0D348522F2A7A5400AB6121 /* ClipUploadResult.swift in Sources */,
 				F07508DA2F5380E10026D021 /* ViewClipRecorder.swift in Sources */,
 				F0E2CC4F2EC5389B00993165 /* MyDayAndStatSaver.swift in Sources */,
+				F0750BBD2F621B4F0026D021 /* MyDayNewSportManager.swift in Sources */,
 				F01E0EA12E7A1242008C1547 /* RecordingOverlay.swift in Sources */,
 				F0F4B2B62E85622E007E2469 /* MyDayLoader.swift in Sources */,
 				F01E0E9F2E7A11B7008C1547 /* VideoRecorder.swift in Sources */,
@@ -659,6 +696,7 @@
 				F0750B1B2F5E258D0026D021 /* FitnessTimeSelectorView.swift in Sources */,
 				F0F4B2AE2E855707007E2469 /* MyDayUploader.swift in Sources */,
 				F0E2CC4D2EC5297D00993165 /* ExerciseStatsSaver.swift in Sources */,
+				F0750BB92F621ACC0026D021 /* SportTimeSelectorView.swift in Sources */,
 				F0750B192F5E252F0026D021 /* TimeSettable.swift in Sources */,
 				F0BE5BED2EB402DC009677F5 /* MyDayDistanceSelectorView.swift in Sources */,
 				F0750B102F5E22780026D021 /* FitnessActivityPickerView.swift in Sources */,
@@ -678,10 +716,12 @@
 				F07509C82F5A23820026D021 /* ViewClipViewModel.swift in Sources */,
 				F0D5278D2F2F905900FA0636 /* VideoConverter.swift in Sources */,
 				F0F35C482F16AEF600ACB11E /* MyDayCoordinator.swift in Sources */,
+				F0750BB52F621A7E0026D021 /* SportPickerView.swift in Sources */,
 				F0C8EC192ECF7F32002213C7 /* MyDayHomeViewController.swift in Sources */,
 				F0F4B2B22E85620B007E2469 /* MyDaySaver.swift in Sources */,
 				F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */,
 				F0C8EC162ECE77E8002213C7 /* PlaceholderSetView.swift in Sources */,
+				F0750BBB2F621AF40026D021 /* SportNoteSelectorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
