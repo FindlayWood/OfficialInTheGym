@@ -18,12 +18,6 @@ class CommentSectionDataSource: NSObject {
     
     var workoutTapped = PassthroughSubject<PostModel,Never>()
     
-    var groupPostLikeButtonTapped = PassthroughSubject<GroupPost,Never>()
-    
-    var groupPostWorkoutButtonTapped = PassthroughSubject<GroupPost,Never>()
-    
-    var groupUserButtonTapped = PassthroughSubject<GroupPost,Never>()
-    
     var commentUserTapped = PassthroughSubject<Comment,Never>()
     
     var commentWorkoutTapped = PassthroughSubject<Comment,Never>()
@@ -60,15 +54,6 @@ class CommentSectionDataSource: NSObject {
                         self?.actionPublisher(action: action, indexPath: indexPath)
                     })
                 return cell
-            case .mainGroupPost(let post):
-                let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.cellID, for: indexPath) as! PostTableViewCell
-                cell.longDateFormat = true
-                cell.configure(with: post)
-                self?.subscriptions[indexPath] = cell.actionPublisher
-                    .sink(receiveValue: { [weak self] action in
-                        self?.actionPublisher(action: action, indexPath: indexPath)
-                    })
-                return cell
             case .comment(let comment):
                 let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.cellID, for: indexPath) as! CommentTableViewCell
                 cell.setup(with: comment)
@@ -85,14 +70,6 @@ class CommentSectionDataSource: NSObject {
         var currentSnapshot = dataSource.snapshot()
         currentSnapshot.appendSections([.Post, .comments])
         currentSnapshot.appendItems([.mainPost(post)], toSection: .Post)
-        dataSource.apply(currentSnapshot, animatingDifferences: false)
-    }
-    
-    // MARK: - Initial Group Setup
-    func initialGroupSetup(with post: GroupPost) {
-        var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.appendSections([.Post, .comments])
-        currentSnapshot.appendItems([.mainGroupPost(post)], toSection: .Post)
         dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
     
@@ -120,15 +97,6 @@ class CommentSectionDataSource: NSObject {
         currentSnapshot.deleteItems([first])
         dataSource.apply(currentSnapshot, animatingDifferences: false)
     }
-    // MARK: - Reload Main Post
-    func reloadMainGroup(with post: GroupPost) {
-        var currentSnapshot = dataSource.snapshot()
-        guard let first = currentSnapshot.itemIdentifiers.first else {return}
-        var newPost = post
-        currentSnapshot.insertItems([.mainGroupPost(newPost)], beforeItem: first)
-        currentSnapshot.deleteItems([first])
-        dataSource.apply(currentSnapshot, animatingDifferences: false)
-    }
     
     // MARK: - Actions
     func actionPublisher(action: PostAction, indexPath: IndexPath) {
@@ -147,17 +115,6 @@ class CommentSectionDataSource: NSObject {
                 userTapped.send(post)
             case .taggedUserTapped:
                 mainPostTaggedUserTapped.send(post)
-            }
-        case .mainGroupPost(let groupPost):
-            switch action {
-            case .likeButtonTapped:
-                groupPostLikeButtonTapped.send(groupPost)
-            case .workoutTapped:
-                groupPostWorkoutButtonTapped.send(groupPost)
-            case .userTapped:
-                groupUserButtonTapped.send(groupPost)
-            case .taggedUserTapped:
-                break
             }
         case .comment(let comment):
             switch action {

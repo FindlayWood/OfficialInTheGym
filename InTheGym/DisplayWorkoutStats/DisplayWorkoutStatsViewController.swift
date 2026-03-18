@@ -11,7 +11,7 @@ import UIKit
 class DisplayWorkoutStatsViewController: UIViewController {
     // MARK: - Properties
     var display = DisplayWorkoutStatsView()
-    var firebaseService = FirebaseAPILoader.shared
+//    var firebaseService = FirebaseAPILoader.shared
     var savedWorkoutID: String!
     var adapter: DisplayWorkoutStatsAdapter!
     var viewModel = DisplayWorkoutStatsViewModel()

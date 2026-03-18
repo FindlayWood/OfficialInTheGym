@@ -15,8 +15,6 @@ struct NewPostView: View {
     @State var showAttachmentSheet: Bool = false
     @State var showPrivacySheet: Bool = false
     @State var profileImage: UIImage?
-    // MARK: - Variables
-    var isGroup: Bool
     // MARK: - Callback to ViewController
     var post: () -> ()
     var addAttachments: () -> ()
@@ -92,14 +90,12 @@ struct NewPostView: View {
                         .foregroundColor(Color(.darkColour))
                 }
                 Spacer()
-                if !isGroup {
-                    Button {
-                        changePrivacy()
-                    } label: {
-                        Image(systemName: viewModel.isPrivate ? "lock.fill" : "globe")
-                            .font(.title)
-                            .foregroundColor(Color(.darkColour))
-                    }
+                Button {
+                    changePrivacy()
+                } label: {
+                    Image(systemName: viewModel.isPrivate ? "lock.fill" : "globe")
+                        .font(.title)
+                        .foregroundColor(Color(.darkColour))
                 }
             }
         }

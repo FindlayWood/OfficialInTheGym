@@ -13,17 +13,16 @@ class RegularWorkoutCreationCoordinator: Coordinator {
     
     /// the publisher to publish the exercise when it is completed
     var completedExercise: PassthroughSubject<ExerciseModel,Never>?
-    var completedCircuit: PassthroughSubject<CircuitModel,Never>?
-    var completedAmrap: PassthroughSubject<AMRAPModel,Never>?
-    var completedEMOM: PassthroughSubject<EMOMModel,Never>?
     
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var assignTo: Users?
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController, assignTo: Users?) {
+    init(navigationController: UINavigationController, assignTo: Users?, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.assignTo = assignTo
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -62,22 +61,7 @@ extension RegularWorkoutCreationCoordinator: ExerciseSelectionFlow {
         navigationController.present(vc, animated: true)
     }
     func infoSelected(_ discoverModel: DiscoverExerciseModel) {
-        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: discoverModel)
-        childCoordinators.append(child)
-        child.start()
-    }
-    func addCircuit() {
-        let child = CircuitCreationCoordinator(navigationController: navigationController, publisher: completedCircuit)
-        childCoordinators.append(child)
-        child.start()
-    }
-    func addAmrap() {
-        let child = AMRAPCreationCoordinator(navigationController: navigationController, publisher: completedAmrap)
-        childCoordinators.append(child)
-        child.start()
-    }
-    func addEmom() {
-        let child = EmomCreationCoordinator(navigationController: navigationController, publisher: completedEMOM)
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: discoverModel, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -112,7 +96,6 @@ extension RegularWorkoutCreationCoordinator: WeightSelectionFlow {
 // Finished
 extension RegularWorkoutCreationCoordinator: FinishedExerciseCreationFlow {
     func finishedExercise(_ exercise: ExerciseModel) {
-        // completedexercise.send exercise
         completedExercise?.send(exercise)
         let viewControllers: [UIViewController] = navigationController.viewControllers as [UIViewController]
         for viewController in viewControllers {

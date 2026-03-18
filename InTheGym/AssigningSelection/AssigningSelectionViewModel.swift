@@ -14,7 +14,6 @@ class AssigningSelectedionViewModel: ObservableObject {
     // MARK: - Publishers
     @Published var isLoading: Bool = false
     @Published var isUploading: Bool = false
-    @Published var isUploadingToGroup: Bool = false
     @Published var users: [Users] = []
     @Published var selectedUsers: [Users] = []
     
@@ -22,7 +21,6 @@ class AssigningSelectedionViewModel: ObservableObject {
     var playersPublisher = PassthroughSubject<[Users],Never>()
     var errorLoadingPublisher = PassthroughSubject<Error,Never>()
     var addedWorkoutPublisher = PassthroughSubject<Bool,Never>()
-    var addedGroupWorkoutPublisher = PassthroughSubject<Bool,Never>()
     var membersPublisher = PassthroughSubject<[Users],Never>()
     
     // MARK: - Properties
@@ -57,19 +55,6 @@ class AssigningSelectedionViewModel: ObservableObject {
             }
         }
     }
-    func selectedGroup(_ group: GroupModel) {
-        membersPublisher
-            .sink { [weak self] members in
-                self?.isUploadingToGroup = true
-                members.forEach { member in
-                    self?.selectedPlayer(member)
-                }
-                self?.isUploadingToGroup = false
-                self?.addedGroupWorkoutPublisher.send(true)
-            }.store(in: &subscriptions)
-        
-        fetchMembers(for: group)
-    }
     
     // MARK: - Functions
     func fetchPlayers() {
@@ -100,30 +85,4 @@ class AssigningSelectedionViewModel: ObservableObject {
             }
         }
     }
-    
-    // MARK: - Functions
-    private func fetchMembers(for group: GroupModel) {
-        let membersModel = GroupMembersModel(id: group.uid)
-        apiService.fetchKeys(from: membersModel) { [weak self] result in
-            switch result {
-            case .success(let keys):
-                self?.loadMembers(from: keys)
-            case .failure(let error):
-                self?.errorLoadingPublisher.send(error)
-            }
-        }
-    }
-    
-    private func loadMembers(from keys: [String]) {
-        let keyModels = keys.map { UserSearchModel(uid: $0) }
-        apiService.fetchRange(from: keyModels, returning: Users.self) { [weak self] result in
-            switch result {
-            case .success(let members):
-                self?.membersPublisher.send(members)
-            case .failure(let error):
-                self?.errorLoadingPublisher.send(error)
-            }
-        }
-    }
-
 }

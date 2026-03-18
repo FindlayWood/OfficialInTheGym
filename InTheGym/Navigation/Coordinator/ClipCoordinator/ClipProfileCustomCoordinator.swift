@@ -14,15 +14,17 @@ class ClipProfileCustomCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     var clipModel: KeyClipModel
     var fromViewControllerDelegate: CustomAnimatingClipFromVC
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController, clipModel: KeyClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC) {
+    init(navigationController: UINavigationController, clipModel: KeyClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.clipModel = clipModel
         self.fromViewControllerDelegate = fromViewControllerDelegate
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
-        if SubscriptionManager.shared.isSubscribed {
+        if subscriptionManager.hasUnlockedPro {
             let vc = ViewClipViewController()
             vc.newCoordinator = self
             vc.viewModel.keyClipModel = clipModel
@@ -32,6 +34,8 @@ class ClipProfileCustomCoordinator: NSObject, Coordinator {
             navigationController.present(vc, animated: true)
         } else {
             let vc = PremiumAccountViewController()
+            vc.modalPresentationStyle = .fullScreen
+            vc.viewModel = PremiumAccountViewModel(purchaseManager: subscriptionManager)
             navigationController.present(vc, animated: true)
         }
     }

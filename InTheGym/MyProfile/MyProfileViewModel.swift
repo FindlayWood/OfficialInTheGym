@@ -134,27 +134,26 @@ class MyProfileViewModel {
     }
     
     // MARK: - Fetch Follower Count
+    @MainActor
     func getFollowerCount() {
         let followerModel = FollowersModel(id: UserDefaults.currentUser.uid)
-        apiService.childCount(of: followerModel) { [weak self] result in
-            switch result {
-            case .success(let count):
-                print("Followers = \(count)")
-                self?.currentProfileModel.followers = count
-                self?.followerCountPublisher.send(count)
-            case .failure(_):
-                break
+        Task {
+            do {
+                let count = try await apiService.childCountAsync(of: followerModel)
+                currentProfileModel.followers = count
+                followerCountPublisher.send(count)
+            } catch {
+                print(String(describing: error))
             }
         }
         let followingModel = FollowingModel(id: UserDefaults.currentUser.uid)
-        apiService.childCount(of: followingModel) { [weak self] result in
-            switch result {
-            case .success(let count):
-                print("Following = \(count)")
-                self?.currentProfileModel.following = count
-                self?.followingCountPublisher.send(count)
-            case .failure(_):
-                break
+        Task {
+            do {
+                let count = try await apiService.childCountAsync(of: followingModel)
+                currentProfileModel.following = count
+                followingCountPublisher.send(count)
+            } catch {
+                print(String(describing: error))
             }
         }
     }
@@ -199,7 +198,8 @@ class MyProfileViewModel {
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
             case .success(()):
-                LikesAPIService.shared.LikedPostsCache[post.id] = true
+                LikeCache.shared.upload(postID: post.id)
+                break
             case .failure(let error):
                 self?.errorLikingPost.send(error)
             }

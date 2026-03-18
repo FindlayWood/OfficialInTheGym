@@ -95,9 +95,6 @@ class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
         viewModel.tagsPublisher
             .sink { [weak self] in self?.dataSource.updateTags(with: $0)}
             .store(in: &subscriptions)
-//        viewModel.programPublisher
-//            .sink { [weak self] in self?.dataSource.updateProgram(with: $0)}
-//            .store(in: &subscriptions)
         
         viewModel.tagSelected
             .sink { [weak self] in self?.coordinator?.moreTagsSelected(text: $0)}
@@ -111,7 +108,6 @@ class DiscoverPageViewController: UIViewController, CustomAnimatingClipFromVC {
         viewModel.loadExercises()
         viewModel.loadTags()
         viewModel.loadClips()
-//        viewModel.loadPrograms()
         
     }
     

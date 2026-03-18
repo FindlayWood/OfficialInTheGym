@@ -25,10 +25,14 @@ class UsersLoader {
         if let cached = cache[searchModel.uid] {
             completion(.success(cached))
         } else {
-            apiService.fetchSingleInstance(of: searchModel, returning: Users.self) { [weak self] result in
-                let user = try? result.get()
-                user.map { self?.cache[searchModel.uid] = $0 }
-                completion(result)
+            Task {
+                do {
+                    let model: Users = try await apiService.fetchSingleInstanceAsync(of: searchModel)
+                    cache[searchModel.uid] = model
+                    completion(.success(model))
+                } catch {
+                    completion(.failure(error))
+                }
             }
         }
     }

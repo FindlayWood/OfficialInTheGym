@@ -14,10 +14,12 @@ class ExerciseDiscoveryCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var exercise: DiscoverExerciseModel
+    var subscriptionManager: PurchaseManager
     // MARK: - Initializer
-    init(navigationController: UINavigationController, exercise: DiscoverExerciseModel) {
+    init(navigationController: UINavigationController, exercise: DiscoverExerciseModel, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.exercise = exercise
+        self.subscriptionManager = subscriptionManager
     }
     // MARK: - Starts
     func start() {
@@ -51,7 +53,7 @@ extension ExerciseDiscoveryCoordinator: ClipSelectorFlow {
     // MARK: - Show Clip
     func clipSelected(_  model: ClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC) {
         let keyClipModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
-        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate)
+        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

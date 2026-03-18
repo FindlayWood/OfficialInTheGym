@@ -24,7 +24,7 @@ struct PlayerDetailViewSwiftUI: View {
                             .frame(width: 100, height: 100)
                             .foregroundColor(.secondary)
                     }
-                    Text("\(viewModel.user.firstName) \(viewModel.user.lastName)")
+                    Text(viewModel.user.displayName)
                         .font(.custom("Menlo-Bold", size: 25, relativeTo: .title))
                         .foregroundColor(.primary)
                     Text("@\(viewModel.user.username)")
@@ -32,12 +32,10 @@ struct PlayerDetailViewSwiftUI: View {
                         .foregroundColor(Color(.darkColour))
                     UserFollowingSwiftUI(user: viewModel.user)
                     .padding()
-                    if let profileBio = viewModel.user.profileBio {
-                        Text(profileBio)
-                            .font(.body)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
+                    Text(viewModel.user.bio)
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
                 }
                 .padding()
                 .frame(maxWidth: .infinity)

@@ -32,70 +32,6 @@ extension UIViewController {
         }
         alert.showSuccess("RPE", subTitle: "Enter RPE score for this exercise.", closeButtonTitle: "Cancel")
     }
-    func showCircuitRPE(completion: @escaping (Int) -> Void) {
-        let alert = SCLAlertView()
-        let rpe = alert.addTextField()
-        rpe.placeholder = "enter rpe 1-10..."
-        rpe.keyboardType = .numberPad
-        rpe.becomeFirstResponder()
-        alert.addButton("Save") {
-            guard let score = rpe.text else {
-                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
-                return}
-            guard let scoreInt = Int(score) else {
-                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
-                return}
-            if scoreInt > 0 && scoreInt < 11 {
-                completion(scoreInt)
-            } else {
-                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
-            }
-        }
-        alert.showSuccess("RPE", subTitle: "Enter RPE for this circuit.", closeButtonTitle: "cancel")
-    }
-    
-    func showRPEEMOM(completion: @escaping (Int) -> Void) {
-        let alert = SCLAlertView()
-        let rpe = alert.addTextField()
-        rpe.placeholder = "enter rpe 1-10..."
-        rpe.keyboardType = .numberPad
-        rpe.becomeFirstResponder()
-        alert.addButton("Save") {
-            guard let score = rpe.text else {
-                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
-                return}
-            guard let scoreInt = Int(score) else {
-                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
-                return}
-            if scoreInt > 0 && scoreInt < 11 {
-                completion(scoreInt)
-            } else {
-                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
-            }
-        }
-        alert.showSuccess("RPE", subTitle: "Enter RPE for EMOM(1-10).",closeButtonTitle: "cancel")
-    }
-    func showRPEAMRAP(completion: @escaping (Int) -> Void) {
-        let alert = SCLAlertView()
-        let rpe = alert.addTextField()
-        rpe.placeholder = "enter rpe 1-10..."
-        rpe.keyboardType = .numberPad
-        rpe.becomeFirstResponder()
-        alert.addButton("Save") {
-            guard let score = rpe.text else {
-                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
-                return}
-            guard let scoreInt = Int(score) else {
-                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
-                return}
-            if scoreInt > 0 && scoreInt < 11 {
-                completion(scoreInt)
-            } else {
-                self.showError(title: "Error", subtitle: "Enter RPE between 1 and 10.")
-            }
-        }
-        alert.showSuccess("RPE", subTitle: "Enter RPE for AMRAP(1-10).",closeButtonTitle: "cancel")
-    }
 
     func showWorkoutRPEAlert(completion: @escaping (Int) -> ()) {
         let alert = SCLAlertView()
@@ -131,6 +67,6 @@ extension UIViewController {
     func showButtonAlert(title: String, subtitle: String, buttonAction: @escaping () -> Void) {
         let alert = SCLAlertView()
         alert.addButton("Yes", action: buttonAction)
-        alert.showWarning(title, subTitle: subtitle, closeButtonTitle: "No", colorStyle: 0xe01212, colorTextButton: 0xfcfcfc)
+        alert.showWarning(title, subTitle: subtitle, closeButtonTitle: "No", colorStyle: .red, colorTextButton: .white)
     }
 }

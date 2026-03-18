@@ -30,14 +30,6 @@ class DisplayingWorkoutsView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    var programButton: UIButton = {
-        let button = UIButton()
-        let configuration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
-        button.setImage(UIImage(systemName: "text.book.closed.fill", withConfiguration: configuration), for: .normal)
-        button.tintColor = .darkColour
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
     var segment: CustomUnderlineSegmentControl = {
         let view = CustomUnderlineSegmentControl(frame: CGRect(x: 0, y: 0, width: Constants.screenSize.width, height: 32), buttonTitles: ["All","Completed","Live"])
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -70,7 +62,6 @@ private extension DisplayingWorkoutsView {
         backgroundColor = .systemBackground
         addSubview(titleLabel)
         addSubview(plusButton)
-        addSubview(programButton)
         addSubview(segment)
         addSubview(collectionView)
         configureUI()
@@ -83,9 +74,6 @@ private extension DisplayingWorkoutsView {
             
             plusButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            
-            programButton.trailingAnchor.constraint(equalTo: plusButton.leadingAnchor, constant: -4),
-            programButton.topAnchor.constraint(equalTo: plusButton.topAnchor),
             
             segment.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             segment.leadingAnchor.constraint(equalTo: leadingAnchor),

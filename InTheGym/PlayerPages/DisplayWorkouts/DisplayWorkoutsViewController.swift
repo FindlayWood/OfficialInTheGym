@@ -67,7 +67,6 @@ class DisplayingWorkoutsViewController: UIViewController {
     // MARK: - Button Actions
     func buttonActions() {
         display.plusButton.addTarget(self, action: #selector(plusButtonTapped(_:)), for: .touchUpInside)
-        display.programButton.addTarget(self, action: #selector(programButtonTapped(_:)), for: .touchUpInside)
         refreshControl.addTarget(self, action: #selector(didPullToRefresh(_:)), for: .valueChanged)
         display.collectionView.refreshControl = refreshControl
     }
@@ -112,10 +111,6 @@ class DisplayingWorkoutsViewController: UIViewController {
     
     @objc func plusButtonTapped(_ sender: UIButton) {
         coordinator?.plusPressed()
-//        coordinator?.addNewWorkout(UserDefaults.currentUser)
-    }
-    @objc func programButtonTapped(_ sender: UIButton) {
-        coordinator?.addProgram()
     }
     
     @objc func didPullToRefresh(_ sender: Any) {

@@ -20,12 +20,15 @@ class SettingsViewModel {
     
     // MARK: - Properties
     var apiService: AuthManagerService = FirebaseAuthManager.shared
+    var firestoreService: FirestoreService
+    var userSignedOut: (() -> Void)?
     
     let navigationTitle: String = "Settings"
     
     // MARK: - Initializer
-    init(apiService: AuthManagerService = FirebaseAuthManager.shared) {
+    init(apiService: AuthManagerService = FirebaseAuthManager.shared, firestoreService: FirestoreService = FirestoreManager.shared) {
         self.apiService = apiService
+        self.firestoreService = firestoreService
     }
     
     // MARK: - Actions
@@ -51,37 +54,29 @@ class SettingsViewModel {
     }
     // MARK: - Functions
     func logout() {
-        apiService.logout { [weak self] success in
-            if success {
-                LikesAPIService.shared.LikedPostsCache.removeAll()
-                ViewController.admin = nil
-                ViewController.username = nil
+        Task { @MainActor in
+            do {
+                let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
+                try await firestoreService.upload(dataPoints: ["FCMTokens/\(UserDefaults.currentUser.uid)": fcmTokenModel])
+                UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
+                try apiService.signout()
+                NotificationCenter.default.post(name: Notification.signOut, object: nil)
                 LikeCache.shared.removeAll()
                 ClipCache.shared.removeAll()
-                let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
-                Task {
-                    do {
-                        try await FirestoreManager.shared.upload(fcmTokenModel)
-                        UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
-                    } catch {
-                        print(String(describing: error))
-                    }
-                }
-                self?.loggedOut()
-            } else {
-                self?.errorLoggingOut.send(true)
+            } catch {
+                self.errorLoggingOut.send(true)
             }
         }
     }
     func resetPassword() {
-        apiService.sendResetPassword(to: UserDefaults.currentUser.email) { [weak self] success in
-            self?.successfullySentResetPassword.send(success)
+        Task {
+            do {
+                try await apiService.forgotPassword(for: UserDefaults.currentUser.email)
+                self.successfullySentResetPassword.send(true)
+            } catch {
+                self.successfullySentResetPassword.send(false)
+            }
         }
-    }
-    // MARK: - Success
-    func loggedOut() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.nilUser()
     }
 }
 

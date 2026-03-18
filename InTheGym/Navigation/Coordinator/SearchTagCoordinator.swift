@@ -12,10 +12,12 @@ class SearchTagCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var searchText: String?
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController, searchText: String? = nil) {
+    init(navigationController: UINavigationController, searchText: String? = nil, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.searchText = searchText
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -30,7 +32,7 @@ class SearchTagCoordinator: NSObject, Coordinator {
 // MARK: - Actions
 extension SearchTagCoordinator {
     func exerciseSelected(_ model: DiscoverExerciseModel) {
-        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: model)
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: model, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

@@ -1,0 +1,34 @@
+{
+  "configurations" : [
+    {
+      "id" : "8CEA4EBB-821C-460D-98DE-CFF7AA5FE1D1",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:ITGWorkoutKit.xcodeproj",
+          "identifier" : "7460AB512B94D040000FDF22",
+          "name" : "ITGWorkoutKit"
+        }
+      ]
+    },
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:ITGWorkoutKit.xcodeproj",
+        "identifier" : "74A6DCD42BCF09A1002A420C",
+        "name" : "ITGWorkoutKitCacheIntegrationTests"
+      }
+    }
+  ],
+  "version" : 1
+}

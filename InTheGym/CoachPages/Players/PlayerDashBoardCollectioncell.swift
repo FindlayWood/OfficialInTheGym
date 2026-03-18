@@ -326,7 +326,7 @@ private extension PlayerDashBoardCollectionCell {
 // MARK: - Public Config
 extension PlayerDashBoardCollectionCell {
     public func configure(with user: Users) {
-        fullNameLabel.text = user.firstName + " " + user.lastName
+        fullNameLabel.text = user.displayName
         usernameLabel.text = "@" + user.username
         viewModel = .init(user: user)
         

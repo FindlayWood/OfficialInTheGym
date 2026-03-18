@@ -44,17 +44,11 @@ class CommentSectionViewModel: ObservableObject {
     
     var mainPost: PostModel!
     
-    var mainGroupPost: GroupPost!
-    
     lazy var mainPostReplyModel = PostReplies(postID: mainPost.id)
-    
-    lazy var groupPostReplyModel = PostReplies(postID: mainGroupPost.id)
     
     var listener: PostListener?
     
     var deleteListener: PostListener?
-    
-    var groupListener: GroupPostListener?
     
     var workoutSelected = PassthroughSubject<WorkoutModel,Never>()
     
@@ -141,39 +135,6 @@ class CommentSectionViewModel: ObservableObject {
     func likedMainPost() {
         mainPost.likeCount += 1
     }
-    func groupSendPressed() {
-        self.isLoading = true
-        let newComment = Comment(id: UUID().uuidString,
-                                 username: UserDefaults.currentUser.username,
-                                 time: Date().timeIntervalSince1970,
-                                 message: commentText,
-                                 posterID: UserDefaults.currentUser.uid,
-                                 postID: mainGroupPost.id,
-                                 attachedWorkoutSavedID: attachedWorkout?.id)
-        
-        let uploadModel = UploadGroupCommentModel(comment: newComment, groupID: mainGroupPost.groupID)
-        let points = uploadModel.uploadPoints()
-        apiService.multiLocationUpload(data: points) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(()):
-                self.isLoading = false
-                self.addedGroupReply(newComment)
-            case .failure(_):
-                self.errorUploadingComment.send(())
-                self.isLoading = false
-            }
-        }
-    }
-    func addedGroupReply(_ comment: Comment) {
-        mainGroupPost.replyCount += 1
-        groupListener?.send(mainGroupPost)
-        uploadingNewComment.send(comment)
-    }
-    func likedMainGroupPost() {
-        mainGroupPost.likeCount += 1
-    }
-    
     func updateCommentText(with text: String) {
         self.text = text
     }
@@ -208,49 +169,18 @@ class CommentSectionViewModel: ObservableObject {
         }
     }
     
-    func groupLikeCheck(_ post: GroupPost) {
-        let likeCheck = PostLikesModel(postID: post.id)
-        apiService.checkExistence(of: likeCheck) { [weak self] result in
-            switch result {
-            case .success(let liked):
-                if !liked {
-                    self?.groupLike(post)
-                }
-            case .failure(_):
-                self?.errorLiking.send(())
-            }
-        }
-    }
-    
-    // MARK: - Like Group Post
-    func groupLike(_ post: GroupPost) {
-        let likeModels = LikeTransportLayer(postID: post.id).groupPostLike(post: post)
-        apiService.multiLocationUpload(data: likeModels) { [weak self] result in
-            switch result {
-            case .success(()):
-                LikesAPIService.shared.LikedPostsCache[post.id] = true
-                self?.groupListener?.send(post)
-            case .failure(_):
-                self?.errorLiking.send(())
-            }
-        }
-    }
     // MARK: - Like Post
     func like(_ post: PostModel) {
         let likeModels = LikeTransportLayer(postID: post.id).postLike(post: post)
         apiService.multiLocationUpload(data: likeModels) { [weak self] result in
             switch result {
             case .success(()):
-                LikesAPIService.shared.LikedPostsCache[post.id] = true
+                LikeCache.shared.upload(postID: post.id)
                 self?.listener?.send(post)
             case .failure(_):
                 self?.errorLiking.send(())
             }
         }
-    }
-    
-    func sendNotifications() {
-        
     }
     
     // MARK: - Retreive Functions
@@ -279,34 +209,7 @@ class CommentSectionViewModel: ObservableObject {
             }
         }
     }
-    
-    func getWorkout(from tappedPost: GroupPost) {
-        if let workoutID = tappedPost.workoutID {
-            let keyModel = WorkoutKeyModel(id: workoutID, assignID: tappedPost.posterID)
-            WorkoutLoader.shared.load(from: keyModel) { [weak self] result in
-                guard let workout = try? result.get() else {return}
-                self?.workoutSelected.send(workout)
-            }
-        }
-        else if let savedWorkoutID = tappedPost.savedWorkoutID {
-            let keyModel = SavedWorkoutKeyModel(id: savedWorkoutID)
-            SavedWorkoutLoader.shared.load(from: keyModel) { [weak self] result in
-                guard let workout = try? result.get() else {return}
-                self?.savedWorkoutSelected.send(workout)
-            }
-        }
-    }
-    
     func getUser(from tappedPost: PostModel) {
-        let userSearchModel = UserSearchModel(uid: tappedPost.posterID)
-        UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
-            guard let user = try? result.get() else {return}
-            if user != UserDefaults.currentUser {
-                self?.userSelected.send(user)
-            }
-        }
-    }
-    func getUser(from tappedPost: GroupPost) {
         let userSearchModel = UserSearchModel(uid: tappedPost.posterID)
         UsersLoader.shared.load(from: userSearchModel) { [weak self] result in
             guard let user = try? result.get() else {return}

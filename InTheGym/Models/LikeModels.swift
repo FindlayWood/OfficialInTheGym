@@ -18,7 +18,7 @@ struct PostLikesModel {
 }
 extension PostLikesModel: FirebaseInstance {
     var internalPath: String {
-        return "PostLikes/\(postID)/\(FirebaseAuthManager.currentlyLoggedInUser.uid)"
+        return "PostLikes/\(postID)/\(UserDefaults.currentUser.uid)"
     }
 }
 
@@ -43,7 +43,7 @@ struct LikedCommentsModel {
 }
 extension LikedCommentsModel {
     var internalPath: String {
-        "LikedComments/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(commentID)"
+        "LikedComments/\(UserDefaults.currentUser.uid)/\(commentID)"
     }
 }
 struct LikesModel {
@@ -55,7 +55,7 @@ struct LikesModel {
 }
 extension LikesModel: FirebaseInstance {
     var internalPath: String {
-        return "Likes/\(FirebaseAuthManager.currentlyLoggedInUser.uid)/\(postID)"
+        return "Likes/\(UserDefaults.currentUser.uid)/\(postID)"
     }
 }
 
@@ -86,24 +86,12 @@ struct LikeTransportLayer {
         uploadPoints.append(LikeCount(postID: postID).toMultiUploadPoint(increment: increasing))
         return uploadPoints
     }
-    func groupPostLike(post: GroupPost) -> [FirebaseMultiUploadDataPoint] {
-        var uploadPoints = [FirebaseMultiUploadDataPoint]()
-        uploadPoints.append(PostLikesModel(postID: postID).toMultiUploadPoint(with: true))
-        uploadPoints.append(LikesModel(postID: postID).toMultiUploadPoint(with: true))
-        uploadPoints.append(LikeCount(postID: postID).toMultiUploadPoint(increment: true))
-//        if let notification = NotificationModel.createNotification(type: .GroupLikedPost, to: post.posterID, postID: post.id, groupID: post.groupID)?.toFirebaseJSON() {
-//            uploadPoints.append(notification)
-//        }
-        return uploadPoints
-    }
+
     func postLike(post: PostModel) -> [FirebaseMultiUploadDataPoint] {
         var uploadPoints = [FirebaseMultiUploadDataPoint]()
         uploadPoints.append(PostLikesModel(postID: postID).toMultiUploadPoint(with: true))
         uploadPoints.append(LikesModel(postID: postID).toMultiUploadPoint(with: true))
         uploadPoints.append(LikeCount(postID: postID).toMultiUploadPoint(increment: true))
-//        if let notification = NotificationModel.createNotification(type: .LikedPost, to: post.posterID, postID: post.id)?.toFirebaseJSON() {
-//            uploadPoints.append(notification)
-//        }
         return uploadPoints
     }
     

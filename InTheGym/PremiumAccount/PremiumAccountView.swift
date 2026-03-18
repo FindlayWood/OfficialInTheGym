@@ -8,135 +8,314 @@
 import SwiftUI
 import RevenueCat
 
-struct PremiumAccountViewSwiftUI: View {
-    @StateObject var viewModel = PremiumAccountViewModel()
-    var dismissAction: () -> ()
+struct PremiumAccountView: View {
+    @ObservedObject var viewModel: PremiumAccountViewModel
+
+    @State private var selectedProduct: DisplayAndPurchaseProduct?
+    
+    var next: (() -> ())?
+    
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack {
-                    if SubscriptionManager.shared.isSubscribed {
-                        SubscribedView()
-                        if let originalPurchaseData = viewModel.originalPurchaseDate {
-                            Text("Purchase Date")
-                                .font(.headline)
-                            Text(originalPurchaseData, format: .dateTime.day().month().year())
-                                .fontWeight(.medium)
-                        }
-                    } else {
-                        Text("Sign up for a premium account and gain access to awesome features and power yourself into an elite athlete.")
-                            .font(.body.weight(.medium))
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                            .padding(.bottom)
-                        Spacer()
-                        SubscriptionFeatureView(imageName: "clip_icon", title: "Clips", message: "Record and upload clips.")
-                        SubscriptionFeatureView(imageName: "monitor_icon", title: "Performance Center", message: "Gain access to the performance center.")
-                        HStack {
-                            ForEach(viewModel.subscriptionPackages) { package in
-                                Button {
-                                    viewModel.selectedPackage = package
-                                } label: {
-                                    VStack(spacing: 8) {
-                                        Text(package.storeProduct.subscriptionPeriod?.durationTitle ?? "Error")
-                                            .font(.headline)
-                                            .foregroundColor(viewModel.selectedPackage == package ? Color(.white) : .primary)
-                                        Text(package.storeProduct.localizedPriceString)
-                                            .font(.subheadline)
-                                            .foregroundColor(viewModel.selectedPackage == package ? Color(.white) : .primary)
-                                        if viewModel.selectedPackage == package {
-                                            Image(systemName: "checkmark.circle.fill")
-                                                .font(.title)
-                                                .foregroundColor(viewModel.selectedPackage == package ? Color(.white) : Color(.premiumColour))
-                                        } else {
-                                            Image(systemName: "circle")
-                                                .font(.title)
-                                                .foregroundColor(viewModel.selectedPackage == package ? .white : Color(.premiumColour))
+        if viewModel.purchaseManager.hasUnlockedPro {
+            PurchaseSuccessSubview(action: {
+                next?()
+            })
+        } else if viewModel.success {
+            PurchaseSuccessSubview(action: {
+                next?()
+            })
+        } else {
+            VStack {
+                HStack(alignment: .lastTextBaseline) {
+                    Text("INTHEGYM")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(Color(.darkColour))
+                    Text("pro")
+                        .font(.title.bold())
+                        .foregroundStyle(Color(.premiumColour))
+                }
+                ZStack(alignment: .bottom) {
+                    
+                    ScrollView {
+                        VStack {
+                            
+                            Text("Gain access to the performance center including all workout stats and record and watch video clips with INTHEGYM pro.")
+                                .font(.title2.weight(.semibold))
+                                .multilineTextAlignment(.leading)
+                                .padding()
+                            
+                            ForEach(viewModel.products, id: \.id) { (product) in
+                                if selectedProduct?.id == product.id {
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            Text(product.period)
+                                                .font(.title2.bold())
+                                                .foregroundStyle(Color.primary)
+                                            HStack {
+                                                Text(product.displayPrice)
+                                                    .font(.headline)
+                                                    .foregroundStyle(Color.primary)
+                                                Text("/ \(product.perPeriod)")
+                                            }
+                                            
                                         }
+                                        Spacer()
+                                        
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundStyle(Color(.premiumColour))
                                     }
                                     .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(viewModel.selectedPackage == package ? Color(.premiumColour) : Color(.systemBackground))
-                                    .cornerRadius(8)
-                                    .shadow(radius: viewModel.selectedPackage == package ? 0 : 4)
-                                    .overlay(RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color(.premiumColour), lineWidth: 2))
+                                    .background {
+                                        Color(.backgroundColour)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                            .shadow(radius: 2, y: 2)
+                                    }
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .inset(by: 1)
+                                            .stroke(Color(.premiumColour), lineWidth: 2)
+                                    }
+                                    .onTapGesture {
+                                        selectedProduct = product
+                                    }
+                                    .padding()
+                                } else {
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            Text(product.period)
+                                                .font(.title2.bold())
+                                                .foregroundStyle(Color.primary)
+                                            HStack {
+                                                Text(product.displayPrice)
+                                                    .font(.headline)
+                                                    .foregroundStyle(Color.primary)
+                                                Text("/ \(product.perPeriod)")
+                                            }
+                                            
+                                        }
+                                        Spacer()
+                                        
+                                        Image(systemName: "circle")
+                                            .foregroundStyle(Color(.premiumColour))
+                                    }
+                                    .padding()
+                                    .background {
+                                        Color(.backgroundColour)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                            .shadow(radius: 2, y: 2)
+                                    }
+                                    .onTapGesture {
+                                        selectedProduct = product
+                                    }
                                     .padding()
                                 }
-                                .disabled(viewModel.isLoading)
-                            }
-                        }
-                        .padding(.horizontal)
-                        if viewModel.isLoading {
-                            VStack {
-                                ProgressView()
-                                    .tint(Color(.darkColour))
-                                    .padding()
-                            }
-                            .background(Color(.premiumColour))
-                            .clipShape(Capsule())
-                        } else {
-                            Button {
-                                Task {
-                                    await viewModel.subscribeAction()
-                                }
-                            } label: {
-                                Text("Subscribe")
-                                    .padding()
-                                    .font(.headline)
-                                    .foregroundColor(Color(.white))
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color(.premiumColour))
-                                    .clipShape(Capsule())
-                                    .shadow(radius: 4)
                             }
                             
-                            Button {
-                                Task {
-                                    await viewModel.restorePurchaseAction()
+                            VStack {
+                                Text("What INTHEGYM pro includes")
+                                    .font(.footnote.weight(.semibold))
+                                VStack(alignment: .leading, spacing: 12) {
+                                    HStack {
+                                        Image(systemName: "checkmark")
+                                            .bold()
+                                            .foregroundStyle(Color.green)
+                                        Text("Record Clips")
+                                    }
+                                    HStack {
+                                        Image(systemName: "checkmark")
+                                            .bold()
+                                            .foregroundStyle(Color.green)
+                                        Text("Watch Clips")
+                                    }
+                                    HStack {
+                                        Image(systemName: "checkmark")
+                                            .bold()
+                                            .foregroundStyle(Color.green)
+                                        Text("Individual Exercise Stats")
+                                    }
+                                    HStack {
+                                        Image(systemName: "checkmark")
+                                            .bold()
+                                            .foregroundStyle(Color.green)
+                                        Text("Vertical Jump Stats")
+                                    }
+                                    HStack {
+                                        Image(systemName: "checkmark")
+                                            .bold()
+                                            .foregroundStyle(Color.green)
+                                        Text("CMJ stats")
+                                    }
+                                    HStack {
+                                        Image(systemName: "checkmark")
+                                            .bold()
+                                            .foregroundStyle(Color.green)
+                                        Text("Injury tracker")
+                                    }
+                                    HStack {
+                                        Image(systemName: "checkmark")
+                                            .bold()
+                                            .foregroundStyle(Color.green)
+                                        Text("Journal")
+                                    }
                                 }
-                            } label: {
-                                Text("Restore Purchase")
-                                    .foregroundColor(Color(.premiumColour))
-                                    .font(.headline)
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .inset(by: 1)
+                                        .stroke(Color(.secondarySystemBackground), lineWidth: 2)
+                                }
+                                .padding(.horizontal)
                             }
+                            .padding(.top)
+                            
+                            
+                            Spacer()
+                                .frame(height: 100)
                         }
-                        
-                        Text("Recurring bill, cancel anytime, \n Your payment will be charged to your iTunes account and your subscription will automatically renew for the same package length at the same price until you cancel it. Cancel anytime from settings -> subscriptions.")
-                            .font(.footnote)
-                            .foregroundColor(Color(.secondaryLabel))
-                            .multilineTextAlignment(.center)
-                            .padding()
-                        Spacer()
                     }
                     
-                }
-                .animation(.easeInOut, value: viewModel.isLoading)
-                .navigationTitle("Premium")
-                .navigationBarTitleDisplayMode(.inline)
-                .frame(maxWidth: .infinity)
-                .padding()
-                
-                .task {
-                    await viewModel.fetchIAPOfferings()
-                }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            dismissAction()
-                        } label: {
-                            Text("Dismiss")
-                                .fontWeight(.bold)
-                                .foregroundColor(Color(.darkColour))
+                    if !viewModel.isLoading {
+                        if let selectedProduct {
+                            Button {
+                                Task {
+                                    await viewModel.purchaseProduct(selectedProduct)
+                                }
+                            } label: {
+                                Text("Purchase pro")
+                                    .font(.headline)
+                                    .foregroundStyle(Color.white)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background {
+                                        Color(.premiumColour)
+                                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                                            .shadow(color: .black.opacity(0.5), radius: 2, y: 2)
+                                    }
+                            }
+                            .padding()
                         }
                     }
                 }
+                
+                if let error = viewModel.error {
+                    switch error {
+                    case .loadingProducts:
+                        Text("Failed to load products. Please try again.")
+                            .font(.system(size: 15, weight: .semibold))
+                        Button {
+                            viewModel.error = nil
+                            Task {
+                                await viewModel.loadProducts()
+                                selectedProduct = viewModel.products.first
+                            }
+                        } label: {
+                            Text("Try Again")
+                                .font(.headline)
+                                .foregroundStyle(Color.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                    Color(.redColour)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .shadow(color: .black.opacity(0.5), radius: 2, y: 2)
+                                }
+                        }
+                        .padding()
+                    case .purchasingProduct:
+                        Text("Failed to purchase.")
+                            .font(.system(size: 15, weight: .semibold))
+                        Button {
+                            viewModel.error = nil
+                        } label: {
+                            Text("Try Again")
+                                .font(.headline)
+                                .foregroundStyle(Color.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                    Color(.redColour)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .shadow(color: .black.opacity(0.5), radius: 2, y: 2)
+                                }
+                        }
+                        .padding()
+                    case .restorePurchases:
+                        Text("Failed to restore purchase. Please try again")
+                            .font(.system(size: 15, weight: .semibold))
+                        Button {
+                            viewModel.error = nil
+                        } label: {
+                            Text("Try Again")
+                                .font(.headline)
+                                .foregroundStyle(Color.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                    Color(.redColour)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .shadow(color: .black.opacity(0.5), radius: 2, y: 2)
+                                }
+                        }
+                        .padding()
+                    case .handleResult:
+                        Text("There was an error. Please try again.")
+                            .font(.system(size: 15, weight: .semibold))
+                        Button {
+                            viewModel.error = nil
+                        } label: {
+                            Text("Try Again")
+                                .font(.headline)
+                                .foregroundStyle(Color.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                    Color(.redColour)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .shadow(color: .black.opacity(0.5), radius: 2, y: 2)
+                                }
+                        }
+                        .padding()
+                    }
+                } else if viewModel.isLoading {
+                    CircularLoader(size: 40, lineWidth: 6)
+                        .padding()
+                } else {
+                    Button {
+                        Task {
+                            await viewModel.restorePurchase()
+                        }
+                    } label: {
+                        Text("Restore Purchases")
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(Color.primary)
+                    }
+                    
+                    Button {
+                        next?()
+                    } label: {
+                        Text("Not Now")
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(Color.primary)
+                    }
+                    .padding(.top)
+                }
             }
-            .background(
-                LinearGradient(colors: [Color(.secondarySystemBackground), Color(.secondarySystemBackground), Color(.premiumColour)], startPoint: .top, endPoint: .bottom)
-                    .edgesIgnoringSafeArea(.all))
+            .background {
+                Color(.systemBackground)
+                    .ignoresSafeArea()
+            }
+            .task {
+                await viewModel.loadProducts()
+                selectedProduct = viewModel.products.first
+            }
+
         }
     }
+}
+
+#Preview {
+    PremiumAccountView(viewModel: PremiumAccountViewModel(purchaseManager: PreviewPurchaseManager(), backendService: PreviewFirestoreService()))
 }
 
 struct SubscribedView: View {

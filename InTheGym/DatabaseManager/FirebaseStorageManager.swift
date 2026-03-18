@@ -34,6 +34,16 @@ class FirebaseStorageManager {
         }
     }
     
+    func dataUploadAsync(data: Data, at path: String) async throws {
+        let ref = Storage.storage().reference().child(path)
+        let _ = try await ref.putDataAsync(data)
+    }
+    
+    func dataDownload(from path: String, maxSize: Int64, completion: @escaping (Result<Data,Error>) -> Void) {
+        let ref = Storage.storage().reference().child(path)
+        ref.getData(maxSize: maxSize, completion: completion)
+    }
+    
     func downloadImage(from model: FirebaseStoragePath, completion: @escaping ((Result<UIImage,Error>) -> Void)) {
         let storageRef = Storage.storage().reference().child(model.storagePath)
         storageRef.getData(maxSize: 1 * 720 * 720) { (data, error) in

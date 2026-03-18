@@ -19,6 +19,7 @@ class RequestsViewController: UIViewController {
     var viewModel = RequestsViewModel()
     
     private var dataSource: RequestsDataSource!
+    var purchaseManager: PurchaseManager!
     
     private var subscriptions = Set<AnyCancellable>()
 
@@ -80,6 +81,7 @@ private extension RequestsViewController {
     func userSelected(_ user: Users) {
         let vc = PublicTimelineViewController()
         vc.viewModel.user = user
+        vc.purchaseManager = purchaseManager
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }

@@ -13,14 +13,17 @@ class PlayerDetailCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var player: Users
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController, player: Users) {
+    init(navigationController: UINavigationController, player: Users, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.player = player
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
         let vc = PlayerDetailViewController()
+        vc.purchaseManager = subscriptionManager
         vc.viewModel.user = player
         vc.coordinator = self
         vc.hidesBottomBarWhenPushed = true
@@ -30,7 +33,7 @@ class PlayerDetailCoordinator: NSObject, Coordinator {
 
 extension PlayerDetailCoordinator {
     func showPublicProfile() {
-        let child = UserProfileCoordinator(navigationController: navigationController, user: player)
+        let child = UserProfileCoordinator(navigationController: navigationController, user: player, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -41,12 +44,12 @@ extension PlayerDetailCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func addWorkout() {
-        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: player)
+        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: player, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showPerformance(_ user: Users) {
-        let child = PerformanceHomeCoordinator(navigationController: navigationController, user: user)
+        let child = PerformanceHomeCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
 //        let vc = PerformanceMonitorViewController()
@@ -61,12 +64,12 @@ extension PlayerDetailCoordinator {
     }
     func viewClip(_ clipModel: WorkoutClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC) {
         let keyClipModel = KeyClipModel(clipKey: clipModel.clipKey, storageURL: clipModel.storageURL)
-        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate)
+        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyClipModel, fromViewControllerDelegate: fromViewControllerDelegate, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showDescriptions(_ exercise: DiscoverExerciseModel) {
-        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise)
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

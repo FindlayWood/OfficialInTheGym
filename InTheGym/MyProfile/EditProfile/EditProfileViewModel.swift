@@ -34,7 +34,7 @@ class EditProfileViewModel: ObservableObject {
     
     // MARK: - Computed Properties
     var canSave: Bool {
-        newProfileImage != nil || bioText.trimTrailingWhiteSpaces() != UserDefaults.currentUser.profileBio
+        newProfileImage != nil || bioText.trimTrailingWhiteSpaces() != UserDefaults.currentUser.bio
     }
     
     // MARK: - Properties
@@ -69,7 +69,7 @@ class EditProfileViewModel: ObservableObject {
         }
     }
     func saveBio() {
-        UserDefaults.currentUser.profileBio = bioText
+        UserDefaults.currentUser.bio = bioText
         let editProfileBioModel = EditProfileBioModel(newBio: bioText)
         let uploadPoint = editProfileBioModel.uploadPoint
         apiService.multiLocationUpload(data: [uploadPoint]) { [weak self] result in
@@ -98,6 +98,6 @@ class EditProfileViewModel: ObservableObject {
             guard let image = try? result.get() else {return}
             self?.profileImage = image
         }
-        bioText = UserDefaults.currentUser.profileBio ?? ""
+        bioText = UserDefaults.currentUser.bio
     }
 }

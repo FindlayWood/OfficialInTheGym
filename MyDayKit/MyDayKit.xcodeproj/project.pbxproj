@@ -1,0 +1,1009 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F00CD1722E4D2DBB0051042A /* MyDayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CD1712E4D2DBB0051042A /* MyDayManager.swift */; };
+		F01E0E932E78A9D6008C1547 /* RecordClipScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0E922E78A9D6008C1547 /* RecordClipScreen.swift */; };
+		F01E0E972E7A01E8008C1547 /* ClipPlaybackScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0E962E7A01E8008C1547 /* ClipPlaybackScreen.swift */; };
+		F01E0E9A2E7A110A008C1547 /* LoopingVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0E992E7A110A008C1547 /* LoopingVideoPlayer.swift */; };
+		F01E0E9C2E7A1158008C1547 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0E9B2E7A1158008C1547 /* CameraPreview.swift */; };
+		F01E0E9F2E7A11B7008C1547 /* VideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0E9E2E7A11B7008C1547 /* VideoRecorder.swift */; };
+		F01E0EA12E7A1242008C1547 /* RecordingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0EA02E7A1242008C1547 /* RecordingOverlay.swift */; };
+		F01E0EA32E7A15FC008C1547 /* PlaybackOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */; };
+		F03334612F1ED3EC004102AC /* ClipUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03334602F1ED3EC004102AC /* ClipUploader.swift */; };
+		F03334632F1FF2E2004102AC /* RecordingProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03334622F1FF2E2004102AC /* RecordingProgressRing.swift */; };
+		F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06004842E37E17F000B279F /* MyDayExerciseListView.swift */; };
+		F0622F012ED260CF00260A5B /* CustomNumberPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0622F002ED260CF00260A5B /* CustomNumberPad.swift */; };
+		F07508DA2F5380E10026D021 /* ViewClipRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07508D92F5380E10026D021 /* ViewClipRecorder.swift */; };
+		F07509C42F5A22EC0026D021 /* ClipOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07509C32F5A22EC0026D021 /* ClipOverlayView.swift */; };
+		F07509C62F5A23630026D021 /* ViewClipDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07509C52F5A23630026D021 /* ViewClipDisplayView.swift */; };
+		F07509C82F5A23820026D021 /* ViewClipViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07509C72F5A23820026D021 /* ViewClipViewModel.swift */; };
+		F0750B102F5E22780026D021 /* FitnessActivityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B0F2F5E22780026D021 /* FitnessActivityPickerView.swift */; };
+		F0750B122F5E24380026D021 /* FitnessSessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B112F5E24380026D021 /* FitnessSessionDetailView.swift */; };
+		F0750B192F5E252F0026D021 /* TimeSettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B182F5E252F0026D021 /* TimeSettable.swift */; };
+		F0750B1B2F5E258D0026D021 /* FitnessTimeSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B1A2F5E258D0026D021 /* FitnessTimeSelectorView.swift */; };
+		F0750B492F5F7B2D0026D021 /* SportType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750B482F5F7B2D0026D021 /* SportType.swift */; };
+		F0750BB52F621A7E0026D021 /* SportPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750BB42F621A7E0026D021 /* SportPickerView.swift */; };
+		F0750BB72F621AA70026D021 /* SportSessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750BB62F621AA70026D021 /* SportSessionDetailView.swift */; };
+		F0750BB92F621ACC0026D021 /* SportTimeSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750BB82F621ACC0026D021 /* SportTimeSelectorView.swift */; };
+		F0750BBB2F621AF40026D021 /* SportNoteSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750BBA2F621AF40026D021 /* SportNoteSelectorView.swift */; };
+		F0750BBD2F621B4F0026D021 /* MyDayNewSportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0750BBC2F621B4F0026D021 /* MyDayNewSportManager.swift */; };
+		F0B38C622E5B9C570096234C /* MyDayUnitsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */; };
+		F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */; };
+		F0B38C762E5F93600096234C /* WeightUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C752E5F93600096234C /* WeightUnit.swift */; };
+		F0B38C7A2E5F94D00096234C /* MyDayNewExerciseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C792E5F94D00096234C /* MyDayNewExerciseManager.swift */; };
+		F0BE5BED2EB402DC009677F5 /* MyDayDistanceSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5BEC2EB402DC009677F5 /* MyDayDistanceSelectorView.swift */; };
+		F0BE5BEF2EB40657009677F5 /* MyDayTimeSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5BEE2EB40657009677F5 /* MyDayTimeSelectorView.swift */; };
+		F0BE5C122EB553B6009677F5 /* MyDayTempoSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C112EB553B6009677F5 /* MyDayTempoSelectorView.swift */; };
+		F0BE5C142EB55C29009677F5 /* MyDayNoteSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C132EB55C29009677F5 /* MyDayNoteSelectorView.swift */; };
+		F0BE5C182EB7AC71009677F5 /* ExerciseCompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C172EB7AC71009677F5 /* ExerciseCompletionView.swift */; };
+		F0BE5C1A2EB7ACB0009677F5 /* ProgressRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */; };
+		F0BE5C1C2EB7C981009677F5 /* CompletedSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C1B2EB7C981009677F5 /* CompletedSetView.swift */; };
+		F0BE5C1E2EB7CBF1009677F5 /* RepeatSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C1D2EB7CBF1009677F5 /* RepeatSetView.swift */; };
+		F0BE5C202EB7CD30009677F5 /* SetDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BE5C1F2EB7CD30009677F5 /* SetDetailView.swift */; };
+		F0C102C72E4A65AB0062C8A2 /* MyDayKitRootview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */; };
+		F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */; };
+		F0C8EC162ECE77E8002213C7 /* PlaceholderSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C8EC152ECE77E8002213C7 /* PlaceholderSetView.swift */; };
+		F0C8EC192ECF7F32002213C7 /* MyDayHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C8EC182ECF7F32002213C7 /* MyDayHomeViewController.swift */; };
+		F0D3443E2F25123500AB6121 /* PlayBackSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D3443D2F25123500AB6121 /* PlayBackSheet.swift */; };
+		F0D3444B2F2582E900AB6121 /* UploadProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D3444A2F2582E900AB6121 /* UploadProgressView.swift */; };
+		F0D3456A2F27E24F00AB6121 /* UploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D345692F27E24F00AB6121 /* UploadManager.swift */; };
+		F0D348522F2A7A5400AB6121 /* ClipUploadResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D348512F2A7A5400AB6121 /* ClipUploadResult.swift */; };
+		F0D348542F2A7A6500AB6121 /* ClipManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D348532F2A7A6500AB6121 /* ClipManagerError.swift */; };
+		F0D348562F2A7A7D00AB6121 /* ClipUploadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D348552F2A7A7D00AB6121 /* ClipUploadData.swift */; };
+		F0D348582F2A7A8E00AB6121 /* UploadError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D348572F2A7A8E00AB6121 /* UploadError.swift */; };
+		F0D5278D2F2F905900FA0636 /* VideoConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D5278C2F2F905900FA0636 /* VideoConverter.swift */; };
+		F0D5278F2F2F90D700FA0636 /* ProcessedVideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D5278E2F2F90D700FA0636 /* ProcessedVideoData.swift */; };
+		F0D527912F3007E100FA0636 /* ExerciseClipsSubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D527902F3007E100FA0636 /* ExerciseClipsSubView.swift */; };
+		F0D528532F34012700FA0636 /* ThumbnailGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D528522F34012700FA0636 /* ThumbnailGenerator.swift */; };
+		F0D528C92F37D2E200FA0636 /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D528C82F37D2E200FA0636 /* Transition.swift */; };
+		F0D528CD2F37E80500FA0636 /* MyDayExampleUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D528CC2F37E80500FA0636 /* MyDayExampleUploader.swift */; };
+		F0D528D22F38C4BA00FA0636 /* ViewClipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D528D12F38C4BA00FA0636 /* ViewClipViewController.swift */; };
+		F0D528D52F392A5900FA0636 /* ClipLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D528D42F392A5900FA0636 /* ClipLoader.swift */; };
+		F0D6C2422E358B0400FEFEF1 /* MyDayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */; };
+		F0D6C24E2E358C0900FEFEF1 /* MyDayHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */; };
+		F0D6C2552E36C12A00FEFEF1 /* MyDayExerciseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D6C2542E36C12A00FEFEF1 /* MyDayExerciseModel.swift */; };
+		F0E2CC4D2EC5297D00993165 /* ExerciseStatsSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E2CC4C2EC5297D00993165 /* ExerciseStatsSaver.swift */; };
+		F0E2CC4F2EC5389B00993165 /* MyDayAndStatSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E2CC4E2EC5389B00993165 /* MyDayAndStatSaver.swift */; };
+		F0E2CC532EC538C800993165 /* ExerciseStatsSaveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E2CC522EC538C800993165 /* ExerciseStatsSaveModel.swift */; };
+		F0F35C012F10216D00ACB11E /* MyDayDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F35C002F10216D00ACB11E /* MyDayDeleter.swift */; };
+		F0F35C062F15837C00ACB11E /* SelectOptionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F35C052F15837C00ACB11E /* SelectOptionSheet.swift */; };
+		F0F35C452F16ADC700ACB11E /* MyDayBoundaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F35C442F16ADC700ACB11E /* MyDayBoundaryViewController.swift */; };
+		F0F35C482F16AEF600ACB11E /* MyDayCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F35C472F16AEF600ACB11E /* MyDayCoordinator.swift */; };
+		F0F4B2AE2E855707007E2469 /* MyDayUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F4B2AD2E855707007E2469 /* MyDayUploader.swift */; };
+		F0F4B2B22E85620B007E2469 /* MyDaySaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F4B2B12E85620B007E2469 /* MyDaySaver.swift */; };
+		F0F4B2B62E85622E007E2469 /* MyDayLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F4B2B52E85622E007E2469 /* MyDayLoader.swift */; };
+		F0F608282E42A1B50015F260 /* ExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F608272E42A1B50015F260 /* ExerciseLoader.swift */; };
+		F0F6082E2E42A1F50015F260 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6082D2E42A1F50015F260 /* Exercise.swift */; };
+		F0F608302E42A20B0015F260 /* ExerciseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6082F2E42A20B0015F260 /* ExerciseCategory.swift */; };
+		F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F608402E4405B50015F260 /* MyDayKitRouter.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F0D6C2432E358B0400FEFEF1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0D6C20B2E3574EF00FEFEF1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F0D6C2362E358B0400FEFEF1;
+			remoteInfo = MyDayKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		F00CD1712E4D2DBB0051042A /* MyDayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayManager.swift; sourceTree = "<group>"; };
+		F01E0E922E78A9D6008C1547 /* RecordClipScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordClipScreen.swift; sourceTree = "<group>"; };
+		F01E0E962E7A01E8008C1547 /* ClipPlaybackScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipPlaybackScreen.swift; sourceTree = "<group>"; };
+		F01E0E992E7A110A008C1547 /* LoopingVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoPlayer.swift; sourceTree = "<group>"; };
+		F01E0E9B2E7A1158008C1547 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		F01E0E9E2E7A11B7008C1547 /* VideoRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRecorder.swift; sourceTree = "<group>"; };
+		F01E0EA02E7A1242008C1547 /* RecordingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingOverlay.swift; sourceTree = "<group>"; };
+		F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackOverlay.swift; sourceTree = "<group>"; };
+		F03334602F1ED3EC004102AC /* ClipUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipUploader.swift; sourceTree = "<group>"; };
+		F03334622F1FF2E2004102AC /* RecordingProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingProgressRing.swift; sourceTree = "<group>"; };
+		F06004842E37E17F000B279F /* MyDayExerciseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExerciseListView.swift; sourceTree = "<group>"; };
+		F0622F002ED260CF00260A5B /* CustomNumberPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNumberPad.swift; sourceTree = "<group>"; };
+		F07508D92F5380E10026D021 /* ViewClipRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipRecorder.swift; sourceTree = "<group>"; };
+		F07509C32F5A22EC0026D021 /* ClipOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipOverlayView.swift; sourceTree = "<group>"; };
+		F07509C52F5A23630026D021 /* ViewClipDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipDisplayView.swift; sourceTree = "<group>"; };
+		F07509C72F5A23820026D021 /* ViewClipViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewClipViewModel.swift; path = Clips/UI/ViewClip/ViewClipViewModel.swift; sourceTree = SOURCE_ROOT; };
+		F0750B0F2F5E22780026D021 /* FitnessActivityPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessActivityPickerView.swift; sourceTree = "<group>"; };
+		F0750B112F5E24380026D021 /* FitnessSessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessSessionDetailView.swift; sourceTree = "<group>"; };
+		F0750B182F5E252F0026D021 /* TimeSettable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSettable.swift; sourceTree = "<group>"; };
+		F0750B1A2F5E258D0026D021 /* FitnessTimeSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessTimeSelectorView.swift; sourceTree = "<group>"; };
+		F0750B482F5F7B2D0026D021 /* SportType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportType.swift; sourceTree = "<group>"; };
+		F0750BB42F621A7E0026D021 /* SportPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportPickerView.swift; sourceTree = "<group>"; };
+		F0750BB62F621AA70026D021 /* SportSessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportSessionDetailView.swift; sourceTree = "<group>"; };
+		F0750BB82F621ACC0026D021 /* SportTimeSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportTimeSelectorView.swift; sourceTree = "<group>"; };
+		F0750BBA2F621AF40026D021 /* SportNoteSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportNoteSelectorView.swift; sourceTree = "<group>"; };
+		F0750BBC2F621B4F0026D021 /* MyDayNewSportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayNewSportManager.swift; sourceTree = "<group>"; };
+		F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayUnitsHomeView.swift; sourceTree = "<group>"; };
+		F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWeightSelectorView.swift; sourceTree = "<group>"; };
+		F0B38C752E5F93600096234C /* WeightUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightUnit.swift; sourceTree = "<group>"; };
+		F0B38C792E5F94D00096234C /* MyDayNewExerciseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayNewExerciseManager.swift; sourceTree = "<group>"; };
+		F0BE5BEC2EB402DC009677F5 /* MyDayDistanceSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDistanceSelectorView.swift; sourceTree = "<group>"; };
+		F0BE5BEE2EB40657009677F5 /* MyDayTimeSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimeSelectorView.swift; sourceTree = "<group>"; };
+		F0BE5C112EB553B6009677F5 /* MyDayTempoSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTempoSelectorView.swift; sourceTree = "<group>"; };
+		F0BE5C132EB55C29009677F5 /* MyDayNoteSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayNoteSelectorView.swift; sourceTree = "<group>"; };
+		F0BE5C172EB7AC71009677F5 /* ExerciseCompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCompletionView.swift; sourceTree = "<group>"; };
+		F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRingView.swift; sourceTree = "<group>"; };
+		F0BE5C1B2EB7C981009677F5 /* CompletedSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedSetView.swift; sourceTree = "<group>"; };
+		F0BE5C1D2EB7CBF1009677F5 /* RepeatSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatSetView.swift; sourceTree = "<group>"; };
+		F0BE5C1F2EB7CD30009677F5 /* SetDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetDetailView.swift; sourceTree = "<group>"; };
+		F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRootview.swift; sourceTree = "<group>"; };
+		F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRepsView.swift; sourceTree = "<group>"; };
+		F0C8EC152ECE77E8002213C7 /* PlaceholderSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderSetView.swift; sourceTree = "<group>"; };
+		F0C8EC182ECF7F32002213C7 /* MyDayHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayHomeViewController.swift; sourceTree = "<group>"; };
+		F0D3443D2F25123500AB6121 /* PlayBackSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayBackSheet.swift; sourceTree = "<group>"; };
+		F0D3444A2F2582E900AB6121 /* UploadProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadProgressView.swift; sourceTree = "<group>"; };
+		F0D345692F27E24F00AB6121 /* UploadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadManager.swift; sourceTree = "<group>"; };
+		F0D348512F2A7A5400AB6121 /* ClipUploadResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipUploadResult.swift; sourceTree = "<group>"; };
+		F0D348532F2A7A6500AB6121 /* ClipManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipManagerError.swift; sourceTree = "<group>"; };
+		F0D348552F2A7A7D00AB6121 /* ClipUploadData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipUploadData.swift; sourceTree = "<group>"; };
+		F0D348572F2A7A8E00AB6121 /* UploadError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadError.swift; sourceTree = "<group>"; };
+		F0D5278C2F2F905900FA0636 /* VideoConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoConverter.swift; sourceTree = "<group>"; };
+		F0D5278E2F2F90D700FA0636 /* ProcessedVideoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessedVideoData.swift; sourceTree = "<group>"; };
+		F0D527902F3007E100FA0636 /* ExerciseClipsSubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseClipsSubView.swift; sourceTree = "<group>"; };
+		F0D528522F34012700FA0636 /* ThumbnailGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailGenerator.swift; sourceTree = "<group>"; };
+		F0D528C82F37D2E200FA0636 /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
+		F0D528CC2F37E80500FA0636 /* MyDayExampleUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExampleUploader.swift; sourceTree = "<group>"; };
+		F0D528D12F38C4BA00FA0636 /* ViewClipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipViewController.swift; sourceTree = "<group>"; };
+		F0D528D42F392A5900FA0636 /* ClipLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipLoader.swift; sourceTree = "<group>"; };
+		F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayHomeScreen.swift; sourceTree = "<group>"; };
+		F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MyDayKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0D6C2412E358B0400FEFEF1 /* MyDayKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyDayKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0D6C2542E36C12A00FEFEF1 /* MyDayExerciseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExerciseModel.swift; sourceTree = "<group>"; };
+		F0E2CC4C2EC5297D00993165 /* ExerciseStatsSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStatsSaver.swift; sourceTree = "<group>"; };
+		F0E2CC4E2EC5389B00993165 /* MyDayAndStatSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayAndStatSaver.swift; sourceTree = "<group>"; };
+		F0E2CC522EC538C800993165 /* ExerciseStatsSaveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExerciseStatsSaveModel.swift; path = MyDayKit/Uploader/ExerciseStatsSaveModel.swift; sourceTree = SOURCE_ROOT; };
+		F0F35C002F10216D00ACB11E /* MyDayDeleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDeleter.swift; sourceTree = "<group>"; };
+		F0F35C052F15837C00ACB11E /* SelectOptionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectOptionSheet.swift; sourceTree = "<group>"; };
+		F0F35C442F16ADC700ACB11E /* MyDayBoundaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayBoundaryViewController.swift; sourceTree = "<group>"; };
+		F0F35C472F16AEF600ACB11E /* MyDayCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayCoordinator.swift; sourceTree = "<group>"; };
+		F0F4B2AD2E855707007E2469 /* MyDayUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayUploader.swift; sourceTree = "<group>"; };
+		F0F4B2B12E85620B007E2469 /* MyDaySaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDaySaver.swift; sourceTree = "<group>"; };
+		F0F4B2B52E85622E007E2469 /* MyDayLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayLoader.swift; sourceTree = "<group>"; };
+		F0F608272E42A1B50015F260 /* ExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLoader.swift; sourceTree = "<group>"; };
+		F0F6082D2E42A1F50015F260 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
+		F0F6082F2E42A20B0015F260 /* ExerciseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCategory.swift; sourceTree = "<group>"; };
+		F0F608402E4405B50015F260 /* MyDayKitRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRouter.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		F0D6C2382E358B0400FEFEF1 /* MyDayKit */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MyDayKit;
+			sourceTree = "<group>";
+		};
+		F0D6C2452E358B0400FEFEF1 /* MyDayKitTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MyDayKitTests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F0D6C2342E358B0400FEFEF1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0D6C23E2E358B0400FEFEF1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0D6C2422E358B0400FEFEF1 /* MyDayKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F01E0E902E78A9BA008C1547 /* Clips */ = {
+			isa = PBXGroup;
+			children = (
+				F07508D82F5380870026D021 /* ViewAnalytics */,
+				F0D528D32F392A4C00FA0636 /* Loader */,
+				F0D528512F34011800FA0636 /* Helpers */,
+				F0D348502F2A7A4800AB6121 /* Models */,
+				F033345F2F1ED3E2004102AC /* Uploader */,
+				F01E0E9D2E7A11A9008C1547 /* Managers */,
+				F01E0E982E7A10F8008C1547 /* UIViewRepresentable */,
+				F01E0E912E78A9C7008C1547 /* UI */,
+			);
+			path = Clips;
+			sourceTree = "<group>";
+		};
+		F01E0E912E78A9C7008C1547 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				F07509C22F5A22DE0026D021 /* ViewClip */,
+				F0D528D02F38C4A900FA0636 /* ViewControllers */,
+				F01E0E922E78A9D6008C1547 /* RecordClipScreen.swift */,
+				F01E0E962E7A01E8008C1547 /* ClipPlaybackScreen.swift */,
+				F01E0EA02E7A1242008C1547 /* RecordingOverlay.swift */,
+				F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */,
+				F03334622F1FF2E2004102AC /* RecordingProgressRing.swift */,
+				F0D3443D2F25123500AB6121 /* PlayBackSheet.swift */,
+				F0D3444A2F2582E900AB6121 /* UploadProgressView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		F01E0E982E7A10F8008C1547 /* UIViewRepresentable */ = {
+			isa = PBXGroup;
+			children = (
+				F01E0E992E7A110A008C1547 /* LoopingVideoPlayer.swift */,
+				F01E0E9B2E7A1158008C1547 /* CameraPreview.swift */,
+			);
+			path = UIViewRepresentable;
+			sourceTree = "<group>";
+		};
+		F01E0E9D2E7A11A9008C1547 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				F01E0E9E2E7A11B7008C1547 /* VideoRecorder.swift */,
+				F0D345692F27E24F00AB6121 /* UploadManager.swift */,
+				F0D5278C2F2F905900FA0636 /* VideoConverter.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		F033345F2F1ED3E2004102AC /* Uploader */ = {
+			isa = PBXGroup;
+			children = (
+				F03334602F1ED3EC004102AC /* ClipUploader.swift */,
+			);
+			path = Uploader;
+			sourceTree = "<group>";
+		};
+		F07508D82F5380870026D021 /* ViewAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				F07508D92F5380E10026D021 /* ViewClipRecorder.swift */,
+			);
+			path = ViewAnalytics;
+			sourceTree = "<group>";
+		};
+		F07509C22F5A22DE0026D021 /* ViewClip */ = {
+			isa = PBXGroup;
+			children = (
+				F07509C32F5A22EC0026D021 /* ClipOverlayView.swift */,
+				F07509C52F5A23630026D021 /* ViewClipDisplayView.swift */,
+			);
+			path = ViewClip;
+			sourceTree = "<group>";
+		};
+		F0750B0E2F5E226C0026D021 /* Fitness */ = {
+			isa = PBXGroup;
+			children = (
+				F0750B0F2F5E22780026D021 /* FitnessActivityPickerView.swift */,
+				F0750B112F5E24380026D021 /* FitnessSessionDetailView.swift */,
+				F0750B1A2F5E258D0026D021 /* FitnessTimeSelectorView.swift */,
+			);
+			path = Fitness;
+			sourceTree = "<group>";
+		};
+		F0750B142F5E25220026D021 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				F0750B182F5E252F0026D021 /* TimeSettable.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		F0750B462F5F7B1E0026D021 /* Sports */ = {
+			isa = PBXGroup;
+			children = (
+				F0750B482F5F7B2D0026D021 /* SportType.swift */,
+				F0750BBC2F621B4F0026D021 /* MyDayNewSportManager.swift */,
+			);
+			path = Sports;
+			sourceTree = "<group>";
+		};
+		F0750BB32F621A700026D021 /* Sports */ = {
+			isa = PBXGroup;
+			children = (
+				F0750BB42F621A7E0026D021 /* SportPickerView.swift */,
+				F0750BB62F621AA70026D021 /* SportSessionDetailView.swift */,
+				F0750BB82F621ACC0026D021 /* SportTimeSelectorView.swift */,
+				F0750BBA2F621AF40026D021 /* SportNoteSelectorView.swift */,
+			);
+			path = Sports;
+			sourceTree = "<group>";
+		};
+		F0BE5C152EB7ABFB009677F5 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				F0750BB32F621A700026D021 /* Sports */,
+				F0750B0E2F5E226C0026D021 /* Fitness */,
+				F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */,
+				F06004842E37E17F000B279F /* MyDayExerciseListView.swift */,
+				F0C102C82E4BA9010062C8A2 /* MyDayKitRepsView.swift */,
+				F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */,
+				F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */,
+				F0BE5BEC2EB402DC009677F5 /* MyDayDistanceSelectorView.swift */,
+				F0BE5BEE2EB40657009677F5 /* MyDayTimeSelectorView.swift */,
+				F0BE5C112EB553B6009677F5 /* MyDayTempoSelectorView.swift */,
+				F0BE5C132EB55C29009677F5 /* MyDayNoteSelectorView.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		F0BE5C162EB7AC65009677F5 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				F0BE5C172EB7AC71009677F5 /* ExerciseCompletionView.swift */,
+				F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */,
+				F0BE5C1B2EB7C981009677F5 /* CompletedSetView.swift */,
+				F0BE5C1D2EB7CBF1009677F5 /* RepeatSetView.swift */,
+				F0BE5C1F2EB7CD30009677F5 /* SetDetailView.swift */,
+				F0C8EC152ECE77E8002213C7 /* PlaceholderSetView.swift */,
+				F0622F002ED260CF00260A5B /* CustomNumberPad.swift */,
+				F0D527902F3007E100FA0636 /* ExerciseClipsSubView.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		F0C8EC172ECF7F16002213C7 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				F0C8EC182ECF7F32002213C7 /* MyDayHomeViewController.swift */,
+				F0F35C442F16ADC700ACB11E /* MyDayBoundaryViewController.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		F0D348502F2A7A4800AB6121 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F0D348512F2A7A5400AB6121 /* ClipUploadResult.swift */,
+				F0D348532F2A7A6500AB6121 /* ClipManagerError.swift */,
+				F0D348552F2A7A7D00AB6121 /* ClipUploadData.swift */,
+				F0D348572F2A7A8E00AB6121 /* UploadError.swift */,
+				F0D5278E2F2F90D700FA0636 /* ProcessedVideoData.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F0D528512F34011800FA0636 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				F0D528522F34012700FA0636 /* ThumbnailGenerator.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		F0D528D02F38C4A900FA0636 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				F0D528D12F38C4BA00FA0636 /* ViewClipViewController.swift */,
+				F07509C72F5A23820026D021 /* ViewClipViewModel.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		F0D528D32F392A4C00FA0636 /* Loader */ = {
+			isa = PBXGroup;
+			children = (
+				F0D528D42F392A5900FA0636 /* ClipLoader.swift */,
+			);
+			path = Loader;
+			sourceTree = "<group>";
+		};
+		F0D6C20A2E3574EF00FEFEF1 = {
+			isa = PBXGroup;
+			children = (
+				F0F35C462F16AED800ACB11E /* Coordinator */,
+				F0E2CBCE2EC3E2C600993165 /* MyDayStats */,
+				F01E0E902E78A9BA008C1547 /* Clips */,
+				F0F6083F2E4405990015F260 /* MyDayKitRouter */,
+				F0D6C22F2E3588EF00FEFEF1 /* MyDayKitUI */,
+				F0D6C22E2E35754E00FEFEF1 /* MyDayKit */,
+				F0D6C2382E358B0400FEFEF1 /* MyDayKit */,
+				F0D6C2452E358B0400FEFEF1 /* MyDayKitTests */,
+				F0D6C2152E3574EF00FEFEF1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F0D6C2152E3574EF00FEFEF1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */,
+				F0D6C2412E358B0400FEFEF1 /* MyDayKitTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F0D6C22E2E35754E00FEFEF1 /* MyDayKit */ = {
+			isa = PBXGroup;
+			children = (
+				F0750B142F5E25220026D021 /* Protocols */,
+				F0F35BFE2F10215C00ACB11E /* Deleter */,
+				F0F4B2AB2E8556CA007E2469 /* Uploader */,
+				F0F608242E42A1A10015F260 /* ExerciseLoader */,
+				F0D6C2502E36B7AA00FEFEF1 /* Models */,
+			);
+			path = MyDayKit;
+			sourceTree = "<group>";
+		};
+		F0D6C22F2E3588EF00FEFEF1 /* MyDayKitUI */ = {
+			isa = PBXGroup;
+			children = (
+				F0F35C042F15836C00ACB11E /* Sheets */,
+				F0C8EC172ECF7F16002213C7 /* UIKit */,
+				F0BE5C162EB7AC65009677F5 /* SubViews */,
+				F0BE5C152EB7ABFB009677F5 /* Screens */,
+			);
+			path = MyDayKitUI;
+			sourceTree = "<group>";
+		};
+		F0D6C2502E36B7AA00FEFEF1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F0750B462F5F7B1E0026D021 /* Sports */,
+				F0D6C2542E36C12A00FEFEF1 /* MyDayExerciseModel.swift */,
+				F0F6082D2E42A1F50015F260 /* Exercise.swift */,
+				F0F6082F2E42A20B0015F260 /* ExerciseCategory.swift */,
+				F00CD1712E4D2DBB0051042A /* MyDayManager.swift */,
+				F0B38C752E5F93600096234C /* WeightUnit.swift */,
+				F0B38C792E5F94D00096234C /* MyDayNewExerciseManager.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F0E2CBCE2EC3E2C600993165 /* MyDayStats */ = {
+			isa = PBXGroup;
+			children = (
+				F0E2CBD72EC3E33300993165 /* Models */,
+				F0E2CC4C2EC5297D00993165 /* ExerciseStatsSaver.swift */,
+			);
+			path = MyDayStats;
+			sourceTree = "<group>";
+		};
+		F0E2CBD72EC3E33300993165 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F0E2CC522EC538C800993165 /* ExerciseStatsSaveModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F0F35BFE2F10215C00ACB11E /* Deleter */ = {
+			isa = PBXGroup;
+			children = (
+				F0F35C002F10216D00ACB11E /* MyDayDeleter.swift */,
+			);
+			path = Deleter;
+			sourceTree = "<group>";
+		};
+		F0F35C042F15836C00ACB11E /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				F0F35C052F15837C00ACB11E /* SelectOptionSheet.swift */,
+			);
+			path = Sheets;
+			sourceTree = "<group>";
+		};
+		F0F35C462F16AED800ACB11E /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				F0F35C472F16AEF600ACB11E /* MyDayCoordinator.swift */,
+				F0D528C82F37D2E200FA0636 /* Transition.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		F0F4B2AB2E8556CA007E2469 /* Uploader */ = {
+			isa = PBXGroup;
+			children = (
+				F0F4B2AD2E855707007E2469 /* MyDayUploader.swift */,
+				F0F4B2B12E85620B007E2469 /* MyDaySaver.swift */,
+				F0F4B2B52E85622E007E2469 /* MyDayLoader.swift */,
+				F0E2CC4E2EC5389B00993165 /* MyDayAndStatSaver.swift */,
+				F0D528CC2F37E80500FA0636 /* MyDayExampleUploader.swift */,
+			);
+			path = Uploader;
+			sourceTree = "<group>";
+		};
+		F0F608242E42A1A10015F260 /* ExerciseLoader */ = {
+			isa = PBXGroup;
+			children = (
+				F0F608272E42A1B50015F260 /* ExerciseLoader.swift */,
+			);
+			path = ExerciseLoader;
+			sourceTree = "<group>";
+		};
+		F0F6083F2E4405990015F260 /* MyDayKitRouter */ = {
+			isa = PBXGroup;
+			children = (
+				F0F608402E4405B50015F260 /* MyDayKitRouter.swift */,
+				F0C102C62E4A65AB0062C8A2 /* MyDayKitRootview.swift */,
+			);
+			path = MyDayKitRouter;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		F0D6C2322E358B0400FEFEF1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		F0D6C2362E358B0400FEFEF1 /* MyDayKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0D6C2482E358B0400FEFEF1 /* Build configuration list for PBXNativeTarget "MyDayKit" */;
+			buildPhases = (
+				F0D6C2322E358B0400FEFEF1 /* Headers */,
+				F0D6C2332E358B0400FEFEF1 /* Sources */,
+				F0D6C2342E358B0400FEFEF1 /* Frameworks */,
+				F0D6C2352E358B0400FEFEF1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F0D6C2382E358B0400FEFEF1 /* MyDayKit */,
+			);
+			name = MyDayKit;
+			packageProductDependencies = (
+			);
+			productName = MyDayKit;
+			productReference = F0D6C2372E358B0400FEFEF1 /* MyDayKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		F0D6C2402E358B0400FEFEF1 /* MyDayKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0D6C24B2E358B0400FEFEF1 /* Build configuration list for PBXNativeTarget "MyDayKitTests" */;
+			buildPhases = (
+				F0D6C23D2E358B0400FEFEF1 /* Sources */,
+				F0D6C23E2E358B0400FEFEF1 /* Frameworks */,
+				F0D6C23F2E358B0400FEFEF1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F0D6C2442E358B0400FEFEF1 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F0D6C2452E358B0400FEFEF1 /* MyDayKitTests */,
+			);
+			name = MyDayKitTests;
+			packageProductDependencies = (
+			);
+			productName = MyDayKitTests;
+			productReference = F0D6C2412E358B0400FEFEF1 /* MyDayKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F0D6C20B2E3574EF00FEFEF1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
+				TargetAttributes = {
+					F0D6C2362E358B0400FEFEF1 = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					F0D6C2402E358B0400FEFEF1 = {
+						CreatedOnToolsVersion = 16.3;
+					};
+				};
+			};
+			buildConfigurationList = F0D6C20E2E3574EF00FEFEF1 /* Build configuration list for PBXProject "MyDayKit" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F0D6C20A2E3574EF00FEFEF1;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = F0D6C2152E3574EF00FEFEF1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F0D6C2362E358B0400FEFEF1 /* MyDayKit */,
+				F0D6C2402E358B0400FEFEF1 /* MyDayKitTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F0D6C2352E358B0400FEFEF1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0D6C23F2E358B0400FEFEF1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F0D6C2332E358B0400FEFEF1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F01E0EA32E7A15FC008C1547 /* PlaybackOverlay.swift in Sources */,
+				F0D6C2552E36C12A00FEFEF1 /* MyDayExerciseModel.swift in Sources */,
+				F0BE5BEF2EB40657009677F5 /* MyDayTimeSelectorView.swift in Sources */,
+				F0B38C762E5F93600096234C /* WeightUnit.swift in Sources */,
+				F0BE5C202EB7CD30009677F5 /* SetDetailView.swift in Sources */,
+				F0F608302E42A20B0015F260 /* ExerciseCategory.swift in Sources */,
+				F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */,
+				F0D527912F3007E100FA0636 /* ExerciseClipsSubView.swift in Sources */,
+				F0D528D22F38C4BA00FA0636 /* ViewClipViewController.swift in Sources */,
+				F0750BB72F621AA70026D021 /* SportSessionDetailView.swift in Sources */,
+				F0F35C452F16ADC700ACB11E /* MyDayBoundaryViewController.swift in Sources */,
+				F0D528D52F392A5900FA0636 /* ClipLoader.swift in Sources */,
+				F0D3456A2F27E24F00AB6121 /* UploadManager.swift in Sources */,
+				F0750B492F5F7B2D0026D021 /* SportType.swift in Sources */,
+				F0D5278F2F2F90D700FA0636 /* ProcessedVideoData.swift in Sources */,
+				F0D3444B2F2582E900AB6121 /* UploadProgressView.swift in Sources */,
+				F03334632F1FF2E2004102AC /* RecordingProgressRing.swift in Sources */,
+				F0BE5C182EB7AC71009677F5 /* ExerciseCompletionView.swift in Sources */,
+				F0F608282E42A1B50015F260 /* ExerciseLoader.swift in Sources */,
+				F0C102C72E4A65AB0062C8A2 /* MyDayKitRootview.swift in Sources */,
+				F0BE5C142EB55C29009677F5 /* MyDayNoteSelectorView.swift in Sources */,
+				F0D528532F34012700FA0636 /* ThumbnailGenerator.swift in Sources */,
+				F0B38C7A2E5F94D00096234C /* MyDayNewExerciseManager.swift in Sources */,
+				F00CD1722E4D2DBB0051042A /* MyDayManager.swift in Sources */,
+				F01E0E9C2E7A1158008C1547 /* CameraPreview.swift in Sources */,
+				F0BE5C1C2EB7C981009677F5 /* CompletedSetView.swift in Sources */,
+				F0D528CD2F37E80500FA0636 /* MyDayExampleUploader.swift in Sources */,
+				F0D348542F2A7A6500AB6121 /* ClipManagerError.swift in Sources */,
+				F0BE5C1E2EB7CBF1009677F5 /* RepeatSetView.swift in Sources */,
+				F01E0E9A2E7A110A008C1547 /* LoopingVideoPlayer.swift in Sources */,
+				F0622F012ED260CF00260A5B /* CustomNumberPad.swift in Sources */,
+				F0750B122F5E24380026D021 /* FitnessSessionDetailView.swift in Sources */,
+				F0D348562F2A7A7D00AB6121 /* ClipUploadData.swift in Sources */,
+				F03334612F1ED3EC004102AC /* ClipUploader.swift in Sources */,
+				F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */,
+				F0D348522F2A7A5400AB6121 /* ClipUploadResult.swift in Sources */,
+				F07508DA2F5380E10026D021 /* ViewClipRecorder.swift in Sources */,
+				F0E2CC4F2EC5389B00993165 /* MyDayAndStatSaver.swift in Sources */,
+				F0750BBD2F621B4F0026D021 /* MyDayNewSportManager.swift in Sources */,
+				F01E0EA12E7A1242008C1547 /* RecordingOverlay.swift in Sources */,
+				F0F4B2B62E85622E007E2469 /* MyDayLoader.swift in Sources */,
+				F01E0E9F2E7A11B7008C1547 /* VideoRecorder.swift in Sources */,
+				F0BE5C122EB553B6009677F5 /* MyDayTempoSelectorView.swift in Sources */,
+				F07509C62F5A23630026D021 /* ViewClipDisplayView.swift in Sources */,
+				F0E2CC532EC538C800993165 /* ExerciseStatsSaveModel.swift in Sources */,
+				F0750B1B2F5E258D0026D021 /* FitnessTimeSelectorView.swift in Sources */,
+				F0F4B2AE2E855707007E2469 /* MyDayUploader.swift in Sources */,
+				F0E2CC4D2EC5297D00993165 /* ExerciseStatsSaver.swift in Sources */,
+				F0750BB92F621ACC0026D021 /* SportTimeSelectorView.swift in Sources */,
+				F0750B192F5E252F0026D021 /* TimeSettable.swift in Sources */,
+				F0BE5BED2EB402DC009677F5 /* MyDayDistanceSelectorView.swift in Sources */,
+				F0750B102F5E22780026D021 /* FitnessActivityPickerView.swift in Sources */,
+				F0D528C92F37D2E200FA0636 /* Transition.swift in Sources */,
+				F0F35C012F10216D00ACB11E /* MyDayDeleter.swift in Sources */,
+				F0D3443E2F25123500AB6121 /* PlayBackSheet.swift in Sources */,
+				F0F35C062F15837C00ACB11E /* SelectOptionSheet.swift in Sources */,
+				F01E0E932E78A9D6008C1547 /* RecordClipScreen.swift in Sources */,
+				F0B38C622E5B9C570096234C /* MyDayUnitsHomeView.swift in Sources */,
+				F0BE5C1A2EB7ACB0009677F5 /* ProgressRingView.swift in Sources */,
+				F0F6082E2E42A1F50015F260 /* Exercise.swift in Sources */,
+				F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */,
+				F01E0E972E7A01E8008C1547 /* ClipPlaybackScreen.swift in Sources */,
+				F0D348582F2A7A8E00AB6121 /* UploadError.swift in Sources */,
+				F0D6C24E2E358C0900FEFEF1 /* MyDayHomeScreen.swift in Sources */,
+				F07509C42F5A22EC0026D021 /* ClipOverlayView.swift in Sources */,
+				F07509C82F5A23820026D021 /* ViewClipViewModel.swift in Sources */,
+				F0D5278D2F2F905900FA0636 /* VideoConverter.swift in Sources */,
+				F0F35C482F16AEF600ACB11E /* MyDayCoordinator.swift in Sources */,
+				F0750BB52F621A7E0026D021 /* SportPickerView.swift in Sources */,
+				F0C8EC192ECF7F32002213C7 /* MyDayHomeViewController.swift in Sources */,
+				F0F4B2B22E85620B007E2469 /* MyDaySaver.swift in Sources */,
+				F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */,
+				F0C8EC162ECE77E8002213C7 /* PlaceholderSetView.swift in Sources */,
+				F0750BBB2F621AF40026D021 /* SportNoteSelectorView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0D6C23D2E358B0400FEFEF1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F0D6C2442E358B0400FEFEF1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F0D6C2362E358B0400FEFEF1 /* MyDayKit */;
+			targetProxy = F0D6C2432E358B0400FEFEF1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		F0D6C2262E3574EF00FEFEF1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = W4C6DZQ8J4;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		F0D6C2272E3574EF00FEFEF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = W4C6DZQ8J4;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		F0D6C2492E358B0400FEFEF1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W4C6DZQ8J4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.MyDayKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F0D6C24A2E358B0400FEFEF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W4C6DZQ8J4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.MyDayKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F0D6C24C2E358B0400FEFEF1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W4C6DZQ8J4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.MyDayKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F0D6C24D2E358B0400FEFEF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W4C6DZQ8J4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.FindlayWood.MyDayKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F0D6C20E2E3574EF00FEFEF1 /* Build configuration list for PBXProject "MyDayKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0D6C2262E3574EF00FEFEF1 /* Debug */,
+				F0D6C2272E3574EF00FEFEF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F0D6C2482E358B0400FEFEF1 /* Build configuration list for PBXNativeTarget "MyDayKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0D6C2492E358B0400FEFEF1 /* Debug */,
+				F0D6C24A2E358B0400FEFEF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F0D6C24B2E358B0400FEFEF1 /* Build configuration list for PBXNativeTarget "MyDayKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0D6C24C2E358B0400FEFEF1 /* Debug */,
+				F0D6C24D2E358B0400FEFEF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F0D6C20B2E3574EF00FEFEF1 /* Project object */;
+}

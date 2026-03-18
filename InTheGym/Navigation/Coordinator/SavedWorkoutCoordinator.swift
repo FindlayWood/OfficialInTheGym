@@ -14,11 +14,13 @@ class SavedWorkoutCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     var savedWorkoutModel: SavedWorkoutModel
     var listener: SavedWorkoutRemoveListener?
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController, savedWorkoutModel: SavedWorkoutModel, listener: SavedWorkoutRemoveListener? = nil) {
+    init(navigationController: UINavigationController, savedWorkoutModel: SavedWorkoutModel, listener: SavedWorkoutRemoveListener? = nil, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.savedWorkoutModel = savedWorkoutModel
         self.listener = listener
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -39,34 +41,19 @@ extension SavedWorkoutCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func showUser(_ user: Users) {
-        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showDescriptions(_ exercise: DiscoverExerciseModel) {
-        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise)
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: exercise, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showWorkoutDiscovery() {
-        let child = WorkoutDiscoveryCoordinator(navigationController: navigationController, savedWorkoutModel: savedWorkoutModel)
+        let child = WorkoutDiscoveryCoordinator(navigationController: navigationController, savedWorkoutModel: savedWorkoutModel, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
-    }
-    func showEMOM(_ emom: EMOMModel) {
-        let vc = DisplayEMOMViewController()
-        vc.viewModel.emomModel = emom
-        navigationController.pushViewController(vc, animated: true)
-    }
-    func showCircuit(_ circuit: CircuitModel) {
-        let vc = DisplayCircuitViewController()
-        vc.viewModel.circuitModel = circuit
-        navigationController.pushViewController(vc, animated: true)
-    }
-    func showAMRAP(_ amrap: AMRAPModel) {
-        let vc = DisplayAMRAPViewController()
-        vc.viewModel.amrapModel = amrap
-        navigationController.pushViewController(vc, animated: true)
     }
     func showAssign(_ model: SavedWorkoutModel) {
         let vc = AssigningSelectionViewController()
@@ -79,4 +66,7 @@ extension SavedWorkoutCoordinator {
         child.start()
     }
 
+}
+protocol SavedWorkoutsFlow: AnyObject {
+    func savedWorkoutSelected(_ selectedWorkout: SavedWorkoutModel, listener: SavedWorkoutRemoveListener?)
 }

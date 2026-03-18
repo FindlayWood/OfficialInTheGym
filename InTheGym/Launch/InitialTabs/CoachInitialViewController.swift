@@ -9,28 +9,30 @@
 import UIKit
 
 class CoachInitialViewController: UITabBarController {
-
+    
+    var subscriptionManager: PurchaseManager!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // MARK: - Timeline
         let timelineNavigationController = UINavigationController()
         timelineNavigationController.tabBarItem = UITabBarItem(title: "NEWSFEED", image: UIImage(systemName: "newspaper.fill"), tag: 0)
-        let timeLineCoordinator = TimelineCoordinator(navigationController: timelineNavigationController)
+        let timeLineCoordinator = TimelineCoordinator(navigationController: timelineNavigationController, subscriptionManager: subscriptionManager)
         timeLineCoordinator.start()
         // MARK: - Discover
         let discoverNavigationController = UINavigationController()
         discoverNavigationController.tabBarItem = UITabBarItem(title: "DISCOVER", image: UIImage(systemName: "magnifyingglass"), tag: 1)
-        let discoverCoordinator = DiscoverCoordinator(navigationController: discoverNavigationController)
+        let discoverCoordinator = DiscoverCoordinator(navigationController: discoverNavigationController, subscriptionManager: subscriptionManager)
         discoverCoordinator.start()
         // MARK: - Players
         let playersNavigationController = UINavigationController()
         playersNavigationController.tabBarItem = UITabBarItem(title: "PLAYERS", image: UIImage(systemName: "person.2.fill"), tag: 2)
-        let playerCoordinator = PlayersCoordinator(navigationController: playersNavigationController)
+        let playerCoordinator = PlayersCoordinator(navigationController: playersNavigationController, subscriptionManager: subscriptionManager)
         playerCoordinator.start()
         // MARK: - Profile
         let myProfileNavigationController = UINavigationController()
         myProfileNavigationController.tabBarItem = UITabBarItem(title: "MYPROFILE", image: UIImage(systemName: "person.fill"), tag: 3)
-        let myProfileCoordinator = MyProfileCoordinator(navigationController: myProfileNavigationController)
+        let myProfileCoordinator = MyProfileCoordinator(navigationController: myProfileNavigationController, subscriptionManager: subscriptionManager)
         myProfileCoordinator.start()
         
         viewControllers = [timelineNavigationController, discoverNavigationController, playersNavigationController, myProfileNavigationController]

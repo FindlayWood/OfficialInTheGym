@@ -111,3 +111,59 @@ extension PreLiveWorkoutView {
         titleField.isUserInteractionEnabled = allowed
     }
 }
+
+import SwiftUI
+
+struct LiveWorkoutTitleView: View {
+    
+    @ObservedObject var viewModel: PreLiveWorkoutViewModel
+    
+    var body: some View {
+        VStack {
+            HStack {
+                TextField("workout title", text: $viewModel.title)
+                    .font(.headline)
+                    .tint(Color(.darkColour))
+                Button {
+                    viewModel.updateTitle(with: "")
+                } label: {
+                    Image(systemName: "x.circle.fill")
+                        .foregroundStyle(Color.primary.opacity(0.5))
+                }
+            }
+            .padding()
+            
+            Divider()
+                .padding(.horizontal)
+            
+            Text("Title Suggestions")
+                .font(.subheadline)
+                .foregroundStyle(Color.primary.opacity(0.3))
+            List {
+                ForEach(viewModel.getItems(), id: \.self) { item in
+                    Button {
+                        viewModel.updateTitle(with: item)
+                    } label : {
+                        Text(item)
+                            .font(.headline)
+                            .foregroundStyle(Color.primary)
+                    }
+                    .buttonStyle(.plain)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background {
+                        Color(.secondarySystemBackground)
+                            .clipShape(RoundedRectangle(cornerRadius: 15))
+                    }
+                    .listRowSeparator(.hidden)
+                }
+            }
+            .scrollContentBackground(.hidden)
+            .listStyle(.inset)
+        }
+    }
+}
+
+#Preview {
+    LiveWorkoutTitleView(viewModel: PreLiveWorkoutViewModel())
+}

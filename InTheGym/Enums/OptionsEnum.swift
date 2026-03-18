@@ -18,7 +18,6 @@ enum Options: String {
     case saveWorkout = "Save Workout"
     case viewCreatorProfile = "View Creator Profile"
     case viewWorkoutStats = "View Workout Stats"
-    case makeCurrentProgram = "Make Current Program"
     
     var image: UIImage {
         switch self {
@@ -40,8 +39,6 @@ enum Options: String {
             return UIImage(systemName: "person.fill")!
         case .viewWorkoutStats:
             return UIImage(systemName: "chart.bar.fill")!
-        case .makeCurrentProgram:
-            return UIImage(systemName: "book.closed.fill")!
         }
     }
     var imageName: String {
@@ -64,8 +61,6 @@ enum Options: String {
             return "person.fill"
         case .viewWorkoutStats:
             return "chart.bar.fill"
-        case .makeCurrentProgram:
-            return "book.closed.fill"
         }
     }
 }

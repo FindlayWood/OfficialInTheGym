@@ -62,14 +62,15 @@ class ViewClipViewModel: NSObject {
         }
     }
     // MARK: - Fetch Clip Model
+    @MainActor
     func fetchClipModel() {
         let clipSearchModel = ClipModelDownloadModel(clipKey: keyClipModel.clipKey)
-        apiService.fetchSingleInstance(of: clipSearchModel, returning: ClipModel.self) { [weak self] result in
-            switch result {
-            case .success(let model):
-                self?.clipModel = model
-            case .failure(let error):
-                self?.error = error
+        Task {
+            do {
+                let model: ClipModel = try await apiService.fetchSingleInstanceAsync(of: clipSearchModel)
+                clipModel = model
+            } catch {
+                self.error = error
             }
         }
     }

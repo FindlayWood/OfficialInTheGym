@@ -70,13 +70,14 @@ class WorkoutDiscoveryCommentsViewModel {
             }
         }
     }
+    @MainActor
     func getUserRating() {
         let ratingModel = WorkoutRatingUserModel(savedWorkoutID: savedWorkoutModel.id)
-        apiService.fetchSingleInstance(of: ratingModel, returning: Int.self) { [weak self] result in
-            switch result {
-            case .success(let rating):
-                self?.userRating = rating
-            case .failure(let error):
+        Task {
+            do {
+                let rating: Int = try await apiService.fetchSingleInstanceAsync(of: ratingModel)
+                userRating = rating
+            } catch {
                 print(String(describing: error))
             }
         }

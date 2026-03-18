@@ -14,10 +14,12 @@ class TaggedUsersCoordinator: Coordinator {
     var navigationController: UINavigationController
     var modalNavigationController: UINavigationController?
     var ids: [String]
+    var subscriptionManager: PurchaseManager
     // MARK: - Initializer
-    init(navigationController: UINavigationController, ids: [String]) {
+    init(navigationController: UINavigationController, ids: [String], subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.ids = ids
+        self.subscriptionManager = subscriptionManager
     }
     // MARK: - Start
     func start() {
@@ -41,7 +43,7 @@ extension TaggedUsersCoordinator {
     func showUser(_ user: Users) {
         guard let modalNavigationController else { return }
         modalNavigationController.dismiss(animated: true)
-        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

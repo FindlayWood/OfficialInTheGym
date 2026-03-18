@@ -66,8 +66,7 @@ extension OnBoardMainViewController {
         setViewControllers([controllers[sender.currentPage]], direction: .forward, animated: true, completion: nil)
     }
     func getStartedAction() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.launchScreen()
+        // TODO: - handle navigation
     }
 }
 // MARK: - DataSource

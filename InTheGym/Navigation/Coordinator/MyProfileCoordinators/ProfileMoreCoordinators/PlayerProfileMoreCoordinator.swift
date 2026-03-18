@@ -12,14 +12,17 @@ class PlayerProfileMoreCoordinator: Coordinator {
     // MARK: - Properties
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var subscriptionManager: PurchaseManager
     // MARK: - Initializer
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
+        self.subscriptionManager = subscriptionManager
     }
     // MARK: - Start
     func start() {
          let vc = PlayerProfileMoreViewController()
         vc.coordinator = self
+        vc.viewModel = .init(purchaseManager: subscriptionManager)
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
@@ -33,6 +36,8 @@ extension PlayerProfileMoreCoordinator {
     }
     func showMySubscriptions() {
         let vc = PremiumAccountViewController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.viewModel = PremiumAccountViewModel(purchaseManager: subscriptionManager)
         navigationController.present(vc, animated: true)
     }
     func showMyMeasurements() {
@@ -58,12 +63,12 @@ extension PlayerProfileMoreCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func showPerformanceMonitor(for user: Users) {
-        let child = PerformanceHomeCoordinator(navigationController: navigationController, user: user)
+        let child = PerformanceHomeCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func jumpMeasure() {
-        let child = JumpCoordinator(navigationController: navigationController)
+        let child = JumpCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -77,7 +82,7 @@ extension PlayerProfileMoreCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func userSelected(_ user: Users) {
-        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

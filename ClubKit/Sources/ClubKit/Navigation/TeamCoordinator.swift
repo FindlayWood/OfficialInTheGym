@@ -1,0 +1,81 @@
+//
+//  File.swift
+//  
+//
+//  Created by Findlay-Personal on 02/06/2023.
+//
+
+import UIKit
+
+protocol TeamFlow: Coordinator {
+    func addNewTeam()
+    func goToTeam(_ model: RemoteTeamModel)
+    func goToDefaultLineup(_ model: RemoteTeamModel)
+    func goToPlayers(_ model: RemoteTeamModel)
+    func showPlayersList(for team: RemoteTeamModel, excluding: [RemotePlayerModel], selectedAction: @escaping (RemotePlayerModel) -> ())
+    func selectPlayersForNewTeam(alreadySelected: [RemotePlayerModel], _ selectedAction: @escaping ([RemotePlayerModel]) -> ())
+}
+
+class BasicTeamFlow: TeamFlow {
+
+    var navigationController: UINavigationController
+    var viewControllerFactory: TeamViewControllerFactory
+    var clubModel: RemoteClubModel
+    
+    init(navigationController: UINavigationController, viewControllerFactory: TeamViewControllerFactory, clubModel: RemoteClubModel) {
+        self.navigationController = navigationController
+        self.viewControllerFactory = viewControllerFactory
+        self.clubModel = clubModel
+    }
+    
+    func start() {
+        let vc = viewControllerFactory.makeTeamsViewController(for: clubModel)
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func addNewTeam() {
+        let vc = viewControllerFactory.makeCreateTeamViewController(for: clubModel)
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToTeam(_ model: RemoteTeamModel) {
+        let vc = viewControllerFactory.makeTeamHomeViewController(for: model)
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToDefaultLineup(_ model: RemoteTeamModel) {
+        let vc = viewControllerFactory.makeTeamDefaultLineupViewController(for: model)
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func goToPlayers(_ model: RemoteTeamModel) {
+        let vc = viewControllerFactory.makePlayersViewController(for: clubModel, selectable: false)
+        vc.viewModel.loadFromTeam(with: model.id)
+        vc.viewModel.selectedPlayer = { [weak self] in self?.goToDetail(for: $0) }
+        navigationController.pushViewController(vc, animated: true)
+    }
+    func goToDetail(for model: RemotePlayerModel) {
+        let vc = viewControllerFactory.makePlayerDetailViewController(with: model, in: clubModel)
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showPlayersList(for team: RemoteTeamModel, excluding: [RemotePlayerModel], selectedAction: @escaping (RemotePlayerModel) -> ()) {
+        let vc = viewControllerFactory.makePlayersViewController(for: clubModel, selectable: false)
+        vc.viewModel.excludedPlayers = excluding
+        vc.viewModel.loadFromTeam(with: team.id)
+        vc.viewModel.selectedPlayer = selectedAction
+        navigationController.present(vc, animated: true)
+    }
+    
+    func selectPlayersForNewTeam(alreadySelected: [RemotePlayerModel], _ selectedAction: @escaping ([RemotePlayerModel]) -> ()) {
+        let vc = viewControllerFactory.makePlayersViewController(for: clubModel, selectable: true)
+        vc.viewModel.loadFromClub()
+        vc.viewModel.selectedPlayers = alreadySelected
+        vc.viewModel.selectedPlayersConfirmed = selectedAction
+        navigationController.present(vc, animated: true)
+    }
+}

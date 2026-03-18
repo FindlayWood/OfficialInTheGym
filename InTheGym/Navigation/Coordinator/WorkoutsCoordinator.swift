@@ -21,12 +21,14 @@ protocol PreLiveWorkoutFlow: AnyObject {
 class WorkoutsCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController.navigationBar.shadowImage = UIImage()
         self.navigationController.navigationBar.tintColor = .white
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -55,25 +57,20 @@ extension WorkoutsCoordinator: WorkoutsFlow {
     }
     
     func addNewWorkout(_ assignTo: Users?) {
-        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: assignTo)
+        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: assignTo, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
-    func addProgram() {
-        let child = MyProgramsCoordinator(navigationController: navigationController)
-        childCoordinators.append(child)
-        child.start()
-    }
-
     
     func addLiveWorkout() {
-        let vc = PreLiveWorkoutViewController.instantiate()
+        let vc = PreLiveWorkoutViewController()
         vc.coordinator = self
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
     
     func addSavedWorkout() {
-        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: nil)
+        let child = RegularWorkoutCreationCoordinator(navigationController: navigationController, assignTo: nil, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -84,12 +81,12 @@ extension WorkoutsCoordinator: WorkoutsFlow {
 //MARK: - Child Coordinators
 extension WorkoutsCoordinator: PreLiveWorkoutFlow {
     func show(_ workout: WorkoutModel) {
-        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: workout)
+        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: workout, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showLiveWorkout(_ workout: WorkoutModel) {
-        let child = LiveWorkoutDisplayCoordinator(navigationController: navigationController, workout: workout)
+        let child = LiveWorkoutDisplayCoordinator(navigationController: navigationController, workout: workout, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

@@ -17,7 +17,7 @@ class PlayerProfileMoreViewController: UIViewController {
     
     var childContentView: PlayerProfileMoreView!
     
-    var viewModel = PlayerProfileMoreViewModel()
+    var viewModel: PlayerProfileMoreViewModel!
     
     private var subscriptions = Set<AnyCancellable>()
     

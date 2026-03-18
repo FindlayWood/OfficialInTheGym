@@ -11,4 +11,6 @@ import Foundation
 extension Notification {
     static let newPostFromCurrentUser = Notification.Name("newPostFromCurrentUser")
     static let deletedPost = Notification.Name("deletedPost")
+    static let signOut = Notification.Name("signOut")
+    static let signIn = Notification.Name("signIn")
 }

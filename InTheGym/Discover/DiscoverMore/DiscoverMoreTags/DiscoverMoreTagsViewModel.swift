@@ -37,14 +37,14 @@ class DiscoverMoreTagsViewModel {
             
         } else {
             isLoading = true
-            apiService.searchTextQueryModel(model: searchTagModel, returning: TagModel.self) { [weak self] result in
-                switch result {
-                case .success(let models):
-                    self?.getExericses(from: models)
-                    self?.tagModels = models
-                case.failure(let error):
+            Task { @MainActor in
+                do {
+                    let models: [TagModel] = try await apiService.searchTextQueryModelAsync(model: searchTagModel)
+                    getExericses(from: models)
+                    tagModels = models
+                } catch {
                     print(String(describing: error))
-                    self?.isLoading = false
+                    isLoading = false
                 }
             }
         }

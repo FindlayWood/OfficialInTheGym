@@ -16,11 +16,13 @@ class LiveWorkoutExerciseCreationCoordinator: Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var exercise: ExerciseModel
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController, exercise: ExerciseModel, publisher: PassthroughSubject<ExerciseModel,Never>) {
+    init(navigationController: UINavigationController, exercise: ExerciseModel, publisher: PassthroughSubject<ExerciseModel,Never>, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.exercise = exercise
         self.completedExercise = publisher
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -49,17 +51,8 @@ extension LiveWorkoutExerciseCreationCoordinator: ExerciseSelectionFlow {
         navigationController.present(vc, animated: true)
     }
     func infoSelected(_ discoverModel: DiscoverExerciseModel) {
-        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: discoverModel)
+        let child = ExerciseDiscoveryCoordinator(navigationController: navigationController, exercise: discoverModel, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
-    }
-    func addCircuit() {
-        
-    }
-    func addAmrap() {
-        
-    }
-    func addEmom() {
-        
     }
 }

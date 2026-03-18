@@ -12,8 +12,6 @@ class AddMoreNoteViewController: UIViewController {
 
     weak var coordinator: AddMoreToExerciseCoordinator?
     
-    weak var newExercise: exercise?
-    
     var display = DisplayNoteView()
     
     var exerciseViewModel: ExerciseCreationViewModel!

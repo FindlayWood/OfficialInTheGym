@@ -15,18 +15,22 @@ class JumpCoordinator: Coordinator {
     var modalNavigationController: UINavigationController!
     var replayModelNavigationController: UINavigationController!
     var maxModel: VerticalJumpModel?
+    var subscriptionManager: PurchaseManager
     // MARK: - Initializer
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
+        self.subscriptionManager = subscriptionManager
     }
     // MARK: - Start
     func start() {
-        if SubscriptionManager.shared.isSubscribed {
+        if subscriptionManager.hasUnlockedPro {
             let vc = MyJumpsViewController()
             vc.coordinator = self
             navigationController.pushViewController(vc, animated: true)
         } else {
             let vc = PremiumAccountViewController()
+            vc.modalPresentationStyle = .fullScreen
+            vc.viewModel = PremiumAccountViewModel(purchaseManager: subscriptionManager)
             navigationController.present(vc, animated: true)
         }
 

@@ -97,11 +97,11 @@ private extension UIProfileInfoView {
 }
 // MARK: - Public Configuration
 extension UIProfileInfoView {
-    public func configure(with user: Users) {
+    public func configure(with user: Users, purchaseManager: PurchaseManager) {
         nameUsernameView.configure(with: user)
-        followerView.configure(admin: user.admin)
-        userStampsView.configure(with: user)
-        bioLabel.text = user.profileBio
+        followerView.configure(admin: user.accountType == .coach)
+        userStampsView.configure(with: user, purchaseManager: purchaseManager)
+        bioLabel.text = user.bio
         let imageDownloader = ProfileImageDownloadModel(id: user.uid)
         ImageCache.shared.load(from: imageDownloader) { [weak self] result in
             guard let self = self else {return}
@@ -112,7 +112,7 @@ extension UIProfileInfoView {
                 self.profileImageView.backgroundColor = .lightGray
             }
         }
-        if UserDefaults.currentUser == user && SubscriptionManager.shared.isSubscribed {
+        if UserDefaults.currentUser == user && purchaseManager.hasUnlockedPro {
             profileImageView.layer.borderColor = UIColor.premiumColour.cgColor
         } else {
             profileImageView.layer.borderColor = UIColor.clear.cgColor

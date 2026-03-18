@@ -21,7 +21,6 @@ class ImageAPIService {
     
     // MARK: - Cache Properties
     let profileImageCache = NSCache<NSString,UIImage>()
-    //let groupProfileImageCache = NSCache<NSString, UIImage>()
  
 }
 
@@ -34,13 +33,6 @@ extension ImageAPIService {
             downloadFirebaseImage(for: userID, completion: completion)
         }
     }
-//    public func getGroupProfileImage(for groupID: String, completion: @escaping (UIImage?) -> Void) {
-//        if let image = groupProfileImageCache.object(forKey: groupID as NSString) {
-//            completion(image)
-//        } else {
-//            downloadGroupProfileImage(for: groupID, completion: completion)
-//        }
-//    }
 }
 
 // MARK: - Private Functions
@@ -59,19 +51,4 @@ private extension ImageAPIService {
             }
         }
     }
-//    func downloadGroupProfileImage(for groupID: String, completion: @escaping (UIImage?) -> Void) {
-//        let storage = Storage.storage().reference().child("GroupProfilePhotos/\(groupID)")
-//        storage.getData(maxSize: 1 * 1024 * 1024) { (data, error) in
-//            if error != nil {
-//                completion(nil)
-//                return
-//            }
-//            if let data = data{
-//                let image = UIImage(data: data)
-//                completion(image)
-//                self.groupProfileImageCache.setObject(image!, forKey: groupID as NSString)
-//            }
-//        }
-//    }
-    
 }

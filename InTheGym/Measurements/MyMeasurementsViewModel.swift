@@ -58,18 +58,6 @@ class MyMeasurementsViewModel: ObservableObject {
             self.error = .networkError
             self.isLoading = false
         }
-//        let loadModel = LoadMeasurementsModel(userID: UserDefaults.currentUser.uid)
-//        apiService.fetchSingleInstance(of: loadModel, returning: MeasurementModel.self) { [weak self] result in
-//            switch result {
-//            case .success(let model):
-//                self?.height = String(model.height)
-//                self?.weight = String(model.weight)
-//                self?.isLoading = false
-//            case .failure(_):
-//                self?.error = .networkError
-//                self?.isLoading = false
-//            }
-//        }
     }
     // MARK: - Functions
     func upload() async {
@@ -89,7 +77,7 @@ class MyMeasurementsViewModel: ObservableObject {
         let ref = Firestore.firestore().collection("AthleteMeasurements").document(UserDefaults.currentUser.uid)
         
         do {
-            try ref.setData(from: measurementModel)
+            try await ref.setData(from: measurementModel)
             self.successfulUpload = true
             self.isLoading = false
         } catch {

@@ -2,6 +2,8 @@
   InTheGym
 </h1>
 
+[![CI](https://github.com/FindlayWood/OfficialInTheGym/actions/workflows/CI.yml/badge.svg)](https://github.com/FindlayWood/OfficialInTheGym/actions/workflows/CI.yml)
+
 <p align="center">
   <img src="https://user-images.githubusercontent.com/39130967/173814303-592372bb-a608-4618-956f-00ec51c06a34.PNG" width="115"     height="115">
 </p>

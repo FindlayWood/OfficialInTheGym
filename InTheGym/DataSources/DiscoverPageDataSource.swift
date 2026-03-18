@@ -106,7 +106,7 @@ class DiscoverPageDataSource: NSObject {
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
     
-    // MARK: - Update Programs
+    // MARK: - Update Tags
     func updateTags(with models: [ExerciseTagReturnModel]) {
         let items = models.map { DiscoverPageItems.tag($0)}
         var currentSnapshot = dataSource.snapshot()

@@ -72,6 +72,6 @@ struct WorkoutListView: View {
 
 struct WorkoutListView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutListView(model: WorkoutModel(liveModel: .init(id: "", title: "Wednesday - Session", creatorID: "", createdBy: "", assignedTo: "", isPrivate: false, completed: true, liveWorkout: false, startTime: 0)))
+        WorkoutListView(model: WorkoutModel(liveModel: .init(id: "", title: "Wednesday - Session", creatorID: "", assignedTo: "", isPrivate: false, completed: true, liveWorkout: false, startTime: 0)))
     }
 }

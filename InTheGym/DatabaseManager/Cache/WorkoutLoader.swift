@@ -27,11 +27,11 @@ class WorkoutLoader {
         if let cached = cache[searchModel.id] {
             completion(.success(cached))
         } else {
-            apiService.fetchSingleInstance(of: searchModel, returning: WorkoutModel.self) { [weak self] result in
+            Task {
                 do {
-                    let user = try result.get()
-                    self?.cache[searchModel.id] = user
-                    completion(result)
+                    let model: WorkoutModel = try await apiService.fetchSingleInstanceAsync(of: searchModel)
+                    cache[searchModel.id] = model
+                    completion(.success(model))
                 } catch {
                     completion(.failure(error))
                 }

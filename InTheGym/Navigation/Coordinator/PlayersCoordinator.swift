@@ -17,12 +17,14 @@ protocol PlayersFlow {
 class PlayersCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController.navigationBar.shadowImage = UIImage()
         self.navigationController.navigationBar.tintColor = .white
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -36,7 +38,7 @@ class PlayersCoordinator: NSObject, Coordinator {
 //MARK: - Flow Methods
 extension PlayersCoordinator: PlayersFlow {
     func addNewPlayer(_ currentPlayers: [Users]) {
-        let child = AddPlayerCoordinator(navigationController: navigationController, currentPlayers: currentPlayers)
+        let child = AddPlayerCoordinator(navigationController: navigationController, currentPlayers: currentPlayers, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
         
@@ -47,12 +49,12 @@ extension PlayersCoordinator: PlayersFlow {
 //        navigationController.present(vc, animated: true, completion: nil)
     }
     func showPlayerInMoreDetail(player: Users) {
-        let child = PlayerDetailCoordinator(navigationController: navigationController, player: player)
+        let child = PlayerDetailCoordinator(navigationController: navigationController, player: player, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showMyWorkouts() {
-        let child = CoachWorkoutsCoordinator(navigationController: navigationController)
+        let child = CoachWorkoutsCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }

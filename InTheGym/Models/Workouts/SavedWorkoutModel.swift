@@ -20,32 +20,24 @@ class SavedWorkoutModel: Codable, Hashable {
     var completions: Int
     var totalRPE: Int
     var totalTime: Int
-    var createdBy: String
     var creatorID: String
     var timeCreated: TimeInterval?
     var title: String
     var isPrivate: Bool
     var exercises: [ExerciseModel]?
-    var circuits: [CircuitModel]?
-    var amraps: [AMRAPModel]?
-    var emoms: [EMOMModel]?
     
-    init(title: String, isPrivate: Bool, exercises: [ExerciseModel], circuits: [CircuitModel], amraps: [AMRAPModel], emoms: [EMOMModel]) {
+    init(title: String, isPrivate: Bool, exercises: [ExerciseModel]) {
         self.id = UUID().uuidString
         self.views = 0
         self.downloads = 0
         self.completions = 0
         self.totalRPE = 0
         self.totalTime = 0
-        self.createdBy = FirebaseAuthManager.currentlyLoggedInUser.username
-        self.creatorID = FirebaseAuthManager.currentlyLoggedInUser.uid
+        self.creatorID = UserDefaults.currentUser.uid
         self.timeCreated = Date().timeIntervalSince1970
         self.title = title
         self.isPrivate = isPrivate
         self.exercises = exercises
-        self.circuits = circuits
-        self.amraps = amraps
-        self.emoms = emoms
     }
     
     static func == (lhs: SavedWorkoutModel, rhs: SavedWorkoutModel) -> Bool {
@@ -74,9 +66,6 @@ extension SavedWorkoutModel {
     func totalExerciseCount() -> Int {
         var totalExerciseCount = 0
         totalExerciseCount += exercises?.count ?? 0
-        totalExerciseCount += circuits?.count ?? 0
-        totalExerciseCount += emoms?.count ?? 0
-        totalExerciseCount += amraps?.count ?? 0
         return totalExerciseCount
     }
 }
@@ -112,30 +101,22 @@ struct NewSavedWorkoutModel: Codable {
     var completions: Int
     var totalRPE: Int
     var totalTime: Int
-    var createdBy: String
     var creatorID: String
     var title: String
     var isPrivate: Bool
     var exercises: [ExerciseModel]?
-    var circuits: [CircuitModel]?
-    var amraps: [AMRAPModel]?
-    var emoms: [EMOMModel]?
     
-    init(title: String, isPrivate: Bool, exercises: [ExerciseModel], circuits: [CircuitModel], amraps: [AMRAPModel], emoms: [EMOMModel]) {
+    init(title: String, isPrivate: Bool, exercises: [ExerciseModel]) {
         self.savedID = UUID().uuidString
         self.views = 0
         self.downloads = 0
         self.completions = 0
         self.totalRPE = 0
         self.totalTime = 0
-        self.createdBy = FirebaseAuthManager.currentlyLoggedInUser.username
-        self.creatorID = FirebaseAuthManager.currentlyLoggedInUser.uid
+        self.creatorID = UserDefaults.currentUser.uid
         self.title = title
         self.isPrivate = isPrivate
         self.exercises = exercises
-        self.circuits = circuits
-        self.amraps = amraps
-        self.emoms = emoms
     }
 }
 extension NewSavedWorkoutModel: FirebaseInstance {

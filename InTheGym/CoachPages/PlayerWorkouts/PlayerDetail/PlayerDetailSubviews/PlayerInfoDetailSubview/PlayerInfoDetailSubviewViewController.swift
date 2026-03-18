@@ -14,12 +14,13 @@ class PlayerInfoDetailSubviewViewController: UIViewController {
     var display = PlayerInfoDetailSubviewView()
     var viewModel = PlayerInfoDetailSubviewViewModel()
     private var subscriptions = Set<AnyCancellable>()
+    var purchaseManager: PurchaseManager!
     override func loadView() {
         view = display
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        display.infoView.configure(with: viewModel.user)
+        display.infoView.configure(with: viewModel.user, purchaseManager: purchaseManager)
         initViewModel()
     }
     // MARK: - View Model

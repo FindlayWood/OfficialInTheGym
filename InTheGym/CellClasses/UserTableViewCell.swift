@@ -111,11 +111,9 @@ private extension UserTableViewCell {
 // MARK: - Configure Cell
 extension UserTableViewCell {
     public func configureCell(with user: Users) {
-        let firstName = user.firstName
-        let lastName = user.lastName
         let username = user.username
         let userID = user.uid
-        fullNameLabel.text = firstName + " " + lastName
+        fullNameLabel.text = user.displayName
         usernameLabel.text = username
         viewModel.loadProfileImage(for: user)
 //        ImageAPIService.shared.getProfileImage(for: userID) { [weak self] returnedImage in

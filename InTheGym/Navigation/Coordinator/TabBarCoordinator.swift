@@ -14,15 +14,17 @@ class TabBarCoordinator: Coordinator {
     
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
-    //var tabBarController: PlayerInitialViewController!
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController){
+    
+    init(navigationController: UINavigationController, subscriptionManager: PurchaseManager){
         self.navigationController = navigationController
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
-        let tabBarController = PlayerInitialViewController()
-        //tabBarController = PlayerInitialViewController.instantiate()
+        let tabBarController = PlayerInitialViewController(subscriptionManager: subscriptionManager)
+        
         tabBarController.coordinator = self
         
         let timelineNavigationController = UINavigationController()
@@ -32,7 +34,7 @@ class TabBarCoordinator: Coordinator {
             timelineNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 0)
             timelineNavigationController.tabBarItem.title = "NEWSFEED"
         }
-        let timeLineCoord = TimelineCoordinator(navigationController: timelineNavigationController)
+        let timeLineCoord = TimelineCoordinator(navigationController: timelineNavigationController, subscriptionManager: subscriptionManager)
         
         
         let discoverNavigationController = UINavigationController()
@@ -41,12 +43,12 @@ class TabBarCoordinator: Coordinator {
         } else {
             discoverNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 1)
         }
-        let discoverCoord = DiscoverCoordinator(navigationController: discoverNavigationController)
+        let discoverCoord = DiscoverCoordinator(navigationController: discoverNavigationController, subscriptionManager: subscriptionManager)
         
         
         let workoutsNavigationController = UINavigationController()
         workoutsNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 2)
-        let workoutsCoord = WorkoutsCoordinator(navigationController: workoutsNavigationController)
+        let workoutsCoord = WorkoutsCoordinator(navigationController: workoutsNavigationController, subscriptionManager: subscriptionManager)
         
         
         let playersNavigationController = UINavigationController()
@@ -56,7 +58,7 @@ class TabBarCoordinator: Coordinator {
             playersNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 2)
             playersNavigationController.tabBarItem.title = "PLAYERS"
         }
-        let playerCoord = PlayersCoordinator(navigationController: playersNavigationController)
+        let playerCoord = PlayersCoordinator(navigationController: playersNavigationController, subscriptionManager: subscriptionManager)
         
         
         let myProfileNavigationController = UINavigationController()
@@ -66,10 +68,10 @@ class TabBarCoordinator: Coordinator {
             myProfileNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .featured, tag: 3)
             myProfileNavigationController.tabBarItem.title = "MYPROFILE"
         }
-        let myProfileCoord = MyProfileCoordinator(navigationController: myProfileNavigationController)
+        let myProfileCoord = MyProfileCoordinator(navigationController: myProfileNavigationController, subscriptionManager: subscriptionManager)
         
         
-        if UserDefaults.currentUser.admin {
+        if UserDefaults.currentUser.accountType == .coach {
             tabBarController.viewControllers = [timelineNavigationController,
                                                 discoverNavigationController,
                                                 playersNavigationController,
@@ -83,43 +85,22 @@ class TabBarCoordinator: Coordinator {
         }
         
         
-//        tabBarController.modalPresentationStyle = .fullScreen
+
         navigationController.present(tabBarController, animated: true, completion: nil)
         
         coordinate(to: timeLineCoord)
         coordinate(to: discoverCoord)
         coordinate(to: myProfileCoord)
-        if UserDefaults.currentUser.admin {
+        if UserDefaults.currentUser.accountType == .coach {
             coordinate(to: playerCoord)
         } else {
             coordinate(to: workoutsCoord)
         }
-        //observeForNotifications()
     }
     
     func coordinateToMain(){
-        let main = MainCoordinator(navigationController: navigationController)
+        let main = MainCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
         coordinate(to: main)
     }
     
-//    func observeForNotifications() {
-//        NotificationCenter.default.addObserver(self, selector: #selector(setToUnseenNotifications), name: .unseenNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(setToSeenNotifications), name: .seenAllNotifications, object: nil)
-//    }
-//    
-//    @objc func setToUnseenNotifications() {
-//        if let tabItems = tabBarController?.tabBar.items {
-//            // In this case we want to modify the badge number of the third tab:
-//            let tabItem = tabItems[3]
-//            tabItem.badgeValue = "1"
-//        }
-//    }
-//    
-//    @objc func setToSeenNotifications() {
-//        if let tabItems = tabBarController?.tabBar.items {
-//            // In this case we want to modify the badge number of the third tab:
-//            let tabItem = tabItems[3]
-//            tabItem.badgeValue = "1"
-//        }
-//    }
 }

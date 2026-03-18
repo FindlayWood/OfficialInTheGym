@@ -13,15 +13,18 @@ class UserProfileCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var userToShow: Users
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController, user: Users) {
+    init(navigationController: UINavigationController, user: Users, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
         self.userToShow = user
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
         let vc = PublicTimelineViewController()
         vc.coordinator = self
+        vc.purchaseManager = subscriptionManager
         vc.viewModel.user = userToShow
         navigationController.pushViewController(vc, animated: true)
     }
@@ -39,25 +42,18 @@ class UserProfileCoordinator: NSObject, Coordinator {
 
 //MARK: - Flow Methods
 extension UserProfileCoordinator {
-    
-    func showCreatedWorkouts(for user: Users){
-        let child = PublicCreatedWorkoutsCoordinator(navigationController: navigationController, user: user)
-        childCoordinators.append(child)
-        child.start()
-    }
-    
     func showCommentSection(for post: PostModel, with listener: PostListener) {
-        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener, deleteListener: nil)
+        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener, deleteListener: nil, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showWorkout(_ model: WorkoutModel) {
-        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: model)
+        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: model, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showSavedWorkout(_ model: SavedWorkoutModel) {
-        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model)
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -66,7 +62,7 @@ extension UserProfileCoordinator {
         navigationController.present(vc, animated: true)
     }
     func showUser(user: Users) {
-        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -103,7 +99,7 @@ extension UserProfileCoordinator {
 extension UserProfileCoordinator {
     func clipSelected(_  model: ClipModel, fromViewControllerDelegate: CustomAnimatingClipFromVC) {
         let keyModel = KeyClipModel(clipKey: model.id, storageURL: model.storageURL)
-        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyModel, fromViewControllerDelegate: fromViewControllerDelegate)
+        let child = ClipProfileCustomCoordinator(navigationController: navigationController, clipModel: keyModel, fromViewControllerDelegate: fromViewControllerDelegate, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
@@ -130,10 +126,5 @@ extension UserProfileCoordinator: UINavigationControllerDelegate {
         if navigationController.viewControllers.contains(fromViewController){
             return
         }
-        
-        if let createdWorkoutsViewController = fromViewController as? PublicCreatedWorkoutsViewController {
-            childDidFinish(createdWorkoutsViewController.coordinator)
-        }
-        
     }
 }

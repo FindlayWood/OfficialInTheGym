@@ -38,20 +38,20 @@ class DisplayExerciseStatsViewModel: ObservableObject {
     }
     
     // MARK: - Fetch Stat Models
+    @MainActor
     func fetchStatModels() {
         isLoading = true
-        apiService.fetch(ExerciseStatsModel.self) { [weak self] result in
-            switch result {
-            case .success(let models):
+        Task {
+            do {
+                let models: [ExerciseStatsModel] = try await apiService.fetchAsync()
                 let sortedModels = models.sorted(by: { $0.exerciseName < $1.exerciseName })
-                self?.statModelPublisher.send(sortedModels)
-                self?.unfilteredModels = sortedModels
-                self?.exerciseModels = sortedModels
-                self?.isLoading = false
-            case .failure(let error):
+                statModelPublisher.send(sortedModels)
+                unfilteredModels = sortedModels
+                exerciseModels = sortedModels
+                isLoading = false
+            } catch {
                 print(String(describing: error))
-                self?.isLoading = false
-                break
+                isLoading = false
             }
         }
     }

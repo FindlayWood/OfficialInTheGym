@@ -45,19 +45,19 @@ class CoachWorkoutsViewModel {
     }
     
     // MARK: - Fetch Function
+    @MainActor
     func fetchWorkouts() {
         isLoading = true
-        apiService.fetch(WorkoutModel.self) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(let models):
-                self.workouts = models
-                self.storedWorkouts = models
-                self.filteredWorkouts = models
-                self.isLoading = false
-            case .failure(let error):
-                self.errorFetching.send(error)
-                self.isLoading = false
+        Task {
+            do {
+                let models: [WorkoutModel] = try await apiService.fetchAsync()
+                workouts = models
+                storedWorkouts = models
+                filteredWorkouts = models
+                isLoading = false
+            } catch {
+                errorFetching.send(error)
+                isLoading = false
             }
         }
     }

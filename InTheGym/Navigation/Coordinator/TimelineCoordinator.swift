@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol TimelineFlow: AnyObject {
-    func showWorkouts(with workout: WorkoutDelegate)
+//    func showWorkouts(with workout: WorkoutDelegate)
     func showUser(user: Users)
 }
 
@@ -26,12 +26,14 @@ class TimelineCoordinator: NSObject, Coordinator {
     
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
+    var subscriptionManager: PurchaseManager
     
-    init(navigationController: UINavigationController){
+    init(navigationController: UINavigationController, subscriptionManager: PurchaseManager){
         self.navigationController = navigationController
         self.navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController.navigationBar.shadowImage = UIImage()
         self.navigationController.navigationBar.tintColor = .white
+        self.subscriptionManager = subscriptionManager
     }
     
     func start() {
@@ -60,32 +62,32 @@ extension TimelineCoordinator {
     }
     
     func showCommentSection(for post: PostModel, with listener: PostListener, deleteListener: PostListener) {
-        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener, deleteListener: deleteListener)
+        let child = CommentSectionCoordinator(navigationController: navigationController, mainPost: post, listener: listener, deleteListener: deleteListener, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showWorkout(_ model: WorkoutModel) {
-        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: model)
+        let child = WorkoutDisplayCoordinator(navigationController: navigationController, workout: model, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showSavedWorkout(_ model: SavedWorkoutModel) {
-        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model, listener: nil)
+        let child = SavedWorkoutCoordinator(navigationController: navigationController, savedWorkoutModel: model, listener: nil, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showUser(user: Users) {
-        let child = UserProfileCoordinator(navigationController: navigationController, user: user)
+        let child = UserProfileCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showPerformance() {
-        let child = PerformanceHomeCoordinator(navigationController: navigationController, user: UserDefaults.currentUser)
+        let child = PerformanceHomeCoordinator(navigationController: navigationController, user: UserDefaults.currentUser, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showTaggedUsers(_ ids: [String]) {
-        let child = TaggedUsersCoordinator(navigationController: navigationController, ids: ids)
+        let child = TaggedUsersCoordinator(navigationController: navigationController, ids: ids, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
