@@ -12,6 +12,7 @@ struct SelectOptionSheet: View {
     var exerciseSelected: (() -> ())?
     var fitnessSelected: (() -> ())?
     var sportSelected: (() -> ())?
+    var workoutSelected: (() -> ())?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -29,8 +30,17 @@ struct SelectOptionSheet: View {
             // ── Options ────────────────────────────────────────────────
             VStack(spacing: 10) {
                 optionRow(
+                    title: "Workout",
+                    subtitle: "Build, follow or log a full workout",
+                    icon: "list.bullet.clipboard.fill",
+                    color: Color.purple
+                ) {
+                    workoutSelected?()
+                }
+                
+                optionRow(
                     title: "Exercise",
-                    subtitle: "Reps, sets, weight and more",
+                    subtitle: "Log a single exercise with sets",
                     icon: "dumbbell.fill",
                     color: Color.blue
                 ) {
@@ -58,6 +68,7 @@ struct SelectOptionSheet: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 24)
         }
+        .presentationDetents([.height(360)])
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(28)
     }
