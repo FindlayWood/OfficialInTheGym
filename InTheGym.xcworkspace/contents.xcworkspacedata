@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:StatsKit/StatsKit.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:MyDayKit/MyDayKit.xcodeproj">
    </FileRef>
    <FileRef
