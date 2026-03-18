@@ -66,7 +66,6 @@ class PlayerInitialViewController: UITabBarController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
-        tabBar.backgroundColor = .systemBackground
         tabBar.tintColor = .darkColour
         tabBar.barTintColor = .systemBackground
     }
