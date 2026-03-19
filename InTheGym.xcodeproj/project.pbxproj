@@ -895,6 +895,8 @@
 		9FF8B30429283D8A00C47313 /* WorkoutListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B30329283D8A00C47313 /* WorkoutListView.swift */; };
 		9FF8B3062928422A00C47313 /* WorkoutFiguresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */; };
 		9FF8B3082928459E00C47313 /* WorkoutClipThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */; };
+		F0A11D272F6C637100CE1E9A /* StatsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; };
+		F0A11D282F6C637100CE1E9A /* StatsKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F0D344432F256E0E00AB6121 /* DataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D344422F256E0E00AB6121 /* DataUploader.swift */; };
 		F0F608342E42A5350015F260 /* MyDayKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F608332E42A5350015F260 /* MyDayKitComposition.swift */; };
 		F0F608362E42A5A70015F260 /* MyDayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0F608352E42A5A70015F260 /* MyDayKit.framework */; };
@@ -919,6 +921,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				F0F608372E42A5A70015F260 /* MyDayKit.framework in Embed Frameworks */,
+				F0A11D282F6C637100CE1E9A /* StatsKit.framework in Embed Frameworks */,
 				746DA0D52C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Embed Frameworks */,
 				746DA0D32C090AD10094EA3B /* ITGWorkoutKit.framework in Embed Frameworks */,
 			);
@@ -1800,6 +1803,7 @@
 		9FF8B30329283D8A00C47313 /* WorkoutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListView.swift; sourceTree = "<group>"; };
 		9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFiguresView.swift; sourceTree = "<group>"; };
 		9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutClipThumbnailView.swift; sourceTree = "<group>"; };
+		F0A11D262F6C637100CE1E9A /* StatsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StatsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0D344422F256E0E00AB6121 /* DataUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUploader.swift; sourceTree = "<group>"; };
 		F0F608332E42A5350015F260 /* MyDayKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitComposition.swift; sourceTree = "<group>"; };
 		F0F608352E42A5A70015F260 /* MyDayKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MyDayKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1833,6 +1837,7 @@
 				7404A4B028C926D70034AADC /* RevenueCat in Frameworks */,
 				7404A4AD28C903270034AADC /* StoreKit.framework in Frameworks */,
 				74330449289E962B00F2569A /* FirebaseFirestoreCombine-Community in Frameworks */,
+				F0A11D272F6C637100CE1E9A /* StatsKit.framework in Frameworks */,
 				9FC11F6129DDCA8E0054D79A /* LoginKit in Frameworks */,
 				7433044B289E962B00F2569A /* FirebaseFirestoreSwift in Frameworks */,
 				9F72F9422A114BE200BF040C /* ClubKit in Frameworks */,
@@ -4760,6 +4765,7 @@
 		D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F0A11D262F6C637100CE1E9A /* StatsKit.framework */,
 				F0F608352E42A5A70015F260 /* MyDayKit.framework */,
 				746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */,
 				746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */,
@@ -5941,7 +5947,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = H6WZPTFL8D;
+				DEVELOPMENT_TEAM = W4C6DZQ8J4;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_NO_COMMON_BLOCKS = NO;
 				HEADER_SEARCH_PATHS = (
@@ -6023,7 +6029,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = H6WZPTFL8D;
+				DEVELOPMENT_TEAM = W4C6DZQ8J4;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_NO_COMMON_BLOCKS = NO;
 				HEADER_SEARCH_PATHS = (
@@ -6214,7 +6220,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = H6WZPTFL8D;
+				DEVELOPMENT_TEAM = W4C6DZQ8J4;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_NO_COMMON_BLOCKS = NO;
 				HEADER_SEARCH_PATHS = (
