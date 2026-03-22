@@ -9,4 +9,5 @@ import Foundation
 
 enum StatsKitRoutes {
     case home
+    case allExercises
 }

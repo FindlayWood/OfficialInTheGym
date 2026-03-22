@@ -11,6 +11,15 @@
 		F0A11D202F6C61AC00CE1E9A /* StatsKitRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11D1F2F6C61AC00CE1E9A /* StatsKitRouter.swift */; };
 		F0A11D222F6C61E600CE1E9A /* StatsKitRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11D212F6C61E600CE1E9A /* StatsKitRoutes.swift */; };
 		F0A11D252F6C623900CE1E9A /* StatsKitHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11D242F6C623900CE1E9A /* StatsKitHomeScreen.swift */; };
+		F0A11D2E2F6C6ECA00CE1E9A /* StatsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11D2D2F6C6ECA00CE1E9A /* StatsModels.swift */; };
+		F0A11F2C2F6F5EC200CE1E9A /* DailyTotal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11F2B2F6F5EC200CE1E9A /* DailyTotal.swift */; };
+		F0A11F302F6F622C00CE1E9A /* DailyTotalsProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11F2F2F6F622C00CE1E9A /* DailyTotalsProviding.swift */; };
+		F0F6DF3A2F705D0100D02F93 /* HomeSubViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF392F705D0100D02F93 /* HomeSubViews.swift */; };
+		F0F6DF3D2F705DDC00D02F93 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0F6DF3C2F705DDC00D02F93 /* Charts.framework */; };
+		F0F6DF3F2F70836800D02F93 /* ExerciseListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF3E2F70836800D02F93 /* ExerciseListScreen.swift */; };
+		F0F6DF412F70849800D02F93 /* ExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF402F70849800D02F93 /* ExerciseLoader.swift */; };
+		F0F6DF452F708AEA00D02F93 /* StatsKitBoundaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF442F708AEA00D02F93 /* StatsKitBoundaryViewController.swift */; };
+		F0F6DF472F708BE300D02F93 /* ExerciseStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF462F708BE300D02F93 /* ExerciseStats.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +38,15 @@
 		F0A11D1F2F6C61AC00CE1E9A /* StatsKitRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitRouter.swift; sourceTree = "<group>"; };
 		F0A11D212F6C61E600CE1E9A /* StatsKitRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitRoutes.swift; sourceTree = "<group>"; };
 		F0A11D242F6C623900CE1E9A /* StatsKitHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitHomeScreen.swift; sourceTree = "<group>"; };
+		F0A11D2D2F6C6ECA00CE1E9A /* StatsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsModels.swift; sourceTree = "<group>"; };
+		F0A11F2B2F6F5EC200CE1E9A /* DailyTotal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTotal.swift; sourceTree = "<group>"; };
+		F0A11F2F2F6F622C00CE1E9A /* DailyTotalsProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTotalsProviding.swift; sourceTree = "<group>"; };
+		F0F6DF392F705D0100D02F93 /* HomeSubViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSubViews.swift; sourceTree = "<group>"; };
+		F0F6DF3C2F705DDC00D02F93 /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk/System/Library/Frameworks/Charts.framework; sourceTree = DEVELOPER_DIR; };
+		F0F6DF3E2F70836800D02F93 /* ExerciseListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseListScreen.swift; sourceTree = "<group>"; };
+		F0F6DF402F70849800D02F93 /* ExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLoader.swift; sourceTree = "<group>"; };
+		F0F6DF442F708AEA00D02F93 /* StatsKitBoundaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitBoundaryViewController.swift; sourceTree = "<group>"; };
+		F0F6DF462F708BE300D02F93 /* ExerciseStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStats.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -49,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0F6DF3D2F705DDC00D02F93 /* Charts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,10 +85,12 @@
 		F0750E732F6B62960026D021 = {
 			isa = PBXGroup;
 			children = (
+				F0A11D2C2F6C6EBE00CE1E9A /* Models */,
 				F0A11D232F6C622C00CE1E9A /* Screens */,
 				F0A11D1E2F6C618C00CE1E9A /* Router */,
 				F0750E7F2F6B62960026D021 /* StatsKit */,
 				F0750E8C2F6B62960026D021 /* StatsKitTests */,
+				F0F6DF3B2F705DDC00D02F93 /* Frameworks */,
 				F0750E7E2F6B62960026D021 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,6 +109,7 @@
 			children = (
 				F0A11D1F2F6C61AC00CE1E9A /* StatsKitRouter.swift */,
 				F0A11D212F6C61E600CE1E9A /* StatsKitRoutes.swift */,
+				F0F6DF442F708AEA00D02F93 /* StatsKitBoundaryViewController.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -95,9 +117,39 @@
 		F0A11D232F6C622C00CE1E9A /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				F0F6DF382F705CED00D02F93 /* SubViews */,
 				F0A11D242F6C623900CE1E9A /* StatsKitHomeScreen.swift */,
+				F0F6DF3E2F70836800D02F93 /* ExerciseListScreen.swift */,
 			);
 			path = Screens;
+			sourceTree = "<group>";
+		};
+		F0A11D2C2F6C6EBE00CE1E9A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F0A11D2D2F6C6ECA00CE1E9A /* StatsModels.swift */,
+				F0A11F2B2F6F5EC200CE1E9A /* DailyTotal.swift */,
+				F0A11F2F2F6F622C00CE1E9A /* DailyTotalsProviding.swift */,
+				F0F6DF402F70849800D02F93 /* ExerciseLoader.swift */,
+				F0F6DF462F708BE300D02F93 /* ExerciseStats.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F0F6DF382F705CED00D02F93 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				F0F6DF392F705D0100D02F93 /* HomeSubViews.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		F0F6DF3B2F705DDC00D02F93 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F0F6DF3C2F705DDC00D02F93 /* Charts.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,8 +272,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0A11D222F6C61E600CE1E9A /* StatsKitRoutes.swift in Sources */,
+				F0F6DF412F70849800D02F93 /* ExerciseLoader.swift in Sources */,
+				F0F6DF472F708BE300D02F93 /* ExerciseStats.swift in Sources */,
+				F0F6DF3F2F70836800D02F93 /* ExerciseListScreen.swift in Sources */,
+				F0A11F302F6F622C00CE1E9A /* DailyTotalsProviding.swift in Sources */,
+				F0A11D2E2F6C6ECA00CE1E9A /* StatsModels.swift in Sources */,
+				F0F6DF452F708AEA00D02F93 /* StatsKitBoundaryViewController.swift in Sources */,
 				F0A11D252F6C623900CE1E9A /* StatsKitHomeScreen.swift in Sources */,
+				F0F6DF3A2F705D0100D02F93 /* HomeSubViews.swift in Sources */,
 				F0A11D202F6C61AC00CE1E9A /* StatsKitRouter.swift in Sources */,
+				F0A11F2C2F6F5EC200CE1E9A /* DailyTotal.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

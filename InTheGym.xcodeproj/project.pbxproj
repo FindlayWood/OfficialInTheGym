@@ -897,10 +897,13 @@
 		9FF8B3082928459E00C47313 /* WorkoutClipThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */; };
 		F0A11D272F6C637100CE1E9A /* StatsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; };
 		F0A11D282F6C637100CE1E9A /* StatsKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */; };
 		F0D344432F256E0E00AB6121 /* DataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D344422F256E0E00AB6121 /* DataUploader.swift */; };
 		F0F608342E42A5350015F260 /* MyDayKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F608332E42A5350015F260 /* MyDayKitComposition.swift */; };
 		F0F608362E42A5A70015F260 /* MyDayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0F608352E42A5A70015F260 /* MyDayKit.framework */; };
 		F0F608372E42A5A70015F260 /* MyDayKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0F608352E42A5A70015F260 /* MyDayKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F0F6DEFE2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DEFD2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift */; };
+		F0F6DF432F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF422F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1804,9 +1807,12 @@
 		9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFiguresView.swift; sourceTree = "<group>"; };
 		9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutClipThumbnailView.swift; sourceTree = "<group>"; };
 		F0A11D262F6C637100CE1E9A /* StatsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StatsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitComposition.swift; sourceTree = "<group>"; };
 		F0D344422F256E0E00AB6121 /* DataUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUploader.swift; sourceTree = "<group>"; };
 		F0F608332E42A5350015F260 /* MyDayKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitComposition.swift; sourceTree = "<group>"; };
 		F0F608352E42A5A70015F260 /* MyDayKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MyDayKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0F6DEFD2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitDailyTotalsLoader.swift; sourceTree = "<group>"; };
+		F0F6DF422F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteStatsKitExerciseLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4730,6 +4736,7 @@
 		9FC11F5D29DDC9A20054D79A /* Composition */ = {
 			isa = PBXGroup;
 			children = (
+				F0A11D292F6C642A00CE1E9A /* StatsKit */,
 				F0D3443F2F25616A00AB6121 /* MyDay */,
 				9FC11F5E29DDC9B80054D79A /* LoginComposition.swift */,
 				9FB4D1DB29E752AB0019CA57 /* AccountCreationComposition.swift */,
@@ -4774,6 +4781,16 @@
 				746061BC252547E9005B1480 /* AppTrackingTransparency.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F0A11D292F6C642A00CE1E9A /* StatsKit */ = {
+			isa = PBXGroup;
+			children = (
+				F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */,
+				F0F6DEFD2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift */,
+				F0F6DF422F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift */,
+			);
+			path = StatsKit;
 			sourceTree = "<group>";
 		};
 		F0D3443F2F25616A00AB6121 /* MyDay */ = {
@@ -4959,6 +4976,7 @@
 				748B98AE2863A844003226CA /* MyJumpsViewModel.swift in Sources */,
 				74E08A7B2841542D009D0DCB /* MyWorkoutStatsViewController.swift in Sources */,
 				9F4DFB4529BCE83C00363AE8 /* TaggedUsersView.swift in Sources */,
+				F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */,
 				74A602A72850C87200AFA236 /* WorkoutDiscoveryViewModel.swift in Sources */,
 				7444D0C026D3C9BE0009C7A6 /* UploadingWorkoutViewModel.swift in Sources */,
 				7479812F27DB7EBA00CF3F9B /* RequestsView.swift in Sources */,
@@ -5372,6 +5390,7 @@
 				742AEDCD282A8EF20004E901 /* LiveWorkoutSetCreationCoordinator.swift in Sources */,
 				74DA1AE428F1A9A200F4DB9E /* MatchTrackerView.swift in Sources */,
 				74AF6D5E26868288005C52A8 /* DisplayExerciseStatsViewController.swift in Sources */,
+				F0F6DF432F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift in Sources */,
 				74B48E1127A4625500BBFC16 /* LiveWorkoutDisplayCoordinator.swift in Sources */,
 				741044FB285CC20900A9FF4E /* CoachInitialViewController.swift in Sources */,
 				745F89D9286DCFBB000070B2 /* LoadingView.swift in Sources */,
@@ -5592,6 +5611,7 @@
 				74220899256FFE2C00B42563 /* LaunchPageViewController.swift in Sources */,
 				9F89DD992A3E59560018E124 /* BaseFlow.swift in Sources */,
 				742FCD1328450B9E007ED1C6 /* ExerciseMaxHistoryViewController.swift in Sources */,
+				F0F6DEFE2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift in Sources */,
 				74EE4ECC27E7AD9B00051451 /* PostsChildViewController.swift in Sources */,
 				743E92AE280705460029F447 /* BoxBreathingViewController.swift in Sources */,
 				742C1C4D27B2A34E00DD1BB0 /* RecordClipViewModel.swift in Sources */,
