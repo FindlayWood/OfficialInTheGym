@@ -8,10 +8,11 @@
 import SwiftUI
 
 enum ExerciseCategory: String, CaseIterable, Codable {
-    case upperBody
-    case lowerBody
-    case core
-    case cardio
+    case upperBody = "upper_body"
+    case lowerBody = "lower_body"
+    case core = "core"
+    case cardio = "cardio"
+    case fullBody = "full_body"
     
     var title: String {
         switch self {
@@ -23,6 +24,8 @@ enum ExerciseCategory: String, CaseIterable, Codable {
             return "Core"
         case .cardio:
             return "Cardio"
+        case .fullBody:
+            return "Full Body"
         }
     }
     
@@ -32,6 +35,7 @@ enum ExerciseCategory: String, CaseIterable, Codable {
         case .lowerBody:  return .green
         case .core:       return .orange
         case .cardio:     return .red
+        case .fullBody:   return .purple
         }
     }
 }
