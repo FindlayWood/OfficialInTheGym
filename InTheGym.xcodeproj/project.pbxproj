@@ -904,6 +904,7 @@
 		F0F608372E42A5A70015F260 /* MyDayKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0F608352E42A5A70015F260 /* MyDayKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F0F6DEFE2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DEFD2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift */; };
 		F0F6DF432F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF422F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift */; };
+		F0F6DFBA2F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DFB92F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1813,6 +1814,7 @@
 		F0F608352E42A5A70015F260 /* MyDayKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MyDayKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0F6DEFD2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitDailyTotalsLoader.swift; sourceTree = "<group>"; };
 		F0F6DF422F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteStatsKitExerciseLoader.swift; sourceTree = "<group>"; };
+		F0F6DFB92F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteExerciseDailyStatsLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4789,6 +4791,7 @@
 				F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */,
 				F0F6DEFD2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift */,
 				F0F6DF422F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift */,
+				F0F6DFB92F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift */,
 			);
 			path = StatsKit;
 			sourceTree = "<group>";
@@ -5345,6 +5348,7 @@
 				740682F828901CC700CD9C08 /* PerformanceIntroSubview.swift in Sources */,
 				748B403D25236EBD00C947B6 /* SetSelectionViewController.swift in Sources */,
 				742C1C7827BAFC6200DD1BB0 /* PublicTimelineView.swift in Sources */,
+				F0F6DFBA2F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift in Sources */,
 				9F4DFB3329A6A4E300363AE8 /* CommentWithAttachmentsView.swift in Sources */,
 				74DE6D9E27D3D801009FB44A /* PlayerDetailView.swift in Sources */,
 				74FA60A128AFF834007B2CD8 /* InjuryTrackerView.swift in Sources */,
@@ -5967,7 +5971,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = W4C6DZQ8J4;
+				DEVELOPMENT_TEAM = H6WZPTFL8D;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_NO_COMMON_BLOCKS = NO;
 				HEADER_SEARCH_PATHS = (
@@ -6049,7 +6053,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = W4C6DZQ8J4;
+				DEVELOPMENT_TEAM = H6WZPTFL8D;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_NO_COMMON_BLOCKS = NO;
 				HEADER_SEARCH_PATHS = (
@@ -6240,7 +6244,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = W4C6DZQ8J4;
+				DEVELOPMENT_TEAM = H6WZPTFL8D;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_NO_COMMON_BLOCKS = NO;
 				HEADER_SEARCH_PATHS = (

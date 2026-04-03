@@ -18,6 +18,7 @@ public final class StatsKitRouter {
     let dailyTotalLoader: DailyTotalsProviding
     let exerciseLoader: StatsKitExerciseLoader
     let recentExerciseLoader: StatsKitExerciseLoader
+    let exerciseDailyStatsLoader: ExerciseDailyStatsProviding
 
     // MARK: - Init
 
@@ -25,12 +26,14 @@ public final class StatsKitRouter {
         navigationController: UINavigationController,
         dailyTotalLoader: DailyTotalsProviding,
         exerciseLoader: StatsKitExerciseLoader,
-        recentExerciseLoader: StatsKitExerciseLoader
+        recentExerciseLoader: StatsKitExerciseLoader,
+        exerciseDailyStatsLoader: ExerciseDailyStatsProviding
     ) {
         self.navigationController = navigationController
         self.dailyTotalLoader = dailyTotalLoader
         self.exerciseLoader = exerciseLoader
         self.recentExerciseLoader = recentExerciseLoader
+        self.exerciseDailyStatsLoader = exerciseDailyStatsLoader
     }
 
     // MARK: - Root
@@ -57,9 +60,24 @@ public final class StatsKitRouter {
             vc.router = self
             return vc
         case .allExercises:
-            let viewModel = ExerciseListScreenViewModel(loader: exerciseLoader)
+            let viewModel = ExerciseListScreenViewModel(
+                loader: exerciseLoader,
+                onExerciseTapped: { [weak self] exercise in
+                    self?.navigate(to: .exerciseDetail(exercise: exercise))
+                }
+            )
             let vc = UIHostingController(
                 rootView: ExerciseListScreen(viewModel: viewModel)
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+        case .exerciseDetail(let exercise):
+            let viewModel = ExerciseDetailViewModel(
+                exercise: exercise,
+                provider: exerciseDailyStatsLoader
+            )
+            let vc = UIHostingController(
+                rootView: ExerciseDetailScreen(viewModel: viewModel)
             )
             return vc
         }

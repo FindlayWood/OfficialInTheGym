@@ -43,7 +43,16 @@ public struct HomeScreenContent: View {
         VStack(alignment: .leading, spacing: 20) {
             StreakAndActivityView(streak: stats.streak, totals: totals)
             WeekStatsView(stats: stats)
-            ACWRSummaryView(acwr: stats.acwr, onDetail: onACWRDetail)
+            ACWRSummaryView(acwr: stats.acwr, title: "Reps", onDetail: onACWRDetail)
+            if stats.volumeACWR.ratio != nil {
+                ACWRSummaryView(acwr: stats.volumeACWR, title: "Volume", onDetail: onACWRDetail)
+            }
+            if stats.weightACWR.ratio != nil {
+                ACWRSummaryView(acwr: stats.weightACWR, title: "Weight", onDetail: onACWRDetail)
+            }
+            if stats.timeACWR.ratio != nil {
+                ACWRSummaryView(acwr: stats.timeACWR, title: "Time", onDetail: onACWRDetail)
+            }
             RecentExercisesView(
                 exercises: recentExercises,
                 onExerciseTapped: onExerciseTapped,
@@ -119,9 +128,11 @@ struct HomeStats {
     }
 
     private var last7Days: [DailyTotal] {
-        let cutoff = Calendar.current.date(byAdding: .day, value: -7, to: .now)!
-        let key = DateFormatter.yyyyMMdd.string(from: cutoff)
-        return totals.filter { $0.id >= key }
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let start = calendar.date(byAdding: .day, value: -6, to: today)! // today + 6 previous days
+
+        return totals.filter { $0.date >= start }
     }
 
     var weekTotalSets: Int      { last7Days.reduce(0) { $0 + $1.totalSets } }
@@ -142,6 +153,54 @@ struct HomeStats {
             let total = (0..<days).reduce(0) { sum, offset in
                 let date = Calendar.current.date(byAdding: .day, value: -offset, to: .now)!
                 return sum + (repsByKey[fmt.string(from: date)] ?? 0)
+            }
+            return Double(total) / Double(days)
+        }
+        let acute = average(over: 7)
+        let chronic = average(over: 28)
+        guard chronic > 0 else { return ACWR(acute: acute, chronic: chronic, ratio: nil) }
+        return ACWR(acute: acute, chronic: chronic, ratio: acute / chronic)
+    }
+    
+    var volumeACWR: ACWR {
+        let fmt = DateFormatter.yyyyMMdd
+        let volumeByKey = Dictionary(uniqueKeysWithValues: totals.map { ($0.id, $0.totalVolume) })
+        func average(over days: Int) -> Double {
+            let total = (0..<days).reduce(0) { sum, offset in
+                let date = Calendar.current.date(byAdding: .day, value: -offset, to: .now)!
+                return sum + (volumeByKey[fmt.string(from: date)] ?? 0)
+            }
+            return Double(total) / Double(days)
+        }
+        let acute = average(over: 7)
+        let chronic = average(over: 28)
+        guard chronic > 0 else { return ACWR(acute: acute, chronic: chronic, ratio: nil) }
+        return ACWR(acute: acute, chronic: chronic, ratio: acute / chronic)
+    }
+    
+    var weightACWR: ACWR {
+        let fmt = DateFormatter.yyyyMMdd
+        let weightByKey = Dictionary(uniqueKeysWithValues: totals.map { ($0.id, $0.totalWeight) })
+        func average(over days: Int) -> Double {
+            let total = (0..<days).reduce(0) { sum, offset in
+                let date = Calendar.current.date(byAdding: .day, value: -offset, to: .now)!
+                return sum + (weightByKey[fmt.string(from: date)] ?? 0)
+            }
+            return Double(total) / Double(days)
+        }
+        let acute = average(over: 7)
+        let chronic = average(over: 28)
+        guard chronic > 0 else { return ACWR(acute: acute, chronic: chronic, ratio: nil) }
+        return ACWR(acute: acute, chronic: chronic, ratio: acute / chronic)
+    }
+    
+    var timeACWR: ACWR {
+        let fmt = DateFormatter.yyyyMMdd
+        let timeByKey = Dictionary(uniqueKeysWithValues: totals.map { ($0.id, $0.totalTime) })
+        func average(over days: Int) -> Double {
+            let total = (0..<days).reduce(0) { sum, offset in
+                let date = Calendar.current.date(byAdding: .day, value: -offset, to: .now)!
+                return sum + (timeByKey[fmt.string(from: date)] ?? 0)
             }
             return Double(total) / Double(days)
         }
@@ -340,10 +399,11 @@ struct StatCell: View {
 // MARK: - ACWRSummaryView
 struct ACWRSummaryView: View {
     let acwr: ACWR
+    let title: String
     let onDetail: () -> Void
 
     var body: some View {
-        SectionContainer(title: "Workload") {
+        SectionContainer(title: "Workload - \(title)") {
             Button(action: onDetail) {
                 HStack(spacing: 14) {
                     ZStack {

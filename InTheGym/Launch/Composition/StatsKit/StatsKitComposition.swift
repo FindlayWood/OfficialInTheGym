@@ -19,11 +19,14 @@ class StatsKitComposition {
         
         let recentExerciseLoader = RemoteRecentStatsKitExerciseLoader()
         
+        let exerciseDailyStatsLoader = RemoteExerciseDailyStatsLoader()
+        
         let router = StatsKitRouter(
             navigationController: navigationController,
             dailyTotalLoader: dailyTotalLoader,
             exerciseLoader: exerciseLoader,
-            recentExerciseLoader: recentExerciseLoader
+            recentExerciseLoader: recentExerciseLoader,
+            exerciseDailyStatsLoader: exerciseDailyStatsLoader
         )
         
         router.start()

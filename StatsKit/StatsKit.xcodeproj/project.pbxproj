@@ -20,6 +20,11 @@
 		F0F6DF412F70849800D02F93 /* ExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF402F70849800D02F93 /* ExerciseLoader.swift */; };
 		F0F6DF452F708AEA00D02F93 /* StatsKitBoundaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF442F708AEA00D02F93 /* StatsKitBoundaryViewController.swift */; };
 		F0F6DF472F708BE300D02F93 /* ExerciseStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF462F708BE300D02F93 /* ExerciseStats.swift */; };
+		F0F6DF492F70A82D00D02F93 /* ExerciseDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF482F70A82D00D02F93 /* ExerciseDetailScreen.swift */; };
+		F0F6DF4B2F70A85C00D02F93 /* ExerciseDailyStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF4A2F70A85C00D02F93 /* ExerciseDailyStats.swift */; };
+		F0F6E50C2F772B0E00D02F93 /* SimpleLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E50B2F772B0E00D02F93 /* SimpleLineChart.swift */; };
+		F0F6E50E2F772DA100D02F93 /* WeeklyLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E50D2F772DA100D02F93 /* WeeklyLineChart.swift */; };
+		F0F6E5102F77378000D02F93 /* ProgressChartSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E50F2F77377800D02F93 /* ProgressChartSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +52,11 @@
 		F0F6DF402F70849800D02F93 /* ExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLoader.swift; sourceTree = "<group>"; };
 		F0F6DF442F708AEA00D02F93 /* StatsKitBoundaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitBoundaryViewController.swift; sourceTree = "<group>"; };
 		F0F6DF462F708BE300D02F93 /* ExerciseStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStats.swift; sourceTree = "<group>"; };
+		F0F6DF482F70A82D00D02F93 /* ExerciseDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailScreen.swift; sourceTree = "<group>"; };
+		F0F6DF4A2F70A85C00D02F93 /* ExerciseDailyStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDailyStats.swift; sourceTree = "<group>"; };
+		F0F6E50B2F772B0E00D02F93 /* SimpleLineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleLineChart.swift; sourceTree = "<group>"; };
+		F0F6E50D2F772DA100D02F93 /* WeeklyLineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyLineChart.swift; sourceTree = "<group>"; };
+		F0F6E50F2F77377800D02F93 /* ProgressChartSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressChartSection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -120,6 +130,7 @@
 				F0F6DF382F705CED00D02F93 /* SubViews */,
 				F0A11D242F6C623900CE1E9A /* StatsKitHomeScreen.swift */,
 				F0F6DF3E2F70836800D02F93 /* ExerciseListScreen.swift */,
+				F0F6DF482F70A82D00D02F93 /* ExerciseDetailScreen.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -132,6 +143,7 @@
 				F0A11F2F2F6F622C00CE1E9A /* DailyTotalsProviding.swift */,
 				F0F6DF402F70849800D02F93 /* ExerciseLoader.swift */,
 				F0F6DF462F708BE300D02F93 /* ExerciseStats.swift */,
+				F0F6DF4A2F70A85C00D02F93 /* ExerciseDailyStats.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -139,7 +151,10 @@
 		F0F6DF382F705CED00D02F93 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				F0F6E50F2F77377800D02F93 /* ProgressChartSection.swift */,
 				F0F6DF392F705D0100D02F93 /* HomeSubViews.swift */,
+				F0F6E50B2F772B0E00D02F93 /* SimpleLineChart.swift */,
+				F0F6E50D2F772DA100D02F93 /* WeeklyLineChart.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -273,8 +288,13 @@
 			files = (
 				F0A11D222F6C61E600CE1E9A /* StatsKitRoutes.swift in Sources */,
 				F0F6DF412F70849800D02F93 /* ExerciseLoader.swift in Sources */,
+				F0F6DF4B2F70A85C00D02F93 /* ExerciseDailyStats.swift in Sources */,
+				F0F6E5102F77378000D02F93 /* ProgressChartSection.swift in Sources */,
+				F0F6E50E2F772DA100D02F93 /* WeeklyLineChart.swift in Sources */,
 				F0F6DF472F708BE300D02F93 /* ExerciseStats.swift in Sources */,
+				F0F6E50C2F772B0E00D02F93 /* SimpleLineChart.swift in Sources */,
 				F0F6DF3F2F70836800D02F93 /* ExerciseListScreen.swift in Sources */,
+				F0F6DF492F70A82D00D02F93 /* ExerciseDetailScreen.swift in Sources */,
 				F0A11F302F6F622C00CE1E9A /* DailyTotalsProviding.swift in Sources */,
 				F0A11D2E2F6C6ECA00CE1E9A /* StatsModels.swift in Sources */,
 				F0F6DF452F708AEA00D02F93 /* StatsKitBoundaryViewController.swift in Sources */,

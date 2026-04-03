@@ -29,6 +29,9 @@ struct StatsKitHomeScreen: View {
             )
             .padding()
         }
+        .background {
+            Color.black.opacity(0.3).ignoresSafeArea()
+        }
         .navigationTitle("Stats")
         .task { await viewModel.load() }
     }
