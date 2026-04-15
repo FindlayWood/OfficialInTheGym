@@ -1,8 +1,8 @@
 //
 //  ExerciseCategory.swift
-//  MyDayKit
+//  StatsKit
 //
-//  Created by Findlay Wood on 05/08/2025.
+//  Created by Findlay Wood on 04/04/2026.
 //
 
 import SwiftUI

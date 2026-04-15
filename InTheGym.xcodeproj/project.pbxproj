@@ -895,10 +895,19 @@
 		9FF8B30429283D8A00C47313 /* WorkoutListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B30329283D8A00C47313 /* WorkoutListView.swift */; };
 		9FF8B3062928422A00C47313 /* WorkoutFiguresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */; };
 		9FF8B3082928459E00C47313 /* WorkoutClipThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */; };
+		F026EE752F8D8FF70066FCB4 /* RemoteMovementTypesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE742F8D8FF70066FCB4 /* RemoteMovementTypesLoader.swift */; };
+		F0A11D272F6C637100CE1E9A /* StatsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; };
+		F0A11D282F6C637100CE1E9A /* StatsKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */; };
 		F0D344432F256E0E00AB6121 /* DataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D344422F256E0E00AB6121 /* DataUploader.swift */; };
 		F0F608342E42A5350015F260 /* MyDayKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F608332E42A5350015F260 /* MyDayKitComposition.swift */; };
 		F0F608362E42A5A70015F260 /* MyDayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0F608352E42A5A70015F260 /* MyDayKit.framework */; };
 		F0F608372E42A5A70015F260 /* MyDayKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0F608352E42A5A70015F260 /* MyDayKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F0F6DEFE2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DEFD2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift */; };
+		F0F6DF432F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF422F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift */; };
+		F0F6DFBA2F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DFB92F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift */; };
+		F0F6E7CE2F81948B00D02F93 /* RemoteExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7CD2F81948B00D02F93 /* RemoteExerciseLoader.swift */; };
+		F0F6E7D02F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7CF2F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -919,6 +928,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				F0F608372E42A5A70015F260 /* MyDayKit.framework in Embed Frameworks */,
+				F0A11D282F6C637100CE1E9A /* StatsKit.framework in Embed Frameworks */,
 				746DA0D52C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Embed Frameworks */,
 				746DA0D32C090AD10094EA3B /* ITGWorkoutKit.framework in Embed Frameworks */,
 			);
@@ -1800,9 +1810,17 @@
 		9FF8B30329283D8A00C47313 /* WorkoutListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListView.swift; sourceTree = "<group>"; };
 		9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFiguresView.swift; sourceTree = "<group>"; };
 		9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutClipThumbnailView.swift; sourceTree = "<group>"; };
+		F026EE742F8D8FF70066FCB4 /* RemoteMovementTypesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMovementTypesLoader.swift; sourceTree = "<group>"; };
+		F0A11D262F6C637100CE1E9A /* StatsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StatsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitComposition.swift; sourceTree = "<group>"; };
 		F0D344422F256E0E00AB6121 /* DataUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUploader.swift; sourceTree = "<group>"; };
 		F0F608332E42A5350015F260 /* MyDayKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitComposition.swift; sourceTree = "<group>"; };
 		F0F608352E42A5A70015F260 /* MyDayKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MyDayKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0F6DEFD2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitDailyTotalsLoader.swift; sourceTree = "<group>"; };
+		F0F6DF422F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteStatsKitExerciseLoader.swift; sourceTree = "<group>"; };
+		F0F6DFB92F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteExerciseDailyStatsLoader.swift; sourceTree = "<group>"; };
+		F0F6E7CD2F81948B00D02F93 /* RemoteExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteExerciseLoader.swift; sourceTree = "<group>"; };
+		F0F6E7CF2F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMuscleGroupsLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1833,6 +1851,7 @@
 				7404A4B028C926D70034AADC /* RevenueCat in Frameworks */,
 				7404A4AD28C903270034AADC /* StoreKit.framework in Frameworks */,
 				74330449289E962B00F2569A /* FirebaseFirestoreCombine-Community in Frameworks */,
+				F0A11D272F6C637100CE1E9A /* StatsKit.framework in Frameworks */,
 				9FC11F6129DDCA8E0054D79A /* LoginKit in Frameworks */,
 				7433044B289E962B00F2569A /* FirebaseFirestoreSwift in Frameworks */,
 				9F72F9422A114BE200BF040C /* ClubKit in Frameworks */,
@@ -4725,6 +4744,7 @@
 		9FC11F5D29DDC9A20054D79A /* Composition */ = {
 			isa = PBXGroup;
 			children = (
+				F0A11D292F6C642A00CE1E9A /* StatsKit */,
 				F0D3443F2F25616A00AB6121 /* MyDay */,
 				9FC11F5E29DDC9B80054D79A /* LoginComposition.swift */,
 				9FB4D1DB29E752AB0019CA57 /* AccountCreationComposition.swift */,
@@ -4760,6 +4780,7 @@
 		D8C9DE8A1BC4B8CD68BF1E20 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F0A11D262F6C637100CE1E9A /* StatsKit.framework */,
 				F0F608352E42A5A70015F260 /* MyDayKit.framework */,
 				746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */,
 				746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */,
@@ -4768,6 +4789,20 @@
 				746061BC252547E9005B1480 /* AppTrackingTransparency.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F0A11D292F6C642A00CE1E9A /* StatsKit */ = {
+			isa = PBXGroup;
+			children = (
+				F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */,
+				F0F6DEFD2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift */,
+				F0F6DF422F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift */,
+				F0F6DFB92F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift */,
+				F0F6E7CD2F81948B00D02F93 /* RemoteExerciseLoader.swift */,
+				F0F6E7CF2F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift */,
+				F026EE742F8D8FF70066FCB4 /* RemoteMovementTypesLoader.swift */,
+			);
+			path = StatsKit;
 			sourceTree = "<group>";
 		};
 		F0D3443F2F25616A00AB6121 /* MyDay */ = {
@@ -4953,6 +4988,7 @@
 				748B98AE2863A844003226CA /* MyJumpsViewModel.swift in Sources */,
 				74E08A7B2841542D009D0DCB /* MyWorkoutStatsViewController.swift in Sources */,
 				9F4DFB4529BCE83C00363AE8 /* TaggedUsersView.swift in Sources */,
+				F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */,
 				74A602A72850C87200AFA236 /* WorkoutDiscoveryViewModel.swift in Sources */,
 				7444D0C026D3C9BE0009C7A6 /* UploadingWorkoutViewModel.swift in Sources */,
 				7479812F27DB7EBA00CF3F9B /* RequestsView.swift in Sources */,
@@ -5111,6 +5147,7 @@
 				74F45CC1260A9CB700AF16DF /* PublicTimelineViewController.swift in Sources */,
 				74655975282FE0FC00E1CA9A /* DiscoverMoreClipsViewController.swift in Sources */,
 				74C5883428BBE009008661B7 /* WellnessHistoryRowView.swift in Sources */,
+				F0F6E7D02F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift in Sources */,
 				74D93472282EF87D005D15DE /* PlayerProfileMoreCoordinator.swift in Sources */,
 				9F612BCA2917FF6900B5AE5A /* AccountTypeEnum.swift in Sources */,
 				74BA1641281752D900E10E8A /* SettingsViewModel.swift in Sources */,
@@ -5321,6 +5358,7 @@
 				740682F828901CC700CD9C08 /* PerformanceIntroSubview.swift in Sources */,
 				748B403D25236EBD00C947B6 /* SetSelectionViewController.swift in Sources */,
 				742C1C7827BAFC6200DD1BB0 /* PublicTimelineView.swift in Sources */,
+				F0F6DFBA2F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift in Sources */,
 				9F4DFB3329A6A4E300363AE8 /* CommentWithAttachmentsView.swift in Sources */,
 				74DE6D9E27D3D801009FB44A /* PlayerDetailView.swift in Sources */,
 				74FA60A128AFF834007B2CD8 /* InjuryTrackerView.swift in Sources */,
@@ -5358,6 +5396,7 @@
 				741EC128284BF6D1009B00AB /* ExerciseCommentsViewModel.swift in Sources */,
 				9F4FFD832953837E004853BD /* MainButton.swift in Sources */,
 				742FD573283FAD350025E43C /* SearchTagsDataSource.swift in Sources */,
+				F026EE752F8D8FF70066FCB4 /* RemoteMovementTypesLoader.swift in Sources */,
 				7425D4182545AE8000567DAB /* Constants.swift in Sources */,
 				741858FA283D70980042B81B /* DisplayWorkoutsCollectionHeader.swift in Sources */,
 				74330436289D88FF00F2569A /* WellnessStatus.swift in Sources */,
@@ -5366,6 +5405,7 @@
 				742AEDCD282A8EF20004E901 /* LiveWorkoutSetCreationCoordinator.swift in Sources */,
 				74DA1AE428F1A9A200F4DB9E /* MatchTrackerView.swift in Sources */,
 				74AF6D5E26868288005C52A8 /* DisplayExerciseStatsViewController.swift in Sources */,
+				F0F6DF432F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift in Sources */,
 				74B48E1127A4625500BBFC16 /* LiveWorkoutDisplayCoordinator.swift in Sources */,
 				741044FB285CC20900A9FF4E /* CoachInitialViewController.swift in Sources */,
 				745F89D9286DCFBB000070B2 /* LoadingView.swift in Sources */,
@@ -5586,10 +5626,12 @@
 				74220899256FFE2C00B42563 /* LaunchPageViewController.swift in Sources */,
 				9F89DD992A3E59560018E124 /* BaseFlow.swift in Sources */,
 				742FCD1328450B9E007ED1C6 /* ExerciseMaxHistoryViewController.swift in Sources */,
+				F0F6DEFE2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift in Sources */,
 				74EE4ECC27E7AD9B00051451 /* PostsChildViewController.swift in Sources */,
 				743E92AE280705460029F447 /* BoxBreathingViewController.swift in Sources */,
 				742C1C4D27B2A34E00DD1BB0 /* RecordClipViewModel.swift in Sources */,
 				74104510285E056F00A9FF4E /* OnBoardThirdViewController.swift in Sources */,
+				F0F6E7CE2F81948B00D02F93 /* RemoteExerciseLoader.swift in Sources */,
 				7492263222C8D1DF00EAD386 /* AddPlayerViewController.swift in Sources */,
 				74AF6D572684ED87005C52A8 /* DisplayWorkoutStatsView.swift in Sources */,
 				7486C211267A4727008A1E21 /* WeightViewModel.swift in Sources */,
