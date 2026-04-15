@@ -49,7 +49,7 @@ public final class MockDailyTotalsProvider: DailyTotalsProviding, @unchecked Sen
                 totalWeight: Double(Int.random(in: 200...600)),
                 totalVolume: Double(Int.random(in: 2000...8000)),
                 totalTime: Int.random(in: 0...300),
-                exercisesWorked: ["ex1", "ex2", "ex3"].prefix(Int.random(in: 1...3)).map { $0 }
+                exerciseSetCounts: [:]
             )
         }
     }

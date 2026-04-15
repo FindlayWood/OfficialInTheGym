@@ -152,252 +152,252 @@ struct ProgressChartsSection: View {
 }
 
 // MARK: - ACWRChartsSection
-struct ACWRChartsSection: View {
-    let dailyStats: [ExerciseDailyStats]
-    let exercise: ExerciseStats
-
-    private var showWeight: Bool { exercise.maxWeight > 0 }
-    private var showVolume: Bool { exercise.maxWeight > 0 || exercise.totalVolume > 0 }
-    private var showTime:   Bool { exercise.isTimeBased }
-    private var showReps:   Bool { !exercise.isTimeBased }
-
-    // Build 13 ACWR points from the same 13-week buckets.
-    // Points 0-2 have nil values (only used as chronic baseline).
-    // Points 3-12 have computed ratios.
-    private var acwrPoints: [ACWRPoint] {
-        let weeks = buildWeeks(from: dailyStats)
-
-        return weeks.enumerated().map { weekIndex, week in
-            guard weekIndex >= 3 else {
-                return ACWRPoint(id: weekIndex, label: week.label,
-                                 reps: nil, weight: nil, volume: nil, time: nil)
-            }
-
-            let chronic = Array(weeks[(weekIndex - 3)..<weekIndex])
-
-            func ratio(_ acuteVal: Double, _ chronicVals: [Double]) -> Double? {
-                let avg = chronicVals.reduce(0.0, +) / Double(chronicVals.count)
-                guard avg > 0 else { return nil }
-                return acuteVal / avg
-            }
-
-            return ACWRPoint(
-                id: weekIndex,
-                label: week.label,
-                reps:   ratio(Double(week.totalReps),   chronic.map { Double($0.totalReps) }),
-                weight: ratio(week.maxWeight,            chronic.map(\.maxWeight)),
-                volume: ratio(week.volume,               chronic.map(\.volume)),
-                time:   ratio(Double(week.totalTime),   chronic.map { Double($0.totalTime) })
-            )
-        }
-    }
-
-    // Only show this section when at least one metric has enough data
-    private var hasEnoughData: Bool {
-        acwrPoints.dropFirst(3).contains { $0.hasAnyValue }
-    }
-
-    var body: some View {
-        SectionContainer(title: "Workload ratio · last 90 days") {
-            VStack(spacing: 0) {
-                if !hasEnoughData {
-                    Text("Not enough training history to calculate workload ratio")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(32)
-                } else {
-                    // Zone legend
-                    HStack(spacing: 12) {
-                        ForEach([
-                            ("Low", Color.blue),
-                            ("Optimal", Color.green),
-                            ("Caution", Color.orange),
-                            ("High risk", Color.red)
-                        ], id: \.0) { label, color in
-                            HStack(spacing: 4) {
-                                Circle().fill(color).frame(width: 7, height: 7)
-                                Text(label).font(.system(size: 9)).foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.top, 14)
-                    .padding(.bottom, 4)
-
-                    let labels = acwrPoints.map(\.label)
-
-                    if showReps, acwrPoints.dropFirst(3).contains(where: { $0.reps != nil }) {
-                        ACWRMiniChart(
-                            title: "Reps ACWR",
-                            values: acwrPoints.map(\.reps),
-                            labels: labels
-                        )
-                        if showVolume || showWeight || showTime {
-                            Divider().padding(.horizontal, 16)
-                        }
-                    }
-                    if showVolume, acwrPoints.dropFirst(3).contains(where: { $0.volume != nil }) {
-                        ACWRMiniChart(
-                            title: "Volume ACWR",
-                            values: acwrPoints.map(\.volume),
-                            labels: labels
-                        )
-                        if showWeight {
-                            Divider().padding(.horizontal, 16)
-                        }
-                    }
-                    if showWeight, acwrPoints.dropFirst(3).contains(where: { $0.weight != nil }) {
-                        ACWRMiniChart(
-                            title: "Weight ACWR",
-                            values: acwrPoints.map(\.weight),
-                            labels: labels
-                        )
-                    }
-                    if showTime, acwrPoints.dropFirst(3).contains(where: { $0.time != nil }) {
-                        ACWRMiniChart(
-                            title: "Time ACWR",
-                            values: acwrPoints.map(\.time),
-                            labels: labels
-                        )
-                    }
-
-                    Divider().padding(.horizontal, 16)
-                    Text("Acute = 7 days · Chronic = prior 3 weeks avg")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(14)
-                }
-            }
-            .padding()
-        }
-    }
-}
+//struct ACWRChartsSection: View {
+//    let dailyStats: [ExerciseDailyStats]
+//    let exercise: ExerciseStats
+//
+//    private var showWeight: Bool { exercise.maxWeight > 0 }
+//    private var showVolume: Bool { exercise.maxWeight > 0 || exercise.totalVolume > 0 }
+//    private var showTime:   Bool { exercise.isTimeBased }
+//    private var showReps:   Bool { !exercise.isTimeBased }
+//
+//    // Build 13 ACWR points from the same 13-week buckets.
+//    // Points 0-2 have nil values (only used as chronic baseline).
+//    // Points 3-12 have computed ratios.
+//    private var acwrPoints: [ACWRPoint] {
+//        let weeks = buildWeeks(from: dailyStats)
+//
+//        return weeks.enumerated().map { weekIndex, week in
+//            guard weekIndex >= 3 else {
+//                return ACWRPoint(id: weekIndex, label: week.label,
+//                                 reps: nil, weight: nil, volume: nil, time: nil)
+//            }
+//
+//            let chronic = Array(weeks[(weekIndex - 3)..<weekIndex])
+//
+//            func ratio(_ acuteVal: Double, _ chronicVals: [Double]) -> Double? {
+//                let avg = chronicVals.reduce(0.0, +) / Double(chronicVals.count)
+//                guard avg > 0 else { return nil }
+//                return acuteVal / avg
+//            }
+//
+//            return ACWRPoint(
+//                id: weekIndex,
+//                label: week.label,
+//                reps:   ratio(Double(week.totalReps),   chronic.map { Double($0.totalReps) }),
+//                weight: ratio(week.maxWeight,            chronic.map(\.maxWeight)),
+//                volume: ratio(week.volume,               chronic.map(\.volume)),
+//                time:   ratio(Double(week.totalTime),   chronic.map { Double($0.totalTime) })
+//            )
+//        }
+//    }
+//
+//    // Only show this section when at least one metric has enough data
+//    private var hasEnoughData: Bool {
+//        acwrPoints.dropFirst(3).contains { $0.hasAnyValue }
+//    }
+//
+//    var body: some View {
+//        SectionContainer(title: "Workload ratio · last 90 days") {
+//            VStack(spacing: 0) {
+//                if !hasEnoughData {
+//                    Text("Not enough training history to calculate workload ratio")
+//                        .font(.subheadline)
+//                        .foregroundStyle(.secondary)
+//                        .multilineTextAlignment(.center)
+//                        .frame(maxWidth: .infinity, alignment: .center)
+//                        .padding(32)
+//                } else {
+//                    // Zone legend
+//                    HStack(spacing: 12) {
+//                        ForEach([
+//                            ("Low", Color.blue),
+//                            ("Optimal", Color.green),
+//                            ("Caution", Color.orange),
+//                            ("High risk", Color.red)
+//                        ], id: \.0) { label, color in
+//                            HStack(spacing: 4) {
+//                                Circle().fill(color).frame(width: 7, height: 7)
+//                                Text(label).font(.system(size: 9)).foregroundStyle(.secondary)
+//                            }
+//                        }
+//                    }
+//                    .padding(.horizontal, 16)
+//                    .padding(.top, 14)
+//                    .padding(.bottom, 4)
+//
+//                    let labels = acwrPoints.map(\.label)
+//
+//                    if showReps, acwrPoints.dropFirst(3).contains(where: { $0.reps != nil }) {
+//                        ACWRMiniChart(
+//                            title: "Reps ACWR",
+//                            values: acwrPoints.map(\.reps),
+//                            labels: labels
+//                        )
+//                        if showVolume || showWeight || showTime {
+//                            Divider().padding(.horizontal, 16)
+//                        }
+//                    }
+//                    if showVolume, acwrPoints.dropFirst(3).contains(where: { $0.volume != nil }) {
+//                        ACWRMiniChart(
+//                            title: "Volume ACWR",
+//                            values: acwrPoints.map(\.volume),
+//                            labels: labels
+//                        )
+//                        if showWeight {
+//                            Divider().padding(.horizontal, 16)
+//                        }
+//                    }
+//                    if showWeight, acwrPoints.dropFirst(3).contains(where: { $0.weight != nil }) {
+//                        ACWRMiniChart(
+//                            title: "Weight ACWR",
+//                            values: acwrPoints.map(\.weight),
+//                            labels: labels
+//                        )
+//                    }
+//                    if showTime, acwrPoints.dropFirst(3).contains(where: { $0.time != nil }) {
+//                        ACWRMiniChart(
+//                            title: "Time ACWR",
+//                            values: acwrPoints.map(\.time),
+//                            labels: labels
+//                        )
+//                    }
+//
+//                    Divider().padding(.horizontal, 16)
+//                    Text("Acute = 7 days · Chronic = prior 3 weeks avg")
+//                        .font(.caption)
+//                        .foregroundStyle(.secondary)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .padding(14)
+//                }
+//            }
+//            .padding()
+//        }
+//    }
+//}
 
 // MARK: - MiniLineChart
-private struct MiniLineChart: View {
-    let title: String
-    let values: [Double]
-    let labels: [String]
-    let color: Color
-    var formatValue: ((Double) -> String)? = nil
-
-    private var maxValue: Double { values.max().flatMap { $0 > 0 ? $0 : nil } ?? 1 }
-
-    private var peakLabel: String {
-        let max = values.max() ?? 0
-        return formatValue?(max) ?? "\(Int(max))"
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text(title)
-                    .font(.caption).fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                    .textCase(.uppercase).tracking(0.5)
-                Spacer()
-                Text(peakLabel)
-                    .font(.caption).fontWeight(.medium)
-                    .foregroundStyle(color)
-            }
-            .padding(.horizontal, 16)
-            .padding(.top, 14)
-
-            GeometryReader { geo in
-                let w = geo.size.width
-                let h = geo.size.height
-                ZStack(alignment: .bottomLeading) {
-                    gradientFill(values: values, width: w, height: h)
-                    linePath(values: values, width: w, height: h)
-                        .stroke(color, style: StrokeStyle(lineWidth: 2, lineJoin: .round))
-                    dotsView(values: values, width: w, height: h)
-                    xLabels(width: w, height: h)
-                }
-            }
-            .frame(height: 90)
-            .padding(.horizontal, 16)
-            .padding(.bottom, 20)
-        }
-    }
-
-    private func norm(_ v: Double) -> Double { maxValue > 0 ? v / maxValue : 0 }
-
-    private func pt(i: Int, v: Double, w: CGFloat, h: CGFloat) -> CGPoint {
-        let sx = values.count > 1 ? w / CGFloat(values.count - 1) : w
-        return CGPoint(x: CGFloat(i) * sx, y: h * CGFloat(1.0 - norm(v)))
-    }
-
-    private func linePath(values: [Double], width: CGFloat, height: CGFloat) -> Path {
-        Path { p in
-            guard values.count > 1 else { return }
-            let sx = width / CGFloat(values.count - 1)
-            for (i, v) in values.enumerated() {
-                let point = pt(i: i, v: v, w: width, h: height)
-                if i == 0 { p.move(to: point) }
-                else {
-                    let prev = pt(i: i - 1, v: values[i - 1], w: width, h: height)
-                    p.addCurve(to: point,
-                               control1: CGPoint(x: prev.x + sx * 0.4, y: prev.y),
-                               control2: CGPoint(x: point.x - sx * 0.4, y: point.y))
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func gradientFill(values: [Double], width: CGFloat, height: CGFloat) -> some View {
-        Path { p in
-            guard values.count > 1 else { return }
-            let sx = width / CGFloat(values.count - 1)
-            p.move(to: CGPoint(x: 0, y: height))
-            p.addLine(to: pt(i: 0, v: values[0], w: width, h: height))
-            for i in 1..<values.count {
-                let point = pt(i: i, v: values[i], w: width, h: height)
-                let prev  = pt(i: i - 1, v: values[i - 1], w: width, h: height)
-                p.addCurve(to: point,
-                           control1: CGPoint(x: prev.x + sx * 0.4, y: prev.y),
-                           control2: CGPoint(x: point.x - sx * 0.4, y: point.y))
-            }
-            p.addLine(to: CGPoint(x: width, y: height))
-            p.closeSubpath()
-        }
-        .fill(LinearGradient(
-            colors: [color.opacity(0.3), color.opacity(0.0)],
-            startPoint: .top, endPoint: .bottom
-        ))
-    }
-
-    @ViewBuilder
-    private func dotsView(values: [Double], width: CGFloat, height: CGFloat) -> some View {
-        ForEach(Array(values.enumerated()), id: \.offset) { i, v in
-            if v > 0 {
-                Circle().fill(color).frame(width: 5, height: 5)
-                    .position(pt(i: i, v: v, w: width, h: height))
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func xLabels(width: CGFloat, height: CGFloat) -> some View {
-        let sx = values.count > 1 ? width / CGFloat(values.count - 1) : width
-        ForEach([0, 6, 12], id: \.self) { i in
-            if i < labels.count {
-                Text(labels[i]).font(.system(size: 9)).foregroundStyle(.secondary)
-                    .position(x: CGFloat(i) * sx, y: height + 12)
-            }
-        }
-    }
-}
+//private struct MiniLineChart: View {
+//    let title: String
+//    let values: [Double]
+//    let labels: [String]
+//    let color: Color
+//    var formatValue: ((Double) -> String)? = nil
+//
+//    private var maxValue: Double { values.max().flatMap { $0 > 0 ? $0 : nil } ?? 1 }
+//
+//    private var peakLabel: String {
+//        let max = values.max() ?? 0
+//        return formatValue?(max) ?? "\(Int(max))"
+//    }
+//
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 6) {
+//            HStack {
+//                Text(title)
+//                    .font(.caption).fontWeight(.semibold)
+//                    .foregroundStyle(.secondary)
+//                    .textCase(.uppercase).tracking(0.5)
+//                Spacer()
+//                Text(peakLabel)
+//                    .font(.caption).fontWeight(.medium)
+//                    .foregroundStyle(color)
+//            }
+//            .padding(.horizontal, 16)
+//            .padding(.top, 14)
+//
+//            GeometryReader { geo in
+//                let w = geo.size.width
+//                let h = geo.size.height
+//                ZStack(alignment: .bottomLeading) {
+//                    gradientFill(values: values, width: w, height: h)
+//                    linePath(values: values, width: w, height: h)
+//                        .stroke(color, style: StrokeStyle(lineWidth: 2, lineJoin: .round))
+//                    dotsView(values: values, width: w, height: h)
+//                    xLabels(width: w, height: h)
+//                }
+//            }
+//            .frame(height: 90)
+//            .padding(.horizontal, 16)
+//            .padding(.bottom, 20)
+//        }
+//    }
+//
+//    private func norm(_ v: Double) -> Double { maxValue > 0 ? v / maxValue : 0 }
+//
+//    private func pt(i: Int, v: Double, w: CGFloat, h: CGFloat) -> CGPoint {
+//        let sx = values.count > 1 ? w / CGFloat(values.count - 1) : w
+//        return CGPoint(x: CGFloat(i) * sx, y: h * CGFloat(1.0 - norm(v)))
+//    }
+//
+//    private func linePath(values: [Double], width: CGFloat, height: CGFloat) -> Path {
+//        Path { p in
+//            guard values.count > 1 else { return }
+//            let sx = width / CGFloat(values.count - 1)
+//            for (i, v) in values.enumerated() {
+//                let point = pt(i: i, v: v, w: width, h: height)
+//                if i == 0 { p.move(to: point) }
+//                else {
+//                    let prev = pt(i: i - 1, v: values[i - 1], w: width, h: height)
+//                    p.addCurve(to: point,
+//                               control1: CGPoint(x: prev.x + sx * 0.4, y: prev.y),
+//                               control2: CGPoint(x: point.x - sx * 0.4, y: point.y))
+//                }
+//            }
+//        }
+//    }
+//
+//    @ViewBuilder
+//    private func gradientFill(values: [Double], width: CGFloat, height: CGFloat) -> some View {
+//        Path { p in
+//            guard values.count > 1 else { return }
+//            let sx = width / CGFloat(values.count - 1)
+//            p.move(to: CGPoint(x: 0, y: height))
+//            p.addLine(to: pt(i: 0, v: values[0], w: width, h: height))
+//            for i in 1..<values.count {
+//                let point = pt(i: i, v: values[i], w: width, h: height)
+//                let prev  = pt(i: i - 1, v: values[i - 1], w: width, h: height)
+//                p.addCurve(to: point,
+//                           control1: CGPoint(x: prev.x + sx * 0.4, y: prev.y),
+//                           control2: CGPoint(x: point.x - sx * 0.4, y: point.y))
+//            }
+//            p.addLine(to: CGPoint(x: width, y: height))
+//            p.closeSubpath()
+//        }
+//        .fill(LinearGradient(
+//            colors: [color.opacity(0.3), color.opacity(0.0)],
+//            startPoint: .top, endPoint: .bottom
+//        ))
+//    }
+//
+//    @ViewBuilder
+//    private func dotsView(values: [Double], width: CGFloat, height: CGFloat) -> some View {
+//        ForEach(Array(values.enumerated()), id: \.offset) { i, v in
+//            if v > 0 {
+//                Circle().fill(color).frame(width: 5, height: 5)
+//                    .position(pt(i: i, v: v, w: width, h: height))
+//            }
+//        }
+//    }
+//
+//    @ViewBuilder
+//    private func xLabels(width: CGFloat, height: CGFloat) -> some View {
+//        let sx = values.count > 1 ? width / CGFloat(values.count - 1) : width
+//        ForEach([0, 6, 12], id: \.self) { i in
+//            if i < labels.count {
+//                Text(labels[i]).font(.system(size: 9)).foregroundStyle(.secondary)
+//                    .position(x: CGFloat(i) * sx, y: height + 12)
+//            }
+//        }
+//    }
+//}
 
 // MARK: - ACWRMiniChart
 // Coloured line whose colour reflects the current zone.
 // Gradient fill underneath transitions from line colour to transparent.
 // Zone reference lines (dashed) at 0.8, 1.0, 1.3, 1.5.
 // First 3 values are always nil (chronic baseline only) — skipped in rendering.
-private struct ACWRMiniChart: View {
+struct ACWRMiniChart: View {
     let title: String
     let values: [Double?]   // 13 values; first 3 always nil
     let labels: [String]    // 13 labels matching progress charts

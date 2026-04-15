@@ -7,7 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F026EE6F2F8D77990066FCB4 /* TrainingBalanceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE6E2F8D77990066FCB4 /* TrainingBalanceScreen.swift */; };
+		F026EE712F8D80D90066FCB4 /* MovementPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE702F8D80D90066FCB4 /* MovementPattern.swift */; };
+		F026EE732F8D8FB10066FCB4 /* MovementTypesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE722F8D8FB10066FCB4 /* MovementTypesLoader.swift */; };
+		F034E5792F902F0C00DDB10C /* MiniBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E5782F902F0C00DDB10C /* MiniBarChart.swift */; };
+		F034E57B2F902FE800DDB10C /* WeekBucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E57A2F902FE800DDB10C /* WeekBucket.swift */; };
 		F0750E892F6B62960026D021 /* StatsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0750E7D2F6B62960026D021 /* StatsKit.framework */; };
+		F07584D32F8C3CBA00D2C783 /* ACWRDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07584D22F8C3CBA00D2C783 /* ACWRDetailScreen.swift */; };
 		F0A11D202F6C61AC00CE1E9A /* StatsKitRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11D1F2F6C61AC00CE1E9A /* StatsKitRouter.swift */; };
 		F0A11D222F6C61E600CE1E9A /* StatsKitRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11D212F6C61E600CE1E9A /* StatsKitRoutes.swift */; };
 		F0A11D252F6C623900CE1E9A /* StatsKitHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11D242F6C623900CE1E9A /* StatsKitHomeScreen.swift */; };
@@ -17,7 +23,7 @@
 		F0F6DF3A2F705D0100D02F93 /* HomeSubViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF392F705D0100D02F93 /* HomeSubViews.swift */; };
 		F0F6DF3D2F705DDC00D02F93 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0F6DF3C2F705DDC00D02F93 /* Charts.framework */; };
 		F0F6DF3F2F70836800D02F93 /* ExerciseListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF3E2F70836800D02F93 /* ExerciseListScreen.swift */; };
-		F0F6DF412F70849800D02F93 /* ExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF402F70849800D02F93 /* ExerciseLoader.swift */; };
+		F0F6DF412F70849800D02F93 /* ExerciseStatsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF402F70849800D02F93 /* ExerciseStatsLoader.swift */; };
 		F0F6DF452F708AEA00D02F93 /* StatsKitBoundaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF442F708AEA00D02F93 /* StatsKitBoundaryViewController.swift */; };
 		F0F6DF472F708BE300D02F93 /* ExerciseStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF462F708BE300D02F93 /* ExerciseStats.swift */; };
 		F0F6DF492F70A82D00D02F93 /* ExerciseDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DF482F70A82D00D02F93 /* ExerciseDetailScreen.swift */; };
@@ -25,6 +31,11 @@
 		F0F6E50C2F772B0E00D02F93 /* SimpleLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E50B2F772B0E00D02F93 /* SimpleLineChart.swift */; };
 		F0F6E50E2F772DA100D02F93 /* WeeklyLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E50D2F772DA100D02F93 /* WeeklyLineChart.swift */; };
 		F0F6E5102F77378000D02F93 /* ProgressChartSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E50F2F77377800D02F93 /* ProgressChartSection.swift */; };
+		F0F6E7C42F81557B00D02F93 /* ExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7C32F81557B00D02F93 /* ExerciseLoader.swift */; };
+		F0F6E7C62F8155B800D02F93 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7C52F8155B800D02F93 /* Exercise.swift */; };
+		F0F6E7C82F8155EF00D02F93 /* ExerciseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7C72F8155EF00D02F93 /* ExerciseCategory.swift */; };
+		F0F6E7CA2F81594400D02F93 /* MuscleGroupsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7C92F81594400D02F93 /* MuscleGroupsLoader.swift */; };
+		F0F6E7CC2F8159BD00D02F93 /* MuscleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7CB2F8159BD00D02F93 /* MuscleGroup.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,8 +49,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F026EE6E2F8D77990066FCB4 /* TrainingBalanceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingBalanceScreen.swift; sourceTree = "<group>"; };
+		F026EE702F8D80D90066FCB4 /* MovementPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementPattern.swift; sourceTree = "<group>"; };
+		F026EE722F8D8FB10066FCB4 /* MovementTypesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementTypesLoader.swift; sourceTree = "<group>"; };
+		F034E5782F902F0C00DDB10C /* MiniBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniBarChart.swift; sourceTree = "<group>"; };
+		F034E57A2F902FE800DDB10C /* WeekBucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekBucket.swift; sourceTree = "<group>"; };
 		F0750E7D2F6B62960026D021 /* StatsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StatsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0750E882F6B62960026D021 /* StatsKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StatsKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F07584D22F8C3CBA00D2C783 /* ACWRDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACWRDetailScreen.swift; sourceTree = "<group>"; };
 		F0A11D1F2F6C61AC00CE1E9A /* StatsKitRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitRouter.swift; sourceTree = "<group>"; };
 		F0A11D212F6C61E600CE1E9A /* StatsKitRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitRoutes.swift; sourceTree = "<group>"; };
 		F0A11D242F6C623900CE1E9A /* StatsKitHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitHomeScreen.swift; sourceTree = "<group>"; };
@@ -49,7 +66,7 @@
 		F0F6DF392F705D0100D02F93 /* HomeSubViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSubViews.swift; sourceTree = "<group>"; };
 		F0F6DF3C2F705DDC00D02F93 /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk/System/Library/Frameworks/Charts.framework; sourceTree = DEVELOPER_DIR; };
 		F0F6DF3E2F70836800D02F93 /* ExerciseListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseListScreen.swift; sourceTree = "<group>"; };
-		F0F6DF402F70849800D02F93 /* ExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLoader.swift; sourceTree = "<group>"; };
+		F0F6DF402F70849800D02F93 /* ExerciseStatsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStatsLoader.swift; sourceTree = "<group>"; };
 		F0F6DF442F708AEA00D02F93 /* StatsKitBoundaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitBoundaryViewController.swift; sourceTree = "<group>"; };
 		F0F6DF462F708BE300D02F93 /* ExerciseStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStats.swift; sourceTree = "<group>"; };
 		F0F6DF482F70A82D00D02F93 /* ExerciseDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailScreen.swift; sourceTree = "<group>"; };
@@ -57,6 +74,11 @@
 		F0F6E50B2F772B0E00D02F93 /* SimpleLineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleLineChart.swift; sourceTree = "<group>"; };
 		F0F6E50D2F772DA100D02F93 /* WeeklyLineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyLineChart.swift; sourceTree = "<group>"; };
 		F0F6E50F2F77377800D02F93 /* ProgressChartSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressChartSection.swift; sourceTree = "<group>"; };
+		F0F6E7C32F81557B00D02F93 /* ExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLoader.swift; sourceTree = "<group>"; };
+		F0F6E7C52F8155B800D02F93 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
+		F0F6E7C72F8155EF00D02F93 /* ExerciseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCategory.swift; sourceTree = "<group>"; };
+		F0F6E7C92F81594400D02F93 /* MuscleGroupsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroupsLoader.swift; sourceTree = "<group>"; };
+		F0F6E7CB2F8159BD00D02F93 /* MuscleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroup.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -95,6 +117,7 @@
 		F0750E732F6B62960026D021 = {
 			isa = PBXGroup;
 			children = (
+				F0F6E7C22F81557000D02F93 /* Loaders */,
 				F0A11D2C2F6C6EBE00CE1E9A /* Models */,
 				F0A11D232F6C622C00CE1E9A /* Screens */,
 				F0A11D1E2F6C618C00CE1E9A /* Router */,
@@ -131,6 +154,8 @@
 				F0A11D242F6C623900CE1E9A /* StatsKitHomeScreen.swift */,
 				F0F6DF3E2F70836800D02F93 /* ExerciseListScreen.swift */,
 				F0F6DF482F70A82D00D02F93 /* ExerciseDetailScreen.swift */,
+				F07584D22F8C3CBA00D2C783 /* ACWRDetailScreen.swift */,
+				F026EE6E2F8D77990066FCB4 /* TrainingBalanceScreen.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -141,9 +166,14 @@
 				F0A11D2D2F6C6ECA00CE1E9A /* StatsModels.swift */,
 				F0A11F2B2F6F5EC200CE1E9A /* DailyTotal.swift */,
 				F0A11F2F2F6F622C00CE1E9A /* DailyTotalsProviding.swift */,
-				F0F6DF402F70849800D02F93 /* ExerciseLoader.swift */,
+				F0F6DF402F70849800D02F93 /* ExerciseStatsLoader.swift */,
 				F0F6DF462F708BE300D02F93 /* ExerciseStats.swift */,
 				F0F6DF4A2F70A85C00D02F93 /* ExerciseDailyStats.swift */,
+				F0F6E7C52F8155B800D02F93 /* Exercise.swift */,
+				F0F6E7C72F8155EF00D02F93 /* ExerciseCategory.swift */,
+				F0F6E7CB2F8159BD00D02F93 /* MuscleGroup.swift */,
+				F026EE702F8D80D90066FCB4 /* MovementPattern.swift */,
+				F034E57A2F902FE800DDB10C /* WeekBucket.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -155,6 +185,7 @@
 				F0F6DF392F705D0100D02F93 /* HomeSubViews.swift */,
 				F0F6E50B2F772B0E00D02F93 /* SimpleLineChart.swift */,
 				F0F6E50D2F772DA100D02F93 /* WeeklyLineChart.swift */,
+				F034E5782F902F0C00DDB10C /* MiniBarChart.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -165,6 +196,16 @@
 				F0F6DF3C2F705DDC00D02F93 /* Charts.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F0F6E7C22F81557000D02F93 /* Loaders */ = {
+			isa = PBXGroup;
+			children = (
+				F0F6E7C32F81557B00D02F93 /* ExerciseLoader.swift */,
+				F0F6E7C92F81594400D02F93 /* MuscleGroupsLoader.swift */,
+				F026EE722F8D8FB10066FCB4 /* MovementTypesLoader.swift */,
+			);
+			path = Loaders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -287,19 +328,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0A11D222F6C61E600CE1E9A /* StatsKitRoutes.swift in Sources */,
-				F0F6DF412F70849800D02F93 /* ExerciseLoader.swift in Sources */,
+				F0F6DF412F70849800D02F93 /* ExerciseStatsLoader.swift in Sources */,
 				F0F6DF4B2F70A85C00D02F93 /* ExerciseDailyStats.swift in Sources */,
+				F0F6E7CA2F81594400D02F93 /* MuscleGroupsLoader.swift in Sources */,
 				F0F6E5102F77378000D02F93 /* ProgressChartSection.swift in Sources */,
 				F0F6E50E2F772DA100D02F93 /* WeeklyLineChart.swift in Sources */,
+				F0F6E7C62F8155B800D02F93 /* Exercise.swift in Sources */,
 				F0F6DF472F708BE300D02F93 /* ExerciseStats.swift in Sources */,
 				F0F6E50C2F772B0E00D02F93 /* SimpleLineChart.swift in Sources */,
+				F026EE712F8D80D90066FCB4 /* MovementPattern.swift in Sources */,
+				F07584D32F8C3CBA00D2C783 /* ACWRDetailScreen.swift in Sources */,
+				F034E57B2F902FE800DDB10C /* WeekBucket.swift in Sources */,
 				F0F6DF3F2F70836800D02F93 /* ExerciseListScreen.swift in Sources */,
+				F0F6E7C42F81557B00D02F93 /* ExerciseLoader.swift in Sources */,
+				F0F6E7C82F8155EF00D02F93 /* ExerciseCategory.swift in Sources */,
 				F0F6DF492F70A82D00D02F93 /* ExerciseDetailScreen.swift in Sources */,
 				F0A11F302F6F622C00CE1E9A /* DailyTotalsProviding.swift in Sources */,
+				F0F6E7CC2F8159BD00D02F93 /* MuscleGroup.swift in Sources */,
 				F0A11D2E2F6C6ECA00CE1E9A /* StatsModels.swift in Sources */,
 				F0F6DF452F708AEA00D02F93 /* StatsKitBoundaryViewController.swift in Sources */,
+				F034E5792F902F0C00DDB10C /* MiniBarChart.swift in Sources */,
 				F0A11D252F6C623900CE1E9A /* StatsKitHomeScreen.swift in Sources */,
+				F026EE732F8D8FB10066FCB4 /* MovementTypesLoader.swift in Sources */,
 				F0F6DF3A2F705D0100D02F93 /* HomeSubViews.swift in Sources */,
+				F026EE6F2F8D77990066FCB4 /* TrainingBalanceScreen.swift in Sources */,
 				F0A11D202F6C61AC00CE1E9A /* StatsKitRouter.swift in Sources */,
 				F0A11F2C2F6F5EC200CE1E9A /* DailyTotal.swift in Sources */,
 			);
@@ -323,6 +375,141 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		F0550B462F8424EF00821FA0 /* Emulator */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = W4C6DZQ8J4;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Emulator;
+		};
+		F0550B472F8424EF00821FA0 /* Emulator */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W4C6DZQ8J4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Suji.StatsKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 26.1;
+			};
+			name = Emulator;
+		};
+		F0550B482F8424EF00821FA0 /* Emulator */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W4C6DZQ8J4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MACOSX_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Suji.StatsKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 26.1;
+			};
+			name = Emulator;
+		};
 		F0750E8F2F6B62960026D021 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -592,6 +779,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F0750E8F2F6B62960026D021 /* Debug */,
+				F0550B462F8424EF00821FA0 /* Emulator */,
 				F0750E902F6B62960026D021 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -601,6 +789,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F0750E922F6B62960026D021 /* Debug */,
+				F0550B472F8424EF00821FA0 /* Emulator */,
 				F0750E932F6B62960026D021 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -610,6 +799,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F0750E952F6B62960026D021 /* Debug */,
+				F0550B482F8424EF00821FA0 /* Emulator */,
 				F0750E962F6B62960026D021 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;

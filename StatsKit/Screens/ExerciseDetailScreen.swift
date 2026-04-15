@@ -22,12 +22,9 @@ struct ExerciseDetailScreen: View {
                     VStack(alignment: .leading, spacing: 20) {
                         AllTimeStatsSection(exercise: viewModel.exercise)
                         MaxStatsSection(exercise: viewModel.exercise)
-
+                        
                         if !viewModel.dailyStats.isEmpty {
-                            ProgressChartsSection(
-                                dailyStats: viewModel.dailyStats,
-                                exercise: viewModel.exercise
-                            )
+                            RepsOverTimeSection(dailyStats: viewModel.dailyStats)
                             ACWRChartsSection(
                                 dailyStats: viewModel.dailyStats,
                                 exercise: viewModel.exercise
@@ -150,6 +147,115 @@ private struct MaxStatsSection: View {
                         color: .yellow,
                         borders: []
                     )
+                }
+            }
+        }
+    }
+}
+
+// MARK: - RepsOverTimeSection
+struct RepsOverTimeSection: View {
+    let dailyStats: [ExerciseDailyStats]
+
+    private var weeklyData: (values: [Double], labels: [String]) {
+        let weeks = buildWeeks(from: dailyStats).suffix(10)
+        return (
+            values: weeks.map { Double($0.totalReps) },
+            labels: weeks.map(\.label)
+        )
+    }
+
+    var body: some View {
+        let data = weeklyData
+        guard !data.values.isEmpty else { return AnyView(EmptyView()) }
+
+        return AnyView(
+            MiniBarChart(
+                title: "Reps per week",
+                values: data.values,
+                labels: data.labels,
+                color: .purple,
+                formatValue: { "\(Int($0))" }
+            )
+        )
+    }
+}
+
+// MARK: - Simplified ACWRChartsSection (volume only)
+struct ACWRChartsSection: View {
+    let dailyStats: [ExerciseDailyStats]
+    let exercise: ExerciseStats
+
+    private var acwrPoints: [ACWRPoint] {
+        let weeks = buildWeeks(from: dailyStats)
+
+        return weeks.enumerated().map { weekIndex, week in
+            guard weekIndex >= 3 else {
+                return ACWRPoint(id: weekIndex, label: week.label,
+                                 reps: nil, weight: nil, volume: nil, time: nil)
+            }
+
+            let chronic = Array(weeks[(weekIndex - 3)..<weekIndex])
+            let chronicAvg = chronic.map(\.volume).reduce(0.0, +) / 3.0
+            let ratio: Double? = chronicAvg > 0 ? week.volume / chronicAvg : nil
+
+            return ACWRPoint(
+                id: weekIndex,
+                label: week.label,
+                reps: nil,
+                weight: nil,
+                volume: ratio,
+                time: nil
+            )
+        }
+    }
+
+    private var hasEnoughData: Bool {
+        acwrPoints.dropFirst(3).contains { $0.volume != nil }
+    }
+
+    var body: some View {
+        SectionContainer(title: "Workload ratio · last 90 days") {
+            VStack(spacing: 0) {
+                if !hasEnoughData {
+                    Text("Not enough training history to calculate workload ratio")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(32)
+                } else {
+                    // Zone legend
+                    HStack(spacing: 12) {
+                        ForEach([
+                            ("Low", Color.blue),
+                            ("Optimal", Color.green),
+                            ("Caution", Color.orange),
+                            ("High risk", Color.red)
+                        ], id: \.0) { label, color in
+                            HStack(spacing: 4) {
+                                Circle().fill(color).frame(width: 7, height: 7)
+                                Text(label).font(.system(size: 9)).foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 14)
+                    .padding(.bottom, 4)
+
+                    ACWRMiniChart(
+                        title: "Volume ACWR",
+                        values: acwrPoints.map(\.volume),
+                        labels: acwrPoints.map(\.label)
+                    )
+
+                    Divider().padding(.horizontal, 16)
+
+                    Text("Acute = 7 days · Chronic = prior 3 weeks avg")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(14)
                 }
             }
         }

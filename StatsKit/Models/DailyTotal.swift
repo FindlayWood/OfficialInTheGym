@@ -19,7 +19,9 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
     public let totalWeight: Double
     public let totalVolume: Double
     public let totalTime: Int       // seconds
-    public let exercisesWorked: [String]
+    public let exerciseSetCounts: [String: Int]           // Changed from exerciseSetsCount
+    public let muscleGroupVolumes: [String: Double]       // NEW
+    public let movementTypeVolumes: [String: Double]      // NEW
 
     public init(
         id: String,
@@ -30,7 +32,9 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
         totalWeight: Double,
         totalVolume: Double,
         totalTime: Int,
-        exercisesWorked: [String]
+        exerciseSetCounts: [String: Int],
+        muscleGroupVolumes: [String: Double] = [:],
+        movementTypeVolumes: [String: Double] = [:]
     ) {
         self.id = id
         self.date = date
@@ -40,7 +44,33 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
         self.totalWeight = totalWeight
         self.totalVolume = totalVolume
         self.totalTime = totalTime
-        self.exercisesWorked = exercisesWorked
+        self.exerciseSetCounts = exerciseSetCounts
+        self.muscleGroupVolumes = muscleGroupVolumes
+        self.movementTypeVolumes = movementTypeVolumes
+    }
+    
+    // Custom decoding to handle missing fields gracefully
+    enum CodingKeys: String, CodingKey {
+        case id, date, userID
+        case totalSets, totalReps, totalWeight, totalVolume, totalTime
+        case exerciseSetCounts
+        case muscleGroupVolumes
+        case movementTypeVolumes
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        date = try container.decode(Date.self, forKey: .date)
+        userID = try container.decode(String.self, forKey: .userID)
+        totalSets = try container.decode(Int.self, forKey: .totalSets)
+        totalReps = try container.decode(Int.self, forKey: .totalReps)
+        totalWeight = try container.decode(Double.self, forKey: .totalWeight)
+        totalVolume = try container.decode(Double.self, forKey: .totalVolume)
+        totalTime = try container.decode(Int.self, forKey: .totalTime)
+        exerciseSetCounts = try container.decodeIfPresent([String: Int].self, forKey: .exerciseSetCounts) ?? [:]
+        muscleGroupVolumes = try container.decodeIfPresent([String: Double].self, forKey: .muscleGroupVolumes) ?? [:]
+        movementTypeVolumes = try container.decodeIfPresent([String: Double].self, forKey: .movementTypeVolumes) ?? [:]
     }
 }
 
@@ -53,12 +83,16 @@ public struct DailyTotalSummary: Sendable {
     public let totalVolume: Double
     public let totalTime: Int
     public let activeDays: Int
-    public let exercisesWorked: [String]
+    public let exerciseSetCounts: [String: Int]
+    public let muscleGroupVolumes: [String: Double]
+    public let movementTypeVolumes: [String: Double]
 
     public static let empty = DailyTotalSummary(
         totalSets: 0, totalReps: 0, totalWeight: 0,
         totalVolume: 0, totalTime: 0, activeDays: 0,
-        exercisesWorked: []
+        exerciseSetCounts: [:],
+        muscleGroupVolumes: [:],
+        movementTypeVolumes: [:]
     )
 
     public init(
@@ -68,7 +102,9 @@ public struct DailyTotalSummary: Sendable {
         totalVolume: Double,
         totalTime: Int,
         activeDays: Int,
-        exercisesWorked: [String]
+        exerciseSetCounts: [String: Int],
+        muscleGroupVolumes: [String: Double] = [:],
+        movementTypeVolumes: [String: Double] = [:]
     ) {
         self.totalSets = totalSets
         self.totalReps = totalReps
@@ -76,11 +112,36 @@ public struct DailyTotalSummary: Sendable {
         self.totalVolume = totalVolume
         self.totalTime = totalTime
         self.activeDays = activeDays
-        self.exercisesWorked = exercisesWorked
+        self.exerciseSetCounts = exerciseSetCounts
+        self.muscleGroupVolumes = muscleGroupVolumes
+        self.movementTypeVolumes = movementTypeVolumes
     }
 
     public static func from(_ totals: [DailyTotal]) -> DailyTotalSummary {
-        let exerciseIDs = Array(Set(totals.flatMap(\.exercisesWorked))).sorted()
+        // Merge all exercise set counts
+        var mergedExerciseSetCounts: [String: Int] = [:]
+        for total in totals {
+            for (exerciseID, count) in total.exerciseSetCounts {
+                mergedExerciseSetCounts[exerciseID, default: 0] += count
+            }
+        }
+        
+        // Merge all muscle group volumes
+        var mergedMuscleGroupVolumes: [String: Double] = [:]
+        for total in totals {
+            for (muscleGroup, volume) in total.muscleGroupVolumes {
+                mergedMuscleGroupVolumes[muscleGroup, default: 0] += volume
+            }
+        }
+        
+        // Merge all movement type volumes
+        var mergedMovementTypeVolumes: [String: Double] = [:]
+        for total in totals {
+            for (movementType, volume) in total.movementTypeVolumes {
+                mergedMovementTypeVolumes[movementType, default: 0] += volume
+            }
+        }
+        
         return DailyTotalSummary(
             totalSets: totals.reduce(0) { $0 + $1.totalSets },
             totalReps: totals.reduce(0) { $0 + $1.totalReps },
@@ -88,14 +149,16 @@ public struct DailyTotalSummary: Sendable {
             totalVolume: totals.reduce(0) { $0 + $1.totalVolume },
             totalTime: totals.reduce(0) { $0 + $1.totalTime },
             activeDays: totals.count,
-            exercisesWorked: exerciseIDs
+            exerciseSetCounts: mergedExerciseSetCounts,
+            muscleGroupVolumes: mergedMuscleGroupVolumes,
+            movementTypeVolumes: mergedMovementTypeVolumes
         )
     }
 
     public var formattedVolume: String {
         totalVolume >= 1000
             ? String(format: "%.1fk", totalVolume / 1000)
-            : String(Int(totalVolume))
+            : String(format: "%.0f", totalVolume)
     }
 
     public var formattedTime: String {
@@ -103,6 +166,66 @@ public struct DailyTotalSummary: Sendable {
         let m = (totalTime % 3600) / 60
         if h > 0 { return "\(h)h \(m)m" }
         return "\(m)m"
+    }
+    
+    /// Top muscle groups by volume
+    public var topMuscleGroups: [(muscleGroup: String, volume: Double)] {
+        muscleGroupVolumes
+            .sorted { $0.value > $1.value }
+            .map { ($0.key, $0.value) }
+    }
+    
+    /// Top movement types by volume
+    public var topMovementTypes: [(movementType: String, volume: Double)] {
+        movementTypeVolumes
+            .sorted { $0.value > $1.value }
+            .map { ($0.key, $0.value) }
+    }
+    
+    /// Get volume for a specific muscle group
+    public func volumeFor(muscleGroup: String) -> Double {
+        muscleGroupVolumes[muscleGroup] ?? 0
+    }
+    
+    /// Get volume for a specific movement type
+    public func volumeFor(movementType: String) -> Double {
+        movementTypeVolumes[movementType] ?? 0
+    }
+}
+
+// MARK: - Array Extension for exerciseSetCounts merging
+extension Array where Element == DailyTotal {
+    /// Merges all exerciseSetCounts from multiple DailyTotal objects
+    public var exerciseSetCounts: [String: Int] {
+        var merged: [String: Int] = [:]
+        for total in self {
+            for (exerciseID, count) in total.exerciseSetCounts {
+                merged[exerciseID, default: 0] += count
+            }
+        }
+        return merged
+    }
+    
+    /// Merges all muscleGroupVolumes from multiple DailyTotal objects
+    public var muscleGroupVolumes: [String: Double] {
+        var merged: [String: Double] = [:]
+        for total in self {
+            for (muscleGroup, volume) in total.muscleGroupVolumes {
+                merged[muscleGroup, default: 0] += volume
+            }
+        }
+        return merged
+    }
+    
+    /// Merges all movementTypeVolumes from multiple DailyTotal objects
+    public var movementTypeVolumes: [String: Double] {
+        var merged: [String: Double] = [:]
+        for total in self {
+            for (movementType, volume) in total.movementTypeVolumes {
+                merged[movementType, default: 0] += volume
+            }
+        }
+        return merged
     }
 }
 

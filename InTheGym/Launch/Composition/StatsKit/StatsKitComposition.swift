@@ -15,18 +15,27 @@ class StatsKitComposition {
         
         let dailyTotalLoader = StatsKitDailyTotalsLoader()
         
-        let exerciseLoader = RemoteStatsKitExerciseLoader()
+        let exerciseStatsLoader = RemoteStatsKitExerciseLoader()
         
         let recentExerciseLoader = RemoteRecentStatsKitExerciseLoader()
         
         let exerciseDailyStatsLoader = RemoteExerciseDailyStatsLoader()
         
+        let exerciseLoader = RemoteExerciseLoader()
+        
+        let muscleGroupLoader = RemoteMuscleGroupsLoader()
+        
+        let movementTypeLoader = RemoteMovementTypesLoader()
+        
         let router = StatsKitRouter(
             navigationController: navigationController,
             dailyTotalLoader: dailyTotalLoader,
-            exerciseLoader: exerciseLoader,
+            exerciseStatsLoader: exerciseStatsLoader,
             recentExerciseLoader: recentExerciseLoader,
-            exerciseDailyStatsLoader: exerciseDailyStatsLoader
+            exerciseDailyStatsLoader: exerciseDailyStatsLoader,
+            exerciseLoader: exerciseLoader,
+            muscleGroupLoader: muscleGroupLoader,
+            movementTypeLoader: movementTypeLoader
         )
         
         router.start()

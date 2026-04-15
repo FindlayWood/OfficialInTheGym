@@ -11,4 +11,6 @@ enum StatsKitRoutes {
     case home
     case allExercises
     case exerciseDetail(exercise: ExerciseStats)
+    case acwrDetail(totals: [DailyTotal])
+    case trainingBalance([DailyTotal], [MuscleGroup], [MovementPattern])
 }
