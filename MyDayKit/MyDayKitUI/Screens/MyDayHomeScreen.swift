@@ -44,6 +44,7 @@ struct MyDayHomeScreen: View {
     var recordClip: ((String) -> ())?
     var edit: ((MyDayNewExerciseManager) -> ())?
     var clipSelected: ((MyDayClipModel, UIImage, CGRect) -> ())?
+    var wellnessTapped: (() -> ())?
     
     private var isToday: Bool { dayManager.isTodaySelected() }
     
@@ -56,9 +57,9 @@ struct MyDayHomeScreen: View {
             Divider()
             
             // ── Activity tabs ──────────────────────────────────────────
-            activityTabs
-            
-            Divider()
+//            activityTabs
+//            
+//            Divider()
             
             // ── Content ────────────────────────────────────────────────
             if let selectedDay = dayManager.selectedDay {
@@ -249,6 +250,13 @@ struct MyDayHomeScreen: View {
     private func exerciseList(for day: MyDayFullDayModel) -> some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 12) {
+                WellnessSummaryCard(
+                    entry: dayManager.selectedWellness,
+                    isCurrentDay: isToday,
+                    onTap: {
+                        wellnessTapped?()
+                    }
+                )
                 ForEach(day.exercises) { exercise in
                     ExerciseCompletionView(
                         model: exercise,
@@ -283,6 +291,15 @@ struct MyDayHomeScreen: View {
     
     private var emptyState: some View {
         VStack(spacing: 16) {
+            
+            WellnessSummaryCard(
+                entry: dayManager.selectedWellness,
+                isCurrentDay: isToday,
+                onTap: {
+                    wellnessTapped?()
+                }
+            )
+            
             Spacer()
             
             ZStack {
@@ -327,7 +344,8 @@ struct MyDayHomeScreen: View {
             
             Spacer()
         }
-        .padding(.horizontal, 32)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
     }
     
     // MARK: - Loading
@@ -418,7 +436,9 @@ struct MyDayHomeScreen: View {
             clipSaver: PreviewMyDaySaver(),
             deleteSaver: PreviewMyDaySaver(),
             loader: PreviewLoader(),
-            deleter: PreviewMyDayDeleter()
+            deleter: PreviewMyDayDeleter(),
+            wellnessLoader: PreviewWellnessLoader(),
+            wellnessSaver: PreviewWellnessSaver()
         )
     )
 }

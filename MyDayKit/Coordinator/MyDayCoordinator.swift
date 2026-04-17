@@ -74,6 +74,9 @@ extension MyDayCoordinator {
                 },
                 clipSelected: { [weak self] model, thumbnail, frame in
                     self?.presentFullScreen(.viewClip(model, thumbnail, frame))
+                },
+                wellnessTapped: { [weak self] in
+                    self?.navigate(to: .wellness)
                 }
             )
             let vc = MyDayBoundaryViewController()
@@ -193,6 +196,20 @@ extension MyDayCoordinator {
                     manager: manager
                 )
             )
+            return vc
+        case .wellness:
+            let viewModel = WellnessQuestionnaireViewModel(
+                onComplete: { [weak self] entry in
+                    self?.dayManager.saveWellnessEntry(entry)
+                    self?.popBack()
+                }
+            )
+            let vc = selectorVC(
+                WellnessQuestionnaireScreen(
+                    viewModel: viewModel
+                )
+            )
+            vc.hidesBottomBarWhenPushed = true
             return vc
         }
     }

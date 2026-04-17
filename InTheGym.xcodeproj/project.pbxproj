@@ -896,6 +896,13 @@
 		9FF8B3062928422A00C47313 /* WorkoutFiguresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */; };
 		9FF8B3082928459E00C47313 /* WorkoutClipThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */; };
 		F026EE752F8D8FF70066FCB4 /* RemoteMovementTypesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE742F8D8FF70066FCB4 /* RemoteMovementTypesLoader.swift */; };
+		F034E6662F917F1F00DDB10C /* RemoteWellnessLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E6652F917F1F00DDB10C /* RemoteWellnessLoader.swift */; };
+		F034E6682F917F4D00DDB10C /* LocalWellnessLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E6672F917F4D00DDB10C /* LocalWellnessLoader.swift */; };
+		F034E66A2F91831700DDB10C /* LocalWithRemoteFallBackWellnessLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E6692F91831700DDB10C /* LocalWithRemoteFallBackWellnessLoader.swift */; };
+		F034E66C2F91839700DDB10C /* WellnessPolicyLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E66B2F91839700DDB10C /* WellnessPolicyLoader.swift */; };
+		F034E6732F91935E00DDB10C /* LocalAndRemoteWellnessSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E6722F91935E00DDB10C /* LocalAndRemoteWellnessSaver.swift */; };
+		F034E6752F9193B500DDB10C /* WellnessFileManagerSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E6742F9193B500DDB10C /* WellnessFileManagerSaver.swift */; };
+		F034E6772F91941000DDB10C /* RemoteWellnessSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E6762F91941000DDB10C /* RemoteWellnessSaver.swift */; };
 		F0A11D272F6C637100CE1E9A /* StatsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; };
 		F0A11D282F6C637100CE1E9A /* StatsKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */; };
@@ -1811,6 +1818,13 @@
 		9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutFiguresView.swift; sourceTree = "<group>"; };
 		9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutClipThumbnailView.swift; sourceTree = "<group>"; };
 		F026EE742F8D8FF70066FCB4 /* RemoteMovementTypesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMovementTypesLoader.swift; sourceTree = "<group>"; };
+		F034E6652F917F1F00DDB10C /* RemoteWellnessLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWellnessLoader.swift; sourceTree = "<group>"; };
+		F034E6672F917F4D00DDB10C /* LocalWellnessLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWellnessLoader.swift; sourceTree = "<group>"; };
+		F034E6692F91831700DDB10C /* LocalWithRemoteFallBackWellnessLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWithRemoteFallBackWellnessLoader.swift; sourceTree = "<group>"; };
+		F034E66B2F91839700DDB10C /* WellnessPolicyLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessPolicyLoader.swift; sourceTree = "<group>"; };
+		F034E6722F91935E00DDB10C /* LocalAndRemoteWellnessSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAndRemoteWellnessSaver.swift; sourceTree = "<group>"; };
+		F034E6742F9193B500DDB10C /* WellnessFileManagerSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessFileManagerSaver.swift; sourceTree = "<group>"; };
+		F034E6762F91941000DDB10C /* RemoteWellnessSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWellnessSaver.swift; sourceTree = "<group>"; };
 		F0A11D262F6C637100CE1E9A /* StatsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StatsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitComposition.swift; sourceTree = "<group>"; };
 		F0D344422F256E0E00AB6121 /* DataUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUploader.swift; sourceTree = "<group>"; };
@@ -4791,6 +4805,28 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F034E6642F917F0B00DDB10C /* Wellness */ = {
+			isa = PBXGroup;
+			children = (
+				F034E6712F91934E00DDB10C /* Saver */,
+				F034E6652F917F1F00DDB10C /* RemoteWellnessLoader.swift */,
+				F034E6672F917F4D00DDB10C /* LocalWellnessLoader.swift */,
+				F034E6692F91831700DDB10C /* LocalWithRemoteFallBackWellnessLoader.swift */,
+				F034E66B2F91839700DDB10C /* WellnessPolicyLoader.swift */,
+			);
+			path = Wellness;
+			sourceTree = "<group>";
+		};
+		F034E6712F91934E00DDB10C /* Saver */ = {
+			isa = PBXGroup;
+			children = (
+				F034E6722F91935E00DDB10C /* LocalAndRemoteWellnessSaver.swift */,
+				F034E6742F9193B500DDB10C /* WellnessFileManagerSaver.swift */,
+				F034E6762F91941000DDB10C /* RemoteWellnessSaver.swift */,
+			);
+			path = Saver;
+			sourceTree = "<group>";
+		};
 		F0A11D292F6C642A00CE1E9A /* StatsKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -4808,6 +4844,7 @@
 		F0D3443F2F25616A00AB6121 /* MyDay */ = {
 			isa = PBXGroup;
 			children = (
+				F034E6642F917F0B00DDB10C /* Wellness */,
 				F0D344422F256E0E00AB6121 /* DataUploader.swift */,
 			);
 			path = MyDay;
@@ -4965,6 +5002,7 @@
 				74B48DEC27A1FCBF00BBFC16 /* PostReferencesModel.swift in Sources */,
 				744AED52279B08AB000D2D74 /* WorkouCollectionDataSource.swift in Sources */,
 				7410450B285D439100A9FF4E /* OnBoardMainView.swift in Sources */,
+				F034E6732F91935E00DDB10C /* LocalAndRemoteWellnessSaver.swift in Sources */,
 				9FA4F1F429102E7400757860 /* InjuryDetailView.swift in Sources */,
 				74FA60A328B0034B007B2CD8 /* AddNewInjuryView.swift in Sources */,
 				74F2CCE626E2E98700D7AD79 /* AddMoreNoteViewController.swift in Sources */,
@@ -5006,8 +5044,10 @@
 				741FB1B92667DEB20039EB29 /* Exercise.swift in Sources */,
 				740682FA2890424000CD9C08 /* PlayerDashBoardCollectioncell.swift in Sources */,
 				7403A60D26C6DDF6000588CE /* StretchyTableHeaderView.swift in Sources */,
+				F034E6752F9193B500DDB10C /* WellnessFileManagerSaver.swift in Sources */,
 				7466A82025EED31800F4050F /* BestUseMessageViewController.swift in Sources */,
 				74E08A7F28415452009D0DCB /* MyWorkoutStatsView.swift in Sources */,
+				F034E6682F917F4D00DDB10C /* LocalWellnessLoader.swift in Sources */,
 				745F89E8286F432B000070B2 /* PerformanceIntroViewModel.swift in Sources */,
 				743330FA2795AB22005A0C45 /* LikeModels.swift in Sources */,
 				9F4DFB5729C661A700363AE8 /* CommentCellViewModel.swift in Sources */,
@@ -5215,6 +5255,7 @@
 				74A0B598285A9EDA0037FD3F /* MonthlySubscriptionView.swift in Sources */,
 				743E92BD280779780029F447 /* MethodSelectionViewController.swift in Sources */,
 				744F3C0C2864AB5F00EBB248 /* JumpInstructionsViewController.swift in Sources */,
+				F034E66C2F91839700DDB10C /* WellnessPolicyLoader.swift in Sources */,
 				744AED54279B1A36000D2D74 /* SavedWorkoutLoader.swift in Sources */,
 				74B48DE627A1B77A00BBFC16 /* PostsDataSource.swift in Sources */,
 				744AED1A2796FDCC000D2D74 /* MainWorkoutExerciseCollectionCell.swift in Sources */,
@@ -5273,6 +5314,7 @@
 				74B48E0727A42FF800BBFC16 /* LiveWorkoutDisplayViewModel.swift in Sources */,
 				74B48E0227A4281C00BBFC16 /* LiveWorkoutSetDataSource.swift in Sources */,
 				7479812327DA1F3B00CF3F9B /* ClipModel.swift in Sources */,
+				F034E6772F91941000DDB10C /* RemoteWellnessSaver.swift in Sources */,
 				7479A909229F2B4C00D39E2E /* AppDelegate.swift in Sources */,
 				742C1CA227BE9FE300DD1BB0 /* ExerciseClipsViewModel.swift in Sources */,
 				742FD56F283EB6240025E43C /* ExerciseTagCell.swift in Sources */,
@@ -5632,6 +5674,7 @@
 				742C1C4D27B2A34E00DD1BB0 /* RecordClipViewModel.swift in Sources */,
 				74104510285E056F00A9FF4E /* OnBoardThirdViewController.swift in Sources */,
 				F0F6E7CE2F81948B00D02F93 /* RemoteExerciseLoader.swift in Sources */,
+				F034E66A2F91831700DDB10C /* LocalWithRemoteFallBackWellnessLoader.swift in Sources */,
 				7492263222C8D1DF00EAD386 /* AddPlayerViewController.swift in Sources */,
 				74AF6D572684ED87005C52A8 /* DisplayWorkoutStatsView.swift in Sources */,
 				7486C211267A4727008A1E21 /* WeightViewModel.swift in Sources */,
@@ -5730,6 +5773,7 @@
 				744AED0D27960A51000D2D74 /* WorkoutDisplayViewController.swift in Sources */,
 				744AED3827989E68000D2D74 /* OptionsDataSource.swift in Sources */,
 				74221B3B2642D86800D05527 /* TabBarCoordinator.swift in Sources */,
+				F034E6662F917F1F00DDB10C /* RemoteWellnessLoader.swift in Sources */,
 				7403A5FA26C54F6B000588CE /* UIColor+Extension.swift in Sources */,
 				749E9FEF260B9633000E96AE /* TimelineTapProtocol.swift in Sources */,
 				74F0C710284F9CBE00FE3A01 /* WorkoutCreationOptionsNavigationModel.swift in Sources */,
