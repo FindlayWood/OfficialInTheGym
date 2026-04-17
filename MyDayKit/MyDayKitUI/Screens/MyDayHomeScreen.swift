@@ -281,6 +281,8 @@ struct MyDayHomeScreen: View {
                         clipSelected: clipSelected
                     )
                 }
+                
+                RPECard(isCurrentDay: isToday)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -343,6 +345,9 @@ struct MyDayHomeScreen: View {
             }
             
             Spacer()
+            
+            RPECard(isCurrentDay: isToday)
+            
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
