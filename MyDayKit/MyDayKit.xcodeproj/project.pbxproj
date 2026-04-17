@@ -17,6 +17,12 @@
 		F01E0EA32E7A15FC008C1547 /* PlaybackOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */; };
 		F03334612F1ED3EC004102AC /* ClipUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03334602F1ED3EC004102AC /* ClipUploader.swift */; };
 		F03334632F1FF2E2004102AC /* RecordingProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03334622F1FF2E2004102AC /* RecordingProgressRing.swift */; };
+		F034E6502F916D1300DDB10C /* WellnessSummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E64F2F916D1300DDB10C /* WellnessSummaryCard.swift */; };
+		F034E6542F916D9C00DDB10C /* WellnessQuestionnaireScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E6532F916D9C00DDB10C /* WellnessQuestionnaireScreen.swift */; };
+		F034E6592F916DE200DDB10C /* WellnessQuestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E6582F916DE200DDB10C /* WellnessQuestion.swift */; };
+		F034E65D2F916E0000DDB10C /* WellnessEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E65C2F916E0000DDB10C /* WellnessEntry.swift */; };
+		F034E6632F917B1400DDB10C /* WellnessLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E6622F917B1400DDB10C /* WellnessLoader.swift */; };
+		F034E66E2F9192E400DDB10C /* WellnessSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E66D2F9192E400DDB10C /* WellnessSaver.swift */; };
 		F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06004842E37E17F000B279F /* MyDayExerciseListView.swift */; };
 		F0622F012ED260CF00260A5B /* CustomNumberPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0622F002ED260CF00260A5B /* CustomNumberPad.swift */; };
 		F07508DA2F5380E10026D021 /* ViewClipRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07508D92F5380E10026D021 /* ViewClipRecorder.swift */; };
@@ -105,6 +111,12 @@
 		F01E0EA22E7A15FC008C1547 /* PlaybackOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackOverlay.swift; sourceTree = "<group>"; };
 		F03334602F1ED3EC004102AC /* ClipUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipUploader.swift; sourceTree = "<group>"; };
 		F03334622F1FF2E2004102AC /* RecordingProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingProgressRing.swift; sourceTree = "<group>"; };
+		F034E64F2F916D1300DDB10C /* WellnessSummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessSummaryCard.swift; sourceTree = "<group>"; };
+		F034E6532F916D9C00DDB10C /* WellnessQuestionnaireScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessQuestionnaireScreen.swift; sourceTree = "<group>"; };
+		F034E6582F916DE200DDB10C /* WellnessQuestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessQuestion.swift; sourceTree = "<group>"; };
+		F034E65C2F916E0000DDB10C /* WellnessEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessEntry.swift; sourceTree = "<group>"; };
+		F034E6622F917B1400DDB10C /* WellnessLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessLoader.swift; sourceTree = "<group>"; };
+		F034E66D2F9192E400DDB10C /* WellnessSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessSaver.swift; sourceTree = "<group>"; };
 		F06004842E37E17F000B279F /* MyDayExerciseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExerciseListView.swift; sourceTree = "<group>"; };
 		F0622F002ED260CF00260A5B /* CustomNumberPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNumberPad.swift; sourceTree = "<group>"; };
 		F07508D92F5380E10026D021 /* ViewClipRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipRecorder.swift; sourceTree = "<group>"; };
@@ -263,6 +275,31 @@
 			path = Uploader;
 			sourceTree = "<group>";
 		};
+		F034E6512F916D4800DDB10C /* Wellness */ = {
+			isa = PBXGroup;
+			children = (
+				F034E64F2F916D1300DDB10C /* WellnessSummaryCard.swift */,
+			);
+			path = Wellness;
+			sourceTree = "<group>";
+		};
+		F034E6522F916D9300DDB10C /* Wellness */ = {
+			isa = PBXGroup;
+			children = (
+				F034E6532F916D9C00DDB10C /* WellnessQuestionnaireScreen.swift */,
+			);
+			path = Wellness;
+			sourceTree = "<group>";
+		};
+		F034E6562F916DD300DDB10C /* Wellness */ = {
+			isa = PBXGroup;
+			children = (
+				F034E6582F916DE200DDB10C /* WellnessQuestion.swift */,
+				F034E65C2F916E0000DDB10C /* WellnessEntry.swift */,
+			);
+			path = Wellness;
+			sourceTree = "<group>";
+		};
 		F07508D82F5380870026D021 /* ViewAnalytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,6 +331,8 @@
 			isa = PBXGroup;
 			children = (
 				F0750B182F5E252F0026D021 /* TimeSettable.swift */,
+				F034E6622F917B1400DDB10C /* WellnessLoader.swift */,
+				F034E66D2F9192E400DDB10C /* WellnessSaver.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -321,6 +360,7 @@
 		F0BE5C152EB7ABFB009677F5 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				F034E6522F916D9300DDB10C /* Wellness */,
 				F0750BB32F621A700026D021 /* Sports */,
 				F0750B0E2F5E226C0026D021 /* Fitness */,
 				F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */,
@@ -339,6 +379,7 @@
 		F0BE5C162EB7AC65009677F5 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				F034E6512F916D4800DDB10C /* Wellness */,
 				F0BE5C172EB7AC71009677F5 /* ExerciseCompletionView.swift */,
 				F0BE5C192EB7ACB0009677F5 /* ProgressRingView.swift */,
 				F0BE5C1B2EB7C981009677F5 /* CompletedSetView.swift */,
@@ -447,6 +488,7 @@
 		F0D6C2502E36B7AA00FEFEF1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F034E6562F916DD300DDB10C /* Wellness */,
 				F0750B462F5F7B1E0026D021 /* Sports */,
 				F0D6C2542E36C12A00FEFEF1 /* MyDayExerciseModel.swift */,
 				F0F6082D2E42A1F50015F260 /* Exercise.swift */,
@@ -681,14 +723,17 @@
 				F0622F012ED260CF00260A5B /* CustomNumberPad.swift in Sources */,
 				F0750B122F5E24380026D021 /* FitnessSessionDetailView.swift in Sources */,
 				F0D348562F2A7A7D00AB6121 /* ClipUploadData.swift in Sources */,
+				F034E6542F916D9C00DDB10C /* WellnessQuestionnaireScreen.swift in Sources */,
 				F03334612F1ED3EC004102AC /* ClipUploader.swift in Sources */,
 				F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */,
 				F0D348522F2A7A5400AB6121 /* ClipUploadResult.swift in Sources */,
+				F034E6592F916DE200DDB10C /* WellnessQuestion.swift in Sources */,
 				F07508DA2F5380E10026D021 /* ViewClipRecorder.swift in Sources */,
 				F0E2CC4F2EC5389B00993165 /* MyDayAndStatSaver.swift in Sources */,
 				F0750BBD2F621B4F0026D021 /* MyDayNewSportManager.swift in Sources */,
 				F01E0EA12E7A1242008C1547 /* RecordingOverlay.swift in Sources */,
 				F0F4B2B62E85622E007E2469 /* MyDayLoader.swift in Sources */,
+				F034E6632F917B1400DDB10C /* WellnessLoader.swift in Sources */,
 				F01E0E9F2E7A11B7008C1547 /* VideoRecorder.swift in Sources */,
 				F0BE5C122EB553B6009677F5 /* MyDayTempoSelectorView.swift in Sources */,
 				F07509C62F5A23630026D021 /* ViewClipDisplayView.swift in Sources */,
@@ -709,11 +754,13 @@
 				F0BE5C1A2EB7ACB0009677F5 /* ProgressRingView.swift in Sources */,
 				F0F6082E2E42A1F50015F260 /* Exercise.swift in Sources */,
 				F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */,
+				F034E65D2F916E0000DDB10C /* WellnessEntry.swift in Sources */,
 				F01E0E972E7A01E8008C1547 /* ClipPlaybackScreen.swift in Sources */,
 				F0D348582F2A7A8E00AB6121 /* UploadError.swift in Sources */,
 				F0D6C24E2E358C0900FEFEF1 /* MyDayHomeScreen.swift in Sources */,
 				F07509C42F5A22EC0026D021 /* ClipOverlayView.swift in Sources */,
 				F07509C82F5A23820026D021 /* ViewClipViewModel.swift in Sources */,
+				F034E6502F916D1300DDB10C /* WellnessSummaryCard.swift in Sources */,
 				F0D5278D2F2F905900FA0636 /* VideoConverter.swift in Sources */,
 				F0F35C482F16AEF600ACB11E /* MyDayCoordinator.swift in Sources */,
 				F0750BB52F621A7E0026D021 /* SportPickerView.swift in Sources */,
@@ -721,6 +768,7 @@
 				F0F4B2B22E85620B007E2469 /* MyDaySaver.swift in Sources */,
 				F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */,
 				F0C8EC162ECE77E8002213C7 /* PlaceholderSetView.swift in Sources */,
+				F034E66E2F9192E400DDB10C /* WellnessSaver.swift in Sources */,
 				F0750BBB2F621AF40026D021 /* SportNoteSelectorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

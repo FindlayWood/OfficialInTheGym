@@ -34,14 +34,35 @@ class MyDayKitComposition {
         // Deleter
         let deleter = FirestoreRawLogDeleter()
         
+        // Wellness
+        let localWellnessLoader: WellnessLoader = FileManagerWellnessLoader(
+            policy: weekPolicy
+        )
+        let remoteWellnessLoader: WellnessLoader = FirestoreWellnessLoader()
+        let localWithRemoteFallbackWellnessLoader = LocalWithRemoteFallBackWellnessLoader(
+            localLoader: localWellnessLoader,
+            remoteLoader: remoteWellnessLoader
+        )
+        let wellnessPolicyLoader = WellnessPolicyLoader(
+            localLoader: localWithRemoteFallbackWellnessLoader,
+            remoteLoader: remoteWellnessLoader,
+            policy: weekPolicy
+        )
+        
+        // Wellness Saver
+        let localWellnessSaver = WellnessFileManagerSaver()
+        let remoteWellnessSaver: WellnessSaver = WellnessFirestoreSaver()
+        let localAndRemoteWellnessSaver = LocalAndRemoteWellnessSaver(local: localWellnessSaver, remote: remoteWellnessSaver)
+        
         let dayManager = MyDayManager(
             saver: localAndRemoteMyDayAndExerciseStatsSaver,
             clipSaver: localAndRemoteMyDaySaver,
             deleteSaver: localAndRemoteMyDaySaver,
             loader: policyLoader,
-            deleter: deleter
+            deleter: deleter,
+            wellnessLoader: wellnessPolicyLoader,
+            wellnessSaver: localAndRemoteWellnessSaver
         )
-        
         
         
         // Clip
@@ -89,12 +110,35 @@ class MyDayKitComposition {
         // Deleter
         let deleter = FirestoreRawLogDeleter()
         
+        // Wellness
+        let localWellnessLoader: WellnessLoader = FileManagerWellnessLoader(
+            policy: weekPolicy
+        )
+        let remoteWellnessLoader: WellnessLoader = FirestoreWellnessLoader()
+        let localWithRemoteFallbackWellnessLoader = LocalWithRemoteFallBackWellnessLoader(
+            localLoader: localWellnessLoader,
+            remoteLoader: remoteWellnessLoader
+        )
+        let wellnessPolicyLoader = WellnessPolicyLoader(
+            localLoader: localWithRemoteFallbackWellnessLoader,
+            remoteLoader: remoteWellnessLoader,
+            policy: weekPolicy
+        )
+        
+        // Wellness Saver
+        let localWellnessSaver = WellnessFileManagerSaver()
+        let remoteWellnessSaver: WellnessSaver = WellnessFirestoreSaver()
+        let localAndRemoteWellnessSaver = LocalAndRemoteWellnessSaver(local: localWellnessSaver, remote: remoteWellnessSaver)
+        
+        
         let dayManager = MyDayManager(
             saver: localAndRemoteMyDayAndExerciseStatsSaver,
             clipSaver: localAndRemoteMyDaySaver,
             deleteSaver: localAndRemoteMyDaySaver,
             loader: policyLoader,
-            deleter: deleter
+            deleter: deleter,
+            wellnessLoader: wellnessPolicyLoader,
+            wellnessSaver: localAndRemoteWellnessSaver
         )
         
         // Clip
@@ -143,12 +187,34 @@ class MyDayKitComposition {
         // Deleter
         let deleter = FirestoreRawLogDeleter()
         
+        // Wellness
+        let localWellnessLoader: WellnessLoader = FileManagerWellnessLoader(
+            policy: weekPolicy
+        )
+        let remoteWellnessLoader: WellnessLoader = FirestoreWellnessLoader()
+        let localWithRemoteFallbackWellnessLoader = LocalWithRemoteFallBackWellnessLoader(
+            localLoader: localWellnessLoader,
+            remoteLoader: remoteWellnessLoader
+        )
+        let wellnessPolicyLoader = WellnessPolicyLoader(
+            localLoader: localWithRemoteFallbackWellnessLoader,
+            remoteLoader: remoteWellnessLoader,
+            policy: weekPolicy
+        )
+        
+        // Wellness Saver
+        let localWellnessSaver = WellnessFileManagerSaver()
+        let remoteWellnessSaver: WellnessSaver = WellnessFirestoreSaver()
+        let localAndRemoteWellnessSaver = LocalAndRemoteWellnessSaver(local: localWellnessSaver, remote: remoteWellnessSaver)
+        
         let dayManager = MyDayManager(
             saver: localAndRemoteMyDayAndExerciseStatsSaver,
             clipSaver: localAndRemoteMyDaySaver,
             deleteSaver: localAndRemoteMyDaySaver,
             loader: policyLoader,
-            deleter: deleter
+            deleter: deleter,
+            wellnessLoader: wellnessPolicyLoader,
+            wellnessSaver: localAndRemoteWellnessSaver
         )
         
         let vc = MyDayHomeViewController(dayManager: dayManager)

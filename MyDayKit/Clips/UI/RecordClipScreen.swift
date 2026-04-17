@@ -236,7 +236,9 @@ struct RecordClipScreen: View {
             clipSaver: PreviewMyDaySaver(),
             deleteSaver: PreviewMyDaySaver(),
             loader: PreviewLoader(),
-            deleter: PreviewMyDayDeleter()
+            deleter: PreviewMyDayDeleter(),
+            wellnessLoader: PreviewWellnessLoader(),
+            wellnessSaver: PreviewWellnessSaver()
         ),
         exerciseID: "exerciseID"
     )

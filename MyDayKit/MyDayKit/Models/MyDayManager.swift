@@ -14,18 +14,35 @@ public class MyDayManager: ObservableObject {
     
     @Published var selectedDay: MyDayFullDayModel?
     
+    @Published var selectedWellness: WellnessEntry?
+    @Published var loadedWellness: [WellnessEntry] = []
+    
     let saver: MyDayAndStatSaver
     let clipSaver: MyDaySaver
     let deleteSaver: MyDaySaver
     let loader: MyDayLoader
     let deleter: MyDayDeleter
     
-    public init(saver: MyDayAndStatSaver, clipSaver: MyDaySaver, deleteSaver: MyDaySaver, loader: MyDayLoader, deleter: MyDayDeleter) {
+    // wellness
+    let wellnessLoader: WellnessLoader
+    let wellnessSaver: WellnessSaver
+    
+    public init(
+        saver: MyDayAndStatSaver,
+        clipSaver: MyDaySaver,
+        deleteSaver: MyDaySaver,
+        loader: MyDayLoader,
+        deleter: MyDayDeleter,
+        wellnessLoader: WellnessLoader,
+        wellnessSaver: WellnessSaver
+    ) {
         self.saver = saver
         self.clipSaver = clipSaver
         self.deleteSaver = deleteSaver
         self.loader = loader
         self.deleter = deleter
+        self.wellnessLoader = wellnessLoader
+        self.wellnessSaver = wellnessSaver
         initialLoad()
     }
     
@@ -148,6 +165,11 @@ public class MyDayManager: ObservableObject {
             } else {
                 self.selectedDay = MyDayFullDayModel(id: UUID().uuidString, date: .now, exercises: [])
             }
+            
+            if let wellness: WellnessEntry = try? await wellnessLoader.load(for: .now) {
+                self.loadedWellness.append(wellness)
+                self.selectedWellness = wellness
+            }
         }
     }
     
@@ -162,6 +184,29 @@ public class MyDayManager: ObservableObject {
                 await MainActor.run {
                     self.selectedDay = MyDayFullDayModel(id: UUID().uuidString, date: date, exercises: [])
                 }
+            }
+            
+            if let wellness: WellnessEntry = try? await wellnessLoader.load(for: date) {
+                await MainActor.run {
+                    self.loadedWellness.append(wellness)
+                    self.selectedWellness = wellness
+                }
+            } else {
+                await MainActor.run {
+                    self.selectedWellness = nil
+                }
+            }
+        }
+    }
+    
+    // save wellness
+    func saveWellnessEntry(_ entry: WellnessEntry) {
+        selectedWellness = entry
+        Task {
+            do {
+                try await wellnessSaver.save(data: entry)
+            } catch {
+                print(String(describing: error))
             }
         }
     }
