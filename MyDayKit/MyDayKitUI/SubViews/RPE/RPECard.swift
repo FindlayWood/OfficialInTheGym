@@ -13,7 +13,7 @@ import SwiftUI
 struct RPECard: View {
     var entry: RPEEntry?
     var isCurrentDay: Bool
-    var onConfirm: ((Int) -> ())?
+    var onConfirm: ((RPEEntry) -> ())?
 
     @State private var isExpanded: Bool = false
     @State private var pendingScore: Int? = nil
@@ -171,7 +171,8 @@ struct RPECard: View {
                 guard let score = pendingScore else { return }
                 withAnimation {
                     isExpanded = false
-                    onConfirm?(score)
+                    let newEntry = RPEEntry(score: score)
+                    onConfirm?(newEntry)
                 }
             }) {
                 Text("Confirm")

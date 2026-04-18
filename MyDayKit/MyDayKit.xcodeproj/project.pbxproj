@@ -18,7 +18,6 @@
 		F03334612F1ED3EC004102AC /* ClipUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03334602F1ED3EC004102AC /* ClipUploader.swift */; };
 		F03334632F1FF2E2004102AC /* RecordingProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03334622F1FF2E2004102AC /* RecordingProgressRing.swift */; };
 		F034E6502F916D1300DDB10C /* WellnessSummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E64F2F916D1300DDB10C /* WellnessSummaryCard.swift */; };
-		F034E6542F916D9C00DDB10C /* WellnessQuestionnaireScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E6532F916D9C00DDB10C /* WellnessQuestionnaireScreen.swift */; };
 		F034E6592F916DE200DDB10C /* WellnessQuestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E6582F916DE200DDB10C /* WellnessQuestion.swift */; };
 		F034E65D2F916E0000DDB10C /* WellnessEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E65C2F916E0000DDB10C /* WellnessEntry.swift */; };
 		F034E6632F917B1400DDB10C /* WellnessLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E6622F917B1400DDB10C /* WellnessLoader.swift */; };
@@ -114,7 +113,6 @@
 		F03334602F1ED3EC004102AC /* ClipUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipUploader.swift; sourceTree = "<group>"; };
 		F03334622F1FF2E2004102AC /* RecordingProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingProgressRing.swift; sourceTree = "<group>"; };
 		F034E64F2F916D1300DDB10C /* WellnessSummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessSummaryCard.swift; sourceTree = "<group>"; };
-		F034E6532F916D9C00DDB10C /* WellnessQuestionnaireScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessQuestionnaireScreen.swift; sourceTree = "<group>"; };
 		F034E6582F916DE200DDB10C /* WellnessQuestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessQuestion.swift; sourceTree = "<group>"; };
 		F034E65C2F916E0000DDB10C /* WellnessEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessEntry.swift; sourceTree = "<group>"; };
 		F034E6622F917B1400DDB10C /* WellnessLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessLoader.swift; sourceTree = "<group>"; };
@@ -287,14 +285,6 @@
 			path = Wellness;
 			sourceTree = "<group>";
 		};
-		F034E6522F916D9300DDB10C /* Wellness */ = {
-			isa = PBXGroup;
-			children = (
-				F034E6532F916D9C00DDB10C /* WellnessQuestionnaireScreen.swift */,
-			);
-			path = Wellness;
-			sourceTree = "<group>";
-		};
 		F034E6562F916DD300DDB10C /* Wellness */ = {
 			isa = PBXGroup;
 			children = (
@@ -380,7 +370,6 @@
 		F0BE5C152EB7ABFB009677F5 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				F034E6522F916D9300DDB10C /* Wellness */,
 				F0750BB32F621A700026D021 /* Sports */,
 				F0750B0E2F5E226C0026D021 /* Fitness */,
 				F0D6C2302E35890600FEFEF1 /* MyDayHomeScreen.swift */,
@@ -747,7 +736,6 @@
 				F0622F012ED260CF00260A5B /* CustomNumberPad.swift in Sources */,
 				F0750B122F5E24380026D021 /* FitnessSessionDetailView.swift in Sources */,
 				F0D348562F2A7A7D00AB6121 /* ClipUploadData.swift in Sources */,
-				F034E6542F916D9C00DDB10C /* WellnessQuestionnaireScreen.swift in Sources */,
 				F03334612F1ED3EC004102AC /* ClipUploader.swift in Sources */,
 				F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */,
 				F0D348522F2A7A5400AB6121 /* ClipUploadResult.swift in Sources */,

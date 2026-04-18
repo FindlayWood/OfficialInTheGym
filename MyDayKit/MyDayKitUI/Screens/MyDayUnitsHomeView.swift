@@ -279,8 +279,8 @@ struct MyDayUnitsHomeView: View {
             deleteSaver: PreviewMyDaySaver(),
             loader: PreviewLoader(),
             deleter: PreviewMyDayDeleter(),
-            wellnessLoader: PreviewWellnessLoader(),
-            wellnessSaver: PreviewWellnessSaver()
+            wellnessSaver: PreviewMyDaySaver(),
+            rpeSaver: PreviewMyDaySaver()
         ),
         newExercise: .init(exercise: .pressUps)
     )

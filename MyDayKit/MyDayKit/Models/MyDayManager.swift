@@ -24,8 +24,10 @@ public class MyDayManager: ObservableObject {
     let deleter: MyDayDeleter
     
     // wellness
-    let wellnessLoader: WellnessLoader
-    let wellnessSaver: WellnessSaver
+    let wellnessSaver: MyDaySaver
+    
+    // rpe
+    let rpeSaver: MyDaySaver
     
     public init(
         saver: MyDayAndStatSaver,
@@ -33,16 +35,16 @@ public class MyDayManager: ObservableObject {
         deleteSaver: MyDaySaver,
         loader: MyDayLoader,
         deleter: MyDayDeleter,
-        wellnessLoader: WellnessLoader,
-        wellnessSaver: WellnessSaver
+        wellnessSaver: MyDaySaver,
+        rpeSaver: MyDaySaver
     ) {
         self.saver = saver
         self.clipSaver = clipSaver
         self.deleteSaver = deleteSaver
         self.loader = loader
         self.deleter = deleter
-        self.wellnessLoader = wellnessLoader
         self.wellnessSaver = wellnessSaver
+        self.rpeSaver = rpeSaver
         initialLoad()
     }
     
@@ -165,11 +167,6 @@ public class MyDayManager: ObservableObject {
             } else {
                 self.selectedDay = MyDayFullDayModel(id: UUID().uuidString, date: .now, exercises: [])
             }
-            
-            if let wellness: WellnessEntry = try? await wellnessLoader.load(for: .now) {
-                self.loadedWellness.append(wellness)
-                self.selectedWellness = wellness
-            }
         }
     }
     
@@ -185,29 +182,32 @@ public class MyDayManager: ObservableObject {
                     self.selectedDay = MyDayFullDayModel(id: UUID().uuidString, date: date, exercises: [])
                 }
             }
-            
-            if let wellness: WellnessEntry = try? await wellnessLoader.load(for: date) {
-                await MainActor.run {
-                    self.loadedWellness.append(wellness)
-                    self.selectedWellness = wellness
-                }
-            } else {
-                await MainActor.run {
-                    self.selectedWellness = nil
-                }
-            }
         }
     }
     
     // save wellness
     func saveWellnessEntry(_ entry: WellnessEntry) {
-        selectedWellness = entry
+        guard var selectedDay else { return }
+        
+        selectedDay.wellnessEntry = entry
+        
+        self.selectedDay = selectedDay
+        
         Task {
-            do {
-                try await wellnessSaver.save(data: entry)
-            } catch {
-                print(String(describing: error))
-            }
+            try await wellnessSaver.save(data: selectedDay)
+        }
+    }
+    
+    // save rpe
+    func saveRPEEntry(_ entry: RPEEntry) {
+        guard var selectedDay else { return }
+        
+        selectedDay.rpeEntry = entry
+        
+        self.selectedDay = selectedDay
+        
+        Task {
+            try await rpeSaver.save(data: selectedDay)
         }
     }
 }

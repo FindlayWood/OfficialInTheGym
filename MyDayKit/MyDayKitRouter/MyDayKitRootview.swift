@@ -43,8 +43,8 @@ public struct MyDayKitRootview: View {
                 deleteSaver: PreviewMyDaySaver(),
                 loader: PreviewLoader(),
                 deleter: PreviewMyDayDeleter(),
-                wellnessLoader: PreviewWellnessLoader(),
-                wellnessSaver: PreviewWellnessSaver()
+                wellnessSaver: PreviewMyDaySaver(),
+                rpeSaver: PreviewMyDaySaver()
             ),
             videoConverter: VideoConverter(
                 userID: "user123",

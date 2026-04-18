@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - RPEEntry
-public struct RPEEntry: Identifiable {
+public struct RPEEntry: Identifiable, Codable {
     public let id: String
     public let date: Date
     public let score: Int  // 1–10
