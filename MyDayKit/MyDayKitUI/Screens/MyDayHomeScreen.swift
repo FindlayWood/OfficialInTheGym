@@ -44,7 +44,6 @@ struct MyDayHomeScreen: View {
     var recordClip: ((String) -> ())?
     var edit: ((MyDayNewExerciseManager) -> ())?
     var clipSelected: ((MyDayClipModel, UIImage, CGRect) -> ())?
-    var wellnessTapped: (() -> ())?
     
     private var isToday: Bool { dayManager.isTodaySelected() }
     
@@ -251,11 +250,13 @@ struct MyDayHomeScreen: View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 12) {
                 WellnessSummaryCard(
-                    entry: dayManager.selectedWellness,
-                    isCurrentDay: isToday,
-                    onTap: {
-                        wellnessTapped?()
-                    }
+                    viewModel: WellnessQuestionnaireViewModel(
+                        existingEntry: day.wellnessEntry,
+                        onComplete: { entry in
+                            dayManager.saveWellnessEntry(entry)
+                        }
+                    ),
+                    isCurrentDay: isToday
                 )
                 ForEach(day.exercises) { exercise in
                     ExerciseCompletionView(
@@ -281,6 +282,16 @@ struct MyDayHomeScreen: View {
                         clipSelected: clipSelected
                     )
                 }
+                
+                if day.exercises.count > 0 {
+                    RPECard(
+                        entry: dayManager.selectedDay?.rpeEntry,
+                        isCurrentDay: isToday,
+                        onConfirm: { entry in
+                            dayManager.saveRPEEntry(entry)
+                        }
+                    )
+                }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -293,11 +304,13 @@ struct MyDayHomeScreen: View {
         VStack(spacing: 16) {
             
             WellnessSummaryCard(
-                entry: dayManager.selectedWellness,
-                isCurrentDay: isToday,
-                onTap: {
-                    wellnessTapped?()
-                }
+                viewModel: WellnessQuestionnaireViewModel(
+                    existingEntry: dayManager.selectedDay?.wellnessEntry,
+                    onComplete: { entry in
+                        dayManager.saveWellnessEntry(entry)
+                    }
+                ),
+                isCurrentDay: isToday
             )
             
             Spacer()
@@ -343,6 +356,7 @@ struct MyDayHomeScreen: View {
             }
             
             Spacer()
+            
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
@@ -437,8 +451,8 @@ struct MyDayHomeScreen: View {
             deleteSaver: PreviewMyDaySaver(),
             loader: PreviewLoader(),
             deleter: PreviewMyDayDeleter(),
-            wellnessLoader: PreviewWellnessLoader(),
-            wellnessSaver: PreviewWellnessSaver()
+            wellnessSaver: PreviewMyDaySaver(),
+            rpeSaver: PreviewMyDaySaver()
         )
     )
 }

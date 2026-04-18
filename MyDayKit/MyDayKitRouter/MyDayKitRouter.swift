@@ -24,8 +24,6 @@ enum MyDayRoutes: Hashable {
     
     case sportPicker
     case sportDetail(MyDayNewSportManager)
-    
-    case wellness
 }
 
 enum MyDaySheets: Identifiable {
@@ -160,8 +158,6 @@ public class MyDayKitRouter: ObservableObject {
             SportPickerView()
         case .sportDetail(let manager):
             SportSessionDetailView(manager: manager)
-        case .wellness:
-            Text("Wellness")
         }
     }
     

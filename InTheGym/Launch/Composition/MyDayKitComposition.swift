@@ -12,82 +12,6 @@ import SwiftUI
 
 class MyDayKitComposition {
     
-    func compose() -> UIHostingController<MyDayKitRootview> {
-        let loader: ExerciseLoader = FirebaseExerciseLoader()
-        let mainThreadLoader: ExerciseLoader = MainThreadExerciseLoaderDecorator(decoratee: loader)
-        let exerciseManager = ExerciseManager(loader: mainThreadLoader)
-        let localSaver = MyDayFileManagerSaver()
-        let remoteSaver = MyDayFirestoreSaver()
-        let localAndRemoteMyDaySaver: MyDaySaver = LocalAndRemoteMyDaySaver(local: localSaver, remote: remoteSaver)
-        
-        // Stats
-        let rawLogRemoteStatsSaver: ExerciseStatsSaver = FirestoreExerciseStatsLogSaver()
-        let localAndRemoteMyDayAndExerciseStatsSaver = LocalAndRemoteMyDayAndRemoteStatSaver(myDaySaver: localAndRemoteMyDaySaver, statSaver: rawLogRemoteStatsSaver)
-        
-        // Loader
-        let weekPolicy = MyDayOneWeekPolicy()
-        let localLoader: MyDayLoader = MyDayFileManagerLoader(policy: weekPolicy)
-        let remoteLoader = MyDayFirestoreLoader()
-        let localWithRemoteFallbackLoader = LocalWithRemoteFallBackMyDayLoader(localLoader: localLoader, remoteLoader: remoteLoader)
-        let policyLoader = MyDayPolicyDayLoader(localLoader: localWithRemoteFallbackLoader, remoteLoader: remoteLoader, policy: weekPolicy)
-        
-        // Deleter
-        let deleter = FirestoreRawLogDeleter()
-        
-        // Wellness
-        let localWellnessLoader: WellnessLoader = FileManagerWellnessLoader(
-            policy: weekPolicy
-        )
-        let remoteWellnessLoader: WellnessLoader = FirestoreWellnessLoader()
-        let localWithRemoteFallbackWellnessLoader = LocalWithRemoteFallBackWellnessLoader(
-            localLoader: localWellnessLoader,
-            remoteLoader: remoteWellnessLoader
-        )
-        let wellnessPolicyLoader = WellnessPolicyLoader(
-            localLoader: localWithRemoteFallbackWellnessLoader,
-            remoteLoader: remoteWellnessLoader,
-            policy: weekPolicy
-        )
-        
-        // Wellness Saver
-        let localWellnessSaver = WellnessFileManagerSaver()
-        let remoteWellnessSaver: WellnessSaver = WellnessFirestoreSaver()
-        let localAndRemoteWellnessSaver = LocalAndRemoteWellnessSaver(local: localWellnessSaver, remote: remoteWellnessSaver)
-        
-        let dayManager = MyDayManager(
-            saver: localAndRemoteMyDayAndExerciseStatsSaver,
-            clipSaver: localAndRemoteMyDaySaver,
-            deleteSaver: localAndRemoteMyDaySaver,
-            loader: policyLoader,
-            deleter: deleter,
-            wellnessLoader: wellnessPolicyLoader,
-            wellnessSaver: localAndRemoteWellnessSaver
-        )
-        
-        
-        // Clip
-        let thumbnailGenerator = VideoThumbnailGenerator()
-        let converter = VideoConverter(
-            userID: UserDefaults.currentUser.uid,
-            thumbnailGenerator: thumbnailGenerator
-        )
-        let storageClipUploader = FirebaseStorageClipUploader()
-        let thumnbailUploader = ThumbnailUploadDecorator(wrapping: storageClipUploader)
-        let wrappedClipUploader = FirestoreMetadataDecorator(wrapped: thumnbailUploader)
-        let uploadManager = UploadManager(clipUploader: wrappedClipUploader)
-        
-        let router = MyDayKitRouter(
-            exerciseManager: exerciseManager,
-            dayManager: dayManager,
-            videoConverter: converter,
-            uploadManager: uploadManager
-        )
-        
-        let view = MyDayKitRootview(router: router)
-        let hostingController = UIHostingController(rootView: view)
-        return hostingController
-    }
-    
     func composeCombination(_ navigationController: UINavigationController) {
         let loader: ExerciseLoader = FirebaseExerciseLoader()
         let mainThreadLoader: ExerciseLoader = MainThreadExerciseLoaderDecorator(decoratee: loader)
@@ -110,26 +34,6 @@ class MyDayKitComposition {
         // Deleter
         let deleter = FirestoreRawLogDeleter()
         
-        // Wellness
-        let localWellnessLoader: WellnessLoader = FileManagerWellnessLoader(
-            policy: weekPolicy
-        )
-        let remoteWellnessLoader: WellnessLoader = FirestoreWellnessLoader()
-        let localWithRemoteFallbackWellnessLoader = LocalWithRemoteFallBackWellnessLoader(
-            localLoader: localWellnessLoader,
-            remoteLoader: remoteWellnessLoader
-        )
-        let wellnessPolicyLoader = WellnessPolicyLoader(
-            localLoader: localWithRemoteFallbackWellnessLoader,
-            remoteLoader: remoteWellnessLoader,
-            policy: weekPolicy
-        )
-        
-        // Wellness Saver
-        let localWellnessSaver = WellnessFileManagerSaver()
-        let remoteWellnessSaver: WellnessSaver = WellnessFirestoreSaver()
-        let localAndRemoteWellnessSaver = LocalAndRemoteWellnessSaver(local: localWellnessSaver, remote: remoteWellnessSaver)
-        
         
         let dayManager = MyDayManager(
             saver: localAndRemoteMyDayAndExerciseStatsSaver,
@@ -137,8 +41,8 @@ class MyDayKitComposition {
             deleteSaver: localAndRemoteMyDaySaver,
             loader: policyLoader,
             deleter: deleter,
-            wellnessLoader: wellnessPolicyLoader,
-            wellnessSaver: localAndRemoteWellnessSaver
+            wellnessSaver: localAndRemoteMyDaySaver,
+            rpeSaver: localAndRemoteMyDaySaver
         )
         
         // Clip
@@ -164,61 +68,6 @@ class MyDayKitComposition {
             clipViewRecorder: viewClipRecorder
         )
         coordinator.start()
-    }
-    
-    func composeUIKit() -> UIViewController {
-        let loader: ExerciseLoader = FirebaseExerciseLoader()
-        let mainThreadLoader: ExerciseLoader = MainThreadExerciseLoaderDecorator(decoratee: loader)
-        let exerciseManager = ExerciseManager(loader: mainThreadLoader)
-        let localSaver = MyDayFileManagerSaver()
-        let remoteSaver = MyDayFirestoreSaver()
-        let localAndRemoteMyDaySaver: MyDaySaver = LocalAndRemoteMyDaySaver(local: localSaver, remote: remoteSaver)
-        
-        // Stats
-        let rawLogRemoteStatsSaver: ExerciseStatsSaver = FirestoreExerciseStatsLogSaver()
-        let localAndRemoteMyDayAndExerciseStatsSaver = LocalAndRemoteMyDayAndRemoteStatSaver(myDaySaver: localAndRemoteMyDaySaver, statSaver: rawLogRemoteStatsSaver)
-        
-        // Loader
-        let weekPolicy = MyDayOneWeekPolicy()
-        let localLoader: MyDayLoader = MyDayFileManagerLoader(policy: weekPolicy)
-        let remoteLoader = MyDayFirestoreLoader()
-        let policyLoader = MyDayPolicyDayLoader(localLoader: localLoader, remoteLoader: remoteLoader, policy: weekPolicy)
-        
-        // Deleter
-        let deleter = FirestoreRawLogDeleter()
-        
-        // Wellness
-        let localWellnessLoader: WellnessLoader = FileManagerWellnessLoader(
-            policy: weekPolicy
-        )
-        let remoteWellnessLoader: WellnessLoader = FirestoreWellnessLoader()
-        let localWithRemoteFallbackWellnessLoader = LocalWithRemoteFallBackWellnessLoader(
-            localLoader: localWellnessLoader,
-            remoteLoader: remoteWellnessLoader
-        )
-        let wellnessPolicyLoader = WellnessPolicyLoader(
-            localLoader: localWithRemoteFallbackWellnessLoader,
-            remoteLoader: remoteWellnessLoader,
-            policy: weekPolicy
-        )
-        
-        // Wellness Saver
-        let localWellnessSaver = WellnessFileManagerSaver()
-        let remoteWellnessSaver: WellnessSaver = WellnessFirestoreSaver()
-        let localAndRemoteWellnessSaver = LocalAndRemoteWellnessSaver(local: localWellnessSaver, remote: remoteWellnessSaver)
-        
-        let dayManager = MyDayManager(
-            saver: localAndRemoteMyDayAndExerciseStatsSaver,
-            clipSaver: localAndRemoteMyDaySaver,
-            deleteSaver: localAndRemoteMyDaySaver,
-            loader: policyLoader,
-            deleter: deleter,
-            wellnessLoader: wellnessPolicyLoader,
-            wellnessSaver: localAndRemoteWellnessSaver
-        )
-        
-        let vc = MyDayHomeViewController(dayManager: dayManager)
-        return vc
     }
 }
 

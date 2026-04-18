@@ -84,6 +84,8 @@ public struct MyDayFullDayModel: Identifiable, Codable {
     public let id: String
     let date: Date
     var exercises: [MyDayExerciseModel]
+    var rpeEntry: RPEEntry?
+    var wellnessEntry: WellnessEntry?
 }
 
 struct MyDayClipModel: Identifiable, Codable {
