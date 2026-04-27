@@ -37,7 +37,7 @@ struct ExerciseDetailScreen: View {
                 .refreshable { await viewModel.load() }
             }
         }
-        .background { Color.black.opacity(0.3).ignoresSafeArea() }
+        .background { Color.darkColor.ignoresSafeArea() }
         .navigationTitle(viewModel.exercise.exerciseName)
         .navigationBarTitleDisplayMode(.large)
         .task { await viewModel.load() }

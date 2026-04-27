@@ -12,6 +12,7 @@
 		F026EE732F8D8FB10066FCB4 /* MovementTypesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE722F8D8FB10066FCB4 /* MovementTypesLoader.swift */; };
 		F034E5792F902F0C00DDB10C /* MiniBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E5782F902F0C00DDB10C /* MiniBarChart.swift */; };
 		F034E57B2F902FE800DDB10C /* WeekBucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E57A2F902FE800DDB10C /* WeekBucket.swift */; };
+		F0664E742F9FF5F70053DEE7 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0664E732F9FF5F70053DEE7 /* Color+Extension.swift */; };
 		F0750E892F6B62960026D021 /* StatsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0750E7D2F6B62960026D021 /* StatsKit.framework */; };
 		F07584D32F8C3CBA00D2C783 /* ACWRDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07584D22F8C3CBA00D2C783 /* ACWRDetailScreen.swift */; };
 		F0A11D202F6C61AC00CE1E9A /* StatsKitRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11D1F2F6C61AC00CE1E9A /* StatsKitRouter.swift */; };
@@ -54,6 +55,7 @@
 		F026EE722F8D8FB10066FCB4 /* MovementTypesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementTypesLoader.swift; sourceTree = "<group>"; };
 		F034E5782F902F0C00DDB10C /* MiniBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniBarChart.swift; sourceTree = "<group>"; };
 		F034E57A2F902FE800DDB10C /* WeekBucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekBucket.swift; sourceTree = "<group>"; };
+		F0664E732F9FF5F70053DEE7 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		F0750E7D2F6B62960026D021 /* StatsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StatsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0750E882F6B62960026D021 /* StatsKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StatsKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F07584D22F8C3CBA00D2C783 /* ACWRDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACWRDetailScreen.swift; sourceTree = "<group>"; };
@@ -114,9 +116,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F0664E722F9FF5EA0053DEE7 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				F0664E732F9FF5F70053DEE7 /* Color+Extension.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		F0750E732F6B62960026D021 = {
 			isa = PBXGroup;
 			children = (
+				F0664E722F9FF5EA0053DEE7 /* UI */,
 				F0F6E7C22F81557000D02F93 /* Loaders */,
 				F0A11D2C2F6C6EBE00CE1E9A /* Models */,
 				F0A11D232F6C622C00CE1E9A /* Screens */,
@@ -328,6 +339,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0A11D222F6C61E600CE1E9A /* StatsKitRoutes.swift in Sources */,
+				F0664E742F9FF5F70053DEE7 /* Color+Extension.swift in Sources */,
 				F0F6DF412F70849800D02F93 /* ExerciseStatsLoader.swift in Sources */,
 				F0F6DF4B2F70A85C00D02F93 /* ExerciseDailyStats.swift in Sources */,
 				F0F6E7CA2F81594400D02F93 /* MuscleGroupsLoader.swift in Sources */,

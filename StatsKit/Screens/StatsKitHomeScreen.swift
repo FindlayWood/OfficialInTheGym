@@ -37,7 +37,7 @@ struct StatsKitHomeScreen: View {
             .padding()
         }
         .background {
-            Color.black.opacity(0.3).ignoresSafeArea()
+            Color.darkColor.ignoresSafeArea()
         }
         .navigationTitle("Stats")
         .task { await viewModel.load() }

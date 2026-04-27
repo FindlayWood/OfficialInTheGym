@@ -260,7 +260,7 @@ struct SectionContainer<Content: View>: View {
                     Text(title)
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.white)
                         .textCase(.uppercase)
                         .tracking(0.5)
                     Spacer()
