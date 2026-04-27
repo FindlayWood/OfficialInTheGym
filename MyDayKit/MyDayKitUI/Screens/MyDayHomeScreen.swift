@@ -71,6 +71,9 @@ struct MyDayHomeScreen: View {
                 loadingView
             }
         }
+        .background {
+            Color.darkColor.ignoresSafeArea()
+        }
         .overlay {
             if let selectedSet {
                 setDetailOverlay(for: selectedSet)
@@ -141,6 +144,9 @@ struct MyDayHomeScreen: View {
                 dateStrip
                     .transition(.opacity.combined(with: .move(edge: .top)))
             }
+        }
+        .background {
+            Color.white.ignoresSafeArea()
         }
     }
     

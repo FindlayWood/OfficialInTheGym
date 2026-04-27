@@ -24,6 +24,9 @@
 		F034E66E2F9192E400DDB10C /* WellnessSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E66D2F9192E400DDB10C /* WellnessSaver.swift */; };
 		F034E7CE2F92E89100DDB10C /* RPEModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E7CD2F92E89100DDB10C /* RPEModel.swift */; };
 		F034E7D32F92E8C000DDB10C /* RPECard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E7D22F92E8C000DDB10C /* RPECard.swift */; };
+		F034E8112F95214A00DDB10C /* MyDayWorkoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E8102F95214A00DDB10C /* MyDayWorkoutModel.swift */; };
+		F034EA9E2F9CEDDC00DDB10C /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034EA9D2F9CEDDC00DDB10C /* Color+Extension.swift */; };
+		F034EAA12F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034EAA02F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift */; };
 		F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06004842E37E17F000B279F /* MyDayExerciseListView.swift */; };
 		F0622F012ED260CF00260A5B /* CustomNumberPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0622F002ED260CF00260A5B /* CustomNumberPad.swift */; };
 		F07508DA2F5380E10026D021 /* ViewClipRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07508D92F5380E10026D021 /* ViewClipRecorder.swift */; };
@@ -119,6 +122,9 @@
 		F034E66D2F9192E400DDB10C /* WellnessSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessSaver.swift; sourceTree = "<group>"; };
 		F034E7CD2F92E89100DDB10C /* RPEModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPEModel.swift; sourceTree = "<group>"; };
 		F034E7D22F92E8C000DDB10C /* RPECard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPECard.swift; sourceTree = "<group>"; };
+		F034E8102F95214A00DDB10C /* MyDayWorkoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutModel.swift; sourceTree = "<group>"; };
+		F034EA9D2F9CEDDC00DDB10C /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
+		F034EAA02F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutCreationHomeScreen.swift; sourceTree = "<group>"; };
 		F06004842E37E17F000B279F /* MyDayExerciseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExerciseListView.swift; sourceTree = "<group>"; };
 		F0622F002ED260CF00260A5B /* CustomNumberPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNumberPad.swift; sourceTree = "<group>"; };
 		F07508D92F5380E10026D021 /* ViewClipRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipRecorder.swift; sourceTree = "<group>"; };
@@ -310,6 +316,39 @@
 			path = RPE;
 			sourceTree = "<group>";
 		};
+		F034E80E2F95213300DDB10C /* MyDayWorkouts */ = {
+			isa = PBXGroup;
+			children = (
+				F034EA9F2F9CF75D00DDB10C /* UI */,
+				F034E80F2F95213C00DDB10C /* Models */,
+			);
+			path = MyDayWorkouts;
+			sourceTree = "<group>";
+		};
+		F034E80F2F95213C00DDB10C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F034E8102F95214A00DDB10C /* MyDayWorkoutModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F034EA9C2F9CEDCE00DDB10C /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				F034EA9D2F9CEDDC00DDB10C /* Color+Extension.swift */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
+		F034EA9F2F9CF75D00DDB10C /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				F034EAA02F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		F07508D82F5380870026D021 /* ViewAnalytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -451,6 +490,7 @@
 		F0D6C20A2E3574EF00FEFEF1 = {
 			isa = PBXGroup;
 			children = (
+				F034E80E2F95213300DDB10C /* MyDayWorkouts */,
 				F0F35C462F16AED800ACB11E /* Coordinator */,
 				F0E2CBCE2EC3E2C600993165 /* MyDayStats */,
 				F01E0E902E78A9BA008C1547 /* Clips */,
@@ -487,6 +527,7 @@
 		F0D6C22F2E3588EF00FEFEF1 /* MyDayKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				F034EA9C2F9CEDCE00DDB10C /* Color */,
 				F0F35C042F15836C00ACB11E /* Sheets */,
 				F0C8EC172ECF7F16002213C7 /* UIKit */,
 				F0BE5C162EB7AC65009677F5 /* SubViews */,
@@ -719,6 +760,7 @@
 				F034E7CE2F92E89100DDB10C /* RPEModel.swift in Sources */,
 				F034E7D32F92E8C000DDB10C /* RPECard.swift in Sources */,
 				F0D3444B2F2582E900AB6121 /* UploadProgressView.swift in Sources */,
+				F034E8112F95214A00DDB10C /* MyDayWorkoutModel.swift in Sources */,
 				F03334632F1FF2E2004102AC /* RecordingProgressRing.swift in Sources */,
 				F0BE5C182EB7AC71009677F5 /* ExerciseCompletionView.swift in Sources */,
 				F0F608282E42A1B50015F260 /* ExerciseLoader.swift in Sources */,
@@ -756,6 +798,7 @@
 				F0750BB92F621ACC0026D021 /* SportTimeSelectorView.swift in Sources */,
 				F0750B192F5E252F0026D021 /* TimeSettable.swift in Sources */,
 				F0BE5BED2EB402DC009677F5 /* MyDayDistanceSelectorView.swift in Sources */,
+				F034EAA12F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift in Sources */,
 				F0750B102F5E22780026D021 /* FitnessActivityPickerView.swift in Sources */,
 				F0D528C92F37D2E200FA0636 /* Transition.swift in Sources */,
 				F0F35C012F10216D00ACB11E /* MyDayDeleter.swift in Sources */,
@@ -764,6 +807,7 @@
 				F01E0E932E78A9D6008C1547 /* RecordClipScreen.swift in Sources */,
 				F0B38C622E5B9C570096234C /* MyDayUnitsHomeView.swift in Sources */,
 				F0BE5C1A2EB7ACB0009677F5 /* ProgressRingView.swift in Sources */,
+				F034EA9E2F9CEDDC00DDB10C /* Color+Extension.swift in Sources */,
 				F0F6082E2E42A1F50015F260 /* Exercise.swift in Sources */,
 				F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */,
 				F034E65D2F916E0000DDB10C /* WellnessEntry.swift in Sources */,
