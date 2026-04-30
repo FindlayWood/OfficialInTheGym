@@ -12,6 +12,8 @@ extension Color {
     static let lightColor = Color(hex: 0x4179BD)
     static let darkColor = Color(hex: 0x1C496E)
     
+    static let thirdColour = Color(hex: 0xF3F9FF)
+    
     /// create a colour using a hex code
     init(hex: Int, opacity: Double = 1.0) {
         let red = Double((hex & 0xff0000) >> 16) / 255.0

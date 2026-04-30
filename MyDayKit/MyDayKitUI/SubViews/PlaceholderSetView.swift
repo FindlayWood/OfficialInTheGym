@@ -42,7 +42,7 @@ struct PlaceholderSetView: View {
         .frame(width: 100, height: 100)
         .background {
             RoundedRectangle(cornerRadius: 8)
-                .foregroundStyle(Color.white)
+                .foregroundStyle(Color.thirdColour)
                 .overlay {
                     RoundedRectangle(cornerRadius: 8)
                         .inset(by: 0.5)

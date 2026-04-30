@@ -32,7 +32,6 @@ struct CompletedSetView: View {
                     .foregroundStyle(Color.secondary)
                     .padding(.horizontal, 5)
                     .padding(.vertical, 2)
-                    .background(Color(UIColor.tertiarySystemBackground))
                     .clipShape(Capsule())
             }
             
@@ -69,7 +68,7 @@ struct CompletedSetView: View {
         .background {
             RoundedRectangle(cornerRadius: 12)
                 .matchedGeometryEffect(id: "\(model.id)background", in: animation)
-                .foregroundStyle(Color(UIColor.systemBackground))
+                .foregroundStyle(Color.thirdColour)
                 .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
                 .overlay {
                     RoundedRectangle(cornerRadius: 12)
