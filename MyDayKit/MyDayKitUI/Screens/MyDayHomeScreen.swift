@@ -89,7 +89,7 @@ struct MyDayHomeScreen: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("MyDay")
                         .font(.system(size: 28, weight: .bold))
-                        .foregroundStyle(Color.primary)
+                        .foregroundStyle(Color.darkColor)
                     
                     // Date selector trigger
                     Button {
