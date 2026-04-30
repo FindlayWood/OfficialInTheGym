@@ -13,35 +13,60 @@ struct StatsKitHomeScreen: View {
     @ObservedObject var viewModel: StatsKitHomeScreenViewModel
 
     var body: some View {
-        ScrollView {
-            HomeScreenContent(
-                totals: viewModel.totals,
-                exercises: viewModel.exerciseStats,
-                muscleGroups: viewModel.muscleGroups,
-                onSeeAllExercises: {
-                    viewModel.onSeeAllExercises?()
-                },
-                onACWRDetail: {
-                    viewModel.onACWRDetail?(viewModel.totals)
-                },
-                onExerciseTapped: { exercise in
-                    viewModel.onExerciseTapped?(exercise)
-                },
-                onBodyMetricsDetail: {
-                    
-                },
-                onTrainingBalanceTapped: {
-                    viewModel.onTrainingBalanceTapped?(viewModel.totals, viewModel.muscleGroups, viewModel.movementTypes)
-                }
-            )
-            .padding()
+        VStack(spacing: 0) {
+            
+            header
+            
+            ScrollView {
+                HomeScreenContent(
+                    totals: viewModel.totals,
+                    exercises: viewModel.exerciseStats,
+                    muscleGroups: viewModel.muscleGroups,
+                    onSeeAllExercises: {
+                        viewModel.onSeeAllExercises?()
+                    },
+                    onACWRDetail: {
+                        viewModel.onACWRDetail?(viewModel.totals)
+                    },
+                    onExerciseTapped: { exercise in
+                        viewModel.onExerciseTapped?(exercise)
+                    },
+                    onBodyMetricsDetail: {
+                        
+                    },
+                    onTrainingBalanceTapped: {
+                        viewModel.onTrainingBalanceTapped?(viewModel.totals, viewModel.muscleGroups, viewModel.movementTypes)
+                    }
+                )
+                .padding()
+            }
         }
         .background {
             Color.darkColor.ignoresSafeArea()
         }
-        .navigationTitle("Stats")
         .task { await viewModel.load() }
     }
+    
+    // MARK: - Header
+    
+    private var header: some View {
+        VStack(spacing: 0) {
+            HStack(alignment: .center) {
+                Text("Stats")
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundStyle(Color.darkColor)
+                
+                Spacer()
+                
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+        }
+        .background {
+            Color.white.ignoresSafeArea()
+        }
+    }
+
 }
 
 #Preview {
