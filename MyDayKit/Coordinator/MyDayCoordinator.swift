@@ -159,6 +159,14 @@ extension MyDayCoordinator {
                     continueAction: { [weak self] in self?.popBack() }
                 )
             )
+        case .workoutCreationHome:
+            let vc = selectorVC(
+                MyDayWorkoutCreationHomeScreen(
+                    manager: WorkoutBuilderManager()
+                )
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
         case .fitnessPicker:
             let vc = selectorVC(
                 FitnessActivityPickerView(
@@ -247,6 +255,10 @@ extension MyDayCoordinator {
                     sportSelected: { [weak self] in
                         self?.navigationController.dismiss(animated: true)
                         self?.navigate(to: .sportPicker)
+                    },
+                    workoutSelected: { [weak self] in
+                        self?.navigationController.dismiss(animated: true)
+                        self?.navigate(to: .workoutCreationHome)
                     }
                 )
             )
