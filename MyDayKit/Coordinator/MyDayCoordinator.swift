@@ -174,7 +174,7 @@ extension MyDayCoordinator {
             )
             
             workoutCoordinator = sub
-            return sub.viewController(for: .root)
+            return sub.start()
             
         case .fitnessPicker:
             let vc = selectorVC(

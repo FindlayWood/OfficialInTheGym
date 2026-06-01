@@ -22,6 +22,15 @@ class MyDayWorkoutCoordinator {
     let uploadManager: UploadManager
     let clipLoader: ClipLoader
     let clipViewRecorder: ViewClipRecorder
+    
+    // MARK: - State
+ 
+    /// Held here so every route in the exercise-add flow can read/write it.
+    private let workoutManager = WorkoutBuilderManager()
+    
+    /// The root VC of *this* coordinator. Set once in start() so we can pop
+    /// back to it without blowing past the parent coordinator's stack.
+    private weak var rootViewController: UIViewController?
 
     // MARK: - Init
 
@@ -47,6 +56,7 @@ class MyDayWorkoutCoordinator {
 
     public func start() -> UIViewController {
         let rootVC = viewController(for: .root)
+        rootViewController = rootVC
         return rootVC
     }
 }
@@ -58,7 +68,7 @@ extension MyDayWorkoutCoordinator {
         case .root:
             let vc = selectorVC(
                 MyDayWorkoutCreationHomeScreen(
-                    manager: WorkoutBuilderManager(),
+                    manager: workoutManager,
                     onOptionsTapped: { [weak self] in
                         self?.presentSheet(.workoutSettings)
                     },
@@ -118,6 +128,13 @@ extension MyDayWorkoutCoordinator {
                         case .note:
                             self?.navigate(to: .note(manager))
                         }
+                    },
+                    continueAction: { [weak self] in
+                        guard let self else { return }
+                        // Append the finished exercise to the workout, then
+                        // pop all the way back to the creation home screen.
+                        self.workoutManager.exercises.append(manager)
+                        self.popToCoordinatorRoot()
                     }
                 )
             )
@@ -193,6 +210,16 @@ extension MyDayWorkoutCoordinator {
 
     func popToRoot() {
         navigationController.popToRootViewController(animated: true)
+    }
+    
+    /// Pops back to this coordinator's own root VC, not the nav stack's root.
+    func popToCoordinatorRoot() {
+        guard let rootViewController else {
+            // Fallback: pop one level rather than blowing past the parent.
+            navigationController.popViewController(animated: true)
+            return
+        }
+        navigationController.popToViewController(rootViewController, animated: true)
     }
 }
 
