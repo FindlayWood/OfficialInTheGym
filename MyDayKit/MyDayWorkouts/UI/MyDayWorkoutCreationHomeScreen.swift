@@ -35,6 +35,7 @@ struct MyDayWorkoutCreationHomeScreen: View {
     }
     
     var onOptionsTapped: (() -> ())?
+    var addExerciseTapped: (() -> ())?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -146,9 +147,10 @@ struct MyDayWorkoutCreationHomeScreen: View {
                         }
                         
                         Button {
-                            withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
-                                manager.exercises.append("New Exercise")
-                            }
+                            addExerciseTapped?()
+//                            withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
+//                                manager.exercises.append("New Exercise")
+//                            }
                         } label: {
                             HStack(spacing: 8) {
                                 Image(systemName: "plus")
@@ -185,7 +187,7 @@ struct MyDayWorkoutCreationHomeScreen: View {
                                                 .foregroundColor(.accentColor)
                                         )
 
-                                    Text(exercise)
+                                    Text(exercise.exercise.name)
                                         .font(.system(size: 16, weight: .medium))
 
                                     Spacer()
@@ -196,7 +198,7 @@ struct MyDayWorkoutCreationHomeScreen: View {
                                 }
                                 .padding(.vertical, 4)
                                 .listRowBackground(Color(.secondarySystemBackground))
-                                .id(exercise + "\(manager.exercises.firstIndex(of: exercise) ?? 0)")
+//                                .id(exercise.exericse.id + "\(manager.exercises.firstIndex(of: exercise) ?? 0)")
                             }
                             .onDelete { indexSet in
                                 withAnimation {
@@ -227,9 +229,9 @@ struct MyDayWorkoutCreationHomeScreen: View {
                     }
                     // MARK: Floating Add Button
                     Button {
-                        withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
-                            manager.exercises.append("New Exercise")
-                        }
+//                        withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
+//                            manager.exercises.append("New Exercise")
+//                        }
                     } label: {
                         Image(systemName: "plus")
                             .font(.system(size: 20, weight: .bold))

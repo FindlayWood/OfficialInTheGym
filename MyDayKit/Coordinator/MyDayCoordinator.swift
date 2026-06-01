@@ -22,6 +22,9 @@ public final class MyDayCoordinator {
     let uploadManager: UploadManager
     let clipLoader: ClipLoader
     let clipViewRecorder: ViewClipRecorder
+    
+    // MARK: - Properties
+    private var workoutCoordinator: MyDayWorkoutCoordinator?
 
     // MARK: - Init
 
@@ -160,13 +163,19 @@ extension MyDayCoordinator {
                 )
             )
         case .workoutCreationHome:
-            let vc = selectorVC(
-                MyDayWorkoutCreationHomeScreen(
-                    manager: WorkoutBuilderManager()
-                )
+            let sub = MyDayWorkoutCoordinator(
+                navigationController: navigationController,
+                exerciseManager: exerciseManager,
+                dayManager: dayManager,
+                videoConverter: videoConverter,
+                uploadManager: uploadManager,
+                clipLoader: clipLoader,
+                clipViewRecorder: clipViewRecorder
             )
-            vc.hidesBottomBarWhenPushed = true
-            return vc
+            
+            workoutCoordinator = sub
+            return sub.viewController(for: .root)
+            
         case .fitnessPicker:
             let vc = selectorVC(
                 FitnessActivityPickerView(
@@ -269,6 +278,13 @@ extension MyDayCoordinator {
             }
 
             vc = hosting
+            
+        case .workoutSettings:
+            let hosting = UIHostingController(
+                rootView: WorkoutSettingsSheet()
+            )
+            vc = hosting
+
         }
 
         navigationController.present(vc, animated: true)

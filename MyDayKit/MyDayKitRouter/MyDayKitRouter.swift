@@ -35,11 +35,15 @@ enum MyDaySheets: Identifiable {
             return "add"
         case .option:
             return "option"
+        case .workoutSettings:
+            return "workoutSettings"
         }
     }
     
     case add
     case option
+    
+    case workoutSettings
 }
 
 enum MyDayFullScreenCover: Identifiable {
@@ -178,6 +182,8 @@ public class MyDayKitRouter: ObservableObject {
             )
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
+        case .workoutSettings:
+            Text("")
         }
     }
     @ViewBuilder func fullScreenCover(for cover: MyDayFullScreenCover) -> some View {

@@ -16,6 +16,7 @@ struct MyDayExerciseListView: View {
     @ObservedObject var exerciseManager: ExerciseManager
     
     var selectedExercise: ((MyDayNewExerciseManager) -> ())?
+    var selectedWorkoutExercise: ((Exercise) -> ())?
     
     var filteredExercises: [Exercise] {
         let base = exerciseManager.exercises
@@ -131,6 +132,7 @@ struct MyDayExerciseListView: View {
                 Button {
                     let newExercise = MyDayNewExerciseManager(exercise: exercise)
                     selectedExercise?(newExercise)
+                    selectedWorkoutExercise?(exercise)
                 } label: {
                     HStack(spacing: 12) {
                         // Category colour dot

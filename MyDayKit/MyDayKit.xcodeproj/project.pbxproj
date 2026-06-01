@@ -27,9 +27,20 @@
 		F034E8112F95214A00DDB10C /* MyDayWorkoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E8102F95214A00DDB10C /* MyDayWorkoutModel.swift */; };
 		F034EA9E2F9CEDDC00DDB10C /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034EA9D2F9CEDDC00DDB10C /* Color+Extension.swift */; };
 		F034EAA12F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034EAA02F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift */; };
+		F044A9902FCE28BB0038ADC8 /* MyDayWorkoutBuilderDistanceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F044A98F2FCE28BB0038ADC8 /* MyDayWorkoutBuilderDistanceScreen.swift */; };
+		F044A9922FCE2B200038ADC8 /* MyDayWorkoutBuilderTimeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F044A9912FCE2B200038ADC8 /* MyDayWorkoutBuilderTimeScreen.swift */; };
+		F044A9942FCE2C410038ADC8 /* MyDayWorkoutBuilderTempoScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F044A9932FCE2C410038ADC8 /* MyDayWorkoutBuilderTempoScreen.swift */; };
+		F044A9962FCE2CD60038ADC8 /* MyDayWorkoutBuilderNoteScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F044A9952FCE2CD60038ADC8 /* MyDayWorkoutBuilderNoteScreen.swift */; };
 		F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06004842E37E17F000B279F /* MyDayExerciseListView.swift */; };
 		F0622F012ED260CF00260A5B /* CustomNumberPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0622F002ED260CF00260A5B /* CustomNumberPad.swift */; };
 		F0664E772FA003DB0053DEE7 /* WorkoutBuilderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0664E762FA003DB0053DEE7 /* WorkoutBuilderManager.swift */; };
+		F06652702FAE91580053DEE7 /* WorkoutSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F066526F2FAE91580053DEE7 /* WorkoutSettingsSheet.swift */; };
+		F06652D72FB1275C0053DEE7 /* MyDayWorkoutCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06652D62FB1275B0053DEE7 /* MyDayWorkoutCoordinator.swift */; };
+		F06652D92FB129320053DEE7 /* MyDayWorkoutRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06652D82FB129320053DEE7 /* MyDayWorkoutRoutes.swift */; };
+		F06653CB2FB26D250053DEE7 /* MyDayWorkoutSetsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06653CA2FB26D250053DEE7 /* MyDayWorkoutSetsScreen.swift */; };
+		F06653CD2FB276BC0053DEE7 /* MyDayWorkoutBuilderRepsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06653CC2FB276BC0053DEE7 /* MyDayWorkoutBuilderRepsScreen.swift */; };
+		F066540F2FB3CEB50053DEE7 /* MyDayWorkoutBuilderUnitsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F066540E2FB3CEB50053DEE7 /* MyDayWorkoutBuilderUnitsScreen.swift */; };
+		F06654112FB3D0E50053DEE7 /* MyDayWorkoutBuilderWeightScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06654102FB3D0E50053DEE7 /* MyDayWorkoutBuilderWeightScreen.swift */; };
 		F07508DA2F5380E10026D021 /* ViewClipRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07508D92F5380E10026D021 /* ViewClipRecorder.swift */; };
 		F07509C42F5A22EC0026D021 /* ClipOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07509C32F5A22EC0026D021 /* ClipOverlayView.swift */; };
 		F07509C62F5A23630026D021 /* ViewClipDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07509C52F5A23630026D021 /* ViewClipDisplayView.swift */; };
@@ -126,9 +137,20 @@
 		F034E8102F95214A00DDB10C /* MyDayWorkoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutModel.swift; sourceTree = "<group>"; };
 		F034EA9D2F9CEDDC00DDB10C /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		F034EAA02F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutCreationHomeScreen.swift; sourceTree = "<group>"; };
+		F044A98F2FCE28BB0038ADC8 /* MyDayWorkoutBuilderDistanceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutBuilderDistanceScreen.swift; sourceTree = "<group>"; };
+		F044A9912FCE2B200038ADC8 /* MyDayWorkoutBuilderTimeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutBuilderTimeScreen.swift; sourceTree = "<group>"; };
+		F044A9932FCE2C410038ADC8 /* MyDayWorkoutBuilderTempoScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutBuilderTempoScreen.swift; sourceTree = "<group>"; };
+		F044A9952FCE2CD60038ADC8 /* MyDayWorkoutBuilderNoteScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutBuilderNoteScreen.swift; sourceTree = "<group>"; };
 		F06004842E37E17F000B279F /* MyDayExerciseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExerciseListView.swift; sourceTree = "<group>"; };
 		F0622F002ED260CF00260A5B /* CustomNumberPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNumberPad.swift; sourceTree = "<group>"; };
 		F0664E762FA003DB0053DEE7 /* WorkoutBuilderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutBuilderManager.swift; sourceTree = "<group>"; };
+		F066526F2FAE91580053DEE7 /* WorkoutSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSettingsSheet.swift; sourceTree = "<group>"; };
+		F06652D62FB1275B0053DEE7 /* MyDayWorkoutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutCoordinator.swift; sourceTree = "<group>"; };
+		F06652D82FB129320053DEE7 /* MyDayWorkoutRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutRoutes.swift; sourceTree = "<group>"; };
+		F06653CA2FB26D250053DEE7 /* MyDayWorkoutSetsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutSetsScreen.swift; sourceTree = "<group>"; };
+		F06653CC2FB276BC0053DEE7 /* MyDayWorkoutBuilderRepsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutBuilderRepsScreen.swift; sourceTree = "<group>"; };
+		F066540E2FB3CEB50053DEE7 /* MyDayWorkoutBuilderUnitsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutBuilderUnitsScreen.swift; sourceTree = "<group>"; };
+		F06654102FB3D0E50053DEE7 /* MyDayWorkoutBuilderWeightScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutBuilderWeightScreen.swift; sourceTree = "<group>"; };
 		F07508D92F5380E10026D021 /* ViewClipRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipRecorder.swift; sourceTree = "<group>"; };
 		F07509C32F5A22EC0026D021 /* ClipOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipOverlayView.swift; sourceTree = "<group>"; };
 		F07509C52F5A23630026D021 /* ViewClipDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClipDisplayView.swift; sourceTree = "<group>"; };
@@ -347,6 +369,8 @@
 		F034EA9F2F9CF75D00DDB10C /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				F06653C92FB26D0A0053DEE7 /* Screens */,
+				F066526E2FAE914A0053DEE7 /* Sheets */,
 				F034EAA02F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift */,
 			);
 			path = UI;
@@ -358,6 +382,29 @@
 				F0664E762FA003DB0053DEE7 /* WorkoutBuilderManager.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		F066526E2FAE914A0053DEE7 /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				F066526F2FAE91580053DEE7 /* WorkoutSettingsSheet.swift */,
+			);
+			path = Sheets;
+			sourceTree = "<group>";
+		};
+		F06653C92FB26D0A0053DEE7 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				F06653CA2FB26D250053DEE7 /* MyDayWorkoutSetsScreen.swift */,
+				F06653CC2FB276BC0053DEE7 /* MyDayWorkoutBuilderRepsScreen.swift */,
+				F066540E2FB3CEB50053DEE7 /* MyDayWorkoutBuilderUnitsScreen.swift */,
+				F06654102FB3D0E50053DEE7 /* MyDayWorkoutBuilderWeightScreen.swift */,
+				F044A98F2FCE28BB0038ADC8 /* MyDayWorkoutBuilderDistanceScreen.swift */,
+				F044A9912FCE2B200038ADC8 /* MyDayWorkoutBuilderTimeScreen.swift */,
+				F044A9932FCE2C410038ADC8 /* MyDayWorkoutBuilderTempoScreen.swift */,
+				F044A9952FCE2CD60038ADC8 /* MyDayWorkoutBuilderNoteScreen.swift */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		F07508D82F5380870026D021 /* ViewAnalytics */ = {
@@ -601,6 +648,8 @@
 			children = (
 				F0F35C472F16AEF600ACB11E /* MyDayCoordinator.swift */,
 				F0D528C82F37D2E200FA0636 /* Transition.swift */,
+				F06652D62FB1275B0053DEE7 /* MyDayWorkoutCoordinator.swift */,
+				F06652D82FB129320053DEE7 /* MyDayWorkoutRoutes.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -755,9 +804,12 @@
 			files = (
 				F01E0EA32E7A15FC008C1547 /* PlaybackOverlay.swift in Sources */,
 				F0D6C2552E36C12A00FEFEF1 /* MyDayExerciseModel.swift in Sources */,
+				F044A9962FCE2CD60038ADC8 /* MyDayWorkoutBuilderNoteScreen.swift in Sources */,
 				F0BE5BEF2EB40657009677F5 /* MyDayTimeSelectorView.swift in Sources */,
 				F0B38C762E5F93600096234C /* WeightUnit.swift in Sources */,
+				F06652D92FB129320053DEE7 /* MyDayWorkoutRoutes.swift in Sources */,
 				F0BE5C202EB7CD30009677F5 /* SetDetailView.swift in Sources */,
+				F06652D72FB1275C0053DEE7 /* MyDayWorkoutCoordinator.swift in Sources */,
 				F0F608302E42A20B0015F260 /* ExerciseCategory.swift in Sources */,
 				F0C102C92E4BA9010062C8A2 /* MyDayKitRepsView.swift in Sources */,
 				F0D527912F3007E100FA0636 /* ExerciseClipsSubView.swift in Sources */,
@@ -765,6 +817,7 @@
 				F0750BB72F621AA70026D021 /* SportSessionDetailView.swift in Sources */,
 				F0F35C452F16ADC700ACB11E /* MyDayBoundaryViewController.swift in Sources */,
 				F0D528D52F392A5900FA0636 /* ClipLoader.swift in Sources */,
+				F06653CD2FB276BC0053DEE7 /* MyDayWorkoutBuilderRepsScreen.swift in Sources */,
 				F0D3456A2F27E24F00AB6121 /* UploadManager.swift in Sources */,
 				F0750B492F5F7B2D0026D021 /* SportType.swift in Sources */,
 				F0D5278F2F2F90D700FA0636 /* ProcessedVideoData.swift in Sources */,
@@ -779,6 +832,7 @@
 				F0BE5C142EB55C29009677F5 /* MyDayNoteSelectorView.swift in Sources */,
 				F0D528532F34012700FA0636 /* ThumbnailGenerator.swift in Sources */,
 				F0B38C7A2E5F94D00096234C /* MyDayNewExerciseManager.swift in Sources */,
+				F06652702FAE91580053DEE7 /* WorkoutSettingsSheet.swift in Sources */,
 				F00CD1722E4D2DBB0051042A /* MyDayManager.swift in Sources */,
 				F01E0E9C2E7A1158008C1547 /* CameraPreview.swift in Sources */,
 				F0BE5C1C2EB7C981009677F5 /* CompletedSetView.swift in Sources */,
@@ -801,7 +855,10 @@
 				F034E6632F917B1400DDB10C /* WellnessLoader.swift in Sources */,
 				F01E0E9F2E7A11B7008C1547 /* VideoRecorder.swift in Sources */,
 				F0BE5C122EB553B6009677F5 /* MyDayTempoSelectorView.swift in Sources */,
+				F066540F2FB3CEB50053DEE7 /* MyDayWorkoutBuilderUnitsScreen.swift in Sources */,
+				F06653CB2FB26D250053DEE7 /* MyDayWorkoutSetsScreen.swift in Sources */,
 				F07509C62F5A23630026D021 /* ViewClipDisplayView.swift in Sources */,
+				F044A9922FCE2B200038ADC8 /* MyDayWorkoutBuilderTimeScreen.swift in Sources */,
 				F0E2CC532EC538C800993165 /* ExerciseStatsSaveModel.swift in Sources */,
 				F0750B1B2F5E258D0026D021 /* FitnessTimeSelectorView.swift in Sources */,
 				F0F4B2AE2E855707007E2469 /* MyDayUploader.swift in Sources */,
@@ -811,6 +868,7 @@
 				F0BE5BED2EB402DC009677F5 /* MyDayDistanceSelectorView.swift in Sources */,
 				F034EAA12F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift in Sources */,
 				F0750B102F5E22780026D021 /* FitnessActivityPickerView.swift in Sources */,
+				F044A9942FCE2C410038ADC8 /* MyDayWorkoutBuilderTempoScreen.swift in Sources */,
 				F0D528C92F37D2E200FA0636 /* Transition.swift in Sources */,
 				F0F35C012F10216D00ACB11E /* MyDayDeleter.swift in Sources */,
 				F0D3443E2F25123500AB6121 /* PlayBackSheet.swift in Sources */,
@@ -825,10 +883,12 @@
 				F01E0E972E7A01E8008C1547 /* ClipPlaybackScreen.swift in Sources */,
 				F0D348582F2A7A8E00AB6121 /* UploadError.swift in Sources */,
 				F0D6C24E2E358C0900FEFEF1 /* MyDayHomeScreen.swift in Sources */,
+				F044A9902FCE28BB0038ADC8 /* MyDayWorkoutBuilderDistanceScreen.swift in Sources */,
 				F07509C42F5A22EC0026D021 /* ClipOverlayView.swift in Sources */,
 				F07509C82F5A23820026D021 /* ViewClipViewModel.swift in Sources */,
 				F034E6502F916D1300DDB10C /* WellnessSummaryCard.swift in Sources */,
 				F0D5278D2F2F905900FA0636 /* VideoConverter.swift in Sources */,
+				F06654112FB3D0E50053DEE7 /* MyDayWorkoutBuilderWeightScreen.swift in Sources */,
 				F0F35C482F16AEF600ACB11E /* MyDayCoordinator.swift in Sources */,
 				F0750BB52F621A7E0026D021 /* SportPickerView.swift in Sources */,
 				F0C8EC192ECF7F32002213C7 /* MyDayHomeViewController.swift in Sources */,
