@@ -89,6 +89,7 @@ let exampleFullDay: MyDayFullDayModel = {
     return MyDayFullDayModel(
         id: UUID().uuidString,
         date: date,
-        exercises: [exercise1, exercise2]
+        exercises: [exercise1, exercise2],
+        workouts: []
     )
 }()

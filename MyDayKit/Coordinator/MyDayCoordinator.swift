@@ -22,6 +22,8 @@ public final class MyDayCoordinator {
     let uploadManager: UploadManager
     let clipLoader: ClipLoader
     let clipViewRecorder: ViewClipRecorder
+    let workoutManager: WorkoutBuilderManager
+    let workoutLibraryManager: WorkoutLibraryManager
     
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
@@ -35,7 +37,9 @@ public final class MyDayCoordinator {
         videoConverter: VideoConverter,
         uploadManager: UploadManager,
         clipLoader: ClipLoader,
-        clipViewRecorder: ViewClipRecorder
+        clipViewRecorder: ViewClipRecorder,
+        workoutManager: WorkoutBuilderManager,
+        workoutLibraryManager: WorkoutLibraryManager
     ) {
         self.navigationController = navigationController
         self.exerciseManager = exerciseManager
@@ -44,6 +48,8 @@ public final class MyDayCoordinator {
         self.uploadManager = uploadManager
         self.clipLoader = clipLoader
         self.clipViewRecorder = clipViewRecorder
+        self.workoutManager = workoutManager
+        self.workoutLibraryManager = workoutLibraryManager
     }
 
     // MARK: - Root
@@ -170,7 +176,9 @@ extension MyDayCoordinator {
                 videoConverter: videoConverter,
                 uploadManager: uploadManager,
                 clipLoader: clipLoader,
-                clipViewRecorder: clipViewRecorder
+                clipViewRecorder: clipViewRecorder,
+                workoutManager: workoutManager,
+                libraryManager: workoutLibraryManager
             )
             
             workoutCoordinator = sub

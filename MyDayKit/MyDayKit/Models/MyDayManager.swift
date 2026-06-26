@@ -165,7 +165,7 @@ public class MyDayManager: ObservableObject {
                 self.loadedDays.append(day)
                 self.selectedDay = day
             } else {
-                self.selectedDay = MyDayFullDayModel(id: UUID().uuidString, date: .now, exercises: [])
+                self.selectedDay = MyDayFullDayModel(id: UUID().uuidString, date: .now, exercises: [], workouts: [])
             }
         }
     }
@@ -179,7 +179,7 @@ public class MyDayManager: ObservableObject {
                 }
             } else {
                 await MainActor.run {
-                    self.selectedDay = MyDayFullDayModel(id: UUID().uuidString, date: date, exercises: [])
+                    self.selectedDay = MyDayFullDayModel(id: UUID().uuidString, date: date, exercises: [], workouts: [])
                 }
             }
         }

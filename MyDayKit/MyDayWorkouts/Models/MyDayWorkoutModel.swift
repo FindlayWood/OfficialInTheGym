@@ -16,81 +16,131 @@ public struct MyDayWorkoutModel: Identifiable, Codable {
 
 // MARK: - Workout Template
 
-struct WorkoutTemplateModel: Identifiable, Codable {
-    let id: String
-    let title: String
-    let description: String?
-    let exercises: [WorkoutExerciseModel]
-    let createdBy: String
-    let isPublic: Bool
-    let tags: [String]?
-    let estimatedDuration: Int?
-    let difficulty: WorkoutDifficulty?
-    let createdAt: Date
-    let updatedAt: Date
+public struct WorkoutTemplateModel: Identifiable, Codable {
+    public let id: String
+    public let title: String
+    public let description: String?
+    public let exercises: [WorkoutExerciseModel]
+    public let createdBy: String
+    public let isPublic: Bool
+    public let tags: [String]?
+    public let estimatedDuration: Int?
+    public let difficulty: WorkoutDifficulty?
+    public let createdAt: Date
+    public let updatedAt: Date
 }
 
 // MARK: - Workout Exercise (blueprint)
 
-struct WorkoutExerciseModel: Identifiable, Codable {
-    let id: String
-    let exerciseId: String
-    let orderIndex: Int
-    let targetSets: Int
-    let targetReps: Int?
-    let targetWeight: Double?
-    let targetWeightUnit: WeightUnit?
-    let targetTime: Int?
-    let targetDistance: Double?
-    let targetDistanceUnit: DistanceUnit?
-    let restSeconds: Int?
-    let notes: String?
-    let eachSide: Bool?
-    let tempo: Tempo?
+public struct WorkoutExerciseModel: Identifiable, Codable {
+    public let id: String
+    public let exerciseId: String
+    public let orderIndex: Int
+    public let sets: [WorkoutSetModel]
+    public let restSeconds: Int?
+    public let notes: String?
+
+    public init(
+        id: String,
+        exerciseId: String,
+        orderIndex: Int,
+        sets: [WorkoutSetModel],
+        restSeconds: Int? = nil,
+        notes: String? = nil
+    ) {
+        self.id = id
+        self.exerciseId = exerciseId
+        self.orderIndex = orderIndex
+        self.sets = sets
+        self.restSeconds = restSeconds
+        self.notes = notes
+    }
+}
+
+// MARK: - Workout Set (per-set blueprint)
+
+public struct WorkoutSetModel: Identifiable, Codable {
+    public let id: String
+    public let orderIndex: Int
+    public let reps: Int?
+    public let weight: Double?
+    public let weightUnit: WeightUnit?
+    public let time: Int?
+    public let distance: Double?
+    public let distanceUnit: DistanceUnit?
+    public let tempo: Tempo?
+    public let note: String?
+    public let eachSide: Bool?
+
+    public init(
+        id: String,
+        orderIndex: Int,
+        reps: Int? = nil,
+        weight: Double? = nil,
+        weightUnit: WeightUnit? = nil,
+        time: Int? = nil,
+        distance: Double? = nil,
+        distanceUnit: DistanceUnit? = nil,
+        tempo: Tempo? = nil,
+        note: String? = nil,
+        eachSide: Bool? = nil
+    ) {
+        self.id = id
+        self.orderIndex = orderIndex
+        self.reps = reps
+        self.weight = weight
+        self.weightUnit = weightUnit
+        self.time = time
+        self.distance = distance
+        self.distanceUnit = distanceUnit
+        self.tempo = tempo
+        self.note = note
+        self.eachSide = eachSide
+    }
 }
 
 // MARK: - Workout Session
 
-struct WorkoutSessionModel: Identifiable, Codable {
-    let id: String
-    let templateId: String?
-    let userId: String
-    let title: String
-    let startedAt: Date
-    let completedAt: Date?
-    let notes: String?
-    let status: WorkoutStatus
+public struct WorkoutSessionModel: Identifiable, Codable {
+    public let id: String
+    public let templateId: String?
+    public let userId: String
+    public let title: String
+    public let startedAt: Date
+    public let completedAt: Date?
+    public let notes: String?
+    public let status: WorkoutStatus
 }
 
 // MARK: - Workout Set Log
 
-struct WorkoutSetLog: Identifiable, Codable {
-    let id: String
-    let exerciseId: String
-    let userId: String
-    let workoutSessionId: String?
-    let orderIndex: Int
-    let reps: Int?
-    let weight: Double?
-    let weightUnit: WeightUnit?
-    let distance: Double?
-    let distanceUnit: DistanceUnit?
-    let time: Int?
-    let tempo: Tempo?
-    let note: String?
-    let eachSide: Bool?
-    let completedAt: Date
+public struct WorkoutSetLog: Identifiable, Codable {
+    public let id: String
+    public let exerciseId: String
+    public let userId: String
+    public let workoutSessionId: String?
+    public let orderIndex: Int
+    public let reps: Int?
+    public let weight: Double?
+    public let weightUnit: WeightUnit?
+    public let distance: Double?
+    public let distanceUnit: DistanceUnit?
+    public let time: Int?
+    public let tempo: Tempo?
+    public let note: String?
+    public let eachSide: Bool?
+    public let completedAt: Date
 }
 
 // MARK: - Enums
 
-enum WorkoutDifficulty: String, Codable {
+public enum WorkoutDifficulty: String, Codable {
     case beginner
     case intermediate
     case advanced
 }
 
-enum WorkoutStatus: String, Codable {
+public enum WorkoutStatus: String, Codable {
     case inProgress
     case completed
     case abandoned

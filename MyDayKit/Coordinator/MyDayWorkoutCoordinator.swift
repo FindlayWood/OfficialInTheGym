@@ -22,15 +22,16 @@ class MyDayWorkoutCoordinator {
     let uploadManager: UploadManager
     let clipLoader: ClipLoader
     let clipViewRecorder: ViewClipRecorder
+    /// Held here so every route in the exercise-add flow can read/write it.
+    let workoutManager: WorkoutBuilderManager
+    let libraryManager: WorkoutLibraryManager
     
     // MARK: - State
- 
-    /// Held here so every route in the exercise-add flow can read/write it.
-    private let workoutManager = WorkoutBuilderManager()
     
     /// The root VC of *this* coordinator. Set once in start() so we can pop
     /// back to it without blowing past the parent coordinator's stack.
     private weak var rootViewController: UIViewController?
+    private weak var creationRootViewController: UIViewController?
 
     // MARK: - Init
 
@@ -41,7 +42,9 @@ class MyDayWorkoutCoordinator {
         videoConverter: VideoConverter,
         uploadManager: UploadManager,
         clipLoader: ClipLoader,
-        clipViewRecorder: ViewClipRecorder
+        clipViewRecorder: ViewClipRecorder,
+        workoutManager: WorkoutBuilderManager,
+        libraryManager: WorkoutLibraryManager
     ) {
         self.navigationController = navigationController
         self.exerciseManager = exerciseManager
@@ -50,12 +53,14 @@ class MyDayWorkoutCoordinator {
         self.uploadManager = uploadManager
         self.clipLoader = clipLoader
         self.clipViewRecorder = clipViewRecorder
+        self.workoutManager = workoutManager
+        self.libraryManager = libraryManager
     }
 
     // MARK: - Root
 
     public func start() -> UIViewController {
-        let rootVC = viewController(for: .root)
+        let rootVC = viewController(for: .library)
         rootViewController = rootVC
         return rootVC
     }
@@ -65,7 +70,28 @@ extension MyDayWorkoutCoordinator {
     
     func viewController(for route: MyDayWorkoutRoutes) -> UIViewController {
         switch route {
-        case .root:
+        case .library:
+            let vc = selectorVC(
+                MyDayWorkoutLibraryScreen(
+                    manager: libraryManager,
+                    onWorkoutSelected: { [weak self] model in
+                        self?.navigate(to: .templateDetail(model))
+                    },
+                    onCreateNewTapped: { [weak self] in
+                        self?.navigate(to: .creation)
+                    }
+                )
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+        case .templateDetail(let template):
+            let vc = selectorVC(
+                WorkoutTemplateDetailScreen(
+                    template: template
+                )
+            )
+            return vc
+        case .creation:
             let vc = selectorVC(
                 MyDayWorkoutCreationHomeScreen(
                     manager: workoutManager,
@@ -74,10 +100,14 @@ extension MyDayWorkoutCoordinator {
                     },
                     addExerciseTapped: { [weak self] in
                         self?.navigate(to: .exercise)
+                    },
+                    uploadComplete: { [weak self] in
+                        self?.popToCoordinatorRoot()
                     }
                 )
             )
             vc.hidesBottomBarWhenPushed = true
+            creationRootViewController = vc
             return vc
         case .exercise:
             let vc = UIHostingController(
@@ -133,8 +163,10 @@ extension MyDayWorkoutCoordinator {
                         guard let self else { return }
                         // Append the finished exercise to the workout, then
                         // pop all the way back to the creation home screen.
-                        self.workoutManager.exercises.append(manager)
-                        self.popToCoordinatorRoot()
+                        DispatchQueue.main.async {
+                            self.workoutManager.addExercise(manager)
+                            self.popToCreationCoordinatorRoot()
+                        }
                     }
                 )
             )
@@ -220,6 +252,16 @@ extension MyDayWorkoutCoordinator {
             return
         }
         navigationController.popToViewController(rootViewController, animated: true)
+    }
+    
+    /// Pops back to this coordinator's own root VC, not the nav stack's root.
+    func popToCreationCoordinatorRoot() {
+        guard let creationRootViewController else {
+            // Fallback: pop one level rather than blowing past the parent.
+            navigationController.popViewController(animated: true)
+            return
+        }
+        navigationController.popToViewController(creationRootViewController, animated: true)
     }
 }
 

@@ -58,6 +58,35 @@ class MyDayKitComposition {
         let clipLoader = FirestoreClipLoader()
         let viewClipRecorder = FirebaseFunctionsViewClipRecorder()
         
+        // Workout
+        let userId = UserDefaults.currentUser.uid
+        let syncQueue = SyncQueueWorkoutTemplateUploader(userId: userId)
+
+        let syncer = WorkoutTemplateSyncer(
+            remote: FirestoreWorkoutTemplateUploader(),
+            queue: syncQueue
+        )
+        let saver = WorkoutTemplateSaver(
+            local: FileManagerWorkoutTemplateUploader(),
+            remote: syncer
+        )
+        let workoutManager = WorkoutBuilderManager(
+            uploader: saver,
+            userId: userId
+        )
+
+        let syncService = WorkoutTemplateSyncService(
+            remote: FirestoreWorkoutTemplateUploader(),
+            syncQueue: syncQueue
+        )
+        syncService.start()
+        
+        let workoutLibraryFetcher = FirestoreWorkoutTemplateFetcher()
+        
+        let workoutLibraryManager = WorkoutLibraryManager(
+            fetcher: workoutLibraryFetcher
+        )
+        
         let coordinator = MyDayCoordinator(
             navigationController: navigationController,
             exerciseManager: exerciseManager,
@@ -65,7 +94,9 @@ class MyDayKitComposition {
             videoConverter: converter,
             uploadManager: uploadManager,
             clipLoader: clipLoader,
-            clipViewRecorder: viewClipRecorder
+            clipViewRecorder: viewClipRecorder,
+            workoutManager: workoutManager,
+            workoutLibraryManager: workoutLibraryManager
         )
         coordinator.start()
     }

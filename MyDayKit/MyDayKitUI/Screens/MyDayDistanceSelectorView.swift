@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum DistanceUnit: String, CaseIterable, Codable {
+public enum DistanceUnit: String, CaseIterable, Codable {
     case metres = "m"
     case kilometres = "km"
     case miles = "mi"

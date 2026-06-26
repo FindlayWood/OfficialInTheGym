@@ -8,7 +8,9 @@
 import Foundation
 
 enum MyDayWorkoutRoutes {
-    case root
+    case library
+    case templateDetail(WorkoutTemplateModel)
+    case creation
     case exercise
     case sets(WorkoutExerciseBuilderManager)
     case reps(WorkoutExerciseBuilderManager)

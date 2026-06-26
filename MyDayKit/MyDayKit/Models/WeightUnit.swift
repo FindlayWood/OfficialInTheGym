@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum WeightUnit: String, CaseIterable, Codable, Hashable {
+public enum WeightUnit: String, CaseIterable, Codable, Hashable {
     case kg = "kg"
     case lbs = "lbs"
     case percent1RM = "% of 1RM"

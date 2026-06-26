@@ -1,0 +1,42 @@
+//
+//  WorkoutLibraryManager.swift
+//  MyDayKit
+//
+//  Created by Findlay Wood on 10/06/2026.
+//
+
+import Combine
+import Foundation
+
+public enum WorkoutLibraryState {
+    case loading
+    case empty
+    case loaded([WorkoutTemplateModel])
+}
+
+public class WorkoutLibraryManager: ObservableObject {
+
+    @Published public var state: WorkoutLibraryState = .loading
+
+    private let fetcher: WorkoutTemplateFetching
+
+    public init(fetcher: WorkoutTemplateFetching) {
+        self.fetcher = fetcher
+    }
+
+    public func load() {
+        state = .loading
+        Task {
+            do {
+                let templates = try await fetcher.fetchAll()
+                await MainActor.run {
+                    state = templates.isEmpty ? .empty : .loaded(templates)
+                }
+            } catch {
+                await MainActor.run {
+                    state = .empty
+                }
+            }
+        }
+    }
+}

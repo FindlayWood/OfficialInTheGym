@@ -264,6 +264,39 @@ struct MyDayHomeScreen: View {
                     ),
                     isCurrentDay: isToday
                 )
+     
+                // MARK: - Workout Cards
+                if !day.workouts.isEmpty {
+                    HStack {
+                        Text("Workouts")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.secondary)
+                            .textCase(.uppercase)
+                            .tracking(1.2)
+                        Spacer()
+                    }
+     
+                    ForEach(day.workouts) { entry in
+                        DailyWorkoutCard(entry: entry) {
+//                            workoutEntryTapped?(entry)
+                        }
+                    }
+                }
+     
+                // MARK: - Individual Exercises
+                if !day.exercises.isEmpty {
+                    HStack {
+                        Text("Exercises")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.secondary)
+                            .textCase(.uppercase)
+                            .tracking(1.2)
+                        Spacer()
+                    }
+                }
+     
                 ForEach(day.exercises) { exercise in
                     ExerciseCompletionView(
                         model: exercise,
@@ -288,7 +321,7 @@ struct MyDayHomeScreen: View {
                         clipSelected: clipSelected
                     )
                 }
-                
+     
                 if day.exercises.count > 0 {
                     RPECard(
                         entry: dayManager.selectedDay?.rpeEntry,
