@@ -278,9 +278,18 @@ struct MyDayHomeScreen: View {
                     }
      
                     ForEach(day.workouts) { entry in
-                        DailyWorkoutCard(entry: entry) {
-//                            workoutEntryTapped?(entry)
-                        }
+                        DailyWorkoutCard(
+                            entry: entry,
+                            onDelete: {
+                                withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                                    dayManager.removeWorkoutFromDay(entry)
+                                }
+                            }
+                        )
+                        .transition(.asymmetric(
+                            insertion: .opacity,
+                            removal: .opacity.combined(with: .scale(scale: 0.94))
+                        ))
                     }
                 }
      

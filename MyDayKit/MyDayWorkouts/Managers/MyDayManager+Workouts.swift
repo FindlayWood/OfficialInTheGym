@@ -23,6 +23,16 @@ extension MyDayManager {
         }
     }
 
+    /// Remove a workout entry from the selected day and persist.
+    public func removeWorkoutFromDay(_ entry: DailyWorkoutEntry) {
+        guard var day = selectedDay else { return }
+        day.workouts.removeAll { $0.id == entry.id }
+        selectedDay = day
+        Task {
+            try await workoutSaver.save(data: day)
+        }
+    }
+
     /// Update an existing workout entry — called when session status changes
     /// (e.g. planned → inProgress → completed).
     public func updateWorkoutEntry(_ entry: DailyWorkoutEntry) {
