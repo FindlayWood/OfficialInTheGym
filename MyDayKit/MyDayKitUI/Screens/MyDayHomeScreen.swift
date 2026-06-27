@@ -62,7 +62,7 @@ struct MyDayHomeScreen: View {
             
             // ── Content ────────────────────────────────────────────────
             if let selectedDay = dayManager.selectedDay {
-                if selectedDay.exercises.isEmpty {
+                if selectedDay.exercises.isEmpty && selectedDay.workouts.isEmpty {
                     emptyState
                 } else {
                     exerciseList(for: selectedDay)
@@ -491,7 +491,8 @@ struct MyDayHomeScreen: View {
             loader: PreviewLoader(),
             deleter: PreviewMyDayDeleter(),
             wellnessSaver: PreviewMyDaySaver(),
-            rpeSaver: PreviewMyDaySaver()
+            rpeSaver: PreviewMyDaySaver(),
+            workoutSaver: PreviewMyDaySaver()
         )
     )
 }

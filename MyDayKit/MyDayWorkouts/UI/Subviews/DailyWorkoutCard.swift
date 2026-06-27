@@ -94,8 +94,18 @@ struct DailyWorkoutCard: View {
     private var subtitleText: String {
         let count = entry.template.exercises.count
         let exercises = "\(count) \(count == 1 ? "exercise" : "exercises")"
-        let creator = entry.template.createdBy
-        return "\(exercises) · \(creator)"
+
+        if let startedAt = entry.startedAt {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "h:mm a"
+            return "\(exercises) · Started \(formatter.string(from: startedAt))"
+        }
+
+        if let duration = entry.template.estimatedDuration {
+            return "\(exercises) · \(duration) min"
+        }
+
+        return exercises
     }
 
     private var statusColor: Color {
@@ -154,28 +164,44 @@ struct DailyWorkoutCard: View {
 }
 
 #Preview {
+    let template: (String, String, Int?, WorkoutDifficulty?) -> WorkoutTemplateModel = { id, title, duration, difficulty in
+        WorkoutTemplateModel(id: id, title: title, description: nil, exercises: [
+            WorkoutExerciseModel(id: "e1", exerciseId: "Bench Press", orderIndex: 0, sets: [
+                WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg)
+            ]),
+            WorkoutExerciseModel(id: "e2", exerciseId: "Pull Ups", orderIndex: 1, sets: [
+                WorkoutSetModel(id: "s2", orderIndex: 0, reps: 10)
+            ]),
+            WorkoutExerciseModel(id: "e3", exerciseId: "Dumbbell Curl", orderIndex: 2, sets: [
+                WorkoutSetModel(id: "s3", orderIndex: 0, reps: 12, weight: 15, weightUnit: .kg)
+            ])
+        ], createdBy: "findlay", isPublic: false, tags: nil, estimatedDuration: duration, difficulty: difficulty, createdAt: .now, updatedAt: .now)
+    }
+
     VStack(spacing: 12) {
         DailyWorkoutCard(entry: DailyWorkoutEntry(
-            template: WorkoutTemplateModel(id: "1", title: "Monday Upper", description: nil, exercises: [], createdBy: "findlay", isPublic: false, tags: nil, estimatedDuration: 60, difficulty: .intermediate, createdAt: .now, updatedAt: .now),
+            template: template("1", "Monday Upper", 60, .intermediate),
             assignedDate: .now,
             status: .planned
         ))
         DailyWorkoutCard(entry: DailyWorkoutEntry(
-            template: WorkoutTemplateModel(id: "2", title: "Tuesday Lower", description: nil, exercises: [], createdBy: "findlay", isPublic: false, tags: nil, estimatedDuration: 45, difficulty: .intermediate, createdAt: .now, updatedAt: .now),
+            template: template("2", "Tuesday Lower", 45, .intermediate),
             assignedDate: .now,
-            status: .inProgress
+            status: .inProgress,
+            startedAt: Calendar.current.date(byAdding: .minute, value: -18, to: .now)
         ))
         DailyWorkoutCard(entry: DailyWorkoutEntry(
-            template: WorkoutTemplateModel(id: "3", title: "Thursday Push", description: nil, exercises: [], createdBy: "findlay", isPublic: false, tags: nil, estimatedDuration: 50, difficulty: .advanced, createdAt: .now, updatedAt: .now),
+            template: template("3", "Thursday Push", 50, .advanced),
             assignedDate: .now,
-            status: .completed
+            status: .completed,
+            startedAt: Calendar.current.date(byAdding: .hour, value: -1, to: .now)
         ))
         DailyWorkoutCard(entry: DailyWorkoutEntry(
-            template: WorkoutTemplateModel(id: "4", title: "Friday Pull", description: nil, exercises: [], createdBy: "findlay", isPublic: false, tags: nil, estimatedDuration: nil, difficulty: nil, createdAt: .now, updatedAt: .now),
+            template: template("4", "Friday Pull", nil, nil),
             assignedDate: .now,
             status: .incomplete
         ))
     }
     .padding()
-    .background(Color(.systemGroupedBackground))
+    .background(Color(UIColor.systemGroupedBackground))
 }

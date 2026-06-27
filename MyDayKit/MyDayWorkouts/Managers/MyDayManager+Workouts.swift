@@ -18,7 +18,9 @@ extension MyDayManager {
         )
         day.workouts.append(entry)
         selectedDay = day
-//        saveDay(day)
+        Task {
+            try await workoutSaver.save(data: day)
+        }
     }
 
     /// Update an existing workout entry — called when session status changes

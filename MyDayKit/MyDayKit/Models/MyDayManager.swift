@@ -28,7 +28,10 @@ public class MyDayManager: ObservableObject {
     
     // rpe
     let rpeSaver: MyDaySaver
-    
+
+    // workouts
+    let workoutSaver: MyDaySaver
+
     public init(
         saver: MyDayAndStatSaver,
         clipSaver: MyDaySaver,
@@ -36,7 +39,8 @@ public class MyDayManager: ObservableObject {
         loader: MyDayLoader,
         deleter: MyDayDeleter,
         wellnessSaver: MyDaySaver,
-        rpeSaver: MyDaySaver
+        rpeSaver: MyDaySaver,
+        workoutSaver: MyDaySaver
     ) {
         self.saver = saver
         self.clipSaver = clipSaver
@@ -45,6 +49,7 @@ public class MyDayManager: ObservableObject {
         self.deleter = deleter
         self.wellnessSaver = wellnessSaver
         self.rpeSaver = rpeSaver
+        self.workoutSaver = workoutSaver
         initialLoad()
     }
     

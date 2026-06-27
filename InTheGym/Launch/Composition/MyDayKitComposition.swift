@@ -42,7 +42,8 @@ class MyDayKitComposition {
             loader: policyLoader,
             deleter: deleter,
             wellnessSaver: localAndRemoteMyDaySaver,
-            rpeSaver: localAndRemoteMyDaySaver
+            rpeSaver: localAndRemoteMyDaySaver,
+            workoutSaver: localAndRemoteMyDaySaver
         )
         
         // Clip

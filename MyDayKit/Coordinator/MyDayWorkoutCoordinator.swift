@@ -87,7 +87,8 @@ extension MyDayWorkoutCoordinator {
         case .templateDetail(let template):
             let vc = selectorVC(
                 MyDayWorkoutTemplateDetailScreen(
-                    template: template
+                    template: template,
+                    onAddToTodayTapped: dayManager.addWorkoutToDay
                 )
             )
             return vc

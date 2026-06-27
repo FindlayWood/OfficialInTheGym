@@ -11,7 +11,7 @@ struct MyDayWorkoutTemplateDetailScreen: View {
 
     let template: WorkoutTemplateModel
 
-    var onAddToTodayTapped: (() -> Void)?
+    var onAddToTodayTapped: ((WorkoutTemplateModel) -> Void)?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -91,7 +91,7 @@ struct MyDayWorkoutTemplateDetailScreen: View {
 
     private var addToTodayButton: some View {
         Button {
-            onAddToTodayTapped?()
+            onAddToTodayTapped?(template)
         } label: {
             HStack(spacing: 10) {
                 Image(systemName: "calendar.badge.plus")

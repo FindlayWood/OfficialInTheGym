@@ -280,7 +280,8 @@ struct MyDayUnitsHomeView: View {
             loader: PreviewLoader(),
             deleter: PreviewMyDayDeleter(),
             wellnessSaver: PreviewMyDaySaver(),
-            rpeSaver: PreviewMyDaySaver()
+            rpeSaver: PreviewMyDaySaver(),
+            workoutSaver: PreviewMyDaySaver()
         ),
         newExercise: .init(exercise: .pressUps)
     )

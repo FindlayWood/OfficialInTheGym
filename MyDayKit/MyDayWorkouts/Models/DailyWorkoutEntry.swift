@@ -13,19 +13,22 @@ public struct DailyWorkoutEntry: Identifiable, Codable {
     public let assignedDate: Date
     public var status: DailyWorkoutStatus
     public var sessionId: String?
+    public var startedAt: Date?
 
     public init(
         id: String = UUID().uuidString,
         template: WorkoutTemplateModel,
         assignedDate: Date,
         status: DailyWorkoutStatus = .planned,
-        sessionId: String? = nil
+        sessionId: String? = nil,
+        startedAt: Date? = nil
     ) {
         self.id = id
         self.template = template
         self.assignedDate = assignedDate
         self.status = status
         self.sessionId = sessionId
+        self.startedAt = startedAt
     }
 }
 
