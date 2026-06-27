@@ -86,7 +86,7 @@ extension MyDayWorkoutCoordinator {
             return vc
         case .templateDetail(let template):
             let vc = selectorVC(
-                WorkoutTemplateDetailScreen(
+                MyDayWorkoutTemplateDetailScreen(
                     template: template
                 )
             )
