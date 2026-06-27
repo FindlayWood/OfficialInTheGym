@@ -54,7 +54,7 @@ struct MyDayWorkoutLibraryScreen: View {
         .navigationTitle("Select Workout")
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
-            manager.load()
+            manager.loadIfNeeded()
         }
     }
 

@@ -24,6 +24,23 @@ public class WorkoutLibraryManager: ObservableObject {
         self.fetcher = fetcher
     }
 
+    public func addTemplate(_ template: WorkoutTemplateModel) {
+        switch state {
+        case .loaded(var templates):
+            templates.insert(template, at: 0)
+            state = .loaded(templates)
+        case .empty:
+            state = .loaded([template])
+        case .loading:
+            break
+        }
+    }
+
+    public func loadIfNeeded() {
+        guard case .loading = state else { return }
+        load()
+    }
+
     public func load() {
         state = .loading
         Task {

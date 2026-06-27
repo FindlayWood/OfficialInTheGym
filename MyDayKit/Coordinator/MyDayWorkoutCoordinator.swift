@@ -92,6 +92,7 @@ extension MyDayWorkoutCoordinator {
             )
             return vc
         case .creation:
+            workoutManager.onUploadSuccess = libraryManager.addTemplate
             let vc = selectorVC(
                 MyDayWorkoutCreationHomeScreen(
                     manager: workoutManager,

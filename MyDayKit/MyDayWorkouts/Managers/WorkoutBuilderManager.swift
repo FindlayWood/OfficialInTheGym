@@ -39,6 +39,8 @@ public final class WorkoutBuilderManager: ObservableObject {
     @Published var exercises: [WorkoutExerciseBuilderManager] = []
     @Published var uploadState: WorkoutUploadState = .idle
 
+    public var onUploadSuccess: ((WorkoutTemplateModel) -> Void)?
+
     // MARK: - Dependencies
 
     private let uploader: WorkoutTemplateUploading
@@ -70,6 +72,7 @@ public final class WorkoutBuilderManager: ObservableObject {
         do {
             try await uploader.upload(template)
             await MainActor.run {
+                self.onUploadSuccess?(template)
                 self.uploadState = .success
             }
         } catch {
