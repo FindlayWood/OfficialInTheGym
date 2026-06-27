@@ -1,0 +1,257 @@
+//
+//  MyDayWorkoutSessionScreen.swift
+//  MyDayKit
+//
+//  Created by Findlay Wood on 27/06/2026.
+//
+
+import SwiftUI
+
+struct MyDayWorkoutSessionScreen: View {
+
+    @ObservedObject var manager: WorkoutSessionManager
+    let userId: String
+
+    var onFinish: ((WorkoutSessionModel) -> Void)?
+
+    @State private var elapsedSeconds = 0
+
+    var body: some View {
+        VStack(spacing: 0) {
+            progressHeader
+
+            Divider()
+
+            if manager.isRestTimerRunning {
+                restTimerBanner
+                    .transition(.move(edge: .top).combined(with: .opacity))
+            }
+
+            ScrollView(showsIndicators: false) {
+                LazyVStack(spacing: 12) {
+                    ForEach(manager.entry.template.exercises) { exercise in
+                        MyDayWorkoutSessionExerciseCard(
+                            exercise: exercise,
+                            loggedSets: manager.sets(for: exercise.exerciseId),
+                            onCompleteSet: { targetSet, index in
+                                autoLog(targetSet: targetSet, index: index, exercise: exercise)
+                            }
+                        )
+                    }
+                    Color.clear.frame(height: 100)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+            }
+            .background(Color.darkColor)
+        }
+        .animation(.easeInOut(duration: 0.25), value: manager.isRestTimerRunning)
+        .navigationTitle(manager.entry.template.title)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Finish") {
+                    let session = manager.finishSession()
+                    onFinish?(session)
+                }
+                .fontWeight(.semibold)
+                .foregroundStyle(Color.darkColor)
+            }
+        }
+        .onAppear {
+            manager.startSession()
+        }
+        .task {
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                elapsedSeconds += 1
+            }
+        }
+    }
+
+    // MARK: - Auto Log
+
+    private func autoLog(targetSet: WorkoutSetModel, index: Int, exercise: WorkoutExerciseModel) {
+        let log = WorkoutSetLog(
+            id: UUID().uuidString,
+            exerciseId: exercise.exerciseId,
+            userId: userId,
+            workoutSessionId: nil,
+            orderIndex: index,
+            reps: targetSet.reps,
+            weight: targetSet.weight,
+            weightUnit: targetSet.weightUnit,
+            distance: targetSet.distance,
+            distanceUnit: targetSet.distanceUnit,
+            time: targetSet.time,
+            tempo: nil,
+            note: nil,
+            eachSide: targetSet.eachSide,
+            completedAt: Date()
+        )
+        manager.logSet(log, for: exercise.exerciseId)
+        if let rest = exercise.restSeconds, rest > 0 {
+            manager.startRestTimer(seconds: rest)
+        }
+    }
+
+    // MARK: - Progress Header
+
+    private var progressHeader: some View {
+        HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("SETS")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(Color.secondary)
+                    .tracking(1.2)
+                HStack(alignment: .lastTextBaseline, spacing: 3) {
+                    Text("\(manager.totalSetsLogged)")
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(Color.primary)
+                        .contentTransition(.numericText())
+                        .animation(.easeInOut(duration: 0.2), value: manager.totalSetsLogged)
+                    Text("/ \(manager.totalSetsTargeted)")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(Color.secondary)
+                }
+            }
+
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color(UIColor.secondarySystemBackground))
+                        .frame(height: 6)
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color.darkColor)
+                        .frame(
+                            width: manager.totalSetsTargeted > 0
+                                ? geo.size.width * CGFloat(manager.totalSetsLogged) / CGFloat(manager.totalSetsTargeted)
+                                : 0,
+                            height: 6
+                        )
+                        .animation(.easeInOut(duration: 0.3), value: manager.totalSetsLogged)
+                }
+            }
+            .frame(height: 6)
+
+            VStack(alignment: .trailing, spacing: 4) {
+                Text("TIME")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(Color.secondary)
+                    .tracking(1.2)
+                Text(formattedElapsed)
+                    .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(Color.primary)
+                    .contentTransition(.numericText())
+                    .animation(.linear(duration: 0.5), value: elapsedSeconds)
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 14)
+    }
+
+    // MARK: - Rest Timer Banner
+
+    private var restTimerBanner: some View {
+        HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("REST")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(Color.orange.opacity(0.8))
+                    .tracking(1.5)
+                Text(formattedRestTimer)
+                    .font(.system(size: 28, weight: .bold, design: .monospaced))
+                    .foregroundStyle(Color.orange)
+                    .contentTransition(.numericText())
+                    .animation(.linear(duration: 0.5), value: manager.restTimerSeconds)
+            }
+
+            Spacer()
+
+            Button {
+                manager.cancelRestTimer()
+            } label: {
+                Text("Skip")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Color.orange)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Capsule().fill(Color.orange.opacity(0.12)))
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 12)
+        .background(Color.orange.opacity(0.06))
+        .overlay(alignment: .bottom) {
+            Rectangle()
+                .fill(Color.orange.opacity(0.15))
+                .frame(height: 1)
+        }
+    }
+
+    // MARK: - Helpers
+
+    private var formattedElapsed: String {
+        let h = elapsedSeconds / 3600
+        let m = (elapsedSeconds % 3600) / 60
+        let s = elapsedSeconds % 60
+        return h > 0
+            ? String(format: "%d:%02d:%02d", h, m, s)
+            : String(format: "%d:%02d", m, s)
+    }
+
+    private var formattedRestTimer: String {
+        let m = manager.restTimerSeconds / 60
+        let s = manager.restTimerSeconds % 60
+        return String(format: "%d:%02d", m, s)
+    }
+}
+
+// MARK: - Preview
+
+#Preview {
+    NavigationStack {
+        MyDayWorkoutSessionScreen(
+            manager: WorkoutSessionManager(
+                entry: DailyWorkoutEntry(
+                    template: WorkoutTemplateModel(
+                        id: "1",
+                        title: "Monday Upper",
+                        description: nil,
+                        exercises: [
+                            WorkoutExerciseModel(
+                                id: "e1",
+                                exerciseId: "Bench Press",
+                                orderIndex: 0,
+                                sets: [
+                                    WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg),
+                                    WorkoutSetModel(id: "s2", orderIndex: 1, reps: 8, weight: 80, weightUnit: .kg),
+                                    WorkoutSetModel(id: "s3", orderIndex: 2, reps: 6, weight: 85, weightUnit: .kg)
+                                ],
+                                restSeconds: 90
+                            ),
+                            WorkoutExerciseModel(
+                                id: "e2",
+                                exerciseId: "Pull Ups",
+                                orderIndex: 1,
+                                sets: [
+                                    WorkoutSetModel(id: "s4", orderIndex: 0, reps: 10),
+                                    WorkoutSetModel(id: "s5", orderIndex: 1, reps: 10)
+                                ]
+                            )
+                        ],
+                        createdBy: "user1",
+                        isPublic: false,
+                        tags: nil,
+                        estimatedDuration: 60,
+                        difficulty: .intermediate,
+                        createdAt: .now,
+                        updatedAt: .now
+                    ),
+                    assignedDate: .now
+                )
+            ),
+            userId: "preview-user"
+        )
+    }
+}
