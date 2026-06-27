@@ -12,6 +12,10 @@ struct MyDayWorkoutTemplateDetailScreen: View {
     let template: WorkoutTemplateModel
 
     var onAddToTodayTapped: ((WorkoutTemplateModel) -> Void)?
+    var onReadyToDismiss: (() -> Void)?
+
+    @State private var showDim = false
+    @State private var showCard = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -35,6 +39,19 @@ struct MyDayWorkoutTemplateDetailScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom) {
             addToTodayButton
+        }
+        .overlay {
+            if showDim {
+                Color.black.opacity(0.45)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+            }
+        }
+        .overlay {
+            if showCard {
+                WorkoutAddedConfirmationOverlay()
+                    .transition(.move(edge: .bottom))
+            }
         }
     }
 
@@ -92,6 +109,16 @@ struct MyDayWorkoutTemplateDetailScreen: View {
     private var addToTodayButton: some View {
         Button {
             onAddToTodayTapped?(template)
+            showDim = true
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
+                showCard = true
+            }
+            Task {
+                try? await Task.sleep(nanoseconds: 1_300_000_000)
+                await MainActor.run {
+                    onReadyToDismiss?()
+                }
+            }
         } label: {
             HStack(spacing: 10) {
                 Image(systemName: "calendar.badge.plus")

@@ -180,7 +180,7 @@ extension MyDayCoordinator {
                 workoutManager: workoutManager,
                 libraryManager: workoutLibraryManager
             )
-            
+            sub.onWorkoutAddedToDay = { [weak self] in self?.popToRoot() }
             workoutCoordinator = sub
             return sub.start()
             

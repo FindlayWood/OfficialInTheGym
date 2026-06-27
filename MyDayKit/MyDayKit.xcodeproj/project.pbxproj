@@ -73,6 +73,7 @@
 		F09C55622FF01602007CDAB4 /* MyDayExerciseTemplateCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09C55632FF01602007CDAB4 /* MyDayExerciseTemplateCard.swift */; };
 		F09C55642FF01604007CDAB4 /* MyDaySetTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09C55652FF01604007CDAB4 /* MyDaySetTemplateView.swift */; };
 		F09C55662FF01606007CDAB4 /* MyDayTemplateSetPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09C55672FF01606007CDAB4 /* MyDayTemplateSetPill.swift */; };
+		F09C55682FF01608007CDAB4 /* WorkoutAddedConfirmationOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09C55692FF0160A007CDAB4 /* WorkoutAddedConfirmationOverlay.swift */; };
 		F0B38C622E5B9C570096234C /* MyDayUnitsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */; };
 		F0B38C722E5E163F0096234C /* MyDayWeightSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */; };
 		F0B38C762E5F93600096234C /* WeightUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B38C752E5F93600096234C /* WeightUnit.swift */; };
@@ -201,6 +202,7 @@
 		F09C55632FF01602007CDAB4 /* MyDayExerciseTemplateCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExerciseTemplateCard.swift; sourceTree = "<group>"; };
 		F09C55652FF01604007CDAB4 /* MyDaySetTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDaySetTemplateView.swift; sourceTree = "<group>"; };
 		F09C55672FF01606007CDAB4 /* MyDayTemplateSetPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTemplateSetPill.swift; sourceTree = "<group>"; };
+		F09C55692FF0160A007CDAB4 /* WorkoutAddedConfirmationOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutAddedConfirmationOverlay.swift; sourceTree = "<group>"; };
 		F0B38C612E5B9C570096234C /* MyDayUnitsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayUnitsHomeView.swift; sourceTree = "<group>"; };
 		F0B38C712E5E163F0096234C /* MyDayWeightSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWeightSelectorView.swift; sourceTree = "<group>"; };
 		F0B38C752E5F93600096234C /* WeightUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightUnit.swift; sourceTree = "<group>"; };
@@ -538,6 +540,7 @@
 				F09C55652FF01604007CDAB4 /* MyDaySetTemplateView.swift */,
 				F09C55672FF01606007CDAB4 /* MyDayTemplateSetPill.swift */,
 				F09C54632FE08416007CDAB4 /* DailyWorkoutCard.swift */,
+				F09C55692FF0160A007CDAB4 /* WorkoutAddedConfirmationOverlay.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -936,6 +939,7 @@
 				F0D348522F2A7A5400AB6121 /* ClipUploadResult.swift in Sources */,
 				F034E6592F916DE200DDB10C /* WellnessQuestion.swift in Sources */,
 				F09C54642FE08416007CDAB4 /* DailyWorkoutCard.swift in Sources */,
+				F09C55682FF01608007CDAB4 /* WorkoutAddedConfirmationOverlay.swift in Sources */,
 				F09C53DE2FD9E937007CDAB4 /* WorkoutLibraryManager.swift in Sources */,
 				F07508DA2F5380E10026D021 /* ViewClipRecorder.swift in Sources */,
 				F0E2CC4F2EC5389B00993165 /* MyDayAndStatSaver.swift in Sources */,

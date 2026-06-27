@@ -26,8 +26,12 @@ class MyDayWorkoutCoordinator {
     let workoutManager: WorkoutBuilderManager
     let libraryManager: WorkoutLibraryManager
     
+    // MARK: - Callbacks
+
+    var onWorkoutAddedToDay: (() -> Void)?
+
     // MARK: - State
-    
+
     /// The root VC of *this* coordinator. Set once in start() so we can pop
     /// back to it without blowing past the parent coordinator's stack.
     private weak var rootViewController: UIViewController?
@@ -88,7 +92,10 @@ extension MyDayWorkoutCoordinator {
             let vc = selectorVC(
                 MyDayWorkoutTemplateDetailScreen(
                     template: template,
-                    onAddToTodayTapped: dayManager.addWorkoutToDay
+                    onAddToTodayTapped: dayManager.addWorkoutToDay,
+                    onReadyToDismiss: { [weak self] in
+                        self?.onWorkoutAddedToDay?()
+                    }
                 )
             )
             return vc
