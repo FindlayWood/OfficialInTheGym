@@ -60,14 +60,13 @@ and use these as the template for structure, naming, and style.
 
 ## App Structure
 5 tabs: NEWSFEED, DISCOVER, MYDAY, STATS, PROFILE.
-Current focus: MYDAY tab — getting workouts into this tab.
+Current focus: MYDAY tab — workouts are now in the tab; next is the session screen.
 NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
 
 Roadmap order:
-1. Workout session screen (immediate — manager layer ready, UI not built)
-2. Workouts into MYDAY tab
-3. Fix workout stats → update STATS tab
-4. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
+1. Workout session screen (next — `WorkoutSessionManager` ready, UI not built)
+2. Fix workout stats → update STATS tab
+3. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
 
 ## Feature Areas Complete
 - Daily exercise logging
@@ -80,6 +79,21 @@ Roadmap order:
 - Wellness and RPE inline check-in cards
 - Performance analytics with hand-built charts (`MiniBarChart`, `MiniLineChart`, ACWR zone bar)
 - Library, creation home, template detail screens with collapsible exercise cards and set pill views
+- Workouts in MYDAY tab — add/remove workouts to a day, persisted via `workoutSaver`
+
+## MYDAY Workout Flow
+- **Library → Template Detail → Add to Today**: `MyDayWorkoutCoordinator` handles navigation;
+  `MyDayWorkoutTemplateDetailScreen` shows dark scrollview + white metrics strip;
+  "Add to Today" shows a `WorkoutAddedConfirmationOverlay` (instant dim, card springs from bottom)
+  then pops back to MyDay home via `onWorkoutAddedToDay` callback chain
+- **`DailyWorkoutEntry`**: `id`, `template`, `assignedDate`, `status` (`planned` / `inProgress` /
+  `completed` / `incomplete`), `sessionId?`, `startedAt?`
+- **`MyDayManager+Workouts`**: `addWorkoutToDay(_:)` and `removeWorkoutFromDay(_:)` — both
+  mutate `selectedDay.workouts` and save via `workoutSaver: MyDaySaver`
+- **`DailyWorkoutCard`**: "WORKOUT" label, inline status chip, ellipsis; tap opens
+  `WorkoutCardOptionsSheet` (half sheet — Start Workout / Remove from Today)
+- **Coordinator callback pattern**: child coordinator exposes `var onX: (() -> Void)?`;
+  parent sets it after `let sub = ChildCoordinator(...)` before returning `sub.start()`
 
 ## Firestore
 Firestore collection structure will be provided when working on specific features.
