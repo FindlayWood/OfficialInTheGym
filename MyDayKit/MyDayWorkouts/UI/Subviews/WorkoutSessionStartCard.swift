@@ -48,16 +48,10 @@ struct WorkoutSessionStartCard: View {
                     )
             }
             .padding(.horizontal, 20)
-            .padding(.bottom, 36)
+            .padding(.bottom, 20)
         }
         .background(Color.white)
-        .clipShape(UnevenRoundedRectangle(
-            topLeadingRadius: 24,
-            bottomLeadingRadius: 0,
-            bottomTrailingRadius: 0,
-            topTrailingRadius: 24,
-            style: .continuous
-        ))
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
         .shadow(color: Color.black.opacity(0.12), radius: 16, x: 0, y: -4)
     }
 

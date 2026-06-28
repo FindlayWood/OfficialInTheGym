@@ -52,6 +52,8 @@ struct MyDayWorkoutSessionScreen: View {
 
             if !sessionStarted {
                 WorkoutSessionStartCard(entry: manager.entry, onStart: manager.startSession)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 16)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
