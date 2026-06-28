@@ -20,7 +20,8 @@ enum MyDayRoutes: Hashable {
     case note(MyDayNewExerciseManager)
     
     case workoutCreationHome
-    
+    case workoutSession(DailyWorkoutEntry)
+
     case fitnessPicker
     case fitnessDetail(MyDayNewFitnessManager)
     

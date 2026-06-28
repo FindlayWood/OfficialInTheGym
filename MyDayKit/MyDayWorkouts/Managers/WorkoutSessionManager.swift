@@ -12,7 +12,7 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
     // MARK: - Published State
 
     @Published public var entry: DailyWorkoutEntry
-    @Published public var loggedSets: [String: [WorkoutSetLog]] = [:]  // keyed by exerciseId
+    @Published public var sessionRecord: WorkoutSessionRecord?
     @Published public var sessionStatus: WorkoutSessionStatus = .notStarted
     @Published public var restTimerSeconds: Int = 0
     @Published public var isRestTimerRunning: Bool = false
@@ -20,7 +20,7 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
     // MARK: - Private
 
     private let sessionId: String
-    private let startedAt: Date
+    private var startedAt: Date = Date()
     private var restTimerTask: Task<Void, Never>?
 
     // MARK: - Init
@@ -28,31 +28,46 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
     public init(entry: DailyWorkoutEntry) {
         self.entry = entry
         self.sessionId = UUID().uuidString
-        self.startedAt = Date()
     }
 
-    // MARK: - Set Logging
+    // MARK: - Set Completion
 
-    /// Log a completed set for a given exercise.
-    public func logSet(_ log: WorkoutSetLog, for exerciseId: String) {
-        var sets = loggedSets[exerciseId] ?? []
-        sets.append(log)
-        loggedSets[exerciseId] = sets
+    /// Mark a template set as completed and store the actual performed values.
+    public func completeSet(
+        exerciseId: String,
+        setId: String,
+        reps: Int?,
+        weight: Double?,
+        weightUnit: WeightUnit?,
+        time: Int?,
+        distance: Double?,
+        distanceUnit: DistanceUnit?
+    ) {
+        guard var record = sessionRecord else { return }
+        guard let exIdx = record.exerciseRecords.firstIndex(where: { $0.exerciseId == exerciseId }) else { return }
+        guard let setIdx = record.exerciseRecords[exIdx].setRecords.firstIndex(where: { $0.id == setId }) else { return }
+
+        record.exerciseRecords[exIdx].setRecords[setIdx].isCompleted = true
+        record.exerciseRecords[exIdx].setRecords[setIdx].reps = reps
+        record.exerciseRecords[exIdx].setRecords[setIdx].weight = weight
+        record.exerciseRecords[exIdx].setRecords[setIdx].weightUnit = weightUnit
+        record.exerciseRecords[exIdx].setRecords[setIdx].time = time
+        record.exerciseRecords[exIdx].setRecords[setIdx].distance = distance
+        record.exerciseRecords[exIdx].setRecords[setIdx].distanceUnit = distanceUnit
+        record.exerciseRecords[exIdx].setRecords[setIdx].completedAt = Date()
+
+        sessionRecord = record
+        entry.sessionRecord = record
     }
 
-    /// Remove a logged set.
-    public func removeSet(_ log: WorkoutSetLog, for exerciseId: String) {
-        loggedSets[exerciseId]?.removeAll { $0.id == log.id }
+    /// All set records for a given exercise, in template order.
+    public func setRecords(for exerciseId: String) -> [WorkoutSetRecord] {
+        sessionRecord?.exerciseRecords.first(where: { $0.exerciseId == exerciseId })?.setRecords ?? []
     }
 
-    /// All logged sets for a given exercise, sorted by completion date.
-    public func sets(for exerciseId: String) -> [WorkoutSetLog] {
-        (loggedSets[exerciseId] ?? []).sorted { $0.completedAt < $1.completedAt }
-    }
-
-    /// Total sets logged across all exercises.
+    /// Total sets marked completed across all exercises.
     public var totalSetsLogged: Int {
-        loggedSets.values.reduce(0) { $0 + $1.count }
+        sessionRecord?.exerciseRecords.flatMap(\.setRecords).filter(\.isCompleted).count ?? 0
     }
 
     /// Total sets targeted across all exercises.
@@ -86,15 +101,44 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
     // MARK: - Session Control
 
     public func startSession() {
+        startedAt = Date()
         sessionStatus = .inProgress
         entry.status = .inProgress
+        entry.startedAt = startedAt
+
+        let record = WorkoutSessionRecord(
+            id: sessionId,
+            startedAt: startedAt,
+            exerciseRecords: entry.template.exercises.map { exercise in
+                WorkoutExerciseRecord(
+                    id: exercise.id,
+                    exerciseId: exercise.exerciseId,
+                    setRecords: exercise.sets.map { set in
+                        WorkoutSetRecord(id: set.id, isCompleted: false)
+                    }
+                )
+            }
+        )
+        sessionRecord = record
+        entry.sessionRecord = record
     }
 
-    /// Build the final session model. Call when the user taps Finish.
+    /// Finalise the session record and return a summary model. Call when the user taps Finish.
     public func finishSession() -> WorkoutSessionModel {
+        let endedAt = Date()
         sessionStatus = .completed
         entry.status = .completed
         cancelRestTimer()
+
+        if var record = sessionRecord {
+            record.endedAt = endedAt
+            if let rpe = record.rpe {
+                let minutes = endedAt.timeIntervalSince(startedAt) / 60.0
+                record.workload = minutes * Double(rpe)
+            }
+            sessionRecord = record
+            entry.sessionRecord = record
+        }
 
         return WorkoutSessionModel(
             id: sessionId,
@@ -102,7 +146,7 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
             userId: entry.template.createdBy,
             title: entry.template.title,
             startedAt: startedAt,
-            completedAt: Date(),
+            completedAt: endedAt,
             notes: nil,
             status: .completed
         )
@@ -110,9 +154,16 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
 
     /// Mark as incomplete without finishing fully.
     public func abandonSession() -> WorkoutSessionModel {
+        let endedAt = Date()
         sessionStatus = .abandoned
         entry.status = .incomplete
         cancelRestTimer()
+
+        if var record = sessionRecord {
+            record.endedAt = endedAt
+            sessionRecord = record
+            entry.sessionRecord = record
+        }
 
         return WorkoutSessionModel(
             id: sessionId,
@@ -120,7 +171,7 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
             userId: entry.template.createdBy,
             title: entry.template.title,
             startedAt: startedAt,
-            completedAt: Date(),
+            completedAt: endedAt,
             notes: nil,
             status: .abandoned
         )

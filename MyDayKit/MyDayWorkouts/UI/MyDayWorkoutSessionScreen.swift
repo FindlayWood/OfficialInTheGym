@@ -16,55 +16,67 @@ struct MyDayWorkoutSessionScreen: View {
 
     @State private var elapsedSeconds = 0
 
+    private var sessionStarted: Bool { manager.sessionStatus != .notStarted }
+
     var body: some View {
-        VStack(spacing: 0) {
-            progressHeader
-
-            Divider()
-
-            if manager.isRestTimerRunning {
-                restTimerBanner
-                    .transition(.move(edge: .top).combined(with: .opacity))
-            }
-
-            ScrollView(showsIndicators: false) {
-                LazyVStack(spacing: 12) {
-                    ForEach(manager.entry.template.exercises) { exercise in
-                        MyDayWorkoutSessionExerciseCard(
-                            exercise: exercise,
-                            loggedSets: manager.sets(for: exercise.exerciseId),
-                            onCompleteSet: { targetSet, index in
-                                autoLog(targetSet: targetSet, index: index, exercise: exercise)
-                            }
-                        )
+        ZStack(alignment: .bottom) {
+            VStack(spacing: 0) {
+                if sessionStarted {
+                    progressHeader
+                    Divider()
+                    if manager.isRestTimerRunning {
+                        restTimerBanner
+                            .transition(.move(edge: .top).combined(with: .opacity))
                     }
-                    Color.clear.frame(height: 100)
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
+
+                ScrollView(showsIndicators: false) {
+                    LazyVStack(spacing: 12) {
+                        ForEach(manager.entry.template.exercises) { exercise in
+                            MyDayWorkoutSessionExerciseCard(
+                                exercise: exercise,
+                                setRecords: manager.setRecords(for: exercise.exerciseId),
+                                isSessionStarted: sessionStarted,
+                                onCompleteSet: { targetSet, index in
+                                    autoLog(targetSet: targetSet, index: index, exercise: exercise)
+                                }
+                            )
+                        }
+                        Color.clear.frame(height: sessionStarted ? 100 : 200)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                }
+                .background(Color.darkColor)
             }
-            .background(Color.darkColor)
+
+            if !sessionStarted {
+                WorkoutSessionStartCard(entry: manager.entry, onStart: manager.startSession)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
         }
         .animation(.easeInOut(duration: 0.25), value: manager.isRestTimerRunning)
+        .animation(.easeInOut(duration: 0.3), value: sessionStarted)
         .navigationTitle(manager.entry.template.title)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color.white, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Finish") {
-                    let session = manager.finishSession()
-                    onFinish?(session)
+            if sessionStarted {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Finish") {
+                        let session = manager.finishSession()
+                        onFinish?(session)
+                    }
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color.darkColor)
                 }
-                .fontWeight(.semibold)
-                .foregroundStyle(Color.darkColor)
             }
-        }
-        .onAppear {
-            manager.startSession()
         }
         .task {
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
-                elapsedSeconds += 1
+                if sessionStarted { elapsedSeconds += 1 }
             }
         }
     }
@@ -72,24 +84,16 @@ struct MyDayWorkoutSessionScreen: View {
     // MARK: - Auto Log
 
     private func autoLog(targetSet: WorkoutSetModel, index: Int, exercise: WorkoutExerciseModel) {
-        let log = WorkoutSetLog(
-            id: UUID().uuidString,
+        manager.completeSet(
             exerciseId: exercise.exerciseId,
-            userId: userId,
-            workoutSessionId: nil,
-            orderIndex: index,
+            setId: targetSet.id,
             reps: targetSet.reps,
             weight: targetSet.weight,
             weightUnit: targetSet.weightUnit,
-            distance: targetSet.distance,
-            distanceUnit: targetSet.distanceUnit,
             time: targetSet.time,
-            tempo: nil,
-            note: nil,
-            eachSide: targetSet.eachSide,
-            completedAt: Date()
+            distance: targetSet.distance,
+            distanceUnit: targetSet.distanceUnit
         )
-        manager.logSet(log, for: exercise.exerciseId)
         if let rest = exercise.restSeconds, rest > 0 {
             manager.startRestTimer(seconds: rest)
         }

@@ -16,6 +16,7 @@ public final class MyDayCoordinator {
 
     // MARK: - Dependencies
 
+    let userId: String
     let exerciseManager: ExerciseManager
     let dayManager: MyDayManager
     let videoConverter: VideoConverter
@@ -32,6 +33,7 @@ public final class MyDayCoordinator {
 
     public init(
         navigationController: UINavigationController,
+        userId: String,
         exerciseManager: ExerciseManager,
         dayManager: MyDayManager,
         videoConverter: VideoConverter,
@@ -42,6 +44,7 @@ public final class MyDayCoordinator {
         workoutLibraryManager: WorkoutLibraryManager
     ) {
         self.navigationController = navigationController
+        self.userId = userId
         self.exerciseManager = exerciseManager
         self.dayManager = dayManager
         self.videoConverter = videoConverter
@@ -67,7 +70,7 @@ extension MyDayCoordinator {
         switch route {
 
         case .root:
-            let display = MyDayHomeScreen(
+            var display = MyDayHomeScreen(
                 dayManager: dayManager,
                 addButtonAction: { [weak self] in
                     self?.presentSheet(.option)
@@ -85,6 +88,9 @@ extension MyDayCoordinator {
                     self?.presentFullScreen(.viewClip(model, thumbnail, frame))
                 }
             )
+            display.startWorkout = { [weak self] entry in
+                self?.navigate(to: .workoutSession(entry))
+            }
             let vc = MyDayBoundaryViewController()
             vc.display = display
             vc.coordinator = self
@@ -184,6 +190,21 @@ extension MyDayCoordinator {
             workoutCoordinator = sub
             return sub.start()
             
+        case .workoutSession(let entry):
+            let manager = WorkoutSessionManager(entry: entry)
+            let vc = UIHostingController(
+                rootView: MyDayWorkoutSessionScreen(
+                    manager: manager,
+                    userId: userId,
+                    onFinish: { [weak self] _ in
+                        self?.dayManager.updateWorkoutEntry(manager.entry)
+                        self?.popToRoot()
+                    }
+                )
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
         case .fitnessPicker:
             let vc = selectorVC(
                 FitnessActivityPickerView(

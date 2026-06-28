@@ -10,17 +10,15 @@ import SwiftUI
 struct MyDayWorkoutSessionExerciseCard: View {
 
     let exercise: WorkoutExerciseModel
-    let loggedSets: [WorkoutSetLog]
+    let setRecords: [WorkoutSetRecord]
+    let isSessionStarted: Bool
     var onCompleteSet: ((WorkoutSetModel, Int) -> Void)?
     var onExerciseTapped: (() -> Void)?
     var onRPETapped: (() -> Void)?
     var onCameraTapped: (() -> Void)?
 
-    private var setsLogged: Int { loggedSets.count }
-    private var setsTargeted: Int { exercise.sets.count }
-
     private var completedRepsText: String {
-        let reps = loggedSets.compactMap { $0.reps }
+        let reps = setRecords.filter(\.isCompleted).compactMap(\.reps)
         guard !reps.isEmpty else { return "" }
         return reps.map { "\($0)" }.joined(separator: ", ")
     }
@@ -78,10 +76,12 @@ struct MyDayWorkoutSessionExerciseCard: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
                 ForEach(Array(exercise.sets.enumerated()), id: \.element.id) { index, set in
+                    let record = setRecords.first(where: { $0.id == set.id })
                     SessionSetPill(
                         index: index,
                         set: set,
-                        isLogged: index < setsLogged,
+                        isLogged: record?.isCompleted ?? false,
+                        isDisabled: !isSessionStarted,
                         onTap: { onCompleteSet?(set, index) }
                     )
                 }
@@ -147,27 +147,38 @@ struct MyDayWorkoutSessionExerciseCard: View {
         restSeconds: 90
     )
 
-    let allLogs: [WorkoutSetLog] = [
-        WorkoutSetLog(id: "l1", exerciseId: "Bench Press", userId: "preview", workoutSessionId: nil, orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg, distance: nil, distanceUnit: nil, time: nil, tempo: nil, note: nil, eachSide: nil, completedAt: Date()),
-        WorkoutSetLog(id: "l2", exerciseId: "Bench Press", userId: "preview", workoutSessionId: nil, orderIndex: 1, reps: 8, weight: 80, weightUnit: .kg, distance: nil, distanceUnit: nil, time: nil, tempo: nil, note: nil, eachSide: nil, completedAt: Date()),
-        WorkoutSetLog(id: "l3", exerciseId: "Bench Press", userId: "preview", workoutSessionId: nil, orderIndex: 2, reps: 6, weight: 85, weightUnit: .kg, distance: nil, distanceUnit: nil, time: nil, tempo: nil, note: nil, eachSide: nil, completedAt: Date())
+    let allRecords: [WorkoutSetRecord] = [
+        WorkoutSetRecord(id: "s1", isCompleted: true, reps: 8, weight: 80, weightUnit: .kg, completedAt: .now),
+        WorkoutSetRecord(id: "s2", isCompleted: true, reps: 8, weight: 80, weightUnit: .kg, completedAt: .now),
+        WorkoutSetRecord(id: "s3", isCompleted: true, reps: 6, weight: 85, weightUnit: .kg, completedAt: .now)
     ]
 
     ScrollView {
         VStack(spacing: 16) {
             MyDayWorkoutSessionExerciseCard(
                 exercise: exercise,
-                loggedSets: []
+                setRecords: [
+                    WorkoutSetRecord(id: "s1", isCompleted: false),
+                    WorkoutSetRecord(id: "s2", isCompleted: false),
+                    WorkoutSetRecord(id: "s3", isCompleted: false)
+                ],
+                isSessionStarted: false
             )
 
             MyDayWorkoutSessionExerciseCard(
                 exercise: exercise,
-                loggedSets: [allLogs[0]]
+                setRecords: [
+                    WorkoutSetRecord(id: "s1", isCompleted: true, reps: 8, weight: 80, weightUnit: .kg),
+                    WorkoutSetRecord(id: "s2", isCompleted: false),
+                    WorkoutSetRecord(id: "s3", isCompleted: false)
+                ],
+                isSessionStarted: true
             )
 
             MyDayWorkoutSessionExerciseCard(
                 exercise: exercise,
-                loggedSets: allLogs
+                setRecords: allRecords,
+                isSessionStarted: true
             )
         }
         .padding(16)

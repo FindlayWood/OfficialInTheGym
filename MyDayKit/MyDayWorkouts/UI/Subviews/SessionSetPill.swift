@@ -12,6 +12,7 @@ struct SessionSetPill: View {
     let index: Int
     let set: WorkoutSetModel
     let isLogged: Bool
+    let isDisabled: Bool
     let onTap: () -> Void
 
     var body: some View {
@@ -56,10 +57,10 @@ struct SessionSetPill: View {
             Button(action: onTap) {
                 Image(systemName: isLogged ? "checkmark.circle.fill" : "circle")
                     .font(.system(size: 22, weight: .medium))
-                    .foregroundStyle(isLogged ? Color.white : Color.secondary.opacity(0.5))
+                    .foregroundStyle(isLogged ? Color.white : Color.secondary.opacity(isDisabled ? 0.25 : 0.5))
             }
             .buttonStyle(.plain)
-            .disabled(isLogged)
+            .disabled(isLogged || isDisabled)
         }
         .frame(width: 72, height: 88)
         .padding(.vertical, 8)
@@ -92,18 +93,21 @@ struct SessionSetPill: View {
             index: 0,
             set: WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg),
             isLogged: false,
+            isDisabled: true,
             onTap: {}
         )
         SessionSetPill(
             index: 1,
             set: WorkoutSetModel(id: "s2", orderIndex: 1, reps: 8, weight: 80, weightUnit: .kg),
             isLogged: true,
+            isDisabled: false,
             onTap: {}
         )
         SessionSetPill(
             index: 2,
             set: WorkoutSetModel(id: "s3", orderIndex: 2, time: 60),
             isLogged: false,
+            isDisabled: false,
             onTap: {}
         )
     }

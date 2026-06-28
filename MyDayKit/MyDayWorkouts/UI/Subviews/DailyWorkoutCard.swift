@@ -16,44 +16,25 @@ struct DailyWorkoutCard: View {
     @State private var showOptions = false
 
     var body: some View {
-        Button {
-            showOptions = true
-        } label: {
-            VStack(alignment: .leading, spacing: 8) {
+        ZStack(alignment: .topTrailing) {
+            // Full-card tap navigates to session
+            cardContent
 
-                // MARK: - Top row: type label + status chip
-                HStack {
-                    Text("WORKOUT")
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundColor(.secondary)
-                        .tracking(1.5)
-                    Spacer()
-                    statusChip
-                }
-
-                // MARK: - Title + ellipsis
-                HStack(alignment: .center) {
-                    Text(entry.template.title)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.primary)
-                        .lineLimit(1)
-                    Spacer()
+            // Ellipsis sits above the card button in the ZStack so it wins its hit area
+            Button { showOptions = true } label: {
+                ZStack {
+                    Circle()
+                        .fill(Color(UIColor.secondarySystemBackground))
+                        .frame(width: 32, height: 32)
                     Image(systemName: "ellipsis")
-                        .font(.system(size: 15, weight: .medium))
+                        .font(.system(size: 13, weight: .medium))
                         .foregroundColor(.secondary)
                 }
-
-                // MARK: - Subtitle
-                Text(subtitleText)
-                    .font(.system(size: 13))
-                    .foregroundColor(.secondary)
+                .frame(width: 50, height: 50)
             }
-            .padding(16)
-            .background(Color.white)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .shadow(color: Color.black.opacity(0.06), radius: 8, x: 0, y: 2)
+            .buttonStyle(.plain)
+            .padding(8)
         }
-        .buttonStyle(.borderless)
         .sheet(isPresented: $showOptions) {
             WorkoutCardOptionsSheet(
                 entry: entry,
@@ -68,6 +49,43 @@ struct DailyWorkoutCard: View {
             )
             .presentationDetents([.height(210)])
             .presentationDragIndicator(.visible)
+        }
+    }
+
+    private var cardContent: some View {
+        VStack(alignment: .leading, spacing: 8) {
+
+            // MARK: - Top row: type label + status chip
+            HStack {
+                Text("WORKOUT")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundColor(.secondary)
+                    .tracking(1.5)
+                Spacer()
+                statusChip
+            }
+
+            // MARK: - Title + ellipsis placeholder
+            HStack(alignment: .center) {
+                Text(entry.template.title)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.primary)
+                    .lineLimit(1)
+                Spacer()
+            }
+
+            // MARK: - Subtitle
+            Text(subtitleText)
+                .font(.system(size: 13))
+                .foregroundColor(.secondary)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: Color.black.opacity(0.06), radius: 8, x: 0, y: 2)
+        .onTapGesture {
+            onStart?()
         }
     }
 

@@ -40,6 +40,8 @@ extension MyDayManager {
         guard let index = day.workouts.firstIndex(where: { $0.id == entry.id }) else { return }
         day.workouts[index] = entry
         selectedDay = day
-//        saveDay(day)
+        Task {
+            try await workoutSaver.save(data: day)
+        }
     }
 }

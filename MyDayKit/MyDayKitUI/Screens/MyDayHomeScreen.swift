@@ -44,6 +44,7 @@ struct MyDayHomeScreen: View {
     var recordClip: ((String) -> ())?
     var edit: ((MyDayNewExerciseManager) -> ())?
     var clipSelected: ((MyDayClipModel, UIImage, CGRect) -> ())?
+    var startWorkout: ((DailyWorkoutEntry) -> ())?
     
     private var isToday: Bool { dayManager.isTodaySelected() }
     
@@ -280,6 +281,7 @@ struct MyDayHomeScreen: View {
                     ForEach(day.workouts) { entry in
                         DailyWorkoutCard(
                             entry: entry,
+                            onStart: { startWorkout?(entry) },
                             onDelete: {
                                 withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
                                     dayManager.removeWorkoutFromDay(entry)

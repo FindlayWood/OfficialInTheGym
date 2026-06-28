@@ -90,6 +90,7 @@ class MyDayKitComposition {
         
         let coordinator = MyDayCoordinator(
             navigationController: navigationController,
+            userId: userId,
             exerciseManager: exerciseManager,
             dayManager: dayManager,
             videoConverter: converter,
