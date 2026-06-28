@@ -22,8 +22,8 @@ Firebase Auth, email and password only.
 - Coordinator-based UIKit navigation with SwiftUI views via `UIHostingController`
 - Protocol-oriented DI — framework layer owns only protocols and managers
 - All concrete infrastructure lives in the composition root
-- Local-first: FileManager + JSON for templates, Firestore for remote sync
-- Core Data planned (not yet implemented) for session logs
+- Local-first: FileManager + JSON for templates and daily entries, Firestore for remote sync
+- Session logs stored as `WorkoutSessionRecord` embedded in `DailyWorkoutEntry` (same JSON day file)
 
 ## Tech Stack
 Swift, SwiftUI, UIKit, Combine, Firebase/Firestore, Firebase Cloud Functions,
@@ -60,11 +60,11 @@ and use these as the template for structure, naming, and style.
 
 ## App Structure
 5 tabs: NEWSFEED, DISCOVER, MYDAY, STATS, PROFILE.
-Current focus: MYDAY tab — workouts are now in the tab; next is the session screen.
+Current focus: MYDAY tab — workout session screen built; next is completing the active session UI.
 NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
 
 Roadmap order:
-1. Workout session screen (next — `WorkoutSessionManager` ready, UI not built)
+1. Active session UI — manual set logging sheet, RPE input at finish, abandon flow (in progress)
 2. Fix workout stats → update STATS tab
 3. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
 
@@ -80,6 +80,7 @@ Roadmap order:
 - Performance analytics with hand-built charts (`MiniBarChart`, `MiniLineChart`, ACWR zone bar)
 - Library, creation home, template detail screens with collapsible exercise cards and set pill views
 - Workouts in MYDAY tab — add/remove workouts to a day, persisted via `workoutSaver`
+- Workout session screen — navigate, start, track set completion, finish
 
 ## MYDAY Workout Flow
 - **Library → Template Detail → Add to Today**: `MyDayWorkoutCoordinator` handles navigation;
@@ -87,13 +88,28 @@ Roadmap order:
   "Add to Today" shows a `WorkoutAddedConfirmationOverlay` (instant dim, card springs from bottom)
   then pops back to MyDay home via `onWorkoutAddedToDay` callback chain
 - **`DailyWorkoutEntry`**: `id`, `template`, `assignedDate`, `status` (`planned` / `inProgress` /
-  `completed` / `incomplete`), `sessionId?`, `startedAt?`
-- **`MyDayManager+Workouts`**: `addWorkoutToDay(_:)` and `removeWorkoutFromDay(_:)` — both
-  mutate `selectedDay.workouts` and save via `workoutSaver: MyDaySaver`
-- **`DailyWorkoutCard`**: "WORKOUT" label, inline status chip, ellipsis; tap opens
-  `WorkoutCardOptionsSheet` (half sheet — Start Workout / Remove from Today)
+  `completed` / `incomplete`), `sessionId?`, `startedAt?`, `sessionRecord?`
+- **`WorkoutSessionRecord`**: embedded in `DailyWorkoutEntry`; holds `startedAt`, `endedAt`,
+  `rpe?`, `workload?` (duration × RPE), and `exerciseRecords: [WorkoutExerciseRecord]` each with
+  `setRecords: [WorkoutSetRecord]` (per-set `isCompleted` + actual values). All `Codable`,
+  persisted automatically through `workoutSaver`.
+- **`MyDayManager+Workouts`**: `addWorkoutToDay(_:)`, `removeWorkoutFromDay(_:)`, and
+  `updateWorkoutEntry(_:)` — all mutate `selectedDay.workouts` and save via `workoutSaver`
+- **`DailyWorkoutCard`**: card body tap → session screen; ellipsis-only tap → `WorkoutCardOptionsSheet`
+  (Start Workout / Remove from Today). ZStack pattern: ellipsis `Button` sits above card `Button`
+  as siblings so it wins its hit area without gesture conflicts.
+- **Session screen flow**: `MyDayCoordinator` pushes `MyDayWorkoutSessionScreen` on `.workoutSession`
+  route; screen shows `WorkoutSessionStartCard` overlay until started; tapping "Start Workout" calls
+  `manager.startSession()` then immediately saves via `onSessionStarted` callback;
+  set pills disabled until session starts; "Finish" saves and pops to root.
 - **Coordinator callback pattern**: child coordinator exposes `var onX: (() -> Void)?`;
   parent sets it after `let sub = ChildCoordinator(...)` before returning `sub.start()`
+
+## Session Screen — What's Not Yet Built
+- Manual set logging (editing actual reps/weight per set — `MyDayWorkoutSessionLogSetSheet` exists but not wired)
+- RPE input at session end
+- Abandon session flow
+- Workload computation (requires RPE to be set first)
 
 ## Firestore
 Firestore collection structure will be provided when working on specific features.
