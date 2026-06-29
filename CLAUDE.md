@@ -60,11 +60,11 @@ and use these as the template for structure, naming, and style.
 
 ## App Structure
 5 tabs: NEWSFEED, DISCOVER, MYDAY, STATS, PROFILE.
-Current focus: MYDAY tab — workout session screen built; next is completing the active session UI.
+Current focus: MYDAY tab — active session UI partially complete (see roadmap and Feature Areas Complete).
 NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
 
 Roadmap order:
-1. Active session UI — manual set logging sheet, RPE input at finish, abandon flow (in progress)
+1. Active session UI — manual set logging sheet, session-end RPE, abandon flow (in progress)
 2. Fix workout stats → update STATS tab
 3. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
 
@@ -74,8 +74,14 @@ Roadmap order:
 - Upload/sync pipeline:
   `WorkoutTemplateSaver` → `WorkoutTemplateSyncer` → `SyncQueueWorkoutTemplateUploader`
   → `FirestoreWorkoutTemplateUploader` → `WorkoutTemplateSyncService`
-- `WorkoutSessionManager` with active session state, rest timer,
-  `finishSession()` / `abandonSession()`
+- `WorkoutSessionManager` with active session state, rest timer, `finishSession()` /
+  `abandonSession()`; `onEntryUpdated: ((DailyWorkoutEntry) -> Void)?` callback fires after start,
+  set completion, finish, and abandon — coordinator wires this to `dayManager.updateWorkoutEntry`;
+  init restores `.inProgress` or `.completed` state from the entry on construction
+- Per-exercise RPE input: `WorkoutExerciseRecord.rpe?`, `setExerciseRPE(exerciseId:rpe:)` /
+  `exerciseRPE(for:)` on manager, `WorkoutExerciseRPESheet` (color-coded 1–10, flash-then-dismiss)
+- Completed session read-only view: `completedHeader` (sets logged + duration + green badge);
+  set pills disabled; Finish button hidden; revisiting a completed entry shows this view
 - Wellness and RPE inline check-in cards
 - Performance analytics with hand-built charts (`MiniBarChart`, `MiniLineChart`, ACWR zone bar)
 - Library, creation home, template detail screens with collapsible exercise cards and set pill views
@@ -89,27 +95,35 @@ Roadmap order:
   then pops back to MyDay home via `onWorkoutAddedToDay` callback chain
 - **`DailyWorkoutEntry`**: `id`, `template`, `assignedDate`, `status` (`planned` / `inProgress` /
   `completed` / `incomplete`), `sessionId?`, `startedAt?`, `sessionRecord?`
+- **`WorkoutExerciseModel`**: carries `exerciseName: String` and `exerciseCategory: ExerciseCategory`
+  populated at template build time from the `Exercise` struct in `WorkoutBuilderManager.buildTemplate()`.
+  Cards display `exerciseName` — never `exerciseId` (which is a UUID at runtime).
 - **`WorkoutSessionRecord`**: embedded in `DailyWorkoutEntry`; holds `startedAt`, `endedAt`,
   `rpe?`, `workload?` (duration × RPE), and `exerciseRecords: [WorkoutExerciseRecord]` each with
-  `setRecords: [WorkoutSetRecord]` (per-set `isCompleted` + actual values). All `Codable`,
-  persisted automatically through `workoutSaver`.
+  `exerciseName: String`, `rpe: Int?`, and `setRecords: [WorkoutSetRecord]` (per-set `isCompleted`
+  + actual values). All `Codable`, persisted automatically through `workoutSaver`.
 - **`MyDayManager+Workouts`**: `addWorkoutToDay(_:)`, `removeWorkoutFromDay(_:)`, and
   `updateWorkoutEntry(_:)` — all mutate `selectedDay.workouts` and save via `workoutSaver`
-- **`DailyWorkoutCard`**: card body tap → session screen; ellipsis-only tap → `WorkoutCardOptionsSheet`
+- **`DailyWorkoutCard`**: status chip lives in the subtitle row (not top row) to avoid ellipsis
+  overlap. Card body tap → session screen; ellipsis-only tap → `WorkoutCardOptionsSheet`
   (Start Workout / Remove from Today). ZStack pattern: ellipsis `Button` sits above card `Button`
   as siblings so it wins its hit area without gesture conflicts.
 - **Session screen flow**: `MyDayCoordinator` pushes `MyDayWorkoutSessionScreen` on `.workoutSession`
   route; screen shows `WorkoutSessionStartCard` overlay until started; tapping "Start Workout" calls
-  `manager.startSession()` then immediately saves via `onSessionStarted` callback;
-  set pills disabled until session starts; "Finish" saves and pops to root.
+  `manager.startSession()` which fires `onEntryUpdated` to persist; set pills disabled until started;
+  elapsed timer seeds from `manager.startedAt` on resume so it is accurate when re-entering an
+  in-progress session; "Finish" calls `manager.finishSession()` (fires `onEntryUpdated`) then `onFinish`
+  pops to root. Screen is pure UI — no save calls. Coordinator wires
+  `manager.onEntryUpdated = { dayManager.updateWorkoutEntry($0) }`.
+  Revisiting a completed entry shows `completedHeader` (read-only).
 - **Coordinator callback pattern**: child coordinator exposes `var onX: (() -> Void)?`;
   parent sets it after `let sub = ChildCoordinator(...)` before returning `sub.start()`
 
 ## Session Screen — What's Not Yet Built
 - Manual set logging (editing actual reps/weight per set — `MyDayWorkoutSessionLogSetSheet` exists but not wired)
-- RPE input at session end
+- RPE input at session end (session-level `WorkoutSessionRecord.rpe`; per-exercise RPE is built separately)
 - Abandon session flow
-- Workload computation (requires RPE to be set first)
+- Workload computation (requires session-end RPE)
 
 ## Firestore
 Firestore collection structure will be provided when working on specific features.
