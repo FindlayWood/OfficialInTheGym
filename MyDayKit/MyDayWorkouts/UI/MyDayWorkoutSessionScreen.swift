@@ -15,6 +15,7 @@ struct MyDayWorkoutSessionScreen: View {
     var onFinish: ((WorkoutSessionModel) -> Void)?
 
     @State private var elapsedSeconds = 0
+    @State private var rpeExercise: WorkoutExerciseModel?
 
     private var sessionStarted: Bool { manager.sessionStatus != .notStarted }
     private var sessionCompleted: Bool { manager.sessionStatus == .completed }
@@ -43,9 +44,13 @@ struct MyDayWorkoutSessionScreen: View {
                                 setRecords: manager.setRecords(for: exercise.exerciseId),
                                 isSessionStarted: sessionStarted,
                                 isSessionCompleted: sessionCompleted,
+                                exerciseRPE: manager.exerciseRPE(for: exercise.exerciseId),
                                 onCompleteSet: { targetSet, index in
                                     autoLog(targetSet: targetSet, index: index, exercise: exercise)
-                                }
+                                },
+                                onRPETapped: sessionStarted && !sessionCompleted ? {
+                                    rpeExercise = exercise
+                                } : nil
                             )
                         }
                         Color.clear.frame(height: sessionStarted ? 100 : 200)
@@ -62,6 +67,7 @@ struct MyDayWorkoutSessionScreen: View {
                     .padding(.bottom, 16)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
+
         }
         .animation(.easeInOut(duration: 0.25), value: manager.isRestTimerRunning)
         .animation(.easeInOut(duration: 0.3), value: sessionStarted)
@@ -90,6 +96,18 @@ struct MyDayWorkoutSessionScreen: View {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
                 if sessionStarted { elapsedSeconds += 1 }
             }
+        }
+        .sheet(item: $rpeExercise) { exercise in
+            WorkoutExerciseRPESheet(
+                exerciseName: exercise.exerciseName,
+                currentRPE: manager.exerciseRPE(for: exercise.exerciseId),
+                onSelect: { rpe in
+                    manager.setExerciseRPE(exerciseId: exercise.exerciseId, rpe: rpe)
+                    rpeExercise = nil
+                }
+            )
+            .presentationDetents([.height(260)])
+            .presentationDragIndicator(.visible)
         }
     }
 

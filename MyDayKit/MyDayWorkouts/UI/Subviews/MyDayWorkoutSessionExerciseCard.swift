@@ -13,6 +13,7 @@ struct MyDayWorkoutSessionExerciseCard: View {
     let setRecords: [WorkoutSetRecord]
     let isSessionStarted: Bool
     let isSessionCompleted: Bool
+    let exerciseRPE: Int?
     var onCompleteSet: ((WorkoutSetModel, Int) -> Void)?
     var onExerciseTapped: (() -> Void)?
     var onRPETapped: (() -> Void)?
@@ -102,10 +103,10 @@ struct MyDayWorkoutSessionExerciseCard: View {
                 HStack(spacing: 6) {
                     Image(systemName: "gauge.medium")
                         .font(.system(size: 14, weight: .medium))
-                    Text("RPE")
+                    Text(exerciseRPE.map { "\($0)" } ?? "RPE")
                         .font(.system(size: 14, weight: .semibold))
                 }
-                .foregroundStyle(Color.secondary)
+                .foregroundStyle(exerciseRPE != nil ? Color.darkColor : Color.secondary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
             }
@@ -166,7 +167,8 @@ struct MyDayWorkoutSessionExerciseCard: View {
                     WorkoutSetRecord(id: "s3", isCompleted: false)
                 ],
                 isSessionStarted: false,
-                isSessionCompleted: false
+                isSessionCompleted: false,
+                exerciseRPE: nil
             )
 
             MyDayWorkoutSessionExerciseCard(
@@ -177,14 +179,16 @@ struct MyDayWorkoutSessionExerciseCard: View {
                     WorkoutSetRecord(id: "s3", isCompleted: false)
                 ],
                 isSessionStarted: true,
-                isSessionCompleted: false
+                isSessionCompleted: false,
+                exerciseRPE: nil
             )
 
             MyDayWorkoutSessionExerciseCard(
                 exercise: exercise,
                 setRecords: allRecords,
                 isSessionStarted: true,
-                isSessionCompleted: true
+                isSessionCompleted: true,
+                exerciseRPE: 8
             )
         }
         .padding(16)

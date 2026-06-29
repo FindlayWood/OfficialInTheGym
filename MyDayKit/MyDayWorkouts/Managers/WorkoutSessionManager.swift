@@ -77,6 +77,21 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         sessionRecord?.exerciseRecords.first(where: { $0.exerciseId == exerciseId })?.setRecords ?? []
     }
 
+    /// RPE logged for a given exercise, if set.
+    public func exerciseRPE(for exerciseId: String) -> Int? {
+        sessionRecord?.exerciseRecords.first(where: { $0.exerciseId == exerciseId })?.rpe
+    }
+
+    /// Set the RPE for a specific exercise and persist.
+    public func setExerciseRPE(exerciseId: String, rpe: Int) {
+        guard var record = sessionRecord else { return }
+        guard let idx = record.exerciseRecords.firstIndex(where: { $0.exerciseId == exerciseId }) else { return }
+        record.exerciseRecords[idx].rpe = rpe
+        sessionRecord = record
+        entry.sessionRecord = record
+        onEntryUpdated?(entry)
+    }
+
     /// Total sets marked completed across all exercises.
     public var totalSetsLogged: Int {
         sessionRecord?.exerciseRecords.flatMap(\.setRecords).filter(\.isCompleted).count ?? 0
