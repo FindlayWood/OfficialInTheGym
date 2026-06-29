@@ -92,6 +92,8 @@ public final class WorkoutBuilderManager: ObservableObject {
                 WorkoutExerciseModel(
                     id: UUID().uuidString,
                     exerciseId: manager.exercise.id,
+                    exerciseName: manager.exercise.name,
+                    exerciseCategory: manager.exercise.category,
                     orderIndex: index,
                     sets: manager.sets.enumerated().map { setIndex, setManager in
                         WorkoutSetModel(

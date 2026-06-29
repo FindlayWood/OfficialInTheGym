@@ -141,13 +141,13 @@ struct DailyWorkoutCard: View {
 #Preview {
     let template: (String, String, Int?, WorkoutDifficulty?) -> WorkoutTemplateModel = { id, title, duration, difficulty in
         WorkoutTemplateModel(id: id, title: title, description: nil, exercises: [
-            WorkoutExerciseModel(id: "e1", exerciseId: "Bench Press", orderIndex: 0, sets: [
+            WorkoutExerciseModel(id: "e1", exerciseId: "bench-press", exerciseName: "Bench Press", exerciseCategory: .upperBody, orderIndex: 0, sets: [
                 WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg)
             ]),
-            WorkoutExerciseModel(id: "e2", exerciseId: "Pull Ups", orderIndex: 1, sets: [
+            WorkoutExerciseModel(id: "e2", exerciseId: "pull-ups", exerciseName: "Pull Ups", exerciseCategory: .upperBody, orderIndex: 1, sets: [
                 WorkoutSetModel(id: "s2", orderIndex: 0, reps: 10)
             ]),
-            WorkoutExerciseModel(id: "e3", exerciseId: "Dumbbell Curl", orderIndex: 2, sets: [
+            WorkoutExerciseModel(id: "e3", exerciseId: "dumbbell-curl", exerciseName: "Dumbbell Curl", exerciseCategory: .upperBody, orderIndex: 2, sets: [
                 WorkoutSetModel(id: "s3", orderIndex: 0, reps: 12, weight: 15, weightUnit: .kg)
             ])
         ], createdBy: "findlay", isPublic: false, tags: nil, estimatedDuration: duration, difficulty: difficulty, createdAt: .now, updatedAt: .now)

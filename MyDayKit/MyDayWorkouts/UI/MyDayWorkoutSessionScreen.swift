@@ -293,7 +293,9 @@ struct MyDayWorkoutSessionScreen: View {
                         exercises: [
                             WorkoutExerciseModel(
                                 id: "e1",
-                                exerciseId: "Bench Press",
+                                exerciseId: "bench-press",
+                                exerciseName: "Bench Press",
+                                exerciseCategory: .upperBody,
                                 orderIndex: 0,
                                 sets: [
                                     WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg),
@@ -304,7 +306,9 @@ struct MyDayWorkoutSessionScreen: View {
                             ),
                             WorkoutExerciseModel(
                                 id: "e2",
-                                exerciseId: "Pull Ups",
+                                exerciseId: "pull-ups",
+                                exerciseName: "Pull Ups",
+                                exerciseCategory: .upperBody,
                                 orderIndex: 1,
                                 sets: [
                                     WorkoutSetModel(id: "s4", orderIndex: 0, reps: 10),

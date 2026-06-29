@@ -77,10 +77,10 @@ struct WorkoutSessionStartCard: View {
                     title: "Monday Upper",
                     description: nil,
                     exercises: [
-                        WorkoutExerciseModel(id: "e1", exerciseId: "Bench Press", orderIndex: 0, sets: [
+                        WorkoutExerciseModel(id: "e1", exerciseId: "bench-press", exerciseName: "Bench Press", exerciseCategory: .upperBody, orderIndex: 0, sets: [
                             WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg)
                         ]),
-                        WorkoutExerciseModel(id: "e2", exerciseId: "Pull Ups", orderIndex: 1, sets: [
+                        WorkoutExerciseModel(id: "e2", exerciseId: "pull-ups", exerciseName: "Pull Ups", exerciseCategory: .upperBody, orderIndex: 1, sets: [
                             WorkoutSetModel(id: "s2", orderIndex: 0, reps: 10)
                         ])
                     ],

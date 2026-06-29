@@ -125,6 +125,7 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
                 WorkoutExerciseRecord(
                     id: exercise.id,
                     exerciseId: exercise.exerciseId,
+                    exerciseName: exercise.exerciseName,
                     setRecords: exercise.sets.map { set in
                         WorkoutSetRecord(id: set.id, isCompleted: false)
                     }

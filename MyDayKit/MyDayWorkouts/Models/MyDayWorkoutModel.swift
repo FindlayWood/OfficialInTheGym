@@ -35,6 +35,8 @@ public struct WorkoutTemplateModel: Identifiable, Codable {
 public struct WorkoutExerciseModel: Identifiable, Codable {
     public let id: String
     public let exerciseId: String
+    public let exerciseName: String
+    public let exerciseCategory: ExerciseCategory
     public let orderIndex: Int
     public let sets: [WorkoutSetModel]
     public let restSeconds: Int?
@@ -43,6 +45,8 @@ public struct WorkoutExerciseModel: Identifiable, Codable {
     public init(
         id: String,
         exerciseId: String,
+        exerciseName: String,
+        exerciseCategory: ExerciseCategory,
         orderIndex: Int,
         sets: [WorkoutSetModel],
         restSeconds: Int? = nil,
@@ -50,6 +54,8 @@ public struct WorkoutExerciseModel: Identifiable, Codable {
     ) {
         self.id = id
         self.exerciseId = exerciseId
+        self.exerciseName = exerciseName
+        self.exerciseCategory = exerciseCategory
         self.orderIndex = orderIndex
         self.sets = sets
         self.restSeconds = restSeconds

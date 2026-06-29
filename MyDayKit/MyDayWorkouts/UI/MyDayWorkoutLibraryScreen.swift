@@ -199,9 +199,9 @@ private extension View {
             manager: {
                 let m = WorkoutLibraryManager(fetcher: PreviewWorkoutTemplateFetching())
                 m.state = .loaded([
-                    WorkoutTemplateModel(id: "1", title: "Monday Upper", description: nil, exercises: Array(repeating: WorkoutExerciseModel(id: UUID().uuidString, exerciseId: "", orderIndex: 0, sets: []), count: 6), createdBy: "", isPublic: false, tags: nil, estimatedDuration: nil, difficulty: nil, createdAt: .now, updatedAt: .now),
-                    WorkoutTemplateModel(id: "2", title: "Tuesday Lower", description: nil, exercises: Array(repeating: WorkoutExerciseModel(id: UUID().uuidString, exerciseId: "", orderIndex: 0, sets: []), count: 5), createdBy: "", isPublic: false, tags: nil, estimatedDuration: nil, difficulty: nil, createdAt: .now, updatedAt: .now),
-                    WorkoutTemplateModel(id: "3", title: "Thursday Push", description: nil, exercises: Array(repeating: WorkoutExerciseModel(id: UUID().uuidString, exerciseId: "", orderIndex: 0, sets: []), count: 4), createdBy: "", isPublic: false, tags: nil, estimatedDuration: nil, difficulty: nil, createdAt: .now, updatedAt: .now),
+                    WorkoutTemplateModel(id: "1", title: "Monday Upper", description: nil, exercises: Array(repeating: WorkoutExerciseModel(id: UUID().uuidString, exerciseId: "", exerciseName: "", exerciseCategory: .upperBody, orderIndex: 0, sets: []), count: 6), createdBy: "", isPublic: false, tags: nil, estimatedDuration: nil, difficulty: nil, createdAt: .now, updatedAt: .now),
+                    WorkoutTemplateModel(id: "2", title: "Tuesday Lower", description: nil, exercises: Array(repeating: WorkoutExerciseModel(id: UUID().uuidString, exerciseId: "", exerciseName: "", exerciseCategory: .upperBody, orderIndex: 0, sets: []), count: 5), createdBy: "", isPublic: false, tags: nil, estimatedDuration: nil, difficulty: nil, createdAt: .now, updatedAt: .now),
+                    WorkoutTemplateModel(id: "3", title: "Thursday Push", description: nil, exercises: Array(repeating: WorkoutExerciseModel(id: UUID().uuidString, exerciseId: "", exerciseName: "", exerciseCategory: .upperBody, orderIndex: 0, sets: []), count: 4), createdBy: "", isPublic: false, tags: nil, estimatedDuration: nil, difficulty: nil, createdAt: .now, updatedAt: .now),
                 ])
                 return m
             }()

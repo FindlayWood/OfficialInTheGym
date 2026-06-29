@@ -51,7 +51,7 @@ struct MyDayWorkoutSessionExerciseCard: View {
                 Button {
                     onExerciseTapped?()
                 } label: {
-                    Text(exercise.exerciseId)
+                    Text(exercise.exerciseName)
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(Color.primary)
                         .lineLimit(1)
@@ -138,7 +138,9 @@ struct MyDayWorkoutSessionExerciseCard: View {
 #Preview {
     let exercise = WorkoutExerciseModel(
         id: "e1",
-        exerciseId: "Bench Press",
+        exerciseId: "bench-press",
+        exerciseName: "Bench Press",
+        exerciseCategory: .upperBody,
         orderIndex: 0,
         sets: [
             WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg),

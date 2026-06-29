@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum ExerciseCategory: String, CaseIterable, Codable {
+public enum ExerciseCategory: String, CaseIterable, Codable {
     case upperBody = "upper_body"
     case lowerBody = "lower_body"
     case core = "core"

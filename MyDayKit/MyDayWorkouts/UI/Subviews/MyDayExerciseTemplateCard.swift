@@ -35,7 +35,7 @@ struct MyDayExerciseTemplateCard: View {
                 Button {
                     onExerciseTapped?()
                 } label: {
-                    Text(exercise.exerciseId)
+                    Text(exercise.exerciseName)
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(Color.primary)
                         .lineLimit(1)
@@ -71,7 +71,9 @@ struct MyDayExerciseTemplateCard: View {
             MyDayExerciseTemplateCard(
                 exercise: WorkoutExerciseModel(
                     id: "e1",
-                    exerciseId: "Bench Press",
+                    exerciseId: "bench-press",
+                    exerciseName: "Bench Press",
+                    exerciseCategory: .upperBody,
                     orderIndex: 0,
                     sets: [
                         WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg),
@@ -85,7 +87,9 @@ struct MyDayExerciseTemplateCard: View {
             MyDayExerciseTemplateCard(
                 exercise: WorkoutExerciseModel(
                     id: "e2",
-                    exerciseId: "Pull Ups",
+                    exerciseId: "pull-ups",
+                    exerciseName: "Pull Ups",
+                    exerciseCategory: .upperBody,
                     orderIndex: 1,
                     sets: [
                         WorkoutSetModel(id: "s4", orderIndex: 0, reps: 10),
@@ -96,7 +100,9 @@ struct MyDayExerciseTemplateCard: View {
             MyDayExerciseTemplateCard(
                 exercise: WorkoutExerciseModel(
                     id: "e3",
-                    exerciseId: "Plank",
+                    exerciseId: "plank",
+                    exerciseName: "Plank",
+                    exerciseCategory: .core,
                     orderIndex: 2,
                     sets: [
                         WorkoutSetModel(id: "s6", orderIndex: 0, time: 60),
