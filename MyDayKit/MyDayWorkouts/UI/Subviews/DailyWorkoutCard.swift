@@ -55,29 +55,26 @@ struct DailyWorkoutCard: View {
     private var cardContent: some View {
         VStack(alignment: .leading, spacing: 8) {
 
-            // MARK: - Top row: type label + status chip
+            // MARK: - Top row: type label
+            Text("WORKOUT")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundColor(.secondary)
+                .tracking(1.5)
+
+            // MARK: - Title
+            Text(entry.template.title)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.primary)
+                .lineLimit(1)
+
+            // MARK: - Subtitle + status chip
             HStack {
-                Text("WORKOUT")
-                    .font(.system(size: 10, weight: .semibold))
+                Text(subtitleText)
+                    .font(.system(size: 13))
                     .foregroundColor(.secondary)
-                    .tracking(1.5)
                 Spacer()
                 statusChip
             }
-
-            // MARK: - Title + ellipsis placeholder
-            HStack(alignment: .center) {
-                Text(entry.template.title)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.primary)
-                    .lineLimit(1)
-                Spacer()
-            }
-
-            // MARK: - Subtitle
-            Text(subtitleText)
-                .font(.system(size: 13))
-                .foregroundColor(.secondary)
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)

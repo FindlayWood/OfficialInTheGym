@@ -77,6 +77,9 @@ struct MyDayWorkoutSessionScreen: View {
             }
         }
         .task {
+            if sessionStarted {
+                elapsedSeconds = Int(Date().timeIntervalSince(manager.startedAt))
+            }
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
                 if sessionStarted { elapsedSeconds += 1 }

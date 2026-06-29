@@ -192,16 +192,15 @@ extension MyDayCoordinator {
             
         case .workoutSession(let entry):
             let manager = WorkoutSessionManager(entry: entry)
-            let vc = UIHostingController(
-                rootView: MyDayWorkoutSessionScreen(
-                    manager: manager,
-                    userId: userId,
-                    onFinish: { [weak self] _ in
-                        self?.dayManager.updateWorkoutEntry(manager.entry)
-                        self?.popToRoot()
-                    }
-                )
+            manager.onEntryUpdated = dayManager.updateWorkoutEntry
+            let screen = MyDayWorkoutSessionScreen(
+                manager: manager,
+                userId: userId,
+                onFinish: { [weak self] _ in
+                    self?.popToRoot()
+                }
             )
+            let vc = UIHostingController(rootView: screen)
             vc.hidesBottomBarWhenPushed = true
             return vc
 

@@ -17,17 +17,28 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
     @Published public var restTimerSeconds: Int = 0
     @Published public var isRestTimerRunning: Bool = false
 
+    // MARK: - Callbacks
+
+    public var onEntryUpdated: ((DailyWorkoutEntry) -> Void)?
+
     // MARK: - Private
 
     private let sessionId: String
-    private var startedAt: Date = Date()
+    public private(set) var startedAt: Date = Date()
     private var restTimerTask: Task<Void, Never>?
 
     // MARK: - Init
 
     public init(entry: DailyWorkoutEntry) {
         self.entry = entry
-        self.sessionId = UUID().uuidString
+        if entry.status == .inProgress, let record = entry.sessionRecord {
+            self.sessionId = record.id
+            self.startedAt = entry.startedAt ?? record.startedAt
+            self.sessionStatus = .inProgress
+            self.sessionRecord = record
+        } else {
+            self.sessionId = UUID().uuidString
+        }
     }
 
     // MARK: - Set Completion
@@ -58,6 +69,7 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
 
         sessionRecord = record
         entry.sessionRecord = record
+        onEntryUpdated?(entry)
     }
 
     /// All set records for a given exercise, in template order.
@@ -121,6 +133,7 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         )
         sessionRecord = record
         entry.sessionRecord = record
+        onEntryUpdated?(entry)
     }
 
     /// Finalise the session record and return a summary model. Call when the user taps Finish.
@@ -139,6 +152,8 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
             sessionRecord = record
             entry.sessionRecord = record
         }
+
+        onEntryUpdated?(entry)
 
         return WorkoutSessionModel(
             id: sessionId,
@@ -164,6 +179,8 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
             sessionRecord = record
             entry.sessionRecord = record
         }
+
+        onEntryUpdated?(entry)
 
         return WorkoutSessionModel(
             id: sessionId,
