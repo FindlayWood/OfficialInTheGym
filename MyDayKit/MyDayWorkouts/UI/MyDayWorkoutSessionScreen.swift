@@ -206,7 +206,7 @@ struct MyDayWorkoutSessionScreen: View {
         let m = (elapsedSeconds % 3600) / 60
         let s = elapsedSeconds % 60
         return h > 0
-            ? String(format: "%d:%02d:%02d", h, m, s)
+            ? String(format: "%d:%02d", h, m)
             : String(format: "%d:%02d", m, s)
     }
 
