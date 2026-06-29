@@ -31,10 +31,10 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
 
     public init(entry: DailyWorkoutEntry) {
         self.entry = entry
-        if entry.status == .inProgress, let record = entry.sessionRecord {
+        if let record = entry.sessionRecord, entry.status == .inProgress || entry.status == .completed {
             self.sessionId = record.id
             self.startedAt = entry.startedAt ?? record.startedAt
-            self.sessionStatus = .inProgress
+            self.sessionStatus = entry.status == .completed ? .completed : .inProgress
             self.sessionRecord = record
         } else {
             self.sessionId = UUID().uuidString

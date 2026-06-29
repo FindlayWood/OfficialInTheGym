@@ -12,6 +12,7 @@ struct MyDayWorkoutSessionExerciseCard: View {
     let exercise: WorkoutExerciseModel
     let setRecords: [WorkoutSetRecord]
     let isSessionStarted: Bool
+    let isSessionCompleted: Bool
     var onCompleteSet: ((WorkoutSetModel, Int) -> Void)?
     var onExerciseTapped: (() -> Void)?
     var onRPETapped: (() -> Void)?
@@ -81,7 +82,7 @@ struct MyDayWorkoutSessionExerciseCard: View {
                         index: index,
                         set: set,
                         isLogged: record?.isCompleted ?? false,
-                        isDisabled: !isSessionStarted,
+                        isDisabled: !isSessionStarted || isSessionCompleted,
                         onTap: { onCompleteSet?(set, index) }
                     )
                 }
@@ -162,7 +163,8 @@ struct MyDayWorkoutSessionExerciseCard: View {
                     WorkoutSetRecord(id: "s2", isCompleted: false),
                     WorkoutSetRecord(id: "s3", isCompleted: false)
                 ],
-                isSessionStarted: false
+                isSessionStarted: false,
+                isSessionCompleted: false
             )
 
             MyDayWorkoutSessionExerciseCard(
@@ -172,13 +174,15 @@ struct MyDayWorkoutSessionExerciseCard: View {
                     WorkoutSetRecord(id: "s2", isCompleted: false),
                     WorkoutSetRecord(id: "s3", isCompleted: false)
                 ],
-                isSessionStarted: true
+                isSessionStarted: true,
+                isSessionCompleted: false
             )
 
             MyDayWorkoutSessionExerciseCard(
                 exercise: exercise,
                 setRecords: allRecords,
-                isSessionStarted: true
+                isSessionStarted: true,
+                isSessionCompleted: true
             )
         }
         .padding(16)

@@ -17,17 +17,22 @@ struct MyDayWorkoutSessionScreen: View {
     @State private var elapsedSeconds = 0
 
     private var sessionStarted: Bool { manager.sessionStatus != .notStarted }
+    private var sessionCompleted: Bool { manager.sessionStatus == .completed }
 
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
                 if sessionStarted {
-                    progressHeader
-                    Divider()
-                    if manager.isRestTimerRunning {
-                        restTimerBanner
-                            .transition(.move(edge: .top).combined(with: .opacity))
+                    if sessionCompleted {
+                        completedHeader
+                    } else {
+                        progressHeader
+                        if manager.isRestTimerRunning {
+                            restTimerBanner
+                                .transition(.move(edge: .top).combined(with: .opacity))
+                        }
                     }
+                    Divider()
                 }
 
                 ScrollView(showsIndicators: false) {
@@ -37,6 +42,7 @@ struct MyDayWorkoutSessionScreen: View {
                                 exercise: exercise,
                                 setRecords: manager.setRecords(for: exercise.exerciseId),
                                 isSessionStarted: sessionStarted,
+                                isSessionCompleted: sessionCompleted,
                                 onCompleteSet: { targetSet, index in
                                     autoLog(targetSet: targetSet, index: index, exercise: exercise)
                                 }
@@ -65,7 +71,7 @@ struct MyDayWorkoutSessionScreen: View {
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.light, for: .navigationBar)
         .toolbar {
-            if sessionStarted {
+            if sessionStarted && !sessionCompleted {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Finish") {
                         let session = manager.finishSession()
@@ -103,6 +109,52 @@ struct MyDayWorkoutSessionScreen: View {
         if let rest = exercise.restSeconds, rest > 0 {
             manager.startRestTimer(seconds: rest)
         }
+    }
+
+    // MARK: - Completed Header
+
+    private var completedHeader: some View {
+        HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("SETS")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(Color.secondary)
+                    .tracking(1.2)
+                HStack(alignment: .lastTextBaseline, spacing: 3) {
+                    Text("\(manager.totalSetsLogged)")
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(Color.primary)
+                    Text("/ \(manager.totalSetsTargeted)")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(Color.secondary)
+                }
+            }
+
+            Spacer()
+
+            HStack(spacing: 6) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Color.green)
+                Text("Completed")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(Color.green)
+            }
+
+            Spacer()
+
+            VStack(alignment: .trailing, spacing: 4) {
+                Text("DURATION")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(Color.secondary)
+                    .tracking(1.2)
+                Text(formattedDuration)
+                    .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(Color.primary)
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 14)
     }
 
     // MARK: - Progress Header
@@ -200,6 +252,16 @@ struct MyDayWorkoutSessionScreen: View {
     }
 
     // MARK: - Helpers
+
+    private var formattedDuration: String {
+        guard let record = manager.entry.sessionRecord, let endedAt = record.endedAt else { return "--:--" }
+        let seconds = Int(endedAt.timeIntervalSince(record.startedAt))
+        let h = seconds / 3600
+        let m = (seconds % 3600) / 60
+        return h > 0
+            ? String(format: "%d:%02d", h, m)
+            : String(format: "%d:%02d", m, seconds % 60)
+    }
 
     private var formattedElapsed: String {
         let h = elapsedSeconds / 3600
