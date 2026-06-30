@@ -54,13 +54,9 @@ struct SessionSetPill: View {
 
             Spacer(minLength: 4)
 
-            Button(action: onTap) {
-                Image(systemName: isLogged ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 22, weight: .medium))
-                    .foregroundStyle(isLogged ? Color.white : Color.secondary.opacity(isDisabled ? 0.25 : 0.5))
-            }
-            .buttonStyle(.plain)
-            .disabled(isLogged || isDisabled)
+            Image(systemName: isLogged ? "checkmark.circle.fill" : "circle")
+                .font(.system(size: 22, weight: .medium))
+                .foregroundStyle(isLogged ? Color.white : Color.secondary.opacity(isDisabled ? 0.25 : 0.5))
         }
         .frame(width: 72, height: 88)
         .padding(.vertical, 8)
@@ -68,6 +64,8 @@ struct SessionSetPill: View {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .fill(isLogged ? Color.darkColor : Color(UIColor.secondarySystemBackground))
         )
+        .contentShape(Rectangle())
+        .onTapGesture { if !isDisabled { onTap() } }
         .animation(.easeInOut(duration: 0.2), value: isLogged)
     }
 

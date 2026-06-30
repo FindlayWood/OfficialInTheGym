@@ -16,6 +16,7 @@ struct MyDayWorkoutSessionScreen: View {
 
     @State private var elapsedSeconds = 0
     @State private var rpeExercise: WorkoutExerciseModel?
+    @State private var selectedSet: SessionSetDetail?
 
     private var sessionStarted: Bool { manager.sessionStatus != .notStarted }
     private var sessionCompleted: Bool { manager.sessionStatus == .completed }
@@ -45,9 +46,16 @@ struct MyDayWorkoutSessionScreen: View {
                                 isSessionStarted: sessionStarted,
                                 isSessionCompleted: sessionCompleted,
                                 exerciseRPE: manager.exerciseRPE(for: exercise.exerciseId),
-                                onCompleteSet: { targetSet, index in
-                                    autoLog(targetSet: targetSet, index: index, exercise: exercise)
-                                },
+                                onSetTapped: sessionStarted ? { targetSet, record, index in
+                                    withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
+                                        selectedSet = SessionSetDetail(
+                                            exercise: exercise,
+                                            setModel: targetSet,
+                                            setRecord: record,
+                                            index: index
+                                        )
+                                    }
+                                } : nil,
                                 onRPETapped: sessionStarted && !sessionCompleted ? {
                                     rpeExercise = exercise
                                 } : nil
@@ -68,7 +76,40 @@ struct MyDayWorkoutSessionScreen: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
+            if let detail = selectedSet {
+                Color.black.opacity(0.55)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+                    .onTapGesture {
+                        withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
+                            selectedSet = nil
+                        }
+                    }
+
+                VStack {
+                    Spacer()
+                    SessionSetDetailOverlay(
+                        detail: detail,
+                        isSessionActive: sessionStarted && !sessionCompleted,
+                        onComplete: {
+                            autoLog(targetSet: detail.setModel, index: detail.index, exercise: detail.exercise)
+                            withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
+                                selectedSet = nil
+                            }
+                        },
+                        onDismiss: {
+                            withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
+                                selectedSet = nil
+                            }
+                        }
+                    )
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+                .ignoresSafeArea(edges: .bottom)
+            }
+
         }
+        .animation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8), value: selectedSet != nil)
         .animation(.easeInOut(duration: 0.25), value: manager.isRestTimerRunning)
         .animation(.easeInOut(duration: 0.3), value: sessionStarted)
         .navigationTitle(manager.entry.template.title)

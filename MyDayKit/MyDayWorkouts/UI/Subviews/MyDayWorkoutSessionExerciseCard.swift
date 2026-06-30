@@ -14,7 +14,7 @@ struct MyDayWorkoutSessionExerciseCard: View {
     let isSessionStarted: Bool
     let isSessionCompleted: Bool
     let exerciseRPE: Int?
-    var onCompleteSet: ((WorkoutSetModel, Int) -> Void)?
+    var onSetTapped: ((WorkoutSetModel, WorkoutSetRecord?, Int) -> Void)?
     var onExerciseTapped: (() -> Void)?
     var onRPETapped: (() -> Void)?
     var onCameraTapped: (() -> Void)?
@@ -84,7 +84,7 @@ struct MyDayWorkoutSessionExerciseCard: View {
                         set: set,
                         isLogged: record?.isCompleted ?? false,
                         isDisabled: !isSessionStarted || isSessionCompleted,
-                        onTap: { onCompleteSet?(set, index) }
+                        onTap: { onSetTapped?(set, record, index) }
                     )
                 }
             }
