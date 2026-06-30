@@ -64,7 +64,7 @@ Current focus: MYDAY tab — active session UI partially complete (see roadmap a
 NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
 
 Roadmap order:
-1. Active session UI — manual set logging sheet, session-end RPE, abandon flow (in progress)
+1. Active session UI — **fix set detail overlay** (priority 1), abandon flow, manual set logging
 2. Fix workout stats → update STATS tab
 3. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
 
@@ -87,6 +87,9 @@ Roadmap order:
 - Library, creation home, template detail screens with collapsible exercise cards and set pill views
 - Workouts in MYDAY tab — add/remove workouts to a day, persisted via `workoutSaver`
 - Workout session screen — navigate, start, track set completion, finish
+- Post-session summary screen — duration/sets stats, session RPE picker, workload reveal,
+  notes input, "Complete Workout" finalises session (`finishSession(rpe:notes:)`)
+- Set detail overlay on session screen — bottom-sheet card per set pill tap (animation WIP)
 
 ## MYDAY Workout Flow
 - **Library → Template Detail → Add to Today**: `MyDayWorkoutCoordinator` handles navigation;
@@ -112,18 +115,34 @@ Roadmap order:
   route; screen shows `WorkoutSessionStartCard` overlay until started; tapping "Start Workout" calls
   `manager.startSession()` which fires `onEntryUpdated` to persist; set pills disabled until started;
   elapsed timer seeds from `manager.startedAt` on resume so it is accurate when re-entering an
-  in-progress session; "Finish" calls `manager.finishSession()` (fires `onEntryUpdated`) then `onFinish`
-  pops to root. Screen is pure UI — no save calls. Coordinator wires
-  `manager.onEntryUpdated = { dayManager.updateWorkoutEntry($0) }`.
+  in-progress session; "Finish" navigates to `WorkoutSessionSummaryScreen` (via `onGoToSummary`
+  callback → `coordinator.showSummary(manager:)`). Screen is pure UI — no save calls. Coordinator
+  wires `manager.onEntryUpdated = { dayManager.updateWorkoutEntry($0) }`.
   Revisiting a completed entry shows `completedHeader` (read-only).
+- **Summary screen** (`WorkoutSessionSummaryScreen`): pushed after "Finish"; shows duration + sets
+  completed stats, session RPE picker (1–10 grid, same colour coding as exercise RPE) with average
+  exercise RPE displayed for reference, workload (duration × RPE) animates in once RPE is entered,
+  free-text notes field, "Complete Workout" button. "Complete Workout" calls
+  `manager.finishSession(rpe:notes:)` then pops to root. Back navigation discards summary input.
+  `WorkoutSessionRecord` now includes `notes: String?`; workload and rpe set at finish time.
+- **Set detail overlay** (`SessionSetDetailOverlay`): tapping a set pill (when session started)
+  opens a bottom-sheet overlay over the session screen. Shows exercise name + set number, a TARGET
+  stats grid (reps/weight/time/distance from `WorkoutSetModel`), a LOGGED grid (from `WorkoutSetRecord`,
+  shown with green badge if completed), and a "Complete Set" button if not yet logged and session
+  active. `SessionSetDetail` bundles exercise + setModel + setRecord + index. Pill tap opens overlay
+  via `onSetTapped((WorkoutSetModel, WorkoutSetRecord?, Int) -> Void)?` on the exercise card;
+  whole-pill is the tap target (`.contentShape` + `.onTapGesture`). **Animation and final view
+  still need fixing — see PRIORITY 1 above.**
 - **Coordinator callback pattern**: child coordinator exposes `var onX: (() -> Void)?`;
   parent sets it after `let sub = ChildCoordinator(...)` before returning `sub.start()`
 
 ## Session Screen — What's Not Yet Built
-- Manual set logging (editing actual reps/weight per set — `MyDayWorkoutSessionLogSetSheet` exists but not wired)
-- RPE input at session end (session-level `WorkoutSessionRecord.rpe`; per-exercise RPE is built separately)
+- **PRIORITY 1: Set detail overlay** — `SessionSetDetailOverlay` + `SessionSetDetail` exist and are
+  wired (tapping a set pill opens a bottom-sheet overlay with target/logged stat grids and a
+  "Complete Set" button), but the **animation is broken and the final view needs fixing**. This must
+  be addressed at the start of the next session before any other work.
 - Abandon session flow
-- Workload computation (requires session-end RPE)
+- Manual set logging (editing actual reps/weight per set — `MyDayWorkoutSessionLogSetSheet` exists but not wired)
 
 ## Firestore
 Firestore collection structure will be provided when working on specific features.
