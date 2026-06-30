@@ -196,8 +196,8 @@ extension MyDayCoordinator {
             let screen = MyDayWorkoutSessionScreen(
                 manager: manager,
                 userId: userId,
-                onFinish: { [weak self] _ in
-                    self?.popToRoot()
+                onGoToSummary: { [weak self] in
+                    self?.showSummary(manager: manager)
                 }
             )
             let vc = UIHostingController(rootView: screen)
@@ -260,6 +260,18 @@ extension MyDayCoordinator {
 
     func popToRoot() {
         navigationController.popToRootViewController(animated: true)
+    }
+
+    func showSummary(manager: WorkoutSessionManager) {
+        let screen = WorkoutSessionSummaryScreen(
+            manager: manager,
+            endedAt: Date(),
+            onComplete: { [weak self] in
+                self?.popToRoot()
+            }
+        )
+        let vc = UIHostingController(rootView: screen)
+        navigationController.pushViewController(vc, animated: true)
     }
 }
 

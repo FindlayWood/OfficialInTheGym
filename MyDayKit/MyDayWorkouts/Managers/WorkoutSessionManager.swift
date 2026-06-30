@@ -102,6 +102,13 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         entry.template.exercises.reduce(0) { $0 + $1.sets.count }
     }
 
+    /// Average RPE across exercises that have one logged, nil if none logged.
+    public var averageExerciseRPE: Double? {
+        let values = sessionRecord?.exerciseRecords.compactMap(\.rpe) ?? []
+        guard !values.isEmpty else { return nil }
+        return Double(values.reduce(0, +)) / Double(values.count)
+    }
+
     // MARK: - Rest Timer
 
     public func startRestTimer(seconds: Int) {
@@ -152,8 +159,9 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         onEntryUpdated?(entry)
     }
 
-    /// Finalise the session record and return a summary model. Call when the user taps Finish.
-    public func finishSession() -> WorkoutSessionModel {
+    /// Finalise the session record. Called when the user confirms on the summary screen.
+    @discardableResult
+    public func finishSession(rpe: Int?, notes: String?) -> WorkoutSessionModel {
         let endedAt = Date()
         sessionStatus = .completed
         entry.status = .completed
@@ -161,7 +169,9 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
 
         if var record = sessionRecord {
             record.endedAt = endedAt
-            if let rpe = record.rpe {
+            record.rpe = rpe
+            record.notes = notes
+            if let rpe = rpe {
                 let minutes = endedAt.timeIntervalSince(startedAt) / 60.0
                 record.workload = minutes * Double(rpe)
             }
@@ -178,7 +188,7 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
             title: entry.template.title,
             startedAt: startedAt,
             completedAt: endedAt,
-            notes: nil,
+            notes: notes,
             status: .completed
         )
     }

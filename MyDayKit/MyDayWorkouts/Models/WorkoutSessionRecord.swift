@@ -13,6 +13,7 @@ public struct WorkoutSessionRecord: Identifiable, Codable {
     public var endedAt: Date?
     public var rpe: Int?            // 1–10, set by user at session end
     public var workload: Double?    // duration (minutes) × rpe; nil until both are present
+    public var notes: String?
     public var exerciseRecords: [WorkoutExerciseRecord]
 
     public init(
@@ -21,6 +22,7 @@ public struct WorkoutSessionRecord: Identifiable, Codable {
         endedAt: Date? = nil,
         rpe: Int? = nil,
         workload: Double? = nil,
+        notes: String? = nil,
         exerciseRecords: [WorkoutExerciseRecord]
     ) {
         self.id = id
@@ -28,6 +30,7 @@ public struct WorkoutSessionRecord: Identifiable, Codable {
         self.endedAt = endedAt
         self.rpe = rpe
         self.workload = workload
+        self.notes = notes
         self.exerciseRecords = exerciseRecords
     }
 }

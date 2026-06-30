@@ -12,7 +12,7 @@ struct MyDayWorkoutSessionScreen: View {
     @ObservedObject var manager: WorkoutSessionManager
     let userId: String
 
-    var onFinish: ((WorkoutSessionModel) -> Void)?
+    var onGoToSummary: (() -> Void)?
 
     @State private var elapsedSeconds = 0
     @State private var rpeExercise: WorkoutExerciseModel?
@@ -80,8 +80,7 @@ struct MyDayWorkoutSessionScreen: View {
             if sessionStarted && !sessionCompleted {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Finish") {
-                        let session = manager.finishSession()
-                        onFinish?(session)
+                        onGoToSummary?()
                     }
                     .fontWeight(.semibold)
                     .foregroundStyle(Color.darkColor)
