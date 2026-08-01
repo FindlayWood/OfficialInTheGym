@@ -64,9 +64,31 @@ Current focus: MYDAY tab — active session UI partially complete (see roadmap a
 NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
 
 Roadmap order:
-1. Active session UI — **fix set detail overlay** (priority 1), abandon flow, manual set logging
+1. Active session UI — abandon flow, manual set logging
 2. Fix workout stats → update STATS tab
 3. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
+
+## Workout Library Loading
+The library screen showed an empty state despite saved templates existing. Three defects, all fixed:
+1. `FirestoreWorkoutTemplateFetcher.fetchAll()` had `try` *outside* the `compactMap`, so one
+   undecodable document aborted the whole fetch. It now decodes per document and skips failures
+   with a `❌ Skipping workout template <id>` log. **Keep the decode per-document.**
+2. `WorkoutExerciseModel.exerciseName` / `.exerciseCategory` are non-optional and were added in
+   commit `adf2ac71`. Templates written to Firestore before that commit have neither key and can
+   never decode — they are now skipped (and logged) rather than blanking the library. Any such
+   template has to be recreated. **Adding a non-optional field to a persisted model breaks every
+   document already in Firestore — make new fields optional or migrate.**
+3. `WorkoutLibraryManager.load()` mapped every thrown error to `.empty`. There is now a
+   `.failed(String)` state rendered as a "Couldn't Load Workouts" view with a Try Again button, and
+   `loadIfNeeded()` only treats `.loaded` as settled so empty/failed results retry on next
+   appearance — the manager is built once in `MyDayKitComposition` and outlives the screen, so the
+   old `guard case .loading` left it blank until app relaunch. An `isFetching` flag guards against
+   overlapping fetches.
+
+Still outstanding: reads are Firestore-only while writes are local-first (`WorkoutTemplateSaver` →
+FileManager + queued remote), so a template that has not synced yet is invisible to the library.
+There is no `FileManager` counterpart to `FirestoreWorkoutTemplateFetcher`.
+Also `addTemplate` drops the template if it lands while `state == .loading`.
 
 ## Feature Areas Complete
 - Daily exercise logging
@@ -89,7 +111,7 @@ Roadmap order:
 - Workout session screen — navigate, start, track set completion, finish
 - Post-session summary screen — duration/sets stats, session RPE picker, workload reveal,
   notes input, "Complete Workout" finalises session (`finishSession(rpe:notes:)`)
-- Set detail overlay on session screen — bottom-sheet card per set pill tap (animation WIP)
+- Set detail overlay on session screen — matched-geometry hero expansion from the tapped set pill
 
 ## MYDAY Workout Flow
 - **Library → Template Detail → Add to Today**: `MyDayWorkoutCoordinator` handles navigation;
@@ -126,21 +148,28 @@ Roadmap order:
   `manager.finishSession(rpe:notes:)` then pops to root. Back navigation discards summary input.
   `WorkoutSessionRecord` now includes `notes: String?`; workload and rpe set at finish time.
 - **Set detail overlay** (`SessionSetDetailOverlay`): tapping a set pill (when session started)
-  opens a bottom-sheet overlay over the session screen. Shows exercise name + set number, a TARGET
-  stats grid (reps/weight/time/distance from `WorkoutSetModel`), a LOGGED grid (from `WorkoutSetRecord`,
-  shown with green badge if completed), and a "Complete Set" button if not yet logged and session
-  active. `SessionSetDetail` bundles exercise + setModel + setRecord + index. Pill tap opens overlay
-  via `onSetTapped((WorkoutSetModel, WorkoutSetRecord?, Int) -> Void)?` on the exercise card;
-  whole-pill is the tap target (`.contentShape` + `.onTapGesture`). **Animation and final view
-  still need fixing — see PRIORITY 1 above.**
+  expands that pill into a full-bleed card. Shows exercise name + set number, a TARGET stats grid
+  (reps/weight/time/distance from `WorkoutSetModel`), a LOGGED grid (from `WorkoutSetRecord`, shown
+  with green badge if completed), and a "Complete Set" button if not yet logged and session active.
+  `SessionSetDetail` bundles exercise + setModel + setRecord + index, and owns `matchedId`
+  (`"\(exercise.id)-\(setModel.id)"` — set ids are only unique within an exercise). Pill tap opens
+  the overlay via `onSetTapped((WorkoutSetModel, WorkoutSetRecord?, Int) -> Void)?` on the exercise
+  card; whole-pill is the tap target (`.contentShape` + `.onTapGesture`).
+  **Animation deliberately mirrors `MyDayHomeScreen.setDetailOverlay` — keep the two in step.**
+  `SessionSetPill` carries `matchedGeometryEffect` on `"\(matchedId)background"` /
+  `"\(matchedId)overlay"`; while selected it is swapped for `SessionSetPillPlaceholder` so the
+  layout slot survives the hero flight. The card reveals its content via `@State isShowing` 0.3s
+  after appear (`.easeInOut(0.2)`); the close button reverses that before calling `onDismiss` at
+  +0.4s. Presented from `.overlay { }` on the screen — never inside the main `ZStack` — with a 0.6
+  black dim (`.transition(.opacity)`) and `.transition(.asymmetric(insertion: .identity,
+  removal: .offset(y: 5)))` on the card. The spring lives in one place as `heroAnimation`; drive it
+  only with `withAnimation` at the mutation sites, never also with `.animation(_:value:)`.
+  Known gaps: "Complete Set" dismisses immediately so the LOGGED grid only appears on re-tap, and
+  `SessionSetDetail` is a snapshot that does not refresh — both belong with manual set logging.
 - **Coordinator callback pattern**: child coordinator exposes `var onX: (() -> Void)?`;
   parent sets it after `let sub = ChildCoordinator(...)` before returning `sub.start()`
 
 ## Session Screen — What's Not Yet Built
-- **PRIORITY 1: Set detail overlay** — `SessionSetDetailOverlay` + `SessionSetDetail` exist and are
-  wired (tapping a set pill opens a bottom-sheet overlay with target/logged stat grids and a
-  "Complete Set" button), but the **animation is broken and the final view needs fixing**. This must
-  be addressed at the start of the next session before any other work.
 - Abandon session flow
 - Manual set logging (editing actual reps/weight per set — `MyDayWorkoutSessionLogSetSheet` exists but not wired)
 
