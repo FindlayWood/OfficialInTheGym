@@ -25,6 +25,8 @@ struct MyDayWorkoutLibraryScreen: View {
                     emptyView
                 case .loaded(let workouts):
                     listView(workouts: workouts)
+                case .failed(let message):
+                    failedView(message: message)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -91,6 +93,41 @@ struct MyDayWorkoutLibraryScreen: View {
                     .font(.system(size: 14))
                     .foregroundColor(.secondary)
             }
+            Spacer()
+            Spacer()
+        }
+    }
+
+    // MARK: - Failed State
+    private func failedView(message: String) -> some View {
+        VStack(spacing: 16) {
+            Spacer()
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 44, weight: .light))
+                .foregroundStyle(.tertiary)
+
+            VStack(spacing: 4) {
+                Text("Couldn't Load Workouts")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundColor(.primary)
+                Text(message)
+                    .font(.system(size: 14))
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+            }
+
+            Button {
+                manager.load()
+            } label: {
+                Text("Try Again")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Color.darkColor)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(Capsule().fill(Color.darkColor.opacity(0.12)))
+            }
+
             Spacer()
             Spacer()
         }

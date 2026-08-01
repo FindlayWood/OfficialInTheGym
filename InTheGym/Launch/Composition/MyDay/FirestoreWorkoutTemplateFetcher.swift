@@ -19,8 +19,16 @@ final class FirestoreWorkoutTemplateFetcher: WorkoutTemplateFetching {
             .collection("Users/\(userID)/WorkoutTemplates")
             .getDocuments()
 
-        return try snapshot.documents.compactMap { document in
-            try document.data(as: WorkoutTemplateModel.self)
+        // Decode per document. A template written before `exerciseName` /
+        // `exerciseCategory` were added to WorkoutExerciseModel cannot decode,
+        // and must not be allowed to take the rest of the library with it.
+        return snapshot.documents.compactMap { document in
+            do {
+                return try document.data(as: WorkoutTemplateModel.self)
+            } catch {
+                print("❌ Skipping workout template \(document.documentID): \(error)")
+                return nil
+            }
         }
     }
 }

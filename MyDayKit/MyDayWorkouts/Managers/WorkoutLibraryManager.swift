@@ -12,6 +12,7 @@ public enum WorkoutLibraryState {
     case loading
     case empty
     case loaded([WorkoutTemplateModel])
+    case failed(String)
 }
 
 public class WorkoutLibraryManager: ObservableObject {
@@ -19,6 +20,7 @@ public class WorkoutLibraryManager: ObservableObject {
     @Published public var state: WorkoutLibraryState = .loading
 
     private let fetcher: WorkoutTemplateFetching
+    private var isFetching = false
 
     public init(fetcher: WorkoutTemplateFetching) {
         self.fetcher = fetcher
@@ -29,29 +31,36 @@ public class WorkoutLibraryManager: ObservableObject {
         case .loaded(var templates):
             templates.insert(template, at: 0)
             state = .loaded(templates)
-        case .empty:
+        case .empty, .failed:
             state = .loaded([template])
         case .loading:
             break
         }
     }
 
+    /// Called on every appearance of the library. Only a successful load is
+    /// treated as settled — an empty or failed result is retried, since the
+    /// manager outlives the screen and would otherwise stay blank until relaunch.
     public func loadIfNeeded() {
-        guard case .loading = state else { return }
+        if case .loaded = state { return }
         load()
     }
 
     public func load() {
+        guard !isFetching else { return }
+        isFetching = true
         state = .loading
         Task {
             do {
                 let templates = try await fetcher.fetchAll()
                 await MainActor.run {
+                    isFetching = false
                     state = templates.isEmpty ? .empty : .loaded(templates)
                 }
             } catch {
                 await MainActor.run {
-                    state = .empty
+                    isFetching = false
+                    state = .failed(error.localizedDescription)
                 }
             }
         }
