@@ -14,6 +14,8 @@ struct MyDayWorkoutSessionExerciseCard: View {
     let isSessionStarted: Bool
     let isSessionCompleted: Bool
     let exerciseRPE: Int?
+    let animation: Namespace.ID
+    var selectedSetId: String?
     var onSetTapped: ((WorkoutSetModel, WorkoutSetRecord?, Int) -> Void)?
     var onExerciseTapped: (() -> Void)?
     var onRPETapped: (() -> Void)?
@@ -79,13 +81,21 @@ struct MyDayWorkoutSessionExerciseCard: View {
             HStack(spacing: 8) {
                 ForEach(Array(exercise.sets.enumerated()), id: \.element.id) { index, set in
                     let record = setRecords.first(where: { $0.id == set.id })
-                    SessionSetPill(
-                        index: index,
-                        set: set,
-                        isLogged: record?.isCompleted ?? false,
-                        isDisabled: !isSessionStarted || isSessionCompleted,
-                        onTap: { onSetTapped?(set, record, index) }
-                    )
+                    let matchedId = SessionSetDetail.matchedId(exerciseId: exercise.id, setId: set.id)
+
+                    if selectedSetId == matchedId {
+                        SessionSetPillPlaceholder(index: index, set: set)
+                    } else {
+                        SessionSetPill(
+                            index: index,
+                            set: set,
+                            isLogged: record?.isCompleted ?? false,
+                            isDisabled: !isSessionStarted || isSessionCompleted,
+                            matchedId: matchedId,
+                            animation: animation,
+                            onTap: { onSetTapped?(set, record, index) }
+                        )
+                    }
                 }
             }
             .padding(.horizontal, 16)
@@ -137,6 +147,8 @@ struct MyDayWorkoutSessionExerciseCard: View {
 // MARK: - Preview
 
 #Preview {
+    @Previewable @Namespace var animation
+
     let exercise = WorkoutExerciseModel(
         id: "e1",
         exerciseId: "bench-press",
@@ -168,7 +180,8 @@ struct MyDayWorkoutSessionExerciseCard: View {
                 ],
                 isSessionStarted: false,
                 isSessionCompleted: false,
-                exerciseRPE: nil
+                exerciseRPE: nil,
+                animation: animation
             )
 
             MyDayWorkoutSessionExerciseCard(
@@ -180,7 +193,8 @@ struct MyDayWorkoutSessionExerciseCard: View {
                 ],
                 isSessionStarted: true,
                 isSessionCompleted: false,
-                exerciseRPE: nil
+                exerciseRPE: nil,
+                animation: animation
             )
 
             MyDayWorkoutSessionExerciseCard(
@@ -188,7 +202,8 @@ struct MyDayWorkoutSessionExerciseCard: View {
                 setRecords: allRecords,
                 isSessionStarted: true,
                 isSessionCompleted: true,
-                exerciseRPE: 8
+                exerciseRPE: 8,
+                animation: animation
             )
         }
         .padding(16)

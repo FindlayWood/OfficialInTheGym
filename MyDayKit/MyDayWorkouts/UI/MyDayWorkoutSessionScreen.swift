@@ -14,9 +14,13 @@ struct MyDayWorkoutSessionScreen: View {
 
     var onGoToSummary: (() -> Void)?
 
+    @Namespace private var animation
+
     @State private var elapsedSeconds = 0
     @State private var rpeExercise: WorkoutExerciseModel?
     @State private var selectedSet: SessionSetDetail?
+
+    private let heroAnimation: Animation = .interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)
 
     private var sessionStarted: Bool { manager.sessionStatus != .notStarted }
     private var sessionCompleted: Bool { manager.sessionStatus == .completed }
@@ -46,8 +50,10 @@ struct MyDayWorkoutSessionScreen: View {
                                 isSessionStarted: sessionStarted,
                                 isSessionCompleted: sessionCompleted,
                                 exerciseRPE: manager.exerciseRPE(for: exercise.exerciseId),
+                                animation: animation,
+                                selectedSetId: selectedSet?.matchedId,
                                 onSetTapped: sessionStarted ? { targetSet, record, index in
-                                    withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
+                                    withAnimation(heroAnimation) {
                                         selectedSet = SessionSetDetail(
                                             exercise: exercise,
                                             setModel: targetSet,
@@ -76,42 +82,14 @@ struct MyDayWorkoutSessionScreen: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
-            if let detail = selectedSet {
-                Color.black.opacity(0.55)
-                    .ignoresSafeArea()
-                    .transition(.opacity)
-                    .onTapGesture {
-                        withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
-                            selectedSet = nil
-                        }
-                    }
-
-                VStack {
-                    Spacer()
-                    SessionSetDetailOverlay(
-                        detail: detail,
-                        isSessionActive: sessionStarted && !sessionCompleted,
-                        onComplete: {
-                            autoLog(targetSet: detail.setModel, index: detail.index, exercise: detail.exercise)
-                            withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
-                                selectedSet = nil
-                            }
-                        },
-                        onDismiss: {
-                            withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)) {
-                                selectedSet = nil
-                            }
-                        }
-                    )
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
-                .ignoresSafeArea(edges: .bottom)
-            }
-
         }
-        .animation(.interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8), value: selectedSet != nil)
         .animation(.easeInOut(duration: 0.25), value: manager.isRestTimerRunning)
         .animation(.easeInOut(duration: 0.3), value: sessionStarted)
+        .overlay {
+            if let selectedSet {
+                setDetailOverlay(for: selectedSet)
+            }
+        }
         .navigationTitle(manager.entry.template.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(Color.white, for: .navigationBar)
@@ -148,6 +126,41 @@ struct MyDayWorkoutSessionScreen: View {
             )
             .presentationDetents([.height(260)])
             .presentationDragIndicator(.visible)
+        }
+    }
+
+    // MARK: - Set Detail Overlay
+
+    private func setDetailOverlay(for detail: SessionSetDetail) -> some View {
+        ZStack {
+            Color.black
+                .opacity(0.6)
+                .ignoresSafeArea()
+                .transition(.opacity)
+                .onTapGesture {
+                    withAnimation(heroAnimation) {
+                        selectedSet = nil
+                    }
+                }
+
+            SessionSetDetailOverlay(
+                detail: detail,
+                isSessionActive: sessionStarted && !sessionCompleted,
+                animation: animation,
+                onComplete: {
+                    autoLog(targetSet: detail.setModel, index: detail.index, exercise: detail.exercise)
+                    withAnimation(heroAnimation) {
+                        selectedSet = nil
+                    }
+                },
+                onDismiss: {
+                    withAnimation(heroAnimation) {
+                        selectedSet = nil
+                    }
+                }
+            )
+            .transition(.asymmetric(insertion: .identity, removal: .offset(y: 5)))
+            .padding()
         }
     }
 

@@ -13,6 +13,8 @@ struct SessionSetPill: View {
     let set: WorkoutSetModel
     let isLogged: Bool
     let isDisabled: Bool
+    let matchedId: String
+    let animation: Namespace.ID
     let onTap: () -> Void
 
     var body: some View {
@@ -60,10 +62,18 @@ struct SessionSetPill: View {
         }
         .frame(width: 72, height: 88)
         .padding(.vertical, 8)
-        .background(
+        .background {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(isLogged ? Color.darkColor : Color(UIColor.secondarySystemBackground))
-        )
+                .matchedGeometryEffect(id: "\(matchedId)background", in: animation)
+                .foregroundStyle(isLogged ? Color.darkColor : Color(UIColor.secondarySystemBackground))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .inset(by: 0.5)
+                        .stroke(Color(UIColor.separator), lineWidth: 0.5)
+                        .matchedGeometryEffect(id: "\(matchedId)overlay", in: animation)
+                }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .contentShape(Rectangle())
         .onTapGesture { if !isDisabled { onTap() } }
         .animation(.easeInOut(duration: 0.2), value: isLogged)
@@ -86,12 +96,16 @@ struct SessionSetPill: View {
 // MARK: - Preview
 
 #Preview {
+    @Previewable @Namespace var animation
+
     HStack(spacing: 8) {
         SessionSetPill(
             index: 0,
             set: WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg),
             isLogged: false,
             isDisabled: true,
+            matchedId: "e1-s1",
+            animation: animation,
             onTap: {}
         )
         SessionSetPill(
@@ -99,6 +113,8 @@ struct SessionSetPill: View {
             set: WorkoutSetModel(id: "s2", orderIndex: 1, reps: 8, weight: 80, weightUnit: .kg),
             isLogged: true,
             isDisabled: false,
+            matchedId: "e1-s2",
+            animation: animation,
             onTap: {}
         )
         SessionSetPill(
@@ -106,6 +122,8 @@ struct SessionSetPill: View {
             set: WorkoutSetModel(id: "s3", orderIndex: 2, time: 60),
             isLogged: false,
             isDisabled: false,
+            matchedId: "e1-s3",
+            animation: animation,
             onTap: {}
         )
     }

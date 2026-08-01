@@ -9,25 +9,44 @@ import SwiftUI
 
 struct SessionSetDetailOverlay: View {
 
+    @State private var isShowing: Bool = false
+
     let detail: SessionSetDetail
     let isSessionActive: Bool
+    let animation: Namespace.ID
     var onComplete: (() -> Void)?
     var onDismiss: (() -> Void)?
 
     var body: some View {
         VStack(spacing: 0) {
-            header
-            Divider()
-            content
+            if isShowing {
+                header
+                Divider()
+                content
+            } else {
+                Spacer()
+            }
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color(UIColor.systemBackground))
+            RoundedRectangle(cornerRadius: 16)
+                .matchedGeometryEffect(id: "\(detail.matchedId)background", in: animation)
+                .foregroundStyle(Color(UIColor.systemBackground))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 16)
+                        .inset(by: 0.5)
+                        .stroke(Color(UIColor.separator), lineWidth: 0.5)
+                        .matchedGeometryEffect(id: "\(detail.matchedId)overlay", in: animation)
+                }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .padding(.horizontal, 12)
-        .padding(.bottom, 8)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isShowing = true
+                }
+            }
+        }
     }
 
     // MARK: - Header
@@ -46,7 +65,12 @@ struct SessionSetDetailOverlay: View {
             }
             Spacer()
             Button {
-                onDismiss?()
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isShowing = false
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    onDismiss?()
+                }
             } label: {
                 ZStack {
                     Circle()
@@ -66,20 +90,22 @@ struct SessionSetDetailOverlay: View {
     // MARK: - Content
 
     private var content: some View {
-        VStack(spacing: 12) {
-            targetGrid
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 12) {
+                targetGrid
 
-            if let record = detail.setRecord, record.isCompleted {
-                loggedGrid(record: record)
-            }
+                if let record = detail.setRecord, record.isCompleted {
+                    loggedGrid(record: record)
+                }
 
-            if (detail.setRecord?.isCompleted ?? false) == false, isSessionActive {
-                completeButton
+                if (detail.setRecord?.isCompleted ?? false) == false, isSessionActive {
+                    completeButton
+                }
             }
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .padding(.bottom, 24)
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 16)
-        .padding(.bottom, 24)
     }
 
     // MARK: - Target Grid

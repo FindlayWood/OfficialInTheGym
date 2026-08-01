@@ -72,6 +72,7 @@
 		F09C555E2FF01500007CDAB4 /* SessionSetPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09C555D2FF01500007CDAB4 /* SessionSetPill.swift */; };
 		6F57B9E9F9944157AAB253E3 /* SessionSetDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35E8E17535542B3B9FDC4EB /* SessionSetDetail.swift */; };
 		AB061FDC6BC6496AAF3CDBC2 /* SessionSetDetailOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BCA7B6236E44CE6AD24A631 /* SessionSetDetailOverlay.swift */; };
+		C4E1A9075B3D42F8B60C1E29 /* SessionSetPillPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F2B1483C6E49A1852D0F37 /* SessionSetPillPlaceholder.swift */; };
 		F09C55602FF01600007CDAB4 /* MyDayWorkoutTemplateDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09C55612FF01600007CDAB4 /* MyDayWorkoutTemplateDetailScreen.swift */; };
 		F09C55622FF01602007CDAB4 /* MyDayExerciseTemplateCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09C55632FF01602007CDAB4 /* MyDayExerciseTemplateCard.swift */; };
 		F09C55642FF01604007CDAB4 /* MyDaySetTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09C55652FF01604007CDAB4 /* MyDaySetTemplateView.swift */; };
@@ -209,6 +210,7 @@
 		F09C555B2FF013F4007CDAB4 /* MyDayWorkoutSessionLogSetSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutSessionLogSetSheet.swift; sourceTree = "<group>"; };
 		F09C555D2FF01500007CDAB4 /* SessionSetPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetPill.swift; sourceTree = "<group>"; };
 		2BCA7B6236E44CE6AD24A631 /* SessionSetDetailOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetDetailOverlay.swift; sourceTree = "<group>"; };
+		D7F2B1483C6E49A1852D0F37 /* SessionSetPillPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetPillPlaceholder.swift; sourceTree = "<group>"; };
 		F09C55612FF01600007CDAB4 /* MyDayWorkoutTemplateDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutTemplateDetailScreen.swift; sourceTree = "<group>"; };
 		F09C55632FF01602007CDAB4 /* MyDayExerciseTemplateCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayExerciseTemplateCard.swift; sourceTree = "<group>"; };
 		F09C55652FF01604007CDAB4 /* MyDaySetTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDaySetTemplateView.swift; sourceTree = "<group>"; };
@@ -562,6 +564,7 @@
 				F09C55592FF013E5007CDAB4 /* MyDayWorkoutSessionExerciseCard.swift */,
 				F09C555D2FF01500007CDAB4 /* SessionSetPill.swift */,
 				2BCA7B6236E44CE6AD24A631 /* SessionSetDetailOverlay.swift */,
+				D7F2B1483C6E49A1852D0F37 /* SessionSetPillPlaceholder.swift */,
 				F09C55632FF01602007CDAB4 /* MyDayExerciseTemplateCard.swift */,
 				F09C55652FF01604007CDAB4 /* MyDaySetTemplateView.swift */,
 				F09C55672FF01606007CDAB4 /* MyDayTemplateSetPill.swift */,
@@ -929,6 +932,7 @@
 				F09C555A2FF013E5007CDAB4 /* MyDayWorkoutSessionExerciseCard.swift in Sources */,
 				F09C555E2FF01500007CDAB4 /* SessionSetPill.swift in Sources */,
 				AB061FDC6BC6496AAF3CDBC2 /* SessionSetDetailOverlay.swift in Sources */,
+				C4E1A9075B3D42F8B60C1E29 /* SessionSetPillPlaceholder.swift in Sources */,
 				F09C55582FF013BC007CDAB4 /* MyDayWorkoutSessionScreen.swift in Sources */,
 				CE6D407F61F74E0096FAE36E /* WorkoutSessionSummaryScreen.swift in Sources */,
 				F09C55602FF01600007CDAB4 /* MyDayWorkoutTemplateDetailScreen.swift in Sources */,
