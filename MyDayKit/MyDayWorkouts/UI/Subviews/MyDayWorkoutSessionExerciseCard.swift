@@ -84,12 +84,12 @@ struct MyDayWorkoutSessionExerciseCard: View {
                     let matchedId = SessionSetDetail.matchedId(exerciseId: exercise.id, setId: set.id)
 
                     if selectedSetId == matchedId {
-                        SessionSetPillPlaceholder(index: index, set: set)
+                        SessionSetPillPlaceholder(index: index, set: set, record: record)
                     } else {
                         SessionSetPill(
                             index: index,
                             set: set,
-                            isLogged: record?.isCompleted ?? false,
+                            record: record,
                             isDisabled: !isSessionStarted || isSessionCompleted,
                             matchedId: matchedId,
                             animation: animation,

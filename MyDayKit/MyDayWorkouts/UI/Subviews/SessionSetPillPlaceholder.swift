@@ -8,11 +8,17 @@
 import SwiftUI
 
 /// Holds the layout slot in the sets row while its `SessionSetPill` is flying
-/// up into `SessionSetDetailOverlay`. Carries no matched geometry of its own.
+/// up into `SessionSetDetailOverlay`. Carries no matched geometry of its own,
+/// but mirrors the pill's values so the slot it leaves behind is the same size.
 struct SessionSetPillPlaceholder: View {
 
     let index: Int
     let set: WorkoutSetModel
+    let record: WorkoutSetRecord?
+
+    private var values: [SessionSetPillValue] {
+        SessionSetPillValue.values(for: set, record: record)
+    }
 
     var body: some View {
         VStack(spacing: 4) {
@@ -22,14 +28,18 @@ struct SessionSetPillPlaceholder: View {
                 .textCase(.uppercase)
                 .tracking(0.5)
 
-            if let reps = set.reps {
+            ForEach(Array(values.enumerated()), id: \.element.id) { position, value in
                 HStack(alignment: .lastTextBaseline, spacing: 2) {
-                    Text("\(reps)")
-                        .font(.system(size: 16, weight: .bold))
-                    Text("reps")
-                        .font(.system(size: 10))
+                    Text(value.value)
+                        .font(.system(size: position == 0 ? 16 : 12, weight: position == 0 ? .bold : .semibold))
+                    if let unit = value.unit {
+                        Text(unit)
+                            .font(.system(size: 10))
+                    }
                 }
                 .foregroundStyle(Color.primary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
             }
 
             Spacer(minLength: 4)
@@ -50,7 +60,8 @@ struct SessionSetPillPlaceholder: View {
 #Preview {
     SessionSetPillPlaceholder(
         index: 0,
-        set: WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg)
+        set: WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg),
+        record: nil
     )
     .padding(20)
     .background(Color(UIColor.systemGroupedBackground))

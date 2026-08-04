@@ -72,6 +72,31 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         onEntryUpdated?(entry)
     }
 
+    /// Return a set to un-logged, discarding the performed values.
+    public func uncompleteSet(exerciseId: String, setId: String) {
+        guard var record = sessionRecord else { return }
+        guard let exIdx = record.exerciseRecords.firstIndex(where: { $0.exerciseId == exerciseId }) else { return }
+        guard let setIdx = record.exerciseRecords[exIdx].setRecords.firstIndex(where: { $0.id == setId }) else { return }
+
+        record.exerciseRecords[exIdx].setRecords[setIdx].isCompleted = false
+        record.exerciseRecords[exIdx].setRecords[setIdx].reps = nil
+        record.exerciseRecords[exIdx].setRecords[setIdx].weight = nil
+        record.exerciseRecords[exIdx].setRecords[setIdx].weightUnit = nil
+        record.exerciseRecords[exIdx].setRecords[setIdx].time = nil
+        record.exerciseRecords[exIdx].setRecords[setIdx].distance = nil
+        record.exerciseRecords[exIdx].setRecords[setIdx].distanceUnit = nil
+        record.exerciseRecords[exIdx].setRecords[setIdx].completedAt = nil
+
+        sessionRecord = record
+        entry.sessionRecord = record
+        onEntryUpdated?(entry)
+    }
+
+    /// The stored record for a single set, if the session has started.
+    public func setRecord(exerciseId: String, setId: String) -> WorkoutSetRecord? {
+        setRecords(for: exerciseId).first(where: { $0.id == setId })
+    }
+
     /// All set records for a given exercise, in template order.
     public func setRecords(for exerciseId: String) -> [WorkoutSetRecord] {
         sessionRecord?.exerciseRecords.first(where: { $0.exerciseId == exerciseId })?.setRecords ?? []

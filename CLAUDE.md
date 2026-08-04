@@ -64,7 +64,7 @@ Current focus: MYDAY tab — active session UI partially complete (see roadmap a
 NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
 
 Roadmap order:
-1. Active session UI — abandon flow, manual set logging
+1. Active session UI — abandon flow
 2. Fix workout stats → update STATS tab
 3. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
 
@@ -112,6 +112,9 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
 - Post-session summary screen — duration/sets stats, session RPE picker, workload reveal,
   notes input, "Complete Workout" finalises session (`finishSession(rpe:notes:)`)
 - Set detail overlay on session screen — matched-geometry hero expansion from the tapped set pill
+- Manual set logging — reps/weight/time/distance per set edited on the custom number pad via
+  `SessionSetValueSheet`, with un-logging via `uncompleteSet(exerciseId:setId:)`;
+  weight unit (kg / lbs / BW) selectable at log time
 
 ## MYDAY Workout Flow
 - **Library → Template Detail → Add to Today**: `MyDayWorkoutCoordinator` handles navigation;
@@ -148,9 +151,9 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   `manager.finishSession(rpe:notes:)` then pops to root. Back navigation discards summary input.
   `WorkoutSessionRecord` now includes `notes: String?`; workload and rpe set at finish time.
 - **Set detail overlay** (`SessionSetDetailOverlay`): tapping a set pill (when session started)
-  expands that pill into a full-bleed card. Shows exercise name + set number, a TARGET stats grid
-  (reps/weight/time/distance from `WorkoutSetModel`), a LOGGED grid (from `WorkoutSetRecord`, shown
-  with green badge if completed), and a "Complete Set" button if not yet logged and session active.
+  expands that pill into a full-bleed card. Shows exercise name + set number, a single measure grid
+  (see below), tempo/note when the template set has them, and a "Complete Set" button while the
+  session is active.
   `SessionSetDetail` bundles exercise + setModel + setRecord + index, and owns `matchedId`
   (`"\(exercise.id)-\(setModel.id)"` — set ids are only unique within an exercise). Pill tap opens
   the overlay via `onSetTapped((WorkoutSetModel, WorkoutSetRecord?, Int) -> Void)?` on the exercise
@@ -164,14 +167,61 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   black dim (`.transition(.opacity)`) and `.transition(.asymmetric(insertion: .identity,
   removal: .offset(y: 5)))` on the card. The spring lives in one place as `heroAnimation`; drive it
   only with `withAnimation` at the mutation sites, never also with `.animation(_:value:)`.
-  Known gaps: "Complete Set" dismisses immediately so the LOGGED grid only appears on re-tap, and
-  `SessionSetDetail` is a snapshot that does not refresh — both belong with manual set logging.
+- **Manual set logging**: every measure is editable — reps, weight, time and distance. **No typed
+  input during a session:** tapping a card opens `SessionSetValueSheet`, which drives
+  `CustomNumberPad` (the same big-target pad `MyDayKitRepsView` / `MyDayWeightSelectorView` use) and
+  binds the value live, so "Done" only dismisses. `SessionSetMeasure` describes which value is being
+  entered (title, icon, and whether decimals are allowed — reps and time are whole numbers). Do not
+  reintroduce a system-keyboard `TextField` here. `SessionSetInput` carries the entered values up via
+  `onLog`; the screen's `log(_:for:)` writes them through `manager.completeSet(...)` and starts the
+  rest timer **only on first completion**, never on an edit. Button reads "Complete Set" then
+  "Update Set", and is enabled once any value is entered (or BW is selected).
+  `onRemoveLog` → `manager.uncompleteSet(exerciseId:setId:)` clears `isCompleted` and
+  all performed values, and the overlay resets its fields back to the target.
+  The overlay also renders the template set's `tempo` and `note` (mirroring `SetDetailView`'s cards);
+  an all-zero `Tempo` is the builder's empty default and is treated as absent. Inputs seed once
+  (`hasSeededInputs`) so a re-render never clobbers an entered value. The screen rebuilds
+  `SessionSetDetail` from `manager.setRecord(exerciseId:setId:)` on every render — the stored
+  `selectedSet` is only a tap-time snapshot, so **never read `setRecord` off it directly.**
+  Known gap: the overlay stays open after logging, so the rest timer banner is hidden behind it
+  until dismissed.
+- **One merged measure grid — do not reintroduce separate TARGET and LOGGED grids.** There used to be
+  a 4-card TARGET grid plus a 2-card input grid: six cards for four measures, with "—" drawn for
+  measures the set never used. `measureGrid` now renders **one card per measure**, the performed
+  value large with the target beside it in grey brackets, and the bracket appears **only when the two
+  differ** so an on-target set stays clean and a deviation is what catches the eye. This is what
+  keeps the overlay off a long scroll now that all four measures are editable — the earlier
+  alternative, a TARGET/PERFORMED toggle, was rejected for hiding the target exactly while entering.
+  `visibleMeasures` renders reps/time/distance only when the template or record has them; **weight is
+  always offered**, since a load the template never specified (vest, dumbbell, loaded carry) is the
+  commonest thing added beyond the prescription. `targetText(for: .weight)` carries its unit because
+  the prescription may be in one the session cannot log — "(80 % of 1RM)" beside a logged 100 kg is
+  the reference the user is working from — so `comparableValue` re-renders the performed weight the
+  same way before comparing, or the unit alone would read as a difference. When the session is not
+  active the cards read from the record, not the seeded inputs: a set left unlogged in a finished
+  session must show "—", never the target it never met.
+- **Weight unit is chosen in the session, not inherited.** `WeightUnit.loggable` is `[.kg, .lbs, .bw]`
+  — `% of 1RM`, `% of BW` and `Max` are *prescriptions* (relative to a number the session doesn't
+  hold, or an instruction), so they describe a target and are never stored against a performed set.
+  `SessionSetValueSheet` shows the picker for `.weight` only; `SessionSetInput.weightUnit` carries
+  the choice and `log(_:for:)` passes it straight through, so **do not re-default the weight unit
+  from the template.** Previously it did, storing e.g. `weight: 100, weightUnit: .percent1RM` —
+  rendered as "100 % of 1RM". `WeightUnit.carriesValue` is false for `.bw` / `.max`: those label a
+  set on their own, so selecting BW clears and hides the number pad and stores `weight: nil`.
+  The target's weight only seeds the field when the session logs in the unit the target was written
+  in (`targetWeightInput`). Distance and time units still come from the template, defaulting to
+  `.metres` / seconds, because a value whose unit is nil renders as "—".
+- **Set pills show at most two values** (`SessionSetPillValue.values(for:record:)`), in priority
+  order reps → weight → time → distance. A set carrying all four overflows the 72×88 frame and
+  clips the text top and bottom. Pills take the `WorkoutSetRecord`, not just the `WorkoutSetModel`,
+  and a logged set is read **wholesale** from the record — never merged field-by-field with the
+  target, or logging bodyweight would resurrect the target's number under a `BW` unit.
+  `SessionSetPillPlaceholder` renders the same values so the slot it holds stays the right size.
 - **Coordinator callback pattern**: child coordinator exposes `var onX: (() -> Void)?`;
   parent sets it after `let sub = ChildCoordinator(...)` before returning `sub.start()`
 
 ## Session Screen — What's Not Yet Built
-- Abandon session flow
-- Manual set logging (editing actual reps/weight per set — `MyDayWorkoutSessionLogSetSheet` exists but not wired)
+- Abandon session flow (`WorkoutSessionManager.abandonSession()` exists; nothing calls it)
 
 ## Firestore
 Firestore collection structure will be provided when working on specific features.

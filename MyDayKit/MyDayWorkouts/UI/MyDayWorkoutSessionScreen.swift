@@ -132,7 +132,19 @@ struct MyDayWorkoutSessionScreen: View {
     // MARK: - Set Detail Overlay
 
     private func setDetailOverlay(for detail: SessionSetDetail) -> some View {
-        ZStack {
+        // `selectedSet` is captured at tap time; re-read the record from the
+        // manager on every render so the overlay reflects what was just logged.
+        let live = SessionSetDetail(
+            exercise: detail.exercise,
+            setModel: detail.setModel,
+            setRecord: manager.setRecord(
+                exerciseId: detail.exercise.exerciseId,
+                setId: detail.setModel.id
+            ),
+            index: detail.index
+        )
+
+        return ZStack {
             Color.black
                 .opacity(0.6)
                 .ignoresSafeArea()
@@ -144,14 +156,17 @@ struct MyDayWorkoutSessionScreen: View {
                 }
 
             SessionSetDetailOverlay(
-                detail: detail,
+                detail: live,
                 isSessionActive: sessionStarted && !sessionCompleted,
                 animation: animation,
-                onComplete: {
-                    autoLog(targetSet: detail.setModel, index: detail.index, exercise: detail.exercise)
-                    withAnimation(heroAnimation) {
-                        selectedSet = nil
-                    }
+                onLog: { input in
+                    log(input, for: live)
+                },
+                onRemoveLog: {
+                    manager.uncompleteSet(
+                        exerciseId: live.exercise.exerciseId,
+                        setId: live.setModel.id
+                    )
                 },
                 onDismiss: {
                     withAnimation(heroAnimation) {
@@ -164,20 +179,32 @@ struct MyDayWorkoutSessionScreen: View {
         }
     }
 
-    // MARK: - Auto Log
+    // MARK: - Log
 
-    private func autoLog(targetSet: WorkoutSetModel, index: Int, exercise: WorkoutExerciseModel) {
+    private func log(_ input: SessionSetInput, for detail: SessionSetDetail) {
+        let wasLogged = detail.setRecord?.isCompleted ?? false
+
+        // Weight carries its own unit — the user picks it in the session, so a
+        // set prescribed in % of 1RM or Max is stored as the real load lifted.
+        // Distance has no picker, so it still falls back to the template's unit
+        // and then to metres: the LOGGED grid renders "—" for a value whose
+        // unit is nil.
+        let distanceUnit = detail.setModel.distanceUnit ?? (input.distance != nil ? .metres : nil)
+
         manager.completeSet(
-            exerciseId: exercise.exerciseId,
-            setId: targetSet.id,
-            reps: targetSet.reps,
-            weight: targetSet.weight,
-            weightUnit: targetSet.weightUnit,
-            time: targetSet.time,
-            distance: targetSet.distance,
-            distanceUnit: targetSet.distanceUnit
+            exerciseId: detail.exercise.exerciseId,
+            setId: detail.setModel.id,
+            reps: input.reps,
+            weight: input.weight,
+            weightUnit: input.weightUnit,
+            time: input.time,
+            distance: input.distance,
+            distanceUnit: distanceUnit
         )
-        if let rest = exercise.restSeconds, rest > 0 {
+
+        // Only on first completion — editing an already-logged set must not
+        // restart the rest timer.
+        if !wasLogged, let rest = detail.exercise.restSeconds, rest > 0 {
             manager.startRestTimer(seconds: rest)
         }
     }

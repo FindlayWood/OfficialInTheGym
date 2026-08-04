@@ -11,11 +11,17 @@ struct SessionSetPill: View {
 
     let index: Int
     let set: WorkoutSetModel
-    let isLogged: Bool
+    let record: WorkoutSetRecord?
     let isDisabled: Bool
     let matchedId: String
     let animation: Namespace.ID
     let onTap: () -> Void
+
+    private var isLogged: Bool { record?.isCompleted ?? false }
+
+    private var values: [SessionSetPillValue] {
+        SessionSetPillValue.values(for: set, record: record)
+    }
 
     var body: some View {
         VStack(spacing: 4) {
@@ -25,33 +31,18 @@ struct SessionSetPill: View {
                 .textCase(.uppercase)
                 .tracking(0.5)
 
-            if let reps = set.reps {
+            ForEach(Array(values.enumerated()), id: \.element.id) { position, value in
                 HStack(alignment: .lastTextBaseline, spacing: 2) {
-                    Text("\(reps)")
-                        .font(.system(size: 16, weight: .bold))
-                    Text("reps")
-                        .font(.system(size: 10))
+                    Text(value.value)
+                        .font(.system(size: position == 0 ? 16 : 12, weight: position == 0 ? .bold : .semibold))
+                    if let unit = value.unit {
+                        Text(unit)
+                            .font(.system(size: 10))
+                    }
                 }
-                .foregroundStyle(isLogged ? Color.white : Color.primary)
-            }
-
-            if let weight = set.weight {
-                let unit = set.weightUnit?.rawValue ?? "kg"
-                Text(formatWeight(weight, unit: unit))
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(isLogged ? Color.white.opacity(0.85) : Color.darkColor)
-            }
-
-            if let time = set.time {
-                Text(formatTime(time))
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundStyle(isLogged ? Color.white : Color.primary)
-            }
-
-            if let dist = set.distance, let unit = set.distanceUnit {
-                Text("\(formatValue(dist))\(unit.rawValue)")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(isLogged ? Color.white.opacity(0.85) : Color.darkColor)
+                .foregroundStyle(colour(at: position))
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
             }
 
             Spacer(minLength: 4)
@@ -79,17 +70,11 @@ struct SessionSetPill: View {
         .animation(.easeInOut(duration: 0.2), value: isLogged)
     }
 
-    private func formatWeight(_ w: Double, unit: String) -> String {
-        w.truncatingRemainder(dividingBy: 1) == 0 ? "\(Int(w))\(unit)" : "\(w)\(unit)"
-    }
-
-    private func formatTime(_ s: Int) -> String {
-        let m = s / 60; let sec = s % 60
-        return m > 0 ? "\(m)m\(sec)s" : "\(sec)s"
-    }
-
-    private func formatValue(_ v: Double) -> String {
-        v.truncatingRemainder(dividingBy: 1) == 0 ? "\(Int(v))" : "\(v)"
+    private func colour(at position: Int) -> Color {
+        if isLogged {
+            return position == 0 ? Color.white : Color.white.opacity(0.85)
+        }
+        return position == 0 ? Color.primary : Color.darkColor
     }
 }
 
@@ -102,7 +87,7 @@ struct SessionSetPill: View {
         SessionSetPill(
             index: 0,
             set: WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg),
-            isLogged: false,
+            record: nil,
             isDisabled: true,
             matchedId: "e1-s1",
             animation: animation,
@@ -111,7 +96,7 @@ struct SessionSetPill: View {
         SessionSetPill(
             index: 1,
             set: WorkoutSetModel(id: "s2", orderIndex: 1, reps: 8, weight: 80, weightUnit: .kg),
-            isLogged: true,
+            record: WorkoutSetRecord(id: "s2", isCompleted: true, reps: 6, weight: 85, weightUnit: .kg),
             isDisabled: false,
             matchedId: "e1-s2",
             animation: animation,
@@ -119,10 +104,19 @@ struct SessionSetPill: View {
         )
         SessionSetPill(
             index: 2,
-            set: WorkoutSetModel(id: "s3", orderIndex: 2, time: 60),
-            isLogged: false,
+            set: WorkoutSetModel(id: "s3", orderIndex: 2, time: 60, distance: 400, distanceUnit: .metres),
+            record: nil,
             isDisabled: false,
             matchedId: "e1-s3",
+            animation: animation,
+            onTap: {}
+        )
+        SessionSetPill(
+            index: 3,
+            set: WorkoutSetModel(id: "s4", orderIndex: 3, reps: 12, weightUnit: .bw),
+            record: nil,
+            isDisabled: false,
+            matchedId: "e1-s4",
             animation: animation,
             onTap: {}
         )
