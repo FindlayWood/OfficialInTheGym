@@ -13,12 +13,15 @@ struct MyDayWorkoutSessionScreen: View {
     let userId: String
 
     var onGoToSummary: (() -> Void)?
+    var onBack: (() -> Void)?
+    var onCancelled: (() -> Void)?
 
     @Namespace private var animation
 
     @State private var elapsedSeconds = 0
     @State private var rpeExercise: WorkoutExerciseModel?
     @State private var selectedSet: SessionSetDetail?
+    @State private var isConfirmingCancel = false
 
     private let heroAnimation: Animation = .interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)
 
@@ -28,6 +31,13 @@ struct MyDayWorkoutSessionScreen: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
+                WorkoutSessionNavBar(
+                    title: manager.entry.template.title,
+                    showsOptions: sessionStarted && !sessionCompleted,
+                    onBack: { onBack?() },
+                    onCancelWorkout: { isConfirmingCancel = true }
+                )
+
                 if sessionStarted {
                     if sessionCompleted {
                         completedHeader
@@ -80,6 +90,9 @@ struct MyDayWorkoutSessionScreen: View {
                     .padding(.horizontal, 16)
                     .padding(.bottom, 16)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
+            } else if !sessionCompleted {
+                WorkoutSessionFinishBar(onFinish: { onGoToSummary?() })
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
         }
@@ -90,21 +103,21 @@ struct MyDayWorkoutSessionScreen: View {
                 setDetailOverlay(for: selectedSet)
             }
         }
-        .navigationTitle(manager.entry.template.title)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color.white, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
-        .toolbarColorScheme(.light, for: .navigationBar)
-        .toolbar {
-            if sessionStarted && !sessionCompleted {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Finish") {
-                        onGoToSummary?()
-                    }
-                    .fontWeight(.semibold)
-                    .foregroundStyle(Color.darkColor)
-                }
+        .confirmationDialog(
+            "Cancel this workout?",
+            isPresented: $isConfirmingCancel,
+            titleVisibility: .visible
+        ) {
+            Button("Cancel Workout", role: .destructive) {
+                manager.cancelSession()
+                onCancelled?()
             }
+            Button("Keep Going", role: .cancel) {}
+        } message: {
+            // `cancelSession()` genuinely discards everything, so the copy has
+            // to say so — this is the one place in the flow where leaving does
+            // cost the user something.
+            Text("This will remove all logged sets and reset the workout. It stays on your day, so you can start it again.")
         }
         .task {
             if sessionStarted {
@@ -379,9 +392,10 @@ struct MyDayWorkoutSessionScreen: View {
 
 // MARK: - Preview
 
+// The real screen is hosted with the navigation bar hidden
+// (`WorkoutSessionHostingController`), so no `NavigationStack` here.
 #Preview {
-    NavigationStack {
-        MyDayWorkoutSessionScreen(
+    MyDayWorkoutSessionScreen(
             manager: WorkoutSessionManager(
                 entry: DailyWorkoutEntry(
                     template: WorkoutTemplateModel(
@@ -426,6 +440,5 @@ struct MyDayWorkoutSessionScreen: View {
                 )
             ),
             userId: "preview-user"
-        )
-    }
+    )
 }

@@ -23,7 +23,7 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
 
     // MARK: - Private
 
-    private let sessionId: String
+    private var sessionId: String
     public private(set) var startedAt: Date = Date()
     private var restTimerTask: Task<Void, Never>?
 
@@ -218,31 +218,28 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         )
     }
 
-    /// Mark as incomplete without finishing fully.
-    public func abandonSession() -> WorkoutSessionModel {
-        let endedAt = Date()
-        sessionStatus = .abandoned
-        entry.status = .incomplete
+    /// Reset the workout to as though it had never been started — the record
+    /// and every logged set are discarded and the entry returns to `.planned`.
+    ///
+    /// This is deliberately a full reset rather than a "mark incomplete": the
+    /// workout stays on the day and can be started again, and removing it
+    /// altogether is a separate action on the MyDay home screen.
+    public func cancelSession() {
         cancelRestTimer()
 
-        if var record = sessionRecord {
-            record.endedAt = endedAt
-            sessionRecord = record
-            entry.sessionRecord = record
-        }
+        // A restart is a new session, so it must not reuse the cancelled id.
+        sessionId = UUID().uuidString
+        startedAt = Date()
+
+        sessionStatus = .notStarted
+        sessionRecord = nil
+
+        entry.status = .planned
+        entry.sessionId = nil
+        entry.startedAt = nil
+        entry.sessionRecord = nil
 
         onEntryUpdated?(entry)
-
-        return WorkoutSessionModel(
-            id: sessionId,
-            templateId: entry.template.id,
-            userId: entry.template.createdBy,
-            title: entry.template.title,
-            startedAt: startedAt,
-            completedAt: endedAt,
-            notes: nil,
-            status: .abandoned
-        )
     }
 }
 
@@ -252,5 +249,4 @@ public enum WorkoutSessionStatus {
     case notStarted
     case inProgress
     case completed
-    case abandoned
 }

@@ -60,13 +60,12 @@ and use these as the template for structure, naming, and style.
 
 ## App Structure
 5 tabs: NEWSFEED, DISCOVER, MYDAY, STATS, PROFILE.
-Current focus: MYDAY tab — active session UI partially complete (see roadmap and Feature Areas Complete).
+Current focus: MYDAY tab — active session UI complete (see roadmap and Feature Areas Complete).
 NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
 
 Roadmap order:
-1. Active session UI — abandon flow
-2. Fix workout stats → update STATS tab
-3. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
+1. Fix workout stats → update STATS tab
+2. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
 
 ## Workout Library Loading
 The library screen showed an empty state despite saved templates existing. Three defects, all fixed:
@@ -97,8 +96,8 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   `WorkoutTemplateSaver` → `WorkoutTemplateSyncer` → `SyncQueueWorkoutTemplateUploader`
   → `FirestoreWorkoutTemplateUploader` → `WorkoutTemplateSyncService`
 - `WorkoutSessionManager` with active session state, rest timer, `finishSession()` /
-  `abandonSession()`; `onEntryUpdated: ((DailyWorkoutEntry) -> Void)?` callback fires after start,
-  set completion, finish, and abandon — coordinator wires this to `dayManager.updateWorkoutEntry`;
+  `cancelSession()`; `onEntryUpdated: ((DailyWorkoutEntry) -> Void)?` callback fires after start,
+  set completion, finish, and cancel — coordinator wires this to `dayManager.updateWorkoutEntry`;
   init restores `.inProgress` or `.completed` state from the entry on construction
 - Per-exercise RPE input: `WorkoutExerciseRecord.rpe?`, `setExerciseRPE(exerciseId:rpe:)` /
   `exerciseRPE(for:)` on manager, `WorkoutExerciseRPESheet` (color-coded 1–10, flash-then-dismiss)
@@ -115,6 +114,7 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
 - Manual set logging — reps/weight/time/distance per set edited on the custom number pad via
   `SessionSetValueSheet`, with un-logging via `uncompleteSet(exerciseId:setId:)`;
   weight unit (kg / lbs / BW) selectable at log time
+- Custom session nav bar (system bar hidden) + cancel-workout flow (`cancelSession()` full reset)
 
 ## MYDAY Workout Flow
 - **Library → Template Detail → Add to Today**: `MyDayWorkoutCoordinator` handles navigation;
@@ -217,11 +217,44 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   and a logged set is read **wholesale** from the record — never merged field-by-field with the
   target, or logging bodyweight would resurrect the target's number under a `BW` unit.
   `SessionSetPillPlaceholder` renders the same values so the slot it holds stays the right size.
+- **Session screen nav is custom — the system bar is hidden.**
+  `WorkoutSessionHostingController` (a `UIHostingController` subclass) hides the nav bar in
+  `viewWillAppear` and restores it in `viewWillDisappear`, mirroring `MyDayBoundaryViewController`.
+  **Reason: a `UINavigationBar` is a sibling view owned by the `UINavigationController`, drawn above
+  the hosting controller's view, so the set detail overlay could never dim or cover it** — the hero
+  card was structurally boxed in below a white bar. Do not reinstate `.navigationTitle` /
+  `.toolbar` on this screen. Hiding the bar also disables the swipe-from-edge pop, so the controller
+  takes over `interactivePopGestureRecognizer.delegate` and allows the gesture whenever the stack has
+  more than one VC — losing swipe-back would contradict the whole point of the screen.
+  `WorkoutSessionNavBar` draws back / title / `⋯`, and `WorkoutSessionFinishBar` pins "Finish
+  Workout" to the bottom, taking the slot `WorkoutSessionStartCard` holds pre-start (start bottom →
+  finish bottom).
+- **Leaving the session screen must stay free.** Progress persists after every set via
+  `onEntryUpdated`, `WorkoutSessionManager.init` restores `.inProgress`, and the elapsed timer
+  reseeds from `startedAt` — so back is a **plain chevron with no confirmation**. A warning would
+  misrepresent stakes that do not exist. **Do not add a confirmation to back.**
+  Cancelling the workout is the separate destructive action, kept behind the `⋯` menu with a
+  confirmation dialog so it cannot be mistaken for leaving. It is called **"Cancel Workout", not
+  "End"** — "end" reads as finishing, which is the opposite outcome. It calls
+  `manager.cancelSession()` then `onCancelled` → `popToCoordinatorRoot()`.
+- **`cancelSession()` is a full reset, not a "mark incomplete".** It discards `sessionRecord` and
+  every logged set, returns the entry to `.planned` with `startedAt` / `sessionId` / `sessionRecord`
+  cleared, and regenerates the manager's `sessionId` so a restart is a genuinely new session. The
+  workout stays on the day and can be started again; removing it altogether is the separate
+  "Remove from Today" action in `WorkoutCardOptionsSheet`. This is the one place in the flow where
+  leaving does cost something, so the dialog says so plainly — everywhere else, back is free.
+  This replaced `abandonSession()`, which set `.incomplete` and kept the record.
+  `DailyWorkoutStatus.incomplete` is now unreachable but **kept** — it is a persisted `Codable`
+  enum and dropping a case would break decoding of any day file already holding it.
+  `DailyWorkoutCard` still renders a chip for it. `WorkoutSessionStatus.abandoned` was removed
+  instead, being in-memory only.
 - **Coordinator callback pattern**: child coordinator exposes `var onX: (() -> Void)?`;
-  parent sets it after `let sub = ChildCoordinator(...)` before returning `sub.start()`
+  parent sets it after `let sub = ChildCoordinator(...)` before returning `sub.start()`.
+  `MyDayCoordinator` now stores `rootViewController` in `start()` and exposes
+  `popToCoordinatorRoot()`; `popToRoot()` / `popToRootViewController` are gone.
 
 ## Session Screen — What's Not Yet Built
-- Abandon session flow (`WorkoutSessionManager.abandonSession()` exists; nothing calls it)
+- Rest timer banner is hidden behind the set detail overlay, which stays open after logging
 
 ## Firestore
 Firestore collection structure will be provided when working on specific features.

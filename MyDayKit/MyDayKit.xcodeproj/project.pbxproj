@@ -73,6 +73,9 @@
 		B2C7E4A38F1D46E5A709C3D1 /* SessionSetMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A9D8B26C3E4718B52A0E67 /* SessionSetMeasure.swift */; };
 		D9A3F1C74B8E42D6A017E5B3 /* SessionSetValueSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E28B4D3A9F41708D2C7F15 /* SessionSetValueSheet.swift */; };
 		E8B4C2915A7D43F2916E0B48 /* SessionSetInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D6F3072E8B44C7B35F1D90 /* SessionSetInput.swift */; };
+		F60D3B821E75C49A08B6D253 /* WorkoutSessionFinishBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1F70A2B863D5E1067A4B8 /* WorkoutSessionFinishBar.swift */; };
+		D82F16A5943BC7E0521D8F46 /* WorkoutSessionNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E97B24C60D1A85F7C42E930 /* WorkoutSessionNavBar.swift */; };
+		C1A4E9B36D82F5470E93B2A8 /* WorkoutSessionHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B26D5F94A03E1C86D5470FA /* WorkoutSessionHostingController.swift */; };
 		E5B29A4761D3C08A24F7B913 /* SessionSetPillValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93A7D615C40E2871FA6D385 /* SessionSetPillValue.swift */; };
 		A7F31C0842E9B65D1704CA39 /* WeightUnit+Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48D5E9370B2A16FE8320D74 /* WeightUnit+Session.swift */; };
 		AB061FDC6BC6496AAF3CDBC2 /* SessionSetDetailOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BCA7B6236E44CE6AD24A631 /* SessionSetDetailOverlay.swift */; };
@@ -227,6 +230,9 @@
 		F4A9D8B26C3E4718B52A0E67 /* SessionSetMeasure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetMeasure.swift; sourceTree = "<group>"; };
 		C6E28B4D3A9F41708D2C7F15 /* SessionSetValueSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetValueSheet.swift; sourceTree = "<group>"; };
 		A1D6F3072E8B44C7B35F1D90 /* SessionSetInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetInput.swift; sourceTree = "<group>"; };
+		94C1F70A2B863D5E1067A4B8 /* WorkoutSessionFinishBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSessionFinishBar.swift; sourceTree = "<group>"; };
+		3E97B24C60D1A85F7C42E930 /* WorkoutSessionNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSessionNavBar.swift; sourceTree = "<group>"; };
+		7B26D5F94A03E1C86D5470FA /* WorkoutSessionHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSessionHostingController.swift; sourceTree = "<group>"; };
 		B93A7D615C40E2871FA6D385 /* SessionSetPillValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionSetPillValue.swift"; sourceTree = "<group>"; };
 		C48D5E9370B2A16FE8320D74 /* WeightUnit+Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightUnit+Session.swift"; sourceTree = "<group>"; };
 		F09C5AD12FF1CA6A007CDAB4 /* WorkoutSetRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetRecord.swift; sourceTree = "<group>"; };
@@ -461,6 +467,7 @@
 				F024D9212FD0BE910070865C /* MyDayWorkoutLibraryScreen.swift */,
 				F09C55612FF01600007CDAB4 /* MyDayWorkoutTemplateDetailScreen.swift */,
 				F09C55572FF013BC007CDAB4 /* MyDayWorkoutSessionScreen.swift */,
+				7B26D5F94A03E1C86D5470FA /* WorkoutSessionHostingController.swift */,
 				460FCF49623A468BA34BB4AD /* WorkoutSessionSummaryScreen.swift */,
 			);
 			path = UI;
@@ -575,6 +582,8 @@
 				F09C5ACD2FF1B6A2007CDAB4 /* WorkoutSessionStartCard.swift */,
 				F09C55592FF013E5007CDAB4 /* MyDayWorkoutSessionExerciseCard.swift */,
 				F09C555D2FF01500007CDAB4 /* SessionSetPill.swift */,
+				3E97B24C60D1A85F7C42E930 /* WorkoutSessionNavBar.swift */,
+				94C1F70A2B863D5E1067A4B8 /* WorkoutSessionFinishBar.swift */,
 				2BCA7B6236E44CE6AD24A631 /* SessionSetDetailOverlay.swift */,
 				D7F2B1483C6E49A1852D0F37 /* SessionSetPillPlaceholder.swift */,
 				F09C55632FF01602007CDAB4 /* MyDayExerciseTemplateCard.swift */,
@@ -1013,6 +1022,9 @@
 				B2C7E4A38F1D46E5A709C3D1 /* SessionSetMeasure.swift in Sources */,
 				D9A3F1C74B8E42D6A017E5B3 /* SessionSetValueSheet.swift in Sources */,
 				E8B4C2915A7D43F2916E0B48 /* SessionSetInput.swift in Sources */,
+				F60D3B821E75C49A08B6D253 /* WorkoutSessionFinishBar.swift in Sources */,
+				D82F16A5943BC7E0521D8F46 /* WorkoutSessionNavBar.swift in Sources */,
+				C1A4E9B36D82F5470E93B2A8 /* WorkoutSessionHostingController.swift in Sources */,
 				E5B29A4761D3C08A24F7B913 /* SessionSetPillValue.swift in Sources */,
 				A7F31C0842E9B65D1704CA39 /* WeightUnit+Session.swift in Sources */,
 				F09C5AD42FF1CA6A007CDAB4 /* WorkoutSetRecord.swift in Sources */,

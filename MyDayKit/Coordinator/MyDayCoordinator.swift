@@ -28,6 +28,7 @@ public final class MyDayCoordinator {
     
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
+    private var rootViewController: UIViewController?
 
     // MARK: - Init
 
@@ -59,6 +60,7 @@ public final class MyDayCoordinator {
 
     public func start() {
         let rootVC = viewController(for: .root)
+        rootViewController = rootVC
         navigationController.setViewControllers([rootVC], animated: false)
     }
 }
@@ -130,7 +132,7 @@ extension MyDayCoordinator {
                         self?.optionSelected(option, exercise: exercise)
                     },
                     addedAction: { [weak self] in
-                        self?.popToRoot()
+                        self?.popToCoordinatorRoot()
                     }
                 )
             )
@@ -186,7 +188,7 @@ extension MyDayCoordinator {
                 workoutManager: workoutManager,
                 libraryManager: workoutLibraryManager
             )
-            sub.onWorkoutAddedToDay = { [weak self] in self?.popToRoot() }
+            sub.onWorkoutAddedToDay = { [weak self] in self?.popToCoordinatorRoot() }
             workoutCoordinator = sub
             return sub.start()
             
@@ -198,9 +200,17 @@ extension MyDayCoordinator {
                 userId: userId,
                 onGoToSummary: { [weak self] in
                     self?.showSummary(manager: manager)
+                },
+                // Leaving mid-session costs nothing — progress is persisted
+                // after every set and restored on the way back in.
+                onBack: { [weak self] in
+                    self?.popBack()
+                },
+                onCancelled: { [weak self] in
+                    self?.popToCoordinatorRoot()
                 }
             )
-            let vc = UIHostingController(rootView: screen)
+            let vc = WorkoutSessionHostingController(rootView: screen)
             vc.hidesBottomBarWhenPushed = true
             return vc
 
@@ -258,8 +268,14 @@ extension MyDayCoordinator {
         navigationController.popViewController(animated: true)
     }
 
-    func popToRoot() {
-        navigationController.popToRootViewController(animated: true)
+    /// Pops back to this coordinator's own root VC, not the nav stack's root.
+    func popToCoordinatorRoot() {
+        guard let rootViewController else {
+            // Fallback: pop one level rather than blowing past the parent.
+            navigationController.popViewController(animated: true)
+            return
+        }
+        navigationController.popToViewController(rootViewController, animated: true)
     }
 
     func showSummary(manager: WorkoutSessionManager) {
@@ -267,7 +283,7 @@ extension MyDayCoordinator {
             manager: manager,
             endedAt: Date(),
             onComplete: { [weak self] in
-                self?.popToRoot()
+                self?.popToCoordinatorRoot()
             }
         )
         let vc = UIHostingController(rootView: screen)
