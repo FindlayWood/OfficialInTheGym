@@ -263,6 +263,20 @@ Firestore collection structure will be provided when working on specific feature
 Each tab to become its own framework. Shared core features (e.g. user profile loading)
 to be extracted into dedicated frameworks as usage spans multiple tabs.
 
+## Future Ideas — not scheduled, not designed
+Ideas captured so they are not lost. **Nothing here is agreed or specified — do not start
+building any of it, and treat the details as a starting point for a conversation, not a spec.**
+
+- **Coach-granted premium passes (in-app purchase).** A subscribed coach buys 1-year passes and
+  grants them to their clients/athletes, giving each client the premium version of the app for that
+  year. The pass is what lets the coach programme workouts to that client for the year. The coach
+  must hold their own active subscription — a granted pass depends on the granting coach still
+  being subscribed. Open questions before this is buildable: what happens to a client's pass when
+  the coach's subscription lapses mid-year; whether passes are transferable or revocable; whether
+  a client can hold passes from more than one coach; how this interacts with a client who also
+  subscribes directly; and how the entitlement is verified server-side (App Store Server
+  Notifications → Firestore) rather than trusted on device.
+
 ## What Not To Do
 - Do not use Swift Charts
 - Do not use `Array(repeating:count:)` for reference types
