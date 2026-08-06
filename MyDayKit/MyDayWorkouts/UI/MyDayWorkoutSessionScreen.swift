@@ -212,7 +212,9 @@ struct MyDayWorkoutSessionScreen: View {
             weightUnit: input.weightUnit,
             time: input.time,
             distance: input.distance,
-            distanceUnit: distanceUnit
+            distanceUnit: distanceUnit,
+            tempo: input.tempo,
+            note: input.note
         )
 
         // Only on first completion — editing an already-logged set must not

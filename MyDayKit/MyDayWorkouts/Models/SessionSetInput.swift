@@ -16,10 +16,16 @@ import Foundation
 /// nonsense ("100 % of 1RM"). It is already resolved here: `nil` when there is
 /// nothing to qualify, and `.bw` with no `weight` for a bodyweight set.
 /// Time and distance units still come from the template.
+///
+/// `tempo` and `note` are carried here for the same reason as the measures:
+/// they describe the set as performed. The template's own tempo and note stay
+/// untouched — they are the prescription, and the workout is reused.
 struct SessionSetInput {
     let reps: Int?
     let weight: Double?
     let weightUnit: WeightUnit?
     let time: Int?
     let distance: Double?
+    let tempo: Tempo?
+    let note: String?
 }

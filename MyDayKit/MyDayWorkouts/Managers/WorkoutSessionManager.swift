@@ -52,7 +52,9 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         weightUnit: WeightUnit?,
         time: Int?,
         distance: Double?,
-        distanceUnit: DistanceUnit?
+        distanceUnit: DistanceUnit?,
+        tempo: Tempo? = nil,
+        note: String? = nil
     ) {
         guard var record = sessionRecord else { return }
         guard let exIdx = record.exerciseRecords.firstIndex(where: { $0.exerciseId == exerciseId }) else { return }
@@ -65,6 +67,8 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         record.exerciseRecords[exIdx].setRecords[setIdx].time = time
         record.exerciseRecords[exIdx].setRecords[setIdx].distance = distance
         record.exerciseRecords[exIdx].setRecords[setIdx].distanceUnit = distanceUnit
+        record.exerciseRecords[exIdx].setRecords[setIdx].tempo = tempo
+        record.exerciseRecords[exIdx].setRecords[setIdx].note = note
         record.exerciseRecords[exIdx].setRecords[setIdx].completedAt = Date()
 
         sessionRecord = record
@@ -85,6 +89,8 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         record.exerciseRecords[exIdx].setRecords[setIdx].time = nil
         record.exerciseRecords[exIdx].setRecords[setIdx].distance = nil
         record.exerciseRecords[exIdx].setRecords[setIdx].distanceUnit = nil
+        record.exerciseRecords[exIdx].setRecords[setIdx].tempo = nil
+        record.exerciseRecords[exIdx].setRecords[setIdx].note = nil
         record.exerciseRecords[exIdx].setRecords[setIdx].completedAt = nil
 
         sessionRecord = record

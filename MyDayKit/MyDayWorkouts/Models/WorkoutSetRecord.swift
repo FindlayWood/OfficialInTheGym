@@ -16,6 +16,13 @@ public struct WorkoutSetRecord: Identifiable, Codable {
     public var time: Int?
     public var distance: Double?
     public var distanceUnit: DistanceUnit?
+
+    /// What was actually performed, not what the template prescribed. A session
+    /// never writes back to `WorkoutSetModel` — the template is reused on later
+    /// days and must keep saying what the coach asked for.
+    public var tempo: Tempo?
+    public var note: String?
+
     public var completedAt: Date?
 
     public init(
@@ -27,6 +34,8 @@ public struct WorkoutSetRecord: Identifiable, Codable {
         time: Int? = nil,
         distance: Double? = nil,
         distanceUnit: DistanceUnit? = nil,
+        tempo: Tempo? = nil,
+        note: String? = nil,
         completedAt: Date? = nil
     ) {
         self.id = id
@@ -37,6 +46,8 @@ public struct WorkoutSetRecord: Identifiable, Codable {
         self.time = time
         self.distance = distance
         self.distanceUnit = distanceUnit
+        self.tempo = tempo
+        self.note = note
         self.completedAt = completedAt
     }
 }

@@ -212,4 +212,17 @@ public struct Tempo: Codable, Equatable {
         self.concentric = 0
         self.concentricHold = 0
     }
+
+    init(eccentric: Int, eccentricHold: Int, concentric: Int, concentricHold: Int) {
+        self.eccentric = eccentric
+        self.eccentricHold = eccentricHold
+        self.concentric = concentric
+        self.concentricHold = concentricHold
+    }
+
+    /// All zeros is the builder's empty default rather than a prescription, so
+    /// nothing should render it as one.
+    var isEmpty: Bool {
+        eccentric == 0 && eccentricHold == 0 && concentric == 0 && concentricHold == 0
+    }
 }

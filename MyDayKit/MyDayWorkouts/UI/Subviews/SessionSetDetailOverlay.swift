@@ -16,8 +16,10 @@ struct SessionSetDetailOverlay: View {
     @State private var weightUnitInput: WeightUnit = .kg
     @State private var timeInput: String = ""
     @State private var distanceInput: String = ""
+    @State private var tempoInput: Tempo?
+    @State private var noteInput: String = ""
 
-    @State private var editingMeasure: SessionSetMeasure?
+    @State private var editingTarget: SessionSetEditTarget?
 
     let detail: SessionSetDetail
     let isSessionActive: Bool
@@ -42,28 +44,54 @@ struct SessionSetDetailOverlay: View {
     /// otherwise the unit only means something once there is a weight.
     private var input: SessionSetInput {
         let weight = weightUnitInput.carriesValue ? Double(weightInput) : nil
+        let trimmedNote = noteInput.trimmingCharacters(in: .whitespacesAndNewlines)
         return SessionSetInput(
             reps: Int(repsInput),
             weight: weight,
             weightUnit: weightUnitInput.carriesValue ? (weight != nil ? weightUnitInput : nil) : weightUnitInput,
             time: Int(timeInput),
-            distance: Double(distanceInput)
+            distance: Double(distanceInput),
+            tempo: (tempoInput?.isEmpty ?? true) ? nil : tempoInput,
+            note: trimmedNote.isEmpty ? nil : trimmedNote
         )
     }
 
-    /// A tempo of all zeros is the builder's empty default, not a prescription.
-    private var visibleTempo: Tempo? {
-        guard let tempo = detail.setModel.tempo else { return nil }
-        let isEmpty = tempo.eccentric == 0
-            && tempo.eccentricHold == 0
-            && tempo.concentric == 0
-            && tempo.concentricHold == 0
-        return isEmpty ? nil : tempo
+    /// The tempo prescribed by the template. All zeros is the builder's empty
+    /// default rather than a prescription.
+    private var prescribedTempo: Tempo? {
+        guard let tempo = detail.setModel.tempo, !tempo.isEmpty else { return nil }
+        return tempo
     }
 
-    private var visibleNote: String? {
+    private var prescribedNote: String? {
         guard let note = detail.setModel.note else { return nil }
         return note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : note
+    }
+
+    /// The tempo the card shows. Live input while the session is running;
+    /// otherwise strictly what the record holds, so a set left unlogged shows
+    /// nothing rather than the prescription it never met.
+    private var displayedTempo: Tempo? {
+        if isSessionActive {
+            guard let tempo = tempoInput, !tempo.isEmpty else { return nil }
+            return tempo
+        }
+        guard let record = detail.setRecord, record.isCompleted else { return nil }
+        guard let tempo = record.tempo, !tempo.isEmpty else { return nil }
+        return tempo
+    }
+
+    private var displayedNote: String? {
+        let value: String?
+        if isSessionActive {
+            value = noteInput
+        } else {
+            guard let record = detail.setRecord, record.isCompleted else { return nil }
+            value = record.note
+        }
+        guard let value else { return nil }
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : trimmed
     }
 
     var body: some View {
@@ -97,7 +125,18 @@ struct SessionSetDetailOverlay: View {
                 }
             }
         }
-        .sheet(item: $editingMeasure) { measure in
+        .sheet(item: $editingTarget) { target in
+            editSheet(for: target)
+                .presentationDetents([.height(target.detentHeight)])
+        }
+    }
+
+    // MARK: - Edit Sheets
+
+    @ViewBuilder
+    private func editSheet(for target: SessionSetEditTarget) -> some View {
+        switch target {
+        case .measure(let measure):
             SessionSetValueSheet(
                 measure: measure,
                 exerciseName: detail.exercise.exerciseName,
@@ -107,7 +146,20 @@ struct SessionSetDetailOverlay: View {
                 value: binding(for: measure),
                 weightUnit: measure == .weight ? $weightUnitInput : nil
             )
-            .presentationDetents([.height(measure == .weight ? 620 : 560)])
+        case .tempo:
+            SessionSetTempoSheet(
+                exerciseName: detail.exercise.exerciseName,
+                setNumber: detail.index + 1,
+                targetSummary: prescribedTempo.map(Self.tempoString),
+                tempo: $tempoInput
+            )
+        case .note:
+            SessionSetNoteSheet(
+                exerciseName: detail.exercise.exerciseName,
+                setNumber: detail.index + 1,
+                prescribedNote: prescribedNote,
+                note: $noteInput
+            )
         }
     }
 
@@ -165,6 +217,23 @@ struct SessionSetDetailOverlay: View {
 
         weightUnitInput = WeightUnit.loggableDefault(for: record?.weightUnit ?? detail.setModel.weightUnit)
         weightInput = record?.weight.map { Self.formatDouble($0) } ?? targetWeightInput
+
+        // An already-logged set is read wholesale from the record: a user who
+        // cleared the tempo stored `nil`, and falling back to the prescription
+        // there would resurrect the tempo they just deleted. Only a set with no
+        // record yet seeds from the prescription — performing the tempo asked
+        // for is the common case, so it wants confirming rather than entering.
+        //
+        // The note never seeds from the prescription. It records how the set
+        // went; pre-filling it with the coach's instruction would put words in
+        // the user's mouth and then store them as their own.
+        if let record, record.isCompleted {
+            tempoInput = record.tempo
+            noteInput = record.note ?? ""
+        } else {
+            tempoInput = prescribedTempo
+            noteInput = ""
+        }
     }
 
     /// The target's weight, but only when the session is logging in the unit
@@ -185,6 +254,8 @@ struct SessionSetDetailOverlay: View {
         weightInput = targetWeightInput
         timeInput = detail.setModel.time.map { "\($0)" } ?? ""
         distanceInput = detail.setModel.distance.map { Self.formatDouble($0) } ?? ""
+        tempoInput = prescribedTempo
+        noteInput = ""
     }
 
     // MARK: - Header
@@ -232,15 +303,13 @@ struct SessionSetDetailOverlay: View {
             VStack(spacing: 12) {
                 measureGrid
 
-                // Both are prescribed on the template set, so they sit with the
-                // measures rather than with what was performed.
-                if let tempo = visibleTempo {
-                    tempoCard(tempo: tempo)
-                }
-
-                if let note = visibleNote {
-                    noteCard(note: note)
-                }
+                // Always present, like the measures — a tempo or a note the
+                // template never prescribed is still something worth recording,
+                // and a card that appears only sometimes is a card the user
+                // never learns is there. Full width rather than in the grid:
+                // four tempo phases and a sentence of text both need the room.
+                tempoCard
+                noteCard
 
                 if isSessionActive {
                     logButton
@@ -276,7 +345,7 @@ struct SessionSetDetailOverlay: View {
             }
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                ForEach(visibleMeasures) { measure in
+                ForEach(SessionSetMeasure.allCases) { measure in
                     measureCard(measure)
                 }
             }
@@ -288,30 +357,12 @@ struct SessionSetDetailOverlay: View {
         return isSessionActive ? "PERFORMED" : "NOT LOGGED"
     }
 
-    /// Only the measures the set actually uses. Weight is always offered: the
-    /// commonest thing a user records beyond the prescription is a load the
-    /// template never specified — a vest, a dumbbell, a loaded carry.
-    private var visibleMeasures: [SessionSetMeasure] {
-        var measures: [SessionSetMeasure] = []
-        if detail.setModel.reps != nil || detail.setRecord?.reps != nil {
-            measures.append(.reps)
-        }
-        measures.append(.weight)
-        if detail.setModel.time != nil || detail.setRecord?.time != nil {
-            measures.append(.time)
-        }
-        if detail.setModel.distance != nil || detail.setRecord?.distance != nil {
-            measures.append(.distance)
-        }
-        return measures
-    }
-
     private func measureCard(_ measure: SessionSetMeasure) -> some View {
         let value = displayValue(for: measure)
         let bracket = bracketTarget(for: measure)
 
         return Button {
-            editingMeasure = measure
+            editingTarget = .measure(measure)
         } label: {
             VStack(alignment: .leading, spacing: 6) {
                 HStack(spacing: 4) {
@@ -463,77 +514,149 @@ struct SessionSetDetailOverlay: View {
         .buttonStyle(.plain)
     }
 
+    // MARK: - Card Chrome
+
+    /// The header row every card shares — icon, title, and the chevron that
+    /// says it can be tapped. Keeps the tempo and note cards reading as the
+    /// same object as the measure cards despite their different bodies.
+    private func cardHeader(icon: String, title: String) -> some View {
+        HStack(spacing: 4) {
+            Image(systemName: icon)
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(Color.darkColor)
+            Text(title)
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(Color.darkColor)
+            Spacer(minLength: 0)
+            if isSessionActive {
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(Color(UIColor.tertiaryLabel))
+            }
+        }
+    }
+
+    private func cardBackground<Content: View>(_ content: Content) -> some View {
+        content
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(14)
+            .background(Color(UIColor.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+
     // MARK: - Tempo Card
 
     /// Mirrors `SetDetailView.tempoCard` — the two set detail views are kept
-    /// visually in step.
-    private func tempoCard(tempo: Tempo) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 4) {
-                Image(systemName: "waveform.path")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(Color.secondary)
-                Text("Tempo")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(Color.secondary)
-            }
+    /// visually in step — but is always shown and, during a session, tappable.
+    /// An absent tempo draws its four phases as "—" rather than vanishing, so
+    /// the card is a constant place to put one.
+    private var tempoCard: some View {
+        let tempo = displayedTempo
+        let bracket = tempoBracket
 
-            HStack(spacing: 0) {
-                ForEach(
-                    [
-                        ("Ecc", "\(tempo.eccentric)"),
-                        ("Hold", "\(tempo.eccentricHold)"),
-                        ("Con", "\(tempo.concentric)"),
-                        ("Hold", "\(tempo.concentricHold)")
-                    ],
-                    id: \.0
-                ) { phase, value in
-                    VStack(spacing: 4) {
-                        Text(value)
-                            .font(.system(size: 20, weight: .bold))
-                            .foregroundStyle(Color.primary)
-                        Text(phase)
-                            .font(.system(size: 10, weight: .medium))
+        return Button {
+            editingTarget = .tempo
+        } label: {
+            cardBackground(
+                VStack(alignment: .leading, spacing: 10) {
+                    cardHeader(icon: "waveform.path", title: "Tempo")
+
+                    HStack(spacing: 0) {
+                        ForEach(Array(Self.tempoPhases.enumerated()), id: \.offset) { index, phase in
+                            VStack(spacing: 4) {
+                                Text(tempo.map { "\($0[keyPath: phase.keyPath])" } ?? "—")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .foregroundStyle(tempo == nil ? Color(UIColor.tertiaryLabel) : Color.primary)
+                                Text(phase.label)
+                                    .font(.system(size: 10, weight: .medium))
+                                    .foregroundStyle(Color.secondary)
+                            }
+                            .frame(maxWidth: .infinity)
+
+                            if index < Self.tempoPhases.count - 1 {
+                                Text("–")
+                                    .font(.system(size: 16, weight: .light))
+                                    .foregroundStyle(Color(UIColor.tertiaryLabel))
+                            }
+                        }
+                    }
+
+                    if let bracket {
+                        Text("Target \(bracket)")
+                            .font(.system(size: 12, weight: .medium))
                             .foregroundStyle(Color.secondary)
                     }
-                    .frame(maxWidth: .infinity)
-
-                    if phase != "Hold" {
-                        Text("–")
-                            .font(.system(size: 16, weight: .light))
-                            .foregroundStyle(Color(UIColor.tertiaryLabel))
-                    }
                 }
-            }
+            )
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(14)
-        .background(Color(UIColor.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .buttonStyle(.plain)
+        .allowsHitTesting(isSessionActive)
+    }
+
+    /// The four phases in the order a tempo is written, paired with where each
+    /// one lives on `Tempo`.
+    private static let tempoPhases: [(label: String, keyPath: KeyPath<Tempo, Int>)] = [
+        ("Ecc", \.eccentric),
+        ("Hold", \.eccentricHold),
+        ("Con", \.concentric),
+        ("Hold", \.concentricHold)
+    ]
+
+    /// The prescribed tempo, shown only when it differs from what was performed
+    /// — the same rule the measure cards use for their bracketed target.
+    private var tempoBracket: String? {
+        guard let prescribed = prescribedTempo else { return nil }
+        guard prescribed != displayedTempo else { return nil }
+        return Self.tempoString(prescribed)
+    }
+
+    private static func tempoString(_ tempo: Tempo) -> String {
+        "\(tempo.eccentric)–\(tempo.eccentricHold)–\(tempo.concentric)–\(tempo.concentricHold)"
     }
 
     // MARK: - Note Card
 
-    private func noteCard(note: String) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 4) {
-                Image(systemName: "note.text")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(Color.secondary)
-                Text("Note")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(Color.secondary)
-            }
-            Text(note)
-                .font(.system(size: 14, weight: .regular))
-                .foregroundStyle(Color.primary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .fixedSize(horizontal: false, vertical: true)
+    /// Always shown, and during a session tappable. Two notes can be in play:
+    /// the coach's instruction from the template and the user's own note on how
+    /// the set went. The user's is the value; the template's sits underneath as
+    /// the reference, exactly as a target does on a measure card.
+    private var noteCard: some View {
+        let note = displayedNote
+        let prescribed = prescribedNote
+
+        return Button {
+            editingTarget = .note
+        } label: {
+            cardBackground(
+                VStack(alignment: .leading, spacing: 8) {
+                    cardHeader(icon: "note.text", title: "Note")
+
+                    Text(note ?? (isSessionActive ? "Add a note" : "—"))
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundStyle(note == nil ? Color(UIColor.tertiaryLabel) : Color.primary)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    if let prescribed, prescribed != note {
+                        HStack(alignment: .top, spacing: 5) {
+                            Image(systemName: "target")
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundStyle(Color.secondary)
+                                .padding(.top, 2)
+                            Text(prescribed)
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundStyle(Color.secondary)
+                                .multilineTextAlignment(.leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+            )
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(14)
-        .background(Color(UIColor.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .buttonStyle(.plain)
+        .allowsHitTesting(isSessionActive)
     }
 
     // MARK: - Log Button

@@ -7,8 +7,13 @@
 
 import Foundation
 
-/// Which value of a set is being entered in `SessionSetValueSheet`.
-enum SessionSetMeasure: String, Identifiable {
+/// Which numeric value of a set is being entered in `SessionSetValueSheet`.
+///
+/// Every case is always offered in the overlay, whether or not the template
+/// prescribed it — a measure the prescription omitted is still one the user may
+/// have performed. Tempo and note are not measures and route through
+/// `SessionSetEditTarget` instead.
+enum SessionSetMeasure: String, Identifiable, CaseIterable {
     case reps
     case weight
     case time

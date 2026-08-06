@@ -129,7 +129,9 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
 - **`WorkoutSessionRecord`**: embedded in `DailyWorkoutEntry`; holds `startedAt`, `endedAt`,
   `rpe?`, `workload?` (duration × RPE), and `exerciseRecords: [WorkoutExerciseRecord]` each with
   `exerciseName: String`, `rpe: Int?`, and `setRecords: [WorkoutSetRecord]` (per-set `isCompleted`
-  + actual values). All `Codable`, persisted automatically through `workoutSaver`.
+  + actual values, including performed `tempo` and `note`). All `Codable`, persisted automatically
+  through `workoutSaver`. New fields on `WorkoutSetRecord` must be optional — see the Firestore
+  decode warning under Workout Library Loading.
 - **`MyDayManager+Workouts`**: `addWorkoutToDay(_:)`, `removeWorkoutFromDay(_:)`, and
   `updateWorkoutEntry(_:)` — all mutate `selectedDay.workouts` and save via `workoutSaver`
 - **`DailyWorkoutCard`**: status chip lives in the subtitle row (not top row) to avoid ellipsis
@@ -167,19 +169,23 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   black dim (`.transition(.opacity)`) and `.transition(.asymmetric(insertion: .identity,
   removal: .offset(y: 5)))` on the card. The spring lives in one place as `heroAnimation`; drive it
   only with `withAnimation` at the mutation sites, never also with `.animation(_:value:)`.
-- **Manual set logging**: every measure is editable — reps, weight, time and distance. **No typed
-  input during a session:** tapping a card opens `SessionSetValueSheet`, which drives
+- **Manual set logging**: every measure is editable — reps, weight, time and distance — plus tempo
+  and a note. **No typed input for numbers during a session:** tapping a card opens
+  `SessionSetValueSheet`, which drives
   `CustomNumberPad` (the same big-target pad `MyDayKitRepsView` / `MyDayWeightSelectorView` use) and
   binds the value live, so "Done" only dismisses. `SessionSetMeasure` describes which value is being
   entered (title, icon, and whether decimals are allowed — reps and time are whole numbers). Do not
-  reintroduce a system-keyboard `TextField` here. `SessionSetInput` carries the entered values up via
+  reintroduce a system-keyboard `TextField` for any numeric measure. The **note is the sole
+  exception** — free text has no number-pad equivalent, so `SessionSetNoteSheet` uses a `TextEditor`
+  and the system keyboard. Do not extend that sheet to numbers.
+  `SessionSetInput` carries the entered values up via
   `onLog`; the screen's `log(_:for:)` writes them through `manager.completeSet(...)` and starts the
   rest timer **only on first completion**, never on an edit. Button reads "Complete Set" then
   "Update Set", and is enabled once any value is entered (or BW is selected).
   `onRemoveLog` → `manager.uncompleteSet(exerciseId:setId:)` clears `isCompleted` and
   all performed values, and the overlay resets its fields back to the target.
-  The overlay also renders the template set's `tempo` and `note` (mirroring `SetDetailView`'s cards);
-  an all-zero `Tempo` is the builder's empty default and is treated as absent. Inputs seed once
+  An all-zero `Tempo` is the builder's empty default and is treated as absent throughout
+  (`Tempo.isEmpty`) — stepping a tempo back to 0–0–0–0 stores `nil`, not a tempo of zero. Inputs seed once
   (`hasSeededInputs`) so a re-render never clobbers an entered value. The screen rebuilds
   `SessionSetDetail` from `manager.setRecord(exerciseId:setId:)` on every render — the stored
   `selectedSet` is only a tap-time snapshot, so **never read `setRecord` off it directly.**
@@ -192,14 +198,36 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   differ** so an on-target set stays clean and a deviation is what catches the eye. This is what
   keeps the overlay off a long scroll now that all four measures are editable — the earlier
   alternative, a TARGET/PERFORMED toggle, was rejected for hiding the target exactly while entering.
-  `visibleMeasures` renders reps/time/distance only when the template or record has them; **weight is
-  always offered**, since a load the template never specified (vest, dumbbell, loaded carry) is the
-  commonest thing added beyond the prescription. `targetText(for: .weight)` carries its unit because
+  **Every option is always offered, whether or not the template prescribed it** — all four measures
+  (`SessionSetMeasure.allCases`), plus tempo and note. A card the set never used draws "—" rather
+  than vanishing. This replaced a `visibleMeasures` filter that showed reps/time/distance only when
+  the template or record had them: a measure the prescription omitted is still one the user may have
+  performed (a vest, a dumbbell, a loaded carry), and **a card that appears only sometimes is a card
+  the user never learns is there.** Do not reintroduce the filter.
+  Tempo and note are full-width cards below the grid, not cells inside it — four tempo phases and a
+  sentence of text both need the width. `SessionSetEditTarget` (`.measure` / `.tempo` / `.note`)
+  routes the single `.sheet(item:)` to the right sheet and carries its detent height.
+  `targetText(for: .weight)` carries its unit because
   the prescription may be in one the session cannot log — "(80 % of 1RM)" beside a logged 100 kg is
   the reference the user is working from — so `comparableValue` re-renders the performed weight the
   same way before comparing, or the unit alone would read as a difference. When the session is not
   active the cards read from the record, not the seeded inputs: a set left unlogged in a finished
   session must show "—", never the target it never met.
+- **A session never writes back to the template.** Tempo and note used to be read-only prescriptions
+  off `WorkoutSetModel`; they are now editable, and the edit lands on `WorkoutSetRecord.tempo` /
+  `.note` as *performed*. `WorkoutSetModel` keeps saying what the coach asked for — the template is
+  reused on later days, so editing it from a session would silently rewrite next week's workout.
+  Both cards therefore show two things: the performed value, and the prescription beneath it
+  (bracketed target for tempo, a `target`-icon line for the note) **only when the two differ**, the
+  same rule the measure cards use. Both are carried on `SessionSetInput` and persisted by the same
+  "Complete Set" / "Update Set" press as the measures — they are not separately saved.
+  `canLog` deliberately ignores them: a note alone must not mark a set completed, or it would count
+  toward the session's sets-completed stat without anything having been performed.
+  Seeding follows the wholesale rule — a **logged** set reads tempo/note straight off the record, so
+  a cleared tempo stays cleared; only an unlogged set seeds tempo from the prescription. The note
+  never seeds from the prescription: it records how the set went, and pre-filling it with the
+  coach's instruction would put words in the user's mouth and store them as their own.
+  `Tempo` gained a memberwise `init` and `isEmpty` for this.
 - **Weight unit is chosen in the session, not inherited.** `WeightUnit.loggable` is `[.kg, .lbs, .bw]`
   — `% of 1RM`, `% of BW` and `Max` are *prescriptions* (relative to a number the session doesn't
   hold, or an instruction), so they describe a target and are never stored against a performed set.
