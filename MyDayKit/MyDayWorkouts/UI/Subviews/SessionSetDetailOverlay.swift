@@ -234,18 +234,30 @@ struct SessionSetDetailOverlay: View {
     // MARK: - Seeding
 
     /// Pre-fill from the logged record if there is one, otherwise from the
-    /// target. Runs once so a re-render after logging never overwrites typing.
+    /// prescription. Runs once so a re-render after logging never overwrites typing.
     private func seedInputs() {
         guard !hasSeededInputs else { return }
         hasSeededInputs = true
 
-        let record = detail.setRecord
-        repsInput = (record?.reps ?? detail.setModel.reps).map { "\($0)" } ?? ""
+        if let record = detail.setRecord, record.isCompleted {
+            seedFromRecord(record)
+        } else {
+            resetInputsToTarget()
+        }
+    }
 
-        // A clean number of minutes seeds the pad as minutes, so a 3-minute
-        // plank reads "3 min" rather than "180 sec". Anything else seeds as
-        // seconds, where every value is expressible.
-        if let seconds = record?.time ?? detail.setModel.time {
+    /// **A logged set is read wholesale — never merged field-by-field with the
+    /// prescription.** This is the same rule `SessionSetPillValue.values` follows,
+    /// and the two must agree: a set logged with the weight cleared stores
+    /// `weight: nil`, which per-field fallback cannot tell apart from a set that
+    /// was never logged, so the template's number came back on the card while
+    /// the pill correctly showed none. The units are the one exception — a unit
+    /// qualifies a value rather than being one, so an absent unit falls back
+    /// rather than leaving a number that cannot be rendered.
+    private func seedFromRecord(_ record: WorkoutSetRecord) {
+        repsInput = record.reps.map { "\($0)" } ?? ""
+
+        if let seconds = record.time {
             let seeded = SessionTimeUnit.seeding(for: seconds)
             timeUnitInput = seeded.unit
             timeInput = "\(seeded.value)"
@@ -254,28 +266,17 @@ struct SessionSetDetailOverlay: View {
             timeInput = ""
         }
 
-        distanceInput = (record?.distance ?? detail.setModel.distance).map { Self.formatDouble($0) } ?? ""
-        distanceUnitInput = record?.distanceUnit ?? detail.setModel.distanceUnit ?? .metres
+        distanceInput = record.distance.map { Self.formatDouble($0) } ?? ""
+        distanceUnitInput = record.distanceUnit ?? detail.setModel.distanceUnit ?? .metres
 
-        weightUnitInput = WeightUnit.loggableDefault(for: record?.weightUnit ?? detail.setModel.weightUnit)
-        weightInput = record?.weight.map { Self.formatDouble($0) } ?? targetWeightInput
+        weightUnitInput = WeightUnit.loggableDefault(for: record.weightUnit ?? detail.setModel.weightUnit)
+        weightInput = record.weight.map { Self.formatDouble($0) } ?? ""
 
-        // An already-logged set is read wholesale from the record: a user who
-        // cleared the tempo stored `nil`, and falling back to the prescription
-        // there would resurrect the tempo they just deleted. Only a set with no
-        // record yet seeds from the prescription — performing the tempo asked
-        // for is the common case, so it wants confirming rather than entering.
-        //
-        // The note never seeds from the prescription. It records how the set
-        // went; pre-filling it with the coach's instruction would put words in
-        // the user's mouth and then store them as their own.
-        if let record, record.isCompleted {
-            tempoInput = record.tempo
-            noteInput = record.note ?? ""
-        } else {
-            tempoInput = prescribedTempo
-            noteInput = ""
-        }
+        // The note is never seeded from the prescription either way — it records
+        // how the set went, and pre-filling it with the coach's instruction
+        // would put words in the user's mouth and then store them as their own.
+        tempoInput = record.tempo
+        noteInput = record.note ?? ""
     }
 
     /// The target's weight, but only when the session is logging in the unit
@@ -288,8 +289,9 @@ struct SessionSetDetailOverlay: View {
         return detail.setModel.weight.map { Self.formatDouble($0) } ?? ""
     }
 
-    /// After un-logging, the fields should show the target again rather than
-    /// the values that were just discarded.
+    /// Seeds every field from the prescription — used for a set that has not
+    /// been logged yet, and again after un-logging, where the fields should
+    /// show the target rather than the values just discarded.
     private func resetInputsToTarget() {
         repsInput = detail.setModel.reps.map { "\($0)" } ?? ""
         weightUnitInput = WeightUnit.loggableDefault(for: detail.setModel.weightUnit)

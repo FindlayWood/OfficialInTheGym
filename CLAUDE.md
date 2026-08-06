@@ -235,11 +235,20 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   "Complete Set" / "Update Set" press as the measures — they are not separately saved.
   `canLog` deliberately ignores them: a note alone must not mark a set completed, or it would count
   toward the session's sets-completed stat without anything having been performed.
-  Seeding follows the wholesale rule — a **logged** set reads tempo/note straight off the record, so
-  a cleared tempo stays cleared; only an unlogged set seeds tempo from the prescription. The note
-  never seeds from the prescription: it records how the set went, and pre-filling it with the
-  coach's instruction would put words in the user's mouth and store them as their own.
   `Tempo` gained a memberwise `init` and `isEmpty` for this.
+- **Seeding the overlay reads a logged set wholesale — never field-by-field.** `seedInputs()`
+  branches once: `seedFromRecord(_:)` for a set with `isCompleted`, `resetInputsToTarget()` for
+  everything else. It must not fall back per field (`record?.weight ?? templateWeight`), because a
+  set logged with the weight cleared stores `weight: nil`, which per-field fallback cannot tell
+  apart from a set never logged — so the template's number reappeared on the overlay while the pill,
+  which already read wholesale (`SessionSetPillValue.values`), correctly showed none. **The two must
+  agree.** This bug has now appeared twice, first for tempo and then for all four measures; treat
+  any `record?.x ?? setModel.x` in the seeding path as the same defect.
+  Units are the one exception — a unit qualifies a value rather than being one, so an absent
+  `weightUnit` / `distanceUnit` falls back rather than leaving a number that cannot be rendered.
+  The note is never seeded from the prescription in either branch: it records how the set went, and
+  pre-filling it with the coach's instruction would put words in the user's mouth and store them as
+  their own.
 - **Weight unit is chosen in the session, not inherited.** `WeightUnit.loggable` is `[.kg, .lbs, .bw]`
   — `% of 1RM`, `% of BW` and `Max` are *prescriptions* (relative to a number the session doesn't
   hold, or an instruction), so they describe a target and are never stored against a performed set.
