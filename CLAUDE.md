@@ -102,7 +102,8 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
 - Per-exercise RPE input: `WorkoutExerciseRecord.rpe?`, `setExerciseRPE(exerciseId:rpe:)` /
   `exerciseRPE(for:)` on manager, `WorkoutExerciseRPESheet` (color-coded 1–10, flash-then-dismiss)
 - Completed session read-only view: `completedHeader` (sets logged + duration + green badge);
-  set pills disabled; Finish button hidden; revisiting a completed entry shows this view
+  set pills not loggable but still open the detail overlay; Finish button hidden; revisiting a
+  completed entry shows this view
 - Wellness and RPE inline check-in cards
 - Performance analytics with hand-built charts (`MiniBarChart`, `MiniLineChart`, ACWR zone bar)
 - Library, creation home, template detail screens with collapsible exercise cards and set pill views
@@ -140,7 +141,8 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   as siblings so it wins its hit area without gesture conflicts.
 - **Session screen flow**: `MyDayCoordinator` pushes `MyDayWorkoutSessionScreen` on `.workoutSession`
   route; screen shows `WorkoutSessionStartCard` overlay until started; tapping "Start Workout" calls
-  `manager.startSession()` which fires `onEntryUpdated` to persist; set pills disabled until started;
+  `manager.startSession()` which fires `onEntryUpdated` to persist; set pills cannot be *logged*
+  until started, but stay tappable throughout (see the overlay's three modes);
   elapsed timer seeds from `manager.startedAt` on resume so it is accurate when re-entering an
   in-progress session; "Finish" navigates to `WorkoutSessionSummaryScreen` (via `onGoToSummary`
   callback → `coordinator.showSummary(manager:)`). Screen is pure UI — no save calls. Coordinator
@@ -152,10 +154,19 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   free-text notes field, "Complete Workout" button. "Complete Workout" calls
   `manager.finishSession(rpe:notes:)` then pops to root. Back navigation discards summary input.
   `WorkoutSessionRecord` now includes `notes: String?`; workload and rpe set at finish time.
-- **Set detail overlay** (`SessionSetDetailOverlay`): tapping a set pill (when session started)
+- **Set detail overlay** (`SessionSetDetailOverlay`): tapping a set pill — **in any session state** —
   expands that pill into a full-bleed card. Shows exercise name + set number, a single measure grid
-  (see below), tempo/note when the template set has them, and a "Complete Set" button while the
-  session is active.
+  (see below), tempo and note cards, and a "Complete Set" button while the session is active.
+- **The overlay has three modes** (`SessionSetDetailMode`), because it answers a different question
+  in each and the same card shows a different number:
+  `.planned` (not started) renders the **prescription** as the card's value, titled TARGET, with no
+  bracketed target — bracketing would print the number twice — and no chevrons or log button;
+  `.active` renders live input with the target beside it; `.review` (finished) renders the record,
+  with "—" for a set never logged. This replaced a single `isSessionActive: Bool`, which could not
+  tell `.planned` from `.review` and so drew an unstarted set as "—" — hiding the prescription,
+  which is the entire reason to open a set before doing it. **Do not collapse the mode back to a
+  Bool.** `SessionSetPill.isInactive` now only *dims* the empty circle; the pill is tappable in
+  every state, so a set is readable before it is performed and after.
   `SessionSetDetail` bundles exercise + setModel + setRecord + index, and owns `matchedId`
   (`"\(exercise.id)-\(setModel.id)"` — set ids are only unique within an exercise). Pill tap opens
   the overlay via `onSetTapped((WorkoutSetModel, WorkoutSetRecord?, Int) -> Void)?` on the exercise

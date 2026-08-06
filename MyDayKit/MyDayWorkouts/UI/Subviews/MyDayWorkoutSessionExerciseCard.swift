@@ -90,7 +90,7 @@ struct MyDayWorkoutSessionExerciseCard: View {
                             index: index,
                             set: set,
                             record: record,
-                            isDisabled: !isSessionStarted || isSessionCompleted,
+                            isInactive: !isSessionStarted || isSessionCompleted,
                             matchedId: matchedId,
                             animation: animation,
                             onTap: { onSetTapped?(set, record, index) }

@@ -62,7 +62,10 @@ struct MyDayWorkoutSessionScreen: View {
                                 exerciseRPE: manager.exerciseRPE(for: exercise.exerciseId),
                                 animation: animation,
                                 selectedSetId: selectedSet?.matchedId,
-                                onSetTapped: sessionStarted ? { targetSet, record, index in
+                                // Always available. Before starting, the overlay
+                                // is how a set is read in full; after finishing,
+                                // it is how it is revisited.
+                                onSetTapped: { targetSet, record, index in
                                     withAnimation(heroAnimation) {
                                         selectedSet = SessionSetDetail(
                                             exercise: exercise,
@@ -71,7 +74,7 @@ struct MyDayWorkoutSessionScreen: View {
                                             index: index
                                         )
                                     }
-                                } : nil,
+                                },
                                 onRPETapped: sessionStarted && !sessionCompleted ? {
                                     rpeExercise = exercise
                                 } : nil
@@ -170,7 +173,7 @@ struct MyDayWorkoutSessionScreen: View {
 
             SessionSetDetailOverlay(
                 detail: live,
-                isSessionActive: sessionStarted && !sessionCompleted,
+                mode: SessionSetDetailMode(isStarted: sessionStarted, isCompleted: sessionCompleted),
                 animation: animation,
                 onLog: { input in
                     log(input, for: live)

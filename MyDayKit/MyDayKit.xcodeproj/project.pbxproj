@@ -73,6 +73,7 @@
 		B2C7E4A38F1D46E5A709C3D1 /* SessionSetMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A9D8B26C3E4718B52A0E67 /* SessionSetMeasure.swift */; };
 		D9A3F1C74B8E42D6A017E5B3 /* SessionSetValueSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E28B4D3A9F41708D2C7F15 /* SessionSetValueSheet.swift */; };
 		E8B4C2915A7D43F2916E0B48 /* SessionSetInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D6F3072E8B44C7B35F1D90 /* SessionSetInput.swift */; };
+		812E02470FF946869A299800 /* SessionSetDetailMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4087E69E61014F2983DA52ED /* SessionSetDetailMode.swift */; };
 		22C2001A6FF44A2CAAE6513E /* SessionSetNoteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055A3D97CF8B4DCFA300767D /* SessionSetNoteSheet.swift */; };
 		59B2D18A3AB0460A8FA0AA58 /* SessionSetTempoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860F47C12D564132AEC73AF5 /* SessionSetTempoSheet.swift */; };
 		1D66013DCBE846A89E32BABB /* SessionSetEditTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E501441CAB4B9F9C547C90 /* SessionSetEditTarget.swift */; };
@@ -233,6 +234,7 @@
 		F4A9D8B26C3E4718B52A0E67 /* SessionSetMeasure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetMeasure.swift; sourceTree = "<group>"; };
 		C6E28B4D3A9F41708D2C7F15 /* SessionSetValueSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetValueSheet.swift; sourceTree = "<group>"; };
 		A1D6F3072E8B44C7B35F1D90 /* SessionSetInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetInput.swift; sourceTree = "<group>"; };
+		4087E69E61014F2983DA52ED /* SessionSetDetailMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetDetailMode.swift; sourceTree = "<group>"; };
 		055A3D97CF8B4DCFA300767D /* SessionSetNoteSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetNoteSheet.swift; sourceTree = "<group>"; };
 		860F47C12D564132AEC73AF5 /* SessionSetTempoSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetTempoSheet.swift; sourceTree = "<group>"; };
 		D2E501441CAB4B9F9C547C90 /* SessionSetEditTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetEditTarget.swift; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 				A1D6F3072E8B44C7B35F1D90 /* SessionSetInput.swift */,
 				B93A7D615C40E2871FA6D385 /* SessionSetPillValue.swift */,
 				C48D5E9370B2A16FE8320D74 /* WeightUnit+Session.swift */,
+				4087E69E61014F2983DA52ED /* SessionSetDetailMode.swift */,
 				D2E501441CAB4B9F9C547C90 /* SessionSetEditTarget.swift */,
 			);
 			path = Models;
@@ -1031,6 +1034,7 @@
 				B2C7E4A38F1D46E5A709C3D1 /* SessionSetMeasure.swift in Sources */,
 				D9A3F1C74B8E42D6A017E5B3 /* SessionSetValueSheet.swift in Sources */,
 				E8B4C2915A7D43F2916E0B48 /* SessionSetInput.swift in Sources */,
+				812E02470FF946869A299800 /* SessionSetDetailMode.swift in Sources */,
 				22C2001A6FF44A2CAAE6513E /* SessionSetNoteSheet.swift in Sources */,
 				59B2D18A3AB0460A8FA0AA58 /* SessionSetTempoSheet.swift in Sources */,
 				1D66013DCBE846A89E32BABB /* SessionSetEditTarget.swift in Sources */,

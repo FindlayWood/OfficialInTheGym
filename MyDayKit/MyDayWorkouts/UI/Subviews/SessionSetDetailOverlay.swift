@@ -22,7 +22,7 @@ struct SessionSetDetailOverlay: View {
     @State private var editingTarget: SessionSetEditTarget?
 
     let detail: SessionSetDetail
-    let isSessionActive: Bool
+    let mode: SessionSetDetailMode
     let animation: Namespace.ID
     var onLog: ((SessionSetInput) -> Void)?
     var onRemoveLog: (() -> Void)?
@@ -68,24 +68,32 @@ struct SessionSetDetailOverlay: View {
         return note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : note
     }
 
-    /// The tempo the card shows. Live input while the session is running;
-    /// otherwise strictly what the record holds, so a set left unlogged shows
-    /// nothing rather than the prescription it never met.
+    /// The tempo the card shows: the prescription before the session starts,
+    /// live input while it runs, and strictly the record afterwards — so a set
+    /// left unlogged shows nothing rather than the tempo it never met.
     private var displayedTempo: Tempo? {
-        if isSessionActive {
+        switch mode {
+        case .planned:
+            return prescribedTempo
+        case .active:
             guard let tempo = tempoInput, !tempo.isEmpty else { return nil }
             return tempo
+        case .review:
+            guard let record = detail.setRecord, record.isCompleted else { return nil }
+            guard let tempo = record.tempo, !tempo.isEmpty else { return nil }
+            return tempo
         }
-        guard let record = detail.setRecord, record.isCompleted else { return nil }
-        guard let tempo = record.tempo, !tempo.isEmpty else { return nil }
-        return tempo
     }
 
     private var displayedNote: String? {
         let value: String?
-        if isSessionActive {
+        switch mode {
+        case .planned:
+            // The coach's instruction is the note worth reading before starting.
+            return prescribedNote
+        case .active:
             value = noteInput
-        } else {
+        case .review:
             guard let record = detail.setRecord, record.isCompleted else { return nil }
             value = record.note
         }
@@ -311,7 +319,7 @@ struct SessionSetDetailOverlay: View {
                 tempoCard
                 noteCard
 
-                if isSessionActive {
+                if mode.isEditable {
                     logButton
                     if isLogged {
                         removeLogButton
@@ -354,7 +362,11 @@ struct SessionSetDetailOverlay: View {
 
     private var gridTitle: String {
         if isLogged { return "LOGGED" }
-        return isSessionActive ? "PERFORMED" : "NOT LOGGED"
+        switch mode {
+        case .planned: return "TARGET"
+        case .active:  return "PERFORMED"
+        case .review:  return "NOT LOGGED"
+        }
     }
 
     private func measureCard(_ measure: SessionSetMeasure) -> some View {
@@ -378,7 +390,7 @@ struct SessionSetDetailOverlay: View {
                             .foregroundStyle(Color.secondary)
                     }
                     Spacer(minLength: 0)
-                    if isSessionActive {
+                    if mode.isEditable {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 10, weight: .semibold))
                             .foregroundStyle(Color(UIColor.tertiaryLabel))
@@ -407,36 +419,60 @@ struct SessionSetDetailOverlay: View {
             .clipShape(RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
-        .allowsHitTesting(isSessionActive)
+        .allowsHitTesting(mode.isEditable)
     }
 
     // MARK: - Card Values
 
-    /// What the card shows as performed. During a session that is the live
-    /// input; once read-only it is whatever the record holds, so a set left
-    /// unlogged in a finished session shows "—" rather than the target it
-    /// never actually met.
+    /// What the card shows. Before the session starts that is the prescription
+    /// — the whole reason to open a set you have not done yet. During a session
+    /// it is the live input. Afterwards it is whatever the record holds, so a
+    /// set left unlogged in a finished session shows "—" rather than the target
+    /// it never actually met.
     private func displayValue(for measure: SessionSetMeasure) -> String {
-        if isSessionActive {
+        switch mode {
+        case .planned:
+            return plannedValue(for: measure)
+
+        case .active:
             switch measure {
             case .reps:     return repsInput
             case .weight:   return weightUnitInput.carriesValue ? weightInput : weightUnitInput.rawValue
             case .time:     return timeInput
             case .distance: return distanceInput
             }
-        }
 
-        guard let record = detail.setRecord, record.isCompleted else { return "" }
+        case .review:
+            guard let record = detail.setRecord, record.isCompleted else { return "" }
+            switch measure {
+            case .reps:
+                return record.reps.map { "\($0)" } ?? ""
+            case .weight:
+                if let unit = record.weightUnit, !unit.carriesValue { return unit.rawValue }
+                return record.weight.map { Self.formatDouble($0) } ?? ""
+            case .time:
+                return record.time.map { "\($0)" } ?? ""
+            case .distance:
+                return record.distance.map { Self.formatDouble($0) } ?? ""
+            }
+        }
+    }
+
+    /// The prescription as the card's own value. Unlike `targetText`, this
+    /// leaves the unit off — in `.planned` the unit sits in the card header
+    /// like it does in every other mode, so including it here would print it
+    /// twice. A `BW` or `Max` set states itself with the unit alone.
+    private func plannedValue(for measure: SessionSetMeasure) -> String {
         switch measure {
         case .reps:
-            return record.reps.map { "\($0)" } ?? ""
+            return detail.setModel.reps.map { "\($0)" } ?? ""
         case .weight:
-            if let unit = record.weightUnit, !unit.carriesValue { return unit.rawValue }
-            return record.weight.map { Self.formatDouble($0) } ?? ""
+            if let unit = detail.setModel.weightUnit, !unit.carriesValue { return unit.rawValue }
+            return detail.setModel.weight.map { Self.formatDouble($0) } ?? ""
         case .time:
-            return record.time.map { "\($0)" } ?? ""
+            return detail.setModel.time.map { "\($0)" } ?? ""
         case .distance:
-            return record.distance.map { Self.formatDouble($0) } ?? ""
+            return detail.setModel.distance.map { Self.formatDouble($0) } ?? ""
         }
     }
 
@@ -445,7 +481,12 @@ struct SessionSetDetailOverlay: View {
         case .reps:
             return nil
         case .weight:
-            let unit = isSessionActive ? weightUnitInput : detail.setRecord?.weightUnit
+            let unit: WeightUnit?
+            switch mode {
+            case .planned: unit = detail.setModel.weightUnit
+            case .active:  unit = weightUnitInput
+            case .review:  unit = detail.setRecord?.weightUnit
+            }
             guard let unit, unit.carriesValue else { return nil }
             return unit.rawValue
         case .time:
@@ -457,7 +498,10 @@ struct SessionSetDetailOverlay: View {
 
     /// The target, shown beside the performed value only when the two differ —
     /// an on-target set stays clean, so the bracket is what catches the eye.
+    /// Never in `.planned`: there the card's value already *is* the target, and
+    /// bracketing it would print the same number twice.
     private func bracketTarget(for measure: SessionSetMeasure) -> String? {
+        guard mode != .planned else { return nil }
         guard let target = targetText(for: measure) else { return nil }
         return target == comparableValue(for: measure) ? nil : target
     }
@@ -486,7 +530,7 @@ struct SessionSetDetailOverlay: View {
     private func comparableValue(for measure: SessionSetMeasure) -> String {
         guard measure == .weight else { return displayValue(for: measure) }
 
-        let unit = isSessionActive ? weightUnitInput : detail.setRecord?.weightUnit
+        let unit = mode.isEditable ? weightUnitInput : detail.setRecord?.weightUnit
         guard let unit else { return displayValue(for: .weight) }
         guard unit.carriesValue else { return unit.rawValue }
 
@@ -528,7 +572,7 @@ struct SessionSetDetailOverlay: View {
                 .font(.system(size: 11, weight: .semibold))
                 .foregroundStyle(Color.darkColor)
             Spacer(minLength: 0)
-            if isSessionActive {
+            if mode.isEditable {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 10, weight: .semibold))
                     .foregroundStyle(Color(UIColor.tertiaryLabel))
@@ -590,7 +634,7 @@ struct SessionSetDetailOverlay: View {
             )
         }
         .buttonStyle(.plain)
-        .allowsHitTesting(isSessionActive)
+        .allowsHitTesting(mode.isEditable)
     }
 
     /// The four phases in the order a tempo is written, paired with where each
@@ -605,6 +649,7 @@ struct SessionSetDetailOverlay: View {
     /// The prescribed tempo, shown only when it differs from what was performed
     /// — the same rule the measure cards use for their bracketed target.
     private var tempoBracket: String? {
+        guard mode != .planned else { return nil }
         guard let prescribed = prescribedTempo else { return nil }
         guard prescribed != displayedTempo else { return nil }
         return Self.tempoString(prescribed)
@@ -631,7 +676,7 @@ struct SessionSetDetailOverlay: View {
                 VStack(alignment: .leading, spacing: 8) {
                     cardHeader(icon: "note.text", title: "Note")
 
-                    Text(note ?? (isSessionActive ? "Add a note" : "—"))
+                    Text(note ?? (mode.isEditable ? "Add a note" : "—"))
                         .font(.system(size: 14, weight: .regular))
                         .foregroundStyle(note == nil ? Color(UIColor.tertiaryLabel) : Color.primary)
                         .multilineTextAlignment(.leading)
@@ -656,7 +701,7 @@ struct SessionSetDetailOverlay: View {
             )
         }
         .buttonStyle(.plain)
-        .allowsHitTesting(isSessionActive)
+        .allowsHitTesting(mode.isEditable)
     }
 
     // MARK: - Log Button

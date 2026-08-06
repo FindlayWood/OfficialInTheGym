@@ -12,7 +12,13 @@ struct SessionSetPill: View {
     let index: Int
     let set: WorkoutSetModel
     let record: WorkoutSetRecord?
-    let isDisabled: Bool
+
+    /// The session is not accepting logs — before it starts, or once finished.
+    /// Dims the empty circle so the pill reads as not-actionable, but the pill
+    /// stays **tappable**: the detail overlay is worth reading in every state,
+    /// to look a set over before starting and to revisit it afterwards.
+    let isInactive: Bool
+
     let matchedId: String
     let animation: Namespace.ID
     let onTap: () -> Void
@@ -49,7 +55,7 @@ struct SessionSetPill: View {
 
             Image(systemName: isLogged ? "checkmark.circle.fill" : "circle")
                 .font(.system(size: 22, weight: .medium))
-                .foregroundStyle(isLogged ? Color.white : Color.secondary.opacity(isDisabled ? 0.25 : 0.5))
+                .foregroundStyle(isLogged ? Color.white : Color.secondary.opacity(isInactive ? 0.25 : 0.5))
         }
         .frame(width: 72, height: 88)
         .padding(.vertical, 8)
@@ -66,7 +72,7 @@ struct SessionSetPill: View {
         }
         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .contentShape(Rectangle())
-        .onTapGesture { if !isDisabled { onTap() } }
+        .onTapGesture { onTap() }
         .animation(.easeInOut(duration: 0.2), value: isLogged)
     }
 
@@ -88,7 +94,7 @@ struct SessionSetPill: View {
             index: 0,
             set: WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg),
             record: nil,
-            isDisabled: true,
+            isInactive: true,
             matchedId: "e1-s1",
             animation: animation,
             onTap: {}
@@ -97,7 +103,7 @@ struct SessionSetPill: View {
             index: 1,
             set: WorkoutSetModel(id: "s2", orderIndex: 1, reps: 8, weight: 80, weightUnit: .kg),
             record: WorkoutSetRecord(id: "s2", isCompleted: true, reps: 6, weight: 85, weightUnit: .kg),
-            isDisabled: false,
+            isInactive: false,
             matchedId: "e1-s2",
             animation: animation,
             onTap: {}
@@ -106,7 +112,7 @@ struct SessionSetPill: View {
             index: 2,
             set: WorkoutSetModel(id: "s3", orderIndex: 2, time: 60, distance: 400, distanceUnit: .metres),
             record: nil,
-            isDisabled: false,
+            isInactive: false,
             matchedId: "e1-s3",
             animation: animation,
             onTap: {}
@@ -115,7 +121,7 @@ struct SessionSetPill: View {
             index: 3,
             set: WorkoutSetModel(id: "s4", orderIndex: 3, reps: 12, weightUnit: .bw),
             record: nil,
-            isDisabled: false,
+            isInactive: false,
             matchedId: "e1-s4",
             animation: animation,
             onTap: {}
