@@ -114,7 +114,8 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
 - Set detail overlay on session screen — matched-geometry hero expansion from the tapped set pill
 - Manual set logging — reps/weight/time/distance per set edited on the custom number pad via
   `SessionSetValueSheet`, with un-logging via `uncompleteSet(exerciseId:setId:)`;
-  weight unit (kg / lbs / BW) selectable at log time
+  weight unit (kg / lbs / BW), distance unit (m / km / mi) and time unit (sec / min) all
+  selectable at log time
 - Custom session nav bar (system bar hidden) + cancel-workout flow (`cancelSession()` full reset)
 
 ## MYDAY Workout Flow
@@ -242,14 +243,37 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
 - **Weight unit is chosen in the session, not inherited.** `WeightUnit.loggable` is `[.kg, .lbs, .bw]`
   — `% of 1RM`, `% of BW` and `Max` are *prescriptions* (relative to a number the session doesn't
   hold, or an instruction), so they describe a target and are never stored against a performed set.
-  `SessionSetValueSheet` shows the picker for `.weight` only; `SessionSetInput.weightUnit` carries
-  the choice and `log(_:for:)` passes it straight through, so **do not re-default the weight unit
-  from the template.** Previously it did, storing e.g. `weight: 100, weightUnit: .percent1RM` —
-  rendered as "100 % of 1RM". `WeightUnit.carriesValue` is false for `.bw` / `.max`: those label a
+  `SessionSetInput.weightUnit` carries the choice and `log(_:for:)` passes it straight through, so
+  **do not re-default the weight unit from the template.** Previously it did, storing e.g.
+  `weight: 100, weightUnit: .percent1RM` — rendered as "100 % of 1RM".
+  `WeightUnit.carriesValue` is false for `.bw` / `.max`: those label a
   set on their own, so selecting BW clears and hides the number pad and stores `weight: nil`.
   The target's weight only seeds the field when the session logs in the unit the target was written
-  in (`targetWeightInput`). Distance and time units still come from the template, defaulting to
-  `.metres` / seconds, because a value whose unit is nil renders as "—".
+  in (`targetWeightInput`).
+- **Distance unit is chosen in the session too** — m / km / mi, `DistanceUnit.allCases`, the same
+  three `MyDayWorkoutBuilderDistanceScreen` offers and drawn the same way (short label over
+  `fullName`). It rides on `SessionSetInput.distanceUnit`; `log(_:for:)` no longer derives it from
+  the template, so a 400 m target logged as 0.5 km stays 0.5 km. `targetText(for: .distance)` now
+  carries its unit for the same reason weight does, and `comparableValue` re-renders the performed
+  distance with its unit before comparing, or the unit alone would read as a difference.
+  Switching unit **keeps** the entered number (type "5", then pick km) — unlike the builder screen,
+  which clears it, because there picking the unit is step one.
+- **Time has no unit in the model and must not gain one.** `WorkoutSetModel.time` and
+  `WorkoutSetRecord.time` are both a plain second count, exactly as `MyDayWorkoutBuilderTimeScreen`
+  stores them — that screen has no unit picker at all, it steps a total in seconds and draws it as
+  `Xm Ys`. `SessionTimeUnit` (`sec` / `min`) is **entry only**: it decides what the number on the
+  pad meant and converts to seconds before storage. Whole numbers in both units — decimals are off
+  for time because "1.30 min" reads as 1m 30s but means 78 seconds, so 90 seconds is 90 `sec`.
+  Seeding picks the unit back: a clean number of minutes seeds as minutes ("3 min", not "180 sec").
+  `SessionTimeUnit.display` renders `1m 30s` everywhere a time appears on a card, so
+  `cardUnitLabel(for: .time)` is nil — the value carries its own units.
+  `SessionSetPillValue.formatTime` keeps its own tighter `1m30s` for the 72pt pill.
+- **One unit picker, three unit types.** `SessionSetValueSheet` flattens whichever of
+  `WeightUnit` / `DistanceUnit` / `SessionTimeUnit` the measure uses into `[SessionSetUnitOption]`
+  (id, label, optional `fullName`, `carriesValue`) and draws a single picker. The three enums share
+  no protocol but need the same picker. An option with no `fullName` renders the label-only 40pt
+  button the weight picker has always had; one with a `fullName` gets the 52pt two-line button from
+  the builder. Reps is the only measure with no picker, and so the only 560pt detent.
 - **Set pills show at most two values** (`SessionSetPillValue.values(for:record:)`), in priority
   order reps → weight → time → distance. A set carrying all four overflows the 72×88 frame and
   clips the text top and bottom. Pills take the `WorkoutSetRecord`, not just the `WorkoutSetModel`,

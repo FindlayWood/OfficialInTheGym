@@ -19,10 +19,21 @@ struct SessionSetValueSheet: View {
 
     @Binding var value: String
 
-    /// Weight only — the unit actually lifted. `nil` for every other measure,
-    /// whose unit comes from the template. Restricted to `WeightUnit.loggable`:
-    /// the percentage and `Max` cases describe a target, not a performed load.
+    /// The unit actually lifted. Restricted to `WeightUnit.loggable`: the
+    /// percentage and `Max` cases describe a target, not a performed load.
     var weightUnit: Binding<WeightUnit>?
+
+    /// The unit the distance was covered in — m / km / mi, the same three
+    /// `MyDayWorkoutBuilderDistanceScreen` offers.
+    var distanceUnit: Binding<DistanceUnit>?
+
+    /// Whether the number on the pad means seconds or minutes. Entry only: the
+    /// value is converted to seconds before it leaves this sheet.
+    var timeUnit: Binding<SessionTimeUnit>?
+
+    /// What the entered value works out to, when that is not simply the number
+    /// typed — "3 min" resolving to "3m 0s". `nil` hides the line.
+    var resolvedSummary: String?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -30,11 +41,58 @@ struct SessionSetValueSheet: View {
 
     /// A bodyweight set is stated by its unit alone, so there is nothing to type.
     private var takesNumber: Bool {
-        weightUnit.map { $0.wrappedValue.carriesValue } ?? true
+        selectedOption.map(\.carriesValue) ?? true
     }
 
     private var decimalDisabled: Bool {
         !measure.allowsDecimal || value.isEmpty || value.contains(".")
+    }
+
+    // MARK: - Unit Options
+
+    /// The measure's units, flattened so one picker can draw any of them.
+    private var unitOptions: [SessionSetUnitOption] {
+        if weightUnit != nil {
+            return WeightUnit.loggable.map {
+                SessionSetUnitOption(id: $0.rawValue, label: $0.rawValue, carriesValue: $0.carriesValue)
+            }
+        }
+        if distanceUnit != nil {
+            return DistanceUnit.allCases.map {
+                SessionSetUnitOption(id: $0.rawValue, label: $0.rawValue, fullName: $0.fullName)
+            }
+        }
+        if timeUnit != nil {
+            return SessionTimeUnit.allCases.map {
+                SessionSetUnitOption(id: $0.rawValue, label: $0.rawValue, fullName: $0.fullName)
+            }
+        }
+        return []
+    }
+
+    private var selectedOption: SessionSetUnitOption? {
+        guard let id = selectedUnitId else { return nil }
+        return unitOptions.first { $0.id == id }
+    }
+
+    private var selectedUnitId: String? {
+        weightUnit?.wrappedValue.rawValue
+            ?? distanceUnit?.wrappedValue.rawValue
+            ?? timeUnit?.wrappedValue.rawValue
+    }
+
+    private func selectUnit(_ option: SessionSetUnitOption) {
+        if let weightUnit, let unit = WeightUnit(rawValue: option.id) {
+            weightUnit.wrappedValue = unit
+        } else if let distanceUnit, let unit = DistanceUnit(rawValue: option.id) {
+            distanceUnit.wrappedValue = unit
+        } else if let timeUnit, let unit = SessionTimeUnit(rawValue: option.id) {
+            timeUnit.wrappedValue = unit
+        }
+
+        // A unit that states the set on its own carries no number, so anything
+        // already typed would be stored and never rendered.
+        if !option.carriesValue { value = "" }
     }
 
     var body: some View {
@@ -42,8 +100,12 @@ struct SessionSetValueSheet: View {
             header
             valueDisplay
 
-            if let weightUnit {
-                unitPicker(weightUnit)
+            if !unitOptions.isEmpty {
+                unitPicker
+            }
+
+            if let resolvedSummary, takesNumber, hasInput {
+                resolvedReference(resolvedSummary)
             }
 
             if let targetSummary, takesNumber {
@@ -117,7 +179,7 @@ struct SessionSetValueSheet: View {
     }
 
     private var displayValue: String {
-        guard takesNumber else { return weightUnit?.wrappedValue.rawValue ?? "–" }
+        guard takesNumber else { return selectedOption?.label ?? "–" }
         return hasInput ? value : "–"
     }
 
@@ -125,35 +187,63 @@ struct SessionSetValueSheet: View {
 
     // MARK: - Unit Picker
 
-    private func unitPicker(_ unit: Binding<WeightUnit>) -> some View {
+    /// One picker for whichever unit the measure has. Laid out like
+    /// `MyDayWorkoutBuilderDistanceScreen`'s — short label over the full word —
+    /// so choosing "km" in a session looks like choosing "km" in the builder.
+    /// Options with no `fullName` (the weight units) keep the single-line
+    /// button the weight picker has always had.
+    private var unitPicker: some View {
         HStack(spacing: 8) {
-            ForEach(WeightUnit.loggable, id: \.self) { option in
+            ForEach(unitOptions) { option in
+                let isSelected = option.id == selectedUnitId
+
                 Button {
                     withAnimation(.easeInOut(duration: 0.15)) {
-                        unit.wrappedValue = option
-                        // A bodyweight set carries no number, so anything
-                        // already typed would be stored and never rendered.
-                        if !option.carriesValue { value = "" }
+                        selectUnit(option)
                     }
                 } label: {
-                    Text(option.rawValue)
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(unit.wrappedValue == option ? Color.white : Color.secondary)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 40)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(
-                                    unit.wrappedValue == option
-                                        ? Color.darkColor
-                                        : Color(UIColor.secondarySystemBackground)
-                                )
-                        )
+                    VStack(spacing: 3) {
+                        Text(option.label)
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(isSelected ? Color.white : Color.secondary)
+
+                        if let fullName = option.fullName {
+                            Text(fullName)
+                                .font(.system(size: 10, weight: .regular))
+                                .foregroundStyle(isSelected ? Color.white.opacity(0.7) : Color.secondary)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: option.fullName == nil ? 40 : 52)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(isSelected ? Color.darkColor : Color(UIColor.secondarySystemBackground))
+                    )
                 }
                 .buttonStyle(.plain)
             }
         }
         .padding(.horizontal, 16)
+        .padding(.top, 12)
+    }
+
+    // MARK: - Resolved Reference
+
+    /// What the entry works out to, when the unit means the stored value is not
+    /// the number typed — "3 min" is stored as 180 seconds, so the sheet says
+    /// "3m 0s" rather than leaving the user to trust the conversion.
+    private func resolvedReference(_ summary: String) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: "equal.circle")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(Color.secondary)
+            Text(summary)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(Color.primary)
+        }
+        .frame(maxWidth: .infinity)
         .padding(.top, 12)
     }
 

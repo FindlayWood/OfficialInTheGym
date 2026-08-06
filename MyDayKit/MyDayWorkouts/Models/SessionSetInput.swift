@@ -15,7 +15,10 @@ import Foundation
 /// load, and storing the prescription against that number renders it as
 /// nonsense ("100 % of 1RM"). It is already resolved here: `nil` when there is
 /// nothing to qualify, and `.bw` with no `weight` for a bodyweight set.
-/// Time and distance units still come from the template.
+/// `distanceUnit` is chosen in the session for the same reason: a 400 m target
+/// may well be logged as 0.5 km. `time` carries no unit because the model has
+/// none — it is always a second count, converted from whatever
+/// `SessionTimeUnit` the user entered it in.
 ///
 /// `tempo` and `note` are carried here for the same reason as the measures:
 /// they describe the set as performed. The template's own tempo and note stay
@@ -26,6 +29,7 @@ struct SessionSetInput {
     let weightUnit: WeightUnit?
     let time: Int?
     let distance: Double?
+    let distanceUnit: DistanceUnit?
     let tempo: Tempo?
     let note: String?
 }

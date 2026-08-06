@@ -23,11 +23,12 @@ enum SessionSetEditTarget: Identifiable, Hashable {
         }
     }
 
-    /// The note sheet sizes itself around the system keyboard; the other two
-    /// stand the `CustomNumberPad` up and need the height for it.
+    /// The note sheet sizes itself around the system keyboard; the others stand
+    /// the `CustomNumberPad` up and need the height for it. Reps is the only
+    /// measure with no unit picker, so it is the only short one.
     var detentHeight: CGFloat {
         switch self {
-        case .measure(let measure): return measure == .weight ? 620 : 560
+        case .measure(let measure): return measure == .reps ? 560 : 620
         case .tempo:                return 620
         case .note:                 return 400
         }

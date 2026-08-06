@@ -15,7 +15,9 @@ struct SessionSetDetailOverlay: View {
     @State private var weightInput: String = ""
     @State private var weightUnitInput: WeightUnit = .kg
     @State private var timeInput: String = ""
+    @State private var timeUnitInput: SessionTimeUnit = .seconds
     @State private var distanceInput: String = ""
+    @State private var distanceUnitInput: DistanceUnit = .metres
     @State private var tempoInput: Tempo?
     @State private var noteInput: String = ""
 
@@ -45,15 +47,26 @@ struct SessionSetDetailOverlay: View {
     private var input: SessionSetInput {
         let weight = weightUnitInput.carriesValue ? Double(weightInput) : nil
         let trimmedNote = noteInput.trimmingCharacters(in: .whitespacesAndNewlines)
+        let distance = Double(distanceInput)
         return SessionSetInput(
             reps: Int(repsInput),
             weight: weight,
             weightUnit: weightUnitInput.carriesValue ? (weight != nil ? weightUnitInput : nil) : weightUnitInput,
-            time: Int(timeInput),
-            distance: Double(distanceInput),
+            time: resolvedTimeSeconds,
+            distance: distance,
+            // Like the weight unit, only meaningful once there is a value —
+            // a bare unit would render as "— km" on the card.
+            distanceUnit: distance != nil ? distanceUnitInput : nil,
             tempo: (tempoInput?.isEmpty ?? true) ? nil : tempoInput,
             note: trimmedNote.isEmpty ? nil : trimmedNote
         )
+    }
+
+    /// The entered time in seconds, which is the only form the model stores.
+    /// `SessionTimeUnit` decides what the number on the pad meant.
+    private var resolvedTimeSeconds: Int? {
+        guard let entered = Int(timeInput) else { return nil }
+        return timeUnitInput.seconds(from: entered)
     }
 
     /// The tempo prescribed by the template. All zeros is the builder's empty
@@ -152,7 +165,10 @@ struct SessionSetDetailOverlay: View {
                 unitLabel: sheetUnitLabel(for: measure),
                 targetSummary: targetSummary(for: measure),
                 value: binding(for: measure),
-                weightUnit: measure == .weight ? $weightUnitInput : nil
+                weightUnit: measure == .weight ? $weightUnitInput : nil,
+                distanceUnit: measure == .distance ? $distanceUnitInput : nil,
+                timeUnit: measure == .time ? $timeUnitInput : nil,
+                resolvedSummary: measure == .time ? resolvedTimeSummary : nil
             )
         case .tempo:
             SessionSetTempoSheet(
@@ -188,9 +204,16 @@ struct SessionSetDetailOverlay: View {
         switch measure {
         case .reps:     return nil
         case .weight:   return weightUnitInput.rawValue
-        case .time:     return "sec"
-        case .distance: return detail.setModel.distanceUnit?.rawValue ?? "m"
+        case .time:     return timeUnitInput.rawValue
+        case .distance: return distanceUnitInput.rawValue
         }
+    }
+
+    /// Only worth showing once the conversion actually changes the number —
+    /// "45 sec" needs no restating, "3 min" as "3m 0s" does.
+    private var resolvedTimeSummary: String? {
+        guard timeUnitInput == .minutes, let seconds = resolvedTimeSeconds else { return nil }
+        return SessionTimeUnit.display(seconds)
     }
 
     private func targetSummary(for measure: SessionSetMeasure) -> String? {
@@ -201,9 +224,7 @@ struct SessionSetDetailOverlay: View {
             guard let weight = detail.setModel.weight else { return nil }
             return "\(Self.formatDouble(weight)) \(detail.setModel.weightUnit?.rawValue ?? "kg")"
         case .time:
-            guard let time = detail.setModel.time else { return nil }
-            let m = time / 60; let s = time % 60
-            return m > 0 ? "\(m)m \(s)s" : "\(s)s"
+            return detail.setModel.time.map(SessionTimeUnit.display)
         case .distance:
             guard let distance = detail.setModel.distance else { return nil }
             return "\(Self.formatDouble(distance)) \(detail.setModel.distanceUnit?.rawValue ?? "m")"
@@ -220,8 +241,21 @@ struct SessionSetDetailOverlay: View {
 
         let record = detail.setRecord
         repsInput = (record?.reps ?? detail.setModel.reps).map { "\($0)" } ?? ""
-        timeInput = (record?.time ?? detail.setModel.time).map { "\($0)" } ?? ""
+
+        // A clean number of minutes seeds the pad as minutes, so a 3-minute
+        // plank reads "3 min" rather than "180 sec". Anything else seeds as
+        // seconds, where every value is expressible.
+        if let seconds = record?.time ?? detail.setModel.time {
+            let seeded = SessionTimeUnit.seeding(for: seconds)
+            timeUnitInput = seeded.unit
+            timeInput = "\(seeded.value)"
+        } else {
+            timeUnitInput = .seconds
+            timeInput = ""
+        }
+
         distanceInput = (record?.distance ?? detail.setModel.distance).map { Self.formatDouble($0) } ?? ""
+        distanceUnitInput = record?.distanceUnit ?? detail.setModel.distanceUnit ?? .metres
 
         weightUnitInput = WeightUnit.loggableDefault(for: record?.weightUnit ?? detail.setModel.weightUnit)
         weightInput = record?.weight.map { Self.formatDouble($0) } ?? targetWeightInput
@@ -260,8 +294,16 @@ struct SessionSetDetailOverlay: View {
         repsInput = detail.setModel.reps.map { "\($0)" } ?? ""
         weightUnitInput = WeightUnit.loggableDefault(for: detail.setModel.weightUnit)
         weightInput = targetWeightInput
-        timeInput = detail.setModel.time.map { "\($0)" } ?? ""
+        if let seconds = detail.setModel.time {
+            let seeded = SessionTimeUnit.seeding(for: seconds)
+            timeUnitInput = seeded.unit
+            timeInput = "\(seeded.value)"
+        } else {
+            timeUnitInput = .seconds
+            timeInput = ""
+        }
         distanceInput = detail.setModel.distance.map { Self.formatDouble($0) } ?? ""
+        distanceUnitInput = detail.setModel.distanceUnit ?? .metres
         tempoInput = prescribedTempo
         noteInput = ""
     }
@@ -438,7 +480,10 @@ struct SessionSetDetailOverlay: View {
             switch measure {
             case .reps:     return repsInput
             case .weight:   return weightUnitInput.carriesValue ? weightInput : weightUnitInput.rawValue
-            case .time:     return timeInput
+            // The card shows the resolved total, not the number on the pad —
+            // "3" entered under `min` is a 3m 0s set, and showing a bare "3"
+            // beside a target of 180 would read as a huge shortfall.
+            case .time:     return resolvedTimeSeconds.map(SessionTimeUnit.display) ?? ""
             case .distance: return distanceInput
             }
 
@@ -451,7 +496,7 @@ struct SessionSetDetailOverlay: View {
                 if let unit = record.weightUnit, !unit.carriesValue { return unit.rawValue }
                 return record.weight.map { Self.formatDouble($0) } ?? ""
             case .time:
-                return record.time.map { "\($0)" } ?? ""
+                return record.time.map(SessionTimeUnit.display) ?? ""
             case .distance:
                 return record.distance.map { Self.formatDouble($0) } ?? ""
             }
@@ -470,7 +515,7 @@ struct SessionSetDetailOverlay: View {
             if let unit = detail.setModel.weightUnit, !unit.carriesValue { return unit.rawValue }
             return detail.setModel.weight.map { Self.formatDouble($0) } ?? ""
         case .time:
-            return detail.setModel.time.map { "\($0)" } ?? ""
+            return detail.setModel.time.map(SessionTimeUnit.display) ?? ""
         case .distance:
             return detail.setModel.distance.map { Self.formatDouble($0) } ?? ""
         }
@@ -490,9 +535,21 @@ struct SessionSetDetailOverlay: View {
             guard let unit, unit.carriesValue else { return nil }
             return unit.rawValue
         case .time:
-            return "sec"
+            // `SessionTimeUnit.display` already writes its own units into the
+            // value ("1m 30s"), so a unit chip here would repeat them.
+            return nil
         case .distance:
-            return detail.setModel.distanceUnit?.rawValue ?? "m"
+            return currentDistanceUnit?.rawValue
+        }
+    }
+
+    /// The distance unit the card is speaking in — chosen in the session while
+    /// it runs, off the record afterwards, off the template before it starts.
+    private var currentDistanceUnit: DistanceUnit? {
+        switch mode {
+        case .planned: return detail.setModel.distanceUnit ?? .metres
+        case .active:  return distanceUnitInput
+        case .review:  return detail.setRecord?.distanceUnit
         }
     }
 
@@ -519,23 +576,36 @@ struct SessionSetDetailOverlay: View {
             guard let unit = detail.setModel.weightUnit else { return Self.formatDouble(weight) }
             return "\(Self.formatDouble(weight)) \(unit.rawValue)"
         case .time:
-            return detail.setModel.time.map { "\($0)" }
+            return detail.setModel.time.map(SessionTimeUnit.display)
         case .distance:
-            return detail.setModel.distance.map { Self.formatDouble($0) }
+            // Carries its unit for the same reason weight does: the session can
+            // log a 400 m target as 0.5 km, and "(400 m)" is the reference the
+            // user is working from.
+            guard let distance = detail.setModel.distance else { return nil }
+            let unit = detail.setModel.distanceUnit ?? .metres
+            return "\(Self.formatDouble(distance)) \(unit.rawValue)"
         }
     }
 
     /// The performed value rendered the way `targetText` renders the target, so
     /// the two can be compared without the unit causing a false difference.
     private func comparableValue(for measure: SessionSetMeasure) -> String {
-        guard measure == .weight else { return displayValue(for: measure) }
+        switch measure {
+        case .reps, .time:
+            return displayValue(for: measure)
 
-        let unit = mode.isEditable ? weightUnitInput : detail.setRecord?.weightUnit
-        guard let unit else { return displayValue(for: .weight) }
-        guard unit.carriesValue else { return unit.rawValue }
+        case .weight:
+            let unit = mode.isEditable ? weightUnitInput : detail.setRecord?.weightUnit
+            guard let unit else { return displayValue(for: .weight) }
+            guard unit.carriesValue else { return unit.rawValue }
+            let value = displayValue(for: .weight)
+            return value.isEmpty ? "" : "\(value) \(unit.rawValue)"
 
-        let value = displayValue(for: .weight)
-        return value.isEmpty ? "" : "\(value) \(unit.rawValue)"
+        case .distance:
+            let value = displayValue(for: .distance)
+            guard !value.isEmpty, let unit = currentDistanceUnit else { return value }
+            return "\(value) \(unit.rawValue)"
+        }
     }
 
     // MARK: - Remove Log

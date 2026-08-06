@@ -200,13 +200,9 @@ struct MyDayWorkoutSessionScreen: View {
     private func log(_ input: SessionSetInput, for detail: SessionSetDetail) {
         let wasLogged = detail.setRecord?.isCompleted ?? false
 
-        // Weight carries its own unit — the user picks it in the session, so a
-        // set prescribed in % of 1RM or Max is stored as the real load lifted.
-        // Distance has no picker, so it still falls back to the template's unit
-        // and then to metres: the LOGGED grid renders "—" for a value whose
-        // unit is nil.
-        let distanceUnit = detail.setModel.distanceUnit ?? (input.distance != nil ? .metres : nil)
-
+        // Weight and distance both carry the unit the user picked in the
+        // session, so a set prescribed in % of 1RM is stored as the real load
+        // lifted and a 400 m target logged as 0.5 km stays 0.5 km.
         manager.completeSet(
             exerciseId: detail.exercise.exerciseId,
             setId: detail.setModel.id,
@@ -215,7 +211,7 @@ struct MyDayWorkoutSessionScreen: View {
             weightUnit: input.weightUnit,
             time: input.time,
             distance: input.distance,
-            distanceUnit: distanceUnit,
+            distanceUnit: input.distanceUnit,
             tempo: input.tempo,
             note: input.note
         )
