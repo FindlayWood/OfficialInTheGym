@@ -82,10 +82,12 @@ class MyDayKitComposition {
         )
         syncService.start()
         
-        let workoutLibraryFetcher = FirestoreWorkoutTemplateFetcher()
-        
+        // Local-first, mirroring the write path: `WorkoutTemplateSaver` writes
+        // FileManager then queues the remote write, so the library has to read
+        // FileManager first or a template that has not synced yet is invisible.
         let workoutLibraryManager = WorkoutLibraryManager(
-            fetcher: workoutLibraryFetcher
+            local: FileManagerWorkoutTemplateFetcher(),
+            remote: FirestoreWorkoutTemplateFetcher()
         )
         
         let coordinator = MyDayCoordinator(

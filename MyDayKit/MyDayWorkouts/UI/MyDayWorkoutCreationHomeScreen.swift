@@ -90,7 +90,7 @@ struct MyDayWorkoutCreationHomeScreen: View {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                                     .strokeBorder(
-                                        isFocused ? Color.accentColor.opacity(0.6) : Color.clear,
+                                        isFocused ? Color.darkColor.opacity(0.6) : Color.clear,
                                         lineWidth: 1.5
                                     )
                             )
@@ -199,12 +199,12 @@ struct MyDayWorkoutCreationHomeScreen: View {
                                 ForEach(manager.exercises, id: \.self) { exercise in
                                     HStack(spacing: 12) {
                                         RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                            .fill(Color.accentColor.opacity(0.12))
+                                            .fill(Color.darkColor.opacity(0.12))
                                             .frame(width: 32, height: 32)
                                             .overlay(
                                                 Image(systemName: "dumbbell.fill")
                                                     .font(.system(size: 13, weight: .medium))
-                                                    .foregroundColor(.accentColor)
+                                                    .foregroundColor(Color.darkColor)
                                             )
                                         
                                         Text(exercise.exercise.name)

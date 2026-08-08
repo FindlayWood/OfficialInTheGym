@@ -29,7 +29,7 @@ struct WorkoutSettingsSheet: View {
                                 Text(isPublic ? "Public" : "Private")
                                     .font(.system(size: 15, weight: .medium))
                             }
-                            .tint(.accentColor)
+                            .tint(Color.darkColor)
                         }
 
                         SettingsCard(title: "Save", icon: "square.and.arrow.down") {
@@ -37,7 +37,7 @@ struct WorkoutSettingsSheet: View {
                                 Text(saveToLibrary ? "Yes" : "No")
                                     .font(.system(size: 15, weight: .medium))
                             }
-                            .tint(.accentColor)
+                            .tint(Color.darkColor)
                         }
                     }
 
@@ -57,7 +57,7 @@ struct WorkoutSettingsSheet: View {
                                             .font(.system(size: 13, weight: .semibold))
                                             .foregroundColor(.white)
                                             .frame(width: 28, height: 28)
-                                            .background(Circle().fill(Color.accentColor))
+                                            .background(Circle().fill(Color.darkColor))
                                     }
                                     .transition(.scale.combined(with: .opacity))
                                 }
@@ -87,8 +87,8 @@ struct WorkoutSettingsSheet: View {
                                         }
                                         .padding(.horizontal, 10)
                                         .padding(.vertical, 6)
-                                        .background(Capsule().fill(Color.accentColor.opacity(0.12)))
-                                        .foregroundColor(.accentColor)
+                                        .background(Capsule().fill(Color.darkColor.opacity(0.12)))
+                                        .foregroundColor(Color.darkColor)
                                     }
                                 }
                                 .transition(.opacity.combined(with: .move(edge: .top)))
@@ -139,7 +139,7 @@ private struct SettingsCard<Content: View>: View {
             HStack(spacing: 7) {
                 Image(systemName: icon)
                     .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(Color.darkColor)
                 Text(title)
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(.secondary)
@@ -170,7 +170,7 @@ private struct ChipButton: View {
                 .padding(.vertical, 7)
                 .background(
                     Capsule()
-                        .fill(isSelected ? Color.accentColor : Color(.tertiarySystemBackground))
+                        .fill(isSelected ? Color.darkColor : Color(.tertiarySystemBackground))
                 )
                 .foregroundColor(isSelected ? .white : .secondary)
         }

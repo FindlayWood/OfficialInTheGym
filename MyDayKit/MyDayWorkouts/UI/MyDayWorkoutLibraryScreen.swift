@@ -61,20 +61,62 @@ struct MyDayWorkoutLibraryScreen: View {
     }
 
     // MARK: - Loading
+
+    /// Skeleton rows shaped like the real ones — icon tile, title bar, subtitle
+    /// bar — under the same "Your Library" heading, so the list appears to fill
+    /// in rather than being replaced by a different layout. Grey slabs of a
+    /// different height read as a separate screen that then swaps out.
+    ///
+    /// Local storage answers almost immediately, so in practice this is a brief
+    /// flash on a cold start and is only really seen when the device is slow or
+    /// the library is large. It is not the wait for the network — that happens
+    /// behind an already-populated list.
     private var loadingView: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 10) {
+            Text("Your Library")
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundColor(.secondary)
+                .textCase(.uppercase)
+                .tracking(1.2)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 8)
+
             ForEach(0..<5, id: \.self) { _ in
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color(.secondarySystemBackground))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 68)
-                    .redacted(reason: .placeholder)
-                    .shimmering()
+                skeletonRow
             }
+
             Spacer()
         }
         .padding(.horizontal, 20)
-        .padding(.top, 8)
+    }
+
+    private var skeletonRow: some View {
+        HStack(spacing: 14) {
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(Color(.tertiarySystemBackground))
+                .frame(width: 44, height: 44)
+
+            VStack(alignment: .leading, spacing: 7) {
+                RoundedRectangle(cornerRadius: 4, style: .continuous)
+                    .fill(Color(.tertiarySystemBackground))
+                    .frame(width: 120, height: 13)
+                // Wider than the title bar: the subtitle carries the exercise
+                // count *and* the created date.
+                RoundedRectangle(cornerRadius: 4, style: .continuous)
+                    .fill(Color(.tertiarySystemBackground))
+                    .frame(width: 160, height: 11)
+            }
+
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(Color(.secondarySystemBackground))
+        )
+        .shimmering()
     }
 
     // MARK: - Empty State
@@ -151,22 +193,28 @@ struct MyDayWorkoutLibraryScreen: View {
                         onWorkoutSelected?(workout)
                     } label: {
                         HStack(spacing: 14) {
+                            // Solid brand tile rather than a 12%-tinted one:
+                            // at 44pt a wash of colour on a `secondarySystem`
+                            // card barely registers, and the rows had nothing
+                            // anchoring them. `dumbbell.fill` also reads far
+                            // cleaner here than the busy figure glyph did.
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(Color.accentColor.opacity(0.12))
+                                .fill(Color.darkColor)
                                 .frame(width: 44, height: 44)
                                 .overlay(
-                                    Image(systemName: "figure.strengthtraining.traditional")
-                                        .font(.system(size: 18, weight: .medium))
-                                        .foregroundColor(.accentColor)
+                                    Image(systemName: "dumbbell.fill")
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundStyle(Color.white)
                                 )
 
                             VStack(alignment: .leading, spacing: 3) {
                                 Text(workout.title)
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(.primary)
-                                Text("\(workout.exercises.count) \(workout.exercises.count == 1 ? "exercise" : "exercises")")
+                                Text(subtitle(for: workout))
                                     .font(.system(size: 13))
                                     .foregroundColor(.secondary)
+                                    .lineLimit(1)
                             }
 
                             Spacer()
@@ -190,6 +238,61 @@ struct MyDayWorkoutLibraryScreen: View {
             .padding(.horizontal, 20)
         }
     }
+}
+
+// MARK: - Row Subtitle
+
+private extension MyDayWorkoutLibraryScreen {
+
+    /// Exercise count plus when the template was created, in the same
+    /// `"… · …"` shape `DailyWorkoutCard` uses.
+    ///
+    /// The date is the differentiator: the builder's name suggestions produce
+    /// repeats — several "Saturday Upper" — and a list of identical titles over
+    /// identical exercise counts is unpickable. `createdAt` is used rather than
+    /// `updatedAt` because it is also what the library sorts by, so the dates
+    /// read in order down the list; `updatedAt` would jump rows around relative
+    /// to the sort as templates were edited.
+    func subtitle(for workout: WorkoutTemplateModel) -> String {
+        let count = workout.exercises.count
+        let exercises = "\(count) \(count == 1 ? "exercise" : "exercises")"
+        return "\(exercises) · \(Self.created(workout.createdAt))"
+    }
+
+    /// Today and yesterday carry the time, because several templates made in
+    /// one sitting would otherwise all read "Today" and differentiate nothing —
+    /// which is the exact case this was added for. Older ones only need the day.
+    static func created(_ date: Date) -> String {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(date) {
+            return "Today, \(timeFormatter.string(from: date))"
+        }
+        if calendar.isDateInYesterday(date) {
+            return "Yesterday, \(timeFormatter.string(from: date))"
+        }
+        if calendar.isDate(date, equalTo: .now, toGranularity: .year) {
+            return dayFormatter.string(from: date)
+        }
+        return dayAndYearFormatter.string(from: date)
+    }
+
+    static let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }()
+
+    static let dayFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("d MMM")
+        return formatter
+    }()
+
+    static let dayAndYearFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("d MMM yyyy")
+        return formatter
+    }()
 }
 
 // MARK: - Shimmer modifier
@@ -231,14 +334,49 @@ private extension View {
 // MARK: - Preview
 
 #Preview("Loaded") {
-    NavigationStack {
+    // Deliberately three "Saturday Upper" entries: the repeated names the
+    // builder's suggestions produce are what the created date is there to tell
+    // apart, so the preview has to show that case.
+    let template: (String, String, Int, Date) -> WorkoutTemplateModel = { id, title, count, created in
+        WorkoutTemplateModel(
+            id: id,
+            title: title,
+            description: nil,
+            exercises: (0..<count).map { index in
+                WorkoutExerciseModel(
+                    id: UUID().uuidString,
+                    exerciseId: "",
+                    exerciseName: "",
+                    exerciseCategory: .upperBody,
+                    orderIndex: index,
+                    sets: []
+                )
+            },
+            createdBy: "",
+            isPublic: false,
+            tags: nil,
+            estimatedDuration: nil,
+            difficulty: nil,
+            createdAt: created,
+            updatedAt: created
+        )
+    }
+
+    let calendar = Calendar.current
+
+    return NavigationStack {
         MyDayWorkoutLibraryScreen(
             manager: {
-                let m = WorkoutLibraryManager(fetcher: PreviewWorkoutTemplateFetching())
+                let m = WorkoutLibraryManager(
+                    local: PreviewWorkoutTemplateFetching(),
+                    remote: PreviewWorkoutTemplateFetching()
+                )
                 m.state = .loaded([
-                    WorkoutTemplateModel(id: "1", title: "Monday Upper", description: nil, exercises: Array(repeating: WorkoutExerciseModel(id: UUID().uuidString, exerciseId: "", exerciseName: "", exerciseCategory: .upperBody, orderIndex: 0, sets: []), count: 6), createdBy: "", isPublic: false, tags: nil, estimatedDuration: nil, difficulty: nil, createdAt: .now, updatedAt: .now),
-                    WorkoutTemplateModel(id: "2", title: "Tuesday Lower", description: nil, exercises: Array(repeating: WorkoutExerciseModel(id: UUID().uuidString, exerciseId: "", exerciseName: "", exerciseCategory: .upperBody, orderIndex: 0, sets: []), count: 5), createdBy: "", isPublic: false, tags: nil, estimatedDuration: nil, difficulty: nil, createdAt: .now, updatedAt: .now),
-                    WorkoutTemplateModel(id: "3", title: "Thursday Push", description: nil, exercises: Array(repeating: WorkoutExerciseModel(id: UUID().uuidString, exerciseId: "", exerciseName: "", exerciseCategory: .upperBody, orderIndex: 0, sets: []), count: 4), createdBy: "", isPublic: false, tags: nil, estimatedDuration: nil, difficulty: nil, createdAt: .now, updatedAt: .now),
+                    template("1", "Saturday Upper", 6, .now),
+                    template("2", "Saturday Upper", 5, calendar.date(byAdding: .hour, value: -3, to: .now)!),
+                    template("3", "Saturday Upper", 4, calendar.date(byAdding: .day, value: -1, to: .now)!),
+                    template("4", "Tuesday Lower", 5, calendar.date(byAdding: .day, value: -12, to: .now)!),
+                    template("5", "Thursday Push", 4, calendar.date(byAdding: .year, value: -1, to: .now)!)
                 ])
                 return m
             }()
@@ -250,7 +388,7 @@ private extension View {
     NavigationStack {
         MyDayWorkoutLibraryScreen(
             manager: {
-                let m = WorkoutLibraryManager(fetcher: PreviewWorkoutTemplateFetching())
+                let m = WorkoutLibraryManager(local: PreviewWorkoutTemplateFetching(), remote: PreviewWorkoutTemplateFetching())
                 m.state = .empty
                 return m
             }()
@@ -260,6 +398,6 @@ private extension View {
 
 #Preview("Loading") {
     NavigationStack {
-        MyDayWorkoutLibraryScreen(manager: WorkoutLibraryManager(fetcher: PreviewWorkoutTemplateFetching()))
+        MyDayWorkoutLibraryScreen(manager: WorkoutLibraryManager(local: PreviewWorkoutTemplateFetching(), remote: PreviewWorkoutTemplateFetching()))
     }
 }

@@ -33,14 +33,23 @@ Firebase Emulator (Python seeding scripts, --import/--export), NWPathMonitor
 - Dark: `#1C496E` — `Color.darkColor`
 - Light: `#4179BD` — `Color.lightColor`
 
-Both live in `MyDayKit/MyDayKitUI/Color/Color+Extension.swift`. **Never use system `Color.blue` for
-accent or selection** — it read as generic iOS chrome next to the session screens. Every selected
+Both live in `MyDayKit/MyDayKitUI/Color/Color+Extension.swift`. **Never use system `Color.blue` *or*
+`Color.accentColor` for accent or selection** — there is no `AccentColor.colorset` in the project, so
+`accentColor` resolves to the same system blue and hides from a `Color.blue` grep. It read as generic
+iOS chrome next to the session screens. Every selected
 pill, active-state fill, tint and primary button is now `Color.darkColor` across both flows:
 - **Workout builder** — everything in `MyDayWorkouts/UI/Screens/`
 - **Exercise logging** — `MyDayExerciseListView`, `MyDayKitRepsView`, `MyDayUnitsHomeView` and the
   weight / distance / time / tempo / note selector views in `MyDayKitUI/Screens/`
 - **MyDay home** — `MyDayHomeScreen` (Add button, date strip selection, activity underline, empty
   state), plus `CompletedSetView`, `RepeatSetView`, `ExerciseClipsSubView`, `SetDetailView`
+- **Workout library / creation** — `MyDayWorkoutLibraryScreen`, `MyDayWorkoutCreationHomeScreen`,
+  `WorkoutSettingsSheet`. These used `accentColor` rather than `Color.blue` and so survived the first
+  sweep — **grep for both.**
+
+The library row's icon is a **solid** `darkColor` tile with a white `dumbbell.fill`, not a 12%-tinted
+one: at 44pt on a `secondarySystemBackground` card a wash of colour barely registers and the rows had
+nothing anchoring them.
 
 `Color.blue` still appears elsewhere in `MyDayKit` (clips, fitness, sports, wellness, `RPECard`) and
 in `ExerciseCategory` / `SportType`, where it is a **semantic** colour identifying a category rather
@@ -97,10 +106,35 @@ The library screen showed an empty state despite saved templates existing. Three
    old `guard case .loading` left it blank until app relaunch. An `isFetching` flag guards against
    overlapping fetches.
 
-Still outstanding: reads are Firestore-only while writes are local-first (`WorkoutTemplateSaver` →
-FileManager + queued remote), so a template that has not synced yet is invisible to the library.
-There is no `FileManager` counterpart to `FirestoreWorkoutTemplateFetcher`.
-Also `addTemplate` drops the template if it lands while `state == .loading`.
+### Library reads are local-first (resolved)
+Reads used to be Firestore-only while writes were local-first, so a template that had not synced yet
+was invisible in the library it had just been saved to. Both defects are fixed:
+- **`FileManagerWorkoutTemplateFetcher`** is the counterpart to `FileManagerWorkoutTemplateUploader`,
+  reading `Documents/WorkoutTemplates/{id}.json`. **The directory and the ISO-8601 date strategy must
+  stay in step with the uploader** — changing one side alone silently stops everything decoding. It
+  decodes per file and skips failures, exactly as the Firestore fetcher decodes per document.
+- **`WorkoutLibraryManager` takes `local:` and `remote:`.** `load()` reads local, publishes it
+  immediately if non-empty, then fetches remote and publishes the merge. **A remote failure is not an
+  error once local has produced something** — offline means stale, not broken, and blanking a visible
+  list for a network blip is a worse lie than showing it. `.failed` is only reached when local was
+  empty too.
+- **`merge(_:with:)` unions by id, newest-created first.** Neither side is authoritative: local holds
+  what has not synced, remote holds what was made on another device. Same id in both → later
+  `updatedAt` wins.
+- **`addTemplate` during `.loading` no longer drops the template.** It buffers into
+  `pendingTemplates`, folded in by `publish(_:)` when the load settles. That moment — builder
+  finishes, library still fetching — is exactly when the user is looking for it.
+
+The loading skeleton mirrors the real row (icon tile, title bar, subtitle bar) under the same
+"Your Library" heading, so the list fills in rather than swapping layouts. It is only the local read;
+the network refresh happens behind an already-populated list.
+
+Library rows read `"N exercises · <created>"`, the same `" · "` shape `DailyWorkoutCard` uses.
+**The date is a differentiator, not decoration** — the builder's name suggestions produce repeats
+(several "Saturday Upper"), and identical titles over identical exercise counts are unpickable.
+It shows `createdAt`, not `updatedAt`, because `createdAt` is also the sort key, so dates read in
+order down the list. Today and yesterday carry the time (`Today, 14:32`) since several templates
+made in one sitting would otherwise all read "Today" and differentiate nothing.
 
 ## Feature Areas Complete
 - Daily exercise logging
@@ -108,6 +142,8 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
 - Upload/sync pipeline:
   `WorkoutTemplateSaver` → `WorkoutTemplateSyncer` → `SyncQueueWorkoutTemplateUploader`
   → `FirestoreWorkoutTemplateUploader` → `WorkoutTemplateSyncService`
+- Local-first template reads: `FileManagerWorkoutTemplateFetcher` + `FirestoreWorkoutTemplateFetcher`
+  behind `WorkoutLibraryManager(local:remote:)` — the read path mirroring the write path
 - `WorkoutSessionManager` with active session state, rest timer, `finishSession()` /
   `cancelSession()`; `onEntryUpdated: ((DailyWorkoutEntry) -> Void)?` callback fires after start,
   set completion, finish, and cancel — coordinator wires this to `dayManager.updateWorkoutEntry`;
