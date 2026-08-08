@@ -132,7 +132,7 @@ struct MyDayHomeScreen: View {
                         .foregroundStyle(Color.white)
                         .padding(.horizontal, 14)
                         .padding(.vertical, 8)
-                        .background(Color.blue)
+                        .background(Color.darkColor)
                         .clipShape(Capsule())
                     }
                 }
@@ -174,7 +174,7 @@ struct MyDayHomeScreen: View {
                         .frame(width: 44, height: 56)
                         .background(
                             isSelected
-                                ? Color.blue
+                                ? Color.darkColor
                                 : Color(UIColor.secondarySystemBackground)
                         )
                         .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -235,7 +235,7 @@ struct MyDayHomeScreen: View {
                             
                             if activity == selectedActivity {
                                 RoundedRectangle(cornerRadius: 2)
-                                    .fill(Color.blue)
+                                    .fill(Color.darkColor)
                                     .frame(height: 2)
                                     .matchedGeometryEffect(id: "activityUnderline", in: animation)
                             }
@@ -400,7 +400,7 @@ struct MyDayHomeScreen: View {
                     .foregroundStyle(Color.white)
                     .padding(.horizontal, 24)
                     .padding(.vertical, 12)
-                    .background(Color.blue)
+                    .background(Color.darkColor)
                     .clipShape(Capsule())
                 }
             }
@@ -441,6 +441,7 @@ struct MyDayHomeScreen: View {
                 }
             
             SetDetailView(
+                index: setIndex(for: set),
                 model: set,
                 animation: animation,
                 isToday: isToday,
@@ -479,7 +480,16 @@ struct MyDayHomeScreen: View {
     }
     
     // MARK: - Helpers
-    
+
+    /// Where this completion sits within its own exercise, for the detail
+    /// card's "Set N" subtitle. Purely for display — the overlay is still
+    /// driven by `selectedSet`, not by an index.
+    private func setIndex(for set: ExerciseCompletions) -> Int {
+        dayManager.selectedDay?.exercises
+            .first { $0.completions.contains { $0.id == set.id } }?
+            .completions.firstIndex { $0.id == set.id } ?? 0
+    }
+
     private func formattedDateDay(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "E"

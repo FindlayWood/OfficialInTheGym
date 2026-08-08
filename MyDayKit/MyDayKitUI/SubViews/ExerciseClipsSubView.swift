@@ -39,7 +39,7 @@ struct ExerciseClipsSubView: View {
                     
                     Image(systemName: "video.badge.plus")
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(Color.blue)
+                        .foregroundStyle(Color.darkColor)
                 }
                 
                 VStack(alignment: .leading, spacing: 2) {
@@ -105,10 +105,10 @@ struct ExerciseClipsSubView: View {
                             VStack(spacing: 4) {
                                 Image(systemName: "plus")
                                     .font(.system(size: 18, weight: .semibold))
-                                    .foregroundStyle(Color.blue)
+                                    .foregroundStyle(Color.darkColor)
                                 Text("Add")
                                     .font(.system(size: 11, weight: .medium))
-                                    .foregroundStyle(Color.blue)
+                                    .foregroundStyle(Color.darkColor)
                             }
                         }
                     }
@@ -160,7 +160,7 @@ struct SingleClipListView: View {
                     .overlay {
                         Circle()
                             .inset(by: 1)
-                            .stroke(Color.blue, lineWidth: 2)
+                            .stroke(Color.darkColor, lineWidth: 2)
                     }
                     .onTapGesture {
                         selected?(image)
@@ -174,7 +174,7 @@ struct SingleClipListView: View {
                     .overlay {
                         Circle()
                             .inset(by: 1)
-                            .stroke(Color.blue, lineWidth: 2)
+                            .stroke(Color.darkColor, lineWidth: 2)
                     }
                     .onTapGesture {
                         selected?(placeholderColorImage())

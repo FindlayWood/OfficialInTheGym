@@ -39,6 +39,8 @@ pill, active-state fill, tint and primary button is now `Color.darkColor` across
 - **Workout builder** — everything in `MyDayWorkouts/UI/Screens/`
 - **Exercise logging** — `MyDayExerciseListView`, `MyDayKitRepsView`, `MyDayUnitsHomeView` and the
   weight / distance / time / tempo / note selector views in `MyDayKitUI/Screens/`
+- **MyDay home** — `MyDayHomeScreen` (Add button, date strip selection, activity underline, empty
+  state), plus `CompletedSetView`, `RepeatSetView`, `ExerciseClipsSubView`, `SetDetailView`
 
 `Color.blue` still appears elsewhere in `MyDayKit` (clips, fitness, sports, wellness, `RPECard`) and
 in `ExerciseCategory` / `SportType`, where it is a **semantic** colour identifying a category rather
@@ -151,6 +153,48 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   overlap. Card body tap → session screen; ellipsis-only tap → `WorkoutCardOptionsSheet`
   (Start Workout / Remove from Today). ZStack pattern: ellipsis `Button` sits above card `Button`
   as siblings so it wins its hit area without gesture conflicts.
+- **`ExerciseCompletionView` mirrors `MyDayWorkoutSessionExerciseCard` — keep the two in step.**
+  The MyDay home card for a single logged exercise uses the session card's structure, typography and
+  chrome: header (name 16 semibold + reps summary 13 secondary), divider, horizontal sets row,
+  divider, evenly-split actions row. An exercise logged on its own and an exercise logged inside a
+  workout should read as the same kind of thing. **Presentation only — no callback or condition
+  changed.** Two moves worth knowing: "Add Set" left the header (it was a tinted pill competing with
+  the exercise name) for the actions row, joining "Clip"; and the clips strip is now passed
+  `canAdd: false` and drawn only when clips exist, because the actions row owns adding — leaving
+  `canAdd` true would draw a second add button inside the strip and its empty state would duplicate
+  the row outright.
+- **`CompletedSetView` is a completed `SessionSetPill`.** Same 72×88 frame, radius 14,
+  `Color.darkColor` fill, white text, `Set N` label on top and the white `checkmark.circle.fill` at
+  the bottom — every completion on the home screen has already been performed, so it is always in
+  the logged state and has no empty variant. The checkmark is an indicator only; the whole pill is
+  the tap target, as on the session screen. `index` comes from the enumerated `ForEach` in
+  `ExerciseCompletionView`.
+  It takes its values from **`SessionSetPillValue.values(for: ExerciseCompletions)`**, a second
+  factory alongside the session one so both pills cap at **two values** in the same priority order
+  (reps → weight → time → distance) — **keep the two factories in step.** The cap is what makes 72×88
+  survivable: this pill previously ran to four lines at 100×100, and shrinking it without capping
+  clips the text top and bottom. `eachSide` rides on the reps unit ("12 reps ea") rather than
+  spending one of the two slots, since it qualifies the reps rather than being a measure.
+  `PlaceholderSetView` mirrors it the way `SessionSetPillPlaceholder` mirrors the session pill —
+  **same size and the same `SessionSetPillValue` values**, dimmed to 0.35 — so the slot survives the
+  hero flight to `SetDetailView`. Rendering different measures there would resize the slot mid-flight
+  and the hero would land crooked.
+- **`SetDetailView` mirrors `SessionSetDetailOverlay` — keep the two in step.** Same header (name 20
+  bold over a 13 medium subtitle, 36pt close circle), same `LOGGED` section label with its green
+  check, same two-column measure grid in the session's order (**reps → weight → time → distance**),
+  and the same `cardHeader` / `cardBackground` chrome with `Color.darkColor` labels. The subtitle is
+  `Set N · HH:mm` — the session's "Set N" plus the completion time this view has always shown;
+  `index` is looked up by `MyDayHomeScreen.setIndex(for:)` for display only, the overlay is still
+  driven by `selectedSet`.
+  **What it deliberately does not copy is editing.** The session overlay edits each measure inline
+  via `SessionSetValueSheet`, so its cards carry chevrons and are buttons. Here the whole set is
+  edited by re-entering the logging flow behind the **Edit** button, so the cards have **no chevrons
+  and are not tappable**, and the Edit / Delete pair and the delete confirmation are untouched. Do
+  not "finish the match" by making these cards tappable — that would fork set editing into two
+  different mechanisms on the same screen.
+  A card for a measure the set never carried still draws "—" rather than vanishing, so the grid
+  always shows four. Tempo and note remain conditional here (read-only, nothing to discover by
+  tapping) where the session always shows them.
 - **Session screen flow**: `MyDayCoordinator` pushes `MyDayWorkoutSessionScreen` on `.workoutSession`
   route; screen shows `WorkoutSessionStartCard` overlay until started; tapping "Start Workout" calls
   `manager.startSession()` which fires `onEntryUpdated` to persist; set pills cannot be *logged*
