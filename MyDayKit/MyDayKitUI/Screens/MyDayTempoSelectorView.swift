@@ -118,7 +118,7 @@ struct MyDayTempoSelectorView: View {
                     .frame(height: 52)
                     .background(
                         isValidSelection
-                            ? Color.blue
+                            ? Color.darkColor
                             : Color(UIColor.secondarySystemBackground)
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 14))
@@ -152,11 +152,11 @@ struct MyDayTempoSelectorView: View {
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.blue.opacity(0.1))
+                        .fill(Color.darkColor.opacity(0.1))
                         .frame(height: 44)
                     Image(systemName: "plus")
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(Color.blue)
+                        .foregroundStyle(Color.darkColor)
                 }
             }
             

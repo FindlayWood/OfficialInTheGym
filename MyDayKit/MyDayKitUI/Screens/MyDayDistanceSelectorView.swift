@@ -148,7 +148,7 @@ struct MyDayDistanceSelectorView: View {
                 .frame(height: 52)
                 .background(
                     isValidSelection
-                        ? Color.blue
+                        ? Color.darkColor
                         : Color(UIColor.secondarySystemBackground)
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 14))
@@ -188,7 +188,7 @@ struct MyDayDistanceSelectorView: View {
             }
             .frame(maxWidth: .infinity)
             .frame(height: 52)
-            .background(isSelected ? Color.blue : Color(UIColor.secondarySystemBackground))
+            .background(isSelected ? Color.darkColor : Color(UIColor.secondarySystemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay {
                 RoundedRectangle(cornerRadius: 12)

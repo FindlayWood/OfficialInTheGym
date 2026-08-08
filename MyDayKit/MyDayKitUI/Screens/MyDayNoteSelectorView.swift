@@ -72,7 +72,7 @@ struct MyDayNoteSelectorView: View {
                 .overlay {
                     RoundedRectangle(cornerRadius: 14)
                         .stroke(
-                            isFocused ? Color.blue.opacity(0.5) : Color(UIColor.separator),
+                            isFocused ? Color.darkColor.opacity(0.5) : Color(UIColor.separator),
                             lineWidth: isFocused ? 1.5 : 0.5
                         )
                         .animation(.easeInOut(duration: 0.2), value: isFocused)
@@ -137,7 +137,7 @@ struct MyDayNoteSelectorView: View {
                     .frame(height: 52)
                     .background(
                         isValid
-                            ? Color.blue
+                            ? Color.darkColor
                             : Color(UIColor.secondarySystemBackground)
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 14))

@@ -21,9 +21,13 @@ struct MyDayWorkoutSessionScreen: View {
     @State private var elapsedSeconds = 0
     @State private var rpeExercise: WorkoutExerciseModel?
     @State private var selectedSet: SessionSetDetail?
-    @State private var isConfirmingCancel = false
+    @State private var dialog: WorkoutSessionDialog?
 
     private let heroAnimation: Animation = .interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)
+
+    /// Shared by the `⋯` menu and the confirmation that replaces it, so the
+    /// step between them is one continuous movement inside a single backdrop.
+    private let dialogAnimation: Animation = .spring(response: 0.32, dampingFraction: 0.86)
 
     private var sessionStarted: Bool { manager.sessionStatus != .notStarted }
     private var sessionCompleted: Bool { manager.sessionStatus == .completed }
@@ -35,7 +39,9 @@ struct MyDayWorkoutSessionScreen: View {
                     title: manager.entry.template.title,
                     showsOptions: sessionStarted && !sessionCompleted,
                     onBack: { onBack?() },
-                    onCancelWorkout: { isConfirmingCancel = true }
+                    onOptions: {
+                        withAnimation(dialogAnimation) { dialog = .options }
+                    }
                 )
 
                 if sessionStarted {
@@ -112,21 +118,25 @@ struct MyDayWorkoutSessionScreen: View {
                 setDetailOverlay(for: selectedSet)
             }
         }
-        .confirmationDialog(
-            "Cancel this workout?",
-            isPresented: $isConfirmingCancel,
-            titleVisibility: .visible
-        ) {
-            Button("Cancel Workout", role: .destructive) {
-                manager.cancelSession()
-                onCancelled?()
+        .overlay {
+            if let dialog {
+                WorkoutSessionDialogOverlay(
+                    dialog: dialog,
+                    // Steps the same overlay from menu to confirmation rather
+                    // than presenting a second one over it.
+                    onCancelWorkoutTapped: {
+                        withAnimation(dialogAnimation) { self.dialog = .confirmCancel }
+                    },
+                    onConfirmCancel: {
+                        self.dialog = nil
+                        manager.cancelSession()
+                        onCancelled?()
+                    },
+                    onDismiss: {
+                        withAnimation(dialogAnimation) { self.dialog = nil }
+                    }
+                )
             }
-            Button("Keep Going", role: .cancel) {}
-        } message: {
-            // `cancelSession()` genuinely discards everything, so the copy has
-            // to say so — this is the one place in the flow where leaving does
-            // cost the user something.
-            Text("This will remove all logged sets and reset the workout. It stays on your day, so you can start it again.")
         }
         .task {
             if sessionStarted {

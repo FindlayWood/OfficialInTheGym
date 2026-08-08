@@ -94,7 +94,7 @@ struct MyDayTimeSelectorView: View {
                     HStack {
                         Image(systemName: "plus.circle.fill")
                             .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(Color.blue.opacity(0.7))
+                            .foregroundStyle(Color.darkColor.opacity(0.7))
                         Text("Add")
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundStyle(Color.secondary)
@@ -106,7 +106,7 @@ struct MyDayTimeSelectorView: View {
                             stepButton(
                                 label: formattedStep(step),
                                 prefix: "+",
-                                color: Color.blue,
+                                color: Color.darkColor,
                                 disabled: false
                             ) {
                                 withAnimation(.easeInOut(duration: 0.15)) {
@@ -132,7 +132,7 @@ struct MyDayTimeSelectorView: View {
                     .frame(height: 52)
                     .background(
                         isValidSelection
-                            ? Color.blue
+                            ? Color.darkColor
                             : Color(UIColor.secondarySystemBackground)
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 14))

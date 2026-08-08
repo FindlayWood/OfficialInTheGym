@@ -46,7 +46,7 @@ struct MyDayUnitsHomeView: View {
                     .foregroundStyle(Color.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .background(Color.blue)
+                    .background(Color.darkColor)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .padding(.horizontal, 16)
@@ -89,7 +89,7 @@ struct MyDayUnitsHomeView: View {
                         .foregroundStyle(Color.white)
                         .padding(.horizontal, 7)
                         .padding(.vertical, 3)
-                        .background(Color.blue)
+                        .background(Color.darkColor)
                         .clipShape(Capsule())
                 }
             }
@@ -117,13 +117,13 @@ struct MyDayUnitsHomeView: View {
                 HStack {
                     Text(option.title)
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(added ? Color.blue : Color.secondary)
+                        .foregroundStyle(added ? Color.darkColor : Color.secondary)
                     
                     Spacer()
                     
                     ZStack {
                         Circle()
-                            .fill(added ? Color.blue : Color(UIColor.tertiarySystemBackground))
+                            .fill(added ? Color.darkColor : Color(UIColor.tertiarySystemBackground))
                             .frame(width: 24, height: 24)
                         Image(systemName: added ? "checkmark" : "plus")
                             .font(.system(size: 10, weight: .bold))
@@ -175,14 +175,14 @@ struct MyDayUnitsHomeView: View {
             .frame(height: 120)
             .background(
                 added
-                    ? Color.blue.opacity(0.06)
+                    ? Color.darkColor.opacity(0.06)
                     : Color(UIColor.secondarySystemBackground)
             )
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay {
                 RoundedRectangle(cornerRadius: 14)
                     .stroke(
-                        added ? Color.blue.opacity(0.25) : Color.clear,
+                        added ? Color.darkColor.opacity(0.25) : Color.clear,
                         lineWidth: 1
                     )
             }
@@ -247,7 +247,7 @@ struct MyDayUnitsHomeView: View {
             HStack(spacing: 4) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 13))
-                    .foregroundStyle(Color.blue)
+                    .foregroundStyle(Color.darkColor)
                 Text("Note added")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(Color.primary)

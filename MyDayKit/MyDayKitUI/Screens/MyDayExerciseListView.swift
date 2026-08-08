@@ -53,7 +53,7 @@ struct MyDayExerciseListView: View {
                                 .padding(.vertical, 8)
                                 .background(
                                     selectedCategory == cat
-                                        ? Color.blue
+                                        ? Color.darkColor
                                         : Color(UIColor.secondarySystemBackground)
                                 )
                                 .clipShape(Capsule())
@@ -205,10 +205,10 @@ struct MyDayExerciseListView: View {
                 } label: {
                     Text("Clear search")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(Color.blue)
+                        .foregroundStyle(Color.darkColor)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 8)
-                        .background(Color.blue.opacity(0.08))
+                        .background(Color.darkColor.opacity(0.08))
                         .clipShape(Capsule())
                 }
                 .padding(.top, 4)

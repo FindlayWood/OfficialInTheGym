@@ -16,12 +16,21 @@ import SwiftUI
 /// costs nothing and a warning would misrepresent the stakes. Cancelling the
 /// workout is a separate, destructive action kept behind the overflow menu —
 /// "cancel" rather than "end" because ending reads as finishing.
+///
+/// The bar raises intent only. Both the menu and its confirmation are drawn by
+/// the screen as `WorkoutSessionDialogOverlay`; see that file for why the
+/// system `Menu` and `confirmationDialog` were dropped.
 struct WorkoutSessionNavBar: View {
 
     let title: String
     let showsOptions: Bool
     var onBack: (() -> Void)?
-    var onCancelWorkout: (() -> Void)?
+
+    /// Opens `WorkoutSessionDialogOverlay` in its `.options` state. The bar
+    /// deliberately does not own a `Menu`: the menu is drawn as a custom card
+    /// by the screen, so it can dim over this bar and share a backdrop with the
+    /// confirmation that follows it.
+    var onOptions: (() -> Void)?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -47,12 +56,8 @@ struct WorkoutSessionNavBar: View {
                     Spacer()
 
                     if showsOptions {
-                        Menu {
-                            Button(role: .destructive) {
-                                onCancelWorkout?()
-                            } label: {
-                                Label("Cancel Workout", systemImage: "xmark.circle")
-                            }
+                        Button {
+                            onOptions?()
                         } label: {
                             Image(systemName: "ellipsis")
                                 .font(.system(size: 17, weight: .semibold))

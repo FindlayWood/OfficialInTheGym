@@ -34,11 +34,15 @@ Firebase Emulator (Python seeding scripts, --import/--export), NWPathMonitor
 - Light: `#4179BD` — `Color.lightColor`
 
 Both live in `MyDayKit/MyDayKitUI/Color/Color+Extension.swift`. **Never use system `Color.blue` for
-accent or selection.** The workout builder screens used to, which read as generic iOS chrome next to
-the session screens; every selected pill, active-state fill, tint and primary button across
-`MyDayWorkouts/UI/Screens/` is now `Color.darkColor`. `MyDayExerciseListView` still uses
-`Color.blue` and was deliberately left alone — it is shared with the daily-logging flow, so
-recolouring it is a wider change than the builder.
+accent or selection** — it read as generic iOS chrome next to the session screens. Every selected
+pill, active-state fill, tint and primary button is now `Color.darkColor` across both flows:
+- **Workout builder** — everything in `MyDayWorkouts/UI/Screens/`
+- **Exercise logging** — `MyDayExerciseListView`, `MyDayKitRepsView`, `MyDayUnitsHomeView` and the
+  weight / distance / time / tempo / note selector views in `MyDayKitUI/Screens/`
+
+`Color.blue` still appears elsewhere in `MyDayKit` (clips, fitness, sports, wellness, `RPECard`) and
+in `ExerciseCategory` / `SportType`, where it is a **semantic** colour identifying a category rather
+than an accent. Leave those alone.
 
 ## Conventions — enforce strictly
 
@@ -345,6 +349,20 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   confirmation dialog so it cannot be mistaken for leaving. It is called **"Cancel Workout", not
   "End"** — "end" reads as finishing, which is the opposite outcome. It calls
   `manager.cancelSession()` then `onCancelled` → `popToCoordinatorRoot()`.
+- **The `⋯` menu and its confirmation are custom cards, not system controls.** Both are
+  `WorkoutSessionDialogOverlay`, a centred card driven by one `WorkoutSessionDialog` state
+  (`.options` / `.confirmCancel`). The system `Menu` and `confirmationDialog` were dropped because
+  both fought the screen: a `Menu` anchors to the bar button and brings system chrome that reads as
+  a different app, and a `confirmationDialog` slides up from the bottom edge — exactly where
+  `WorkoutSessionFinishBar` sits — putting the destructive action under the thumb in the same place
+  as "Finish Workout". **One overlay with two states, not two overlays**: tapping "Cancel Workout"
+  in the menu swaps the card inside the same backdrop, so the confirmation *replaces* the menu
+  rather than stacking a second dim layer on it. Presented from `.overlay { }` for the same reason
+  the set detail overlay is — the system nav bar is hidden, so only an overlay can dim over
+  `WorkoutSessionNavBar`. The bar raises intent only (`onOptions`) and owns no menu of its own.
+  In the confirmation, **"Keep Going" is the filled button and "Cancel Workout" is tinted**: the
+  destructive option comes first because it is what the user came for, but the safe choice is the
+  one the eye lands on.
 - **`cancelSession()` is a full reset, not a "mark incomplete".** It discards `sessionRecord` and
   every logged set, returns the entry to `.planned` with `startedAt` / `sessionId` / `sessionRecord`
   cleared, and regenerates the manager's `sessionId` so a restart is a genuinely new session. The

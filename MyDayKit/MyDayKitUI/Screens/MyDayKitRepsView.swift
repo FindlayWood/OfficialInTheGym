@@ -53,11 +53,11 @@ struct MyDayKitRepsView: View {
                     HStack(spacing: 8) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 6)
-                                .fill(exercise.eachSide ? Color.blue.opacity(0.12) : Color(UIColor.tertiarySystemBackground))
+                                .fill(exercise.eachSide ? Color.darkColor.opacity(0.12) : Color(UIColor.tertiarySystemBackground))
                                 .frame(width: 28, height: 28)
                             Image(systemName: exercise.eachSide ? "checkmark" : "arrow.left.arrow.right")
                                 .font(.system(size: 12, weight: .semibold))
-                                .foregroundStyle(exercise.eachSide ? Color.blue : Color.secondary)
+                                .foregroundStyle(exercise.eachSide ? Color.darkColor : Color.secondary)
                         }
                         
                         Text("Each side")
@@ -111,7 +111,7 @@ struct MyDayKitRepsView: View {
                     .foregroundStyle(hasInput ? Color.white : Color.secondary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .background(hasInput ? Color.blue : Color(UIColor.secondarySystemBackground))
+                    .background(hasInput ? Color.darkColor : Color(UIColor.secondarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .animation(.easeInOut(duration: 0.2), value: hasInput)
             }
