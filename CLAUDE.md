@@ -568,6 +568,26 @@ every day document of every user.
 `WorkoutSessionModel` (`MyDayWorkoutModel.swift`) is dead — built by `finishSession`, never read.
 Left in place; `CompletedWorkoutSession` is the model that is actually persisted.
 
+### These writes are remote-only, and that is a decision
+Unlike templates (`WorkoutTemplateSaver` → `WorkoutTemplateSyncer` → `SyncQueueWorkoutTemplateUploader`
+→ `WorkoutTemplateSyncService`, which keeps a `Documents/PendingSync` queue and flushes on reconnect),
+the session documents and the exercise raw logs have **no local copy and no retry**. A failed write is
+simply lost.
+
+Accepted deliberately, because the data is not: every completed session is still in the day file at
+`Documents/MyDays/{uid}/{date}.json` as `workouts[].sessionRecord`, and **nothing yet reads these
+collections** — the history screen does not exist and analytics is external. A missing document
+therefore costs nothing today and can be backfilled from local day files at any point. Firestore's own
+disk-backed mutation queue covers ordinary offline writes.
+
+**Revisit when the workout history screen is built** — that is when a missing document first becomes
+visible to a user, and when it will be clear whether a sync queue or a one-off backfill is the answer.
+Two caveats that survive until then: permission-denied is a **hard** failure the SDK never retries
+(so deploy the rules before trusting the collection), and `#if EMULATOR` sets
+`isPersistenceEnabled = false` (`AppDelegate.swift:41`), so emulator builds have no offline queue at
+all. The exercise raw logs have had this same gap since long before the workout ones — fix both
+together or neither.
+
 ## Firestore
 Firestore collection structure will be provided when working on specific features.
 
