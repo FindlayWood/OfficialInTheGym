@@ -23,6 +23,15 @@ struct SessionSetPill: View {
     let animation: Namespace.ID
     let onTap: () -> Void
 
+    /// Logs the set at its prescribed values straight from the pill, skipping
+    /// the overlay entirely — the common case is performing a set exactly as
+    /// written, and making that cost two taps and a sheet was the whole reason
+    /// to add this. `nil` whenever the set cannot be quick-completed (session
+    /// not running, session finished, set already logged, or nothing
+    /// prescribed to log), and the circle then behaves like the rest of the
+    /// pill and opens the overlay.
+    var onQuickComplete: (() -> Void)?
+
     private var isLogged: Bool { record?.isCompleted ?? false }
 
     private var values: [SessionSetPillValue] {
@@ -55,7 +64,18 @@ struct SessionSetPill: View {
 
             Image(systemName: isLogged ? "checkmark.circle.fill" : "circle")
                 .font(.system(size: 22, weight: .medium))
-                .foregroundStyle(isLogged ? Color.white : Color.secondary.opacity(isInactive ? 0.25 : 0.5))
+                .foregroundStyle(circleColour)
+                // Widened past the 22pt glyph so the quick tap is comfortable.
+                // Width only: the pill is a fixed 72x88 and a set carrying two
+                // values already fills it, so growing this vertically would
+                // push the text into the clip.
+                .frame(width: 44)
+                .contentShape(Rectangle())
+                // A tap gesture on a child takes the tap before the ancestor's,
+                // so this splits one target out of a pill that is otherwise a
+                // single tap area. Falls through to `onTap` when there is
+                // nothing to quick-complete, rather than swallowing the tap.
+                .onTapGesture { (onQuickComplete ?? onTap)() }
         }
         .frame(width: 72, height: 88)
         .padding(.vertical, 8)
@@ -74,6 +94,15 @@ struct SessionSetPill: View {
         .contentShape(Rectangle())
         .onTapGesture { onTap() }
         .animation(.easeInOut(duration: 0.2), value: isLogged)
+    }
+
+    /// Brand-tinted while the circle is a live control, so it reads as
+    /// something to press rather than a status dot — otherwise there is no way
+    /// to discover that it does anything the rest of the pill does not.
+    private var circleColour: Color {
+        if isLogged { return Color.white }
+        if onQuickComplete != nil { return Color.darkColor.opacity(0.55) }
+        return Color.secondary.opacity(isInactive ? 0.25 : 0.5)
     }
 
     private func colour(at position: Int) -> Color {
@@ -108,6 +137,7 @@ struct SessionSetPill: View {
             animation: animation,
             onTap: {}
         )
+        // Quick-completable: circle tinted, and its tap logs rather than opens.
         SessionSetPill(
             index: 2,
             set: WorkoutSetModel(id: "s3", orderIndex: 2, time: 60, distance: 400, distanceUnit: .metres),
@@ -115,7 +145,8 @@ struct SessionSetPill: View {
             isInactive: false,
             matchedId: "e1-s3",
             animation: animation,
-            onTap: {}
+            onTap: {},
+            onQuickComplete: {}
         )
         SessionSetPill(
             index: 3,

@@ -75,7 +75,7 @@ struct MyDayWorkoutSetsScreen: View {
                     .foregroundStyle(hasInput ? Color.white : Color.secondary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .background(hasInput ? Color.blue : Color(UIColor.secondarySystemBackground))
+                    .background(hasInput ? Color.darkColor : Color(UIColor.secondarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .animation(.easeInOut(duration: 0.2), value: hasInput)
             }

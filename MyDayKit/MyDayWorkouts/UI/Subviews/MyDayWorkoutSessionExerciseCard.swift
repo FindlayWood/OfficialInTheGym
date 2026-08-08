@@ -17,6 +17,10 @@ struct MyDayWorkoutSessionExerciseCard: View {
     let animation: Namespace.ID
     var selectedSetId: String?
     var onSetTapped: ((WorkoutSetModel, WorkoutSetRecord?, Int) -> Void)?
+    /// Logs the set at its prescribed values from the pill's circle. The card
+    /// decides *per set* whether the tap is offered; the screen only supplies
+    /// the action.
+    var onSetQuickCompleted: ((WorkoutSetModel) -> Void)?
     var onExerciseTapped: (() -> Void)?
     var onRPETapped: (() -> Void)?
     var onCameraTapped: (() -> Void)?
@@ -93,7 +97,10 @@ struct MyDayWorkoutSessionExerciseCard: View {
                             isInactive: !isSessionStarted || isSessionCompleted,
                             matchedId: matchedId,
                             animation: animation,
-                            onTap: { onSetTapped?(set, record, index) }
+                            onTap: { onSetTapped?(set, record, index) },
+                            onQuickComplete: canQuickComplete(set, record)
+                                ? { onSetQuickCompleted?(set) }
+                                : nil
                         )
                     }
                 }
@@ -101,6 +108,22 @@ struct MyDayWorkoutSessionExerciseCard: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
         }
+    }
+
+    /// A set is quick-completable only while the session is running and only
+    /// until it is logged. Re-tapping a logged set does **not** toggle it back
+    /// off: a set may have been logged with values the user typed, and one
+    /// stray tap on a 44pt target would discard them silently. Un-logging stays
+    /// behind the overlay's deliberate "Remove log".
+    ///
+    /// A set the template prescribed nothing for is excluded too — there is
+    /// nothing to log, so the circle opens the overlay to enter values instead
+    /// of marking an empty set complete. Mirrors the overlay's disabled button.
+    private func canQuickComplete(_ set: WorkoutSetModel, _ record: WorkoutSetRecord?) -> Bool {
+        guard onSetQuickCompleted != nil else { return false }
+        guard isSessionStarted, !isSessionCompleted else { return false }
+        guard !(record?.isCompleted ?? false) else { return false }
+        return SessionSetInput.target(for: set).isLoggable
     }
 
     // MARK: - Actions Row

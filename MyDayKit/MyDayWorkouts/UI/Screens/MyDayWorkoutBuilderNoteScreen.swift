@@ -40,7 +40,7 @@ struct MyDayWorkoutBuilderNoteScreen: View {
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(allSetsMode ? Color.white : Color.secondary)
                             .frame(width: 72, height: 52)
-                            .background(allSetsMode ? Color.blue : Color(UIColor.secondarySystemBackground))
+                            .background(allSetsMode ? Color.darkColor : Color(UIColor.secondarySystemBackground))
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
                     .buttonStyle(.plain)
@@ -70,12 +70,12 @@ struct MyDayWorkoutBuilderNoteScreen: View {
                                 }
                             }
                             .frame(width: 72, height: 52)
-                            .background(isSelected ? Color.blue : Color(UIColor.secondarySystemBackground))
+                            .background(isSelected ? Color.darkColor : Color(UIColor.secondarySystemBackground))
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 14)
                                     .strokeBorder(
-                                        hasNote && !isSelected ? Color.blue.opacity(0.4) : Color.clear,
+                                        hasNote && !isSelected ? Color.darkColor.opacity(0.4) : Color.clear,
                                         lineWidth: 1.5
                                     )
                             )
@@ -92,7 +92,7 @@ struct MyDayWorkoutBuilderNoteScreen: View {
             HStack {
                 Image(systemName: allSetsMode ? "square.stack.3d.up" : "checkmark.circle")
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.blue)
+                    .foregroundStyle(Color.darkColor)
 
                 Text(applyingToLabel)
                     .font(.system(size: 12, weight: .medium))
@@ -139,7 +139,7 @@ struct MyDayWorkoutBuilderNoteScreen: View {
                 .overlay {
                     RoundedRectangle(cornerRadius: 14)
                         .stroke(
-                            isFocused ? Color.blue.opacity(0.5) : Color(UIColor.separator),
+                            isFocused ? Color.darkColor.opacity(0.5) : Color(UIColor.separator),
                             lineWidth: isFocused ? 1.5 : 0.5
                         )
                         .animation(.easeInOut(duration: 0.2), value: isFocused)
@@ -201,7 +201,7 @@ struct MyDayWorkoutBuilderNoteScreen: View {
                     .foregroundStyle(isValid ? Color.white : Color.secondary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .background(isValid ? Color.blue : Color(UIColor.secondarySystemBackground))
+                    .background(isValid ? Color.darkColor : Color(UIColor.secondarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .animation(.easeInOut(duration: 0.2), value: isValid)
             }

@@ -30,8 +30,15 @@ Swift, SwiftUI, UIKit, Combine, Firebase/Firestore, Firebase Cloud Functions,
 Firebase Emulator (Python seeding scripts, --import/--export), NWPathMonitor
 
 ## Brand Colours
-- Dark: `#1C496E`
-- Light: `#4179BD`
+- Dark: `#1C496E` — `Color.darkColor`
+- Light: `#4179BD` — `Color.lightColor`
+
+Both live in `MyDayKit/MyDayKitUI/Color/Color+Extension.swift`. **Never use system `Color.blue` for
+accent or selection.** The workout builder screens used to, which read as generic iOS chrome next to
+the session screens; every selected pill, active-state fill, tint and primary button across
+`MyDayWorkouts/UI/Screens/` is now `Color.darkColor`. `MyDayExerciseListView` still uses
+`Color.blue` and was deliberately left alone — it is shared with the daily-logging flow, so
+recolouring it is a wider change than the builder.
 
 ## Conventions — enforce strictly
 
@@ -289,6 +296,35 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   and a logged set is read **wholesale** from the record — never merged field-by-field with the
   target, or logging bodyweight would resurrect the target's number under a `BW` unit.
   `SessionSetPillPlaceholder` renders the same values so the slot it holds stays the right size.
+- **Quick-complete: the pill's circle is its own tap target.** Tapping the circle logs the set at
+  its prescribed values without opening the overlay — performing a set exactly as written is the
+  common case, and it should not cost a tap, a hero animation and a button press. The rest of the
+  pill still opens the overlay. The circle carries its own `.onTapGesture`, which SwiftUI dispatches
+  before the pill's, and is widened to `.frame(width: 44)` — **width only**: the pill is a fixed
+  72×88 and a two-value set already fills it, so growing the target vertically pushes the text into
+  the clip. `SessionSetPill.onQuickComplete` is `nil` whenever the tap is not offered and the circle
+  then falls through to `onTap` rather than swallowing the tap. The circle is tinted
+  `Color.darkColor.opacity(0.55)` while live, because otherwise nothing tells the user it does
+  anything the rest of the pill does not.
+  `MyDayWorkoutSessionExerciseCard.canQuickComplete` decides per set: session running, not finished,
+  **not already logged**, and something prescribed to log. **Re-tapping a logged set does not toggle
+  it off** — a set may hold values the user typed, and one stray tap on a 44pt target would discard
+  them silently; un-logging stays behind the overlay's deliberate "Remove log". A set with nothing
+  prescribed falls through to the overlay rather than being marked complete while empty, mirroring
+  the overlay's disabled button.
+- **`SessionSetInput.target(for:)` is the one definition of "the prescription as a performed set".**
+  Quick-complete logs through it, so it must stay in step with
+  `SessionSetDetailOverlay.resetInputsToTarget()` feeding `input` — the same idea in two shapes, one
+  resolved and one as editable text. A set logged by either path has to come out identical. It
+  applies the same rules the overlay does: weight only carries over when the prescribed unit
+  survives `WeightUnit.loggableDefault` unchanged (so `% of 1RM` logs reps and no load), the
+  distance unit only rides along when there is a distance, an all-zero `Tempo` stores `nil`, and the
+  **note is never seeded from the prescription**. `isLoggable` mirrors the overlay's `canLog`.
+- **`log(_:exercise:set:)` on the session screen is shared by both paths** — the overlay's
+  "Complete Set" and the pill's circle. It takes the exercise and set rather than a
+  `SessionSetDetail` so the quick path need not invent an `index`, and reads `wasLogged` from
+  `manager.setRecord(...)` rather than a passed-in record, the manager being the only current
+  source. The rest timer still starts on first completion only.
 - **Session screen nav is custom — the system bar is hidden.**
   `WorkoutSessionHostingController` (a `UIHostingController` subclass) hides the nav bar in
   `viewWillAppear` and restores it in `viewWillDisappear`, mirroring `MyDayBoundaryViewController`.
@@ -326,7 +362,9 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   `popToCoordinatorRoot()`; `popToRoot()` / `popToRootViewController` are gone.
 
 ## Session Screen — What's Not Yet Built
-- Rest timer banner is hidden behind the set detail overlay, which stays open after logging
+- Rest timer banner is hidden behind the set detail overlay, which stays open after logging.
+  Quick-complete sidesteps this rather than fixing it — logging from the pill's circle never opens
+  the overlay, so the banner is visible on that path. Logging *through* the overlay still hides it.
 
 ## Firestore
 Firestore collection structure will be provided when working on specific features.

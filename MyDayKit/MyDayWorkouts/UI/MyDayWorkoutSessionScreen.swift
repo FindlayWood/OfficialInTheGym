@@ -75,6 +75,12 @@ struct MyDayWorkoutSessionScreen: View {
                                         )
                                     }
                                 },
+                                // Tapping the pill's circle logs the set as
+                                // prescribed without opening the overlay. The
+                                // card decides per set whether to offer it.
+                                onSetQuickCompleted: { targetSet in
+                                    quickComplete(targetSet, for: exercise)
+                                },
                                 onRPETapped: sessionStarted && !sessionCompleted ? {
                                     rpeExercise = exercise
                                 } : nil
@@ -176,7 +182,7 @@ struct MyDayWorkoutSessionScreen: View {
                 mode: SessionSetDetailMode(isStarted: sessionStarted, isCompleted: sessionCompleted),
                 animation: animation,
                 onLog: { input in
-                    log(input, for: live)
+                    log(input, exercise: live.exercise, set: live.setModel)
                 },
                 onRemoveLog: {
                     manager.uncompleteSet(
@@ -197,15 +203,23 @@ struct MyDayWorkoutSessionScreen: View {
 
     // MARK: - Log
 
-    private func log(_ input: SessionSetInput, for detail: SessionSetDetail) {
-        let wasLogged = detail.setRecord?.isCompleted ?? false
+    /// Shared by the overlay's "Complete Set" button and the pill's
+    /// quick-complete tap. Takes the exercise and set rather than a
+    /// `SessionSetDetail` so the quick path does not have to invent an `index`
+    /// it has no use for, and reads `wasLogged` from the manager rather than a
+    /// passed-in record — the manager is the only source that is current.
+    private func log(_ input: SessionSetInput, exercise: WorkoutExerciseModel, set: WorkoutSetModel) {
+        let wasLogged = manager.setRecord(
+            exerciseId: exercise.exerciseId,
+            setId: set.id
+        )?.isCompleted ?? false
 
         // Weight and distance both carry the unit the user picked in the
         // session, so a set prescribed in % of 1RM is stored as the real load
         // lifted and a 400 m target logged as 0.5 km stays 0.5 km.
         manager.completeSet(
-            exerciseId: detail.exercise.exerciseId,
-            setId: detail.setModel.id,
+            exerciseId: exercise.exerciseId,
+            setId: set.id,
             reps: input.reps,
             weight: input.weight,
             weightUnit: input.weightUnit,
@@ -218,8 +232,23 @@ struct MyDayWorkoutSessionScreen: View {
 
         // Only on first completion — editing an already-logged set must not
         // restart the rest timer.
-        if !wasLogged, let rest = detail.exercise.restSeconds, rest > 0 {
+        if !wasLogged, let rest = exercise.restSeconds, rest > 0 {
             manager.startRestTimer(seconds: rest)
+        }
+    }
+
+    // MARK: - Quick Complete
+
+    /// The pill's circle logs the set exactly as prescribed. It routes through
+    /// the same `log` as the overlay's button, so a set completed either way is
+    /// stored identically — and, unlike the overlay, this path leaves nothing
+    /// covering the screen, so the rest timer banner is actually visible.
+    ///
+    /// `canQuickComplete` on the card has already ruled out a logged set, so
+    /// this is always a first completion and always starts the rest timer.
+    private func quickComplete(_ set: WorkoutSetModel, for exercise: WorkoutExerciseModel) {
+        withAnimation(.easeInOut(duration: 0.2)) {
+            log(SessionSetInput.target(for: set), exercise: exercise, set: set)
         }
     }
 

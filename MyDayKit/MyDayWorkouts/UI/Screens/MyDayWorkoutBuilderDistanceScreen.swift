@@ -54,7 +54,7 @@ struct MyDayWorkoutBuilderDistanceScreen: View {
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(allSetsMode ? Color.white : Color.secondary)
                             .frame(width: 72, height: 52)
-                            .background(allSetsMode ? Color.blue : Color(UIColor.secondarySystemBackground))
+                            .background(allSetsMode ? Color.darkColor : Color(UIColor.secondarySystemBackground))
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
                     .buttonStyle(.plain)
@@ -86,12 +86,12 @@ struct MyDayWorkoutBuilderDistanceScreen: View {
                                 }
                             }
                             .frame(width: 72, height: 52)
-                            .background(isSelected ? Color.blue : Color(UIColor.secondarySystemBackground))
+                            .background(isSelected ? Color.darkColor : Color(UIColor.secondarySystemBackground))
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 14)
                                     .strokeBorder(
-                                        hasDistance && !isSelected ? Color.blue.opacity(0.4) : Color.clear,
+                                        hasDistance && !isSelected ? Color.darkColor.opacity(0.4) : Color.clear,
                                         lineWidth: 1.5
                                     )
                             )
@@ -108,7 +108,7 @@ struct MyDayWorkoutBuilderDistanceScreen: View {
             HStack {
                 Image(systemName: allSetsMode ? "square.stack.3d.up" : "checkmark.circle")
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.blue)
+                    .foregroundStyle(Color.darkColor)
 
                 Text(applyingToLabel)
                     .font(.system(size: 12, weight: .medium))
@@ -201,7 +201,7 @@ struct MyDayWorkoutBuilderDistanceScreen: View {
                     .foregroundStyle(isValidSelection ? Color.white : Color.secondary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .background(isValidSelection ? Color.blue : Color(UIColor.secondarySystemBackground))
+                    .background(isValidSelection ? Color.darkColor : Color(UIColor.secondarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .animation(.easeInOut(duration: 0.2), value: isValidSelection)
             }
@@ -241,7 +241,7 @@ struct MyDayWorkoutBuilderDistanceScreen: View {
             }
             .frame(maxWidth: .infinity)
             .frame(height: 52)
-            .background(isSelected ? Color.blue : Color(UIColor.secondarySystemBackground))
+            .background(isSelected ? Color.darkColor : Color(UIColor.secondarySystemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay {
                 RoundedRectangle(cornerRadius: 12)

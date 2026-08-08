@@ -47,7 +47,7 @@ struct MyDayWorkoutBuilderTempoScreen: View {
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(allSetsMode ? Color.white : Color.secondary)
                             .frame(width: 72, height: 52)
-                            .background(allSetsMode ? Color.blue : Color(UIColor.secondarySystemBackground))
+                            .background(allSetsMode ? Color.darkColor : Color(UIColor.secondarySystemBackground))
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
                     .buttonStyle(.plain)
@@ -79,12 +79,12 @@ struct MyDayWorkoutBuilderTempoScreen: View {
                                 }
                             }
                             .frame(width: 72, height: 52)
-                            .background(isSelected ? Color.blue : Color(UIColor.secondarySystemBackground))
+                            .background(isSelected ? Color.darkColor : Color(UIColor.secondarySystemBackground))
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 14)
                                     .strokeBorder(
-                                        hasTempo && !isSelected ? Color.blue.opacity(0.4) : Color.clear,
+                                        hasTempo && !isSelected ? Color.darkColor.opacity(0.4) : Color.clear,
                                         lineWidth: 1.5
                                     )
                             )
@@ -101,7 +101,7 @@ struct MyDayWorkoutBuilderTempoScreen: View {
             HStack {
                 Image(systemName: allSetsMode ? "square.stack.3d.up" : "checkmark.circle")
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.blue)
+                    .foregroundStyle(Color.darkColor)
 
                 Text(applyingToLabel)
                     .font(.system(size: 12, weight: .medium))
@@ -175,7 +175,7 @@ struct MyDayWorkoutBuilderTempoScreen: View {
                     .foregroundStyle(isValidSelection ? Color.white : Color.secondary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .background(isValidSelection ? Color.blue : Color(UIColor.secondarySystemBackground))
+                    .background(isValidSelection ? Color.darkColor : Color(UIColor.secondarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .animation(.easeInOut(duration: 0.2), value: isValidSelection)
             }
@@ -206,11 +206,11 @@ struct MyDayWorkoutBuilderTempoScreen: View {
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.blue.opacity(0.1))
+                        .fill(Color.darkColor.opacity(0.1))
                         .frame(height: 44)
                     Image(systemName: "plus")
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(Color.blue)
+                        .foregroundStyle(Color.darkColor)
                 }
             }
 
