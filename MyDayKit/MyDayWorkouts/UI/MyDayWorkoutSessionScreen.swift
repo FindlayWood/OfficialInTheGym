@@ -35,7 +35,7 @@ struct MyDayWorkoutSessionScreen: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
-                WorkoutSessionNavBar(
+                MyDayWorkoutNavBar(
                     title: manager.entry.template.title,
                     showsOptions: sessionStarted && !sessionCompleted,
                     onBack: { onBack?() },
@@ -433,7 +433,7 @@ struct MyDayWorkoutSessionScreen: View {
 // MARK: - Preview
 
 // The real screen is hosted with the navigation bar hidden
-// (`WorkoutSessionHostingController`), so no `NavigationStack` here.
+// (`NavBarHidingHostingController`), so no `NavigationStack` here.
 #Preview {
     MyDayWorkoutSessionScreen(
             manager: WorkoutSessionManager(

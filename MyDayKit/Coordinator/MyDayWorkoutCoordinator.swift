@@ -89,12 +89,18 @@ extension MyDayWorkoutCoordinator {
             vc.hidesBottomBarWhenPushed = true
             return vc
         case .templateDetail(let template):
-            let vc = selectorVC(
-                MyDayWorkoutTemplateDetailScreen(
+            // Hosted with the nav bar hidden so the set detail overlay can dim
+            // over the whole screen; the screen draws `MyDayWorkoutNavBar`
+            // itself and pops through `onBack`.
+            let vc = NavBarHidingHostingController(
+                rootView: MyDayWorkoutTemplateDetailScreen(
                     template: template,
                     onAddToTodayTapped: dayManager.addWorkoutToDay,
                     onReadyToDismiss: { [weak self] in
                         self?.onWorkoutAddedToDay?()
+                    },
+                    onBack: { [weak self] in
+                        self?.popBack()
                     }
                 )
             )

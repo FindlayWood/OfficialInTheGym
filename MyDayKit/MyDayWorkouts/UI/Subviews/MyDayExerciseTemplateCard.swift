@@ -10,7 +10,10 @@ import SwiftUI
 struct MyDayExerciseTemplateCard: View {
 
     let exercise: WorkoutExerciseModel
+    let animation: Namespace.ID
+    var selectedSetId: String?
     var onExerciseTapped: (() -> Void)?
+    var onSetTapped: ((WorkoutSetModel, Int) -> Void)?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -54,7 +57,19 @@ struct MyDayExerciseTemplateCard: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
                 ForEach(Array(exercise.sets.enumerated()), id: \.element.id) { index, set in
-                    MyDayTemplateSetPill(index: index, set: set)
+                    let matchedId = SessionSetDetail.matchedId(exerciseId: exercise.id, setId: set.id)
+
+                    if selectedSetId == matchedId {
+                        MyDayTemplateSetPillPlaceholder(index: index, set: set)
+                    } else {
+                        MyDayTemplateSetPill(
+                            index: index,
+                            set: set,
+                            matchedId: matchedId,
+                            animation: animation,
+                            onTap: { onSetTapped?(set, index) }
+                        )
+                    }
                 }
             }
             .padding(.horizontal, 16)
@@ -66,6 +81,8 @@ struct MyDayExerciseTemplateCard: View {
 // MARK: - Preview
 
 #Preview {
+    @Previewable @Namespace var animation
+
     ScrollView {
         VStack(spacing: 12) {
             MyDayExerciseTemplateCard(
@@ -82,7 +99,8 @@ struct MyDayExerciseTemplateCard: View {
                     ],
                     restSeconds: 90,
                     notes: "Keep elbows at 45 degrees"
-                )
+                ),
+                animation: animation
             )
             MyDayExerciseTemplateCard(
                 exercise: WorkoutExerciseModel(
@@ -95,7 +113,8 @@ struct MyDayExerciseTemplateCard: View {
                         WorkoutSetModel(id: "s4", orderIndex: 0, reps: 10),
                         WorkoutSetModel(id: "s5", orderIndex: 1, reps: 10)
                     ]
-                )
+                ),
+                animation: animation
             )
             MyDayExerciseTemplateCard(
                 exercise: WorkoutExerciseModel(
@@ -108,7 +127,8 @@ struct MyDayExerciseTemplateCard: View {
                         WorkoutSetModel(id: "s6", orderIndex: 0, time: 60),
                         WorkoutSetModel(id: "s7", orderIndex: 1, time: 45)
                     ]
-                )
+                ),
+                animation: animation
             )
         }
         .padding(16)

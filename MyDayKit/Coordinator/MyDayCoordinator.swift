@@ -210,7 +210,7 @@ extension MyDayCoordinator {
                     self?.popToCoordinatorRoot()
                 }
             )
-            let vc = WorkoutSessionHostingController(rootView: screen)
+            let vc = NavBarHidingHostingController(rootView: screen)
             vc.hidesBottomBarWhenPushed = true
             return vc
 

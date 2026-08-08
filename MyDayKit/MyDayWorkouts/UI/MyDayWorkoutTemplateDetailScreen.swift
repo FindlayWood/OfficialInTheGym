@@ -13,12 +13,25 @@ struct MyDayWorkoutTemplateDetailScreen: View {
 
     var onAddToTodayTapped: ((WorkoutTemplateModel) -> Void)?
     var onReadyToDismiss: (() -> Void)?
+    var onBack: (() -> Void)?
 
     @State private var showDim = false
     @State private var showCard = false
+    @State private var selectedSet: SessionSetDetail?
+
+    @Namespace private var animation
+
+    /// The same spring the session screen and MyDay home use for the set hero.
+    /// **All three are deliberately in step — keep them that way.**
+    private let heroAnimation: Animation = .interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)
 
     var body: some View {
         VStack(spacing: 0) {
+            MyDayWorkoutNavBar(
+                title: template.title,
+                onBack: { onBack?() }
+            )
+
             metricsStrip
 
             Divider()
@@ -26,7 +39,24 @@ struct MyDayWorkoutTemplateDetailScreen: View {
             ScrollView(showsIndicators: false) {
                 LazyVStack(spacing: 12) {
                     ForEach(template.exercises) { exercise in
-                        MyDayExerciseTemplateCard(exercise: exercise)
+                        MyDayExerciseTemplateCard(
+                            exercise: exercise,
+                            animation: animation,
+                            selectedSetId: selectedSet?.matchedId,
+                            onSetTapped: { set, index in
+                                withAnimation(heroAnimation) {
+                                    selectedSet = SessionSetDetail(
+                                        exercise: exercise,
+                                        setModel: set,
+                                        // A template holds no record — it is
+                                        // prescription only, which is exactly
+                                        // what `.planned` renders.
+                                        setRecord: nil,
+                                        index: index
+                                    )
+                                }
+                            }
+                        )
                     }
                     Color.clear.frame(height: 100)
                 }
@@ -35,8 +65,9 @@ struct MyDayWorkoutTemplateDetailScreen: View {
             }
             .background(Color.darkColor)
         }
-        .navigationTitle(template.title)
-        .navigationBarTitleDisplayMode(.inline)
+        // No `.navigationTitle` / `.toolbar`: the system bar is hidden by
+        // `NavBarHidingHostingController` so the set detail overlay can dim
+        // over `MyDayWorkoutNavBar`. Do not reinstate them here.
         .safeAreaInset(edge: .bottom) {
             addToTodayButton
         }
@@ -52,6 +83,48 @@ struct MyDayWorkoutTemplateDetailScreen: View {
                 WorkoutAddedConfirmationOverlay()
                     .transition(.move(edge: .bottom))
             }
+        }
+        .overlay {
+            if let selectedSet {
+                setDetailOverlay(for: selectedSet)
+            }
+        }
+    }
+
+    // MARK: - Set Detail Overlay
+
+    /// `SessionSetDetailOverlay` in `.planned` mode — the mode built for a set
+    /// that has not been performed, which is every set on a template. It shows
+    /// the prescription as the card value under a TARGET heading, with no
+    /// bracketed target, no chevrons and no log button, so it is read-only here
+    /// without needing a read-only variant.
+    ///
+    /// Covers the whole screen, `MyDayWorkoutNavBar` included, because the
+    /// system bar is hidden by `NavBarHidingHostingController`.
+    private func setDetailOverlay(for detail: SessionSetDetail) -> some View {
+        ZStack {
+            Color.black
+                .opacity(0.6)
+                .ignoresSafeArea()
+                .transition(.opacity)
+                .onTapGesture {
+                    withAnimation(heroAnimation) {
+                        selectedSet = nil
+                    }
+                }
+
+            SessionSetDetailOverlay(
+                detail: detail,
+                mode: .planned,
+                animation: animation,
+                onDismiss: {
+                    withAnimation(heroAnimation) {
+                        selectedSet = nil
+                    }
+                }
+            )
+            .transition(.asymmetric(insertion: .identity, removal: .offset(y: 5)))
+            .padding()
         }
     }
 

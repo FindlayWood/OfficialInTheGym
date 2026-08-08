@@ -1,5 +1,5 @@
 //
-//  WorkoutSessionNavBar.swift
+//  MyDayWorkoutNavBar.swift
 //  MyDayKit
 //
 //  Created by Findlay Wood on 04/08/2026.
@@ -7,23 +7,28 @@
 
 import SwiftUI
 
-/// Replaces the system navigation bar on the workout session screen so the set
-/// detail overlay can cover the full screen. See
-/// `WorkoutSessionHostingController` for why the real bar is hidden.
+/// Replaces the system navigation bar on the workout screens that present the
+/// set detail overlay — the session screen and the template detail screen — so
+/// the overlay can cover the full screen. See `NavBarHidingHostingController`
+/// for why the real bar has to go.
 ///
-/// Back is a plain chevron with **no confirmation**: progress persists after
-/// every set and the session resumes where it left off, so leaving genuinely
-/// costs nothing and a warning would misrepresent the stakes. Cancelling the
-/// workout is a separate, destructive action kept behind the overflow menu —
-/// "cancel" rather than "end" because ending reads as finishing.
+/// Back is a plain chevron with **no confirmation** on either screen: session
+/// progress persists after every set and resumes where it left off, and the
+/// template screen is read-only, so leaving genuinely costs nothing and a
+/// warning would misrepresent the stakes. Cancelling a workout is the separate
+/// destructive action, kept behind the overflow menu — "cancel" rather than
+/// "end" because ending reads as finishing.
 ///
 /// The bar raises intent only. Both the menu and its confirmation are drawn by
-/// the screen as `WorkoutSessionDialogOverlay`; see that file for why the
-/// system `Menu` and `confirmationDialog` were dropped.
-struct WorkoutSessionNavBar: View {
+/// the session screen as `WorkoutSessionDialogOverlay`; see that file for why
+/// the system `Menu` and `confirmationDialog` were dropped.
+struct MyDayWorkoutNavBar: View {
 
     let title: String
-    let showsOptions: Bool
+
+    /// The template screen passes `false` — it has nothing behind a `⋯`, and
+    /// the bar then draws a matching blank so the title stays centred.
+    var showsOptions: Bool = false
     var onBack: (() -> Void)?
 
     /// Opens `WorkoutSessionDialogOverlay` in its `.options` state. The bar
@@ -84,7 +89,7 @@ struct WorkoutSessionNavBar: View {
 
 #Preview {
     VStack(spacing: 0) {
-        WorkoutSessionNavBar(title: "Monday Upper", showsOptions: true)
+        MyDayWorkoutNavBar(title: "Monday Upper", showsOptions: true)
         Color.darkColor
     }
 }

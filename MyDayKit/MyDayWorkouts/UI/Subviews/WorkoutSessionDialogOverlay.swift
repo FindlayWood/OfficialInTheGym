@@ -19,7 +19,7 @@ import SwiftUI
 ///
 /// Presented from `.overlay { }` on the screen for the same reason the set
 /// detail overlay is: the session screen hides the system navigation bar
-/// (`WorkoutSessionHostingController`), and only an overlay can dim over the
+/// (`NavBarHidingHostingController`), and only an overlay can dim over the
 /// custom bar drawn in its place.
 struct WorkoutSessionDialogOverlay: View {
 

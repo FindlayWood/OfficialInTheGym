@@ -136,6 +136,25 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   `MyDayWorkoutTemplateDetailScreen` shows dark scrollview + white metrics strip;
   "Add to Today" shows a `WorkoutAddedConfirmationOverlay` (instant dim, card springs from bottom)
   then pops back to MyDay home via `onWorkoutAddedToDay` callback chain
+- **Template detail set pills tap through to `SessionSetDetailOverlay` in `.planned` mode.** That
+  mode exists for a set that has not been performed, which is every set on a template — it renders
+  the prescription as the card value under a TARGET heading with no bracketed target, no chevrons
+  and no log button, so the screen gets a read-only detail view without a read-only variant being
+  written. `SessionSetDetail` is built with `setRecord: nil`; the hero uses the same
+  `heroAnimation` spring as the session screen and MyDay home, and
+  `MyDayTemplateSetPillPlaceholder` holds the slot during the flight.
+  The overlay covers the whole screen, custom nav bar included — see below.
+- **Template detail nav is custom too — the system bar is hidden**, for exactly the reason the
+  session screen's is. `MyDayWorkoutCoordinator` hosts it in `NavBarHidingHostingController` and the
+  screen draws `MyDayWorkoutNavBar(title:onBack:)` with `showsOptions` defaulted to false; `onBack`
+  pops through the coordinator. **Do not reinstate `.navigationTitle` / `.toolbar` here** — the dim
+  could not cover the system bar and the overlay was boxed in below it.
+- **`MyDayTemplateSetPill` caps at two values** via `SessionSetPillValue.values(for:record:)` with a
+  nil record. It used to render reps, weight, time *and* distance unconditionally into a fixed 72×72
+  frame, so a set carrying all four spilled its text outside the card. It is now 72×88 like every
+  other set pill, ending with the **dimmed empty circle** a `.planned` `SessionSetPill` draws — a
+  template set has not been performed, so the empty state is the honest one, and it fills the slot
+  that otherwise left these pills looking lopsided. Indicator only; the whole pill is the tap target.
 - **`DailyWorkoutEntry`**: `id`, `template`, `assignedDate`, `status` (`planned` / `inProgress` /
   `completed` / `incomplete`), `sessionId?`, `startedAt?`, `sessionRecord?`
 - **`WorkoutExerciseModel`**: carries `exerciseName: String` and `exerciseCategory: ExerciseCategory`
@@ -374,15 +393,19 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   `manager.setRecord(...)` rather than a passed-in record, the manager being the only current
   source. The rest timer still starts on first completion only.
 - **Session screen nav is custom — the system bar is hidden.**
-  `WorkoutSessionHostingController` (a `UIHostingController` subclass) hides the nav bar in
+  `NavBarHidingHostingController` (a `UIHostingController` subclass) hides the nav bar in
   `viewWillAppear` and restores it in `viewWillDisappear`, mirroring `MyDayBoundaryViewController`.
+  **Nothing in it is screen-specific** — the template detail screen uses it too. It and
+  `MyDayWorkoutNavBar` were renamed from `WorkoutSessionHostingController` /
+  `WorkoutSessionNavBar` when the second screen adopted them; host any screen that needs the bar
+  gone rather than writing a second one.
   **Reason: a `UINavigationBar` is a sibling view owned by the `UINavigationController`, drawn above
   the hosting controller's view, so the set detail overlay could never dim or cover it** — the hero
   card was structurally boxed in below a white bar. Do not reinstate `.navigationTitle` /
   `.toolbar` on this screen. Hiding the bar also disables the swipe-from-edge pop, so the controller
   takes over `interactivePopGestureRecognizer.delegate` and allows the gesture whenever the stack has
   more than one VC — losing swipe-back would contradict the whole point of the screen.
-  `WorkoutSessionNavBar` draws back / title / `⋯`, and `WorkoutSessionFinishBar` pins "Finish
+  `MyDayWorkoutNavBar` draws back / title / `⋯`, and `WorkoutSessionFinishBar` pins "Finish
   Workout" to the bottom, taking the slot `WorkoutSessionStartCard` holds pre-start (start bottom →
   finish bottom).
 - **Leaving the session screen must stay free.** Progress persists after every set via
@@ -403,7 +426,7 @@ Also `addTemplate` drops the template if it lands while `state == .loading`.
   in the menu swaps the card inside the same backdrop, so the confirmation *replaces* the menu
   rather than stacking a second dim layer on it. Presented from `.overlay { }` for the same reason
   the set detail overlay is — the system nav bar is hidden, so only an overlay can dim over
-  `WorkoutSessionNavBar`. The bar raises intent only (`onOptions`) and owns no menu of its own.
+  `MyDayWorkoutNavBar`. The bar raises intent only (`onOptions`) and owns no menu of its own.
   In the confirmation, **"Keep Going" is the filled button and "Cancel Workout" is tinted**: the
   destructive option comes first because it is what the user came for, but the safe choice is the
   one the eye lands on.
