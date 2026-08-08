@@ -43,7 +43,8 @@ class MyDayKitComposition {
             deleter: deleter,
             wellnessSaver: localAndRemoteMyDaySaver,
             rpeSaver: localAndRemoteMyDaySaver,
-            workoutSaver: localAndRemoteMyDaySaver
+            workoutSaver: localAndRemoteMyDaySaver,
+            workoutStatsSaver: rawLogRemoteStatsSaver
         )
         
         // Clip

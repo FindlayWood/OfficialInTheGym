@@ -10,3 +10,9 @@ import Foundation
 public protocol ExerciseStatsSaver {
     func save(_ stats: ExerciseStatsSaveModel) async throws
 }
+
+struct PreviewExerciseStatsSaver: ExerciseStatsSaver {
+    func save(_ stats: ExerciseStatsSaveModel) async throws {
+        print("Saving stats: \(stats)")
+    }
+}

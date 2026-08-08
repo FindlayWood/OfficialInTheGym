@@ -143,7 +143,8 @@ struct MyDayKitRepsView: View {
             deleter: PreviewMyDayDeleter(),
             wellnessSaver: PreviewMyDaySaver(),
             rpeSaver: PreviewMyDaySaver(),
-            workoutSaver: PreviewMyDaySaver()
+            workoutSaver: PreviewMyDaySaver(),
+            workoutStatsSaver: PreviewExerciseStatsSaver()
         ),
         exercise: MyDayNewExerciseManager(exercise: .pressUps)
     )

@@ -21,6 +21,18 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
 
     public var onEntryUpdated: ((DailyWorkoutEntry) -> Void)?
 
+    /// Fired when a set is logged, carrying its raw stats log.
+    ///
+    /// A set performed in a session is the same event as an exercise logged on
+    /// its own, so it writes to the same `ExerciseStats/{id}/RawLogs`
+    /// collection. Kept separate from `onEntryUpdated` because that fires for
+    /// start, finish and cancel too, where no set was performed.
+    public var onSetLogged: ((ExerciseStatsSaveModel) -> Void)?
+
+    /// Fired when a logged set is discarded — un-logged individually, or thrown
+    /// away with the whole session — carrying what addresses its raw log.
+    public var onSetUnlogged: ((_ exerciseId: String, _ logId: String) -> Void)?
+
     // MARK: - Private
 
     private var sessionId: String
@@ -74,6 +86,17 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         sessionRecord = record
         entry.sessionRecord = record
         onEntryUpdated?(entry)
+
+        // Re-logging an already-logged set rewrites the same raw log document,
+        // so an edit corrects the stats rather than adding a second entry.
+        let exerciseRecord = record.exerciseRecords[exIdx]
+        onSetLogged?(
+            exerciseRecord.setRecords[setIdx].getStats(
+                exerciseId: exerciseRecord.exerciseId,
+                exerciseName: exerciseRecord.exerciseName,
+                sessionId: sessionId
+            )
+        )
     }
 
     /// Return a set to un-logged, discarding the performed values.
@@ -81,6 +104,9 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         guard var record = sessionRecord else { return }
         guard let exIdx = record.exerciseRecords.firstIndex(where: { $0.exerciseId == exerciseId }) else { return }
         guard let setIdx = record.exerciseRecords[exIdx].setRecords.firstIndex(where: { $0.id == setId }) else { return }
+
+        // A set that was never logged wrote no raw log to remove.
+        let wasLogged = record.exerciseRecords[exIdx].setRecords[setIdx].isCompleted
 
         record.exerciseRecords[exIdx].setRecords[setIdx].isCompleted = false
         record.exerciseRecords[exIdx].setRecords[setIdx].reps = nil
@@ -96,6 +122,13 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         sessionRecord = record
         entry.sessionRecord = record
         onEntryUpdated?(entry)
+
+        if wasLogged {
+            onSetUnlogged?(
+                record.exerciseRecords[exIdx].exerciseId,
+                WorkoutSetRecord.statsLogId(sessionId: sessionId, setId: setId)
+            )
+        }
     }
 
     /// The stored record for a single set, if the session has started.
@@ -232,6 +265,20 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
     /// altogether is a separate action on the MyDay home screen.
     public func cancelSession() {
         cancelRestTimer()
+
+        // Discarding the session discards its raw logs too — a workout the user
+        // threw away must not go on counting toward exercise stats. Done before
+        // the session id is regenerated, since that id addresses the logs.
+        if let record = sessionRecord {
+            for exerciseRecord in record.exerciseRecords {
+                for set in exerciseRecord.setRecords where set.isCompleted {
+                    onSetUnlogged?(
+                        exerciseRecord.exerciseId,
+                        WorkoutSetRecord.statsLogId(sessionId: sessionId, setId: set.id)
+                    )
+                }
+            }
+        }
 
         // A restart is a new session, so it must not reuse the cancelled id.
         sessionId = UUID().uuidString

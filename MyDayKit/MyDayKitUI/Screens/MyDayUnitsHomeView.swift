@@ -281,7 +281,8 @@ struct MyDayUnitsHomeView: View {
             deleter: PreviewMyDayDeleter(),
             wellnessSaver: PreviewMyDaySaver(),
             rpeSaver: PreviewMyDaySaver(),
-            workoutSaver: PreviewMyDaySaver()
+            workoutSaver: PreviewMyDaySaver(),
+            workoutStatsSaver: PreviewExerciseStatsSaver()
         ),
         newExercise: .init(exercise: .pressUps)
     )

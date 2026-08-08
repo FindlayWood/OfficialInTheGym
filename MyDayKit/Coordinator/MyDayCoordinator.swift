@@ -195,6 +195,8 @@ extension MyDayCoordinator {
         case .workoutSession(let entry):
             let manager = WorkoutSessionManager(entry: entry)
             manager.onEntryUpdated = dayManager.updateWorkoutEntry
+            manager.onSetLogged = dayManager.saveWorkoutSetStats
+            manager.onSetUnlogged = dayManager.deleteWorkoutSetStats
             let screen = MyDayWorkoutSessionScreen(
                 manager: manager,
                 userId: userId,

@@ -32,6 +32,12 @@ public class MyDayManager: ObservableObject {
     // workouts
     let workoutSaver: MyDaySaver
 
+    /// Raw stats logs for sets performed in a workout session. Exercises logged
+    /// on their own get theirs from `saver`, which writes the day and the log
+    /// together; a session already saves the day through `workoutSaver` after
+    /// every set, so it needs the log on its own.
+    let workoutStatsSaver: ExerciseStatsSaver
+
     public init(
         saver: MyDayAndStatSaver,
         clipSaver: MyDaySaver,
@@ -40,7 +46,8 @@ public class MyDayManager: ObservableObject {
         deleter: MyDayDeleter,
         wellnessSaver: MyDaySaver,
         rpeSaver: MyDaySaver,
-        workoutSaver: MyDaySaver
+        workoutSaver: MyDaySaver,
+        workoutStatsSaver: ExerciseStatsSaver
     ) {
         self.saver = saver
         self.clipSaver = clipSaver
@@ -50,6 +57,7 @@ public class MyDayManager: ObservableObject {
         self.wellnessSaver = wellnessSaver
         self.rpeSaver = rpeSaver
         self.workoutSaver = workoutSaver
+        self.workoutStatsSaver = workoutStatsSaver
         initialLoad()
     }
     

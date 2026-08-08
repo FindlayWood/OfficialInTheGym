@@ -61,20 +61,13 @@ struct ExerciseCompletions: Identifiable, Codable {
     let eachSide: Bool?
     
     func getStats() -> ExerciseStatsSaveModel {
-        var w: Double = 0
-        if weightUnit == .kg {
-            w = Double(weight ?? 0)
-        }
-        if weightUnit == .lbs {
-            w = Double(weight ?? 0) * 0.453592
-        }
-        return ExerciseStatsSaveModel(
+        ExerciseStatsSaveModel(
             id: id,
             exerciseID: exercise.id,
             exerciseName: exercise.name,
             dateComplete: dateCompleted,
             reps: reps,
-            weight: w,
+            weight: WeightUnit.kilograms(weight, unit: weightUnit),
             time: time ?? 0
         )
     }

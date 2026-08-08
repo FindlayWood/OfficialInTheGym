@@ -493,6 +493,42 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   Quick-complete sidesteps this rather than fixing it — logging from the pill's circle never opens
   the overlay, so the banner is visible on that path. Logging *through* the overlay still hides it.
 
+## Exercise Stats Raw Logs
+Two things are written when work is recorded, and **both paths write the same two things**:
+1. the whole day document — `Users/{uid}/MyDay/{yyyy-MM-dd}`, `setData(merge: true)` with the entire
+   `MyDayFullDayModel`. Every log rewrites the whole day, workouts included.
+2. a raw stats log — `Users/{uid}/ExerciseStats/{exerciseID}/RawLogs/{logID}`, holding an
+   `ExerciseStatsSaveModel` (id, exerciseID, exerciseName, dateComplete, reps, weight, time).
+
+An exercise logged on its own goes through `MyDayManager.addNewCompletion` → `MyDayAndStatSaver`,
+which writes both together. A **set logged inside a workout session** writes the day through
+`workoutSaver` (via `onEntryUpdated`) and the raw log through `workoutStatsSaver`, wired from
+`WorkoutSessionManager.onSetLogged` / `.onSetUnlogged` in `MyDayCoordinator`. Work done in a session
+and work logged on its own are the same work — **stats that counted only one of them would depend on
+how the user happened to record it.**
+
+- **`WorkoutSetRecord.getStats(...)` and `ExerciseCompletions.getStats()` must stay in step.** They
+  write to the same collection, so anything one records that the other does not is a gap that opens
+  and closes with the logging route. Weight normalisation is shared as
+  `WeightUnit.kilograms(_:unit:)` — kg passes through, lbs converts, and `% of 1RM` / `% of BW` /
+  `Max` / `BW` are **prescriptions or bodyweight, not loads, so they normalise to 0**, as does an
+  absent unit. Do not re-inline that conversion at either call site.
+- **The raw log id is `"{sessionId}-{setId}"`** (`WorkoutSetRecord.statsLogId`), never the set id
+  alone. Set ids are only unique *within an exercise*, and a template reused next week repeats them
+  exactly — keying by set id would have each session overwrite the last one's logs. It is derived,
+  not stored, so un-logging can address the log it already wrote; `sessionId` survives relaunch
+  because `WorkoutSessionManager.init` restores it from `sessionRecord.id`.
+- **Logs are written per set, not at finish**, mirroring the exercise path and so surviving a session
+  the user leaves and never finishes. Re-logging a set rewrites the same document, so an edit
+  corrects the log rather than adding a second one.
+- **Three things delete a raw log, and all three must**: `uncompleteSet` (only when the set was
+  actually logged), `cancelSession` (which discards the whole record — it fires before the session id
+  is regenerated, since that id addresses the logs), and `removeWorkoutFromDay`
+  (`deleteWorkoutStats(for:)`). Removing the workout is the second way a session's sets stop
+  existing, and it is offered whatever the status; logs left behind would count toward stats for a
+  workout the user can no longer see.
+- `finishSession` writes no logs — the sets were logged as they happened.
+
 ## Firestore
 Firestore collection structure will be provided when working on specific features.
 

@@ -28,6 +28,7 @@ extension MyDayManager {
         guard var day = selectedDay else { return }
         day.workouts.removeAll { $0.id == entry.id }
         selectedDay = day
+        deleteWorkoutStats(for: entry)
         Task {
             try await workoutSaver.save(data: day)
         }
