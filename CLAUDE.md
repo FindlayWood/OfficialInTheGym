@@ -247,9 +247,15 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   and are not tappable**, and the Edit / Delete pair and the delete confirmation are untouched. Do
   not "finish the match" by making these cards tappable — that would fork set editing into two
   different mechanisms on the same screen.
-  A card for a measure the set never carried still draws "—" rather than vanishing, so the grid
-  always shows four. Tempo and note remain conditional here (read-only, nothing to discover by
-  tapping) where the session always shows them.
+  **Every card is always present**, exactly as on the session overlay — the four measures, tempo and
+  note. A measure the set never carried draws "—" rather than vanishing, and so do tempo and note.
+  A card that appears only sometimes is a card the user never learns is there. The note reads "—"
+  rather than the session's "Add a note", since nothing is edited in place here and prompting for an
+  action this card does not offer would be a dead end.
+  Absent is judged the same way the rest of the app judges it: an all-zero `Tempo` is the builder's
+  empty default and shows "—", and a note that is only whitespace counts as no note.
+  The "Performed each side" chip stays conditional — it is a chip, not a card, and the session
+  overlay has no counterpart to keep in step with.
 - **Session screen flow**: `MyDayCoordinator` pushes `MyDayWorkoutSessionScreen` on `.workoutSession`
   route; screen shows `WorkoutSessionStartCard` overlay until started; tapping "Start Workout" calls
   `manager.startSession()` which fires `onEntryUpdated` to persist; set pills cannot be *logged*

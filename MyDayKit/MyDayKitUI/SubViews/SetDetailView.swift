@@ -124,10 +124,12 @@ struct SetDetailView: View {
                 measureGrid
 
                 // ── Tempo ──────────────────────────────────────────────
-                if let tempo = model.tempo {
-                    tempoCard(tempo: tempo)
-                }
-                
+                // Always present, as on the session overlay: an absent tempo
+                // draws its phases as "—" rather than vanishing. A card that
+                // appears only sometimes is a card the user never learns is
+                // there, and the grid above already follows the same rule.
+                tempoCard
+
                 // ── Each side ──────────────────────────────────────────
                 if model.eachSide ?? false {
                     HStack(spacing: 8) {
@@ -146,10 +148,8 @@ struct SetDetailView: View {
                 }
                 
                 // ── Note ───────────────────────────────────────────────
-                if let note = model.note {
-                    noteCard(note: note)
-                }
-                
+                noteCard
+
                 // ── Actions ────────────────────────────────────────────
                 if isToday {
                     actionButtons
@@ -311,17 +311,26 @@ struct SetDetailView: View {
 
     // MARK: - Tempo Card
     
-    private func tempoCard(tempo: Tempo) -> some View {
-        cardBackground(
+    /// An all-zero `Tempo` is the builder's empty default and is treated as
+    /// absent throughout the app, so it draws "—" rather than "0 – 0 – 0 – 0".
+    private var loggedTempo: Tempo? {
+        guard let tempo = model.tempo, !tempo.isEmpty else { return nil }
+        return tempo
+    }
+
+    private var tempoCard: some View {
+        let tempo = loggedTempo
+
+        return cardBackground(
             VStack(alignment: .leading, spacing: 10) {
                 cardHeader(icon: "waveform.path", title: "Tempo")
 
                 HStack(spacing: 0) {
                     ForEach(Array(Self.tempoPhases.enumerated()), id: \.offset) { position, phase in
                         VStack(spacing: 4) {
-                            Text("\(tempo[keyPath: phase.keyPath])")
+                            Text(tempo.map { "\($0[keyPath: phase.keyPath])" } ?? "—")
                                 .font(.system(size: 20, weight: .bold))
-                                .foregroundStyle(Color.primary)
+                                .foregroundStyle(tempo == nil ? Color(UIColor.tertiaryLabel) : Color.primary)
                             Text(phase.label)
                                 .font(.system(size: 10, weight: .medium))
                                 .foregroundStyle(Color.secondary)
@@ -352,14 +361,28 @@ struct SetDetailView: View {
 
     // MARK: - Note Card
     
-    private func noteCard(note: String) -> some View {
-        cardBackground(
+    /// Whitespace is not a note. A set logged with the field opened and left
+    /// blank must read the same as one that never had a note at all.
+    private var loggedNote: String? {
+        guard let note = model.note?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !note.isEmpty
+        else { return nil }
+        return note
+    }
+
+    private var noteCard: some View {
+        let note = loggedNote
+
+        return cardBackground(
             VStack(alignment: .leading, spacing: 8) {
                 cardHeader(icon: "note.text", title: "Note")
 
-                Text(note)
+                // "—" rather than the session overlay's "Add a note": nothing
+                // is edited in place here, so prompting for an action this card
+                // does not offer would be a dead end.
+                Text(note ?? "—")
                     .font(.system(size: 14, weight: .regular))
-                    .foregroundStyle(Color.primary)
+                    .foregroundStyle(note == nil ? Color(UIColor.tertiaryLabel) : Color.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .fixedSize(horizontal: false, vertical: true)
             }
