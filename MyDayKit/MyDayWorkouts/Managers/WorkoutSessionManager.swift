@@ -33,16 +33,29 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
     /// away with the whole session — carrying what addresses its raw log.
     public var onSetUnlogged: ((_ exerciseId: String, _ logId: String) -> Void)?
 
+    /// Fired once the session is finished, carrying it as a document of its own
+    /// for the analytics collection and the user's history. Unlike a set's raw
+    /// log, this is written on finish rather than as work happens — a session
+    /// only means something complete.
+    public var onSessionFinished: ((CompletedWorkoutSession) -> Void)?
+
     // MARK: - Private
 
     private var sessionId: String
+
+    /// Who is performing the session. Deliberately injected rather than read off
+    /// `entry.template.createdBy` — that is the template's *author*, which for a
+    /// coach-programmed workout is not the person doing it.
+    private let userId: String
+
     public private(set) var startedAt: Date = Date()
     private var restTimerTask: Task<Void, Never>?
 
     // MARK: - Init
 
-    public init(entry: DailyWorkoutEntry) {
+    public init(entry: DailyWorkoutEntry, userId: String) {
         self.entry = entry
+        self.userId = userId
         if let record = entry.sessionRecord, entry.status == .inProgress || entry.status == .completed {
             self.sessionId = record.id
             self.startedAt = entry.startedAt ?? record.startedAt
@@ -245,15 +258,39 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
 
         onEntryUpdated?(entry)
 
+        if let record = sessionRecord {
+            onSessionFinished?(completedSession(from: record, endedAt: endedAt))
+        }
+
         return WorkoutSessionModel(
             id: sessionId,
             templateId: entry.template.id,
-            userId: entry.template.createdBy,
+            userId: userId,
             title: entry.template.title,
             startedAt: startedAt,
             completedAt: endedAt,
             notes: notes,
             status: .completed
+        )
+    }
+
+    /// The finished session as its own document.
+    private func completedSession(from record: WorkoutSessionRecord, endedAt: Date) -> CompletedWorkoutSession {
+        CompletedWorkoutSession(
+            id: sessionId,
+            userId: userId,
+            templateId: entry.template.id,
+            title: entry.template.title,
+            assignedDate: entry.assignedDate,
+            startedAt: startedAt,
+            endedAt: endedAt,
+            durationSeconds: Int(endedAt.timeIntervalSince(startedAt)),
+            rpe: record.rpe,
+            workload: record.workload,
+            notes: record.notes,
+            setsCompleted: totalSetsLogged,
+            setsTargeted: totalSetsTargeted,
+            exerciseRecords: record.exerciseRecords
         )
     }
 

@@ -477,7 +477,8 @@ struct MyDayWorkoutSessionScreen: View {
                         updatedAt: .now
                     ),
                     assignedDate: .now
-                )
+                ),
+                userId: "preview-user"
             ),
             userId: "preview-user"
     )

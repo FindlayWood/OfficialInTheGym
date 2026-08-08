@@ -29,6 +29,7 @@ extension MyDayManager {
         day.workouts.removeAll { $0.id == entry.id }
         selectedDay = day
         deleteWorkoutStats(for: entry)
+        deleteCompletedSession(for: entry)
         Task {
             try await workoutSaver.save(data: day)
         }

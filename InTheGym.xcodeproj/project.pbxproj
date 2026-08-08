@@ -902,6 +902,8 @@
 		F09A385B2FD227A5009793DD /* WorkoutTemplateSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09A385A2FD227A5009793DD /* WorkoutTemplateSyncer.swift */; };
 		F09C539C2FD76234007CDAB4 /* WorkoutTemplateSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09C539B2FD76234007CDAB4 /* WorkoutTemplateSyncService.swift */; };
 		F09C53E02FD9EAD1007CDAB4 /* FirestoreWorkoutTemplateFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09C53DF2FD9EAD1007CDAB4 /* FirestoreWorkoutTemplateFetcher.swift */; };
+		E4C90B7A15D24F8E9A330006 /* FirestoreCompletedWorkoutSessionSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330005 /* FirestoreCompletedWorkoutSessionSaver.swift */; };
+		E4C90B7A15D24F8E9A330008 /* FirestoreCompletedWorkoutSessionDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */; };
 		A1D0E5F200024C0A9B110002 /* FileManagerWorkoutTemplateFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */; };
 		F0A11D272F6C637100CE1E9A /* StatsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; };
 		F0A11D282F6C637100CE1E9A /* StatsKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -1824,6 +1826,8 @@
 		F09A385A2FD227A5009793DD /* WorkoutTemplateSyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateSyncer.swift; sourceTree = "<group>"; };
 		F09C539B2FD76234007CDAB4 /* WorkoutTemplateSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateSyncService.swift; sourceTree = "<group>"; };
 		F09C53DF2FD9EAD1007CDAB4 /* FirestoreWorkoutTemplateFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWorkoutTemplateFetcher.swift; sourceTree = "<group>"; };
+		E4C90B7A15D24F8E9A330005 /* FirestoreCompletedWorkoutSessionSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreCompletedWorkoutSessionSaver.swift"; sourceTree = "<group>"; };
+		E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreCompletedWorkoutSessionDeleter.swift"; sourceTree = "<group>"; };
 		A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerWorkoutTemplateFetcher.swift; sourceTree = "<group>"; };
 		F0A11D262F6C637100CE1E9A /* StatsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StatsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitComposition.swift; sourceTree = "<group>"; };
@@ -4829,6 +4833,8 @@
 				F09A385A2FD227A5009793DD /* WorkoutTemplateSyncer.swift */,
 				F09C539B2FD76234007CDAB4 /* WorkoutTemplateSyncService.swift */,
 				F09C53DF2FD9EAD1007CDAB4 /* FirestoreWorkoutTemplateFetcher.swift */,
+				E4C90B7A15D24F8E9A330005 /* FirestoreCompletedWorkoutSessionSaver.swift */,
+				E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */,
 				A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */,
 			);
 			path = MyDay;
@@ -4984,6 +4990,8 @@
 				745E1DA4283E7649009CA236 /* CoachWorkoutsViewController.swift in Sources */,
 				74DE6DAA27D6299E009FB44A /* WorkloadSearchModel.swift in Sources */,
 				F09C53E02FD9EAD1007CDAB4 /* FirestoreWorkoutTemplateFetcher.swift in Sources */,
+				E4C90B7A15D24F8E9A330006 /* FirestoreCompletedWorkoutSessionSaver.swift in Sources */,
+				E4C90B7A15D24F8E9A330008 /* FirestoreCompletedWorkoutSessionDeleter.swift in Sources */,
 				A1D0E5F200024C0A9B110002 /* FileManagerWorkoutTemplateFetcher.swift in Sources */,
 				74B48DEC27A1FCBF00BBFC16 /* PostReferencesModel.swift in Sources */,
 				744AED52279B08AB000D2D74 /* WorkouCollectionDataSource.swift in Sources */,

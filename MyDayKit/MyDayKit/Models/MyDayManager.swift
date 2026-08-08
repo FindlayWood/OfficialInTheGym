@@ -38,6 +38,11 @@ public class MyDayManager: ObservableObject {
     /// every set, so it needs the log on its own.
     let workoutStatsSaver: ExerciseStatsSaver
 
+    /// A finished session as a document of its own — the analytics collection
+    /// and the user's workout history.
+    let completedSessionSaver: CompletedWorkoutSessionSaver
+    let completedSessionDeleter: CompletedWorkoutSessionDeleter
+
     public init(
         saver: MyDayAndStatSaver,
         clipSaver: MyDaySaver,
@@ -47,7 +52,9 @@ public class MyDayManager: ObservableObject {
         wellnessSaver: MyDaySaver,
         rpeSaver: MyDaySaver,
         workoutSaver: MyDaySaver,
-        workoutStatsSaver: ExerciseStatsSaver
+        workoutStatsSaver: ExerciseStatsSaver,
+        completedSessionSaver: CompletedWorkoutSessionSaver,
+        completedSessionDeleter: CompletedWorkoutSessionDeleter
     ) {
         self.saver = saver
         self.clipSaver = clipSaver
@@ -58,6 +65,8 @@ public class MyDayManager: ObservableObject {
         self.rpeSaver = rpeSaver
         self.workoutSaver = workoutSaver
         self.workoutStatsSaver = workoutStatsSaver
+        self.completedSessionSaver = completedSessionSaver
+        self.completedSessionDeleter = completedSessionDeleter
         initialLoad()
     }
     

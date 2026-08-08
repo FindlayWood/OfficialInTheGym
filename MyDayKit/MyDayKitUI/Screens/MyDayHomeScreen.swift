@@ -514,7 +514,9 @@ struct MyDayHomeScreen: View {
             wellnessSaver: PreviewMyDaySaver(),
             rpeSaver: PreviewMyDaySaver(),
             workoutSaver: PreviewMyDaySaver(),
-            workoutStatsSaver: PreviewExerciseStatsSaver()
+            workoutStatsSaver: PreviewExerciseStatsSaver(),
+            completedSessionSaver: PreviewCompletedWorkoutSessionSaver(),
+            completedSessionDeleter: PreviewCompletedWorkoutSessionDeleter()
         )
     )
 }

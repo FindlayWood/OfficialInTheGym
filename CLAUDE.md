@@ -529,6 +529,45 @@ how the user happened to record it.**
   workout the user can no longer see.
 - `finishSession` writes no logs — the sets were logged as they happened.
 
+## Completed Workout Sessions
+A finished session is written as a document of its own, to **two** paths, on `finishSession` only —
+unlike raw logs, which are per set, because a session only means something complete:
+
+```
+WorkoutSessions/{sessionId}              <- analytics, every user
+Users/{userId}/WorkoutSessions/{id}      <- that user's workout history
+```
+
+Both hold the **same** `CompletedWorkoutSession`; only the analytics copy ever gains `deletedAt`.
+The session still lives embedded in the day (`DailyWorkoutEntry.sessionRecord`) — that is what the
+day screen reads. These documents exist so that "what workouts have been done" does not mean reading
+every day document of every user.
+
+- **Both writes go in one `WriteBatch`** (`FirestoreCompletedWorkoutSessionSaver`). Two identical
+  copies that can silently diverge are worse than one — a half-succeeded write would leave the
+  collections disagreeing with nothing to say which was right.
+- **`userId` is the performer, injected into `WorkoutSessionManager.init(entry:userId:)` from the
+  coordinator.** It is emphatically **not** `entry.template.createdBy`, which is the template's
+  *author* — for a coach-programmed workout that is the coach, and every session would be filed
+  under them. `finishSession` used to build `WorkoutSessionModel` that way; that was a latent bug
+  that only stayed harmless because the return value is discarded.
+- **Removing the workout from the day hard-deletes the user's copy and marks the analytics copy
+  `deletedAt`** (`FirestoreCompletedWorkoutSessionDeleter`, again one batch). A deletion that was
+  never recorded cannot be reconstructed later, which is why the soft-delete exists from the start.
+  `removeWorkoutFromDay` is the *only* trigger — `cancelSession` cannot reach a completed session,
+  since the `⋯` menu is hidden by `showsOptions: sessionStarted && !sessionCompleted`.
+- **`updateData` failing on a missing analytics document is intended.** The copies are only written
+  together, so either both exist or neither does; a session completed before this shipped has
+  neither, and the batch failing changes nothing. Do not soften it to `setData(merge:)` — that
+  writes a stub document holding only a `deletedAt`.
+- **Forward-only, by decision** — sessions finished before this shipped are not backfilled and stay
+  readable in their day documents.
+- Requires Firestore rules permitting the new collections. **Rules are not in this repository** —
+  a client write to a new top-level collection is denied until they are deployed.
+
+`WorkoutSessionModel` (`MyDayWorkoutModel.swift`) is dead — built by `finishSession`, never read.
+Left in place; `CompletedWorkoutSession` is the model that is actually persisted.
+
 ## Firestore
 Firestore collection structure will be provided when working on specific features.
 

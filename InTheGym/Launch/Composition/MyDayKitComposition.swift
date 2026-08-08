@@ -44,7 +44,9 @@ class MyDayKitComposition {
             wellnessSaver: localAndRemoteMyDaySaver,
             rpeSaver: localAndRemoteMyDaySaver,
             workoutSaver: localAndRemoteMyDaySaver,
-            workoutStatsSaver: rawLogRemoteStatsSaver
+            workoutStatsSaver: rawLogRemoteStatsSaver,
+            completedSessionSaver: FirestoreCompletedWorkoutSessionSaver(),
+            completedSessionDeleter: FirestoreCompletedWorkoutSessionDeleter()
         )
         
         // Clip
