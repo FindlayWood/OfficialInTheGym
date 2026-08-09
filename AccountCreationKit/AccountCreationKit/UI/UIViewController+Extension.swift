@@ -14,7 +14,9 @@ extension UIViewController {
         addChild(childView)
         view.addSubview(childView.view)
         childView.didMove(toParent: self)
-        childView.view.backgroundColor = .secondarySystemBackground
+        // The page sits on `systemBackground` and the cards on `secondarySystemBackground`, the way
+        // round MyDay uses them. It was inverted before, when the cards were the lighter surface.
+        childView.view.backgroundColor = .systemBackground
         childView.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             childView.view.topAnchor.constraint(equalTo: view.topAnchor),

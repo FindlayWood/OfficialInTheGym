@@ -19,10 +19,10 @@ Lean, minimal UI aesthetic throughout.
 Firebase Auth, email and password only.
 
 ## Account Creation
-The post-signup onboarding flow — a 7-step paged form between email verification and the tab bar.
-It was an SPM package until it moved to a framework built like `MyDayKit` and `StatsKit`; the move
-was **structure only**, with the screens left as they were so the UI/UX pass could be judged on its
-own. Entered from `BasicBaseFlow.showAccountCreation` → `AccountCreationComposerAdapter`.
+The post-signup onboarding flow — a paged form between email verification and the tab bar. It was an
+SPM package until it moved to a framework built like `MyDayKit` and `StatsKit`, in two passes: the
+framework move (structure only), then the flow and design below. Entered from
+`BasicBaseFlow.showAccountCreation` → `AccountCreationComposerAdapter`.
 
 - **`AccountCreationKit.xcodeproj` carries no file references.** Both targets are driven entirely by
   a `PBXFileSystemSynchronizedRootGroup`, unlike StatsKit which synchronises only its `StatsKit/`
@@ -49,12 +49,103 @@ own. Entered from `BasicBaseFlow.showAccountCreation` → `AccountCreationCompos
   types that existed to build one view controller. It follows `StatsKitRouter`: `public init` taking
   every dependency, `public func start()`, `viewController(for:)` over `AccountCreationRoutes`.
 
-Two behaviours are preserved from the package **and are wrong** — they were left alone so the move
-stayed a move, and they belong to the UI/UX pass:
-- a thrown error from the availability check sets `.taken`, so a network blip reads as "username
-  taken" (comment marks the spot in `AccountCreationHomeViewModel.checkUsername`);
-- the `$username` listener drops the first **four** values, so a username typed to exactly 3
-  characters and left alone is never checked and stays `.idle` — which `canCreateAccount` blocks on.
+### Four steps, in `AccountCreationStep`
+`details` → `profile` → `body` → `review`. This was seven: a welcome screen, then a step each for
+username, display name, bio, account type and photo, then a summary. The enum replaced a bare `Int`
+page index so the review step can send the user back to the step that is missing something.
+
+- **The welcome step was cut.** Four cards of text — Account Setup, Privacy, Stamps, Premium — shown
+  before the user had done anything, two of them marketing features they could not yet use. Do not
+  reinstate a step that only tells.
+- **Username and display name share a step; photo and bio share the next.** The pairs group by
+  whether they are required — everything after `details` gates nothing, so "Continue" *is* the skip
+  and each subtitle says so. A separate Skip button would say the same thing twice.
+- **The progress bar is tappable backwards only.** Every segment used to be tappable both ways, so a
+  user on step one could land on the summary behind a disabled button with nothing saying why.
+- **Each step gates its own button** (`canAdvance`), so the user is stopped where the problem is.
+  `canCreateAccount` still gates the final press, and on the review step anything missing renders as
+  a **tappable** row that jumps to its step — it used to be flat red text with no way to act on it.
+  Height, weight and age never appear in `missing`; they are optional, so they show when present and
+  are simply absent when not.
+
+### Account type is no longer asked
+There was a step for it. It is gone: everyone is created `.individual`, and coaching is something a
+user takes on later rather than a kind of account they declare before they have seen the app.
+
+- **`AccountType` and `CreateAccountModel.accountType` stay.** `Users.accountType` is non-optional
+  and every document already written carries one — dropping the field breaks decoding for all of
+  them. See the Firestore decode warning under Workout Library Loading.
+- **Existing routing is untouched.** `BaseController.swift` still sends `.coach` to
+  `CoachInitialViewController`, so accounts already marked coach keep their tab bar. Nothing creates
+  a new one.
+- **Open, and deliberately unanswered: what "start coaching" does.** Flipping an existing user to
+  `.coach` would take away their own training tabs, which is the wrong trade for someone who trains
+  *and* coaches. The likely answer is coaching as a mode inside the normal app rather than a separate
+  tab bar — which is also what the coach-assigned-workouts design below assumes. Do not resolve this
+  by reinstating the signup question.
+
+### Body measurements — height, weight, date of birth
+All three optional, all on the `body` step, each a `BodyMeasurementRow` that reads "Not set" until it
+has a value.
+
+- **Stored canonically: `heightCentimetres` and `weightKilograms`,** whatever the user entered them
+  in, matching `WeightUnit.kilograms(_:unit:)` on the stats path. `heightUnit` / `weightUnit` record
+  how to *read them back*, not what the numbers mean. Two bodyweights that cannot be compared without
+  unpicking a unit first are not much use to a stat.
+- **Date of birth, not an age.** An age is wrong within a year of signup and there is no second
+  conversation in which to correct it. `DateOfBirthSheet` floors the picker at 13 years — that is the
+  wheel refusing to express a younger date, **not an age gate**, and it is not a substitute for one.
+- **The wheel only appears in a sheet, never inline.** A wheel always has something under the marker,
+  so an inline picker would make an untouched optional field look answered. `AccountCreationPickerSheet`
+  gives all three a Clear, which is the only way back to "not set" once a sheet has been opened.
+  Values bind live and Done only dismisses, the same contract as `SessionSetValueSheet`.
+- **Switching unit converts, it does not clear** — unlike `MyDayWorkoutBuilderDistanceScreen`, where
+  picking the unit is step one. Here you have already dialled a number in by the time you notice.
+
+**Not persisted yet.** `createAccount` is a callable Cloud Function living outside this repository
+and it drops keys it does not know, so `FunctionsAccountCreator` sends the five body keys and the
+server discards them. Persisting them needs the function updated *and* optional properties added to
+`Users` to read them back — **the new properties must be optional**, since every existing user
+document lacks them. The handoff spec is `CLOUD_FUNCTIONS_ACCOUNT_CREATION.md`, which also records
+that `Users` is decoded from **two** stores (Firestore `Users/{uid}` on the launch path, RTDB
+`users/{uid}` for followers / coaches / requests), so a field written to only one appears on some
+screens and not others. **Weight in particular should not stay a single signup value** — it is
+what `WeightUnit.percentBodyweight` prescriptions are worked out from, so a number captured once at
+signup goes quietly wrong; it wants to be editable and probably logged over time alongside the MyDay
+wellness cards.
+
+### Fixed here — do not reintroduce
+- **Usernames are lowercased** in `AccountCreationHomeViewModel.username`'s `didSet`, and the field
+  sets `.textInputAutocapitalization(.never)`. `Usernames/{username}` is a case-sensitive Firestore
+  document id, so `Findlay` and `findlay` are two different reservations — and iOS capitalises the
+  first letter of a text field by default, which reserved names users never typed. Both halves are
+  needed: the modifier for typing, the `didSet` for pastes.
+- **The availability check is debounced**, not `.dropFirst(4)`. Dropping the first four published
+  values meant a username typed to exactly three characters and left alone was never checked at all,
+  so it sat on `.idle` and `canCreateAccount` blocked forever.
+- **A failed lookup is `.unchecked`, not `.taken`.** A network blip is not a claimed username, and
+  saying so sent users off to invent a name they never needed.
+- **Creation failure is reported.** `creationError` renders as `AccountCreationErrorBanner` above the
+  bottom button, on whichever step the user is on. It used to fail silently — the spinner vanished
+  and nothing else changed. A username lost between check and reservation sends the user back to
+  `.details` with a message, and **does not clear the field**, which the old code did.
+
+### Design
+Matched to MyDay, which it did not resemble at all: white capsules with `shadow(radius: 8)`, radius-8
+cards, drop shadows on selection, and hardcoded `.white` backgrounds that were unreadable in dark
+mode. It now uses MyDay's vocabulary — `secondarySystemBackground` cards at radius 14/16 holding
+`tertiarySystemBackground` input wells, uppercase caption headers, explicit `.system(size:weight:)`
+fonts, no shadows. **The page is `systemBackground` and the cards are `secondarySystemBackground`**
+(set in `UI/UIViewController+Extension.swift`); that was the other way round before.
+- The forward action is one full-width 52pt button at the bottom, as on every MyDay builder screen;
+  back is a 44pt chevron in `AccountCreationTopBar`, like `MyDayWorkoutNavBar`. It used to be two
+  60pt filled circles at the bottom.
+- Disabled buttons use the gated styling from `SessionSetDetailOverlay` — `Color.secondary` on
+  `tertiarySystemFill`, `.easeInOut(0.15)`.
+- Sign out is a quiet text button in the top corner, on the first step only. It was red, directly
+  under "Get Started", which read as an error rather than an escape hatch.
+- The `PhotosPicker` wraps the avatar itself with a camera badge. The placeholder used to be a
+  `person.circle.fill` scaled to 300pt with a text link under it.
 
 ## Architecture
 - Coordinator-based UIKit navigation with SwiftUI views via `UIHostingController`

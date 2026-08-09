@@ -7,6 +7,9 @@
 
 import Foundation
 
+/// Kept because `Users.accountType` is non-optional and every document already written carries one.
+/// **The creation flow no longer asks** — everything created now is `.individual`, and coaching is
+/// something a user takes on later rather than a kind of account they declare at signup.
 public enum AccountType: String, CaseIterable, Identifiable, Codable {
 
     case individual
@@ -23,17 +26,6 @@ public enum AccountType: String, CaseIterable, Identifiable, Codable {
             return "Athlete"
         case .coach:
             return "Coach"
-        }
-    }
-
-    public var message: String {
-        switch self {
-        case .individual:
-            return "Select this type if you are looking to use this app as an individual."
-        case .athlete:
-            return "Select this type if you are an athlete playing sport / part of a team"
-        case .coach:
-            return "Select this type if you are looking to manage teams, athlete's or clients."
         }
     }
 }

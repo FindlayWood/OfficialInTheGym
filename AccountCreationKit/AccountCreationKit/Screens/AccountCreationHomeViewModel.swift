@@ -12,7 +12,7 @@ class AccountCreationHomeViewModel: ObservableObject {
 
     // MARK: - Steps
 
-    @Published var page: Int = 0
+    @Published var step: AccountCreationStep = .details
 
     // MARK: - User
 
@@ -21,14 +21,31 @@ class AccountCreationHomeViewModel: ObservableObject {
 
     // MARK: - Entered Details
 
+    /// Held lowercase. `Usernames/{username}` is a case-sensitive Firestore document id, so
+    /// `Findlay` and `findlay` would be two different reservations — and iOS capitalises the first
+    /// letter of a text field by default, which is how a user who typed lowercase ended up with a
+    /// capitalised name they never chose. The field also sets `.textInputAutocapitalization(.never)`;
+    /// this is the half that a paste cannot get around.
     @Published var username: String = "" {
         didSet {
-            if username.count > usernameLimit && oldValue.count <= usernameLimit {
+            guard username != oldValue else { return }
+            if username.count > usernameLimit {
                 username = oldValue
+                return
             }
+            let normalised = username.lowercased()
+            if normalised != username {
+                username = normalised
+                return
+            }
+            usernameError = nil
+            isUsernameValid = username.isEmpty ? .idle : .checking
         }
     }
     @Published var isUsernameValid: UsernameValidity = .idle
+
+    /// Set when a username that passed the availability check was taken before we could reserve it.
+    @Published var usernameError: String?
 
     @Published var displayName: String = "" {
         didSet {
@@ -50,16 +67,48 @@ class AccountCreationHomeViewModel: ObservableObject {
     let displayNameLimit: Int = 100
     let bioLimit: Int = 300
 
-    @Published var selectedAccountType: AccountType?
-
     @Published var profileImage: UIImage?
+
+    // MARK: - Body
+    //
+    // All optional, and all stored canonically — centimetres and kilograms — with the entry unit
+    // kept alongside so the value reads back the way it was typed.
+
+    @Published var heightCentimetres: Double?
+    @Published var weightKilograms: Double?
+    @Published var dateOfBirth: Date?
+
+    /// The unit last used to enter each measure. Metric by default.
+    @Published var heightUnit: HeightUnit = .centimetres
+    @Published var weightUnit: BodyWeightUnit = .kilograms
 
     @Published var uploading: Bool = false
 
-    @Published var accountCreated: Bool = false
+    /// Shown above the bottom button. Account creation used to fail silently — the spinner
+    /// disappeared and the user was left on the last screen of onboarding with no way to tell
+    /// whether it had worked.
+    @Published var creationError: String?
+
+    // MARK: - Validation
+
+    var isUsernameComplete: Bool { isUsernameValid == .valid }
+    var isDisplayNameComplete: Bool { !displayName.trimTrailingWhiteSpaces().isEmpty }
 
     var canCreateAccount: Bool {
-        isUsernameValid == .valid && selectedAccountType != nil && !displayName.isEmpty
+        isUsernameComplete && isDisplayNameComplete
+    }
+
+    /// Whether the bottom button is enabled on the step being shown. Each step gates on its own
+    /// answers, so the user is stopped where the problem is rather than at the end.
+    var canAdvance: Bool {
+        switch step {
+        case .details:
+            return isUsernameComplete && isDisplayNameComplete
+        case .profile, .body:
+            return true
+        case .review:
+            return canCreateAccount
+        }
     }
 
     // MARK: - Dependencies
@@ -99,39 +148,62 @@ class AccountCreationHomeViewModel: ObservableObject {
         usernameListener()
     }
 
+    // MARK: - Navigation
+
+    @MainActor
+    func advance() {
+        if step == .review {
+            createAccount()
+        } else if let next = step.next {
+            step = next
+        }
+    }
+
+    func goBack() {
+        if let previous = step.previous {
+            step = previous
+        }
+    }
+
     // MARK: - Username
 
+    /// Debounced rather than `.dropFirst(4)`, which is what this used to be: dropping the first four
+    /// published values meant a username typed to exactly three characters and left alone was never
+    /// checked at all, so it sat on `.idle` and `canCreateAccount` blocked forever.
     func usernameListener() {
         $username
-            .dropFirst(4)
+            .dropFirst()
+            .removeDuplicates()
+            .debounce(for: .milliseconds(400), scheduler: RunLoop.main)
             .sink { [weak self] in self?.checkUsername($0) }
             .store(in: &subscriptions)
     }
 
     func checkUsername(_ text: String) {
-        isUsernameValid = .checking
-        let usernameRegEx = "[A-Za-z0-9_.]{3,50}$"
-
+        let usernameRegEx = "[a-z0-9_.]{3,50}$"
         let usernamePred = NSPredicate(format: "SELF MATCHES %@", usernameRegEx)
-        if usernamePred.evaluate(with: text) {
-            Task { @MainActor in
-                do {
-                    isUsernameValid = try await usernameChecker.isUsernameAvailable(text) ? .valid : .taken
-                } catch {
-                    // A failed lookup currently reads as "taken", so a network blip blocks a name
-                    // that is actually free. Preserved from the original for now — the fix belongs
-                    // with the UI pass, which needs a state to show it in.
-                    print(String(describing: error))
-                    isUsernameValid = .taken
-                }
-            }
-        } else {
-            if text.count == 0 {
+
+        guard usernamePred.evaluate(with: text) else {
+            if text.isEmpty {
                 isUsernameValid = .idle
             } else if text.count < 3 {
                 isUsernameValid = .tooShort
             } else {
                 isUsernameValid = .invalid
+            }
+            return
+        }
+
+        isUsernameValid = .checking
+        Task { @MainActor in
+            do {
+                isUsernameValid = try await usernameChecker.isUsernameAvailable(text) ? .valid : .taken
+            } catch {
+                // A failed lookup is not a taken username. Saying "taken" for a name that is
+                // probably free sends the user off to invent another one for no reason, so this
+                // reports the lookup itself as the thing that failed.
+                print(String(describing: error))
+                isUsernameValid = .unchecked
             }
         }
     }
@@ -140,7 +212,8 @@ class AccountCreationHomeViewModel: ObservableObject {
 
     @MainActor
     func createAccount() {
-        guard let selectedAccountType else { return }
+        creationError = nil
+        usernameError = nil
         uploading = true
 
         let newAccountModel = CreateAccountModel(
@@ -149,39 +222,41 @@ class AccountCreationHomeViewModel: ObservableObject {
             username: username.trimTrailingWhiteSpaces(),
             displayName: displayName.trimTrailingWhiteSpaces(),
             bio: bio.trimTrailingWhiteSpaces(),
-            accountType: selectedAccountType
+            heightCentimetres: heightCentimetres,
+            weightKilograms: weightKilograms,
+            heightUnit: heightCentimetres == nil ? nil : heightUnit,
+            weightUnit: weightKilograms == nil ? nil : weightUnit,
+            dateOfBirth: dateOfBirth
         )
 
         Task {
-            let reservedUsername = await reserveUsername()
-            if reservedUsername {
-                do {
-                    try await accountCreator.createAccount(newAccountModel)
-                    if profileImage != nil {
-                        uploadProfileImage()
-                    }
-                    onAccountCreated()
-                } catch {
-                    // failed to upload account
-                    print(String(describing: error))
-                    uploading = false
-                }
-            } else {
-                // error with username already being taken
-                username.removeAll()
+            do {
+                try await usernameReserver.reserveUsername(newAccountModel.username, for: uid)
+            } catch {
+                // The username went between the availability check and here. Send the user back to
+                // the field rather than clearing it — clearing loses what they typed and never says
+                // why.
+                print(String(describing: error))
                 uploading = false
+                isUsernameValid = .taken
+                usernameError = "That username was taken just before we could save it. Try another."
+                step = .details
+                return
             }
-        }
-    }
 
-    func reserveUsername() async -> Bool {
-        do {
-            try await usernameReserver.reserveUsername(username, for: uid)
-            return true
-        } catch {
-            print("error reserving username")
-            print(String(describing: error))
-            return false
+            do {
+                try await accountCreator.createAccount(newAccountModel)
+            } catch {
+                print(String(describing: error))
+                uploading = false
+                creationError = "We couldn't create your account. Check your connection and try again."
+                return
+            }
+
+            if profileImage != nil {
+                uploadProfileImage()
+            }
+            onAccountCreated()
         }
     }
 
