@@ -13,6 +13,12 @@ import SwiftUI
 /// the metrics here are duplicated rather than shared.
 struct WorkoutSessionFinishBar: View {
 
+    /// False until at least one set has been logged. A session with nothing
+    /// performed has nothing to finish — it would write a completed session
+    /// holding no work, counting toward stats and, once assignment ships,
+    /// telling a coach the workout was done.
+    var isEnabled: Bool = true
+
     var onFinish: (() -> Void)?
 
     var body: some View {
@@ -24,14 +30,17 @@ struct WorkoutSessionFinishBar: View {
             } label: {
                 Text("Finish Workout")
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(isEnabled ? Color.white : Color.secondary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
                     .background(
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .fill(Color.darkColor)
+                            .fill(isEnabled ? Color.darkColor : Color(UIColor.tertiarySystemFill))
                     )
             }
+            .buttonStyle(.plain)
+            .disabled(!isEnabled)
+            .animation(.easeInOut(duration: 0.15), value: isEnabled)
             .padding(.horizontal, 20)
             .padding(.vertical, 12)
         }

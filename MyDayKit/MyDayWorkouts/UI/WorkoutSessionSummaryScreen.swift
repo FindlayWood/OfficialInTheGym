@@ -238,6 +238,11 @@ struct WorkoutSessionSummaryScreen: View {
 
     // MARK: - Complete Button
 
+    /// The session RPE is the one thing here that cannot be recovered later —
+    /// notes can be added to a record, but how hard the session felt is only
+    /// answerable now, and `workload` (duration × RPE) does not exist without it.
+    private var canComplete: Bool { selectedRPE != nil }
+
     private var completeButton: some View {
         Button {
             manager.finishSession(rpe: selectedRPE, notes: notes.isEmpty ? nil : notes)
@@ -245,15 +250,17 @@ struct WorkoutSessionSummaryScreen: View {
         } label: {
             Text("Complete Workout")
                 .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(canComplete ? Color.white : Color.secondary)
                 .frame(maxWidth: .infinity)
                 .frame(height: 52)
                 .background(
                     RoundedRectangle(cornerRadius: 14)
-                        .fill(Color.darkColor)
+                        .fill(canComplete ? Color.darkColor : Color(UIColor.tertiarySystemFill))
                 )
         }
         .buttonStyle(.plain)
+        .disabled(!canComplete)
+        .animation(.easeInOut(duration: 0.15), value: canComplete)
         .padding(.horizontal, 20)
         .padding(.vertical, 12)
         .background(Color(UIColor.systemBackground))

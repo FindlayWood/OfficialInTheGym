@@ -20,20 +20,26 @@ struct DailyWorkoutCard: View {
             // Full-card tap navigates to session
             cardContent
 
-            // Ellipsis sits above the card button in the ZStack so it wins its hit area
-            Button { showOptions = true } label: {
-                ZStack {
-                    Circle()
-                        .fill(Color(UIColor.secondarySystemBackground))
-                        .frame(width: 32, height: 32)
-                    Image(systemName: "ellipsis")
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundColor(.secondary)
+            // Ellipsis sits above the card button in the ZStack so it wins its hit area.
+            // Hidden once the workout is completed: it cannot be removed from the
+            // day any more, and "Start Workout" means nothing for work already
+            // done — so the sheet would open with nothing to offer. The card body
+            // still taps through to the read-only completed session.
+            if entry.status != .completed {
+                Button { showOptions = true } label: {
+                    ZStack {
+                        Circle()
+                            .fill(Color(UIColor.secondarySystemBackground))
+                            .frame(width: 32, height: 32)
+                        Image(systemName: "ellipsis")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(width: 50, height: 50)
                 }
-                .frame(width: 50, height: 50)
+                .buttonStyle(.plain)
+                .padding(8)
             }
-            .buttonStyle(.plain)
-            .padding(8)
         }
         .sheet(isPresented: $showOptions) {
             WorkoutCardOptionsSheet(

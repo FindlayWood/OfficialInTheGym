@@ -106,7 +106,10 @@ struct MyDayWorkoutSessionScreen: View {
                     .padding(.bottom, 16)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             } else if !sessionCompleted {
-                WorkoutSessionFinishBar(onFinish: { onGoToSummary?() })
+                WorkoutSessionFinishBar(
+                    isEnabled: manager.totalSetsLogged > 0,
+                    onFinish: { onGoToSummary?() }
+                )
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 

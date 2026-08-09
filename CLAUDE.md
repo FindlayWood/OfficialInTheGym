@@ -488,6 +488,29 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   `MyDayCoordinator` now stores `rootViewController` in `start()` and exposes
   `popToCoordinatorRoot()`; `popToRoot()` / `popToRootViewController` are gone.
 
+## Workout Completion Rules
+Three guards on what counts as a finished workout. All three protect the same thing: a completed
+session is a claim that work was performed, and it is read by stats now and by a coach later.
+
+- **A completed workout cannot be removed from the day.** `removeWorkoutFromDay` guards on
+  `entry.status != .completed`, and `DailyWorkoutCard` hides the `⋯` entirely for a completed entry
+  — not just the delete row, because "Start Workout" is equally meaningless for work already done
+  and the sheet would open offering nothing. The card body still taps through to the read-only
+  completed view. The manager guard is what makes this an invariant rather than a UI convention the
+  next caller can breach.
+- **A session cannot be finished with zero sets logged.** `WorkoutSessionFinishBar(isEnabled:)` is
+  driven by `manager.totalSetsLogged > 0`. Finishing an empty session would write a
+  `CompletedWorkoutSession` recording no work, which still counts toward the day and would tell a
+  coach the workout was done.
+- **"Complete Workout" is disabled until a session RPE is picked** (`canComplete` on
+  `WorkoutSessionSummaryScreen`). RPE is the one thing on that screen that cannot be recovered
+  later — notes can be added to a record, but how hard it felt is only answerable now, and
+  `workload` (duration × RPE) does not exist without it.
+
+All three use the disabled styling already established by `SessionSetDetailOverlay`'s log button:
+`Color.secondary` label on `Color(UIColor.tertiarySystemFill)`, with `.easeInOut(0.15)` on the
+enabled flag. **Keep new gated buttons in step with it** rather than inventing a second look.
+
 ## Session Screen — What's Not Yet Built
 - Rest timer banner is hidden behind the set detail overlay, which stays open after logging.
   Quick-complete sidesteps this rather than fixing it — logging from the pill's circle never opens
@@ -551,11 +574,15 @@ every day document of every user.
   *author* — for a coach-programmed workout that is the coach, and every session would be filed
   under them. `finishSession` used to build `WorkoutSessionModel` that way; that was a latent bug
   that only stayed harmless because the return value is discarded.
-- **Removing the workout from the day hard-deletes the user's copy and marks the analytics copy
-  `deletedAt`** (`FirestoreCompletedWorkoutSessionDeleter`, again one batch). A deletion that was
-  never recorded cannot be reconstructed later, which is why the soft-delete exists from the start.
-  `removeWorkoutFromDay` is the *only* trigger — `cancelSession` cannot reach a completed session,
-  since the `⋯` menu is hidden by `showsOptions: sessionStarted && !sessionCompleted`.
+- **The deletion path is currently unreachable — deliberately, and it is kept anyway.**
+  `FirestoreCompletedWorkoutSessionDeleter` hard-deletes the user's copy and marks the analytics copy
+  `deletedAt`, in one batch. Its only caller is `removeWorkoutFromDay`, which now refuses `.completed`
+  entries (see *A completed workout cannot be removed* below), and `cancelSession` cannot reach a
+  completed session either. So nothing sets `deletedAt` today. It is retained because a session
+  document with no way to retract it is a worse position to be in than unused code, and because a
+  deletion that was never recorded cannot be reconstructed afterwards. **If a "delete a completed
+  workout" path is ever added, this is already built** — and Function 2 in
+  `CLOUD_FUNCTIONS_WORKOUT_SESSIONS.md` is what retires the coach-facing copy.
 - **`updateData` failing on a missing analytics document is intended.** The copies are only written
   together, so either both exist or neither does; a session completed before this shipped has
   neither, and the batch failing changes nothing. Do not soften it to `setData(merge:)` — that

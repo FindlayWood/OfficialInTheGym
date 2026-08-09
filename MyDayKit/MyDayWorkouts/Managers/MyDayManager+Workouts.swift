@@ -24,7 +24,14 @@ extension MyDayManager {
     }
 
     /// Remove a workout entry from the selected day and persist.
+    ///
+    /// **A completed workout cannot be removed.** It is a record of work that was
+    /// actually performed — it has raw logs behind it, it counts toward stats, and
+    /// once assignment ships a coach may have been told about it. `DailyWorkoutCard`
+    /// hides the options menu for a completed entry; this guard is what makes it an
+    /// invariant rather than a convention the next caller can breach.
     public func removeWorkoutFromDay(_ entry: DailyWorkoutEntry) {
+        guard entry.status != .completed else { return }
         guard var day = selectedDay else { return }
         day.workouts.removeAll { $0.id == entry.id }
         selectedDay = day
