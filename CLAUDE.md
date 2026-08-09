@@ -588,6 +588,53 @@ Two caveats that survive until then: permission-denied is a **hard** failure the
 all. The exercise raw logs have had this same gap since long before the workout ones — fix both
 together or neither.
 
+## Coach-Assigned Workouts — designed, not built
+The data model is prepared for coach assignment; **none of the assignment feature exists yet.** What
+is in the code today is provenance: `DailyWorkoutEntry.assignedBy` / `.assignmentId` and the same
+pair on `CompletedWorkoutSession`, both optional, both `nil` for everything written so far (which is
+correct — those workouts were self-started). They are carried from the entry into the completed
+session by `WorkoutSessionManager.completedSession(from:endedAt:)` and nothing else reads them.
+
+The agreed design, so that whoever builds it does not re-litigate it:
+
+- **Assignments live at `Users/{athleteId}/AssignedWorkouts/{id}`**, written by the coach. A coach
+  never touches `Users/{uid}/MyDay/*` — that document holds wellness and RPE, and Firestore rules
+  cannot scope a write to one field, so write access there would expose everything on it.
+- **Accepting materialises a `DailyWorkoutEntry`** carrying `assignedBy` / `assignmentId` and a
+  **snapshot of the template taken at accept time**, not at assign time. From that moment it is an
+  ordinary entry: same session flow, same raw logs, same completed-session document.
+- **The date is a parameter of acceptance, not an edit.** The athlete picks which day to put it on;
+  the assignment keeps the coach's original `assignedDate` alongside an `acceptedForDate`. This keeps
+  the coach's record of intent intact, makes "assigned Monday, done Wednesday" legible for free, and
+  avoids coach and athlete writing the same fields. Open question, deliberately: whether a coach may
+  edit an assignment *after* acceptance — leaning no, since the entry's snapshot would silently
+  disagree with it, making withdraw-and-reassign the honest version.
+- **Completion still writes to `WorkoutSessions` / `Users/{uid}/WorkoutSessions`** — the same single
+  pair as a self-started workout, with `assignedBy` set. A **Cloud Function** triggers on create,
+  and when `assignedBy` is set writes the coach-facing projection and pushes to that coach.
+  **Do not add a parallel `CompletedAssignedWorkouts` client write.** It was considered and rejected:
+  it would make the athlete's own history a union of two collections forever, let the two shapes
+  drift, and duplicate the soft-delete logic. Server-side fan-out gets the same structural privacy
+  boundary — the coach reads only the projection, never the athlete's sessions — and a projection the
+  client cannot fabricate.
+- **Assigned workouts appear in MyDay**, in their own section of the scroll, so the date strip stays
+  the calendar. They are read from the assignment collection and merged **at display time** — the day
+  document is not written until the athlete accepts. **De-dupe rule: if a day entry carries an
+  `assignmentId`, that assignment must not also render as its own row.** Once accepted, a workout
+  stays in its section rather than moving; the section says who asked for it, which does not change
+  when it is done, and cards jumping between sections reads as a glitch.
+- Assignments are **inherently remote** — they originate on another device — which makes them the
+  first thing on the MyDay screen that cannot be answered from local storage. Cache them to disk on
+  fetch. Reads that are remote-only while everything around them is local-first is the exact bug
+  that emptied the workout library.
+- Raw logs deliberately gain nothing: a coach reads set detail from the completed session's
+  `exerciseRecords`, so `ExerciseStatsSaveModel` stays the athlete's own stats record.
+
+**Blocked on: the coach↔athlete link living in Firestore.** `CoachPlayers/{coachId}` and
+`PlayerCoaches/{playerId}` are **Realtime Database** paths (`FirebaseInstance`), and Firestore rules
+cannot read RTDB — so there is currently no way to express "this coach may write to this athlete's
+assignments". Deferred by decision; nothing above is enforceable until it is resolved.
+
 ## Firestore
 Firestore collection structure will be provided when working on specific features.
 

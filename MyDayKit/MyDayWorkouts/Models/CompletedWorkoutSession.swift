@@ -36,6 +36,19 @@ public struct CompletedWorkoutSession: Identifiable, Codable {
     public let setsTargeted: Int
     public let exerciseRecords: [WorkoutExerciseRecord]
 
+    /// Carried through from `DailyWorkoutEntry` — the coach who assigned the
+    /// workout, and the assignment the athlete accepted. `nil` means the athlete
+    /// started it themselves.
+    ///
+    /// **This is the contract a Cloud Function reads.** A trigger on
+    /// `WorkoutSessions` create checks `assignedBy` and, when set, writes the
+    /// coach-facing projection and pushes a notification to that coach. Doing the
+    /// fan-out server-side is what keeps a single completion collection: the
+    /// athlete's history is never a union of two collections, and the coach gets
+    /// a copy they can read without any access to the athlete's own sessions.
+    public let assignedBy: String?
+    public let assignmentId: String?
+
     /// Set on the analytics copy when the workout is removed from the day; the
     /// user's copy is deleted outright. A deletion that was never recorded
     /// cannot be reconstructed later, so it is recorded from the start.
@@ -56,6 +69,8 @@ public struct CompletedWorkoutSession: Identifiable, Codable {
         setsCompleted: Int,
         setsTargeted: Int,
         exerciseRecords: [WorkoutExerciseRecord],
+        assignedBy: String? = nil,
+        assignmentId: String? = nil,
         deletedAt: Date? = nil
     ) {
         self.id = id
@@ -72,6 +87,8 @@ public struct CompletedWorkoutSession: Identifiable, Codable {
         self.setsCompleted = setsCompleted
         self.setsTargeted = setsTargeted
         self.exerciseRecords = exerciseRecords
+        self.assignedBy = assignedBy
+        self.assignmentId = assignmentId
         self.deletedAt = deletedAt
     }
 }

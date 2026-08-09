@@ -290,7 +290,9 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
             notes: record.notes,
             setsCompleted: totalSetsLogged,
             setsTargeted: totalSetsTargeted,
-            exerciseRecords: record.exerciseRecords
+            exerciseRecords: record.exerciseRecords,
+            assignedBy: entry.assignedBy,
+            assignmentId: entry.assignmentId
         )
     }
 
