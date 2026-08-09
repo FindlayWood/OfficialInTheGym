@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		10D000000000000000000002 /* LoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10D000000000000000000001 /* LoginKit.framework */; };
+		10D000000000000000000003 /* LoginKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 10D000000000000000000001 /* LoginKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ACE000000000000000000014 /* VerifyEmailResendState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000000A /* VerifyEmailResendState.swift */; };
 		ACE000000000000000000015 /* VerifyEmailErrorBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000000B /* VerifyEmailErrorBanner.swift */; };
 		ACB000000000000000000014 /* SubscriptionProductRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB00000000000000000000A /* SubscriptionProductRow.swift */; };
@@ -899,7 +901,6 @@
 		9FB4D1E729EC5DC10019CA57 /* CheckUserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4D1E629EC5DC10019CA57 /* CheckUserError.swift */; };
 		9FB4D1E929EC88D40019CA57 /* ClipSuccessData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4D1E829EC88D40019CA57 /* ClipSuccessData.swift */; };
 		9FC11F5F29DDC9B80054D79A /* LoginComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC11F5E29DDC9B80054D79A /* LoginComposition.swift */; };
-		9FC11F6129DDCA8E0054D79A /* LoginKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9FC11F6029DDCA8E0054D79A /* LoginKit */; };
 		9FC11F6429E0B5190054D79A /* VerifyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC11F6329E0B5190054D79A /* VerifyAccountViewController.swift */; };
 		9FC11F6629E0B5270054D79A /* VerifyAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC11F6529E0B5270054D79A /* VerifyAccountViewModel.swift */; };
 		9FC11F6829E0B5350054D79A /* VerifyAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC11F6729E0B5350054D79A /* VerifyAccountView.swift */; };
@@ -950,6 +951,7 @@
 				F0F608372E42A5A70015F260 /* MyDayKit.framework in Embed Frameworks */,
 				F0A11D282F6C637100CE1E9A /* StatsKit.framework in Embed Frameworks */,
 				ACA000000000000000000003 /* AccountCreationKit.framework in Embed Frameworks */,
+				10D000000000000000000003 /* LoginKit.framework in Embed Frameworks */,
 				746DA0D52C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Embed Frameworks */,
 				746DA0D32C090AD10094EA3B /* ITGWorkoutKit.framework in Embed Frameworks */,
 			);
@@ -959,6 +961,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		10D000000000000000000001 /* LoginKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LoginKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACE00000000000000000000A /* VerifyEmailResendState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailResendState.swift; sourceTree = "<group>"; };
 		ACE00000000000000000000B /* VerifyEmailErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailErrorBanner.swift; sourceTree = "<group>"; };
 		ACB00000000000000000000A /* SubscriptionProductRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionProductRow.swift; sourceTree = "<group>"; };
@@ -1893,7 +1896,7 @@
 				74330449289E962B00F2569A /* FirebaseFirestoreCombine-Community in Frameworks */,
 				F0A11D272F6C637100CE1E9A /* StatsKit.framework in Frameworks */,
 				ACA000000000000000000002 /* AccountCreationKit.framework in Frameworks */,
-				9FC11F6129DDCA8E0054D79A /* LoginKit in Frameworks */,
+				10D000000000000000000002 /* LoginKit.framework in Frameworks */,
 				7433044B289E962B00F2569A /* FirebaseFirestoreSwift in Frameworks */,
 				9F72F9422A114BE200BF040C /* ClubKit in Frameworks */,
 			);
@@ -4841,6 +4844,7 @@
 			children = (
 				F0A11D262F6C637100CE1E9A /* StatsKit.framework */,
 				ACA000000000000000000001 /* AccountCreationKit.framework */,
+				10D000000000000000000001 /* LoginKit.framework */,
 				F0F608352E42A5A70015F260 /* MyDayKit.framework */,
 				746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */,
 				746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */,
@@ -4915,7 +4919,6 @@
 				74FA60B328B3E500007B2CD8 /* SCLAlertView */,
 				7404A4AF28C926D70034AADC /* RevenueCat */,
 				74F664E728E8DA6D0086BA4E /* FirebaseMessaging */,
-				9FC11F6029DDCA8E0054D79A /* LoginKit */,
 				9F3D3C3929F45D8200CDACC0 /* WorkoutKit */,
 				9F72F9412A114BE200BF040C /* ClubKit */,
 				74616AB32A40E8D100007752 /* FirebaseFunctions */,
@@ -6613,10 +6616,6 @@
 		9F72F9412A114BE200BF040C /* ClubKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ClubKit;
-		};
-		9FC11F6029DDCA8E0054D79A /* LoginKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = LoginKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 

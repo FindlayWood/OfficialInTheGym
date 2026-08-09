@@ -9,7 +9,7 @@ Lean, minimal UI aesthetic throughout.
 - `MyDayKit` — framework
 - `StatsKit` — framework
 - `AccountCreationKit` — framework
-- `LoginKit` — package
+- `LoginKit` — framework
 
 ### Inactive — do not modify
 - `ITGWorkoutKit` — ignore, do not touch
@@ -18,12 +18,19 @@ Lean, minimal UI aesthetic throughout.
 ## Auth
 Firebase Auth, email and password only.
 
-`LoginKit` owns welcome / login / signup / forgot-password. It is **still an SPM package** — only its
-UI was brought onto MyDay's design vocabulary, matching Account Creation, so the screens either side
-of signup read as one flow. It has its own `UI/Color+Extension.swift`, as MyDayKit, StatsKit and
-AccountCreationKit each do; `LoginFieldCard`, `LoginPrimaryButton` and `LoginErrorBanner` are its
-copies of the account-creation equivalents. **Keep the two sets in step** — they are deliberate
-duplicates across a module boundary, not one shared component.
+`LoginKit` owns welcome / login / signup / forgot-password. It is a **framework**, built exactly like
+`AccountCreationKit` — one `PBXFileSystemSynchronizedRootGroup` per target and no file references in
+the pbxproj — and its UI is on MyDay's design vocabulary, so the screens either side of signup read
+as one flow. It has its own `UI/Color+Extension.swift`, as MyDayKit, StatsKit and AccountCreationKit
+each do; `LoginFieldCard`, `LoginPrimaryButton` and `LoginErrorBanner` are its copies of the
+account-creation equivalents. **Keep the two sets in step** — they are deliberate duplicates across a
+module boundary, not one shared component, and see *Shared UI* below.
+
+The framework targets set `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES` (inherited from the
+StatsKit template all three were generated from), so a type must import the module that defines it
+rather than picking it up transitively. `WelcomeViewModel` needed an explicit `import Combine` for
+`ObservableObject` that the package build had not required. **Expect this on any file moved into one
+of these frameworks.**
 
 - **The injected `colour: UIColor` is gone** from `MainLoginKitInterface.init`, same as
   AccountCreationKit: the app only ever passed `.darkColour`, which is `#1C496E` — `Color.darkColor`.
@@ -862,6 +869,19 @@ Firestore collection structure will be provided when working on specific feature
 ## Long-term Architecture Goal
 Each tab to become its own framework. Shared core features (e.g. user profile loading)
 to be extracted into dedicated frameworks as usage spans multiple tabs.
+
+### Shared UI — the next extraction, not yet built
+The four active modules are now all frameworks and all draw the same design, by **copying it**. Today
+that means four `Color+Extension.swift` files, four error banners (`AccountCreationErrorBanner`,
+`LoginErrorBanner`, `VerifyEmailErrorBanner`, `PurchaseErrorBanner`), two field cards, and the
+52pt/radius-14 primary button re-implemented in a dozen places. The note under *Workout Completion
+Rules* — "keep new gated buttons in step with it" — is that tax written down.
+
+A shared UI framework (colours, field card, error banner, primary and disabled button) consumed by
+MyDayKit, StatsKit, AccountCreationKit and LoginKit would remove all of it, and is exactly the
+"shared core features extracted as usage spans multiple tabs" this section already calls for.
+**Not started, and not costless**: it adds a dependency edge to every module and every shared
+component has to be `public`. Scope it before committing.
 
 ## Future Ideas — not scheduled, not designed
 Ideas captured so they are not lost. **Nothing here is agreed or specified — do not start

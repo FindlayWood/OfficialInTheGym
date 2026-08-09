@@ -23,7 +23,7 @@
       location = "group:AccountCreationKit/AccountCreationKit.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:LoginKit">
+      location = "group:LoginKit/LoginKit.xcodeproj">
    </FileRef>
    <FileRef
       location = "container:InTheGym.xcodeproj">
