@@ -64,6 +64,12 @@ class MyDayKitComposition {
         
         // Workout
         let userId = UserDefaults.currentUser.uid
+
+        // The local template store is scoped by user id. Anything still at the
+        // old unscoped path is filed under its own author before the library
+        // reads — see `LegacyWorkoutTemplateStoreMigrator`.
+        LegacyWorkoutTemplateStoreMigrator().migrate()
+
         let syncQueue = SyncQueueWorkoutTemplateUploader(userId: userId)
 
         let syncer = WorkoutTemplateSyncer(
@@ -71,7 +77,7 @@ class MyDayKitComposition {
             queue: syncQueue
         )
         let saver = WorkoutTemplateSaver(
-            local: FileManagerWorkoutTemplateUploader(),
+            local: FileManagerWorkoutTemplateUploader(userId: userId),
             remote: syncer
         )
         let workoutManager = WorkoutBuilderManager(
@@ -89,7 +95,7 @@ class MyDayKitComposition {
         // FileManager then queues the remote write, so the library has to read
         // FileManager first or a template that has not synced yet is invisible.
         let workoutLibraryManager = WorkoutLibraryManager(
-            local: FileManagerWorkoutTemplateFetcher(),
+            local: FileManagerWorkoutTemplateFetcher(userId: userId),
             remote: FirestoreWorkoutTemplateFetcher()
         )
         

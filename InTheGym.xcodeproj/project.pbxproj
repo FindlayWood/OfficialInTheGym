@@ -917,6 +917,8 @@
 		E4C90B7A15D24F8E9A330006 /* FirestoreCompletedWorkoutSessionSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330005 /* FirestoreCompletedWorkoutSessionSaver.swift */; };
 		E4C90B7A15D24F8E9A330008 /* FirestoreCompletedWorkoutSessionDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */; };
 		A1D0E5F200024C0A9B110002 /* FileManagerWorkoutTemplateFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */; };
+		A1D0E5F200024C0A9B110004 /* WorkoutTemplateStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D0E5F200024C0A9B110003 /* WorkoutTemplateStoreLocation.swift */; };
+		A1D0E5F200024C0A9B110006 /* LegacyWorkoutTemplateStoreMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D0E5F200024C0A9B110005 /* LegacyWorkoutTemplateStoreMigrator.swift */; };
 		F0A11D272F6C637100CE1E9A /* StatsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; };
 		F0A11D282F6C637100CE1E9A /* StatsKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */; };
@@ -1855,6 +1857,8 @@
 		E4C90B7A15D24F8E9A330005 /* FirestoreCompletedWorkoutSessionSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreCompletedWorkoutSessionSaver.swift"; sourceTree = "<group>"; };
 		E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreCompletedWorkoutSessionDeleter.swift"; sourceTree = "<group>"; };
 		A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerWorkoutTemplateFetcher.swift; sourceTree = "<group>"; };
+		A1D0E5F200024C0A9B110003 /* WorkoutTemplateStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateStoreLocation.swift; sourceTree = "<group>"; };
+		A1D0E5F200024C0A9B110005 /* LegacyWorkoutTemplateStoreMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyWorkoutTemplateStoreMigrator.swift; sourceTree = "<group>"; };
 		F0A11D262F6C637100CE1E9A /* StatsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StatsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitComposition.swift; sourceTree = "<group>"; };
 		F0D344422F256E0E00AB6121 /* DataUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUploader.swift; sourceTree = "<group>"; };
@@ -4882,6 +4886,8 @@
 				E4C90B7A15D24F8E9A330005 /* FirestoreCompletedWorkoutSessionSaver.swift */,
 				E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */,
 				A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */,
+				A1D0E5F200024C0A9B110003 /* WorkoutTemplateStoreLocation.swift */,
+				A1D0E5F200024C0A9B110005 /* LegacyWorkoutTemplateStoreMigrator.swift */,
 			);
 			path = MyDay;
 			sourceTree = "<group>";
@@ -5037,6 +5043,8 @@
 				E4C90B7A15D24F8E9A330006 /* FirestoreCompletedWorkoutSessionSaver.swift in Sources */,
 				E4C90B7A15D24F8E9A330008 /* FirestoreCompletedWorkoutSessionDeleter.swift in Sources */,
 				A1D0E5F200024C0A9B110002 /* FileManagerWorkoutTemplateFetcher.swift in Sources */,
+				A1D0E5F200024C0A9B110004 /* WorkoutTemplateStoreLocation.swift in Sources */,
+				A1D0E5F200024C0A9B110006 /* LegacyWorkoutTemplateStoreMigrator.swift in Sources */,
 				74B48DEC27A1FCBF00BBFC16 /* PostReferencesModel.swift in Sources */,
 				744AED52279B08AB000D2D74 /* WorkouCollectionDataSource.swift in Sources */,
 				7410450B285D439100A9FF4E /* OnBoardMainView.swift in Sources */,

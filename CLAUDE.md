@@ -311,9 +311,9 @@ The library screen showed an empty state despite saved templates existing. Three
 Reads used to be Firestore-only while writes were local-first, so a template that had not synced yet
 was invisible in the library it had just been saved to. Both defects are fixed:
 - **`FileManagerWorkoutTemplateFetcher`** is the counterpart to `FileManagerWorkoutTemplateUploader`,
-  reading `Documents/WorkoutTemplates/{id}.json`. **The directory and the ISO-8601 date strategy must
-  stay in step with the uploader** — changing one side alone silently stops everything decoding. It
-  decodes per file and skips failures, exactly as the Firestore fetcher decodes per document.
+  reading `Documents/WorkoutTemplates/{uid}/{id}.json`. **The ISO-8601 date strategy must stay in
+  step with the uploader** — changing one side alone silently stops everything decoding. It decodes
+  per file and skips failures, exactly as the Firestore fetcher decodes per document.
 - **`WorkoutLibraryManager` takes `local:` and `remote:`.** `load()` reads local, publishes it
   immediately if non-empty, then fetches remote and publishes the merge. **A remote failure is not an
   error once local has produced something** — offline means stale, not broken, and blanking a visible
@@ -325,6 +325,31 @@ was invisible in the library it had just been saved to. Both defects are fixed:
 - **`addTemplate` during `.loading` no longer drops the template.** It buffers into
   `pendingTemplates`, folded in by `publish(_:)` when the load settles. That moment — builder
   finishes, library still fetching — is exactly when the user is looking for it.
+
+### Local stores are scoped by user id, not cleared on sign-out
+The device is shared. `Documents/WorkoutTemplates` used to be flat, so every template from every
+account that had ever signed in sat in one directory — and because the library reads local first,
+the next user to sign in opened their library and saw the previous user's workouts. It is now
+`Documents/WorkoutTemplates/{uid}/{id}.json`, the shape `Documents/MyDays/{uid}/{date}.json` and
+`Documents/PendingSync/workoutTemplates_{uid}.json` already had.
+
+- **`WorkoutTemplateStoreLocation` is the one definition of that path.** The uploader, the fetcher
+  and the migrator all derive it from there — they each worked it out separately before, which is
+  how the two sides of a local store drift apart. **Do not re-derive it at a call site.**
+- **The injected `userId` is the signed-in user, never `template.createdBy`.** For a coach-assigned
+  workout those differ, and the file belongs in the library of whoever is using the device.
+- **Scoping, not wiping on sign-out — deliberately.** A template that has not reached Firestore yet
+  is still on disk when its owner signs back in. Wiping would throw that away to solve a problem
+  scoping already solves.
+- **`LegacyWorkoutTemplateStoreMigrator` files pre-existing root-level templates under their own
+  `createdBy`**, run from `MyDayKitComposition` before the library is built. Filing them under the
+  user signing in now would hand one person the whole pool — which is the bug. A file that cannot be
+  decoded is **left in place, not deleted**: the fetcher has always skipped those, its owner cannot
+  be read off it, and destroying it gains nothing.
+
+Not covered, and still open: `WorkoutTemplateSyncService.stop()` has no caller, so signing out leaves
+its `NWPathMonitor` running and a second sign-in starts another one. The queue it flushes is
+uid-scoped, so it uploads the right data — this is a leak, not a correctness bug.
 
 The loading skeleton mirrors the real row (icon tile, title bar, subtitle bar) under the same
 "Your Library" heading, so the list fills in rather than swapping layouts. It is only the local read;

@@ -28,19 +28,23 @@ public final class FirestoreWorkoutTemplateUploader: WorkoutTemplateUploading {
 // MARK: - FileManager Uploader
 
 /// Saves the template as a JSON file in the app's Documents directory.
-/// Path: Documents/WorkoutTemplates/{id}.json
+/// Path: Documents/WorkoutTemplates/{userId}/{id}.json
+///
+/// `userId` is the signed-in user rather than `template.createdBy`, so a
+/// template written on someone else's behalf still lands in the library of
+/// whoever is using the device. See `WorkoutTemplateStoreLocation` for why the
+/// directory is scoped at all.
 public final class FileManagerWorkoutTemplateUploader: WorkoutTemplateUploading {
 
     private let encoder: JSONEncoder
     private let directory: URL
 
-    public init() {
+    public init(userId: String) {
         encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         encoder.outputFormatting = .prettyPrinted
 
-        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        directory = documents.appendingPathComponent("WorkoutTemplates", isDirectory: true)
+        directory = WorkoutTemplateStoreLocation.directory(for: userId)
     }
 
     public func upload(_ template: WorkoutTemplateModel) async throws {

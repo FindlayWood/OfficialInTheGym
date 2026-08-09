@@ -9,29 +9,33 @@
 import Foundation
 import MyDayKit
 
-/// Reads workout templates back out of `Documents/WorkoutTemplates/{id}.json`
-/// — the counterpart to `FileManagerWorkoutTemplateUploader`, which is what
-/// `WorkoutTemplateSaver` writes to first.
+/// Reads workout templates back out of
+/// `Documents/WorkoutTemplates/{userId}/{id}.json` — the counterpart to
+/// `FileManagerWorkoutTemplateUploader`, which is what `WorkoutTemplateSaver`
+/// writes to first.
 ///
 /// Until this existed the library read from Firestore only, while writes were
 /// local-first with the remote write queued behind it. A template created
 /// offline, or simply faster than the sync queue drained, was therefore
 /// invisible in the library it had just been saved to.
 ///
-/// **The directory and encoding must stay in step with
-/// `FileManagerWorkoutTemplateUploader`.** Both use ISO-8601 dates; changing
-/// one side alone silently stops every stored template decoding.
+/// **The encoding must stay in step with `FileManagerWorkoutTemplateUploader`.**
+/// Both use ISO-8601 dates; changing one side alone silently stops every stored
+/// template decoding. The directory is no longer duplicated between them — both
+/// take it from `WorkoutTemplateStoreLocation`.
+///
+/// `userId` is the signed-in user, not the template's `createdBy`: it says whose
+/// library is being read, which for an assigned workout is not its author.
 final class FileManagerWorkoutTemplateFetcher: WorkoutTemplateFetching {
 
     private let decoder: JSONDecoder
     private let directory: URL
 
-    init() {
+    init(userId: String) {
         decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
 
-        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        directory = documents.appendingPathComponent("WorkoutTemplates", isDirectory: true)
+        directory = WorkoutTemplateStoreLocation.directory(for: userId)
     }
 
     func fetchAll() async throws -> [WorkoutTemplateModel] {
