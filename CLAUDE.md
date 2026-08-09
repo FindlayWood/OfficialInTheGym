@@ -8,7 +8,7 @@ Lean, minimal UI aesthetic throughout.
 ### Active — modify freely
 - `MyDayKit` — framework
 - `StatsKit` — framework
-- `AccountCreationKit` — package
+- `AccountCreationKit` — framework
 - `LoginKit` — package
 
 ### Inactive — do not modify
@@ -17,6 +17,44 @@ Lean, minimal UI aesthetic throughout.
 
 ## Auth
 Firebase Auth, email and password only.
+
+## Account Creation
+The post-signup onboarding flow — a 7-step paged form between email verification and the tab bar.
+It was an SPM package until it moved to a framework built like `MyDayKit` and `StatsKit`; the move
+was **structure only**, with the screens left as they were so the UI/UX pass could be judged on its
+own. Entered from `BasicBaseFlow.showAccountCreation` → `AccountCreationComposerAdapter`.
+
+- **`AccountCreationKit.xcodeproj` carries no file references.** Both targets are driven entirely by
+  a `PBXFileSystemSynchronizedRootGroup`, unlike StatsKit which synchronises only its `StatsKit/`
+  folder and lists `Router/`, `Screens/`, `Models/` etc. file by file. New files need no project
+  edit — **do not start adding explicit `PBXFileReference`s to it.**
+- **One narrow protocol per job, in `Services/`**: `UsernameAvailabilityChecker`, `UsernameReserver`,
+  `AccountCreator`, `ProfileImageUploader`, `AccountCreationSignOutService`. This replaced a single
+  `NetworkService` with six generic methods (`upload(data:at:)`, `read(at:)`, `callFunction(named:with:)`
+  …) that left the view model building Firestore paths — `"Usernames/\(text)"`, `"ProfilePhotos/\(uid)"`
+  — and naming the `createAccount` callable. Those all live in
+  `InTheGym/Launch/Composition/AccountCreation/` now, one adapter per file. `UsernameModel` is the
+  shape of the `Usernames/{username}` document and lives with the adapter that writes it, not in the
+  framework.
+- **`FirestoreUsernameAvailabilityChecker` must read into an *optional*.**
+  `FirestoreManager.read` goes through `getDocument(as:)`, which decodes a missing document's
+  `NSNull` into `nil` rather than throwing — so `let existing: UsernameModel?` distinguishes "no such
+  document" (free) from a real failure. Asking for a non-optional `UsernameModel` throws for every
+  username that is actually **available**, which inverts the check.
+- **The framework owns its brand colour** (`UI/Color+Extension.swift`, same as MyDayKit and StatsKit)
+  rather than being handed a `colour: UIColor`. The injected value was always `.darkColour`, which is
+  `#1C496E` — `Color.darkColor` exactly.
+- `AccountCreationKitRouter` replaced `AccountCreationKitInterface` /
+  `MainAccountCreationKitInterface` / `BasicAccountCreationFlow` / `ViewControllerFactory` — four
+  types that existed to build one view controller. It follows `StatsKitRouter`: `public init` taking
+  every dependency, `public func start()`, `viewController(for:)` over `AccountCreationRoutes`.
+
+Two behaviours are preserved from the package **and are wrong** — they were left alone so the move
+stayed a move, and they belong to the UI/UX pass:
+- a thrown error from the availability check sets `.taken`, so a network blip reads as "username
+  taken" (comment marks the spot in `AccountCreationHomeViewModel.checkUsername`);
+- the `$username` listener drops the first **four** values, so a username typed to exactly 3
+  characters and left alone is never checked and stays `.idle` — which `canCreateAccount` blocks on.
 
 ## Architecture
 - Coordinator-based UIKit navigation with SwiftUI views via `UIHostingController`

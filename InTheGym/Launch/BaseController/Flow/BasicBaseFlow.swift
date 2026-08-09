@@ -40,8 +40,7 @@ struct BasicBaseFlow: BaseFlow {
     }
     
     func showAccountCreation(email: String, uid: String) {
-        let interface = accountCreationComposer.makeAccountCreationInterface(with: email, uid: uid)
-        interface.launch()
+        accountCreationComposer.startAccountCreation(email: email, uid: uid)
     }
     func showAccountCreated(for user: Users) {
         let vc = AccountCreatedViewController()

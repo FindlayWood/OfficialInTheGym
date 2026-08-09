@@ -20,7 +20,7 @@
       location = "group:WorkoutKit">
    </FileRef>
    <FileRef
-      location = "group:AccountCreationKit">
+      location = "group:AccountCreationKit/AccountCreationKit.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:LoginKit">

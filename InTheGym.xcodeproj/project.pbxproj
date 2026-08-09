@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ACA000000000000000000002 /* AccountCreationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACA000000000000000000001 /* AccountCreationKit.framework */; };
+		ACA000000000000000000003 /* AccountCreationKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ACA000000000000000000001 /* AccountCreationKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		ACA000000000000000000014 /* UsernameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000A /* UsernameModel.swift */; };
+		ACA000000000000000000015 /* FirestoreUsernameAvailabilityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000B /* FirestoreUsernameAvailabilityChecker.swift */; };
+		ACA000000000000000000016 /* FirestoreUsernameReserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000C /* FirestoreUsernameReserver.swift */; };
+		ACA000000000000000000017 /* FunctionsAccountCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000D /* FunctionsAccountCreator.swift */; };
+		ACA000000000000000000018 /* StorageProfileImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000E /* StorageProfileImageUploader.swift */; };
+		ACA000000000000000000019 /* FirebaseAccountCreationSignOut.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000F /* FirebaseAccountCreationSignOut.swift */; };
 		74003C6F2C738D2C00C13B22 /* LoadingListViewController+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74003C6E2C738D2C00C13B22 /* LoadingListViewController+TestHelpers.swift */; };
 		74028E5C25E693FB005A1D21 /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E5B25E693FB005A1D21 /* TopView.swift */; };
 		74028E6425E69B52005A1D21 /* TextFieldReturning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E6325E69B52005A1D21 /* TextFieldReturning.swift */; };
@@ -891,7 +899,6 @@
 		9FC11F6429E0B5190054D79A /* VerifyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC11F6329E0B5190054D79A /* VerifyAccountViewController.swift */; };
 		9FC11F6629E0B5270054D79A /* VerifyAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC11F6529E0B5270054D79A /* VerifyAccountViewModel.swift */; };
 		9FC11F6829E0B5350054D79A /* VerifyAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC11F6729E0B5350054D79A /* VerifyAccountView.swift */; };
-		9FC11F6A29E20CB60054D79A /* AccountCreationKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9FC11F6929E20CB60054D79A /* AccountCreationKit */; };
 		9FF8B30429283D8A00C47313 /* WorkoutListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B30329283D8A00C47313 /* WorkoutListView.swift */; };
 		9FF8B3062928422A00C47313 /* WorkoutFiguresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3052928422A00C47313 /* WorkoutFiguresView.swift */; };
 		9FF8B3082928459E00C47313 /* WorkoutClipThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */; };
@@ -938,6 +945,7 @@
 			files = (
 				F0F608372E42A5A70015F260 /* MyDayKit.framework in Embed Frameworks */,
 				F0A11D282F6C637100CE1E9A /* StatsKit.framework in Embed Frameworks */,
+				ACA000000000000000000003 /* AccountCreationKit.framework in Embed Frameworks */,
 				746DA0D52C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Embed Frameworks */,
 				746DA0D32C090AD10094EA3B /* ITGWorkoutKit.framework in Embed Frameworks */,
 			);
@@ -947,6 +955,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		ACA000000000000000000001 /* AccountCreationKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AccountCreationKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ACA00000000000000000000A /* UsernameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameModel.swift; sourceTree = "<group>"; };
+		ACA00000000000000000000B /* FirestoreUsernameAvailabilityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUsernameAvailabilityChecker.swift; sourceTree = "<group>"; };
+		ACA00000000000000000000C /* FirestoreUsernameReserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUsernameReserver.swift; sourceTree = "<group>"; };
+		ACA00000000000000000000D /* FunctionsAccountCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsAccountCreator.swift; sourceTree = "<group>"; };
+		ACA00000000000000000000E /* StorageProfileImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageProfileImageUploader.swift; sourceTree = "<group>"; };
+		ACA00000000000000000000F /* FirebaseAccountCreationSignOut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAccountCreationSignOut.swift; sourceTree = "<group>"; };
 		74003C6E2C738D2C00C13B22 /* LoadingListViewController+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoadingListViewController+TestHelpers.swift"; sourceTree = "<group>"; };
 		74028E5B25E693FB005A1D21 /* TopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
 		74028E6325E69B52005A1D21 /* TextFieldReturning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldReturning.swift; sourceTree = "<group>"; };
@@ -1851,7 +1866,6 @@
 				746DA0D22C090AD10094EA3B /* ITGWorkoutKit.framework in Frameworks */,
 				74330445289E962B00F2569A /* FirebaseDatabaseSwift in Frameworks */,
 				74A7EB65289EAE92007C2ECD /* SkyFloatingLabelTextField in Frameworks */,
-				9FC11F6A29E20CB60054D79A /* AccountCreationKit in Frameworks */,
 				9F3D3C3A29F45D8200CDACC0 /* WorkoutKit in Frameworks */,
 				74FA60B428B3E500007B2CD8 /* SCLAlertView in Frameworks */,
 				746061BD252547E9005B1480 /* AppTrackingTransparency.framework in Frameworks */,
@@ -1870,6 +1884,7 @@
 				7404A4AD28C903270034AADC /* StoreKit.framework in Frameworks */,
 				74330449289E962B00F2569A /* FirebaseFirestoreCombine-Community in Frameworks */,
 				F0A11D272F6C637100CE1E9A /* StatsKit.framework in Frameworks */,
+				ACA000000000000000000002 /* AccountCreationKit.framework in Frameworks */,
 				9FC11F6129DDCA8E0054D79A /* LoginKit in Frameworks */,
 				7433044B289E962B00F2569A /* FirebaseFirestoreSwift in Frameworks */,
 				9F72F9422A114BE200BF040C /* ClubKit in Frameworks */,
@@ -1886,6 +1901,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		ACA000000000000000000004 /* AccountCreation */ = {
+			isa = PBXGroup;
+			children = (
+				ACA00000000000000000000A /* UsernameModel.swift */,
+				ACA00000000000000000000B /* FirestoreUsernameAvailabilityChecker.swift */,
+				ACA00000000000000000000C /* FirestoreUsernameReserver.swift */,
+				ACA00000000000000000000D /* FunctionsAccountCreator.swift */,
+				ACA00000000000000000000E /* StorageProfileImageUploader.swift */,
+				ACA00000000000000000000F /* FirebaseAccountCreationSignOut.swift */,
+			);
+			path = AccountCreation;
+			sourceTree = "<group>";
+		};
 		74028E0E25E53695005A1D21 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -4763,6 +4791,7 @@
 			isa = PBXGroup;
 			children = (
 				F0A11D292F6C642A00CE1E9A /* StatsKit */,
+				ACA000000000000000000004 /* AccountCreation */,
 				F0D3443F2F25616A00AB6121 /* MyDay */,
 				9FC11F5E29DDC9B80054D79A /* LoginComposition.swift */,
 				9FB4D1DB29E752AB0019CA57 /* AccountCreationComposition.swift */,
@@ -4799,6 +4828,7 @@
 			isa = PBXGroup;
 			children = (
 				F0A11D262F6C637100CE1E9A /* StatsKit.framework */,
+				ACA000000000000000000001 /* AccountCreationKit.framework */,
 				F0F608352E42A5A70015F260 /* MyDayKit.framework */,
 				746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */,
 				746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */,
@@ -4874,7 +4904,6 @@
 				7404A4AF28C926D70034AADC /* RevenueCat */,
 				74F664E728E8DA6D0086BA4E /* FirebaseMessaging */,
 				9FC11F6029DDCA8E0054D79A /* LoginKit */,
-				9FC11F6929E20CB60054D79A /* AccountCreationKit */,
 				9F3D3C3929F45D8200CDACC0 /* WorkoutKit */,
 				9F72F9412A114BE200BF040C /* ClubKit */,
 				74616AB32A40E8D100007752 /* FirebaseFunctions */,
@@ -5662,6 +5691,12 @@
 				9F89DD992A3E59560018E124 /* BaseFlow.swift in Sources */,
 				742FCD1328450B9E007ED1C6 /* ExerciseMaxHistoryViewController.swift in Sources */,
 				F0F6DEFE2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift in Sources */,
+				ACA000000000000000000014 /* UsernameModel.swift in Sources */,
+				ACA000000000000000000015 /* FirestoreUsernameAvailabilityChecker.swift in Sources */,
+				ACA000000000000000000016 /* FirestoreUsernameReserver.swift in Sources */,
+				ACA000000000000000000017 /* FunctionsAccountCreator.swift in Sources */,
+				ACA000000000000000000018 /* StorageProfileImageUploader.swift in Sources */,
+				ACA000000000000000000019 /* FirebaseAccountCreationSignOut.swift in Sources */,
 				74EE4ECC27E7AD9B00051451 /* PostsChildViewController.swift in Sources */,
 				743E92AE280705460029F447 /* BoxBreathingViewController.swift in Sources */,
 				742C1C4D27B2A34E00DD1BB0 /* RecordClipViewModel.swift in Sources */,
@@ -6566,10 +6601,6 @@
 		9FC11F6029DDCA8E0054D79A /* LoginKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LoginKit;
-		};
-		9FC11F6929E20CB60054D79A /* AccountCreationKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AccountCreationKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 
