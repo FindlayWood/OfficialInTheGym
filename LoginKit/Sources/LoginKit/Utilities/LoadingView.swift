@@ -1,39 +1,43 @@
 //
-//  File.swift
-//  
+//  LoadingView.swift
+//  LoginKit
 //
 //  Created by Findlay-Personal on 04/04/2023.
 //
 
 import SwiftUI
 
+/// The card was hardcoded `Color.white` — a white slab in dark mode.
 struct LoadingView: View {
+
     @State private var isAnimating = false
-    
-    var colour: UIColor
-    
-    var animation: Animation {
+
+    private var animation: Animation {
         Animation.linear(duration: 2)
-        .repeatForever(autoreverses: false)
+            .repeatForever(autoreverses: false)
     }
+
     var body: some View {
         ZStack {
             Color.black.opacity(0.4)
-            VStack {
-                Circle()
-                    .trim(from: 0.2, to: 1)
-                    .stroke(Color(colour), style: StrokeStyle(lineWidth: 8, lineCap: .round, lineJoin: .round))
-                    .frame(width: 48, height: 48)
-                    .rotationEffect(.degrees(isAnimating ? 360 : 0))
-                    .animation(animation, value: isAnimating)
-                    .padding(50)
-                    .onAppear {
-                        isAnimating = true
-                    }
-            }
-            .background(Color.white)
-            .cornerRadius(8)
+
+            Circle()
+                .trim(from: 0.2, to: 1)
+                .stroke(Color.darkColor, style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
+                .frame(width: 40, height: 40)
+                .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                .animation(animation, value: isAnimating)
+                .onAppear { isAnimating = true }
+                .padding(36)
+                .background(
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .fill(Color(.secondarySystemBackground))
+                )
         }
-        .edgesIgnoringSafeArea(.all)
+        .ignoresSafeArea()
     }
+}
+
+#Preview {
+    LoadingView()
 }

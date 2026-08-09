@@ -1,6 +1,6 @@
 //
-//  SwiftUIView.swift
-//  
+//  ForgotPasswordView.swift
+//  LoginKit
 //
 //  Created by Findlay-Personal on 04/04/2023.
 //
@@ -8,69 +8,65 @@
 import SwiftUI
 
 struct ForgotPasswordView: View {
-    
+
     @ObservedObject var viewModel: ForgotPasswordViewModel
-    
-    var colour: UIColor
-    
+
+    @FocusState private var emailFocused: Bool
+
     var body: some View {
         ZStack {
-            VStack {
-                HStack {
-                    Image(systemName: "envelope.fill")
-                        .foregroundColor(Color(colour))
-                    TextField("email", text: $viewModel.email)
-                        .tint(Color(.blue))
-                }
-                .padding()
-                .background(.white)
-                .clipShape(Capsule())
-                .shadow(radius: 8)
-                
-                
-                Button {
-                    Task {
-                        await viewModel.login()
+            VStack(spacing: 0) {
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 16) {
+                        Text("Enter the email you signed up with and we'll send you a link to reset your password.")
+                            .font(.system(size: 15))
+                            .foregroundStyle(Color.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .fixedSize(horizontal: false, vertical: true)
+
+                        LoginFieldCard(title: "Email", icon: "envelope") {
+                            TextField("you@example.com", text: $viewModel.email)
+                                .font(.system(size: 16))
+                                .tint(Color.darkColor)
+                                .keyboardType(.emailAddress)
+                                .textContentType(.username)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled(true)
+                                .focused($emailFocused)
+                                .submitLabel(.done)
+                                .onSubmit { emailFocused = false }
+                        }
                     }
-                } label: {
-                    Text("Send Reset Email")
-                        .padding()
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .background(Color(colour).opacity(viewModel.canReset ? 1 : 0.3))
-                        .clipShape(Capsule())
-                        .shadow(radius: viewModel.canReset ? 4 : 0)
-                        
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                    .padding(.bottom, 24)
                 }
-                .disabled(!viewModel.canReset)
-                
-                Text("If you have forgotten your password don't worry, we will send an email allowing you to reset your password. Enter the email address that you created your account with above so we can send you the email.")
-                    .font(.caption.bold())
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.secondary)
-                
-                Spacer()
+                .scrollDismissesKeyboard(.interactively)
+
+                VStack(spacing: 0) {
+                    Divider()
+                    LoginPrimaryButton(title: "Send Reset Email", isEnabled: viewModel.canReset) {
+                        Task { await viewModel.login() }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                }
+                .background(Color(.systemBackground))
             }
-            .padding()
-            
+
             if viewModel.isLoading {
-                LoadingView(colour: colour)
+                LoadingView()
             }
         }
         .background(Color(.systemBackground))
-
-
     }
 }
 
-struct ForgotPasswordView_Previews: PreviewProvider {
+#Preview {
     struct PreviewNetworkService: NetworkService {
         func login(with email: String, password: String) async throws {}
         func signup(with email: String, password: String) async throws {}
         func forgotPassword(for email: String) async throws {}
     }
-    static var previews: some View {
-        ForgotPasswordView(viewModel: ForgotPasswordViewModel(networkService: PreviewNetworkService()), colour: .blue)
-    }
+    return ForgotPasswordView(viewModel: ForgotPasswordViewModel(networkService: PreviewNetworkService()))
 }

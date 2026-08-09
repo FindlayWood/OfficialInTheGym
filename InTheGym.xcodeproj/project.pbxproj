@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ACE000000000000000000014 /* VerifyEmailResendState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000000A /* VerifyEmailResendState.swift */; };
+		ACE000000000000000000015 /* VerifyEmailErrorBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000000B /* VerifyEmailErrorBanner.swift */; };
+		ACB000000000000000000014 /* SubscriptionProductRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB00000000000000000000A /* SubscriptionProductRow.swift */; };
+		ACB000000000000000000015 /* SubscriptionFeatureList.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB00000000000000000000B /* SubscriptionFeatureList.swift */; };
+		ACB000000000000000000016 /* PurchaseErrorBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB00000000000000000000C /* PurchaseErrorBanner.swift */; };
 		ACA000000000000000000002 /* AccountCreationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACA000000000000000000001 /* AccountCreationKit.framework */; };
 		ACA000000000000000000003 /* AccountCreationKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ACA000000000000000000001 /* AccountCreationKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ACA000000000000000000014 /* UsernameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000A /* UsernameModel.swift */; };
@@ -891,7 +896,6 @@
 		9FB0F2A329147F2E00BF222E /* PracticeTrackerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */; };
 		9FB4D1DC29E752AB0019CA57 /* AccountCreationComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4D1DB29E752AB0019CA57 /* AccountCreationComposition.swift */; };
 		9FB4D1DF29EAD4A50019CA57 /* AccountCreatedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4D1DE29EAD4A50019CA57 /* AccountCreatedViewController.swift */; };
-		9FB4D1E329EAD4C10019CA57 /* AccountCreatedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4D1E229EAD4C10019CA57 /* AccountCreatedView.swift */; };
 		9FB4D1E729EC5DC10019CA57 /* CheckUserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4D1E629EC5DC10019CA57 /* CheckUserError.swift */; };
 		9FB4D1E929EC88D40019CA57 /* ClipSuccessData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4D1E829EC88D40019CA57 /* ClipSuccessData.swift */; };
 		9FC11F5F29DDC9B80054D79A /* LoginComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC11F5E29DDC9B80054D79A /* LoginComposition.swift */; };
@@ -955,6 +959,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		ACE00000000000000000000A /* VerifyEmailResendState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailResendState.swift; sourceTree = "<group>"; };
+		ACE00000000000000000000B /* VerifyEmailErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailErrorBanner.swift; sourceTree = "<group>"; };
+		ACB00000000000000000000A /* SubscriptionProductRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionProductRow.swift; sourceTree = "<group>"; };
+		ACB00000000000000000000B /* SubscriptionFeatureList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionFeatureList.swift; sourceTree = "<group>"; };
+		ACB00000000000000000000C /* PurchaseErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseErrorBanner.swift; sourceTree = "<group>"; };
 		ACA000000000000000000001 /* AccountCreationKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AccountCreationKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACA00000000000000000000A /* UsernameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameModel.swift; sourceTree = "<group>"; };
 		ACA00000000000000000000B /* FirestoreUsernameAvailabilityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUsernameAvailabilityChecker.swift; sourceTree = "<group>"; };
@@ -1824,7 +1833,6 @@
 		9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerDetailView.swift; sourceTree = "<group>"; };
 		9FB4D1DB29E752AB0019CA57 /* AccountCreationComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreationComposition.swift; sourceTree = "<group>"; };
 		9FB4D1DE29EAD4A50019CA57 /* AccountCreatedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreatedViewController.swift; sourceTree = "<group>"; };
-		9FB4D1E229EAD4C10019CA57 /* AccountCreatedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreatedView.swift; sourceTree = "<group>"; };
 		9FB4D1E629EC5DC10019CA57 /* CheckUserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckUserError.swift; sourceTree = "<group>"; };
 		9FB4D1E829EC88D40019CA57 /* ClipSuccessData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipSuccessData.swift; sourceTree = "<group>"; };
 		9FC11F5E29DDC9B80054D79A /* LoginComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginComposition.swift; sourceTree = "<group>"; };
@@ -3704,6 +3712,9 @@
 			isa = PBXGroup;
 			children = (
 				74AF66142D0F374900B49BDA /* PurchaseSuccessSubview.swift */,
+				ACB00000000000000000000A /* SubscriptionProductRow.swift */,
+				ACB00000000000000000000B /* SubscriptionFeatureList.swift */,
+				ACB00000000000000000000C /* PurchaseErrorBanner.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -4780,7 +4791,6 @@
 			children = (
 				74AF66132D0F372400B49BDA /* Subviews */,
 				9FB4D1DE29EAD4A50019CA57 /* AccountCreatedViewController.swift */,
-				9FB4D1E229EAD4C10019CA57 /* AccountCreatedView.swift */,
 				740B3E6B2CBB18970098AB57 /* AccountCreatedSubscriptionView.swift */,
 				74587CE92CD027E0004E8642 /* AccountCreatedViewModel.swift */,
 			);
@@ -4808,6 +4818,8 @@
 				9FC11F6329E0B5190054D79A /* VerifyAccountViewController.swift */,
 				9FC11F6529E0B5270054D79A /* VerifyAccountViewModel.swift */,
 				9FC11F6729E0B5350054D79A /* VerifyAccountView.swift */,
+				ACE00000000000000000000A /* VerifyEmailResendState.swift */,
+				ACE00000000000000000000B /* VerifyEmailErrorBanner.swift */,
 			);
 			path = VerifyAccount;
 			sourceTree = "<group>";
@@ -5053,7 +5065,6 @@
 				7444D0C026D3C9BE0009C7A6 /* UploadingWorkoutViewModel.swift in Sources */,
 				7479812F27DB7EBA00CF3F9B /* RequestsView.swift in Sources */,
 				74E9899727D7CCCB00898C59 /* WorkoutBottomChildViewController.swift in Sources */,
-				9FB4D1E329EAD4C10019CA57 /* AccountCreatedView.swift in Sources */,
 				7416CCCF26546F200043B1C2 /* RepsBottomCollectionAdapter.swift in Sources */,
 				742C1C7227BAAEBD00DD1BB0 /* FollowersModel.swift in Sources */,
 				742C1C5F27B5737300DD1BB0 /* UINameUsernameSubView.swift in Sources */,
@@ -5452,6 +5463,9 @@
 				74B6F68C2747E2E900A72679 /* UIViewController+Extension.swift in Sources */,
 				742FCD1728450BBA007ED1C6 /* ExerciseMaxHistoryView.swift in Sources */,
 				74AF66152D0F374900B49BDA /* PurchaseSuccessSubview.swift in Sources */,
+				ACB000000000000000000014 /* SubscriptionProductRow.swift in Sources */,
+				ACB000000000000000000015 /* SubscriptionFeatureList.swift in Sources */,
+				ACB000000000000000000016 /* PurchaseErrorBanner.swift in Sources */,
 				74F664DF28DF40EF0086BA4E /* CMJMyJumpsViewModel.swift in Sources */,
 				743E93412809AA2A0029F447 /* ProfileDataSource.swift in Sources */,
 				741EC128284BF6D1009B00AB /* ExerciseCommentsViewModel.swift in Sources */,
@@ -5509,6 +5523,8 @@
 				74AF6D62268682C4005C52A8 /* DisplayExerciseStatsAdapter.swift in Sources */,
 				744AED3E2799A617000D2D74 /* ExerciseUpdateModels.swift in Sources */,
 				9FC11F6829E0B5350054D79A /* VerifyAccountView.swift in Sources */,
+				ACE000000000000000000014 /* VerifyEmailResendState.swift in Sources */,
+				ACE000000000000000000015 /* VerifyEmailErrorBanner.swift in Sources */,
 				74F18AE827D66E750043551F /* CoachPlayerWorkoutViewModel.swift in Sources */,
 				7444D09726D1369F0009C7A6 /* AddMoreToExerciseProtocol.swift in Sources */,
 				743A0505276B7C3A0027B752 /* CommentTableViewCell.swift in Sources */,

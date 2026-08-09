@@ -1,6 +1,6 @@
 //
-//  SwiftUIView.swift
-//  
+//  WelcomeView.swift
+//  LoginKit
 //
 //  Created by Findlay-Personal on 05/04/2023.
 //
@@ -8,58 +8,57 @@
 import SwiftUI
 
 struct WelcomeView: View {
-    
+
     @ObservedObject var viewModel: WelcomeViewModel
-    
+
     var image: UIImage
-    var colour: UIColor
-    
+
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             Spacer()
+
             Image(uiImage: image)
                 .resizable()
-                .frame(maxWidth: .infinity)
                 .aspectRatio(contentMode: .fit)
-                .padding()
-            
+                .frame(maxWidth: 180, maxHeight: 180)
+
             Text(viewModel.title)
-                .font(.largeTitle.bold())
-                .foregroundColor(Color(colour))
-            
+                .font(.system(size: 34, weight: .bold))
+                .foregroundStyle(Color.darkColor)
+                .padding(.top, 16)
+
+            Text("Plan your training, log every set, and see it add up.")
+                .font(.system(size: 15))
+                .foregroundStyle(Color.secondary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, 8)
+                .padding(.horizontal, 24)
+
             Spacer()
-            
-            Button {
-                viewModel.signupAction()
-            } label: {
-                Text("Sign Up")
-                    .padding()
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .background(Color(colour))
-                    .clipShape(Capsule())
-                    .shadow(radius: 4)
-            }
-            
-            HStack {
-                Text("Already have an acccount?")
-                Button {
+
+            // Two full-width buttons rather than a primary and a word inside a sentence. Logging in
+            // is half of what this screen is for, and "LOGIN" tucked into "Already have an
+            // acccount?" — typo included — made it the harder of the two to hit.
+            VStack(spacing: 10) {
+                LoginPrimaryButton(title: "Sign Up") {
+                    viewModel.signupAction()
+                }
+                LoginSecondaryButton(title: "Log In") {
                     viewModel.loginAction()
-                } label: {
-                    Text("LOGIN")
-                        .font(.headline)
-                        .foregroundColor(Color(colour))
                 }
             }
         }
-        .padding()
-        .background(Color(.systemBackground).edgesIgnoringSafeArea(.all))
+        .padding(.horizontal, 20)
+        .padding(.bottom, 24)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground).ignoresSafeArea())
     }
 }
 
-struct WelcomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        WelcomeView(viewModel: WelcomeViewModel(title: "INTHEGYM"), image: UIImage(systemName: "eraser.fill")!, colour: .blue)
-    }
+#Preview {
+    WelcomeView(
+        viewModel: WelcomeViewModel(title: "INTHEGYM"),
+        image: UIImage(systemName: "figure.strengthtraining.traditional")!
+    )
 }

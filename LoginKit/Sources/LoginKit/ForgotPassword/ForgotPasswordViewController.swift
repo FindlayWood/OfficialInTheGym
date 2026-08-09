@@ -13,7 +13,6 @@ class ForgotPasswordViewController: UIViewController {
     
     var viewModel: ForgotPasswordViewModel!
     
-    var colour: UIColor!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -24,12 +23,23 @@ class ForgotPasswordViewController: UIViewController {
     
     // MARK: - Display
     func addDisplay() {
-        display = .init(viewModel: viewModel, colour: colour)
+        display = .init(viewModel: viewModel)
         addSwiftUIView(display)
     }
     // MARK: - Nav Bar
     func initNavBar() {
         navigationItem.title = "Forgot Password"
-        editNavBarColour(to: colour)
+        editNavBarColour()
+        // This screen is presented modally in its own navigation controller, so it had no button to
+        // leave by — only the sheet's swipe-down, which is not obvious once the keyboard is up.
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .cancel,
+            target: self,
+            action: #selector(cancelTapped)
+        )
+    }
+
+    @objc private func cancelTapped() {
+        dismiss(animated: true)
     }
 }

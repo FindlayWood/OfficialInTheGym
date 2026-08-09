@@ -18,6 +18,71 @@ Lean, minimal UI aesthetic throughout.
 ## Auth
 Firebase Auth, email and password only.
 
+`LoginKit` owns welcome / login / signup / forgot-password. It is **still an SPM package** — only its
+UI was brought onto MyDay's design vocabulary, matching Account Creation, so the screens either side
+of signup read as one flow. It has its own `UI/Color+Extension.swift`, as MyDayKit, StatsKit and
+AccountCreationKit each do; `LoginFieldCard`, `LoginPrimaryButton` and `LoginErrorBanner` are its
+copies of the account-creation equivalents. **Keep the two sets in step** — they are deliberate
+duplicates across a module boundary, not one shared component.
+
+- **The injected `colour: UIColor` is gone** from `MainLoginKitInterface.init`, same as
+  AccountCreationKit: the app only ever passed `.darkColour`, which is `#1C496E` — `Color.darkColor`.
+  `editNavBarColour()` now takes it from the framework rather than an argument.
+- **Password fields are `PasswordField`**, shared by login and signup. The reveal eye was
+  `.foregroundColor(.black)` — invisible in dark mode — and neither field had a `textContentType`, so
+  iOS never offered a saved or generated password. Login uses `.password`, signup `.newPassword`.
+- **Signup states the password rule** ("At least 6 characters") rather than leaving `canSignup` to
+  disable the button with nothing saying why. The rule itself is unchanged: `password.count > 5`.
+- **The welcome screen has two full-width buttons.** Logging in used to be the word "LOGIN" inside
+  "Already have an acccount?" — typo included, now fixed — which made the returning user's action the
+  harder of the two to hit.
+- **Forgot Password has a Cancel button.** It is presented modally in its own navigation controller
+  and had no way out but the sheet's swipe-down, which is not obvious with the keyboard up.
+
+### Verify email — `VerifyAccountView`
+Sits between signup and account creation, polling `user.reload()` every two seconds and moving on by
+itself once the address is verified.
+
+- **It used to be titled "Account Created".** It isn't — nothing has been created at that point, and
+  the title made the two screens after it look like a mistake. It now reads "Check your email", and
+  the address is shown in a card of its own: a typo there is the likeliest reason the mail never
+  arrives, and it is the only thing on the screen the user can check.
+- **Resend has states** (`VerifyEmailResendState`: idle / sending / sent(cooldown) / failed) and a
+  **30-second cooldown**. Tapping it used to change nothing at all on screen — the send was fired
+  into a `Task` and any error printed — so people tap repeatedly, and repeated sends are exactly what
+  Firebase rate-limits. A failure now shows `VerifyEmailErrorBanner`.
+- **The polling timer is invalidated** on verification and in `deinit`. It was retained by the run
+  loop and never stopped, so it kept calling `reload()` every two seconds for the rest of the
+  session, long after the screen was gone.
+- The view reads `viewModel.email` rather than `viewModel.user?.email`, so it does not touch the
+  Firebase `User` type — it only ever needed the address.
+
+### The screen after account creation is a paywall
+`AccountCreatedViewController` shows **`AccountCreatedSubscriptionView`** — INTHEGYM pro, not a
+"welcome" screen. `AccountCreatedView.swift` was the welcome screen it sounds like, was never used,
+and has been deleted; don't recreate it without wiring it up. Same design vocabulary as the rest of
+onboarding, in the app target rather than a framework.
+
+- **`premiumColour` is green, not purple.** There is a `premiumColour` **colorset** (`#79B49F`, with
+  a dark variant) *and* a purple `UIColor.premiumColour` `#colorLiteral` in
+  `Helper/UIColor+Extension.swift`. `Color(.premiumColour)` resolves to the asset, so every SwiftUI
+  screen is green while UIKit callers (`editNavBarColour(to: .premiumColour)`, `UserStampsView`,
+  `UIProfileInfoView`) get purple. Pre-existing and app-wide — **not** a paywall bug, so it was left
+  alone here. Worth resolving centrally.
+- It keeps `premiumColour` as its accent rather than `darkColor`: that is a semantic colour marking
+  premium, like the category colours in `ExerciseCategory`, and it matches `PremiumAccountView`.
+- **"Not Now" is always on screen.** It used to sit in an `else` branch that any error or a stuck
+  `isLoading` removed, and `AccountCreatedViewModel` set `isLoading = true` in its `catch` blocks —
+  so a failed purchase hid both the purchase button and the way out, soft-locking onboarding. The
+  `catch` blocks now set `false`. **A paywall must always be dismissible.**
+- `SubscriptionProductRow` is one component with an `isSelected` flag; it was inlined twice, selected
+  and unselected, and the two copies had already drifted. `PurchaseErrorBanner` renders
+  `PurchaseError.description` — which already existed and was going unused behind four hand-written
+  `case` branches with their own duplicated buttons.
+- The feature list copy is unchanged and is data now (`SubscriptionFeatureList.features`). Some
+  entries — Vertical Jump, CMJ, Injury tracker, Journal — may no longer match what the app ships;
+  that is a product call, not a styling one.
+
 ## Account Creation
 The post-signup onboarding flow — a paged form between email verification and the tab bar. It was an
 SPM package until it moved to a framework built like `MyDayKit` and `StatsKit`, in two passes: the

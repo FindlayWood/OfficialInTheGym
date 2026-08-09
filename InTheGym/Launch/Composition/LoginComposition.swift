@@ -24,7 +24,6 @@ class LoginComposition {
         let mainInterface = MainLoginKitInterface(
             navigationController: navigationController,
             networkService: LoginKitNetworkService(),
-            colour: .darkColour,
             title: "INTHEGYM",
             image: UIImage(named: "inthegym_icon3")!,
             completion: completion)

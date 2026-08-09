@@ -13,7 +13,6 @@ class SignupViewController: UIViewController {
     
     var viewModel: SignupViewModel!
     
-    var colour: UIColor!
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -24,13 +23,13 @@ class SignupViewController: UIViewController {
     
     // MARK: - Display
     func addDisplay() {
-        display = .init(viewModel: viewModel, colour: colour)
+        display = .init(viewModel: viewModel)
         addSwiftUIView(display)
     }
     
     // MARK: - Nav Bar
     func initNavBar() {
         navigationItem.title = "Signup"
-        editNavBarColour(to: colour)
+        editNavBarColour()
     }
 }

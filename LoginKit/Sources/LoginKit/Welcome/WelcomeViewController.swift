@@ -13,7 +13,6 @@ class WelcomeViewController: UIViewController {
     
     var viewModel: WelcomeViewModel!
     
-    var colour: UIColor!
     var image: UIImage!
     
 
@@ -25,7 +24,7 @@ class WelcomeViewController: UIViewController {
     
     // MARK: - Display
     func addDisplay() {
-        display = .init(viewModel: viewModel, image: image, colour: colour)
+        display = .init(viewModel: viewModel, image: image)
         addSwiftUIView(display)
     }
 }

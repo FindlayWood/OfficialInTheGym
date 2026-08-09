@@ -44,10 +44,12 @@ class AccountCreatedViewModel: ObservableObject {
         } catch {
             print(String(describing: error))
             self.error = .purchasingProduct
-            isLoading = true
+            // Was `true`, which left the spinner up and the purchase button hidden for good — a
+            // failed purchase soft-locked the paywall.
+            isLoading = false
         }
     }
-    
+
     func restorePurchase() async {
         isLoading = true
         do {
@@ -58,7 +60,7 @@ class AccountCreatedViewModel: ObservableObject {
             print(String(describing: error))
             print("---- restore was un successful")
             self.error = .restorePurchases
-            isLoading = true
+            isLoading = false
         }
     }
     

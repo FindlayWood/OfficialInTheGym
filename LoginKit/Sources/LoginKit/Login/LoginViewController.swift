@@ -13,7 +13,6 @@ class LoginViewController: UIViewController {
     
     var viewModel: LoginViewModel!
     
-    var colour: UIColor!
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -24,13 +23,13 @@ class LoginViewController: UIViewController {
     
     // MARK: - Display
     func addDisplay() {
-        display = .init(viewModel: viewModel, colour: colour)
+        display = .init(viewModel: viewModel)
         addSwiftUIView(display)
     }
     
     // MARK: - Nav Bar
     func initNavBar() {
         navigationItem.title = "Login"
-        editNavBarColour(to: colour)
+        editNavBarColour()
     }
 }

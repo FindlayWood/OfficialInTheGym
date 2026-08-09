@@ -58,7 +58,6 @@ protocol ViewControllerFactory {
 struct BasicViewControllerFactory: ViewControllerFactory {
     
     var networkService: NetworkService
-    var colour: UIColor
     var title: String
     var image: UIImage
     var completion: () -> Void
@@ -66,21 +65,18 @@ struct BasicViewControllerFactory: ViewControllerFactory {
     func makeWelcomeViewController() -> WelcomeViewController {
         let vc = WelcomeViewController()
         vc.viewModel = .init(title: title)
-        vc.colour = colour
         vc.image = image
         return vc
     }
     
     func makeLoginViewController() -> LoginViewController {
         let vc = LoginViewController()
-        vc.colour = colour
         vc.viewModel = .init(networkService: networkService, completion: completion)
         return vc
     }
     
     func makeSignUpViewController() -> SignupViewController {
         let vc = SignupViewController()
-        vc.colour = colour
         vc.viewModel = .init(networkService: networkService, completion: completion)
         return vc
     }
@@ -88,7 +84,6 @@ struct BasicViewControllerFactory: ViewControllerFactory {
     func makeForgotPasswordViewController() -> ForgotPasswordViewController {
         let vc = ForgotPasswordViewController()
         vc.viewModel = .init(networkService: networkService)
-        vc.colour = colour
         return vc
     }
 }

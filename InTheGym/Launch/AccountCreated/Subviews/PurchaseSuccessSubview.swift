@@ -10,47 +10,61 @@ import SwiftUI
 import RevenueCat
 
 struct PurchaseSuccessSubview: View {
+
     var action: (() -> ())
+
     var body: some View {
-        VStack {
-            Text("Great!")
-                .font(.largeTitle.bold())
-                .foregroundStyle(Color.primary)
+        VStack(spacing: 0) {
+            Spacer()
+
             Image(systemName: "checkmark.seal.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 100, height: 100)
+                .frame(width: 88, height: 88)
                 .foregroundStyle(Color(.premiumColour))
-                .padding()
-            Text("You are now subscribed to InTheGym Pro")
+
+            Text("Great!")
+                .font(.system(size: 28, weight: .bold))
                 .foregroundStyle(Color.primary)
-            
-            Button {
-                action()
-            } label: {
-                Text("Continue")
-                    .font(.headline)
-                    .foregroundStyle(Color.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background {
-                        Color(.premiumColour)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .shadow(color: .black.opacity(0.5), radius: 2, y: 2)
-                    }
-            }
-            .padding()
-            
-            
-            Button {
-                openManageSubscriptions()
-            } label: {
-                Text("Manage Subscription")
-                    .foregroundStyle(Color.primary)
+                .padding(.top, 20)
+
+            Text("You are now subscribed to InTheGym Pro")
+                .font(.system(size: 15))
+                .foregroundStyle(Color.secondary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, 6)
+
+            Spacer()
+
+            VStack(spacing: 12) {
+                Button {
+                    action()
+                } label: {
+                    Text("Continue")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(Color.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 52)
+                        .background(Color(.premiumColour))
+                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                }
+
+                Button {
+                    openManageSubscriptions()
+                } label: {
+                    Text("Manage Subscription")
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundStyle(Color.secondary)
+                }
             }
         }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 24)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground).ignoresSafeArea())
     }
-    
+
     private func openManageSubscriptions() {
         Purchases.shared.showManageSubscriptions(completion: { error in
             if let error {
