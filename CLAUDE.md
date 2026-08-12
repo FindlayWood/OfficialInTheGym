@@ -15,6 +15,29 @@ Lean, minimal UI aesthetic throughout.
 - `ITGWorkoutKit` — ignore, do not touch
 - `ClubKit` — ignore, do not touch
 
+`WorkoutKit` is a third SPM package — legacy, still composed from `WorkoutKitComposition`, not a
+target for new work.
+
+### Project shapes — the four frameworks are not built the same way
+Open **`InTheGym.xcworkspace`**, not `InTheGym.xcodeproj`. It stitches the app project to the four
+framework projects and the SPM packages.
+
+| Project | Source file references in the pbxproj | New file |
+|---|---|---|
+| `AccountCreationKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
+| `LoginKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
+| `StatsKit.xcodeproj` | 36 | **check target membership** |
+| `MyDayKit.xcodeproj` | 149 | **check target membership** |
+
+All four use `PBXFileSystemSynchronizedRootGroup`, but only AccountCreationKit and LoginKit are
+driven *entirely* by it. StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
+`Screens/`, `Models/` etc. individually; MyDayKit lists most of its tree.
+
+`SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES` is set on **StatsKit, AccountCreationKit and
+LoginKit** — the three built from the StatsKit template. **`MyDayKit` does not set it.** A file that
+compiles inside MyDayKit can therefore fail on a missing `import` the moment it moves into one of the
+other three.
+
 ## Auth
 Firebase Auth, email and password only.
 
@@ -226,9 +249,110 @@ fonts, no shadows. **The page is `systemBackground` and the cards are `secondary
 - Local-first: FileManager + JSON for templates and daily entries, Firestore for remote sync
 - Session logs stored as `WorkoutSessionRecord` embedded in `DailyWorkoutEntry` (same JSON day file)
 
+### Coordinator and Router are the same pattern under two names
+`Coordinator` (MyDayKit, app target) and `Router` (StatsKit, AccountCreationKit) are one shape.
+`Router` is the newer naming, adopted where a framework collapsed a stack of interface/flow/factory
+types into one — see `AccountCreationKitRouter` under *Account Creation*.
+
+- **Skeleton, in this order**: `// MARK: - Navigation` (the `UINavigationController`) → `Dependencies`
+  → `Properties` (child coordinators, `rootViewController`) → `Init` (`public`, taking every
+  dependency) → `Root` (`public func start()`, which stores `rootViewController` and calls
+  `setViewControllers`). `viewController(for:)` and `navigate(to:)` live in an **extension**, not the
+  main declaration.
+- **Routes are an enum carrying the screen's inputs as associated values**, including data already
+  loaded — `case acwrDetail(totals: [DailyTotal], metric: TrainingLoadMetric)`. A detail screen does
+  not re-fetch what the screen before it already holds.
+- **`viewController(for:)` builds the view model, fills its navigation closures, wraps it in a host,
+  and returns** — all in one `case`. That is the only place the two halves meet. Every closure
+  captures `[weak self]`.
+- **Managers scoped to one flow are built in the coordinator, not the composition root**, and have
+  their callbacks wired on the spot — `WorkoutSessionManager` in the `.workoutSession` case.
+
+### Three ways a SwiftUI screen is hosted
+1. **`UIHostingController(rootView:)` inline** in `viewController(for:)` — the default, with
+   `hidesBottomBarWhenPushed = true` when the tab bar should go.
+2. **A Boundary view controller** — `StatsKitBoundaryViewController`, `MyDayBoundaryViewController`,
+   `AccountCreationBoundaryViewController`. A plain `UIViewController` with `var display: SomeScreen!`
+   and a `var router`/`coordinator`, embedding through a local `addSwiftUIView<T: View>(_:)` that adds
+   the hosting controller as a child and pins its view to all four anchors. It exists to control the
+   nav bar (`setNavigationBarHidden` in `viewWillAppear` / `viewWillDisappear`) around a SwiftUI
+   screen. Each module carries its own copy of `addSwiftUIView`, like the colour extensions.
+3. **`NavBarHidingHostingController`** — see *MYDAY Workout Flow*. Nothing in it is screen-specific.
+
+### Composition root mechanics
+- **One `XComposition` class per module**, with a `compose…(_ navigationController:)` method that
+  builds the graph bottom-up in commented sections and ends `coordinator.start()` / `router.start()`.
+- **Annotate the `let` with the protocol** where the concrete type would otherwise be inferred —
+  `let loader: ExerciseLoader = FirebaseExerciseLoader()` — which is what makes the next line's
+  decorator substitutable.
+- **Behaviour is composed by wrapping, never by a flag inside an implementation.** The wrap labels are
+  not standardised: `decoratee:` (`MainThreadExerciseLoaderDecorator`), `wrapping:`
+  (`ThumbnailUploadDecorator`), `wrapped:` (`FirestoreMetadataDecorator`), `local:`/`remote:`
+  (`LocalAndRemoteMyDaySaver`), `localLoader:`/`remoteLoader:` (`LocalWithRemoteFallBackMyDayLoader`).
+  Match the neighbours. The clip upload path is three nested decorators over
+  `FirebaseStorageClipUploader`.
+- **A one-use decorator may live at the bottom of the composition file**; anything used twice gets its
+  own file.
+- **Migrations run before the readers they affect**, with a comment saying so —
+  `LegacyWorkoutTemplateStoreMigrator().migrate()` precedes `WorkoutLibraryManager`.
+- **The user id is read once, here** (`UserDefaults.currentUser.uid`) and injected downward.
+
+### Legacy UIKit — the app-target triple
+905 files. This is how the app target is built, and it is what to follow when **extending an existing
+app-target screen**. New features do not go here; they go in a framework as SwiftUI.
+
+One feature folder holds three files with the same prefix — `XView.swift`, `XViewController.swift`,
+`XViewModel.swift`.
+
+- **The view controller**: `var display = XView()` as a property (`loadView` is not overridden), with
+  `display.frame = getFullViewableFrame()` and `view.addSubview(display)` in `viewDidLayoutSubviews`;
+  `weak var coordinator`, set by the coordinator after construction; injected dependencies
+  implicitly unwrapped (`var purchaseManager: PurchaseManager!`); `viewDidLoad` calling small named
+  wiring methods (`initDisplay()`, `initDataSource()`, `initViewModel()`) rather than inline setup;
+  `editNavBarColour(to:)` and `navigationItem.title` in `viewWillAppear`;
+  `private var subscriptions = Set<AnyCancellable>()` with `.sink { [weak self] … }.store(in:)`.
+- **The view**: every subview a closure-initialised property under `// MARK: - Subviews`, each ending
+  `translatesAutoresizingMaskIntoConstraints = false`. **The view registers its own cells** — the view
+  that owns the table owns the list of cell types it can show. `lazy var` when the initialiser reads
+  another property. `didSet` recomputes layout rather than exposing a `reload()`. Constraints are
+  `NSLayoutConstraint.activate([...])` in `setupUI()`.
+- **The view model**: `CurrentValueSubject` for state, `PassthroughSubject` for events and errors,
+  failure type always `Never` — errors travel as values on their own subject rather than failing the
+  stream. Navigation targets are published as subjects too; the VC sinks them and asks its
+  coordinator. `apiService` carries a default (`= FirebaseDatabaseManager.shared`) so the type is
+  constructible untouched and overridable in tests.
+- **Lists are a dedicated `NSObject` data source class**, not an extension on the VC: it owns
+  `private lazy var dataSource = makeDataSource()`, conforms to the delegate in an extension, and
+  **republishes selection through a `PassthroughSubject`**. Fixed method set — `makeDataSource()`,
+  `initialSetup()` (append sections, apply a non-animating empty snapshot), `updateTable(with:)`.
+  `SingleSection` is the default one-section enum. Force-cast dequeue is the house style.
+- **Cells** expose `static let cellID` (tables) or `reuseID` (collections) — both spellings exist,
+  match the folder — and may own a Combine publisher and a cell view model, raising intent upward as
+  events. `configure(with:)` is the single entry point.
+- The older screens use an `NSObject` **delegate adapter** with a lowercase-initial multi-method
+  protocol declared in the same file (`repsTopCollectionProtocol`). That is the predecessor of the
+  diffable data source — extend it only inside a screen that already uses it, never write a new one.
+- Legacy views hardcode `.white` / `.black` in places. That is a **known dark-mode defect**, not a
+  pattern to copy.
+
 ## Tech Stack
 Swift, SwiftUI, UIKit, Combine, Firebase/Firestore, Firebase Cloud Functions,
 Firebase Emulator (Python seeding scripts, --import/--export), NWPathMonitor
+
+Fuller picture, since which half of the app you are in decides what is available:
+
+| Current — use for new work | Legacy — present, do not extend |
+|---|---|
+| SwiftUI, Combine (`ObservableObject`/`@Published`) | UIKit + Combine bare subjects |
+| Firestore + `FirebaseFirestoreSwift` (29 / 8 files) | **Realtime Database** — `FirebaseDatabaseManager`, the whole social/coaching graph |
+| Firebase Storage, Functions, Auth, Messaging | CoreData (`InTheGym.xcdatamodeld`, dormant; `ITGWorkoutKit`'s cache) |
+| `async`/`await` + `throws` | `Result` completion handlers |
+| Hand-built charts | `danielgindi/Charts` 4.1.0 (13 files) + axis formatters in `Helper/ChartAxisFormatter/` |
+| RevenueCat 4.44 behind `PurchaseManager`, StoreKit for local testing | `SCLAlertView-Swift` (13 files), `SkyFloatingLabelTextField` (5 files) |
+| AVFoundation (clips, jump measuring), PhotosUI | Storyboards / xibs — launch screen and `Main.storyboard` only, **do not add more** |
+
+Only `ITGWorkoutKit` is localised (`.strings` + localisation tests). Everything else hardcodes
+English at the point of use — do not introduce a localisation table for one screen.
 
 ## Brand Colours
 - Dark: `#1C496E` — `Color.darkColor`
@@ -277,9 +401,67 @@ than an accent. Leave those alone.
 - Coordinators: `sub.start()` from parent
 - `popToCoordinatorRoot()` not `popToRootViewController()`
 
+### Files and comments
+- **Xcode file header on every file.** App-target files keep the copyright line
+  (`Copyright © 2021 FindlayWood. All rights reserved.`); framework files do not.
+- **`// MARK: -` section banners in a consistent order.** Frameworks: `Navigation` → `Dependencies` →
+  `Properties` → `Init` → `Root`. App target: `Coordinator` → `Publishers` → `Properties` →
+  `Subviews` → `Initializer` → `View` → `Display` → `Data Source`. Both `Init` and `Initializer`
+  appear — match the file's neighbours.
+- **A `///` comment records the decision, not the signature.** The house style is several sentences
+  explaining why the shape is what it is and what broke under the previous one, with the rule in
+  bold. `WorkoutLibraryManager`, `StatsDay`, `WorkoutSetRecord.statsLogId` and
+  `WeightUnit.kilograms` are the reference examples. Inline `//` comments carry the same weight where
+  a single line is load-bearing (the ordering inside `cancelSession`).
+- **Folder and file names are not sanitised** — `New Group/`, `Feed Feature/`,
+  `WorkoutCreation(4.4)/`, `Protocols/CooridnatorFlows/`, `DisplayWorkoutStatsAdater.swift` all exist
+  and are referenced from the pbxproj. Do not rename them incidentally.
+
+### A rule that exists in two places is a defect
+Each of these is the single definition of something that had previously been inlined at three or four
+call sites and drifted apart. Do not re-inline any of them:
+
+`WeightUnit.kilograms(_:unit:)` · `StatsDay.key(for:)` · `ACWR.Zone(ratio:)` ·
+`SessionSetInput.target(for:)` · `SessionSetPillValue.values(for:record:)` ·
+`WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty`
+
 ## Testing
 Before writing any tests, read all test files and folders within `ITGWorkoutKit`
 and use these as the template for structure, naming, and style.
+
+`ITGWorkoutKit` is read-only but its suite is the reference. `StatsKit/StatsKitTests/` is the one
+substantial framework suite and is the model for new ones — `MyDayKitTests`, `LoginKitTests` and
+`AccountCreationKitTests` are Xcode-generated placeholders.
+
+- **`test_<method>_<expectedBehaviour><condition>()`**, behaviour first —
+  `test_rolling_deliversRatioOfOneOnSteadyLoad`,
+  `test_rolling_averagesOverWindowLengthNotOverTrainedDays`. "delivers" is the standard verb for a
+  returned value.
+- **`let sut = …`** on the first line; `final class`; `@testable import`.
+- **Deterministic inputs from private helpers at the bottom of the file** — `fixedDate`,
+  `load(100, forLastDays: 28)`.
+- **`accuracy:` on every floating-point assertion.**
+- **A comment above a non-obvious test naming the behaviour that would break** — written in the same
+  voice as the source doc comments, saying what a wrong implementation would produce.
+- **Domain maths is tested directly as a value type**; `ACWR.rolling(...)` needs no test double.
+- **A spy records an `Equatable` message enum** in `private(set) var receivedMessages` and stores
+  completions for the test to drive (`complete(with:at:)`, `at index: Int = 0`). **A spy never
+  asserts.** One double per file, under the suite's `Helpers/`.
+- **Helpers are `Type+TestHelpers.swift`**, one per file, forwarding `file:`/`line:` so a failure
+  points at the test. Assertions are extracted too (`…Tests+Assertions.swift`).
+- **`Mock…`/`Preview…` conformers that exist for SwiftUI previews ship in the *framework*, not the
+  test target** — `MockDailyTotalsProvider`, `PreviewFirestoreService`, `PreviewExerciseLoader` —
+  and are `public` + `@unchecked Sendable`.
+
+### CI
+`.github/workflows` → the shared `CI_iOS` scheme → `CI_iOS_TestPlan.xctestplan`, which sets
+`testExecutionOrdering: random` (tests must not depend on each other) and `testTimeoutsEnabled`.
+
+**A test target is invisible to CI until it is added to the test plan.** The plan currently runs
+`InTheGymTests`, `ITGWorkoutKitTests`, `ITGWorkoutKitiOSTests`, `ITGWorkoutKitCacheIntegrationTests`
+and `WorkoutAPIEndToEndTests`, with coverage measured on `InTheGym`, `ITGWorkoutKit` and
+`ITGWorkoutKitiOS`. **None of the four framework test targets are in it** — `StatsKitTests` included,
+so the ACWR and training-load tests do not currently run on CI.
 
 ## App Structure
 5 tabs: NEWSFEED, DISCOVER, MYDAY, STATS, PROFILE.
@@ -289,6 +471,22 @@ NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
 Roadmap order:
 1. Fix workout stats → update STATS tab
 2. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
+
+Those five are the **player** tab bar (`PlayerInitialViewController`). The **coach** tab bar
+(`CoachInitialViewController`) is a different four: NEWSFEED, DISCOVER, **PLAYERS**, MYPROFILE — no
+MYDAY and no STATS. `BaseController` routes `.coach` accounts there. Nothing creates a new coach
+account (see *Account type is no longer asked*), but existing ones keep that tab bar, so a change to
+"the tab bar" is two changes.
+
+A tab is a `UINavigationController` handed to a coordinator that is `start()`ed, with the whole set
+assigned to `viewControllers` at the end of `viewDidLoad`.
+
+**`PlayerInitialViewController` builds three tabs it never shows.** `ClubKitComposition` and
+`WorkoutKitComposition` are constructed and then not composed, and `WorkoutsCoordinator` has
+`.start()` called on it — building an entire view-controller stack — but none of their navigation
+controllers appear in `viewControllers`. It is dead work on every launch, and it is why ClubKit and
+WorkoutKit are still wired into the app at all. Worth clearing when the NEWSFEED/WORKOUTS tab
+question above is settled.
 
 ## Workout Library Loading
 The library screen showed an empty state despite saved templates existing. Three defects, all fixed:
@@ -742,6 +940,77 @@ enabled flag. **Keep new gated buttons in step with it** rather than inventing a
   Quick-complete sidesteps this rather than fixing it — logging from the pill's circle never opens
   the overlay, so the banner is visible on that path. Logging *through* the overlay still hides it.
 
+## STATS Tab — `StatsKit`
+Reads the `DailyTotal` documents and the raw exercise logs written by the MyDay path below, and turns
+them into training-load metrics. `StatsKitRouter` follows the shape under *Architecture*; the six read
+protocols (`DailyTotalsProviding`, `StatsKitExerciseLoader`, `ExerciseDailyStatsProviding`,
+`ExerciseLoader`, `MuscleGroupsLoader`, `MovementTypesLoader`) are implemented in
+`InTheGym/Launch/Composition/StatsKit/`, one adapter per file.
+
+### `StatsDay` is the one definition of a day, and it is UTC
+`DailyTotal.id` and `ExerciseDailyStats.id` are `yyyy-MM-dd` document ids minted **server-side in
+UTC**, and `DateFormatter.yyyyMMdd` reads them back in UTC. Every piece of day arithmetic — the
+streak, the activity dots, the rolling ACWR windows — steps days to rebuild those same keys, so it
+has to step them in the calendar the keys were written in.
+
+**Do not reach for `Calendar.current` on the stats path.** Stepping with the device calendar means
+that for any user east of GMT the key built for "now" is *yesterday's* document for part of every
+day: the streak breaks and every rolling window is silently shifted by one. `StatsDay.calendar` is a
+Gregorian calendar pinned to UTC and must not drift from `DateFormatter.yyyyMMdd`. If a screen needs
+to show a date to the user, format it in their locale **at the point of display** — but look it up
+through `StatsDay.key(for:)` / `.key(daysAgo:from:)` / `.date(daysAgo:)`.
+
+### `ACWR` — one calculation, one set of boundaries
+Acute:Chronic Workload Ratio — recent load against the baseline the body has adapted to.
+
+**There were four ACWR calculations**: the home card, the workload detail screen, `MetricACWR`, and
+the per-exercise weekly chart. Two disagreed on what the chronic window even was, so the same
+training read "optimal" on one screen and "high risk" on the next. `ACWR.rolling(loadByDay:endingOn:
+acuteDays:chronicDays:)` is now the only one. What varies legitimately is the *load series* going in
+— see `TrainingLoadMetric` — never the arithmetic.
+
+- **The mean divides by the window length, not by the number of trained days.** Averaged over trained
+  days, one 700-unit day in an otherwise empty month reads 700; over the window it reads 100 acute
+  and 25 chronic, which is the behaviour a deload depends on. The acute window has to see rest days
+  as zero or a deload never shows.
+- **`ratio` is optional.** Chronic zero → `ratio: nil`, zone `.insufficient`, `formattedRatio` `"—"`.
+- **`ACWR.Zone(ratio:)` is the only place the boundaries are written down** — `<0.8` low,
+  `0.8..<1.3` optimal, `1.3..<1.5` caution, above that danger — and it owns the colours. The charts
+  each carried a private `acwrColor(_:)` before this, so the boundaries lived in three places and the
+  colours in four. `Zone.color` is why `ACWR.swift` imports SwiftUI; those colours are semantic, not
+  accents.
+
+### `TrainingLoadMetric` — two load series that must not be merged
+`.session` (duration × RPE) and `.volume` (reps × weight) are **separate on purpose**. Each is
+incomplete in a different way:
+- `.session` only exists for work done inside a workout, because RPE is asked for at the end of a
+  session. An exercise logged on its own produces a `DailyTotal` with no `totalWorkload` at all.
+- `.volume` only counts loaded work — `WeightUnit.kilograms` normalises bodyweight, `% of 1RM`,
+  `% of BW` and `Max` to zero — so a full calisthenics session scores zero volume.
+
+Averaging them, or falling back from one to the other, hides which kind of work is missing behind a
+number that looks complete. **Two ratios that each say what they cover is the honest presentation.**
+The enum carries its own `title`, `subtitle` ("Duration × RPE") and `explanation`: a "1.24" with
+nothing saying which work it counted is meaningless, so a metric that cannot explain itself is not
+shipped.
+
+### Charts and previews
+Hand-built, as everywhere. `ProgressChartSection` derives **13 buckets of 7 days = 91 days** from a
+private `buildWeeks(from:)` shared by both chart sections *so the x-axis is identical*, and decides
+which series to draw from the exercise (`showReps` / `showTime` split on `isTimeBased`).
+`WeeklyChartData.hasData` / `ACWRPoint.hasAnyValue` drive the empty states; the first three
+`ACWRPoint`s are nil-valued because they exist only as the chronic baseline.
+
+**`MockDailyTotalsProvider` generates 120 days**, not a handful — the same window the real loader
+fetches, so previews exercise the full 28-day chronic window rather than a short one that hid the
+ACWR's edges. Every third active day is deliberately workload-less, which is the exact case the two
+separate ACWRs exist for. A mock that only produces happy data is not useful here.
+
+### Not yet covered by CI
+`StatsKitTests` — `ACWRTests`, `TrainingLoadMetricTests`, `HomeStatsStreakTests`,
+`DailyTotalDecodingTests` — is **not in `CI_iOS_TestPlan.xctestplan`**, so none of it runs on CI. See
+*Testing → CI*.
+
 ## Exercise Stats Raw Logs
 Two things are written when work is recorded, and **both paths write the same two things**:
 1. the whole day document — `Users/{uid}/MyDay/{yyyy-MM-dd}`, `setData(merge: true)` with the entire
@@ -891,6 +1160,39 @@ assignments". Deferred by decision; nothing above is enforceable until it is res
 ## Firestore
 Firestore collection structure will be provided when working on specific features.
 
+What the code writes today, gathered in one place. **Firestore is the forward store; the Realtime
+Database is the legacy one**, and `Users` is decoded from *both* — Firestore `Users/{uid}` on the
+launch path, RTDB `users/{uid}` for followers / coaches / requests — so a field written to only one
+appears on some screens and not others.
+
+| Path | Store | Written by |
+|---|---|---|
+| `Users/{uid}` | Firestore | `createAccount` Cloud Function |
+| `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
+| `Users/{uid}/ExerciseStats/{exerciseID}/RawLogs/{logID}` | Firestore | both logging paths, per set |
+| `Users/{uid}/WorkoutSessions/{id}` | Firestore | `FirestoreCompletedWorkoutSessionSaver` (batched) |
+| `WorkoutSessions/{sessionId}` | Firestore | same batch — analytics copy, the only one to gain `deletedAt` |
+| `Usernames/{username}` | Firestore | `FirestoreUsernameReserver` — **case-sensitive document id** |
+| `users/{uid}`, posts, followers, requests | RTDB | `FirebaseDatabaseManager` |
+| `CoachPlayers/{coachId}`, `PlayerCoaches/{playerId}` | RTDB | the coach↔athlete link — see *Coach-Assigned Workouts* |
+| `Documents/MyDays/{uid}/{date}.json` | disk | `MyDayFileManagerSaver` |
+| `Documents/WorkoutTemplates/{uid}/{id}.json` | disk | `FileManagerWorkoutTemplateUploader` |
+| `Documents/PendingSync/workoutTemplates_{uid}.json` | disk | `SyncQueueWorkoutTemplateUploader` |
+
+**The path lives on the model, never at the call site.** `FirebaseInstance` requires
+`var internalPath: String`, `FirebaseModel` requires `static var path: String`, and
+`typealias FirebaseResource = FirebaseInstance & FirebaseModel`; Firestore models conform to
+`FirestoreResource` (`collectionPath`, `documentID`). A view model building
+`"Users/\(uid)/MyDay/\(date)"` inline is the shape *Account Creation* records moving away from.
+
+`FirestoreManager.shared` (a `private init` singleton behind a `FirestoreService` protocol, with a
+no-op `PreviewFirestoreService` in the same file) is the one place a multi-method protocol is
+accepted, because it is generic CRUD — `upload<Model: FirestoreResource>`, `upload(data:at:)`,
+`read<T: Codable>(at:)`, `readAll<T: Codable>(at:)`, all `async throws`.
+
+**Rules are not in this repository.** A client write to a new top-level collection is denied until
+they are deployed elsewhere, and permission-denied is a hard failure the SDK never retries.
+
 ## Long-term Architecture Goal
 Each tab to become its own framework. Shared core features (e.g. user profile loading)
 to be extracted into dedicated frameworks as usage spans multiple tabs.
@@ -921,6 +1223,41 @@ building any of it, and treat the details as a starting point for a conversation
   a client can hold passes from more than one coach; how this interacts with a client who also
   subscribes directly; and how the entitlement is verified server-side (App Store Server
   Notifications → Firestore) rather than trusted on device.
+
+## Keep in step — index
+Every pair below is documented in full in its own section above; this is just somewhere to look them
+up. Each exists because changing one side alone has already broken something, and each carries a
+comment in the source saying so. **Changing one without the other is the single most repeated defect
+in this codebase.**
+
+| This | …and this | Section |
+|---|---|---|
+| `WorkoutSetRecord.getStats(...)` | `ExerciseCompletions.getStats()` | Exercise Stats Raw Logs |
+| `SessionSetPillValue.values(for:record:)` | `SessionSetPillValue.values(for: ExerciseCompletions)` | MYDAY Workout Flow |
+| `SessionSetInput.target(for:)` | `SessionSetDetailOverlay.resetInputsToTarget()` | MYDAY Workout Flow |
+| `SessionSetPill` | `SessionSetPillPlaceholder` | MYDAY Workout Flow |
+| `ExerciseCompletionView` | `MyDayWorkoutSessionExerciseCard` | MYDAY Workout Flow |
+| `SetDetailView` | `SessionSetDetailOverlay` (**but not its editing**) | MYDAY Workout Flow |
+| `CompletedSetView` | a completed `SessionSetPill` | MYDAY Workout Flow |
+| `MyDayHomeScreen.setDetailOverlay` animation | the session screen's overlay animation | MYDAY Workout Flow |
+| `FileManagerWorkoutTemplateUploader` date strategy | `FileManagerWorkoutTemplateFetcher` date strategy | Library reads are local-first |
+| `StatsDay.calendar` | `DateFormatter.yyyyMMdd` | STATS Tab |
+| `LoginFieldCard` / `LoginPrimaryButton` / `LoginErrorBanner` | their AccountCreationKit twins | Auth, Shared UI |
+| the four `Color+Extension.swift` | each other | Brand Colours, Shared UI |
+
+## Analysis artefacts — `.results/`, gitignored
+A generated structural analysis can be produced into `.results/`: `1-techstack.md`,
+`2-file-categorization.json` (every file, 55 categories), `3-architectural-domains.json`,
+`4-domains/*.md` (15 domain deep-dives with real code), `5-style-guides/*.md` (one per category).
+
+**It is gitignored and will not be in a fresh clone** — it is derived from the source and goes stale
+the moment the source moves, so it is regenerated rather than tracked or hand-edited. Regenerate with
+the `instruction-generation` prompt chain
+(`bitovi/ai-enablement-prompts` → `plugins/code/skills/instruction-generation/`), pointing it at
+`.results` with `CLAUDE.md.generated` as the final output so it cannot overwrite this file.
+
+**This file is the authoritative one.** Anything in `.results/` that turns out to matter belongs
+here, in prose, with the reason attached.
 
 ## What Not To Do
 - Do not use Swift Charts

@@ -94,3 +94,10 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+# Generated codebase analysis (instruction-generation prompt chain)
+#
+# Derived from the source, not authoritative over it — CLAUDE.md is.
+# Regenerate rather than hand-edit; see the note at the end of CLAUDE.md.
+
+.results/
