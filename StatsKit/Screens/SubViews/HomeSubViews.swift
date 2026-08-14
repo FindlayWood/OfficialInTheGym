@@ -14,7 +14,7 @@ public struct HomeScreenContent: View {
     let muscleGroups: [MuscleGroup]
     let bodyMetrics: BodyMetrics?
     let onSeeAllExercises: () -> Void
-    let onACWRDetail: () -> Void
+    let onACWRDetail: (TrainingLoadMetric) -> Void
     let onExerciseTapped: (ExerciseStats) -> Void
     let onBodyMetricsDetail: () -> Void
     let onTrainingBalanceTapped: () -> Void
@@ -37,7 +37,7 @@ public struct HomeScreenContent: View {
         muscleGroups: [MuscleGroup],
         bodyMetrics: BodyMetrics? = nil,
         onSeeAllExercises: @escaping () -> Void,
-        onACWRDetail: @escaping () -> Void,
+        onACWRDetail: @escaping (TrainingLoadMetric) -> Void,
         onExerciseTapped: @escaping (ExerciseStats) -> Void,
         onBodyMetricsDetail: @escaping () -> Void,
         onTrainingBalanceTapped: @escaping () -> Void
@@ -55,13 +55,19 @@ public struct HomeScreenContent: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 20) {
+            // The chart leads. It is populated from the first logged set, where
+            // both ACWR ratios need 28 days of history before they say anything
+            // and session load needs a Cloud Function that has not shipped —
+            // leading with those put the emptiest content in the most prominent
+            // slot, and pushed everything concrete below the fold.
+            TrainingChartSection(totals: totals)
+
             StreakAndActivityView(streak: stats.streak, totals: totals)
-            
-            // Single ACWR for Volume (encompasses everything now)
-            ACWRSummaryView(acwr: stats.volumeACWR, title: "Volume", onDetail: onACWRDetail)
-            
-            WeekStatsView(stats: stats)
-            
+
+            // Both metrics in one card — see `TrainingLoadMetric` for why they
+            // stay two ratios rather than being merged into one number.
+            TrainingLoadSummaryView(stats: stats, onDetail: onACWRDetail)
+
             TrainingBalanceSummaryView(balanceData: balanceData, muscleGroups: muscleGroups, onDetail: onTrainingBalanceTapped)
             
             // Body metrics section (if available)
@@ -287,114 +293,36 @@ struct SectionContainer<Content: View>: View {
 struct HomeStats {
     let totals: [DailyTotal]
 
+    /// What "now" means. Injectable so the date-dependent stats — the streak
+    /// especially — can be asserted against a fixed day rather than whatever
+    /// day the test suite happens to run on.
+    var asOf: Date = .now
+
+    /// Consecutive days trained, counting back from today.
+    ///
+    /// **Today is allowed to be pending.** A user thirty days into a streak who
+    /// has not trained yet this morning still has a thirty-day streak — it only
+    /// ends once today has become yesterday and is still empty. Requiring a
+    /// logged today read "No active streak" to everyone every morning, which is
+    /// both wrong and the opposite of the nudge the card exists to give.
     var streak: Int {
         let keys = Set(totals.map(\.id))
+        var offset = keys.contains(StatsDay.key(for: asOf)) ? 0 : 1
         var count = 0
-        var checking = Date.now
-        while true {
-            let key = DateFormatter.yyyyMMdd.string(from: checking)
-            if keys.contains(key) {
-                count += 1
-                checking = Calendar.current.date(byAdding: .day, value: -1, to: checking)!
-            } else { break }
+        while keys.contains(StatsDay.key(daysAgo: offset, from: asOf)) {
+            count += 1
+            offset += 1
         }
         return count
     }
 
-    private var last7Days: [DailyTotal] {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        let start = calendar.date(byAdding: .day, value: -6, to: today)! // today + 6 previous days
+    // The week's sets, reps, volume and active-day count used to be derived
+    // here for a 2×2 grid. `TrainingChartSection` plots the first three over
+    // twelve weeks and `ActivityGrid` draws the fourth as its rightmost column,
+    // so a single week of each was the same data with none of the shape.
 
-        return totals.filter { $0.date >= start }
-    }
-
-    var weekTotalSets: Int      { last7Days.reduce(0) { $0 + $1.totalSets } }
-    var weekTotalReps: Int      { last7Days.reduce(0) { $0 + $1.totalReps } }
-    var weekTotalVolume: Double { last7Days.reduce(0) { $0 + $1.totalVolume } }
-    var weekActiveDays: Int     { last7Days.count }
-
-    var formattedWeekVolume: String {
-        weekTotalVolume >= 1000
-            ? String(format: "%.1fk", weekTotalVolume / 1000)
-            : String(format: "%.0f", weekTotalVolume)
-    }
-
-    var volumeACWR: ACWR {
-        let fmt = DateFormatter.yyyyMMdd
-        let volumeByKey = Dictionary(uniqueKeysWithValues: totals.map { ($0.id, $0.totalVolume) })
-        func average(over days: Int) -> Double {
-            let total = (0..<days).reduce(0) { sum, offset in
-                let date = Calendar.current.date(byAdding: .day, value: -offset, to: .now)!
-                return sum + (volumeByKey[fmt.string(from: date)] ?? 0)
-            }
-            return Double(total) / Double(days)
-        }
-        let acute = average(over: 7)
-        let chronic = average(over: 28)
-        guard chronic > 0 else { return ACWR(acute: acute, chronic: chronic, ratio: nil) }
-        return ACWR(acute: acute, chronic: chronic, ratio: acute / chronic)
-    }
-}
-
-// MARK: - ACWR model
-public struct ACWR {
-    public let acute: Double
-    public let chronic: Double
-    public let ratio: Double?
-
-    public enum Zone {
-        case optimal, caution, danger, low, insufficient
-
-        public var color: Color {
-            switch self {
-            case .optimal:      return .green
-            case .caution:      return .orange
-            case .danger:       return .red
-            case .low:          return .blue
-            case .insufficient: return .secondary
-            }
-        }
-
-        public var label: String {
-            switch self {
-            case .optimal:      return "Optimal"
-            case .caution:      return "Caution"
-            case .danger:       return "High risk"
-            case .low:          return "Low load"
-            case .insufficient: return "Not enough data"
-            }
-        }
-
-        public var explanation: String {
-            switch self {
-            case .optimal:
-                return "Your training load is well balanced against your baseline."
-            case .caution:
-                return "Recent load is elevated. Consider managing intensity."
-            case .danger:
-                return "Recent load significantly exceeds baseline. Risk of overtraining is elevated."
-            case .low:
-                return "Recent load is below baseline. Consider gradually increasing training."
-            case .insufficient:
-                return "Not enough training history. Keep logging to build your baseline."
-            }
-        }
-    }
-
-    public var zone: Zone {
-        guard let r = ratio else { return .insufficient }
-        switch r {
-        case ..<0.8:    return .low
-        case 0.8..<1.3: return .optimal
-        case 1.3..<1.5: return .caution
-        default:        return .danger
-        }
-    }
-
-    public var formattedRatio: String {
-        guard let r = ratio else { return "—" }
-        return String(format: "%.2f", r)
+    func acwr(_ metric: TrainingLoadMetric) -> ACWR {
+        ACWR.rolling(loadByDay: totals.loadByDay(metric), endingOn: asOf)
     }
 }
 
@@ -402,19 +330,9 @@ public struct ACWR {
 struct StreakAndActivityView: View {
     let streak: Int
     let totals: [DailyTotal]
-    private let days = 30
-
-    private var activeDateKeys: Set<String> { Set(totals.map(\.id)) }
-
-    private var dayData: [String] {
-        (0..<days).reversed().map { offset in
-            let date = Calendar.current.date(byAdding: .day, value: -offset, to: .now)!
-            return DateFormatter.yyyyMMdd.string(from: date)
-        }
-    }
 
     var body: some View {
-        SectionContainer(title: "Activity") {
+        SectionContainer(title: "Activity · last 4 weeks") {
             // Streak row
             HStack(spacing: 12) {
                 Text(streak > 0 ? "🔥" : "💤")
@@ -433,51 +351,11 @@ struct StreakAndActivityView: View {
             Divider()
                 .padding(.horizontal, 16)
 
-            // Activity dots
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Last 30 days")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                GeometryReader { geo in
-                    let spacing: CGFloat = 3
-                    let dotSize = (geo.size.width - spacing * CGFloat(days - 1)) / CGFloat(days)
-                    HStack(spacing: spacing) {
-                        ForEach(dayData, id: \.self) { key in
-                            Circle()
-                                .fill(activeDateKeys.contains(key)
-                                      ? Color.green
-                                      : Color(.tertiarySystemFill))
-                                .frame(width: dotSize, height: dotSize)
-                        }
-                    }
-                }
-                .frame(height: 22)
-            }
-            .padding(16)
-        }
-    }
-}
-
-// MARK: - WeekStatsView
-struct WeekStatsView: View {
-    let stats: HomeStats
-
-    var body: some View {
-        SectionContainer(title: "Last 7 days") {
-            LazyVGrid(
-                columns: [GridItem(.flexible()), GridItem(.flexible())],
-                spacing: 0
-            ) {
-                StatCell(label: "Sets",        value: "\(stats.weekTotalSets)",
-                         icon: "square.stack.fill", color: .orange, borders: [.bottom, .trailing])
-                StatCell(label: "Reps",        value: "\(stats.weekTotalReps)",
-                         icon: "repeat",            color: .purple, borders: [.bottom])
-                StatCell(label: "Volume",      value: stats.formattedWeekVolume,
-                         icon: "chart.bar.fill",    color: .blue,   borders: [.trailing])
-                StatCell(label: "Active days", value: "\(stats.weekActiveDays) / 7",
-                         icon: "calendar",          color: .green,  borders: [])
-            }
+            // The "N / 7 days this week" readout that briefly sat in the row
+            // above is gone: the grid's rightmost column *is* this week, so the
+            // figure restated what the card already draws.
+            ActivityGrid(totals: totals)
+                .padding(16)
         }
     }
 }
@@ -522,250 +400,6 @@ struct StatCell: View {
     }
 }
 
-/// MARK: - ACWRSummaryView
-struct ACWRSummaryView: View {
-    let acwr: ACWR
-    let title: String
-    let onDetail: () -> Void
-
-    var body: some View {
-        SectionContainer(title: "Workload - \(title)") {
-            Button(action: onDetail) {
-                VStack(spacing: 16) {
-                    // Top row — big number + zone badge
-                    HStack(alignment: .firstTextBaseline, spacing: 10) {
-                        Text(acwr.formattedRatio)
-                            .font(.system(size: 48, weight: .bold, design: .rounded))
-                            .foregroundStyle(acwr.zone.color)
-
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(acwr.zone.label)
-                                .font(.caption2).fontWeight(.semibold)
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 3)
-                                .background(acwr.zone.color.opacity(0.12))
-                                .foregroundStyle(acwr.zone.color)
-                                .clipShape(Capsule())
-                            Text("ACWR")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .tracking(1)
-                        }
-
-                        Spacer()
-
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(.tertiary)
-                    }
-
-                    // Zone bar
-                    ACWRZoneBar(acwr: acwr)
-
-                    // Explanation
-                    Text(acwr.zone.explanation)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .padding(16)
-            }
-            .buttonStyle(.plain)
-        }
-    }
-}
-
-// MARK: - ACWRZoneBar
-struct ACWRZoneBar: View {
-    let acwr: ACWR
-
-    // Zone definitions — must sum to 1.0 in proportional width
-    // Scale: 0.0 → 2.0, zones: 0–0.8, 0.8–1.3, 1.3–1.5, 1.5–2.0
-    private struct Zone {
-        let label: String
-        let color: Color
-        let proportion: CGFloat  // share of total bar width
-        let maxValue: Double     // upper bound on the 0–2 scale
-    }
-
-    private let zones: [Zone] = [
-        Zone(label: "Low",      color: .blue,   proportion: 0.40, maxValue: 0.8),
-        Zone(label: "Optimal",  color: .green,  proportion: 0.25, maxValue: 1.3),
-        Zone(label: "Caution",  color: .orange, proportion: 0.10, maxValue: 1.5),
-        Zone(label: "High",     color: .red,    proportion: 0.25, maxValue: 2.0)
-    ]
-
-    private var clampedRatio: Double {
-        guard let r = acwr.ratio else { return 1.0 }
-        return min(max(r, 0.0), 2.0)
-    }
-
-    // Convert ratio value to fractional position (0→1) along the bar
-    // accounting for non-uniform zone widths
-    private func barPosition(for value: Double) -> CGFloat {
-        let boundaries = [0.0, 0.8, 1.3, 1.5, 2.0]
-        let proportions: [CGFloat] = [0.40, 0.25, 0.10, 0.25]
-
-        for i in 0..<4 {
-            let lo = boundaries[i]
-            let hi = boundaries[i + 1]
-            if value <= hi || i == 3 {
-                let t = CGFloat((value - lo) / (hi - lo))
-                let startProportion = proportions[0..<i].reduce(0, +)
-                return startProportion + t * proportions[i]
-            }
-        }
-        return 1.0
-    }
-
-    var body: some View {
-        VStack(spacing: 6) {
-            GeometryReader { geo in
-                let barHeight: CGFloat = 10
-                let markerSize: CGFloat = 16
-                let totalHeight = markerSize + 4 + barHeight
-
-                ZStack(alignment: .topLeading) {
-                    // Coloured zone segments
-                    HStack(spacing: 2) {
-                        ForEach(Array(zones.enumerated()), id: \.offset) { index, zone in
-                            RoundedRectangle(cornerRadius: 3)
-                                .fill(zone.color.opacity(0.25))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 3)
-                                        .stroke(zone.color.opacity(0.5), lineWidth: 1)
-                                )
-                                .frame(width: geo.size.width * zone.proportion - 2, height: barHeight)
-                        }
-                    }
-                    .frame(height: barHeight)
-                    .offset(y: markerSize + 4)
-
-                    // Position marker (triangle + circle)
-                    let markerX = barPosition(for: clampedRatio) * geo.size.width
-                    VStack(spacing: 0) {
-                        // Triangle pointer
-                        Triangle()
-                            .fill(acwr.zone.color)
-                            .frame(width: 10, height: 6)
-
-                        // Circle dot
-                        Circle()
-                            .fill(acwr.zone.color)
-                            .frame(width: markerSize - 6, height: markerSize - 6)
-                    }
-                    .frame(width: markerSize)
-                    .offset(x: markerX - markerSize / 2, y: 0)
-                }
-                .frame(height: totalHeight)
-            }
-            .frame(height: 34)
-
-            // Zone labels
-            HStack(spacing: 2) {
-                ForEach(Array(zones.enumerated()), id: \.offset) { _, zone in
-                    Text(zone.label)
-                        .font(.system(size: 9, weight: .medium))
-                        .foregroundStyle(zone.color)
-                        .frame(maxWidth: .infinity)
-                        .frame(width: nil)
-                }
-            }
-        }
-    }
-}
-
-// MARK: - Triangle shape (points downward)
-struct Triangle: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.midX, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
-        path.closeSubpath()
-        return path
-    }
-}
-
-// MARK: - TrainingBalanceSummaryView
-struct TrainingBalanceSummaryView: View {
-    let balanceData: TrainingBalanceData
-    let muscleGroups: [MuscleGroup]
-    let onDetail: () -> Void
-
-    var body: some View {
-        SectionContainer(title: "Training Balance") {
-            Button(action: onDetail) {
-                HStack(spacing: 14) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.blue.opacity(0.12))
-                            .frame(width: 50, height: 50)
-                        Image(systemName: "chart.bar.fill")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundStyle(.blue)
-                    }
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack(spacing: 6) {
-                            Text("Muscle Group Balance")
-                                .font(.subheadline).fontWeight(.medium)
-                                .foregroundStyle(.primary)
-                            if let topGroup = balanceData.topMuscleGroups.first,
-                               let name = muscleGroups.first(where: { $0.id == topGroup.muscleGroup })?.name {
-                                Text(name)
-                                    .font(.caption2).fontWeight(.semibold)
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 3)
-                                    .background(Color.blue.opacity(0.12))
-                                    .foregroundStyle(.blue)
-                                    .clipShape(Capsule())
-                            }
-                        }
-                        Text(summaryMessage)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-
-                    Spacer()
-
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                }
-                .padding(16)
-            }
-            .buttonStyle(.plain)
-        }
-    }
-
-    private var summaryMessage: String {
-        let count = balanceData.topMuscleGroups.count
-        guard count > 0 else { return "No training data for this period." }
-
-        let topName = muscleGroups.first(where: { $0.id == balanceData.topMuscleGroups[0].muscleGroup })?.name ?? "Unknown"
-
-        if count == 1 {
-            return "Only \(topName) trained this period. Try adding more variety."
-        }
-
-        let topVolume = balanceData.topMuscleGroups[0].volume
-        let secondVolume = balanceData.topMuscleGroups[1].volume
-        let ratio = secondVolume > 0 ? topVolume / secondVolume : 0
-
-        if ratio > 3 {
-            return "\(topName) is dominating your volume. Consider balancing across more groups."
-        } else if count >= 4 {
-            return "Training \(count) muscle groups with good distribution."
-        } else {
-            return "Training \(count) muscle groups this period."
-        }
-    }
-}
-
 // MARK: - RecentExercisesView
 struct RecentExercisesView: View {
     let exercises: [ExerciseStats]
@@ -775,10 +409,27 @@ struct RecentExercisesView: View {
     var body: some View {
         SectionContainer(
             title: "Recent exercises",
+            // **A `SectionContainer` header sits on the page background, which
+            // is `Color.darkColor` — not on the card.** That is why the title is
+            // white. This was `.orange` (an accent used nowhere else), then
+            // briefly `darkColor`, which is the background colour: the button
+            // was still there and still tappable, but invisible. It is a filled
+            // capsule now rather than bare text, so it reads as the button it is.
             headerTrailing: AnyView(
-                Button("See all", action: onSeeAll)
-                    .font(.subheadline)
-                    .foregroundStyle(.orange)
+                Button(action: onSeeAll) {
+                    HStack(spacing: 3) {
+                        Text("View all")
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 10, weight: .semibold))
+                    }
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(Color.white.opacity(0.18))
+                    .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
             )
         ) {
             if exercises.isEmpty {
@@ -809,6 +460,21 @@ struct ExerciseRowContent: View {
 
     var body: some View {
         HStack(spacing: 14) {
+            // A solid 44pt tile, the same anchor the workout library rows use
+            // and for the same reason: at this size a 12%-tinted wash barely
+            // registers and the rows had nothing holding the eye down the list.
+            // `ExerciseStats` carries no category, so the glyph is the one
+            // distinction the model does make — timed work against loaded.
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.darkColor)
+                    .frame(width: 44, height: 44)
+
+                Image(systemName: exercise.isTimeBased ? "timer" : "dumbbell.fill")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(exercise.exerciseName)
                     .font(.subheadline).fontWeight(.medium)
@@ -918,7 +584,7 @@ public struct StatCard: View {
             muscleGroups: [],
             bodyMetrics: bodyMetrics,
             onSeeAllExercises: {},
-            onACWRDetail: {},
+            onACWRDetail: { _ in },
             onExerciseTapped: { _ in },
             onBodyMetricsDetail: {},
             onTrainingBalanceTapped: {}

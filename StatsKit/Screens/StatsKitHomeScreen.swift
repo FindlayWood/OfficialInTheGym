@@ -25,8 +25,8 @@ struct StatsKitHomeScreen: View {
                     onSeeAllExercises: {
                         viewModel.onSeeAllExercises?()
                     },
-                    onACWRDetail: {
-                        viewModel.onACWRDetail?(viewModel.totals)
+                    onACWRDetail: { metric in
+                        viewModel.onACWRDetail?(viewModel.totals, metric)
                     },
                     onExerciseTapped: { exercise in
                         viewModel.onExerciseTapped?(exercise)
@@ -101,7 +101,7 @@ final class StatsKitHomeScreenViewModel: ObservableObject {
     let exerciseDailyStatsLoader: ExerciseDailyStatsProviding
     
     var onSeeAllExercises: (() -> ())?
-    var onACWRDetail: (([DailyTotal]) -> ())?
+    var onACWRDetail: (([DailyTotal], TrainingLoadMetric) -> ())?
     var onExerciseTapped: ((ExerciseStats) -> ())?
     var onTrainingBalanceTapped: (([DailyTotal], [MuscleGroup], [MovementPattern]) -> ())?
     
@@ -113,7 +113,7 @@ final class StatsKitHomeScreenViewModel: ObservableObject {
         movementTypeLoader: MovementTypesLoader,
         exerciseDailyStatsLoader: ExerciseDailyStatsProviding,
         onSeeAllExercises: (() -> ())? = nil,
-        onACWRDetail: (([DailyTotal]) -> ())? = nil,
+        onACWRDetail: (([DailyTotal], TrainingLoadMetric) -> ())? = nil,
         onExerciseTapped: ((ExerciseStats) -> ())? = nil,
         onTrainingBalanceTapped: (([DailyTotal], [MuscleGroup], [MovementPattern]) -> ())? = nil
     ) {
