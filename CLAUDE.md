@@ -979,14 +979,33 @@ acuteDays:chronicDays:)` is now the only one. What varies legitimately is the *l
   each carried a private `acwrColor(_:)` before this, so the boundaries lived in three places and the
   colours in four. `Zone.color` is why `ACWR.swift` imports SwiftUI; those colours are semantic, not
   accents.
+- **The zone colours are the matte palette, not the system ones.** `Color.matteGreen` / `matteAmber`
+  / `matteRed` / `matteBlue` / `mattePlum` live in StatsKit's `UI/Color+Extension.swift` beside the
+  brand colours; `Zone.color` owns the *mapping*, the extension owns the values — the same split
+  brand colours use. `.red` / `.orange` / `.green` at full saturation read as system alerts beside
+  `darkColor`, and made the louder zones look more urgent than the marker's position warranted; the
+  matte set sits at a similar lightness so no zone grabs the eye purely by being brighter. Mid-tone
+  by design, so each holds up in light and dark without a second variant.
+  **`ACWRDetailScreen` had hardcoded copies of all of them** — the progression chart's zone bands,
+  `ZoneDistributionView`'s four bars, the insight accents and the educational key — despite the rule
+  above. They route through `ACWR.Zone.<case>.color` now. The acute/chronic series are `matteAmber` /
+  `mattePlum` for the same reason: a sharp orange line over matte zone bands is one screen with two
+  palettes.
 
 ### `TrainingLoadMetric` — two load series that must not be merged
 `.session` (duration × RPE) and `.volume` (reps × weight) are **separate on purpose**. Each is
 incomplete in a different way:
 - `.session` only exists for work done inside a workout, because RPE is asked for at the end of a
   session. An exercise logged on its own produces a `DailyTotal` with no `totalWorkload` at all.
-- `.volume` only counts loaded work — `WeightUnit.kilograms` normalises bodyweight, `% of 1RM`,
-  `% of BW` and `Max` to zero — so a full calisthenics session scores zero volume.
+- `.volume` **under-weights** unloaded work rather than ignoring it. `WeightUnit.kilograms` stores no
+  kilogram value for bodyweight, `% of 1RM`, `% of BW` or `Max` (all normalise to 0 — they are
+  prescriptions or bodyweight, not loads), but the DailyTotals Cloud Function works the day's volume
+  out as **`(1 + weightKg) × reps`**, so a bodyweight set still contributes its rep count. A
+  calisthenics session registers, far below a loaded session of the same reps. That is a difference
+  of scale, not an absence. The `+ 1` lives in the function, **outside this repository** — do not
+  re-derive volume on the client to "fix" a number that looks small. *(This entry previously claimed
+  calisthenics scored zero volume, which was wrong: it read `WeightUnit.kilograms` and missed the
+  `+ 1`.)*
 
 Averaging them, or falling back from one to the other, hides which kind of work is missing behind a
 number that looks complete. **Two ratios that each say what they cover is the honest presentation.**
@@ -994,10 +1013,108 @@ The enum carries its own `title`, `subtitle` ("Duration × RPE") and `explanatio
 nothing saying which work it counted is meaningless, so a metric that cannot explain itself is not
 shipped.
 
+### The home screen leads with a chart, and the order is deliberate
+`TrainingChartSection` → `StreakAndActivityView` → `TrainingLoadSummaryView` → training balance →
+recent exercises. It used to be streak → two full-width ACWR cards → a 2×2 week grid, which put the
+**emptiest** content in the most prominent slot: both ratios need 28 days of history, `.session`
+needs a Cloud Function that has not shipped, and the two cards together ran ~350pt — so on a 6.1"
+phone every concrete number began below the fold.
+
+- **`TrainingChartSection` is the only thing on the tab with a shape rather than a number**, and it
+  is first for that reason. Twelve weekly buckets, a metric toggle (`TrainingChartMetric`: volume /
+  sets / reps / time), the newest week called out as a headline with a week-on-week change chip.
+- **Bars, not a line.** A week's total is a discrete sum and a rest week is genuinely zero; a line
+  would slope between two weeks and imply values never measured. The ACWR progression chart is a
+  line correctly — a rolling ratio really is continuous.
+- **The bars are `Color.darkColor` with opacity carrying magnitude**, the same ramp `ActivityGrid`
+  uses, which is what makes the two cards read as one system. `TrainingChartMetric` therefore carries
+  **no colour** — each case used to own one (volume blue, sets orange…) so the whole chart changed
+  hue under the toggle. The newest bar also no longer gets an emphasis opacity: once opacity means
+  magnitude, spending it on recency too makes a big old week and the current week indistinguishable.
+  The axis labels the newest bar "This week" instead.
+- **Weekly buckets, not daily.** At a realistic training frequency a 30-bar daily chart is mostly
+  gaps and reads as noise.
+- **The change chip is not colour-coded up-good / down-bad.** More load is not better — the ACWR card
+  two rows down exists to say a spike is a risk, and a deload showing a red arrow would contradict
+  it. It reports direction and leaves the judgement to the ratio.
+- **`TrainingWeek.buckets` newest bucket is a rolling seven days (0–6), not a calendar week.** A
+  calendar week makes the newest bar a partial one that collapses every Monday and refills — which
+  reads as training falling off a cliff rather than a week that has not happened yet.
+- **The 2×2 "Last 7 days" grid is gone.** Three of its four figures (sets, reps, volume) are what the
+  chart now plots over twelve weeks; the fourth, active days, is a *consistency* figure and moved
+  into the activity card beside the streak.
+- **`ActivityGrid` replaced a row of thirty dots.** Thirty circles across a card is ~7½pt each — the
+  least legible thing on the screen — and a dot could only say trained / did not. It is now a
+  calendar-shaped grid: **a column per weekday, a row per week, four weeks**, oldest week at the top,
+  intensity in four fixed steps off `totalSets`.
+  **Weekdays run horizontally because that is how a calendar reads.** The first version ran the other
+  way — a column per week, weekday rows, twelve weeks — which is denser but asks the eye to read
+  down-then-across against every calendar the user has ever seen. Seven columns also leaves the cells
+  large enough to carry a legible intensity.
+  Two rules: columns are pinned **Monday-first** rather than deferring to
+  `StatsDay.calendar.firstWeekday`, which is locale-driven and would shift every cell by device
+  region while the keys stayed put; and the intensity thresholds are **fixed, never scaled to the
+  user's own maximum**, since a relative scale repaints history whenever a heavier week lands. Future
+  days in the partial bottom row are blank, not drawn as rest days.
+- **`TrainingBalanceSummaryView` draws ranked bars, not a sentence.** It computed `topMuscleGroups` —
+  an ordered distribution — and rendered an icon tile beside a paragraph about it. Five bars at
+  `Color.darkColor` on a descending opacity ramp (the ramp *is* the ranking; `MuscleGroup` carries
+  only `id` and `name`, so five invented colours would add a dimension carrying no information). The
+  sentence survives as a caption, because it says the thing bars cannot: what to do about the shape.
+  Bars scale against the **leading group**, not the total — five shares of one split are all short
+  bars. `MuscleGroupShareRow` is deliberately **not** the detail screen's `MuscleGroupBar`: that one
+  stacks header over full-width bar at ~28pt a group, which is 140pt for five on a summary card.
+- **Exercise rows carry a solid 44pt `darkColor` tile**, the anchor the workout library rows already
+  use and for the same reason. `ExerciseStats` has no category, so the glyph is the one distinction
+  the model makes — `timer` for `isTimeBased`, `dumbbell.fill` otherwise. `ExerciseRowContent` is
+  shared with `ExerciseListScreen`, so both lists gained it.
+- **A `SectionContainer` header sits on the page background, not on the card** — the page is
+  `Color.darkColor`, which is why the title is `.white`. Anything put in `headerTrailing` must be
+  light. The "View all" button was `.orange` (an accent used nowhere else), then briefly `darkColor`
+  — the background colour, so the button was still present and still tappable but **invisible**. It
+  is now a white-on-`white.opacity(0.18)` capsule with a chevron, so it reads as the button it is.
+- **`TrainingLoadSummaryView` is one card with both ratios as side-by-side tiles**, replacing a
+  full-width card each. Side by side they compare, which is the point of having two — a high session
+  ratio beside a flat volume one says the extra work was unloaded. The tiles carry **no zone bar**:
+  the four-segment 0–2 scale does not survive halving (the Caution band is 10% of the width), and
+  the old bar drew its marker at 1.0 when `ratio` was `nil`, parking a grey pointer mid-Optimal under
+  a "Not enough data" label — an absence rendered as a reading. The scale lives on the detail screen.
+
+### Every stats screen is `darkColor` behind `SectionContainer` cards
+The four screens had drifted into two families. `StatsKitHomeScreen` and `ExerciseDetailScreen` were
+on `Color.darkColor` with `SectionContainer`; `ACWRDetailScreen` and `TrainingBalanceScreen` were on
+`systemGroupedBackground` with the card chrome —
+`.padding(16).background(systemBackground).clipShape(16).overlay(stroke).padding(.horizontal, 16)` —
+**written out inline sixteen times between them.** Pushing from the home screen into a detail screen
+changed the frame of the whole app. All four now match, and every card goes through
+`SectionContainer`.
+
+- **A `SectionContainer` header sits on the page, not on the card**, which is why its title is
+  `.white`. Two bugs came from forgetting that, and both were *invisible* rather than ugly:
+  `ExerciseListScreen` set **no background at all**, so its section title was white on white in light
+  appearance; and the home screen's "View all" was briefly `darkColor`, the page colour. **Anything
+  placed on a section header must be light.**
+- **`MiniLineChart.title` and `MiniBarChart.title` are optional** (`String? = nil`). Both are used at
+  two levels: `ProgressChartSection` stacks three inside one container, so each needs its own
+  sub-heading, while on `ACWRDetailScreen` the chart is the card's only content and the container's
+  header already names it — a title there printed the heading twice. When `nil`, `MiniLineChart`
+  still shows its peak-value label.
+- Card titles that were inline uppercase `.secondary` captions *inside* the card moved up into the
+  container's header. `AcuteChronicComparisonChart` keeps its acute/chronic legend inside the card,
+  because a legend belongs next to the marks it explains.
+- **No sharp system accent remains anywhere in the module.** Beyond the ACWR zones, the sweep caught
+  `ExerciseDetailScreen`'s four `StatCell` accents and its five `.yellow` personal bests, the
+  `ProgressChartSection` series, `colorForMovement`, `WeeklyLineChart` and `SimpleLineChart`. `StatCell`
+  icons are `darkColor`; series colours are the matte set. Two stray `print`s in view bodies went with
+  them (error logging in the view models is the house pattern and stays).
+
 ### Charts and previews
 Hand-built, as everywhere. `ProgressChartSection` derives **13 buckets of 7 days = 91 days** from a
 private `buildWeeks(from:)` shared by both chart sections *so the x-axis is identical*, and decides
 which series to draw from the exercise (`showReps` / `showTime` split on `isTimeBased`).
+`buildWeeks` steps days through `StatsDay`, **not `Calendar.current`** — it did, which put every
+bucket boundary a day out from the UTC keys it looks up for any user east of GMT, and its label
+formatter is pinned to the same zone so a bar's label and its contents cannot disagree.
 `WeeklyChartData.hasData` / `ACWRPoint.hasAnyValue` drive the empty states; the first three
 `ACWRPoint`s are nil-valued because they exist only as the chronic baseline.
 
@@ -1008,8 +1125,8 @@ separate ACWRs exist for. A mock that only produces happy data is not useful her
 
 ### Not yet covered by CI
 `StatsKitTests` — `ACWRTests`, `TrainingLoadMetricTests`, `HomeStatsStreakTests`,
-`DailyTotalDecodingTests` — is **not in `CI_iOS_TestPlan.xctestplan`**, so none of it runs on CI. See
-*Testing → CI*.
+`DailyTotalDecodingTests`, `TrainingWeekTests` — is **not in `CI_iOS_TestPlan.xctestplan`**, so none
+of it runs on CI. See *Testing → CI*.
 
 ## Exercise Stats Raw Logs
 Two things are written when work is recorded, and **both paths write the same two things**:

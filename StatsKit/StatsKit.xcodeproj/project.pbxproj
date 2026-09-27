@@ -12,6 +12,15 @@
 		F026EE732F8D8FB10066FCB4 /* MovementTypesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE722F8D8FB10066FCB4 /* MovementTypesLoader.swift */; };
 		F034E5792F902F0C00DDB10C /* MiniBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E5782F902F0C00DDB10C /* MiniBarChart.swift */; };
 		F034E57B2F902FE800DDB10C /* WeekBucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E57A2F902FE800DDB10C /* WeekBucket.swift */; };
+		F034E5912F902FE800DDB10C /* StatsDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E5902F902FE800DDB10C /* StatsDay.swift */; };
+		F034E5932F902FE800DDB10C /* ACWR.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E5922F902FE800DDB10C /* ACWR.swift */; };
+		F034E5952F902FE800DDB10C /* TrainingLoadMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E5942F902FE800DDB10C /* TrainingLoadMetric.swift */; };
+		F034E5972F902FE800DDB10C /* TrainingLoadSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E5962F902FE800DDB10C /* TrainingLoadSummaryView.swift */; };
+		F034E5992F902FE800DDB10C /* TrainingWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E5982F902FE800DDB10C /* TrainingWeek.swift */; };
+		F034E59B2F902FE800DDB10C /* TrainingChartMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E59A2F902FE800DDB10C /* TrainingChartMetric.swift */; };
+		F034E59D2F902FE800DDB10C /* TrainingChartSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E59C2F902FE800DDB10C /* TrainingChartSection.swift */; };
+		F034E59F2F902FE800DDB10C /* ActivityGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E59E2F902FE800DDB10C /* ActivityGrid.swift */; };
+		F034E5A12F902FE800DDB10C /* TrainingBalanceSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E5A02F902FE800DDB10C /* TrainingBalanceSummaryView.swift */; };
 		F0664E742F9FF5F70053DEE7 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0664E732F9FF5F70053DEE7 /* Color+Extension.swift */; };
 		F0750E892F6B62960026D021 /* StatsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0750E7D2F6B62960026D021 /* StatsKit.framework */; };
 		F07584D32F8C3CBA00D2C783 /* ACWRDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07584D22F8C3CBA00D2C783 /* ACWRDetailScreen.swift */; };
@@ -55,6 +64,15 @@
 		F026EE722F8D8FB10066FCB4 /* MovementTypesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementTypesLoader.swift; sourceTree = "<group>"; };
 		F034E5782F902F0C00DDB10C /* MiniBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniBarChart.swift; sourceTree = "<group>"; };
 		F034E57A2F902FE800DDB10C /* WeekBucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekBucket.swift; sourceTree = "<group>"; };
+		F034E5902F902FE800DDB10C /* StatsDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsDay.swift; sourceTree = "<group>"; };
+		F034E5922F902FE800DDB10C /* ACWR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACWR.swift; sourceTree = "<group>"; };
+		F034E5942F902FE800DDB10C /* TrainingLoadMetric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingLoadMetric.swift; sourceTree = "<group>"; };
+		F034E5962F902FE800DDB10C /* TrainingLoadSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingLoadSummaryView.swift; sourceTree = "<group>"; };
+		F034E5982F902FE800DDB10C /* TrainingWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingWeek.swift; sourceTree = "<group>"; };
+		F034E59A2F902FE800DDB10C /* TrainingChartMetric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingChartMetric.swift; sourceTree = "<group>"; };
+		F034E59C2F902FE800DDB10C /* TrainingChartSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingChartSection.swift; sourceTree = "<group>"; };
+		F034E59E2F902FE800DDB10C /* ActivityGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityGrid.swift; sourceTree = "<group>"; };
+		F034E5A02F902FE800DDB10C /* TrainingBalanceSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingBalanceSummaryView.swift; sourceTree = "<group>"; };
 		F0664E732F9FF5F70053DEE7 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		F0750E7D2F6B62960026D021 /* StatsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StatsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0750E882F6B62960026D021 /* StatsKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StatsKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -185,6 +203,11 @@
 				F0F6E7CB2F8159BD00D02F93 /* MuscleGroup.swift */,
 				F026EE702F8D80D90066FCB4 /* MovementPattern.swift */,
 				F034E57A2F902FE800DDB10C /* WeekBucket.swift */,
+				F034E5902F902FE800DDB10C /* StatsDay.swift */,
+				F034E5922F902FE800DDB10C /* ACWR.swift */,
+				F034E5942F902FE800DDB10C /* TrainingLoadMetric.swift */,
+				F034E5982F902FE800DDB10C /* TrainingWeek.swift */,
+				F034E59A2F902FE800DDB10C /* TrainingChartMetric.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -194,6 +217,10 @@
 			children = (
 				F0F6E50F2F77377800D02F93 /* ProgressChartSection.swift */,
 				F0F6DF392F705D0100D02F93 /* HomeSubViews.swift */,
+				F034E5962F902FE800DDB10C /* TrainingLoadSummaryView.swift */,
+				F034E59C2F902FE800DDB10C /* TrainingChartSection.swift */,
+				F034E59E2F902FE800DDB10C /* ActivityGrid.swift */,
+				F034E5A02F902FE800DDB10C /* TrainingBalanceSummaryView.swift */,
 				F0F6E50B2F772B0E00D02F93 /* SimpleLineChart.swift */,
 				F0F6E50D2F772DA100D02F93 /* WeeklyLineChart.swift */,
 				F034E5782F902F0C00DDB10C /* MiniBarChart.swift */,
@@ -344,6 +371,12 @@
 				F0F6DF4B2F70A85C00D02F93 /* ExerciseDailyStats.swift in Sources */,
 				F0F6E7CA2F81594400D02F93 /* MuscleGroupsLoader.swift in Sources */,
 				F0F6E5102F77378000D02F93 /* ProgressChartSection.swift in Sources */,
+				F034E5972F902FE800DDB10C /* TrainingLoadSummaryView.swift in Sources */,
+				F034E5992F902FE800DDB10C /* TrainingWeek.swift in Sources */,
+				F034E59B2F902FE800DDB10C /* TrainingChartMetric.swift in Sources */,
+				F034E59D2F902FE800DDB10C /* TrainingChartSection.swift in Sources */,
+				F034E59F2F902FE800DDB10C /* ActivityGrid.swift in Sources */,
+				F034E5A12F902FE800DDB10C /* TrainingBalanceSummaryView.swift in Sources */,
 				F0F6E50E2F772DA100D02F93 /* WeeklyLineChart.swift in Sources */,
 				F0F6E7C62F8155B800D02F93 /* Exercise.swift in Sources */,
 				F0F6DF472F708BE300D02F93 /* ExerciseStats.swift in Sources */,
@@ -351,6 +384,9 @@
 				F026EE712F8D80D90066FCB4 /* MovementPattern.swift in Sources */,
 				F07584D32F8C3CBA00D2C783 /* ACWRDetailScreen.swift in Sources */,
 				F034E57B2F902FE800DDB10C /* WeekBucket.swift in Sources */,
+				F034E5912F902FE800DDB10C /* StatsDay.swift in Sources */,
+				F034E5932F902FE800DDB10C /* ACWR.swift in Sources */,
+				F034E5952F902FE800DDB10C /* TrainingLoadMetric.swift in Sources */,
 				F0F6DF3F2F70836800D02F93 /* ExerciseListScreen.swift in Sources */,
 				F0F6E7C42F81557B00D02F93 /* ExerciseLoader.swift in Sources */,
 				F0F6E7C82F8155EF00D02F93 /* ExerciseCategory.swift in Sources */,

@@ -23,6 +23,18 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
     public let muscleGroupVolumes: [String: Double]       // NEW
     public let movementTypeVolumes: [String: Double]      // NEW
 
+    /// Session load for the day — the sum of each completed workout's
+    /// `duration × RPE`, aggregated server-side from `CompletedWorkoutSession`.
+    ///
+    /// **Optional, and it has to stay optional**: every DailyTotals document
+    /// written before the function shipped lacks the key entirely.
+    ///
+    /// `nil` means *no workout session that day* — which is not the same as a
+    /// rest day, because an exercise logged on its own produces a DailyTotal
+    /// with volume and no workload. That is exactly why workload and volume
+    /// drive two separate ACWRs rather than being merged into one number.
+    public let totalWorkload: Double?
+
     public init(
         id: String,
         date: Date,
@@ -34,7 +46,8 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
         totalTime: Int,
         exerciseSetCounts: [String: Int],
         muscleGroupVolumes: [String: Double] = [:],
-        movementTypeVolumes: [String: Double] = [:]
+        movementTypeVolumes: [String: Double] = [:],
+        totalWorkload: Double? = nil
     ) {
         self.id = id
         self.date = date
@@ -47,8 +60,9 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
         self.exerciseSetCounts = exerciseSetCounts
         self.muscleGroupVolumes = muscleGroupVolumes
         self.movementTypeVolumes = movementTypeVolumes
+        self.totalWorkload = totalWorkload
     }
-    
+
     // Custom decoding to handle missing fields gracefully
     enum CodingKeys: String, CodingKey {
         case id, date, userID
@@ -56,6 +70,7 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
         case exerciseSetCounts
         case muscleGroupVolumes
         case movementTypeVolumes
+        case totalWorkload
     }
     
     public init(from decoder: Decoder) throws {
@@ -71,6 +86,7 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
         exerciseSetCounts = try container.decodeIfPresent([String: Int].self, forKey: .exerciseSetCounts) ?? [:]
         muscleGroupVolumes = try container.decodeIfPresent([String: Double].self, forKey: .muscleGroupVolumes) ?? [:]
         movementTypeVolumes = try container.decodeIfPresent([String: Double].self, forKey: .movementTypeVolumes) ?? [:]
+        totalWorkload = try container.decodeIfPresent(Double.self, forKey: .totalWorkload)
     }
 }
 

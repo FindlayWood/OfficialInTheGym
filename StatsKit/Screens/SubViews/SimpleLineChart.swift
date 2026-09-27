@@ -22,7 +22,7 @@ struct SimpleLineChart: View {
                     path.addLine(to: point)
                 }
             }
-            .stroke(Color.blue, lineWidth: 2)
+            .stroke(Color.matteBlue, lineWidth: 2)
         }
         .frame(height: 200)
     }

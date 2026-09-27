@@ -41,18 +41,25 @@ struct ACWRPoint: Identifiable {
 private func buildWeeks(
     from dailyStats: [ExerciseDailyStats]
 ) -> [WeeklyChartData] {
+    // Days are stepped through `StatsDay`, not `Calendar.current`. The bucket is
+    // a span of `yyyy-MM-dd` keys looked up against `ExerciseDailyStats.id`,
+    // which is minted server-side in UTC — stepping it in the device calendar
+    // put every bucket boundary a day out from the data it was collecting for
+    // any user east of GMT. The label formatter is pinned to the same zone so a
+    // bar's label and its contents can never be a day apart.
     let labelFmt = DateFormatter()
     labelFmt.dateFormat = "d MMM"
+    labelFmt.timeZone = StatsDay.calendar.timeZone
     let statsByKey = Dictionary(grouping: dailyStats, by: \.id)
 
     return (0..<13).map { weekIndex in
         let daysAgoEnd   = (12 - weekIndex) * 7
         let daysAgoStart = daysAgoEnd + 6
-        let bucketDates  = (daysAgoEnd...daysAgoStart).compactMap {
-            Calendar.current.date(byAdding: .day, value: -$0, to: .now)
+        let bucketDates  = (daysAgoEnd...daysAgoStart).map {
+            StatsDay.date(daysAgo: $0)
         }
         let bucketStats = bucketDates
-            .compactMap { statsByKey[DateFormatter.yyyyMMdd.string(from: $0)] }
+            .compactMap { statsByKey[StatsDay.key(for: $0)] }
             .flatMap { $0 }
         let weekStart = bucketDates.last ?? .now
 
@@ -67,15 +74,6 @@ private func buildWeeks(
     }
 }
 
-// MARK: - ACWR zone colour
-private func acwrColor(_ ratio: Double) -> Color {
-    switch ratio {
-    case ..<0.8:    return .blue
-    case 0.8..<1.3: return .green
-    case 1.3..<1.5: return .orange
-    default:        return .red
-    }
-}
 
 // MARK: - ProgressChartsSection
 struct ProgressChartsSection: View {
@@ -103,7 +101,7 @@ struct ProgressChartsSection: View {
                             title: "Reps",
                             values: weeks.map { Double($0.totalReps) },
                             labels: weeks.map(\.label),
-                            color: .purple
+                            color: .mattePlum
                         )
                         if showVolume || showWeight || showTime {
                             Divider().padding(.horizontal, 16)
@@ -114,7 +112,7 @@ struct ProgressChartsSection: View {
                             title: "Volume",
                             values: weeks.map(\.volume),
                             labels: weeks.map(\.label),
-                            color: .orange,
+                            color: .matteAmber,
                             formatValue: { v in
                                 v >= 1000 ? String(format: "%.0fk", v / 1000) : "\(Int(v))"
                             }
@@ -128,7 +126,7 @@ struct ProgressChartsSection: View {
                             title: "Max weight",
                             values: weeks.map(\.maxWeight),
                             labels: weeks.map(\.label),
-                            color: .blue,
+                            color: .matteBlue,
                             formatValue: { "\(Int($0))kg" }
                         )
                     }
@@ -137,7 +135,7 @@ struct ProgressChartsSection: View {
                             title: "Time",
                             values: weeks.map { Double($0.totalTime) },
                             labels: weeks.map(\.label),
-                            color: .teal,
+                            color: .matteGreen,
                             formatValue: { v in
                                 let s = Int(v); let m = s / 60; let sec = s % 60
                                 return String(format: "%d:%02d", m, sec)
@@ -486,7 +484,7 @@ struct ACWRMiniChart: View {
                                control1: CGPoint(x: fromPt.x + sx * 0.4, y: fromPt.y),
                                control2: CGPoint(x: toPt.x - sx * 0.4, y: toPt.y))
                 }
-                .stroke(acwrColor(toV), style: StrokeStyle(lineWidth: 2.5, lineJoin: .round))
+                .stroke(ACWR.Zone(ratio: toV).color, style: StrokeStyle(lineWidth: 2.5, lineJoin: .round))
             }
         }
     }
@@ -497,7 +495,7 @@ struct ACWRMiniChart: View {
         let nonNil = renderValues.filter { $0.value != nil }
         if let first = nonNil.first, let last = nonNil.last,
            let firstV = first.value, let lastV = last.value {
-            let currentZoneColor = acwrColor(lastV)
+            let currentZoneColor = ACWR.Zone(ratio: lastV).color
             let firstX = xPos(index: first.index, width: width)
             let lastX  = xPos(index: last.index, width: width)
 
@@ -537,7 +535,7 @@ struct ACWRMiniChart: View {
         ForEach(renderValues, id: \.index) { entry in
             if let v = entry.value {
                 Circle()
-                    .fill(acwrColor(v))
+                    .fill(ACWR.Zone(ratio: v).color)
                     .frame(width: 5, height: 5)
                     .position(x: xPos(index: entry.index, width: width),
                               y: yPos(value: v, height: height))

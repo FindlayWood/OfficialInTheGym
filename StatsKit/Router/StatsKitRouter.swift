@@ -66,8 +66,11 @@ public final class StatsKitRouter {
                 onSeeAllExercises: { [weak self] in
                     self?.navigate(to: .allExercises)
                 },
-                onACWRDetail: { [weak self] totals in
-                    self?.navigate(to: .acwrDetail(totals: totals))
+                onACWRDetail: { [weak self] totals, metric in
+                    self?.navigate(to: .acwrDetail(totals: totals, metric: metric))
+                },
+                onExerciseTapped: { [weak self] exercise in
+                    self?.navigate(to: .exerciseDetail(exercise: exercise))
                 },
                 onTrainingBalanceTapped: { [weak self] totals, groups, types in
                     self?.navigate(to: .trainingBalance(totals, groups, types))
@@ -99,9 +102,9 @@ public final class StatsKitRouter {
                 rootView: ExerciseDetailScreen(viewModel: viewModel)
             )
             return vc
-        case .acwrDetail(let totals):
+        case let .acwrDetail(totals, metric):
             let vc = UIHostingController(
-                rootView: ACWRDetailScreen(totals: totals)
+                rootView: ACWRDetailScreen(totals: totals, metric: metric)
             )
             vc.hidesBottomBarWhenPushed = true
             return vc

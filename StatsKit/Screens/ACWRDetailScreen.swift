@@ -10,22 +10,29 @@ import SwiftUI
 // MARK: - ACWRDetailScreen
 public struct ACWRDetailScreen: View {
     let totals: [DailyTotal]
+    let metric: TrainingLoadMetric
     @State private var selectedRange: ACWRRange = .twoWeeks
-    
+
     private var acwrData: ACWRDetailData {
-        ACWRDetailData(totals: totals, range: selectedRange)
+        ACWRDetailData(totals: totals, range: selectedRange, metric: metric)
     }
-    
-    public init(totals: [DailyTotal]) {
+
+    public init(totals: [DailyTotal], metric: TrainingLoadMetric) {
         self.totals = totals
+        self.metric = metric
     }
-    
+
     public var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+        // Bound once: every series below comes from one pass over the range,
+        // and `acwrData` is a computed property that would otherwise rebuild
+        // the whole thing per access.
+        let series = acwrData.series
+
+        return ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
                 // Current status card
-                CurrentStatusCard(acwr: acwrData.currentACWR)
-                
+                CurrentStatusCard(acwr: acwrData.currentACWR, metric: metric)
+
                 // Range picker
                 Picker("Range", selection: $selectedRange) {
                     ForEach(ACWRRange.allCases) { range in
@@ -33,52 +40,51 @@ public struct ACWRDetailScreen: View {
                     }
                 }
                 .pickerStyle(.segmented)
-                .padding(.horizontal, 16)
-                
+
                 // ACWR progression chart
                 ACWRProgressionChart(
                     title: "ACWR Progression",
-                    values: acwrData.acwrValues,
-                    labels: acwrData.labels
+                    values: series.acwr,
+                    labels: series.labels
                 )
-                
+
                 // Acute vs Chronic comparison
                 AcuteChronicComparisonChart(
-                    acuteValues: acwrData.acuteValues,
-                    chronicValues: acwrData.chronicValues,
-                    labels: acwrData.labels
+                    acuteValues: series.acute,
+                    chronicValues: series.chronic,
+                    labels: series.labels
                 )
-                
-                // Volume breakdown chart
-                MiniLineChart(
-                    title: "Daily Volume",
-                    values: acwrData.volumeValues,
-                    labels: acwrData.labels,
-                    color: .blue,
-                    formatValue: { v in
-                        v >= 1000 ? String(format: "%.1fk", v / 1000) : String(format: "%.0f", v)
-                    }
-                )
-                .background(Color(.systemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-                )
-                
+
+                // Daily load breakdown
+                SectionContainer(title: "Daily \(metric.title)") {
+                    MiniLineChart(
+                        values: series.load,
+                        labels: series.labels,
+                        color: .matteBlue,
+                        formatValue: { v in
+                            v >= 1000 ? String(format: "%.1fk", v / 1000) : String(format: "%.0f", v)
+                        }
+                    )
+                }
+
                 // Zone distribution
                 ZoneDistributionView(distribution: acwrData.zoneDistribution)
-                
+
                 // Insights and recommendations
                 InsightsView(insights: acwrData.insights)
-                
+
                 // What is ACWR? educational section
-                EducationalSection()
+                EducationalSection(metric: metric)
             }
-            .padding(.vertical, 20)
+            .padding(.horizontal)
+            .padding(.vertical, 8)
         }
-        .background(Color(.systemGroupedBackground).ignoresSafeArea())
-        .navigationTitle("Workload Analysis")
+        // The same page/card relationship as the home screen and
+        // `ExerciseDetailScreen`: `darkColor` behind `systemBackground` cards.
+        // This was `systemGroupedBackground`, so pushing from the stats home
+        // into a detail screen changed the whole frame of the app.
+        .background { Color.darkColor.ignoresSafeArea() }
+        .navigationTitle(metric.title)
         .navigationBarTitleDisplayMode(.large)
     }
 }
@@ -102,125 +108,71 @@ enum ACWRRange: String, CaseIterable, Identifiable {
     }
 }
 
+// MARK: - ACWRSeries
+/// Every series the screen draws, over the same x-axis.
+///
+/// Built in one pass because `ACWR.rolling` already returns acute, chronic and
+/// the ratio together — asking for them separately walked the same 28-day
+/// window three times per day on screen.
+struct ACWRSeries {
+    let labels: [String]
+    let acwr: [Double?]
+    let acute: [Double]
+    let chronic: [Double]
+    let load: [Double]
+}
+
 // MARK: - ACWRDetailData
 struct ACWRDetailData {
     let totals: [DailyTotal]
     let range: ACWRRange
-    
-    private var last90Days: [DailyTotal] {
-        let cutoff = Calendar.current.date(byAdding: .day, value: -90, to: .now)!
-        return totals.filter { $0.date >= cutoff }.sorted { $0.date < $1.date }
+    let metric: TrainingLoadMetric
+
+    /// Labels are formatted in the same calendar the day keys are built in, so
+    /// a point's label and its data can never be a day apart.
+    private static let labelFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        formatter.timeZone = StatsDay.calendar.timeZone
+        return formatter
+    }()
+
+    /// The days on the x-axis, oldest first, **including today**.
+    ///
+    /// The range used to end at yesterday, so the ratio in the status card —
+    /// which is always as of now — was one the chart never plotted.
+    private var days: [Date] {
+        (0..<range.days).reversed().map { StatsDay.date(daysAgo: $0) }
     }
-    
-    var labels: [String] {
-        let rangeEnd = Date.now
-        let rangeStart = Calendar.current.date(byAdding: .day, value: -range.days, to: rangeEnd)!
-        
-        return (0..<range.days).map { offset in
-            let date = Calendar.current.date(byAdding: .day, value: offset, to: rangeStart)!
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MMM d"
-            return formatter.string(from: date)
+
+    var series: ACWRSeries {
+        let loads = totals.loadByDay(metric)
+        var labels: [String] = []
+        var acwr: [Double?] = []
+        var acute: [Double] = []
+        var chronic: [Double] = []
+        var load: [Double] = []
+
+        for day in days {
+            let rolling = ACWR.rolling(loadByDay: loads, endingOn: day)
+            labels.append(Self.labelFormatter.string(from: day))
+            acwr.append(rolling.ratio)
+            acute.append(rolling.acute)
+            chronic.append(rolling.chronic)
+            load.append(loads[StatsDay.key(for: day)] ?? 0)
         }
+
+        return ACWRSeries(
+            labels: labels, acwr: acwr, acute: acute, chronic: chronic, load: load
+        )
     }
-    
-    // Calculate ACWR for each day in the range
-    var acwrValues: [Double?] {
-        let fmt = DateFormatter.yyyyMMdd
-        let volumeByKey = Dictionary(uniqueKeysWithValues: last90Days.map { ($0.id, $0.totalVolume) })
-        
-        let rangeEnd = Date.now
-        let rangeStart = Calendar.current.date(byAdding: .day, value: -range.days, to: rangeEnd)!
-        
-        return (0..<range.days).map { offset in
-            let date = Calendar.current.date(byAdding: .day, value: offset, to: rangeStart)!
-            
-            // Acute: average of last 7 days ending on this date
-            let acuteTotal = (0..<7).reduce(0.0) { sum, i in
-                let d = Calendar.current.date(byAdding: .day, value: -i, to: date)!
-                return sum + (volumeByKey[fmt.string(from: d)] ?? 0)
-            }
-            let acute = acuteTotal / 7.0
-            
-            // Chronic: average of last 28 days ending on this date
-            let chronicTotal = (0..<28).reduce(0.0) { sum, i in
-                let d = Calendar.current.date(byAdding: .day, value: -i, to: date)!
-                return sum + (volumeByKey[fmt.string(from: d)] ?? 0)
-            }
-            let chronic = chronicTotal / 28.0
-            
-            guard chronic > 0 else { return nil }
-            return acute / chronic
-        }
-    }
-    
-    var acuteValues: [Double] {
-        let fmt = DateFormatter.yyyyMMdd
-        let volumeByKey = Dictionary(uniqueKeysWithValues: last90Days.map { ($0.id, $0.totalVolume) })
-        
-        let rangeEnd = Date.now
-        let rangeStart = Calendar.current.date(byAdding: .day, value: -range.days, to: rangeEnd)!
-        
-        return (0..<range.days).map { offset in
-            let date = Calendar.current.date(byAdding: .day, value: offset, to: rangeStart)!
-            let total = (0..<7).reduce(0.0) { sum, i in
-                let d = Calendar.current.date(byAdding: .day, value: -i, to: date)!
-                return sum + (volumeByKey[fmt.string(from: d)] ?? 0)
-            }
-            return total / 7.0
-        }
-    }
-    
-    var chronicValues: [Double] {
-        let fmt = DateFormatter.yyyyMMdd
-        let volumeByKey = Dictionary(uniqueKeysWithValues: last90Days.map { ($0.id, $0.totalVolume) })
-        
-        let rangeEnd = Date.now
-        let rangeStart = Calendar.current.date(byAdding: .day, value: -range.days, to: rangeEnd)!
-        
-        return (0..<range.days).map { offset in
-            let date = Calendar.current.date(byAdding: .day, value: offset, to: rangeStart)!
-            let total = (0..<28).reduce(0.0) { sum, i in
-                let d = Calendar.current.date(byAdding: .day, value: -i, to: date)!
-                return sum + (volumeByKey[fmt.string(from: d)] ?? 0)
-            }
-            return total / 28.0
-        }
-    }
-    
-    var volumeValues: [Double] {
-        let fmt = DateFormatter.yyyyMMdd
-        let volumeByKey = Dictionary(uniqueKeysWithValues: totals.map { ($0.id, $0.totalVolume) })
-        
-        let rangeEnd = Date.now
-        let rangeStart = Calendar.current.date(byAdding: .day, value: -range.days, to: rangeEnd)!
-        
-        return (0..<range.days).map { offset in
-            let date = Calendar.current.date(byAdding: .day, value: offset, to: rangeStart)!
-            return volumeByKey[fmt.string(from: date)] ?? 0
-        }
-    }
-    
+
     var currentACWR: ACWR {
-        let fmt = DateFormatter.yyyyMMdd
-        let volumeByKey = Dictionary(uniqueKeysWithValues: totals.map { ($0.id, $0.totalVolume) })
-        
-        func average(over days: Int) -> Double {
-            let total = (0..<days).reduce(0.0) { sum, offset in
-                let date = Calendar.current.date(byAdding: .day, value: -offset, to: .now)!
-                return sum + (volumeByKey[fmt.string(from: date)] ?? 0)
-            }
-            return total / Double(days)
-        }
-        
-        let acute = average(over: 7)
-        let chronic = average(over: 28)
-        guard chronic > 0 else { return ACWR(acute: acute, chronic: chronic, ratio: nil) }
-        return ACWR(acute: acute, chronic: chronic, ratio: acute / chronic)
+        ACWR.rolling(loadByDay: totals.loadByDay(metric))
     }
-    
+
     var zoneDistribution: ZoneDistribution {
-        let validRatios = acwrValues.compactMap { $0 }
+        let validRatios = series.acwr.compactMap { $0 }
         guard !validRatios.isEmpty else {
             return ZoneDistribution(optimal: 0, caution: 0, danger: 0, low: 0)
         }
@@ -241,28 +193,30 @@ struct ACWRDetailData {
     
     var insights: [ACWRInsight] {
         var results: [ACWRInsight] = []
-        
+        let ratios = series.acwr
+
         // Current zone insight
-        let zone = currentACWR.zone
-        results.append(.currentZone(zone, currentACWR.formattedRatio))
-        
+        let current = currentACWR
+        let zone = current.zone
+        results.append(.currentZone(zone, current.formattedRatio))
+
         // Trend analysis
-        let recentValues = acwrValues.suffix(7).compactMap { $0 }
-        if recentValues.count >= 2 {
-            let trend = recentValues.last! - recentValues.first!
+        let recentValues = ratios.suffix(7).compactMap { $0 }
+        if recentValues.count >= 2, let first = recentValues.first, let last = recentValues.last {
+            let trend = last - first
             if trend > 0.2 {
                 results.append(.risingTrend)
             } else if trend < -0.2 {
                 results.append(.fallingTrend)
             }
         }
-        
+
         // Time in danger zone
-        let dangerDays = acwrValues.compactMap { $0 }.filter { $0 >= 1.5 }.count
+        let dangerDays = ratios.compactMap { $0 }.filter { $0 >= 1.5 }.count
         if dangerDays >= 3 {
             results.append(.dangerZoneWarning(dangerDays))
         }
-        
+
         // Recovery recommendation
         if zone == .danger || zone == .caution {
             results.append(.recoveryRecommended)
@@ -270,7 +224,7 @@ struct ACWRDetailData {
         
         // Low load warning
         if zone == .low {
-            let lowDays = acwrValues.suffix(7).compactMap { $0 }.filter { $0 < 0.8 }.count
+            let lowDays = ratios.suffix(7).compactMap { $0 }.filter { $0 < 0.8 }.count
             if lowDays >= 5 {
                 results.append(.lowLoadWarning)
             }
@@ -283,15 +237,20 @@ struct ACWRDetailData {
 // MARK: - CurrentStatusCard
 struct CurrentStatusCard: View {
     let acwr: ACWR
-    
+    let metric: TrainingLoadMetric
+
     var body: some View {
+        SectionContainer(title: "Current status") {
         VStack(spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Current Status")
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                    
+                    // The acute and chronic figures below are bare numbers; this
+                    // is the only thing on the card that says what they are
+                    // counting, which matters now there are two metrics.
+                    Text(metric.subtitle)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
                     HStack(spacing: 8) {
                         Text(acwr.formattedRatio)
                             .font(.system(size: 48, weight: .bold, design: .rounded))
@@ -346,16 +305,10 @@ struct CurrentStatusCard: View {
                 }
             }
         }
-        .padding(20)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(acwr.zone.color.opacity(0.3), lineWidth: 2)
-        )
-        .padding(.horizontal, 16)
+        .padding(16)
+        }
     }
-    
+
     private var zoneIcon: String {
         switch acwr.zone {
         case .optimal: return "checkmark.circle.fill"
@@ -381,14 +334,8 @@ struct ACWRProgressionChart: View {
     }
     
     var body: some View {
+        SectionContainer(title: title) {
         VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.caption).fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase).tracking(0.5)
-                .padding(.horizontal, 16)
-                .padding(.top, 14)
-            
             GeometryReader { geo in
                 let w = geo.size.width
                 let h = geo.size.height
@@ -410,15 +357,10 @@ struct ACWRProgressionChart: View {
             }
             .frame(height: 120)
             .padding(.horizontal, 16)
+            .padding(.top, 14)
             .padding(.bottom, 20)
         }
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
     
     private func xPos(index: Int, width: CGFloat) -> CGFloat {
@@ -434,18 +376,18 @@ struct ACWRProgressionChart: View {
     private func zoneBackgrounds(width: CGFloat, height: CGFloat) -> some View {
         // Danger zone (1.5+)
         Rectangle()
-            .fill(Color.red.opacity(0.05))
+            .fill(ACWR.Zone.danger.color.opacity(0.07))
             .frame(width: width, height: yPos(value: 1.5, height: height))
         
         // Caution zone (1.3-1.5)
         Rectangle()
-            .fill(Color.orange.opacity(0.05))
+            .fill(ACWR.Zone.caution.color.opacity(0.07))
             .frame(width: width, height: yPos(value: 1.3, height: height) - yPos(value: 1.5, height: height))
             .offset(y: yPos(value: 1.5, height: height))
         
         // Optimal zone (0.8-1.3)
         Rectangle()
-            .fill(Color.green.opacity(0.05))
+            .fill(ACWR.Zone.optimal.color.opacity(0.07))
             .frame(width: width, height: yPos(value: 0.8, height: height) - yPos(value: 1.3, height: height))
             .offset(y: yPos(value: 1.3, height: height))
     }
@@ -489,7 +431,7 @@ struct ACWRProgressionChart: View {
                                control1: CGPoint(x: fromPt.x + sx * 0.4, y: fromPt.y),
                                control2: CGPoint(x: toPt.x - sx * 0.4, y: toPt.y))
                 }
-                .stroke(acwrColor(toV), style: StrokeStyle(lineWidth: 2.5, lineJoin: .round))
+                .stroke(ACWR.Zone(ratio: toV).color, style: StrokeStyle(lineWidth: 2.5, lineJoin: .round))
             }
         }
     }
@@ -499,7 +441,7 @@ struct ACWRProgressionChart: View {
         let nonNil = values.enumerated().filter { $0.element != nil }
         if let first = nonNil.first, let last = nonNil.last,
            let firstV = first.element, let lastV = last.element {
-            let currentZoneColor = acwrColor(lastV)
+            let currentZoneColor = ACWR.Zone(ratio: lastV).color
             let firstX = xPos(index: first.offset, width: width)
             let lastX = xPos(index: last.offset, width: width)
             
@@ -536,7 +478,7 @@ struct ACWRProgressionChart: View {
         ForEach(values.enumerated().filter { $0.element != nil }.map { $0.offset }, id: \.self) { i in
             if let v = values[i] {
                 Circle()
-                    .fill(acwrColor(v))
+                    .fill(ACWR.Zone(ratio: v).color)
                     .frame(width: 5, height: 5)
                     .position(x: xPos(index: i, width: width),
                               y: yPos(value: v, height: height))
@@ -558,15 +500,6 @@ struct ACWRProgressionChart: View {
     }
 }
 
-// Helper function
-private func acwrColor(_ ratio: Double) -> Color {
-    switch ratio {
-    case ..<0.8: return .blue
-    case 0.8..<1.3: return .green
-    case 1.3..<1.5: return .orange
-    default: return .red
-    }
-}
 
 // MARK: - AcuteChronicComparisonChart
 struct AcuteChronicComparisonChart: View {
@@ -575,24 +508,20 @@ struct AcuteChronicComparisonChart: View {
     let labels: [String]
     
     var body: some View {
+        SectionContainer(title: "Acute vs Chronic Load") {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text("Acute vs Chronic Load")
-                    .font(.caption).fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                    .textCase(.uppercase).tracking(0.5)
-                
                 Spacer()
-                
+
                 HStack(spacing: 12) {
                     HStack(spacing: 4) {
-                        Circle().fill(Color.orange).frame(width: 8, height: 8)
+                        Circle().fill(Color.matteAmber).frame(width: 8, height: 8)
                         Text("Acute (7d)")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
                     HStack(spacing: 4) {
-                        Circle().fill(Color.purple).frame(width: 8, height: 8)
+                        Circle().fill(Color.mattePlum).frame(width: 8, height: 8)
                         Text("Chronic (28d)")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
@@ -610,11 +539,11 @@ struct AcuteChronicComparisonChart: View {
                 ZStack(alignment: .bottomLeading) {
                     // Chronic line (behind)
                     linePath(values: chronicValues, width: w, height: h, maxValue: maxValue)
-                        .stroke(Color.purple.opacity(0.6), style: StrokeStyle(lineWidth: 2, lineJoin: .round))
+                        .stroke(Color.mattePlum.opacity(0.75), style: StrokeStyle(lineWidth: 2, lineJoin: .round))
                     
                     // Acute line (in front)
                     linePath(values: acuteValues, width: w, height: h, maxValue: maxValue)
-                        .stroke(Color.orange, style: StrokeStyle(lineWidth: 2.5, lineJoin: .round))
+                        .stroke(Color.matteAmber, style: StrokeStyle(lineWidth: 2.5, lineJoin: .round))
                     
                     xLabels(width: w, height: h)
                 }
@@ -623,13 +552,7 @@ struct AcuteChronicComparisonChart: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 20)
         }
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
     
     private func linePath(values: [Double], width: CGFloat, height: CGFloat, maxValue: Double) -> Path {
@@ -669,9 +592,14 @@ struct AcuteChronicComparisonChart: View {
     }
 }
 
-// MARK: - MiniLineChart (copied from example)
+// MARK: - MiniLineChart
+/// **`title` is optional because the chart is used at two levels.**
+/// `ProgressChartSection` stacks three of them inside one `SectionContainer`, so
+/// each needs its own sub-heading ("Reps", "Volume", "Max weight"). On
+/// `ACWRDetailScreen` it is the only content in its card, and the container's
+/// own header names it — a title here as well would print the heading twice.
 struct MiniLineChart: View {
-    let title: String
+    var title: String? = nil
     let values: [Double]
     let labels: [String]
     let color: Color
@@ -687,10 +615,12 @@ struct MiniLineChart: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text(title)
-                    .font(.caption).fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                    .textCase(.uppercase).tracking(0.5)
+                if let title {
+                    Text(title)
+                        .font(.caption).fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
+                        .textCase(.uppercase).tracking(0.5)
+                }
                 Spacer()
                 Text(peakLabel)
                     .font(.caption).fontWeight(.medium)
@@ -798,27 +728,17 @@ struct ZoneDistributionView: View {
     let distribution: ZoneDistribution
     
     var body: some View {
+        SectionContainer(title: "Time in Each Zone") {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Time in Each Zone")
-                .font(.caption).fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase).tracking(0.5)
-            
             VStack(spacing: 8) {
-                ZoneBar(label: "Optimal", percentage: distribution.optimal, color: .green)
-                ZoneBar(label: "Caution", percentage: distribution.caution, color: .orange)
-                ZoneBar(label: "High Risk", percentage: distribution.danger, color: .red)
-                ZoneBar(label: "Low Load", percentage: distribution.low, color: .blue)
+                ZoneBar(label: "Optimal", percentage: distribution.optimal, color: ACWR.Zone.optimal.color)
+                ZoneBar(label: "Caution", percentage: distribution.caution, color: ACWR.Zone.caution.color)
+                ZoneBar(label: "High Risk", percentage: distribution.danger, color: ACWR.Zone.danger.color)
+                ZoneBar(label: "Low Load", percentage: distribution.low, color: ACWR.Zone.low.color)
             }
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
 }
 
@@ -896,11 +816,11 @@ enum ACWRInsight: Identifiable {
     var color: Color {
         switch self {
         case .currentZone(let zone, _): return zone.color
-        case .risingTrend: return .orange
-        case .fallingTrend: return .blue
-        case .dangerZoneWarning: return .red
-        case .recoveryRecommended: return .orange
-        case .lowLoadWarning: return .blue
+        case .risingTrend: return .matteAmber
+        case .fallingTrend: return .matteBlue
+        case .dangerZoneWarning: return ACWR.Zone.danger.color
+        case .recoveryRecommended: return .matteAmber
+        case .lowLoadWarning: return .matteBlue
         }
     }
     
@@ -937,12 +857,8 @@ struct InsightsView: View {
     let insights: [ACWRInsight]
     
     var body: some View {
+        SectionContainer(title: "Insights & Recommendations") {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Insights & Recommendations")
-                .font(.caption).fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase).tracking(0.5)
-            
             ForEach(insights) { insight in
                 HStack(spacing: 12) {
                     Image(systemName: insight.icon)
@@ -964,64 +880,68 @@ struct InsightsView: View {
             }
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
 }
 
 // MARK: - Educational Section
 struct EducationalSection: View {
+    let metric: TrainingLoadMetric
+
     var body: some View {
+        SectionContainer(title: "What is ACWR?") {
         VStack(alignment: .leading, spacing: 12) {
-            Text("What is ACWR?")
-                .font(.headline)
-            
             Text("The Acute:Chronic Workload Ratio (ACWR) compares your recent training load (last 7 days) to your longer-term average (last 28 days).")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-            
+
+            // Which work this particular ratio counted, and — just as important
+            // — which it did not. Two ratios that look alike but measure
+            // different training need to say so somewhere.
+            VStack(alignment: .leading, spacing: 4) {
+                Text(metric.title)
+                    .font(.subheadline).fontWeight(.medium)
+                Text(metric.explanation)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(12)
+            .background(Color(.tertiarySystemFill))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+
             Divider()
                 .padding(.vertical, 4)
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 ZoneExplanation(
                     zone: "Optimal (0.8 - 1.3)",
-                    color: .green,
+                    color: ACWR.Zone.optimal.color,
                     explanation: "Your training is well-balanced. Maintain this range for optimal adaptation."
                 )
                 
                 ZoneExplanation(
                     zone: "Caution (1.3 - 1.5)",
-                    color: .orange,
+                    color: ACWR.Zone.caution.color,
                     explanation: "Recent load is elevated. Monitor recovery and consider adjusting volume."
                 )
                 
                 ZoneExplanation(
                     zone: "High Risk (1.5+)",
-                    color: .red,
+                    color: ACWR.Zone.danger.color,
                     explanation: "Significant spike in training load. High injury risk - prioritize recovery."
                 )
                 
                 ZoneExplanation(
                     zone: "Low Load (<0.8)",
-                    color: .blue,
+                    color: ACWR.Zone.low.color,
                     explanation: "Training volume is low. Gradually increase when ready."
                 )
             }
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
 }
 
@@ -1049,8 +969,20 @@ struct ZoneExplanation: View {
 }
 
 // MARK: - Preview
-#Preview {
+#Preview("Session load") {
     NavigationStack {
-        ACWRDetailScreen(totals: MockDailyTotalsProvider().previewTotals)
+        ACWRDetailScreen(
+            totals: MockDailyTotalsProvider().previewTotals,
+            metric: .session
+        )
+    }
+}
+
+#Preview("Volume") {
+    NavigationStack {
+        ACWRDetailScreen(
+            totals: MockDailyTotalsProvider().previewTotals,
+            metric: .volume
+        )
     }
 }

@@ -27,15 +27,14 @@ public struct TrainingBalanceScreen: View {
     
     public var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 20) {
                 // View toggle
                 Picker("View", selection: $selectedView) {
                     Text("Muscle Groups").tag(BalanceView.muscleGroups)
                     Text("Movement Patterns").tag(BalanceView.movements)
                 }
                 .pickerStyle(.segmented)
-                .padding(.horizontal, 16)
-                
+
                 // Range picker
                 Picker("Range", selection: $selectedRange) {
                     ForEach(BalanceRange.allCases) { range in
@@ -43,8 +42,7 @@ public struct TrainingBalanceScreen: View {
                     }
                 }
                 .pickerStyle(.segmented)
-                .padding(.horizontal, 16)
-                
+
                 // Summary card
                 if selectedView == .muscleGroups {
                     MuscleGroupSummaryCard(data: balanceData)
@@ -85,9 +83,13 @@ public struct TrainingBalanceScreen: View {
                     MovementBalanceInsights(data: balanceData)
                 }
             }
-            .padding(.vertical, 20)
+            .padding(.horizontal)
+            .padding(.vertical, 8)
         }
-        .background(Color(.systemGroupedBackground).ignoresSafeArea())
+        // Matches the stats home and every other detail screen: `darkColor`
+        // behind `systemBackground` cards. It was `systemGroupedBackground`, so
+        // pushing in from the home screen changed the frame of the whole app.
+        .background { Color.darkColor.ignoresSafeArea() }
         .navigationTitle("Training Balance")
         .navigationBarTitleDisplayMode(.large)
     }
@@ -180,6 +182,7 @@ struct MuscleGroupSummaryCard: View {
     let data: TrainingBalanceData
     
     var body: some View {
+        SectionContainer(title: "Summary") {
         VStack(spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
@@ -191,9 +194,6 @@ struct MuscleGroupSummaryCard: View {
                         let muscleGroup = data.muscleGroups.first(where: { $0.id == top.muscleGroup })
                         Text(muscleGroup?.name ?? top.muscleGroup)
                             .font(.title2).fontWeight(.bold)
-                            .onAppear {
-                                print(top.muscleGroup)
-                            }
                     } else {
                         Text("—")
                             .font(.title2).fontWeight(.bold)
@@ -226,7 +226,7 @@ struct MuscleGroupSummaryCard: View {
                                 .frame(width: 20)
                             
                             Circle()
-                                .fill(.blue)
+                                .fill(Color.matteBlue)
                                 .frame(width: 10, height: 10)
                             
                             Text(muscleGroup?.name ?? item.muscleGroup)
@@ -243,15 +243,6 @@ struct MuscleGroupSummaryCard: View {
             }
         }
         .padding(20)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
-        .onAppear {
-            print("balance data ---- \(data.muscleGroups)")
         }
     }
     
@@ -265,6 +256,7 @@ struct MovementPatternSummaryCard: View {
     let data: TrainingBalanceData
     
     var body: some View {
+        SectionContainer(title: "Summary") {
         VStack(spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
@@ -272,7 +264,7 @@ struct MovementPatternSummaryCard: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     if let top = data.topMovementPatterns.first {
-                        Text(formatMovementName(top.pattern))
+                        Text(MovementPattern.displayName(for: top.pattern))
                             .font(.title2).fontWeight(.bold)
                     } else {
                         Text("—")
@@ -311,7 +303,7 @@ struct MovementPatternSummaryCard: View {
                                 .foregroundStyle(.secondary)
                                 .frame(width: 20)
                             
-                            Text(formatMovementName(item.pattern))
+                            Text(MovementPattern.displayName(for: item.pattern))
                                 .font(.subheadline)
                         }
                         
@@ -325,18 +317,9 @@ struct MovementPatternSummaryCard: View {
             }
         }
         .padding(20)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
     
-    private func formatMovementName(_ name: String) -> String {
-        name.replacingOccurrences(of: "_", with: " ").capitalized
-    }
     
     private func formatVolume(_ volume: Double) -> String {
         volume >= 1000 ? String(format: "%.1fk", volume / 1000) : String(format: "%.0f", volume)
@@ -348,9 +331,17 @@ struct MovementPatternSummaryCard: View {
         return "checkmark.circle.fill"
     }
     
+    /// **These boundaries are push:pull balance, not ACWR — do not route this
+    /// through `ACWR.Zone`.** They happen to read 1.3 / 0.7, close enough to the
+    /// acute:chronic bands to look like the same rule, but they answer a
+    /// different question: whether opposing patterns are trained evenly, not
+    /// whether recent load has outrun the baseline. Tying them together would
+    /// move push:pull thresholds the next time an injury-risk boundary moved.
+    /// Only the palette is shared, for the reason `MovementPattern.color` is
+    /// matte.
     private func ratioColor(_ ratio: Double) -> Color {
-        if ratio > 1.3 || ratio < 0.7 { return .orange }
-        return .green
+        if ratio > 1.3 || ratio < 0.7 { return .matteAmber }
+        return .matteGreen
     }
 }
 
@@ -360,11 +351,8 @@ struct MuscleGroupBreakdown: View {
     let muscleGroups: [MuscleGroup]
     
     var body: some View {
+        SectionContainer(title: "Volume Distribution") {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Volume Distribution")
-                .font(.caption).fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase).tracking(0.5)
             
             VStack(spacing: 8) {
                 ForEach(data.topMuscleGroups, id: \.muscleGroup) { item in
@@ -375,19 +363,13 @@ struct MuscleGroupBreakdown: View {
                         name: muscleGroup?.name ?? item.muscleGroup,
                         volume: item.volume,
                         percentage: percentage,
-                        color: .blue
+                        color: .matteBlue
                     )
                 }
             }
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
 }
 
@@ -440,47 +422,27 @@ struct MovementPatternBreakdown: View {
     let data: TrainingBalanceData
     
     var body: some View {
+        SectionContainer(title: "Pattern Distribution") {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Pattern Distribution")
-                .font(.caption).fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase).tracking(0.5)
             
             VStack(spacing: 8) {
                 ForEach(data.topMovementPatterns, id: \.pattern) { item in
                     let percentage = data.totalVolume > 0 ? item.volume / data.totalVolume : 0
                     
                     MovementPatternBar(
-                        name: formatMovementName(item.pattern),
+                        name: MovementPattern.displayName(for: item.pattern),
                         volume: item.volume,
                         percentage: percentage,
-                        color: colorForMovement(item.pattern)
+                        color: MovementPattern.color(for: item.pattern)
                     )
                 }
             }
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
     
-    private func formatMovementName(_ name: String) -> String {
-        name.replacingOccurrences(of: "_", with: " ").capitalized
-    }
     
-    private func colorForMovement(_ movement: String) -> Color {
-        let lower = movement.lowercased()
-        if lower.contains("push") || lower.contains("press") { return .orange }
-        if lower.contains("pull") || lower.contains("row") { return .blue }
-        if lower.contains("squat") || lower.contains("lunge") { return .purple }
-        if lower.contains("hinge") { return .green }
-        return .gray
-    }
 }
 
 struct MovementPatternBar: View {
@@ -556,22 +518,16 @@ struct MuscleGroupProgressionChart: View {
     }
     
     var body: some View {
-        MiniLineChart(
-            title: muscleGroupName,
-            values: values,
-            labels: labels,
-            color: .blue,
-            formatValue: { v in
-                v >= 1000 ? String(format: "%.1fk", v / 1000) : String(format: "%.0f", v)
-            }
-        )
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        SectionContainer(title: muscleGroupName) {
+            MiniLineChart(
+                values: values,
+                labels: labels,
+                color: .matteBlue,
+                formatValue: { v in
+                    v >= 1000 ? String(format: "%.1fk", v / 1000) : String(format: "%.0f", v)
+                }
+            )
+        }
     }
 }
 
@@ -608,32 +564,20 @@ struct MovementPatternProgressionChart: View {
     }
     
     var body: some View {
+        SectionContainer(
+            title: MovementPattern.displayName(for: pattern)
+        ) {
         MiniLineChart(
-            title: pattern.replacingOccurrences(of: "_", with: " ").capitalized,
             values: values,
             labels: labels,
-            color: colorForMovement(pattern),
+            color: MovementPattern.color(for: pattern),
             formatValue: { v in
                 v >= 1000 ? String(format: "%.1fk", v / 1000) : String(format: "%.0f", v)
             }
         )
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
-    
-    private func colorForMovement(_ movement: String) -> Color {
-        let lower = movement.lowercased()
-        if lower.contains("push") || lower.contains("press") { return .orange }
-        if lower.contains("pull") || lower.contains("row") { return .blue }
-        if lower.contains("squat") || lower.contains("lunge") { return .purple }
-        if lower.contains("hinge") { return .green }
-        return .gray
-    }
+
 }
 
 // MARK: - Balance Insights
@@ -642,11 +586,8 @@ struct MuscleBalanceInsights: View {
     let muscleGroups: [MuscleGroup]
     
     var body: some View {
+        SectionContainer(title: "Balance Insights") {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Balance Insights")
-                .font(.caption).fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase).tracking(0.5)
             
             VStack(spacing: 8) {
                 // Check for imbalances
@@ -658,7 +599,7 @@ struct MuscleBalanceInsights: View {
                     
                     InsightCard(
                         icon: "exclamationmark.triangle.fill",
-                        color: .orange,
+                        color: .matteAmber,
                         title: "Volume Imbalance",
                         message: "\(topName) volume is significantly higher than \(bottomName). Consider balancing your training."
                     )
@@ -672,7 +613,7 @@ struct MuscleBalanceInsights: View {
                     if topVolume > 0 && fourthVolume / topVolume > 0.5 {
                         InsightCard(
                             icon: "checkmark.circle.fill",
-                            color: .green,
+                            color: .matteGreen,
                             title: "Well-Rounded Training",
                             message: "You're training multiple muscle groups with good balance. Keep it up!"
                         )
@@ -689,7 +630,7 @@ struct MuscleBalanceInsights: View {
                     if !names.isEmpty {
                         InsightCard(
                             icon: "lightbulb.fill",
-                            color: .blue,
+                            color: .matteBlue,
                             title: "Consider Adding",
                             message: "Your \(names.joined(separator: " and ")) could use more volume this period."
                         )
@@ -698,13 +639,7 @@ struct MuscleBalanceInsights: View {
             }
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
 }
 
@@ -712,11 +647,8 @@ struct MovementBalanceInsights: View {
     let data: TrainingBalanceData
     
     var body: some View {
+        SectionContainer(title: "Pattern Insights") {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Pattern Insights")
-                .font(.caption).fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase).tracking(0.5)
             
             VStack(spacing: 8) {
                 // Push/Pull ratio
@@ -724,21 +656,21 @@ struct MovementBalanceInsights: View {
                     if ratio > 1.3 {
                         InsightCard(
                             icon: "arrow.up.circle.fill",
-                            color: .orange,
+                            color: .matteAmber,
                             title: "Push Dominant",
                             message: String(format: "Push:Pull ratio is %.1f:1. Consider adding more pulling movements for balance.", ratio)
                         )
                     } else if ratio < 0.7 {
                         InsightCard(
                             icon: "arrow.down.circle.fill",
-                            color: .orange,
+                            color: .matteAmber,
                             title: "Pull Dominant",
                             message: String(format: "Push:Pull ratio is %.1f:1. Consider adding more pushing movements for balance.", ratio)
                         )
                     } else {
                         InsightCard(
                             icon: "checkmark.circle.fill",
-                            color: .green,
+                            color: .matteGreen,
                             title: "Balanced Push/Pull",
                             message: String(format: "Your Push:Pull ratio of %.1f:1 is well balanced.", ratio)
                         )
@@ -749,7 +681,7 @@ struct MovementBalanceInsights: View {
                 if data.topMovementPatterns.count >= 4 {
                     InsightCard(
                         icon: "star.fill",
-                        color: .purple,
+                        color: .mattePlum,
                         title: "Great Variety",
                         message: "You're using \(data.topMovementPatterns.count) different movement patterns. This promotes well-rounded development."
                     )
@@ -757,13 +689,7 @@ struct MovementBalanceInsights: View {
             }
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
 }
 

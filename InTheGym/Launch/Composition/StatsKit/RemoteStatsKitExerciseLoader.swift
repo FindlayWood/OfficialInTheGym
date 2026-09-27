@@ -34,13 +34,7 @@ class RemoteRecentStatsKitExerciseLoader: StatsKitExerciseLoader {
     
     func load() async throws -> [ExerciseStats] {
         let userID = UserDefaults.currentUser.id
-        let cutoff = Calendar.current.date(byAdding: .day, value: -7, to: .now)!
-
-        var cal = Calendar(identifier: .gregorian)
-        cal.timeZone = TimeZone(identifier: "UTC")!
-        let components = cal.dateComponents([.year, .month, .day], from: cutoff)
-        let midnight = cal.date(from: components)!
-        let cutoffTimestamp = Timestamp(date: midnight)
+        let cutoffTimestamp = Timestamp(date: StatsDay.startOfDay(daysAgo: 7))
 
         let snapshot = try await Firestore.firestore()
             .collection("Users/\(userID)/ExerciseStats")

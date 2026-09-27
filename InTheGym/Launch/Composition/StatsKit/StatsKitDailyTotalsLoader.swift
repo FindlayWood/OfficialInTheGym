@@ -11,15 +11,23 @@ import Foundation
 import StatsKit
 
 class StatsKitDailyTotalsLoader: DailyTotalsProviding {
+
+    /// How far back to fetch.
+    ///
+    /// **This is not the window any screen displays — it is the widest window
+    /// any screen *computes* from.** The longest range offered is 2M (60 days),
+    /// and every ACWR point in it needs the 28 days of chronic history ending on
+    /// that day. Fetching only as far back as the displayed range leaves the
+    /// oldest points with a chronic window that reaches outside the data, so
+    /// chronic comes out too low and the ratio too high — the chart reads
+    /// "high risk" the further left you look. 60 + 28 rounded up for headroom.
+    private static let daysToFetch = 120
+
     func fetchDailyTotals() async throws -> [DailyTotal] {
         let userID = UserDefaults.currentUser.id
-        let cutoff = Calendar.current.date(byAdding: .day, value: -30, to: .now)!
-
-        var cal = Calendar(identifier: .gregorian)
-        cal.timeZone = TimeZone(identifier: "UTC")!
-        let components = cal.dateComponents([.year, .month, .day], from: cutoff)
-        let midnight = cal.date(from: components)!
-        let cutoffTimestamp = Timestamp(date: midnight)
+        let cutoffTimestamp = Timestamp(
+            date: StatsDay.startOfDay(daysAgo: Self.daysToFetch)
+        )
 
         let path = "Users/\(userID)/DailyTotals"
         let snapshot = try await Firestore.firestore()

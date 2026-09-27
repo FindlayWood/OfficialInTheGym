@@ -64,7 +64,7 @@ private struct AllTimeStatsSection: View {
                     label: "Total sets",
                     value: "\(exercise.setCount)",
                     icon: "square.stack.fill",
-                    color: .orange,
+                    color: .darkColor,
                     borders: [.bottom, .trailing]
                 )
                 StatCell(
@@ -73,7 +73,7 @@ private struct AllTimeStatsSection: View {
                         ? formatTime(exercise.totalTime)
                         : "\(exercise.totalReps)",
                     icon: exercise.isTimeBased ? "clock.fill" : "repeat",
-                    color: .purple,
+                    color: .darkColor,
                     borders: [.bottom]
                 )
                 StatCell(
@@ -82,14 +82,14 @@ private struct AllTimeStatsSection: View {
                         ? "\(exercise.totalReps / exercise.setCount)"
                         : "—",
                     icon: "chart.bar.fill",
-                    color: .blue,
+                    color: .darkColor,
                     borders: [.trailing]
                 )
                 StatCell(
                     label: "Since",
                     value: exercise.firstRecordDate.formatted(.dateTime.month(.abbreviated).year()),
                     icon: "calendar",
-                    color: .green,
+                    color: .darkColor,
                     borders: []
                 )
             }
@@ -112,7 +112,7 @@ private struct MaxStatsSection: View {
                         label: "Best time",
                         value: formatTime(exercise.maxTime),
                         icon: "stopwatch.fill",
-                        color: .yellow,
+                        color: .matteAmber,
                         borders: []
                     )
                 } else if exercise.maxWeight > 0 {
@@ -120,14 +120,14 @@ private struct MaxStatsSection: View {
                         label: "Max weight",
                         value: "\(Int(exercise.maxWeight))kg",
                         icon: "scalemass.fill",
-                        color: .yellow,
+                        color: .matteAmber,
                         borders: [.trailing]
                     )
                     StatCell(
                         label: "Best volume day",
                         value: formatVolume(exercise.totalVolume),
                         icon: "star.fill",
-                        color: .yellow,
+                        color: .matteAmber,
                         borders: []
                     )
                 } else {
@@ -137,14 +137,14 @@ private struct MaxStatsSection: View {
                             ? "\(exercise.totalReps / max(exercise.setCount, 1))"
                             : "—",
                         icon: "star.fill",
-                        color: .yellow,
+                        color: .matteAmber,
                         borders: [.trailing]
                     )
                     StatCell(
                         label: "Total sets logged",
                         value: "\(exercise.setCount)",
                         icon: "square.stack.fill",
-                        color: .yellow,
+                        color: .matteAmber,
                         borders: []
                     )
                 }
@@ -170,13 +170,14 @@ struct RepsOverTimeSection: View {
         guard !data.values.isEmpty else { return AnyView(EmptyView()) }
 
         return AnyView(
-            MiniBarChart(
-                title: "Reps per week",
-                values: data.values,
-                labels: data.labels,
-                color: .purple,
-                formatValue: { "\(Int($0))" }
-            )
+            SectionContainer(title: "Reps per week") {
+                MiniBarChart(
+                    values: data.values,
+                    labels: data.labels,
+                    color: .darkColor,
+                    formatValue: { "\(Int($0))" }
+                )
+            }
         )
     }
 }
@@ -227,11 +228,13 @@ struct ACWRChartsSection: View {
                 } else {
                     // Zone legend
                     HStack(spacing: 12) {
+                        // Routed through `ACWR.Zone` rather than repeating
+                        // the palette — this was the fourth hardcoded copy.
                         ForEach([
-                            ("Low", Color.blue),
-                            ("Optimal", Color.green),
-                            ("Caution", Color.orange),
-                            ("High risk", Color.red)
+                            ("Low", ACWR.Zone.low.color),
+                            ("Optimal", ACWR.Zone.optimal.color),
+                            ("Caution", ACWR.Zone.caution.color),
+                            ("High risk", ACWR.Zone.danger.color)
                         ], id: \.0) { label, color in
                             HStack(spacing: 4) {
                                 Circle().fill(color).frame(width: 7, height: 7)
