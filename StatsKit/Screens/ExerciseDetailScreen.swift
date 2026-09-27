@@ -227,11 +227,13 @@ struct ACWRChartsSection: View {
                 } else {
                     // Zone legend
                     HStack(spacing: 12) {
+                        // Routed through `ACWR.Zone` rather than repeating
+                        // the palette — this was the fourth hardcoded copy.
                         ForEach([
-                            ("Low", Color.blue),
-                            ("Optimal", Color.green),
-                            ("Caution", Color.orange),
-                            ("High risk", Color.red)
+                            ("Low", ACWR.Zone.low.color),
+                            ("Optimal", ACWR.Zone.optimal.color),
+                            ("Caution", ACWR.Zone.caution.color),
+                            ("High risk", ACWR.Zone.danger.color)
                         ], id: \.0) { label, color in
                             HStack(spacing: 4) {
                                 Circle().fill(color).frame(width: 7, height: 7)
