@@ -1080,6 +1080,34 @@ phone every concrete number began below the fold.
   the old bar drew its marker at 1.0 when `ratio` was `nil`, parking a grey pointer mid-Optimal under
   a "Not enough data" label — an absence rendered as a reading. The scale lives on the detail screen.
 
+### Every stats screen is `darkColor` behind `SectionContainer` cards
+The four screens had drifted into two families. `StatsKitHomeScreen` and `ExerciseDetailScreen` were
+on `Color.darkColor` with `SectionContainer`; `ACWRDetailScreen` and `TrainingBalanceScreen` were on
+`systemGroupedBackground` with the card chrome —
+`.padding(16).background(systemBackground).clipShape(16).overlay(stroke).padding(.horizontal, 16)` —
+**written out inline sixteen times between them.** Pushing from the home screen into a detail screen
+changed the frame of the whole app. All four now match, and every card goes through
+`SectionContainer`.
+
+- **A `SectionContainer` header sits on the page, not on the card**, which is why its title is
+  `.white`. Two bugs came from forgetting that, and both were *invisible* rather than ugly:
+  `ExerciseListScreen` set **no background at all**, so its section title was white on white in light
+  appearance; and the home screen's "View all" was briefly `darkColor`, the page colour. **Anything
+  placed on a section header must be light.**
+- **`MiniLineChart.title` and `MiniBarChart.title` are optional** (`String? = nil`). Both are used at
+  two levels: `ProgressChartSection` stacks three inside one container, so each needs its own
+  sub-heading, while on `ACWRDetailScreen` the chart is the card's only content and the container's
+  header already names it — a title there printed the heading twice. When `nil`, `MiniLineChart`
+  still shows its peak-value label.
+- Card titles that were inline uppercase `.secondary` captions *inside* the card moved up into the
+  container's header. `AcuteChronicComparisonChart` keeps its acute/chronic legend inside the card,
+  because a legend belongs next to the marks it explains.
+- **No sharp system accent remains anywhere in the module.** Beyond the ACWR zones, the sweep caught
+  `ExerciseDetailScreen`'s four `StatCell` accents and its five `.yellow` personal bests, the
+  `ProgressChartSection` series, `colorForMovement`, `WeeklyLineChart` and `SimpleLineChart`. `StatCell`
+  icons are `darkColor`; series colours are the matte set. Two stray `print`s in view bodies went with
+  them (error logging in the view models is the house pattern and stays).
+
 ### Charts and previews
 Hand-built, as everywhere. `ProgressChartSection` derives **13 buckets of 7 days = 91 days** from a
 private `buildWeeks(from:)` shared by both chart sections *so the x-axis is identical*, and decides

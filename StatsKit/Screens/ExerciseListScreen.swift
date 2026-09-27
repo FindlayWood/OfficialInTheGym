@@ -60,6 +60,11 @@ struct ExerciseListScreen: View {
                 .searchable(text: $searchText, prompt: "Search exercises")
             }
         }
+        // Without this the screen sat on the default background and
+        // `SectionContainer`'s title — which is `.white`, because a header sits
+        // on the page rather than on the card — was white on white. The section
+        // heading was invisible in light appearance and only showed in dark.
+        .background { Color.darkColor.ignoresSafeArea() }
         .navigationTitle("Exercises")
         .navigationBarTitleDisplayMode(.large)
         .task {

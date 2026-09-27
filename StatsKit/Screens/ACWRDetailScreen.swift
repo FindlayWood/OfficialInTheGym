@@ -29,7 +29,7 @@ public struct ACWRDetailScreen: View {
         let series = acwrData.series
 
         return ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 20) {
                 // Current status card
                 CurrentStatusCard(acwr: acwrData.currentACWR, metric: metric)
 
@@ -40,7 +40,6 @@ public struct ACWRDetailScreen: View {
                     }
                 }
                 .pickerStyle(.segmented)
-                .padding(.horizontal, 16)
 
                 // ACWR progression chart
                 ACWRProgressionChart(
@@ -57,21 +56,16 @@ public struct ACWRDetailScreen: View {
                 )
 
                 // Daily load breakdown
-                MiniLineChart(
-                    title: "Daily \(metric.title)",
-                    values: series.load,
-                    labels: series.labels,
-                    color: .matteBlue,
-                    formatValue: { v in
-                        v >= 1000 ? String(format: "%.1fk", v / 1000) : String(format: "%.0f", v)
-                    }
-                )
-                .background(Color(.systemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-                )
+                SectionContainer(title: "Daily \(metric.title)") {
+                    MiniLineChart(
+                        values: series.load,
+                        labels: series.labels,
+                        color: .matteBlue,
+                        formatValue: { v in
+                            v >= 1000 ? String(format: "%.1fk", v / 1000) : String(format: "%.0f", v)
+                        }
+                    )
+                }
 
                 // Zone distribution
                 ZoneDistributionView(distribution: acwrData.zoneDistribution)
@@ -82,9 +76,14 @@ public struct ACWRDetailScreen: View {
                 // What is ACWR? educational section
                 EducationalSection(metric: metric)
             }
-            .padding(.vertical, 20)
+            .padding(.horizontal)
+            .padding(.vertical, 8)
         }
-        .background(Color(.systemGroupedBackground).ignoresSafeArea())
+        // The same page/card relationship as the home screen and
+        // `ExerciseDetailScreen`: `darkColor` behind `systemBackground` cards.
+        // This was `systemGroupedBackground`, so pushing from the stats home
+        // into a detail screen changed the whole frame of the app.
+        .background { Color.darkColor.ignoresSafeArea() }
         .navigationTitle(metric.title)
         .navigationBarTitleDisplayMode(.large)
     }
@@ -241,20 +240,16 @@ struct CurrentStatusCard: View {
     let metric: TrainingLoadMetric
 
     var body: some View {
+        SectionContainer(title: "Current status") {
         VStack(spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Current Status")
-                            .font(.headline)
-                            .foregroundStyle(.primary)
-                        // The acute and chronic figures below are bare numbers;
-                        // this is the only thing on the card that says what they
-                        // are counting, which matters now there are two metrics.
-                        Text(metric.subtitle)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
+                    // The acute and chronic figures below are bare numbers; this
+                    // is the only thing on the card that says what they are
+                    // counting, which matters now there are two metrics.
+                    Text(metric.subtitle)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
 
                     HStack(spacing: 8) {
                         Text(acwr.formattedRatio)
@@ -310,16 +305,10 @@ struct CurrentStatusCard: View {
                 }
             }
         }
-        .padding(20)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(acwr.zone.color.opacity(0.3), lineWidth: 2)
-        )
-        .padding(.horizontal, 16)
+        .padding(16)
+        }
     }
-    
+
     private var zoneIcon: String {
         switch acwr.zone {
         case .optimal: return "checkmark.circle.fill"
@@ -345,14 +334,8 @@ struct ACWRProgressionChart: View {
     }
     
     var body: some View {
+        SectionContainer(title: title) {
         VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.caption).fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase).tracking(0.5)
-                .padding(.horizontal, 16)
-                .padding(.top, 14)
-            
             GeometryReader { geo in
                 let w = geo.size.width
                 let h = geo.size.height
@@ -374,15 +357,10 @@ struct ACWRProgressionChart: View {
             }
             .frame(height: 120)
             .padding(.horizontal, 16)
+            .padding(.top, 14)
             .padding(.bottom, 20)
         }
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
     
     private func xPos(index: Int, width: CGFloat) -> CGFloat {
@@ -530,15 +508,11 @@ struct AcuteChronicComparisonChart: View {
     let labels: [String]
     
     var body: some View {
+        SectionContainer(title: "Acute vs Chronic Load") {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text("Acute vs Chronic Load")
-                    .font(.caption).fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                    .textCase(.uppercase).tracking(0.5)
-                
                 Spacer()
-                
+
                 HStack(spacing: 12) {
                     HStack(spacing: 4) {
                         Circle().fill(Color.matteAmber).frame(width: 8, height: 8)
@@ -578,13 +552,7 @@ struct AcuteChronicComparisonChart: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 20)
         }
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
     
     private func linePath(values: [Double], width: CGFloat, height: CGFloat, maxValue: Double) -> Path {
@@ -624,9 +592,14 @@ struct AcuteChronicComparisonChart: View {
     }
 }
 
-// MARK: - MiniLineChart (copied from example)
+// MARK: - MiniLineChart
+/// **`title` is optional because the chart is used at two levels.**
+/// `ProgressChartSection` stacks three of them inside one `SectionContainer`, so
+/// each needs its own sub-heading ("Reps", "Volume", "Max weight"). On
+/// `ACWRDetailScreen` it is the only content in its card, and the container's
+/// own header names it — a title here as well would print the heading twice.
 struct MiniLineChart: View {
-    let title: String
+    var title: String? = nil
     let values: [Double]
     let labels: [String]
     let color: Color
@@ -642,10 +615,12 @@ struct MiniLineChart: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text(title)
-                    .font(.caption).fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                    .textCase(.uppercase).tracking(0.5)
+                if let title {
+                    Text(title)
+                        .font(.caption).fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
+                        .textCase(.uppercase).tracking(0.5)
+                }
                 Spacer()
                 Text(peakLabel)
                     .font(.caption).fontWeight(.medium)
@@ -753,12 +728,8 @@ struct ZoneDistributionView: View {
     let distribution: ZoneDistribution
     
     var body: some View {
+        SectionContainer(title: "Time in Each Zone") {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Time in Each Zone")
-                .font(.caption).fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase).tracking(0.5)
-            
             VStack(spacing: 8) {
                 ZoneBar(label: "Optimal", percentage: distribution.optimal, color: ACWR.Zone.optimal.color)
                 ZoneBar(label: "Caution", percentage: distribution.caution, color: ACWR.Zone.caution.color)
@@ -767,13 +738,7 @@ struct ZoneDistributionView: View {
             }
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
 }
 
@@ -892,12 +857,8 @@ struct InsightsView: View {
     let insights: [ACWRInsight]
     
     var body: some View {
+        SectionContainer(title: "Insights & Recommendations") {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Insights & Recommendations")
-                .font(.caption).fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase).tracking(0.5)
-            
             ForEach(insights) { insight in
                 HStack(spacing: 12) {
                     Image(systemName: insight.icon)
@@ -919,13 +880,7 @@ struct InsightsView: View {
             }
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
 }
 
@@ -934,10 +889,8 @@ struct EducationalSection: View {
     let metric: TrainingLoadMetric
 
     var body: some View {
+        SectionContainer(title: "What is ACWR?") {
         VStack(alignment: .leading, spacing: 12) {
-            Text("What is ACWR?")
-                .font(.headline)
-
             Text("The Acute:Chronic Workload Ratio (ACWR) compares your recent training load (last 7 days) to your longer-term average (last 28 days).")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -988,13 +941,7 @@ struct EducationalSection: View {
             }
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
+        }
     }
 }
 

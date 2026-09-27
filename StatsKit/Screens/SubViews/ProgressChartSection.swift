@@ -101,7 +101,7 @@ struct ProgressChartsSection: View {
                             title: "Reps",
                             values: weeks.map { Double($0.totalReps) },
                             labels: weeks.map(\.label),
-                            color: .purple
+                            color: .mattePlum
                         )
                         if showVolume || showWeight || showTime {
                             Divider().padding(.horizontal, 16)
@@ -112,7 +112,7 @@ struct ProgressChartsSection: View {
                             title: "Volume",
                             values: weeks.map(\.volume),
                             labels: weeks.map(\.label),
-                            color: .orange,
+                            color: .matteAmber,
                             formatValue: { v in
                                 v >= 1000 ? String(format: "%.0fk", v / 1000) : "\(Int(v))"
                             }
@@ -126,7 +126,7 @@ struct ProgressChartsSection: View {
                             title: "Max weight",
                             values: weeks.map(\.maxWeight),
                             labels: weeks.map(\.label),
-                            color: .blue,
+                            color: .matteBlue,
                             formatValue: { "\(Int($0))kg" }
                         )
                     }
@@ -135,7 +135,7 @@ struct ProgressChartsSection: View {
                             title: "Time",
                             values: weeks.map { Double($0.totalTime) },
                             labels: weeks.map(\.label),
-                            color: .teal,
+                            color: .matteGreen,
                             formatValue: { v in
                                 let s = Int(v); let m = s / 60; let sec = s % 60
                                 return String(format: "%d:%02d", m, sec)

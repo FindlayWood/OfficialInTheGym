@@ -57,7 +57,7 @@ struct WeeklyLineChart: View {
                         path.addQuadCurve(to: current, control: CGPoint(x: current.x, y: current.y))
                     }
                 }
-                .stroke(Color.blue, lineWidth: 2)
+                .stroke(Color.matteBlue, lineWidth: 2)
                 
                 // Dots
                 ForEach(points.indices, id: \.self) { i in

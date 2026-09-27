@@ -8,8 +8,11 @@
 import SwiftUI
 
 // MARK: - MiniBarChart
+/// `title` is optional for the same reason `MiniLineChart`'s is: when the chart
+/// is the only content of a `SectionContainer`, the container's header names it
+/// and a title here would print the heading twice.
 struct MiniBarChart: View {
-    let title: String
+    var title: String? = nil
     let values: [Double]
     let labels: [String]
     let color: Color
@@ -21,11 +24,13 @@ struct MiniBarChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(title)
-                .font(.caption).fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase)
-                .tracking(0.5)
+            if let title {
+                Text(title)
+                    .font(.caption).fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+                    .textCase(.uppercase)
+                    .tracking(0.5)
+            }
 
             GeometryReader { geo in
                 let barCount = values.count
@@ -84,13 +89,6 @@ struct MiniBarChart: View {
             .frame(height: 120)
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-        )
-        .padding(.horizontal, 16)
     }
 }
 
