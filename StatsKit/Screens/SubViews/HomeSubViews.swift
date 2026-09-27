@@ -219,12 +219,15 @@ struct BodyMetricsSummaryView: View {
         }
     }
     
+    /// The matte set, like every other signal colour on the stats path. The
+    /// judgement itself stays: BMI categories are externally defined ranges, not
+    /// the app's opinion of the number — unlike the weight trend below.
     private var bmiColor: Color {
         switch metrics.bmi {
-        case ..<18.5: return .orange
-        case 18.5..<25: return .green
-        case 25..<30: return .orange
-        default: return .red
+        case ..<18.5: return .matteAmber
+        case 18.5..<25: return .matteGreen
+        case 25..<30: return .matteAmber
+        default: return .matteRed
         }
     }
     
@@ -235,10 +238,13 @@ struct BodyMetricsSummaryView: View {
         return "arrow.right"
     }
     
+    /// **A weight trend is not colour-coded up-bad / down-good**, the same rule
+    /// the training chart's change chip follows. This was amber for gaining and
+    /// blue for losing, which tells someone deliberately putting weight on that
+    /// their training is going wrong. The arrow already reports the direction;
+    /// the judgement is not the app's to make, so the colour stays neutral.
     private var trendColor: Color {
-        guard let trend = metrics.weekTrend else { return .secondary }
-        if abs(trend) < 0.1 { return .secondary }
-        return trend > 0 ? .orange : .blue
+        .secondary
     }
 }
 

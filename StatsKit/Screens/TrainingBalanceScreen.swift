@@ -264,7 +264,7 @@ struct MovementPatternSummaryCard: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     if let top = data.topMovementPatterns.first {
-                        Text(formatMovementName(top.pattern))
+                        Text(MovementPattern.displayName(for: top.pattern))
                             .font(.title2).fontWeight(.bold)
                     } else {
                         Text("—")
@@ -303,7 +303,7 @@ struct MovementPatternSummaryCard: View {
                                 .foregroundStyle(.secondary)
                                 .frame(width: 20)
                             
-                            Text(formatMovementName(item.pattern))
+                            Text(MovementPattern.displayName(for: item.pattern))
                                 .font(.subheadline)
                         }
                         
@@ -320,9 +320,6 @@ struct MovementPatternSummaryCard: View {
         }
     }
     
-    private func formatMovementName(_ name: String) -> String {
-        name.replacingOccurrences(of: "_", with: " ").capitalized
-    }
     
     private func formatVolume(_ volume: Double) -> String {
         volume >= 1000 ? String(format: "%.1fk", volume / 1000) : String(format: "%.0f", volume)
@@ -334,9 +331,17 @@ struct MovementPatternSummaryCard: View {
         return "checkmark.circle.fill"
     }
     
+    /// **These boundaries are push:pull balance, not ACWR — do not route this
+    /// through `ACWR.Zone`.** They happen to read 1.3 / 0.7, close enough to the
+    /// acute:chronic bands to look like the same rule, but they answer a
+    /// different question: whether opposing patterns are trained evenly, not
+    /// whether recent load has outrun the baseline. Tying them together would
+    /// move push:pull thresholds the next time an injury-risk boundary moved.
+    /// Only the palette is shared, for the reason `MovementPattern.color` is
+    /// matte.
     private func ratioColor(_ ratio: Double) -> Color {
-        if ratio > 1.3 || ratio < 0.7 { return .orange }
-        return .green
+        if ratio > 1.3 || ratio < 0.7 { return .matteAmber }
+        return .matteGreen
     }
 }
 
@@ -425,10 +430,10 @@ struct MovementPatternBreakdown: View {
                     let percentage = data.totalVolume > 0 ? item.volume / data.totalVolume : 0
                     
                     MovementPatternBar(
-                        name: formatMovementName(item.pattern),
+                        name: MovementPattern.displayName(for: item.pattern),
                         volume: item.volume,
                         percentage: percentage,
-                        color: colorForMovement(item.pattern)
+                        color: MovementPattern.color(for: item.pattern)
                     )
                 }
             }
@@ -437,18 +442,7 @@ struct MovementPatternBreakdown: View {
         }
     }
     
-    private func formatMovementName(_ name: String) -> String {
-        name.replacingOccurrences(of: "_", with: " ").capitalized
-    }
     
-    private func colorForMovement(_ movement: String) -> Color {
-        let lower = movement.lowercased()
-        if lower.contains("push") || lower.contains("press") { return .orange }
-        if lower.contains("pull") || lower.contains("row") { return .blue }
-        if lower.contains("squat") || lower.contains("lunge") { return .purple }
-        if lower.contains("hinge") { return .green }
-        return .gray
-    }
 }
 
 struct MovementPatternBar: View {
@@ -571,12 +565,12 @@ struct MovementPatternProgressionChart: View {
     
     var body: some View {
         SectionContainer(
-            title: pattern.replacingOccurrences(of: "_", with: " ").capitalized
+            title: MovementPattern.displayName(for: pattern)
         ) {
         MiniLineChart(
             values: values,
             labels: labels,
-            color: colorForMovement(pattern),
+            color: MovementPattern.color(for: pattern),
             formatValue: { v in
                 v >= 1000 ? String(format: "%.1fk", v / 1000) : String(format: "%.0f", v)
             }
@@ -584,17 +578,6 @@ struct MovementPatternProgressionChart: View {
         }
     }
 
-    /// Matte, like every other signal colour on the stats path — these sat
-    /// beside `MiniLineChart`s drawn in the matte set and were the only sharp
-    /// thing left on the screen.
-    private func colorForMovement(_ movement: String) -> Color {
-        let lower = movement.lowercased()
-        if lower.contains("push") || lower.contains("press") { return .matteAmber }
-        if lower.contains("pull") || lower.contains("row") { return .matteBlue }
-        if lower.contains("squat") || lower.contains("lunge") { return .mattePlum }
-        if lower.contains("hinge") { return .matteGreen }
-        return .gray
-    }
 }
 
 // MARK: - Balance Insights
