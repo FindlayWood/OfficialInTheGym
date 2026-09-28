@@ -434,7 +434,7 @@ struct FirestoreRawLogDeleter: MyDayDeleter {
 struct FirestoreClipLoader: ClipLoader {
     
     func loadClip(with id: String) async throws -> Clip {
-        let path = "TestClips/\(id)"
+        let path = "Clips/\(id)"
         let ref = Firestore.firestore().document(path)
         return try await ref.getDocument(as: Clip.self)
     }
