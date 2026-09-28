@@ -12,6 +12,10 @@ import MyDayKit
 
 // MARK: - Firestore Uploader
 
+/// Writes to `Users/{createdBy}/WorkoutTemplates/{id}` — the author's library,
+/// and the path `FirestoreWorkoutTemplateFetcher` reads. This path only; the
+/// top-level copy is `FirestoreTopLevelWorkoutTemplateUploader`, and the two are
+/// composed by `UserAndTopLevelWorkoutTemplateUploader`.
 public final class FirestoreWorkoutTemplateUploader: WorkoutTemplateUploading {
 
     public init() {}

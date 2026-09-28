@@ -72,8 +72,15 @@ class MyDayKitComposition {
 
         let syncQueue = SyncQueueWorkoutTemplateUploader(userId: userId)
 
+        // Each writer owns one path; the decorator writes both. The syncer and
+        // the queue flush share it, so a queued template reaches both on retry.
+        let remoteTemplateUploader: WorkoutTemplateUploading = UserAndTopLevelWorkoutTemplateUploader(
+            user: FirestoreWorkoutTemplateUploader(),
+            topLevel: FirestoreTopLevelWorkoutTemplateUploader()
+        )
+
         let syncer = WorkoutTemplateSyncer(
-            remote: FirestoreWorkoutTemplateUploader(),
+            remote: remoteTemplateUploader,
             queue: syncQueue
         )
         let saver = WorkoutTemplateSaver(
@@ -86,7 +93,7 @@ class MyDayKitComposition {
         )
 
         let syncService = WorkoutTemplateSyncService(
-            remote: FirestoreWorkoutTemplateUploader(),
+            remote: remoteTemplateUploader,
             syncQueue: syncQueue
         )
         syncService.start()

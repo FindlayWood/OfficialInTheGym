@@ -37,6 +37,10 @@ public final class WorkoutBuilderManager: ObservableObject {
 
     @Published var title: String = ""
     @Published var exercises: [WorkoutExerciseBuilderManager] = []
+    /// Public by default — templates are shared unless the author opts out in
+    /// the options sheet.
+    @Published var isPublic: Bool = true
+    @Published private(set) var tags: [String] = []
     @Published var uploadState: WorkoutUploadState = .idle
 
     public var onUploadSuccess: ((WorkoutTemplateModel) -> Void)?
@@ -58,6 +62,20 @@ public final class WorkoutBuilderManager: ObservableObject {
         exercises.append(exercise)
     }
 
+    // MARK: - Tags
+
+    /// Normalises through `WorkoutTag`, and ignores a tag that normalises to
+    /// nothing or is already added.
+    func addTag(_ tag: String) {
+        let normalized = WorkoutTag.normalized(tag)
+        guard !normalized.isEmpty, !tags.contains(normalized) else { return }
+        tags.append(normalized)
+    }
+
+    func removeTag(_ tag: String) {
+        tags.removeAll { $0 == tag }
+    }
+
     // MARK: - Upload
 
     public func uploadWorkout() async {
@@ -73,11 +91,32 @@ public final class WorkoutBuilderManager: ObservableObject {
             try await uploader.upload(template)
             await MainActor.run {
                 self.onUploadSuccess?(template)
+                // Reset before publishing `.success`: that is what pops the
+                // screen, and this manager is built once in the composition
+                // root and outlives it — so anything left here is what the
+                // next visit to the builder opens with.
+                self.reset()
                 self.uploadState = .success
             }
         } catch {
-            uploadState = .failure(error)
+            // Nothing is reset on failure — the user's input is what they
+            // need to try again.
+            await MainActor.run {
+                self.uploadState = .failure(error)
+            }
         }
+    }
+
+    // MARK: - Reset
+
+    /// Clears everything the builder collects, including the options sheet's
+    /// visibility and tags — a private workout must not leave the next one
+    /// private, or carry its tags into it.
+    private func reset() {
+        title = ""
+        exercises = []
+        isPublic = true
+        tags = []
     }
 
     // MARK: - Private
@@ -113,8 +152,8 @@ public final class WorkoutBuilderManager: ObservableObject {
                 )
             },
             createdBy: userId,
-            isPublic: false,
-            tags: nil,
+            isPublic: isPublic,
+            tags: tags,
             estimatedDuration: nil,
             difficulty: nil,
             createdAt: now,

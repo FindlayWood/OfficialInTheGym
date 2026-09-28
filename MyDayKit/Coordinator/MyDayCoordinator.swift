@@ -340,7 +340,7 @@ extension MyDayCoordinator {
             
         case .workoutSettings:
             let hosting = UIHostingController(
-                rootView: WorkoutSettingsSheet()
+                rootView: WorkoutSettingsSheet(manager: workoutManager)
             )
             vc = hosting
 

@@ -909,6 +909,8 @@
 		9FF8B3082928459E00C47313 /* WorkoutClipThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */; };
 		F026EE752F8D8FF70066FCB4 /* RemoteMovementTypesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE742F8D8FF70066FCB4 /* RemoteMovementTypesLoader.swift */; };
 		F09A384E2FD20C52009793DD /* WorkoutTemplateUploaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09A384D2FD20C52009793DD /* WorkoutTemplateUploaders.swift */; };
+		B7C41E0A2FE7A1D000A10002 /* FirestoreTopLevelWorkoutTemplateUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C41E0A2FE7A1D000A10001 /* FirestoreTopLevelWorkoutTemplateUploader.swift */; };
+		B7C41E0A2FE7A1D000A10004 /* UserAndTopLevelWorkoutTemplateUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C41E0A2FE7A1D000A10003 /* UserAndTopLevelWorkoutTemplateUploader.swift */; };
 		F09A38572FD22424009793DD /* WorkoutTemplateSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09A38562FD22424009793DD /* WorkoutTemplateSaver.swift */; };
 		F09A38592FD22737009793DD /* SyncQueueWorkoutTemplateUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09A38582FD22737009793DD /* SyncQueueWorkoutTemplateUploader.swift */; };
 		F09A385B2FD227A5009793DD /* WorkoutTemplateSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09A385A2FD227A5009793DD /* WorkoutTemplateSyncer.swift */; };
@@ -1849,6 +1851,8 @@
 		9FF8B3072928459E00C47313 /* WorkoutClipThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutClipThumbnailView.swift; sourceTree = "<group>"; };
 		F026EE742F8D8FF70066FCB4 /* RemoteMovementTypesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMovementTypesLoader.swift; sourceTree = "<group>"; };
 		F09A384D2FD20C52009793DD /* WorkoutTemplateUploaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateUploaders.swift; sourceTree = "<group>"; };
+		B7C41E0A2FE7A1D000A10001 /* FirestoreTopLevelWorkoutTemplateUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreTopLevelWorkoutTemplateUploader.swift; sourceTree = "<group>"; };
+		B7C41E0A2FE7A1D000A10003 /* UserAndTopLevelWorkoutTemplateUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAndTopLevelWorkoutTemplateUploader.swift; sourceTree = "<group>"; };
 		F09A38562FD22424009793DD /* WorkoutTemplateSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateSaver.swift; sourceTree = "<group>"; };
 		F09A38582FD22737009793DD /* SyncQueueWorkoutTemplateUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncQueueWorkoutTemplateUploader.swift; sourceTree = "<group>"; };
 		F09A385A2FD227A5009793DD /* WorkoutTemplateSyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateSyncer.swift; sourceTree = "<group>"; };
@@ -4878,6 +4882,8 @@
 			children = (
 				F0D344422F256E0E00AB6121 /* DataUploader.swift */,
 				F09A384D2FD20C52009793DD /* WorkoutTemplateUploaders.swift */,
+				B7C41E0A2FE7A1D000A10001 /* FirestoreTopLevelWorkoutTemplateUploader.swift */,
+				B7C41E0A2FE7A1D000A10003 /* UserAndTopLevelWorkoutTemplateUploader.swift */,
 				F09A38562FD22424009793DD /* WorkoutTemplateSaver.swift */,
 				F09A38582FD22737009793DD /* SyncQueueWorkoutTemplateUploader.swift */,
 				F09A385A2FD227A5009793DD /* WorkoutTemplateSyncer.swift */,
@@ -5688,6 +5694,8 @@
 				9F4DFB3129A6A30500363AE8 /* CommentWithAttachmentsViewController.swift in Sources */,
 				74D93470282EF854005D15DE /* EditProfileCoordinator.swift in Sources */,
 				F09A384E2FD20C52009793DD /* WorkoutTemplateUploaders.swift in Sources */,
+				B7C41E0A2FE7A1D000A10002 /* FirestoreTopLevelWorkoutTemplateUploader.swift in Sources */,
+				B7C41E0A2FE7A1D000A10004 /* UserAndTopLevelWorkoutTemplateUploader.swift in Sources */,
 				74F0C701284F656000FE3A01 /* WorkoutCreationOptionsViewModel.swift in Sources */,
 				74E51D0C25AF615E002054D6 /* DiscoverPosts.swift in Sources */,
 				74EE4EC027E4FB3300051451 /* DescriptionsCellViewModel.swift in Sources */,
