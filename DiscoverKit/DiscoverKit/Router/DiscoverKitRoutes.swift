@@ -16,4 +16,5 @@ enum DiscoverKitRoutes {
     case workoutDetail(DiscoverWorkoutCard)
     case comments(DiscoverSubject)
     case clipPlayer(DiscoverClipCard)
+    case tag(String)
 }

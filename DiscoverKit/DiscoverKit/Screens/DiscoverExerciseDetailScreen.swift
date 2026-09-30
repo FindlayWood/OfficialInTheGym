@@ -7,13 +7,15 @@
 
 import SwiftUI
 
-/// An exercise's DISCOVER page: its header, rating and the way into its
-/// comments. Tags and the exercise's clips join it in later steps of the plan.
+/// An exercise's DISCOVER page: its header, rating, tags and the way into
+/// its comments. The exercise's clips join it in a later step of the plan.
 struct DiscoverExerciseDetailScreen: View {
 
     let card: DiscoverExerciseCard
     @ObservedObject var ratingViewModel: DiscoverRatingViewModel
+    @ObservedObject var taggingViewModel: DiscoverTaggingViewModel
     var onOpenComments: () -> Void = {}
+    var onTagTapped: (String) -> Void = { _ in }
 
     var body: some View {
         ScrollView {
@@ -38,6 +40,8 @@ struct DiscoverExerciseDetailScreen: View {
 
                 DiscoverRatingSection(viewModel: ratingViewModel)
 
+                DiscoverTagsSection(viewModel: taggingViewModel, onTagTapped: onTagTapped)
+
                 DiscoverCommentsEntrySection(count: card.commentCount ?? 0, onOpen: onOpenComments)
             }
             .padding()
@@ -47,7 +51,11 @@ struct DiscoverExerciseDetailScreen: View {
         }
         .navigationTitle(card.name)
         .navigationBarTitleDisplayMode(.inline)
-        .task { await ratingViewModel.load() }
+        .task {
+            async let rating: Void = ratingViewModel.load()
+            async let tags: Void = taggingViewModel.load()
+            _ = await (rating, tags)
+        }
     }
 }
 
@@ -63,6 +71,16 @@ struct DiscoverExerciseDetailScreen: View {
                 summaryLoader: PreviewRatingSummaryLoader(),
                 myRatingLoader: PreviewMyRatingLoader(rating: 8),
                 writer: PreviewRatingWriter()
+            ),
+            taggingViewModel: DiscoverTaggingViewModel(
+                subject: .exercise(id: "squat"),
+                visibleTags: ["legs", "lowerbody", "squat"],
+                counts: ["legs": 9, "lowerbody": 4, "squat": 3, "hotel": 1],
+                canVote: true,
+                normalizer: PreviewTagServices(),
+                myTagsLoader: PreviewTagLoaders(),
+                writer: PreviewTagServices(),
+                suggestionLoader: PreviewTagLoaders()
             )
         )
     }

@@ -40,6 +40,13 @@ public final class DiscoverKitRouter {
     let likeWriter: LikeWriter
     let profileLoader: UserProfileLoader
     let clipWatchRecorder: ClipWatchRecorder
+    let popularTagsLoader: PopularTagsLoader
+    let tagSuggestionLoader: TagSuggestionLoader
+    let taggedExercisesLoader: TaggedExercisesLoader
+    let taggedWorkoutsLoader: TaggedWorkoutsLoader
+    let myTagVotesLoader: MyTagVotesLoader
+    let tagVoteWriter: TagVoteWriter
+    let tagNormalizer: TagNormalizer
     let currentUserId: String
 
     // MARK: - Properties
@@ -64,6 +71,13 @@ public final class DiscoverKitRouter {
         likeWriter: LikeWriter,
         profileLoader: UserProfileLoader,
         clipWatchRecorder: ClipWatchRecorder,
+        popularTagsLoader: PopularTagsLoader,
+        tagSuggestionLoader: TagSuggestionLoader,
+        taggedExercisesLoader: TaggedExercisesLoader,
+        taggedWorkoutsLoader: TaggedWorkoutsLoader,
+        myTagVotesLoader: MyTagVotesLoader,
+        tagVoteWriter: TagVoteWriter,
+        tagNormalizer: TagNormalizer,
         currentUserId: String
     ) {
         self.navigationController = navigationController
@@ -81,6 +95,13 @@ public final class DiscoverKitRouter {
         self.likeWriter = likeWriter
         self.profileLoader = profileLoader
         self.clipWatchRecorder = clipWatchRecorder
+        self.popularTagsLoader = popularTagsLoader
+        self.tagSuggestionLoader = tagSuggestionLoader
+        self.taggedExercisesLoader = taggedExercisesLoader
+        self.taggedWorkoutsLoader = taggedWorkoutsLoader
+        self.myTagVotesLoader = myTagVotesLoader
+        self.tagVoteWriter = tagVoteWriter
+        self.tagNormalizer = tagNormalizer
         self.currentUserId = currentUserId
     }
 
@@ -103,8 +124,10 @@ extension DiscoverKitRouter {
             let viewModel = DiscoverHomeViewModel(
                 clipLoader: clipLoader,
                 workoutLoader: workoutLoader,
-                exerciseLoader: exerciseLoader
+                exerciseLoader: exerciseLoader,
+                tagLoader: popularTagsLoader
             )
+            viewModel.onTagTapped = { [weak self] in self?.navigate(to: .tag($0)) }
             viewModel.onSeeAllClips = { [weak self] in self?.navigate(to: .allClips) }
             viewModel.onSeeAllWorkouts = { [weak self] in self?.navigate(to: .allWorkouts) }
             viewModel.onSeeAllExercises = { [weak self] in self?.navigate(to: .allExercises) }
@@ -168,7 +191,14 @@ extension DiscoverKitRouter {
                 rootView: DiscoverExerciseDetailScreen(
                     card: card,
                     ratingViewModel: ratingViewModel,
-                    onOpenComments: { [weak self] in self?.navigate(to: .comments(.exercise(id: card.exerciseId))) }
+                    taggingViewModel: makeTaggingViewModel(
+                        subject: .exercise(id: card.exerciseId),
+                        visibleTags: card.visibleTags,
+                        counts: card.tagCounts,
+                        canVote: true
+                    ),
+                    onOpenComments: { [weak self] in self?.navigate(to: .comments(.exercise(id: card.exerciseId))) },
+                    onTagTapped: { [weak self] in self?.navigate(to: .tag($0)) }
                 )
             )
             vc.hidesBottomBarWhenPushed = true
@@ -184,7 +214,14 @@ extension DiscoverKitRouter {
                 rootView: DiscoverWorkoutDetailScreen(
                     card: card,
                     ratingViewModel: ratingViewModel,
-                    onOpenComments: { [weak self] in self?.navigate(to: .comments(.workout(id: card.templateId))) }
+                    taggingViewModel: makeTaggingViewModel(
+                        subject: .workout(id: card.templateId),
+                        visibleTags: card.visibleTags,
+                        counts: card.tagCounts,
+                        canVote: card.createdBy != currentUserId
+                    ),
+                    onOpenComments: { [weak self] in self?.navigate(to: .comments(.workout(id: card.templateId))) },
+                    onTagTapped: { [weak self] in self?.navigate(to: .tag($0)) }
                 )
             )
             vc.hidesBottomBarWhenPushed = true
@@ -221,7 +258,45 @@ extension DiscoverKitRouter {
             )
             vc.hidesBottomBarWhenPushed = true
             return vc
+
+        case .tag(let tag):
+            let exercises = DiscoverPager<DiscoverTagged<DiscoverExerciseCard>> { [taggedExercisesLoader] limit, last in
+                try await taggedExercisesLoader.exercises(taggedWith: tag, limit: limit, after: last)
+            }
+            let workouts = DiscoverPager<DiscoverTagged<DiscoverWorkoutCard>> { [taggedWorkoutsLoader] limit, last in
+                try await taggedWorkoutsLoader.workouts(taggedWith: tag, limit: limit, after: last)
+            }
+            let vc = UIHostingController(
+                rootView: DiscoverTagScreen(
+                    tag: tag,
+                    exercises: exercises,
+                    workouts: workouts,
+                    onExerciseTapped: { [weak self] in self?.navigate(to: .exerciseDetail($0)) },
+                    onWorkoutTapped: { [weak self] in self?.navigate(to: .workoutDetail($0)) }
+                )
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
         }
+    }
+
+    @MainActor
+    private func makeTaggingViewModel(
+        subject: DiscoverSubject,
+        visibleTags: [String]?,
+        counts: [String: Int]?,
+        canVote: Bool
+    ) -> DiscoverTaggingViewModel {
+        DiscoverTaggingViewModel(
+            subject: subject,
+            visibleTags: visibleTags ?? [],
+            counts: counts ?? [:],
+            canVote: canVote,
+            normalizer: tagNormalizer,
+            myTagsLoader: myTagVotesLoader,
+            writer: tagVoteWriter,
+            suggestionLoader: tagSuggestionLoader
+        )
     }
 
     @MainActor

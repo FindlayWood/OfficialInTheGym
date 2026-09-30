@@ -52,6 +52,22 @@ class DiscoverKitComposition {
 
         let clipWatchRecorder: ClipWatchRecorder = FirebaseFunctionsViewClipRecorder()
 
+        // MARK: - Tags
+
+        let popularTagsLoader: PopularTagsLoader = FirestorePopularTagsLoader()
+
+        let tagSuggestionLoader: TagSuggestionLoader = FirestoreTagSuggestionLoader()
+
+        let taggedExercisesLoader: TaggedExercisesLoader = FirestoreTaggedExercisesLoader()
+
+        let taggedWorkoutsLoader: TaggedWorkoutsLoader = FirestoreTaggedWorkoutsLoader()
+
+        let myTagVotesLoader: MyTagVotesLoader = FirestoreMyTagVotesLoader(userId: userId)
+
+        let tagVoteWriter: TagVoteWriter = FirestoreTagVoteWriter(userId: userId)
+
+        let tagNormalizer: TagNormalizer = WorkoutTagNormalizer()
+
         // MARK: - Router
 
         let router = DiscoverKitRouter(
@@ -70,6 +86,13 @@ class DiscoverKitComposition {
             likeWriter: likeWriter,
             profileLoader: profileLoader,
             clipWatchRecorder: clipWatchRecorder,
+            popularTagsLoader: popularTagsLoader,
+            tagSuggestionLoader: tagSuggestionLoader,
+            taggedExercisesLoader: taggedExercisesLoader,
+            taggedWorkoutsLoader: taggedWorkoutsLoader,
+            myTagVotesLoader: myTagVotesLoader,
+            tagVoteWriter: tagVoteWriter,
+            tagNormalizer: tagNormalizer,
             currentUserId: userId
         )
 

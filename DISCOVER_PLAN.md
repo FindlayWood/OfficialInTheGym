@@ -148,6 +148,20 @@ deployed from either repository); the exact text is under each step below.
 - [ ] Play a clip, like it, leave; check `likeCount` and `viewCount` on its card
 - [ ] **Do not release comments to users until step 6 (report and block) is rolled out**
 
+**Step 5 — Tags**
+- [ ] Console rules: `TagVotes` under `Exercises` and `WorkoutTemplates`, and read-only `Tags`
+- [ ] Console indexes: the two `Tags` composite indexes and the two collection-group `subjectId`
+      exemptions — **tag syncs fail without the exemptions**
+- [ ] Deploy functions — the four tag triggers, the updated `rebuildDiscoverCards`; **confirm the
+      deletion of `onWorkoutTemplateWritten`** when the deploy asks
+- [ ] `python SeedExerciseTags.py` — dry run, check the derived tags read sensibly
+- [ ] `python SeedExerciseTags.py --write`
+- [ ] `python RebuildDiscoverCards.py findlaywood1@gmail.com workout-tags` — index every template's
+      existing author tags (and `exercise-tags` too, if seeding ran before the deploy)
+- [ ] Check `Tags` in the console, and the home screen's Tags section
+- [ ] Vote a tag on an exercise: it shows to you outlined, not to others, until three people agree
+- [ ] Delete the old `TaggedWorkoutTemplates` collection by hand
+
 ## Steps
 
 ### Step 1 — Groundwork — built, not rolled out
@@ -432,28 +446,98 @@ Every comment query filters `status in ['visible', 'removed']`, or `canReadComme
 | `parentId` ↑, `status` ↑, `createdAt` ↓, `__name__` ↓ | top-level comments, newest first |
 | `parentId` ↑, `status` ↑, `createdAt` ↑, `__name__` ↑ | replies, oldest first |
 
-### Step 5 — Tags
+### Step 5 — Tags — built, not rolled out
 
-**Cloud**
-- **Replace `TaggedWorkoutTemplates` with the `Tags` tree.** Nothing in the app reads it today, so
-  the move is free now and would need a reader migration later.
-- `TagVotes` trigger (exercises and workouts): diff before/after, maintain `tagCounts` /
-  `visibleTags` on the card, and `Tags/{tag}/…/{id}.voteCount`.
-- Change `planTagIndex` for workouts to index **author tags ∪ community tags with ≥ 3 voters**, the
-  author's tags counting as one vote each, and carry `voteCount` on every entry.
-- Maintain `Tags/{tag}.exerciseCount` / `workoutCount` / `totalCount` on the tag crossing the
-  visibility threshold in either direction, and on a workout's `isPublic` changing.
-- Every tag through the shared validator and blocklist.
+**Decided here:** seeded tags **and** your own votes. Seeded (curated) tags on a catalogue exercise
+play exactly the role a workout author's tags do — **base tags**, always visible, one vote each — so
+the server has one rule for both. A user's own votes are shown to them at once, outlined, even
+below the threshold; nobody else sees them until three people agree.
+
+**Cloud** (`src/Discover/Tags/`)
+- `tallyTags` — the one visibility rule: base tags always, community tags at `VISIBLE_TAG_VOTES` (3),
+  ranked by votes then alphabetically, capped at 20; counts kept for the top 30.
+- `voterTags` — one voter's tags through `tagRejection`, de-duplicated, capped at 10.
+- `syncSubjectTags` — recomputes a subject's tags **from scratch** (base tags, every `TagVotes`
+  document, and its existing index entries found by collection-group query on `subjectId`), writes
+  `tagCounts` / `visibleTags` onto the card with `mergeFields` (a plain merge would never drop a
+  tag), and adds / removes `Tags/{tag}/TaggedExercises|TaggedWorkouts/{id}` entries. **Only public
+  subjects are indexed**; a workout author's own vote document is ignored.
+- `syncTagDirectory` — recounts `Tags/{tag}` (`exerciseCount`, `workoutCount`, `totalCount`,
+  `lastUsedAt`, default `status`). Tag documents are never deleted.
+- Triggers: `discoverExerciseTagVotes`, `discoverWorkoutTagVotes` (votes), `discoverExerciseTags`,
+  `discoverWorkoutTags` (the subject itself — base tags, visibility, name/title).
+- **`onWorkoutTemplateWritten` and the `TaggedWorkoutTemplates` index are removed** —
+  `PlanTagIndex`, `ApplyTagIndexPlan`, `TemplateCard`, `CardsEqual` and their test. `IndexedTags`
+  stays as the base-tag validator; its tests moved to `test/Discover/indexedTags.test.ts`.
+- `rebuildDiscoverCards` gains kinds `exercise-tags` and `workout-tags`.
 
 **App**
-- `TagVoteLoader`, `TagVoteWriter`, `TagDirectoryLoader`, `TaggedSubjectsLoader`.
-- `TagNormalizer` protocol, implemented in the composition root by an adapter over MyDayKit's
-  `WorkoutTag.normalized` — so the rule still has one definition. (`WorkoutTag` is `internal` today
-  and needs to be made `public`.)
-- Tag sheet on exercise and workout detail: ranked visible tags, add a tag, remove your own, prefix
-  suggestions from `Tags`. Not offered on your own workout — author tags are edited in the builder.
-- Tag screen: exercises and workouts for one tag, each ordered by `voteCount`.
-- Home screen Tags section: `Tags` ordered by `totalCount`.
+- MyDayKit: **`WorkoutTag` is now `public`**, answered to DiscoverKit's `TagNormalizer` by the
+  composition root's `WorkoutTagNormalizer` — the rule keeps one definition.
+- Framework: `DiscoverTag`, `DiscoverTagged<Card>` (a card plus `voteCount`, decoded from one flat
+  entry document), `visibleTags` / `tagCounts` on both cards. Protocols: `PopularTagsLoader`,
+  `TagSuggestionLoader`, `TaggedExercisesLoader`, `TaggedWorkoutsLoader`, `MyTagVotesLoader`,
+  `TagVoteWriter`, `TagNormalizer`.
+- `DiscoverTaggingViewModel` — own votes loaded and shown at once, whole set written per change,
+  optimistic with revert, 10-tag limit, field normalised as typed, suggestions debounced 250 ms.
+- `DiscoverTagsSection` on both detail screens (no Tag button on your own workout), `DiscoverTagSheet`
+  (Done only dismisses), `DiscoverTagScreen` (exercises and workouts, each paged by votes), a Tags
+  section on the home screen. `DiscoverFlowLayout`, `DiscoverTagChip` (plain / mine / pending),
+  `DiscoverHeaderButton`.
+- Composition root: `DiscoverTagPath` (the one definition of the directory's paths), one Firestore
+  adapter per protocol, `tagVotePath` on `DiscoverSubject+Firestore`.
+- Tests: `DiscoverTaggingViewModelTests`, `DiscoverTaggedDecodingTests`, `TagVoteWriterSpy`.
+
+**Scripts** — `SeedExerciseTags.py [--write]` derives each exercise's base tags from its
+`muscleGroups`, `movementPatterns` and `category` (normalised: `upper_back` → `upperback`), keeps any
+tags already there, caps at 20. `RebuildDiscoverCards.py` takes `exercise-tags` / `workout-tags`,
+and `all` now runs them after the card kinds.
+
+**Console — rules**
+```
+function isOwnTagVote(userId) {
+  let d = request.resource.data;
+  return request.auth != null && request.auth.uid == userId
+    && d.keys().hasOnly(['tags', 'authorId', 'updatedAt'])
+    && d.authorId == userId
+    && d.tags is list && d.tags.size() >= 1 && d.tags.size() <= 10;
+}
+
+match /Exercises/{exerciseId}/TagVotes/{userId} {
+  allow read: if request.auth != null && request.auth.uid == userId;
+  allow create, update: if isOwnTagVote(userId)
+    && exists(/databases/$(database)/documents/Exercises/$(exerciseId));
+  allow delete: if request.auth != null && request.auth.uid == userId;
+}
+match /WorkoutTemplates/{templateId}/TagVotes/{userId} {
+  allow read: if request.auth != null && request.auth.uid == userId;
+  allow create, update: if isOwnTagVote(userId)
+    && get(/databases/$(database)/documents/WorkoutTemplates/$(templateId)).data.isPublic == true
+    && get(/databases/$(database)/documents/WorkoutTemplates/$(templateId)).data.createdBy != request.auth.uid;
+  allow delete: if request.auth != null && request.auth.uid == userId;
+}
+match /Tags/{tag} {
+  allow read: if request.auth != null;
+  allow write: if false;
+  match /{entries}/{subjectId} {
+    allow read: if request.auth != null;
+    allow write: if false;
+  }
+}
+```
+Once `TaggedWorkoutTemplates` is deleted, its rule can go too.
+
+**Console — indexes**
+
+| Collection | Scope | Fields |
+|---|---|---|
+| `Tags` | collection | `status` ↑, `totalCount` ↓ |
+| `Tags` | collection | `status` ↑, `tag` ↑ |
+| `TaggedExercises` | **collection group** | single-field `subjectId` ↑ (exemption) |
+| `TaggedWorkouts` | **collection group** | single-field `subjectId` ↑ (exemption) |
+
+The two collection-group exemptions are what `syncSubjectTags` finds a subject's entries with —
+**without them every tag sync fails.**
 
 ### Step 6 — Moderation
 

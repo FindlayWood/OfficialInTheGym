@@ -12,7 +12,7 @@ import SwiftUI
 /// does not change what the app looks like.
 ///
 /// Sections, in order: clips (the only visual content, so it leads), workouts,
-/// exercises. Tags join them once the tag directory exists.
+/// exercises, then the most-used tags.
 struct DiscoverHomeScreen: View {
 
     @ObservedObject var viewModel: DiscoverHomeViewModel
@@ -25,6 +25,7 @@ struct DiscoverHomeScreen: View {
                     clipsSection
                     workoutsSection
                     exercisesSection
+                    tagsSection
                 }
                 .padding()
             }
@@ -144,6 +145,36 @@ struct DiscoverHomeScreen: View {
         }
     }
 
+    // MARK: - Tags
+
+    private var tagsSection: some View {
+        SectionContainer(title: "Tags") {
+            switch viewModel.tags {
+            case .loading:
+                DiscoverFlowLayout {
+                    ForEach(0..<6, id: \.self) { _ in
+                        Capsule().fill(Color(.tertiarySystemFill)).frame(width: 70, height: 32)
+                    }
+                }
+                .padding(16)
+            case .loaded(let tags) where tags.isEmpty:
+                DiscoverSectionMessage(message: "No tags yet")
+            case .loaded(let tags):
+                DiscoverFlowLayout {
+                    ForEach(tags) { tag in
+                        DiscoverTagChip(tag: tag.tag, count: tag.totalCount)
+                            .onTapGesture { viewModel.onTagTapped?(tag.tag) }
+                    }
+                }
+                .padding(16)
+            case .failed:
+                DiscoverSectionMessage(message: "Couldn't load tags") {
+                    Task { await viewModel.loadTags() }
+                }
+            }
+        }
+    }
+
     // MARK: - Rows
 
     private func rows<Card: Identifiable, Row: View>(
@@ -177,7 +208,8 @@ struct DiscoverHomeScreen: View {
         viewModel: DiscoverHomeViewModel(
             clipLoader: PreviewDiscoverClipCardLoader(),
             workoutLoader: PreviewDiscoverWorkoutCardLoader(),
-            exerciseLoader: PreviewDiscoverExerciseCardLoader()
+            exerciseLoader: PreviewDiscoverExerciseCardLoader(),
+            tagLoader: PreviewTagLoaders()
         )
     )
 }

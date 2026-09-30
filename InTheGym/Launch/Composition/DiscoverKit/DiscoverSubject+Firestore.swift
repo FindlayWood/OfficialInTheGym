@@ -50,4 +50,10 @@ extension DiscoverSubject {
     func commentPath(_ commentId: String) -> String {
         "\(commentsPath)/\(commentId)"
     }
+
+    /// One user's tags on the subject — the whole set in one document, so a
+    /// user counts once per tag.
+    func tagVotePath(userId: String) -> String {
+        "\(documentPath)/TagVotes/\(userId)"
+    }
 }

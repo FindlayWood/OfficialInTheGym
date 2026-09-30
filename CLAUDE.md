@@ -652,6 +652,10 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   is stored, and `addTag` normalises again so nothing reaches a template unnormalised. Tags are
   matched exactly by Firestore `array-contains`, so "Legs" and "legs" would otherwise be two tags —
   the case-sensitive `Usernames` bug again. **Do not re-inline the rule at a call site.**
+  `WorkoutTag` is **`public`** because DISCOVER applies the same rule to the tags people vote onto
+  exercises and workouts: DiscoverKit declares a `TagNormalizer` and the composition root's
+  `WorkoutTagNormalizer` answers it with `WorkoutTag.normalized` — still one definition.
+  `WorkoutTag.maxLength` (32) must stay in step with the server's `MAX_TAG_LENGTH`.
 - **`WorkoutSessionRecord`**: embedded in `DailyWorkoutEntry`; holds `startedAt`, `endedAt`,
   `rpe?`, `workload?` (duration × RPE), and `exerciseRecords: [WorkoutExerciseRecord]` each with
   `exerciseName: String`, `rpe: Int?`, and `setRecords: [WorkoutSetRecord]` (per-set `isCompleted`

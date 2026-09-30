@@ -27,6 +27,14 @@
 		D1CA00000000000000000206 /* FirestoreLikeWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000106 /* FirestoreLikeWriter.swift */; };
 		D1CA00000000000000000207 /* FirestoreUserProfileLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000107 /* FirestoreUserProfileLoader.swift */; };
 		D1CA00000000000000000208 /* FirebaseFunctionsViewClipRecorder+ClipWatchRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000108 /* FirebaseFunctionsViewClipRecorder+ClipWatchRecorder.swift */; };
+		D1CA00000000000000000220 /* DiscoverTagPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000120 /* DiscoverTagPath.swift */; };
+		D1CA00000000000000000221 /* FirestorePopularTagsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000121 /* FirestorePopularTagsLoader.swift */; };
+		D1CA00000000000000000222 /* FirestoreTagSuggestionLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000122 /* FirestoreTagSuggestionLoader.swift */; };
+		D1CA00000000000000000223 /* FirestoreTaggedExercisesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000123 /* FirestoreTaggedExercisesLoader.swift */; };
+		D1CA00000000000000000224 /* FirestoreTaggedWorkoutsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000124 /* FirestoreTaggedWorkoutsLoader.swift */; };
+		D1CA00000000000000000225 /* FirestoreMyTagVotesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000125 /* FirestoreMyTagVotesLoader.swift */; };
+		D1CA00000000000000000226 /* FirestoreTagVoteWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000126 /* FirestoreTagVoteWriter.swift */; };
+		D1CA00000000000000000227 /* WorkoutTagNormalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000127 /* WorkoutTagNormalizer.swift */; };
 		D1CA00000000000000000002 /* DiscoverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000001 /* DiscoverKit.framework */; };
 		D1CA00000000000000000003 /* DiscoverKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000001 /* DiscoverKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ACE000000000000000000014 /* VerifyEmailResendState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000000A /* VerifyEmailResendState.swift */; };
@@ -1006,6 +1014,14 @@
 		D1CA00000000000000000106 /* FirestoreLikeWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreLikeWriter.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000107 /* FirestoreUserProfileLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreUserProfileLoader.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000108 /* FirebaseFunctionsViewClipRecorder+ClipWatchRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirebaseFunctionsViewClipRecorder+ClipWatchRecorder.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000120 /* DiscoverTagPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiscoverTagPath.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000121 /* FirestorePopularTagsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestorePopularTagsLoader.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000122 /* FirestoreTagSuggestionLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreTagSuggestionLoader.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000123 /* FirestoreTaggedExercisesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreTaggedExercisesLoader.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000124 /* FirestoreTaggedWorkoutsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreTaggedWorkoutsLoader.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000125 /* FirestoreMyTagVotesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreMyTagVotesLoader.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000126 /* FirestoreTagVoteWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreTagVoteWriter.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000127 /* WorkoutTagNormalizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutTagNormalizer.swift"; sourceTree = "<group>"; };
 		ACE00000000000000000000A /* VerifyEmailResendState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailResendState.swift; sourceTree = "<group>"; };
 		ACE00000000000000000000B /* VerifyEmailErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailErrorBanner.swift; sourceTree = "<group>"; };
 		ACB00000000000000000000A /* SubscriptionProductRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionProductRow.swift; sourceTree = "<group>"; };
@@ -4927,6 +4943,14 @@
 				D1CA00000000000000000106 /* FirestoreLikeWriter.swift */,
 				D1CA00000000000000000107 /* FirestoreUserProfileLoader.swift */,
 				D1CA00000000000000000108 /* FirebaseFunctionsViewClipRecorder+ClipWatchRecorder.swift */,
+				D1CA00000000000000000120 /* DiscoverTagPath.swift */,
+				D1CA00000000000000000121 /* FirestorePopularTagsLoader.swift */,
+				D1CA00000000000000000122 /* FirestoreTagSuggestionLoader.swift */,
+				D1CA00000000000000000123 /* FirestoreTaggedExercisesLoader.swift */,
+				D1CA00000000000000000124 /* FirestoreTaggedWorkoutsLoader.swift */,
+				D1CA00000000000000000125 /* FirestoreMyTagVotesLoader.swift */,
+				D1CA00000000000000000126 /* FirestoreTagVoteWriter.swift */,
+				D1CA00000000000000000127 /* WorkoutTagNormalizer.swift */,
 			);
 			path = DiscoverKit;
 			sourceTree = "<group>";
@@ -5164,6 +5188,14 @@
 				D1CA00000000000000000206 /* FirestoreLikeWriter.swift in Sources */,
 				D1CA00000000000000000207 /* FirestoreUserProfileLoader.swift in Sources */,
 				D1CA00000000000000000208 /* FirebaseFunctionsViewClipRecorder+ClipWatchRecorder.swift in Sources */,
+				D1CA00000000000000000220 /* DiscoverTagPath.swift in Sources */,
+				D1CA00000000000000000221 /* FirestorePopularTagsLoader.swift in Sources */,
+				D1CA00000000000000000222 /* FirestoreTagSuggestionLoader.swift in Sources */,
+				D1CA00000000000000000223 /* FirestoreTaggedExercisesLoader.swift in Sources */,
+				D1CA00000000000000000224 /* FirestoreTaggedWorkoutsLoader.swift in Sources */,
+				D1CA00000000000000000225 /* FirestoreMyTagVotesLoader.swift in Sources */,
+				D1CA00000000000000000226 /* FirestoreTagVoteWriter.swift in Sources */,
+				D1CA00000000000000000227 /* WorkoutTagNormalizer.swift in Sources */,
 				74A602A72850C87200AFA236 /* WorkoutDiscoveryViewModel.swift in Sources */,
 				7444D0C026D3C9BE0009C7A6 /* UploadingWorkoutViewModel.swift in Sources */,
 				7479812F27DB7EBA00CF3F9B /* RequestsView.swift in Sources */,
