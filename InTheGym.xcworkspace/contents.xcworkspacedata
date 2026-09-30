@@ -26,6 +26,9 @@
       location = "group:LoginKit/LoginKit.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:DiscoverKit/DiscoverKit.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "container:InTheGym.xcodeproj">
    </FileRef>
 </Workspace>

@@ -1,0 +1,15 @@
+//
+//  DiscoverKitRoutes.swift
+//  DiscoverKit
+//
+//  Created by Findlay Wood on 28/09/2026.
+//
+
+import Foundation
+
+enum DiscoverKitRoutes {
+    case home
+    case allClips
+    case allWorkouts
+    case allExercises
+}

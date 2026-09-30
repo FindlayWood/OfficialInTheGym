@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		10D000000000000000000002 /* LoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10D000000000000000000001 /* LoginKit.framework */; };
 		10D000000000000000000003 /* LoginKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 10D000000000000000000001 /* LoginKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D1CA00000000000000000020 /* DiscoverKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000010 /* DiscoverKitComposition.swift */; };
+		D1CA00000000000000000021 /* DiscoverCardQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000011 /* DiscoverCardQuery.swift */; };
+		D1CA00000000000000000022 /* FirestoreDiscoverClipCardLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000012 /* FirestoreDiscoverClipCardLoader.swift */; };
+		D1CA00000000000000000023 /* FirestoreDiscoverWorkoutCardLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000013 /* FirestoreDiscoverWorkoutCardLoader.swift */; };
+		D1CA00000000000000000024 /* FirestoreDiscoverExerciseCardLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000014 /* FirestoreDiscoverExerciseCardLoader.swift */; };
+		D1CA00000000000000000002 /* DiscoverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000001 /* DiscoverKit.framework */; };
+		D1CA00000000000000000003 /* DiscoverKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000001 /* DiscoverKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ACE000000000000000000014 /* VerifyEmailResendState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000000A /* VerifyEmailResendState.swift */; };
 		ACE000000000000000000015 /* VerifyEmailErrorBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000000B /* VerifyEmailErrorBanner.swift */; };
 		ACB000000000000000000014 /* SubscriptionProductRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB00000000000000000000A /* SubscriptionProductRow.swift */; };
@@ -956,6 +963,7 @@
 				F0A11D282F6C637100CE1E9A /* StatsKit.framework in Embed Frameworks */,
 				ACA000000000000000000003 /* AccountCreationKit.framework in Embed Frameworks */,
 				10D000000000000000000003 /* LoginKit.framework in Embed Frameworks */,
+				D1CA00000000000000000003 /* DiscoverKit.framework in Embed Frameworks */,
 				746DA0D52C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Embed Frameworks */,
 				746DA0D32C090AD10094EA3B /* ITGWorkoutKit.framework in Embed Frameworks */,
 			);
@@ -966,6 +974,12 @@
 
 /* Begin PBXFileReference section */
 		10D000000000000000000001 /* LoginKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LoginKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1CA00000000000000000001 /* DiscoverKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DiscoverKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1CA00000000000000000010 /* DiscoverKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverKitComposition.swift; sourceTree = "<group>"; };
+		D1CA00000000000000000011 /* DiscoverCardQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverCardQuery.swift; sourceTree = "<group>"; };
+		D1CA00000000000000000012 /* FirestoreDiscoverClipCardLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDiscoverClipCardLoader.swift; sourceTree = "<group>"; };
+		D1CA00000000000000000013 /* FirestoreDiscoverWorkoutCardLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDiscoverWorkoutCardLoader.swift; sourceTree = "<group>"; };
+		D1CA00000000000000000014 /* FirestoreDiscoverExerciseCardLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDiscoverExerciseCardLoader.swift; sourceTree = "<group>"; };
 		ACE00000000000000000000A /* VerifyEmailResendState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailResendState.swift; sourceTree = "<group>"; };
 		ACE00000000000000000000B /* VerifyEmailErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailErrorBanner.swift; sourceTree = "<group>"; };
 		ACB00000000000000000000A /* SubscriptionProductRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionProductRow.swift; sourceTree = "<group>"; };
@@ -1905,6 +1919,7 @@
 				F0A11D272F6C637100CE1E9A /* StatsKit.framework in Frameworks */,
 				ACA000000000000000000002 /* AccountCreationKit.framework in Frameworks */,
 				10D000000000000000000002 /* LoginKit.framework in Frameworks */,
+				D1CA00000000000000000002 /* DiscoverKit.framework in Frameworks */,
 				7433044B289E962B00F2569A /* FirebaseFirestoreSwift in Frameworks */,
 				9F72F9422A114BE200BF040C /* ClubKit in Frameworks */,
 			);
@@ -4812,6 +4827,7 @@
 			isa = PBXGroup;
 			children = (
 				F0A11D292F6C642A00CE1E9A /* StatsKit */,
+				D1CA00000000000000000004 /* DiscoverKit */,
 				ACA000000000000000000004 /* AccountCreation */,
 				F0D3443F2F25616A00AB6121 /* MyDay */,
 				9FC11F5E29DDC9B80054D79A /* LoginComposition.swift */,
@@ -4853,6 +4869,7 @@
 				F0A11D262F6C637100CE1E9A /* StatsKit.framework */,
 				ACA000000000000000000001 /* AccountCreationKit.framework */,
 				10D000000000000000000001 /* LoginKit.framework */,
+				D1CA00000000000000000001 /* DiscoverKit.framework */,
 				F0F608352E42A5A70015F260 /* MyDayKit.framework */,
 				746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */,
 				746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */,
@@ -4861,6 +4878,18 @@
 				746061BC252547E9005B1480 /* AppTrackingTransparency.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D1CA00000000000000000004 /* DiscoverKit */ = {
+			isa = PBXGroup;
+			children = (
+				D1CA00000000000000000010 /* DiscoverKitComposition.swift */,
+				D1CA00000000000000000011 /* DiscoverCardQuery.swift */,
+				D1CA00000000000000000012 /* FirestoreDiscoverClipCardLoader.swift */,
+				D1CA00000000000000000013 /* FirestoreDiscoverWorkoutCardLoader.swift */,
+				D1CA00000000000000000014 /* FirestoreDiscoverExerciseCardLoader.swift */,
+			);
+			path = DiscoverKit;
 			sourceTree = "<group>";
 		};
 		F0A11D292F6C642A00CE1E9A /* StatsKit */ = {
@@ -5078,6 +5107,11 @@
 				74E08A7B2841542D009D0DCB /* MyWorkoutStatsViewController.swift in Sources */,
 				9F4DFB4529BCE83C00363AE8 /* TaggedUsersView.swift in Sources */,
 				F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */,
+				D1CA00000000000000000020 /* DiscoverKitComposition.swift in Sources */,
+				D1CA00000000000000000021 /* DiscoverCardQuery.swift in Sources */,
+				D1CA00000000000000000022 /* FirestoreDiscoverClipCardLoader.swift in Sources */,
+				D1CA00000000000000000023 /* FirestoreDiscoverWorkoutCardLoader.swift in Sources */,
+				D1CA00000000000000000024 /* FirestoreDiscoverExerciseCardLoader.swift in Sources */,
 				74A602A72850C87200AFA236 /* WorkoutDiscoveryViewModel.swift in Sources */,
 				7444D0C026D3C9BE0009C7A6 /* UploadingWorkoutViewModel.swift in Sources */,
 				7479812F27DB7EBA00CF3F9B /* RequestsView.swift in Sources */,

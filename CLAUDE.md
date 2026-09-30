@@ -10,6 +10,7 @@ Lean, minimal UI aesthetic throughout.
 - `StatsKit` — framework
 - `AccountCreationKit` — framework
 - `LoginKit` — framework
+- `DiscoverKit` — framework (in progress — see `DISCOVER_PLAN.md`)
 
 ### Inactive — do not modify
 - `ITGWorkoutKit` — ignore, do not touch
@@ -28,13 +29,15 @@ framework projects and the SPM packages.
 | `LoginKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
 | `StatsKit.xcodeproj` | 36 | **check target membership** |
 | `MyDayKit.xcodeproj` | 149 | **check target membership** |
+| `DiscoverKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
 
-All four use `PBXFileSystemSynchronizedRootGroup`, but only AccountCreationKit and LoginKit are
-driven *entirely* by it. StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
+All five use `PBXFileSystemSynchronizedRootGroup`, but only AccountCreationKit, LoginKit and
+DiscoverKit are driven *entirely* by it. DiscoverKit's project was generated from LoginKit's, with
+its object ids prefixed `D1C`. StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
 `Screens/`, `Models/` etc. individually; MyDayKit lists most of its tree.
 
-`SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES` is set on **StatsKit, AccountCreationKit and
-LoginKit** — the three built from the StatsKit template. **`MyDayKit` does not set it.** A file that
+`SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES` is set on **StatsKit, AccountCreationKit,
+LoginKit and DiscoverKit** — the four built from the StatsKit template. **`MyDayKit` does not set it.** A file that
 compiles inside MyDayKit can therefore fail on a missing `import` the moment it moves into one of the
 other three.
 
@@ -1391,7 +1394,9 @@ in this codebase.**
 | `FileManagerWorkoutTemplateUploader` date strategy | `FileManagerWorkoutTemplateFetcher` date strategy | Library reads are local-first |
 | `StatsDay.calendar` | `DateFormatter.yyyyMMdd` | STATS Tab |
 | `LoginFieldCard` / `LoginPrimaryButton` / `LoginErrorBanner` | their AccountCreationKit twins | Auth, Shared UI |
-| the four `Color+Extension.swift` | each other | Brand Colours, Shared UI |
+| the five `Color+Extension.swift` | each other | Brand Colours, Shared UI |
+| DiscoverKit's `SectionContainer` | StatsKit's `SectionContainer` | DISCOVER_PLAN.md step 2 |
+| `WorkoutTag.maxLength` | `MAX_TAG_LENGTH` in the Cloud Functions' `Tags/TagRejection.ts` | DISCOVER_PLAN.md step 1 |
 
 ## Analysis artefacts — `.results/`, gitignored
 A generated structural analysis can be produced into `.results/`: `1-techstack.md`,

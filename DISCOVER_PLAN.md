@@ -107,9 +107,34 @@ Users/{uid}/BlockedUsers/{blockedUid}               client — createdAt
 
 ---
 
+## Rollout checklist
+
+The manual steps that take built work live — nothing here is done by committing. **In order**;
+tick each one as it is done. Rules and indexes are entered in the Firebase console (they are not
+deployed from either repository); the exact text is under each step below.
+
+**Step 1 — Groundwork**
+- [ ] Console rules: allow clients to create and read `Clips/{clipId}` (the app no longer writes
+      `TestClips`; uploads are denied until this exists)
+- [ ] `python MigrateTestClips.py` — dry run, check the list
+- [ ] `python MigrateTestClips.py --write` — copy `TestClips` into `Clips`
+- [ ] `python SetAdminClaim.py findlaywood1@gmail.com` — grant the `admin` claim
+- [ ] Deploy functions from the `discover` branch — shared tag validation starts dropping blocked
+      tags from the workout tag index
+- [ ] Once the copy is checked, delete `TestClips` by hand
+
+**Step 2 — Cards**
+- [ ] Console rules: `DiscoverExercises`, `DiscoverWorkouts`, `DiscoverClips` (read-only) and the
+      full `Clips` rule
+- [ ] Console indexes: the three composite indexes for the card queries
+- [ ] Deploy functions — `discoverExerciseCard`, `discoverWorkoutCard`, `discoverClipCard`,
+      `rebuildDiscoverCards`, and `recordClipWatch` writing counts to the card
+- [ ] `python RebuildDiscoverCards.py findlaywood1@gmail.com all` — backfill every card
+- [ ] Spot-check a few documents in each `Discover*` collection
+
 ## Steps
 
-### Step 1 — Groundwork ✅
+### Step 1 — Groundwork — built, not rolled out
 
 **Rules and indexes are not deployed from either repository.** `firestore.rules` in
 `InTheGym-CloudFunctions` is not what is live, and its `firebase.json` has no `firestore` section,
@@ -140,34 +165,80 @@ Done:
 - **Scripts** — `SetAdminClaim.py` grants / revokes the `admin` claim; `MigrateTestClips.py` copies
   `TestClips` into `Clips` with a merge (dry run by default).
 
-### Step 2 — Cards and the DiscoverKit skeleton
+### Step 2 — Cards and the DiscoverKit skeleton — built, not rolled out
 
-**Cloud**
-- `onExerciseWritten` → `DiscoverExercises` projection.
-- `onWorkoutTemplateWritten` (extend) → `DiscoverWorkouts` projection, alongside its tag work.
-- `onClipWritten` → `DiscoverClips` projection.
-- **Move `recordClipWatch`'s counts from `Clips/{clipID}` to `DiscoverClips/{clipID}`.** It
-  merges `viewCount` etc. onto the clip document itself — the exact thing *Who writes what*
-  forbids. It is harmless only while the app writes a clip once, at upload; the first client edit
-  of a clip (e.g. making it private) would wipe them with a `setData`. Looks up `exerciseName` from
-  `Exercises/{exerciseID}` (the clip does not carry one) and parses `duration` out of
-  `videoMetaData`, which stores it as a string.
-- Deleting a subject: `recursiveDelete` its subcollections (ratings, comments, likes, votes) and
-  delete its card and tag entries.
+**Cloud** (`src/Discover/`)
+- `syncCard` is the one way a card's projection is written. It **projects the subject's current
+  state, read in a transaction** — not the event's snapshot — so late or repeated events converge on
+  the same card; merges projection fields only; and supplies `status: "visible"` only when a card
+  has no status, never overwriting moderation's.
+- `discoverExerciseCard`, `discoverWorkoutCard`, `discoverClipCard` — one trigger per card, separate
+  from `onWorkoutTemplateWritten` (one trigger per aggregate, as the RawLogs fan-out does).
+  The clip card resolves `exerciseName` from `Exercises/{exerciseID}` and parses `durationSeconds`
+  out of the string in `videoMetaData`.
+- **Deletes cascade for templates and clips, not exercises.** A deleted template or clip takes its
+  subcollections (ratings, comments, likes, votes, `ViewSessions`) with it. A deleted exercise only
+  loses its card: exercises are a catalogue edited by scripts, and a delete-and-recreate must not
+  wipe everything people said about one.
+- `recordClipWatch` writes its clip-level counts to `DiscoverClips/{clipID}`; `ViewSessions` stay
+  under the clip. Counts already on `Clips` documents are not carried over.
+- `rebuildDiscoverCards` — admin-only callable that runs `syncCard` over the union of subject and
+  card ids for one kind. Backfills everything that predates the triggers. Never cascades a delete.
+- Tests in `test/Discover/`; `recordClipWatch`'s tests now read the card.
 
-**App — framework**
-- Scaffold `DiscoverKit.xcodeproj` from the StatsKit template: `PBXFileSystemSynchronizedRootGroup`,
-  `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES`, a test target. Its own
-  `UI/Color+Extension.swift` and `addSwiftUIView`, as every framework carries.
-- `DiscoverSubject` (`.exercise(id)` / `.workout(id)` / `.clip(id)`) — the one definition of every
-  engagement path. **No call site builds a path.**
-- Card models: `DiscoverExerciseCard`, `DiscoverWorkoutCard`, `DiscoverClipCard`. Every field that
-  may be absent on an existing document is optional.
-- `DiscoverKitRouter` with `DiscoverKitRoutes`; home screen (Clips / Workouts / Exercises / Tags
-  sections) and "see all" lists.
+**App**
+- `DiscoverKit.xcodeproj` — generated from LoginKit's (ids prefixed `D1C`), synchronised root groups,
+  `MEMBER_IMPORT_VISIBILITY`, shared scheme, in the workspace; linked and embedded by the app.
+- Framework: card models (every count optional — a new card has none), three card loader protocols
+  paging by **the last card as cursor** (no Firestore type crosses the boundary), preview loaders,
+  `DiscoverPager` (one pager for every "see all"), `DiscoverHomeScreen` (clips / workouts /
+  exercises, each loading and failing on its own), `DiscoverCardListScreen`, `DiscoverClipGridScreen`,
+  `DiscoverKitRouter`. STATS' frame: white title bar, `darkColor` page, `SectionContainer` cards.
+- Composition root (`Launch/Composition/DiscoverKit/`): `DiscoverKitComposition`, one Firestore loader
+  per card, `DiscoverCardQuery` (per-document decode, document-id tiebreak on every ordering).
+- `DiscoverKitTests`: pager and card display. **Not yet in `CI_iOS_TestPlan.xctestplan`** (step 10).
+- Taps lead nowhere yet — detail routes arrive with steps 3, 4 and 7. The Tags section arrives with
+  step 5. **Not yet on the tab bar** — that is step 9.
+- `DiscoverSubject` moved to step 3, where it is first needed, and **its Firestore paths live in the
+  composition root**, not the framework — the framework holds no infrastructure.
 
-**App — composition root** (`InTheGym/Launch/Composition/DiscoverKit/`, one adapter per file)
-- `DiscoverKitComposition` and the card loaders.
+**Scripts** — `RebuildDiscoverCards.py <admin> exercises|workouts|clips|all` mints a custom token for
+an admin, exchanges it for an ID token and calls `rebuildDiscoverCards`.
+
+**Console — rules**
+```
+match /DiscoverExercises/{exerciseId} {
+  allow read: if request.auth != null;
+  allow write: if false;
+}
+match /DiscoverWorkouts/{templateId} {
+  allow read: if request.auth != null
+    && (resource.data.isPublic == true || resource.data.createdBy == request.auth.uid);
+  allow write: if false;
+}
+match /DiscoverClips/{clipId} {
+  allow read: if request.auth != null
+    && (resource.data.isPublic == true || resource.data.createdBy == request.auth.uid);
+  allow write: if false;
+}
+match /Clips/{clipId} {
+  allow read: if request.auth != null
+    && (resource.data.isPrivate == false || resource.data.userID == request.auth.uid);
+  allow create: if request.auth != null && request.resource.data.userID == request.auth.uid;
+  allow update, delete: if request.auth != null && resource.data.userID == request.auth.uid;
+}
+```
+Queries on another user's cards must filter `isPublic == true`, or the rules reject them outright.
+
+**Console — composite indexes** (collection scope)
+
+| Collection | Fields |
+|---|---|
+| `DiscoverWorkouts` | `isPublic` ↑, `status` ↑, `createdAt` ↓, `__name__` ↓ |
+| `DiscoverClips` | `isPublic` ↑, `status` ↑, `uploadedAt` ↓, `__name__` ↓ |
+| `DiscoverExercises` | `status` ↑, `name` ↑, `__name__` ↑ |
+
+**Rollout order**: rules and indexes → deploy functions → `RebuildDiscoverCards.py <admin> all`.
 
 ### Step 3 — Ratings
 
