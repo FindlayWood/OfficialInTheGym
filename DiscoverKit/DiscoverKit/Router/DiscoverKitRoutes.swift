@@ -14,4 +14,6 @@ enum DiscoverKitRoutes {
     case allExercises
     case exerciseDetail(DiscoverExerciseCard)
     case workoutDetail(DiscoverWorkoutCard)
+    case comments(DiscoverSubject)
+    case clipPlayer(DiscoverClipCard)
 }

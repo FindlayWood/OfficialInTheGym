@@ -33,6 +33,25 @@ class DiscoverKitComposition {
 
         let ratingWriter: RatingWriter = FirestoreRatingWriter(userId: userId)
 
+        // MARK: - Comments and likes
+
+        let commentLoader: CommentLoader = FirestoreCommentLoader()
+
+        let replyLoader: ReplyLoader = FirestoreReplyLoader()
+
+        let commentWriter: CommentWriter = FirestoreCommentWriter(userId: userId)
+
+        let commentRemover: CommentRemover = FirestoreCommentRemover()
+
+        let likeLoader: LikeLoader = FirestoreLikeLoader(userId: userId)
+
+        let likeWriter: LikeWriter = FirestoreLikeWriter(userId: userId)
+
+        // One cache for the session: comment threads are mostly the same few people.
+        let profileLoader: UserProfileLoader = CachingUserProfileLoader(decoratee: FirestoreUserProfileLoader())
+
+        let clipWatchRecorder: ClipWatchRecorder = FirebaseFunctionsViewClipRecorder()
+
         // MARK: - Router
 
         let router = DiscoverKitRouter(
@@ -43,6 +62,14 @@ class DiscoverKitComposition {
             ratingSummaryLoader: ratingSummaryLoader,
             myRatingLoader: myRatingLoader,
             ratingWriter: ratingWriter,
+            commentLoader: commentLoader,
+            replyLoader: replyLoader,
+            commentWriter: commentWriter,
+            commentRemover: commentRemover,
+            likeLoader: likeLoader,
+            likeWriter: likeWriter,
+            profileLoader: profileLoader,
+            clipWatchRecorder: clipWatchRecorder,
             currentUserId: userId
         )
 

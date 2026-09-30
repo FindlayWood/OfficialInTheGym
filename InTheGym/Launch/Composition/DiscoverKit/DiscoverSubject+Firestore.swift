@@ -41,4 +41,13 @@ extension DiscoverSubject {
     func ratingPath(userId: String) -> String {
         "\(documentPath)/Ratings/\(userId)"
     }
+
+    /// Every comment and reply on the subject, in one collection.
+    var commentsPath: String {
+        "\(documentPath)/Comments"
+    }
+
+    func commentPath(_ commentId: String) -> String {
+        "\(commentsPath)/\(commentId)"
+    }
 }

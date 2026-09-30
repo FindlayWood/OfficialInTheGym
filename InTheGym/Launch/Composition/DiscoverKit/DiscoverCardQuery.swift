@@ -35,6 +35,9 @@ enum DiscoverCardQuery {
     /// A cursor value for a date field that may be absent: Firestore orders a
     /// `null` field, so `NSNull` resumes after it where a missing value could not.
     static func cursorValue(_ date: Date?) -> Any {
-        date.map(Timestamp.init(date:)) ?? NSNull()
+        if let date {
+            return Timestamp(date: date)
+        }
+        return NSNull()
     }
 }

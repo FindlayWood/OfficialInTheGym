@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-/// A workout's DISCOVER page. For now its header and rating; the exercises,
-/// tags, comments and "Add to Today" join it in later steps of the plan.
+/// A workout's DISCOVER page: its header, rating and the way into its
+/// comments. The exercises, tags and "Add to Today" join it in later steps.
 struct DiscoverWorkoutDetailScreen: View {
 
     let card: DiscoverWorkoutCard
     @ObservedObject var ratingViewModel: DiscoverRatingViewModel
+    var onOpenComments: () -> Void = {}
 
     var body: some View {
         ScrollView {
@@ -34,6 +35,8 @@ struct DiscoverWorkoutDetailScreen: View {
                 }
 
                 DiscoverRatingSection(viewModel: ratingViewModel)
+
+                DiscoverCommentsEntrySection(count: card.commentCount ?? 0, onOpen: onOpenComments)
             }
             .padding()
         }

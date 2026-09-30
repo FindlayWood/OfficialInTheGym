@@ -12,13 +12,12 @@ import UIKit
 /// dependency through `public init`, `start()` sets the root, and
 /// `viewController(for:)` is the one place a view model meets its screen.
 ///
-/// Exercises and workouts open their detail screens. A clip tap leads nowhere
-/// yet — the clip player arrives with comments and likes (plan step 4), and
-/// its route is added then rather than stubbed now.
+/// Exercises and workouts open their detail screens, clips open the player,
+/// and all three lead to their comments.
 ///
 /// `currentUserId` is the signed-in user, read once in the composition root.
-/// The router needs it for one decision only: a user cannot rate their own
-/// workout.
+/// The router needs it to decide two things: a user cannot rate their own
+/// workout, and can delete only their own comments.
 public final class DiscoverKitRouter {
 
     // MARK: - Navigation
@@ -33,6 +32,14 @@ public final class DiscoverKitRouter {
     let ratingSummaryLoader: RatingSummaryLoader
     let myRatingLoader: MyRatingLoader
     let ratingWriter: RatingWriter
+    let commentLoader: CommentLoader
+    let replyLoader: ReplyLoader
+    let commentWriter: CommentWriter
+    let commentRemover: CommentRemover
+    let likeLoader: LikeLoader
+    let likeWriter: LikeWriter
+    let profileLoader: UserProfileLoader
+    let clipWatchRecorder: ClipWatchRecorder
     let currentUserId: String
 
     // MARK: - Properties
@@ -49,6 +56,14 @@ public final class DiscoverKitRouter {
         ratingSummaryLoader: RatingSummaryLoader,
         myRatingLoader: MyRatingLoader,
         ratingWriter: RatingWriter,
+        commentLoader: CommentLoader,
+        replyLoader: ReplyLoader,
+        commentWriter: CommentWriter,
+        commentRemover: CommentRemover,
+        likeLoader: LikeLoader,
+        likeWriter: LikeWriter,
+        profileLoader: UserProfileLoader,
+        clipWatchRecorder: ClipWatchRecorder,
         currentUserId: String
     ) {
         self.navigationController = navigationController
@@ -58,6 +73,14 @@ public final class DiscoverKitRouter {
         self.ratingSummaryLoader = ratingSummaryLoader
         self.myRatingLoader = myRatingLoader
         self.ratingWriter = ratingWriter
+        self.commentLoader = commentLoader
+        self.replyLoader = replyLoader
+        self.commentWriter = commentWriter
+        self.commentRemover = commentRemover
+        self.likeLoader = likeLoader
+        self.likeWriter = likeWriter
+        self.profileLoader = profileLoader
+        self.clipWatchRecorder = clipWatchRecorder
         self.currentUserId = currentUserId
     }
 
@@ -87,6 +110,7 @@ extension DiscoverKitRouter {
             viewModel.onSeeAllExercises = { [weak self] in self?.navigate(to: .allExercises) }
             viewModel.onWorkoutTapped = { [weak self] in self?.navigate(to: .workoutDetail($0)) }
             viewModel.onExerciseTapped = { [weak self] in self?.navigate(to: .exerciseDetail($0)) }
+            viewModel.onClipTapped = { [weak self] in self?.navigate(to: .clipPlayer($0)) }
             let vc = DiscoverKitBoundaryViewController()
             vc.display = DiscoverHomeScreen(viewModel: viewModel)
             vc.router = self
@@ -97,7 +121,7 @@ extension DiscoverKitRouter {
                 try await clipLoader.load(limit: limit, after: last)
             }
             let vc = UIHostingController(
-                rootView: DiscoverClipGridScreen(pager: pager, onTap: { _ in })
+                rootView: DiscoverClipGridScreen(pager: pager, onTap: { [weak self] in self?.navigate(to: .clipPlayer($0)) })
             )
             vc.hidesBottomBarWhenPushed = true
             return vc
@@ -141,7 +165,11 @@ extension DiscoverKitRouter {
                 canRate: true
             )
             let vc = UIHostingController(
-                rootView: DiscoverExerciseDetailScreen(card: card, ratingViewModel: ratingViewModel)
+                rootView: DiscoverExerciseDetailScreen(
+                    card: card,
+                    ratingViewModel: ratingViewModel,
+                    onOpenComments: { [weak self] in self?.navigate(to: .comments(.exercise(id: card.exerciseId))) }
+                )
             )
             vc.hidesBottomBarWhenPushed = true
             return vc
@@ -153,7 +181,43 @@ extension DiscoverKitRouter {
                 canRate: card.createdBy != currentUserId
             )
             let vc = UIHostingController(
-                rootView: DiscoverWorkoutDetailScreen(card: card, ratingViewModel: ratingViewModel)
+                rootView: DiscoverWorkoutDetailScreen(
+                    card: card,
+                    ratingViewModel: ratingViewModel,
+                    onOpenComments: { [weak self] in self?.navigate(to: .comments(.workout(id: card.templateId))) }
+                )
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .comments(let subject):
+            let viewModel = DiscoverCommentsViewModel(
+                subject: subject,
+                currentUserId: currentUserId,
+                commentLoader: commentLoader,
+                replyLoader: replyLoader,
+                commentWriter: commentWriter,
+                commentRemover: commentRemover,
+                likeLoader: likeLoader,
+                likeWriter: likeWriter,
+                profileLoader: profileLoader
+            )
+            let vc = UIHostingController(rootView: DiscoverCommentsScreen(viewModel: viewModel))
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .clipPlayer(let card):
+            let viewModel = DiscoverClipPlayerViewModel(
+                card: card,
+                likeLoader: likeLoader,
+                likeWriter: likeWriter,
+                recorder: clipWatchRecorder
+            )
+            let vc = UIHostingController(
+                rootView: DiscoverClipPlayerScreen(
+                    viewModel: viewModel,
+                    onComments: { [weak self] in self?.navigate(to: .comments(.clip(id: card.clipId))) }
+                )
             )
             vc.hidesBottomBarWhenPushed = true
             return vc

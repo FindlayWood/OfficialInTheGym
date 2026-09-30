@@ -138,6 +138,16 @@ deployed from either repository); the exact text is under each step below.
 - [ ] Rate an exercise and a public workout in the app; check `ratingCount` / `ratingSum` / `score`
       land on their cards, and that rating again changes the sum without changing the count
 
+**Step 4 — Comments and likes**
+- [ ] Console rules: comments and comment likes under `Exercises`, `WorkoutTemplates` and `Clips`,
+      and `Clips/{id}/Likes`
+- [ ] Console indexes: the two `Comments` composite indexes
+- [ ] Deploy functions — the three `…Comments`, the three `…CommentLikes`, and `discoverClipLikes`
+- [ ] Post, reply, like and delete a comment in the app; check `commentCount`, `replyCount` and
+      `likeCount` settle, and that a deleted comment with replies reads "Comment removed"
+- [ ] Play a clip, like it, leave; check `likeCount` and `viewCount` on its card
+- [ ] **Do not release comments to users until step 6 (report and block) is rolled out**
+
 ## Steps
 
 ### Step 1 — Groundwork — built, not rolled out
@@ -303,22 +313,124 @@ match /WorkoutTemplates/{templateId}/Ratings/{userId} {
 ```
 No rating a private workout, and no rating your own. A rating can be changed, never withdrawn.
 
-### Step 4 — Comments and likes
+### Step 4 — Comments and likes — built, not rolled out
 
-**Cloud**
-- Comment triggers maintain the card's `commentCount` (visible comments only — a status change
-  adjusts it) and the parent comment's `replyCount`.
-- Like triggers maintain `likeCount` on comments and on `DiscoverClips`.
+**Cloud** (`src/Discover/`)
+- `syncCount` — recount a query into one field, in a transaction, **only if its owner exists** and
+  **only if the number changed**. The second guard matters: `likeCount` written onto a comment fires
+  that comment's trigger, and skipping no-op writes is what lets the chain settle.
+- `discover{Exercise,Workout,Clip}Comments` → the card's `commentCount` (visible comments, replies
+  included) and, for a reply, its parent's `replyCount`. `parentId` is read from either side of the
+  event — on a delete only `before` has it.
+- `discover{Exercise,Workout,Clip}CommentLikes` → the comment's `likeCount`.
+- `discoverClipLikes` → `DiscoverClips/{id}.likeCount` — the card, never the clip.
+- Tests in `test/Discover/`.
 
 **App**
-- `CommentLoader`, `CommentWriter`, `CommentRemover`, `LikeWriter`, `LikeLoader`.
-- `UserProfileLoader` over Firestore `Users/{uid}`, behind a decorator that collects the unique ids on
-  screen, fetches in batches of 30 (`in` query) and caches for the session. A missing profile renders
-  as "Deleted user".
-- Comments screen: top-level list, one level of replies, "Comment removed" placeholder rows, like
-  button, delete own comment.
-- Clip like button, and the Discover clip player — DiscoverKit's own screen, not MyDay's
-  `ClipPlaybackScreen`.
+- Framework: `DiscoverComment` (status `visible` / `removed` / `hidden`; counts optional),
+  `DiscoverCommentThread`, `DiscoverUserProfile`, `DiscoverLikeTarget` (`@frozen`, as is
+  `DiscoverSubject` — the framework builds with library evolution, and both are closed sets).
+  Protocols: `CommentLoader`, `ReplyLoader`, `CommentWriter`, `CommentRemover`, `LikeLoader`,
+  `LikeWriter`, `UserProfileLoader`, `ClipWatchRecorder`. `CachingUserProfileLoader` remembers hits
+  **and misses** for the session.
+- `DiscoverCommentsViewModel` — paging newest first, replies loaded on first open (oldest first),
+  post / like / remove all shown before the server confirms and put back on failure; a failed post
+  keeps the draft. `attemptedProfileIds` separates "name loading" from "Deleted user".
+- `DiscoverCommentsScreen` + `DiscoverCommentRow` + `DiscoverCommentComposer`. A removed comment stays
+  as "Comment removed" only while replies hang off it. 500-character limit, matching the rules.
+- `DiscoverCommentsEntrySection` on both detail screens.
+- `DiscoverClipPlayerScreen` — looping player (`DiscoverLoopingPlayerView`, reports progress and
+  loops), like, comments. **One watch recorded per visit, on leaving**, through `ClipWatchRecorder` —
+  the composition root's existing `FirebaseFunctionsViewClipRecorder` conforms to both it and
+  MyDayKit's `ViewClipRecorder`, so both tabs feed `recordClipWatch` by the one path.
+- Composition root: `DiscoverLikeTarget+Firestore` (the one definition of a like's path), comment
+  paths on `DiscoverSubject+Firestore`, and one Firestore adapter per protocol.
+  `FirestoreUserProfileLoader` reads `Users` thirty ids at a time (the `in` limit).
+- **Avatars are initials.** `Users/{uid}` holds no photo URL — photos are in Storage by uid.
+- **No report or block yet** — step 6. Comments must not reach real users before it lands.
+- Tests: `DiscoverCommentsViewModelTests`, `CachingUserProfileLoaderTests`,
+  `DiscoverClipPlayerViewModelTests`, with spies under `Helpers/`.
+
+**Console — rules** (inside `match /databases/{database}/documents`)
+```
+function isNewComment(commentId) {
+  let d = request.resource.data;
+  return request.auth != null
+    && d.keys().hasOnly(['commentId', 'authorId', 'text', 'parentId', 'status', 'createdAt'])
+    && d.commentId == commentId
+    && d.authorId == request.auth.uid
+    && d.status == 'visible'
+    && d.text is string && d.text.size() > 0 && d.text.size() <= 500
+    && (d.parentId == null || d.parentId is string)
+    && d.createdAt == request.time;
+}
+function isAuthorRemoval() {
+  return request.auth != null
+    && resource.data.authorId == request.auth.uid
+    && resource.data.status == 'visible'
+    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'text'])
+    && request.resource.data.status == 'removed'
+    && request.resource.data.text == '';
+}
+function isOwnLike(userId) {
+  return request.auth != null && request.auth.uid == userId
+    && request.resource.data.keys().hasOnly(['authorId', 'createdAt'])
+    && request.resource.data.authorId == userId;
+}
+function canReadComment() {
+  return request.auth != null && resource.data.status in ['visible', 'removed'];
+}
+
+match /Exercises/{exerciseId}/Comments/{commentId} {
+  allow read: if canReadComment();
+  allow create: if isNewComment(commentId);
+  allow update: if isAuthorRemoval();
+  allow delete: if false;
+  match /Likes/{userId} {
+    allow read: if request.auth != null;
+    allow create: if isOwnLike(userId);
+    allow delete: if request.auth != null && request.auth.uid == userId;
+  }
+}
+match /WorkoutTemplates/{templateId}/Comments/{commentId} {
+  allow read: if canReadComment();
+  allow create: if isNewComment(commentId)
+    && get(/databases/$(database)/documents/WorkoutTemplates/$(templateId)).data.isPublic == true;
+  allow update: if isAuthorRemoval();
+  allow delete: if false;
+  match /Likes/{userId} {
+    allow read: if request.auth != null;
+    allow create: if isOwnLike(userId);
+    allow delete: if request.auth != null && request.auth.uid == userId;
+  }
+}
+match /Clips/{clipId}/Comments/{commentId} {
+  allow read: if canReadComment();
+  allow create: if isNewComment(commentId)
+    && get(/databases/$(database)/documents/Clips/$(clipId)).data.isPrivate == false;
+  allow update: if isAuthorRemoval();
+  allow delete: if false;
+  match /Likes/{userId} {
+    allow read: if request.auth != null;
+    allow create: if isOwnLike(userId);
+    allow delete: if request.auth != null && request.auth.uid == userId;
+  }
+}
+match /Clips/{clipId}/Likes/{userId} {
+  allow read: if request.auth != null;
+  allow create: if isOwnLike(userId);
+  allow delete: if request.auth != null && request.auth.uid == userId;
+}
+```
+Every comment query filters `status in ['visible', 'removed']`, or `canReadComment` rejects it.
+`Users/{uid}` must be readable by signed-in users for comment authors to resolve.
+
+**Console — composite indexes** (collection `Comments`, collection scope)
+
+| Fields | For |
+|---|---|
+| `parentId` ↑, `status` ↑, `createdAt` ↓, `__name__` ↓ | top-level comments, newest first |
+| `parentId` ↑, `status` ↑, `createdAt` ↑, `__name__` ↑ | replies, oldest first |
 
 ### Step 5 — Tags
 

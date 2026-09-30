@@ -14,6 +14,11 @@ import Foundation
 /// composition root (`DiscoverSubject+Firestore.swift`), the one place they are
 /// written down; the framework holds no infrastructure, and a path built at a
 /// call site is the shape AccountCreationKit moved away from.
+///
+/// `@frozen` because the kinds are closed by design, and the framework builds
+/// with library evolution on: without it every `switch` over a subject in the
+/// app would need an `@unknown default` for a case that can never exist.
+@frozen
 public enum DiscoverSubject: Hashable, Sendable {
     case exercise(id: String)
     case workout(id: String)
