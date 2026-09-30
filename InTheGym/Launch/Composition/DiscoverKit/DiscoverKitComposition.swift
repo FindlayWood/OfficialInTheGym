@@ -23,13 +23,27 @@ class DiscoverKitComposition {
 
         let exerciseLoader: DiscoverExerciseCardLoader = FirestoreDiscoverExerciseCardLoader()
 
+        // MARK: - Ratings
+
+        let userId = UserDefaults.currentUser.uid
+
+        let ratingSummaryLoader: RatingSummaryLoader = FirestoreRatingSummaryLoader()
+
+        let myRatingLoader: MyRatingLoader = FirestoreMyRatingLoader(userId: userId)
+
+        let ratingWriter: RatingWriter = FirestoreRatingWriter(userId: userId)
+
         // MARK: - Router
 
         let router = DiscoverKitRouter(
             navigationController: navigationController,
             clipLoader: clipLoader,
             workoutLoader: workoutLoader,
-            exerciseLoader: exerciseLoader
+            exerciseLoader: exerciseLoader,
+            ratingSummaryLoader: ratingSummaryLoader,
+            myRatingLoader: myRatingLoader,
+            ratingWriter: ratingWriter,
+            currentUserId: userId
         )
 
         router.start()

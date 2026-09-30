@@ -132,6 +132,12 @@ deployed from either repository); the exact text is under each step below.
 - [ ] `python RebuildDiscoverCards.py findlaywood1@gmail.com all` — backfill every card
 - [ ] Spot-check a few documents in each `Discover*` collection
 
+**Step 3 — Ratings**
+- [ ] Console rules: `Exercises/{id}/Ratings/{userId}` and `WorkoutTemplates/{id}/Ratings/{userId}`
+- [ ] Deploy functions — `discoverExerciseRatings`, `discoverWorkoutRatings`
+- [ ] Rate an exercise and a public workout in the app; check `ratingCount` / `ratingSum` / `score`
+      land on their cards, and that rating again changes the sum without changing the count
+
 ## Steps
 
 ### Step 1 — Groundwork — built, not rolled out
@@ -240,17 +246,62 @@ Queries on another user's cards must filter `isPublic == true`, or the rules rej
 
 **Rollout order**: rules and indexes → deploy functions → `RebuildDiscoverCards.py <admin> all`.
 
-### Step 3 — Ratings
+### Step 3 — Ratings — built, not rolled out
 
-**Cloud**
-- One handler, triggered on `Exercises/{id}/Ratings/{uid}` and `WorkoutTemplates/{id}/Ratings/{uid}`:
-  applies deltas to `ratingCount` / `ratingSum` (create +1/+r, update +(new−old), delete −1/−r) and
-  recomputes `score`. Idempotent under at-least-once delivery.
+**Cloud** (`src/Discover/`)
+- `discoverExerciseRatings` / `discoverWorkoutRatings` share `syncRatingSummary`, which **recounts**
+  the subject's `Ratings` with an aggregation query (`count` + `sum` of `rating`, integers 1–10
+  only) inside a transaction with the card write — **never applies a +1 / +r delta.** Triggers are
+  at-least-once, and a delta handler double-counts every redelivered event, permanently. A recount
+  is idempotent and order-independent, the property `syncCard` has for projections.
+- `ratingScore` — the Bayesian ordering score, `(5 × 5.5 + sum) / (5 + count)`. Ordering only;
+  never shown.
+- A subject that no longer exists gets no write (a template's cascade delete fires this per rating).
+- Tests in `test/Discover/` — including redelivery not double-counting.
 
 **App**
-- `RatingLoader` (the summary, and the current user's rating) and `RatingWriter`.
-- `RatingSummary.average` — the one place the average is worked out.
-- 1–10 rating sheet in the RPE sheet's visual language. Hidden on the user's own workouts.
+- Framework: `DiscoverSubject` (kind + id, **no paths**), `RatingSummary` (`average` is the one
+  place the displayed average is worked out; `replacingRating(_:with:)` for the optimistic update),
+  `RatingSummaryLoader`, `MyRatingLoader`, `RatingWriter`, preview conformers.
+- `DiscoverRatingViewModel` updates the summary **before** the server recounts, and puts both the
+  summary and the user's rating back if the write fails. `canRate` is false on your own workout.
+- `DiscoverRatingSection` (average large over "N ratings", "Rate this" / "Your rating"),
+  `DiscoverRatingSheet` (RPE sheet's layout, `darkColor` not RPE's colour scale).
+- `DiscoverExerciseDetailScreen` / `DiscoverWorkoutDetailScreen` — header and rating for now; home
+  and "see all" taps on exercises and workouts now open them. Clip taps still lead nowhere (step 4).
+- Composition root: `DiscoverSubject+Firestore.swift` is **the one definition of every subject,
+  card and rating path**; `FirestoreRatingSummaryLoader`, `FirestoreMyRatingLoader`,
+  `FirestoreRatingWriter` (writes `createdAt` only on a first rating). `userId` read once in
+  `DiscoverKitComposition` and injected.
+- `RatingSummaryTests`, `DiscoverRatingViewModelTests` (+ `RatingWriterSpy`).
+
+**Console — rules**
+```
+match /Exercises/{exerciseId}/Ratings/{userId} {
+  allow read: if request.auth != null;
+  allow create, update: if request.auth != null
+    && request.auth.uid == userId
+    && request.resource.data.keys().hasOnly(['rating', 'authorId', 'createdAt', 'updatedAt'])
+    && request.resource.data.authorId == userId
+    && request.resource.data.rating is int
+    && request.resource.data.rating >= 1 && request.resource.data.rating <= 10
+    && exists(/databases/$(database)/documents/Exercises/$(exerciseId));
+  allow delete: if false;
+}
+match /WorkoutTemplates/{templateId}/Ratings/{userId} {
+  allow read: if request.auth != null;
+  allow create, update: if request.auth != null
+    && request.auth.uid == userId
+    && request.resource.data.keys().hasOnly(['rating', 'authorId', 'createdAt', 'updatedAt'])
+    && request.resource.data.authorId == userId
+    && request.resource.data.rating is int
+    && request.resource.data.rating >= 1 && request.resource.data.rating <= 10
+    && get(/databases/$(database)/documents/WorkoutTemplates/$(templateId)).data.isPublic == true
+    && get(/databases/$(database)/documents/WorkoutTemplates/$(templateId)).data.createdBy != request.auth.uid;
+  allow delete: if false;
+}
+```
+No rating a private workout, and no rating your own. A rating can be changed, never withdrawn.
 
 ### Step 4 — Comments and likes
 

@@ -12,9 +12,13 @@ import UIKit
 /// dependency through `public init`, `start()` sets the root, and
 /// `viewController(for:)` is the one place a view model meets its screen.
 ///
-/// Taps on a clip, workout or exercise lead nowhere yet — their detail screens
-/// arrive with ratings, comments and the clip player (plan steps 3, 4 and 7),
-/// and those routes are added then rather than stubbed now.
+/// Exercises and workouts open their detail screens. A clip tap leads nowhere
+/// yet — the clip player arrives with comments and likes (plan step 4), and
+/// its route is added then rather than stubbed now.
+///
+/// `currentUserId` is the signed-in user, read once in the composition root.
+/// The router needs it for one decision only: a user cannot rate their own
+/// workout.
 public final class DiscoverKitRouter {
 
     // MARK: - Navigation
@@ -26,6 +30,10 @@ public final class DiscoverKitRouter {
     let clipLoader: DiscoverClipCardLoader
     let workoutLoader: DiscoverWorkoutCardLoader
     let exerciseLoader: DiscoverExerciseCardLoader
+    let ratingSummaryLoader: RatingSummaryLoader
+    let myRatingLoader: MyRatingLoader
+    let ratingWriter: RatingWriter
+    let currentUserId: String
 
     // MARK: - Properties
 
@@ -37,12 +45,20 @@ public final class DiscoverKitRouter {
         navigationController: UINavigationController,
         clipLoader: DiscoverClipCardLoader,
         workoutLoader: DiscoverWorkoutCardLoader,
-        exerciseLoader: DiscoverExerciseCardLoader
+        exerciseLoader: DiscoverExerciseCardLoader,
+        ratingSummaryLoader: RatingSummaryLoader,
+        myRatingLoader: MyRatingLoader,
+        ratingWriter: RatingWriter,
+        currentUserId: String
     ) {
         self.navigationController = navigationController
         self.clipLoader = clipLoader
         self.workoutLoader = workoutLoader
         self.exerciseLoader = exerciseLoader
+        self.ratingSummaryLoader = ratingSummaryLoader
+        self.myRatingLoader = myRatingLoader
+        self.ratingWriter = ratingWriter
+        self.currentUserId = currentUserId
     }
 
     // MARK: - Root
@@ -69,6 +85,8 @@ extension DiscoverKitRouter {
             viewModel.onSeeAllClips = { [weak self] in self?.navigate(to: .allClips) }
             viewModel.onSeeAllWorkouts = { [weak self] in self?.navigate(to: .allWorkouts) }
             viewModel.onSeeAllExercises = { [weak self] in self?.navigate(to: .allExercises) }
+            viewModel.onWorkoutTapped = { [weak self] in self?.navigate(to: .workoutDetail($0)) }
+            viewModel.onExerciseTapped = { [weak self] in self?.navigate(to: .exerciseDetail($0)) }
             let vc = DiscoverKitBoundaryViewController()
             vc.display = DiscoverHomeScreen(viewModel: viewModel)
             vc.router = self
@@ -93,7 +111,7 @@ extension DiscoverKitRouter {
                     title: "Workouts",
                     emptyMessage: "No public workouts yet",
                     pager: pager,
-                    onTap: { _ in },
+                    onTap: { [weak self] in self?.navigate(to: .workoutDetail($0)) },
                     row: { DiscoverWorkoutRow(card: $0) }
                 )
             )
@@ -109,13 +127,53 @@ extension DiscoverKitRouter {
                     title: "Exercises",
                     emptyMessage: "No exercises yet",
                     pager: pager,
-                    onTap: { _ in },
+                    onTap: { [weak self] in self?.navigate(to: .exerciseDetail($0)) },
                     row: { DiscoverExerciseRow(card: $0) }
                 )
             )
             vc.hidesBottomBarWhenPushed = true
             return vc
+
+        case .exerciseDetail(let card):
+            let ratingViewModel = makeRatingViewModel(
+                subject: .exercise(id: card.exerciseId),
+                summary: card.ratingSummary,
+                canRate: true
+            )
+            let vc = UIHostingController(
+                rootView: DiscoverExerciseDetailScreen(card: card, ratingViewModel: ratingViewModel)
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .workoutDetail(let card):
+            let ratingViewModel = makeRatingViewModel(
+                subject: .workout(id: card.templateId),
+                summary: card.ratingSummary,
+                canRate: card.createdBy != currentUserId
+            )
+            let vc = UIHostingController(
+                rootView: DiscoverWorkoutDetailScreen(card: card, ratingViewModel: ratingViewModel)
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
         }
+    }
+
+    @MainActor
+    private func makeRatingViewModel(
+        subject: DiscoverSubject,
+        summary: RatingSummary,
+        canRate: Bool
+    ) -> DiscoverRatingViewModel {
+        DiscoverRatingViewModel(
+            subject: subject,
+            initialSummary: summary,
+            canRate: canRate,
+            summaryLoader: ratingSummaryLoader,
+            myRatingLoader: myRatingLoader,
+            writer: ratingWriter
+        )
     }
 
     @MainActor

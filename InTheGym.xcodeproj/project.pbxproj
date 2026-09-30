@@ -14,6 +14,10 @@
 		D1CA00000000000000000022 /* FirestoreDiscoverClipCardLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000012 /* FirestoreDiscoverClipCardLoader.swift */; };
 		D1CA00000000000000000023 /* FirestoreDiscoverWorkoutCardLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000013 /* FirestoreDiscoverWorkoutCardLoader.swift */; };
 		D1CA00000000000000000024 /* FirestoreDiscoverExerciseCardLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000014 /* FirestoreDiscoverExerciseCardLoader.swift */; };
+		D1CA00000000000000000025 /* DiscoverSubject+Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000015 /* DiscoverSubject+Firestore.swift */; };
+		D1CA00000000000000000026 /* FirestoreRatingSummaryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000016 /* FirestoreRatingSummaryLoader.swift */; };
+		D1CA00000000000000000027 /* FirestoreMyRatingLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000017 /* FirestoreMyRatingLoader.swift */; };
+		D1CA00000000000000000028 /* FirestoreRatingWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000018 /* FirestoreRatingWriter.swift */; };
 		D1CA00000000000000000002 /* DiscoverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000001 /* DiscoverKit.framework */; };
 		D1CA00000000000000000003 /* DiscoverKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000001 /* DiscoverKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ACE000000000000000000014 /* VerifyEmailResendState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000000A /* VerifyEmailResendState.swift */; };
@@ -980,6 +984,10 @@
 		D1CA00000000000000000012 /* FirestoreDiscoverClipCardLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDiscoverClipCardLoader.swift; sourceTree = "<group>"; };
 		D1CA00000000000000000013 /* FirestoreDiscoverWorkoutCardLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDiscoverWorkoutCardLoader.swift; sourceTree = "<group>"; };
 		D1CA00000000000000000014 /* FirestoreDiscoverExerciseCardLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDiscoverExerciseCardLoader.swift; sourceTree = "<group>"; };
+		D1CA00000000000000000015 /* DiscoverSubject+Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiscoverSubject+Firestore.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000016 /* FirestoreRatingSummaryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreRatingSummaryLoader.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000017 /* FirestoreMyRatingLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreMyRatingLoader.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000018 /* FirestoreRatingWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreRatingWriter.swift"; sourceTree = "<group>"; };
 		ACE00000000000000000000A /* VerifyEmailResendState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailResendState.swift; sourceTree = "<group>"; };
 		ACE00000000000000000000B /* VerifyEmailErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailErrorBanner.swift; sourceTree = "<group>"; };
 		ACB00000000000000000000A /* SubscriptionProductRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionProductRow.swift; sourceTree = "<group>"; };
@@ -4888,6 +4896,10 @@
 				D1CA00000000000000000012 /* FirestoreDiscoverClipCardLoader.swift */,
 				D1CA00000000000000000013 /* FirestoreDiscoverWorkoutCardLoader.swift */,
 				D1CA00000000000000000014 /* FirestoreDiscoverExerciseCardLoader.swift */,
+				D1CA00000000000000000015 /* DiscoverSubject+Firestore.swift */,
+				D1CA00000000000000000016 /* FirestoreRatingSummaryLoader.swift */,
+				D1CA00000000000000000017 /* FirestoreMyRatingLoader.swift */,
+				D1CA00000000000000000018 /* FirestoreRatingWriter.swift */,
 			);
 			path = DiscoverKit;
 			sourceTree = "<group>";
@@ -5112,6 +5124,10 @@
 				D1CA00000000000000000022 /* FirestoreDiscoverClipCardLoader.swift in Sources */,
 				D1CA00000000000000000023 /* FirestoreDiscoverWorkoutCardLoader.swift in Sources */,
 				D1CA00000000000000000024 /* FirestoreDiscoverExerciseCardLoader.swift in Sources */,
+				D1CA00000000000000000025 /* DiscoverSubject+Firestore.swift in Sources */,
+				D1CA00000000000000000026 /* FirestoreRatingSummaryLoader.swift in Sources */,
+				D1CA00000000000000000027 /* FirestoreMyRatingLoader.swift in Sources */,
+				D1CA00000000000000000028 /* FirestoreRatingWriter.swift in Sources */,
 				74A602A72850C87200AFA236 /* WorkoutDiscoveryViewModel.swift in Sources */,
 				7444D0C026D3C9BE0009C7A6 /* UploadingWorkoutViewModel.swift in Sources */,
 				7479812F27DB7EBA00CF3F9B /* RequestsView.swift in Sources */,
