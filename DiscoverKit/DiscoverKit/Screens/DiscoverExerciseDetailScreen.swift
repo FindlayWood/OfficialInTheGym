@@ -14,6 +14,7 @@ struct DiscoverExerciseDetailScreen: View {
     let card: DiscoverExerciseCard
     @ObservedObject var ratingViewModel: DiscoverRatingViewModel
     @ObservedObject var taggingViewModel: DiscoverTaggingViewModel
+    @ObservedObject var moderation: DiscoverModerationStore
     var onOpenComments: () -> Void = {}
     var onTagTapped: (String) -> Void = { _ in }
 
@@ -40,7 +41,7 @@ struct DiscoverExerciseDetailScreen: View {
 
                 DiscoverRatingSection(viewModel: ratingViewModel)
 
-                DiscoverTagsSection(viewModel: taggingViewModel, onTagTapped: onTagTapped)
+                DiscoverTagsSection(viewModel: taggingViewModel, moderation: moderation, onTagTapped: onTagTapped)
 
                 DiscoverCommentsEntrySection(count: card.commentCount ?? 0, onOpen: onOpenComments)
             }
@@ -54,7 +55,8 @@ struct DiscoverExerciseDetailScreen: View {
         .task {
             async let rating: Void = ratingViewModel.load()
             async let tags: Void = taggingViewModel.load()
-            _ = await (rating, tags)
+            async let moderationState: Void = moderation.loadIfNeeded()
+            _ = await (rating, tags, moderationState)
         }
     }
 }
@@ -81,7 +83,8 @@ struct DiscoverExerciseDetailScreen: View {
                 myTagsLoader: PreviewTagLoaders(),
                 writer: PreviewTagServices(),
                 suggestionLoader: PreviewTagLoaders()
-            )
+            ),
+            moderation: PreviewModeration.store()
         )
     }
 }

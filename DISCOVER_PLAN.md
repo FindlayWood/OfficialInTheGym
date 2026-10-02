@@ -162,6 +162,17 @@ deployed from either repository); the exact text is under each step below.
 - [ ] Vote a tag on an exercise: it shows to you outlined, not to others, until three people agree
 - [ ] Delete the old `TaggedWorkoutTemplates` collection by hand
 
+**Step 6 — Moderation**
+- [ ] Console rules: `Reports`, `ModerationQueue`, `Users/{uid}/BlockedUsers`, and the admin
+      status-change additions
+- [ ] Deploy functions — `discoverReportFiled`, and the updated tag sync (hidden cards and tags)
+- [ ] With three test accounts, report one comment: hidden after the third, `ModerationQueue` entry
+      `hidden`, the card's `commentCount` drops
+- [ ] Report with the admin account: hidden at once, `adminReported: true`
+- [ ] Report a tag as admin: gone from the directory and from every subject's tag chips
+- [ ] Block a user: their comments and clips disappear; unblock from Blocked Users brings them back
+- [ ] **Once this is rolled out, comments (step 4) may reach real users**
+
 ## Steps
 
 ### Step 1 — Groundwork — built, not rolled out
@@ -539,16 +550,79 @@ Once `TaggedWorkoutTemplates` is deleted, its rule can go too.
 The two collection-group exemptions are what `syncSubjectTags` finds a subject's entries with —
 **without them every tag sync fails.**
 
-### Step 6 — Moderation
+### Step 6 — Moderation — built, not rolled out
 
-**Cloud**
-- `Reports` trigger: count reports per target; at **3**, or **1 from an admin**, set
-  `status: "hidden"` on the comment, card or `Tags/{tag}`, and upsert `ModerationQueue/{targetHash}`.
-- Tag blocklist enforced in the validator (step 1).
+**Decided here:** auto-hide at **3 distinct reporters**, or **1 admin**. Apple guideline 1.2 wants
+prompt action; the queue is where a wrong hide gets restored.
+
+**Cloud** (`src/Discover/Moderation/`, `DiscoverReportFiled.ts`)
+- `reportTarget` — validates a client-written `targetKind` + `targetPath` against **one path shape
+  per kind**, so a crafted report cannot hide an arbitrary document. Maps each to the document
+  moderation sets `status` on: the comment itself; the **card** for a workout or clip (the author's
+  template or clip stays usable in MyDay); `Tags/{tag}` for a tag.
+- `isAdmin` — the reporter's `admin` custom claim, read from **Auth**, never from the report.
+- `moderateTarget` — counts **distinct reporterIds** by querying `targetPath` (never report documents,
+  whose ids the client picks), hides at 3 or on an admin report, upserts
+  `ModerationQueue/{sha256(targetPath)}` (`reportCount`, `reasons`, `status: open|hidden`,
+  `firstReportedAt`, `updatedAt`, `adminReported`). A comment already `removed` stays removed.
+  Nothing lifts a hide — restoring is the admin app's.
+- **Hiding reuses what exists**: lists filter `status == "visible"`, counts count visible only,
+  `syncCard` / `syncTagDirectory` never overwrite a status. `syncSubjectTags` now **skips a hidden
+  card and drops hidden tags** from every subject, so a hidden workout leaves the tag pages and a
+  hidden tag leaves every exercise and workout — both re-derived straight after hiding.
+- `discoverReportFiled` — `onDocumentCreated` on `Reports/{reportId}`.
+- Tests: `reportTarget.test.ts`, `discoverReportFiled.test.ts` (admin path via the Auth emulator).
 
 **App**
-- `ReportWriter`; report sheet with a fixed reason list, on comments, workouts, clips and tags.
-- `BlockedUsersLoader` / `BlockedUsersWriter`; blocked users' comments and clips filtered client-side.
+- Framework: `DiscoverReportTarget` (`@frozen`), `DiscoverReportReason` (fixed list — no free text),
+  `BlockedUsersLoader`, `MyReportsLoader`, `ReportWriter`, `BlockedUsersWriter`.
+- **`DiscoverModerationStore`** — one per flow, built by the router, handed to every listing screen.
+  Blocks and the user's own reports, loaded once a session; report and block both apply at once
+  and revert on failure. **Filtering is on the device, by design** — a block is private and
+  one-way, so no other user's query could honour it.
+- Report: `⋯` on other people's comments (report / block), `⋯` on someone else's workout detail and
+  clip player (clip also offers block), long-press a tag chip. `DiscoverReportSheet` — reason list,
+  then "You won't see this again. We'll review it." A reported workout or clip closes its screen.
+- Filtered: home clips / workouts / tags, clip grid, workout list, tag pages, comments and replies.
+- `DiscoverBlockedUsersScreen` (from the comments screen's `⋯`) — the list, with Unblock.
+- Composition root: `DiscoverReportTarget+Firestore` (**must match `ReportTarget.ts`'s shapes**),
+  `DiscoverBlockPath`, `FirestoreReportWriter` (id `{uid}_{sha256(path)}`), `FirestoreMyReportsLoader`,
+  `FirestoreBlockedUsersLoader` / `Writer`.
+- Tests: `DiscoverModerationStoreTests`, `ModerationSpy`.
+
+**Console — rules**
+```
+function isAdminStatusChange() {
+  return request.auth != null && request.auth.token.admin == true
+    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+    && request.resource.data.status in ['visible', 'hidden'];
+}
+
+match /Reports/{reportId} {
+  allow read: if request.auth != null && resource.data.reporterId == request.auth.uid;
+  allow create: if request.auth != null
+    && reportId.matches(request.auth.uid + '_[0-9a-f]{64}')
+    && request.resource.data.keys().hasOnly(['reporterId', 'targetPath', 'targetKind', 'reason', 'createdAt'])
+    && request.resource.data.reporterId == request.auth.uid
+    && request.resource.data.targetKind in ['comment', 'workout', 'clip', 'tag']
+    && request.resource.data.reason in ['spam', 'harassment', 'hate', 'sexual', 'violence', 'other']
+    && request.resource.data.targetPath is string && request.resource.data.targetPath.size() <= 300
+    && request.resource.data.createdAt == request.time;
+  allow update, delete: if false;
+}
+match /ModerationQueue/{key} {
+  allow read: if request.auth != null && request.auth.token.admin == true;
+  allow write: if false;
+}
+match /Users/{userId}/BlockedUsers/{blockedId} {
+  allow read, write: if request.auth != null && request.auth.uid == userId;
+}
+```
+And, for the admin app later, add `|| isAdminStatusChange()` to the `update` rule of every
+`…/Comments/{commentId}` block from step 4, and an `allow update: if isAdminStatusChange();` to
+`DiscoverWorkouts`, `DiscoverClips` and `Tags/{tag}`.
+
+**Console — indexes**: none. Both report queries are single-field equality.
 
 ### Step 7 — Workout and exercise detail, and shared actions
 

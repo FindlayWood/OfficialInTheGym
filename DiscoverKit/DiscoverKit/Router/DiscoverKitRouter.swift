@@ -16,8 +16,14 @@ import UIKit
 /// and all three lead to their comments.
 ///
 /// `currentUserId` is the signed-in user, read once in the composition root.
-/// The router needs it to decide two things: a user cannot rate their own
-/// workout, and can delete only their own comments.
+/// The router needs it to decide what a user may do to their own content:
+/// not rate or report their own workout, not report their own clip, delete
+/// only their own comments.
+///
+/// `moderation` is the one `DiscoverModerationStore` for the flow — built here,
+/// as a flow-scoped manager is, and handed to every screen that lists
+/// something, so a block or report on one screen hides the thing on all of
+/// them at once.
 public final class DiscoverKitRouter {
 
     // MARK: - Navigation
@@ -47,11 +53,23 @@ public final class DiscoverKitRouter {
     let myTagVotesLoader: MyTagVotesLoader
     let tagVoteWriter: TagVoteWriter
     let tagNormalizer: TagNormalizer
+    let blockedUsersLoader: BlockedUsersLoader
+    let myReportsLoader: MyReportsLoader
+    let reportWriter: ReportWriter
+    let blockedUsersWriter: BlockedUsersWriter
     let currentUserId: String
 
     // MARK: - Properties
 
     private(set) var rootViewController: UIViewController?
+
+    @MainActor
+    private(set) lazy var moderation = DiscoverModerationStore(
+        blockedLoader: blockedUsersLoader,
+        reportsLoader: myReportsLoader,
+        reportWriter: reportWriter,
+        blockWriter: blockedUsersWriter
+    )
 
     // MARK: - Init
 
@@ -78,6 +96,10 @@ public final class DiscoverKitRouter {
         myTagVotesLoader: MyTagVotesLoader,
         tagVoteWriter: TagVoteWriter,
         tagNormalizer: TagNormalizer,
+        blockedUsersLoader: BlockedUsersLoader,
+        myReportsLoader: MyReportsLoader,
+        reportWriter: ReportWriter,
+        blockedUsersWriter: BlockedUsersWriter,
         currentUserId: String
     ) {
         self.navigationController = navigationController
@@ -102,6 +124,10 @@ public final class DiscoverKitRouter {
         self.myTagVotesLoader = myTagVotesLoader
         self.tagVoteWriter = tagVoteWriter
         self.tagNormalizer = tagNormalizer
+        self.blockedUsersLoader = blockedUsersLoader
+        self.myReportsLoader = myReportsLoader
+        self.reportWriter = reportWriter
+        self.blockedUsersWriter = blockedUsersWriter
         self.currentUserId = currentUserId
     }
 
@@ -135,7 +161,7 @@ extension DiscoverKitRouter {
             viewModel.onExerciseTapped = { [weak self] in self?.navigate(to: .exerciseDetail($0)) }
             viewModel.onClipTapped = { [weak self] in self?.navigate(to: .clipPlayer($0)) }
             let vc = DiscoverKitBoundaryViewController()
-            vc.display = DiscoverHomeScreen(viewModel: viewModel)
+            vc.display = DiscoverHomeScreen(viewModel: viewModel, moderation: moderation)
             vc.router = self
             return vc
 
@@ -144,7 +170,11 @@ extension DiscoverKitRouter {
                 try await clipLoader.load(limit: limit, after: last)
             }
             let vc = UIHostingController(
-                rootView: DiscoverClipGridScreen(pager: pager, onTap: { [weak self] in self?.navigate(to: .clipPlayer($0)) })
+                rootView: DiscoverClipGridScreen(
+                    pager: pager,
+                    moderation: moderation,
+                    onTap: { [weak self] in self?.navigate(to: .clipPlayer($0)) }
+                )
             )
             vc.hidesBottomBarWhenPushed = true
             return vc
@@ -158,6 +188,8 @@ extension DiscoverKitRouter {
                     title: "Workouts",
                     emptyMessage: "No public workouts yet",
                     pager: pager,
+                    moderation: moderation,
+                    hides: { [moderation] in moderation.hides($0) },
                     onTap: { [weak self] in self?.navigate(to: .workoutDetail($0)) },
                     row: { DiscoverWorkoutRow(card: $0) }
                 )
@@ -174,6 +206,7 @@ extension DiscoverKitRouter {
                     title: "Exercises",
                     emptyMessage: "No exercises yet",
                     pager: pager,
+                    moderation: moderation,
                     onTap: { [weak self] in self?.navigate(to: .exerciseDetail($0)) },
                     row: { DiscoverExerciseRow(card: $0) }
                 )
@@ -197,6 +230,7 @@ extension DiscoverKitRouter {
                         counts: card.tagCounts,
                         canVote: true
                     ),
+                    moderation: moderation,
                     onOpenComments: { [weak self] in self?.navigate(to: .comments(.exercise(id: card.exerciseId))) },
                     onTagTapped: { [weak self] in self?.navigate(to: .tag($0)) }
                 )
@@ -220,6 +254,9 @@ extension DiscoverKitRouter {
                         counts: card.tagCounts,
                         canVote: card.createdBy != currentUserId
                     ),
+                    moderation: moderation,
+                    canReport: card.createdBy != currentUserId,
+                    onReported: { [weak self] in self?.navigationController.popViewController(animated: true) },
                     onOpenComments: { [weak self] in self?.navigate(to: .comments(.workout(id: card.templateId))) },
                     onTagTapped: { [weak self] in self?.navigate(to: .tag($0)) }
                 )
@@ -239,7 +276,13 @@ extension DiscoverKitRouter {
                 likeWriter: likeWriter,
                 profileLoader: profileLoader
             )
-            let vc = UIHostingController(rootView: DiscoverCommentsScreen(viewModel: viewModel))
+            let vc = UIHostingController(
+                rootView: DiscoverCommentsScreen(
+                    viewModel: viewModel,
+                    moderation: moderation,
+                    onOpenBlockedUsers: { [weak self] in self?.navigate(to: .blockedUsers) }
+                )
+            )
             vc.hidesBottomBarWhenPushed = true
             return vc
 
@@ -253,7 +296,10 @@ extension DiscoverKitRouter {
             let vc = UIHostingController(
                 rootView: DiscoverClipPlayerScreen(
                     viewModel: viewModel,
-                    onComments: { [weak self] in self?.navigate(to: .comments(.clip(id: card.clipId))) }
+                    moderation: moderation,
+                    canReport: card.createdBy != currentUserId,
+                    onComments: { [weak self] in self?.navigate(to: .comments(.clip(id: card.clipId))) },
+                    onClose: { [weak self] in self?.navigationController.popViewController(animated: true) }
                 )
             )
             vc.hidesBottomBarWhenPushed = true
@@ -271,9 +317,18 @@ extension DiscoverKitRouter {
                     tag: tag,
                     exercises: exercises,
                     workouts: workouts,
+                    moderation: moderation,
                     onExerciseTapped: { [weak self] in self?.navigate(to: .exerciseDetail($0)) },
                     onWorkoutTapped: { [weak self] in self?.navigate(to: .workoutDetail($0)) }
                 )
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .blockedUsers:
+            let viewModel = DiscoverBlockedUsersViewModel(moderation: moderation, profileLoader: profileLoader)
+            let vc = UIHostingController(
+                rootView: DiscoverBlockedUsersScreen(viewModel: viewModel, moderation: moderation)
             )
             vc.hidesBottomBarWhenPushed = true
             return vc

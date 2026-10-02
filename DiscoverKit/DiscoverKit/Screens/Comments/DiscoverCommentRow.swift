@@ -8,7 +8,8 @@
 import SwiftUI
 
 /// One comment or reply: avatar, name and age, the text, then like / reply /
-/// delete.
+/// delete, and a `⋯` for someone else's comment to report it or block its
+/// author.
 ///
 /// A removed comment keeps its place — replies may hang off it — but shows
 /// only "Comment removed": no author, no actions. Replies get no Reply button,
@@ -22,8 +23,12 @@ struct DiscoverCommentRow: View {
     let onLike: () -> Void
     let onReply: (() -> Void)?
     let onRemove: () -> Void
+    /// Nil on your own comments — you cannot report or block yourself.
+    var onReport: (() -> Void)?
+    var onBlock: (() -> Void)?
 
     @State private var isConfirmingRemove = false
+    @State private var isShowingMore = false
 
     var body: some View {
         if comment.isRemoved {
@@ -80,6 +85,18 @@ struct DiscoverCommentRow: View {
                             .foregroundStyle(.secondary)
                             .buttonStyle(.plain)
                     }
+                    if onReport != nil || onBlock != nil {
+                        Button {
+                            isShowingMore = true
+                        } label: {
+                            Image(systemName: "ellipsis")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(.secondary)
+                                .frame(width: 28, height: 20)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
                 .padding(.top, 2)
             }
@@ -90,6 +107,18 @@ struct DiscoverCommentRow: View {
             Button("Delete", role: .destructive, action: onRemove)
         } message: {
             Text("Replies to it stay, under \"Comment removed\".")
+        }
+        .confirmationDialog("", isPresented: $isShowingMore) {
+            if let onReport {
+                Button("Report comment", action: onReport)
+            }
+            if let onBlock {
+                Button("Block \(name)", role: .destructive, action: onBlock)
+            }
+        } message: {
+            if onBlock != nil {
+                Text("Blocking hides their comments and clips from you. They won't be told.")
+            }
         }
     }
 

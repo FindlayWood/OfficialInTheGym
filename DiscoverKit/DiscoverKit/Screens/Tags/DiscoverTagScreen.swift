@@ -14,6 +14,7 @@ struct DiscoverTagScreen: View {
     let tag: String
     @ObservedObject var exercises: DiscoverPager<DiscoverTagged<DiscoverExerciseCard>>
     @ObservedObject var workouts: DiscoverPager<DiscoverTagged<DiscoverWorkoutCard>>
+    @ObservedObject var moderation: DiscoverModerationStore
     let onExerciseTapped: (DiscoverExerciseCard) -> Void
     let onWorkoutTapped: (DiscoverWorkoutCard) -> Void
 
@@ -25,8 +26,10 @@ struct DiscoverTagScreen: View {
                         .onTapGesture { onExerciseTapped(tagged.card) }
                 }
                 section("Workouts", pager: workouts) { tagged in
-                    DiscoverWorkoutRow(card: tagged.card)
-                        .onTapGesture { onWorkoutTapped(tagged.card) }
+                    if !moderation.hides(tagged.card) {
+                        DiscoverWorkoutRow(card: tagged.card)
+                            .onTapGesture { onWorkoutTapped(tagged.card) }
+                    }
                 }
             }
             .padding()

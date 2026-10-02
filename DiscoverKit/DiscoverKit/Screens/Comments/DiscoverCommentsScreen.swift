@@ -16,6 +16,10 @@ import SwiftUI
 struct DiscoverCommentsScreen: View {
 
     @ObservedObject var viewModel: DiscoverCommentsViewModel
+    @ObservedObject var moderation: DiscoverModerationStore
+    var onOpenBlockedUsers: () -> Void = {}
+
+    @State private var reportRequest: DiscoverReportRequest?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -51,11 +55,34 @@ struct DiscoverCommentsScreen: View {
         }
         .navigationTitle("Comments")
         .navigationBarTitleDisplayMode(.inline)
-        .task { await viewModel.loadFirstPageIfNeeded() }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Button("Blocked users", systemImage: "hand.raised", action: onOpenBlockedUsers)
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+            }
+        }
+        .sheet(item: $reportRequest) { request in
+            DiscoverReportSheet(target: request.target, moderation: moderation)
+                .presentationDetents([.medium])
+        }
+        .task {
+            async let comments: Void = viewModel.loadFirstPageIfNeeded()
+            async let moderationState: Void = moderation.loadIfNeeded()
+            _ = await (comments, moderationState)
+        }
     }
 
+    /// Threads worth drawing: not removed-and-empty, and nothing this user has
+    /// blocked or reported.
     private var shownThreads: [DiscoverCommentThread] {
-        viewModel.threads.filter(\.isShown)
+        viewModel.threads.filter { $0.isShown && !moderation.hides($0.comment, on: viewModel.subject) }
+    }
+
+    private func shownReplies(of thread: DiscoverCommentThread) -> [DiscoverComment] {
+        thread.visibleReplies.filter { !moderation.hides($0, on: viewModel.subject) }
     }
 
     @ViewBuilder
@@ -84,7 +111,7 @@ struct DiscoverCommentsScreen: View {
             }
 
             if thread.isExpanded {
-                ForEach(thread.visibleReplies) { reply in
+                ForEach(shownReplies(of: thread)) { reply in
                     row(reply, canReply: false)
                         .padding(.leading, 42)
                 }
@@ -100,8 +127,21 @@ struct DiscoverCommentsScreen: View {
             canRemove: viewModel.canRemove(comment),
             onLike: { Task { await viewModel.toggleLike(comment) } },
             onReply: canReply ? { viewModel.replyingTo = comment } : nil,
-            onRemove: { Task { await viewModel.remove(comment) } }
+            onRemove: { Task { await viewModel.remove(comment) } },
+            onReport: isOthers(comment) ? {
+                reportRequest = DiscoverReportRequest(target: .comment(commentId: comment.id, subject: viewModel.subject))
+            } : nil,
+            onBlock: isOthers(comment) ? {
+                if let authorId = comment.authorId {
+                    Task { await moderation.setBlocked(true, userId: authorId) }
+                }
+            } : nil
         )
+    }
+
+    private func isOthers(_ comment: DiscoverComment) -> Bool {
+        guard let authorId = comment.authorId else { return false }
+        return authorId != viewModel.currentUserId && !comment.isRemoved
     }
 
     @ViewBuilder
@@ -131,7 +171,8 @@ struct DiscoverCommentsScreen: View {
                 likeLoader: PreviewLikeLoader(),
                 likeWriter: PreviewCommentWriter(),
                 profileLoader: PreviewUserProfileLoader()
-            )
+            ),
+            moderation: PreviewModeration.store()
         )
     }
 }

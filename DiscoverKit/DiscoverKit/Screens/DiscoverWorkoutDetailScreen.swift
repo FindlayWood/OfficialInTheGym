@@ -14,6 +14,14 @@ struct DiscoverWorkoutDetailScreen: View {
     let card: DiscoverWorkoutCard
     @ObservedObject var ratingViewModel: DiscoverRatingViewModel
     @ObservedObject var taggingViewModel: DiscoverTaggingViewModel
+    @ObservedObject var moderation: DiscoverModerationStore
+    /// False on the user's own workout.
+    var canReport = false
+    /// Called once a report is filed and its sheet closed — the screen leaves,
+    /// since what it shows is now hidden from this user.
+    var onReported: () -> Void = {}
+
+    @State private var reportRequest: DiscoverReportRequest?
     var onOpenComments: () -> Void = {}
     var onTagTapped: (String) -> Void = { _ in }
 
@@ -38,7 +46,7 @@ struct DiscoverWorkoutDetailScreen: View {
 
                 DiscoverRatingSection(viewModel: ratingViewModel)
 
-                DiscoverTagsSection(viewModel: taggingViewModel, onTagTapped: onTagTapped)
+                DiscoverTagsSection(viewModel: taggingViewModel, moderation: moderation, onTagTapped: onTagTapped)
 
                 DiscoverCommentsEntrySection(count: card.commentCount ?? 0, onOpen: onOpenComments)
             }
@@ -52,7 +60,25 @@ struct DiscoverWorkoutDetailScreen: View {
         .task {
             async let rating: Void = ratingViewModel.load()
             async let tags: Void = taggingViewModel.load()
-            _ = await (rating, tags)
+            async let moderationState: Void = moderation.loadIfNeeded()
+            _ = await (rating, tags, moderationState)
+        }
+        .toolbar {
+            if canReport {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Button("Report workout", systemImage: "flag") {
+                            reportRequest = DiscoverReportRequest(target: .workout(id: card.templateId))
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
+                }
+            }
+        }
+        .sheet(item: $reportRequest) { request in
+            DiscoverReportSheet(target: request.target, moderation: moderation, onFinished: onReported)
+                .presentationDetents([.medium])
         }
     }
 
@@ -88,7 +114,8 @@ struct DiscoverWorkoutDetailScreen: View {
                 myTagsLoader: PreviewTagLoaders(),
                 writer: PreviewTagServices(),
                 suggestionLoader: PreviewTagLoaders()
-            )
+            ),
+            moderation: PreviewModeration.store()
         )
     }
 }

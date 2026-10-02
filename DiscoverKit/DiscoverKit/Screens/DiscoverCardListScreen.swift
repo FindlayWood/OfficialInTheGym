@@ -18,6 +18,10 @@ struct DiscoverCardListScreen<Card: Identifiable, Row: View>: View {
     let title: String
     let emptyMessage: String
     @ObservedObject var pager: DiscoverPager<Card>
+    @ObservedObject var moderation: DiscoverModerationStore
+    /// Whether this user has blocked or reported a card — it is skipped. The
+    /// pager still pages over it, so "load more" keeps its place.
+    var hides: (Card) -> Bool = { _ in false }
     let onTap: (Card) -> Void
     @ViewBuilder let row: (Card) -> Row
 
@@ -26,12 +30,17 @@ struct DiscoverCardListScreen<Card: Identifiable, Row: View>: View {
             SectionContainer {
                 LazyVStack(spacing: 0) {
                     ForEach(Array(pager.cards.enumerated()), id: \.element.id) { index, card in
-                        if index > 0 {
-                            Divider().padding(.leading, 72)
+                        if hides(card) {
+                            Color.clear.frame(height: 0)
+                                .task { await pager.loadMore(ifShowing: card) }
+                        } else {
+                            if index > 0 {
+                                Divider().padding(.leading, 72)
+                            }
+                            row(card)
+                                .onTapGesture { onTap(card) }
+                                .task { await pager.loadMore(ifShowing: card) }
                         }
-                        row(card)
-                            .onTapGesture { onTap(card) }
-                            .task { await pager.loadMore(ifShowing: card) }
                     }
                     footer
                 }

@@ -16,6 +16,7 @@ import SwiftUI
 struct DiscoverHomeScreen: View {
 
     @ObservedObject var viewModel: DiscoverHomeViewModel
+    @ObservedObject var moderation: DiscoverModerationStore
 
     var body: some View {
         VStack(spacing: 0) {
@@ -34,7 +35,11 @@ struct DiscoverHomeScreen: View {
         .background {
             Color.darkColor.ignoresSafeArea()
         }
-        .task { await viewModel.load() }
+        .task {
+            async let content: Void = viewModel.load()
+            async let moderationState: Void = moderation.loadIfNeeded()
+            _ = await (content, moderationState)
+        }
     }
 
     // MARK: - Header
@@ -69,11 +74,11 @@ struct DiscoverHomeScreen: View {
                             .frame(width: 110, height: 160)
                     }
                 }
-            case .loaded(let clips) where clips.isEmpty:
+            case .loaded(let clips) where clips.allSatisfy(moderation.hides):
                 DiscoverSectionMessage(message: "No clips yet")
             case .loaded(let clips):
                 clipStrip {
-                    ForEach(clips) { clip in
+                    ForEach(clips.filter { !moderation.hides($0) }) { clip in
                         DiscoverClipTile(card: clip)
                             .onTapGesture { viewModel.onClipTapped?(clip) }
                     }
@@ -105,10 +110,10 @@ struct DiscoverHomeScreen: View {
             switch viewModel.workouts {
             case .loading:
                 skeletonRows(count: 3)
-            case .loaded(let workouts) where workouts.isEmpty:
+            case .loaded(let workouts) where workouts.allSatisfy(moderation.hides):
                 DiscoverSectionMessage(message: "No public workouts yet")
             case .loaded(let workouts):
-                rows(workouts) { workout in
+                rows(workouts.filter { !moderation.hides($0) }) { workout in
                     DiscoverWorkoutRow(card: workout)
                         .onTapGesture { viewModel.onWorkoutTapped?(workout) }
                 }
@@ -157,11 +162,11 @@ struct DiscoverHomeScreen: View {
                     }
                 }
                 .padding(16)
-            case .loaded(let tags) where tags.isEmpty:
+            case .loaded(let tags) where tags.allSatisfy({ moderation.hides(tag: $0.tag) }):
                 DiscoverSectionMessage(message: "No tags yet")
             case .loaded(let tags):
                 DiscoverFlowLayout {
-                    ForEach(tags) { tag in
+                    ForEach(tags.filter { !moderation.hides(tag: $0.tag) }) { tag in
                         DiscoverTagChip(tag: tag.tag, count: tag.totalCount)
                             .onTapGesture { viewModel.onTagTapped?(tag.tag) }
                     }
@@ -210,6 +215,7 @@ struct DiscoverHomeScreen: View {
             workoutLoader: PreviewDiscoverWorkoutCardLoader(),
             exerciseLoader: PreviewDiscoverExerciseCardLoader(),
             tagLoader: PreviewTagLoaders()
-        )
+        ),
+        moderation: PreviewModeration.store()
     )
 }

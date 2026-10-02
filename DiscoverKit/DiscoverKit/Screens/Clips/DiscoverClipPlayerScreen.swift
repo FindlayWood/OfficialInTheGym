@@ -15,7 +15,16 @@ import SwiftUI
 struct DiscoverClipPlayerScreen: View {
 
     @ObservedObject var viewModel: DiscoverClipPlayerViewModel
+    @ObservedObject var moderation: DiscoverModerationStore
+    /// False on the user's own clip.
+    let canReport: Bool
     let onComments: () -> Void
+    /// Called after reporting or blocking — the player leaves, since what it
+    /// shows is now hidden from this user.
+    var onClose: () -> Void = {}
+
+    @State private var reportRequest: DiscoverReportRequest?
+    @State private var isConfirmingBlock = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -66,6 +75,38 @@ struct DiscoverClipPlayerScreen: View {
             Color.black.ignoresSafeArea()
         }
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if canReport {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Button("Report clip", systemImage: "flag") {
+                            reportRequest = DiscoverReportRequest(target: .clip(id: viewModel.card.clipId))
+                        }
+                        if viewModel.card.createdBy != nil {
+                            Button("Block user", systemImage: "hand.raised", role: .destructive) {
+                                isConfirmingBlock = true
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
+                }
+            }
+        }
+        .sheet(item: $reportRequest) { request in
+            DiscoverReportSheet(target: request.target, moderation: moderation, onFinished: onClose)
+                .presentationDetents([.medium])
+        }
+        .confirmationDialog("Block this user?", isPresented: $isConfirmingBlock, titleVisibility: .visible) {
+            Button("Block", role: .destructive) {
+                guard let userId = viewModel.card.createdBy else { return }
+                Task {
+                    if await moderation.setBlocked(true, userId: userId) { onClose() }
+                }
+            }
+        } message: {
+            Text("Their clips and comments will be hidden from you. They won't be told.")
+        }
         .task { await viewModel.load() }
         .onDisappear { viewModel.finishWatching() }
     }

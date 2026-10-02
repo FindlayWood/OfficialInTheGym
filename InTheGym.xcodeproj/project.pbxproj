@@ -35,6 +35,12 @@
 		D1CA00000000000000000225 /* FirestoreMyTagVotesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000125 /* FirestoreMyTagVotesLoader.swift */; };
 		D1CA00000000000000000226 /* FirestoreTagVoteWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000126 /* FirestoreTagVoteWriter.swift */; };
 		D1CA00000000000000000227 /* WorkoutTagNormalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000127 /* WorkoutTagNormalizer.swift */; };
+		D1CA00000000000000000240 /* DiscoverReportTarget+Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000140 /* DiscoverReportTarget+Firestore.swift */; };
+		D1CA00000000000000000241 /* FirestoreReportWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000141 /* FirestoreReportWriter.swift */; };
+		D1CA00000000000000000242 /* FirestoreMyReportsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000142 /* FirestoreMyReportsLoader.swift */; };
+		D1CA00000000000000000243 /* FirestoreBlockedUsersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000143 /* FirestoreBlockedUsersLoader.swift */; };
+		D1CA00000000000000000244 /* FirestoreBlockedUsersWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000144 /* FirestoreBlockedUsersWriter.swift */; };
+		D1CA00000000000000000245 /* DiscoverBlockPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000145 /* DiscoverBlockPath.swift */; };
 		D1CA00000000000000000002 /* DiscoverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000001 /* DiscoverKit.framework */; };
 		D1CA00000000000000000003 /* DiscoverKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000001 /* DiscoverKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ACE000000000000000000014 /* VerifyEmailResendState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000000A /* VerifyEmailResendState.swift */; };
@@ -1022,6 +1028,12 @@
 		D1CA00000000000000000125 /* FirestoreMyTagVotesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreMyTagVotesLoader.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000126 /* FirestoreTagVoteWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreTagVoteWriter.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000127 /* WorkoutTagNormalizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutTagNormalizer.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000140 /* DiscoverReportTarget+Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiscoverReportTarget+Firestore.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000141 /* FirestoreReportWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreReportWriter.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000142 /* FirestoreMyReportsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreMyReportsLoader.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000143 /* FirestoreBlockedUsersLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreBlockedUsersLoader.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000144 /* FirestoreBlockedUsersWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreBlockedUsersWriter.swift"; sourceTree = "<group>"; };
+		D1CA00000000000000000145 /* DiscoverBlockPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiscoverBlockPath.swift"; sourceTree = "<group>"; };
 		ACE00000000000000000000A /* VerifyEmailResendState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailResendState.swift; sourceTree = "<group>"; };
 		ACE00000000000000000000B /* VerifyEmailErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailErrorBanner.swift; sourceTree = "<group>"; };
 		ACB00000000000000000000A /* SubscriptionProductRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionProductRow.swift; sourceTree = "<group>"; };
@@ -4951,6 +4963,12 @@
 				D1CA00000000000000000125 /* FirestoreMyTagVotesLoader.swift */,
 				D1CA00000000000000000126 /* FirestoreTagVoteWriter.swift */,
 				D1CA00000000000000000127 /* WorkoutTagNormalizer.swift */,
+				D1CA00000000000000000140 /* DiscoverReportTarget+Firestore.swift */,
+				D1CA00000000000000000141 /* FirestoreReportWriter.swift */,
+				D1CA00000000000000000142 /* FirestoreMyReportsLoader.swift */,
+				D1CA00000000000000000143 /* FirestoreBlockedUsersLoader.swift */,
+				D1CA00000000000000000144 /* FirestoreBlockedUsersWriter.swift */,
+				D1CA00000000000000000145 /* DiscoverBlockPath.swift */,
 			);
 			path = DiscoverKit;
 			sourceTree = "<group>";
@@ -5196,6 +5214,12 @@
 				D1CA00000000000000000225 /* FirestoreMyTagVotesLoader.swift in Sources */,
 				D1CA00000000000000000226 /* FirestoreTagVoteWriter.swift in Sources */,
 				D1CA00000000000000000227 /* WorkoutTagNormalizer.swift in Sources */,
+				D1CA00000000000000000240 /* DiscoverReportTarget+Firestore.swift in Sources */,
+				D1CA00000000000000000241 /* FirestoreReportWriter.swift in Sources */,
+				D1CA00000000000000000242 /* FirestoreMyReportsLoader.swift in Sources */,
+				D1CA00000000000000000243 /* FirestoreBlockedUsersLoader.swift in Sources */,
+				D1CA00000000000000000244 /* FirestoreBlockedUsersWriter.swift in Sources */,
+				D1CA00000000000000000245 /* DiscoverBlockPath.swift in Sources */,
 				74A602A72850C87200AFA236 /* WorkoutDiscoveryViewModel.swift in Sources */,
 				7444D0C026D3C9BE0009C7A6 /* UploadingWorkoutViewModel.swift in Sources */,
 				7479812F27DB7EBA00CF3F9B /* RequestsView.swift in Sources */,

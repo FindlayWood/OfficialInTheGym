@@ -68,6 +68,16 @@ class DiscoverKitComposition {
 
         let tagNormalizer: TagNormalizer = WorkoutTagNormalizer()
 
+        // MARK: - Moderation
+
+        let blockedUsersLoader: BlockedUsersLoader = FirestoreBlockedUsersLoader(userId: userId)
+
+        let myReportsLoader: MyReportsLoader = FirestoreMyReportsLoader(userId: userId)
+
+        let reportWriter: ReportWriter = FirestoreReportWriter(userId: userId)
+
+        let blockedUsersWriter: BlockedUsersWriter = FirestoreBlockedUsersWriter(userId: userId)
+
         // MARK: - Router
 
         let router = DiscoverKitRouter(
@@ -93,6 +103,10 @@ class DiscoverKitComposition {
             myTagVotesLoader: myTagVotesLoader,
             tagVoteWriter: tagVoteWriter,
             tagNormalizer: tagNormalizer,
+            blockedUsersLoader: blockedUsersLoader,
+            myReportsLoader: myReportsLoader,
+            reportWriter: reportWriter,
+            blockedUsersWriter: blockedUsersWriter,
             currentUserId: userId
         )
 

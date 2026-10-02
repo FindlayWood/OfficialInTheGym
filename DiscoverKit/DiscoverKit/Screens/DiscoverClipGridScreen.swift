@@ -12,6 +12,7 @@ import SwiftUI
 struct DiscoverClipGridScreen: View {
 
     @ObservedObject var pager: DiscoverPager<DiscoverClipCard>
+    @ObservedObject var moderation: DiscoverModerationStore
     let onTap: (DiscoverClipCard) -> Void
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 3)
@@ -19,7 +20,7 @@ struct DiscoverClipGridScreen: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 8) {
-                ForEach(pager.cards) { clip in
+                ForEach(pager.cards.filter { !moderation.hides($0) }) { clip in
                     DiscoverClipTile(card: clip, width: nil)
                         .onTapGesture { onTap(clip) }
                         .task { await pager.loadMore(ifShowing: clip) }

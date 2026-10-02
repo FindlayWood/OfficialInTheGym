@@ -17,4 +17,5 @@ enum DiscoverKitRoutes {
     case comments(DiscoverSubject)
     case clipPlayer(DiscoverClipCard)
     case tag(String)
+    case blockedUsers
 }
