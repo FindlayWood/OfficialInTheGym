@@ -28,6 +28,12 @@ public struct WorkoutTemplateModel: Identifiable, Codable {
     public let difficulty: WorkoutDifficulty?
     public let createdAt: Date
     public let updatedAt: Date
+    /// The template this one was saved from in DISCOVER, if it is a copy — the
+    /// original's id, kept so the library can tell it already holds a copy.
+    /// **Optional**, as every field added to a persisted model must be: no
+    /// template written before it has the key. A `var` with a default so the
+    /// builder's memberwise construction is unchanged.
+    public var copiedFrom: String? = nil
 }
 
 // MARK: - Workout Exercise (blueprint)

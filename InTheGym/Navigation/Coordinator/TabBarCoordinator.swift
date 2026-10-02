@@ -37,15 +37,6 @@ class TabBarCoordinator: Coordinator {
         let timeLineCoord = TimelineCoordinator(navigationController: timelineNavigationController, subscriptionManager: subscriptionManager)
         
         
-        let discoverNavigationController = UINavigationController()
-        if #available(iOS 13.0, *) {
-            discoverNavigationController.tabBarItem = UITabBarItem(title: "DISCOVER", image: UIImage(systemName: "magnifyingglass"), tag: 1)
-        } else {
-            discoverNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 1)
-        }
-        let discoverCoord = DiscoverCoordinator(navigationController: discoverNavigationController, subscriptionManager: subscriptionManager)
-        
-        
         let workoutsNavigationController = UINavigationController()
         workoutsNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 2)
         let workoutsCoord = WorkoutsCoordinator(navigationController: workoutsNavigationController, subscriptionManager: subscriptionManager)
@@ -73,13 +64,11 @@ class TabBarCoordinator: Coordinator {
         
         if UserDefaults.currentUser.accountType == .coach {
             tabBarController.viewControllers = [timelineNavigationController,
-                                                discoverNavigationController,
                                                 playersNavigationController,
                                                 myProfileNavigationController]
                                                 
         } else {
             tabBarController.viewControllers = [timelineNavigationController,
-                                                discoverNavigationController,
                                                 workoutsNavigationController,
                                                 myProfileNavigationController]
         }
@@ -89,7 +78,6 @@ class TabBarCoordinator: Coordinator {
         navigationController.present(tabBarController, animated: true, completion: nil)
         
         coordinate(to: timeLineCoord)
-        coordinate(to: discoverCoord)
         coordinate(to: myProfileCoord)
         if UserDefaults.currentUser.accountType == .coach {
             coordinate(to: playerCoord)

@@ -33,6 +33,13 @@ enum UploadError: LocalizedError {
 }
 
 
+/// Writes the clip's document to `Clips/{clipID}` once the video is in Storage.
+///
+/// **`Clips`, not `TestClips`.** This used to write `TestClips` while the `recordClipWatch` Cloud
+/// Function wrote view counts to `Clips`, so a clip's metadata and its engagement lived in two
+/// collections that never met. DISCOVER builds its clip cards from `Clips`, which is the one
+/// collection both sides now share. The Storage paths still read `TestClips/…` — nothing looks a
+/// file up by its path, so they were left alone.
 public final class FirestoreMetadataDecorator: ClipUploader {
     
     private let wrapped: ClipUploader
@@ -47,7 +54,7 @@ public final class FirestoreMetadataDecorator: ClipUploader {
 
         let db = Firestore.firestore()
         try await db
-            .collection("TestClips")
+            .collection("Clips")
             .document(result.clipID)
             .setData([
                 "clipID": result.clipID,

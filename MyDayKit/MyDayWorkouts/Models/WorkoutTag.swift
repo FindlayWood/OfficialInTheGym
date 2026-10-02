@@ -22,14 +22,27 @@ import Foundation
 /// The tag field runs every keystroke through this, so what the user sees is
 /// what gets stored; `WorkoutBuilderManager.addTag` runs it again so a tag
 /// cannot reach a template any other way unnormalised.
-enum WorkoutTag {
+///
+/// **Capped at `maxLength`, which must stay in step with `MAX_TAG_LENGTH` in the
+/// Cloud Functions' `Tags/TagRejection.ts`.** The server re-checks every tag
+/// before indexing it and drops anything longer, so without the cap here a
+/// long tag would be shown and stored on the template yet never be findable.
+///
+/// **Public because DISCOVER needs the same rule** for the tags people vote
+/// onto exercises and workouts. DiscoverKit does not import MyDayKit; it
+/// declares a `TagNormalizer`, and the composition root's `WorkoutTagNormalizer`
+/// answers it with this — so the rule still has exactly one definition.
+public enum WorkoutTag {
 
-    static func normalized(_ raw: String) -> String {
+    public static let maxLength = 32
+
+    public static func normalized(_ raw: String) -> String {
         String(
             raw.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: nil)
                 .lowercased()
                 .unicodeScalars
                 .filter { ("a"..."z").contains($0) || ("0"..."9").contains($0) }
+                .prefix(maxLength)
                 .map(Character.init)
         )
     }

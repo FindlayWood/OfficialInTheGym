@@ -1,7 +1,11 @@
 # InTheGym — CLAUDE.md
 
 ## Project Overview
-iOS fitness app. iPhone only, iOS 17+ minimum.
+iOS fitness app. iPhone only, **iOS 26.0 minimum** — the app and all five active frameworks
+(`IPHONEOS_DEPLOYMENT_TARGET = 26.0` everywhere). It used to read iOS 17+ while StatsKit was built
+for 26.1 and MyDayKit for 18.4, so the app could not have launched below 26.1. **A framework must
+never target a newer iOS than the app.** `ITGWorkoutKit` targets lower,
+which is harmless — embedded code may support older versions than the app does.
 Lean, minimal UI aesthetic throughout.
 
 ## Packages & Frameworks
@@ -10,6 +14,7 @@ Lean, minimal UI aesthetic throughout.
 - `StatsKit` — framework
 - `AccountCreationKit` — framework
 - `LoginKit` — framework
+- `DiscoverKit` — framework (in progress — see `DISCOVER_PLAN.md`)
 
 ### Inactive — do not modify
 - `ITGWorkoutKit` — ignore, do not touch
@@ -28,13 +33,15 @@ framework projects and the SPM packages.
 | `LoginKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
 | `StatsKit.xcodeproj` | 36 | **check target membership** |
 | `MyDayKit.xcodeproj` | 149 | **check target membership** |
+| `DiscoverKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
 
-All four use `PBXFileSystemSynchronizedRootGroup`, but only AccountCreationKit and LoginKit are
-driven *entirely* by it. StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
+All five use `PBXFileSystemSynchronizedRootGroup`, but only AccountCreationKit, LoginKit and
+DiscoverKit are driven *entirely* by it. DiscoverKit's project was generated from LoginKit's, with
+its object ids prefixed `D1C`. StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
 `Screens/`, `Models/` etc. individually; MyDayKit lists most of its tree.
 
-`SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES` is set on **StatsKit, AccountCreationKit and
-LoginKit** — the three built from the StatsKit template. **`MyDayKit` does not set it.** A file that
+`SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES` is set on **StatsKit, AccountCreationKit,
+LoginKit and DiscoverKit** — the four built from the StatsKit template. **`MyDayKit` does not set it.** A file that
 compiles inside MyDayKit can therefore fail on a missing `import` the moment it moves into one of the
 other three.
 
@@ -443,9 +450,10 @@ call sites and drifted apart. Do not re-inline any of them:
 Before writing any tests, read all test files and folders within `ITGWorkoutKit`
 and use these as the template for structure, naming, and style.
 
-`ITGWorkoutKit` is read-only but its suite is the reference. `StatsKit/StatsKitTests/` is the one
-substantial framework suite and is the model for new ones — `MyDayKitTests`, `LoginKitTests` and
-`AccountCreationKitTests` are Xcode-generated placeholders.
+`ITGWorkoutKit` is read-only but its suite is the reference. `StatsKit/StatsKitTests/` and
+`DiscoverKit/DiscoverKitTests/` are the substantial framework suites and the model for new ones —
+`LoginKitTests` and `AccountCreationKitTests` are Xcode-generated placeholders, and `MyDayKitTests`
+holds only `WorkoutTemplateModelCopyTests` (its scheme had no test action until DISCOVER added one).
 
 - **`test_<method>_<expectedBehaviour><condition>()`**, behaviour first —
   `test_rolling_deliversRatioOfOneOnSteadyLoad`,
@@ -471,11 +479,17 @@ substantial framework suite and is the model for new ones — `MyDayKitTests`, `
 `.github/workflows` → the shared `CI_iOS` scheme → `CI_iOS_TestPlan.xctestplan`, which sets
 `testExecutionOrdering: random` (tests must not depend on each other) and `testTimeoutsEnabled`.
 
-**A test target is invisible to CI until it is added to the test plan.** The plan currently runs
-`InTheGymTests`, `ITGWorkoutKitTests`, `ITGWorkoutKitiOSTests`, `ITGWorkoutKitCacheIntegrationTests`
-and `WorkoutAPIEndToEndTests`, with coverage measured on `InTheGym`, `ITGWorkoutKit` and
-`ITGWorkoutKitiOS`. **None of the four framework test targets are in it** — `StatsKitTests` included,
-so the ACWR and training-load tests do not currently run on CI.
+**A test target is invisible to CI until it is added to the test plan.** The plan runs
+`InTheGymTests`, `ITGWorkoutKitTests`, `ITGWorkoutKitiOSTests`, `ITGWorkoutKitCacheIntegrationTests`,
+`WorkoutAPIEndToEndTests` **and every framework suite** — `StatsKitTests`, `MyDayKitTests`,
+`AccountCreationKitTests`, `LoginKitTests`, `DiscoverKitTests` — with coverage on the app,
+ITGWorkoutKit and all five frameworks. **Add any new framework's test target here.**
+
+**CI is not actually running.** Every run since at least August fails before starting on a GitHub
+billing error. Once that is fixed the workflow itself still needs updating: it pins Xcode 15.3 (which
+cannot open the `objectVersion = 77` framework projects), an iOS 17.4 simulator — the app now
+needs iOS 26 — and a workspace path of `InTheGym/InTheGym.xcworkspace` (the workspace is at the repo
+root).
 
 ## App Structure
 5 tabs: NEWSFEED, DISCOVER, MYDAY, STATS, PROFILE.
@@ -494,6 +508,12 @@ account (see *Account type is no longer asked*), but existing ones keep that tab
 
 A tab is a `UINavigationController` handed to a coordinator that is `start()`ed, with the whole set
 assigned to `viewControllers` at the end of `viewDidLoad`.
+
+**DISCOVER is `DiscoverKit`** on both tab bars (see `DISCOVER_PLAN.md`). On the player tab bar it is
+composed **after** MyDay and handed `myDayKit.workoutLibrary`, so "Save to Library" writes through
+MyDay's own template saver and library manager; the coach tab bar passes `nil` and its workout pages
+offer no Save. The old RTDB Discover tab is gone, but `ExerciseDescriptions/`, `WorkoutDiscovery/`
+and `ExerciseDiscoveryCoordinator` remain — other legacy flows still reach them.
 
 **`PlayerInitialViewController` builds a tab it never shows.** `WorkoutsCoordinator` has
 `.start()` called on it — building an entire view-controller stack — but its navigation controller
@@ -648,6 +668,10 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   is stored, and `addTag` normalises again so nothing reaches a template unnormalised. Tags are
   matched exactly by Firestore `array-contains`, so "Legs" and "legs" would otherwise be two tags —
   the case-sensitive `Usernames` bug again. **Do not re-inline the rule at a call site.**
+  `WorkoutTag` is **`public`** because DISCOVER applies the same rule to the tags people vote onto
+  exercises and workouts: DiscoverKit declares a `TagNormalizer` and the composition root's
+  `WorkoutTagNormalizer` answers it with `WorkoutTag.normalized` — still one definition.
+  `WorkoutTag.maxLength` (32) must stay in step with the server's `MAX_TAG_LENGTH`.
 - **`WorkoutSessionRecord`**: embedded in `DailyWorkoutEntry`; holds `startedAt`, `endedAt`,
   `rpe?`, `workload?` (duration × RPE), and `exerciseRecords: [WorkoutExerciseRecord]` each with
   `exerciseName: String`, `rpe: Int?`, and `setRecords: [WorkoutSetRecord]` (per-set `isCompleted`
@@ -1151,10 +1175,80 @@ fetches, so previews exercise the full 28-day chronic window rather than a short
 ACWR's edges. Every third active day is deliberately workload-less, which is the exact case the two
 separate ACWRs exist for. A mock that only produces happy data is not useful here.
 
-### Not yet covered by CI
+### On the CI test plan
 `StatsKitTests` — `ACWRTests`, `TrainingLoadMetricTests`, `HomeStatsStreakTests`,
-`DailyTotalDecodingTests`, `TrainingWeekTests` — is **not in `CI_iOS_TestPlan.xctestplan`**, so none
-of it runs on CI. See *Testing → CI*.
+`DailyTotalDecodingTests`, `TrainingWeekTests` — is in `CI_iOS_TestPlan.xctestplan`, but CI is not
+running. See *Testing → CI*.
+
+## DISCOVER Tab — `DiscoverKit`
+Exercises, public workouts and clips, with ratings, comments, likes, tags and moderation. Firestore
+only — nothing reads the Realtime Database. The full build history, every rule and index, and the
+**rollout checklist** are in `DISCOVER_PLAN.md`; this section is the shape and the reasons.
+
+### Cards — the server owns every count
+DISCOVER lists **cards**, never subject documents: `DiscoverExercises/{id}`, `DiscoverWorkouts/{id}`,
+`DiscoverClips/{id}`, each a projection of its subject plus counts, written **only by Cloud
+Functions**. Counts never live on `Exercises` / `WorkoutTemplates` / `Clips` themselves: authors save
+templates and clips with a plain `setData`, which would wipe any count on the next save. Every card
+carries `status` (`visible` / `hidden`, moderation's field) and workouts and clips `isPublic`; every
+query filters on both, and the rules reject a query that does not.
+
+- **Every count is a recount, never a delta** — ratings, comments, replies, likes, tag votes. Triggers
+  are at-least-once; a `+1` per event double-counts every redelivery, permanently.
+- **`score` orders "top rated" and is never shown** — a Bayesian average. The displayed average is
+  `RatingSummary.average` (`ratingSum / ratingCount`), the one place it is worked out.
+- **Every count on a card model is optional.** A new card has none, and a non-optional count would
+  fail to decode every card nobody has rated yet.
+
+### Ratings, comments, likes
+- Ratings 1–10, one per user (`Ratings/{uid}`), exercises and workouts only — **clips are never
+  rated**. You cannot rate your own workout.
+- Comments: one level of replies via `parentId` (stored as an explicit `null` on top-level comments —
+  Firestore cannot query a missing field). **No editing.** Deleting your own is a soft delete (text
+  cleared, `status: removed`) so replies keep a parent. Authors are stored as `authorId` only and
+  resolved at display time through `CachingUserProfileLoader`.
+- Likes on comments and clips, one document per user. Every action shows before the server confirms
+  and is put back on failure.
+
+### Tags — one rule for exercises and workouts
+**Base tags** (a workout author's `tags`, or curated tags seeded onto a catalogue exercise) are always
+visible and count as one vote; **community tags** (`TagVotes/{uid}`, a user's whole set in one
+document, at most 10) become visible at **3 voters**. A user sees their own votes at once, outlined,
+before anyone else does. **Private workouts are never indexed.** The directory is `Tags/{tag}`, with
+subjects under `Tags/{tag}/TaggedExercises` and `/TaggedWorkouts` — not `Exercises`, because the
+functions find a subject's entries by collection-group query and that name would match the catalogue.
+`WorkoutTag.normalized` is the one tag rule on the client, reached through `TagNormalizer`.
+
+### Moderation
+Report a comment, someone else's public workout or clip, or a tag — a fixed reason list, never free
+text. Hidden for everyone at **3 distinct reporters or 1 admin** (the `admin` custom claim, read from
+Auth on the server). Hiding a workout or clip hides its **card** only — the author's copy still works
+in MyDay. **Blocking is on the device**: `DiscoverModerationStore`, one per flow, filters blocked
+users' comments, clips and workouts and anything the user reported, at once. Nothing un-hides
+automatically; restoring is the admin app's, from `ModerationQueue`. **Comments must not reach real
+users unless moderation is rolled out with them** (Apple guideline 1.2).
+
+### Workout pages — Save to Library, a copy
+The workout page's one action is **Save to Library** — never "Add to Today"; a day is MyDay's. The
+save is a **copy** (`WorkoutTemplateModel.copy(savedBy:)` — new id, the saver's, private,
+`copiedFrom` set), so the author editing theirs never changes it. It goes through **MyDay's own saver
+and library manager** (`MyDayWorkoutLibrary`), so it syncs like any template and shows in MyDay's
+library at once.
+
+### How the framework meets the app
+DiscoverKit imports no other framework and defines its own models. Where it needs something another
+framework owns, it declares a protocol and the composition root answers it: `TagNormalizer` →
+`WorkoutTag`, `ClipWatchRecorder` → the existing `FirebaseFunctionsViewClipRecorder` (which serves
+MyDay's `ViewClipRecorder` too), `WorkoutCopySaver` → MyDay's library. **Every Firestore path is in
+the composition root**: `DiscoverSubject+Firestore` (subjects, cards, ratings, comments, tag votes),
+`DiscoverLikeTarget+Firestore`, `DiscoverTagPath`, `DiscoverReportTarget+Firestore`,
+`DiscoverBlockPath`. `DiscoverSubject` and `DiscoverLikeTarget` are `@frozen` — DiscoverKit builds with
+library evolution, and without it every `switch` over them in the app needs an `@unknown default`.
+
+### Emulator
+`InTheGym-Scripts/Emulator/SeedDiscover.py` seeds accounts, exercises, workouts and activity; the
+functions build every card and count from it, so build the functions on the current branch first.
+Run the app with **InTheGym-EM** and sign in as `demo@inthegym.test`.
 
 ## Exercise Stats Raw Logs
 Two things are written when work is recorded, and **both paths write the same two things**:
@@ -1320,6 +1414,16 @@ appears on some screens and not others.
 | `Users/{uid}/WorkoutTemplates/{id}` | Firestore | `FirestoreWorkoutTemplateUploader` — the author's library, what `FirestoreWorkoutTemplateFetcher` reads |
 | `WorkoutTemplates/{id}` | Firestore | `FirestoreTopLevelWorkoutTemplateUploader` — every template, top level; both composed by `UserAndTopLevelWorkoutTemplateUploader` |
 | `Usernames/{username}` | Firestore | `FirestoreUsernameReserver` — **case-sensitive document id** |
+| `Clips/{clipId}` | Firestore | `FirestoreMetadataDecorator` — **not `TestClips`** (the Storage files still are) |
+| `DiscoverExercises/{id}`, `DiscoverWorkouts/{id}`, `DiscoverClips/{id}` | Firestore | **Cloud Functions only** — DISCOVER's cards |
+| `{subject}/Ratings/{uid}` | Firestore | `FirestoreRatingWriter` — exercises and workouts |
+| `{subject}/Comments/{id}`, `…/Comments/{id}/Likes/{uid}` | Firestore | `FirestoreCommentWriter` / `Remover`, `FirestoreLikeWriter` |
+| `Clips/{id}/Likes/{uid}` | Firestore | `FirestoreLikeWriter` |
+| `{subject}/TagVotes/{uid}` | Firestore | `FirestoreTagVoteWriter` — the user's whole tag set |
+| `Tags/{tag}`, `Tags/{tag}/TaggedExercises\|TaggedWorkouts/{id}` | Firestore | **Cloud Functions only** — the tag directory |
+| `Reports/{uid}_{sha256(path)}` | Firestore | `FirestoreReportWriter` — create-only |
+| `ModerationQueue/{sha256(path)}` | Firestore | **Cloud Functions only** — read by the admin app |
+| `Users/{uid}/BlockedUsers/{uid}` | Firestore | `FirestoreBlockedUsersWriter` |
 | `users/{uid}`, posts, followers, requests | RTDB | `FirebaseDatabaseManager` |
 | `CoachPlayers/{coachId}`, `PlayerCoaches/{playerId}` | RTDB | the coach↔athlete link — see *Coach-Assigned Workouts* |
 | `Documents/MyDays/{uid}/{date}.json` | disk | `MyDayFileManagerSaver` |
@@ -1390,7 +1494,14 @@ in this codebase.**
 | `FileManagerWorkoutTemplateUploader` date strategy | `FileManagerWorkoutTemplateFetcher` date strategy | Library reads are local-first |
 | `StatsDay.calendar` | `DateFormatter.yyyyMMdd` | STATS Tab |
 | `LoginFieldCard` / `LoginPrimaryButton` / `LoginErrorBanner` | their AccountCreationKit twins | Auth, Shared UI |
-| the four `Color+Extension.swift` | each other | Brand Colours, Shared UI |
+| the five `Color+Extension.swift` | each other | Brand Colours, Shared UI |
+| DiscoverKit's `SectionContainer` | StatsKit's `SectionContainer` | DISCOVER_PLAN.md step 2 |
+| `WorkoutTag.maxLength` | `MAX_TAG_LENGTH` in the Cloud Functions' `Tags/TagRejection.ts` | DISCOVER_PLAN.md step 1 |
+| `DiscoverReportTarget+Firestore` path shapes | `Discover/Moderation/ReportTarget.ts` | DISCOVER Tab |
+| `DiscoverTagPath` subcollection names | `TAGGED_EXERCISES` / `TAGGED_WORKOUTS` in `SyncTagDirectory.ts` | DISCOVER Tab |
+| `DiscoverTaggingViewModel.maxMyTags` (10) | `MAX_TAGS_PER_VOTER` in `VoterTags.ts`, and the rules | DISCOVER Tab |
+| `DiscoverCommentsViewModel.maxLength` (500) | the comment rules' `text.size()` limit | DISCOVER Tab |
+| `DiscoverReportReason` raw values | the rules' accepted `reason` list | DISCOVER Tab |
 
 ## Analysis artefacts — `.results/`, gitignored
 A generated structural analysis can be produced into `.results/`: `1-techstack.md`,

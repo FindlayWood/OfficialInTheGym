@@ -29,11 +29,6 @@ class PlayerInitialViewController: UITabBarController {
         timelineNavigationController.tabBarItem = UITabBarItem(title: "NEWSFEED", image: UIImage(systemName: "newspaper.fill"), tag: 0)
         let timeLineCoordinator = TimelineCoordinator(navigationController: timelineNavigationController, subscriptionManager: subscriptionManager)
         timeLineCoordinator.start()
-        // MARK: - Discover
-        let discoverNavigationController = UINavigationController()
-        discoverNavigationController.tabBarItem = UITabBarItem(title: "DISCOVER", image: UIImage(systemName: "magnifyingglass"), tag: 1)
-        let discoverCoordinator = DiscoverCoordinator(navigationController: discoverNavigationController, subscriptionManager: subscriptionManager)
-        discoverCoordinator.start()
         // MARK: - Workouts
         let workoutsNavigationController = UINavigationController()
         workoutsNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 2)
@@ -45,6 +40,15 @@ class PlayerInitialViewController: UITabBarController {
         let myDayNavigationController = UINavigationController()
         myDayKit.composeCombination(myDayNavigationController)
         myDayNavigationController.tabBarItem = UITabBarItem(title: "MYDAY", image: UIImage(systemName: "list.dash"), tag: 4)
+
+        // MARK: - Discover
+        // Composed after MyDay: "Save to Library" writes through MyDay's own
+        // template saver and library manager, so a saved workout shows in the
+        // MyDay library at once — see `MyDayWorkoutLibrary`.
+        let discoverKit = DiscoverKitComposition()
+        let discoverNavigationController = UINavigationController()
+        discoverKit.composeCombination(discoverNavigationController, workoutLibrary: myDayKit.workoutLibrary)
+        discoverNavigationController.tabBarItem = UITabBarItem(title: "DISCOVER", image: UIImage(systemName: "magnifyingglass"), tag: 1)
         
         // MARK: - Stats Kit
         let statsKit = StatsKitComposition()

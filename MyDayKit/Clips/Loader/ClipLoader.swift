@@ -14,7 +14,10 @@ public protocol ClipLoader {
 public struct Clip: Codable {
     let clipID: String
     let videoURL: String
-    let thumbnailURL: String
+    /// Optional because it is not always written. `ThumbnailUploadDecorator` only uploads a
+    /// thumbnail when one could be generated, and otherwise the document stores `null` — which a
+    /// non-optional `String` cannot decode, so that clip failed to load at all.
+    let thumbnailURL: String?
     let uploadedAt: Date
     let exerciseID: String
     let isPrivate: Bool
