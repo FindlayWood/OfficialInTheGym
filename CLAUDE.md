@@ -4,7 +4,7 @@
 iOS fitness app. iPhone only, **iOS 26.0 minimum** — the app and all five active frameworks
 (`IPHONEOS_DEPLOYMENT_TARGET = 26.0` everywhere). It used to read iOS 17+ while StatsKit was built
 for 26.1 and MyDayKit for 18.4, so the app could not have launched below 26.1. **A framework must
-never target a newer iOS than the app.** `ITGWorkoutKit` / `ClubKit` / `WorkoutKit` target lower,
+never target a newer iOS than the app.** `ITGWorkoutKit` targets lower,
 which is harmless — embedded code may support older versions than the app does.
 Lean, minimal UI aesthetic throughout.
 
@@ -18,10 +18,10 @@ Lean, minimal UI aesthetic throughout.
 
 ### Inactive — do not modify
 - `ITGWorkoutKit` — ignore, do not touch
-- `ClubKit` — ignore, do not touch
 
-`WorkoutKit` is a third SPM package — legacy, still composed from `WorkoutKitComposition`, not a
-target for new work.
+`ClubKit` and `WorkoutKit` (two legacy SPM packages) were removed from staging. Both were
+constructed in `PlayerInitialViewController` and never shown. They are preserved on the
+`archive/clubkit-workoutkit` branch — restore from there rather than rebuilding them.
 
 ### Project shapes — the four frameworks are not built the same way
 Open **`InTheGym.xcworkspace`**, not `InTheGym.xcodeproj`. It stitches the app project to the four
@@ -515,12 +515,11 @@ MyDay's own template saver and library manager; the coach tab bar passes `nil` a
 offer no Save. The old RTDB Discover tab is gone, but `ExerciseDescriptions/`, `WorkoutDiscovery/`
 and `ExerciseDiscoveryCoordinator` remain — other legacy flows still reach them.
 
-**`PlayerInitialViewController` builds three tabs it never shows.** `ClubKitComposition` and
-`WorkoutKitComposition` are constructed and then not composed, and `WorkoutsCoordinator` has
-`.start()` called on it — building an entire view-controller stack — but none of their navigation
-controllers appear in `viewControllers`. It is dead work on every launch, and it is why ClubKit and
-WorkoutKit are still wired into the app at all. Worth clearing when the NEWSFEED/WORKOUTS tab
-question above is settled.
+**`PlayerInitialViewController` builds a tab it never shows.** `WorkoutsCoordinator` has
+`.start()` called on it — building an entire view-controller stack — but its navigation controller
+never appears in `viewControllers`. It is dead work on every launch. Worth clearing when the
+NEWSFEED/WORKOUTS tab question above is settled. (The ClubKit and WorkoutKit tabs that used to sit
+beside it are gone — see *Packages & Frameworks*.)
 
 ## Workout Library Loading
 The library screen showed an empty state despite saved templates existing. Three defects, all fixed:
@@ -1523,7 +1522,7 @@ here, in prose, with the reason attached.
 - Do not use `Array(repeating:count:)` for reference types
 - Do not use `.insetGrouped` list style
 - Do not use `popToRootViewController()`
-- Do not modify `ITGWorkoutKit` or `ClubKit`
+- Do not modify `ITGWorkoutKit`
 - Do not put concrete infrastructure in framework layer — composition root only
 - Do not create multi-purpose files — one concept per file
 - Do not give one reader or writer two destinations — one writer per path, composed by a decorator
