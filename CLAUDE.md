@@ -13,10 +13,10 @@ Lean, minimal UI aesthetic throughout.
 
 ### Inactive — do not modify
 - `ITGWorkoutKit` — ignore, do not touch
-- `ClubKit` — ignore, do not touch
 
-`WorkoutKit` is a third SPM package — legacy, still composed from `WorkoutKitComposition`, not a
-target for new work.
+`ClubKit` and `WorkoutKit` (two legacy SPM packages) were removed from staging. Both were
+constructed in `PlayerInitialViewController` and never shown. They are preserved on the
+`archive/clubkit-workoutkit` branch — restore from there rather than rebuilding them.
 
 ### Project shapes — the four frameworks are not built the same way
 Open **`InTheGym.xcworkspace`**, not `InTheGym.xcodeproj`. It stitches the app project to the four
@@ -495,12 +495,11 @@ account (see *Account type is no longer asked*), but existing ones keep that tab
 A tab is a `UINavigationController` handed to a coordinator that is `start()`ed, with the whole set
 assigned to `viewControllers` at the end of `viewDidLoad`.
 
-**`PlayerInitialViewController` builds three tabs it never shows.** `ClubKitComposition` and
-`WorkoutKitComposition` are constructed and then not composed, and `WorkoutsCoordinator` has
-`.start()` called on it — building an entire view-controller stack — but none of their navigation
-controllers appear in `viewControllers`. It is dead work on every launch, and it is why ClubKit and
-WorkoutKit are still wired into the app at all. Worth clearing when the NEWSFEED/WORKOUTS tab
-question above is settled.
+**`PlayerInitialViewController` builds a tab it never shows.** `WorkoutsCoordinator` has
+`.start()` called on it — building an entire view-controller stack — but its navigation controller
+never appears in `viewControllers`. It is dead work on every launch. Worth clearing when the
+NEWSFEED/WORKOUTS tab question above is settled. (The ClubKit and WorkoutKit tabs that used to sit
+beside it are gone — see *Packages & Frameworks*.)
 
 ## Workout Library Loading
 The library screen showed an empty state despite saved templates existing. Three defects, all fixed:
@@ -1412,7 +1411,7 @@ here, in prose, with the reason attached.
 - Do not use `Array(repeating:count:)` for reference types
 - Do not use `.insetGrouped` list style
 - Do not use `popToRootViewController()`
-- Do not modify `ITGWorkoutKit` or `ClubKit`
+- Do not modify `ITGWorkoutKit`
 - Do not put concrete infrastructure in framework layer — composition root only
 - Do not create multi-purpose files — one concept per file
 - Do not give one reader or writer two destinations — one writer per path, composed by a decorator
