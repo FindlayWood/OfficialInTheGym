@@ -753,22 +753,26 @@ data lives. Nothing calls it until that feature exists.
   `DiscoverMoreTags` (tag search), and the RTDB models they use. They go when those flows go — the
   same question CLAUDE.md raises about `PlayerInitialViewController` building tabs it never shows.
 
-### Step 10 — Tests and documentation
+### Step 10 — Tests and documentation — done
 
-**Cloud**
-- Emulator tests for every trigger, one file per function, namespaced ids, following the existing
-  suite.
+- **Tests**: 93 Cloud Functions tests on the emulator (`test/Discover/`, `test/Tags/`), 74 DiscoverKit
+  tests, and MyDayKit's copy tests — written step by step rather than here.
+- **CI test plan**: every framework suite added — `StatsKitTests`, `MyDayKitTests`,
+  `AccountCreationKitTests`, `LoginKitTests`, `DiscoverKitTests` — with all five frameworks under code
+  coverage.
+- **CI is not running, for reasons outside DISCOVER**: every run fails before starting on a GitHub
+  billing error; the workflow pins Xcode 15.3 (cannot open the `objectVersion = 77` framework
+  projects), an iOS 17.4 simulator and a wrong workspace path.
+- **Minimum iOS raised to 26.0** for the app and all five active frameworks. StatsKit was built for
+  26.1 and MyDayKit for 18.4 against the app's 17.0 — the app could not have launched below 26.1, and
+  StatsKit's tests could not run on any installed simulator. All five suites now pass on iOS 26.0:
+  StatsKit 28, MyDayKit 7, DiscoverKit 74 (LoginKit and AccountCreationKit have no tests yet).
+- **Docs**: a *DISCOVER Tab* section in the app's `CLAUDE.md`, the new collections in its Firestore
+  table, five new keep-in-step pairs, the CI section corrected; a *DISCOVER* section in the Cloud
+  Functions repo's `CLAUDE.md`.
 
-**App**
-- `DiscoverKitTests` in the `StatsKitTests` style: rating average, tag visibility threshold, profile
-  batching and caching.
-- **Add `DiscoverKitTests` to `CI_iOS_TestPlan.xctestplan`** — a target outside the plan does not run.
-
-**Docs**
-- A Discover section in this repo's `CLAUDE.md`, and the new paths in its Firestore table.
-- The Discover functions in `InTheGym-CloudFunctions/CLAUDE.md`.
-
----
+**The build is complete. What remains is the rollout checklist above** — rules, indexes, deploys,
+seeding and backfills, in step order.
 
 ## Out of scope
 
