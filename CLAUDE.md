@@ -498,6 +498,12 @@ account (see *Account type is no longer asked*), but existing ones keep that tab
 A tab is a `UINavigationController` handed to a coordinator that is `start()`ed, with the whole set
 assigned to `viewControllers` at the end of `viewDidLoad`.
 
+**DISCOVER is `DiscoverKit`** on both tab bars (see `DISCOVER_PLAN.md`). On the player tab bar it is
+composed **after** MyDay and handed `myDayKit.workoutLibrary`, so "Save to Library" writes through
+MyDay's own template saver and library manager; the coach tab bar passes `nil` and its workout pages
+offer no Save. The old RTDB Discover tab is gone, but `ExerciseDescriptions/`, `WorkoutDiscovery/`
+and `ExerciseDiscoveryCoordinator` remain — other legacy flows still reach them.
+
 **`PlayerInitialViewController` builds three tabs it never shows.** `ClubKitComposition` and
 `WorkoutKitComposition` are constructed and then not composed, and `WorkoutsCoordinator` has
 `.start()` called on it — building an entire view-controller stack — but none of their navigation

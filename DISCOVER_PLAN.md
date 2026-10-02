@@ -185,6 +185,13 @@ deployed from either repository); the exact text is under each step below.
       `TagVotes` — **without them the deletion's queries fail**
 - [ ] Nothing to deploy on its own — it ships with, and is called by, the account-deletion feature
 
+**Step 9 — Tab wiring**
+- [ ] Steps 1–7's rules, indexes and deploys are all live before this build ships — DISCOVER now
+      reads nothing from the Realtime Database, so an unrolled step is a broken screen
+- [ ] Emulator: `npm run build` in the functions, then `python Emulator/SeedDiscover.py`, then the
+      InTheGym-EM scheme signed in as `demo@inthegym.test` — every DISCOVER screen has data
+- [ ] Coach account: DISCOVER works and workout pages show no Save to Library
+
 ## Steps
 
 ### Step 1 — Groundwork — built, not rolled out
@@ -727,14 +734,24 @@ data lives. Nothing calls it until that feature exists.
 | `Likes` | `authorId` |
 | `TagVotes` | `authorId` |
 
-### Step 9 — Tab wiring and legacy removal
+### Step 9 — Tab wiring and legacy removal — built, not rolled out
 
 **App**
-- Replace `DiscoverCoordinator` with DiscoverKit in **both** `PlayerInitialViewController` and
-  `CoachInitialViewController`.
-- Delete the legacy RTDB Discover once unreferenced: `Discover/`, `WorkoutDiscovery/`,
-  `ExerciseDescriptions/`, `DiscoverPageDataSource`, and the models behind them (`ExerciseRatingModel`,
-  `WorkoutRatingModel`, `ExerciseCommentModel`, `WorkoutCommentModel`, `TagModel`, `DiscoverExerciseModel`).
+- **Player tab bar** composes DiscoverKit **after** MyDay and hands it `myDayKit.workoutLibrary`, so
+  Save to Library writes through MyDay's own saver and shows in MyDay's library at once.
+- **Coach tab bar** composes DiscoverKit with `workoutLibrary: nil` — no MyDay, so no Save.
+- **Removed — the old Discover tab's own code**, now referenced by nothing: `DiscoverCoordinator`,
+  `DiscoverPageView` / `ViewController` / `ViewModel`, `DiscoverSectionHeader`, `DiscoverMoreWorkouts`,
+  `DiscoverMoreClips`, `DiscoverPageDataSource`, `DiscoverPageSections+Items`, `DiscoverPosts` (and a
+  stray untracked-by-the-project `DiscoverPosts 2.swift`). Their project entries and the two emptied
+  groups went with them. The dead `TabBarCoordinator` (never constructed —
+  `MainCoordinator.coordinateToTabBar()` has no caller) lost its discover tab so it still compiles.
+- **Kept, deliberately — still reached from other legacy flows**, so not Discover's to delete:
+  `ExerciseDescriptions/` and `ExerciseDiscoveryCoordinator` (from legacy workout display / creation,
+  player detail, saved workouts), `WorkoutDiscovery/` (saved workouts), `SearchViewController` +
+  `DiscoverSearchView` (comments, post creation), `PublicProfileViewController` (posts),
+  `DiscoverMoreTags` (tag search), and the RTDB models they use. They go when those flows go — the
+  same question CLAUDE.md raises about `PlayerInitialViewController` building tabs it never shows.
 
 ### Step 10 — Tests and documentation
 

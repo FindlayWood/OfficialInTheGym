@@ -20,10 +20,11 @@ class CoachInitialViewController: UITabBarController {
         let timeLineCoordinator = TimelineCoordinator(navigationController: timelineNavigationController, subscriptionManager: subscriptionManager)
         timeLineCoordinator.start()
         // MARK: - Discover
+        // No MyDay on this tab bar, so no library to save a workout into:
+        // DISCOVER's workout pages offer no Save here.
         let discoverNavigationController = UINavigationController()
+        DiscoverKitComposition().composeCombination(discoverNavigationController, workoutLibrary: nil)
         discoverNavigationController.tabBarItem = UITabBarItem(title: "DISCOVER", image: UIImage(systemName: "magnifyingglass"), tag: 1)
-        let discoverCoordinator = DiscoverCoordinator(navigationController: discoverNavigationController, subscriptionManager: subscriptionManager)
-        discoverCoordinator.start()
         // MARK: - Players
         let playersNavigationController = UINavigationController()
         playersNavigationController.tabBarItem = UITabBarItem(title: "PLAYERS", image: UIImage(systemName: "person.2.fill"), tag: 2)
