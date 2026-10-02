@@ -11,6 +11,10 @@ import MyDayKit
 import SwiftUI
 
 class MyDayKitComposition {
+
+    /// MyDay's workout library, for DISCOVER's "Save to Library" — the same
+    /// saver and manager MyDay itself uses. Set by `composeCombination`.
+    private(set) var workoutLibrary: MyDayWorkoutLibrary?
     
     func composeCombination(_ navigationController: UINavigationController) {
         let loader: ExerciseLoader = FirebaseExerciseLoader()
@@ -101,10 +105,13 @@ class MyDayKitComposition {
         // Local-first, mirroring the write path: `WorkoutTemplateSaver` writes
         // FileManager then queues the remote write, so the library has to read
         // FileManager first or a template that has not synced yet is invisible.
+        let localTemplates: WorkoutTemplateFetching = FileManagerWorkoutTemplateFetcher(userId: userId)
         let workoutLibraryManager = WorkoutLibraryManager(
-            local: FileManagerWorkoutTemplateFetcher(userId: userId),
+            local: localTemplates,
             remote: FirestoreWorkoutTemplateFetcher()
         )
+
+        workoutLibrary = MyDayWorkoutLibrary(saver: saver, manager: workoutLibraryManager, local: localTemplates)
         
         let coordinator = MyDayCoordinator(
             navigationController: navigationController,

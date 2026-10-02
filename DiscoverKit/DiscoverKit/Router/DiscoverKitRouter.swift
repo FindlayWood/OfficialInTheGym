@@ -20,6 +20,10 @@ import UIKit
 /// not rate or report their own workout, not report their own clip, delete
 /// only their own comments.
 ///
+/// `workoutCopySaver` / `savedWorkoutCopyChecker` are **optional**: they reach
+/// the user's MyDay library, and the coach tab bar has no MyDay — there, a
+/// workout page simply offers no Save.
+///
 /// `moderation` is the one `DiscoverModerationStore` for the flow — built here,
 /// as a flow-scoped manager is, and handed to every screen that lists
 /// something, so a block or report on one screen hides the thing on all of
@@ -57,6 +61,10 @@ public final class DiscoverKitRouter {
     let myReportsLoader: MyReportsLoader
     let reportWriter: ReportWriter
     let blockedUsersWriter: BlockedUsersWriter
+    let workoutDetailLoader: DiscoverWorkoutDetailLoader
+    let exerciseClipsLoader: ExerciseClipsLoader
+    let workoutCopySaver: WorkoutCopySaver?
+    let savedWorkoutCopyChecker: SavedWorkoutCopyChecker?
     let currentUserId: String
 
     // MARK: - Properties
@@ -100,6 +108,10 @@ public final class DiscoverKitRouter {
         myReportsLoader: MyReportsLoader,
         reportWriter: ReportWriter,
         blockedUsersWriter: BlockedUsersWriter,
+        workoutDetailLoader: DiscoverWorkoutDetailLoader,
+        exerciseClipsLoader: ExerciseClipsLoader,
+        workoutCopySaver: WorkoutCopySaver?,
+        savedWorkoutCopyChecker: SavedWorkoutCopyChecker?,
         currentUserId: String
     ) {
         self.navigationController = navigationController
@@ -128,6 +140,10 @@ public final class DiscoverKitRouter {
         self.myReportsLoader = myReportsLoader
         self.reportWriter = reportWriter
         self.blockedUsersWriter = blockedUsersWriter
+        self.workoutDetailLoader = workoutDetailLoader
+        self.exerciseClipsLoader = exerciseClipsLoader
+        self.workoutCopySaver = workoutCopySaver
+        self.savedWorkoutCopyChecker = savedWorkoutCopyChecker
         self.currentUserId = currentUserId
     }
 
@@ -223,6 +239,7 @@ extension DiscoverKitRouter {
             let vc = UIHostingController(
                 rootView: DiscoverExerciseDetailScreen(
                     card: card,
+                    clipsViewModel: DiscoverExerciseClipsViewModel(exerciseId: card.exerciseId, loader: exerciseClipsLoader),
                     ratingViewModel: ratingViewModel,
                     taggingViewModel: makeTaggingViewModel(
                         subject: .exercise(id: card.exerciseId),
@@ -232,7 +249,8 @@ extension DiscoverKitRouter {
                     ),
                     moderation: moderation,
                     onOpenComments: { [weak self] in self?.navigate(to: .comments(.exercise(id: card.exerciseId))) },
-                    onTagTapped: { [weak self] in self?.navigate(to: .tag($0)) }
+                    onTagTapped: { [weak self] in self?.navigate(to: .tag($0)) },
+                    onClipTapped: { [weak self] in self?.navigate(to: .clipPlayer($0)) }
                 )
             )
             vc.hidesBottomBarWhenPushed = true
@@ -247,6 +265,7 @@ extension DiscoverKitRouter {
             let vc = UIHostingController(
                 rootView: DiscoverWorkoutDetailScreen(
                     card: card,
+                    detailViewModel: makeWorkoutDetailViewModel(card),
                     ratingViewModel: ratingViewModel,
                     taggingViewModel: makeTaggingViewModel(
                         subject: .workout(id: card.templateId),
@@ -333,6 +352,20 @@ extension DiscoverKitRouter {
             vc.hidesBottomBarWhenPushed = true
             return vc
         }
+    }
+
+    /// No Save on the user's own workout — it is already in their library.
+    @MainActor
+    private func makeWorkoutDetailViewModel(_ card: DiscoverWorkoutCard) -> DiscoverWorkoutDetailViewModel {
+        let isOwn = card.createdBy == currentUserId
+        return DiscoverWorkoutDetailViewModel(
+            templateId: card.templateId,
+            createdBy: card.createdBy,
+            detailLoader: workoutDetailLoader,
+            profileLoader: profileLoader,
+            copySaver: isOwn ? nil : workoutCopySaver,
+            copyChecker: isOwn ? nil : savedWorkoutCopyChecker
+        )
     }
 
     @MainActor

@@ -21,13 +21,15 @@
 		B2C7E4A38F1D46E5A709C3D1 /* SessionSetMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A9D8B26C3E4718B52A0E67 /* SessionSetMeasure.swift */; };
 		C1A4E9B36D82F5470E93B2A8 /* NavBarHidingHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B26D5F94A03E1C86D5470FA /* NavBarHidingHostingController.swift */; };
 		C4E1A9075B3D42F8B60C1E29 /* SessionSetPillPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F2B1483C6E49A1852D0F37 /* SessionSetPillPlaceholder.swift */; };
+		C7D52F1A2FE8B2E000B20002 /* WorkoutTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D52F1A2FE8B2E000B20001 /* WorkoutTag.swift */; };
+		C7D52F1A2FE8B2E000B20004 /* WorkoutTemplateModel+Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D52F1A2FE8B2E000B20003 /* WorkoutTemplateModel+Copy.swift */; };
 		CE6D407F61F74E0096FAE36E /* WorkoutSessionSummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460FCF49623A468BA34BB4AD /* WorkoutSessionSummaryScreen.swift */; };
 		D1E5A7C13B9F44A28E610002 /* WorkoutSetRecord+Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E5A7C13B9F44A28E610001 /* WorkoutSetRecord+Stats.swift */; };
-		E4C90B7A15D24F8E9A330002 /* CompletedWorkoutSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330001 /* CompletedWorkoutSession.swift */; };
-		E4C90B7A15D24F8E9A330004 /* MyDayManager+CompletedSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330003 /* MyDayManager+CompletedSessions.swift */; };
 		D1E5A7C13B9F44A28E610004 /* MyDayManager+WorkoutStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E5A7C13B9F44A28E610003 /* MyDayManager+WorkoutStats.swift */; };
 		D82F16A5943BC7E0521D8F46 /* MyDayWorkoutNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E97B24C60D1A85F7C42E930 /* MyDayWorkoutNavBar.swift */; };
 		D9A3F1C74B8E42D6A017E5B3 /* SessionSetValueSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E28B4D3A9F41708D2C7F15 /* SessionSetValueSheet.swift */; };
+		E4C90B7A15D24F8E9A330002 /* CompletedWorkoutSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330001 /* CompletedWorkoutSession.swift */; };
+		E4C90B7A15D24F8E9A330004 /* MyDayManager+CompletedSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330003 /* MyDayManager+CompletedSessions.swift */; };
 		E5B29A4761D3C08A24F7B913 /* SessionSetPillValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93A7D615C40E2871FA6D385 /* SessionSetPillValue.swift */; };
 		E8B4C2915A7D43F2916E0B48 /* SessionSetInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D6F3072E8B44C7B35F1D90 /* SessionSetInput.swift */; };
 		F00CD1722E4D2DBB0051042A /* MyDayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CD1712E4D2DBB0051042A /* MyDayManager.swift */; };
@@ -50,7 +52,6 @@
 		F034E7CE2F92E89100DDB10C /* RPEModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E7CD2F92E89100DDB10C /* RPEModel.swift */; };
 		F034E7D32F92E8C000DDB10C /* RPECard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E7D22F92E8C000DDB10C /* RPECard.swift */; };
 		F034E8112F95214A00DDB10C /* MyDayWorkoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E8102F95214A00DDB10C /* MyDayWorkoutModel.swift */; };
-		C7D52F1A2FE8B2E000B20002 /* WorkoutTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D52F1A2FE8B2E000B20001 /* WorkoutTag.swift */; };
 		F034EA9E2F9CEDDC00DDB10C /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034EA9D2F9CEDDC00DDB10C /* Color+Extension.swift */; };
 		F034EAA12F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034EAA02F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift */; };
 		F044A9902FCE28BB0038ADC8 /* MyDayWorkoutBuilderDistanceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F044A98F2FCE28BB0038ADC8 /* MyDayWorkoutBuilderDistanceScreen.swift */; };
@@ -184,13 +185,15 @@
 		B93A7D615C40E2871FA6D385 /* SessionSetPillValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetPillValue.swift; sourceTree = "<group>"; };
 		C48D5E9370B2A16FE8320D74 /* WeightUnit+Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightUnit+Session.swift"; sourceTree = "<group>"; };
 		C6E28B4D3A9F41708D2C7F15 /* SessionSetValueSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetValueSheet.swift; sourceTree = "<group>"; };
+		C7D52F1A2FE8B2E000B20001 /* WorkoutTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTag.swift; sourceTree = "<group>"; };
+		C7D52F1A2FE8B2E000B20003 /* WorkoutTemplateModel+Copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutTemplateModel+Copy.swift"; sourceTree = "<group>"; };
 		D1E5A7C13B9F44A28E610001 /* WorkoutSetRecord+Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutSetRecord+Stats.swift"; sourceTree = "<group>"; };
-		E4C90B7A15D24F8E9A330001 /* CompletedWorkoutSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompletedWorkoutSession.swift"; sourceTree = "<group>"; };
-		E4C90B7A15D24F8E9A330003 /* MyDayManager+CompletedSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyDayManager+CompletedSessions.swift"; sourceTree = "<group>"; };
 		D1E5A7C13B9F44A28E610003 /* MyDayManager+WorkoutStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyDayManager+WorkoutStats.swift"; sourceTree = "<group>"; };
 		D2E501441CAB4B9F9C547C90 /* SessionSetEditTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetEditTarget.swift; sourceTree = "<group>"; };
 		D35E8E17535542B3B9FDC4EB /* SessionSetDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetDetail.swift; sourceTree = "<group>"; };
 		D7F2B1483C6E49A1852D0F37 /* SessionSetPillPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetPillPlaceholder.swift; sourceTree = "<group>"; };
+		E4C90B7A15D24F8E9A330001 /* CompletedWorkoutSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedWorkoutSession.swift; sourceTree = "<group>"; };
+		E4C90B7A15D24F8E9A330003 /* MyDayManager+CompletedSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyDayManager+CompletedSessions.swift"; sourceTree = "<group>"; };
 		F00CD1712E4D2DBB0051042A /* MyDayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayManager.swift; sourceTree = "<group>"; };
 		F01E0E922E78A9D6008C1547 /* RecordClipScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordClipScreen.swift; sourceTree = "<group>"; };
 		F01E0E962E7A01E8008C1547 /* ClipPlaybackScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipPlaybackScreen.swift; sourceTree = "<group>"; };
@@ -211,7 +214,6 @@
 		F034E7CD2F92E89100DDB10C /* RPEModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPEModel.swift; sourceTree = "<group>"; };
 		F034E7D22F92E8C000DDB10C /* RPECard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPECard.swift; sourceTree = "<group>"; };
 		F034E8102F95214A00DDB10C /* MyDayWorkoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutModel.swift; sourceTree = "<group>"; };
-		C7D52F1A2FE8B2E000B20001 /* WorkoutTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTag.swift; sourceTree = "<group>"; };
 		F034EA9D2F9CEDDC00DDB10C /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		F034EAA02F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutCreationHomeScreen.swift; sourceTree = "<group>"; };
 		F044A98F2FCE28BB0038ADC8 /* MyDayWorkoutBuilderDistanceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutBuilderDistanceScreen.swift; sourceTree = "<group>"; };
@@ -465,6 +467,7 @@
 			children = (
 				F034E8102F95214A00DDB10C /* MyDayWorkoutModel.swift */,
 				C7D52F1A2FE8B2E000B20001 /* WorkoutTag.swift */,
+				C7D52F1A2FE8B2E000B20003 /* WorkoutTemplateModel+Copy.swift */,
 				F09C545C2FE08239007CDAB4 /* DailyWorkoutEntry.swift */,
 				F09C5ACF2FF1CA6A007CDAB4 /* WorkoutExerciseRecord.swift */,
 				F09C5AD02FF1CA6A007CDAB4 /* WorkoutSessionRecord.swift */,
@@ -1015,6 +1018,7 @@
 				F0D3444B2F2582E900AB6121 /* UploadProgressView.swift in Sources */,
 				F034E8112F95214A00DDB10C /* MyDayWorkoutModel.swift in Sources */,
 				C7D52F1A2FE8B2E000B20002 /* WorkoutTag.swift in Sources */,
+				C7D52F1A2FE8B2E000B20004 /* WorkoutTemplateModel+Copy.swift in Sources */,
 				F03334632F1FF2E2004102AC /* RecordingProgressRing.swift in Sources */,
 				F0BE5C182EB7AC71009677F5 /* ExerciseCompletionView.swift in Sources */,
 				F0F608282E42A1B50015F260 /* ExerciseLoader.swift in Sources */,

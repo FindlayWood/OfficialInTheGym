@@ -173,6 +173,13 @@ deployed from either repository); the exact text is under each step below.
 - [ ] Block a user: their comments and clips disappear; unblock from Blocked Users brings them back
 - [ ] **Once this is rolled out, comments (step 4) may reach real users**
 
+**Step 7 — Workout and exercise pages**
+- [ ] Console index: `DiscoverClips` on `exerciseId`, `isPublic`, `status`, `uploadedAt` ↓
+- [ ] Open a public workout: exercises and author show; Save to Library → it appears in MyDay's
+      library at once, private, and the page reads "Saved" on the next visit
+- [ ] Edit the original as its author; the saved copy does not change
+- [ ] Open an exercise with public clips: the strip shows them, newest first
+
 ## Steps
 
 ### Step 1 — Groundwork — built, not rolled out
@@ -624,18 +631,57 @@ And, for the admin app later, add `|| isAdminStatusChange()` to the `update` rul
 
 **Console — indexes**: none. Both report queries are single-field equality.
 
-### Step 7 — Workout and exercise detail, and shared actions
+### Step 7 — Workout and exercise pages — built, not rolled out
 
-**App**
-- Exercise detail: rating, tags, comments, and the exercise's clips.
-- Workout detail: DiscoverKit's own `DiscoverWorkout` read model, rating, tags, comments.
-- Actions reached through composition, never by importing another framework:
+**Decided here:** the workout page's one action is **Save to Library** — never "Add to Today";
+putting a workout on a day is MyDay's job, from the library, where the date strip is. The save is
+**a copy, not a reference**: private, the saver's own, and unchanged when the author edits theirs —
+the same reasoning as snapshotting a coach-assigned workout at accept time.
 
-| Discover needs | DiscoverKit declares | Composition root provides |
-|---|---|---|
-| Add a workout to today | `DiscoverWorkoutAdder` | Adapter that fetches the full `WorkoutTemplateModel` and calls MyDay's `addWorkoutToDay`. The entry snapshots the template, so the author later deleting it breaks nothing. |
-| Normalise a tag | `TagNormalizer` | Adapter over `WorkoutTag.normalized` |
-| Record a clip watch | `ClipWatchRecorder` | The existing `FirebaseFunctionsViewClipRecorder`, conformed in an extension |
+**App — MyDayKit**
+- `WorkoutTemplateModel.copiedFrom: String?` — optional, as every new persisted field must be; a
+  `var` with a default so the builder's construction is unchanged.
+- `WorkoutTemplateModel.copy(savedBy:id:at:)` — **the one definition of a copy**: new id, the
+  saver's `createdBy`, created now, `isPublic: false`, content and tags unchanged, `copiedFrom` set.
+- `WorkoutTemplateModelCopyTests`, and the MyDayKit scheme now runs `MyDayKitTests` — it had no
+  test action, so no MyDayKit test could run from the scheme at all.
+
+**App — DiscoverKit**
+- `DiscoverWorkoutDetail` / `DiscoverWorkoutExercise` / `DiscoverWorkoutSet` — the page's own
+  read-only model. `DiscoverWorkoutExercise.summary` (`4 × 8 · 80 kg`, `3 × 8–12`, a varying load
+  left out rather than averaged).
+- Protocols: `DiscoverWorkoutDetailLoader`, `ExerciseClipsLoader`, `WorkoutCopySaver`,
+  `SavedWorkoutCopyChecker` — the last two **optional** in the router: nil on the coach tab bar,
+  which has no MyDay, and on the user's own workout.
+- Workout page: author ("by …"), description, **Save to Library** (checks for an existing copy
+  first; `Saved` / failed-with-retry), the exercises with their summaries, then rating, tags,
+  comments. Exercise page: a strip of that exercise's newest clips.
+- The tag page's stray divider for a hidden workout is fixed.
+- Tests: `DiscoverWorkoutExerciseSummaryTests`, `DiscoverWorkoutDetailViewModelTests`,
+  `WorkoutCopySaverSpy`.
+
+**App — composition root**
+- `MyDayWorkoutLibrary` — MyDay's template saver, library manager and local store, **the same
+  instances MyDay uses**, handed out by `MyDayKitComposition.workoutLibrary`. A copy written through
+  any other saver would skip the sync queue; one added to any other manager would not show in
+  MyDay's already-loaded library until relaunch.
+- `FirestoreWorkoutTemplateByIdFetcher` (behind `WorkoutTemplateByIdFetching`) — one reader for both
+  the page and the copy. `TemplateDiscoverWorkoutDetailLoader` maps the template to the page model.
+- `LibraryWorkoutCopySaver` — read, `copy(savedBy:)`, save through MyDay's saver, add to MyDay's
+  manager; knows no paths. `LibraryWorkoutCopyChecker` — reads the local store, so a copy saved a
+  moment ago counts before it syncs.
+- `FirestoreExerciseClipsLoader`.
+- `DiscoverKitComposition.composeCombination` now takes `workoutLibrary:` — **wired in step 9**,
+  where the player tab bar passes MyDay's and the coach tab bar passes `nil`.
+
+**Console — index**
+
+| Collection | Fields |
+|---|---|
+| `DiscoverClips` | `exerciseId` ↑, `isPublic` ↑, `status` ↑, `uploadedAt` ↓ |
+
+No new rules: a copy is written through the existing template pipeline, as the saver's own private
+template.
 
 ### Step 8 — `deleteDiscoverData(uid)`
 

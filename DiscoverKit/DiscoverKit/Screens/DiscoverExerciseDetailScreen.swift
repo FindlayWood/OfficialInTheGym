@@ -7,16 +7,18 @@
 
 import SwiftUI
 
-/// An exercise's DISCOVER page: its header, rating, tags and the way into
-/// its comments. The exercise's clips join it in a later step of the plan.
+/// An exercise's DISCOVER page: its header, rating, tags, the clips of people
+/// doing it, and the way into its comments.
 struct DiscoverExerciseDetailScreen: View {
 
     let card: DiscoverExerciseCard
+    @ObservedObject var clipsViewModel: DiscoverExerciseClipsViewModel
     @ObservedObject var ratingViewModel: DiscoverRatingViewModel
     @ObservedObject var taggingViewModel: DiscoverTaggingViewModel
     @ObservedObject var moderation: DiscoverModerationStore
     var onOpenComments: () -> Void = {}
     var onTagTapped: (String) -> Void = { _ in }
+    var onClipTapped: (DiscoverClipCard) -> Void = { _ in }
 
     var body: some View {
         ScrollView {
@@ -43,6 +45,8 @@ struct DiscoverExerciseDetailScreen: View {
 
                 DiscoverTagsSection(viewModel: taggingViewModel, moderation: moderation, onTagTapped: onTagTapped)
 
+                DiscoverExerciseClipsSection(viewModel: clipsViewModel, moderation: moderation, onClipTapped: onClipTapped)
+
                 DiscoverCommentsEntrySection(count: card.commentCount ?? 0, onOpen: onOpenComments)
             }
             .padding()
@@ -53,10 +57,11 @@ struct DiscoverExerciseDetailScreen: View {
         .navigationTitle(card.name)
         .navigationBarTitleDisplayMode(.inline)
         .task {
+            async let clips: Void = clipsViewModel.load()
             async let rating: Void = ratingViewModel.load()
             async let tags: Void = taggingViewModel.load()
             async let moderationState: Void = moderation.loadIfNeeded()
-            _ = await (rating, tags, moderationState)
+            _ = await (clips, rating, tags, moderationState)
         }
     }
 }
@@ -66,6 +71,7 @@ struct DiscoverExerciseDetailScreen: View {
     NavigationStack {
         DiscoverExerciseDetailScreen(
             card: card,
+            clipsViewModel: DiscoverExerciseClipsViewModel(exerciseId: card.exerciseId, loader: PreviewWorkoutLoaders()),
             ratingViewModel: DiscoverRatingViewModel(
                 subject: .exercise(id: card.exerciseId),
                 initialSummary: card.ratingSummary,

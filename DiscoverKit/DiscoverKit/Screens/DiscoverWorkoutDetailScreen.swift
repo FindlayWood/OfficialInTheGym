@@ -7,11 +7,15 @@
 
 import SwiftUI
 
-/// A workout's DISCOVER page: its header, rating, tags and the way into its
-/// comments. The exercises and "Add to Today" join it in a later step.
+/// A workout's DISCOVER page: who made it, what is in it, saving a copy to the
+/// user's library, then its rating, tags and the way into its comments.
+///
+/// The one action is **Save to Library**, never "Add to Today" — putting a
+/// workout on a day is MyDay's job, from the library, where the date strip is.
 struct DiscoverWorkoutDetailScreen: View {
 
     let card: DiscoverWorkoutCard
+    @ObservedObject var detailViewModel: DiscoverWorkoutDetailViewModel
     @ObservedObject var ratingViewModel: DiscoverRatingViewModel
     @ObservedObject var taggingViewModel: DiscoverTaggingViewModel
     @ObservedObject var moderation: DiscoverModerationStore
@@ -38,10 +42,35 @@ struct DiscoverWorkoutDetailScreen: View {
                             Text(subtitle)
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundStyle(.secondary)
+                            if let author = detailViewModel.authorName {
+                                Text("by \(author)")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundStyle(Color.darkColor)
+                            }
                         }
                         Spacer(minLength: 0)
                     }
                     .padding(16)
+                    if case .loaded(let detail) = detailViewModel.detail,
+                       let description = detail.description,
+                       !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        Divider()
+                        Text(description)
+                            .font(.system(size: 14))
+                            .foregroundStyle(.primary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(16)
+                    }
+                }
+
+                if detailViewModel.saveState != .unavailable {
+                    DiscoverSaveToLibraryButton(state: detailViewModel.saveState) {
+                        Task { await detailViewModel.save() }
+                    }
+                }
+
+                DiscoverWorkoutExercisesSection(state: detailViewModel.detail) {
+                    Task { await detailViewModel.loadDetail() }
                 }
 
                 DiscoverRatingSection(viewModel: ratingViewModel)
@@ -58,10 +87,11 @@ struct DiscoverWorkoutDetailScreen: View {
         .navigationTitle(card.title)
         .navigationBarTitleDisplayMode(.inline)
         .task {
+            async let detail: Void = detailViewModel.load()
             async let rating: Void = ratingViewModel.load()
             async let tags: Void = taggingViewModel.load()
             async let moderationState: Void = moderation.loadIfNeeded()
-            _ = await (rating, tags, moderationState)
+            _ = await (detail, rating, tags, moderationState)
         }
         .toolbar {
             if canReport {
@@ -97,6 +127,14 @@ struct DiscoverWorkoutDetailScreen: View {
     NavigationStack {
         DiscoverWorkoutDetailScreen(
             card: card,
+            detailViewModel: DiscoverWorkoutDetailViewModel(
+                templateId: card.templateId,
+                createdBy: "u1",
+                detailLoader: PreviewWorkoutLoaders(),
+                profileLoader: PreviewUserProfileLoader(),
+                copySaver: PreviewWorkoutLoaders(),
+                copyChecker: PreviewWorkoutLoaders()
+            ),
             ratingViewModel: DiscoverRatingViewModel(
                 subject: .workout(id: card.templateId),
                 initialSummary: card.ratingSummary,

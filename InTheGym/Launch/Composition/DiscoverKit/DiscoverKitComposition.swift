@@ -12,8 +12,10 @@ import DiscoverKit
 
 class DiscoverKitComposition {
 
+    /// `workoutLibrary` is MyDay's — see `MyDayWorkoutLibrary`. Nil on the coach
+    /// tab bar, which has no MyDay, and then a workout page offers no Save.
     @MainActor
-    func composeCombination(_ navigationController: UINavigationController) {
+    func composeCombination(_ navigationController: UINavigationController, workoutLibrary: MyDayWorkoutLibrary?) {
 
         // MARK: - Card loaders
 
@@ -78,6 +80,22 @@ class DiscoverKitComposition {
 
         let blockedUsersWriter: BlockedUsersWriter = FirestoreBlockedUsersWriter(userId: userId)
 
+        // MARK: - Workout and exercise pages
+
+        let templateFetcher: WorkoutTemplateByIdFetching = FirestoreWorkoutTemplateByIdFetcher()
+
+        let workoutDetailLoader: DiscoverWorkoutDetailLoader = TemplateDiscoverWorkoutDetailLoader(fetcher: templateFetcher)
+
+        let exerciseClipsLoader: ExerciseClipsLoader = FirestoreExerciseClipsLoader()
+
+        let workoutCopySaver: WorkoutCopySaver? = workoutLibrary.map {
+            LibraryWorkoutCopySaver(fetcher: templateFetcher, library: $0, userId: userId)
+        }
+
+        let savedWorkoutCopyChecker: SavedWorkoutCopyChecker? = workoutLibrary.map {
+            LibraryWorkoutCopyChecker(local: $0.local)
+        }
+
         // MARK: - Router
 
         let router = DiscoverKitRouter(
@@ -107,6 +125,10 @@ class DiscoverKitComposition {
             myReportsLoader: myReportsLoader,
             reportWriter: reportWriter,
             blockedUsersWriter: blockedUsersWriter,
+            workoutDetailLoader: workoutDetailLoader,
+            exerciseClipsLoader: exerciseClipsLoader,
+            workoutCopySaver: workoutCopySaver,
+            savedWorkoutCopyChecker: savedWorkoutCopyChecker,
             currentUserId: userId
         )
 
