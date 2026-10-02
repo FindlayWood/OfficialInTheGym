@@ -180,6 +180,11 @@ deployed from either repository); the exact text is under each step below.
 - [ ] Edit the original as its author; the saved copy does not change
 - [ ] Open an exercise with public clips: the strip shows them, newest first
 
+**Step 8 — `deleteDiscoverData`**
+- [ ] Console indexes: collection-group `authorId` exemptions on `Ratings`, `Comments`, `Likes`,
+      `TagVotes` — **without them the deletion's queries fail**
+- [ ] Nothing to deploy on its own — it ships with, and is called by, the account-deletion feature
+
 ## Steps
 
 ### Step 1 — Groundwork — built, not rolled out
@@ -683,17 +688,44 @@ the same reasoning as snapshotting a coach-assigned workout at accept time.
 No new rules: a copy is written through the existing template pipeline, as the saver's own private
 template.
 
-### Step 8 — `deleteDiscoverData(uid)`
+### Step 8 — `deleteDiscoverData(uid)` — built, not called yet
 
-**Cloud** — a module the separate account-deletion feature will call. Built and tested here.
-- Hard-delete the user's `Ratings`, `Likes`, `TagVotes` and `Reports` via collection-group queries on
-  `authorId`. **The existing triggers correct every count** — the deletion never touches a count.
-- Comments: delete those with no replies; turn those with replies into placeholders (`text` cleared,
-  `authorId` removed, `status: "removed"`) so other people's replies still make sense.
-- Delete the user's clips (document, Storage video and thumbnail) and public workouts; their subject
-  triggers clean up cards, tag entries and everything other people left on them.
-- **Re-runnable**: every step is a delete-if-exists that resumes where it stopped. Auth triggers are
-  at-least-once and a heavy account may outlast one invocation.
+A module, not a trigger: the separate account-deletion feature calls it, alongside the MyDay, stats,
+Storage, `Usernames` and RTDB pieces. Built and tested here because only DISCOVER knows where its
+data lives. Nothing calls it until that feature exists.
+
+**Cloud** (`src/Discover/Deletion/`)
+- `deleteDiscoverData(db, bucket, userId)` returns a summary of what it did:
+  - **ratings, likes, tag votes, reports** — hard-deleted via collection-group queries on `authorId`
+    (`reporterId` for the top-level `Reports`). The existing triggers recount every card and comment
+    they counted toward; the deletion never touches a count.
+  - **comments** — one that **someone else** has replied to becomes a placeholder (text cleared,
+    `authorId` removed, `removed` — or still `hidden` if moderation hid it), so their replies read
+    under "Comment removed". Every other comment is deleted with its likes. Only other people's
+    replies count: the user's own replies go in the same pass, and a placeholder kept for them would
+    be empty. Judging it that way needs no ordering, which paging could not guarantee.
+  - **clips** — the document and everything under it, plus `TestClips/{uid}/` and
+    `TestClipThumbnails/{uid}/` in Storage. The clip-card trigger removes the card.
+  - **workout templates**, public and private — the top-level document and everything under it; the
+    card and tag triggers clean up. Copies other people saved are theirs and stay.
+  - **the user's block list.**
+- `forEachInPages` — re-runs the query from the start after each page (every handler takes the
+  document out of the query), so **a run that stops halfway resumes on the next**; a page with
+  nothing new ends the loop rather than spinning. Auth deletion triggers are at-least-once and a
+  large account may need several runs.
+- Tests: `deleteDiscoverData.test.ts` — including a second run finding nothing.
+- Not in scope: `Users/{uid}/WorkoutTemplates` and the rest of `Users/{uid}` — the account-deletion
+  feature deletes that subtree. Other users' `BlockedUsers/{uid}` entries for this user are left;
+  they are harmless and cannot be found without reading every user's blocks.
+
+**Console — indexes** (collection-group single-field exemptions, `authorId` ↑)
+
+| Collection group | Field |
+|---|---|
+| `Ratings` | `authorId` |
+| `Comments` | `authorId` |
+| `Likes` | `authorId` |
+| `TagVotes` | `authorId` |
 
 ### Step 9 — Tab wiring and legacy removal
 
