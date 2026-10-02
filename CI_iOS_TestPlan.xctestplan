@@ -3,9 +3,7 @@
     {
       "id" : "2693799E-2D36-4050-80AF-28C0AA37AEDD",
       "name" : "Configuration 1",
-      "options" : {
-
-      }
+      "options" : {}
     }
   ],
   "defaultOptions" : {
@@ -25,6 +23,31 @@
           "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
           "identifier" : "74A6DCE82BD1A46B002A420C",
           "name" : "ITGWorkoutKitiOS"
+        },
+        {
+          "containerPath" : "container:StatsKit\/StatsKit.xcodeproj",
+          "identifier" : "F0750E7C2F6B62960026D021",
+          "name" : "StatsKit"
+        },
+        {
+          "containerPath" : "container:MyDayKit\/MyDayKit.xcodeproj",
+          "identifier" : "F0D6C2362E358B0400FEFEF1",
+          "name" : "MyDayKit"
+        },
+        {
+          "containerPath" : "container:AccountCreationKit\/AccountCreationKit.xcodeproj",
+          "identifier" : "ACC00000000000000000000B",
+          "name" : "AccountCreationKit"
+        },
+        {
+          "containerPath" : "container:LoginKit\/LoginKit.xcodeproj",
+          "identifier" : "10C00000000000000000000B",
+          "name" : "LoginKit"
+        },
+        {
+          "containerPath" : "container:DiscoverKit\/DiscoverKit.xcodeproj",
+          "identifier" : "D1C00000000000000000000B",
+          "name" : "DiscoverKit"
         }
       ]
     },
@@ -65,6 +88,41 @@
         "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
         "identifier" : "74730B992BC1DC2D00B54778",
         "name" : "WorkoutAPIEndToEndTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:StatsKit\/StatsKit.xcodeproj",
+        "identifier" : "F0750E872F6B62960026D021",
+        "name" : "StatsKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:MyDayKit\/MyDayKit.xcodeproj",
+        "identifier" : "F0D6C2402E358B0400FEFEF1",
+        "name" : "MyDayKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:AccountCreationKit\/AccountCreationKit.xcodeproj",
+        "identifier" : "ACC000000000000000000012",
+        "name" : "AccountCreationKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:LoginKit\/LoginKit.xcodeproj",
+        "identifier" : "10C000000000000000000012",
+        "name" : "LoginKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:DiscoverKit\/DiscoverKit.xcodeproj",
+        "identifier" : "D1C000000000000000000012",
+        "name" : "DiscoverKitTests"
       }
     }
   ],
