@@ -13,10 +13,10 @@ Lean, minimal UI aesthetic throughout.
 
 ### Inactive — do not modify
 - `ITGWorkoutKit` — ignore, do not touch
-- `ClubKit` — ignore, do not touch
 
-`WorkoutKit` is a third SPM package — legacy, still composed from `WorkoutKitComposition`, not a
-target for new work.
+`ClubKit` and `WorkoutKit` (two legacy SPM packages) were removed from staging. Both were
+constructed in `PlayerInitialViewController` and never shown. They are preserved on the
+`archive/clubkit-workoutkit` branch — restore from there rather than rebuilding them.
 
 ### Project shapes — the four frameworks are not built the same way
 Open **`InTheGym.xcworkspace`**, not `InTheGym.xcodeproj`. It stitches the app project to the four
@@ -291,6 +291,20 @@ types into one — see `AccountCreationKitRouter` under *Account Creation*.
   (`LocalAndRemoteMyDaySaver`), `localLoader:`/`remoteLoader:` (`LocalWithRemoteFallBackMyDayLoader`).
   Match the neighbours. The clip upload path is three nested decorators over
   `FirebaseStorageClipUploader`.
+- **One writer, one destination — single responsibility, enforced.** A reader or writer that talks to
+  infrastructure knows exactly **one** path or store. When data has to land in two places, that is two
+  writers, each conforming to the same protocol, composed by a decorator that knows **no paths at
+  all** — it only decides that both happen, and in what order — and the composed writer is what the
+  composition root hands downstream. Template writes are the reference:
+  `FirestoreWorkoutTemplateUploader` (`Users/{uid}/WorkoutTemplates`) and
+  `FirestoreTopLevelWorkoutTemplateUploader` (`WorkoutTemplates`), composed by
+  `UserAndTopLevelWorkoutTemplateUploader(user:topLevel:)`. The first attempt put both paths in one
+  uploader behind a `WriteBatch`; that was rejected — a writer that knows two destinations cannot be
+  reused, swapped or tested for one of them, and each new copy grows it again.
+  `FirestoreCompletedWorkoutSessionSaver` and `FirestoreCompletedWorkoutSessionDeleter` predate this
+  rule and still write two paths in one batch — **do not copy that shape.** Atomicity is not a reason
+  to merge writers: the retry path (sync queue, idempotent `setData`) is what closes the gap between
+  two writes.
 - **A one-use decorator may live at the bottom of the composition file**; anything used twice gets its
   own file.
 - **Migrations run before the readers they affect**, with a comment saying so —
@@ -422,7 +436,7 @@ Each of these is the single definition of something that had previously been inl
 call sites and drifted apart. Do not re-inline any of them:
 
 `WeightUnit.kilograms(_:unit:)` · `StatsDay.key(for:)` · `ACWR.Zone(ratio:)` ·
-`SessionSetInput.target(for:)` · `SessionSetPillValue.values(for:record:)` ·
+`SessionSetInput.target(for:)` · `WorkoutTag.normalized(_:)` · `SessionSetPillValue.values(for:record:)` ·
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty`
 
 ## Testing
@@ -481,12 +495,11 @@ account (see *Account type is no longer asked*), but existing ones keep that tab
 A tab is a `UINavigationController` handed to a coordinator that is `start()`ed, with the whole set
 assigned to `viewControllers` at the end of `viewDidLoad`.
 
-**`PlayerInitialViewController` builds three tabs it never shows.** `ClubKitComposition` and
-`WorkoutKitComposition` are constructed and then not composed, and `WorkoutsCoordinator` has
-`.start()` called on it — building an entire view-controller stack — but none of their navigation
-controllers appear in `viewControllers`. It is dead work on every launch, and it is why ClubKit and
-WorkoutKit are still wired into the app at all. Worth clearing when the NEWSFEED/WORKOUTS tab
-question above is settled.
+**`PlayerInitialViewController` builds a tab it never shows.** `WorkoutsCoordinator` has
+`.start()` called on it — building an entire view-controller stack — but its navigation controller
+never appears in `viewControllers`. It is dead work on every launch. Worth clearing when the
+NEWSFEED/WORKOUTS tab question above is settled. (The ClubKit and WorkoutKit tabs that used to sit
+beside it are gone — see *Packages & Frameworks*.)
 
 ## Workout Library Loading
 The library screen showed an empty state despite saved templates existing. Three defects, all fixed:
@@ -565,7 +578,8 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
 - Workout builder and templating (`WorkoutTemplateModel` / `WorkoutSessionModel`)
 - Upload/sync pipeline:
   `WorkoutTemplateSaver` → `WorkoutTemplateSyncer` → `SyncQueueWorkoutTemplateUploader`
-  → `FirestoreWorkoutTemplateUploader` → `WorkoutTemplateSyncService`
+  → `UserAndTopLevelWorkoutTemplateUploader` (`FirestoreWorkoutTemplateUploader` +
+  `FirestoreTopLevelWorkoutTemplateUploader`) → `WorkoutTemplateSyncService`
 - Local-first template reads: `FileManagerWorkoutTemplateFetcher` + `FirestoreWorkoutTemplateFetcher`
   behind `WorkoutLibraryManager(local:remote:)` — the read path mirroring the write path
 - `WorkoutSessionManager` with active session state, rest timer, `finishSession()` /
@@ -620,6 +634,20 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
 - **`WorkoutExerciseModel`**: carries `exerciseName: String` and `exerciseCategory: ExerciseCategory`
   populated at template build time from the `Exercise` struct in `WorkoutBuilderManager.buildTemplate()`.
   Cards display `exerciseName` — never `exerciseId` (which is a UUID at runtime).
+- **`WorkoutBuilderManager` resets itself after a successful upload** — title, exercises, `isPublic`
+  and `tags` — *before* publishing `.success`, which is what pops the builder. It is built once in
+  `MyDayKitComposition` and outlives the screen, so anything left on it is what the next visit opens
+  with. A failed upload resets nothing; the input is what the user needs to retry.
+  **`WorkoutSettingsSheet` binds to the manager**, not to its own `@State` — it used to hold
+  visibility and tags locally while `buildTemplate()` hardcoded `isPublic: false, tags: nil`, so the
+  sheet changed nothing. `isPublic` defaults to **public**, and `reset()` restores that default.
+  The sheet's "Save to library" toggle is still local state and still does nothing.
+- **Tags are lowercase ASCII letters and digits only — `WorkoutTag.normalized(_:)` is the one
+  definition.** No spaces, no punctuation; accents are folded ("Café" → "cafe"), anything else
+  outside a–z / 0–9 is dropped. The tag field normalises on every keystroke so what is shown is what
+  is stored, and `addTag` normalises again so nothing reaches a template unnormalised. Tags are
+  matched exactly by Firestore `array-contains`, so "Legs" and "legs" would otherwise be two tags —
+  the case-sensitive `Usernames` bug again. **Do not re-inline the rule at a call site.**
 - **`WorkoutSessionRecord`**: embedded in `DailyWorkoutEntry`; holds `startedAt`, `endedAt`,
   `rpe?`, `workload?` (duration × RPE), and `exerciseRecords: [WorkoutExerciseRecord]` each with
   `exerciseName: String`, `rpe: Int?`, and `setRecords: [WorkoutSetRecord]` (per-set `isCompleted`
@@ -1289,6 +1317,8 @@ appears on some screens and not others.
 | `Users/{uid}/ExerciseStats/{exerciseID}/RawLogs/{logID}` | Firestore | both logging paths, per set |
 | `Users/{uid}/WorkoutSessions/{id}` | Firestore | `FirestoreCompletedWorkoutSessionSaver` (batched) |
 | `WorkoutSessions/{sessionId}` | Firestore | same batch — analytics copy, the only one to gain `deletedAt` |
+| `Users/{uid}/WorkoutTemplates/{id}` | Firestore | `FirestoreWorkoutTemplateUploader` — the author's library, what `FirestoreWorkoutTemplateFetcher` reads |
+| `WorkoutTemplates/{id}` | Firestore | `FirestoreTopLevelWorkoutTemplateUploader` — every template, top level; both composed by `UserAndTopLevelWorkoutTemplateUploader` |
 | `Usernames/{username}` | Firestore | `FirestoreUsernameReserver` — **case-sensitive document id** |
 | `users/{uid}`, posts, followers, requests | RTDB | `FirebaseDatabaseManager` |
 | `CoachPlayers/{coachId}`, `PlayerCoaches/{playerId}` | RTDB | the coach↔athlete link — see *Coach-Assigned Workouts* |
@@ -1381,6 +1411,8 @@ here, in prose, with the reason attached.
 - Do not use `Array(repeating:count:)` for reference types
 - Do not use `.insetGrouped` list style
 - Do not use `popToRootViewController()`
-- Do not modify `ITGWorkoutKit` or `ClubKit`
+- Do not modify `ITGWorkoutKit`
 - Do not put concrete infrastructure in framework layer — composition root only
 - Do not create multi-purpose files — one concept per file
+- Do not give one reader or writer two destinations — one writer per path, composed by a decorator
+  (see *Composition root mechanics*)

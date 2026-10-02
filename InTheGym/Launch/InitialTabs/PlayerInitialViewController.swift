@@ -34,20 +34,11 @@ class PlayerInitialViewController: UITabBarController {
         discoverNavigationController.tabBarItem = UITabBarItem(title: "DISCOVER", image: UIImage(systemName: "magnifyingglass"), tag: 1)
         let discoverCoordinator = DiscoverCoordinator(navigationController: discoverNavigationController, subscriptionManager: subscriptionManager)
         discoverCoordinator.start()
-        // MARK: - ClubKit
-        let clubKitNavigationController = UINavigationController()
-        clubKitNavigationController.tabBarItem = UITabBarItem(title: "CLUBS", image: UIImage(systemName: "person.3.fill"), tag: 2)
-        let clubKitComposition = ClubKitComposition(navigaitonController: clubKitNavigationController)
         // MARK: - Workouts
         let workoutsNavigationController = UINavigationController()
         workoutsNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 2)
         let workoutsCoordinator = WorkoutsCoordinator(navigationController: workoutsNavigationController, subscriptionManager: subscriptionManager)
         workoutsCoordinator.start()
-        // MARK: - Workout Kit
-        let workoutKitNavigationController = UINavigationController()
-        workoutKitNavigationController.tabBarItem = UITabBarItem(title: "WORKOUTS", image: UIImage(named: "dumbell"), tag: 3)
-        let workoutKitComposition = WorkoutKitComposition(navigaitonController: workoutKitNavigationController)
-//        workoutKitComposition.compose()
         
         // MARK: - MyDay
         let myDayKit = MyDayKitComposition()

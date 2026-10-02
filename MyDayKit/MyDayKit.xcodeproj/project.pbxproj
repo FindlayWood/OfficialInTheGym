@@ -50,6 +50,7 @@
 		F034E7CE2F92E89100DDB10C /* RPEModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E7CD2F92E89100DDB10C /* RPEModel.swift */; };
 		F034E7D32F92E8C000DDB10C /* RPECard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E7D22F92E8C000DDB10C /* RPECard.swift */; };
 		F034E8112F95214A00DDB10C /* MyDayWorkoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034E8102F95214A00DDB10C /* MyDayWorkoutModel.swift */; };
+		C7D52F1A2FE8B2E000B20002 /* WorkoutTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D52F1A2FE8B2E000B20001 /* WorkoutTag.swift */; };
 		F034EA9E2F9CEDDC00DDB10C /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034EA9D2F9CEDDC00DDB10C /* Color+Extension.swift */; };
 		F034EAA12F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F034EAA02F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift */; };
 		F044A9902FCE28BB0038ADC8 /* MyDayWorkoutBuilderDistanceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F044A98F2FCE28BB0038ADC8 /* MyDayWorkoutBuilderDistanceScreen.swift */; };
@@ -210,6 +211,7 @@
 		F034E7CD2F92E89100DDB10C /* RPEModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPEModel.swift; sourceTree = "<group>"; };
 		F034E7D22F92E8C000DDB10C /* RPECard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPECard.swift; sourceTree = "<group>"; };
 		F034E8102F95214A00DDB10C /* MyDayWorkoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutModel.swift; sourceTree = "<group>"; };
+		C7D52F1A2FE8B2E000B20001 /* WorkoutTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTag.swift; sourceTree = "<group>"; };
 		F034EA9D2F9CEDDC00DDB10C /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		F034EAA02F9CF76F00DDB10C /* MyDayWorkoutCreationHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutCreationHomeScreen.swift; sourceTree = "<group>"; };
 		F044A98F2FCE28BB0038ADC8 /* MyDayWorkoutBuilderDistanceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWorkoutBuilderDistanceScreen.swift; sourceTree = "<group>"; };
@@ -462,6 +464,7 @@
 			isa = PBXGroup;
 			children = (
 				F034E8102F95214A00DDB10C /* MyDayWorkoutModel.swift */,
+				C7D52F1A2FE8B2E000B20001 /* WorkoutTag.swift */,
 				F09C545C2FE08239007CDAB4 /* DailyWorkoutEntry.swift */,
 				F09C5ACF2FF1CA6A007CDAB4 /* WorkoutExerciseRecord.swift */,
 				F09C5AD02FF1CA6A007CDAB4 /* WorkoutSessionRecord.swift */,
@@ -1011,6 +1014,7 @@
 				F034E7D32F92E8C000DDB10C /* RPECard.swift in Sources */,
 				F0D3444B2F2582E900AB6121 /* UploadProgressView.swift in Sources */,
 				F034E8112F95214A00DDB10C /* MyDayWorkoutModel.swift in Sources */,
+				C7D52F1A2FE8B2E000B20002 /* WorkoutTag.swift in Sources */,
 				F03334632F1FF2E2004102AC /* RecordingProgressRing.swift in Sources */,
 				F0BE5C182EB7AC71009677F5 /* ExerciseCompletionView.swift in Sources */,
 				F0F608282E42A1B50015F260 /* ExerciseLoader.swift in Sources */,

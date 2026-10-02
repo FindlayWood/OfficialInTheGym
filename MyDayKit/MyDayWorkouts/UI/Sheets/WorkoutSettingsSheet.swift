@@ -11,9 +11,13 @@ struct WorkoutSettingsSheet: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @State private var isPublic: Bool = true
+    /// Visibility and tags bind straight to the builder, so they apply as the
+    /// user changes them and survive the sheet closing. They used to be local
+    /// `@State` that the template never saw — `buildTemplate()` hardcoded
+    /// private with no tags whatever the sheet said.
+    @ObservedObject var manager: WorkoutBuilderManager
+
     @State private var saveToLibrary: Bool = true
-    @State private var tags: [String] = []
     @State private var tagInput: String = ""
     @FocusState private var tagFieldFocused: Bool
 
@@ -25,8 +29,8 @@ struct WorkoutSettingsSheet: View {
                     // MARK: Visibility + Save Row
                     HStack(spacing: 12) {
                         SettingsCard(title: "Visibility", icon: "eye") {
-                            Toggle(isOn: $isPublic) {
-                                Text(isPublic ? "Public" : "Private")
+                            Toggle(isOn: $manager.isPublic) {
+                                Text(manager.isPublic ? "Public" : "Private")
                                     .font(.system(size: 15, weight: .medium))
                             }
                             .tint(Color.darkColor)
@@ -49,6 +53,14 @@ struct WorkoutSettingsSheet: View {
                                     .focused($tagFieldFocused)
                                     .font(.system(size: 15))
                                     .submitLabel(.done)
+                                    .textInputAutocapitalization(.never)
+                                    .autocorrectionDisabled()
+                                    // Normalise as the user types, so the box never shows
+                                    // a tag that would be stored differently.
+                                    .onChange(of: tagInput) { _, newValue in
+                                        let normalized = WorkoutTag.normalized(newValue)
+                                        if normalized != newValue { tagInput = normalized }
+                                    }
                                     .onSubmit { commitTag() }
 
                                 if !tagInput.isEmpty {
@@ -70,15 +82,15 @@ struct WorkoutSettingsSheet: View {
                             )
                             .animation(.easeInOut(duration: 0.15), value: tagInput.isEmpty)
 
-                            if !tags.isEmpty {
+                            if !manager.tags.isEmpty {
                                 FlowLayout(spacing: 8) {
-                                    ForEach(tags, id: \.self) { tag in
+                                    ForEach(manager.tags, id: \.self) { tag in
                                         HStack(spacing: 5) {
                                             Text(tag)
                                                 .font(.system(size: 13, weight: .medium))
                                             Button {
                                                 withAnimation(.easeInOut(duration: 0.15)) {
-                                                    tags.removeAll { $0 == tag }
+                                                    manager.removeTag(tag)
                                                 }
                                             } label: {
                                                 Image(systemName: "xmark")
@@ -94,7 +106,7 @@ struct WorkoutSettingsSheet: View {
                                 .transition(.opacity.combined(with: .move(edge: .top)))
                             }
                         }
-                        .animation(.easeInOut(duration: 0.2), value: tags.count)
+                        .animation(.easeInOut(duration: 0.2), value: manager.tags.count)
                     }
                 }
                 .padding(.horizontal, 20)
@@ -116,13 +128,8 @@ struct WorkoutSettingsSheet: View {
     }
 
     private func commitTag() {
-        let trimmed = tagInput.trimmingCharacters(in: .whitespaces)
-        guard !trimmed.isEmpty, !tags.contains(trimmed) else {
-            tagInput = ""
-            return
-        }
         withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
-            tags.append(trimmed)
+            manager.addTag(tagInput)
             tagInput = ""
         }
     }
@@ -221,5 +228,5 @@ private struct FlowLayout: Layout {
 }
 
 #Preview {
-    WorkoutSettingsSheet()
+    WorkoutSettingsSheet(manager: WorkoutBuilderManager(uploader: PreviewWorkoutTemplateUploading()))
 }
