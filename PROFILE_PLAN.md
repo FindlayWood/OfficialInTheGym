@@ -75,8 +75,9 @@ Users/{uid}                              owner + createAccount — PRIVATE to th
   BlockedUsers/{uid}                     exists (DISCOVER)
 
 Profiles/{uid}                           SERVER — the public projection: everything anyone else reads
-  username, displayName, bio, photoURL,
-  isPrivate, verified, elite,
+  userId, username, displayName, bio,
+  verified, elite, status,               status: moderation's, "visible" by default (step 9)
+  isPrivate,
   followerCount, followingCount, clipCount,
   highlights: [{exerciseId, exerciseName, maxWeight, maxTime}],
   usernameLower, displayNameLower,       for search
@@ -171,19 +172,57 @@ Follows/{followerId}_{followeeId}        follower creates; followee approves / r
 - **Known gap:** the bio comes from Firestore `Users.bio`, while the legacy Edit Profile writes
   RTDB `users/{uid}/profileBio`. A bio edited before step 3 will not show. Step 3 closes this.
 
-### Step 2 — `Profiles` projection, `Users` closed
+### Step 2 — `Profiles` projection, `Users` closed — built, not rolled out
 
-**Cloud**
-- `syncProfile`: on `Users/{uid}` write, writes `Profiles/{uid}` (identity fields, lowercased search
-  fields). Later steps add counts and highlights to the same function.
-- Backfill script in `InTheGym-Scripts`: `RebuildProfiles.py`, for every existing user.
+**Cloud** (`InTheGym-CloudFunctions`, branch `profile`, cut from `discover` because it reuses
+`syncCard`)
+- `syncProfile` (v2, `Users/{uid}` written) projects `Profiles/{uid}` through DISCOVER's
+  `syncCard`: current state read in a transaction, own fields merged, `status` defaulted to
+  `"visible"` and never overwritten. A deleted user deletes the profile.
+- `profileProjection` is an **allow-list**: `userId`, `username`, `displayName`, `bio`,
+  `verified`, `elite`, `usernameLower`, `displayNameLower`. Missing fields become `""` / `false`
+  rather than absent. A test asserts that the email, body measurements and account type are never
+  copied.
+- `rebuildProfiles` (v1 callable, `admin` claim) re-projects the union of `Users` and `Profiles`
+  ids, so it backfills and also removes orphans. Tests: 11, against the emulator.
+- **No `photoURL`.** The photo stays at Storage `ProfilePhotos/{uid}`, addressed by the uid the
+  client already has. Step 3 may add a `photoUpdatedAt` if cached photos need busting after an
+  edit.
+
+**Scripts:** `InTheGym-Scripts/RebuildProfiles.py <admin>` calls the callable. It reuses
+`RebuildDiscoverCards.py`'s admin sign-in.
 
 **App**
-- `FirestoreUserProfileLoader` (DISCOVER) reads `Profiles` instead of `Users`.
-- ProfileKit reads other people only through a `ProfileLoader` protocol answered from `Profiles`.
+- `FirestoreUserProfileLoader` (DISCOVER's author names) reads `Profiles` instead of `Users`. It was
+  the **only** client read of another user's `Users` document. The launch path's
+  `UserAPIServiceAdapter` reads only the signed-in user's own document, which the new rule still
+  allows.
+- **Deferred to step 7:** ProfileKit's loader for other people's profiles. Nothing shows another
+  user's profile until then, and a protocol with no caller is dead code. The own-profile header
+  keeps reading the cached `currentUser`.
+- The emulator needs nothing new. `SeedDiscover.py` writes `Users` documents and the functions
+  emulator builds `Profiles` from them, as it builds cards, provided the functions are built from
+  this branch.
 
-**Console:** rules for `Profiles` (read: any signed-in user; write: none), then **close
-`Users/{uid}` reads to the owner**. That is the last item, after the DISCOVER loader has moved.
+**Rules** (console). Add:
+
+```
+match /Profiles/{userId} {
+  allow read: if request.auth != null;
+  allow write: if false;
+}
+```
+
+Then, **last, after the backfill**, change the read rule on `Users/{userId}`. Keep its write rules
+as they are:
+
+```
+match /Users/{userId} {
+  allow get: if request.auth != null && request.auth.uid == userId;
+  allow list: if false;
+  // …existing write rules unchanged
+}
+```
 
 ### Step 3 — Edit profile: photo, name, bio
 
@@ -328,7 +367,16 @@ Built from the steps above as each one lands, in step order, **the same discipli
 rules and indexes are console work, so a merged branch is not a working feature. The order that
 matters most:
 
-- [ ] `Profiles` rules + `RebuildProfiles.py` **before** `Users` reads are closed
+**Step 2 — `Profiles`**
+- [ ] Deploy `syncProfile` and `rebuildProfiles` from the functions `profile` branch
+- [ ] Console rules: add `Profiles/{userId}` (read: signed in; write: none)
+- [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, then spot-check a few `Profiles` documents
+- [ ] Ship an app build whose DISCOVER reads `Profiles` (this branch)
+- [ ] Console rules: close `Users/{userId}` to `get` by its owner, no `list`. **Last**, and only
+      once no build in use still reads other users' `Users` documents. DISCOVER has not shipped,
+      so that is any build from this branch onward.
+
+**Later steps** (expanded as they land)
 - [ ] `Follows` rules + indexes **before** `MigrateFollows.py --write`
 - [ ] Profile reporting and blocking (step 9) live **before** other users' profiles (step 7) reach
       real users
