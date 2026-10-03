@@ -84,7 +84,7 @@ struct SettingsView: View {
             } header: {
                 Text("Contact Info")
             } footer: {
-                Text("Send us an email at officialinthegym@gmail.com")
+                Text("Send us an email at \(Constants.contactEmail)")
             }
             
             Section {

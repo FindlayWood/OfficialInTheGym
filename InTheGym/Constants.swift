@@ -40,6 +40,8 @@ enum Constants {
     
     static let icons8Link = "https://icons8.com"
     
+    static let contactEmail = "officialinthegym@gmail.com"
+    
     static let firstPostID = "-MYv7A7Im-M3O9VYJKs"
     
     static let screenSize = UIScreen.main.bounds

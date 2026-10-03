@@ -48,6 +48,11 @@
           "containerPath" : "container:DiscoverKit\/DiscoverKit.xcodeproj",
           "identifier" : "D1C00000000000000000000B",
           "name" : "DiscoverKit"
+        },
+        {
+          "containerPath" : "container:ProfileKit\/ProfileKit.xcodeproj",
+          "identifier" : "BF100000000000000000000B",
+          "name" : "ProfileKit"
         }
       ]
     },
@@ -123,6 +128,13 @@
         "containerPath" : "container:DiscoverKit\/DiscoverKit.xcodeproj",
         "identifier" : "D1C000000000000000000012",
         "name" : "DiscoverKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:ProfileKit\/ProfileKit.xcodeproj",
+        "identifier" : "BF1000000000000000000012",
+        "name" : "ProfileKitTests"
       }
     }
   ],

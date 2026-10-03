@@ -1,7 +1,7 @@
 # InTheGym — CLAUDE.md
 
 ## Project Overview
-iOS fitness app. iPhone only, **iOS 26.0 minimum** — the app and all five active frameworks
+iOS fitness app. iPhone only, **iOS 26.0 minimum** — the app and all six active frameworks
 (`IPHONEOS_DEPLOYMENT_TARGET = 26.0` everywhere). It used to read iOS 17+ while StatsKit was built
 for 26.1 and MyDayKit for 18.4, so the app could not have launched below 26.1. **A framework must
 never target a newer iOS than the app.** `ITGWorkoutKit` targets lower,
@@ -15,6 +15,7 @@ Lean, minimal UI aesthetic throughout.
 - `AccountCreationKit` — framework
 - `LoginKit` — framework
 - `DiscoverKit` — framework (in progress — see `DISCOVER_PLAN.md`)
+- `ProfileKit` — framework (in progress — see `PROFILE_PLAN.md`)
 
 ### Inactive — do not modify
 - `ITGWorkoutKit` — ignore, do not touch
@@ -34,14 +35,16 @@ framework projects and the SPM packages.
 | `StatsKit.xcodeproj` | 36 | **check target membership** |
 | `MyDayKit.xcodeproj` | 149 | **check target membership** |
 | `DiscoverKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
+| `ProfileKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
 
-All five use `PBXFileSystemSynchronizedRootGroup`, but only AccountCreationKit, LoginKit and
-DiscoverKit are driven *entirely* by it. DiscoverKit's project was generated from LoginKit's, with
-its object ids prefixed `D1C`. StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
+All six use `PBXFileSystemSynchronizedRootGroup`, but only AccountCreationKit, LoginKit,
+DiscoverKit and ProfileKit are driven *entirely* by it. DiscoverKit's project was generated from
+LoginKit's, with its object ids prefixed `D1C`; ProfileKit's from DiscoverKit's, prefixed `BF10`
+(and `BF1A` for its entries in the app's pbxproj). StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
 `Screens/`, `Models/` etc. individually; MyDayKit lists most of its tree.
 
 `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES` is set on **StatsKit, AccountCreationKit,
-LoginKit and DiscoverKit** — the four built from the StatsKit template. **`MyDayKit` does not set it.** A file that
+LoginKit, DiscoverKit and ProfileKit** — the five built from the StatsKit template. **`MyDayKit` does not set it.** A file that
 compiles inside MyDayKit can therefore fail on a missing `import` the moment it moves into one of the
 other three.
 
@@ -444,7 +447,7 @@ call sites and drifted apart. Do not re-inline any of them:
 
 `WeightUnit.kilograms(_:unit:)` · `StatsDay.key(for:)` · `ACWR.Zone(ratio:)` ·
 `SessionSetInput.target(for:)` · `WorkoutTag.normalized(_:)` · `SessionSetPillValue.values(for:record:)` ·
-`WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty`
+`WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut`
 
 ## Testing
 Before writing any tests, read all test files and folders within `ITGWorkoutKit`
@@ -482,8 +485,8 @@ holds only `WorkoutTemplateModelCopyTests` (its scheme had no test action until 
 **A test target is invisible to CI until it is added to the test plan.** The plan runs
 `InTheGymTests`, `ITGWorkoutKitTests`, `ITGWorkoutKitiOSTests`, `ITGWorkoutKitCacheIntegrationTests`,
 `WorkoutAPIEndToEndTests` **and every framework suite** — `StatsKitTests`, `MyDayKitTests`,
-`AccountCreationKitTests`, `LoginKitTests`, `DiscoverKitTests` — with coverage on the app,
-ITGWorkoutKit and all five frameworks. **Add any new framework's test target here.**
+`AccountCreationKitTests`, `LoginKitTests`, `DiscoverKitTests`, `ProfileKitTests` — with coverage on
+the app, ITGWorkoutKit and all six frameworks. **Add any new framework's test target here.**
 
 **CI is not actually running.** Every run since at least August fails before starting on a GitHub
 billing error. Once that is fixed the workflow itself still needs updating: it pins Xcode 15.3 (which
@@ -493,6 +496,10 @@ root).
 
 ## App Structure
 5 tabs: NEWSFEED, DISCOVER, MYDAY, STATS, PROFILE.
+**PROFILE is `ProfileKit`** on the player tab bar (see `PROFILE_PLAN.md`); the coach tab bar keeps
+the legacy `MyProfileCoordinator` until the coach/player split is removed. Performance Center is
+reached from ProfileKit's settings through `ProfileAppRoutes` — a separate roadmap task, **never
+delete its code**.
 Current focus: MYDAY tab — active session UI complete (see roadmap and Feature Areas Complete).
 NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
 
@@ -1494,7 +1501,7 @@ in this codebase.**
 | `FileManagerWorkoutTemplateUploader` date strategy | `FileManagerWorkoutTemplateFetcher` date strategy | Library reads are local-first |
 | `StatsDay.calendar` | `DateFormatter.yyyyMMdd` | STATS Tab |
 | `LoginFieldCard` / `LoginPrimaryButton` / `LoginErrorBanner` | their AccountCreationKit twins | Auth, Shared UI |
-| the five `Color+Extension.swift` | each other | Brand Colours, Shared UI |
+| the six `Color+Extension.swift` | each other | Brand Colours, Shared UI |
 | DiscoverKit's `SectionContainer` | StatsKit's `SectionContainer` | DISCOVER_PLAN.md step 2 |
 | `WorkoutTag.maxLength` | `MAX_TAG_LENGTH` in the Cloud Functions' `Tags/TagRejection.ts` | DISCOVER_PLAN.md step 1 |
 | `DiscoverReportTarget+Firestore` path shapes | `Discover/Moderation/ReportTarget.ts` | DISCOVER Tab |

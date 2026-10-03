@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF1A00000000000000000020 /* ProfileKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000010 /* ProfileKitComposition.swift */; };
+		BF1A00000000000000000021 /* ProfileAppRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000011 /* ProfileAppRoutes.swift */; };
+		BF1A00000000000000000022 /* AppSignOut.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000012 /* AppSignOut.swift */; };
+		BF1A00000000000000000023 /* AppSignOut+ProfileSignOutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000013 /* AppSignOut+ProfileSignOutService.swift */; };
+		BF1A00000000000000000024 /* CurrentUserMyProfileLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000014 /* CurrentUserMyProfileLoader.swift */; };
+		BF1A00000000000000000025 /* ImageCacheProfilePhotoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000015 /* ImageCacheProfilePhotoLoader.swift */; };
+		BF1A00000000000000000026 /* PurchaseManagerSubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000016 /* PurchaseManagerSubscriptionService.swift */; };
+		BF1A00000000000000000027 /* FirebaseProfilePasswordReset.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000017 /* FirebaseProfilePasswordReset.swift */; };
+		BF1A00000000000000000002 /* ProfileKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000001 /* ProfileKit.framework */; };
+		BF1A00000000000000000003 /* ProfileKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000001 /* ProfileKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		10D000000000000000000002 /* LoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10D000000000000000000001 /* LoginKit.framework */; };
 		10D000000000000000000003 /* LoginKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 10D000000000000000000001 /* LoginKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D1CA00000000000000000020 /* DiscoverKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000010 /* DiscoverKitComposition.swift */; };
@@ -983,6 +993,7 @@
 				ACA000000000000000000003 /* AccountCreationKit.framework in Embed Frameworks */,
 				10D000000000000000000003 /* LoginKit.framework in Embed Frameworks */,
 				D1CA00000000000000000003 /* DiscoverKit.framework in Embed Frameworks */,
+				BF1A00000000000000000003 /* ProfileKit.framework in Embed Frameworks */,
 				746DA0D52C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Embed Frameworks */,
 				746DA0D32C090AD10094EA3B /* ITGWorkoutKit.framework in Embed Frameworks */,
 			);
@@ -992,6 +1003,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BF1A00000000000000000001 /* ProfileKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ProfileKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF1A00000000000000000010 /* ProfileKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileKitComposition.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000011 /* ProfileAppRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppRoutes.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000012 /* AppSignOut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSignOut.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000013 /* AppSignOut+ProfileSignOutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppSignOut+ProfileSignOutService.swift"; sourceTree = "<group>"; };
+		BF1A00000000000000000014 /* CurrentUserMyProfileLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserMyProfileLoader.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000015 /* ImageCacheProfilePhotoLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheProfilePhotoLoader.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000016 /* PurchaseManagerSubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManagerSubscriptionService.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000017 /* FirebaseProfilePasswordReset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseProfilePasswordReset.swift; sourceTree = "<group>"; };
 		10D000000000000000000001 /* LoginKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LoginKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1CA00000000000000000001 /* DiscoverKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DiscoverKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1CA00000000000000000010 /* DiscoverKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverKitComposition.swift; sourceTree = "<group>"; };
@@ -1959,6 +1979,7 @@
 				ACA000000000000000000002 /* AccountCreationKit.framework in Frameworks */,
 				10D000000000000000000002 /* LoginKit.framework in Frameworks */,
 				D1CA00000000000000000002 /* DiscoverKit.framework in Frameworks */,
+				BF1A00000000000000000002 /* ProfileKit.framework in Frameworks */,
 				7433044B289E962B00F2569A /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4838,6 +4859,7 @@
 			children = (
 				F0A11D292F6C642A00CE1E9A /* StatsKit */,
 				D1CA00000000000000000004 /* DiscoverKit */,
+				BF1A00000000000000000004 /* ProfileKit */,
 				ACA000000000000000000004 /* AccountCreation */,
 				F0D3443F2F25616A00AB6121 /* MyDay */,
 				9FC11F5E29DDC9B80054D79A /* LoginComposition.swift */,
@@ -4878,6 +4900,7 @@
 				ACA000000000000000000001 /* AccountCreationKit.framework */,
 				10D000000000000000000001 /* LoginKit.framework */,
 				D1CA00000000000000000001 /* DiscoverKit.framework */,
+				BF1A00000000000000000001 /* ProfileKit.framework */,
 				F0F608352E42A5A70015F260 /* MyDayKit.framework */,
 				746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */,
 				746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */,
@@ -4886,6 +4909,21 @@
 				746061BC252547E9005B1480 /* AppTrackingTransparency.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BF1A00000000000000000004 /* ProfileKit */ = {
+			isa = PBXGroup;
+			children = (
+				BF1A00000000000000000010 /* ProfileKitComposition.swift */,
+				BF1A00000000000000000011 /* ProfileAppRoutes.swift */,
+				BF1A00000000000000000012 /* AppSignOut.swift */,
+				BF1A00000000000000000013 /* AppSignOut+ProfileSignOutService.swift */,
+				BF1A00000000000000000014 /* CurrentUserMyProfileLoader.swift */,
+				BF1A00000000000000000015 /* ImageCacheProfilePhotoLoader.swift */,
+				BF1A00000000000000000016 /* PurchaseManagerSubscriptionService.swift */,
+				BF1A00000000000000000017 /* FirebaseProfilePasswordReset.swift */,
+			);
+			path = ProfileKit;
 			sourceTree = "<group>";
 		};
 		D1CA00000000000000000004 /* DiscoverKit */ = {
@@ -5149,6 +5187,14 @@
 				9F4DFB4529BCE83C00363AE8 /* TaggedUsersView.swift in Sources */,
 				F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */,
 				D1CA00000000000000000020 /* DiscoverKitComposition.swift in Sources */,
+				BF1A00000000000000000020 /* ProfileKitComposition.swift in Sources */,
+				BF1A00000000000000000021 /* ProfileAppRoutes.swift in Sources */,
+				BF1A00000000000000000022 /* AppSignOut.swift in Sources */,
+				BF1A00000000000000000023 /* AppSignOut+ProfileSignOutService.swift in Sources */,
+				BF1A00000000000000000024 /* CurrentUserMyProfileLoader.swift in Sources */,
+				BF1A00000000000000000025 /* ImageCacheProfilePhotoLoader.swift in Sources */,
+				BF1A00000000000000000026 /* PurchaseManagerSubscriptionService.swift in Sources */,
+				BF1A00000000000000000027 /* FirebaseProfilePasswordReset.swift in Sources */,
 				D1CA00000000000000000021 /* DiscoverCardQuery.swift in Sources */,
 				D1CA00000000000000000022 /* FirestoreDiscoverClipCardLoader.swift in Sources */,
 				D1CA00000000000000000023 /* FirestoreDiscoverWorkoutCardLoader.swift in Sources */,

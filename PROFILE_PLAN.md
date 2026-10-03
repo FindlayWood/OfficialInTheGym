@@ -125,29 +125,51 @@ Follows/{followerId}_{followeeId}        follower creates; followee approves / r
 
 ## Steps
 
-### Step 1 — ProfileKit skeleton, own profile, settings
+### Step 1 — ProfileKit skeleton, own profile, settings — built
 
 **App**
-- Generate `ProfileKit.xcodeproj` from DiscoverKit's project, prefixing its object ids (`P1F`), as
-  DiscoverKit was generated from LoginKit. `IPHONEOS_DEPLOYMENT_TARGET = 26.0`, own
-  `UI/Color+Extension.swift` (add it to the *keep in step* index), `ProfileKitTests` target,
-  **added to `CI_iOS_TestPlan.xctestplan`**, and added to `InTheGym.xcworkspace`.
-- `ProfileKitRouter` following *Architecture*: `ProfileRoutes` enum (`.myProfile`, `.settings`,
-  `.editProfile`, …), `public init` taking every dependency, `public func start()`.
-- `ProfileComposition` in `InTheGym/Launch/Composition/ProfileKit/`. **Replace
-  `MyProfileCoordinator` on the player tab bar only.** `CoachInitialViewController` and
-  `TabBarCoordinator` keep the legacy coordinator.
-- Own-profile header from the signed-in user's `Users/{uid}` and profile photo: name, @username,
-  bio, stamps. Follower counts are placeholders until step 5.
-- Settings screen: subscription (status, manage via the App Store, restore, all through
-  `PurchaseManager` injected behind a ProfileKit protocol), reset password, log out, contact,
-  version, about. Log out calls back to the app. ProfileKit never imports Firebase Auth.
-- **Not carried over:** posts, legacy saved workouts, Exercise Stats, Workout Stats, the commented-out
-  Measurements / My Coaches / Requests. **Performance Center, Jump and Breathwork code stays in the
-  repository untouched** (see open questions for their entry points).
-- **Stamps colour:** the premium crown is `UIColor.premiumColour`, the purple literal, while SwiftUI
-  `Color(.premiumColour)` is the green asset. The new header is SwiftUI, so it will be green. That is
-  the documented app-wide conflict. Resolve it centrally rather than here.
+- `ProfileKit.xcodeproj`, generated from DiscoverKit's with object ids prefixed **`BF10`**, plus
+  `BF1A` for its entries in the app's pbxproj. `IPHONEOS_DEPLOYMENT_TARGET = 26.0`. It is in
+  `InTheGym.xcworkspace`, and `ProfileKitTests` is in `CI_iOS_TestPlan.xctestplan` (both the
+  coverage list and the test targets). It has its own `UI/Color+Extension.swift`, adding
+  `premiumColor` (`#79B49F`, the colorset's value) and `eliteColor` (`goldColour`).
+- `ProfileKitRouter` (`.myProfile`, `.settings`), `ProfileKitBoundaryViewController` hiding the
+  system bar around the root, and `ProfileKitComposition` in
+  `InTheGym/Launch/Composition/ProfileKit/`. **It replaces `MyProfileCoordinator` on the player tab
+  bar only**; `CoachInitialViewController` and `TabBarCoordinator` are untouched.
+- `MyProfileScreen`: a custom title bar ("Profile" and a settings gear, where the old "More" menu
+  was) and `ProfileHeaderCard` showing the photo, display name with inline stamps, @username and
+  bio. There is a skeleton while loading and a "Couldn't Load Profile" card with Try Again.
+  **Follower counts are absent, not zero**, until step 5.
+- `ProfileSettingsScreen`:
+  - **Subscription:** status, Upgrade (the existing paywall) or Manage (the App Store sheet), and
+    Restore Purchases with its own states.
+  - **Account:** Reset Password, confirmed first, sends once per visit, with sent / failed states.
+  - **Tools:** Performance Center.
+  - **About:** About, Instagram, Website, Contact, Icons8, Version.
+  - **Session:** Log Out, confirmed first, with an error alert on failure.
+- Protocols: `MyProfileLoader`, `ProfilePhotoLoader`, `ProfileSubscriptionService` (named so it
+  does not clash with the app's own `SubscriptionService`), `ProfileSignOutService`,
+  `PasswordResetService`, each with a public `Preview…` conformer.
+- App adapters:
+  - `CurrentUserMyProfileLoader` reads `UserDefaults.currentUser` on each load.
+  - `ImageCacheProfilePhotoLoader` maps Storage `objectNotFound` to `nil`.
+  - `PurchaseManagerSubscriptionService` and `FirebaseProfilePasswordReset` (email injected).
+  - `ProfileAppRoutes` covers the paywall, manage subscriptions, Performance Center and About.
+- **`AppSignOut`** is the sign-out sequence lifted out of `SettingsViewModel.logout()`. The legacy
+  settings and ProfileKit both call it, and it is listed under *A rule that exists in two places*
+  in `CLAUDE.md`. `Constants.contactEmail` replaces the address hardcoded in `SettingsView`.
+- **Not carried over:** posts, legacy saved workouts, Exercise Stats, Workout Stats, and the
+  commented-out Measurements / My Coaches / Requests. Jump and Breathwork had no live row in the old
+  menu (their actions existed, but nothing called them), so nothing was lost. **Their code, and all
+  of Performance Center's, stays in the repository.**
+- **Open question 1, resolved by the recommended default:** Performance Center keeps a row under
+  Tools in settings. Dropping it is one row and one closure.
+- **Stamps colour:** the header is SwiftUI, so premium is the green colorset value. The purple
+  `UIColor.premiumColour` conflict is still app-wide and still unresolved.
+- Tests (20): `MyProfileViewModelTests`, `ProfileSettingsViewModelTests`, `ProfileStampTests`.
+- **Known gap:** the bio comes from Firestore `Users.bio`, while the legacy Edit Profile writes
+  RTDB `users/{uid}/profileBio`. A bio edited before step 3 will not show. Step 3 closes this.
 
 ### Step 2 — `Profiles` projection, `Users` closed
 
