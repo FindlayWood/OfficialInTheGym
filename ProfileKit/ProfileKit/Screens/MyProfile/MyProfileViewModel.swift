@@ -31,6 +31,7 @@ final class MyProfileViewModel: ObservableObject {
     private let subscription: ProfileSubscriptionService
 
     var onOpenSettings: (() -> Void)?
+    var onEditProfile: ((ProfileHeader, UIImage?) -> Void)?
 
     init(
         profileLoader: MyProfileLoader,
@@ -46,6 +47,11 @@ final class MyProfileViewModel: ObservableObject {
     var stamps: [ProfileStamp] {
         guard case .loaded(let header) = header else { return [] }
         return ProfileStamp.stamps(for: header, hasUnlockedPro: subscription.hasUnlockedPro)
+    }
+
+    func editProfile() {
+        guard case .loaded(let header) = header else { return }
+        onEditProfile?(header, photo)
     }
 
     func load() async {

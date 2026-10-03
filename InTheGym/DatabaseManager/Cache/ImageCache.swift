@@ -37,6 +37,12 @@ class ImageCache {
             }
         }
     }
+    /// Replaces a cached profile photo with one just uploaded, so every screen
+    /// that loads photos through here shows the new one at once rather than the
+    /// copy it cached before the edit. Used by `CachingProfilePhotoUploader`.
+    func store(_ image: UIImage, for model: ProfileImageDownloadModel) {
+        cache[model.id] = image
+    }
     func loadThumbnail(from model: ClipThumbnailDownloadModel, completion: @escaping completionHandler) {
         if let cached = cache[model.id] {
             completion(.success(cached))

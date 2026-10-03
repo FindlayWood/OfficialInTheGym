@@ -224,17 +224,68 @@ match /Users/{userId} {
 }
 ```
 
-### Step 3 — Edit profile: photo, name, bio
+### Step 3 — Edit profile: photo, name, bio — built, not rolled out
+
+**Changed from the plan:** the legacy store is kept in step **server-side**, not by a second client
+writer. The client writes Firestore `Users/{uid}` only. `onCreateAccount` already bridged Firestore
+to RTDB at signup, and a matching `onEditAccount` bridges edits, so one bridge covers every writer
+(this app, an admin, a future web client). Two client writers would also leave a legacy key the
+client has to know forever.
+
+**Found while doing it:** the legacy Edit Profile wrote the bio to RTDB `users/{uid}/profileBio`, a
+key nothing decodes (`Users` reads `bio`). Legacy bio edits never showed anywhere. That screen still
+exists on the coach tab bar and still writes the dead key. `onEditAccount` ignores it.
+
+**Cloud**
+- `onEditAccount` (v1, `Users/{uid}` updated, beside `onCreateAccount`) copies `displayName` and
+  `bio` to RTDB `users/{uid}`, only when they changed, and only those keys. It mirrors the after
+  state outright, so redelivery is harmless. 4 tests. The test closes its RTDB connection, or Jest
+  never exits.
+- `syncProfile` (step 2) already re-projects `Profiles/{uid}` on the same write.
 
 **App**
-- `EditProfileScreen` (SwiftUI, live-update, "Done" dismisses): photo via `PhotosPicker` on the
-  avatar with a camera badge, as account creation does, plus display name and bio.
-- Writes through narrow protocols in `ProfileKit/Services/` (`ProfilePhotoUploader`,
-  `ProfileDetailsWriter`), adapters in the composition root, one destination each.
-- **The bio and display name must also reach RTDB `users/{uid}` while legacy screens read it.** That
-  is two writers (`FirestoreProfileDetailsWriter`, `RealtimeDatabaseProfileDetailsWriter`) composed
-  by a path-free decorator, per *one writer, one destination*. Drop the RTDB writer when the last
-  RTDB reader of `users/{uid}` goes.
+- An "Edit Profile" button on your own header opens `EditProfileScreen` **modally** with Cancel /
+  Done. Being modal is what makes "leave without Done" read as discarding.
+- **Done saves everything and Cancel discards everything, the photo included.** The photo goes
+  first; if it fails, nothing else is written. If the photo succeeds and the text fails, the photo
+  is remembered, so the retry writes only the text, and the profile behind reloads either way.
+  Done with no changes just closes. No swipe-to-dismiss with unsaved edits or mid-save.
+- Limits are signup's: display name 1–100, bio ≤ 300, extra characters refused as signup does.
+  Text is trimmed before saving. `ProfileDetails` holds the limits.
+- Writers, one destination each:
+  - `FirestoreProfileDetailsWriter` → `Users/{uid}`, via `updateData` of exactly the two keys.
+  - `CurrentUserProfileDetailsWriter` → the cached `UserDefaults.currentUser`.
+  - `RemoteAndCurrentUserProfileDetailsWriter(remote:currentUser:)` composes them, remote first,
+    so the cache never shows an edit the server did not take.
+- Photo:
+  - `StorageProfilePhotoUploader` → `ProfilePhotos/{uid}`, scaled to 720pt and compressed to fit
+    `downloadImage`'s 720×720-byte cap. A bigger photo would upload and then never load.
+  - `CachingProfilePhotoUploader(wrapping:)` then puts it in `ImageCache` (new
+    `store(_:for:)`), so every screen shows the new photo at once.
+- Not refreshed until relaunch: DISCOVER's session cache of author names
+  (`CachingUserProfileLoader`). Acceptable, since only your own name is affected.
+- Tests: 13 new (`EditProfileViewModelTests`, plus `editProfile` on `MyProfileViewModelTests`),
+  33 in ProfileKit.
+
+**Rules** (console)
+- Add an update rule to `Users/{userId}`. It must be the **only** client write allowed there, since
+  it is what stops a client from setting its own `verifiedAccount` / `eliteAccount`. Nothing else
+  in the app writes `Users/{uid}` today (signup goes through `createAccount`).
+
+  ```
+  allow update: if request.auth != null && request.auth.uid == userId
+    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["displayName", "bio"])
+    && request.resource.data.displayName is string
+    && request.resource.data.displayName.size() > 0
+    && request.resource.data.displayName.size() <= 100
+    && request.resource.data.bio is string
+    && request.resource.data.bio.size() <= 300;
+  ```
+
+  Later steps widen `hasOnly`: step 4 (body measurements), step 6 (`isPrivate`) and step 8
+  (`pinnedHighlights`).
+- Storage: `ProfilePhotos/{uid}` must allow the owner to **overwrite**, not only create. Signup only
+  ever created.
 
 ### Step 4 — Body measurements and the weight log
 
@@ -375,6 +426,12 @@ matters most:
 - [ ] Console rules: close `Users/{userId}` to `get` by its owner, no `list`. **Last**, and only
       once no build in use still reads other users' `Users` documents. DISCOVER has not shipped,
       so that is any build from this branch onward.
+
+**Step 3 — Edit profile**
+- [ ] Deploy `onEditAccount` from the functions `profile` branch
+- [ ] Console rules: the `Users/{userId}` update rule above, then check that no other client write
+      to `Users` is still relied on
+- [ ] Storage rules: the owner may overwrite `ProfilePhotos/{uid}`
 
 **Later steps** (expanded as they land)
 - [ ] `Follows` rules + indexes **before** `MigrateFollows.py --write`

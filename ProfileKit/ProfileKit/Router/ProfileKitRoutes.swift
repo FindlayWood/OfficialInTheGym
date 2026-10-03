@@ -4,11 +4,14 @@
 //
 //  Created by Findlay Wood on 03/10/2026.
 //
-import Foundation
+import UIKit
 
 /// Every screen ProfileKit can show. Later steps of `PROFILE_PLAN.md` add edit
 /// profile, followers, requests and other users' profiles here.
 enum ProfileKitRoutes {
     case myProfile
     case settings
+    /// Carries what the profile already holds, so the editor opens filled in
+    /// without a second read.
+    case editProfile(header: ProfileHeader, photo: UIImage?, onSaved: () -> Void)
 }

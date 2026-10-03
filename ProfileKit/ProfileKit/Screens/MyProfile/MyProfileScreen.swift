@@ -66,7 +66,12 @@ struct MyProfileScreen: View {
         case .loading:
             ProfileHeaderSkeleton()
         case .loaded(let header):
-            ProfileHeaderCard(header: header, photo: viewModel.photo, stamps: viewModel.stamps)
+            ProfileHeaderCard(
+                header: header,
+                photo: viewModel.photo,
+                stamps: viewModel.stamps,
+                onEdit: { viewModel.editProfile() }
+            )
         case .failed:
             ProfileLoadFailedCard {
                 Task { await viewModel.load() }

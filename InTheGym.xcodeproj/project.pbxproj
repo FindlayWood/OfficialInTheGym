@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF1A00000000000000000028 /* FirestoreProfileDetailsWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000018 /* FirestoreProfileDetailsWriter.swift */; };
+		BF1A00000000000000000029 /* CurrentUserProfileDetailsWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000019 /* CurrentUserProfileDetailsWriter.swift */; };
+		BF1A0000000000000000002A /* RemoteAndCurrentUserProfileDetailsWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A0000000000000000001A /* RemoteAndCurrentUserProfileDetailsWriter.swift */; };
+		BF1A0000000000000000002B /* StorageProfilePhotoUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A0000000000000000001B /* StorageProfilePhotoUploader.swift */; };
+		BF1A0000000000000000002C /* CachingProfilePhotoUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A0000000000000000001C /* CachingProfilePhotoUploader.swift */; };
 		BF1A00000000000000000020 /* ProfileKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000010 /* ProfileKitComposition.swift */; };
 		BF1A00000000000000000021 /* ProfileAppRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000011 /* ProfileAppRoutes.swift */; };
 		BF1A00000000000000000022 /* AppSignOut.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000012 /* AppSignOut.swift */; };
@@ -1003,6 +1008,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BF1A00000000000000000018 /* FirestoreProfileDetailsWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileDetailsWriter.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000019 /* CurrentUserProfileDetailsWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserProfileDetailsWriter.swift; sourceTree = "<group>"; };
+		BF1A0000000000000000001A /* RemoteAndCurrentUserProfileDetailsWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAndCurrentUserProfileDetailsWriter.swift; sourceTree = "<group>"; };
+		BF1A0000000000000000001B /* StorageProfilePhotoUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageProfilePhotoUploader.swift; sourceTree = "<group>"; };
+		BF1A0000000000000000001C /* CachingProfilePhotoUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachingProfilePhotoUploader.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000001 /* ProfileKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ProfileKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF1A00000000000000000010 /* ProfileKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileKitComposition.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000011 /* ProfileAppRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppRoutes.swift; sourceTree = "<group>"; };
@@ -4922,6 +4932,11 @@
 				BF1A00000000000000000015 /* ImageCacheProfilePhotoLoader.swift */,
 				BF1A00000000000000000016 /* PurchaseManagerSubscriptionService.swift */,
 				BF1A00000000000000000017 /* FirebaseProfilePasswordReset.swift */,
+				BF1A00000000000000000018 /* FirestoreProfileDetailsWriter.swift */,
+				BF1A00000000000000000019 /* CurrentUserProfileDetailsWriter.swift */,
+				BF1A0000000000000000001A /* RemoteAndCurrentUserProfileDetailsWriter.swift */,
+				BF1A0000000000000000001B /* StorageProfilePhotoUploader.swift */,
+				BF1A0000000000000000001C /* CachingProfilePhotoUploader.swift */,
 			);
 			path = ProfileKit;
 			sourceTree = "<group>";
@@ -5195,6 +5210,11 @@
 				BF1A00000000000000000025 /* ImageCacheProfilePhotoLoader.swift in Sources */,
 				BF1A00000000000000000026 /* PurchaseManagerSubscriptionService.swift in Sources */,
 				BF1A00000000000000000027 /* FirebaseProfilePasswordReset.swift in Sources */,
+				BF1A00000000000000000028 /* FirestoreProfileDetailsWriter.swift in Sources */,
+				BF1A00000000000000000029 /* CurrentUserProfileDetailsWriter.swift in Sources */,
+				BF1A0000000000000000002A /* RemoteAndCurrentUserProfileDetailsWriter.swift in Sources */,
+				BF1A0000000000000000002B /* StorageProfilePhotoUploader.swift in Sources */,
+				BF1A0000000000000000002C /* CachingProfilePhotoUploader.swift in Sources */,
 				D1CA00000000000000000021 /* DiscoverCardQuery.swift in Sources */,
 				D1CA00000000000000000022 /* FirestoreDiscoverClipCardLoader.swift in Sources */,
 				D1CA00000000000000000023 /* FirestoreDiscoverWorkoutCardLoader.swift in Sources */,

@@ -88,6 +88,31 @@ final class MyProfileViewModelTests: XCTestCase {
         XCTAssertEqual(sut.viewModel.stamps, [])
     }
 
+    func test_editProfile_passesTheLoadedHeaderAndPhoto() async {
+        let photo = UIImage()
+        let sut = makeSUT(results: [.success(.make(userId: "me"))], photoResult: .success(photo))
+        await sut.viewModel.load()
+        var received: (ProfileHeader, UIImage?)?
+        sut.viewModel.onEditProfile = { received = ($0, $1) }
+
+        sut.viewModel.editProfile()
+
+        XCTAssertEqual(received?.0, .make(userId: "me"))
+        XCTAssertTrue(received?.1 === photo)
+    }
+
+    // There is nothing to edit before the header loads, and an editor opened
+    // on empty fields would save them over the real name.
+    func test_editProfile_doesNothingBeforeTheHeaderLoads() {
+        let sut = makeSUT()
+        var opened = false
+        sut.viewModel.onEditProfile = { _, _ in opened = true }
+
+        sut.viewModel.editProfile()
+
+        XCTAssertFalse(opened)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(

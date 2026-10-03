@@ -23,6 +23,9 @@ struct ProfileHeaderCard: View {
     let header: ProfileHeader
     let photo: UIImage?
     let stamps: [ProfileStamp]
+    /// Only your own profile can be edited. Nil draws no button, which is how
+    /// other people's profiles (step 7) will use this card.
+    var onEdit: (() -> Void)?
 
     var body: some View {
         VStack(spacing: 14) {
@@ -52,6 +55,19 @@ struct ProfileHeaderCard: View {
                     .foregroundStyle(Color.primary)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
+            }
+
+            if let onEdit {
+                Button(action: onEdit) {
+                    Text("Edit Profile")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(Color.darkColor)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 40)
+                        .background(Color.darkColor.opacity(0.12))
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                }
+                .padding(.top, 4)
             }
         }
         .frame(maxWidth: .infinity)

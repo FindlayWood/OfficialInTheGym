@@ -32,6 +32,8 @@ public final class ProfileKitRouter {
     let subscription: ProfileSubscriptionService
     let signOutService: ProfileSignOutService
     let passwordReset: PasswordResetService
+    let detailsWriter: ProfileDetailsWriter
+    let photoUploader: ProfilePhotoUploader
     let links: ProfileSettingsLinks
 
     // MARK: - Properties
@@ -52,6 +54,8 @@ public final class ProfileKitRouter {
         subscription: ProfileSubscriptionService,
         signOutService: ProfileSignOutService,
         passwordReset: PasswordResetService,
+        detailsWriter: ProfileDetailsWriter,
+        photoUploader: ProfilePhotoUploader,
         links: ProfileSettingsLinks
     ) {
         self.navigationController = navigationController
@@ -60,6 +64,8 @@ public final class ProfileKitRouter {
         self.subscription = subscription
         self.signOutService = signOutService
         self.passwordReset = passwordReset
+        self.detailsWriter = detailsWriter
+        self.photoUploader = photoUploader
         self.links = links
     }
 
@@ -88,6 +94,11 @@ extension ProfileKitRouter {
                 subscription: subscription
             )
             viewModel.onOpenSettings = { [weak self] in self?.navigate(to: .settings) }
+            viewModel.onEditProfile = { [weak self, weak viewModel] header, photo in
+                self?.present(.editProfile(header: header, photo: photo, onSaved: {
+                    Task { await viewModel?.load() }
+                }))
+            }
             let vc = ProfileKitBoundaryViewController()
             vc.display = MyProfileScreen(viewModel: viewModel)
             vc.router = self
@@ -107,7 +118,25 @@ extension ProfileKitRouter {
             let vc = UIHostingController(rootView: ProfileSettingsScreen(viewModel: viewModel))
             vc.hidesBottomBarWhenPushed = true
             return vc
+
+        case .editProfile(let header, let photo, let onSaved):
+            let viewModel = EditProfileViewModel(
+                header: header,
+                photo: photo,
+                detailsWriter: detailsWriter,
+                photoUploader: photoUploader
+            )
+            viewModel.onSaved = onSaved
+            let host = UIHostingController(rootView: EditProfileScreen(viewModel: viewModel))
+            let modal = UINavigationController(rootViewController: host)
+            viewModel.onFinished = { [weak modal] in modal?.dismiss(animated: true) }
+            return modal
         }
+    }
+
+    @MainActor
+    func present(_ route: ProfileKitRoutes) {
+        navigationController.present(viewController(for: route), animated: true)
     }
 
     @MainActor

@@ -23,6 +23,21 @@ class ProfileKitComposition {
 
         let photoLoader: ProfilePhotoLoader = ImageCacheProfilePhotoLoader()
 
+        // MARK: - Edit profile
+
+        let userId = UserDefaults.currentUser.uid
+
+        let remoteDetailsWriter: ProfileDetailsWriter = FirestoreProfileDetailsWriter(userId: userId)
+
+        let detailsWriter: ProfileDetailsWriter = RemoteAndCurrentUserProfileDetailsWriter(
+            remote: remoteDetailsWriter,
+            currentUser: CurrentUserProfileDetailsWriter()
+        )
+
+        let storagePhotoUploader: ProfilePhotoUploader = StorageProfilePhotoUploader(userId: userId)
+
+        let photoUploader: ProfilePhotoUploader = CachingProfilePhotoUploader(wrapping: storagePhotoUploader, userId: userId)
+
         // MARK: - Settings
 
         let subscription: ProfileSubscriptionService = PurchaseManagerSubscriptionService(purchaseManager: purchaseManager)
@@ -47,6 +62,8 @@ class ProfileKitComposition {
             subscription: subscription,
             signOutService: signOutService,
             passwordReset: passwordReset,
+            detailsWriter: detailsWriter,
+            photoUploader: photoUploader,
             links: links
         )
 
