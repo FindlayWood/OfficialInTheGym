@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF1A00000000000000000040 /* WeightTrackingPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000030 /* WeightTrackingPath.swift */; };
+		BF1A00000000000000000041 /* FirestoreBodyMeasurementsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000031 /* FirestoreBodyMeasurementsLoader.swift */; };
+		BF1A00000000000000000042 /* FirestoreBodyMeasurementsWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000032 /* FirestoreBodyMeasurementsWriter.swift */; };
+		BF1A00000000000000000043 /* FirestoreWeightLogLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000033 /* FirestoreWeightLogLoader.swift */; };
+		BF1A00000000000000000044 /* FirestoreWeightEntryWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000034 /* FirestoreWeightEntryWriter.swift */; };
+		BF1A00000000000000000045 /* FirestoreWeightEntryRemover.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000035 /* FirestoreWeightEntryRemover.swift */; };
 		BF1A00000000000000000028 /* FirestoreProfileDetailsWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000018 /* FirestoreProfileDetailsWriter.swift */; };
 		BF1A00000000000000000029 /* CurrentUserProfileDetailsWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000019 /* CurrentUserProfileDetailsWriter.swift */; };
 		BF1A0000000000000000002A /* RemoteAndCurrentUserProfileDetailsWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A0000000000000000001A /* RemoteAndCurrentUserProfileDetailsWriter.swift */; };
@@ -1008,6 +1014,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BF1A00000000000000000030 /* WeightTrackingPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightTrackingPath.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000031 /* FirestoreBodyMeasurementsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreBodyMeasurementsLoader.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000032 /* FirestoreBodyMeasurementsWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreBodyMeasurementsWriter.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000033 /* FirestoreWeightLogLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWeightLogLoader.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000034 /* FirestoreWeightEntryWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWeightEntryWriter.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000035 /* FirestoreWeightEntryRemover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWeightEntryRemover.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000018 /* FirestoreProfileDetailsWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileDetailsWriter.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000019 /* CurrentUserProfileDetailsWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserProfileDetailsWriter.swift; sourceTree = "<group>"; };
 		BF1A0000000000000000001A /* RemoteAndCurrentUserProfileDetailsWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAndCurrentUserProfileDetailsWriter.swift; sourceTree = "<group>"; };
@@ -4937,6 +4949,12 @@
 				BF1A0000000000000000001A /* RemoteAndCurrentUserProfileDetailsWriter.swift */,
 				BF1A0000000000000000001B /* StorageProfilePhotoUploader.swift */,
 				BF1A0000000000000000001C /* CachingProfilePhotoUploader.swift */,
+				BF1A00000000000000000030 /* WeightTrackingPath.swift */,
+				BF1A00000000000000000031 /* FirestoreBodyMeasurementsLoader.swift */,
+				BF1A00000000000000000032 /* FirestoreBodyMeasurementsWriter.swift */,
+				BF1A00000000000000000033 /* FirestoreWeightLogLoader.swift */,
+				BF1A00000000000000000034 /* FirestoreWeightEntryWriter.swift */,
+				BF1A00000000000000000035 /* FirestoreWeightEntryRemover.swift */,
 			);
 			path = ProfileKit;
 			sourceTree = "<group>";
@@ -5215,6 +5233,12 @@
 				BF1A0000000000000000002A /* RemoteAndCurrentUserProfileDetailsWriter.swift in Sources */,
 				BF1A0000000000000000002B /* StorageProfilePhotoUploader.swift in Sources */,
 				BF1A0000000000000000002C /* CachingProfilePhotoUploader.swift in Sources */,
+				BF1A00000000000000000040 /* WeightTrackingPath.swift in Sources */,
+				BF1A00000000000000000041 /* FirestoreBodyMeasurementsLoader.swift in Sources */,
+				BF1A00000000000000000042 /* FirestoreBodyMeasurementsWriter.swift in Sources */,
+				BF1A00000000000000000043 /* FirestoreWeightLogLoader.swift in Sources */,
+				BF1A00000000000000000044 /* FirestoreWeightEntryWriter.swift in Sources */,
+				BF1A00000000000000000045 /* FirestoreWeightEntryRemover.swift in Sources */,
 				D1CA00000000000000000021 /* DiscoverCardQuery.swift in Sources */,
 				D1CA00000000000000000022 /* FirestoreDiscoverClipCardLoader.swift in Sources */,
 				D1CA00000000000000000023 /* FirestoreDiscoverWorkoutCardLoader.swift in Sources */,

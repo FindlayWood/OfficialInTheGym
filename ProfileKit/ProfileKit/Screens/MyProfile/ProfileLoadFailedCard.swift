@@ -11,6 +11,7 @@ import SwiftUI
 /// tinted "Try Again" style from `MyDayWorkoutLibraryScreen`.
 struct ProfileLoadFailedCard: View {
 
+    var title = "Couldn't Load Profile"
     let onRetry: () -> Void
 
     var body: some View {
@@ -18,7 +19,7 @@ struct ProfileLoadFailedCard: View {
             Image(systemName: "exclamationmark.triangle")
                 .font(.system(size: 28, weight: .semibold))
                 .foregroundStyle(Color.secondary)
-            Text("Couldn't Load Profile")
+            Text(title)
                 .font(.system(size: 17, weight: .semibold))
             Text("Check your connection and try again.")
                 .font(.system(size: 14))

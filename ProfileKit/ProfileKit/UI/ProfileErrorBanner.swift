@@ -1,5 +1,5 @@
 //
-//  EditProfileErrorBanner.swift
+//  ProfileErrorBanner.swift
 //  ProfileKit
 //
 //  Created by Findlay Wood on 03/10/2026.
@@ -7,11 +7,12 @@
 
 import SwiftUI
 
-/// A failed save, shown in the screen rather than as an alert, so the fields
-/// the user was editing stay in view while they decide what to do. ProfileKit's
+/// A failed save, shown in the screen rather than as an alert, so whatever the
+/// user was editing stays in view while they decide what to do. Used by Edit
+/// Profile and Body Measurements. ProfileKit's
 /// copy of `AccountCreationErrorBanner` / `LoginErrorBanner`. **Keep the set in
 /// step** until the shared UI framework exists.
-struct EditProfileErrorBanner: View {
+struct ProfileErrorBanner: View {
 
     let message: String
 

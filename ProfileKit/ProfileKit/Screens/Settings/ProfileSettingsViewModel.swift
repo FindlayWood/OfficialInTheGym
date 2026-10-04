@@ -23,6 +23,9 @@ import Foundation
 /// code is to be deleted**. It was reachable from the old menu, so dropping the
 /// row would quietly remove a feature (`PROFILE_PLAN.md`, open question 1).
 ///
+/// Body Measurements (step 4) is a row under Account rather than part of Edit
+/// Profile: it is private, and Edit Profile edits what other people see.
+///
 /// Account deletion (step 10) and the private-account toggle (step 6) join this
 /// screen in later steps.
 @MainActor
@@ -45,6 +48,7 @@ final class ProfileSettingsViewModel: ObservableObject {
     var onManageSubscription: (() -> Void)?
     var onOpenPerformanceCenter: (() -> Void)?
     var onOpenAbout: (() -> Void)?
+    var onOpenBodyMeasurements: (() -> Void)?
 
     init(
         subscription: ProfileSubscriptionService,

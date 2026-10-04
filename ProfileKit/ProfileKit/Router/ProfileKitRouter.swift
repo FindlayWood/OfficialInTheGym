@@ -34,6 +34,11 @@ public final class ProfileKitRouter {
     let passwordReset: PasswordResetService
     let detailsWriter: ProfileDetailsWriter
     let photoUploader: ProfilePhotoUploader
+    let bodyMeasurementsLoader: BodyMeasurementsLoader
+    let bodyMeasurementsWriter: BodyMeasurementsWriter
+    let weightLogLoader: WeightLogLoader
+    let weightEntryWriter: WeightEntryWriter
+    let weightEntryRemover: WeightEntryRemover
     let links: ProfileSettingsLinks
 
     // MARK: - Properties
@@ -56,6 +61,11 @@ public final class ProfileKitRouter {
         passwordReset: PasswordResetService,
         detailsWriter: ProfileDetailsWriter,
         photoUploader: ProfilePhotoUploader,
+        bodyMeasurementsLoader: BodyMeasurementsLoader,
+        bodyMeasurementsWriter: BodyMeasurementsWriter,
+        weightLogLoader: WeightLogLoader,
+        weightEntryWriter: WeightEntryWriter,
+        weightEntryRemover: WeightEntryRemover,
         links: ProfileSettingsLinks
     ) {
         self.navigationController = navigationController
@@ -66,6 +76,11 @@ public final class ProfileKitRouter {
         self.passwordReset = passwordReset
         self.detailsWriter = detailsWriter
         self.photoUploader = photoUploader
+        self.bodyMeasurementsLoader = bodyMeasurementsLoader
+        self.bodyMeasurementsWriter = bodyMeasurementsWriter
+        self.weightLogLoader = weightLogLoader
+        self.weightEntryWriter = weightEntryWriter
+        self.weightEntryRemover = weightEntryRemover
         self.links = links
     }
 
@@ -115,7 +130,20 @@ extension ProfileKitRouter {
             viewModel.onManageSubscription = { [weak self] in self?.onManageSubscription?() }
             viewModel.onOpenPerformanceCenter = { [weak self] in self?.onOpenPerformanceCenter?() }
             viewModel.onOpenAbout = { [weak self] in self?.onOpenAbout?() }
+            viewModel.onOpenBodyMeasurements = { [weak self] in self?.navigate(to: .bodyMeasurements) }
             let vc = UIHostingController(rootView: ProfileSettingsScreen(viewModel: viewModel))
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .bodyMeasurements:
+            let viewModel = BodyMeasurementsViewModel(
+                measurementsLoader: bodyMeasurementsLoader,
+                measurementsWriter: bodyMeasurementsWriter,
+                logLoader: weightLogLoader,
+                entryWriter: weightEntryWriter,
+                entryRemover: weightEntryRemover
+            )
+            let vc = UIHostingController(rootView: BodyMeasurementsScreen(viewModel: viewModel))
             vc.hidesBottomBarWhenPushed = true
             return vc
 

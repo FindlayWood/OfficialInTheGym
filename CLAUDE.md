@@ -207,17 +207,21 @@ has a value.
 - **Switching unit converts, it does not clear** — unlike `MyDayWorkoutBuilderDistanceScreen`, where
   picking the unit is step one. Here you have already dialled a number in by the time you notice.
 
-**Not persisted yet.** `createAccount` is a callable Cloud Function living outside this repository
-and it drops keys it does not know, so `FunctionsAccountCreator` sends the five body keys and the
-server discards them. Persisting them needs the function updated *and* optional properties added to
-`Users` to read them back — **the new properties must be optional**, since every existing user
-document lacks them. The handoff spec is `CLOUD_FUNCTIONS_ACCOUNT_CREATION.md`, which also records
-that `Users` is decoded from **two** stores (Firestore `Users/{uid}` on the launch path, RTDB
-`users/{uid}` for followers / coaches / requests), so a field written to only one appears on some
-screens and not others. **Weight in particular should not stay a single signup value** — it is
-what `WeightUnit.percentBodyweight` prescriptions are worked out from, so a number captured once at
-signup goes quietly wrong; it wants to be editable and probably logged over time alongside the MyDay
-wellness cards.
+**Persisted, and editable after signup.** This section used to say the server discarded the body
+keys. That has not been true since the functions' 10 August `createAccount` (on `main`), which writes
+`heightCentimetres`, `weightKilograms`, `heightUnit`, `weightUnit` and `dateOfBirth` to `Users/{uid}`
+and seeds `Users/{uid}/WeightTracking/{yyyy-MM-dd}` with the signup weight. `onCreateAccount`
+mirrors the measurements into RTDB `users/{uid}` too.
+
+After signup they live on ProfileKit's **Body Measurements** screen (Settings → Account), which is
+private and deliberately not on Edit Profile (`PROFILE_PLAN.md` step 4).
+- Height and date of birth are edited there and written to `Users/{uid}`.
+- **Weight is a log**, one entry per UTC day in `WeightTracking`. The `syncLatestWeight` function
+  copies the newest entry onto `Users.weightKilograms`, so that field stays the latest weight
+  without the app writing two places. It is what `WeightUnit.percentBodyweight` prescriptions should
+  eventually read; nothing does yet.
+- The app's `Users` model still has **no** body properties. ProfileKit's adapters read them by hand.
+  If `Users` ever gains them, **they must be optional**, since most documents lack them.
 
 ### Fixed here — do not reintroduce
 - **Usernames are lowercased** in `AccountCreationHomeViewModel.username`'s `didSet`, and the field
@@ -1415,6 +1419,7 @@ appears on some screens and not others.
 |---|---|---|
 | `Users/{uid}` | Firestore | `createAccount` Cloud Function |
 | `Profiles/{uid}` | Firestore | **Cloud Functions only** (`syncProfile`) — the public projection of `Users`; others read this, never `Users` |
+| `Users/{uid}/WeightTracking/{yyyy-MM-dd}` | Firestore | `createAccount` (signup weight), ProfileKit's `FirestoreWeightEntryWriter`; newest copied to `Users.weightKilograms` by `syncLatestWeight` |
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
 | `Users/{uid}/ExerciseStats/{exerciseID}/RawLogs/{logID}` | Firestore | both logging paths, per set |
 | `Users/{uid}/WorkoutSessions/{id}` | Firestore | `FirestoreCompletedWorkoutSessionSaver` (batched) |
@@ -1501,6 +1506,10 @@ in this codebase.**
 | `MyDayHomeScreen.setDetailOverlay` animation | the session screen's overlay animation | MYDAY Workout Flow |
 | `FileManagerWorkoutTemplateUploader` date strategy | `FileManagerWorkoutTemplateFetcher` date strategy | Library reads are local-first |
 | `StatsDay.calendar` | `DateFormatter.yyyyMMdd` | STATS Tab |
+| `StatsDay` (StatsKit) | ProfileKit's `WeightDay` — both UTC, as the server's `dateKey()` | PROFILE_PLAN.md step 4 |
+| AccountCreationKit's body sheets, `HeightUnit`, `BodyWeightUnit`, `BodyMeasurementRow` | ProfileKit's copies (`ProfileHeightUnit`, `ProfileWeightUnit`, …) | PROFILE_PLAN.md step 4 |
+| `AccountCreationFieldCard` / `AccountCreationErrorBanner` | ProfileKit's `EditProfileFieldCard` / `ProfileErrorBanner` | Shared UI |
+| `ProfileDetails` limits (100 / 300) | `AccountCreationHomeViewModel` limits, and the `Users` update rule | PROFILE_PLAN.md step 3 |
 | `LoginFieldCard` / `LoginPrimaryButton` / `LoginErrorBanner` | their AccountCreationKit twins | Auth, Shared UI |
 | the six `Color+Extension.swift` | each other | Brand Colours, Shared UI |
 | DiscoverKit's `SectionContainer` | StatsKit's `SectionContainer` | DISCOVER_PLAN.md step 2 |

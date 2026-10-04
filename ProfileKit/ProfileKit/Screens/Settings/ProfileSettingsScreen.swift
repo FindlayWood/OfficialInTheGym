@@ -99,6 +99,9 @@ struct ProfileSettingsScreen: View {
 
     private var accountSection: some View {
         ProfileSettingsSection(title: "Account") {
+            ProfileSettingsRow(icon: "figure.stand", title: "Body Measurements") {
+                viewModel.onOpenBodyMeasurements?()
+            }
             ProfileSettingsRow(
                 icon: "key",
                 title: "Reset Password",

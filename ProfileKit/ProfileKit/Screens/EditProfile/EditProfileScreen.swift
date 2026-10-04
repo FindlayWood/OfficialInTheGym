@@ -54,7 +54,7 @@ struct EditProfileScreen: View {
                 }
 
                 if let message = viewModel.errorMessage {
-                    EditProfileErrorBanner(message: message)
+                    ProfileErrorBanner(message: message)
                 }
             }
             .padding(16)

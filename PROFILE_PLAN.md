@@ -71,7 +71,8 @@ Users/{uid}                              owner + createAccount — PRIVATE to th
   dateOfBirth: Timestamp?                new, optional
   heightUnit / weightUnit: String?       new, optional — how to read back, not what the number means
   pinnedHighlights: [String]?            new, optional — exerciseIds, see step 8
-  BodyWeight/{yyyy-MM-dd}                owner — kilograms, unit, loggedAt. StatsDay key (UTC).
+  WeightTracking/{yyyy-MM-dd}            owner + createAccount — id, date, createdDate,
+                                         weightKilograms, weightUnit?. UTC day key (WeightDay)
   BlockedUsers/{uid}                     exists (DISCOVER)
 
 Profiles/{uid}                           SERVER — the public projection: everything anyone else reads
@@ -115,7 +116,7 @@ Follows/{followerId}_{followeeId}        follower creates; followee approves / r
   including whether a private user's clips leave DISCOVER.
 - **New fields on `Users` are optional.** Every existing document lacks them. See the Firestore
   decode warning under *Workout Library Loading* in `CLAUDE.md`.
-- **Weight is a log, not a field.** `BodyWeight/{yyyy-MM-dd}` keyed by `StatsDay.key(for:)`, one
+- **Weight is a log, not a field.** `WeightTracking/{yyyy-MM-dd}` keyed by a UTC day, one
   entry per day, the latest wins. `WeightUnit.percentBodyweight` prescriptions need the *current*
   weight, and a number captured once at signup goes quietly wrong. The signup value becomes the first
   entry. Weight is stored canonically in kilograms, as everywhere else.
@@ -287,22 +288,100 @@ exists on the coach tab bar and still writes the dead key. `onEditAccount` ignor
 - Storage: `ProfilePhotos/{uid}` must allow the owner to **overwrite**, not only create. Signup only
   ever created.
 
-### Step 4 — Body measurements and the weight log
+### Step 4 — Body measurements and the weight log — built, not rolled out
+
+**Changed from the plan, three ways:**
+- **Signup already persists the measurements.** The functions' `createAccount` has written
+  `heightCentimetres` / `weightKilograms` / `heightUnit` / `weightUnit` / `dateOfBirth` to
+  `Users/{uid}` since 10 August, and seeds `Users/{uid}/WeightTracking/{yyyy-MM-dd}`. The plan's
+  "createAccount drops them" was out of date (and so was `CLAUDE.md`, now corrected). The log
+  therefore uses the existing **`WeightTracking`** collection, not a new `BodyWeight`.
+- **Body Measurements is its own screen**, Settings → Account, captioned "Only you can see these",
+  rather than a card on Edit Profile. Edit Profile edits what other people see, and putting weight
+  there would make people wonder whether it shows.
+- **The latest weight on `Users/{uid}` is kept by the server.** `createAccount` calls
+  `Users.weightKilograms` "the latest known weight", and the first log would have made it stale.
+  `syncLatestWeight` re-derives it from the newest entry on every write, rather than the app writing
+  both the entry and the user document.
 
 **Cloud**
-- `createAccount` persists the five body keys it currently drops
-  (`CLOUD_FUNCTIONS_ACCOUNT_CREATION.md`) and writes the signup weight as the first `BodyWeight`
-  entry.
+- `syncLatestWeight` (v2, `Users/{uid}/WeightTracking/{id}` written) copies the newest entry by
+  `date` to `Users.weightKilograms` (and `weightUnit` when the entry has one), in a transaction.
+  - Deleting the newest entry falls back to the previous one.
+  - Deleting the last entry removes `weightKilograms` but keeps the unit preference.
+  - It writes nothing unchanged and never recreates a deleted user.
+  - 5 tests.
 
 **App**
-- A "Body" card on Edit Profile: height and date of birth reuse the account-creation sheet rules
-  (wheel only in a sheet, Clear, switching unit converts). **Copy, do not import**: AccountCreationKit
-  is another framework.
-- Weight: "Log weight" writes today's `BodyWeight` entry, with a small hand-built trend (bars or a
-  line, decided at build time; no Swift Charts) and the history list.
-- `Users` gains the optional properties so the app can read them back.
-- **Not here:** feeding the latest weight into `% of BW` prescriptions. That is a MyDay change worth
-  its own task once the log exists.
+- **Height and date of birth** use the signup rows and wheels, copied into ProfileKit
+  (`BodyMeasurementRow`, `HeightPickerSheet`, `DateOfBirthSheet`, `ProfilePickerSheet`). They save
+  **when the sheet closes**, and only if changed. A failure puts the screen back to the server's
+  value with a banner. Clear deletes the field.
+- **Weight:**
+  - The screen shows the latest reading, a hand-built **line** over time (x-axis is time, not
+    entry index), and the history; long-press an entry to delete it.
+  - "Log Weight" opens a whole + tenths wheel on the last reading. Kilograms or pounds, converted
+    on switch, stored as kilograms to one decimal, which signup's whole numbers do not need.
+  - One entry per **UTC** day (`WeightDay`, matching the server's `dateKey()` and StatsKit's
+    `StatsDay`), so logging again the same day replaces the entry.
+  - Logs and deletes show at once and are put back if the write fails.
+- Adapters, one destination each:
+  - `FirestoreBodyMeasurementsLoader` reads the user's own `Users/{uid}` by hand, since the app's
+    `Users` model has no body fields.
+  - `FirestoreBodyMeasurementsWriter` uses `updateData` of the three keys, with
+    `FieldValue.delete()` for a cleared one.
+  - `FirestoreWeightLogLoader` decodes per document and skips bad entries.
+  - `FirestoreWeightEntryWriter` writes `createAccount`'s entry shape.
+  - `FirestoreWeightEntryRemover`.
+  - `WeightTrackingPath` is the one definition of the collection.
+- Remote-only reads: a failed load is "Couldn't Load Measurements" with Try Again, never an empty
+  log. No local cache, since this is a settings screen opened occasionally.
+- Tests: 17 new (`BodyMeasurementsViewModelTests`, `WeightDayTests`, `ProfileWeightUnitTests`),
+  50 in ProfileKit.
+- **Still not here:** feeding the latest weight into `% of BW` prescriptions. `Users.weightKilograms`
+  is now the number to read for that.
+
+**Rules** (console)
+- Widen step 3's `Users/{userId}` update rule. The full rule:
+
+  ```
+  allow update: if request.auth != null && request.auth.uid == userId
+    && request.resource.data.diff(resource.data).affectedKeys()
+         .hasOnly(["displayName", "bio", "heightCentimetres", "heightUnit", "dateOfBirth"])
+    && request.resource.data.displayName is string
+    && request.resource.data.displayName.size() > 0
+    && request.resource.data.displayName.size() <= 100
+    && request.resource.data.bio is string
+    && request.resource.data.bio.size() <= 300
+    && (!("heightCentimetres" in request.resource.data)
+         || (request.resource.data.heightCentimetres is number
+             && request.resource.data.heightCentimetres >= 50
+             && request.resource.data.heightCentimetres <= 300))
+    && (!("heightUnit" in request.resource.data)
+         || request.resource.data.heightUnit in ["centimetres", "feetInches"])
+    && (!("dateOfBirth" in request.resource.data)
+         || request.resource.data.dateOfBirth is timestamp);
+  ```
+
+  `weightKilograms` and `weightUnit` are deliberately absent. Only `syncLatestWeight` (Admin SDK)
+  writes them.
+- Add `WeightTracking`:
+
+  ```
+  match /Users/{userId}/WeightTracking/{entryId} {
+    allow read, delete: if request.auth != null && request.auth.uid == userId;
+    allow create, update: if request.auth != null && request.auth.uid == userId
+      && request.resource.data.id == entryId
+      && request.resource.data.date is timestamp
+      && request.resource.data.weightKilograms is number
+      && request.resource.data.weightKilograms >= 20
+      && request.resource.data.weightKilograms <= 400
+      && (!("weightUnit" in request.resource.data)
+           || request.resource.data.weightUnit in ["kilograms", "pounds"]);
+  }
+  ```
+
+- No new index: a single-field `orderBy("date")` uses the automatic one.
 
 ### Step 5 — Follows
 
@@ -388,7 +467,7 @@ most-trained exercises by `setCount`, a weighted best for loaded and a time best
 
 **Cloud**
 - `deleteAccount` callable: Firestore `Users/{uid}` and every subcollection (MyDay, ExerciseStats +
-  RawLogs, WorkoutSessions, WorkoutTemplates, BodyWeight, BlockedUsers), the analytics
+  RawLogs, WorkoutSessions, WorkoutTemplates, WeightTracking, BlockedUsers), the analytics
   `WorkoutSessions` copies, top-level `WorkoutTemplates` the user authored, `Usernames/{username}`,
   `Profiles/{uid}`, every `Follows` document either side, `Clips` + Storage (`TestClips`,
   `TestClipThumbnails`, `ProfilePhotos`), **`deleteDiscoverData(uid)`** (built, DISCOVER step 8),
@@ -432,6 +511,11 @@ matters most:
 - [ ] Console rules: the `Users/{userId}` update rule above, then check that no other client write
       to `Users` is still relied on
 - [ ] Storage rules: the owner may overwrite `ProfilePhotos/{uid}`
+
+**Step 4 — Body measurements**
+- [ ] Deploy `syncLatestWeight` from the functions `profile` branch
+- [ ] Console rules: the widened `Users/{userId}` update rule, and `WeightTracking`
+- [ ] Confirm the deployed `createAccount` is the 10 August version that persists the body keys
 
 **Later steps** (expanded as they land)
 - [ ] `Follows` rules + indexes **before** `MigrateFollows.py --write`

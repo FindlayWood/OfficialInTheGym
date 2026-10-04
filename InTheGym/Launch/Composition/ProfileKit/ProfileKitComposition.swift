@@ -38,6 +38,18 @@ class ProfileKitComposition {
 
         let photoUploader: ProfilePhotoUploader = CachingProfilePhotoUploader(wrapping: storagePhotoUploader, userId: userId)
 
+        // MARK: - Body measurements
+
+        let bodyMeasurementsLoader: BodyMeasurementsLoader = FirestoreBodyMeasurementsLoader(userId: userId)
+
+        let bodyMeasurementsWriter: BodyMeasurementsWriter = FirestoreBodyMeasurementsWriter(userId: userId)
+
+        let weightLogLoader: WeightLogLoader = FirestoreWeightLogLoader(userId: userId)
+
+        let weightEntryWriter: WeightEntryWriter = FirestoreWeightEntryWriter(userId: userId)
+
+        let weightEntryRemover: WeightEntryRemover = FirestoreWeightEntryRemover(userId: userId)
+
         // MARK: - Settings
 
         let subscription: ProfileSubscriptionService = PurchaseManagerSubscriptionService(purchaseManager: purchaseManager)
@@ -64,6 +76,11 @@ class ProfileKitComposition {
             passwordReset: passwordReset,
             detailsWriter: detailsWriter,
             photoUploader: photoUploader,
+            bodyMeasurementsLoader: bodyMeasurementsLoader,
+            bodyMeasurementsWriter: bodyMeasurementsWriter,
+            weightLogLoader: weightLogLoader,
+            weightEntryWriter: weightEntryWriter,
+            weightEntryRemover: weightEntryRemover,
             links: links
         )
 
