@@ -158,6 +158,15 @@ public final class DiscoverKitRouter {
         rootViewController = rootVC
         navigationController.setViewControllers([rootVC], animated: false)
     }
+
+    /// Pushes a clip's player onto this router's navigation controller, for a
+    /// router built on **another** tab's stack: ProfileKit's clips grid opens
+    /// clips this way (`PROFILE_PLAN.md` step 8), without `start()`, so that
+    /// tab keeps its own root.
+    @MainActor
+    public func showClip(_ card: DiscoverClipCard) {
+        navigate(to: .clipPlayer(card))
+    }
 }
 
 extension DiscoverKitRouter {

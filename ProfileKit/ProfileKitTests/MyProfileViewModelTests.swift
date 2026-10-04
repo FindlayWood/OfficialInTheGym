@@ -113,18 +113,19 @@ final class MyProfileViewModelTests: XCTestCase {
         XCTAssertFalse(opened)
     }
 
-    func test_load_deliversTheFollowCounts() async {
-        let sut = makeSUT(results: [.success(.make(userId: "me"))], counts: .success(ProfileCounts(followers: 4, following: 2)))
+    func test_load_deliversTheFollowCountsFromThePublicProfile() async {
+        let sut = makeSUT(results: [.success(.make(userId: "me"))], publicProfile: .success(publicProfile(followers: 4)))
 
         await sut.viewModel.load()
 
-        XCTAssertEqual(sut.follows.receivedMessages, [.counts(userId: "me")])
+        XCTAssertEqual(sut.profiles.receivedMessages, [.profile("me")])
         XCTAssertEqual(sut.viewModel.counts, ProfileCounts(followers: 4, following: 2))
+        XCTAssertEqual(sut.viewModel.publicProfile?.clipCount, 7)
     }
 
     // No profile document yet means no counts on screen, not "0 followers".
     func test_load_deliversNoCountsBeforeTheProfileExists() async {
-        let sut = makeSUT(results: [.success(.make())], counts: .success(nil))
+        let sut = makeSUT(results: [.success(.make())], publicProfile: .success(nil))
 
         await sut.viewModel.load()
 
@@ -132,9 +133,9 @@ final class MyProfileViewModelTests: XCTestCase {
     }
 
     func test_refreshCounts_keepsTheShownCountsWhenTheReadFails() async {
-        let sut = makeSUT(results: [.success(.make())], counts: .success(ProfileCounts(followers: 4, following: 2)))
+        let sut = makeSUT(results: [.success(.make())], publicProfile: .success(publicProfile(followers: 4)))
         await sut.viewModel.load()
-        sut.follows.countsResult = .failure(anyError)
+        sut.profiles.profileResults = [.failure(anyError)]
 
         await sut.viewModel.refreshCounts()
 
@@ -146,8 +147,60 @@ final class MyProfileViewModelTests: XCTestCase {
 
         await sut.viewModel.refreshCounts()
 
-        XCTAssertTrue(sut.follows.receivedMessages.isEmpty)
+        XCTAssertTrue(sut.profiles.receivedMessages.isEmpty)
         XCTAssertTrue(sut.privacy.receivedMessages.isEmpty)
+    }
+
+    // MARK: - Highlights and clips
+
+    func test_load_deliversHighlightsAndClips() async {
+        let sut = makeSUT(results: [.success(.make(userId: "me"))])
+        sut.content.highlightsResult = .success(ProfileHighlights(highlights: [highlight("squat")], isPinned: false))
+        sut.content.clipsResult = .success([clip("c1")])
+
+        await sut.viewModel.load()
+
+        XCTAssertEqual(sut.viewModel.highlights?.highlights.map(\.exerciseId), ["squat"])
+        XCTAssertEqual(sut.viewModel.clips.map(\.clipId), ["c1"])
+    }
+
+    // A failed section leaves only itself empty.
+    func test_load_keepsTheClipsWhenHighlightsFail() async {
+        let sut = makeSUT(results: [.success(.make())])
+        sut.content.highlightsResult = .failure(anyError)
+        sut.content.clipsResult = .success([clip("c1")])
+
+        await sut.viewModel.load()
+
+        XCTAssertNil(sut.viewModel.highlights)
+        XCTAssertEqual(sut.viewModel.clips.map(\.clipId), ["c1"])
+    }
+
+    // The editor opens on the current choice; automatic highlights are not a
+    // choice, so it opens with none picked.
+    func test_editHighlights_passesThePinsOnlyWhenPinned() async {
+        let pinned = makeSUT(results: [.success(.make())])
+        pinned.content.highlightsResult = .success(ProfileHighlights(highlights: [highlight("curl")], isPinned: true))
+        await pinned.viewModel.load()
+        var received: [String]?
+        pinned.viewModel.onEditHighlights = { received = $0 }
+        pinned.viewModel.editHighlights()
+        XCTAssertEqual(received, ["curl"])
+
+        let automatic = makeSUT(results: [.success(.make())])
+        automatic.content.highlightsResult = .success(ProfileHighlights(highlights: [highlight("squat")], isPinned: false))
+        await automatic.viewModel.load()
+        automatic.viewModel.onEditHighlights = { received = $0 }
+        automatic.viewModel.editHighlights()
+        XCTAssertEqual(received, [])
+    }
+
+    func test_applySavedHighlights_showsTheResultAtOnce() {
+        let sut = makeSUT()
+
+        sut.viewModel.applySavedHighlights(ProfileHighlights(highlights: [highlight("curl")], isPinned: true))
+
+        XCTAssertEqual(sut.viewModel.highlights, ProfileHighlights(highlights: [highlight("curl")], isPinned: true))
     }
 
     func test_load_deliversThePendingRequestCount() async {
@@ -177,28 +230,47 @@ final class MyProfileViewModelTests: XCTestCase {
     private func makeSUT(
         results: [Result<ProfileHeader, Error>] = [],
         photoResult: Result<UIImage?, Error> = .success(nil),
-        counts: Result<ProfileCounts?, Error> = .success(nil),
+        publicProfile: Result<PublicProfile?, Error> = .success(nil),
         hasUnlockedPro: Bool = false
     ) -> (
         viewModel: MyProfileViewModel,
         loader: MyProfileLoaderSpy,
         photoLoader: ProfilePhotoLoaderSpy,
-        follows: FollowServicesSpy,
-        privacy: PrivacyServicesSpy
+        profiles: PublicProfileServicesSpy,
+        privacy: PrivacyServicesSpy,
+        content: ContentServicesSpy
     ) {
         let loader = MyProfileLoaderSpy(results: results)
         let photoLoader = ProfilePhotoLoaderSpy(result: photoResult)
-        let follows = FollowServicesSpy()
-        follows.countsResult = counts
+        let profiles = PublicProfileServicesSpy()
+        profiles.profileResults = [publicProfile]
         let privacy = PrivacyServicesSpy()
+        let content = ContentServicesSpy()
         let viewModel = MyProfileViewModel(
             profileLoader: loader,
             photoLoader: photoLoader,
-            countsLoader: follows,
+            publicProfileLoader: profiles,
             requestCountLoader: privacy,
+            highlightsLoader: content,
+            clipsLoader: content,
             subscription: ProfileSubscriptionServiceSpy(hasUnlockedPro: hasUnlockedPro)
         )
-        return (viewModel, loader, photoLoader, follows, privacy)
+        return (viewModel, loader, photoLoader, profiles, privacy, content)
+    }
+
+    private func publicProfile(followers: Int) -> PublicProfile {
+        PublicProfile(header: .make(), isPrivate: false, counts: ProfileCounts(followers: followers, following: 2), clipCount: 7)
+    }
+
+    private func highlight(_ id: String) -> ProfileHighlight {
+        ProfileHighlight(exerciseId: id, exerciseName: id, maxWeightKilograms: 100, maxTimeSeconds: 0, isTimeBased: false)
+    }
+
+    private func clip(_ id: String) -> ProfileClip {
+        ProfileClip(
+            clipId: id, exerciseId: nil, exerciseName: nil, videoURL: nil, thumbnailURL: nil, durationSeconds: nil,
+            createdBy: "me", uploadedAt: nil, likeCount: nil, commentCount: nil, viewCount: nil
+        )
     }
 
     private func loadedHeader(_ viewModel: MyProfileViewModel) -> ProfileHeader? {

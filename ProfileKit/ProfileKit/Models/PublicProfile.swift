@@ -19,10 +19,13 @@ public struct PublicProfile: Equatable, Sendable {
     public let header: ProfileHeader
     public let isPrivate: Bool
     public let counts: ProfileCounts
+    /// Public, visible clips, recounted server-side (`profileClipCount`).
+    public let clipCount: Int
 
-    public init(header: ProfileHeader, isPrivate: Bool, counts: ProfileCounts) {
+    public init(header: ProfileHeader, isPrivate: Bool, counts: ProfileCounts, clipCount: Int = 0) {
         self.header = header
         self.isPrivate = isPrivate
         self.counts = counts
+        self.clipCount = clipCount
     }
 }

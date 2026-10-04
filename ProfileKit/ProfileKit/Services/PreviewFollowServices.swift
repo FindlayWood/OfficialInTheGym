@@ -6,19 +6,14 @@
 //
 import Foundation
 
-/// Preview conformer for everything follows: a short list, counts to match,
-/// and writes that succeed and store nothing. A follow comes back
-/// `.following`.
-public final class PreviewFollowServices: ProfileCountsLoader, FollowListLoader, ProfileSummaryLoader,
+/// Preview conformer for everything follows: a short list, and writes that
+/// succeed and store nothing. A follow comes back `.following`.
+public final class PreviewFollowServices: FollowListLoader, ProfileSummaryLoader,
                                           FollowStatusLoader, FollowWriter, Unfollower, FollowerRemover,
                                           @unchecked Sendable {
     private let names = ["Alex Morgan", "Sam Reid", "Jordan Lee", "Taylor Kim"]
 
     public init() {}
-
-    public func counts(for userId: String) async throws -> ProfileCounts? {
-        ProfileCounts(followers: 4, following: 3)
-    }
 
     public func page(_ kind: FollowListKind, of userId: String, after cursor: FollowListCursor?, limit: Int) async throws -> [FollowListEntry] {
         guard cursor == nil else { return [] }

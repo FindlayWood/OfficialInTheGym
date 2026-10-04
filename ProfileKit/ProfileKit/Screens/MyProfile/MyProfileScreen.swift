@@ -31,6 +31,17 @@ struct MyProfileScreen: View {
                             viewModel.onOpenFollowRequests?()
                         }
                     }
+                    if case .loaded = viewModel.header {
+                        ProfileHighlightsSection(highlights: viewModel.highlights) {
+                            viewModel.editHighlights()
+                        }
+                        ProfileClipsSection(
+                            clips: viewModel.clips,
+                            clipCount: viewModel.publicProfile?.clipCount,
+                            isOwnProfile: true,
+                            onOpenClip: { viewModel.onOpenClip?($0) }
+                        )
+                    }
                 }
                 .padding(16)
             }
@@ -101,8 +112,10 @@ struct MyProfileScreen: View {
         viewModel: MyProfileViewModel(
             profileLoader: PreviewMyProfileLoader(),
             photoLoader: PreviewProfilePhotoLoader(),
-            countsLoader: PreviewFollowServices(),
+            publicProfileLoader: PreviewPublicProfileServices(),
             requestCountLoader: PreviewPrivacyServices(),
+            highlightsLoader: PreviewContentServices(),
+            clipsLoader: PreviewContentServices(),
             subscription: PreviewProfileSubscriptionService(hasUnlockedPro: true)
         )
     )

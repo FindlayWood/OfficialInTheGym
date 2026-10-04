@@ -623,22 +623,89 @@ A list query constrains one of `followeeId` / `followerId` with `==`. The rule i
 side, and the `||` with the unconstrained side is how one rule covers both lists. Test both lists,
 for a public account and a private one, in the Rules Playground before publishing.
 
-### Step 8 — Highlights (PBs) and clips
+### Step 8 — Highlights (PBs) and clips — built, not rolled out
+
+**Decided at the start of the step** (2026-10-04):
+- **Highlights are automatic until pinned.** They are your three most-trained exercises (by
+  `setCount`) until you pin up to three of your own. This settles open question 4.
+- **A private account's public clips stay in DISCOVER.** A clip's own `isPrivate` already decides
+  that. This settles open question 2.
+- **The profile grid shows public clips only, for everyone**, your own profile included.
+
+**Changed from the plan:** highlights live in **`ProfileHighlights/{uid}`**, not on `Profiles`.
+`Profiles` is readable by every signed-in user, and a private account's PBs are for followers. A
+separate document lets the rules gate it with the same check as the follow lists, so the server
+enforces the privacy rather than only the app hiding it.
 
 **Cloud**
-- `syncProfileHighlights`: on `Users/{uid}/ExerciseStats/{exerciseId}` write, copy `maxWeight` /
-  `maxTime` for the user's highlighted exercises into `Profiles.highlights`. Others never read
-  `ExerciseStats` directly.
-- `clipCount` added to the profile recount.
+- `syncProfileHighlights` rebuilds `ProfileHighlights/{uid}` (`highlights`, `isPinned`) from
+  current state in a transaction.
+  - It uses the pinned ids in order (skipping any with no stats), or else the top three
+    `ExerciseStats` by `setCount`.
+  - Each highlight is `exerciseId`, `exerciseName`, `maxWeight` (kg), `maxTime` (s) and
+    `isTimeBased` (StatsKit's rule).
+  - A deleted user deletes the document. Unchanged content is not written: the comparison is
+    independent of field order, since Firestore reads keys back in its own order.
+- It has two triggers:
+  - `profileHighlightsFromStats`, on `Users/{uid}/ExerciseStats/{id}`, so a new best or a change in
+    ranking updates the tiles.
+  - `profileHighlightsFromPins`, on `Users/{uid}`, which runs only when `pinnedHighlights` changes
+    or the user is created or deleted, so a bio edit does not rebuild highlights.
+- `profileClipCount` (on `DiscoverClips/{id}`) recounts `Profiles.clipCount`: the owner's public,
+  visible clips, exactly the grid's set, via `syncCount`.
+- `rebuildProfiles` also recounts clips and rebuilds every user's highlights.
+- Tests: 7 new, 39 in `test/Profile`.
 
 **App**
-- Highlights section: up to N tiles (exercise name, best weight in kg rendered in the viewer's unit,
-  or best time). Owner can choose which exercises are pinned (`pinnedHighlights`).
-- Clips grid from the user's Firestore `Clips` (`userID`), visible ones only. Tapping a clip opens
-  the existing clip player route. Like counts come from `DiscoverClips` where the clip has a card.
+- **Highlights section** on both profiles: up to three equal tiles, each a best (kg, or `2m 30s`
+  for timed work) over the exercise name. It is titled "Top Lifts" when automatic and "Highlights"
+  when pinned.
+  - On your own profile it carries **Edit**, and when empty says how it fills. On someone else's,
+    an empty section is not drawn.
+  - A private account you do not follow shows none: the screen does not even ask, since the rules
+    would deny it.
+- **Edit Highlights** is presented modally with Cancel / Save.
+  - An Automatic row, then every logged exercise with its best, numbered 1–3 in the order picked.
+    A fourth pick is refused, not swapped in.
+  - Pins whose stats are gone are dropped on load.
+  - Save shows the result on the profile **at once**, worked out from the candidates on screen,
+    since the server's rebuild lags.
+- **Clips grid** on both profiles: three columns of portrait thumbnails (`AsyncImage`) with
+  durations, the newest 12, from the owner's public, visible `DiscoverClips` cards. The header
+  shows `clipCount`.
+  - **Tapping a clip opens DISCOVER's clip player**, with likes, comments and report.
+    `ProfileKitRouter.onOpenClip` is answered by `DiscoverClipOpener`, which builds a DiscoverKit
+    router on the profile's stack **lazily**: building eagerly would recurse, since each
+    composition builds the other's router.
+  - DiscoverKit gained `DiscoverKitRouter.showClip(_:)` and `DiscoverKitComposition.makeRouter`.
+  - `ProfileClip` carries every card field, so no second read is needed.
+- Your own profile now reads its counts from the same `PublicProfileLoader` as other profiles.
+  **`ProfileCountsLoader` and `FirestoreProfileCountsLoader` were removed**, which also gives the
+  clip count.
+- Adapters:
+  - `FirestoreProfileHighlightsLoader` and `FirestoreHighlightCandidatesLoader`, both reading
+    through **`ProfileHighlight(highlightData:)`**, the one parser of the highlight shape.
+  - `FirestorePinnedHighlightsWriter`, where an empty list deletes the field.
+  - `FirestoreProfileClipsLoader`.
+- Weights show in kilograms. There is no app-wide unit preference to read yet.
+- Tests: 16 new (`EditHighlightsViewModelTests`, `ProfileHighlightTests`, highlights and clips on
+  both profile view models), 115 in ProfileKit. DiscoverKit's suite still passes.
 
-**Open:** what fills highlights before the user pins anything. Recommended: their three
-most-trained exercises by `setCount`, a weighted best for loaded and a time best for timed.
+**Rules** (console)
+- `ProfileHighlights` (`canSeeListsOf` is step 7's function, shared):
+
+  ```
+  match /ProfileHighlights/{userId} {
+    allow read: if request.auth != null && canSeeListsOf(userId);
+    allow write: if false;
+  }
+  ```
+
+- `Users/{userId}` update: add `"pinnedHighlights"` to `hasOnly`, plus
+  `&& (!("pinnedHighlights" in request.resource.data) || (request.resource.data.pinnedHighlights is list && request.resource.data.pinnedHighlights.size() <= 3))`.
+
+**Indexes** (console): composite on `DiscoverClips`: `createdBy` ASC, `isPublic` ASC, `status` ASC,
+`uploadedAt` DESC.
 
 ### Step 9 — Report and block on profiles
 
@@ -657,7 +724,7 @@ most-trained exercises by `setCount`, a weighted best for loaded and a time best
 - `deleteAccount` callable: Firestore `Users/{uid}` and every subcollection (MyDay, ExerciseStats +
   RawLogs, WorkoutSessions, WorkoutTemplates, WeightTracking, BlockedUsers), the analytics
   `WorkoutSessions` copies, top-level `WorkoutTemplates` the user authored, `Usernames/{username}`,
-  `Profiles/{uid}`, every `Follows` document either side, `Clips` + Storage (`TestClips`,
+  `Profiles/{uid}`, `ProfileHighlights/{uid}`, every `Follows` document either side, `Clips` + Storage (`TestClips`,
   `TestClipThumbnails`, `ProfilePhotos`), **`deleteDiscoverData(uid)`** (built, DISCOVER step 8),
   RTDB `users/{uid}` and the legacy graph, then the Auth user last. Idempotent, so a second run
   finds nothing, with a test that proves it.
@@ -725,6 +792,14 @@ matters most:
 - [ ] Console rules: the tightened `Follows` list rule, tested in the Rules Playground for both
       lists, public and private
 
+**Step 8 — Highlights and clips**
+- [ ] Deploy `profileHighlightsFromStats`, `profileHighlightsFromPins`, `profileClipCount` and the
+      updated `rebuildProfiles` from the functions `profile` branch
+- [ ] Console index: the `DiscoverClips` composite (wait for it to build)
+- [ ] Console rules: `ProfileHighlights`, and `pinnedHighlights` in the `Users` update rule
+- [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, to build every user's highlights and clip
+      count
+
 **Later steps** (expanded as they land)
 - [ ] `Follows` rules + indexes **before** `MigrateFollows.py --write`
 - [ ] Profile reporting and blocking (step 9) live **before** other users' profiles (step 7) reach
@@ -739,12 +814,12 @@ matters most:
    Center explicitly). Their only door today is the "More" menu this plan replaces. Recommended: a
    temporary "Tools" row in Settings that calls back to the app, until each gets its own roadmap
    task. The alternative is that they are unreachable until then.
-2. **What a private account hides.** Recommended above: header public, highlights and clips
-   followers-only. Do a private user's clips also leave DISCOVER?
+2. ~~What a private account hides.~~ **Settled in steps 7–8:** header and counts public; lists and
+   highlights followers-only; public clips stay public, in DISCOVER and on the profile.
 3. **Premium stamp for other users.** Premium is known only on-device (RevenueCat), so another
    user's profile cannot show it truthfully. Recommended: own profile only, until entitlements are
    server-verified (see *Future Ideas* → coach passes).
-4. **Default highlights** before anything is pinned (step 8).
+4. ~~Default highlights.~~ **Settled in step 8:** the three most-trained until pinned.
 5. **Follow notifications** (step 6).
 6. **Search from DISCOVER as well as the profile?** (step 7).
 7. **Legacy RTDB follows during the gap** between migration and step 7 (step 5).

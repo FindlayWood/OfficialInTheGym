@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF1A000000000000000000E0 /* FirestoreProfileHighlightsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D0 /* FirestoreProfileHighlightsLoader.swift */; };
+		BF1A000000000000000000E1 /* ProfileHighlight+Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D1 /* ProfileHighlight+Firestore.swift */; };
+		BF1A000000000000000000E2 /* FirestoreHighlightCandidatesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D2 /* FirestoreHighlightCandidatesLoader.swift */; };
+		BF1A000000000000000000E3 /* FirestorePinnedHighlightsWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D3 /* FirestorePinnedHighlightsWriter.swift */; };
+		BF1A000000000000000000E4 /* FirestoreProfileClipsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D4 /* FirestoreProfileClipsLoader.swift */; };
+		BF1A000000000000000000E5 /* DiscoverClipOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D5 /* DiscoverClipOpener.swift */; };
 		BF1A000000000000000000C0 /* FirestorePublicProfileLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000B0 /* FirestorePublicProfileLoader.swift */; };
 		BF1A000000000000000000C1 /* FirestoreUserSearchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000B1 /* FirestoreUserSearchLoader.swift */; };
 		BF1A000000000000000000C8 /* ProfileKitUserProfileOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000B8 /* ProfileKitUserProfileOpener.swift */; };
@@ -19,7 +25,6 @@
 		BF1A00000000000000000070 /* ProfileNamesReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000050 /* ProfileNamesReader.swift */; };
 		BF1A00000000000000000071 /* FollowPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000051 /* FollowPath.swift */; };
 		BF1A00000000000000000072 /* FirestoreProfileSummaryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000052 /* FirestoreProfileSummaryLoader.swift */; };
-		BF1A00000000000000000073 /* FirestoreProfileCountsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000053 /* FirestoreProfileCountsLoader.swift */; };
 		BF1A00000000000000000074 /* FirestoreFollowListLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000054 /* FirestoreFollowListLoader.swift */; };
 		BF1A00000000000000000075 /* FirestoreFollowStatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000055 /* FirestoreFollowStatusLoader.swift */; };
 		BF1A00000000000000000076 /* FollowStatus+FollowDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000056 /* FollowStatus+FollowDocument.swift */; };
@@ -1033,6 +1038,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BF1A000000000000000000D0 /* FirestoreProfileHighlightsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileHighlightsLoader.swift; sourceTree = "<group>"; };
+		BF1A000000000000000000D1 /* ProfileHighlight+Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileHighlight+Firestore.swift"; sourceTree = "<group>"; };
+		BF1A000000000000000000D2 /* FirestoreHighlightCandidatesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreHighlightCandidatesLoader.swift; sourceTree = "<group>"; };
+		BF1A000000000000000000D3 /* FirestorePinnedHighlightsWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePinnedHighlightsWriter.swift; sourceTree = "<group>"; };
+		BF1A000000000000000000D4 /* FirestoreProfileClipsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileClipsLoader.swift; sourceTree = "<group>"; };
+		BF1A000000000000000000D5 /* DiscoverClipOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverClipOpener.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000B0 /* FirestorePublicProfileLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePublicProfileLoader.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000B1 /* FirestoreUserSearchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUserSearchLoader.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000B8 /* ProfileKitUserProfileOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileKitUserProfileOpener.swift; sourceTree = "<group>"; };
@@ -1045,7 +1056,6 @@
 		BF1A00000000000000000050 /* ProfileNamesReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNamesReader.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000051 /* FollowPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowPath.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000052 /* FirestoreProfileSummaryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileSummaryLoader.swift; sourceTree = "<group>"; };
-		BF1A00000000000000000053 /* FirestoreProfileCountsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileCountsLoader.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000054 /* FirestoreFollowListLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFollowListLoader.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000055 /* FirestoreFollowStatusLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFollowStatusLoader.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000056 /* FollowStatus+FollowDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FollowStatus+FollowDocument.swift"; sourceTree = "<group>"; };
@@ -4996,7 +5006,6 @@
 				BF1A00000000000000000050 /* ProfileNamesReader.swift */,
 				BF1A00000000000000000051 /* FollowPath.swift */,
 				BF1A00000000000000000052 /* FirestoreProfileSummaryLoader.swift */,
-				BF1A00000000000000000053 /* FirestoreProfileCountsLoader.swift */,
 				BF1A00000000000000000054 /* FirestoreFollowListLoader.swift */,
 				BF1A00000000000000000055 /* FirestoreFollowStatusLoader.swift */,
 				BF1A00000000000000000056 /* FollowStatus+FollowDocument.swift */,
@@ -5011,6 +5020,12 @@
 				BF1A00000000000000000095 /* FirestorePrivateAccountWriter.swift */,
 				BF1A000000000000000000B0 /* FirestorePublicProfileLoader.swift */,
 				BF1A000000000000000000B1 /* FirestoreUserSearchLoader.swift */,
+				BF1A000000000000000000D0 /* FirestoreProfileHighlightsLoader.swift */,
+				BF1A000000000000000000D1 /* ProfileHighlight+Firestore.swift */,
+				BF1A000000000000000000D2 /* FirestoreHighlightCandidatesLoader.swift */,
+				BF1A000000000000000000D3 /* FirestorePinnedHighlightsWriter.swift */,
+				BF1A000000000000000000D4 /* FirestoreProfileClipsLoader.swift */,
+				BF1A000000000000000000D5 /* DiscoverClipOpener.swift */,
 			);
 			path = ProfileKit;
 			sourceTree = "<group>";
@@ -5299,7 +5314,6 @@
 				BF1A00000000000000000070 /* ProfileNamesReader.swift in Sources */,
 				BF1A00000000000000000071 /* FollowPath.swift in Sources */,
 				BF1A00000000000000000072 /* FirestoreProfileSummaryLoader.swift in Sources */,
-				BF1A00000000000000000073 /* FirestoreProfileCountsLoader.swift in Sources */,
 				BF1A00000000000000000074 /* FirestoreFollowListLoader.swift in Sources */,
 				BF1A00000000000000000075 /* FirestoreFollowStatusLoader.swift in Sources */,
 				BF1A00000000000000000076 /* FollowStatus+FollowDocument.swift in Sources */,
@@ -5314,6 +5328,12 @@
 				BF1A000000000000000000A5 /* FirestorePrivateAccountWriter.swift in Sources */,
 				BF1A000000000000000000C0 /* FirestorePublicProfileLoader.swift in Sources */,
 				BF1A000000000000000000C1 /* FirestoreUserSearchLoader.swift in Sources */,
+				BF1A000000000000000000E0 /* FirestoreProfileHighlightsLoader.swift in Sources */,
+				BF1A000000000000000000E1 /* ProfileHighlight+Firestore.swift in Sources */,
+				BF1A000000000000000000E2 /* FirestoreHighlightCandidatesLoader.swift in Sources */,
+				BF1A000000000000000000E3 /* FirestorePinnedHighlightsWriter.swift in Sources */,
+				BF1A000000000000000000E4 /* FirestoreProfileClipsLoader.swift in Sources */,
+				BF1A000000000000000000E5 /* DiscoverClipOpener.swift in Sources */,
 				BF1A000000000000000000C8 /* ProfileKitUserProfileOpener.swift in Sources */,
 				D1CA00000000000000000021 /* DiscoverCardQuery.swift in Sources */,
 				D1CA00000000000000000022 /* FirestoreDiscoverClipCardLoader.swift in Sources */,

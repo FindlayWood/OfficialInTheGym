@@ -1256,7 +1256,9 @@ DiscoverKit imports no other framework and defines its own models. Where it need
 framework owns, it declares a protocol and the composition root answers it: `TagNormalizer` →
 `WorkoutTag`, `ClipWatchRecorder` → the existing `FirebaseFunctionsViewClipRecorder` (which serves
 MyDay's `ViewClipRecorder` too), `WorkoutCopySaver` → MyDay's library. `UserProfileOpener` → ProfileKit's profile, pushed onto DISCOVER's own stack by a
-`ProfileKitRouter` built there (`ProfileKitUserProfileOpener`). **Every Firestore path is in
+`ProfileKitRouter` built there (`ProfileKitUserProfileOpener`). The reverse, ProfileKit's clip
+grid opening DISCOVER's player, goes through `DiscoverKitRouter.showClip`. Each composition's
+`makeRouter` builds the other's router lazily, or they would recurse. **Every Firestore path is in
 the composition root**: `DiscoverSubject+Firestore` (subjects, cards, ratings, comments, tag votes),
 `DiscoverLikeTarget+Firestore`, `DiscoverTagPath`, `DiscoverReportTarget+Firestore`,
 `DiscoverBlockPath`. `DiscoverSubject` and `DiscoverLikeTarget` are `@frozen` — DiscoverKit builds with
@@ -1426,6 +1428,7 @@ appears on some screens and not others.
 | `Users/{uid}` | Firestore | `createAccount` Cloud Function |
 | `Profiles/{uid}` | Firestore | **Cloud Functions only** (`syncProfile`) — the public projection of `Users`; others read this, never `Users` |
 | `Users/{uid}/WeightTracking/{yyyy-MM-dd}` | Firestore | `createAccount` (signup weight), ProfileKit's `FirestoreWeightEntryWriter`; newest copied to `Users.weightKilograms` by `syncLatestWeight` |
+| `ProfileHighlights/{uid}` | Firestore | **Cloud Functions only**: a profile's PB tiles, from `ExerciseStats` + `Users.pinnedHighlights`; read-gated like a private account's lists |
 | `Follows/{followerId}_{followeeId}` | Firestore | follower creates (`FirestoreFollowWriter`), either deletes; `mirrorLegacyFollow` bridges legacy RTDB follows in. Counts on `Profiles` by `profileFollowCounts` |
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
 | `Users/{uid}/ExerciseStats/{exerciseID}/RawLogs/{logID}` | Firestore | both logging paths, per set |

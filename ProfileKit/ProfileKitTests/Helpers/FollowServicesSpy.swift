@@ -10,12 +10,11 @@ import Foundation
 
 /// Every follow read and write in one message log. Pages are queued and served
 /// in order; results and errors are settable. Never asserts — the test does.
-final class FollowServicesSpy: ProfileCountsLoader, FollowListLoader, ProfileSummaryLoader,
+final class FollowServicesSpy: FollowListLoader, ProfileSummaryLoader,
                                FollowStatusLoader, FollowWriter, Unfollower, FollowerRemover,
                                @unchecked Sendable {
 
     enum Message: Equatable {
-        case counts(userId: String)
         case page(FollowListKind, userId: String, after: FollowListCursor?, limit: Int)
         case summaries(Set<String>)
         case statuses([String])
@@ -25,18 +24,12 @@ final class FollowServicesSpy: ProfileCountsLoader, FollowListLoader, ProfileSum
     }
 
     private(set) var receivedMessages: [Message] = []
-    var countsResult: Result<ProfileCounts?, Error> = .success(nil)
     var pages: [Result<[FollowListEntry], Error>] = []
     var summaries: [String: ProfileSummary] = [:]
     var statuses: [String: FollowStatus] = [:]
     var statusError: Error?
     var followResult: FollowStatus = .following
     var writeError: Error?
-
-    func counts(for userId: String) async throws -> ProfileCounts? {
-        receivedMessages.append(.counts(userId: userId))
-        return try countsResult.get()
-    }
 
     func page(_ kind: FollowListKind, of userId: String, after cursor: FollowListCursor?, limit: Int) async throws -> [FollowListEntry] {
         receivedMessages.append(.page(kind, userId: userId, after: cursor, limit: limit))

@@ -75,8 +75,6 @@ class ProfileKitComposition {
 
         // MARK: - Follows
 
-        let countsLoader: ProfileCountsLoader = FirestoreProfileCountsLoader()
-
         let followListLoader: FollowListLoader = FirestoreFollowListLoader()
 
         let summaryLoader: ProfileSummaryLoader = FirestoreProfileSummaryLoader()
@@ -106,6 +104,16 @@ class ProfileKitComposition {
         let publicProfileLoader: PublicProfileLoader = FirestorePublicProfileLoader()
 
         let userSearchLoader: UserSearchLoader = FirestoreUserSearchLoader()
+
+        // MARK: - Highlights and clips
+
+        let highlightsLoader: ProfileHighlightsLoader = FirestoreProfileHighlightsLoader()
+
+        let clipsLoader: ProfileClipsLoader = FirestoreProfileClipsLoader()
+
+        let highlightCandidatesLoader: HighlightCandidatesLoader = FirestoreHighlightCandidatesLoader(userId: userId)
+
+        let pinnedHighlightsWriter: PinnedHighlightsWriter = FirestorePinnedHighlightsWriter(userId: userId)
 
         // MARK: - Settings
 
@@ -138,7 +146,6 @@ class ProfileKitComposition {
             weightLogLoader: weightLogLoader,
             weightEntryWriter: weightEntryWriter,
             weightEntryRemover: weightEntryRemover,
-            countsLoader: countsLoader,
             followListLoader: followListLoader,
             summaryLoader: summaryLoader,
             followStatusLoader: followStatusLoader,
@@ -152,9 +159,19 @@ class ProfileKitComposition {
             followRequestApprover: followRequestApprover,
             publicProfileLoader: publicProfileLoader,
             userSearchLoader: userSearchLoader,
+            highlightsLoader: highlightsLoader,
+            clipsLoader: clipsLoader,
+            highlightCandidatesLoader: highlightCandidatesLoader,
+            pinnedHighlightsWriter: pinnedHighlightsWriter,
             links: links,
             currentUserId: userId
         )
+
+        // Clips open in DISCOVER's player, through a DiscoverKit router built on
+        // this same stack, lazily, on the first tap. Building it here eagerly
+        // would recurse: DISCOVER's composition builds a ProfileKit router too.
+        let clipOpener = DiscoverClipOpener(navigationController: navigationController, purchaseManager: purchaseManager)
+        router.onOpenClip = { clipOpener.open($0) }
 
         return router
     }

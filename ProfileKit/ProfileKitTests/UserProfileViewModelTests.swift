@@ -51,27 +51,27 @@ final class UserProfileViewModelTests: XCTestCase {
 
     // MARK: - Privacy
 
-    func test_canSeeLists_isTrueForAPublicAccount() async {
+    func test_canSeeActivity_isTrueForAPublicAccount() async {
         let sut = makeSUT(profile: profile(isPrivate: false), status: .notFollowing)
         await sut.viewModel.load()
 
-        XCTAssertTrue(sut.viewModel.canSeeLists)
+        XCTAssertTrue(sut.viewModel.canSeeActivity)
     }
 
     // A private account's lists are for approved followers. A pending request
     // is not approval.
-    func test_canSeeLists_isFalseForAPrivateAccountUntilFollowed() async {
+    func test_canSeeActivity_isFalseForAPrivateAccountUntilFollowed() async {
         let notFollowing = makeSUT(profile: profile(isPrivate: true), status: .notFollowing)
         await notFollowing.viewModel.load()
-        XCTAssertFalse(notFollowing.viewModel.canSeeLists)
+        XCTAssertFalse(notFollowing.viewModel.canSeeActivity)
 
         let requested = makeSUT(profile: profile(isPrivate: true), status: .requested)
         await requested.viewModel.load()
-        XCTAssertFalse(requested.viewModel.canSeeLists)
+        XCTAssertFalse(requested.viewModel.canSeeActivity)
 
         let following = makeSUT(profile: profile(isPrivate: true), status: .following)
         await following.viewModel.load()
-        XCTAssertTrue(following.viewModel.canSeeLists)
+        XCTAssertTrue(following.viewModel.canSeeActivity)
     }
 
     func test_unfollowNeedsConfirmation_onlyForAPrivateAccountYouFollow() async {
@@ -91,6 +91,39 @@ final class UserProfileViewModelTests: XCTestCase {
         await sut.viewModel.load()
 
         XCTAssertEqual(sut.viewModel.stamps, [.elite])
+    }
+
+    // MARK: - Highlights and clips
+
+    func test_load_deliversHighlightsAndClipsForAPublicAccount() async {
+        let sut = makeSUT(profile: profile(isPrivate: false), status: .notFollowing)
+        sut.content.highlightsResult = .success(ProfileHighlights(highlights: [], isPinned: false))
+
+        await sut.viewModel.load()
+
+        XCTAssertTrue(sut.content.receivedMessages.contains(.highlights("alex")))
+        XCTAssertNotNil(sut.viewModel.highlights)
+    }
+
+    // A private account's highlights are for followers; the rules would deny
+    // the read, so the screen does not make it.
+    func test_load_doesNotAskForAPrivateAccountsHighlightsUntilFollowing() async {
+        let sut = makeSUT(profile: profile(isPrivate: true), status: .notFollowing)
+
+        await sut.viewModel.load()
+
+        XCTAssertFalse(sut.content.receivedMessages.contains(.highlights("alex")))
+        XCTAssertNil(sut.viewModel.highlights)
+    }
+
+    // A clip marked public stays public, private account or not, as it does
+    // in DISCOVER.
+    func test_load_deliversAPrivateAccountsPublicClips() async {
+        let sut = makeSUT(profile: profile(isPrivate: true), status: .notFollowing)
+
+        await sut.viewModel.load()
+
+        XCTAssertTrue(sut.content.receivedMessages.contains(.clips("alex", limit: MyProfileViewModel.clipLimit)))
     }
 
     // MARK: - Follow
@@ -151,11 +184,12 @@ final class UserProfileViewModelTests: XCTestCase {
         profile: PublicProfile? = nil,
         profileResult: Result<PublicProfile?, Error>? = nil,
         status: FollowStatus = .notFollowing
-    ) -> (viewModel: UserProfileViewModel, profiles: PublicProfileServicesSpy, follows: FollowServicesSpy) {
+    ) -> (viewModel: UserProfileViewModel, profiles: PublicProfileServicesSpy, follows: FollowServicesSpy, content: ContentServicesSpy) {
         let profiles = PublicProfileServicesSpy()
         profiles.profileResults = [profileResult ?? .success(profile ?? self.profile())]
         let follows = FollowServicesSpy()
         follows.statuses = [userId: status]
+        let content = ContentServicesSpy()
         let viewModel = UserProfileViewModel(
             userId: userId,
             currentUserId: "me",
@@ -163,9 +197,11 @@ final class UserProfileViewModelTests: XCTestCase {
             photoLoader: ProfilePhotoLoaderSpy(),
             statusLoader: follows,
             followWriter: follows,
-            unfollower: follows
+            unfollower: follows,
+            highlightsLoader: content,
+            clipsLoader: content
         )
-        return (viewModel, profiles, follows)
+        return (viewModel, profiles, follows, content)
     }
 
     private func profile(

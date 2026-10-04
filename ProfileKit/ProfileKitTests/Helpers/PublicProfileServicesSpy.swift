@@ -8,9 +8,9 @@
 import Foundation
 @testable import ProfileKit
 
-/// Someone-else's-profile and search reads in one message log. Search results
-/// are served per query, so a test can make an early search slow and a late
-/// one fast. Never asserts — the test does.
+/// Public-profile and search reads in one message log. Profile results are
+/// queued, and the last one repeats, so a test can load and then refresh.
+/// Search results are served per query. Never asserts — the test does.
 final class PublicProfileServicesSpy: PublicProfileLoader, UserSearchLoader, @unchecked Sendable {
 
     enum Message: Equatable {
@@ -25,7 +25,8 @@ final class PublicProfileServicesSpy: PublicProfileLoader, UserSearchLoader, @un
 
     func profile(for userId: String) async throws -> PublicProfile? {
         receivedMessages.append(.profile(userId))
-        return try profileResults.removeFirst().get()
+        let result = profileResults.count > 1 ? profileResults.removeFirst() : profileResults[0]
+        return try result.get()
     }
 
     func search(_ query: String, limit: Int) async throws -> [ProfileSummary] {

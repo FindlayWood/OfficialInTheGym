@@ -39,7 +39,6 @@ public final class ProfileKitRouter {
     let weightLogLoader: WeightLogLoader
     let weightEntryWriter: WeightEntryWriter
     let weightEntryRemover: WeightEntryRemover
-    let countsLoader: ProfileCountsLoader
     let followListLoader: FollowListLoader
     let summaryLoader: ProfileSummaryLoader
     let followStatusLoader: FollowStatusLoader
@@ -53,6 +52,10 @@ public final class ProfileKitRouter {
     let followRequestApprover: FollowRequestApprover
     let publicProfileLoader: PublicProfileLoader
     let userSearchLoader: UserSearchLoader
+    let highlightsLoader: ProfileHighlightsLoader
+    let clipsLoader: ProfileClipsLoader
+    let highlightCandidatesLoader: HighlightCandidatesLoader
+    let pinnedHighlightsWriter: PinnedHighlightsWriter
     let links: ProfileSettingsLinks
     let currentUserId: String
 
@@ -64,6 +67,10 @@ public final class ProfileKitRouter {
     public var onManageSubscription: (() -> Void)?
     public var onOpenPerformanceCenter: (() -> Void)?
     public var onOpenAbout: (() -> Void)?
+    /// A clip from a profile grid, opened in DISCOVER's clip player, which
+    /// ProfileKit cannot build. Set on every router, tab or embedded, by
+    /// `ProfileKitComposition.makeRouter`.
+    public var onOpenClip: ((ProfileClip) -> Void)?
 
     // MARK: - Init
 
@@ -81,7 +88,6 @@ public final class ProfileKitRouter {
         weightLogLoader: WeightLogLoader,
         weightEntryWriter: WeightEntryWriter,
         weightEntryRemover: WeightEntryRemover,
-        countsLoader: ProfileCountsLoader,
         followListLoader: FollowListLoader,
         summaryLoader: ProfileSummaryLoader,
         followStatusLoader: FollowStatusLoader,
@@ -95,6 +101,10 @@ public final class ProfileKitRouter {
         followRequestApprover: FollowRequestApprover,
         publicProfileLoader: PublicProfileLoader,
         userSearchLoader: UserSearchLoader,
+        highlightsLoader: ProfileHighlightsLoader,
+        clipsLoader: ProfileClipsLoader,
+        highlightCandidatesLoader: HighlightCandidatesLoader,
+        pinnedHighlightsWriter: PinnedHighlightsWriter,
         links: ProfileSettingsLinks,
         currentUserId: String
     ) {
@@ -111,7 +121,6 @@ public final class ProfileKitRouter {
         self.weightLogLoader = weightLogLoader
         self.weightEntryWriter = weightEntryWriter
         self.weightEntryRemover = weightEntryRemover
-        self.countsLoader = countsLoader
         self.followListLoader = followListLoader
         self.summaryLoader = summaryLoader
         self.followStatusLoader = followStatusLoader
@@ -125,6 +134,10 @@ public final class ProfileKitRouter {
         self.followRequestApprover = followRequestApprover
         self.publicProfileLoader = publicProfileLoader
         self.userSearchLoader = userSearchLoader
+        self.highlightsLoader = highlightsLoader
+        self.clipsLoader = clipsLoader
+        self.highlightCandidatesLoader = highlightCandidatesLoader
+        self.pinnedHighlightsWriter = pinnedHighlightsWriter
         self.links = links
         self.currentUserId = currentUserId
     }
@@ -162,10 +175,16 @@ extension ProfileKitRouter {
             let viewModel = MyProfileViewModel(
                 profileLoader: profileLoader,
                 photoLoader: photoLoader,
-                countsLoader: countsLoader,
+                publicProfileLoader: publicProfileLoader,
                 requestCountLoader: followRequestCountLoader,
+                highlightsLoader: highlightsLoader,
+                clipsLoader: clipsLoader,
                 subscription: subscription
             )
+            viewModel.onOpenClip = { [weak self] in self?.onOpenClip?($0) }
+            viewModel.onEditHighlights = { [weak self, weak viewModel] pins in
+                self?.present(.editHighlights(pinned: pins, onSaved: { viewModel?.applySavedHighlights($0) }))
+            }
             viewModel.onOpenFollowRequests = { [weak self] in self?.navigate(to: .followRequests) }
             viewModel.onOpenSearch = { [weak self] in self?.navigate(to: .search) }
             viewModel.onOpenFollowList = { [weak self, weak viewModel] kind in
@@ -259,8 +278,11 @@ extension ProfileKitRouter {
                 photoLoader: photoLoader,
                 statusLoader: followStatusLoader,
                 followWriter: followWriter,
-                unfollower: unfollower
+                unfollower: unfollower,
+                highlightsLoader: highlightsLoader,
+                clipsLoader: clipsLoader
             )
+            viewModel.onOpenClip = { [weak self] in self?.onOpenClip?($0) }
             viewModel.onOpenFollowList = { [weak self] kind in
                 self?.navigate(to: .followList(kind, userId: userId))
             }
@@ -277,6 +299,18 @@ extension ProfileKitRouter {
             ))
             vc.hidesBottomBarWhenPushed = true
             return vc
+
+        case .editHighlights(let pinned, let onSaved):
+            let viewModel = EditHighlightsViewModel(
+                pinned: pinned,
+                loader: highlightCandidatesLoader,
+                writer: pinnedHighlightsWriter
+            )
+            viewModel.onSaved = onSaved
+            let host = UIHostingController(rootView: EditHighlightsScreen(viewModel: viewModel))
+            let modal = UINavigationController(rootViewController: host)
+            viewModel.onFinished = { [weak modal] in modal?.dismiss(animated: true) }
+            return modal
 
         case .editProfile(let header, let photo, let onSaved):
             let viewModel = EditProfileViewModel(

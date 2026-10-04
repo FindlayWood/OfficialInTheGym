@@ -34,7 +34,7 @@ struct UserProfileScreen: View {
                         photo: viewModel.photo,
                         stamps: viewModel.stamps,
                         counts: profile.counts,
-                        onOpenFollowList: viewModel.canSeeLists ? { viewModel.onOpenFollowList?($0) } : nil
+                        onOpenFollowList: viewModel.canSeeActivity ? { viewModel.onOpenFollowList?($0) } : nil
                     )
                     if let message = viewModel.errorMessage {
                         ProfileErrorBanner(message: message)
@@ -42,9 +42,16 @@ struct UserProfileScreen: View {
                     if let status = viewModel.followStatus {
                         followButton(status)
                     }
-                    if !viewModel.canSeeLists {
+                    if !viewModel.canSeeActivity {
                         privateCard
                     }
+                    ProfileHighlightsSection(highlights: viewModel.highlights)
+                    ProfileClipsSection(
+                        clips: viewModel.clips,
+                        clipCount: profile.clipCount,
+                        isOwnProfile: false,
+                        onOpenClip: { viewModel.onOpenClip?($0) }
+                    )
                 }
             }
             .padding(16)
@@ -102,8 +109,8 @@ struct UserProfileScreen: View {
             Text("This account is private")
                 .font(.system(size: 16, weight: .semibold))
             Text(viewModel.followStatus == .requested
-                 ? "Your request is waiting. You'll see their followers and activity once they approve it."
-                 : "Follow this account to see their followers and activity.")
+                 ? "Your request is waiting. You'll see their followers and lifts once they approve it."
+                 : "Follow this account to see their followers and lifts.")
                 .font(.system(size: 14))
                 .foregroundStyle(Color.secondary)
                 .multilineTextAlignment(.center)
@@ -147,7 +154,9 @@ struct UserProfileScreen: View {
                 photoLoader: PreviewProfilePhotoLoader(),
                 statusLoader: PreviewFollowServices(),
                 followWriter: PreviewFollowServices(),
-                unfollower: PreviewFollowServices()
+                unfollower: PreviewFollowServices(),
+                highlightsLoader: PreviewContentServices(),
+                clipsLoader: PreviewContentServices()
             )
         )
     }
