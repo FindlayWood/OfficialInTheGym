@@ -39,7 +39,15 @@ public final class ProfileKitRouter {
     let weightLogLoader: WeightLogLoader
     let weightEntryWriter: WeightEntryWriter
     let weightEntryRemover: WeightEntryRemover
+    let countsLoader: ProfileCountsLoader
+    let followListLoader: FollowListLoader
+    let summaryLoader: ProfileSummaryLoader
+    let followStatusLoader: FollowStatusLoader
+    let followWriter: FollowWriter
+    let unfollower: Unfollower
+    let followerRemover: FollowerRemover
     let links: ProfileSettingsLinks
+    let currentUserId: String
 
     // MARK: - Properties
 
@@ -66,7 +74,15 @@ public final class ProfileKitRouter {
         weightLogLoader: WeightLogLoader,
         weightEntryWriter: WeightEntryWriter,
         weightEntryRemover: WeightEntryRemover,
-        links: ProfileSettingsLinks
+        countsLoader: ProfileCountsLoader,
+        followListLoader: FollowListLoader,
+        summaryLoader: ProfileSummaryLoader,
+        followStatusLoader: FollowStatusLoader,
+        followWriter: FollowWriter,
+        unfollower: Unfollower,
+        followerRemover: FollowerRemover,
+        links: ProfileSettingsLinks,
+        currentUserId: String
     ) {
         self.navigationController = navigationController
         self.profileLoader = profileLoader
@@ -81,7 +97,15 @@ public final class ProfileKitRouter {
         self.weightLogLoader = weightLogLoader
         self.weightEntryWriter = weightEntryWriter
         self.weightEntryRemover = weightEntryRemover
+        self.countsLoader = countsLoader
+        self.followListLoader = followListLoader
+        self.summaryLoader = summaryLoader
+        self.followStatusLoader = followStatusLoader
+        self.followWriter = followWriter
+        self.unfollower = unfollower
+        self.followerRemover = followerRemover
         self.links = links
+        self.currentUserId = currentUserId
     }
 
     // MARK: - Root
@@ -106,8 +130,13 @@ extension ProfileKitRouter {
             let viewModel = MyProfileViewModel(
                 profileLoader: profileLoader,
                 photoLoader: photoLoader,
+                countsLoader: countsLoader,
                 subscription: subscription
             )
+            viewModel.onOpenFollowList = { [weak self, weak viewModel] kind in
+                guard let self, case .loaded(let header) = viewModel?.header else { return }
+                self.navigate(to: .followList(kind, userId: header.userId))
+            }
             viewModel.onOpenSettings = { [weak self] in self?.navigate(to: .settings) }
             viewModel.onEditProfile = { [weak self, weak viewModel] header, photo in
                 self?.present(.editProfile(header: header, photo: photo, onSaved: {
@@ -117,6 +146,9 @@ extension ProfileKitRouter {
             let vc = ProfileKitBoundaryViewController()
             vc.display = MyProfileScreen(viewModel: viewModel)
             vc.router = self
+            vc.onWillAppear = { [weak viewModel] in
+                Task { await viewModel?.refreshCounts() }
+            }
             return vc
 
         case .settings:
@@ -144,6 +176,22 @@ extension ProfileKitRouter {
                 entryRemover: weightEntryRemover
             )
             let vc = UIHostingController(rootView: BodyMeasurementsScreen(viewModel: viewModel))
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .followList(let kind, let userId):
+            let viewModel = FollowListViewModel(
+                kind: kind,
+                userId: userId,
+                currentUserId: currentUserId,
+                listLoader: followListLoader,
+                summaryLoader: summaryLoader,
+                statusLoader: followStatusLoader,
+                followWriter: followWriter,
+                unfollower: unfollower,
+                followerRemover: followerRemover
+            )
+            let vc = UIHostingController(rootView: FollowListScreen(viewModel: viewModel, photoLoader: photoLoader))
             vc.hidesBottomBarWhenPushed = true
             return vc
 

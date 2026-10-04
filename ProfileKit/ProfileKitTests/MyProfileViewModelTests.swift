@@ -113,21 +113,61 @@ final class MyProfileViewModelTests: XCTestCase {
         XCTAssertFalse(opened)
     }
 
+    func test_load_deliversTheFollowCounts() async {
+        let sut = makeSUT(results: [.success(.make(userId: "me"))], counts: .success(ProfileCounts(followers: 4, following: 2)))
+
+        await sut.viewModel.load()
+
+        XCTAssertEqual(sut.follows.receivedMessages, [.counts(userId: "me")])
+        XCTAssertEqual(sut.viewModel.counts, ProfileCounts(followers: 4, following: 2))
+    }
+
+    // No profile document yet means no counts on screen, not "0 followers".
+    func test_load_deliversNoCountsBeforeTheProfileExists() async {
+        let sut = makeSUT(results: [.success(.make())], counts: .success(nil))
+
+        await sut.viewModel.load()
+
+        XCTAssertNil(sut.viewModel.counts)
+    }
+
+    func test_refreshCounts_keepsTheShownCountsWhenTheReadFails() async {
+        let sut = makeSUT(results: [.success(.make())], counts: .success(ProfileCounts(followers: 4, following: 2)))
+        await sut.viewModel.load()
+        sut.follows.countsResult = .failure(anyError)
+
+        await sut.viewModel.refreshCounts()
+
+        XCTAssertEqual(sut.viewModel.counts, ProfileCounts(followers: 4, following: 2))
+    }
+
+    func test_refreshCounts_doesNothingBeforeTheHeaderLoads() async {
+        let sut = makeSUT()
+
+        await sut.viewModel.refreshCounts()
+
+        XCTAssertTrue(sut.follows.receivedMessages.isEmpty)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
         results: [Result<ProfileHeader, Error>] = [],
         photoResult: Result<UIImage?, Error> = .success(nil),
+        counts: Result<ProfileCounts?, Error> = .success(nil),
         hasUnlockedPro: Bool = false
-    ) -> (viewModel: MyProfileViewModel, loader: MyProfileLoaderSpy, photoLoader: ProfilePhotoLoaderSpy) {
+    ) -> (viewModel: MyProfileViewModel, loader: MyProfileLoaderSpy, photoLoader: ProfilePhotoLoaderSpy, follows: FollowServicesSpy) {
         let loader = MyProfileLoaderSpy(results: results)
         let photoLoader = ProfilePhotoLoaderSpy(result: photoResult)
+        let follows = FollowServicesSpy()
+        follows.countsResult = counts
         let viewModel = MyProfileViewModel(
             profileLoader: loader,
             photoLoader: photoLoader,
+            countsLoader: follows,
             subscription: ProfileSubscriptionServiceSpy(hasUnlockedPro: hasUnlockedPro)
         )
-        return (viewModel, loader, photoLoader)
+        return (viewModel, loader, photoLoader, follows)
     }
 
     private func loadedHeader(_ viewModel: MyProfileViewModel) -> ProfileHeader? {

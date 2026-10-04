@@ -26,6 +26,10 @@ struct ProfileHeaderCard: View {
     /// Only your own profile can be edited. Nil draws no button, which is how
     /// other people's profiles (step 7) will use this card.
     var onEdit: (() -> Void)?
+    /// Nil before the profile's counts exist (pre-backfill), which draws no row
+    /// rather than zeros.
+    var counts: ProfileCounts?
+    var onOpenFollowList: ((FollowListKind) -> Void)?
 
     var body: some View {
         VStack(spacing: 14) {
@@ -47,6 +51,14 @@ struct ProfileHeaderCard: View {
                 Text("@\(header.username)")
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(Color.secondary)
+            }
+
+            if let counts {
+                ProfileCountsRow(
+                    counts: counts,
+                    onFollowers: { onOpenFollowList?(.followers) },
+                    onFollowing: { onOpenFollowList?(.following) }
+                )
             }
 
             if !header.bio.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {

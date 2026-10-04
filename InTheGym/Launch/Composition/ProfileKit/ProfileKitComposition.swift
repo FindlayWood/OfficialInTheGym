@@ -50,6 +50,22 @@ class ProfileKitComposition {
 
         let weightEntryRemover: WeightEntryRemover = FirestoreWeightEntryRemover(userId: userId)
 
+        // MARK: - Follows
+
+        let countsLoader: ProfileCountsLoader = FirestoreProfileCountsLoader()
+
+        let followListLoader: FollowListLoader = FirestoreFollowListLoader()
+
+        let summaryLoader: ProfileSummaryLoader = FirestoreProfileSummaryLoader()
+
+        let followStatusLoader: FollowStatusLoader = FirestoreFollowStatusLoader(currentUserId: userId)
+
+        let followWriter: FollowWriter = FirestoreFollowWriter(currentUserId: userId)
+
+        let unfollower: Unfollower = FirestoreUnfollower(currentUserId: userId)
+
+        let followerRemover: FollowerRemover = FirestoreFollowerRemover(currentUserId: userId)
+
         // MARK: - Settings
 
         let subscription: ProfileSubscriptionService = PurchaseManagerSubscriptionService(purchaseManager: purchaseManager)
@@ -81,7 +97,15 @@ class ProfileKitComposition {
             weightLogLoader: weightLogLoader,
             weightEntryWriter: weightEntryWriter,
             weightEntryRemover: weightEntryRemover,
-            links: links
+            countsLoader: countsLoader,
+            followListLoader: followListLoader,
+            summaryLoader: summaryLoader,
+            followStatusLoader: followStatusLoader,
+            followWriter: followWriter,
+            unfollower: unfollower,
+            followerRemover: followerRemover,
+            links: links,
+            currentUserId: userId
         )
 
         // MARK: - App screens

@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF1A00000000000000000070 /* ProfileNamesReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000050 /* ProfileNamesReader.swift */; };
+		BF1A00000000000000000071 /* FollowPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000051 /* FollowPath.swift */; };
+		BF1A00000000000000000072 /* FirestoreProfileSummaryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000052 /* FirestoreProfileSummaryLoader.swift */; };
+		BF1A00000000000000000073 /* FirestoreProfileCountsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000053 /* FirestoreProfileCountsLoader.swift */; };
+		BF1A00000000000000000074 /* FirestoreFollowListLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000054 /* FirestoreFollowListLoader.swift */; };
+		BF1A00000000000000000075 /* FirestoreFollowStatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000055 /* FirestoreFollowStatusLoader.swift */; };
+		BF1A00000000000000000076 /* FollowStatus+FollowDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000056 /* FollowStatus+FollowDocument.swift */; };
+		BF1A00000000000000000077 /* FirestoreFollowWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000057 /* FirestoreFollowWriter.swift */; };
+		BF1A00000000000000000078 /* FirestoreUnfollower.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000058 /* FirestoreUnfollower.swift */; };
+		BF1A00000000000000000079 /* FirestoreFollowerRemover.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000059 /* FirestoreFollowerRemover.swift */; };
 		BF1A00000000000000000040 /* WeightTrackingPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000030 /* WeightTrackingPath.swift */; };
 		BF1A00000000000000000041 /* FirestoreBodyMeasurementsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000031 /* FirestoreBodyMeasurementsLoader.swift */; };
 		BF1A00000000000000000042 /* FirestoreBodyMeasurementsWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000032 /* FirestoreBodyMeasurementsWriter.swift */; };
@@ -1014,6 +1024,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BF1A00000000000000000050 /* ProfileNamesReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNamesReader.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000051 /* FollowPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowPath.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000052 /* FirestoreProfileSummaryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileSummaryLoader.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000053 /* FirestoreProfileCountsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileCountsLoader.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000054 /* FirestoreFollowListLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFollowListLoader.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000055 /* FirestoreFollowStatusLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFollowStatusLoader.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000056 /* FollowStatus+FollowDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FollowStatus+FollowDocument.swift"; sourceTree = "<group>"; };
+		BF1A00000000000000000057 /* FirestoreFollowWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFollowWriter.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000058 /* FirestoreUnfollower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUnfollower.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000059 /* FirestoreFollowerRemover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFollowerRemover.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000030 /* WeightTrackingPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightTrackingPath.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000031 /* FirestoreBodyMeasurementsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreBodyMeasurementsLoader.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000032 /* FirestoreBodyMeasurementsWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreBodyMeasurementsWriter.swift; sourceTree = "<group>"; };
@@ -4955,6 +4975,16 @@
 				BF1A00000000000000000033 /* FirestoreWeightLogLoader.swift */,
 				BF1A00000000000000000034 /* FirestoreWeightEntryWriter.swift */,
 				BF1A00000000000000000035 /* FirestoreWeightEntryRemover.swift */,
+				BF1A00000000000000000050 /* ProfileNamesReader.swift */,
+				BF1A00000000000000000051 /* FollowPath.swift */,
+				BF1A00000000000000000052 /* FirestoreProfileSummaryLoader.swift */,
+				BF1A00000000000000000053 /* FirestoreProfileCountsLoader.swift */,
+				BF1A00000000000000000054 /* FirestoreFollowListLoader.swift */,
+				BF1A00000000000000000055 /* FirestoreFollowStatusLoader.swift */,
+				BF1A00000000000000000056 /* FollowStatus+FollowDocument.swift */,
+				BF1A00000000000000000057 /* FirestoreFollowWriter.swift */,
+				BF1A00000000000000000058 /* FirestoreUnfollower.swift */,
+				BF1A00000000000000000059 /* FirestoreFollowerRemover.swift */,
 			);
 			path = ProfileKit;
 			sourceTree = "<group>";
@@ -5239,6 +5269,16 @@
 				BF1A00000000000000000043 /* FirestoreWeightLogLoader.swift in Sources */,
 				BF1A00000000000000000044 /* FirestoreWeightEntryWriter.swift in Sources */,
 				BF1A00000000000000000045 /* FirestoreWeightEntryRemover.swift in Sources */,
+				BF1A00000000000000000070 /* ProfileNamesReader.swift in Sources */,
+				BF1A00000000000000000071 /* FollowPath.swift in Sources */,
+				BF1A00000000000000000072 /* FirestoreProfileSummaryLoader.swift in Sources */,
+				BF1A00000000000000000073 /* FirestoreProfileCountsLoader.swift in Sources */,
+				BF1A00000000000000000074 /* FirestoreFollowListLoader.swift in Sources */,
+				BF1A00000000000000000075 /* FirestoreFollowStatusLoader.swift in Sources */,
+				BF1A00000000000000000076 /* FollowStatus+FollowDocument.swift in Sources */,
+				BF1A00000000000000000077 /* FirestoreFollowWriter.swift in Sources */,
+				BF1A00000000000000000078 /* FirestoreUnfollower.swift in Sources */,
+				BF1A00000000000000000079 /* FirestoreFollowerRemover.swift in Sources */,
 				D1CA00000000000000000021 /* DiscoverCardQuery.swift in Sources */,
 				D1CA00000000000000000022 /* FirestoreDiscoverClipCardLoader.swift in Sources */,
 				D1CA00000000000000000023 /* FirestoreDiscoverWorkoutCardLoader.swift in Sources */,

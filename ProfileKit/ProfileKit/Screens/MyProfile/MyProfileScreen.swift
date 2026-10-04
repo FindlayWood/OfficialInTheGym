@@ -70,7 +70,9 @@ struct MyProfileScreen: View {
                 header: header,
                 photo: viewModel.photo,
                 stamps: viewModel.stamps,
-                onEdit: { viewModel.editProfile() }
+                onEdit: { viewModel.editProfile() },
+                counts: viewModel.counts,
+                onOpenFollowList: { viewModel.onOpenFollowList?($0) }
             )
         case .failed:
             ProfileLoadFailedCard {
@@ -85,6 +87,7 @@ struct MyProfileScreen: View {
         viewModel: MyProfileViewModel(
             profileLoader: PreviewMyProfileLoader(),
             photoLoader: PreviewProfilePhotoLoader(),
+            countsLoader: PreviewFollowServices(),
             subscription: PreviewProfileSubscriptionService(hasUnlockedPro: true)
         )
     )

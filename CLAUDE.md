@@ -1420,6 +1420,7 @@ appears on some screens and not others.
 | `Users/{uid}` | Firestore | `createAccount` Cloud Function |
 | `Profiles/{uid}` | Firestore | **Cloud Functions only** (`syncProfile`) — the public projection of `Users`; others read this, never `Users` |
 | `Users/{uid}/WeightTracking/{yyyy-MM-dd}` | Firestore | `createAccount` (signup weight), ProfileKit's `FirestoreWeightEntryWriter`; newest copied to `Users.weightKilograms` by `syncLatestWeight` |
+| `Follows/{followerId}_{followeeId}` | Firestore | follower creates (`FirestoreFollowWriter`), either deletes; `mirrorLegacyFollow` bridges legacy RTDB follows in. Counts on `Profiles` by `profileFollowCounts` |
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
 | `Users/{uid}/ExerciseStats/{exerciseID}/RawLogs/{logID}` | Firestore | both logging paths, per set |
 | `Users/{uid}/WorkoutSessions/{id}` | Firestore | `FirestoreCompletedWorkoutSessionSaver` (batched) |
@@ -1438,6 +1439,7 @@ appears on some screens and not others.
 | `ModerationQueue/{sha256(path)}` | Firestore | **Cloud Functions only** — read by the admin app |
 | `Users/{uid}/BlockedUsers/{uid}` | Firestore | `FirestoreBlockedUsersWriter` |
 | `users/{uid}`, posts, followers, requests | RTDB | `FirebaseDatabaseManager` |
+| `Following/{uid}`, `Followers/{uid}` | RTDB | the **legacy** follow graph, written only by the old Follow button now; migrated and bridged into `Follows` |
 | `CoachPlayers/{coachId}`, `PlayerCoaches/{playerId}` | RTDB | the coach↔athlete link — see *Coach-Assigned Workouts* |
 | `Documents/MyDays/{uid}/{date}.json` | disk | `MyDayFileManagerSaver` |
 | `Documents/WorkoutTemplates/{uid}/{id}.json` | disk | `FileManagerWorkoutTemplateUploader` |
@@ -1515,6 +1517,7 @@ in this codebase.**
 | DiscoverKit's `SectionContainer` | StatsKit's `SectionContainer` | DISCOVER_PLAN.md step 2 |
 | `WorkoutTag.maxLength` | `MAX_TAG_LENGTH` in the Cloud Functions' `Tags/TagRejection.ts` | DISCOVER_PLAN.md step 1 |
 | `DiscoverReportTarget+Firestore` path shapes | `Discover/Moderation/ReportTarget.ts` | DISCOVER Tab |
+| `FollowPath` (app) | the functions' `followId()` and the `Follows` create rule's id check | PROFILE_PLAN.md step 5 |
 | `DiscoverTagPath` subcollection names | `TAGGED_EXERCISES` / `TAGGED_WORKOUTS` in `SyncTagDirectory.ts` | DISCOVER Tab |
 | `DiscoverTaggingViewModel.maxMyTags` (10) | `MAX_TAGS_PER_VOTER` in `VoterTags.ts`, and the rules | DISCOVER Tab |
 | `DiscoverCommentsViewModel.maxLength` (500) | the comment rules' `text.size()` limit | DISCOVER Tab |

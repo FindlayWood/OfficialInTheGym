@@ -383,27 +383,96 @@ exists on the coach tab bar and still writes the dead key. `onEditAccount` ignor
 
 - No new index: a single-field `orderBy("date")` uses the automatic one.
 
-### Step 5 — Follows
+### Step 5 — Follows — built, not rolled out
 
 **Cloud**
-- `syncFollowCounts`: on `Follows` write, recount `followerCount` / `followingCount` onto both
-  users' `Profiles`.
-- Migration script `MigrateFollows.py`: RTDB `Followers/{uid}` / `Following/{uid}` → `Follows`
-  documents, all `active`. Dry run first.
+- `profileFollowCounts` (v2, `Follows/{id}` written) recounts **active** follows into
+  `Profiles.followerCount` / `followingCount` for both people, through DISCOVER's `syncCount`: a
+  recount, nothing written for a missing profile or an unchanged count. The users come from both
+  snapshots' fields, since a create names them only after and a delete only before.
+- `rebuildProfiles` now recounts follows on every profile it writes, so a rebuild is a full repair
+  and the rollout backfill counts follows that predate the trigger.
+- **Legacy bridge, one way:** `mirrorLegacyFollow` / `mirrorLegacyUnfollow` (v1, RTDB
+  `Following/{a}/{b}`).
+  - The old Follow button (`ProfileInfoCellViewModel`) still writes RTDB, so its follows are
+    carried into `Follows`.
+  - Each is `pending` if the followee is private, and never overwrites an existing follow.
+  - ProfileKit's follows are **not** written back to RTDB. The legacy NEWSFEED is the only RTDB
+    reader left, and a two-way mirror is a loop.
+  - This resolves open question 7. Retire it when step 7 removes the legacy Follow button.
+- `FollowPaths.ts`: the `Follows/{followerId}_{followeeId}` id, matched by the app's `FollowPath`
+  and the rules.
+- Tests: 11 new, 27 in `test/Profile`. The new tests give their users `Users` documents, because
+  `rebuildProfiles`' test runs in parallel against the same emulator and deletes orphan profiles.
+
+**Scripts**
+- `MigrateFollows.py`: dry run by default, `--write` to create. It reads RTDB `Following`, creates
+  missing `Follows` documents as `active`, never overwrites, and skips self-follows and malformed
+  ids. Run it after `profileFollowCounts` is deployed, or follow it with `RebuildProfiles.py`.
+- `Emulator/SeedDiscover.py` seeds 10 follows. `demo` follows 3 accounts and is followed by 4.
 
 **App**
-- Follow / Following / Requested button on another user's profile (step 7 makes that screen
-  reachable). The UI updates before the server confirms and reverts on failure, as DISCOVER's likes
-  do.
-- Followers and following lists from your own header. Remove a follower from your list.
+- The profile header shows **"N Followers · M Following"** once the `Profiles` document exists
+  (absent, not zero, before). Each half opens its list. Counts refresh whenever the tab reappears,
+  and lag a follow by the trigger's few seconds.
+- `FollowListScreen`:
+  - Paged newest first, 30 at a time, resumed after `(createdAt, documentId)`, since migrated
+    follows share one timestamp.
+  - Every row has a follow button: Follow / Follow back / Following / Requested.
+  - **Unfollowing keeps the row** so a mis-tap is undone in place. **Removing a follower** (own
+    followers list only) asks first and takes the row away.
+  - Every action shows at once and is put back on failure. A follow shows the status the writer
+    returns, which may be `Requested`.
+  - Rows are not tappable yet. Opening a profile is step 7.
+- Adapters, one destination each:
+  - `FirestoreProfileCountsLoader`, `FirestoreFollowListLoader`, `FirestoreProfileSummaryLoader`.
+  - `FirestoreFollowStatusLoader` uses parallel `get`s of `Follows/{me}_{them}`, not a query; see
+    the rules.
+  - `FirestoreFollowWriter` is create-only in a transaction. It returns an existing follow's
+    status unchanged, and otherwise picks `pending` / `active` from `Profiles.isPrivate` the way
+    the rule demands.
+  - `FirestoreUnfollower` and `FirestoreFollowerRemover`.
+- **`ProfileNamesReader`** is the one batched `Profiles` name query. DISCOVER's
+  `FirestoreUserProfileLoader` now uses it too, instead of its own copy.
+- Tests: 17 new (`FollowListViewModelTests`, counts on `MyProfileViewModelTests`), 67 in ProfileKit.
 
-**Console:** rules for `Follows` (create rules as above, read by either party, and by anyone for
-`active` follows of a public profile) and composite indexes on `(followeeId, status, createdAt)` and
-`(followerId, status, createdAt)`.
+**Rules** (console):
 
-**Open:** legacy RTDB follow writes. Until every follow button is ProfileKit's, a follow made
-elsewhere lands only in RTDB. Step 7 removes the other buttons. Decide whether to freeze RTDB follow
-writes at migration time or dual-write until then.
+```
+match /Follows/{followId} {
+  // Either person named in the id may read it, even when it does not exist
+  // yet — that is how the app asks "do I follow them?". Anyone signed in may
+  // read an active follow (follower lists).
+  allow get: if request.auth != null
+    && (followId.split("_")[0] == request.auth.uid
+        || followId.split("_")[1] == request.auth.uid
+        || resource.data.status == "active");
+  allow list: if request.auth != null
+    && (resource.data.status == "active"
+        || resource.data.followerId == request.auth.uid
+        || resource.data.followeeId == request.auth.uid);
+  allow create: if request.auth != null
+    && request.resource.data.followerId == request.auth.uid
+    && request.resource.data.followeeId != request.auth.uid
+    && followId == request.resource.data.followerId + "_" + request.resource.data.followeeId
+    && request.resource.data.keys().hasOnly(["followerId", "followeeId", "status", "createdAt"])
+    && request.resource.data.createdAt == request.time
+    && request.resource.data.status ==
+         (get(/databases/$(database)/documents/Profiles/$(request.resource.data.followeeId))
+            .data.get("isPrivate", false) ? "pending" : "active");
+  allow delete: if request.auth != null
+    && (resource.data.followerId == request.auth.uid
+        || resource.data.followeeId == request.auth.uid);
+  // update (approving a request) arrives in step 6
+}
+```
+
+The create rule reads the followee's `Profiles` document, so **a follow of someone with no profile
+is denied**. That is one more reason the step 2 backfill comes first.
+
+**Indexes** (console): composite on `Follows`
+- `followeeId` ASC, `status` ASC, `createdAt` DESC
+- `followerId` ASC, `status` ASC, `createdAt` DESC
 
 ### Step 6 — Private accounts and requests
 
@@ -516,6 +585,14 @@ matters most:
 - [ ] Deploy `syncLatestWeight` from the functions `profile` branch
 - [ ] Console rules: the widened `Users/{userId}` update rule, and `WeightTracking`
 - [ ] Confirm the deployed `createAccount` is the 10 August version that persists the body keys
+
+**Step 5 — Follows**
+- [ ] Deploy `profileFollowCounts`, `mirrorLegacyFollow`, `mirrorLegacyUnfollow` and the updated
+      `rebuildProfiles` from the functions `profile` branch
+- [ ] Console rules: `Follows`
+- [ ] Console indexes: the two `Follows` composites (wait for them to finish building)
+- [ ] `python MigrateFollows.py`, check the counts, then `python MigrateFollows.py --write`
+- [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, to recount every profile once
 
 **Later steps** (expanded as they land)
 - [ ] `Follows` rules + indexes **before** `MigrateFollows.py --write`

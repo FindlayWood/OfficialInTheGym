@@ -19,6 +19,8 @@ class ProfileKitBoundaryViewController: UIViewController {
 
     var display: MyProfileScreen!
     var router: ProfileKitRouter!
+    /// Every time the tab reappears, including on return from a pushed screen.
+    var onWillAppear: (() -> Void)?
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -29,6 +31,7 @@ class ProfileKitBoundaryViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        onWillAppear?()
     }
 
     override func viewWillDisappear(_ animated: Bool) {

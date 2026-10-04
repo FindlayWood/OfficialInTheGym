@@ -12,6 +12,7 @@ enum ProfileKitRoutes {
     case myProfile
     case settings
     case bodyMeasurements
+    case followList(FollowListKind, userId: String)
     /// Carries what the profile already holds, so the editor opens filled in
     /// without a second read.
     case editProfile(header: ProfileHeader, photo: UIImage?, onSaved: () -> Void)
