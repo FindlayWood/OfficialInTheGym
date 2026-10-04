@@ -774,11 +774,33 @@ data lives. Nothing calls it until that feature exists.
 **The build is complete. What remains is the rollout checklist above** — rules, indexes, deploys,
 seeding and backfills, in step order.
 
+## Follow-up — unified search (agreed 2026-10-04, not started)
+
+**Scheduled after the PROFILE work (`PROFILE_PLAN.md`) is finished.** One search on the DISCOVER
+tab covering **people, workouts and exercises**, replacing the people-only search that PROFILE
+step 7 put on the profile title bar.
+
+- **All of it is built in DiscoverKit**: the screen, its view model, the result rows and the loader
+  protocols. DiscoverKit still imports no other framework. A person result opens their profile
+  through the existing `UserProfileOpener`, and nothing else crosses into ProfileKit.
+- **The entry point is DISCOVER's title bar.** The profile's magnifier goes.
+- **ProfileKit's search is then deleted**, not kept beside it: `UserSearchScreen`,
+  `UserSearchViewModel`, `UserSearchRow`, `UserSearchLoader`, `PreviewPublicProfileServices`'
+  search half, `UserProfileViewModel.onOpenSearch` / the `.search` route, the app's
+  `FirestoreUserSearchLoader`, and `UserSearchViewModelTests`. Carry the useful behaviour across
+  into DiscoverKit: query normalisation (trim, lowercase, drop a leading "@"), the debounce that
+  cancels the previous search, and dropping results for a query no longer in the field.
+- **People** search `Profiles.usernameLower` / `displayNameLower`, which `syncProfile` already
+  writes. By then it should also exclude profiles moderation has hidden (PROFILE step 9).
+- **Workouts and exercises** need lowercase title fields on the cards, e.g. `titleLower` on
+  `DiscoverWorkouts` and `nameLower` on `DiscoverExercises`. That means a projection change in the
+  card functions plus a `rebuildDiscoverCards` run. Queries must keep the `status` / `isPublic`
+  filters every card query carries, which may need composite indexes alongside the prefix range.
+
 ## Out of scope
 
-- **Account deletion** — separate feature. The app has no in-app deletion today, which App Store
-  guideline 5.1.1(v) requires. It will call `deleteDiscoverData(uid)` alongside the MyDay, stats,
-  Storage, `Usernames` and RTDB pieces.
+- **Account deletion** — built in `PROFILE_PLAN.md` step 10. The `deleteAccount` callable calls
+  `deleteDiscoverData(uid)` first, then the profile, user, Storage, `Usernames` and RTDB pieces.
 - **Admin moderation UI** — later, in `InTheGym-Admin` or the dashboard, reading `ModerationQueue`.
 - **Automatic profanity filtering of comments** — can be added to the comment-create trigger later.
 - **Clips recorded inside a workout session** — clips are only created from single-exercise logging.

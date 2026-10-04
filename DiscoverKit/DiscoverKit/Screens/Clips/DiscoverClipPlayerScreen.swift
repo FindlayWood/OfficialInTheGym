@@ -22,6 +22,9 @@ struct DiscoverClipPlayerScreen: View {
     /// Called after reporting or blocking — the player leaves, since what it
     /// shows is now hidden from this user.
     var onClose: () -> Void = {}
+    /// The clip owner's profile. Nil when profiles cannot be opened, or for
+    /// your own clip.
+    var onOpenProfile: (() -> Void)?
 
     @State private var reportRequest: DiscoverReportRequest?
     @State private var isConfirmingBlock = false
@@ -79,6 +82,9 @@ struct DiscoverClipPlayerScreen: View {
             if canReport {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
+                        if let onOpenProfile {
+                            Button("View profile", systemImage: "person.crop.circle", action: onOpenProfile)
+                        }
                         Button("Report clip", systemImage: "flag") {
                             reportRequest = DiscoverReportRequest(target: .clip(id: viewModel.card.clipId))
                         }

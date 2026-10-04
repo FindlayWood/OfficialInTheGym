@@ -18,6 +18,7 @@ struct DiscoverCommentsScreen: View {
     @ObservedObject var viewModel: DiscoverCommentsViewModel
     @ObservedObject var moderation: DiscoverModerationStore
     var onOpenBlockedUsers: () -> Void = {}
+    var onOpenProfile: ((String) -> Void)?
 
     @State private var reportRequest: DiscoverReportRequest?
 
@@ -135,8 +136,15 @@ struct DiscoverCommentsScreen: View {
                 if let authorId = comment.authorId {
                     Task { await moderation.setBlocked(true, userId: authorId) }
                 }
-            } : nil
+            } : nil,
+            onOpenAuthor: openAuthor(of: comment)
         )
+    }
+
+    private func openAuthor(of comment: DiscoverComment) -> (() -> Void)? {
+        guard let onOpenProfile, let authorId = comment.authorId, !comment.isRemoved,
+              viewModel.author(of: comment) != .deleted else { return nil }
+        return { onOpenProfile(authorId) }
     }
 
     private func isOthers(_ comment: DiscoverComment) -> Bool {

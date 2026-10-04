@@ -23,7 +23,7 @@ class CoachInitialViewController: UITabBarController {
         // No MyDay on this tab bar, so no library to save a workout into:
         // DISCOVER's workout pages offer no Save here.
         let discoverNavigationController = UINavigationController()
-        DiscoverKitComposition().composeCombination(discoverNavigationController, workoutLibrary: nil)
+        DiscoverKitComposition().composeCombination(discoverNavigationController, workoutLibrary: nil, purchaseManager: subscriptionManager)
         discoverNavigationController.tabBarItem = UITabBarItem(title: "DISCOVER", image: UIImage(systemName: "magnifyingglass"), tag: 1)
         // MARK: - Players
         let playersNavigationController = UINavigationController()

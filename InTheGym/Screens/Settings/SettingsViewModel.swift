@@ -53,16 +53,11 @@ class SettingsViewModel {
 
     }
     // MARK: - Functions
+    /// The sequence itself is `AppSignOut`, shared with the PROFILE tab's settings.
     func logout() {
         Task { @MainActor in
             do {
-                let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
-                try await firestoreService.upload(dataPoints: ["FCMTokens/\(UserDefaults.currentUser.uid)": fcmTokenModel])
-                UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
-                try apiService.signout()
-                NotificationCenter.default.post(name: Notification.signOut, object: nil)
-                LikeCache.shared.removeAll()
-                ClipCache.shared.removeAll()
+                try await AppSignOut(authService: apiService, firestoreService: firestoreService).signOut()
             } catch {
                 self.errorLoggingOut.send(true)
             }

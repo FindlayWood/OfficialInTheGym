@@ -1,7 +1,7 @@
 # InTheGym — CLAUDE.md
 
 ## Project Overview
-iOS fitness app. iPhone only, **iOS 26.0 minimum** — the app and all five active frameworks
+iOS fitness app. iPhone only, **iOS 26.0 minimum** — the app and all six active frameworks
 (`IPHONEOS_DEPLOYMENT_TARGET = 26.0` everywhere). It used to read iOS 17+ while StatsKit was built
 for 26.1 and MyDayKit for 18.4, so the app could not have launched below 26.1. **A framework must
 never target a newer iOS than the app.** `ITGWorkoutKit` targets lower,
@@ -15,6 +15,7 @@ Lean, minimal UI aesthetic throughout.
 - `AccountCreationKit` — framework
 - `LoginKit` — framework
 - `DiscoverKit` — framework (in progress — see `DISCOVER_PLAN.md`)
+- `ProfileKit` — framework (built, not rolled out — see `PROFILE_PLAN.md`)
 
 ### Inactive — do not modify
 - `ITGWorkoutKit` — ignore, do not touch
@@ -34,14 +35,16 @@ framework projects and the SPM packages.
 | `StatsKit.xcodeproj` | 36 | **check target membership** |
 | `MyDayKit.xcodeproj` | 149 | **check target membership** |
 | `DiscoverKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
+| `ProfileKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
 
-All five use `PBXFileSystemSynchronizedRootGroup`, but only AccountCreationKit, LoginKit and
-DiscoverKit are driven *entirely* by it. DiscoverKit's project was generated from LoginKit's, with
-its object ids prefixed `D1C`. StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
+All six use `PBXFileSystemSynchronizedRootGroup`, but only AccountCreationKit, LoginKit,
+DiscoverKit and ProfileKit are driven *entirely* by it. DiscoverKit's project was generated from
+LoginKit's, with its object ids prefixed `D1C`; ProfileKit's from DiscoverKit's, prefixed `BF10`
+(and `BF1A` for its entries in the app's pbxproj). StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
 `Screens/`, `Models/` etc. individually; MyDayKit lists most of its tree.
 
 `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES` is set on **StatsKit, AccountCreationKit,
-LoginKit and DiscoverKit** — the four built from the StatsKit template. **`MyDayKit` does not set it.** A file that
+LoginKit, DiscoverKit and ProfileKit** — the five built from the StatsKit template. **`MyDayKit` does not set it.** A file that
 compiles inside MyDayKit can therefore fail on a missing `import` the moment it moves into one of the
 other three.
 
@@ -204,17 +207,21 @@ has a value.
 - **Switching unit converts, it does not clear** — unlike `MyDayWorkoutBuilderDistanceScreen`, where
   picking the unit is step one. Here you have already dialled a number in by the time you notice.
 
-**Not persisted yet.** `createAccount` is a callable Cloud Function living outside this repository
-and it drops keys it does not know, so `FunctionsAccountCreator` sends the five body keys and the
-server discards them. Persisting them needs the function updated *and* optional properties added to
-`Users` to read them back — **the new properties must be optional**, since every existing user
-document lacks them. The handoff spec is `CLOUD_FUNCTIONS_ACCOUNT_CREATION.md`, which also records
-that `Users` is decoded from **two** stores (Firestore `Users/{uid}` on the launch path, RTDB
-`users/{uid}` for followers / coaches / requests), so a field written to only one appears on some
-screens and not others. **Weight in particular should not stay a single signup value** — it is
-what `WeightUnit.percentBodyweight` prescriptions are worked out from, so a number captured once at
-signup goes quietly wrong; it wants to be editable and probably logged over time alongside the MyDay
-wellness cards.
+**Persisted, and editable after signup.** This section used to say the server discarded the body
+keys. That has not been true since the functions' 10 August `createAccount` (on `main`), which writes
+`heightCentimetres`, `weightKilograms`, `heightUnit`, `weightUnit` and `dateOfBirth` to `Users/{uid}`
+and seeds `Users/{uid}/WeightTracking/{yyyy-MM-dd}` with the signup weight. `onCreateAccount`
+mirrors the measurements into RTDB `users/{uid}` too.
+
+After signup they live on ProfileKit's **Body Measurements** screen (Settings → Account), which is
+private and deliberately not on Edit Profile (`PROFILE_PLAN.md` step 4).
+- Height and date of birth are edited there and written to `Users/{uid}`.
+- **Weight is a log**, one entry per UTC day in `WeightTracking`. The `syncLatestWeight` function
+  copies the newest entry onto `Users.weightKilograms`, so that field stays the latest weight
+  without the app writing two places. It is what `WeightUnit.percentBodyweight` prescriptions should
+  eventually read; nothing does yet.
+- The app's `Users` model still has **no** body properties. ProfileKit's adapters read them by hand.
+  If `Users` ever gains them, **they must be optional**, since most documents lack them.
 
 ### Fixed here — do not reintroduce
 - **Usernames are lowercased** in `AccountCreationHomeViewModel.username`'s `didSet`, and the field
@@ -444,14 +451,17 @@ call sites and drifted apart. Do not re-inline any of them:
 
 `WeightUnit.kilograms(_:unit:)` · `StatsDay.key(for:)` · `ACWR.Zone(ratio:)` ·
 `SessionSetInput.target(for:)` · `WorkoutTag.normalized(_:)` · `SessionSetPillValue.values(for:record:)` ·
-`WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty`
+`WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
+`ReportDocumentWriter` · `ProfileNamesReader` · `FollowsPageQuery` · `MyDayStoreLocation` ·
+`PendingSyncStoreLocation`
 
 ## Testing
 Before writing any tests, read all test files and folders within `ITGWorkoutKit`
 and use these as the template for structure, naming, and style.
 
-`ITGWorkoutKit` is read-only but its suite is the reference. `StatsKit/StatsKitTests/` and
-`DiscoverKit/DiscoverKitTests/` are the substantial framework suites and the model for new ones —
+`ITGWorkoutKit` is read-only but its suite is the reference. `StatsKit/StatsKitTests/`,
+`DiscoverKit/DiscoverKitTests/` and `ProfileKit/ProfileKitTests/` are the substantial framework
+suites and the model for new ones —
 `LoginKitTests` and `AccountCreationKitTests` are Xcode-generated placeholders, and `MyDayKitTests`
 holds only `WorkoutTemplateModelCopyTests` (its scheme had no test action until DISCOVER added one).
 
@@ -482,8 +492,8 @@ holds only `WorkoutTemplateModelCopyTests` (its scheme had no test action until 
 **A test target is invisible to CI until it is added to the test plan.** The plan runs
 `InTheGymTests`, `ITGWorkoutKitTests`, `ITGWorkoutKitiOSTests`, `ITGWorkoutKitCacheIntegrationTests`,
 `WorkoutAPIEndToEndTests` **and every framework suite** — `StatsKitTests`, `MyDayKitTests`,
-`AccountCreationKitTests`, `LoginKitTests`, `DiscoverKitTests` — with coverage on the app,
-ITGWorkoutKit and all five frameworks. **Add any new framework's test target here.**
+`AccountCreationKitTests`, `LoginKitTests`, `DiscoverKitTests`, `ProfileKitTests` — with coverage on
+the app, ITGWorkoutKit and all six frameworks. **Add any new framework's test target here.**
 
 **CI is not actually running.** Every run since at least August fails before starting on a GitHub
 billing error. Once that is fixed the workflow itself still needs updating: it pins Xcode 15.3 (which
@@ -493,12 +503,21 @@ root).
 
 ## App Structure
 5 tabs: NEWSFEED, DISCOVER, MYDAY, STATS, PROFILE.
+**PROFILE is `ProfileKit`** on the player tab bar (see `PROFILE_PLAN.md`); the coach tab bar keeps
+the legacy `MyProfileCoordinator` until the coach/player split is removed. **Every other way of opening a
+person** (DISCOVER, search, follow lists, and all nine legacy `UserProfileCoordinator` callers)
+shows ProfileKit's `UserProfileScreen`, through one `ProfileKitComposition.makeRouter` graph. Performance Center is
+reached from ProfileKit's settings through `ProfileAppRoutes` — a separate roadmap task, **never
+delete its code**.
 Current focus: MYDAY tab — active session UI complete (see roadmap and Feature Areas Complete).
 NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
 
 Roadmap order:
 1. Fix workout stats → update STATS tab
 2. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
+3. PROFILE tab, `ProfileKit` (built; rollout pending, see `PROFILE_PLAN.md`)
+4. Unified search on DISCOVER (people, workouts, exercises), built entirely in DiscoverKit, which
+   replaces ProfileKit's people search. See *Follow-up: unified search* in `DISCOVER_PLAN.md`.
 
 Those five are the **player** tab bar (`PlayerInitialViewController`). The **coach** tab bar
 (`CoachInitialViewController`) is a different four: NEWSFEED, DISCOVER, **PLAYERS**, MYPROFILE — no
@@ -569,6 +588,8 @@ the next user to sign in opened their library and saw the previous user's workou
   how the two sides of a local store drift apart. **Do not re-derive it at a call site.**
 - **The injected `userId` is the signed-in user, never `template.createdBy`.** For a coach-assigned
   workout those differ, and the file belongs in the library of whoever is using the device.
+- **Account deletion is the one exception.** `LocalUserDataEraser` removes that user's day files,
+  templates and sync queue once the server has deleted the account (`PROFILE_PLAN.md` step 10).
 - **Scoping, not wiping on sign-out — deliberately.** A template that has not reached Firestore yet
   is still on disk when its owner signs back in. Wiping would throw that away to solve a problem
   scoping already solves.
@@ -1239,7 +1260,10 @@ library at once.
 DiscoverKit imports no other framework and defines its own models. Where it needs something another
 framework owns, it declares a protocol and the composition root answers it: `TagNormalizer` →
 `WorkoutTag`, `ClipWatchRecorder` → the existing `FirebaseFunctionsViewClipRecorder` (which serves
-MyDay's `ViewClipRecorder` too), `WorkoutCopySaver` → MyDay's library. **Every Firestore path is in
+MyDay's `ViewClipRecorder` too), `WorkoutCopySaver` → MyDay's library. `UserProfileOpener` → ProfileKit's profile, pushed onto DISCOVER's own stack by a
+`ProfileKitRouter` built there (`ProfileKitUserProfileOpener`). The reverse, ProfileKit's clip
+grid opening DISCOVER's player, goes through `DiscoverKitRouter.showClip`. Each composition's
+`makeRouter` builds the other's router lazily, or they would recurse. **Every Firestore path is in
 the composition root**: `DiscoverSubject+Firestore` (subjects, cards, ratings, comments, tag votes),
 `DiscoverLikeTarget+Firestore`, `DiscoverTagPath`, `DiscoverReportTarget+Firestore`,
 `DiscoverBlockPath`. `DiscoverSubject` and `DiscoverLikeTarget` are `@frozen` — DiscoverKit builds with
@@ -1249,6 +1273,79 @@ library evolution, and without it every `switch` over them in the app needs an `
 `InTheGym-Scripts/Emulator/SeedDiscover.py` seeds accounts, exercises, workouts and activity; the
 functions build every card and count from it, so build the functions on the current branch first.
 Run the app with **InTheGym-EM** and sign in as `demo@inthegym.test`.
+
+## PROFILE Tab — `ProfileKit`
+Your own profile, other people's, follows, private accounts, highlights, settings and account
+deletion. Firestore only for everything new. The step-by-step build, every rule and index, and the
+**rollout checklist** are in `PROFILE_PLAN.md`; this section is the shape and the reasons.
+**Nothing is rolled out yet, and steps 7–10 must ship together**: profiles are reachable from
+DISCOVER and search only once report, block and account deletion are live.
+
+### Two documents per person, and why
+- **`Users/{uid}` is private to its owner.** It holds the email and body measurements, and Firestore
+  rules cannot hide fields, so after rollout nobody else may read it.
+- **`Profiles/{uid}` is the public projection**: name, @username, bio, stamps, `isPrivate`, the
+  follow and clip counts, and moderation's `status`. Only Cloud Functions write it (`syncProfile`,
+  the counts triggers). **It is an allow-list**, and a field is public only if `profileProjection`
+  copies it. Every read of another person (DISCOVER's author names, lists, search, profiles) goes
+  here.
+- **`ProfileHighlights/{uid}`** is separate again, so a private account's PBs can be read-gated by
+  the same "public, or an approved follower" check as its follow lists.
+- Your own header still comes from the cached `currentUser` (fresher after an edit); counts,
+  highlights and clips come from the projections.
+
+### Follows
+**One `Follows/{followerId}_{followeeId}` document per relationship**, `active` or `pending`.
+- The follower creates it, the followee approves or deletes it, and either can end it. Mirrored
+  followers/following lists were rejected, as two writers for one fact.
+- The rules decide `pending` versus `active` from the followee's `Profiles.isPrivate`, so a client
+  cannot skip approval.
+- Counts are **recounts** (`profileFollowCounts`, via DISCOVER's `syncCount`), never deltas.
+- The legacy RTDB follow graph was migrated (`MigrateFollows.py`) and is bridged one way
+  (`mirrorLegacyFollow`). Nothing in the app writes it any more, since step 7 sent every legacy
+  profile to ProfileKit.
+
+### How the framework meets the app
+- **`ProfileKitComposition.makeRouter`** builds the one graph, used by:
+  - the tab (`composeCombination`, which adds `start()` and the settings' app screens);
+  - DISCOVER (`ProfileKitUserProfileOpener`);
+  - every legacy `UserProfileCoordinator` caller, which calls `showUserProfile(_:)` on its own
+    stack.
+- **ProfileKit → DISCOVER**: the clips grid opens DISCOVER's player through
+  `DiscoverKitRouter.showClip`, built lazily by `DiscoverClipOpener`. Each composition builds the
+  other's router, so **eager construction would recurse**.
+- Moderation reuses DISCOVER's server path without touching DiscoverKit:
+  - a `"profile"` report kind (`Profiles/{uid}`) in `reportTarget`;
+  - `ReportDocumentWriter`, the one report document;
+  - the profile's Block wraps DISCOVER's `BlockedUsersWriter`;
+  - `removeFollowsOnBlock` cuts follows for a block made anywhere.
+- **Writes the client makes to `Users/{uid}` are exactly** `displayName`, `bio`,
+  `heightCentimetres`, `heightUnit`, `dateOfBirth`, `isPrivate` and `pinnedHighlights`, each through
+  `updateData` of its own keys. The `Users` update rule's `hasOnly` is that list. **Adding a client
+  write to `Users` means widening that rule**, which is all that stops a client setting
+  `verifiedAccount`.
+- Derived fields are the server's: `weightKilograms` (`syncLatestWeight`), counts and highlights.
+  The legacy RTDB `users/{uid}` copy of name and bio follows by `onEditAccount`, never by a second
+  client write.
+
+### Decisions worth not relitigating
+- Your own profile is what others see, so the clips grid is public clips only, even for you.
+- Highlights are automatic (top 3 by `setCount`) until pinned. Premium never shows on someone else's
+  profile; only your own device knows it.
+- A private account hides its lists and highlights from non-followers, but **its public clips stay
+  public**, in DISCOVER and on the profile.
+- Body measurements live on their own private screen, not on Edit Profile, which edits what others
+  see.
+- **Search moves to DISCOVER**, rebuilt there as people + workouts + exercises entirely in
+  DiscoverKit, after which ProfileKit's search is deleted. See *Follow-up: unified search* in
+  `DISCOVER_PLAN.md`.
+
+### Account deletion
+`deleteAccount` deletes everything the user owns: DISCOVER → own tree and files → profile → RTDB →
+Auth last. **The profile projections go after the user tree**, because their triggers rebuild them
+while `Users/{uid}` exists. It is idempotent. The app re-authenticates with the password first, and erases this
+device's day files, templates and sync queue only after the server succeeds. **A feature that adds
+per-user data adds it to one of the deletion modules** in `functions/src/Account/`.
 
 ## Exercise Stats Raw Logs
 Two things are written when work is recorded, and **both paths write the same two things**:
@@ -1407,6 +1504,10 @@ appears on some screens and not others.
 | Path | Store | Written by |
 |---|---|---|
 | `Users/{uid}` | Firestore | `createAccount` Cloud Function |
+| `Profiles/{uid}` | Firestore | **Cloud Functions only** (`syncProfile`) — the public projection of `Users`; others read this, never `Users` |
+| `Users/{uid}/WeightTracking/{yyyy-MM-dd}` | Firestore | `createAccount` (signup weight), ProfileKit's `FirestoreWeightEntryWriter`; newest copied to `Users.weightKilograms` by `syncLatestWeight` |
+| `ProfileHighlights/{uid}` | Firestore | **Cloud Functions only**: a profile's PB tiles, from `ExerciseStats` + `Users.pinnedHighlights`; read-gated like a private account's lists |
+| `Follows/{followerId}_{followeeId}` | Firestore | follower creates (`FirestoreFollowWriter`), either deletes; `mirrorLegacyFollow` bridges legacy RTDB follows in. Counts on `Profiles` by `profileFollowCounts` |
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
 | `Users/{uid}/ExerciseStats/{exerciseID}/RawLogs/{logID}` | Firestore | both logging paths, per set |
 | `Users/{uid}/WorkoutSessions/{id}` | Firestore | `FirestoreCompletedWorkoutSessionSaver` (batched) |
@@ -1425,6 +1526,7 @@ appears on some screens and not others.
 | `ModerationQueue/{sha256(path)}` | Firestore | **Cloud Functions only** — read by the admin app |
 | `Users/{uid}/BlockedUsers/{uid}` | Firestore | `FirestoreBlockedUsersWriter` |
 | `users/{uid}`, posts, followers, requests | RTDB | `FirebaseDatabaseManager` |
+| `Following/{uid}`, `Followers/{uid}` | RTDB | the **legacy** follow graph, written only by the old Follow button now; migrated and bridged into `Follows` |
 | `CoachPlayers/{coachId}`, `PlayerCoaches/{playerId}` | RTDB | the coach↔athlete link — see *Coach-Assigned Workouts* |
 | `Documents/MyDays/{uid}/{date}.json` | disk | `MyDayFileManagerSaver` |
 | `Documents/WorkoutTemplates/{uid}/{id}.json` | disk | `FileManagerWorkoutTemplateUploader` |
@@ -1493,15 +1595,21 @@ in this codebase.**
 | `MyDayHomeScreen.setDetailOverlay` animation | the session screen's overlay animation | MYDAY Workout Flow |
 | `FileManagerWorkoutTemplateUploader` date strategy | `FileManagerWorkoutTemplateFetcher` date strategy | Library reads are local-first |
 | `StatsDay.calendar` | `DateFormatter.yyyyMMdd` | STATS Tab |
+| `StatsDay` (StatsKit) | ProfileKit's `WeightDay` — both UTC, as the server's `dateKey()` | PROFILE_PLAN.md step 4 |
+| AccountCreationKit's body sheets, `HeightUnit`, `BodyWeightUnit`, `BodyMeasurementRow` | ProfileKit's copies (`ProfileHeightUnit`, `ProfileWeightUnit`, …) | PROFILE_PLAN.md step 4 |
+| `AccountCreationFieldCard` / `AccountCreationErrorBanner` | ProfileKit's `EditProfileFieldCard` / `ProfileErrorBanner` | Shared UI |
+| `ProfileDetails` limits (100 / 300) | `AccountCreationHomeViewModel` limits, and the `Users` update rule | PROFILE_PLAN.md step 3 |
 | `LoginFieldCard` / `LoginPrimaryButton` / `LoginErrorBanner` | their AccountCreationKit twins | Auth, Shared UI |
-| the five `Color+Extension.swift` | each other | Brand Colours, Shared UI |
+| the six `Color+Extension.swift` | each other | Brand Colours, Shared UI |
 | DiscoverKit's `SectionContainer` | StatsKit's `SectionContainer` | DISCOVER_PLAN.md step 2 |
 | `WorkoutTag.maxLength` | `MAX_TAG_LENGTH` in the Cloud Functions' `Tags/TagRejection.ts` | DISCOVER_PLAN.md step 1 |
 | `DiscoverReportTarget+Firestore` path shapes | `Discover/Moderation/ReportTarget.ts` | DISCOVER Tab |
+| `FollowPath` (app) | the functions' `followId()` and the `Follows` create rule's id check | PROFILE_PLAN.md step 5 |
 | `DiscoverTagPath` subcollection names | `TAGGED_EXERCISES` / `TAGGED_WORKOUTS` in `SyncTagDirectory.ts` | DISCOVER Tab |
 | `DiscoverTaggingViewModel.maxMyTags` (10) | `MAX_TAGS_PER_VOTER` in `VoterTags.ts`, and the rules | DISCOVER Tab |
 | `DiscoverCommentsViewModel.maxLength` (500) | the comment rules' `text.size()` limit | DISCOVER Tab |
-| `DiscoverReportReason` raw values | the rules' accepted `reason` list | DISCOVER Tab |
+| `DiscoverReportReason` raw values | ProfileKit's `ProfileReportReason`, and the rules' accepted `reason` list | DISCOVER Tab, PROFILE_PLAN.md step 9 |
+| `FirestoreProfileReporter` (`profile`, `Profiles/{uid}`) | `reportTarget`'s `profile` kind in `Discover/Moderation/ReportTarget.ts` | PROFILE_PLAN.md step 9 |
 
 ## Analysis artefacts — `.results/`, gitignored
 A generated structural analysis can be produced into `.results/`: `1-techstack.md`,

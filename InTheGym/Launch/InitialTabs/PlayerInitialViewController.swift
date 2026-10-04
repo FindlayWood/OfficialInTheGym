@@ -47,7 +47,7 @@ class PlayerInitialViewController: UITabBarController {
         // MyDay library at once — see `MyDayWorkoutLibrary`.
         let discoverKit = DiscoverKitComposition()
         let discoverNavigationController = UINavigationController()
-        discoverKit.composeCombination(discoverNavigationController, workoutLibrary: myDayKit.workoutLibrary)
+        discoverKit.composeCombination(discoverNavigationController, workoutLibrary: myDayKit.workoutLibrary, purchaseManager: subscriptionManager)
         discoverNavigationController.tabBarItem = UITabBarItem(title: "DISCOVER", image: UIImage(systemName: "magnifyingglass"), tag: 1)
         
         // MARK: - Stats Kit
@@ -57,10 +57,11 @@ class PlayerInitialViewController: UITabBarController {
         statsKitNavigationController.tabBarItem = UITabBarItem(title: "STATS", image: UIImage(systemName: "chart.bar.fill"), tag: 5)
         
         // MARK: - Profile
+        // ProfileKit. The coach tab bar still uses the legacy MyProfileCoordinator.
+        let profileKit = ProfileKitComposition()
         let myProfileNavigationController = UINavigationController()
+        profileKit.composeCombination(myProfileNavigationController, purchaseManager: subscriptionManager)
         myProfileNavigationController.tabBarItem = UITabBarItem(title: "MYPROFILE", image: UIImage(systemName: "person.fill"), tag: 6)
-        let myProfileCoordinator = MyProfileCoordinator(navigationController: myProfileNavigationController, subscriptionManager: subscriptionManager)
-        myProfileCoordinator.start()
         
         viewControllers = [timelineNavigationController, discoverNavigationController, myDayNavigationController, statsKitNavigationController, myProfileNavigationController]
     }

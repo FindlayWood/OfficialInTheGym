@@ -209,8 +209,7 @@ final class MyDayFileManagerSaver: MyDaySaver {
     private let baseURL: URL
 
     init() {
-        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let dir = docs.appendingPathComponent("MyDays", isDirectory: true)
+        let dir = MyDayStoreLocation.root
 
         if !FileManager.default.fileExists(atPath: dir.path) {
             try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
@@ -251,8 +250,7 @@ struct MyDayFileManagerLoader: MyDayLoader {
     }
     
     private var baseURL: URL {
-        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let dir = docs.appendingPathComponent("MyDays", isDirectory: true)
+        let dir = MyDayStoreLocation.root
         
         if !FileManager.default.fileExists(atPath: dir.path) {
             try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
