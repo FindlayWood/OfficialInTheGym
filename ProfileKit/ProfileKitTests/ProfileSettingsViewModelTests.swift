@@ -112,6 +112,50 @@ final class ProfileSettingsViewModelTests: XCTestCase {
         XCTAssertFalse(sut.viewModel.isSigningOut)
     }
 
+    // MARK: - Private account
+
+    func test_loadPrivacy_deliversTheSetting() async {
+        let sut = makeSUT()
+        sut.privacy.isPrivateResult = .success(true)
+
+        await sut.viewModel.loadPrivacy()
+
+        XCTAssertEqual(sut.viewModel.isPrivate, true)
+    }
+
+    // Until it loads the switch is disabled, not drawn as "off". A guess would
+    // be one tap from overwriting the real setting.
+    func test_setPrivate_writesNothingBeforeTheSettingLoads() async {
+        let sut = makeSUT()
+
+        await sut.viewModel.setPrivate(true)
+
+        XCTAssertNil(sut.viewModel.isPrivate)
+        XCTAssertFalse(sut.privacy.receivedMessages.contains(.setPrivate(true)))
+    }
+
+    func test_setPrivate_writesTheChange() async {
+        let sut = makeSUT()
+        await sut.viewModel.loadPrivacy()
+
+        await sut.viewModel.setPrivate(true)
+
+        XCTAssertEqual(sut.privacy.receivedMessages.last, .setPrivate(true))
+        XCTAssertEqual(sut.viewModel.isPrivate, true)
+        XCTAssertFalse(sut.viewModel.isSavingPrivacy)
+    }
+
+    func test_setPrivate_putsTheSwitchBackOnFailure() async {
+        let sut = makeSUT()
+        await sut.viewModel.loadPrivacy()
+        sut.privacy.writeError = anyError
+
+        await sut.viewModel.setPrivate(true)
+
+        XCTAssertEqual(sut.viewModel.isPrivate, false)
+        XCTAssertNotNil(sut.viewModel.privacyError)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
@@ -122,16 +166,20 @@ final class ProfileSettingsViewModelTests: XCTestCase {
         viewModel: ProfileSettingsViewModel,
         subscription: ProfileSubscriptionServiceSpy,
         signOut: ProfileSignOutServiceSpy,
-        passwordReset: PasswordResetServiceSpy
+        passwordReset: PasswordResetServiceSpy,
+        privacy: PrivacyServicesSpy
     ) {
+        let privacy = PrivacyServicesSpy()
         let viewModel = ProfileSettingsViewModel(
             subscription: subscription,
             signOutService: signOut,
             passwordReset: passwordReset,
+            privateAccountLoader: privacy,
+            privateAccountWriter: privacy,
             links: anyLinks,
             appVersion: "1.0 (1)"
         )
-        return (viewModel, subscription, signOut, passwordReset)
+        return (viewModel, subscription, signOut, passwordReset, privacy)
     }
 
     private var anyLinks: ProfileSettingsLinks {

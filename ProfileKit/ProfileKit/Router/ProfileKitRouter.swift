@@ -46,6 +46,11 @@ public final class ProfileKitRouter {
     let followWriter: FollowWriter
     let unfollower: Unfollower
     let followerRemover: FollowerRemover
+    let privateAccountLoader: PrivateAccountLoader
+    let privateAccountWriter: PrivateAccountWriter
+    let followRequestsLoader: FollowRequestsLoader
+    let followRequestCountLoader: FollowRequestCountLoader
+    let followRequestApprover: FollowRequestApprover
     let links: ProfileSettingsLinks
     let currentUserId: String
 
@@ -81,6 +86,11 @@ public final class ProfileKitRouter {
         followWriter: FollowWriter,
         unfollower: Unfollower,
         followerRemover: FollowerRemover,
+        privateAccountLoader: PrivateAccountLoader,
+        privateAccountWriter: PrivateAccountWriter,
+        followRequestsLoader: FollowRequestsLoader,
+        followRequestCountLoader: FollowRequestCountLoader,
+        followRequestApprover: FollowRequestApprover,
         links: ProfileSettingsLinks,
         currentUserId: String
     ) {
@@ -104,6 +114,11 @@ public final class ProfileKitRouter {
         self.followWriter = followWriter
         self.unfollower = unfollower
         self.followerRemover = followerRemover
+        self.privateAccountLoader = privateAccountLoader
+        self.privateAccountWriter = privateAccountWriter
+        self.followRequestsLoader = followRequestsLoader
+        self.followRequestCountLoader = followRequestCountLoader
+        self.followRequestApprover = followRequestApprover
         self.links = links
         self.currentUserId = currentUserId
     }
@@ -131,8 +146,10 @@ extension ProfileKitRouter {
                 profileLoader: profileLoader,
                 photoLoader: photoLoader,
                 countsLoader: countsLoader,
+                requestCountLoader: followRequestCountLoader,
                 subscription: subscription
             )
+            viewModel.onOpenFollowRequests = { [weak self] in self?.navigate(to: .followRequests) }
             viewModel.onOpenFollowList = { [weak self, weak viewModel] kind in
                 guard let self, case .loaded(let header) = viewModel?.header else { return }
                 self.navigate(to: .followList(kind, userId: header.userId))
@@ -156,6 +173,8 @@ extension ProfileKitRouter {
                 subscription: subscription,
                 signOutService: signOutService,
                 passwordReset: passwordReset,
+                privateAccountLoader: privateAccountLoader,
+                privateAccountWriter: privateAccountWriter,
                 links: links
             )
             viewModel.onShowPaywall = { [weak self] in self?.onShowPaywall?() }
@@ -192,6 +211,17 @@ extension ProfileKitRouter {
                 followerRemover: followerRemover
             )
             let vc = UIHostingController(rootView: FollowListScreen(viewModel: viewModel, photoLoader: photoLoader))
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .followRequests:
+            let viewModel = FollowRequestsViewModel(
+                requestsLoader: followRequestsLoader,
+                summaryLoader: summaryLoader,
+                approver: followRequestApprover,
+                decliner: followerRemover
+            )
+            let vc = UIHostingController(rootView: FollowRequestsScreen(viewModel: viewModel, photoLoader: photoLoader))
             vc.hidesBottomBarWhenPushed = true
             return vc
 

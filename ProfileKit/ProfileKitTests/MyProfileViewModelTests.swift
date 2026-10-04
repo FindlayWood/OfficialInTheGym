@@ -147,6 +147,29 @@ final class MyProfileViewModelTests: XCTestCase {
         await sut.viewModel.refreshCounts()
 
         XCTAssertTrue(sut.follows.receivedMessages.isEmpty)
+        XCTAssertTrue(sut.privacy.receivedMessages.isEmpty)
+    }
+
+    func test_load_deliversThePendingRequestCount() async {
+        let sut = makeSUT(results: [.success(.make())])
+        sut.privacy.requestCountResult = .success(3)
+
+        await sut.viewModel.load()
+
+        XCTAssertEqual(sut.viewModel.pendingRequestCount, 3)
+    }
+
+    // Approving requests on the inbox has to clear the row on return, or it
+    // would offer requests that are no longer there.
+    func test_refreshCounts_updatesThePendingRequestCount() async {
+        let sut = makeSUT(results: [.success(.make())])
+        sut.privacy.requestCountResult = .success(3)
+        await sut.viewModel.load()
+        sut.privacy.requestCountResult = .success(0)
+
+        await sut.viewModel.refreshCounts()
+
+        XCTAssertEqual(sut.viewModel.pendingRequestCount, 0)
     }
 
     // MARK: - Helpers
@@ -156,18 +179,26 @@ final class MyProfileViewModelTests: XCTestCase {
         photoResult: Result<UIImage?, Error> = .success(nil),
         counts: Result<ProfileCounts?, Error> = .success(nil),
         hasUnlockedPro: Bool = false
-    ) -> (viewModel: MyProfileViewModel, loader: MyProfileLoaderSpy, photoLoader: ProfilePhotoLoaderSpy, follows: FollowServicesSpy) {
+    ) -> (
+        viewModel: MyProfileViewModel,
+        loader: MyProfileLoaderSpy,
+        photoLoader: ProfilePhotoLoaderSpy,
+        follows: FollowServicesSpy,
+        privacy: PrivacyServicesSpy
+    ) {
         let loader = MyProfileLoaderSpy(results: results)
         let photoLoader = ProfilePhotoLoaderSpy(result: photoResult)
         let follows = FollowServicesSpy()
         follows.countsResult = counts
+        let privacy = PrivacyServicesSpy()
         let viewModel = MyProfileViewModel(
             profileLoader: loader,
             photoLoader: photoLoader,
             countsLoader: follows,
+            requestCountLoader: privacy,
             subscription: ProfileSubscriptionServiceSpy(hasUnlockedPro: hasUnlockedPro)
         )
-        return (viewModel, loader, photoLoader, follows)
+        return (viewModel, loader, photoLoader, follows, privacy)
     }
 
     private func loadedHeader(_ viewModel: MyProfileViewModel) -> ProfileHeader? {

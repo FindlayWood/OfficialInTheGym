@@ -21,6 +21,7 @@ struct ProfileSettingsScreen: View {
 
     @State private var confirmingPasswordReset = false
     @State private var confirmingSignOut = false
+    @State private var confirmingGoPublic = false
 
     var body: some View {
         ScrollView {
@@ -37,6 +38,13 @@ struct ProfileSettingsScreen: View {
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { viewModel.refreshSubscription() }
+        .task { await viewModel.loadPrivacy() }
+        .alert("Make Account Public?", isPresented: $confirmingGoPublic) {
+            Button("Make Public") { Task { await viewModel.setPrivate(false) } }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Anyone will be able to follow you, and any follow requests waiting will be approved.")
+        }
         .alert("Reset Password?", isPresented: $confirmingPasswordReset) {
             Button("Send Email") { Task { await viewModel.sendPasswordReset() } }
             Button("Cancel", role: .cancel) {}
@@ -98,7 +106,23 @@ struct ProfileSettingsScreen: View {
     // MARK: - Account
 
     private var accountSection: some View {
-        ProfileSettingsSection(title: "Account") {
+        ProfileSettingsSection(title: "Account", footer: privacyFooter) {
+            ProfileSettingsToggleRow(
+                icon: "lock",
+                title: "Private Account",
+                isOn: Binding(
+                    get: { viewModel.isPrivate ?? false },
+                    set: { newValue in
+                        if newValue {
+                            Task { await viewModel.setPrivate(true) }
+                        } else {
+                            confirmingGoPublic = true
+                        }
+                    }
+                ),
+                isSaving: viewModel.isSavingPrivacy,
+                isEnabled: viewModel.isPrivate != nil
+            )
             ProfileSettingsRow(icon: "figure.stand", title: "Body Measurements") {
                 viewModel.onOpenBodyMeasurements?()
             }
@@ -111,6 +135,13 @@ struct ProfileSettingsScreen: View {
                 confirmingPasswordReset = true
             }
         }
+    }
+
+    private var privacyFooter: String {
+        if let error = viewModel.privacyError { return error }
+        return viewModel.isPrivate == true
+            ? "New followers need your approval. People already following you stay."
+            : "Anyone can follow you. Turn this on to approve new followers first."
     }
 
     private var passwordResetTrailing: ProfileSettingsRow.Trailing {
@@ -184,6 +215,8 @@ struct ProfileSettingsScreen: View {
                 subscription: PreviewProfileSubscriptionService(),
                 signOutService: PreviewAccountServices(),
                 passwordReset: PreviewAccountServices(),
+                privateAccountLoader: PreviewPrivacyServices(),
+                privateAccountWriter: PreviewPrivacyServices(),
                 links: ProfileSettingsLinks(
                     instagram: URL(string: "https://instagram.com")!,
                     website: URL(string: "https://example.com")!,

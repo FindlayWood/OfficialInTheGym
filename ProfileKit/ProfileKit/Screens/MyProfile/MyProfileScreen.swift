@@ -26,6 +26,11 @@ struct MyProfileScreen: View {
             ScrollView {
                 VStack(spacing: 16) {
                     headerSection
+                    if viewModel.pendingRequestCount > 0 {
+                        FollowRequestsBanner(count: viewModel.pendingRequestCount) {
+                            viewModel.onOpenFollowRequests?()
+                        }
+                    }
                 }
                 .padding(16)
             }
@@ -88,6 +93,7 @@ struct MyProfileScreen: View {
             profileLoader: PreviewMyProfileLoader(),
             photoLoader: PreviewProfilePhotoLoader(),
             countsLoader: PreviewFollowServices(),
+            requestCountLoader: PreviewPrivacyServices(),
             subscription: PreviewProfileSubscriptionService(hasUnlockedPro: true)
         )
     )

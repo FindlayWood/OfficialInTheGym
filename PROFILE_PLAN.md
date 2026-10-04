@@ -474,20 +474,63 @@ is denied**. That is one more reason the step 2 backfill comes first.
 - `followeeId` ASC, `status` ASC, `createdAt` DESC
 - `followerId` ASC, `status` ASC, `createdAt` DESC
 
-### Step 6 — Private accounts and requests
+### Step 6 — Private accounts and requests — built, not rolled out
 
 **Cloud**
-- `isPrivate` flows into `Profiles` through `syncProfile`.
-- `approvePendingFollows`: when `isPrivate` goes true → false, set every pending follow to `active`.
+- `profileProjection` adds `isPrivate`, true only for a literal `true`. It is what the `Follows`
+  create rule and `FirestoreFollowWriter` read to choose `pending` or `active`. (`createAccount`
+  already writes `isPrivate: false` at signup.)
+- `approvePendingFollows` (v2, `Users/{uid}` updated, `isPrivate` true → false) sets every pending
+  follow of the user to `active` with `approvedAt`, 500 per batch. It re-reads the user before each
+  page, so flipping back to private mid-run stops it. Going private changes nothing; existing
+  followers stay. Each approval fires `profileFollowCounts`.
+- Tests: 5 new, 32 in `test/Profile`.
 
 **App**
-- Private toggle in Settings, saying plainly what it does and that existing followers stay.
-- Requests inbox (approve / decline), reached from the header when there are pending requests.
-- The profile screen hides highlights and clips from non-followers of a private account, with a
-  "This account is private" card.
+- **Private Account switch** in Settings → Account, with a footer that says what it does in each
+  state. It is disabled until the setting loads (never a guessed "off"), shows a spinner while
+  saving, and is put back on failure. **Turning it off asks first**: "any follow requests waiting
+  will be approved".
+- **Requests surface on the profile**, as a "N follow requests" row under the header, shown only
+  while any are waiting. A private account's inbox has no other door, so it sits where the owner
+  looks first. The count refreshes with the follow counts whenever the tab reappears.
+- `FollowRequestsScreen`: paged newest first, with Approve (filled) and Decline (tinted).
+  **Approving keeps the row as "Approved"; declining removes it.** Neither asks first. Both show at
+  once and are put back on failure.
+- Declining is `FollowerRemover`, the same delete of their follow document. There is no second
+  protocol for it.
+- Adapters:
+  - `FirestorePrivateAccountLoader` / `Writer` read and write `Users.isPrivate`.
+  - `FirestoreFollowRequestsLoader` and `FirestoreFollowRequestCountLoader` (a server count
+    query).
+  - `FirestoreFollowRequestApprover` uses `updateData` of `status` and `approvedAt`.
+  - **`FollowsPageQuery`** is the one paged `Follows` query, shared by the follow lists (active)
+    and the inbox (pending). `FirestoreFollowListLoader` now uses it.
+- Tests: 14 new (`FollowRequestsViewModelTests`, privacy on `ProfileSettingsViewModelTests`, the
+  request count on `MyProfileViewModelTests`), 81 in ProfileKit.
 
-**Open:** push notifications for new followers and requests. Messaging is in the stack, but the
-interview did not cover it.
+**Deferred to step 7** (it needs other people's profiles to exist):
+- The "This account is private" card.
+- Hiding a private account's highlights, clips and follow lists from non-followers. The `Follows`
+  list rule currently lets anyone list any account's active follows.
+
+**Rules** (console)
+- `Users/{userId}` update: add `isPrivate` to `hasOnly`, plus
+  `&& (!("isPrivate" in request.resource.data) || request.resource.data.isPrivate is bool)`.
+  The full `hasOnly` list is now
+  `["displayName", "bio", "heightCentimetres", "heightUnit", "dateOfBirth", "isPrivate"]`.
+- `Follows` gains an update rule, for approval by the followee only:
+
+  ```
+  allow update: if request.auth != null
+    && resource.data.followeeId == request.auth.uid
+    && resource.data.status == "pending"
+    && request.resource.data.status == "active"
+    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["status", "approvedAt"])
+    && request.resource.data.approvedAt == request.time;
+  ```
+
+- No new index. The inbox runs on step 5's `(followeeId, status, createdAt desc)`.
 
 ### Step 7 — Other users' profiles: DISCOVER, lists, search
 
@@ -593,6 +636,12 @@ matters most:
 - [ ] Console indexes: the two `Follows` composites (wait for them to finish building)
 - [ ] `python MigrateFollows.py`, check the counts, then `python MigrateFollows.py --write`
 - [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, to recount every profile once
+
+**Step 6 — Private accounts and requests**
+- [ ] Deploy `approvePendingFollows` and the updated `syncProfile` from the functions `profile`
+      branch
+- [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, so every profile carries `isPrivate`
+- [ ] Console rules: `isPrivate` in the `Users` update rule, and the `Follows` update rule
 
 **Later steps** (expanded as they land)
 - [ ] `Follows` rules + indexes **before** `MigrateFollows.py --write`

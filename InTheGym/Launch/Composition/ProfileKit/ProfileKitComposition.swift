@@ -66,6 +66,18 @@ class ProfileKitComposition {
 
         let followerRemover: FollowerRemover = FirestoreFollowerRemover(currentUserId: userId)
 
+        // MARK: - Private account and requests
+
+        let privateAccountLoader: PrivateAccountLoader = FirestorePrivateAccountLoader(userId: userId)
+
+        let privateAccountWriter: PrivateAccountWriter = FirestorePrivateAccountWriter(userId: userId)
+
+        let followRequestsLoader: FollowRequestsLoader = FirestoreFollowRequestsLoader(currentUserId: userId)
+
+        let followRequestCountLoader: FollowRequestCountLoader = FirestoreFollowRequestCountLoader(currentUserId: userId)
+
+        let followRequestApprover: FollowRequestApprover = FirestoreFollowRequestApprover(currentUserId: userId)
+
         // MARK: - Settings
 
         let subscription: ProfileSubscriptionService = PurchaseManagerSubscriptionService(purchaseManager: purchaseManager)
@@ -104,6 +116,11 @@ class ProfileKitComposition {
             followWriter: followWriter,
             unfollower: unfollower,
             followerRemover: followerRemover,
+            privateAccountLoader: privateAccountLoader,
+            privateAccountWriter: privateAccountWriter,
+            followRequestsLoader: followRequestsLoader,
+            followRequestCountLoader: followRequestCountLoader,
+            followRequestApprover: followRequestApprover,
             links: links,
             currentUserId: userId
         )

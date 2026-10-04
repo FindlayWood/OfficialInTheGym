@@ -26,8 +26,12 @@ import Foundation
 /// Body Measurements (step 4) is a row under Account rather than part of Edit
 /// Profile: it is private, and Edit Profile edits what other people see.
 ///
-/// Account deletion (step 10) and the private-account toggle (step 6) join this
-/// screen in later steps.
+/// **Private Account** (step 6) is a switch under Account. It reads `nil` until
+/// loaded, which disables the switch rather than showing a guess. Turning it
+/// off asks first in the screen, because it approves every waiting request.
+/// The change shows at once and is put back if the write fails.
+///
+/// Account deletion (step 10) joins this screen later.
 @MainActor
 final class ProfileSettingsViewModel: ObservableObject {
 
@@ -36,6 +40,9 @@ final class ProfileSettingsViewModel: ObservableObject {
     @Published private(set) var passwordResetState: ProfileActionState = .idle
     @Published private(set) var isSigningOut = false
     @Published var didFailToSignOut = false
+    @Published private(set) var isPrivate: Bool?
+    @Published private(set) var isSavingPrivacy = false
+    @Published private(set) var privacyError: String?
 
     let links: ProfileSettingsLinks
     let appVersion: String
@@ -43,6 +50,8 @@ final class ProfileSettingsViewModel: ObservableObject {
     private let subscription: ProfileSubscriptionService
     private let signOutService: ProfileSignOutService
     private let passwordReset: PasswordResetService
+    private let privateAccountLoader: PrivateAccountLoader
+    private let privateAccountWriter: PrivateAccountWriter
 
     var onShowPaywall: (() -> Void)?
     var onManageSubscription: (() -> Void)?
@@ -54,12 +63,16 @@ final class ProfileSettingsViewModel: ObservableObject {
         subscription: ProfileSubscriptionService,
         signOutService: ProfileSignOutService,
         passwordReset: PasswordResetService,
+        privateAccountLoader: PrivateAccountLoader,
+        privateAccountWriter: PrivateAccountWriter,
         links: ProfileSettingsLinks,
         appVersion: String = Bundle.main.profileAppVersion
     ) {
         self.subscription = subscription
         self.signOutService = signOutService
         self.passwordReset = passwordReset
+        self.privateAccountLoader = privateAccountLoader
+        self.privateAccountWriter = privateAccountWriter
         self.links = links
         self.appVersion = appVersion
         self.hasUnlockedPro = subscription.hasUnlockedPro
@@ -69,6 +82,30 @@ final class ProfileSettingsViewModel: ObservableObject {
     /// purchase made there has to show here when it is dismissed.
     func refreshSubscription() {
         hasUnlockedPro = subscription.hasUnlockedPro
+    }
+
+    func loadPrivacy() async {
+        do {
+            isPrivate = try await privateAccountLoader.isPrivate()
+        } catch {
+            print("❌ Private account setting failed: \(error)")
+            privacyError = "Couldn't load your privacy setting."
+        }
+    }
+
+    func setPrivate(_ value: Bool) async {
+        guard let current = isPrivate, current != value, !isSavingPrivacy else { return }
+        isSavingPrivacy = true
+        privacyError = nil
+        isPrivate = value
+        defer { isSavingPrivacy = false }
+        do {
+            try await privateAccountWriter.setPrivate(value)
+        } catch {
+            print("❌ Private account save failed: \(error)")
+            isPrivate = current
+            privacyError = "Couldn't change your privacy setting. Check your connection and try again."
+        }
     }
 
     func restorePurchases() async {

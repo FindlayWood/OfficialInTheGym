@@ -30,25 +30,31 @@ final class MyProfileViewModel: ObservableObject {
     @Published private(set) var header: ProfileLoadState<ProfileHeader> = .loading
     @Published private(set) var photo: UIImage?
     @Published private(set) var counts: ProfileCounts?
+    /// Requests waiting for approval. Zero, or a failed read, draws no row.
+    @Published private(set) var pendingRequestCount = 0
 
     private let profileLoader: MyProfileLoader
     private let photoLoader: ProfilePhotoLoader
     private let countsLoader: ProfileCountsLoader
+    private let requestCountLoader: FollowRequestCountLoader
     private let subscription: ProfileSubscriptionService
 
     var onOpenSettings: (() -> Void)?
     var onEditProfile: ((ProfileHeader, UIImage?) -> Void)?
     var onOpenFollowList: ((FollowListKind) -> Void)?
+    var onOpenFollowRequests: (() -> Void)?
 
     init(
         profileLoader: MyProfileLoader,
         photoLoader: ProfilePhotoLoader,
         countsLoader: ProfileCountsLoader,
+        requestCountLoader: FollowRequestCountLoader,
         subscription: ProfileSubscriptionService
     ) {
         self.profileLoader = profileLoader
         self.photoLoader = photoLoader
         self.countsLoader = countsLoader
+        self.requestCountLoader = requestCountLoader
         self.subscription = subscription
     }
 
@@ -86,12 +92,18 @@ final class MyProfileViewModel: ObservableObject {
         await loadCounts(for: header.userId)
     }
 
-    /// A failed read keeps whatever counts were already shown.
+    /// A failed read keeps whatever counts were already shown. The request
+    /// count travels with the follow counts: approving a request changes both.
     private func loadCounts(for userId: String) async {
         do {
             counts = try await countsLoader.counts(for: userId)
         } catch {
             print("❌ Profile counts failed: \(error)")
+        }
+        do {
+            pendingRequestCount = try await requestCountLoader.pendingRequestCount()
+        } catch {
+            print("❌ Follow request count failed: \(error)")
         }
     }
 
