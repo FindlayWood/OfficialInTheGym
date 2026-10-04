@@ -16,10 +16,8 @@ final class SyncQueueWorkoutTemplateUploader: WorkoutTemplateUploading {
     private let decoder: JSONDecoder
 
     init(userId: String) {
-        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let directory = documents.appendingPathComponent("PendingSync", isDirectory: true)
-        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        fileURL = directory.appendingPathComponent("workoutTemplates_\(userId).json")
+        try? FileManager.default.createDirectory(at: PendingSyncStoreLocation.root, withIntermediateDirectories: true)
+        fileURL = PendingSyncStoreLocation.workoutTemplatesFile(for: userId)
 
         encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601

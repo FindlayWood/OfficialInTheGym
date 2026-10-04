@@ -31,12 +31,22 @@ struct AppSignOut {
     func signOut() async throws {
         let fcmTokenModel = FCMTokenModel(fcmToken: nil, tokenUpdatedDate: .now)
         try await firestoreService.upload(dataPoints: ["FCMTokens/\(UserDefaults.currentUser.uid)": fcmTokenModel])
-        try await MainActor.run {
-            UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
-            try authService.signout()
-            NotificationCenter.default.post(name: Notification.signOut, object: nil)
-            LikeCache.shared.removeAll()
-            ClipCache.shared.removeAll()
-        }
+        try await MainActor.run { try endLocalSession() }
+    }
+
+    /// The on-device half of signing out: forget the cached user, sign out of
+    /// Auth locally, post `signOut`, empty the caches.
+    ///
+    /// Account deletion uses this alone. The account is already gone, its
+    /// `FCMTokens` document with it, and the token write above would fail for a
+    /// deleted user, or recreate a document for an account that no longer
+    /// exists.
+    @MainActor
+    func endLocalSession() throws {
+        UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.currentUser.rawValue)
+        try authService.signout()
+        NotificationCenter.default.post(name: Notification.signOut, object: nil)
+        LikeCache.shared.removeAll()
+        ClipCache.shared.removeAll()
     }
 }

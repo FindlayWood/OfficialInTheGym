@@ -59,6 +59,7 @@ public final class ProfileKitRouter {
     let reporter: ProfileReporter
     let blocker: ProfileBlocker
     let blockStatusLoader: ProfileBlockStatusLoader
+    let accountDeleter: AccountDeleter
     let links: ProfileSettingsLinks
     let currentUserId: String
 
@@ -111,6 +112,7 @@ public final class ProfileKitRouter {
         reporter: ProfileReporter,
         blocker: ProfileBlocker,
         blockStatusLoader: ProfileBlockStatusLoader,
+        accountDeleter: AccountDeleter,
         links: ProfileSettingsLinks,
         currentUserId: String
     ) {
@@ -147,6 +149,7 @@ public final class ProfileKitRouter {
         self.reporter = reporter
         self.blocker = blocker
         self.blockStatusLoader = blockStatusLoader
+        self.accountDeleter = accountDeleter
         self.links = links
         self.currentUserId = currentUserId
     }
@@ -228,6 +231,7 @@ extension ProfileKitRouter {
             viewModel.onOpenPerformanceCenter = { [weak self] in self?.onOpenPerformanceCenter?() }
             viewModel.onOpenAbout = { [weak self] in self?.onOpenAbout?() }
             viewModel.onOpenBodyMeasurements = { [weak self] in self?.navigate(to: .bodyMeasurements) }
+            viewModel.onOpenDeleteAccount = { [weak self] in self?.navigate(to: .deleteAccount) }
             let vc = UIHostingController(rootView: ProfileSettingsScreen(viewModel: viewModel))
             vc.hidesBottomBarWhenPushed = true
             return vc
@@ -308,6 +312,13 @@ extension ProfileKitRouter {
                 viewModel: viewModel,
                 photoLoader: photoLoader,
                 onOpenProfile: { [weak self] in self?.showUserProfile($0) }
+            ))
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .deleteAccount:
+            let vc = UIHostingController(rootView: DeleteAccountScreen(
+                viewModel: DeleteAccountViewModel(deleter: accountDeleter)
             ))
             vc.hidesBottomBarWhenPushed = true
             return vc

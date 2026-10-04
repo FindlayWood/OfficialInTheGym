@@ -31,7 +31,8 @@ import Foundation
 /// off asks first in the screen, because it approves every waiting request.
 /// The change shows at once and is put back if the write fails.
 ///
-/// Account deletion (step 10) joins this screen later.
+/// **Delete Account** (step 10) sits at the very bottom, under Log Out, in red:
+/// the last thing on the screen, never next to something routine.
 @MainActor
 final class ProfileSettingsViewModel: ObservableObject {
 
@@ -58,6 +59,7 @@ final class ProfileSettingsViewModel: ObservableObject {
     var onOpenPerformanceCenter: (() -> Void)?
     var onOpenAbout: (() -> Void)?
     var onOpenBodyMeasurements: (() -> Void)?
+    var onOpenDeleteAccount: (() -> Void)?
 
     init(
         subscription: ProfileSubscriptionService,

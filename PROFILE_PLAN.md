@@ -762,22 +762,68 @@ highlights) needs an approved follow, which the block removed.
   && !exists(/databases/$(database)/documents/Users/$(request.auth.uid)/BlockedUsers/$(request.resource.data.followeeId))
   ```
 
-### Step 10 — Account deletion
+### Step 10 — Account deletion — built, not rolled out
 
-**Cloud**
-- `deleteAccount` callable: Firestore `Users/{uid}` and every subcollection (MyDay, ExerciseStats +
-  RawLogs, WorkoutSessions, WorkoutTemplates, WeightTracking, BlockedUsers), the analytics
-  `WorkoutSessions` copies, top-level `WorkoutTemplates` the user authored, `Usernames/{username}`,
-  `Profiles/{uid}`, `ProfileHighlights/{uid}`, every `Follows` document either side, `Clips` + Storage (`TestClips`,
-  `TestClipThumbnails`, `ProfilePhotos`), **`deleteDiscoverData(uid)`** (built, DISCOVER step 8),
-  RTDB `users/{uid}` and the legacy graph, then the Auth user last. Idempotent, so a second run
-  finds nothing, with a test that proves it.
+App Store guideline 5.1.1(v): an app that lets you create an account must let you delete it.
+
+**Cloud: `deleteAccount`** (v1 callable, signed-in user only, 540 s, 1 GB). It runs four modules
+in order, then Auth:
+1. **`deleteDiscoverData`** (DISCOVER step 8, built then and called for the first time here):
+   ratings, likes, tag votes, reports, comments (anonymised where others replied), clips with their
+   Storage files, authored templates, and the block list. It goes first because it finds the user's
+   activity by `authorId`.
+2. **`deleteProfileData`**: every `Follows` in either direction (requests included; the counts on
+   the other side recount), `Profiles/{uid}` and `ProfileHighlights/{uid}`.
+3. **`deleteUserData`**:
+   - `Users/{uid}` recursively: MyDay, ExerciseStats with RawLogs and DailyStats, DailyTotals,
+     WorkoutSessions, WorkoutTemplates, WeightTracking, BlockedUsers, and anything added later.
+   - The analytics `WorkoutSessions` copies (`userId`). A deleted account takes these outright; the
+     `deletedAt` soft delete is for one workout removed by a user who stays.
+   - `Usernames` by uid, so the name is free again, plus `UserScore`, `FCMTokens` and
+     `ProfilePhotos/{uid}` in Storage.
+4. **`deleteRealtimeData`**: one multi-path update over every RTDB root the app keys by uid
+   (`users`, `Workouts`, `Following`, `Followers`, `SavedWorkoutReferences`, `MyComments`,
+   `MyCommentLikes`, `ExerciseStats`, `Workloads`, `UserClips`, `Clips`, `Scores`,
+   `PostSelfReferences`, `Likes`, the coach/player links and requests, `UserScore`). It also
+   clears the RTDB `Usernames/{name}`, the reverse half of the follow graph on other users, and the
+   posts `PostSelfReferences` points at, with their replies and likes.
+5. **The Auth user, last.** Until then the user can sign in and call again, so a partial failure is
+   recoverable rather than an orphaned half-account.
+
+It is **idempotent**: every module re-queries what is left and only deletes, and a call for an
+account already gone succeeds. Tests: 4 new, against the emulators, covering every store, a
+bystander's data untouched, and a repeat call.
+
+**Known gap, legacy RTDB only:** content the user left *inside someone else's* node, such as a
+reply on another person's post or a comment on a saved workout, is keyed by that node, with no index
+by author, so it is not reached. These are legacy social features (posts are being dropped). If
+they stay, they need an author index or a sweep before this is complete for them.
 
 **App**
-- Settings → Delete Account: what goes, password re-entry as confirmation, then the callable.
-- Then **clear the local stores** for that uid (`Documents/MyDays/{uid}`,
-  `Documents/WorkoutTemplates/{uid}`, `Documents/PendingSync/*_{uid}.json`). This is the one case
-  where wiping is right, unlike sign-out, where scoping is. Then sign out to the welcome screen.
+- Settings → **Delete Account**, red, at the very bottom under Log Out.
+  - The screen lists specifically what goes (profile and follows; days, workouts and stats;
+    library; clips, comments and likes; body measurements) and notes that **an App Store
+    subscription is cancelled in the App Store**, since deletion does not stop billing.
+  - It asks for the **password**, then a final "can't be undone" confirmation.
+  - Errors are specific: a wrong password clears the field and says "Nothing was deleted"; too many
+    attempts asks you to wait; anything else keeps the password, since a retry is always safe.
+    Back is disabled mid-delete.
+- `FirebaseAccountDeleter` runs four steps in an order that matters:
+  1. **Re-authenticate** with the password (`FirebasePasswordReauthenticator`, mapping Firebase's
+     codes to `AccountDeletionError`).
+  2. **Delete remotely** (`FunctionsAccountDeleter`, through `FunctionsManager`, so emulator
+     builds use the emulator).
+  3. **Erase this device's copies** (`LocalUserDataEraser`), only after the server confirmed.
+  4. **End the session locally.**
+- **`AppSignOut.endLocalSession()`** is the on-device half of sign-out, split out because the
+  deleted account's FCM token write would fail or recreate a document.
+- The erase is the one case where wiping local stores is right; sign-out still scopes rather than
+  wipes. **`MyDayStoreLocation`** and **`PendingSyncStoreLocation`** now define those paths once,
+  as `WorkoutTemplateStoreLocation` already did. The MyDay saver and loader and the sync queue use
+  them, so the eraser could not drift from the writers.
+- Tests: 7 new (`DeleteAccountViewModelTests`), 128 in ProfileKit.
+
+**Rules:** none. The function uses the Admin SDK. **Storage:** none.
 
 ### Step 11 — Tests and documentation
 
@@ -851,11 +897,18 @@ matters most:
       `Follows` create rule
 - [ ] Then steps 7–9 may ship together
 
+**Step 10 — Account deletion**
+- [ ] Deploy `deleteAccount` from the functions `profile` branch
+- [ ] Check the single-field exemptions `deleteDiscoverData` needs (`authorId` on Ratings, Comments,
+      Likes, TagVotes: DISCOVER step 8's checklist) exist, or its collection-group queries fail
+- [ ] On a test account, delete through the app and confirm in the console that nothing is left
+- [ ] Ships with steps 7–9. The App Store requires it as soon as account creation exists, which it
+      already does
+
 **Later steps** (expanded as they land)
 - [ ] `Follows` rules + indexes **before** `MigrateFollows.py --write`
 - [ ] Profile reporting and blocking (step 9) live **before** other users' profiles (step 7) reach
       real users
-- [ ] `deleteAccount` deployed **before** the Delete Account button ships
 
 ---
 

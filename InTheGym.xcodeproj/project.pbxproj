@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF1A00000000000000000120 /* FirebasePasswordReauthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000110 /* FirebasePasswordReauthenticator.swift */; };
+		BF1A00000000000000000121 /* FunctionsAccountDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000111 /* FunctionsAccountDeleter.swift */; };
+		BF1A00000000000000000122 /* LocalUserDataEraser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000112 /* LocalUserDataEraser.swift */; };
+		BF1A00000000000000000123 /* FirebaseAccountDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000113 /* FirebaseAccountDeleter.swift */; };
+		BF1A00000000000000000128 /* MyDayStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000118 /* MyDayStoreLocation.swift */; };
+		BF1A00000000000000000129 /* PendingSyncStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000119 /* PendingSyncStoreLocation.swift */; };
 		BF1A00000000000000000100 /* FirestoreProfileReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000F0 /* FirestoreProfileReporter.swift */; };
 		BF1A00000000000000000101 /* BlockedUsersProfileBlocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000F1 /* BlockedUsersProfileBlocker.swift */; };
 		BF1A00000000000000000102 /* FirestoreProfileBlockStatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000F2 /* FirestoreProfileBlockStatusLoader.swift */; };
@@ -1042,6 +1048,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BF1A00000000000000000110 /* FirebasePasswordReauthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebasePasswordReauthenticator.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000111 /* FunctionsAccountDeleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsAccountDeleter.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000112 /* LocalUserDataEraser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalUserDataEraser.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000113 /* FirebaseAccountDeleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAccountDeleter.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000118 /* MyDayStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayStoreLocation.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000119 /* PendingSyncStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingSyncStoreLocation.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000F0 /* FirestoreProfileReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileReporter.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000F1 /* BlockedUsersProfileBlocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedUsersProfileBlocker.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000F2 /* FirestoreProfileBlockStatusLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileBlockStatusLoader.swift; sourceTree = "<group>"; };
@@ -5037,6 +5049,10 @@
 				BF1A000000000000000000F0 /* FirestoreProfileReporter.swift */,
 				BF1A000000000000000000F1 /* BlockedUsersProfileBlocker.swift */,
 				BF1A000000000000000000F2 /* FirestoreProfileBlockStatusLoader.swift */,
+				BF1A00000000000000000110 /* FirebasePasswordReauthenticator.swift */,
+				BF1A00000000000000000111 /* FunctionsAccountDeleter.swift */,
+				BF1A00000000000000000112 /* LocalUserDataEraser.swift */,
+				BF1A00000000000000000113 /* FirebaseAccountDeleter.swift */,
 			);
 			path = ProfileKit;
 			sourceTree = "<group>";
@@ -5120,6 +5136,8 @@
 				E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */,
 				A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */,
 				A1D0E5F200024C0A9B110003 /* WorkoutTemplateStoreLocation.swift */,
+				BF1A00000000000000000118 /* MyDayStoreLocation.swift */,
+				BF1A00000000000000000119 /* PendingSyncStoreLocation.swift */,
 				A1D0E5F200024C0A9B110005 /* LegacyWorkoutTemplateStoreMigrator.swift */,
 			);
 			path = MyDay;
@@ -5349,6 +5367,12 @@
 				BF1A00000000000000000100 /* FirestoreProfileReporter.swift in Sources */,
 				BF1A00000000000000000101 /* BlockedUsersProfileBlocker.swift in Sources */,
 				BF1A00000000000000000102 /* FirestoreProfileBlockStatusLoader.swift in Sources */,
+				BF1A00000000000000000120 /* FirebasePasswordReauthenticator.swift in Sources */,
+				BF1A00000000000000000121 /* FunctionsAccountDeleter.swift in Sources */,
+				BF1A00000000000000000122 /* LocalUserDataEraser.swift in Sources */,
+				BF1A00000000000000000123 /* FirebaseAccountDeleter.swift in Sources */,
+				BF1A00000000000000000128 /* MyDayStoreLocation.swift in Sources */,
+				BF1A00000000000000000129 /* PendingSyncStoreLocation.swift in Sources */,
 				BF1A00000000000000000108 /* ReportDocumentWriter.swift in Sources */,
 				BF1A000000000000000000C8 /* ProfileKitUserProfileOpener.swift in Sources */,
 				D1CA00000000000000000021 /* DiscoverCardQuery.swift in Sources */,

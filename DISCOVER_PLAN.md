@@ -799,9 +799,8 @@ step 7 put on the profile title bar.
 
 ## Out of scope
 
-- **Account deletion** — separate feature. The app has no in-app deletion today, which App Store
-  guideline 5.1.1(v) requires. It will call `deleteDiscoverData(uid)` alongside the MyDay, stats,
-  Storage, `Usernames` and RTDB pieces.
+- **Account deletion** — built in `PROFILE_PLAN.md` step 10. The `deleteAccount` callable calls
+  `deleteDiscoverData(uid)` first, then the profile, user, Storage, `Usernames` and RTDB pieces.
 - **Admin moderation UI** — later, in `InTheGym-Admin` or the dashboard, reading `ModerationQueue`.
 - **Automatic profanity filtering of comments** — can be added to the comment-create trigger later.
 - **Clips recorded inside a workout session** — clips are only created from single-exercise logging.

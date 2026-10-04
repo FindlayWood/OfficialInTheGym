@@ -452,7 +452,8 @@ call sites and drifted apart. Do not re-inline any of them:
 `WeightUnit.kilograms(_:unit:)` · `StatsDay.key(for:)` · `ACWR.Zone(ratio:)` ·
 `SessionSetInput.target(for:)` · `WorkoutTag.normalized(_:)` · `SessionSetPillValue.values(for:record:)` ·
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
-`ReportDocumentWriter` · `ProfileNamesReader` · `FollowsPageQuery`
+`ReportDocumentWriter` · `ProfileNamesReader` · `FollowsPageQuery` · `MyDayStoreLocation` ·
+`PendingSyncStoreLocation`
 
 ## Testing
 Before writing any tests, read all test files and folders within `ITGWorkoutKit`
@@ -586,6 +587,8 @@ the next user to sign in opened their library and saw the previous user's workou
   how the two sides of a local store drift apart. **Do not re-derive it at a call site.**
 - **The injected `userId` is the signed-in user, never `template.createdBy`.** For a coach-assigned
   workout those differ, and the file belongs in the library of whoever is using the device.
+- **Account deletion is the one exception.** `LocalUserDataEraser` removes that user's day files,
+  templates and sync queue once the server has deleted the account (`PROFILE_PLAN.md` step 10).
 - **Scoping, not wiping on sign-out — deliberately.** A template that has not reached Firestore yet
   is still on disk when its owner signs back in. Wiping would throw that away to solve a problem
   scoping already solves.

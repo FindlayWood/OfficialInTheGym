@@ -199,10 +199,17 @@ struct ProfileSettingsScreen: View {
                 icon: "rectangle.portrait.and.arrow.right",
                 title: "Log Out",
                 isDestructive: true,
-                trailing: viewModel.isSigningOut ? .progress : .none,
-                showsDivider: false
+                trailing: viewModel.isSigningOut ? .progress : .none
             ) {
                 confirmingSignOut = true
+            }
+            ProfileSettingsRow(
+                icon: "trash",
+                title: "Delete Account",
+                isDestructive: true,
+                showsDivider: false
+            ) {
+                viewModel.onOpenDeleteAccount?()
             }
         }
     }

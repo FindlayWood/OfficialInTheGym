@@ -126,6 +126,10 @@ class ProfileKitComposition {
 
         let blockStatusLoader: ProfileBlockStatusLoader = FirestoreProfileBlockStatusLoader(userId: userId)
 
+        // MARK: - Account deletion
+
+        let accountDeleter: AccountDeleter = FirebaseAccountDeleter(userId: userId)
+
         // MARK: - Settings
 
         let subscription: ProfileSubscriptionService = PurchaseManagerSubscriptionService(purchaseManager: purchaseManager)
@@ -177,6 +181,7 @@ class ProfileKitComposition {
             reporter: reporter,
             blocker: blocker,
             blockStatusLoader: blockStatusLoader,
+            accountDeleter: accountDeleter,
             links: links,
             currentUserId: userId
         )
