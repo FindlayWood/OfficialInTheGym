@@ -707,16 +707,60 @@ enforces the privacy rather than only the app hiding it.
 **Indexes** (console): composite on `DiscoverClips`: `createdBy` ASC, `isPublic` ASC, `status` ASC,
 `uploadedAt` DESC.
 
-### Step 9 — Report and block on profiles
+### Step 9 — Report and block on profiles — built, not rolled out
 
-**App + Cloud**
-- A profile carries user-generated text and a photo, so it falls under Apple guideline 1.2 like
-  DISCOVER's comments. Add a **profile report target** to `DiscoverReportTarget` /
-  `ReportTarget.ts` (fixed reasons, the same 3-reporters-or-1-admin hide, where hiding blanks the bio
-  and photo on `Profiles`). Add **Block** to another user's profile menu, writing the existing
-  `BlockedUsers`.
-- `removeFollowsOnBlock` Cloud Function.
-- **Must ship with step 7**, the first moment a stranger's profile is reachable.
+**This is the step step 7 waits for.** Once it is rolled out, steps 7–9 can reach users together.
+
+**Cloud**
+- `reportTarget` (DISCOVER's moderation) accepts a new kind, **`"profile"`**, at `Profiles/{uid}`.
+  Its `moderatedPath` is the projection itself, so DISCOVER's `discoverReportFiled` →
+  `moderateTarget` hides a profile at **3 distinct reporters or 1 admin**, with no new function.
+  - It sets `Profiles.status = "hidden"`, never touching `Users/{uid}`. `syncProfile` leaves
+    `status` alone, so the profile stays hidden through later edits.
+  - It is queued in `ModerationQueue` for the admin app like any report.
+- `removeFollowsOnBlock` (on `Users/{uid}/BlockedUsers/{id}` created) deletes the follows **both
+  ways**, pending requests included. It fires whether the block came from DISCOVER or a profile.
+  Unblocking restores nothing.
+- Tests: 6 new (profile report target, three reporters hiding a profile, the block trigger).
+
+**App**
+- A **⋯ menu** on someone else's profile, with Report Profile and Block / Unblock.
+  - **Report** opens a sheet with the fixed reason list (`ProfileReportReason`, ProfileKit's copy
+    of `DiscoverReportReason`; the raw values are the rules' list), then thanks the user and
+    suggests blocking. It makes no promise of an outcome.
+  - **Block** asks first, saying what it does ("you'll stop following each other… hidden in
+    Discover… they won't be told").
+- **Blocked:** the follow button and the content go, a "You've blocked this account" card offers
+  Unblock, and the follow status and count drop at once to match the server's cut. All of it is put
+  back if the write fails.
+- **Hidden profiles:** others see "This account isn't available", as for a deleted one. Search drops
+  them, after the query, rather than adding a composite index per field. The **owner** still sees
+  their profile, with a notice: "Your profile is hidden… contact us from Settings".
+- Adapters:
+  - `FirestoreProfileReporter` uses kind `"profile"` and path `Profiles/{uid}`.
+  - **`ReportDocumentWriter`** is the one definition of a report document, extracted from
+    `FirestoreReportWriter`, which DISCOVER's reports now use too.
+  - `BlockedUsersProfileBlocker(wrapping:)` wraps DISCOVER's own `FirestoreBlockedUsersWriter`, so
+    there is one block. `FirestoreProfileBlockStatusLoader` reads the user's own `BlockedUsers`.
+- **DiscoverKit is unchanged.** ProfileKit declares its own reporter and blocker protocols, and only
+  the composition root's adapters are shared.
+- Tests: 6 new on `UserProfileViewModelTests`, 121 in ProfileKit.
+
+**What a block does not do, deliberately:** hide the blocker's public header from the person they
+blocked. Whether someone has blocked you lives in their private `BlockedUsers`, and `Profiles` is
+one document for every reader, so the server cannot vary it per viewer. Instead, the rules refuse
+any follow or request between the two while the block stands, and the gated content (lists,
+highlights) needs an approved follow, which the block removed.
+
+**Rules** (console)
+- `Reports` create: add `'profile'` to the accepted `targetKind` list
+  (`['comment', 'workout', 'clip', 'tag', 'profile']`).
+- `Follows` create: add both block checks:
+
+  ```
+  && !exists(/databases/$(database)/documents/Users/$(request.resource.data.followeeId)/BlockedUsers/$(request.auth.uid))
+  && !exists(/databases/$(database)/documents/Users/$(request.auth.uid)/BlockedUsers/$(request.resource.data.followeeId))
+  ```
 
 ### Step 10 — Account deletion
 
@@ -799,6 +843,13 @@ matters most:
 - [ ] Console rules: `ProfileHighlights`, and `pinnedHighlights` in the `Users` update rule
 - [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, to build every user's highlights and clip
       count
+
+**Step 9 — Report and block**
+- [ ] Deploy `removeFollowsOnBlock` and the updated `discoverReportFiled` (new `"profile"` kind) from
+      the functions `profile` branch
+- [ ] Console rules: `'profile'` in the `Reports` `targetKind` list, and both block checks in the
+      `Follows` create rule
+- [ ] Then steps 7–9 may ship together
 
 **Later steps** (expanded as they land)
 - [ ] `Follows` rules + indexes **before** `MigrateFollows.py --write`

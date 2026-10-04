@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF1A00000000000000000100 /* FirestoreProfileReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000F0 /* FirestoreProfileReporter.swift */; };
+		BF1A00000000000000000101 /* BlockedUsersProfileBlocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000F1 /* BlockedUsersProfileBlocker.swift */; };
+		BF1A00000000000000000102 /* FirestoreProfileBlockStatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000F2 /* FirestoreProfileBlockStatusLoader.swift */; };
+		BF1A00000000000000000108 /* ReportDocumentWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000F8 /* ReportDocumentWriter.swift */; };
 		BF1A000000000000000000E0 /* FirestoreProfileHighlightsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D0 /* FirestoreProfileHighlightsLoader.swift */; };
 		BF1A000000000000000000E1 /* ProfileHighlight+Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D1 /* ProfileHighlight+Firestore.swift */; };
 		BF1A000000000000000000E2 /* FirestoreHighlightCandidatesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D2 /* FirestoreHighlightCandidatesLoader.swift */; };
@@ -1038,6 +1042,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BF1A000000000000000000F0 /* FirestoreProfileReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileReporter.swift; sourceTree = "<group>"; };
+		BF1A000000000000000000F1 /* BlockedUsersProfileBlocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedUsersProfileBlocker.swift; sourceTree = "<group>"; };
+		BF1A000000000000000000F2 /* FirestoreProfileBlockStatusLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileBlockStatusLoader.swift; sourceTree = "<group>"; };
+		BF1A000000000000000000F8 /* ReportDocumentWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDocumentWriter.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000D0 /* FirestoreProfileHighlightsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileHighlightsLoader.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000D1 /* ProfileHighlight+Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileHighlight+Firestore.swift"; sourceTree = "<group>"; };
 		BF1A000000000000000000D2 /* FirestoreHighlightCandidatesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreHighlightCandidatesLoader.swift; sourceTree = "<group>"; };
@@ -5026,6 +5034,9 @@
 				BF1A000000000000000000D3 /* FirestorePinnedHighlightsWriter.swift */,
 				BF1A000000000000000000D4 /* FirestoreProfileClipsLoader.swift */,
 				BF1A000000000000000000D5 /* DiscoverClipOpener.swift */,
+				BF1A000000000000000000F0 /* FirestoreProfileReporter.swift */,
+				BF1A000000000000000000F1 /* BlockedUsersProfileBlocker.swift */,
+				BF1A000000000000000000F2 /* FirestoreProfileBlockStatusLoader.swift */,
 			);
 			path = ProfileKit;
 			sourceTree = "<group>";
@@ -5061,6 +5072,7 @@
 				D1CA00000000000000000127 /* WorkoutTagNormalizer.swift */,
 				D1CA00000000000000000140 /* DiscoverReportTarget+Firestore.swift */,
 				D1CA00000000000000000141 /* FirestoreReportWriter.swift */,
+				BF1A000000000000000000F8 /* ReportDocumentWriter.swift */,
 				D1CA00000000000000000142 /* FirestoreMyReportsLoader.swift */,
 				D1CA00000000000000000143 /* FirestoreBlockedUsersLoader.swift */,
 				D1CA00000000000000000144 /* FirestoreBlockedUsersWriter.swift */,
@@ -5334,6 +5346,10 @@
 				BF1A000000000000000000E3 /* FirestorePinnedHighlightsWriter.swift in Sources */,
 				BF1A000000000000000000E4 /* FirestoreProfileClipsLoader.swift in Sources */,
 				BF1A000000000000000000E5 /* DiscoverClipOpener.swift in Sources */,
+				BF1A00000000000000000100 /* FirestoreProfileReporter.swift in Sources */,
+				BF1A00000000000000000101 /* BlockedUsersProfileBlocker.swift in Sources */,
+				BF1A00000000000000000102 /* FirestoreProfileBlockStatusLoader.swift in Sources */,
+				BF1A00000000000000000108 /* ReportDocumentWriter.swift in Sources */,
 				BF1A000000000000000000C8 /* ProfileKitUserProfileOpener.swift in Sources */,
 				D1CA00000000000000000021 /* DiscoverCardQuery.swift in Sources */,
 				D1CA00000000000000000022 /* FirestoreDiscoverClipCardLoader.swift in Sources */,

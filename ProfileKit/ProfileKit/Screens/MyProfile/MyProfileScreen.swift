@@ -26,6 +26,9 @@ struct MyProfileScreen: View {
             ScrollView {
                 VStack(spacing: 16) {
                     headerSection
+                    if viewModel.publicProfile?.isHidden == true {
+                        hiddenNotice
+                    }
                     if viewModel.pendingRequestCount > 0 {
                         FollowRequestsBanner(count: viewModel.pendingRequestCount) {
                             viewModel.onOpenFollowRequests?()
@@ -81,6 +84,33 @@ struct MyProfileScreen: View {
         .padding(.leading, 16)
         .padding(.trailing, 6)
         .padding(.vertical, 6)
+    }
+
+    // MARK: - Hidden
+
+    /// The owner is the one person who still sees a hidden profile, so they
+    /// are the one who needs telling. Edits do not unhide it; only a review
+    /// does, which is why the notice points at contact rather than Edit.
+    private var hiddenNotice: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: "eye.slash.fill")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(Color.secondary)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Your profile is hidden")
+                    .font(.system(size: 15, weight: .semibold))
+                Text("After reports, other people can't see your profile. If you think this is a mistake, contact us from Settings.")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Color.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(14)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(.secondarySystemBackground))
+        )
     }
 
     // MARK: - Header

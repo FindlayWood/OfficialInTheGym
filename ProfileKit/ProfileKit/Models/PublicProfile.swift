@@ -21,11 +21,16 @@ public struct PublicProfile: Equatable, Sendable {
     public let counts: ProfileCounts
     /// Public, visible clips, recounted server-side (`profileClipCount`).
     public let clipCount: Int
+    /// Hidden by moderation (`Profiles.status == "hidden"`, step 9): three
+    /// reporters or an admin. Others see the account as unavailable; the owner
+    /// is told on their own profile.
+    public let isHidden: Bool
 
-    public init(header: ProfileHeader, isPrivate: Bool, counts: ProfileCounts, clipCount: Int = 0) {
+    public init(header: ProfileHeader, isPrivate: Bool, counts: ProfileCounts, clipCount: Int = 0, isHidden: Bool = false) {
         self.header = header
         self.isPrivate = isPrivate
         self.counts = counts
         self.clipCount = clipCount
+        self.isHidden = isHidden
     }
 }

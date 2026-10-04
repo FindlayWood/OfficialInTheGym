@@ -17,6 +17,8 @@ struct UserProfileScreen: View {
 
     @ObservedObject var viewModel: UserProfileViewModel
     @State private var confirmingUnfollow = false
+    @State private var confirmingBlock = false
+    @State private var isReporting = false
 
     var body: some View {
         ScrollView {
@@ -39,11 +41,15 @@ struct UserProfileScreen: View {
                     if let message = viewModel.errorMessage {
                         ProfileErrorBanner(message: message)
                     }
-                    if let status = viewModel.followStatus {
-                        followButton(status)
-                    }
-                    if !viewModel.canSeeActivity {
-                        privateCard
+                    if viewModel.isBlocked == true {
+                        blockedCard
+                    } else {
+                        if let status = viewModel.followStatus {
+                            followButton(status)
+                        }
+                        if !viewModel.canSeeActivity {
+                            privateCard
+                        }
                     }
                     ProfileHighlightsSection(highlights: viewModel.highlights)
                     ProfileClipsSection(
@@ -61,6 +67,37 @@ struct UserProfileScreen: View {
         .navigationTitle(viewModel.profile.map { "@\($0.header.username)" } ?? "")
         .navigationBarTitleDisplayMode(.inline)
         .task { await viewModel.load() }
+        .toolbar {
+            if !viewModel.isOwnProfile, viewModel.profile != nil {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Button("Report Profile", systemImage: "flag") { isReporting = true }
+                        if viewModel.isBlocked == true {
+                            Button("Unblock", systemImage: "hand.raised.slash") {
+                                Task { await viewModel.setBlocked(false) }
+                            }
+                        } else {
+                            Button("Block", systemImage: "hand.raised", role: .destructive) { confirmingBlock = true }
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
+                    .accessibilityLabel("More options")
+                }
+            }
+        }
+        .sheet(isPresented: $isReporting) {
+            ProfileReportSheet(displayName: viewModel.profile?.header.displayName ?? "this person") { reason in
+                await viewModel.report(reason)
+            }
+            .presentationDetents([.medium, .large])
+        }
+        .alert("Block \(viewModel.profile?.header.displayName ?? "this person")?", isPresented: $confirmingBlock) {
+            Button("Block", role: .destructive) { Task { await viewModel.setBlocked(true) } }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("You'll stop following each other, and neither of you can follow the other. Their comments and clips are hidden from you in Discover. They won't be told.")
+        }
         .alert("Unfollow?", isPresented: $confirmingUnfollow) {
             Button("Unfollow", role: .destructive) { Task { await viewModel.toggleFollow() } }
             Button("Cancel", role: .cancel) {}
@@ -99,6 +136,41 @@ struct UserProfileScreen: View {
         case .following:
             "Following"
         }
+    }
+
+    private var blockedCard: some View {
+        VStack(spacing: 10) {
+            Image(systemName: "hand.raised.fill")
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(Color.secondary)
+            Text("You've blocked this account")
+                .font(.system(size: 16, weight: .semibold))
+            Text("Unblock to see their profile again. Follows that ended with the block aren't restored.")
+                .font(.system(size: 14))
+                .foregroundStyle(Color.secondary)
+                .multilineTextAlignment(.center)
+            Button {
+                Task { await viewModel.setBlocked(false) }
+            } label: {
+                Text("Unblock")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Color.darkColor)
+                    .padding(.horizontal, 20)
+                    .frame(height: 40)
+                    .background(Color.darkColor.opacity(0.12))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            }
+            .buttonStyle(.plain)
+            .disabled(viewModel.isUpdatingBlock)
+            .padding(.top, 4)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 24)
+        .padding(.horizontal, 20)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(.secondarySystemBackground))
+        )
     }
 
     private var privateCard: some View {
@@ -156,7 +228,10 @@ struct UserProfileScreen: View {
                 followWriter: PreviewFollowServices(),
                 unfollower: PreviewFollowServices(),
                 highlightsLoader: PreviewContentServices(),
-                clipsLoader: PreviewContentServices()
+                clipsLoader: PreviewContentServices(),
+                reporter: PreviewModerationServices(),
+                blocker: PreviewModerationServices(),
+                blockStatusLoader: PreviewModerationServices()
             )
         )
     }

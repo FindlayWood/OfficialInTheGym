@@ -5,6 +5,7 @@
 //  Created by Findlay Wood on 03/10/2026.
 //  Copyright © 2026 FindlayWood. All rights reserved.
 //
+import DiscoverKit
 import UIKit
 import ProfileKit
 
@@ -115,6 +116,16 @@ class ProfileKitComposition {
 
         let pinnedHighlightsWriter: PinnedHighlightsWriter = FirestorePinnedHighlightsWriter(userId: userId)
 
+        // MARK: - Report and block
+
+        let reporter: ProfileReporter = FirestoreProfileReporter(userId: userId)
+
+        let blockedUsersWriter: BlockedUsersWriter = FirestoreBlockedUsersWriter(userId: userId)
+
+        let blocker: ProfileBlocker = BlockedUsersProfileBlocker(wrapping: blockedUsersWriter)
+
+        let blockStatusLoader: ProfileBlockStatusLoader = FirestoreProfileBlockStatusLoader(userId: userId)
+
         // MARK: - Settings
 
         let subscription: ProfileSubscriptionService = PurchaseManagerSubscriptionService(purchaseManager: purchaseManager)
@@ -163,6 +174,9 @@ class ProfileKitComposition {
             clipsLoader: clipsLoader,
             highlightCandidatesLoader: highlightCandidatesLoader,
             pinnedHighlightsWriter: pinnedHighlightsWriter,
+            reporter: reporter,
+            blocker: blocker,
+            blockStatusLoader: blockStatusLoader,
             links: links,
             currentUserId: userId
         )

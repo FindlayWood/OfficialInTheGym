@@ -126,6 +126,75 @@ final class UserProfileViewModelTests: XCTestCase {
         XCTAssertTrue(sut.content.receivedMessages.contains(.clips("alex", limit: MyProfileViewModel.clipLimit)))
     }
 
+    // MARK: - Moderation
+
+    // A profile moderation hid is unavailable to everyone but its owner.
+    func test_load_deliversNotFoundForAHiddenProfile() async {
+        let sut = makeSUT(profile: profile(isHidden: true))
+
+        await sut.viewModel.load()
+
+        XCTAssertEqual(sut.viewModel.state, .notFound)
+    }
+
+    func test_load_showsTheOwnerTheirHiddenProfile() async {
+        let sut = makeSUT(userId: "me", profile: profile(userId: "me", isHidden: true))
+
+        await sut.viewModel.load()
+
+        XCTAssertEqual(sut.viewModel.profile?.isHidden, true)
+    }
+
+    func test_load_showsNoActivityForSomeoneYouBlocked() async {
+        let sut = makeSUT(profile: profile(isPrivate: false), status: .notFollowing, blocked: true)
+
+        await sut.viewModel.load()
+
+        XCTAssertEqual(sut.viewModel.isBlocked, true)
+        XCTAssertFalse(sut.viewModel.canSeeActivity)
+        XCTAssertFalse(sut.content.receivedMessages.contains { if case .clips = $0 { true } else { false } })
+        XCTAssertFalse(sut.content.receivedMessages.contains(.highlights("alex")))
+    }
+
+    // The server cuts both follows on a block; the screen reflects it rather
+    // than leaving "Following" on someone just blocked.
+    func test_setBlocked_blocksAndDropsTheFollow() async {
+        let sut = makeSUT(profile: profile(followers: 10), status: .following)
+        await sut.viewModel.load()
+
+        await sut.viewModel.setBlocked(true)
+
+        XCTAssertEqual(sut.moderation.receivedMessages.last, .setBlocked(true, userId: "alex"))
+        XCTAssertEqual(sut.viewModel.isBlocked, true)
+        XCTAssertEqual(sut.viewModel.followStatus, .notFollowing)
+        XCTAssertEqual(sut.viewModel.profile?.counts.followers, 9)
+        XCTAssertTrue(sut.viewModel.clips.isEmpty)
+    }
+
+    func test_setBlocked_putsTheBlockBackOnFailure() async {
+        let sut = makeSUT(profile: profile(), status: .following)
+        await sut.viewModel.load()
+        sut.moderation.error = anyError
+
+        await sut.viewModel.setBlocked(true)
+
+        XCTAssertEqual(sut.viewModel.isBlocked, false)
+        XCTAssertEqual(sut.viewModel.followStatus, .following)
+        XCTAssertNotNil(sut.viewModel.errorMessage)
+    }
+
+    func test_report_deliversWhetherTheReportWasFiled() async {
+        let sut = makeSUT()
+
+        let filed = await sut.viewModel.report(.harassment)
+        sut.moderation.error = anyError
+        let failed = await sut.viewModel.report(.spam)
+
+        XCTAssertTrue(filed)
+        XCTAssertFalse(failed)
+        XCTAssertEqual(sut.moderation.receivedMessages.first, .report("alex", .harassment))
+    }
+
     // MARK: - Follow
 
     // The count moves with the button, so the two agree before the server's
@@ -183,13 +252,22 @@ final class UserProfileViewModelTests: XCTestCase {
         userId: String = "alex",
         profile: PublicProfile? = nil,
         profileResult: Result<PublicProfile?, Error>? = nil,
-        status: FollowStatus = .notFollowing
-    ) -> (viewModel: UserProfileViewModel, profiles: PublicProfileServicesSpy, follows: FollowServicesSpy, content: ContentServicesSpy) {
+        status: FollowStatus = .notFollowing,
+        blocked: Bool = false
+    ) -> (
+        viewModel: UserProfileViewModel,
+        profiles: PublicProfileServicesSpy,
+        follows: FollowServicesSpy,
+        content: ContentServicesSpy,
+        moderation: ModerationServicesSpy
+    ) {
         let profiles = PublicProfileServicesSpy()
         profiles.profileResults = [profileResult ?? .success(profile ?? self.profile())]
         let follows = FollowServicesSpy()
         follows.statuses = [userId: status]
         let content = ContentServicesSpy()
+        let moderation = ModerationServicesSpy()
+        moderation.hasBlockedResult = blocked
         let viewModel = UserProfileViewModel(
             userId: userId,
             currentUserId: "me",
@@ -199,16 +277,20 @@ final class UserProfileViewModelTests: XCTestCase {
             followWriter: follows,
             unfollower: follows,
             highlightsLoader: content,
-            clipsLoader: content
+            clipsLoader: content,
+            reporter: moderation,
+            blocker: moderation,
+            blockStatusLoader: moderation
         )
-        return (viewModel, profiles, follows, content)
+        return (viewModel, profiles, follows, content, moderation)
     }
 
     private func profile(
         userId: String = "alex",
         isPrivate: Bool = false,
         isElite: Bool = false,
-        followers: Int = 5
+        followers: Int = 5,
+        isHidden: Bool = false
     ) -> PublicProfile {
         PublicProfile(
             header: ProfileHeader(
@@ -220,7 +302,8 @@ final class UserProfileViewModelTests: XCTestCase {
                 isElite: isElite
             ),
             isPrivate: isPrivate,
-            counts: ProfileCounts(followers: followers, following: 3)
+            counts: ProfileCounts(followers: followers, following: 3),
+            isHidden: isHidden
         )
     }
 }

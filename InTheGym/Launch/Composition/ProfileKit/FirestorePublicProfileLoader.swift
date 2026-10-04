@@ -30,7 +30,8 @@ struct FirestorePublicProfileLoader: PublicProfileLoader {
                 followers: snapshot.get("followerCount") as? Int ?? 0,
                 following: snapshot.get("followingCount") as? Int ?? 0
             ),
-            clipCount: snapshot.get("clipCount") as? Int ?? 0
+            clipCount: snapshot.get("clipCount") as? Int ?? 0,
+            isHidden: snapshot.get("status") as? String == "hidden"
         )
     }
 }

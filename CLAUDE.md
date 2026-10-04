@@ -451,7 +451,8 @@ call sites and drifted apart. Do not re-inline any of them:
 
 `WeightUnit.kilograms(_:unit:)` · `StatsDay.key(for:)` · `ACWR.Zone(ratio:)` ·
 `SessionSetInput.target(for:)` · `WorkoutTag.normalized(_:)` · `SessionSetPillValue.values(for:record:)` ·
-`WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut`
+`WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
+`ReportDocumentWriter` · `ProfileNamesReader` · `FollowsPageQuery`
 
 ## Testing
 Before writing any tests, read all test files and folders within `ITGWorkoutKit`
@@ -1530,7 +1531,8 @@ in this codebase.**
 | `DiscoverTagPath` subcollection names | `TAGGED_EXERCISES` / `TAGGED_WORKOUTS` in `SyncTagDirectory.ts` | DISCOVER Tab |
 | `DiscoverTaggingViewModel.maxMyTags` (10) | `MAX_TAGS_PER_VOTER` in `VoterTags.ts`, and the rules | DISCOVER Tab |
 | `DiscoverCommentsViewModel.maxLength` (500) | the comment rules' `text.size()` limit | DISCOVER Tab |
-| `DiscoverReportReason` raw values | the rules' accepted `reason` list | DISCOVER Tab |
+| `DiscoverReportReason` raw values | ProfileKit's `ProfileReportReason`, and the rules' accepted `reason` list | DISCOVER Tab, PROFILE_PLAN.md step 9 |
+| `FirestoreProfileReporter` (`profile`, `Profiles/{uid}`) | `reportTarget`'s `profile` kind in `Discover/Moderation/ReportTarget.ts` | PROFILE_PLAN.md step 9 |
 
 ## Analysis artefacts — `.results/`, gitignored
 A generated structural analysis can be produced into `.results/`: `1-techstack.md`,

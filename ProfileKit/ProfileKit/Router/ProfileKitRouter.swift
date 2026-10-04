@@ -56,6 +56,9 @@ public final class ProfileKitRouter {
     let clipsLoader: ProfileClipsLoader
     let highlightCandidatesLoader: HighlightCandidatesLoader
     let pinnedHighlightsWriter: PinnedHighlightsWriter
+    let reporter: ProfileReporter
+    let blocker: ProfileBlocker
+    let blockStatusLoader: ProfileBlockStatusLoader
     let links: ProfileSettingsLinks
     let currentUserId: String
 
@@ -105,6 +108,9 @@ public final class ProfileKitRouter {
         clipsLoader: ProfileClipsLoader,
         highlightCandidatesLoader: HighlightCandidatesLoader,
         pinnedHighlightsWriter: PinnedHighlightsWriter,
+        reporter: ProfileReporter,
+        blocker: ProfileBlocker,
+        blockStatusLoader: ProfileBlockStatusLoader,
         links: ProfileSettingsLinks,
         currentUserId: String
     ) {
@@ -138,6 +144,9 @@ public final class ProfileKitRouter {
         self.clipsLoader = clipsLoader
         self.highlightCandidatesLoader = highlightCandidatesLoader
         self.pinnedHighlightsWriter = pinnedHighlightsWriter
+        self.reporter = reporter
+        self.blocker = blocker
+        self.blockStatusLoader = blockStatusLoader
         self.links = links
         self.currentUserId = currentUserId
     }
@@ -280,7 +289,10 @@ extension ProfileKitRouter {
                 followWriter: followWriter,
                 unfollower: unfollower,
                 highlightsLoader: highlightsLoader,
-                clipsLoader: clipsLoader
+                clipsLoader: clipsLoader,
+                reporter: reporter,
+                blocker: blocker,
+                blockStatusLoader: blockStatusLoader
             )
             viewModel.onOpenClip = { [weak self] in self?.onOpenClip?($0) }
             viewModel.onOpenFollowList = { [weak self] kind in
