@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF1A00000000000000000140 /* ProfileHighlightFirestoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000130 /* ProfileHighlightFirestoreTests.swift */; };
+		BF1A00000000000000000141 /* FollowStatusFollowDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000131 /* FollowStatusFollowDocumentTests.swift */; };
+		BF1A00000000000000000142 /* StorageProfilePhotoUploaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000132 /* StorageProfilePhotoUploaderTests.swift */; };
+		BF1A00000000000000000143 /* LocalUserDataEraserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000133 /* LocalUserDataEraserTests.swift */; };
 		BF1A00000000000000000120 /* FirebasePasswordReauthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000110 /* FirebasePasswordReauthenticator.swift */; };
 		BF1A00000000000000000121 /* FunctionsAccountDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000111 /* FunctionsAccountDeleter.swift */; };
 		BF1A00000000000000000122 /* LocalUserDataEraser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000112 /* LocalUserDataEraser.swift */; };
@@ -1048,6 +1052,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BF1A00000000000000000130 /* ProfileHighlightFirestoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHighlightFirestoreTests.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000131 /* FollowStatusFollowDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowStatusFollowDocumentTests.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000132 /* StorageProfilePhotoUploaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageProfilePhotoUploaderTests.swift; sourceTree = "<group>"; };
+		BF1A00000000000000000133 /* LocalUserDataEraserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalUserDataEraserTests.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000110 /* FirebasePasswordReauthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebasePasswordReauthenticator.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000111 /* FunctionsAccountDeleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsAccountDeleter.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000112 /* LocalUserDataEraser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalUserDataEraser.swift; sourceTree = "<group>"; };
@@ -3555,6 +3563,17 @@
 			path = InTheGym;
 			sourceTree = "<group>";
 		};
+		BF1A0000000000000000013F /* ProfileKitComposition */ = {
+			isa = PBXGroup;
+			children = (
+				BF1A00000000000000000130 /* ProfileHighlightFirestoreTests.swift */,
+				BF1A00000000000000000131 /* FollowStatusFollowDocumentTests.swift */,
+				BF1A00000000000000000132 /* StorageProfilePhotoUploaderTests.swift */,
+				BF1A00000000000000000133 /* LocalUserDataEraserTests.swift */,
+			);
+			path = ProfileKitComposition;
+			sourceTree = "<group>";
+		};
 		7479A91F229F2B4D00D39E2E /* InTheGymTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -3562,6 +3581,7 @@
 				7479A922229F2B4D00D39E2E /* Info.plist */,
 				746DA0E12C0A7F980094EA3B /* Helpers */,
 				7446E2192C15D5A00060CEE6 /* SceneDelegateTests.swift */,
+				BF1A0000000000000000013F /* ProfileKitComposition */,
 				7446E2392C15DFE30060CEE6 /* FeedUIIntegrationTests.swift */,
 				7446E23B2C15F0490060CEE6 /* FeedAcceptanceTests.swift */,
 				749396662C3F092F00C1B792 /* CommentsUIIntegrationTests.swift */,
@@ -6237,6 +6257,10 @@
 				7446E2332C15DFC20060CEE6 /* FeedViewControllerTests+Assertions.swift in Sources */,
 				7446E2382C15DFC20060CEE6 /* ListViewController+TestHelpers.swift in Sources */,
 				7446E21A2C15D5A00060CEE6 /* SceneDelegateTests.swift in Sources */,
+				BF1A00000000000000000140 /* ProfileHighlightFirestoreTests.swift in Sources */,
+				BF1A00000000000000000141 /* FollowStatusFollowDocumentTests.swift in Sources */,
+				BF1A00000000000000000142 /* StorageProfilePhotoUploaderTests.swift in Sources */,
+				BF1A00000000000000000143 /* LocalUserDataEraserTests.swift in Sources */,
 				7446E2372C15DFC20060CEE6 /* FeedImageCell+TestHelpers.swift in Sources */,
 				7446E23E2C1652660060CEE6 /* HTTPClientStub.swift in Sources */,
 				7446E2362C15DFC20060CEE6 /* UIRefreshControl+TestHelpers.swift in Sources */,

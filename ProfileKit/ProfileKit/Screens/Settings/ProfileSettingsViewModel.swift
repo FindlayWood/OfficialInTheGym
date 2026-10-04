@@ -47,6 +47,10 @@ final class ProfileSettingsViewModel: ObservableObject {
 
     let links: ProfileSettingsLinks
     let appVersion: String
+    /// The signed-in user's own sign-in address, shown under Account. It is the
+    /// only place ProfileKit sees an email. Profiles never carry one
+    /// (`ProfileHeader`), and this is never anyone else's.
+    let accountEmail: String?
 
     private let subscription: ProfileSubscriptionService
     private let signOutService: ProfileSignOutService
@@ -68,6 +72,7 @@ final class ProfileSettingsViewModel: ObservableObject {
         privateAccountLoader: PrivateAccountLoader,
         privateAccountWriter: PrivateAccountWriter,
         links: ProfileSettingsLinks,
+        accountEmail: String? = nil,
         appVersion: String = Bundle.main.profileAppVersion
     ) {
         self.subscription = subscription
@@ -76,6 +81,7 @@ final class ProfileSettingsViewModel: ObservableObject {
         self.privateAccountLoader = privateAccountLoader
         self.privateAccountWriter = privateAccountWriter
         self.links = links
+        self.accountEmail = accountEmail
         self.appVersion = appVersion
         self.hasUnlockedPro = subscription.hasUnlockedPro
     }

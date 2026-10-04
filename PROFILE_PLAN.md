@@ -1,7 +1,9 @@
 # PROFILE tab — plan
 
-The agreed design for rebuilding PROFILE on Firestore as its own framework, **ProfileKit**. Nothing
-here is built yet. Work is split into steps, each listing what changes in this repository (**App**)
+The agreed design for rebuilding PROFILE on Firestore as its own framework, **ProfileKit**.
+**All eleven steps are built (2026-10-04), on `profile` branches in this repo and in
+`InTheGym-CloudFunctions`. Nothing is rolled out**: the rollout checklist below is the remaining
+work, in step order, and steps 7–10 ship together. Work is split into steps, each listing what changes in this repository (**App**)
 and in `InTheGym-CloudFunctions` (**Cloud**), the same shape as `DISCOVER_PLAN.md`.
 
 The decisions below come from an interview on 2026-10-03. Anything marked **open** was not settled
@@ -772,15 +774,17 @@ in order, then Auth:
    ratings, likes, tag votes, reports, comments (anonymised where others replied), clips with their
    Storage files, authored templates, and the block list. It goes first because it finds the user's
    activity by `authorId`.
-2. **`deleteProfileData`**: every `Follows` in either direction (requests included; the counts on
-   the other side recount), `Profiles/{uid}` and `ProfileHighlights/{uid}`.
-3. **`deleteUserData`**:
+2. **`deleteUserData`**:
    - `Users/{uid}` recursively: MyDay, ExerciseStats with RawLogs and DailyStats, DailyTotals,
      WorkoutSessions, WorkoutTemplates, WeightTracking, BlockedUsers, and anything added later.
-   - The analytics `WorkoutSessions` copies (`userId`). A deleted account takes these outright; the
-     `deletedAt` soft delete is for one workout removed by a user who stays.
-   - `Usernames` by uid, so the name is free again, plus `UserScore`, `FCMTokens` and
-     `ProfilePhotos/{uid}` in Storage.
+   - The analytics `WorkoutSessions` copies (`userId`), `Usernames` by uid (freeing the name),
+     `UserScore`, `FCMTokens`, and `ProfilePhotos/{uid}` in Storage.
+3. **`deleteProfileData`**: every `Follows` in either direction (the other side's counts recount),
+   `Profiles/{uid}` and `ProfileHighlights/{uid}`.
+   - **After the user tree, not before.** Deleting `ExerciseStats` fires the highlights trigger,
+     which rebuilds `ProfileHighlights` for as long as `Users/{uid}` exists. With the projections
+     deleted first, a late trigger wrote them back; the test caught it. Once `Users/{uid}` is gone,
+     every profile trigger deletes instead of writing.
 4. **`deleteRealtimeData`**: one multi-path update over every RTDB root the app keys by uid
    (`users`, `Workouts`, `Following`, `Followers`, `SavedWorkoutReferences`, `MyComments`,
    `MyCommentLikes`, `ExerciseStats`, `Workloads`, `UserClips`, `Clips`, `Scores`,
@@ -825,14 +829,26 @@ they stay, they need an author index or a sweep before this is complete for them
 
 **Rules:** none. The function uses the Admin SDK. **Storage:** none.
 
-### Step 11 — Tests and documentation
+### Step 11 — Tests and documentation — done
 
-- `ProfileKitTests` in the StatsKit / DiscoverKit style: follow-state view model, privacy gating,
-  highlight formatting, weight-log unit conversion, search debounce. Cloud tests for every function,
-  including recounts on redelivery.
-- `CLAUDE.md`: a PROFILE section, the Firestore table rows, the five-framework lists becoming six,
-  and the *keep in step* index (ProfileKit's `Color+Extension.swift`, its copies of the
-  account-creation sheets).
+- **ProfileKitTests: 128 tests**, in the StatsKit / DiscoverKit style, covering every view model:
+  own and other profiles, settings, edit profile, body measurements, follow lists, requests, search,
+  highlights, delete account, plus the value types (`ProfileStamp`, `ProfileWeightUnit`,
+  `WeightDay`, `ProfileHighlight`). One spy per file under `Helpers/`. It is on the CI test plan.
+- **InTheGymTests: 12 new**, for the composition root's own logic:
+  - `ProfileHighlight(highlightData:)`, the one highlight parser;
+  - `FollowStatus(followDocumentStatus:)`;
+  - `StorageProfilePhotoUploader.encode` fitting the download cap;
+  - `LocalUserDataEraser` touching only its own user.
+- **Cloud: 46 tests** in `test/Profile` and `test/Account`, plus the profile cases added to
+  DISCOVER's report tests, all against the emulator. Profile tests give their users `Users`
+  documents, because `rebuildProfiles`' parallel test deletes orphan profiles.
+- `CLAUDE.md` gained a **PROFILE Tab** section (the shape and the reasons), Firestore table rows,
+  six-framework lists, *keep in step* rows, and single-definition entries. The functions'
+  `CLAUDE.md` has a PROFILE section and an Account-deletion section.
+- Added at the end, by request: Settings → Account shows the **signed-in user's email** (its only
+  appearance in ProfileKit, passed in for settings alone), and the reset-password confirmation names
+  the address it sends to.
 
 ---
 
@@ -914,19 +930,22 @@ matters most:
 
 ## Open questions
 
-1. **Performance Center, Jump measuring, Breathwork — entry points.** Their code stays (Performance
+1. ~~Performance Center, Jump measuring, Breathwork — entry points.~~ **Settled in step 1:**
+   Performance Center keeps a Tools row in Settings; Jump and Breathwork had no live entry to keep.
+   Original note: Their code stays (Performance
    Center explicitly). Their only door today is the "More" menu this plan replaces. Recommended: a
    temporary "Tools" row in Settings that calls back to the app, until each gets its own roadmap
    task. The alternative is that they are unreachable until then.
 2. ~~What a private account hides.~~ **Settled in steps 7–8:** header and counts public; lists and
    highlights followers-only; public clips stay public, in DISCOVER and on the profile.
-3. **Premium stamp for other users.** Premium is known only on-device (RevenueCat), so another
-   user's profile cannot show it truthfully. Recommended: own profile only, until entitlements are
+3. ~~Premium stamp for other users.~~ **Settled in step 7:** own profile only, until entitlements are
    server-verified (see *Future Ideas* → coach passes).
 4. ~~Default highlights.~~ **Settled in step 8:** the three most-trained until pinned.
 5. **Follow notifications** (step 6).
-6. **Search from DISCOVER as well as the profile?** (step 7).
-7. **Legacy RTDB follows during the gap** between migration and step 7 (step 5).
+6. ~~Search from DISCOVER as well?~~ **Settled:** search moves to DISCOVER as a unified search
+   built in DiscoverKit, after this plan. See *Follow-up: unified search* in `DISCOVER_PLAN.md`.
+7. ~~Legacy RTDB follows during the gap.~~ **Settled in step 5:** a one-way bridge, now unreachable
+   from the app since step 7.
 8. **Legacy profile files.** Delete `MyProfile/`, `PlayerProfileMore/` and friends once the coach tab
    bar no longer needs them, **never Performance Center's**. That probably belongs with the
    coach/player split removal.

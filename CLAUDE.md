@@ -15,7 +15,7 @@ Lean, minimal UI aesthetic throughout.
 - `AccountCreationKit` — framework
 - `LoginKit` — framework
 - `DiscoverKit` — framework (in progress — see `DISCOVER_PLAN.md`)
-- `ProfileKit` — framework (in progress — see `PROFILE_PLAN.md`)
+- `ProfileKit` — framework (built, not rolled out — see `PROFILE_PLAN.md`)
 
 ### Inactive — do not modify
 - `ITGWorkoutKit` — ignore, do not touch
@@ -459,8 +459,9 @@ call sites and drifted apart. Do not re-inline any of them:
 Before writing any tests, read all test files and folders within `ITGWorkoutKit`
 and use these as the template for structure, naming, and style.
 
-`ITGWorkoutKit` is read-only but its suite is the reference. `StatsKit/StatsKitTests/` and
-`DiscoverKit/DiscoverKitTests/` are the substantial framework suites and the model for new ones —
+`ITGWorkoutKit` is read-only but its suite is the reference. `StatsKit/StatsKitTests/`,
+`DiscoverKit/DiscoverKitTests/` and `ProfileKit/ProfileKitTests/` are the substantial framework
+suites and the model for new ones —
 `LoginKitTests` and `AccountCreationKitTests` are Xcode-generated placeholders, and `MyDayKitTests`
 holds only `WorkoutTemplateModelCopyTests` (its scheme had no test action until DISCOVER added one).
 
@@ -514,7 +515,7 @@ NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
 Roadmap order:
 1. Fix workout stats → update STATS tab
 2. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
-3. PROFILE tab, `ProfileKit` (in progress, see `PROFILE_PLAN.md`)
+3. PROFILE tab, `ProfileKit` (built; rollout pending, see `PROFILE_PLAN.md`)
 4. Unified search on DISCOVER (people, workouts, exercises), built entirely in DiscoverKit, which
    replaces ProfileKit's people search. See *Follow-up: unified search* in `DISCOVER_PLAN.md`.
 
@@ -1272,6 +1273,79 @@ library evolution, and without it every `switch` over them in the app needs an `
 `InTheGym-Scripts/Emulator/SeedDiscover.py` seeds accounts, exercises, workouts and activity; the
 functions build every card and count from it, so build the functions on the current branch first.
 Run the app with **InTheGym-EM** and sign in as `demo@inthegym.test`.
+
+## PROFILE Tab — `ProfileKit`
+Your own profile, other people's, follows, private accounts, highlights, settings and account
+deletion. Firestore only for everything new. The step-by-step build, every rule and index, and the
+**rollout checklist** are in `PROFILE_PLAN.md`; this section is the shape and the reasons.
+**Nothing is rolled out yet, and steps 7–10 must ship together**: profiles are reachable from
+DISCOVER and search only once report, block and account deletion are live.
+
+### Two documents per person, and why
+- **`Users/{uid}` is private to its owner.** It holds the email and body measurements, and Firestore
+  rules cannot hide fields, so after rollout nobody else may read it.
+- **`Profiles/{uid}` is the public projection**: name, @username, bio, stamps, `isPrivate`, the
+  follow and clip counts, and moderation's `status`. Only Cloud Functions write it (`syncProfile`,
+  the counts triggers). **It is an allow-list**, and a field is public only if `profileProjection`
+  copies it. Every read of another person (DISCOVER's author names, lists, search, profiles) goes
+  here.
+- **`ProfileHighlights/{uid}`** is separate again, so a private account's PBs can be read-gated by
+  the same "public, or an approved follower" check as its follow lists.
+- Your own header still comes from the cached `currentUser` (fresher after an edit); counts,
+  highlights and clips come from the projections.
+
+### Follows
+**One `Follows/{followerId}_{followeeId}` document per relationship**, `active` or `pending`.
+- The follower creates it, the followee approves or deletes it, and either can end it. Mirrored
+  followers/following lists were rejected, as two writers for one fact.
+- The rules decide `pending` versus `active` from the followee's `Profiles.isPrivate`, so a client
+  cannot skip approval.
+- Counts are **recounts** (`profileFollowCounts`, via DISCOVER's `syncCount`), never deltas.
+- The legacy RTDB follow graph was migrated (`MigrateFollows.py`) and is bridged one way
+  (`mirrorLegacyFollow`). Nothing in the app writes it any more, since step 7 sent every legacy
+  profile to ProfileKit.
+
+### How the framework meets the app
+- **`ProfileKitComposition.makeRouter`** builds the one graph, used by:
+  - the tab (`composeCombination`, which adds `start()` and the settings' app screens);
+  - DISCOVER (`ProfileKitUserProfileOpener`);
+  - every legacy `UserProfileCoordinator` caller, which calls `showUserProfile(_:)` on its own
+    stack.
+- **ProfileKit → DISCOVER**: the clips grid opens DISCOVER's player through
+  `DiscoverKitRouter.showClip`, built lazily by `DiscoverClipOpener`. Each composition builds the
+  other's router, so **eager construction would recurse**.
+- Moderation reuses DISCOVER's server path without touching DiscoverKit:
+  - a `"profile"` report kind (`Profiles/{uid}`) in `reportTarget`;
+  - `ReportDocumentWriter`, the one report document;
+  - the profile's Block wraps DISCOVER's `BlockedUsersWriter`;
+  - `removeFollowsOnBlock` cuts follows for a block made anywhere.
+- **Writes the client makes to `Users/{uid}` are exactly** `displayName`, `bio`,
+  `heightCentimetres`, `heightUnit`, `dateOfBirth`, `isPrivate` and `pinnedHighlights`, each through
+  `updateData` of its own keys. The `Users` update rule's `hasOnly` is that list. **Adding a client
+  write to `Users` means widening that rule**, which is all that stops a client setting
+  `verifiedAccount`.
+- Derived fields are the server's: `weightKilograms` (`syncLatestWeight`), counts and highlights.
+  The legacy RTDB `users/{uid}` copy of name and bio follows by `onEditAccount`, never by a second
+  client write.
+
+### Decisions worth not relitigating
+- Your own profile is what others see, so the clips grid is public clips only, even for you.
+- Highlights are automatic (top 3 by `setCount`) until pinned. Premium never shows on someone else's
+  profile; only your own device knows it.
+- A private account hides its lists and highlights from non-followers, but **its public clips stay
+  public**, in DISCOVER and on the profile.
+- Body measurements live on their own private screen, not on Edit Profile, which edits what others
+  see.
+- **Search moves to DISCOVER**, rebuilt there as people + workouts + exercises entirely in
+  DiscoverKit, after which ProfileKit's search is deleted. See *Follow-up: unified search* in
+  `DISCOVER_PLAN.md`.
+
+### Account deletion
+`deleteAccount` deletes everything the user owns: DISCOVER → own tree and files → profile → RTDB →
+Auth last. **The profile projections go after the user tree**, because their triggers rebuild them
+while `Users/{uid}` exists. It is idempotent. The app re-authenticates with the password first, and erases this
+device's day files, templates and sync queue only after the server succeeds. **A feature that adds
+per-user data adds it to one of the deletion modules** in `functions/src/Account/`.
 
 ## Exercise Stats Raw Logs
 Two things are written when work is recorded, and **both paths write the same two things**:

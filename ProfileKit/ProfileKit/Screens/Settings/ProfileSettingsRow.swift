@@ -72,10 +72,12 @@ struct ProfileSettingsRow: View {
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(Color(.tertiaryLabel))
         case .detail(let text):
+            // Middle truncation keeps both ends of a long address readable.
             Text(text)
                 .font(.system(size: 15))
                 .foregroundStyle(Color.secondary)
                 .lineLimit(1)
+                .truncationMode(.middle)
         case .progress:
             ProgressView()
         case .none:

@@ -183,6 +183,7 @@ class ProfileKitComposition {
             blockStatusLoader: blockStatusLoader,
             accountDeleter: accountDeleter,
             links: links,
+            accountEmail: UserDefaults.currentUser.email,
             currentUserId: userId
         )
 

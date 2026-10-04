@@ -49,7 +49,8 @@ struct ProfileSettingsScreen: View {
             Button("Send Email") { Task { await viewModel.sendPasswordReset() } }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("We'll email you a link to choose a new password.")
+            Text(viewModel.accountEmail.map { "We'll email a link to \($0) to choose a new password." }
+                 ?? "We'll email you a link to choose a new password.")
         }
         .alert("Log Out?", isPresented: $confirmingSignOut) {
             Button("Log Out", role: .destructive) { Task { await viewModel.signOut() } }
@@ -107,6 +108,9 @@ struct ProfileSettingsScreen: View {
 
     private var accountSection: some View {
         ProfileSettingsSection(title: "Account", footer: privacyFooter) {
+            if let email = viewModel.accountEmail, !email.isEmpty {
+                ProfileSettingsRow(icon: "envelope", title: "Email", trailing: .detail(email))
+            }
             ProfileSettingsToggleRow(
                 icon: "lock",
                 title: "Private Account",

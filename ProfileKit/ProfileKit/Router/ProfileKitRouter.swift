@@ -61,6 +61,7 @@ public final class ProfileKitRouter {
     let blockStatusLoader: ProfileBlockStatusLoader
     let accountDeleter: AccountDeleter
     let links: ProfileSettingsLinks
+    let accountEmail: String?
     let currentUserId: String
 
     // MARK: - Properties
@@ -114,6 +115,7 @@ public final class ProfileKitRouter {
         blockStatusLoader: ProfileBlockStatusLoader,
         accountDeleter: AccountDeleter,
         links: ProfileSettingsLinks,
+        accountEmail: String?,
         currentUserId: String
     ) {
         self.navigationController = navigationController
@@ -151,6 +153,7 @@ public final class ProfileKitRouter {
         self.blockStatusLoader = blockStatusLoader
         self.accountDeleter = accountDeleter
         self.links = links
+        self.accountEmail = accountEmail
         self.currentUserId = currentUserId
     }
 
@@ -224,7 +227,8 @@ extension ProfileKitRouter {
                 passwordReset: passwordReset,
                 privateAccountLoader: privateAccountLoader,
                 privateAccountWriter: privateAccountWriter,
-                links: links
+                links: links,
+                accountEmail: accountEmail
             )
             viewModel.onShowPaywall = { [weak self] in self?.onShowPaywall?() }
             viewModel.onManageSubscription = { [weak self] in self?.onManageSubscription?() }
