@@ -15,7 +15,7 @@ class DiscoverKitComposition {
     /// `workoutLibrary` is MyDay's — see `MyDayWorkoutLibrary`. Nil on the coach
     /// tab bar, which has no MyDay, and then a workout page offers no Save.
     @MainActor
-    func composeCombination(_ navigationController: UINavigationController, workoutLibrary: MyDayWorkoutLibrary?) {
+    func composeCombination(_ navigationController: UINavigationController, workoutLibrary: MyDayWorkoutLibrary?, purchaseManager: PurchaseManager) {
 
         // MARK: - Card loaders
 
@@ -96,6 +96,14 @@ class DiscoverKitComposition {
             LibraryWorkoutCopyChecker(local: $0.local)
         }
 
+        // MARK: - Profiles
+
+        // A ProfileKit router on DISCOVER's own stack, so an author's profile
+        // opens inside this tab. Built without start(); it only pushes.
+        let profileOpener: UserProfileOpener = ProfileKitUserProfileOpener(
+            router: ProfileKitComposition().makeRouter(navigationController, purchaseManager: purchaseManager)
+        )
+
         // MARK: - Router
 
         let router = DiscoverKitRouter(
@@ -129,6 +137,7 @@ class DiscoverKitComposition {
             exerciseClipsLoader: exerciseClipsLoader,
             workoutCopySaver: workoutCopySaver,
             savedWorkoutCopyChecker: savedWorkoutCopyChecker,
+            profileOpener: profileOpener,
             currentUserId: userId
         )
 

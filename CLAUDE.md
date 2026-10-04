@@ -501,7 +501,9 @@ root).
 ## App Structure
 5 tabs: NEWSFEED, DISCOVER, MYDAY, STATS, PROFILE.
 **PROFILE is `ProfileKit`** on the player tab bar (see `PROFILE_PLAN.md`); the coach tab bar keeps
-the legacy `MyProfileCoordinator` until the coach/player split is removed. Performance Center is
+the legacy `MyProfileCoordinator` until the coach/player split is removed. **Every other way of opening a
+person** (DISCOVER, search, follow lists, and all nine legacy `UserProfileCoordinator` callers)
+shows ProfileKit's `UserProfileScreen`, through one `ProfileKitComposition.makeRouter` graph. Performance Center is
 reached from ProfileKit's settings through `ProfileAppRoutes` — a separate roadmap task, **never
 delete its code**.
 Current focus: MYDAY tab — active session UI complete (see roadmap and Feature Areas Complete).
@@ -510,6 +512,9 @@ NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
 Roadmap order:
 1. Fix workout stats → update STATS tab
 2. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
+3. PROFILE tab, `ProfileKit` (in progress, see `PROFILE_PLAN.md`)
+4. Unified search on DISCOVER (people, workouts, exercises), built entirely in DiscoverKit, which
+   replaces ProfileKit's people search. See *Follow-up: unified search* in `DISCOVER_PLAN.md`.
 
 Those five are the **player** tab bar (`PlayerInitialViewController`). The **coach** tab bar
 (`CoachInitialViewController`) is a different four: NEWSFEED, DISCOVER, **PLAYERS**, MYPROFILE — no
@@ -1250,7 +1255,8 @@ library at once.
 DiscoverKit imports no other framework and defines its own models. Where it needs something another
 framework owns, it declares a protocol and the composition root answers it: `TagNormalizer` →
 `WorkoutTag`, `ClipWatchRecorder` → the existing `FirebaseFunctionsViewClipRecorder` (which serves
-MyDay's `ViewClipRecorder` too), `WorkoutCopySaver` → MyDay's library. **Every Firestore path is in
+MyDay's `ViewClipRecorder` too), `WorkoutCopySaver` → MyDay's library. `UserProfileOpener` → ProfileKit's profile, pushed onto DISCOVER's own stack by a
+`ProfileKitRouter` built there (`ProfileKitUserProfileOpener`). **Every Firestore path is in
 the composition root**: `DiscoverSubject+Firestore` (subjects, cards, ratings, comments, tag votes),
 `DiscoverLikeTarget+Firestore`, `DiscoverTagPath`, `DiscoverReportTarget+Firestore`,
 `DiscoverBlockPath`. `DiscoverSubject` and `DiscoverLikeTarget` are `@frozen` — DiscoverKit builds with

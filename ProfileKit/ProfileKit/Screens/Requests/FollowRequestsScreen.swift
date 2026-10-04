@@ -13,6 +13,7 @@ struct FollowRequestsScreen: View {
 
     @ObservedObject var viewModel: FollowRequestsViewModel
     let photoLoader: ProfilePhotoLoader
+    var onOpenProfile: ((String) -> Void)?
 
     var body: some View {
         ScrollView {
@@ -58,7 +59,8 @@ struct FollowRequestsScreen: View {
                     photoLoader: photoLoader,
                     showsDivider: index < viewModel.rows.count - 1,
                     onApprove: { Task { await viewModel.approve(row) } },
-                    onDecline: { Task { await viewModel.decline(row) } }
+                    onDecline: { Task { await viewModel.decline(row) } },
+                    onOpenProfile: onOpenProfile.map { open in { open(row.userId) } }
                 )
                 .onAppear {
                     if row.id == viewModel.rows.last?.id {

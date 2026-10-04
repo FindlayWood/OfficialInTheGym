@@ -20,26 +20,38 @@ struct FollowListRow: View {
     var showsDivider = true
     let onToggleFollow: () -> Void
     var onRemove: (() -> Void)?
+    /// The person's name and photo open their profile; the button and menu
+    /// keep their own taps.
+    var onOpenProfile: (() -> Void)?
 
     @State private var photo: UIImage?
 
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 12) {
-                ProfileAvatar(photo: photo, size: 44)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(row.summary?.displayName ?? "Unknown user")
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(row.summary == nil ? Color.secondary : Color.primary)
-                        .lineLimit(1)
-                    if let username = row.summary?.username {
-                        Text("@\(username)")
-                            .font(.system(size: 13))
-                            .foregroundStyle(Color.secondary)
-                            .lineLimit(1)
+                Button {
+                    onOpenProfile?()
+                } label: {
+                    HStack(spacing: 12) {
+                        ProfileAvatar(photo: photo, size: 44)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(row.summary?.displayName ?? "Unknown user")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(row.summary == nil ? Color.secondary : Color.primary)
+                                .lineLimit(1)
+                            if let username = row.summary?.username {
+                                Text("@\(username)")
+                                    .font(.system(size: 13))
+                                    .foregroundStyle(Color.secondary)
+                                    .lineLimit(1)
+                            }
+                        }
+                        Spacer(minLength: 8)
                     }
+                    .contentShape(Rectangle())
                 }
-                Spacer(minLength: 8)
+                .buttonStyle(.plain)
+                .disabled(onOpenProfile == nil)
                 if let status = row.status {
                     FollowButton(status: status, followsYou: kind == .followers, action: onToggleFollow)
                 }

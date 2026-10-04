@@ -26,6 +26,9 @@ struct DiscoverCommentRow: View {
     /// Nil on your own comments — you cannot report or block yourself.
     var onReport: (() -> Void)?
     var onBlock: (() -> Void)?
+    /// The author's avatar and name open their profile. Nil on a removed
+    /// comment, a deleted author, or when profiles cannot be opened.
+    var onOpenAuthor: (() -> Void)?
 
     @State private var isConfirmingRemove = false
     @State private var isShowingMore = false
@@ -51,14 +54,26 @@ struct DiscoverCommentRow: View {
 
     private var content: some View {
         HStack(alignment: .top, spacing: 10) {
-            DiscoverCommentAvatar(initial: initial, size: comment.isReply ? 26 : 32)
+            Button {
+                onOpenAuthor?()
+            } label: {
+                DiscoverCommentAvatar(initial: initial, size: comment.isReply ? 26 : 32)
+            }
+            .buttonStyle(.plain)
+            .disabled(onOpenAuthor == nil)
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 4) {
-                    Text(name)
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(author == .deleted ? .secondary : .primary)
-                        .redacted(reason: author == .loading ? .placeholder : [])
+                    Button {
+                        onOpenAuthor?()
+                    } label: {
+                        Text(name)
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(author == .deleted ? .secondary : .primary)
+                            .redacted(reason: author == .loading ? .placeholder : [])
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(onOpenAuthor == nil)
                     if let createdAt = comment.createdAt {
                         Text("· \(createdAt.discoverAge)")
                             .font(.system(size: 13))

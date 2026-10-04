@@ -11,11 +11,34 @@ import ProfileKit
 
 class ProfileKitComposition {
 
-    /// Player tab bar only. The coach tab bar keeps the legacy
+    /// The PROFILE tab. Player tab bar only; the coach tab bar keeps the legacy
     /// `MyProfileCoordinator` until the coach/player split is removed. See
     /// `PROFILE_PLAN.md`.
     @MainActor
     func composeCombination(_ navigationController: UINavigationController, purchaseManager: PurchaseManager) {
+
+        let router = makeRouter(navigationController, purchaseManager: purchaseManager)
+
+        // MARK: - App screens
+
+        let appRoutes = ProfileAppRoutes(navigationController: navigationController, purchaseManager: purchaseManager)
+
+        router.onShowPaywall = { appRoutes.showPaywall() }
+        router.onManageSubscription = { appRoutes.showManageSubscription() }
+        router.onOpenPerformanceCenter = { appRoutes.showPerformanceCenter() }
+        router.onOpenAbout = { appRoutes.showAbout() }
+
+        router.start()
+    }
+
+    /// A fully wired router on any navigation controller, **without** `start()`.
+    /// The tab uses it above; DISCOVER (`ProfileKitUserProfileOpener`) and the
+    /// legacy `UserProfileCoordinator` build one on their own stack and call
+    /// `showUserProfile(_:)`. One graph for every entry point, so a profile
+    /// opened from DISCOVER behaves exactly like one opened from a follow list
+    /// (`PROFILE_PLAN.md` step 7).
+    @MainActor
+    func makeRouter(_ navigationController: UINavigationController, purchaseManager: PurchaseManager) -> ProfileKitRouter {
 
         // MARK: - Profile
 
@@ -78,6 +101,12 @@ class ProfileKitComposition {
 
         let followRequestApprover: FollowRequestApprover = FirestoreFollowRequestApprover(currentUserId: userId)
 
+        // MARK: - Other people
+
+        let publicProfileLoader: PublicProfileLoader = FirestorePublicProfileLoader()
+
+        let userSearchLoader: UserSearchLoader = FirestoreUserSearchLoader()
+
         // MARK: - Settings
 
         let subscription: ProfileSubscriptionService = PurchaseManagerSubscriptionService(purchaseManager: purchaseManager)
@@ -121,19 +150,12 @@ class ProfileKitComposition {
             followRequestsLoader: followRequestsLoader,
             followRequestCountLoader: followRequestCountLoader,
             followRequestApprover: followRequestApprover,
+            publicProfileLoader: publicProfileLoader,
+            userSearchLoader: userSearchLoader,
             links: links,
             currentUserId: userId
         )
 
-        // MARK: - App screens
-
-        let appRoutes = ProfileAppRoutes(navigationController: navigationController, purchaseManager: purchaseManager)
-
-        router.onShowPaywall = { appRoutes.showPaywall() }
-        router.onManageSubscription = { appRoutes.showManageSubscription() }
-        router.onOpenPerformanceCenter = { appRoutes.showPerformanceCenter() }
-        router.onOpenAbout = { appRoutes.showAbout() }
-
-        router.start()
+        return router
     }
 }

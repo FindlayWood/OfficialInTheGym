@@ -65,6 +65,7 @@ public final class DiscoverKitRouter {
     let exerciseClipsLoader: ExerciseClipsLoader
     let workoutCopySaver: WorkoutCopySaver?
     let savedWorkoutCopyChecker: SavedWorkoutCopyChecker?
+    let profileOpener: UserProfileOpener?
     let currentUserId: String
 
     // MARK: - Properties
@@ -112,6 +113,7 @@ public final class DiscoverKitRouter {
         exerciseClipsLoader: ExerciseClipsLoader,
         workoutCopySaver: WorkoutCopySaver?,
         savedWorkoutCopyChecker: SavedWorkoutCopyChecker?,
+        profileOpener: UserProfileOpener?,
         currentUserId: String
     ) {
         self.navigationController = navigationController
@@ -144,6 +146,7 @@ public final class DiscoverKitRouter {
         self.exerciseClipsLoader = exerciseClipsLoader
         self.workoutCopySaver = workoutCopySaver
         self.savedWorkoutCopyChecker = savedWorkoutCopyChecker
+        self.profileOpener = profileOpener
         self.currentUserId = currentUserId
     }
 
@@ -277,7 +280,8 @@ extension DiscoverKitRouter {
                     canReport: card.createdBy != currentUserId,
                     onReported: { [weak self] in self?.navigationController.popViewController(animated: true) },
                     onOpenComments: { [weak self] in self?.navigate(to: .comments(.workout(id: card.templateId))) },
-                    onTagTapped: { [weak self] in self?.navigate(to: .tag($0)) }
+                    onTagTapped: { [weak self] in self?.navigate(to: .tag($0)) },
+                    onOpenAuthor: profileAction(for: card.createdBy)
                 )
             )
             vc.hidesBottomBarWhenPushed = true
@@ -299,7 +303,8 @@ extension DiscoverKitRouter {
                 rootView: DiscoverCommentsScreen(
                     viewModel: viewModel,
                     moderation: moderation,
-                    onOpenBlockedUsers: { [weak self] in self?.navigate(to: .blockedUsers) }
+                    onOpenBlockedUsers: { [weak self] in self?.navigate(to: .blockedUsers) },
+                    onOpenProfile: profileOpener.map { opener in { opener.openProfile($0) } }
                 )
             )
             vc.hidesBottomBarWhenPushed = true
@@ -318,7 +323,8 @@ extension DiscoverKitRouter {
                     moderation: moderation,
                     canReport: card.createdBy != currentUserId,
                     onComments: { [weak self] in self?.navigate(to: .comments(.clip(id: card.clipId))) },
-                    onClose: { [weak self] in self?.navigationController.popViewController(animated: true) }
+                    onClose: { [weak self] in self?.navigationController.popViewController(animated: true) },
+                    onOpenProfile: profileAction(for: card.createdBy)
                 )
             )
             vc.hidesBottomBarWhenPushed = true
@@ -352,6 +358,13 @@ extension DiscoverKitRouter {
             vc.hidesBottomBarWhenPushed = true
             return vc
         }
+    }
+
+    /// Opening someone's profile, or nil: with no opener, with no author, or
+    /// for your own content, where a "view profile" would only lead back to you.
+    private func profileAction(for userId: String?) -> (() -> Void)? {
+        guard let profileOpener, let userId, userId != currentUserId else { return nil }
+        return { profileOpener.openProfile(userId) }
     }
 
     /// No Save on the user's own workout — it is already in their library.

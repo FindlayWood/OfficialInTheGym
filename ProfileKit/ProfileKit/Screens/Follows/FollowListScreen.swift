@@ -15,6 +15,7 @@ struct FollowListScreen: View {
 
     @ObservedObject var viewModel: FollowListViewModel
     let photoLoader: ProfilePhotoLoader
+    var onOpenProfile: ((String) -> Void)?
 
     @State private var confirmingRemoval: FollowListViewModel.Row?
 
@@ -73,7 +74,8 @@ struct FollowListScreen: View {
                     photoLoader: photoLoader,
                     showsDivider: index < viewModel.rows.count - 1,
                     onToggleFollow: { Task { await viewModel.toggleFollow(row) } },
-                    onRemove: viewModel.canRemoveFollowers ? { confirmingRemoval = row } : nil
+                    onRemove: viewModel.canRemoveFollowers ? { confirmingRemoval = row } : nil,
+                    onOpenProfile: onOpenProfile.map { open in { open(row.userId) } }
                 )
                 .onAppear {
                     if row.id == viewModel.rows.last?.id {

@@ -17,26 +17,37 @@ struct FollowRequestRow: View {
     var showsDivider = true
     let onApprove: () -> Void
     let onDecline: () -> Void
+    /// Look before approving: the name and photo open the requester's profile.
+    var onOpenProfile: (() -> Void)?
 
     @State private var photo: UIImage?
 
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 12) {
-                ProfileAvatar(photo: photo, size: 44)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(row.summary?.displayName ?? "Unknown user")
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(row.summary == nil ? Color.secondary : Color.primary)
-                        .lineLimit(1)
-                    if let username = row.summary?.username {
-                        Text("@\(username)")
-                            .font(.system(size: 13))
-                            .foregroundStyle(Color.secondary)
-                            .lineLimit(1)
+                Button {
+                    onOpenProfile?()
+                } label: {
+                    HStack(spacing: 12) {
+                        ProfileAvatar(photo: photo, size: 44)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(row.summary?.displayName ?? "Unknown user")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(row.summary == nil ? Color.secondary : Color.primary)
+                                .lineLimit(1)
+                            if let username = row.summary?.username {
+                                Text("@\(username)")
+                                    .font(.system(size: 13))
+                                    .foregroundStyle(Color.secondary)
+                                    .lineLimit(1)
+                            }
+                        }
+                        Spacer(minLength: 8)
                     }
+                    .contentShape(Rectangle())
                 }
-                Spacer(minLength: 8)
+                .buttonStyle(.plain)
+                .disabled(onOpenProfile == nil)
                 if row.isApproved {
                     Label("Approved", systemImage: "checkmark")
                         .font(.system(size: 14, weight: .semibold))

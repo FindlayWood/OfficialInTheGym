@@ -423,7 +423,7 @@ exists on the coach tab bar and still writes the dead key. `onEditAccount` ignor
     followers list only) asks first and takes the row away.
   - Every action shows at once and is put back on failure. A follow shows the status the writer
     returns, which may be `Requested`.
-  - Rows are not tappable yet. Opening a profile is step 7.
+  - Rows open the person's profile from step 7.
 - Adapters, one destination each:
   - `FirestoreProfileCountsLoader`, `FirestoreFollowListLoader`, `FirestoreProfileSummaryLoader`.
   - `FirestoreFollowStatusLoader` uses parallel `get`s of `Follows/{me}_{them}`, not a query; see
@@ -532,20 +532,96 @@ is denied**. That is one more reason the step 2 backfill comes first.
 
 - No new index. The inbox runs on step 5's `(followeeId, status, createdAt desc)`.
 
-### Step 7 — Other users' profiles: DISCOVER, lists, search
+### Step 7 — Other users' profiles: DISCOVER, lists, search — built, not rolled out
 
-**App**
-- The same profile screen for any `userId`, with owner-only controls hidden.
-- **DISCOVER → profile:** DiscoverKit declares a `UserProfileOpener` protocol (it imports no other
-  framework). The composition root answers it by building ProfileKit's screen and pushing it onto
-  DISCOVER's navigation controller. Wire it to workout authors, clip owners and comment authors.
-- Followers / following rows open profiles.
-- User search screen (from the profile header; **open:** also from DISCOVER?): prefix query on
-  `Profiles.usernameLower` and `.displayNameLower`, debounced like the username availability check.
-- **Replace every `UserProfileCoordinator` entry point** (NEWSFEED, comment sections, tagged users)
-  with ProfileKit's screen, so there is one profile and one follow button.
+**Do not ship this to users before step 9.** A stranger's profile, with its bio and photo, can now
+be reached from DISCOVER, search and every legacy screen, and Apple guideline 1.2 requires a way to
+report and block it.
 
-**Console:** indexes for the two search fields if the composite queries need them.
+**App, ProfileKit**
+- `UserProfileScreen` is someone else's profile. It uses the same header card, read from
+  `Profiles/{uid}` (`PublicProfileLoader`), and is titled `@username`.
+  - A full-width **Follow / Request to Follow / Requested / Following** button.
+  - Unfollowing a **private** account asks first, since following again means a new request.
+  - Follow and unfollow move the follower count at once, so the button and the number agree before
+    the server's recount. A request moves no count.
+  - Never shows the premium crown (open question 3: own profile only).
+- **Private accounts:** header and counts are public. Lists are for approved followers only
+  (`canSeeLists`), so for anyone else the counts render as plain text and a "This account is
+  private" card explains why, with different wording while a request is waiting.
+- Opened on your own id (your name in someone's list), it shows your public profile, with no Follow
+  button.
+- A missing profile shows "This account isn't available", not an error to retry.
+- **Search** opens from a magnifier on the profile title bar (`UserSearchScreen`).
+  - Prefix match on `usernameLower` and `displayNameLower`, username matches first.
+  - Debounced 300 ms; every keystroke cancels the search before it, and results for a query no
+    longer in the field are dropped. "@" and case are ignored.
+  - Results open the profile. Following is decided on the profile, not from a match.
+- **Follow and request rows are tappable**: name and photo open the profile, while the buttons keep
+  their own taps.
+- `ProfileKitRouter.showUserProfile(_:)` is the public entry point. It pushes onto the router's own
+  stack without `start()`, so another tab keeps its root.
+
+**App, DISCOVER**
+- DiscoverKit declares **`UserProfileOpener`** (it imports no other framework) and takes it,
+  optionally, on its router. Three places open profiles:
+  - the workout page's "by Author" line, which becomes a button with a chevron;
+  - "View profile" in the clip player's menu;
+  - comment avatars and names.
+- Your own content, a deleted author or no opener all leave plain text.
+- `ProfileKitUserProfileOpener` answers it with a ProfileKit router built on DISCOVER's navigation
+  controller, so profiles open inside the DISCOVER tab and back returns to the workout, clip or
+  thread.
+
+**App, legacy**
+- **`UserProfileCoordinator.start()` now pushes ProfileKit's profile** instead of
+  `PublicTimelineViewController`.
+  - All nine legacy callers (NEWSFEED, comment sections, tagged users, old follower lists) go
+    through it, so one change moves all of them to the one profile and the one Firestore follow
+    button.
+  - The legacy RTDB Follow button is now unreachable, so `mirrorLegacyFollow` has nothing left to
+    bridge. Retire it once the old app versions in use no longer matter.
+  - The coordinator's other flow methods are dead and left for a cleanup pass.
+- `ProfileKitComposition.makeRouter` builds the one dependency graph for every entry point: the
+  tab, DISCOVER and the legacy coordinator. `DiscoverKitComposition` now takes `purchaseManager`,
+  because a ProfileKit router needs it.
+
+**Adapters:** `FirestorePublicProfileLoader` and `FirestoreUserSearchLoader` (two single-field
+range queries in parallel, so no composite index).
+
+**Tests:** 18 new (`UserProfileViewModelTests`, `UserSearchViewModelTests`), 99 in ProfileKit.
+DiscoverKit's suite still passes.
+
+**Not here:**
+- Hiding search results and profiles that moderation has hidden (`Profiles.status`), which is
+  step 9.
+- Whether a private user's clips leave DISCOVER (open question 2), which belongs with step 8's
+  clips section.
+
+**Rules** (console). Tighten the `Follows` **list** rule from step 5, so a private account's lists
+are readable only by its approved followers (and its owner). The client hides them already; this
+makes the server agree.
+
+```
+function canSeeListsOf(uid) {
+  return uid == request.auth.uid
+    || !get(/databases/$(database)/documents/Profiles/$(uid)).data.get("isPrivate", false)
+    || (exists(/databases/$(database)/documents/Follows/$(request.auth.uid + "_" + uid))
+        && get(/databases/$(database)/documents/Follows/$(request.auth.uid + "_" + uid))
+             .data.status == "active");
+}
+
+allow list: if request.auth != null
+  && (resource.data.followerId == request.auth.uid
+      || resource.data.followeeId == request.auth.uid
+      || (resource.data.status == "active"
+          && (canSeeListsOf(resource.data.followeeId)
+              || canSeeListsOf(resource.data.followerId))));
+```
+
+A list query constrains one of `followeeId` / `followerId` with `==`. The rule is evaluated for that
+side, and the `||` with the unconstrained side is how one rule covers both lists. Test both lists,
+for a public account and a private one, in the Rules Playground before publishing.
 
 ### Step 8 — Highlights (PBs) and clips
 
@@ -643,6 +719,12 @@ matters most:
 - [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, so every profile carries `isPrivate`
 - [ ] Console rules: `isPrivate` in the `Users` update rule, and the `Follows` update rule
 
+**Step 7 — Other users' profiles**
+- [ ] **Step 9 is live first.** Do not ship a build with step 7 to users until profile reporting
+      and blocking are in it.
+- [ ] Console rules: the tightened `Follows` list rule, tested in the Rules Playground for both
+      lists, public and private
+
 **Later steps** (expanded as they land)
 - [ ] `Follows` rules + indexes **before** `MigrateFollows.py --write`
 - [ ] Profile reporting and blocking (step 9) live **before** other users' profiles (step 7) reach
@@ -671,6 +753,11 @@ matters most:
    coach/player split removal.
 
 ## Out of scope
+
+- **Search's long-term home.** Step 7's people search sits on the profile title bar for now. After
+  this plan is finished it moves to DISCOVER as a unified people + workouts + exercises search,
+  built entirely in DiscoverKit, and ProfileKit's search is deleted. See *Follow-up: unified
+  search* in `DISCOVER_PLAN.md`.
 
 - Posts, and the NEWSFEED question.
 - Workout history.

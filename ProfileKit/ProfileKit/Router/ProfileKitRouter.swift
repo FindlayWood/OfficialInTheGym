@@ -51,6 +51,8 @@ public final class ProfileKitRouter {
     let followRequestsLoader: FollowRequestsLoader
     let followRequestCountLoader: FollowRequestCountLoader
     let followRequestApprover: FollowRequestApprover
+    let publicProfileLoader: PublicProfileLoader
+    let userSearchLoader: UserSearchLoader
     let links: ProfileSettingsLinks
     let currentUserId: String
 
@@ -91,6 +93,8 @@ public final class ProfileKitRouter {
         followRequestsLoader: FollowRequestsLoader,
         followRequestCountLoader: FollowRequestCountLoader,
         followRequestApprover: FollowRequestApprover,
+        publicProfileLoader: PublicProfileLoader,
+        userSearchLoader: UserSearchLoader,
         links: ProfileSettingsLinks,
         currentUserId: String
     ) {
@@ -119,6 +123,8 @@ public final class ProfileKitRouter {
         self.followRequestsLoader = followRequestsLoader
         self.followRequestCountLoader = followRequestCountLoader
         self.followRequestApprover = followRequestApprover
+        self.publicProfileLoader = publicProfileLoader
+        self.userSearchLoader = userSearchLoader
         self.links = links
         self.currentUserId = currentUserId
     }
@@ -133,6 +139,17 @@ public final class ProfileKitRouter {
         let rootVC = viewController(for: .myProfile)
         rootViewController = rootVC
         navigationController.setViewControllers([rootVC], animated: false)
+    }
+
+    /// Pushes someone's profile onto this router's navigation controller, for
+    /// a router built on **another** tab's stack. DISCOVER's authors and the
+    /// legacy `UserProfileCoordinator` both open profiles this way, without
+    /// `start()`, so the tab they are in keeps its own root
+    /// (`PROFILE_PLAN.md` step 7). Everything pushed from that profile
+    /// (follow lists, other profiles) stays on the same stack.
+    @MainActor
+    public func showUserProfile(_ userId: String) {
+        navigate(to: .userProfile(userId: userId))
     }
 }
 
@@ -150,6 +167,7 @@ extension ProfileKitRouter {
                 subscription: subscription
             )
             viewModel.onOpenFollowRequests = { [weak self] in self?.navigate(to: .followRequests) }
+            viewModel.onOpenSearch = { [weak self] in self?.navigate(to: .search) }
             viewModel.onOpenFollowList = { [weak self, weak viewModel] kind in
                 guard let self, case .loaded(let header) = viewModel?.header else { return }
                 self.navigate(to: .followList(kind, userId: header.userId))
@@ -210,7 +228,11 @@ extension ProfileKitRouter {
                 unfollower: unfollower,
                 followerRemover: followerRemover
             )
-            let vc = UIHostingController(rootView: FollowListScreen(viewModel: viewModel, photoLoader: photoLoader))
+            let vc = UIHostingController(rootView: FollowListScreen(
+                viewModel: viewModel,
+                photoLoader: photoLoader,
+                onOpenProfile: { [weak self] in self?.showUserProfile($0) }
+            ))
             vc.hidesBottomBarWhenPushed = true
             return vc
 
@@ -221,7 +243,38 @@ extension ProfileKitRouter {
                 approver: followRequestApprover,
                 decliner: followerRemover
             )
-            let vc = UIHostingController(rootView: FollowRequestsScreen(viewModel: viewModel, photoLoader: photoLoader))
+            let vc = UIHostingController(rootView: FollowRequestsScreen(
+                viewModel: viewModel,
+                photoLoader: photoLoader,
+                onOpenProfile: { [weak self] in self?.showUserProfile($0) }
+            ))
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .userProfile(let userId):
+            let viewModel = UserProfileViewModel(
+                userId: userId,
+                currentUserId: currentUserId,
+                profileLoader: publicProfileLoader,
+                photoLoader: photoLoader,
+                statusLoader: followStatusLoader,
+                followWriter: followWriter,
+                unfollower: unfollower
+            )
+            viewModel.onOpenFollowList = { [weak self] kind in
+                self?.navigate(to: .followList(kind, userId: userId))
+            }
+            let vc = UIHostingController(rootView: UserProfileScreen(viewModel: viewModel))
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .search:
+            let viewModel = UserSearchViewModel(loader: userSearchLoader)
+            let vc = UIHostingController(rootView: UserSearchScreen(
+                viewModel: viewModel,
+                photoLoader: photoLoader,
+                onOpenProfile: { [weak self] in self?.showUserProfile($0) }
+            ))
             vc.hidesBottomBarWhenPushed = true
             return vc
 

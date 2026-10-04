@@ -43,6 +43,7 @@ final class MyProfileViewModel: ObservableObject {
     var onEditProfile: ((ProfileHeader, UIImage?) -> Void)?
     var onOpenFollowList: ((FollowListKind) -> Void)?
     var onOpenFollowRequests: (() -> Void)?
+    var onOpenSearch: (() -> Void)?
 
     init(
         profileLoader: MyProfileLoader,

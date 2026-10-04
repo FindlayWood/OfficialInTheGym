@@ -47,7 +47,7 @@ class PlayerInitialViewController: UITabBarController {
         // MyDay library at once — see `MyDayWorkoutLibrary`.
         let discoverKit = DiscoverKitComposition()
         let discoverNavigationController = UINavigationController()
-        discoverKit.composeCombination(discoverNavigationController, workoutLibrary: myDayKit.workoutLibrary)
+        discoverKit.composeCombination(discoverNavigationController, workoutLibrary: myDayKit.workoutLibrary, purchaseManager: subscriptionManager)
         discoverNavigationController.tabBarItem = UITabBarItem(title: "DISCOVER", image: UIImage(systemName: "magnifyingglass"), tag: 1)
         
         // MARK: - Stats Kit

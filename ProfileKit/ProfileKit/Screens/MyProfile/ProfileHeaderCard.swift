@@ -56,8 +56,8 @@ struct ProfileHeaderCard: View {
             if let counts {
                 ProfileCountsRow(
                     counts: counts,
-                    onFollowers: { onOpenFollowList?(.followers) },
-                    onFollowing: { onOpenFollowList?(.following) }
+                    onFollowers: onOpenFollowList.map { open in { open(.followers) } },
+                    onFollowing: onOpenFollowList.map { open in { open(.following) } }
                 )
             }
 

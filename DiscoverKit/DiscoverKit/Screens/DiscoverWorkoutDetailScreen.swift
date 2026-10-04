@@ -28,6 +28,8 @@ struct DiscoverWorkoutDetailScreen: View {
     @State private var reportRequest: DiscoverReportRequest?
     var onOpenComments: () -> Void = {}
     var onTagTapped: (String) -> Void = { _ in }
+    /// Nil when profiles cannot be opened, or for your own workout.
+    var onOpenAuthor: (() -> Void)?
 
     var body: some View {
         ScrollView {
@@ -43,9 +45,22 @@ struct DiscoverWorkoutDetailScreen: View {
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundStyle(.secondary)
                             if let author = detailViewModel.authorName {
-                                Text("by \(author)")
-                                    .font(.system(size: 13, weight: .medium))
-                                    .foregroundStyle(Color.darkColor)
+                                if let onOpenAuthor {
+                                    Button(action: onOpenAuthor) {
+                                        HStack(spacing: 3) {
+                                            Text("by \(author)")
+                                            Image(systemName: "chevron.right")
+                                                .font(.system(size: 10, weight: .bold))
+                                        }
+                                        .font(.system(size: 13, weight: .medium))
+                                        .foregroundStyle(Color.darkColor)
+                                    }
+                                    .buttonStyle(.plain)
+                                } else {
+                                    Text("by \(author)")
+                                        .font(.system(size: 13, weight: .medium))
+                                        .foregroundStyle(Color.darkColor)
+                                }
                             }
                         }
                         Spacer(minLength: 0)

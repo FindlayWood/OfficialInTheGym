@@ -6,14 +6,29 @@
 //  Copyright © 2021 FindlayWood. All rights reserved.
 //
 
+import ProfileKit
 import UIKit
 
-/// Child Coordinator to handle the flow when a user profile is shown
+/// Child Coordinator to handle the flow when a user profile is shown.
+///
+/// **It shows ProfileKit's profile now, not `PublicTimelineViewController`.**
+/// Every legacy screen that opens a person (NEWSFEED, comment sections, tagged
+/// users, the old follower lists, nine callers in all) comes through `start()`,
+/// so changing it here moves all of them to the one profile and the one
+/// Firestore follow button at once (`PROFILE_PLAN.md` step 7). The legacy
+/// RTDB Follow button that lived on `PublicTimelineViewController` is no longer
+/// reachable from anywhere.
+///
+/// The flow methods below served `PublicTimelineViewController` and are now
+/// unused. They are left for the legacy-cleanup pass rather than removed
+/// piecemeal.
 class UserProfileCoordinator: NSObject, Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     var userToShow: Users
     var subscriptionManager: PurchaseManager
+    /// Retained here: nothing else holds the router once it has pushed.
+    private var profileRouter: ProfileKitRouter?
     
     init(navigationController: UINavigationController, user: Users, subscriptionManager: PurchaseManager) {
         self.navigationController = navigationController
@@ -22,11 +37,13 @@ class UserProfileCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let vc = PublicTimelineViewController()
-        vc.coordinator = self
-        vc.purchaseManager = subscriptionManager
-        vc.viewModel.user = userToShow
-        navigationController.pushViewController(vc, animated: true)
+        // Coordinators start on the main thread; the protocol just predates
+        // actor annotations.
+        MainActor.assumeIsolated {
+            let router = ProfileKitComposition().makeRouter(navigationController, purchaseManager: subscriptionManager)
+            profileRouter = router
+            router.showUserProfile(userToShow.uid)
+        }
     }
     
     func childDidFinish(_ child: Coordinator?) {
