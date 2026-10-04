@@ -921,10 +921,18 @@ matters most:
 - [ ] Ships with steps 7–9. The App Store requires it as soon as account creation exists, which it
       already does
 
-**Later steps** (expanded as they land)
-- [ ] `Follows` rules + indexes **before** `MigrateFollows.py --write`
-- [ ] Profile reporting and blocking (step 9) live **before** other users' profiles (step 7) reach
-      real users
+**Before shipping steps 7–10 to users**
+- [ ] **DISCOVER's rollout checklist is complete first** (`DISCOVER_PLAN.md`). PROFILE builds on
+      it: `Profiles` reuses DISCOVER's card functions, author names read `Profiles`, and profile
+      reports go through DISCOVER's moderation (step 6 of its checklist).
+- [ ] The functions `profile` branch (cut from `discover`, so it carries every DISCOVER function)
+      is pushed and merged, so deploys come from a branch that exists somewhere other than this Mac
+- [ ] An on-device pass over every PROFILE screen. None has been checked on a simulator: own
+      profile, edit, body measurements, follow lists, requests, search, someone else's profile
+      (public, private, blocked, hidden), report, settings, delete account on a test user
+- [ ] CI runs again (GitHub billing, then Xcode / iOS 26 in the workflow; see `CLAUDE.md` →
+      *Testing → CI*), or the ProfileKit and DiscoverKit suites are run by hand on the release
+      build
 
 ---
 
