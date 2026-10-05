@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-/// Search, pushed from the magnifier on DISCOVER's title bar. The field sits
-/// on a white bar above a `darkColor` page of `SectionContainer` cards — People,
+/// Search, pushed from the magnifier on DISCOVER's title bar. The field and the
+/// scope filter (`DiscoverSearchScopePicker`) sit on a white bar above a `darkColor` page of `SectionContainer` cards — People,
 /// Workouts, Exercises — so results read like the home screen's sections.
 ///
 /// **A kind with no matches is left out rather than drawn as an empty card**;
@@ -22,6 +22,7 @@ struct DiscoverSearchScreen: View {
 
     @ObservedObject var viewModel: DiscoverSearchViewModel
     @ObservedObject var moderation: DiscoverModerationStore
+    let authors: DiscoverAuthorDirectory
     /// Nil with no profile opener: people still show, as plain rows.
     let onPersonTapped: ((DiscoverUserProfile) -> Void)?
     let onWorkoutTapped: (DiscoverWorkoutCard) -> Void
@@ -31,17 +32,25 @@ struct DiscoverSearchScreen: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            DiscoverSearchField(text: $viewModel.query, isFocused: $isFocused)
+            VStack(spacing: 10) {
+                DiscoverSearchField(text: $viewModel.query, isFocused: $isFocused)
+                DiscoverSearchScopePicker(scope: $viewModel.scope)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .background {
+                Color(.systemBackground).ignoresSafeArea()
+            }
             ScrollView {
                 VStack(spacing: 24) {
                     if viewModel.isIdle {
-                        message("Search for people, workouts and exercises.")
+                        message(idleMessage)
                     } else if hasNoResults {
                         message("No results for \u{201C}\(viewModel.query.trimmingCharacters(in: .whitespaces))\u{201D}")
                     } else {
-                        peopleSection
-                        workoutsSection
-                        exercisesSection
+                        if viewModel.scope.includesPeople { peopleSection }
+                        if viewModel.scope.includesWorkouts { workoutsSection }
+                        if viewModel.scope.includesExercises { exercisesSection }
                     }
                 }
                 .padding()
@@ -74,11 +83,21 @@ struct DiscoverSearchScreen: View {
         return exercises
     }
 
-    /// Every kind has answered, and answered with nothing.
+    /// Every kind in scope has answered, and answered with nothing.
     private var hasNoResults: Bool {
-        visiblePeople?.isEmpty == true
-            && visibleWorkouts?.isEmpty == true
-            && visibleExercises?.isEmpty == true
+        let scope = viewModel.scope
+        return (!scope.includesPeople || visiblePeople?.isEmpty == true)
+            && (!scope.includesWorkouts || visibleWorkouts?.isEmpty == true)
+            && (!scope.includesExercises || visibleExercises?.isEmpty == true)
+    }
+
+    private var idleMessage: String {
+        switch viewModel.scope {
+        case .all: "Search for people, workouts and exercises."
+        case .people: "Search for people by name or @username."
+        case .workouts: "Search for workouts by title."
+        case .exercises: "Search for exercises by name."
+        }
     }
 
     // MARK: - Sections
@@ -104,9 +123,11 @@ struct DiscoverSearchScreen: View {
             state: viewModel.workouts,
             visible: visibleWorkouts,
             failure: "Couldn't search workouts",
+            dividerInset: 16,
+            skeleton: AnyView(DiscoverWorkoutRowSkeleton()),
             retry: { await viewModel.retryWorkouts() }
         ) { workout in
-            DiscoverWorkoutRow(card: workout)
+            DiscoverWorkoutRow(card: workout, authors: authors)
                 .onTapGesture { onWorkoutTapped(workout) }
         }
     }
@@ -133,15 +154,17 @@ struct DiscoverSearchScreen: View {
         state: DiscoverSectionState<[Item]>,
         visible: [Item]?,
         failure: String,
+        dividerInset: CGFloat = 72,
+        skeleton: AnyView = AnyView(DiscoverRowSkeleton()),
         retry: @escaping () async -> Void,
         @ViewBuilder row: @escaping (Item) -> Row
     ) -> some View {
         switch state {
         case .loading:
             SectionContainer(title: title) {
-                DiscoverRowSkeleton()
-                Divider().padding(.leading, 72)
-                DiscoverRowSkeleton()
+                skeleton
+                Divider().padding(.leading, dividerInset)
+                skeleton
             }
         case .failed:
             SectionContainer(title: title) {
@@ -155,7 +178,7 @@ struct DiscoverSearchScreen: View {
                     VStack(spacing: 0) {
                         ForEach(Array(visible.enumerated()), id: \.element.id) { index, item in
                             if index > 0 {
-                                Divider().padding(.leading, 72)
+                                Divider().padding(.leading, dividerInset)
                             }
                             row(item)
                         }
@@ -188,6 +211,7 @@ struct DiscoverSearchScreen: View {
         DiscoverSearchScreen(
             viewModel: viewModel,
             moderation: PreviewModeration.store(),
+            authors: DiscoverAuthorDirectory(loader: PreviewUserProfileLoader(), currentUserId: "me"),
             onPersonTapped: { _ in },
             onWorkoutTapped: { _ in },
             onExerciseTapped: { _ in }

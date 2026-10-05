@@ -1260,7 +1260,20 @@ people-only search, which is deleted. Built, not rolled out — checklist in `DI
   and **`DiscoverSearchPrefix` the one range** — do not re-derive either at a call site.
 - **Each kind loads and fails on its own**, as the home sections do; a kind with no matches is left
   out rather than drawn empty.
+- **The All / People / Workouts / Exercises filter narrows the query, not just the screen**
+  (`DiscoverSearchScope`): one kind is searched alone at 25 results instead of 10, and a filter tap
+  re-runs at once, without the typing debounce.
 - You are never in your own people results, and moderation filters the rest, as on every list.
+
+### The workout row is one component everywhere
+`DiscoverWorkoutRow` is the workout on home, see-all, tag pages and search. It has **no icon tile**:
+every workout drew the same dumbbell, so the tile said nothing. It is about twice the exercise row's
+height and spends that on what tells workouts apart — title (two lines), "by Name · date",
+exercise-count / rating / comment pills, and up to three tags. Rating and comments show only once
+there are some. Workout lists divide at a 16pt inset; icon-tile rows keep 72.
+**Author names come from `DiscoverAuthorDirectory`**, one per flow on the router, which batches the
+ids rows request as they appear into one `UserProfileLoader` call. A per-row lookup would be a read
+per row. Your own workouts read "by You" without a lookup.
 
 ### Workout pages — Save to Library, a copy
 The workout page's one action is **Save to Library** — never "Add to Today"; a day is MyDay's. The

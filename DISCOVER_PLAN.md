@@ -823,6 +823,13 @@ No rules change: people search reads `Profiles` as before, and the card queries 
   `MyProfileViewModel.onOpenSearch`, the `.search` route, `FirestoreUserSearchLoader`, and
   `UserSearchViewModelTests` — whose cases moved to `DiscoverSearchViewModelTests` (8 tests).
 
+**Added after: the scope filter.** All / People / Workouts / Exercises capsules under the field
+(`DiscoverSearchScope`, `DiscoverSearchScopePicker`). A single kind is searched alone with a limit of
+25, and changing the filter re-runs at once. Same commit: the workout row across DISCOVER lost its
+icon tile and roughly doubled in height to carry author, date, exercise count, rating, comments and
+tags (`DiscoverWorkoutRow`, `DiscoverAuthorDirectory`, `DiscoverMetaPill`). No new indexes — the
+queries are the same, only their limits differ.
+
 **Known limit: prefix, not substring.** "upper" does not find "Saturday Upper", and "squat" does not
 find "Back Squat". Firestore can only answer a prefix. Matching any word's start would mean a
 server-written array of word prefixes queried with `array-contains` — a projection change and new

@@ -22,6 +22,10 @@ struct DiscoverCardListScreen<Card: Identifiable, Row: View>: View {
     /// Whether this user has blocked or reported a card — it is skipped. The
     /// pager still pages over it, so "load more" keeps its place.
     var hides: (Card) -> Bool = { _ in false }
+    /// Where the divider starts: 72 past an icon tile, 16 for workout rows.
+    var dividerInset: CGFloat = 72
+    /// Loading rows shaped like the real one.
+    var skeleton: AnyView = AnyView(DiscoverRowSkeleton())
     let onTap: (Card) -> Void
     @ViewBuilder let row: (Card) -> Row
 
@@ -35,7 +39,7 @@ struct DiscoverCardListScreen<Card: Identifiable, Row: View>: View {
                                 .task { await pager.loadMore(ifShowing: card) }
                         } else {
                             if index > 0 {
-                                Divider().padding(.leading, 72)
+                                Divider().padding(.leading, dividerInset)
                             }
                             row(card)
                                 .onTapGesture { onTap(card) }
@@ -63,9 +67,11 @@ struct DiscoverCardListScreen<Card: Identifiable, Row: View>: View {
             }
         } else if pager.isLoading {
             if pager.cards.isEmpty {
-                DiscoverRowSkeleton()
-                DiscoverRowSkeleton()
-                DiscoverRowSkeleton()
+                skeleton
+                Divider().padding(.leading, dividerInset)
+                skeleton
+                Divider().padding(.leading, dividerInset)
+                skeleton
             } else {
                 ProgressView().padding(.vertical, 16)
             }

@@ -17,6 +17,7 @@ struct DiscoverHomeScreen: View {
 
     @ObservedObject var viewModel: DiscoverHomeViewModel
     @ObservedObject var moderation: DiscoverModerationStore
+    let authors: DiscoverAuthorDirectory
 
     var body: some View {
         VStack(spacing: 0) {
@@ -121,12 +122,12 @@ struct DiscoverHomeScreen: View {
         ) {
             switch viewModel.workouts {
             case .loading:
-                skeletonRows(count: 3)
+                skeletonRows(count: 3, dividerInset: 16) { DiscoverWorkoutRowSkeleton() }
             case .loaded(let workouts) where workouts.allSatisfy(moderation.hides):
                 DiscoverSectionMessage(message: "No public workouts yet")
             case .loaded(let workouts):
-                rows(workouts.filter { !moderation.hides($0) }) { workout in
-                    DiscoverWorkoutRow(card: workout)
+                rows(workouts.filter { !moderation.hides($0) }, dividerInset: 16) { workout in
+                    DiscoverWorkoutRow(card: workout, authors: authors)
                         .onTapGesture { viewModel.onWorkoutTapped?(workout) }
                 }
             case .failed:
@@ -146,7 +147,7 @@ struct DiscoverHomeScreen: View {
         ) {
             switch viewModel.exercises {
             case .loading:
-                skeletonRows(count: 3)
+                skeletonRows(count: 3) { DiscoverRowSkeleton() }
             case .loaded(let exercises) where exercises.isEmpty:
                 DiscoverSectionMessage(message: "No exercises yet")
             case .loaded(let exercises):
@@ -194,27 +195,34 @@ struct DiscoverHomeScreen: View {
 
     // MARK: - Rows
 
+    /// `dividerInset` lines the divider up with the row's text: 72 past an
+    /// icon tile, 16 for workout rows, which have none.
     private func rows<Card: Identifiable, Row: View>(
         _ cards: [Card],
+        dividerInset: CGFloat = 72,
         @ViewBuilder row: @escaping (Card) -> Row
     ) -> some View {
         VStack(spacing: 0) {
             ForEach(Array(cards.enumerated()), id: \.element.id) { index, card in
                 if index > 0 {
-                    Divider().padding(.leading, 72)
+                    Divider().padding(.leading, dividerInset)
                 }
                 row(card)
             }
         }
     }
 
-    private func skeletonRows(count: Int) -> some View {
+    private func skeletonRows<Skeleton: View>(
+        count: Int,
+        dividerInset: CGFloat = 72,
+        @ViewBuilder skeleton: @escaping () -> Skeleton
+    ) -> some View {
         VStack(spacing: 0) {
             ForEach(0..<count, id: \.self) { index in
                 if index > 0 {
-                    Divider().padding(.leading, 72)
+                    Divider().padding(.leading, dividerInset)
                 }
-                DiscoverRowSkeleton()
+                skeleton()
             }
         }
     }
@@ -228,6 +236,7 @@ struct DiscoverHomeScreen: View {
             exerciseLoader: PreviewDiscoverExerciseCardLoader(),
             tagLoader: PreviewTagLoaders()
         ),
-        moderation: PreviewModeration.store()
+        moderation: PreviewModeration.store(),
+        authors: DiscoverAuthorDirectory(loader: PreviewUserProfileLoader(), currentUserId: "me")
     )
 }

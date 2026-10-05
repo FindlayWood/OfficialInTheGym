@@ -15,6 +15,7 @@ struct DiscoverTagScreen: View {
     @ObservedObject var exercises: DiscoverPager<DiscoverTagged<DiscoverExerciseCard>>
     @ObservedObject var workouts: DiscoverPager<DiscoverTagged<DiscoverWorkoutCard>>
     @ObservedObject var moderation: DiscoverModerationStore
+    let authors: DiscoverAuthorDirectory
     let onExerciseTapped: (DiscoverExerciseCard) -> Void
     let onWorkoutTapped: (DiscoverWorkoutCard) -> Void
 
@@ -25,8 +26,14 @@ struct DiscoverTagScreen: View {
                     DiscoverExerciseRow(card: tagged.card)
                         .onTapGesture { onExerciseTapped(tagged.card) }
                 }
-                section("Workouts", pager: workouts, hides: { moderation.hides($0.card) }) { tagged in
-                    DiscoverWorkoutRow(card: tagged.card)
+                section(
+                    "Workouts",
+                    pager: workouts,
+                    hides: { moderation.hides($0.card) },
+                    dividerInset: 16,
+                    skeleton: AnyView(DiscoverWorkoutRowSkeleton())
+                ) { tagged in
+                    DiscoverWorkoutRow(card: tagged.card, authors: authors)
                         .onTapGesture { onWorkoutTapped(tagged.card) }
                 }
             }
@@ -50,6 +57,8 @@ struct DiscoverTagScreen: View {
         _ title: String,
         pager: DiscoverPager<Card>,
         hides: @escaping (Card) -> Bool = { _ in false },
+        dividerInset: CGFloat = 72,
+        skeleton: AnyView = AnyView(DiscoverRowSkeleton()),
         @ViewBuilder row: @escaping (Card) -> Row
     ) -> some View {
         SectionContainer(title: title) {
@@ -58,7 +67,7 @@ struct DiscoverTagScreen: View {
                 ForEach(pager.cards) { card in
                     if shownIds.contains(card.id) {
                         if card.id != pager.cards.first(where: { shownIds.contains($0.id) })?.id {
-                            Divider().padding(.leading, 72)
+                            Divider().padding(.leading, dividerInset)
                         }
                         row(card)
                             .task { await pager.loadMore(ifShowing: card) }
@@ -72,8 +81,8 @@ struct DiscoverTagScreen: View {
                         Task { await pager.retry() }
                     }
                 } else if pager.isLoading, pager.cards.isEmpty {
-                    DiscoverRowSkeleton()
-                    DiscoverRowSkeleton()
+                    skeleton
+                    skeleton
                 } else if pager.isLoading {
                     ProgressView().padding(.vertical, 16)
                 } else if pager.cards.allSatisfy(hides) {

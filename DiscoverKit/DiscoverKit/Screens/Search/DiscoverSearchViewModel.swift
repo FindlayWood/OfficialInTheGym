@@ -24,14 +24,22 @@ import Foundation
 /// three are three separate queries that land at three different times. So
 /// there is no single results state, only `isIdle` and one
 /// `DiscoverSectionState` per kind.
+///
+/// **`scope` narrows the search itself** (see `DiscoverSearchScope`). Changing
+/// it re-runs at once, without the debounce — it is a tap, not typing — and
+/// only the kinds in scope are searched. A kind out of scope keeps whatever
+/// state it had; the screen does not draw it.
 @MainActor
 final class DiscoverSearchViewModel: ObservableObject {
 
-    /// Per kind. Three full lists of twenty would bury the third section.
-    static let limit = 10
-
     @Published var query = "" {
         didSet { scheduleSearch() }
+    }
+    @Published var scope: DiscoverSearchScope = .all {
+        didSet {
+            guard scope != oldValue else { return }
+            searchNow()
+        }
     }
     /// True while there is nothing to search for — the field is empty or only
     /// whitespace. The three states below are meaningless while it is.
@@ -68,6 +76,15 @@ final class DiscoverSearchViewModel: ObservableObject {
         DiscoverSearchQuery.normalized(query)
     }
 
+    private func searchNow() {
+        searchTask?.cancel()
+        let text = normalizedQuery
+        guard !text.isEmpty else { return }
+        searchTask = Task { [weak self] in
+            await self?.search(text)
+        }
+    }
+
     private func scheduleSearch() {
         searchTask?.cancel()
         let text = normalizedQuery
@@ -80,12 +97,13 @@ final class DiscoverSearchViewModel: ObservableObject {
         }
     }
 
-    /// Runs all three searches now, each publishing as it lands. The debounced
-    /// path calls this; tests call it directly.
+    /// Runs every search in `scope` now, each publishing as it lands. The
+    /// debounced path calls this; tests call it directly.
     func search(_ text: String) async {
-        async let people: Void = searchPeople(text)
-        async let workouts: Void = searchWorkouts(text)
-        async let exercises: Void = searchExercises(text)
+        let scope = scope
+        async let people: Void = scope.includesPeople ? searchPeople(text) : ()
+        async let workouts: Void = scope.includesWorkouts ? searchWorkouts(text) : ()
+        async let exercises: Void = scope.includesExercises ? searchExercises(text) : ()
         _ = await (people, workouts, exercises)
     }
 
@@ -111,7 +129,7 @@ final class DiscoverSearchViewModel: ObservableObject {
     private func searchPeople(_ text: String) async {
         people = .loading
         do {
-            let results = try await peopleLoader.people(matching: text, limit: Self.limit)
+            let results = try await peopleLoader.people(matching: text, limit: scope.limit)
             guard isCurrent(text) else { return }
             people = .loaded(results.filter { $0.userId != currentUserId })
         } catch {
@@ -124,7 +142,7 @@ final class DiscoverSearchViewModel: ObservableObject {
     private func searchWorkouts(_ text: String) async {
         workouts = .loading
         do {
-            let results = try await workoutLoader.workouts(matching: text, limit: Self.limit)
+            let results = try await workoutLoader.workouts(matching: text, limit: scope.limit)
             guard isCurrent(text) else { return }
             workouts = .loaded(results)
         } catch {
@@ -137,7 +155,7 @@ final class DiscoverSearchViewModel: ObservableObject {
     private func searchExercises(_ text: String) async {
         exercises = .loading
         do {
-            let results = try await exerciseLoader.exercises(matching: text, limit: Self.limit)
+            let results = try await exerciseLoader.exercises(matching: text, limit: scope.limit)
             guard isCurrent(text) else { return }
             exercises = .loaded(results)
         } catch {

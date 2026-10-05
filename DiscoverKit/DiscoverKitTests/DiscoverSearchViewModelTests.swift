@@ -83,6 +83,41 @@ final class DiscoverSearchViewModelTests: XCTestCase {
         XCTAssertEqual(sut.spy.receivedMessages.filter { if case .people = $0 { true } else { false } }.count, 1)
     }
 
+    // Narrowing must change the query, not just the screen: one kind, more of it.
+    func test_search_searchesOnlyTheScopedKindWithTheLargerLimit() async {
+        let sut = makeSUT()
+        sut.viewModel.query = "pu"
+        sut.viewModel.scope = .workouts
+
+        await sut.viewModel.search("pu")
+
+        XCTAssertTrue(sut.spy.receivedMessages.allSatisfy { $0 == .workouts("pu", limit: DiscoverSearchScope.workouts.limit) })
+        XCTAssertFalse(sut.spy.receivedMessages.isEmpty)
+    }
+
+    // A filter tap is not typing; waiting out the debounce would make the
+    // screen look as if the tap did nothing.
+    func test_scope_changeSearchesAgainWithoutTheDebounce() async throws {
+        let sut = makeSUT(debounce: .seconds(60))
+        sut.spy.exercises = ["back": [exercise("Back Squat")]]
+        sut.viewModel.query = "back"
+
+        sut.viewModel.scope = .exercises
+        try await Task.sleep(for: .milliseconds(100))
+
+        XCTAssertEqual(sut.spy.receivedMessages, [.exercises("back", limit: DiscoverSearchScope.exercises.limit)])
+        XCTAssertEqual(sut.viewModel.exercises, .loaded([exercise("Back Squat")]))
+    }
+
+    func test_scope_changeWithAnEmptyQuerySearchesNothing() async throws {
+        let sut = makeSUT()
+
+        sut.viewModel.scope = .people
+        try await Task.sleep(for: .milliseconds(50))
+
+        XCTAssertTrue(sut.spy.receivedMessages.isEmpty)
+    }
+
     func test_query_whitespaceOnlyIsIdle() {
         let sut = makeSUT()
         sut.viewModel.query = "al"
@@ -103,7 +138,7 @@ final class DiscoverSearchViewModelTests: XCTestCase {
         sut.viewModel.query = "Back"
         try await Task.sleep(for: .milliseconds(150))
 
-        let limit = DiscoverSearchViewModel.limit
+        let limit = DiscoverSearchScope.all.limit
         XCTAssertEqual(Set(sut.spy.receivedMessages), [
             .people("back", limit: limit),
             .workouts("back", limit: limit),

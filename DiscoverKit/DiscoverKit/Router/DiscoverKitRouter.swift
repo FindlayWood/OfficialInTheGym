@@ -84,6 +84,11 @@ public final class DiscoverKitRouter {
         blockWriter: blockedUsersWriter
     )
 
+    /// Workout authors' names, shared by every list for the reason given on
+    /// `DiscoverAuthorDirectory`.
+    @MainActor
+    private(set) lazy var authors = DiscoverAuthorDirectory(loader: profileLoader, currentUserId: currentUserId)
+
     // MARK: - Init
 
     public init(
@@ -200,7 +205,7 @@ extension DiscoverKitRouter {
             viewModel.onClipTapped = { [weak self] in self?.navigate(to: .clipPlayer($0)) }
             viewModel.onOpenSearch = { [weak self] in self?.navigate(to: .search) }
             let vc = DiscoverKitBoundaryViewController()
-            vc.display = DiscoverHomeScreen(viewModel: viewModel, moderation: moderation)
+            vc.display = DiscoverHomeScreen(viewModel: viewModel, moderation: moderation, authors: authors)
             vc.router = self
             return vc
 
@@ -229,8 +234,10 @@ extension DiscoverKitRouter {
                     pager: pager,
                     moderation: moderation,
                     hides: { [moderation] in moderation.hides($0) },
+                    dividerInset: 16,
+                    skeleton: AnyView(DiscoverWorkoutRowSkeleton()),
                     onTap: { [weak self] in self?.navigate(to: .workoutDetail($0)) },
-                    row: { DiscoverWorkoutRow(card: $0) }
+                    row: { [authors] in DiscoverWorkoutRow(card: $0, authors: authors) }
                 )
             )
             vc.hidesBottomBarWhenPushed = true
@@ -363,6 +370,7 @@ extension DiscoverKitRouter {
                     exercises: exercises,
                     workouts: workouts,
                     moderation: moderation,
+                    authors: authors,
                     onExerciseTapped: { [weak self] in self?.navigate(to: .exerciseDetail($0)) },
                     onWorkoutTapped: { [weak self] in self?.navigate(to: .workoutDetail($0)) }
                 )
@@ -381,6 +389,7 @@ extension DiscoverKitRouter {
                 rootView: DiscoverSearchScreen(
                     viewModel: viewModel,
                     moderation: moderation,
+                    authors: authors,
                     onPersonTapped: profileOpener.map { opener in { opener.openProfile($0.userId) } },
                     onWorkoutTapped: { [weak self] in self?.navigate(to: .workoutDetail($0)) },
                     onExerciseTapped: { [weak self] in self?.navigate(to: .exerciseDetail($0)) }
