@@ -18,3 +18,6 @@ enum DiscoverSectionState<Value> {
     case loaded(Value)
     case failed
 }
+
+/// For the search view model's tests, which compare whole states.
+extension DiscoverSectionState: Equatable where Value: Equatable {}

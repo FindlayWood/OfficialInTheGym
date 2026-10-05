@@ -1,16 +1,18 @@
 //
-//  FirestoreUserSearchLoader.swift
+//  FirestorePeopleSearchLoader.swift
 //  InTheGym
 //
-//  Created by Findlay Wood on 04/10/2026.
+//  Created by Findlay Wood on 05/10/2026.
 //  Copyright © 2026 FindlayWood. All rights reserved.
 //
+
+import DiscoverKit
 import FirebaseFirestore
-import ProfileKit
 
 /// Prefix search over `Profiles`: `usernameLower` and `displayNameLower` each
-/// matched as `>= query` and `< query + "\u{f8ff}"`, the standard Firestore
-/// prefix range. Both fields are written lowercase by `syncProfile`.
+/// matched as `>= query` and `< query + "\u{f8ff}"` (`DiscoverSearchPrefix`).
+/// Both fields are written lowercase by `syncProfile`. Moved from ProfileKit's
+/// `FirestoreUserSearchLoader` when search moved to DISCOVER.
 ///
 /// Profiles moderation has hidden are dropped from the results here, after the
 /// query. Filtering on `status` in the query would need a composite index per
@@ -20,20 +22,15 @@ import ProfileKit
 /// typing a handle wants that exact person, then display-name matches not
 /// already found. Single-field range queries run on Firestore's automatic
 /// indexes, so this needs no composite index.
-struct FirestoreUserSearchLoader: UserSearchLoader {
+struct FirestorePeopleSearchLoader: PeopleSearchLoader {
 
-    func search(_ query: String, limit: Int) async throws -> [ProfileSummary] {
+    func people(matching query: String, limit: Int) async throws -> [DiscoverUserProfile] {
         let profiles = Firestore.firestore().collection("Profiles")
-        let end = query + "\u{f8ff}"
 
-        async let byUsername = profiles
-            .whereField("usernameLower", isGreaterThanOrEqualTo: query)
-            .whereField("usernameLower", isLessThan: end)
+        async let byUsername = DiscoverSearchPrefix.matching(query, on: "usernameLower", in: profiles)
             .limit(to: limit)
             .getDocuments()
-        async let byName = profiles
-            .whereField("displayNameLower", isGreaterThanOrEqualTo: query)
-            .whereField("displayNameLower", isLessThan: end)
+        async let byName = DiscoverSearchPrefix.matching(query, on: "displayNameLower", in: profiles)
             .limit(to: limit)
             .getDocuments()
 
@@ -42,7 +39,7 @@ struct FirestoreUserSearchLoader: UserSearchLoader {
         return (usernames.documents + names.documents).compactMap { document in
             guard document.get("status") as? String != "hidden",
                   seen.insert(document.documentID).inserted else { return nil }
-            return ProfileSummary(
+            return DiscoverUserProfile(
                 userId: document.documentID,
                 username: document.get("username") as? String ?? "",
                 displayName: document.get("displayName") as? String ?? ""

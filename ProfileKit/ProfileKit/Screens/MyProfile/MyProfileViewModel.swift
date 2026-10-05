@@ -52,7 +52,6 @@ final class MyProfileViewModel: ObservableObject {
     var onEditProfile: ((ProfileHeader, UIImage?) -> Void)?
     var onOpenFollowList: ((FollowListKind) -> Void)?
     var onOpenFollowRequests: (() -> Void)?
-    var onOpenSearch: (() -> Void)?
     /// The current pins, empty when highlights are automatic.
     var onEditHighlights: (([String]) -> Void)?
     var onOpenClip: ((ProfileClip) -> Void)?

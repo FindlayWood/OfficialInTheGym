@@ -554,7 +554,9 @@ report and block it.
 - Opened on your own id (your name in someone's list), it shows your public profile, with no Follow
   button.
 - A missing profile shows "This account isn't available", not an error to retry.
-- **Search** opens from a magnifier on the profile title bar (`UserSearchScreen`).
+- **Search** opens from a magnifier on the profile title bar (`UserSearchScreen`). **Since moved:**
+  it is now DISCOVER's unified search, and everything below was deleted from ProfileKit. See
+  *Follow-up — unified search* in `DISCOVER_PLAN.md`.
   - Prefix match on `usernameLower` and `displayNameLower`, username matches first.
   - Debounced 300 ms; every keystroke cancels the search before it, and results for a query no
     longer in the field are dropped. "@" and case are ignored.
@@ -960,10 +962,9 @@ matters most:
 
 ## Out of scope
 
-- **Search's long-term home.** Step 7's people search sits on the profile title bar for now. After
-  this plan is finished it moves to DISCOVER as a unified people + workouts + exercises search,
-  built entirely in DiscoverKit, and ProfileKit's search is deleted. See *Follow-up: unified
-  search* in `DISCOVER_PLAN.md`.
+- **Search's long-term home — done.** Step 7's people search moved to DISCOVER as a unified
+  people + workouts + exercises search, built entirely in DiscoverKit, and ProfileKit's search was
+  deleted. See *Follow-up — unified search* in `DISCOVER_PLAN.md`.
 
 - Posts, and the NEWSFEED question.
 - Workout history.

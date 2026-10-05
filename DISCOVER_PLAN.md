@@ -774,28 +774,59 @@ data lives. Nothing calls it until that feature exists.
 **The build is complete. What remains is the rollout checklist above** — rules, indexes, deploys,
 seeding and backfills, in step order.
 
-## Follow-up — unified search (agreed 2026-10-04, not started)
+## Follow-up — unified search — built, not rolled out
 
-**Scheduled after the PROFILE work (`PROFILE_PLAN.md`) is finished.** One search on the DISCOVER
-tab covering **people, workouts and exercises**, replacing the people-only search that PROFILE
-step 7 put on the profile title bar.
+Built 2026-10-05 on `search` branches (app from `staging`, functions from `profile`). One search on
+the DISCOVER tab covering **people, workouts and exercises**, which replaced the people-only search
+PROFILE step 7 put on the profile title bar.
 
-- **All of it is built in DiscoverKit**: the screen, its view model, the result rows and the loader
-  protocols. DiscoverKit still imports no other framework. A person result opens their profile
-  through the existing `UserProfileOpener`, and nothing else crosses into ProfileKit.
-- **The entry point is DISCOVER's title bar.** The profile's magnifier goes.
-- **ProfileKit's search is then deleted**, not kept beside it: `UserSearchScreen`,
-  `UserSearchViewModel`, `UserSearchRow`, `UserSearchLoader`, `PreviewPublicProfileServices`'
-  search half, `UserProfileViewModel.onOpenSearch` / the `.search` route, the app's
-  `FirestoreUserSearchLoader`, and `UserSearchViewModelTests`. Carry the useful behaviour across
-  into DiscoverKit: query normalisation (trim, lowercase, drop a leading "@"), the debounce that
-  cancels the previous search, and dropping results for a query no longer in the field.
-- **People** search `Profiles.usernameLower` / `displayNameLower`, which `syncProfile` already
-  writes. By then it should also exclude profiles moderation has hidden (PROFILE step 9).
-- **Workouts and exercises** need lowercase title fields on the cards, e.g. `titleLower` on
-  `DiscoverWorkouts` and `nameLower` on `DiscoverExercises`. That means a projection change in the
-  card functions plus a `rebuildDiscoverCards` run. Queries must keep the `status` / `isPublic`
-  filters every card query carries, which may need composite indexes alongside the prefix range.
+**Rollout checklist** — after DISCOVER and PROFILE are rolled out, in order:
+- [ ] Console indexes (collection scope): `DiscoverWorkouts` — `isPublic` ↑, `status` ↑,
+      `titleLower` ↑; `DiscoverExercises` — `status` ↑, `nameLower` ↑. Both searches fail without them.
+- [ ] Deploy functions from the `search` branch — `discoverExerciseCard`, `discoverWorkoutCard`, and
+      the tag triggers, which embed the card projection
+- [ ] `python RebuildDiscoverCards.py findlaywood1@gmail.com exercises` and `… workouts` — every card
+      projected before the deploy has no `titleLower` / `nameLower`, and **search cannot find it**
+- [ ] Search a username, a display name, a workout title and an exercise name from the magnifier on
+      DISCOVER's title bar; each opens its profile or page
+- [ ] Block someone, search for them: they do not appear. Your own account never does.
+- [ ] The profile's title bar has no magnifier
+
+No rules change: people search reads `Profiles` as before, and the card queries keep the `isPublic` /
+`status` filters the card rules already require.
+
+**What was built**
+- **All of it is in DiscoverKit**, which still imports no other framework: `DiscoverSearchScreen`,
+  `DiscoverSearchViewModel`, `DiscoverSearchField`, `DiscoverPersonRow`, and three narrow loader
+  protocols — `PeopleSearchLoader`, `WorkoutSearchLoader`, `ExerciseSearchLoader`. A person opens
+  through the existing `UserProfileOpener`; workouts and exercises open their DISCOVER pages.
+- **The entry point is a magnifier on DISCOVER's title bar** (`.search` route). The profile's went.
+- **`DiscoverSearchQuery.normalized` is the one query rule**, carried from ProfileKit: trimmed,
+  lowercased, a leading "@" dropped. So are the 300 ms debounce that cancels the previous search and
+  the check that drops results for a query no longer in the field.
+- **Each kind loads and fails on its own** — one `DiscoverSectionState` per kind, the home screen's
+  rule. A failed workouts query does not blank the people above it, and each has its own Try Again.
+- **A kind with no matches is left out**, not drawn as an empty card; one "No results" shows only
+  once all three have answered with nothing. Ten results per kind.
+- **You never appear in your own people results** — DISCOVER never opens your own profile
+  (`profileAction`), so the row would lead nowhere. Blocked people, and workouts you blocked or
+  reported, are filtered through `DiscoverModerationStore` as on every other DISCOVER list.
+- **Adapters** (`InTheGym/Launch/Composition/DiscoverKit/`): `FirestorePeopleSearchLoader` (moved from
+  ProfileKit's `FirestoreUserSearchLoader` — username matches first, then display names, hidden
+  profiles dropped), `FirestoreWorkoutSearchLoader`, `FirestoreExerciseSearchLoader`, all three
+  building their range through **`DiscoverSearchPrefix`**, the one definition of a Firestore prefix
+  match (`>= q`, `< q + "\u{f8ff}"`).
+- **Cloud**: the card projections write `titleLower` / `nameLower`, trimmed and lowercased, beside
+  `title` / `name`. Tag directory entries embed the projection, so they gain them too.
+- **Deleted from ProfileKit**: `UserSearchScreen`, `UserSearchViewModel`, `UserSearchRow`,
+  `UserSearchLoader`, the search half of `PreviewPublicProfileServices` and `PublicProfileServicesSpy`,
+  `MyProfileViewModel.onOpenSearch`, the `.search` route, `FirestoreUserSearchLoader`, and
+  `UserSearchViewModelTests` — whose cases moved to `DiscoverSearchViewModelTests` (8 tests).
+
+**Known limit: prefix, not substring.** "upper" does not find "Saturday Upper", and "squat" does not
+find "Back Squat". Firestore can only answer a prefix. Matching any word's start would mean a
+server-written array of word prefixes queried with `array-contains` — a projection change and new
+indexes, worth doing only once real searches show people typing second words.
 
 ## Out of scope
 

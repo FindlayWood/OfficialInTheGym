@@ -96,6 +96,14 @@ class DiscoverKitComposition {
 
         let exerciseClipsLoader: ExerciseClipsLoader = FirestoreExerciseClipsLoader()
 
+        // MARK: - Search
+
+        let peopleSearchLoader: PeopleSearchLoader = FirestorePeopleSearchLoader()
+
+        let workoutSearchLoader: WorkoutSearchLoader = FirestoreWorkoutSearchLoader()
+
+        let exerciseSearchLoader: ExerciseSearchLoader = FirestoreExerciseSearchLoader()
+
         let workoutCopySaver: WorkoutCopySaver? = workoutLibrary.map {
             LibraryWorkoutCopySaver(fetcher: templateFetcher, library: $0, userId: userId)
         }
@@ -143,6 +151,9 @@ class DiscoverKitComposition {
             blockedUsersWriter: blockedUsersWriter,
             workoutDetailLoader: workoutDetailLoader,
             exerciseClipsLoader: exerciseClipsLoader,
+            peopleSearchLoader: peopleSearchLoader,
+            workoutSearchLoader: workoutSearchLoader,
+            exerciseSearchLoader: exerciseSearchLoader,
             workoutCopySaver: workoutCopySaver,
             savedWorkoutCopyChecker: savedWorkoutCopyChecker,
             profileOpener: profileOpener,

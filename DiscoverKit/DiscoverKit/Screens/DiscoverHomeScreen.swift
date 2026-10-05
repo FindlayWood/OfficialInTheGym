@@ -44,15 +44,27 @@ struct DiscoverHomeScreen: View {
 
     // MARK: - Header
 
+    /// The magnifier is the app's one search — people, workouts and exercises.
+    /// It used to be people only, on the profile's title bar.
     private var header: some View {
         HStack {
             Text("Discover")
                 .font(.system(size: 28, weight: .bold))
                 .foregroundStyle(Color.darkColor)
             Spacer()
+            Button {
+                viewModel.onOpenSearch?()
+            } label: {
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(Color.darkColor)
+                    .frame(width: 44, height: 44)
+            }
+            .accessibilityLabel("Search")
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.leading, 16)
+        .padding(.trailing, 6)
+        .padding(.vertical, 6)
         .background {
             Color(.systemBackground).ignoresSafeArea()
         }

@@ -51,7 +51,6 @@ public final class ProfileKitRouter {
     let followRequestCountLoader: FollowRequestCountLoader
     let followRequestApprover: FollowRequestApprover
     let publicProfileLoader: PublicProfileLoader
-    let userSearchLoader: UserSearchLoader
     let highlightsLoader: ProfileHighlightsLoader
     let clipsLoader: ProfileClipsLoader
     let highlightCandidatesLoader: HighlightCandidatesLoader
@@ -105,7 +104,6 @@ public final class ProfileKitRouter {
         followRequestCountLoader: FollowRequestCountLoader,
         followRequestApprover: FollowRequestApprover,
         publicProfileLoader: PublicProfileLoader,
-        userSearchLoader: UserSearchLoader,
         highlightsLoader: ProfileHighlightsLoader,
         clipsLoader: ProfileClipsLoader,
         highlightCandidatesLoader: HighlightCandidatesLoader,
@@ -143,7 +141,6 @@ public final class ProfileKitRouter {
         self.followRequestCountLoader = followRequestCountLoader
         self.followRequestApprover = followRequestApprover
         self.publicProfileLoader = publicProfileLoader
-        self.userSearchLoader = userSearchLoader
         self.highlightsLoader = highlightsLoader
         self.clipsLoader = clipsLoader
         self.highlightCandidatesLoader = highlightCandidatesLoader
@@ -201,7 +198,6 @@ extension ProfileKitRouter {
                 self?.present(.editHighlights(pinned: pins, onSaved: { viewModel?.applySavedHighlights($0) }))
             }
             viewModel.onOpenFollowRequests = { [weak self] in self?.navigate(to: .followRequests) }
-            viewModel.onOpenSearch = { [weak self] in self?.navigate(to: .search) }
             viewModel.onOpenFollowList = { [weak self, weak viewModel] kind in
                 guard let self, case .loaded(let header) = viewModel?.header else { return }
                 self.navigate(to: .followList(kind, userId: header.userId))
@@ -307,16 +303,6 @@ extension ProfileKitRouter {
                 self?.navigate(to: .followList(kind, userId: userId))
             }
             let vc = UIHostingController(rootView: UserProfileScreen(viewModel: viewModel))
-            vc.hidesBottomBarWhenPushed = true
-            return vc
-
-        case .search:
-            let viewModel = UserSearchViewModel(loader: userSearchLoader)
-            let vc = UIHostingController(rootView: UserSearchScreen(
-                viewModel: viewModel,
-                photoLoader: photoLoader,
-                onOpenProfile: { [weak self] in self?.showUserProfile($0) }
-            ))
             vc.hidesBottomBarWhenPushed = true
             return vc
 

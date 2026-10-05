@@ -28,7 +28,6 @@
 		BF1A000000000000000000E4 /* FirestoreProfileClipsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D4 /* FirestoreProfileClipsLoader.swift */; };
 		BF1A000000000000000000E5 /* DiscoverClipOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D5 /* DiscoverClipOpener.swift */; };
 		BF1A000000000000000000C0 /* FirestorePublicProfileLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000B0 /* FirestorePublicProfileLoader.swift */; };
-		BF1A000000000000000000C1 /* FirestoreUserSearchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000B1 /* FirestoreUserSearchLoader.swift */; };
 		BF1A000000000000000000C8 /* ProfileKitUserProfileOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000B8 /* ProfileKitUserProfileOpener.swift */; };
 		BF1A000000000000000000A0 /* FollowsPageQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000090 /* FollowsPageQuery.swift */; };
 		BF1A000000000000000000A1 /* FirestoreFollowRequestsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000091 /* FirestoreFollowRequestsLoader.swift */; };
@@ -104,6 +103,10 @@
 		D1CA00000000000000000261 /* FirestoreWorkoutTemplateByIdFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000161 /* FirestoreWorkoutTemplateByIdFetcher.swift */; };
 		D1CA00000000000000000262 /* WorkoutTemplateModel+DiscoverWorkoutDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000162 /* WorkoutTemplateModel+DiscoverWorkoutDetail.swift */; };
 		D1CA00000000000000000263 /* TemplateDiscoverWorkoutDetailLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000163 /* TemplateDiscoverWorkoutDetailLoader.swift */; };
+		5EA1000000000000000000B1 /* DiscoverSearchPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA1000000000000000000A1 /* DiscoverSearchPrefix.swift */; };
+		5EA1000000000000000000B2 /* FirestorePeopleSearchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA1000000000000000000A2 /* FirestorePeopleSearchLoader.swift */; };
+		5EA1000000000000000000B3 /* FirestoreWorkoutSearchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA1000000000000000000A3 /* FirestoreWorkoutSearchLoader.swift */; };
+		5EA1000000000000000000B4 /* FirestoreExerciseSearchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA1000000000000000000A4 /* FirestoreExerciseSearchLoader.swift */; };
 		D1CA00000000000000000264 /* FirestoreExerciseClipsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000164 /* FirestoreExerciseClipsLoader.swift */; };
 		D1CA00000000000000000265 /* MyDayWorkoutLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000165 /* MyDayWorkoutLibrary.swift */; };
 		D1CA00000000000000000266 /* LibraryWorkoutCopySaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000166 /* LibraryWorkoutCopySaver.swift */; };
@@ -1073,7 +1076,6 @@
 		BF1A000000000000000000D4 /* FirestoreProfileClipsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileClipsLoader.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000D5 /* DiscoverClipOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverClipOpener.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000B0 /* FirestorePublicProfileLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePublicProfileLoader.swift; sourceTree = "<group>"; };
-		BF1A000000000000000000B1 /* FirestoreUserSearchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUserSearchLoader.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000B8 /* ProfileKitUserProfileOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileKitUserProfileOpener.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000090 /* FollowsPageQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowsPageQuery.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000091 /* FirestoreFollowRequestsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFollowRequestsLoader.swift; sourceTree = "<group>"; };
@@ -1148,6 +1150,10 @@
 		D1CA00000000000000000161 /* FirestoreWorkoutTemplateByIdFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreWorkoutTemplateByIdFetcher.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000162 /* WorkoutTemplateModel+DiscoverWorkoutDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutTemplateModel+DiscoverWorkoutDetail.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000163 /* TemplateDiscoverWorkoutDetailLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateDiscoverWorkoutDetailLoader.swift"; sourceTree = "<group>"; };
+		5EA1000000000000000000A1 /* DiscoverSearchPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSearchPrefix.swift; sourceTree = "<group>"; };
+		5EA1000000000000000000A2 /* FirestorePeopleSearchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePeopleSearchLoader.swift; sourceTree = "<group>"; };
+		5EA1000000000000000000A3 /* FirestoreWorkoutSearchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWorkoutSearchLoader.swift; sourceTree = "<group>"; };
+		5EA1000000000000000000A4 /* FirestoreExerciseSearchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreExerciseSearchLoader.swift; sourceTree = "<group>"; };
 		D1CA00000000000000000164 /* FirestoreExerciseClipsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreExerciseClipsLoader.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000165 /* MyDayWorkoutLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyDayWorkoutLibrary.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000166 /* LibraryWorkoutCopySaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryWorkoutCopySaver.swift"; sourceTree = "<group>"; };
@@ -5059,7 +5065,6 @@
 				BF1A00000000000000000094 /* FirestorePrivateAccountLoader.swift */,
 				BF1A00000000000000000095 /* FirestorePrivateAccountWriter.swift */,
 				BF1A000000000000000000B0 /* FirestorePublicProfileLoader.swift */,
-				BF1A000000000000000000B1 /* FirestoreUserSearchLoader.swift */,
 				BF1A000000000000000000D0 /* FirestoreProfileHighlightsLoader.swift */,
 				BF1A000000000000000000D1 /* ProfileHighlight+Firestore.swift */,
 				BF1A000000000000000000D2 /* FirestoreHighlightCandidatesLoader.swift */,
@@ -5122,6 +5127,10 @@
 				D1CA00000000000000000166 /* LibraryWorkoutCopySaver.swift */,
 				D1CA00000000000000000167 /* LibraryWorkoutCopyChecker.swift */,
 				BF1A000000000000000000B8 /* ProfileKitUserProfileOpener.swift */,
+				5EA1000000000000000000A1 /* DiscoverSearchPrefix.swift */,
+				5EA1000000000000000000A2 /* FirestorePeopleSearchLoader.swift */,
+				5EA1000000000000000000A3 /* FirestoreWorkoutSearchLoader.swift */,
+				5EA1000000000000000000A4 /* FirestoreExerciseSearchLoader.swift */,
 			);
 			path = DiscoverKit;
 			sourceTree = "<group>";
@@ -5377,7 +5386,6 @@
 				BF1A000000000000000000A4 /* FirestorePrivateAccountLoader.swift in Sources */,
 				BF1A000000000000000000A5 /* FirestorePrivateAccountWriter.swift in Sources */,
 				BF1A000000000000000000C0 /* FirestorePublicProfileLoader.swift in Sources */,
-				BF1A000000000000000000C1 /* FirestoreUserSearchLoader.swift in Sources */,
 				BF1A000000000000000000E0 /* FirestoreProfileHighlightsLoader.swift in Sources */,
 				BF1A000000000000000000E1 /* ProfileHighlight+Firestore.swift in Sources */,
 				BF1A000000000000000000E2 /* FirestoreHighlightCandidatesLoader.swift in Sources */,
@@ -5431,6 +5439,10 @@
 				D1CA00000000000000000262 /* WorkoutTemplateModel+DiscoverWorkoutDetail.swift in Sources */,
 				D1CA00000000000000000263 /* TemplateDiscoverWorkoutDetailLoader.swift in Sources */,
 				D1CA00000000000000000264 /* FirestoreExerciseClipsLoader.swift in Sources */,
+				5EA1000000000000000000B1 /* DiscoverSearchPrefix.swift in Sources */,
+				5EA1000000000000000000B2 /* FirestorePeopleSearchLoader.swift in Sources */,
+				5EA1000000000000000000B3 /* FirestoreWorkoutSearchLoader.swift in Sources */,
+				5EA1000000000000000000B4 /* FirestoreExerciseSearchLoader.swift in Sources */,
 				D1CA00000000000000000265 /* MyDayWorkoutLibrary.swift in Sources */,
 				D1CA00000000000000000266 /* LibraryWorkoutCopySaver.swift in Sources */,
 				D1CA00000000000000000267 /* LibraryWorkoutCopyChecker.swift in Sources */,

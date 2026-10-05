@@ -63,15 +63,6 @@ struct MyProfileScreen: View {
                 .foregroundStyle(Color.darkColor)
             Spacer()
             Button {
-                viewModel.onOpenSearch?()
-            } label: {
-                Image(systemName: "magnifyingglass")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(Color.darkColor)
-                    .frame(width: 44, height: 44)
-            }
-            .accessibilityLabel("Find people")
-            Button {
                 viewModel.onOpenSettings?()
             } label: {
                 Image(systemName: "gearshape")

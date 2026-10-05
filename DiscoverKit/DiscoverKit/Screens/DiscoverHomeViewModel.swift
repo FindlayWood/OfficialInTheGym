@@ -39,6 +39,7 @@ final class DiscoverHomeViewModel: ObservableObject {
     var onWorkoutTapped: ((DiscoverWorkoutCard) -> Void)?
     var onExerciseTapped: ((DiscoverExerciseCard) -> Void)?
     var onTagTapped: ((String) -> Void)?
+    var onOpenSearch: (() -> Void)?
 
     init(
         clipLoader: DiscoverClipCardLoader,
