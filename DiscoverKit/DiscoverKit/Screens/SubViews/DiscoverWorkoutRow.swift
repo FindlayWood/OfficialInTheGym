@@ -17,6 +17,11 @@ import SwiftUI
 /// name suggestions make repeated titles common (several "Saturday Upper"), so
 /// the title alone was never enough.
 ///
+/// **Always a card of its own**, spaced apart from the next, never a row
+/// joined to it by a divider — at this height a joined list read as one long
+/// slab. It draws its own `discoverCardChrome()`; lists put it in a
+/// `DiscoverSeparateCardsSection`.
+///
 /// The byline comes from `DiscoverAuthorDirectory`, requested as the row
 /// appears, and is simply absent until it resolves. Rating and comments only
 /// show once there are some — "no ratings" on every new workout is noise.
@@ -66,6 +71,7 @@ struct DiscoverWorkoutRow: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 16)
+        .discoverCardChrome()
         .contentShape(Rectangle())
         .onAppear { authors.request(card.createdBy) }
     }

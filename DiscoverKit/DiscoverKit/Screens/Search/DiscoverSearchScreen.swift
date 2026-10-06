@@ -123,7 +123,7 @@ struct DiscoverSearchScreen: View {
             state: viewModel.workouts,
             visible: visibleWorkouts,
             failure: "Couldn't search workouts",
-            dividerInset: 16,
+            separatesCards: true,
             skeleton: AnyView(DiscoverWorkoutRowSkeleton()),
             retry: { await viewModel.retryWorkouts() }
         ) { workout in
@@ -146,44 +146,71 @@ struct DiscoverSearchScreen: View {
         }
     }
 
-    /// One kind's card. `visible` is the loaded results after moderation, nil
-    /// while loading or failed; an empty one draws nothing at all.
+    /// One kind's section. `visible` is the loaded results after moderation,
+    /// nil while loading or failed; an empty one draws nothing at all.
+    ///
+    /// People and exercises join inside one `SectionContainer`; workouts
+    /// (`separatesCards`) stand as cards of their own — see `DiscoverWorkoutRow`.
     @ViewBuilder
     private func section<Item: Identifiable, Row: View>(
         title: String,
         state: DiscoverSectionState<[Item]>,
         visible: [Item]?,
         failure: String,
-        dividerInset: CGFloat = 72,
+        separatesCards: Bool = false,
         skeleton: AnyView = AnyView(DiscoverRowSkeleton()),
         retry: @escaping () async -> Void,
         @ViewBuilder row: @escaping (Item) -> Row
     ) -> some View {
         switch state {
         case .loading:
-            SectionContainer(title: title) {
+            container(title: title, separatesCards: separatesCards) {
                 skeleton
-                Divider().padding(.leading, dividerInset)
+                if !separatesCards {
+                    Divider().padding(.leading, 72)
+                }
                 skeleton
             }
         case .failed:
-            SectionContainer(title: title) {
-                DiscoverSectionMessage(message: failure) {
-                    Task { await retry() }
+            if separatesCards {
+                DiscoverSeparateCardsSection(title: title) {
+                    DiscoverSectionMessage(message: failure) {
+                        Task { await retry() }
+                    }
+                    .discoverCardChrome()
+                }
+            } else {
+                SectionContainer(title: title) {
+                    DiscoverSectionMessage(message: failure) {
+                        Task { await retry() }
+                    }
                 }
             }
         case .loaded:
             if let visible, !visible.isEmpty {
-                SectionContainer(title: title) {
-                    VStack(spacing: 0) {
-                        ForEach(Array(visible.enumerated()), id: \.element.id) { index, item in
-                            if index > 0 {
-                                Divider().padding(.leading, dividerInset)
-                            }
-                            row(item)
+                container(title: title, separatesCards: separatesCards) {
+                    ForEach(Array(visible.enumerated()), id: \.element.id) { index, item in
+                        if index > 0, !separatesCards {
+                            Divider().padding(.leading, 72)
                         }
+                        row(item)
                     }
                 }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func container<Content: View>(
+        title: String,
+        separatesCards: Bool,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        if separatesCards {
+            DiscoverSeparateCardsSection(title: title) { content() }
+        } else {
+            SectionContainer(title: title) {
+                VStack(spacing: 0) { content() }
             }
         }
     }

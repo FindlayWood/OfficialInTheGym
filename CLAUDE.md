@@ -1270,7 +1270,10 @@ people-only search, which is deleted. Built, not rolled out — checklist in `DI
 every workout drew the same dumbbell, so the tile said nothing. It is about twice the exercise row's
 height and spends that on what tells workouts apart — title (two lines), "by Name · date",
 exercise-count / rating / comment pills, and up to three tags. Rating and comments show only once
-there are some. Workout lists divide at a 16pt inset; icon-tile rows keep 72.
+there are some. **Each workout is a card of its own, 10pt apart, never a row joined to the next by
+a divider** — at this height a joined list read as one long slab. The row draws its own
+`discoverCardChrome()` (the one definition of the card look, which `SectionContainer` uses too), and
+workout sections are `DiscoverSeparateCardsSection`; exercises and people stay joined rows.
 **Author names come from `DiscoverAuthorDirectory`**, one per flow on the router, which batches the
 ids rows request as they appear into one `UserProfileLoader` call. A per-row lookup would be a read
 per row. Your own workouts read "by You" without a lookup.

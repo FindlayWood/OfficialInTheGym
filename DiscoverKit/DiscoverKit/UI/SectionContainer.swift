@@ -33,29 +33,13 @@ struct SectionContainer<Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if let title {
-                HStack {
-                    Text(title)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)
-                        .textCase(.uppercase)
-                        .tracking(0.5)
-                    Spacer()
-                    headerTrailing
-                }
-                .padding(.bottom, 8)
-                .padding(.horizontal, 2)
+                DiscoverSectionHeader(title: title, trailing: headerTrailing)
             }
 
             VStack(alignment: .leading, spacing: 0) {
                 content
             }
-            .background(Color(.systemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
-            )
+            .discoverCardChrome()
         }
     }
 }

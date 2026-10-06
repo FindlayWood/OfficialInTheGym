@@ -234,7 +234,7 @@ extension DiscoverKitRouter {
                     pager: pager,
                     moderation: moderation,
                     hides: { [moderation] in moderation.hides($0) },
-                    dividerInset: 16,
+                    separatesCards: true,
                     skeleton: AnyView(DiscoverWorkoutRowSkeleton()),
                     onTap: { [weak self] in self?.navigate(to: .workoutDetail($0)) },
                     row: { [authors] in DiscoverWorkoutRow(card: $0, authors: authors) }

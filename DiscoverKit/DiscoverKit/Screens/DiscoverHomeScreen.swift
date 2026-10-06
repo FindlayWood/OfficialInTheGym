@@ -115,18 +115,22 @@ struct DiscoverHomeScreen: View {
 
     // MARK: - Workouts
 
+    /// Separate cards, not joined rows — see `DiscoverWorkoutRow`.
     private var workoutsSection: some View {
-        SectionContainer(
+        DiscoverSeparateCardsSection(
             title: "Workouts",
             headerTrailing: AnyView(SeeAllButton { viewModel.onSeeAllWorkouts?() })
         ) {
             switch viewModel.workouts {
             case .loading:
-                skeletonRows(count: 3, dividerInset: 16) { DiscoverWorkoutRowSkeleton() }
+                ForEach(0..<3, id: \.self) { _ in
+                    DiscoverWorkoutRowSkeleton()
+                }
             case .loaded(let workouts) where workouts.allSatisfy(moderation.hides):
                 DiscoverSectionMessage(message: "No public workouts yet")
+                    .discoverCardChrome()
             case .loaded(let workouts):
-                rows(workouts.filter { !moderation.hides($0) }, dividerInset: 16) { workout in
+                ForEach(workouts.filter { !moderation.hides($0) }) { workout in
                     DiscoverWorkoutRow(card: workout, authors: authors)
                         .onTapGesture { viewModel.onWorkoutTapped?(workout) }
                 }
@@ -134,6 +138,7 @@ struct DiscoverHomeScreen: View {
                 DiscoverSectionMessage(message: "Couldn't load workouts") {
                     Task { await viewModel.loadWorkouts() }
                 }
+                .discoverCardChrome()
             }
         }
     }
@@ -147,7 +152,7 @@ struct DiscoverHomeScreen: View {
         ) {
             switch viewModel.exercises {
             case .loading:
-                skeletonRows(count: 3) { DiscoverRowSkeleton() }
+                skeletonRows(count: 3)
             case .loaded(let exercises) where exercises.isEmpty:
                 DiscoverSectionMessage(message: "No exercises yet")
             case .loaded(let exercises):
@@ -195,34 +200,27 @@ struct DiscoverHomeScreen: View {
 
     // MARK: - Rows
 
-    /// `dividerInset` lines the divider up with the row's text: 72 past an
-    /// icon tile, 16 for workout rows, which have none.
     private func rows<Card: Identifiable, Row: View>(
         _ cards: [Card],
-        dividerInset: CGFloat = 72,
         @ViewBuilder row: @escaping (Card) -> Row
     ) -> some View {
         VStack(spacing: 0) {
             ForEach(Array(cards.enumerated()), id: \.element.id) { index, card in
                 if index > 0 {
-                    Divider().padding(.leading, dividerInset)
+                    Divider().padding(.leading, 72)
                 }
                 row(card)
             }
         }
     }
 
-    private func skeletonRows<Skeleton: View>(
-        count: Int,
-        dividerInset: CGFloat = 72,
-        @ViewBuilder skeleton: @escaping () -> Skeleton
-    ) -> some View {
+    private func skeletonRows(count: Int) -> some View {
         VStack(spacing: 0) {
             ForEach(0..<count, id: \.self) { index in
                 if index > 0 {
-                    Divider().padding(.leading, dividerInset)
+                    Divider().padding(.leading, 72)
                 }
-                skeleton()
+                DiscoverRowSkeleton()
             }
         }
     }

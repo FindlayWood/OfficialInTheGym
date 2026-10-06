@@ -11,8 +11,10 @@ import SwiftUI
 /// workout and exercise lists, which differ only in their row — one screen
 /// rather than two copies that would drift.
 ///
-/// Same `darkColor` page and `SectionContainer` card as the home screen, so
-/// pushing from a section into its full list keeps the frame.
+/// Same `darkColor` page as the home screen, and the same layout as the
+/// section it came from, so pushing into the full list keeps the frame:
+/// exercises as rows joined inside one `SectionContainer` card, workouts as
+/// separate cards (`separatesCards`, see `DiscoverWorkoutRow`).
 struct DiscoverCardListScreen<Card: Identifiable, Row: View>: View {
 
     let title: String
@@ -22,8 +24,9 @@ struct DiscoverCardListScreen<Card: Identifiable, Row: View>: View {
     /// Whether this user has blocked or reported a card — it is skipped. The
     /// pager still pages over it, so "load more" keeps its place.
     var hides: (Card) -> Bool = { _ in false }
-    /// Where the divider starts: 72 past an icon tile, 16 for workout rows.
-    var dividerInset: CGFloat = 72
+    /// Each card stands apart, with its own chrome, instead of joining the
+    /// others inside one card. The rows passed in must draw that chrome.
+    var separatesCards = false
     /// Loading rows shaped like the real one.
     var skeleton: AnyView = AnyView(DiscoverRowSkeleton())
     let onTap: (Card) -> Void
@@ -31,22 +34,13 @@ struct DiscoverCardListScreen<Card: Identifiable, Row: View>: View {
 
     var body: some View {
         ScrollView {
-            SectionContainer {
-                LazyVStack(spacing: 0) {
-                    ForEach(Array(pager.cards.enumerated()), id: \.element.id) { index, card in
-                        if hides(card) {
-                            Color.clear.frame(height: 0)
-                                .task { await pager.loadMore(ifShowing: card) }
-                        } else {
-                            if index > 0 {
-                                Divider().padding(.leading, dividerInset)
-                            }
-                            row(card)
-                                .onTapGesture { onTap(card) }
-                                .task { await pager.loadMore(ifShowing: card) }
-                        }
+            Group {
+                if separatesCards {
+                    LazyVStack(spacing: 10) { list }
+                } else {
+                    SectionContainer {
+                        LazyVStack(spacing: 0) { list }
                     }
-                    footer
                 }
             }
             .padding()
@@ -60,23 +54,55 @@ struct DiscoverCardListScreen<Card: Identifiable, Row: View>: View {
     }
 
     @ViewBuilder
+    private var list: some View {
+        ForEach(Array(pager.cards.enumerated()), id: \.element.id) { index, card in
+            if hides(card) {
+                Color.clear.frame(height: 0)
+                    .task { await pager.loadMore(ifShowing: card) }
+            } else {
+                if index > 0, !separatesCards {
+                    Divider().padding(.leading, 72)
+                }
+                row(card)
+                    .onTapGesture { onTap(card) }
+                    .task { await pager.loadMore(ifShowing: card) }
+            }
+        }
+        footer
+    }
+
+    @ViewBuilder
     private var footer: some View {
         if pager.didFail {
-            DiscoverSectionMessage(message: "Couldn't load more") {
+            message(DiscoverSectionMessage(message: "Couldn't load more") {
                 Task { await pager.retry() }
-            }
+            })
         } else if pager.isLoading {
             if pager.cards.isEmpty {
-                skeleton
-                Divider().padding(.leading, dividerInset)
-                skeleton
-                Divider().padding(.leading, dividerInset)
-                skeleton
+                ForEach(0..<3, id: \.self) { index in
+                    if index > 0, !separatesCards {
+                        Divider().padding(.leading, 72)
+                    }
+                    skeleton
+                }
             } else {
-                ProgressView().padding(.vertical, 16)
+                ProgressView()
+                    .tint(separatesCards ? .white : nil)
+                    .padding(.vertical, 16)
             }
         } else if pager.cards.isEmpty {
-            DiscoverSectionMessage(message: emptyMessage)
+            message(DiscoverSectionMessage(message: emptyMessage))
+        }
+    }
+
+    /// A message standing in for cards needs a card of its own when there is
+    /// no surrounding `SectionContainer` to sit in.
+    @ViewBuilder
+    private func message(_ message: DiscoverSectionMessage) -> some View {
+        if separatesCards {
+            message.discoverCardChrome()
+        } else {
+            message
         }
     }
 }

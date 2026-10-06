@@ -30,7 +30,7 @@ struct DiscoverTagScreen: View {
                     "Workouts",
                     pager: workouts,
                     hides: { moderation.hides($0.card) },
-                    dividerInset: 16,
+                    separatesCards: true,
                     skeleton: AnyView(DiscoverWorkoutRowSkeleton())
                 ) { tagged in
                     DiscoverWorkoutRow(card: tagged.card, authors: authors)
@@ -53,42 +53,83 @@ struct DiscoverTagScreen: View {
 
     /// A hidden card is skipped without a row or a divider — it still takes
     /// part in paging, so reaching it loads the next page as its row would have.
+    ///
+    /// Exercises join inside one `SectionContainer`; workouts (`separatesCards`)
+    /// stand as cards of their own, as everywhere — see `DiscoverWorkoutRow`.
+    @ViewBuilder
     private func section<Card, Row: View>(
         _ title: String,
         pager: DiscoverPager<Card>,
         hides: @escaping (Card) -> Bool = { _ in false },
-        dividerInset: CGFloat = 72,
+        separatesCards: Bool = false,
         skeleton: AnyView = AnyView(DiscoverRowSkeleton()),
         @ViewBuilder row: @escaping (Card) -> Row
     ) -> some View {
-        SectionContainer(title: title) {
-            LazyVStack(spacing: 0) {
-                let shownIds = Set(pager.cards.filter { !hides($0) }.map(\.id))
-                ForEach(pager.cards) { card in
-                    if shownIds.contains(card.id) {
-                        if card.id != pager.cards.first(where: { shownIds.contains($0.id) })?.id {
-                            Divider().padding(.leading, dividerInset)
-                        }
-                        row(card)
-                            .task { await pager.loadMore(ifShowing: card) }
-                    } else {
-                        Color.clear.frame(height: 0)
-                            .task { await pager.loadMore(ifShowing: card) }
-                    }
-                }
-                if pager.didFail {
-                    DiscoverSectionMessage(message: "Couldn't load \(title.lowercased())") {
-                        Task { await pager.retry() }
-                    }
-                } else if pager.isLoading, pager.cards.isEmpty {
-                    skeleton
-                    skeleton
-                } else if pager.isLoading {
-                    ProgressView().padding(.vertical, 16)
-                } else if pager.cards.allSatisfy(hides) {
-                    DiscoverSectionMessage(message: "No \(title.lowercased()) tagged #\(tag) yet")
-                }
+        let content = sectionContent(
+            title,
+            pager: pager,
+            hides: hides,
+            separatesCards: separatesCards,
+            skeleton: skeleton,
+            row: row
+        )
+        if separatesCards {
+            DiscoverSeparateCardsSection(title: title) { content }
+        } else {
+            SectionContainer(title: title) {
+                LazyVStack(spacing: 0) { content }
             }
+        }
+    }
+
+    @ViewBuilder
+    private func sectionContent<Card, Row: View>(
+        _ title: String,
+        pager: DiscoverPager<Card>,
+        hides: @escaping (Card) -> Bool,
+        separatesCards: Bool,
+        skeleton: AnyView,
+        @ViewBuilder row: @escaping (Card) -> Row
+    ) -> some View {
+        let shownIds = Set(pager.cards.filter { !hides($0) }.map(\.id))
+        ForEach(pager.cards) { card in
+            if shownIds.contains(card.id) {
+                if !separatesCards, card.id != pager.cards.first(where: { shownIds.contains($0.id) })?.id {
+                    Divider().padding(.leading, 72)
+                }
+                row(card)
+                    .task { await pager.loadMore(ifShowing: card) }
+            } else {
+                Color.clear.frame(height: 0)
+                    .task { await pager.loadMore(ifShowing: card) }
+            }
+        }
+        if pager.didFail {
+            message(DiscoverSectionMessage(message: "Couldn't load \(title.lowercased())") {
+                Task { await pager.retry() }
+            }, separatesCards: separatesCards)
+        } else if pager.isLoading, pager.cards.isEmpty {
+            skeleton
+            skeleton
+        } else if pager.isLoading {
+            ProgressView()
+                .tint(separatesCards ? .white : nil)
+                .padding(.vertical, 16)
+        } else if pager.cards.allSatisfy(hides) {
+            message(
+                DiscoverSectionMessage(message: "No \(title.lowercased()) tagged #\(tag) yet"),
+                separatesCards: separatesCards
+            )
+        }
+    }
+
+    /// A message standing in for separate cards needs a card of its own.
+    @ViewBuilder
+    private func message(_ message: DiscoverSectionMessage, separatesCards: Bool) -> some View {
+        if separatesCards {
+            message.discoverCardChrome()
+        } else {
+            message
         }
     }
 }

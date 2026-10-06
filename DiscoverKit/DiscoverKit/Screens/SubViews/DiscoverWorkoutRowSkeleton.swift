@@ -32,5 +32,6 @@ struct DiscoverWorkoutRowSkeleton: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 16)
         .padding(.vertical, 16)
+        .discoverCardChrome()
     }
 }
