@@ -49,12 +49,10 @@ extension PlayerDetailCoordinator {
         child.start()
     }
     func showPerformance(_ user: Users) {
-        let child = PerformanceHomeCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
-        childCoordinators.append(child)
-        child.start()
-//        let vc = PerformanceMonitorViewController()
-//        vc.viewModel.user = user
-//        navigationController.pushViewController(vc, animated: true)
+        // Called from a button action, so already on the main thread.
+        MainActor.assumeIsolated {
+            PerformanceKitComposition().presentModally(from: navigationController, athlete: user, purchaseManager: subscriptionManager)
+        }
     }
     func showWorkout(_ model: WorkoutModel) {
         let vc = CoachPlayerWorkoutViewController()

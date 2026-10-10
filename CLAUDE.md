@@ -1,7 +1,7 @@
 # InTheGym — CLAUDE.md
 
 ## Project Overview
-iOS fitness app. iPhone only, **iOS 26.0 minimum** — the app and all six active frameworks
+iOS fitness app. iPhone only, **iOS 26.0 minimum** — the app and all seven active frameworks
 (`IPHONEOS_DEPLOYMENT_TARGET = 26.0` everywhere). It used to read iOS 17+ while StatsKit was built
 for 26.1 and MyDayKit for 18.4, so the app could not have launched below 26.1. **A framework must
 never target a newer iOS than the app.** `ITGWorkoutKit` targets lower,
@@ -16,6 +16,7 @@ Lean, minimal UI aesthetic throughout.
 - `LoginKit` — framework
 - `DiscoverKit` — framework (in progress — see `DISCOVER_PLAN.md`)
 - `ProfileKit` — framework (built, not rolled out — see `PROFILE_PLAN.md`)
+- `PerformanceKit` — framework (being moved in — see `PERFORMANCE_PLAN.md`)
 
 ### Inactive — do not modify
 - `ITGWorkoutKit` — ignore, do not touch
@@ -36,15 +37,17 @@ framework projects and the SPM packages.
 | `MyDayKit.xcodeproj` | 149 | **check target membership** |
 | `DiscoverKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
 | `ProfileKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
+| `PerformanceKit.xcodeproj` | none — 4 refs, all product bundles | nothing to do |
 
 All six use `PBXFileSystemSynchronizedRootGroup`, but only AccountCreationKit, LoginKit,
 DiscoverKit and ProfileKit are driven *entirely* by it. DiscoverKit's project was generated from
 LoginKit's, with its object ids prefixed `D1C`; ProfileKit's from DiscoverKit's, prefixed `BF10`
-(and `BF1A` for its entries in the app's pbxproj). StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
+(and `BF1A` for its entries in the app's pbxproj); PerformanceKit's from ProfileKit's, prefixed
+`A7F0` (and `A7FA` in the app's pbxproj). StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
 `Screens/`, `Models/` etc. individually; MyDayKit lists most of its tree.
 
 `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES` is set on **StatsKit, AccountCreationKit,
-LoginKit, DiscoverKit and ProfileKit** — the five built from the StatsKit template. **`MyDayKit` does not set it.** A file that
+LoginKit, DiscoverKit, ProfileKit and PerformanceKit** — the six built from the StatsKit template. **`MyDayKit` does not set it.** A file that
 compiles inside MyDayKit can therefore fail on a missing `import` the moment it moves into one of the
 other three.
 
@@ -219,7 +222,8 @@ private and deliberately not on Edit Profile (`PROFILE_PLAN.md` step 4).
 - **Weight is a log**, one entry per UTC day in `WeightTracking`. The `syncLatestWeight` function
   copies the newest entry onto `Users.weightKilograms`, so that field stays the latest weight
   without the app writing two places. It is what `WeightUnit.percentBodyweight` prescriptions should
-  eventually read; nothing does yet.
+  eventually read. PerformanceKit's CMJ reads it for power (`FirestoreBodyMassLoader`) and stores it
+  on each session, so an old test's power does not move with later weigh-ins.
 - The app's `Users` model still has **no** body properties. ProfileKit's adapters read them by hand.
   If `Users` ever gains them, **they must be optional**, since most documents lack them.
 
@@ -492,8 +496,8 @@ holds only `WorkoutTemplateModelCopyTests` (its scheme had no test action until 
 **A test target is invisible to CI until it is added to the test plan.** The plan runs
 `InTheGymTests`, `ITGWorkoutKitTests`, `ITGWorkoutKitiOSTests`, `ITGWorkoutKitCacheIntegrationTests`,
 `WorkoutAPIEndToEndTests` **and every framework suite** — `StatsKitTests`, `MyDayKitTests`,
-`AccountCreationKitTests`, `LoginKitTests`, `DiscoverKitTests`, `ProfileKitTests` — with coverage on
-the app, ITGWorkoutKit and all six frameworks. **Add any new framework's test target here.**
+`AccountCreationKitTests`, `LoginKitTests`, `DiscoverKitTests`, `ProfileKitTests`,
+`PerformanceKitTests` — with coverage on the app, ITGWorkoutKit and all seven frameworks. **Add any new framework's test target here.**
 
 **CI is not actually running.** Every run since at least August fails before starting on a GitHub
 billing error. Once that is fixed the workflow itself still needs updating: it pins Xcode 15.3 (which
@@ -502,15 +506,40 @@ needs iOS 26 — and a workspace path of `InTheGym/InTheGym.xcworkspace` (the wo
 root).
 
 ## App Structure
-5 tabs: NEWSFEED, DISCOVER, MYDAY, STATS, PROFILE.
+5 tabs: MYDAY, DISCOVER, PERFORMANCE, STATS, PROFILE. NEWSFEED was dropped from the player tab bar
+(the coach tab bar keeps it).
+**PERFORMANCE is `PerformanceKit`**, a testing hub for readiness and power built around jump testing
+(see `PERFORMANCE_PLAN.md`, part 2). **The whole tab is pro**: its root, `PerformanceRootScreen`,
+shows the tests with pro and a locked screen without, and re-checks **every time the tab appears**,
+never once at launch, or a new subscriber would stay locked out until relaunch. **Emulator builds can
+unlock it with one tap**: `EmulatorUnlockPerformanceProAccess` wraps the pro check and the locked
+screen offers "Unlock for testing", both compiled only with `-D EMULATOR`. The coach-side and legacy
+callers present the same router modally (`PerformanceKitComposition.presentModally`). Workload,
+Journal, Match Tracker, Practice Tracker and the old CMJ tool were retired and their code removed;
+their stored data was left where it is.
+Its SwiftUI screens are on MyDay's vocabulary through PerformanceKit's own `UI/` components:
+`performanceCard()` (the one card), `PerformanceSectionHeader`, `PerformanceIconTile`,
+`PerformanceRow`, `PerformancePrimaryButton` (keep in step with the gated button in
+`SessionSetDetailOverlay`), `performanceBottomBar`, `PerformanceStatCell`, `PerformancePillPicker`,
+`PerformanceEmptyCard`. Tool icons are SF Symbols. The full-screen jump camera and replay stay UIKit.
 **PROFILE is `ProfileKit`** on the player tab bar (see `PROFILE_PLAN.md`); the coach tab bar keeps
 the legacy `MyProfileCoordinator` until the coach/player split is removed. **Every other way of opening a
 person** (DISCOVER, search, follow lists, and all nine legacy `UserProfileCoordinator` callers)
-shows ProfileKit's `UserProfileScreen`, through one `ProfileKitComposition.makeRouter` graph. Performance Center is
-reached from ProfileKit's settings through `ProfileAppRoutes` — a separate roadmap task, **never
-delete its code**.
-Current focus: MYDAY tab — active session UI complete (see roadmap and Feature Areas Complete).
-NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
+shows ProfileKit's `UserProfileScreen`, through one `ProfileKitComposition.makeRouter` graph.
+Part 2 of the PERFORMANCE plan is built: five jump tests on the engine (CMJ, Vertical Jump, Drop
+Jump, Single-Leg CMJ, Repeated Jumps) and Balance, measured with the motion sensors. **On the tab's
+root nothing is pinned to the bottom** (it would sit over the tab bar): the weekly check's start
+button lives in its card. **Every pushed screen sets `hidesBottomBarWhenPushed`**, in the router's
+`navigate(to:)`, so a test's own pinned button has the full width. The home is a readiness dashboard led
+by the **weekly fatigue check** (`FatigueCheck`): every CMJ session is a check, read as the latest
+best against the best CMJ of the **eight weeks before it**, zoned by `FatigueZone` (the one place the
+95% / 90% boundaries live), calibrating until two earlier sessions exist. **The camera is checked
+before it opens** (`JumpCameraAvailability`): with no camera (the simulator) or access denied it shows
+`JumpCameraUnavailableScreen`, which in the simulator only offers "Add a sample jump" so sessions can
+be tested without a device. Opening the recorder without a camera used to crash. **Every jump test runs on one engine**: a
+`JumpTestKind` is a tag plan and a number of attempts, `JumpTiming` turns tagged times into flights and
+ground contacts, and `JumpPhysics` is the one height formula. A new jump test is a new case, not a new
+screen.
 
 Roadmap order:
 1. Fix workout stats → update STATS tab
@@ -535,11 +564,9 @@ MyDay's own template saver and library manager; the coach tab bar passes `nil` a
 offer no Save. The old RTDB Discover tab is gone, but `ExerciseDescriptions/`, `WorkoutDiscovery/`
 and `ExerciseDiscoveryCoordinator` remain — other legacy flows still reach them.
 
-**`PlayerInitialViewController` builds a tab it never shows.** `WorkoutsCoordinator` has
-`.start()` called on it — building an entire view-controller stack — but its navigation controller
-never appears in `viewControllers`. It is dead work on every launch. Worth clearing when the
-NEWSFEED/WORKOUTS tab question above is settled. (The ClubKit and WorkoutKit tabs that used to sit
-beside it are gone — see *Packages & Frameworks*.)
+`PlayerInitialViewController` no longer builds `WorkoutsCoordinator`, a stack it used to start on
+every launch and never show. It went with NEWSFEED. (The ClubKit and WorkoutKit tabs that used to
+sit beside it are gone too, see *Packages & Frameworks*.)
 
 ## Workout Library Loading
 The library screen showed an empty state despite saved templates existing. Three defects, all fixed:
@@ -1547,6 +1574,9 @@ appears on some screens and not others.
 | `ProfileHighlights/{uid}` | Firestore | **Cloud Functions only**: a profile's PB tiles, from `ExerciseStats` + `Users.pinnedHighlights`; read-gated like a private account's lists |
 | `Follows/{followerId}_{followeeId}` | Firestore | follower creates (`FirestoreFollowWriter`), either deletes; `mirrorLegacyFollow` bridges legacy RTDB follows in. Counts on `Profiles` by `profileFollowCounts` |
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
+| `Users/{uid}/JumpTests/{id}` | Firestore | `FirestoreJumpTestSessionWriter` — one document per jump-test session, every test told apart by `kind`; **needs a rule for the subcollection** |
+| `Users/{uid}/BalanceTests/{id}` | Firestore | `FirestoreBalanceSessionWriter` — one document per balance session; **needs a rule for the subcollection** |
+| `VerticalJump/{uid}/Results/{id}` | Firestore | **read-only now** (`LegacyVerticalJumpSessionsLoader`): Vertical Jump's pre-engine history |
 | `Users/{uid}/ExerciseStats/{exerciseID}/RawLogs/{logID}` | Firestore | both logging paths, per set |
 | `Users/{uid}/WorkoutSessions/{id}` | Firestore | `FirestoreCompletedWorkoutSessionSaver` (batched) |
 | `WorkoutSessions/{sessionId}` | Firestore | same batch — analytics copy, the only one to gain `deletedAt` |
@@ -1638,7 +1668,8 @@ in this codebase.**
 | `AccountCreationFieldCard` / `AccountCreationErrorBanner` | ProfileKit's `EditProfileFieldCard` / `ProfileErrorBanner` | Shared UI |
 | `ProfileDetails` limits (100 / 300) | `AccountCreationHomeViewModel` limits, and the `Users` update rule | PROFILE_PLAN.md step 3 |
 | `LoginFieldCard` / `LoginPrimaryButton` / `LoginErrorBanner` | their AccountCreationKit twins | Auth, Shared UI |
-| the six `Color+Extension.swift` | each other | Brand Colours, Shared UI |
+| the seven `Color+Extension.swift` | each other | Brand Colours, Shared UI |
+| StatsKit's matte zone colours | PerformanceKit's copies (`matteGreen` / `Amber` / `Red`) | PERFORMANCE_PLAN.md phase D |
 | DiscoverKit's `SectionContainer` | StatsKit's `SectionContainer` | DISCOVER_PLAN.md step 2 |
 | `WorkoutTag.maxLength` | `MAX_TAG_LENGTH` in the Cloud Functions' `Tags/TagRejection.ts` | DISCOVER_PLAN.md step 1 |
 | `DiscoverReportTarget+Firestore` path shapes | `Discover/Moderation/ReportTarget.ts` | DISCOVER Tab |

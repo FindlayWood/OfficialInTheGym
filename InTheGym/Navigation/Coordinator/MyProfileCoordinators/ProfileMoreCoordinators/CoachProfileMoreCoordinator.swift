@@ -58,16 +58,20 @@ extension CoachProfileMoreCoordinator {
         let vc = MyWorkoutStatsViewController()
         navigationController.pushViewController(vc, animated: true)
     }
+    /// Unreachable: this coordinator is never built. It opens Performance
+    /// Center, the legacy Workload screen it used to push having been retired.
     func showPerformanceMonitor(for user: Users) {
-        let vc = PerformanceMonitorViewController()
-        vc.viewModel.user = user
-        navigationController.pushViewController(vc, animated: true)
+        MainActor.assumeIsolated {
+            PerformanceKitComposition().presentModally(from: navigationController, athlete: user, purchaseManager: subscriptionManager)
+        }
     }
+    /// Unreachable: this coordinator is never built, and no row sends
+    /// `.measureJump`. It opens Performance Center, where Vertical Jump lives
+    /// now, rather than the jump camera, which moved into PerformanceKit.
     func jumpMeasure() {
-        let vc = JumpMeasuringViewController()
-        vc.hidesBottomBarWhenPushed = true
-        vc.modalPresentationStyle = .fullScreen
-        navigationController.present(vc, animated: true)
+        MainActor.assumeIsolated {
+            PerformanceKitComposition().presentModally(from: navigationController, athlete: UserDefaults.currentUser, purchaseManager: subscriptionManager)
+        }
     }
     func breathWork() {
         let vc = MethodSelectionViewController()

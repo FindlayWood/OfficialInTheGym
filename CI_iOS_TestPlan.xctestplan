@@ -53,6 +53,11 @@
           "containerPath" : "container:ProfileKit\/ProfileKit.xcodeproj",
           "identifier" : "BF100000000000000000000B",
           "name" : "ProfileKit"
+        },
+        {
+          "containerPath" : "container:PerformanceKit\/PerformanceKit.xcodeproj",
+          "identifier" : "A7F00000000000000000000B",
+          "name" : "PerformanceKit"
         }
       ]
     },
@@ -135,6 +140,13 @@
         "containerPath" : "container:ProfileKit\/ProfileKit.xcodeproj",
         "identifier" : "BF1000000000000000000012",
         "name" : "ProfileKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:PerformanceKit\/PerformanceKit.xcodeproj",
+        "identifier" : "A7F000000000000000000012",
+        "name" : "PerformanceKitTests"
       }
     }
   ],
