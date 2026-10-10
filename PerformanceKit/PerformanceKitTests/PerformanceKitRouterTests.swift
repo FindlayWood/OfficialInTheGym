@@ -20,12 +20,25 @@ final class PerformanceKitRouterTests: XCTestCase {
         XCTAssertEqual(events.messages, [.paywall])
     }
 
-    func test_open_opensTheToolWithPro() {
+    func test_open_handsAToolStillInTheAppBackWithPro() {
         let (sut, events) = makeSUT(hasUnlockedPro: true)
+
+        sut.open(.workload)
+
+        XCTAssertEqual(events.messages, [.tool(.workload)])
+    }
+
+    // The journal has moved into PerformanceKit. Handing it to the app as well
+    // would push the legacy journal on top of this one.
+    func test_open_pushesTheJournalItselfWithPro() {
+        let navigationController = UINavigationController()
+        let (sut, events) = makeSUT(hasUnlockedPro: true, navigationController: navigationController)
+        sut.start()
 
         sut.open(.journal)
 
-        XCTAssertEqual(events.messages, [.tool(.journal)])
+        XCTAssertEqual(events.messages, [])
+        XCTAssertEqual(navigationController.viewControllers.count, 2)
     }
 
     // Pro is read on every tap. A router that captured it when the tab was built
@@ -90,6 +103,8 @@ final class PerformanceKitRouterTests: XCTestCase {
         let sut = PerformanceKitRouter(
             navigationController: navigationController,
             proAccess: access ?? PerformanceProAccessStub(hasUnlockedPro: hasUnlockedPro),
+            journalLoader: JournalServicesSpy(),
+            journalWriter: JournalServicesSpy(),
             currentUserId: "me",
             athleteId: "me"
         )

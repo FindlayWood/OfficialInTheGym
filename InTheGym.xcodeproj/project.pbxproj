@@ -796,11 +796,6 @@
 		74E9899B27D7CCEA00898C59 /* WorkoutBottomChildView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E9899A27D7CCEA00898C59 /* WorkoutBottomChildView.swift */; };
 		74EA155B28C4D1A0000669A8 /* VerticalJumpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA155A28C4D1A0000669A8 /* VerticalJumpModel.swift */; };
 		74EA155D28C50A95000669A8 /* VerticalJumpHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA155C28C50A95000669A8 /* VerticalJumpHomeView.swift */; };
-		74EA156128C53D45000669A8 /* JournalHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA156028C53D45000669A8 /* JournalHomeView.swift */; };
-		74EA156328C54164000669A8 /* JournalHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA156228C54164000669A8 /* JournalHomeViewModel.swift */; };
-		74EA156528C544F2000669A8 /* JournalHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA156428C544F2000669A8 /* JournalHomeViewController.swift */; };
-		74EA156828C54871000669A8 /* JournalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA156728C54871000669A8 /* JournalEntryView.swift */; };
-		74EA156A28C54936000669A8 /* JournalEntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA156928C54936000669A8 /* JournalEntryViewModel.swift */; };
 		74EB1E49289EB2B200C4502A /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 74EB1E48289EB2B200C4502A /* Algorithms */; };
 		74ECD4ED2D5A974E00E66EAA /* PurchaseManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECD4EC2D5A974E00E66EAA /* PurchaseManagerProtocol.swift */; };
 		74ECD4EF2D5A976800E66EAA /* PurchaseableProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECD4EE2D5A976800E66EAA /* PurchaseableProduct.swift */; };
@@ -965,7 +960,6 @@
 		9F89DD9B2A3E596A0018E124 /* BasicBaseFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89DD9A2A3E596A0018E124 /* BasicBaseFlow.swift */; };
 		9F9F016629F2F0EB002B969B /* BodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016529F2F0EB002B969B /* BodyType.swift */; };
 		9F9F016829F2F116002B969B /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016729F2F116002B969B /* Observable.swift */; };
-		9FA4F1EB290EE7AF00757860 /* ViewJournalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */; };
 		9FA4F1EE290FECD800757860 /* PreviousJumpsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */; };
 		9FA4F1F0290FECF800757860 /* PreviousJumps+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */; };
 		9FA4F1F2290FEEC100757860 /* PreviousJumpsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1F1290FEEC100757860 /* PreviousJumpsViewController.swift */; };
@@ -1018,6 +1012,12 @@
 		F0F6E7D02F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7CF2F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift */; };
 		A7FA00000000000000000006 /* PerformanceKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000005 /* PerformanceKitComposition.swift */; };
 		A7FA00000000000000000008 /* PurchaseManagerPerformanceProAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000007 /* PurchaseManagerPerformanceProAccess.swift */; };
+		A7FA0000000000000000000A /* JournalPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000009 /* JournalPath.swift */; };
+		A7FA0000000000000000000C /* JournalEntryFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000000B /* JournalEntryFields.swift */; };
+		A7FA0000000000000000000E /* FirestoreJournalEntriesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000000D /* FirestoreJournalEntriesLoader.swift */; };
+		A7FA00000000000000000010 /* FirestoreJournalEntryWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000000F /* FirestoreJournalEntryWriter.swift */; };
+		A7FA00000000000000000012 /* FirestoreLatestJournalEntryWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000011 /* FirestoreLatestJournalEntryWriter.swift */; };
+		A7FA00000000000000000014 /* EntriesAndLatestJournalEntryWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000013 /* EntriesAndLatestJournalEntryWriter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1829,11 +1829,6 @@
 		74E9899A27D7CCEA00898C59 /* WorkoutBottomChildView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutBottomChildView.swift; sourceTree = "<group>"; };
 		74EA155A28C4D1A0000669A8 /* VerticalJumpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalJumpModel.swift; sourceTree = "<group>"; };
 		74EA155C28C50A95000669A8 /* VerticalJumpHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalJumpHomeView.swift; sourceTree = "<group>"; };
-		74EA156028C53D45000669A8 /* JournalHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalHomeView.swift; sourceTree = "<group>"; };
-		74EA156228C54164000669A8 /* JournalHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalHomeViewModel.swift; sourceTree = "<group>"; };
-		74EA156428C544F2000669A8 /* JournalHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalHomeViewController.swift; sourceTree = "<group>"; };
-		74EA156728C54871000669A8 /* JournalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntryView.swift; sourceTree = "<group>"; };
-		74EA156928C54936000669A8 /* JournalEntryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntryViewModel.swift; sourceTree = "<group>"; };
 		74ECD4EC2D5A974E00E66EAA /* PurchaseManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManagerProtocol.swift; sourceTree = "<group>"; };
 		74ECD4EE2D5A976800E66EAA /* PurchaseableProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseableProduct.swift; sourceTree = "<group>"; };
 		74ECD4F02D5A98BE00E66EAA /* Product+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+Extension.swift"; sourceTree = "<group>"; };
@@ -1994,7 +1989,6 @@
 		9F89DD9A2A3E596A0018E124 /* BasicBaseFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicBaseFlow.swift; sourceTree = "<group>"; };
 		9F9F016529F2F0EB002B969B /* BodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyType.swift; sourceTree = "<group>"; };
 		9F9F016729F2F116002B969B /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
-		9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewJournalEntryView.swift; sourceTree = "<group>"; };
 		9FA4F1ED290FECD800757860 /* PreviousJumpsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousJumpsView.swift; sourceTree = "<group>"; };
 		9FA4F1EF290FECF800757860 /* PreviousJumps+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviousJumps+ViewModel.swift"; sourceTree = "<group>"; };
 		9FA4F1F1290FEEC100757860 /* PreviousJumpsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousJumpsViewController.swift; sourceTree = "<group>"; };
@@ -2045,6 +2039,12 @@
 		F0F6E7CF2F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMuscleGroupsLoader.swift; sourceTree = "<group>"; };
 		A7FA00000000000000000005 /* PerformanceKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceKitComposition.swift; sourceTree = "<group>"; };
 		A7FA00000000000000000007 /* PurchaseManagerPerformanceProAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManagerPerformanceProAccess.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000009 /* JournalPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalPath.swift; sourceTree = "<group>"; };
+		A7FA0000000000000000000B /* JournalEntryFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntryFields.swift; sourceTree = "<group>"; };
+		A7FA0000000000000000000D /* FirestoreJournalEntriesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreJournalEntriesLoader.swift; sourceTree = "<group>"; };
+		A7FA0000000000000000000F /* FirestoreJournalEntryWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreJournalEntryWriter.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000011 /* FirestoreLatestJournalEntryWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreLatestJournalEntryWriter.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000013 /* EntriesAndLatestJournalEntryWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntriesAndLatestJournalEntryWriter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3472,7 +3472,6 @@
 				74DA1AE028F1A98600F4DB9E /* MatchTracker */,
 				74F664E228DFBE4F0086BA4E /* UserManager */,
 				74E338CE28CE861500A85E8E /* PurchaseManager */,
-				74EA155E28C53D21000669A8 /* Journal */,
 				74FA609A28AFF7A6007B2CD8 /* InjuryTracker */,
 				74DC3B6A28A02E4800DCEAF7 /* TrainingStatus */,
 				74330437289E8EFE00F2569A /* Wellness */,
@@ -4328,35 +4327,6 @@
 			path = JumpModels;
 			sourceTree = "<group>";
 		};
-		74EA155E28C53D21000669A8 /* Journal */ = {
-			isa = PBXGroup;
-			children = (
-				9FA4F1E9290EE79E00757860 /* ViewJournalEntry */,
-				74EA156628C54862000669A8 /* JournalEntry */,
-				74EA155F28C53D3A000669A8 /* JournalHome */,
-			);
-			path = Journal;
-			sourceTree = "<group>";
-		};
-		74EA155F28C53D3A000669A8 /* JournalHome */ = {
-			isa = PBXGroup;
-			children = (
-				74EA156028C53D45000669A8 /* JournalHomeView.swift */,
-				74EA156228C54164000669A8 /* JournalHomeViewModel.swift */,
-				74EA156428C544F2000669A8 /* JournalHomeViewController.swift */,
-			);
-			path = JournalHome;
-			sourceTree = "<group>";
-		};
-		74EA156628C54862000669A8 /* JournalEntry */ = {
-			isa = PBXGroup;
-			children = (
-				74EA156728C54871000669A8 /* JournalEntryView.swift */,
-				74EA156928C54936000669A8 /* JournalEntryViewModel.swift */,
-			);
-			path = JournalEntry;
-			sourceTree = "<group>";
-		};
 		74EE4EB627E3AA5400051451 /* DescriptionUpload */ = {
 			isa = PBXGroup;
 			children = (
@@ -4891,14 +4861,6 @@
 			path = Flow;
 			sourceTree = "<group>";
 		};
-		9FA4F1E9290EE79E00757860 /* ViewJournalEntry */ = {
-			isa = PBXGroup;
-			children = (
-				9FA4F1EA290EE7AF00757860 /* ViewJournalEntryView.swift */,
-			);
-			path = ViewJournalEntry;
-			sourceTree = "<group>";
-		};
 		9FA4F1EC290FECC700757860 /* PreviousJumps */ = {
 			isa = PBXGroup;
 			children = (
@@ -5149,6 +5111,12 @@
 		A7FA00000000000000000004 /* PerformanceKit */ = {
 			isa = PBXGroup;
 			children = (
+				A7FA00000000000000000013 /* EntriesAndLatestJournalEntryWriter.swift */,
+				A7FA00000000000000000011 /* FirestoreLatestJournalEntryWriter.swift */,
+				A7FA0000000000000000000F /* FirestoreJournalEntryWriter.swift */,
+				A7FA0000000000000000000D /* FirestoreJournalEntriesLoader.swift */,
+				A7FA0000000000000000000B /* JournalEntryFields.swift */,
+				A7FA00000000000000000009 /* JournalPath.swift */,
 				A7FA00000000000000000007 /* PurchaseManagerPerformanceProAccess.swift */,
 				A7FA00000000000000000005 /* PerformanceKitComposition.swift */,
 			);
@@ -5335,6 +5303,12 @@
 				F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */,
 				D1CA00000000000000000020 /* DiscoverKitComposition.swift in Sources */,
 				BF1A00000000000000000020 /* ProfileKitComposition.swift in Sources */,
+				A7FA00000000000000000014 /* EntriesAndLatestJournalEntryWriter.swift in Sources */,
+				A7FA00000000000000000012 /* FirestoreLatestJournalEntryWriter.swift in Sources */,
+				A7FA00000000000000000010 /* FirestoreJournalEntryWriter.swift in Sources */,
+				A7FA0000000000000000000E /* FirestoreJournalEntriesLoader.swift in Sources */,
+				A7FA0000000000000000000C /* JournalEntryFields.swift in Sources */,
+				A7FA0000000000000000000A /* JournalPath.swift in Sources */,
 				A7FA00000000000000000008 /* PurchaseManagerPerformanceProAccess.swift in Sources */,
 				A7FA00000000000000000006 /* PerformanceKitComposition.swift in Sources */,
 				BF1A00000000000000000021 /* ProfileAppRoutes.swift in Sources */,
@@ -5517,7 +5491,6 @@
 				7444D0A826D19C590009C7A6 /* UITextfield+Extension.swift in Sources */,
 				7423B51D279B93BD007AA889 /* HorizontallyFlushCollectionFlowLayout.swift in Sources */,
 				74616AB22A40E34400007752 /* FirebaseFunctionsManager.swift in Sources */,
-				74EA156A28C54936000669A8 /* JournalEntryViewModel.swift in Sources */,
 				7412D621282C5D3C009B3EFA /* SingleSetCoordinator.swift in Sources */,
 				741FB1BF2667DF560039EB29 /* WorkoutModel.swift in Sources */,
 				74B48E0927A4300C00BBFC16 /* LiveWorkoutDisplayView.swift in Sources */,
@@ -5941,7 +5914,6 @@
 				9F9F016629F2F0EB002B969B /* BodyType.swift in Sources */,
 				7419B11E2856A1B400E879DE /* AddCustomWorkloadViewModel.swift in Sources */,
 				74F2CCC026DD560300D7AD79 /* CreateNewPostCoordinator.swift in Sources */,
-				74EA156328C54164000669A8 /* JournalHomeViewModel.swift in Sources */,
 				7433308E278743CF005A0C45 /* ExerciseType.swift in Sources */,
 				74C126B82819B1D900C3B171 /* CoachProfileMoreViewModel.swift in Sources */,
 				74C5883928BBF2E5008661B7 /* ExerciseStatsListRow.swift in Sources */,
@@ -6090,7 +6062,6 @@
 				74221B432642F60C00D05527 /* PlayersCoordinator.swift in Sources */,
 				74F664ED28EA0B400086BA4E /* FirestoreManager.swift in Sources */,
 				74DA1AE828F1BE8B00F4DB9E /* NewMatchTrackerSheet.swift in Sources */,
-				74EA156528C544F2000669A8 /* JournalHomeViewController.swift in Sources */,
 				7433043C289E8F6500F2569A /* WellnessMainView.swift in Sources */,
 				9FC11F5F29DDC9B80054D79A /* LoginComposition.swift in Sources */,
 				745E1DA6283E7664009CA236 /* CoachWorkoutsViewModel.swift in Sources */,
@@ -6128,7 +6099,6 @@
 				744F3C0728648A5000EBB248 /* JumpCoordinator.swift in Sources */,
 				742FCD1128450A9C007ED1C6 /* ExerciseMaxHistoryModel.swift in Sources */,
 				74B647B62817249700ADDB7A /* AddMoreViewModel.swift in Sources */,
-				74EA156128C53D45000669A8 /* JournalHomeView.swift in Sources */,
 				7444D09C26D13DDE0009C7A6 /* AddMoreBasicView.swift in Sources */,
 				74F0C70A284F8DFF00FE3A01 /* AddWorkoutTagsViewModel.swift in Sources */,
 				744AED27279843EF000D2D74 /* SavedWorkoutDisplayViewController.swift in Sources */,
@@ -6155,7 +6125,6 @@
 				7431030926FA30DC00F7121B /* TimeSelectionViewControllerView.swift in Sources */,
 				7423B528279F4F93007AA889 /* UITopMessageView.swift in Sources */,
 				7459BD662641F82B0005C530 /* Coordinator.swift in Sources */,
-				74EA156828C54871000669A8 /* JournalEntryView.swift in Sources */,
 				742FCD2228456597007ED1C6 /* MyCoachesView.swift in Sources */,
 				74104505285D148C00A9FF4E /* OnBoardFirstView.swift in Sources */,
 				742C1C5B27B46CB100DD1BB0 /* ClipProtocols.swift in Sources */,
@@ -6203,7 +6172,6 @@
 				74E08A8428439513009D0DCB /* MyWorkloadsViewController.swift in Sources */,
 				74AF6D6A268A325E005C52A8 /* DisplayExerciseStatsView.swift in Sources */,
 				7403D05E280CA65500268CEC /* UIClipThumbnailsView.swift in Sources */,
-				9FA4F1EB290EE7AF00757860 /* ViewJournalEntryView.swift in Sources */,
 				749B37A8284646E000ADF33D /* CoachRequestCellModel.swift in Sources */,
 				74330439289E8F1500F2569A /* WellnessMainViewController.swift in Sources */,
 				74AF6D6D268B6D23005C52A8 /* RecordClipViewController.swift in Sources */,

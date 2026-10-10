@@ -10,4 +10,5 @@ import UIKit
 /// moves across from the app target (`PERFORMANCE_PLAN.md`).
 enum PerformanceKitRoutes {
     case home
+    case journal
 }

@@ -58,8 +58,28 @@ coordinator the moves take apart.
 - `PlayerProfileMoreCoordinator.jumpMeasure()` opens `JumpCoordinator` directly, not through
   Performance Center. Step 4 has to account for it.
 
-### Step 3 — Journal
-Firestore `Journal/{uid}` and `Journal/{uid}/Entries`.
+### Step 3 — Journal — built
+- `JournalHomeScreen`, `JournalEntryScreen`, `JournalEntryDetailScreen`, `JournalEntryRow`, with
+  `JournalHomeViewModel` / `JournalEntryViewModel`; route `.journal`. SwiftUI already, so moved as
+  it was, apart from the defects below.
+- `JournalEntriesLoader` and `JournalEntryWriter`. In the composition root:
+  `FirestoreJournalEntriesLoader` (`Journal/{uid}/Entries`, newest first, decoded per document) and
+  **two writers**, `FirestoreJournalEntryWriter` (`…/Entries/{id}`) and
+  `FirestoreLatestJournalEntryWriter` (`Journal/{uid}`), composed by
+  `EntriesAndLatestJournalEntryWriter(entries:latest:)`. The legacy view model wrote both in one
+  batch. `JournalPath` and `JournalEntryFields` are the one definition of the paths and the fields.
+- Defects fixed by the move, each with a test:
+  - `JournalEntryModel.id` was a fresh `UUID()` on every read. `JournalEntry.id` is the document id.
+  - Today's entries were appended to a second list on every load, so they repeated each time the
+    screen reappeared. They are derived now.
+  - A failed save left the spinner in place for good. It resets.
+  - One undecodable entry emptied the journal. It is skipped.
+  - An unused read of `Journal/{uid}` is gone; when that document was missing it skipped today's
+    entries.
+- Entries written from now on use the entry's own UUID as the document id rather than a Firestore
+  auto-id. Old entries keep theirs and read the same way.
+- The journal's nav bar is no longer the purple UIKit `premiumColour`. The moved screens use the
+  system bar with `darkColor`, which `PerformanceKitHostingController` restores on the way back.
 
 ### Step 4 — Vertical Jump
 Firestore `VerticalJump/{uid}` and `/Results`, AVFoundation capture and replay, `JumpCoordinator` and

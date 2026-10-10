@@ -76,8 +76,4 @@ extension PerformanceHomeCoordinator {
         let vc = InjuryTrackerViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
-    func showJournalHome() {
-        let vc = JournalHomeViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
 }

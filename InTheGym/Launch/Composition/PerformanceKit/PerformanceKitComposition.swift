@@ -46,11 +46,23 @@ class PerformanceKitComposition {
 
         let proAccess: PerformanceProAccess = PurchaseManagerPerformanceProAccess(purchaseManager: purchaseManager)
 
+        // MARK: - Journal
+        // Owner-only: reachable only when the athlete is the signed-in user.
+
+        let journalLoader: JournalEntriesLoader = FirestoreJournalEntriesLoader(userId: athlete.uid)
+
+        let journalWriter: JournalEntryWriter = EntriesAndLatestJournalEntryWriter(
+            entries: FirestoreJournalEntryWriter(userId: athlete.uid),
+            latest: FirestoreLatestJournalEntryWriter(userId: athlete.uid)
+        )
+
         // MARK: - Router
 
         let router = PerformanceKitRouter(
             navigationController: navigationController,
             proAccess: proAccess,
+            journalLoader: journalLoader,
+            journalWriter: journalWriter,
             currentUserId: UserDefaults.currentUser.uid,
             athleteId: athlete.uid
         )
@@ -76,7 +88,7 @@ class PerformanceKitComposition {
             case .practiceTracker: legacyTools.showPracticeTracker()
             case .workload: legacyTools.showWorkload()
             case .verticalJump: legacyTools.showVerticalJump()
-            case .journal: legacyTools.showJournalHome()
+            case .journal: break // PerformanceKit's own; the router never hands it back
             }
         }
 

@@ -43,6 +43,8 @@ public final class PerformanceKitRouter {
     // MARK: - Dependencies
 
     let proAccess: PerformanceProAccess
+    let journalLoader: JournalEntriesLoader
+    let journalWriter: JournalEntryWriter
     let currentUserId: String
     let athleteId: String
 
@@ -60,11 +62,15 @@ public final class PerformanceKitRouter {
     public init(
         navigationController: UINavigationController,
         proAccess: PerformanceProAccess,
+        journalLoader: JournalEntriesLoader,
+        journalWriter: JournalEntryWriter,
         currentUserId: String,
         athleteId: String
     ) {
         self.navigationController = navigationController
         self.proAccess = proAccess
+        self.journalLoader = journalLoader
+        self.journalWriter = journalWriter
         self.currentUserId = currentUserId
         self.athleteId = athleteId
     }
@@ -99,6 +105,13 @@ extension PerformanceKitRouter {
                 )
             }
             return vc
+
+        case .journal:
+            let viewModel = JournalHomeViewModel(loader: journalLoader)
+            let screen = JournalHomeScreen(viewModel: viewModel) { [journalWriter] in
+                JournalEntryViewModel(writer: journalWriter)
+            }
+            return UIHostingController(rootView: screen)
         }
     }
 
@@ -113,6 +126,11 @@ extension PerformanceKitRouter {
             onShowPaywall?()
             return
         }
-        onOpenLegacyTool?(tool)
+        switch tool {
+        case .journal:
+            navigate(to: .journal)
+        case .matchTracker, .practiceTracker, .workload, .verticalJump:
+            onOpenLegacyTool?(tool)
+        }
     }
 }
