@@ -21,14 +21,14 @@ struct PerformanceHomeScreen: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 8) {
-                Text("Tools for tracking how you train, compete and recover.")
+                Text("Tests for measuring your power and how fresh you are.")
                     .font(.system(size: 15))
                     .foregroundStyle(Color.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.bottom, 16)
 
-                PerformanceSectionHeader(title: "Tools")
+                PerformanceSectionHeader(title: "Tests")
                 VStack(spacing: 0) {
                     ForEach(Array(viewModel.tools.enumerated()), id: \.element) { index, tool in
                         PerformanceRow(
@@ -47,13 +47,11 @@ struct PerformanceHomeScreen: View {
             .padding(.vertical, 12)
         }
         .background(Color(.systemBackground).ignoresSafeArea())
-        .navigationTitle("Performance")
-        .navigationBarTitleDisplayMode(.large)
     }
 }
 
 #Preview {
     NavigationStack {
-        PerformanceHomeScreen(viewModel: PerformanceHomeViewModel(currentUserId: "a", athleteId: "a"))
+        PerformanceHomeScreen(viewModel: PerformanceHomeViewModel())
     }
 }

@@ -11,22 +11,14 @@ import XCTest
 @MainActor
 final class PerformanceHomeViewModelTests: XCTestCase {
 
-    func test_tools_deliversEveryToolInOrderForYourOwnCentre() {
-        let sut = PerformanceHomeViewModel(currentUserId: "me", athleteId: "me")
+    func test_tools_deliversEveryTestInOrder() {
+        let sut = PerformanceHomeViewModel()
 
-        XCTAssertEqual(sut.tools, [.matchTracker, .practiceTracker, .workload, .verticalJump, .journal])
-    }
-
-    // A coach opening an athlete's centre must not see the athlete's journal.
-    // Without the filter, it is listed and opens someone else's private entries.
-    func test_tools_deliversEverythingButTheJournalForSomeoneElsesCentre() {
-        let sut = PerformanceHomeViewModel(currentUserId: "coach", athleteId: "athlete")
-
-        XCTAssertEqual(sut.tools, [.matchTracker, .practiceTracker, .workload, .verticalJump])
+        XCTAssertEqual(sut.tools, [.verticalJump])
     }
 
     func test_select_forwardsTheTool() {
-        let sut = PerformanceHomeViewModel(currentUserId: "me", athleteId: "me")
+        let sut = PerformanceHomeViewModel()
         var selected: [PerformanceTool] = []
         sut.onSelectTool = { selected.append($0) }
 

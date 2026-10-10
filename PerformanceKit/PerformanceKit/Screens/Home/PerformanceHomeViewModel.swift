@@ -6,23 +6,14 @@
 //
 import Foundation
 
-/// Performance Center's home: the list of tools, and what happens on a tap.
-///
-/// Whose Performance Center this is matters for one tool only. A coach viewing
-/// an athlete's centre does not see their journal (`PerformanceTool.isOwnerOnly`).
-/// The legacy screen compared the athlete's id against `UserDefaults.currentUser`
-/// itself; here the two ids are injected, so the rule is testable.
+/// The PERFORMANCE tab's home: the list of tests, and what happens on a tap.
+/// Phase D replaces the list with the readiness dashboard.
 @MainActor
 final class PerformanceHomeViewModel {
 
-    let tools: [PerformanceTool]
+    let tools = PerformanceTool.allCases
 
     var onSelectTool: ((PerformanceTool) -> Void)?
-
-    init(currentUserId: String, athleteId: String) {
-        let isOwn = currentUserId == athleteId
-        self.tools = PerformanceTool.allCases.filter { isOwn || !$0.isOwnerOnly }
-    }
 
     func select(_ tool: PerformanceTool) {
         onSelectTool?(tool)

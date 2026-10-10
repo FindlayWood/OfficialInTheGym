@@ -507,23 +507,25 @@ root).
 ## App Structure
 5 tabs: MYDAY, DISCOVER, PERFORMANCE, STATS, PROFILE. NEWSFEED was dropped from the player tab bar
 (the coach tab bar keeps it).
-**PERFORMANCE is `PerformanceKit`**, the legacy Performance Center moving into a framework one tool
-at a time (see `PERFORMANCE_PLAN.md`). The router checks pro **when a tool is opened**, not when the
-tab is built: a tab built for every user and gated at launch would keep showing a paywall after the
-user subscribed. Tools not yet moved open through `onOpenLegacyTool` and the legacy
-`PerformanceHomeCoordinator`. The coach-side and legacy callers present the same router modally
-(`PerformanceKitComposition.presentModally`).
+**PERFORMANCE is `PerformanceKit`**, a testing hub for readiness and power built around jump testing
+(see `PERFORMANCE_PLAN.md`, part 2). **The whole tab is pro**: its root, `PerformanceRootScreen`,
+shows the tests with pro and a locked screen without, and re-checks **every time the tab appears**,
+never once at launch, or a new subscriber would stay locked out until relaunch. **Emulator builds can
+unlock it with one tap**: `EmulatorUnlockPerformanceProAccess` wraps the pro check and the locked
+screen offers "Unlock for testing", both compiled only with `-D EMULATOR`. The coach-side and legacy
+callers present the same router modally (`PerformanceKitComposition.presentModally`). Workload,
+Journal, Match Tracker, Practice Tracker and the old CMJ tool were retired and their code removed;
+their stored data was left where it is.
 Its SwiftUI screens are on MyDay's vocabulary through PerformanceKit's own `UI/` components:
 `performanceCard()` (the one card), `PerformanceSectionHeader`, `PerformanceIconTile`,
 `PerformanceRow`, `PerformancePrimaryButton` (keep in step with the gated button in
 `SessionSetDetailOverlay`), `performanceBottomBar`, `PerformanceStatCell`, `PerformancePillPicker`,
 `PerformanceEmptyCard`. Tool icons are SF Symbols. The full-screen jump camera and replay stay UIKit.
-**None of its code is to be deleted** — it moves.
 **PROFILE is `ProfileKit`** on the player tab bar (see `PROFILE_PLAN.md`); the coach tab bar keeps
 the legacy `MyProfileCoordinator` until the coach/player split is removed. **Every other way of opening a
 person** (DISCOVER, search, follow lists, and all nine legacy `UserProfileCoordinator` callers)
 shows ProfileKit's `UserProfileScreen`, through one `ProfileKitComposition.makeRouter` graph.
-Current focus: the PERFORMANCE tab.
+Current focus: the PERFORMANCE tab, part 2 phase B (the jump engine).
 
 Roadmap order:
 1. Fix workout stats → update STATS tab

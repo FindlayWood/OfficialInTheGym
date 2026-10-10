@@ -20,9 +20,8 @@ class PerformanceKitComposition {
 
     /// Performance Center presented full screen over `presenter`, for the
     /// legacy ways in: a coach's athlete page (`athlete` is the athlete), the
-    /// old "More" menu and the timeline (`athlete` is the signed-in user). They
-    /// used to present the legacy intro screen; this is the same home the tab
-    /// shows, with a Dismiss button.
+    /// old "More" menu and the timeline (`athlete` is the signed-in user). The
+    /// same root the tab shows, with a Dismiss button.
     @MainActor
     func presentModally(from presenter: UINavigationController, athlete: Users, purchaseManager: PurchaseManager) {
         let navigationController = UINavigationController()
@@ -34,27 +33,17 @@ class PerformanceKitComposition {
     }
 
     /// A fully wired router on any navigation controller, **without** `start()`.
-    ///
-    /// **The legacy tools are reached through `PerformanceHomeCoordinator`**,
-    /// built on the router's own stack, so a tool that has not moved into
-    /// PerformanceKit yet pushes onto the same stack the home screen is on.
-    /// Each tool comes off this switch as it moves.
     @MainActor
     private func makeRouter(_ navigationController: UINavigationController, athlete: Users, purchaseManager: PurchaseManager) -> PerformanceKitRouter {
 
         // MARK: - Pro
+        // The whole tab is pro. Emulator builds wrap the check so the locked
+        // screen can be unlocked for testing.
 
-        let proAccess: PerformanceProAccess = PurchaseManagerPerformanceProAccess(purchaseManager: purchaseManager)
-
-        // MARK: - Journal
-        // Owner-only: reachable only when the athlete is the signed-in user.
-
-        let journalLoader: JournalEntriesLoader = FirestoreJournalEntriesLoader(userId: athlete.uid)
-
-        let journalWriter: JournalEntryWriter = EntriesAndLatestJournalEntryWriter(
-            entries: FirestoreJournalEntryWriter(userId: athlete.uid),
-            latest: FirestoreLatestJournalEntryWriter(userId: athlete.uid)
-        )
+        var proAccess: PerformanceProAccess = PurchaseManagerPerformanceProAccess(purchaseManager: purchaseManager)
+        #if EMULATOR
+        proAccess = EmulatorUnlockPerformanceProAccess(wrapping: proAccess)
+        #endif
 
         // MARK: - Vertical Jump
         // The athlete's jumps. Only the athlete can record one (the router
@@ -69,38 +58,14 @@ class PerformanceKitComposition {
             best: FirestoreBestVerticalJumpWriter(userId: athlete.uid)
         )
 
-        // MARK: - Match and Practice Tracker
-        // Reads are the athlete's. Recording is your own centre only, and the
-        // workload log write always goes to the signed-in user's log.
-
-        let trackedSessionsLoader: TrackedSessionsLoader = RealtimeTrackedSessionsLoader(userId: athlete.uid)
-
-        let trackedSessionWriter: TrackedSessionWriter = RealtimeTrackedSessionWriter(userId: athlete.uid)
-
-        let workloadsLoader: WorkloadsLoader = RealtimeWorkloadsLoader(userId: athlete.uid)
-
-        let workloadWriter: WorkloadWriter = RealtimeWorkloadWriter()
-
-        let wellnessLoader: WellnessSnapshotLoader = FirestoreWellnessSnapshotLoader(userId: athlete.uid)
-
-        let cmjLoader: CMJSnapshotLoader = FirestoreCMJSnapshotLoader(userId: athlete.uid)
-
         // MARK: - Router
 
         let router = PerformanceKitRouter(
             navigationController: navigationController,
             proAccess: proAccess,
-            journalLoader: journalLoader,
-            journalWriter: journalWriter,
             maxJumpLoader: maxJumpLoader,
             jumpHistoryLoader: jumpHistoryLoader,
             jumpWriter: jumpWriter,
-            trackedSessionsLoader: trackedSessionsLoader,
-            trackedSessionWriter: trackedSessionWriter,
-            workloadsLoader: workloadsLoader,
-            workloadWriter: workloadWriter,
-            wellnessLoader: wellnessLoader,
-            cmjLoader: cmjLoader,
             currentUserId: UserDefaults.currentUser.uid,
             athleteId: athlete.uid
         )
@@ -112,20 +77,9 @@ class PerformanceKitComposition {
             navigationController?.present(vc, animated: true)
         }
 
-        // MARK: - Legacy tools
-
-        let legacyTools = PerformanceHomeCoordinator(
-            navigationController: navigationController,
-            user: athlete,
-            subscriptionManager: purchaseManager
-        )
-
-        router.onOpenLegacyTool = { tool in
-            switch tool {
-            case .workload: legacyTools.showWorkload()
-            case .matchTracker, .practiceTracker, .verticalJump, .journal: break // PerformanceKit's own; the router never hands them back
-            }
-        }
+        #if EMULATOR
+        router.onUnlockForTesting = { EmulatorUnlockPerformanceProAccess.unlock() }
+        #endif
 
         return router
     }

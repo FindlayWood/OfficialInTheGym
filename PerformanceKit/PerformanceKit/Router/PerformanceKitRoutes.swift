@@ -6,11 +6,10 @@
 //
 import UIKit
 
-/// Every screen PerformanceKit can show. Each tool adds its screens here as it
-/// moves across from the app target (`PERFORMANCE_PLAN.md`).
+/// Every screen PerformanceKit can show. Each test adds its screens here
+/// (`PERFORMANCE_PLAN.md`, part 2).
 enum PerformanceKitRoutes {
     case home
-    case journal
 
     // MARK: - Vertical Jump
     case verticalJump
@@ -21,8 +20,4 @@ enum PerformanceKitRoutes {
     case jumpRecorder(max: VerticalJump?)
     case jumpReplay(fileURL: URL, max: VerticalJump?)
     case jumpResult(height: Double, max: VerticalJump?)
-
-    // MARK: - Match and Practice Tracker
-    case tracker(TrackedSessionKind)
-    case trackedSession(TrackedSession, kind: TrackedSessionKind)
 }

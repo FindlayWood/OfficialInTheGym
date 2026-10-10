@@ -53,9 +53,6 @@ extension PlayerDetailCoordinator {
         MainActor.assumeIsolated {
             PerformanceKitComposition().presentModally(from: navigationController, athlete: user, purchaseManager: subscriptionManager)
         }
-//        let vc = PerformanceMonitorViewController()
-//        vc.viewModel.user = user
-//        navigationController.pushViewController(vc, animated: true)
     }
     func showWorkout(_ model: WorkoutModel) {
         let vc = CoachPlayerWorkoutViewController()

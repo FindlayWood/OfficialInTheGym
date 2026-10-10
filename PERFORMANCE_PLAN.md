@@ -232,9 +232,25 @@ the ~150–300ms contact times in drop and repeated jumps. **The height formula 
 (`JumpMeasureViewModel`, h = t² × 1.22625); CMJ, Vertical Jump, drop jump and the rest all call it.
 
 ### Phases
-- **A — Clear the deck.** Retire Workload, Journal and both trackers. Remove the bridge
-  (`onOpenLegacyTool`, `PerformanceHomeCoordinator`). Put the tab behind the paywall, with the
-  emulator unlock.
+- **A — Clear the deck — built.**
+  - Workload, Journal, Match Tracker and Practice Tracker are gone from PerformanceKit and their code
+    removed, app and framework, with their adapters and tests. So is the dormant legacy CMJ tool
+    (`CMJ/`, `CMJCoordinator`), and with it `JumpRecording`, the factory that existed only for it.
+    Stored data (`Journal/`, `MatchTracking/`, `PracticeTracking/`, `Workloads/`, `CMJ/`) is untouched.
+  - `WorkloadModel` stays: the legacy profile workloads and the coach dashboard still read it. So do
+    Wellness, Training Status and Injury Tracker, now with no entry point at all.
+  - The bridge is gone: no `onOpenLegacyTool`, no `PerformanceHomeCoordinator`.
+  - **The tab is behind the paywall.** `PerformanceRootScreen` switches between the home and
+    `PerformanceLockedScreen` on `PerformanceGateViewModel.isUnlocked`, which
+    `PerformanceKitHostingController.onWillAppear` refreshes. The locked screen's button presents the
+    app's paywall full screen, so closing it makes the tab appear and re-check. Tools no longer check
+    pro themselves.
+  - **Emulator unlock:** `EmulatorUnlockPerformanceProAccess` (app, `#if EMULATOR`) wraps the real
+    check with a session-only override, shared by every router; the composition sets
+    `router.onUnlockForTesting` only in that build, and the locked screen shows its button only when it
+    is set. Verified: the type is in the Emulator binary and absent from Debug.
+  - The two unreachable `jumpMeasure()` / `showPerformanceMonitor` paths in the legacy More
+    coordinators open Performance Center.
 - **B — Jump engine.** Generalise capture and tagging to N tags. Best-of-3 sessions. Store a result
   per test in Firestore per athlete. Vertical Jump moves onto it, keeping its existing data readable.
 - **C — CMJ.** A test of its own, with power from the athlete's weight.
@@ -247,10 +263,9 @@ the ~150–300ms contact times in drop and repeated jumps. **The height formula 
 Later, not scheduled: coach access, HealthKit resting HR / HRV in the readiness score, and manual
 entry for results measured elsewhere (grip strength, sprint times).
 
-### Open
-- The legacy dormant CMJ tool (`CMJ/` in the app target) has its own Firestore data (`CMJ/{uid}`) and
-  a fatigue level. Phase C decides whether that data is migrated, read, or left.
-- Whether the retired tools' code is deleted in phase A or kept for reference.
+### Settled
+- The old CMJ data (`CMJ/{uid}`) is left alone; phase C starts fresh.
+- The retired tools' code is deleted (phase A).
 
 ## Out of scope
 - Bringing back Wellness, Training Status or Injury Tracker.
