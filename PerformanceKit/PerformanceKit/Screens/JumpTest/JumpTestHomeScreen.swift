@@ -52,7 +52,24 @@ struct JumpTestHomeScreen: View {
 
     @ViewBuilder
     private var bestCard: some View {
-        if let best = viewModel.best, let attempt = best.best {
+        if let best = viewModel.best, let symmetry = best.symmetry {
+            VStack(spacing: 8) {
+                HStack(spacing: 0) {
+                    legColumn(.left, height: symmetry.left)
+                    Divider().frame(height: 48)
+                    legColumn(.right, height: symmetry.right)
+                }
+                Text(symmetry.summary)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(symmetry.isNotable ? Color.matteAmber : Color.secondary)
+                Text(dateLine(for: best))
+                    .font(.system(size: 13))
+                    .foregroundStyle(Color.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 20)
+            .performanceCard()
+        } else if let best = viewModel.best, let attempt = best.best {
             let headline = viewModel.kind.headline(of: attempt)
             VStack(spacing: 4) {
                 Text(headline.value)
@@ -90,6 +107,21 @@ struct JumpTestHomeScreen: View {
         } else {
             PerformanceEmptyCard(message: "No tests recorded yet.", isLoading: viewModel.isLoading)
         }
+    }
+
+    private func legColumn(_ side: JumpSide, height: Double) -> some View {
+        VStack(spacing: 2) {
+            Text(side.title)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(Color.secondary)
+            Text(height.formatted(.number.precision(.fractionLength(1))))
+                .font(.system(size: 36, weight: .bold))
+                .foregroundStyle(Color.darkColor)
+            + Text(" cm")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(Color.secondary)
+        }
+        .frame(maxWidth: .infinity)
     }
 
     private func dateLine(for session: JumpTestSession) -> String {

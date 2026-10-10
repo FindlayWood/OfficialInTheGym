@@ -65,20 +65,21 @@ struct JumpCameraUnavailableScreen: View {
 
     /// A plausible attempt measured the real way, from times through the same
     /// `JumpTiming` and `JumpPhysics` a recording uses, so a sample is
-    /// indistinguishable from a jump downstream. Flight 0.50–0.62 s (about
-    /// 31–47 cm); a drop jump adds a 0.18–0.26 s ground contact.
+    /// indistinguishable from a jump downstream. Each flight 0.50–0.62 s
+    /// (about 31–47 cm), each ground contact 0.18–0.26 s, drawn afresh per
+    /// interval so repeated jumps' hops differ.
     static func sample(for kind: JumpTestKind) -> JumpAttempt {
-        let flight = Double.random(in: 0.50...0.62)
-        let contact = Double.random(in: 0.18...0.26)
         var times: [Double] = []
         var time = 1.0
         for (index, event) in kind.tagPlan.enumerated() {
             if index > 0 {
-                time += kind.tagPlan[index - 1] == .takeOff && event == .landing ? flight : contact
+                let isFlight = kind.tagPlan[index - 1] == .takeOff && event == .landing
+                time += isFlight ? Double.random(in: 0.50...0.62) : Double.random(in: 0.18...0.26)
             }
             times.append(time)
         }
-        return JumpTiming(plan: kind.tagPlan, times: times).map(JumpAttempt.init(timing:))
+        let flight = 0.56
+        return JumpTiming(plan: kind.tagPlan, times: times).map { JumpAttempt(timing: $0, kind: kind) }
             ?? JumpAttempt(height: JumpPhysics.heightCentimetres(flightTime: flight), flightTime: flight, contactTime: nil)
     }
 }

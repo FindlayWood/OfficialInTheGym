@@ -96,6 +96,9 @@ final class PerformanceDashboardViewModel: ObservableObject {
         case .dropJump:
             dropJumpSessions.removeAll { $0.id == session.id }
             dropJumpSessions.append(session)
+        case .singleLegCMJ, .repeatedJumps:
+            // Not on the dashboard's key numbers; their own screens show them.
+            break
         }
     }
 

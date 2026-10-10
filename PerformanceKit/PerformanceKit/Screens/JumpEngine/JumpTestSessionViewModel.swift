@@ -35,6 +35,9 @@ final class JumpTestSessionViewModel: ObservableObject {
     /// one. Chosen before the first attempt; RSI is only comparable off the
     /// same box.
     @Published var boxHeight: Double = 30
+    /// The leg the next attempt is on, for a single-leg test. It moves to the
+    /// other leg once this one has all its attempts.
+    @Published var selectedSide: JumpSide = .left
 
     static let boxHeights: [Double] = [20, 30, 40, 50, 60]
 
@@ -55,12 +58,34 @@ final class JumpTestSessionViewModel: ObservableObject {
         self.sessionId = makeId()
     }
 
-    var canRecordMore: Bool {
-        attempts.count < kind.attempts
+    var isSided: Bool {
+        !kind.sides.isEmpty
     }
 
+    /// For a single-leg test, `kind.attempts` on each leg; otherwise in all.
+    var canRecordMore: Bool {
+        isSided ? attempts(on: selectedSide).count < kind.attempts : attempts.count < kind.attempts
+    }
+
+    /// From the first attempt; for a single-leg test, once each leg has one,
+    /// since the result is the comparison.
     var canSave: Bool {
-        !attempts.isEmpty
+        isSided ? kind.sides.allSatisfy { !attempts(on: $0).isEmpty } : !attempts.isEmpty
+    }
+
+    func attempts(on side: JumpSide) -> [JumpAttempt] {
+        attempts.filter { $0.side == side }
+    }
+
+    /// Left against right so far.
+    var symmetry: LimbSymmetry? {
+        session.symmetry
+    }
+
+    /// The position in `attempts` of the best on one leg.
+    func bestIndex(on side: JumpSide) -> Int? {
+        guard let best = attempts(on: side).map({ $0.score(for: kind) }).max() else { return nil }
+        return attempts.firstIndex { $0.side == side && $0.score(for: kind) == best }
     }
 
     /// The position of the best attempt by the test's score (height, or RSI).
@@ -92,7 +117,16 @@ final class JumpTestSessionViewModel: ObservableObject {
 
     func add(_ attempt: JumpAttempt) {
         guard canRecordMore else { return }
-        attempts.append(attempt)
+        guard isSided else {
+            attempts.append(attempt)
+            return
+        }
+        attempts.append(attempt.on(selectedSide))
+        // A full leg hands over to the other, so the next Record is the
+        // right one without the athlete switching.
+        if !canRecordMore, let next = kind.sides.first(where: { attempts(on: $0).count < kind.attempts }) {
+            selectedSide = next
+        }
     }
 
     func removeAttempt(at index: Int) {

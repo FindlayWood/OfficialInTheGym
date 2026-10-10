@@ -22,12 +22,14 @@ struct JumpTaggingViewModel {
         case rejected(String)
     }
 
+    let kind: JumpTestKind
     let plan: [JumpEvent]
     let titles: [String]
     let hints: [String]
     private(set) var times: [Double] = []
 
     init(kind: JumpTestKind) {
+        self.kind = kind
         self.plan = kind.tagPlan
         self.titles = kind.tagTitles
         self.hints = kind.tagHints
@@ -55,7 +57,7 @@ struct JumpTaggingViewModel {
 
     /// The measured jump, once every event is tagged.
     var attempt: JumpAttempt? {
-        JumpTiming(plan: plan, times: times).map(JumpAttempt.init(timing:))
+        JumpTiming(plan: plan, times: times).map { JumpAttempt(timing: $0, kind: kind) }
     }
 
     mutating func tag(at time: Double) -> TagResult {

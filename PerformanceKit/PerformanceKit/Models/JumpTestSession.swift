@@ -43,9 +43,28 @@ public struct JumpTestSession: Equatable, Sendable, Identifiable {
         attempts.max { $0.score(for: kind) < $1.score(for: kind) }
     }
 
-    /// The best attempt's score: its height, or its RSI for a drop jump.
+    /// The session's score, what ranks it against other sessions: the best
+    /// attempt's height or RSI. **For a single-leg test it is the weaker leg's
+    /// best**, so a session improves when the weak leg does, not when the
+    /// strong one does more; nil until both legs have a jump.
     var bestScore: Double? {
-        best?.score(for: kind)
+        guard !kind.sides.isEmpty else { return best?.score(for: kind) }
+        let sideBests = kind.sides.map { best(on: $0)?.score(for: kind) }
+        guard sideBests.allSatisfy({ $0 != nil }) else { return nil }
+        return sideBests.compactMap { $0 }.min()
+    }
+
+    /// The best attempt on one leg.
+    func best(on side: JumpSide) -> JumpAttempt? {
+        attempts.filter { $0.side == side }.max { $0.score(for: kind) < $1.score(for: kind) }
+    }
+
+    /// Left against right, for a single-leg session with a jump on each.
+    var symmetry: LimbSymmetry? {
+        guard kind.sides == [.left, .right],
+              let left = best(on: .left)?.height,
+              let right = best(on: .right)?.height else { return nil }
+        return LimbSymmetry(left: left, right: right)
     }
 
     /// The best attempt's power, for a test that estimates it and a session
@@ -59,7 +78,7 @@ public struct JumpTestSession: Equatable, Sendable, Identifiable {
     /// session, so a best keeps the date it was first reached.
     static func best(of sessions: [JumpTestSession]) -> JumpTestSession? {
         sessions
-            .filter { $0.best != nil }
+            .filter { $0.bestScore != nil }
             .sorted { $0.date < $1.date }
             .reduce(nil) { current, next in
                 guard let current, let currentBest = current.bestScore else { return next }

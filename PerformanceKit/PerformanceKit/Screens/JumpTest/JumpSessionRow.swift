@@ -15,6 +15,10 @@ struct JumpSessionRow: View {
     let measurement: JumpMeasurement
     var showsDivider = false
 
+    private func format(_ centimetres: Double) -> String {
+        measurement.display(centimetres: centimetres).formatted(.number.precision(.fractionLength(1)))
+    }
+
     private var subtitle: String {
         let attempts = session.attempts.count == 1 ? "1 attempt" : "\(session.attempts.count) attempts"
         guard let box = session.boxHeight else { return attempts }
@@ -33,7 +37,16 @@ struct JumpSessionRow: View {
                         .foregroundStyle(Color.secondary)
                 }
                 Spacer()
-                if let best = session.best {
+                if let symmetry = session.symmetry {
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text("L \(format(symmetry.left)) · R \(format(symmetry.right)) \(measurement.title)")
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundStyle(Color.darkColor)
+                        Text(symmetry.summary)
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(symmetry.isNotable ? Color.matteAmber : Color.secondary)
+                    }
+                } else if let best = session.best {
                     VStack(alignment: .trailing, spacing: 2) {
                         Text(session.kind.headlineText(of: best, measurement: measurement))
                             .font(.system(size: 17, weight: .bold))

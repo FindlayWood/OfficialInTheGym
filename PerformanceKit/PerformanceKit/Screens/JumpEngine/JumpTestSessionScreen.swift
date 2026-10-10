@@ -15,10 +15,44 @@ struct JumpTestSessionScreen: View {
     @ObservedObject var viewModel: JumpTestSessionViewModel
     @State private var isConfirmingCancel = false
 
+    /// The slots for one leg, or for the whole test when it is two-legged.
+    /// Each slot maps to its attempt's position in `attempts`, which is what
+    /// removal and the best marker work on.
+    private func attemptSlots(on side: JumpSide?) -> some View {
+        let indices = viewModel.attempts.indices.filter { side == nil || viewModel.attempts[$0].side == side }
+        let bestIndex = side.map { viewModel.bestIndex(on: $0) } ?? viewModel.bestIndex
+        return VStack(spacing: 0) {
+            ForEach(0..<viewModel.kind.attempts, id: \.self) { slot in
+                let index = indices.indices.contains(slot) ? indices[slot] : nil
+                JumpAttemptRow(
+                    number: slot + 1,
+                    kind: viewModel.kind,
+                    attempt: index.map { viewModel.attempts[$0] },
+                    isBest: index != nil && index == bestIndex,
+                    measurement: viewModel.measurement,
+                    showsDivider: slot < viewModel.kind.attempts - 1,
+                    onRemove: { if let index { viewModel.removeAttempt(at: index) } }
+                )
+            }
+        }
+        .performanceCard()
+    }
+
+    private var recordTitle: String {
+        if viewModel.isSided {
+            return "Record \(viewModel.selectedSide.title.lowercased()) attempt \(viewModel.attempts(on: viewModel.selectedSide).count + 1)"
+        }
+        return "Record attempt \(viewModel.attempts.count + 1)"
+    }
+
     private var intro: String {
         switch viewModel.kind.headline {
+        case .height where viewModel.isSided:
+            "Up to \(viewModel.kind.attempts) on each leg. Your best on each, and the gap between them, is your result."
         case .height:
             "Best of \(viewModel.kind.attempts). Record each jump, tag it, and the highest is your result."
+        case .reactiveStrength where viewModel.kind == .repeatedJumps:
+            "Best of \(viewModel.kind.attempts). Each attempt is ten hops. Your RSI is the average of your best five rebounds."
         case .reactiveStrength:
             "Best of \(viewModel.kind.attempts). Pick your box, then record each jump and tag it. Your best RSI is your result."
         }
@@ -50,24 +84,39 @@ struct JumpTestSessionScreen: View {
                     .padding(.bottom, 16)
                 }
 
-                HStack {
-                    PerformanceSectionHeader(title: "Attempts")
-                    PerformancePillPicker(options: JumpMeasurement.allCases, selection: $viewModel.measurement) { $0.title }
-                }
-                VStack(spacing: 0) {
-                    ForEach(0..<viewModel.kind.attempts, id: \.self) { index in
-                        JumpAttemptRow(
-                            number: index + 1,
-                            kind: viewModel.kind,
-                            attempt: viewModel.attempts.indices.contains(index) ? viewModel.attempts[index] : nil,
-                            isBest: viewModel.bestIndex == index,
-                            measurement: viewModel.measurement,
-                            showsDivider: index < viewModel.kind.attempts - 1,
-                            onRemove: { viewModel.removeAttempt(at: index) }
-                        )
+                if viewModel.isSided {
+                    PerformanceSectionHeader(title: "Recording")
+                    HStack {
+                        PerformancePillPicker(options: viewModel.kind.sides, selection: $viewModel.selectedSide) { "\($0.title) leg" }
+                        Spacer(minLength: 0)
                     }
+                    .padding(12)
+                    .performanceCard()
+                    .padding(.bottom, 16)
+
+                    ForEach(viewModel.kind.sides, id: \.self) { side in
+                        HStack {
+                            PerformanceSectionHeader(title: "\(side.title) leg")
+                            if side == viewModel.kind.sides.first {
+                                PerformancePillPicker(options: JumpMeasurement.allCases, selection: $viewModel.measurement) { $0.title }
+                            }
+                        }
+                        attemptSlots(on: side)
+                            .padding(.bottom, 8)
+                    }
+
+                    if let symmetry = viewModel.symmetry {
+                        JumpSymmetryLine(symmetry: symmetry)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 4)
+                    }
+                } else {
+                    HStack {
+                        PerformanceSectionHeader(title: "Attempts")
+                        PerformancePillPicker(options: JumpMeasurement.allCases, selection: $viewModel.measurement) { $0.title }
+                    }
+                    attemptSlots(on: nil)
                 }
-                .performanceCard()
 
                 if viewModel.kind.estimatesPower {
                     Group {
@@ -100,7 +149,7 @@ struct JumpTestSessionScreen: View {
         .performanceBottomBar {
             VStack(spacing: 12) {
                 if viewModel.canRecordMore {
-                    PerformancePrimaryButton(title: "Record attempt \(viewModel.attempts.count + 1)") {
+                    PerformancePrimaryButton(title: recordTitle) {
                         viewModel.recordAttempt()
                     }
                     if viewModel.canSave {

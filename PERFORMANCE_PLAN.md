@@ -328,7 +328,21 @@ the ~150–300ms contact times in drop and repeated jumps. **The height formula 
     dashboard's "Drop jump RSI" tile pools boxes.
   - Drop Jump is on the home's test list, and the key numbers are now a 2×2 grid: CMJ, Vertical
     Jump, drop-jump RSI, power per kg.
-- **F — Single-leg CMJ and repeated jumps.**
+- **F — Single-leg CMJ and repeated jumps — built.**
+  - **Single-leg CMJ** (`"singleLegCMJ"`): `JumpTestKind.sides` is `[.left, .right]`, and each
+    attempt carries its `side` (stored on the attempt). The session records up to three on each
+    leg behind a Left / Right switch, hands over to the other leg once one is full, and saves only
+    once both legs have a jump, since the result is the comparison.
+  - **`LimbSymmetry`** is the one definition of asymmetry: the gap as a share of the **stronger**
+    leg, with **10% or more notable** (shown in amber), the common return-to-play line. A
+    single-leg session ranks by its **weaker** leg's best, so a better session is one where the
+    weak leg improved. Its home card and history rows show both legs and the asymmetry.
+  - **Repeated jumps** (`"repeatedJumps"`, the 10/5 test): ten hops, twenty tags, each named and
+    hinted by hop ("Tag landing 3 (6 of 20)"). Each rebound is a ground contact and the flight after
+    it; **the attempt is the mean of the best five rebounds by RSI**, its RSI stored on the attempt
+    (`rsi`) because a mean of ratios is not the ratio of the means. Two attempts, not three: each is
+    twenty tags.
+  - Both are on the home's test list; neither is on the dashboard's key numbers yet.
 - **G — Balance**, from the motion sensors.
 
 Later, not scheduled: coach access, HealthKit resting HR / HRV in the readiness score, and manual

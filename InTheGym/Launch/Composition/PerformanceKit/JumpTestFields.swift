@@ -13,8 +13,11 @@ import PerformanceKit
 ///
 /// - `kind`: `JumpTestKind.rawValue`, which is why a case is never renamed.
 /// - `date`: a timestamp.
-/// - `attempts`: an array of `{ height, flightTime?, contactTime? }`, heights in
-///   centimetres and times in seconds; an absent time is left out, not null.
+/// - `attempts`: an array of `{ height, flightTime?, contactTime?, side?, rsi? }`,
+///   heights in centimetres and times in seconds; anything absent is left out,
+///   not null. `side` is `"left"` / `"right"` on a single-leg test. `rsi` is
+///   stored only where it is not height ÷ contact: repeated jumps, whose RSI is
+///   the mean of the best five rebounds.
 /// - `bodyMass`: kilograms at the time of the test, left out when unknown. A
 ///   session's power is worked out from it, so it does not move with later
 ///   weigh-ins.
@@ -65,6 +68,8 @@ enum JumpTestFields {
         var fields: [String: Any] = ["height": attempt.height]
         if let flightTime = attempt.flightTime { fields["flightTime"] = flightTime }
         if let contactTime = attempt.contactTime { fields["contactTime"] = contactTime }
+        if let side = attempt.side { fields["side"] = side.rawValue }
+        if let rsi = attempt.storedReactiveStrength { fields["rsi"] = rsi }
         return fields
     }
 
@@ -73,7 +78,9 @@ enum JumpTestFields {
         return JumpAttempt(
             height: height,
             flightTime: (fields["flightTime"] as? NSNumber)?.doubleValue,
-            contactTime: (fields["contactTime"] as? NSNumber)?.doubleValue
+            contactTime: (fields["contactTime"] as? NSNumber)?.doubleValue,
+            side: (fields["side"] as? String).flatMap(JumpSide.init(rawValue:)),
+            reactiveStrength: (fields["rsi"] as? NSNumber)?.doubleValue
         )
     }
 }

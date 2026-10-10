@@ -42,7 +42,6 @@ final class DropJumpTests: XCTestCase {
         for kind in JumpTestKind.allCases {
             XCTAssertEqual(kind.tagTitles.count, kind.tagPlan.count, "\(kind)")
             XCTAssertEqual(kind.tagHints.count, kind.tagPlan.count, "\(kind)")
-            XCTAssertEqual(kind.tagSteps.count, kind.tagPlan.count, "\(kind)")
         }
     }
 
@@ -53,7 +52,7 @@ final class DropJumpTests: XCTestCase {
             let sut = JumpCameraUnavailableScreen.sample(for: kind)
 
             XCTAssertGreaterThan(sut.height, 25, "\(kind)")
-            XCTAssertEqual(sut.contactTime != nil, kind == .dropJump, "\(kind)")
+            XCTAssertEqual(sut.contactTime != nil, kind.headline == .reactiveStrength, "\(kind)")
         }
     }
 
