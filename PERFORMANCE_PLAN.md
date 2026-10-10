@@ -343,7 +343,34 @@ the ~150–300ms contact times in drop and repeated jumps. **The height formula 
     (`rsi`) because a mean of ratios is not the ratio of the means. Two attempts, not three: each is
     twenty tags.
   - Both are on the home's test list; neither is on the dashboard's key numbers yet.
-- **G — Balance**, from the motion sensors.
+- **Buttons and the tab bar.** A button pinned to the bottom of the tab's root sat on top of the
+  tab bar. The root has none now: the weekly check's start button is **in its card** (primary when
+  due, a quiet "Check again" otherwise), and the locked screen's button sits under its text. Every
+  pushed screen sets `hidesBottomBarWhenPushed` (once, in `navigate(to:)`), so a test's own pinned
+  button has the full width. Considered and not taken: a "+" menu in the navigation bar (hides the
+  one action that matters), a floating button (nothing else in the app has one).
+- **G — Balance — built.**
+  - A single-leg stand of **30 seconds**, phone flat to the chest, eyes open or closed for the whole
+    session (fixed once the first stand is in). Two stands on each leg, handed over like single-leg
+    CMJ, saved once each leg has one.
+  - **Sway** (`BalanceSway`): the RMS of the acceleration the body adds, **horizontal against
+    gravity** at each sample (so how the phone is tilted does not matter, and bouncing is not sway),
+    in mg. Lower is steadier. 50 Hz device motion through `MotionSampleSource` /
+    `CoreMotionSampleSource`; no permission needed.
+  - `BalanceRecordingViewModel`: a five-second countdown, the stand counted in 0.1 s **ticks** (so a
+    full stand is exactly 30 s), and **"Foot down"**, which ends it early and keeps it marked
+    incomplete; incomplete stands never count toward a best. Countdown, start and end are **heard
+    and felt** (`BalanceCue`), since eyes may be closed, and the screen stays awake. Waiting, sensors
+    and cues are injected, so a stand is tested instantly.
+  - Each leg's best is its lowest complete sway; `LimbSymmetry` gained `higherIsBetter`, so the leg
+    that sways more is the weaker. Balance's home shows the **latest** session (sway is a reading of
+    now), its history every session.
+  - Stored at **`Users/{uid}/BalanceTests/{id}`**: `date`, `condition`, `attempts` of
+    `{ sway, duration, side }`. Rules must allow it.
+  - The simulator has no motion sensors: the stand screen says so and, in the simulator only,
+    offers "Add a sample result".
+  - The instructions sheet takes any list of steps now (`.instructions(title:steps:)`), used by
+    every jump test and by balance.
 
 Later, not scheduled: coach access, HealthKit resting HR / HRV in the readiness score, and manual
 entry for results measured elsewhere (grip strength, sprint times).

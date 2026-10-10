@@ -28,9 +28,22 @@ final class PerformanceKitRouterTests: XCTestCase {
         sut.start()
 
         sut.open(.cmj)
-        sut.open(.verticalJump)
+        sut.open(.balance)
 
         XCTAssertEqual(navigationController.viewControllers.count, 3)
+    }
+
+    // The tab's root is the only screen that shows the tab bar. A pushed
+    // screen pins its action to the bottom, which would sit over the tab bar.
+    func test_navigate_hidesTheTabBarOnEveryPushedScreen() {
+        let navigationController = UINavigationController()
+        let sut = makeSUT(navigationController: navigationController)
+        sut.start()
+
+        sut.open(.cmj)
+
+        XCTAssertFalse(navigationController.viewControllers[0].hidesBottomBarWhenPushed)
+        XCTAssertTrue(navigationController.viewControllers[1].hidesBottomBarWhenPushed)
     }
 
     func test_start_offersNoDismissOnTheTab() {
@@ -63,6 +76,8 @@ final class PerformanceKitRouterTests: XCTestCase {
             jumpSessionsLoader: JumpTestServicesSpy(),
             jumpSessionWriter: JumpTestServicesSpy(),
             bodyMassLoader: BodyMassLoaderStub(),
+            balanceSessionsLoader: BalanceServicesSpy(),
+            balanceSessionWriter: BalanceServicesSpy(),
             currentUserId: "me",
             athleteId: "me"
         )

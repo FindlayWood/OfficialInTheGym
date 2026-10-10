@@ -954,6 +954,10 @@
 		A7FA0000000000000000003C /* LegacyVerticalJumpSessionsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000003B /* LegacyVerticalJumpSessionsLoader.swift */; };
 		A7FA0000000000000000003E /* CurrentAndLegacyJumpTestSessionsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000003D /* CurrentAndLegacyJumpTestSessionsLoader.swift */; };
 		A7FA00000000000000000040 /* FirestoreBodyMassLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000003F /* FirestoreBodyMassLoader.swift */; };
+		A7FA00000000000000000042 /* BalanceTestPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000041 /* BalanceTestPath.swift */; };
+		A7FA00000000000000000044 /* BalanceTestFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000043 /* BalanceTestFields.swift */; };
+		A7FA00000000000000000046 /* FirestoreBalanceSessionsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000045 /* FirestoreBalanceSessionsLoader.swift */; };
+		A7FA00000000000000000048 /* FirestoreBalanceSessionWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000047 /* FirestoreBalanceSessionWriter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1917,6 +1921,10 @@
 		A7FA0000000000000000003B /* LegacyVerticalJumpSessionsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyVerticalJumpSessionsLoader.swift; sourceTree = "<group>"; };
 		A7FA0000000000000000003D /* CurrentAndLegacyJumpTestSessionsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentAndLegacyJumpTestSessionsLoader.swift; sourceTree = "<group>"; };
 		A7FA0000000000000000003F /* FirestoreBodyMassLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreBodyMassLoader.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000041 /* BalanceTestPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceTestPath.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000043 /* BalanceTestFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceTestFields.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000045 /* FirestoreBalanceSessionsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreBalanceSessionsLoader.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000047 /* FirestoreBalanceSessionWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreBalanceSessionWriter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4733,6 +4741,10 @@
 		A7FA00000000000000000004 /* PerformanceKit */ = {
 			isa = PBXGroup;
 			children = (
+				A7FA00000000000000000047 /* FirestoreBalanceSessionWriter.swift */,
+				A7FA00000000000000000045 /* FirestoreBalanceSessionsLoader.swift */,
+				A7FA00000000000000000043 /* BalanceTestFields.swift */,
+				A7FA00000000000000000041 /* BalanceTestPath.swift */,
 				A7FA0000000000000000003F /* FirestoreBodyMassLoader.swift */,
 				A7FA0000000000000000003D /* CurrentAndLegacyJumpTestSessionsLoader.swift */,
 				A7FA0000000000000000003B /* LegacyVerticalJumpSessionsLoader.swift */,
@@ -4925,6 +4937,10 @@
 				F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */,
 				D1CA00000000000000000020 /* DiscoverKitComposition.swift in Sources */,
 				BF1A00000000000000000020 /* ProfileKitComposition.swift in Sources */,
+				A7FA00000000000000000048 /* FirestoreBalanceSessionWriter.swift in Sources */,
+				A7FA00000000000000000046 /* FirestoreBalanceSessionsLoader.swift in Sources */,
+				A7FA00000000000000000044 /* BalanceTestFields.swift in Sources */,
+				A7FA00000000000000000042 /* BalanceTestPath.swift in Sources */,
 				A7FA00000000000000000040 /* FirestoreBodyMassLoader.swift in Sources */,
 				A7FA0000000000000000003E /* CurrentAndLegacyJumpTestSessionsLoader.swift in Sources */,
 				A7FA0000000000000000003C /* LegacyVerticalJumpSessionsLoader.swift in Sources */,

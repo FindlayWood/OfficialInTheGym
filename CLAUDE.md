@@ -526,8 +526,11 @@ Its SwiftUI screens are on MyDay's vocabulary through PerformanceKit's own `UI/`
 the legacy `MyProfileCoordinator` until the coach/player split is removed. **Every other way of opening a
 person** (DISCOVER, search, follow lists, and all nine legacy `UserProfileCoordinator` callers)
 shows ProfileKit's `UserProfileScreen`, through one `ProfileKitComposition.makeRouter` graph.
-Current focus: the PERFORMANCE tab, part 2 phase G (balance). Five jump tests run on the engine:
-CMJ, Vertical Jump, Drop Jump, Single-Leg CMJ and Repeated Jumps. The home is a readiness dashboard led
+Part 2 of the PERFORMANCE plan is built: five jump tests on the engine (CMJ, Vertical Jump, Drop
+Jump, Single-Leg CMJ, Repeated Jumps) and Balance, measured with the motion sensors. **On the tab's
+root nothing is pinned to the bottom** (it would sit over the tab bar): the weekly check's start
+button lives in its card. **Every pushed screen sets `hidesBottomBarWhenPushed`**, in the router's
+`navigate(to:)`, so a test's own pinned button has the full width. The home is a readiness dashboard led
 by the **weekly fatigue check** (`FatigueCheck`): every CMJ session is a check, read as the latest
 best against the best CMJ of the **eight weeks before it**, zoned by `FatigueZone` (the one place the
 95% / 90% boundaries live), calibrating until two earlier sessions exist. **The camera is checked
@@ -1572,6 +1575,7 @@ appears on some screens and not others.
 | `Follows/{followerId}_{followeeId}` | Firestore | follower creates (`FirestoreFollowWriter`), either deletes; `mirrorLegacyFollow` bridges legacy RTDB follows in. Counts on `Profiles` by `profileFollowCounts` |
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
 | `Users/{uid}/JumpTests/{id}` | Firestore | `FirestoreJumpTestSessionWriter` — one document per jump-test session, every test told apart by `kind`; **needs a rule for the subcollection** |
+| `Users/{uid}/BalanceTests/{id}` | Firestore | `FirestoreBalanceSessionWriter` — one document per balance session; **needs a rule for the subcollection** |
 | `VerticalJump/{uid}/Results/{id}` | Firestore | **read-only now** (`LegacyVerticalJumpSessionsLoader`): Vertical Jump's pre-engine history |
 | `Users/{uid}/ExerciseStats/{exerciseID}/RawLogs/{logID}` | Firestore | both logging paths, per set |
 | `Users/{uid}/WorkoutSessions/{id}` | Firestore | `FirestoreCompletedWorkoutSessionSaver` (batched) |

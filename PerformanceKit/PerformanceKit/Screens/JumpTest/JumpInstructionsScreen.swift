@@ -6,18 +6,19 @@
 //
 import SwiftUI
 
-/// How to do a jump test, as a sheet: its numbered steps in one card.
+/// How to do a test, as a sheet: its numbered steps in one card. Every test
+/// uses it, jump or balance.
 struct JumpInstructionsScreen: View {
 
     @Environment(\.dismiss) private var dismiss
-    let kind: JumpTestKind
+    let title: String
+    let instructions: [JumpInstruction]
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 8) {
-                    PerformanceSectionHeader(title: kind.title)
-                    let instructions = JumpInstruction.all(for: kind)
+                    PerformanceSectionHeader(title: title)
                     VStack(spacing: 0) {
                         ForEach(instructions, id: \.self) { instruction in
                             JumpInstructionRow(

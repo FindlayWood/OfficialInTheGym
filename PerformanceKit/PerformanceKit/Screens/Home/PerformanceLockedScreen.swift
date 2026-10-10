@@ -25,16 +25,12 @@ struct PerformanceLockedScreen: View {
                     .font(.system(size: 15))
                     .foregroundStyle(Color.secondary)
                     .multilineTextAlignment(.center)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, 32)
-        }
-        .background(Color(.systemBackground).ignoresSafeArea())
-        .performanceBottomBar {
-            VStack(spacing: 12) {
+                // In the content, not pinned: this is the tab's root, and a
+                // pinned bar would sit over the tab bar.
                 PerformancePrimaryButton(title: "See INTHEGYM pro") {
                     viewModel.showPaywall()
                 }
+                .padding(.top, 8)
                 if viewModel.canUnlockForTesting {
                     Button("Unlock for testing (emulator)") {
                         viewModel.unlockForTesting()
@@ -43,6 +39,9 @@ struct PerformanceLockedScreen: View {
                     .tint(Color.secondary)
                 }
             }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 32)
         }
+        .background(Color(.systemBackground).ignoresSafeArea())
     }
 }

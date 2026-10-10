@@ -42,6 +42,8 @@ public final class PerformanceKitRouter {
     let jumpSessionsLoader: JumpTestSessionsLoader
     let jumpSessionWriter: JumpTestSessionWriter
     let bodyMassLoader: BodyMassLoader
+    let balanceSessionsLoader: BalanceSessionsLoader
+    let balanceSessionWriter: BalanceSessionWriter
     let currentUserId: String
     let athleteId: String
 
@@ -64,6 +66,8 @@ public final class PerformanceKitRouter {
         jumpSessionsLoader: JumpTestSessionsLoader,
         jumpSessionWriter: JumpTestSessionWriter,
         bodyMassLoader: BodyMassLoader,
+        balanceSessionsLoader: BalanceSessionsLoader,
+        balanceSessionWriter: BalanceSessionWriter,
         currentUserId: String,
         athleteId: String
     ) {
@@ -72,6 +76,8 @@ public final class PerformanceKitRouter {
         self.jumpSessionsLoader = jumpSessionsLoader
         self.jumpSessionWriter = jumpSessionWriter
         self.bodyMassLoader = bodyMassLoader
+        self.balanceSessionsLoader = balanceSessionsLoader
+        self.balanceSessionWriter = balanceSessionWriter
         self.currentUserId = currentUserId
         self.athleteId = athleteId
     }
@@ -131,7 +137,7 @@ extension PerformanceKitRouter {
             }
             viewModel.onHistory = { [weak self] in self?.navigate(to: .jumpTestHistory(kind)) }
             viewModel.onHelp = { [weak self] in
-                self?.present(.jumpInstructions(kind), from: self?.navigationController)
+                self?.present(.instructions(title: kind.title, steps: JumpInstruction.all(for: kind)), from: self?.navigationController)
             }
             return UIHostingController(rootView: JumpTestHomeScreen(viewModel: viewModel))
 
@@ -139,8 +145,8 @@ extension PerformanceKitRouter {
             let viewModel = JumpTestHistoryViewModel(kind: kind, loader: jumpSessionsLoader)
             return UIHostingController(rootView: JumpTestHistoryScreen(viewModel: viewModel))
 
-        case .jumpInstructions(let kind):
-            return UIHostingController(rootView: JumpInstructionsScreen(kind: kind))
+        case .instructions(let title, let steps):
+            return UIHostingController(rootView: JumpInstructionsScreen(title: title, instructions: steps))
 
         case .jumpTest(let kind, let onSaved):
             let viewModel = JumpTestSessionViewModel(kind: kind, writer: jumpSessionWriter, bodyMassLoader: bodyMassLoader)
@@ -208,12 +214,66 @@ extension PerformanceKitRouter {
             vc.modalPresentationStyle = .fullScreen
             host = vc
             return vc
+
+        case .balanceHome:
+            let viewModel = BalanceHomeViewModel(loader: balanceSessionsLoader, canRecord: currentUserId == athleteId)
+            viewModel.onStartTest = { [weak self, weak viewModel] in
+                self?.present(.balanceTest(onSaved: { viewModel?.sessionSaved($0) }), from: self?.navigationController)
+            }
+            viewModel.onHistory = { [weak self, weak viewModel] in
+                guard let viewModel else { return }
+                self?.navigate(to: .balanceHistory(viewModel))
+            }
+            viewModel.onHelp = { [weak self] in
+                self?.present(.instructions(title: "Balance", steps: JumpInstruction.balance), from: self?.navigationController)
+            }
+            return UIHostingController(rootView: BalanceHomeScreen(viewModel: viewModel))
+
+        case .balanceHistory(let viewModel):
+            return UIHostingController(rootView: BalanceHistoryScreen(viewModel: viewModel))
+
+        case .balanceTest(let onSaved):
+            let viewModel = BalanceSessionViewModel(writer: balanceSessionWriter)
+            let navigationController = UINavigationController(
+                rootViewController: UIHostingController(rootView: BalanceSessionScreen(viewModel: viewModel))
+            )
+            navigationController.modalPresentationStyle = .fullScreen
+            navigationController.navigationBar.tintColor = UIColor(Color.darkColor)
+            viewModel.onRecordStand = { [weak self, weak navigationController, weak viewModel] side in
+                guard let condition = viewModel?.condition else { return }
+                self?.present(.balanceRecording(side: side, condition: condition, onKeep: { attempt in
+                    viewModel?.add(attempt)
+                    navigationController?.dismiss(animated: true)
+                }), from: navigationController)
+            }
+            viewModel.onFinished = { [weak navigationController] session in
+                onSaved(session)
+                navigationController?.presentingViewController?.dismiss(animated: true)
+            }
+            viewModel.onCancel = { [weak navigationController] in
+                navigationController?.presentingViewController?.dismiss(animated: true)
+            }
+            return navigationController
+
+        case .balanceRecording(let side, let condition, let onKeep):
+            let viewModel = BalanceRecordingViewModel(side: side, source: CoreMotionSampleSource())
+            let vc = UIHostingController(rootView: BalanceRecordingScreen(viewModel: viewModel, condition: condition))
+            vc.modalPresentationStyle = .fullScreen
+            viewModel.onKeep = onKeep
+            viewModel.onCancel = { [weak vc] in vc?.dismiss(animated: true) }
+            return vc
         }
     }
 
+    /// **Every pushed screen hides the tab bar.** The tab's root is the only
+    /// screen that shows it; a test's own screens put their action in a bar
+    /// pinned to the bottom, which would otherwise sit on top of the tab bar.
+    /// `hidesBottomBarWhenPushed`, as the app's other UIKit hosts do.
     @MainActor
     func navigate(to route: PerformanceKitRoutes) {
-        navigationController?.pushViewController(viewController(for: route), animated: true)
+        let vc = viewController(for: route)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     /// A jump test is a chain of presentations, session then camera then
@@ -226,6 +286,10 @@ extension PerformanceKitRouter {
 
     @MainActor
     func open(_ tool: PerformanceTool) {
-        navigate(to: .jumpTestHome(tool.jumpTest))
+        if let kind = tool.jumpTest {
+            navigate(to: .jumpTestHome(kind))
+        } else {
+            navigate(to: .balanceHome)
+        }
     }
 }

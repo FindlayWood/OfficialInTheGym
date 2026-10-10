@@ -32,6 +32,12 @@ final class LimbSymmetryTests: XCTestCase {
         XCTAssertEqual(sut.summary, "Even")
     }
 
+    func test_weaker_deliversTheHigherFigureWhenLowerIsBetter() throws {
+        let sut = try XCTUnwrap(LimbSymmetry(left: 10, right: 12, higherIsBetter: false))
+
+        XCTAssertEqual(sut.weaker, .right)
+    }
+
     func test_init_deliversNilWithoutBothLegs() {
         XCTAssertNil(LimbSymmetry(left: 0, right: 30))
     }

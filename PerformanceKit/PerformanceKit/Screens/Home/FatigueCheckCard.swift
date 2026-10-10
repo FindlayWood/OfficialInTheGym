@@ -10,16 +10,34 @@ import SwiftUI
 /// percentage of the athlete's 8-week best, in its zone's colour, with the
 /// zone bar and a line of advice; or calibrating, with how many checks to go;
 /// or an invitation to take the first. The foot says when the next is due.
+///
+/// **The card carries the action that starts a check** (`onStart`): the
+/// primary button when one is due, a quiet "Check again" otherwise, and
+/// nothing on someone else's centre. It used to be a button pinned to the
+/// bottom of the tab, where it sat on top of the tab bar; the tab's root has
+/// no pinned bar now.
 struct FatigueCheckCard: View {
 
     let check: FatigueCheck
     let isDue: Bool
+    var onStart: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             content
             Divider()
             dueLine
+            if let onStart {
+                if isDue {
+                    PerformancePrimaryButton(title: check.latest == nil ? "Take your first check" : "Start this week's check", action: onStart)
+                        .padding(.top, 4)
+                } else {
+                    Button("Check again", action: onStart)
+                        .font(.system(size: 15, weight: .semibold))
+                        .tint(Color.darkColor)
+                        .frame(maxWidth: .infinity)
+                }
+            }
         }
         .padding(16)
         .performanceCard()

@@ -8,9 +8,10 @@ import Foundation
 
 /// The tests on the PERFORMANCE tab, in the order the home screen lists them.
 ///
-/// The jump tests today; balance joins them in phase G
+/// Five jump tests and balance
 /// (`PERFORMANCE_PLAN.md`, part 2). A jump test is a `JumpTestKind` on the
-/// shared engine; `jumpTest` is that mapping.
+/// shared engine (`jumpTest`); balance is its own test, measured with the
+/// motion sensors rather than the camera.
 ///
 /// `@frozen` because PerformanceKit builds with library evolution. Without it,
 /// every `switch` over a tool in the app needs an `@unknown default`.
@@ -21,20 +22,23 @@ public enum PerformanceTool: CaseIterable, Sendable {
     case dropJump
     case singleLegCMJ
     case repeatedJumps
+    case balance
 
-    var jumpTest: JumpTestKind {
+    /// The jump test this tool runs, or nil for balance.
+    var jumpTest: JumpTestKind? {
         switch self {
         case .cmj: .cmj
         case .verticalJump: .verticalJump
         case .dropJump: .dropJump
         case .singleLegCMJ: .singleLegCMJ
         case .repeatedJumps: .repeatedJumps
+        case .balance: nil
         }
     }
 
-    var title: String { jumpTest.title }
+    var title: String { jumpTest?.title ?? "Balance" }
 
-    var message: String { jumpTest.summary }
+    var message: String { jumpTest?.summary ?? "Stand on one leg for 30 seconds. Sway, left against right." }
 
     /// The SF Symbol on the tool's tile.
     var systemImage: String {
@@ -44,6 +48,7 @@ public enum PerformanceTool: CaseIterable, Sendable {
         case .dropJump: "arrow.down.to.line"
         case .singleLegCMJ: "figure.stand"
         case .repeatedJumps: "repeat"
+        case .balance: "figure.mind.and.body"
         }
     }
 }

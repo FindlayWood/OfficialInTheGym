@@ -14,7 +14,7 @@ final class PerformanceDashboardViewModelTests: XCTestCase {
     func test_tools_deliversEveryTestInOrder() {
         let sut = makeSUT()
 
-        XCTAssertEqual(sut.tools, [.cmj, .verticalJump, .dropJump, .singleLegCMJ, .repeatedJumps])
+        XCTAssertEqual(sut.tools, [.cmj, .verticalJump, .dropJump, .singleLegCMJ, .repeatedJumps, .balance])
     }
 
     func test_load_readsCMJAndVerticalJump() async {

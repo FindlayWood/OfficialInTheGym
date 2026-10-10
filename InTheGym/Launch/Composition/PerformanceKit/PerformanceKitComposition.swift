@@ -59,6 +59,12 @@ class PerformanceKitComposition {
 
         let bodyMassLoader: BodyMassLoader = FirestoreBodyMassLoader(userId: athlete.uid)
 
+        // MARK: - Balance
+
+        let balanceSessionsLoader: BalanceSessionsLoader = FirestoreBalanceSessionsLoader(userId: athlete.uid)
+
+        let balanceSessionWriter: BalanceSessionWriter = FirestoreBalanceSessionWriter(userId: athlete.uid)
+
         // MARK: - Router
 
         let router = PerformanceKitRouter(
@@ -67,6 +73,8 @@ class PerformanceKitComposition {
             jumpSessionsLoader: jumpSessionsLoader,
             jumpSessionWriter: jumpSessionWriter,
             bodyMassLoader: bodyMassLoader,
+            balanceSessionsLoader: balanceSessionsLoader,
+            balanceSessionWriter: balanceSessionWriter,
             currentUserId: UserDefaults.currentUser.uid,
             athleteId: athlete.uid
         )

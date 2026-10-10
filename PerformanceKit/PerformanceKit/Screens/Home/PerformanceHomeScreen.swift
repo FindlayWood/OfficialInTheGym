@@ -7,10 +7,10 @@
 import SwiftUI
 
 /// The PERFORMANCE tab's home, a readiness dashboard: this week's fatigue check
-/// as the lead card, the key numbers beneath, then the tests, with "Start
-/// weekly check" pinned to the bottom. It answers "am I fresh?" before it
-/// lists anything; the tab used to be a menu, and a menu always reads as a
-/// settings page.
+/// as the lead card, with its own start button, the key numbers beneath, then
+/// the tests. It answers "am I fresh?" before it lists anything; the tab used
+/// to be a menu, and a menu always reads as a settings page. **Nothing is
+/// pinned to the bottom of the tab's root**, which would sit over the tab bar.
 struct PerformanceHomeScreen: View {
 
     @ObservedObject var viewModel: PerformanceDashboardViewModel
@@ -22,7 +22,11 @@ struct PerformanceHomeScreen: View {
             VStack(spacing: 8) {
                 PerformanceSectionHeader(title: "This Week")
                 if viewModel.hasLoaded {
-                    FatigueCheckCard(check: viewModel.check, isDue: viewModel.isCheckDue)
+                    FatigueCheckCard(
+                        check: viewModel.check,
+                        isDue: viewModel.isCheckDue,
+                        onStart: viewModel.canRecord ? { viewModel.startCheck() } : nil
+                    )
                         .padding(.bottom, 16)
                 } else {
                     PerformanceEmptyCard(message: "", isLoading: true)
@@ -65,13 +69,6 @@ struct PerformanceHomeScreen: View {
             .padding(.vertical, 12)
         }
         .background(Color(.systemBackground).ignoresSafeArea())
-        .performanceBottomBar {
-            if viewModel.canRecord {
-                PerformancePrimaryButton(title: "Start weekly check") {
-                    viewModel.startCheck()
-                }
-            }
-        }
         .task {
             if !viewModel.hasLoaded { await viewModel.load() }
         }
