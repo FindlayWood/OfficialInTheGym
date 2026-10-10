@@ -48,6 +48,12 @@ public final class PerformanceKitRouter {
     let maxJumpLoader: MaxVerticalJumpLoader
     let jumpHistoryLoader: VerticalJumpHistoryLoader
     let jumpWriter: VerticalJumpWriter
+    let trackedSessionsLoader: TrackedSessionsLoader
+    let trackedSessionWriter: TrackedSessionWriter
+    let workloadsLoader: WorkloadsLoader
+    let workloadWriter: WorkloadWriter
+    let wellnessLoader: WellnessSnapshotLoader
+    let cmjLoader: CMJSnapshotLoader
     let currentUserId: String
     let athleteId: String
 
@@ -70,6 +76,12 @@ public final class PerformanceKitRouter {
         maxJumpLoader: MaxVerticalJumpLoader,
         jumpHistoryLoader: VerticalJumpHistoryLoader,
         jumpWriter: VerticalJumpWriter,
+        trackedSessionsLoader: TrackedSessionsLoader,
+        trackedSessionWriter: TrackedSessionWriter,
+        workloadsLoader: WorkloadsLoader,
+        workloadWriter: WorkloadWriter,
+        wellnessLoader: WellnessSnapshotLoader,
+        cmjLoader: CMJSnapshotLoader,
         currentUserId: String,
         athleteId: String
     ) {
@@ -80,6 +92,12 @@ public final class PerformanceKitRouter {
         self.maxJumpLoader = maxJumpLoader
         self.jumpHistoryLoader = jumpHistoryLoader
         self.jumpWriter = jumpWriter
+        self.trackedSessionsLoader = trackedSessionsLoader
+        self.trackedSessionWriter = trackedSessionWriter
+        self.workloadsLoader = workloadsLoader
+        self.workloadWriter = workloadWriter
+        self.wellnessLoader = wellnessLoader
+        self.cmjLoader = cmjLoader
         self.currentUserId = currentUserId
         self.athleteId = athleteId
     }
@@ -164,6 +182,26 @@ extension PerformanceKitRouter {
             let vc = UIHostingController(rootView: JumpResultsScreen(viewModel: viewModel))
             viewModel.onDismiss = { [weak vc] in vc?.dismiss(animated: true) }
             return vc
+
+        case .tracker(let kind):
+            let viewModel = TrackerHomeViewModel(kind: kind, loader: trackedSessionsLoader, canRecord: currentUserId == athleteId)
+            viewModel.onSelectSession = { [weak self] in
+                self?.navigate(to: .trackedSession($0, kind: kind))
+            }
+            let screen = TrackerHomeScreen(viewModel: viewModel) { [workloadsLoader, wellnessLoader, cmjLoader, trackedSessionWriter, workloadWriter] in
+                NewTrackedSessionViewModel(
+                    kind: kind,
+                    workloadsLoader: workloadsLoader,
+                    wellnessLoader: wellnessLoader,
+                    cmjLoader: cmjLoader,
+                    sessionWriter: trackedSessionWriter,
+                    workloadWriter: workloadWriter
+                )
+            }
+            return UIHostingController(rootView: screen)
+
+        case .trackedSession(let session, let kind):
+            return UIHostingController(rootView: TrackedSessionDetailScreen(session: session, title: kind.detailTitle))
         }
     }
 
@@ -191,7 +229,11 @@ extension PerformanceKitRouter {
             navigate(to: .journal)
         case .verticalJump:
             navigate(to: .verticalJump)
-        case .matchTracker, .practiceTracker, .workload:
+        case .matchTracker:
+            navigate(to: .tracker(.match))
+        case .practiceTracker:
+            navigate(to: .tracker(.practice))
+        case .workload:
             onOpenLegacyTool?(tool)
         }
     }

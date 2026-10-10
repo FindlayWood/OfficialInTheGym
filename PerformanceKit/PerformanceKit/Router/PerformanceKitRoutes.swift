@@ -21,4 +21,8 @@ enum PerformanceKitRoutes {
     case jumpRecorder(max: VerticalJump?)
     case jumpReplay(fileURL: URL, max: VerticalJump?)
     case jumpResult(height: Double, max: VerticalJump?)
+
+    // MARK: - Match and Practice Tracker
+    case tracker(TrackedSessionKind)
+    case trackedSession(TrackedSession, kind: TrackedSessionKind)
 }

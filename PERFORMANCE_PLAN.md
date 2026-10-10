@@ -17,7 +17,7 @@ deleted.** It moves.
   change a move makes is the one the framework rules require: **every Firebase call goes behind a
   narrow protocol, with its adapter in `InTheGym/Launch/Composition/PerformanceKit/`**, one per file,
   and the Firestore path or RTDB model lives there, not in the framework.
-- **One tool per commit**, in the order below. Until a tool moves, the router hands it back to the app
+- **One tool per commit**, in the order below (Match and Practice Tracker are one tool). Until a tool moves, the router hands it back to the app
   through `onOpenLegacyTool`, and the app opens it with the legacy `PerformanceHomeCoordinator` on the
   tab's own stack. Each move takes one case off that switch.
 - **Wellness, Training Status, CMJ and Injury Tracker do not move.** They were already commented out
@@ -114,20 +114,49 @@ coordinator the moves take apart.
   unreachable (no row sends `.measureJump`, and the coach one is never built). They open Performance
   Center now rather than the camera.
 
-### Step 5 — Match Tracker
-RTDB through `FirebaseDatabaseManager` (`MatchTrackerModel`, `WorkloadModel`); reads Firestore
-`WellnessScores/{uid}` and `CMJ/{uid}`.
+### Step 5 — Match Tracker and Practice Tracker, as one tool — built
+The legacy app had a full copy of each, identical apart from copy, icons, and the load a session
+logs. They moved as **one tool**, `TrackedSessionKind` (`.match` / `.practice`) carrying every
+difference, so there was no step 6.
+- Routes `.tracker(kind)` and `.trackedSession(_:kind:)`. `TrackerHomeScreen`, `TrackedSessionRow`,
+  `TrackedSessionDetailScreen`, `NewTrackedSessionScreen`, `RatingPicker` (a copy of the app's
+  `QuestionView`, which Wellness keeps), with `TrackerHomeViewModel` and `NewTrackedSessionViewModel`.
+- **Saving takes a snapshot, then stores the session, then logs its load**, in that order, so the
+  snapshot describes the athlete coming into the session. The load links back by the key the session
+  was stored under (`workoutID`). Match: a flat 1000 at RPE 10 over 7200 s. Practice:
+  `duration × RPE × 1.5`, truncated. Both in `TrackedSessionKind.workload(...)`, tested.
+- **`WorkloadRatio` is the one copy of the legacy workload metrics**, which were written out in both
+  trackers and again in the Workload tool. It is deliberately **not** StatsKit's `ACWR`: a different
+  log, device-calendar days, and the values every record already stores. It keeps the legacy
+  `stdev()`, which computes `sqrt(Σ(x − mean)² / n − 1)` instead of `/ (n − 1)` and is often NaN
+  (stored as 0). **Fixing it is for the redesign, with a decision about the records already written.**
+  A test pins the current value so it cannot change quietly.
+- Five services: `TrackedSessionsLoader` / `TrackedSessionWriter` (kind passed in), `WorkloadsLoader`
+  / `WorkloadWriter`, `WellnessSnapshotLoader` / `CMJSnapshotLoader` (nil on failure, as before). In
+  the composition root they go **through the legacy models** (`MatchTrackerModel`,
+  `PracticeTrackerModel`, `WorkloadModel`, `RatioModel`, `WellnessAnswersModel`, `CMJModel`) so the
+  stored shape is unchanged. `PerformanceKit+LegacyModels.swift` maps every field both ways, and
+  `LegacyTrackerRecord` lets one mapping read both record types. `WellnessSnapshot` / `CMJSnapshot`
+  mirror every field for that reason; their titles come from the app's enums.
+- Changed by the move:
+  - A coach sees the **athlete's** sessions (the legacy screens used the signed-in user), and
+    recording is offered on your own centre only. **A coach reading `MatchTracking/{athleteId}`,
+    `PracticeTracking/{athleteId}` and `Workloads/{athleteId}` depends on the Realtime Database rules.**
+  - A failed save puts the button back. The legacy view models left the spinner up.
+  - A new session appears in the list at once.
+  - The match sheet's rating headers are the practice sheet's correct ones.
+  - Cards are `systemBackground`, not `.white`, which was unreadable in dark mode.
+  - The duration stepper stops at 0 and 240, like its slider.
+- Still as before: a failure after the session is stored but before its load is logged leaves the
+  session without a workload entry, and saving again records it twice.
 
-### Step 6 — Practice Tracker
-The same shape as Match Tracker.
-
-### Step 7 — Workload
+### Step 6 — Workload
 `PerformanceMonitorViewController` and the two child view controllers it embeds,
 `WorkloadChildViewController` and `OptimalWorkloadRatioViewController`. RTDB workloads. Nothing MyDay
 writes reaches this screen: its workloads come from the match and practice trackers, custom
 workloads and the legacy workout flow. That is a question for the redesign, not the move.
 
-### Step 8 — Retiring the bridge
+### Step 7 — Retiring the bridge
 `PerformanceHomeCoordinator` and `onOpenLegacyTool` go, and the app's copies of the icons go if
 nothing else names them.
 

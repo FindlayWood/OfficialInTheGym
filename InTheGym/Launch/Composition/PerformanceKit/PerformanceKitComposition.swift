@@ -69,6 +69,22 @@ class PerformanceKitComposition {
             best: FirestoreBestVerticalJumpWriter(userId: athlete.uid)
         )
 
+        // MARK: - Match and Practice Tracker
+        // Reads are the athlete's. Recording is your own centre only, and the
+        // workload log write always goes to the signed-in user's log.
+
+        let trackedSessionsLoader: TrackedSessionsLoader = RealtimeTrackedSessionsLoader(userId: athlete.uid)
+
+        let trackedSessionWriter: TrackedSessionWriter = RealtimeTrackedSessionWriter(userId: athlete.uid)
+
+        let workloadsLoader: WorkloadsLoader = RealtimeWorkloadsLoader(userId: athlete.uid)
+
+        let workloadWriter: WorkloadWriter = RealtimeWorkloadWriter()
+
+        let wellnessLoader: WellnessSnapshotLoader = FirestoreWellnessSnapshotLoader(userId: athlete.uid)
+
+        let cmjLoader: CMJSnapshotLoader = FirestoreCMJSnapshotLoader(userId: athlete.uid)
+
         // MARK: - Router
 
         let router = PerformanceKitRouter(
@@ -79,6 +95,12 @@ class PerformanceKitComposition {
             maxJumpLoader: maxJumpLoader,
             jumpHistoryLoader: jumpHistoryLoader,
             jumpWriter: jumpWriter,
+            trackedSessionsLoader: trackedSessionsLoader,
+            trackedSessionWriter: trackedSessionWriter,
+            workloadsLoader: workloadsLoader,
+            workloadWriter: workloadWriter,
+            wellnessLoader: wellnessLoader,
+            cmjLoader: cmjLoader,
             currentUserId: UserDefaults.currentUser.uid,
             athleteId: athlete.uid
         )
@@ -100,10 +122,8 @@ class PerformanceKitComposition {
 
         router.onOpenLegacyTool = { tool in
             switch tool {
-            case .matchTracker: legacyTools.showMatchTracker()
-            case .practiceTracker: legacyTools.showPracticeTracker()
             case .workload: legacyTools.showWorkload()
-            case .verticalJump, .journal: break // PerformanceKit's own; the router never hands them back
+            case .matchTracker, .practiceTracker, .verticalJump, .journal: break // PerformanceKit's own; the router never hands them back
             }
         }
 

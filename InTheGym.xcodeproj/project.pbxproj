@@ -720,15 +720,7 @@
 		74D93470282EF854005D15DE /* EditProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D9346F282EF854005D15DE /* EditProfileCoordinator.swift */; };
 		74D93472282EF87D005D15DE /* PlayerProfileMoreCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D93471282EF87D005D15DE /* PlayerProfileMoreCoordinator.swift */; };
 		74D93475282EF9DA005D15DE /* ProfileButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D93474282EF9DA005D15DE /* ProfileButton.swift */; };
-		74DA1AE228F1A99500F4DB9E /* MatchTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AE128F1A99500F4DB9E /* MatchTrackerViewController.swift */; };
-		74DA1AE428F1A9A200F4DB9E /* MatchTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AE328F1A9A200F4DB9E /* MatchTrackerView.swift */; };
-		74DA1AE628F1A9B200F4DB9E /* MatchTrackerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AE528F1A9B200F4DB9E /* MatchTrackerViewModel.swift */; };
-		74DA1AE828F1BE8B00F4DB9E /* NewMatchTrackerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AE728F1BE8B00F4DB9E /* NewMatchTrackerSheet.swift */; };
 		74DA1AEB28F1CA5C00F4DB9E /* MatchTrackerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AEA28F1CA5C00F4DB9E /* MatchTrackerModel.swift */; };
-		74DA1AED28FDBC4300F4DB9E /* MatchTrackerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AEC28FDBC4300F4DB9E /* MatchTrackerListView.swift */; };
-		74DA1AEF29008F8B00F4DB9E /* MatchTrackerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AEE29008F8B00F4DB9E /* MatchTrackerCoordinator.swift */; };
-		74DA1AF1290091B000F4DB9E /* MatchTrackerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AF0290091B000F4DB9E /* MatchTrackerDetailView.swift */; };
-		74DA1AF3290091D200F4DB9E /* MatchTrackerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA1AF2290091D200F4DB9E /* MatchTrackerDetailViewController.swift */; };
 		74DC3B67289F240D00DCEAF7 /* WellnessQuestionaireView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DC3B66289F240D00DCEAF7 /* WellnessQuestionaireView.swift */; };
 		74DC3B69289FE87500DCEAF7 /* WellnessStatusRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DC3B68289FE87500DCEAF7 /* WellnessStatusRowView.swift */; };
 		74DC3B6C28A02E6100DCEAF7 /* TrainingStatusMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DC3B6B28A02E6100DCEAF7 /* TrainingStatusMainViewController.swift */; };
@@ -941,15 +933,7 @@
 		9F9F016629F2F0EB002B969B /* BodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016529F2F0EB002B969B /* BodyType.swift */; };
 		9F9F016829F2F116002B969B /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9F016729F2F116002B969B /* Observable.swift */; };
 		9FA4F1F429102E7400757860 /* InjuryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4F1F329102E7400757860 /* InjuryDetailView.swift */; };
-		9FB0F29229142D7D00BF222E /* PracticeTrackerHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29129142D7D00BF222E /* PracticeTrackerHomeViewController.swift */; };
-		9FB0F29429142D8C00BF222E /* PracticeTrackerHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29329142D8C00BF222E /* PracticeTrackerHomeView.swift */; };
-		9FB0F29629142DD900BF222E /* PracticeTrackerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29529142DD900BF222E /* PracticeTrackerViewModel.swift */; };
 		9FB0F29829142E0B00BF222E /* PracticeTrackerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29729142E0B00BF222E /* PracticeTrackerModel.swift */; };
-		9FB0F29A2914306900BF222E /* NewPracticeTrackerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F2992914306900BF222E /* NewPracticeTrackerSheet.swift */; };
-		9FB0F29C2914323B00BF222E /* PracticeTrackerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29B2914323B00BF222E /* PracticeTrackerListView.swift */; };
-		9FB0F29E2914331E00BF222E /* PracticeTrackerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F29D2914331E00BF222E /* PracticeTrackerCoordinator.swift */; };
-		9FB0F2A129147F1700BF222E /* PracticeTrackerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F2A029147F1700BF222E /* PracticeTrackerDetailViewController.swift */; };
-		9FB0F2A329147F2E00BF222E /* PracticeTrackerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */; };
 		9FB4D1DC29E752AB0019CA57 /* AccountCreationComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4D1DB29E752AB0019CA57 /* AccountCreationComposition.swift */; };
 		9FB4D1DF29EAD4A50019CA57 /* AccountCreatedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4D1DE29EAD4A50019CA57 /* AccountCreatedViewController.swift */; };
 		9FB4D1E729EC5DC10019CA57 /* CheckUserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB4D1E629EC5DC10019CA57 /* CheckUserError.swift */; };
@@ -1002,6 +986,14 @@
 		A7FA0000000000000000001E /* FirestoreVerticalJumpResultWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000001D /* FirestoreVerticalJumpResultWriter.swift */; };
 		A7FA00000000000000000020 /* FirestoreBestVerticalJumpWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000001F /* FirestoreBestVerticalJumpWriter.swift */; };
 		A7FA00000000000000000022 /* ResultAndBestVerticalJumpWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000021 /* ResultAndBestVerticalJumpWriter.swift */; };
+		A7FA00000000000000000024 /* LegacyTrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000023 /* LegacyTrackerRecord.swift */; };
+		A7FA00000000000000000026 /* PerformanceKit+LegacyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000025 /* PerformanceKit+LegacyModels.swift */; };
+		A7FA00000000000000000028 /* RealtimeTrackedSessionsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000027 /* RealtimeTrackedSessionsLoader.swift */; };
+		A7FA0000000000000000002A /* RealtimeTrackedSessionWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000029 /* RealtimeTrackedSessionWriter.swift */; };
+		A7FA0000000000000000002C /* RealtimeWorkloadsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000002B /* RealtimeWorkloadsLoader.swift */; };
+		A7FA0000000000000000002E /* RealtimeWorkloadWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000002D /* RealtimeWorkloadWriter.swift */; };
+		A7FA00000000000000000030 /* FirestoreWellnessSnapshotLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000002F /* FirestoreWellnessSnapshotLoader.swift */; };
+		A7FA00000000000000000032 /* FirestoreCMJSnapshotLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000031 /* FirestoreCMJSnapshotLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1737,15 +1729,7 @@
 		74D9346F282EF854005D15DE /* EditProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileCoordinator.swift; sourceTree = "<group>"; };
 		74D93471282EF87D005D15DE /* PlayerProfileMoreCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProfileMoreCoordinator.swift; sourceTree = "<group>"; };
 		74D93474282EF9DA005D15DE /* ProfileButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileButton.swift; sourceTree = "<group>"; };
-		74DA1AE128F1A99500F4DB9E /* MatchTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerViewController.swift; sourceTree = "<group>"; };
-		74DA1AE328F1A9A200F4DB9E /* MatchTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerView.swift; sourceTree = "<group>"; };
-		74DA1AE528F1A9B200F4DB9E /* MatchTrackerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerViewModel.swift; sourceTree = "<group>"; };
-		74DA1AE728F1BE8B00F4DB9E /* NewMatchTrackerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMatchTrackerSheet.swift; sourceTree = "<group>"; };
 		74DA1AEA28F1CA5C00F4DB9E /* MatchTrackerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerModel.swift; sourceTree = "<group>"; };
-		74DA1AEC28FDBC4300F4DB9E /* MatchTrackerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerListView.swift; sourceTree = "<group>"; };
-		74DA1AEE29008F8B00F4DB9E /* MatchTrackerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerCoordinator.swift; sourceTree = "<group>"; };
-		74DA1AF0290091B000F4DB9E /* MatchTrackerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerDetailView.swift; sourceTree = "<group>"; };
-		74DA1AF2290091D200F4DB9E /* MatchTrackerDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTrackerDetailViewController.swift; sourceTree = "<group>"; };
 		74DC3B66289F240D00DCEAF7 /* WellnessQuestionaireView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessQuestionaireView.swift; sourceTree = "<group>"; };
 		74DC3B68289FE87500DCEAF7 /* WellnessStatusRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessStatusRowView.swift; sourceTree = "<group>"; };
 		74DC3B6B28A02E6100DCEAF7 /* TrainingStatusMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingStatusMainViewController.swift; sourceTree = "<group>"; };
@@ -1954,15 +1938,7 @@
 		9F9F016529F2F0EB002B969B /* BodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyType.swift; sourceTree = "<group>"; };
 		9F9F016729F2F116002B969B /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		9FA4F1F329102E7400757860 /* InjuryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuryDetailView.swift; sourceTree = "<group>"; };
-		9FB0F29129142D7D00BF222E /* PracticeTrackerHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerHomeViewController.swift; sourceTree = "<group>"; };
-		9FB0F29329142D8C00BF222E /* PracticeTrackerHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerHomeView.swift; sourceTree = "<group>"; };
-		9FB0F29529142DD900BF222E /* PracticeTrackerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerViewModel.swift; sourceTree = "<group>"; };
 		9FB0F29729142E0B00BF222E /* PracticeTrackerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerModel.swift; sourceTree = "<group>"; };
-		9FB0F2992914306900BF222E /* NewPracticeTrackerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPracticeTrackerSheet.swift; sourceTree = "<group>"; };
-		9FB0F29B2914323B00BF222E /* PracticeTrackerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerListView.swift; sourceTree = "<group>"; };
-		9FB0F29D2914331E00BF222E /* PracticeTrackerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerCoordinator.swift; sourceTree = "<group>"; };
-		9FB0F2A029147F1700BF222E /* PracticeTrackerDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerDetailViewController.swift; sourceTree = "<group>"; };
-		9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTrackerDetailView.swift; sourceTree = "<group>"; };
 		9FB4D1DB29E752AB0019CA57 /* AccountCreationComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreationComposition.swift; sourceTree = "<group>"; };
 		9FB4D1DE29EAD4A50019CA57 /* AccountCreatedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreatedViewController.swift; sourceTree = "<group>"; };
 		9FB4D1E629EC5DC10019CA57 /* CheckUserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckUserError.swift; sourceTree = "<group>"; };
@@ -2013,6 +1989,14 @@
 		A7FA0000000000000000001D /* FirestoreVerticalJumpResultWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreVerticalJumpResultWriter.swift; sourceTree = "<group>"; };
 		A7FA0000000000000000001F /* FirestoreBestVerticalJumpWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreBestVerticalJumpWriter.swift; sourceTree = "<group>"; };
 		A7FA00000000000000000021 /* ResultAndBestVerticalJumpWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultAndBestVerticalJumpWriter.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000023 /* LegacyTrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTrackerRecord.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000025 /* PerformanceKit+LegacyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PerformanceKit+LegacyModels.swift"; sourceTree = "<group>"; };
+		A7FA00000000000000000027 /* RealtimeTrackedSessionsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeTrackedSessionsLoader.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000029 /* RealtimeTrackedSessionWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeTrackedSessionWriter.swift; sourceTree = "<group>"; };
+		A7FA0000000000000000002B /* RealtimeWorkloadsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeWorkloadsLoader.swift; sourceTree = "<group>"; };
+		A7FA0000000000000000002D /* RealtimeWorkloadWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeWorkloadWriter.swift; sourceTree = "<group>"; };
+		A7FA0000000000000000002F /* FirestoreWellnessSnapshotLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWellnessSnapshotLoader.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000031 /* FirestoreCMJSnapshotLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreCMJSnapshotLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3241,8 +3225,6 @@
 			children = (
 				745F89EA286F4494000070B2 /* PerformanceHomeCoordinator.swift */,
 				747511AC288DF5B5006720E9 /* CMJCoordinator.swift */,
-				74DA1AEE29008F8B00F4DB9E /* MatchTrackerCoordinator.swift */,
-				9FB0F29D2914331E00BF222E /* PracticeTrackerCoordinator.swift */,
 			);
 			path = PerformanceCoordinators;
 			sourceTree = "<group>";
@@ -3401,8 +3383,6 @@
 				749396982C456BEE00C1B792 /* Workout Feed Feature */,
 				746DA0DA2C0A67A90094EA3B /* Feed Feature */,
 				9F4DFB3F29BCE6D200363AE8 /* TaggedUsers */,
-				9FB0F29029142D6500BF222E /* PracticeTracker */,
-				74DA1AE028F1A98600F4DB9E /* MatchTracker */,
 				74F664E228DFBE4F0086BA4E /* UserManager */,
 				74E338CE28CE861500A85E8E /* PurchaseManager */,
 				74FA609A28AFF7A6007B2CD8 /* InjuryTracker */,
@@ -3965,20 +3945,6 @@
 				74D93474282EF9DA005D15DE /* ProfileButton.swift */,
 			);
 			path = CustomButtons;
-			sourceTree = "<group>";
-		};
-		74DA1AE028F1A98600F4DB9E /* MatchTracker */ = {
-			isa = PBXGroup;
-			children = (
-				74DA1AE128F1A99500F4DB9E /* MatchTrackerViewController.swift */,
-				74DA1AE328F1A9A200F4DB9E /* MatchTrackerView.swift */,
-				74DA1AE528F1A9B200F4DB9E /* MatchTrackerViewModel.swift */,
-				74DA1AE728F1BE8B00F4DB9E /* NewMatchTrackerSheet.swift */,
-				74DA1AEC28FDBC4300F4DB9E /* MatchTrackerListView.swift */,
-				74DA1AF0290091B000F4DB9E /* MatchTrackerDetailView.swift */,
-				74DA1AF2290091D200F4DB9E /* MatchTrackerDetailViewController.swift */,
-			);
-			path = MatchTracker;
 			sourceTree = "<group>";
 		};
 		74DA1AE928F1CA4D00F4DB9E /* PerformanceModels */ = {
@@ -4744,28 +4710,6 @@
 			path = Flow;
 			sourceTree = "<group>";
 		};
-		9FB0F29029142D6500BF222E /* PracticeTracker */ = {
-			isa = PBXGroup;
-			children = (
-				9FB0F29F29147EEB00BF222E /* PracticeDetail */,
-				9FB0F29129142D7D00BF222E /* PracticeTrackerHomeViewController.swift */,
-				9FB0F29329142D8C00BF222E /* PracticeTrackerHomeView.swift */,
-				9FB0F29529142DD900BF222E /* PracticeTrackerViewModel.swift */,
-				9FB0F2992914306900BF222E /* NewPracticeTrackerSheet.swift */,
-				9FB0F29B2914323B00BF222E /* PracticeTrackerListView.swift */,
-			);
-			path = PracticeTracker;
-			sourceTree = "<group>";
-		};
-		9FB0F29F29147EEB00BF222E /* PracticeDetail */ = {
-			isa = PBXGroup;
-			children = (
-				9FB0F2A029147F1700BF222E /* PracticeTrackerDetailViewController.swift */,
-				9FB0F2A229147F2E00BF222E /* PracticeTrackerDetailView.swift */,
-			);
-			path = PracticeDetail;
-			sourceTree = "<group>";
-		};
 		9FB4D1DD29EAD4910019CA57 /* AccountCreated */ = {
 			isa = PBXGroup;
 			children = (
@@ -4984,6 +4928,14 @@
 		A7FA00000000000000000004 /* PerformanceKit */ = {
 			isa = PBXGroup;
 			children = (
+				A7FA00000000000000000031 /* FirestoreCMJSnapshotLoader.swift */,
+				A7FA0000000000000000002F /* FirestoreWellnessSnapshotLoader.swift */,
+				A7FA0000000000000000002D /* RealtimeWorkloadWriter.swift */,
+				A7FA0000000000000000002B /* RealtimeWorkloadsLoader.swift */,
+				A7FA00000000000000000029 /* RealtimeTrackedSessionWriter.swift */,
+				A7FA00000000000000000027 /* RealtimeTrackedSessionsLoader.swift */,
+				A7FA00000000000000000025 /* PerformanceKit+LegacyModels.swift */,
+				A7FA00000000000000000023 /* LegacyTrackerRecord.swift */,
 				A7FA00000000000000000021 /* ResultAndBestVerticalJumpWriter.swift */,
 				A7FA0000000000000000001F /* FirestoreBestVerticalJumpWriter.swift */,
 				A7FA0000000000000000001D /* FirestoreVerticalJumpResultWriter.swift */,
@@ -5181,6 +5133,14 @@
 				F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */,
 				D1CA00000000000000000020 /* DiscoverKitComposition.swift in Sources */,
 				BF1A00000000000000000020 /* ProfileKitComposition.swift in Sources */,
+				A7FA00000000000000000032 /* FirestoreCMJSnapshotLoader.swift in Sources */,
+				A7FA00000000000000000030 /* FirestoreWellnessSnapshotLoader.swift in Sources */,
+				A7FA0000000000000000002E /* RealtimeWorkloadWriter.swift in Sources */,
+				A7FA0000000000000000002C /* RealtimeWorkloadsLoader.swift in Sources */,
+				A7FA0000000000000000002A /* RealtimeTrackedSessionWriter.swift in Sources */,
+				A7FA00000000000000000028 /* RealtimeTrackedSessionsLoader.swift in Sources */,
+				A7FA00000000000000000026 /* PerformanceKit+LegacyModels.swift in Sources */,
+				A7FA00000000000000000024 /* LegacyTrackerRecord.swift in Sources */,
 				A7FA00000000000000000022 /* ResultAndBestVerticalJumpWriter.swift in Sources */,
 				A7FA00000000000000000020 /* FirestoreBestVerticalJumpWriter.swift in Sources */,
 				A7FA0000000000000000001E /* FirestoreVerticalJumpResultWriter.swift in Sources */,
@@ -5325,7 +5285,6 @@
 				9F24629A2933D8D3006C5656 /* NewPost+ViewModel.swift in Sources */,
 				742FD585283FF1D60025E43C /* TagAndExerciseCellModel.swift in Sources */,
 				744B52C127CA8E7E00B9D45B /* OptionsEnum.swift in Sources */,
-				9FB0F29229142D7D00BF222E /* PracticeTrackerHomeViewController.swift in Sources */,
 				7416CCD12655897B0043B1C2 /* RepsView.swift in Sources */,
 				74EE4EBC27E3AADE00051451 /* DescriptionUploadView.swift in Sources */,
 				74EE4ED727E8B9F700051451 /* UserClipsModel.swift in Sources */,
@@ -5452,7 +5411,6 @@
 				7420399E2832AECB00074ECB /* PublicClipsViewController.swift in Sources */,
 				7486C20B2678D215008A1E21 /* WeightView.swift in Sources */,
 				74DA1AEB28F1CA5C00F4DB9E /* MatchTrackerModel.swift in Sources */,
-				9FB0F2A329147F2E00BF222E /* PracticeTrackerDetailView.swift in Sources */,
 				74FDB5B726A77F04000649CC /* ClipModels.swift in Sources */,
 				742FD581283FCF430025E43C /* AddNewTagView.swift in Sources */,
 				74D40195284CCAE700C8AA89 /* ExerciseRatingViewModel.swift in Sources */,
@@ -5491,7 +5449,6 @@
 				74DE6D8127D11E48009FB44A /* SavedWorkoutsChildView.swift in Sources */,
 				7444D08726D0117D0009C7A6 /* DisplaySingleSetView.swift in Sources */,
 				9F24628D293180BC006C5656 /* UserRow.swift in Sources */,
-				9FB0F29C2914323B00BF222E /* PracticeTrackerListView.swift in Sources */,
 				742C1C4F27B2B4DF00DD1BB0 /* RecordedClipPlayerViewModel.swift in Sources */,
 				7444D0D626D432D50009C7A6 /* UploadCellProtocol.swift in Sources */,
 				74F45CC9260A9D0400AF16DF /* PublicTimelineViewModel.swift in Sources */,
@@ -5576,8 +5533,6 @@
 				7479A911229F2B4C00D39E2E /* InTheGym.xcdatamodeld in Sources */,
 				9F89DD942A38D2E90018E124 /* UserDefaultsCacheSaver.swift in Sources */,
 				742C1C9A27BD96A000DD1BB0 /* DescriptionTableViewCell.swift in Sources */,
-				9FB0F29429142D8C00BF222E /* PracticeTrackerHomeView.swift in Sources */,
-				74DA1AF1290091B000F4DB9E /* MatchTrackerDetailView.swift in Sources */,
 				749B37B12847A2BE00ADF33D /* EditExerciseCoordinator.swift in Sources */,
 				74F664EB28EA09320086BA4E /* FCMTokenModel.swift in Sources */,
 				74B48DF927A2DCA300BBFC16 /* ThinkingTimeMessages.swift in Sources */,
@@ -5589,15 +5544,12 @@
 				74318F4026B5733F009EDFAC /* PreLiveWorkoutProtocol.swift in Sources */,
 				743330882787401C005A0C45 /* WorkoutCreationViewController.swift in Sources */,
 				74221B412642F5FF00D05527 /* WorkoutsCoordinator.swift in Sources */,
-				74DA1AEF29008F8B00F4DB9E /* MatchTrackerCoordinator.swift in Sources */,
 				7452304828BD2168008F1E8D /* ExerciseTempoModel.swift in Sources */,
 				74DE6D7527D10FF2009FB44A /* UsersChildView.swift in Sources */,
 				748613A827D69BC100D50506 /* SavedWorkoutBottomChildViewController.swift in Sources */,
-				74DA1AF3290091D200F4DB9E /* MatchTrackerDetailViewController.swift in Sources */,
 				74B48DEA27A1E14A00BBFC16 /* WorkoutKeyModel.swift in Sources */,
 				9F9F016829F2F116002B969B /* Observable.swift in Sources */,
 				74B48DE127A06E9A00BBFC16 /* FirebaseStorage.swift in Sources */,
-				74DA1AE628F1A9B200F4DB9E /* MatchTrackerViewModel.swift in Sources */,
 				74DC3B6C28A02E6100DCEAF7 /* TrainingStatusMainViewController.swift in Sources */,
 				7444D0B326D2FE1F0009C7A6 /* SwiftUIWorkoutView.swift in Sources */,
 				74DE6D9727D3A18C009FB44A /* ScoresModel.swift in Sources */,
@@ -5630,7 +5582,6 @@
 				74F8A62D2823FD48008EB5E9 /* UserSelectionCellModel.swift in Sources */,
 				742FD587284004040025E43C /* SearchTagCoordinator.swift in Sources */,
 				74EEA754270C992A00911A77 /* Int+Extension.swift in Sources */,
-				9FB0F29E2914331E00BF222E /* PracticeTrackerCoordinator.swift in Sources */,
 				742FF36D277B880900AEE3D2 /* PostReplies.swift in Sources */,
 				74DE6D7F27D11E39009FB44A /* SavedWorkoutsChildViewController.swift in Sources */,
 				74EE4EB827E3AAAF00051451 /* DescriptionUploadViewController.swift in Sources */,
@@ -5683,7 +5634,6 @@
 				9F2462942932BB7C006C5656 /* SavedWorkoutSheet.swift in Sources */,
 				7444D09326D136700009C7A6 /* AddMoreToExerciseViewModel.swift in Sources */,
 				742AEDCD282A8EF20004E901 /* LiveWorkoutSetCreationCoordinator.swift in Sources */,
-				74DA1AE428F1A9A200F4DB9E /* MatchTrackerView.swift in Sources */,
 				74AF6D5E26868288005C52A8 /* DisplayExerciseStatsViewController.swift in Sources */,
 				F0F6DF432F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift in Sources */,
 				74B48E1127A4625500BBFC16 /* LiveWorkoutDisplayCoordinator.swift in Sources */,
@@ -5744,13 +5694,11 @@
 				742FCD202845658B007ED1C6 /* MyCoachesViewModel.swift in Sources */,
 				748FFA2E285397D0001DDE69 /* OptimalWorkloadRatioView.swift in Sources */,
 				74EE4EDB28009CFE00051451 /* UIProfileInfoView.swift in Sources */,
-				9FB0F29629142DD900BF222E /* PracticeTrackerViewModel.swift in Sources */,
 				7444D0BE26D3C86F0009C7A6 /* UploadingWorkoutProtocol.swift in Sources */,
 				7479812B27DA6DC200CF3F9B /* LikeCache.swift in Sources */,
 				74F2CCDE26E191CB00D7AD79 /* ExerciseSelectionProtocol.swift in Sources */,
 				74EE4EDF2804634500051451 /* LiveWorkoutModel.swift in Sources */,
 				74C126BA2819B1EB00C3B171 /* CoachProfileMoreView.swift in Sources */,
-				9FB0F29A2914306900BF222E /* NewPracticeTrackerSheet.swift in Sources */,
 				74104524285FD44700A9FF4E /* PlayerDetailButtonSubviewViewController.swift in Sources */,
 				741EC11F284BDCA8009B00AB /* AddWorkoutSummaryViewController.swift in Sources */,
 				74EE4EBA27E3AAD200051451 /* DescriptionUploadViewModel.swift in Sources */,
@@ -5845,7 +5793,6 @@
 				74E08A8A28439603009D0DCB /* MyWorkloadCollectionCell.swift in Sources */,
 				74F18AE627D66D920043551F /* CoachPlayerWorkoutViewController.swift in Sources */,
 				742FCD1D284532E6007ED1C6 /* ExerciseMaxHistoryDataSource.swift in Sources */,
-				9FB0F2A129147F1700BF222E /* PracticeTrackerDetailViewController.swift in Sources */,
 				9F4DFB2E29A2CDC300363AE8 /* DiscoverSearchBar.swift in Sources */,
 				74AF6D5C2686799A005C52A8 /* DisplayExerciseStatsModel.swift in Sources */,
 				9FC11F6429E0B5190054D79A /* VerifyAccountViewController.swift in Sources */,
@@ -5930,7 +5877,6 @@
 				7459BD6A2641FF640005C530 /* PlayerInitialViewController.swift in Sources */,
 				74221B432642F60C00D05527 /* PlayersCoordinator.swift in Sources */,
 				74F664ED28EA0B400086BA4E /* FirestoreManager.swift in Sources */,
-				74DA1AE828F1BE8B00F4DB9E /* NewMatchTrackerSheet.swift in Sources */,
 				7433043C289E8F6500F2569A /* WellnessMainView.swift in Sources */,
 				9FC11F5F29DDC9B80054D79A /* LoginComposition.swift in Sources */,
 				745E1DA6283E7664009CA236 /* CoachWorkoutsViewModel.swift in Sources */,
@@ -6021,7 +5967,6 @@
 				74B6F6962751532B00A72679 /* DisplayWorkoutsViewController.swift in Sources */,
 				743B1E7F22EF49CF0046006C /* AdminPlayersViewController.swift in Sources */,
 				7444D09126D136600009C7A6 /* AddMoreToExerciseViewController.swift in Sources */,
-				74DA1AED28FDBC4300F4DB9E /* MatchTrackerListView.swift in Sources */,
 				74F18ADE27D65F530043551F /* WorkoutSearchModel.swift in Sources */,
 				7444D0AC26D2B2C50009C7A6 /* CardCollectionViewCell.swift in Sources */,
 				742C1C9827BD91D500DD1BB0 /* ExerciseCommentModel.swift in Sources */,
@@ -6059,7 +6004,6 @@
 				74A602AD2850D1BF00AFA236 /* WorkoutDiscoveryTagsViewController.swift in Sources */,
 				742C1C5D27B571F800DD1BB0 /* MyProfileView.swift in Sources */,
 				7444D0F426DD3DB20009C7A6 /* CreateNewPostModel.swift in Sources */,
-				74DA1AE228F1A99500F4DB9E /* MatchTrackerViewController.swift in Sources */,
 				74ECD4F12D5A98BE00E66EAA /* Product+Extension.swift in Sources */,
 				74221B3D2642D9ED00D05527 /* TimelineCoordinator.swift in Sources */,
 				743A04FF276A87330027B752 /* CommentSectionView.swift in Sources */,

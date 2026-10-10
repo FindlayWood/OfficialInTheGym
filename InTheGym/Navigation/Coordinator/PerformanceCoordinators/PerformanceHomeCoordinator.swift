@@ -35,18 +35,6 @@ final class PerformanceHomeCoordinator {
 }
 // MARK: - Flow
 extension PerformanceHomeCoordinator {
-    func showMatchTracker() {
-        guard let navigationController else { return }
-        let child = MatchTrackerCoordinator(navigationController: navigationController)
-        childCoordinators.append(child)
-        child.start()
-    }
-    func showPracticeTracker() {
-        guard let navigationController else { return }
-        let child = PracticeTrackerCoordinator(navigationController: navigationController)
-        childCoordinators.append(child)
-        child.start()
-    }
     func showWorkload() {
         let vc = PerformanceMonitorViewController()
         vc.viewModel.user = user

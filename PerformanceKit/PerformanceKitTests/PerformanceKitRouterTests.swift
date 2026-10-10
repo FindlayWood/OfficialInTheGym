@@ -75,6 +75,18 @@ final class PerformanceKitRouterTests: XCTestCase {
         XCTAssertEqual(navigationController.viewControllers.count, 2)
     }
 
+    func test_open_pushesBothTrackersItselfWithPro() {
+        let navigationController = UINavigationController()
+        let (sut, events) = makeSUT(hasUnlockedPro: true, navigationController: navigationController)
+        sut.start()
+
+        sut.open(.matchTracker)
+        sut.open(.practiceTracker)
+
+        XCTAssertEqual(events.messages, [])
+        XCTAssertEqual(navigationController.viewControllers.count, 3)
+    }
+
     func test_start_offersNoDismissOnTheTab() {
         let navigationController = UINavigationController()
         let (sut, _) = makeSUT(navigationController: navigationController)
@@ -120,6 +132,12 @@ final class PerformanceKitRouterTests: XCTestCase {
             maxJumpLoader: VerticalJumpServicesSpy(),
             jumpHistoryLoader: VerticalJumpServicesSpy(),
             jumpWriter: VerticalJumpServicesSpy(),
+            trackedSessionsLoader: TrackerServicesSpy(),
+            trackedSessionWriter: TrackerServicesSpy(),
+            workloadsLoader: TrackerServicesSpy(),
+            workloadWriter: TrackerServicesSpy(),
+            wellnessLoader: TrackerServicesSpy(),
+            cmjLoader: TrackerServicesSpy(),
             currentUserId: "me",
             athleteId: athleteId
         )
