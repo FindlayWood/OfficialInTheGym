@@ -18,10 +18,9 @@ import Foundation
 /// - **Measurements, My Coaches, Requests.** Already commented out of the old
 ///   menu, and the coach/player split is being removed.
 ///
-/// **Performance Center keeps its entry point** under Tools, through
-/// `onOpenPerformanceCenter`. It is a separate roadmap task and **none of its
-/// code is to be deleted**. It was reachable from the old menu, so dropping the
-/// row would quietly remove a feature (`PROFILE_PLAN.md`, open question 1).
+/// **Performance Center is no longer here.** It had a row under Tools until it
+/// became the player tab bar's PERFORMANCE tab, which made the row a second
+/// door to the same screen. None of its code lives in ProfileKit.
 ///
 /// Body Measurements (step 4) is a row under Account rather than part of Edit
 /// Profile: it is private, and Edit Profile edits what other people see.
@@ -60,7 +59,6 @@ final class ProfileSettingsViewModel: ObservableObject {
 
     var onShowPaywall: (() -> Void)?
     var onManageSubscription: (() -> Void)?
-    var onOpenPerformanceCenter: (() -> Void)?
     var onOpenAbout: (() -> Void)?
     var onOpenBodyMeasurements: (() -> Void)?
     var onOpenDeleteAccount: (() -> Void)?

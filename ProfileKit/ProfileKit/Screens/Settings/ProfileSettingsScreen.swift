@@ -28,7 +28,6 @@ struct ProfileSettingsScreen: View {
             VStack(spacing: 24) {
                 subscriptionSection
                 accountSection
-                toolsSection
                 aboutSection
                 signOutSection
             }
@@ -154,16 +153,6 @@ struct ProfileSettingsScreen: View {
         case .working: .progress
         case .succeeded: .detail("Email sent")
         case .failed: .detail("Failed, try again")
-        }
-    }
-
-    // MARK: - Tools
-
-    private var toolsSection: some View {
-        ProfileSettingsSection(title: "Tools") {
-            ProfileSettingsRow(icon: "gauge.with.dots.needle.67percent", title: "Performance Center", showsDivider: false) {
-                viewModel.onOpenPerformanceCenter?()
-            }
         }
     }
 

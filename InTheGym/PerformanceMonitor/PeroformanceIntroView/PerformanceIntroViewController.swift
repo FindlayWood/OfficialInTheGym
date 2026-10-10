@@ -30,6 +30,8 @@ class PerformanceIntroViewController: UIViewController {
     var childContentView: PerformanceCenterView!
     var display = Display()
     var viewModel = PerformanceIntroViewModel()
+    /// False on the PERFORMANCE tab, where there is nothing to dismiss to.
+    var showsDismissButton = true
     private var subscriptions = Set<AnyCancellable>()
     
 //    // MARK: - View
@@ -48,6 +50,7 @@ class PerformanceIntroViewController: UIViewController {
     // MARK: - NAv Bar
     func initNavBar() {
         navigationItem.title = "Performance Center"
+        guard showsDismissButton else { return }
         let barButton = UIBarButtonItem(title: "Dismiss", style: .done, target: self, action: #selector(dismissButtonAction(_:)))
         navigationItem.leftBarButtonItem = barButton
     }
@@ -101,6 +104,7 @@ class PerformanceIntroViewController: UIViewController {
 // MARK: - Actions
 private extension PerformanceIntroViewController {
     func actionSelected(_ action: PerformanceIntroOptions) {
+        guard coordinator?.requirePro() == true else { return }
         switch action {
         case .matchTracker:
             coordinator?.showMatchTracker()

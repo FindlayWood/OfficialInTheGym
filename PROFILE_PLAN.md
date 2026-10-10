@@ -942,6 +942,8 @@ matters most:
 
 1. ~~Performance Center, Jump measuring, Breathwork — entry points.~~ **Settled in step 1:**
    Performance Center keeps a Tools row in Settings; Jump and Breathwork had no live entry to keep.
+   **Superseded:** Performance Center is now the player tab bar's PERFORMANCE tab, and the Tools
+   row is gone.
    Original note: Their code stays (Performance
    Center explicitly). Their only door today is the "More" menu this plan replaces. Recommended: a
    temporary "Tools" row in Settings that calls back to the app, until each gets its own roadmap

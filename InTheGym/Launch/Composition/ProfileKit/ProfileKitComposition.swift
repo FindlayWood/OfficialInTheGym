@@ -26,7 +26,6 @@ class ProfileKitComposition {
 
         router.onShowPaywall = { appRoutes.showPaywall() }
         router.onManageSubscription = { appRoutes.showManageSubscription() }
-        router.onOpenPerformanceCenter = { appRoutes.showPerformanceCenter() }
         router.onOpenAbout = { appRoutes.showAbout() }
 
         router.start()

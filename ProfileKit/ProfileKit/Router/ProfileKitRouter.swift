@@ -69,7 +69,6 @@ public final class ProfileKitRouter {
 
     public var onShowPaywall: (() -> Void)?
     public var onManageSubscription: (() -> Void)?
-    public var onOpenPerformanceCenter: (() -> Void)?
     public var onOpenAbout: (() -> Void)?
     /// A clip from a profile grid, opened in DISCOVER's clip player, which
     /// ProfileKit cannot build. Set on every router, tab or embedded, by
@@ -228,7 +227,6 @@ extension ProfileKitRouter {
             )
             viewModel.onShowPaywall = { [weak self] in self?.onShowPaywall?() }
             viewModel.onManageSubscription = { [weak self] in self?.onManageSubscription?() }
-            viewModel.onOpenPerformanceCenter = { [weak self] in self?.onOpenPerformanceCenter?() }
             viewModel.onOpenAbout = { [weak self] in self?.onOpenAbout?() }
             viewModel.onOpenBodyMeasurements = { [weak self] in self?.navigate(to: .bodyMeasurements) }
             viewModel.onOpenDeleteAccount = { [weak self] in self?.navigate(to: .deleteAccount) }

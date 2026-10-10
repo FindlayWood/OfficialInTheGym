@@ -502,15 +502,19 @@ needs iOS 26 — and a workspace path of `InTheGym/InTheGym.xcworkspace` (the wo
 root).
 
 ## App Structure
-5 tabs: NEWSFEED, DISCOVER, MYDAY, STATS, PROFILE.
+5 tabs: MYDAY, DISCOVER, PERFORMANCE, STATS, PROFILE. NEWSFEED was dropped from the player tab bar
+(the coach tab bar keeps it).
+**PERFORMANCE is the legacy Performance Center**, moved as it was from a row in ProfileKit's
+settings. `PerformanceHomeCoordinator.startAsTab()` makes the intro screen the tab's root and
+checks pro **when a tool is opened** (`requirePro()`), not when the tab is built. A tab built for
+every user and gated at build time would keep showing a paywall after the user subscribed. The
+modal `start()` stays for the coach-side and legacy callers. Improving it is the next piece of
+work. Until it is rebuilt, it is app-target UIKit, and **none of its code is to be deleted**.
 **PROFILE is `ProfileKit`** on the player tab bar (see `PROFILE_PLAN.md`); the coach tab bar keeps
 the legacy `MyProfileCoordinator` until the coach/player split is removed. **Every other way of opening a
 person** (DISCOVER, search, follow lists, and all nine legacy `UserProfileCoordinator` callers)
-shows ProfileKit's `UserProfileScreen`, through one `ProfileKitComposition.makeRouter` graph. Performance Center is
-reached from ProfileKit's settings through `ProfileAppRoutes` — a separate roadmap task, **never
-delete its code**.
-Current focus: MYDAY tab — active session UI complete (see roadmap and Feature Areas Complete).
-NEWSFEED may be replaced with a dedicated WORKOUTS tab (TBC).
+shows ProfileKit's `UserProfileScreen`, through one `ProfileKitComposition.makeRouter` graph.
+Current focus: the PERFORMANCE tab.
 
 Roadmap order:
 1. Fix workout stats → update STATS tab
@@ -535,11 +539,9 @@ MyDay's own template saver and library manager; the coach tab bar passes `nil` a
 offer no Save. The old RTDB Discover tab is gone, but `ExerciseDescriptions/`, `WorkoutDiscovery/`
 and `ExerciseDiscoveryCoordinator` remain — other legacy flows still reach them.
 
-**`PlayerInitialViewController` builds a tab it never shows.** `WorkoutsCoordinator` has
-`.start()` called on it — building an entire view-controller stack — but its navigation controller
-never appears in `viewControllers`. It is dead work on every launch. Worth clearing when the
-NEWSFEED/WORKOUTS tab question above is settled. (The ClubKit and WorkoutKit tabs that used to sit
-beside it are gone — see *Packages & Frameworks*.)
+`PlayerInitialViewController` no longer builds `WorkoutsCoordinator`, a stack it used to start on
+every launch and never show. It went with NEWSFEED. (The ClubKit and WorkoutKit tabs that used to
+sit beside it are gone too, see *Packages & Frameworks*.)
 
 ## Workout Library Loading
 The library screen showed an empty state despite saved templates existing. Three defects, all fixed:

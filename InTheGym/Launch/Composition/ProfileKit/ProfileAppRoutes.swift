@@ -9,19 +9,16 @@ import StoreKit
 import UIKit
 
 /// The app-target screens the PROFILE tab opens but ProfileKit cannot build:
-/// the INTHEGYM pro paywall, the App Store's subscription management,
-/// Performance Center, and the About page. `ProfileKitComposition` wires
+/// the INTHEGYM pro paywall, the App Store's subscription management and the
+/// About page. `ProfileKitComposition` wires
 /// these into `ProfileKitRouter`'s `on…` closures.
 ///
 /// Each is opened exactly as the legacy "More" menu and settings opened it
 /// (`PlayerProfileMoreCoordinator`, `SettingsViewController`), so nothing about
 /// those screens changes by moving the door.
 ///
-/// **Performance Center is a separate roadmap task. None of its code is to be
-/// deleted.** It stays reachable from here until that task decides where it
-/// lives. Its coordinator is held in `performanceCoordinator`, because nothing
-/// else retains it once it presents, and it is replaced on each open rather
-/// than appended to a list that never empties.
+/// Performance Center used to open from here too. It is the player tab bar's
+/// PERFORMANCE tab now (`PlayerInitialViewController`).
 ///
 /// The router holds this object through its closures, and it holds the
 /// navigation controller weakly, because the navigation controller holds the
@@ -31,7 +28,6 @@ final class ProfileAppRoutes {
     // MARK: - Properties
     private weak var navigationController: UINavigationController?
     private let purchaseManager: PurchaseManager
-    private var performanceCoordinator: PerformanceHomeCoordinator?
 
     // MARK: - Initializer
     init(navigationController: UINavigationController, purchaseManager: PurchaseManager) {
@@ -59,17 +55,6 @@ extension ProfileAppRoutes {
                 print("❌ Manage subscriptions failed: \(error)")
             }
         }
-    }
-
-    func showPerformanceCenter() {
-        guard let navigationController else { return }
-        let coordinator = PerformanceHomeCoordinator(
-            navigationController: navigationController,
-            user: UserDefaults.currentUser,
-            subscriptionManager: purchaseManager
-        )
-        performanceCoordinator = coordinator
-        coordinator.start()
     }
 
     func showAbout() {
