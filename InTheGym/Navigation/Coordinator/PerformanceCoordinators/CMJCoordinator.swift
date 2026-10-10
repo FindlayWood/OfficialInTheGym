@@ -6,6 +6,7 @@
 //  Copyright © 2022 FindlayWood. All rights reserved.
 //
 
+import PerformanceKit
 import UIKit
 
 /// responsible for the navigation flow for CMJ jumps
@@ -33,19 +34,23 @@ class CMJCoordinator: NSObject, Coordinator {
     }
 }
 // MARK: - Methods
-extension CMJCoordinator: JumpCoordinatorFlow {
+// The camera and replay are PerformanceKit's (`JumpRecording`), the same
+// screens Vertical Jump uses. This used to conform to `JumpCoordinatorFlow`,
+// which went with them; the closures below call the same three methods.
+extension CMJCoordinator {
     func recordNewJump() {
-        let vc = JumpMeasuringViewController()
-        vc.coordinator = self
+        let vc = MainActor.assumeIsolated {
+            JumpRecording.makeRecorder { [weak self] in self?.showJump($0) }
+        }
         modalNavigationController = UINavigationController(rootViewController: vc)
         modalNavigationController.modalPresentationStyle = .fullScreen
         navigationController.present(modalNavigationController, animated: true)
     }
     
     func showJump(_ outputURL: URL) {
-        let vc = ReplayJumpMeasureViewController()
-        vc.viewModel.fileURL = outputURL
-        vc.coordinator = self
+        let vc = MainActor.assumeIsolated {
+            JumpRecording.makeReplay(fileURL: outputURL) { [weak self] in self?.showResult($0) }
+        }
         replayModelNavigationController = UINavigationController(rootViewController: vc)
         replayModelNavigationController.modalPresentationStyle = .fullScreen
         modalNavigationController.present(replayModelNavigationController, animated: false)

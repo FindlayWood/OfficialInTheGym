@@ -68,10 +68,11 @@ extension PlayerProfileMoreCoordinator {
             PerformanceKitComposition().presentModally(from: navigationController, athlete: user, purchaseManager: subscriptionManager)
         }
     }
+    /// Unreachable: no row in the menu sends `.measureJump`. It opens
+    /// Performance Center, where Vertical Jump lives now, rather than the
+    /// legacy jump screens, which moved into PerformanceKit.
     func jumpMeasure() {
-        let child = JumpCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
-        childCoordinators.append(child)
-        child.start()
+        showPerformanceMonitor(for: UserDefaults.currentUser)
     }
     func breathWork() {
         let vc = MethodSelectionViewController()

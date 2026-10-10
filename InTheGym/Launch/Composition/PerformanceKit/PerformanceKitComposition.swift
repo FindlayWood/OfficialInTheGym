@@ -56,6 +56,19 @@ class PerformanceKitComposition {
             latest: FirestoreLatestJournalEntryWriter(userId: athlete.uid)
         )
 
+        // MARK: - Vertical Jump
+        // The athlete's jumps. Only the athlete can record one (the router
+        // offers recording on your own Performance Center only).
+
+        let maxJumpLoader: MaxVerticalJumpLoader = FirestoreMaxVerticalJumpLoader(userId: athlete.uid)
+
+        let jumpHistoryLoader: VerticalJumpHistoryLoader = FirestoreVerticalJumpHistoryLoader(userId: athlete.uid)
+
+        let jumpWriter: VerticalJumpWriter = ResultAndBestVerticalJumpWriter(
+            result: FirestoreVerticalJumpResultWriter(userId: athlete.uid),
+            best: FirestoreBestVerticalJumpWriter(userId: athlete.uid)
+        )
+
         // MARK: - Router
 
         let router = PerformanceKitRouter(
@@ -63,6 +76,9 @@ class PerformanceKitComposition {
             proAccess: proAccess,
             journalLoader: journalLoader,
             journalWriter: journalWriter,
+            maxJumpLoader: maxJumpLoader,
+            jumpHistoryLoader: jumpHistoryLoader,
+            jumpWriter: jumpWriter,
             currentUserId: UserDefaults.currentUser.uid,
             athleteId: athlete.uid
         )
@@ -87,8 +103,7 @@ class PerformanceKitComposition {
             case .matchTracker: legacyTools.showMatchTracker()
             case .practiceTracker: legacyTools.showPracticeTracker()
             case .workload: legacyTools.showWorkload()
-            case .verticalJump: legacyTools.showVerticalJump()
-            case .journal: break // PerformanceKit's own; the router never hands it back
+            case .verticalJump, .journal: break // PerformanceKit's own; the router never hands them back
             }
         }
 

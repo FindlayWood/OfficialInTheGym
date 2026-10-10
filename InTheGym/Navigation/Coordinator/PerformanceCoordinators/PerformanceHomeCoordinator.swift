@@ -60,12 +60,6 @@ extension PerformanceHomeCoordinator {
         let vc = TrainingStatusMainViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
-    func showVerticalJump() {
-        guard let navigationController else { return }
-        let child = JumpCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
-        childCoordinators.append(child)
-        child.start()
-    }
     func showCMJ() {
         guard let navigationController else { return }
         let child = CMJCoordinator(navigationController: navigationController)

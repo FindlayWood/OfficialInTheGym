@@ -81,9 +81,38 @@ coordinator the moves take apart.
 - The journal's nav bar is no longer the purple UIKit `premiumColour`. The moved screens use the
   system bar with `darkColor`, which `PerformanceKitHostingController` restores on the way back.
 
-### Step 4 — Vertical Jump
-Firestore `VerticalJump/{uid}` and `/Results`, AVFoundation capture and replay, `JumpCoordinator` and
-its flows. Also opened directly by the legacy "More" menu (`PlayerProfileMoreCoordinator.jumpMeasure()`).
+### Step 4 — Vertical Jump — built
+- Routes `.verticalJump`, `.previousJumps`, `.jumpInstructions`, and the presented chain
+  `.jumpRecorder(max:)` → `.jumpReplay(fileURL:max:)` → `.jumpResult(height:max:)`, each presented
+  over the last (`present(_:from:)`). The best jump the home screen loaded rides along in the routes,
+  replacing `JumpCoordinator.maxModel`, so the result screen does not read it again.
+- SwiftUI screens moved as they were (`VerticalJumpHomeScreen`, `PreviousJumpsScreen`,
+  `JumpInstructionsScreen`, `JumpResultsScreen`, sharing `VerticalJumpRow`). The UIKit camera and
+  replay (`JumpMeasuringViewController`, `ReplayJumpMeasureViewController`, their views and view
+  models) moved as UIKit, reporting through closures instead of `JumpCoordinatorFlow`.
+- `VerticalJump.best(current:new:)` is the legacy best-jump rule on its own; `JumpMeasureViewModel`
+  holds the height formula (h = t² × 1.22625). Both tested.
+- `MaxVerticalJumpLoader`, `VerticalJumpHistoryLoader`, `VerticalJumpWriter`. In the composition root:
+  `FirestoreMaxVerticalJumpLoader`, `FirestoreVerticalJumpHistoryLoader`, and two writers,
+  `FirestoreVerticalJumpResultWriter` (`…/Results/{auto}`) and `FirestoreBestVerticalJumpWriter`
+  (`VerticalJump/{uid}`), composed by `ResultAndBestVerticalJumpWriter(result:best:)`, replacing the
+  legacy batch. `VerticalJumpPath` / `VerticalJumpFields` are the one definition of paths and fields.
+- **CMJ builds the camera and replay from PerformanceKit** (`JumpRecording`, the only public part).
+  CMJ stays in the app, dormant, but it records the same way, and leaving it a second copy of both
+  screens would be a second copy of the height formula.
+- Changed by the move:
+  - The jumps shown are the **athlete's**. The legacy screens always used the signed-in user, so a
+    coach opening an athlete's centre saw their own jumps. Recording is offered only on your own
+    centre. **A coach reading `VerticalJump/{athleteId}` needs the Firestore rules to allow it.
+    Rules are not in this repository; check before relying on it.**
+  - A failed save no longer leaves "Saving Result..." on screen for good.
+  - The instructions sheet's close button closes it. It had an empty action.
+  - Dead code did not come across: `MyJumpsView` (UIKit, unused), `RecordJumpCoordinator` (every
+    body commented out), a second recording delegate on the camera screen, and an unused
+    `clipUploadingProtocol` conformance.
+- `PlayerProfileMoreCoordinator.jumpMeasure()` and `CoachProfileMoreCoordinator.jumpMeasure()` are
+  unreachable (no row sends `.measureJump`, and the coach one is never built). They open Performance
+  Center now rather than the camera.
 
 ### Step 5 — Match Tracker
 RTDB through `FirebaseDatabaseManager` (`MatchTrackerModel`, `WorkloadModel`); reads Firestore

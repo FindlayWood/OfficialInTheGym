@@ -45,6 +45,9 @@ public final class PerformanceKitRouter {
     let proAccess: PerformanceProAccess
     let journalLoader: JournalEntriesLoader
     let journalWriter: JournalEntryWriter
+    let maxJumpLoader: MaxVerticalJumpLoader
+    let jumpHistoryLoader: VerticalJumpHistoryLoader
+    let jumpWriter: VerticalJumpWriter
     let currentUserId: String
     let athleteId: String
 
@@ -64,6 +67,9 @@ public final class PerformanceKitRouter {
         proAccess: PerformanceProAccess,
         journalLoader: JournalEntriesLoader,
         journalWriter: JournalEntryWriter,
+        maxJumpLoader: MaxVerticalJumpLoader,
+        jumpHistoryLoader: VerticalJumpHistoryLoader,
+        jumpWriter: VerticalJumpWriter,
         currentUserId: String,
         athleteId: String
     ) {
@@ -71,6 +77,9 @@ public final class PerformanceKitRouter {
         self.proAccess = proAccess
         self.journalLoader = journalLoader
         self.journalWriter = journalWriter
+        self.maxJumpLoader = maxJumpLoader
+        self.jumpHistoryLoader = jumpHistoryLoader
+        self.jumpWriter = jumpWriter
         self.currentUserId = currentUserId
         self.athleteId = athleteId
     }
@@ -112,12 +121,63 @@ extension PerformanceKitRouter {
                 JournalEntryViewModel(writer: journalWriter)
             }
             return UIHostingController(rootView: screen)
+
+        case .verticalJump:
+            let viewModel = VerticalJumpHomeViewModel(loader: maxJumpLoader, canRecord: currentUserId == athleteId)
+            viewModel.onRecordNewJump = { [weak self] max in
+                self?.present(.jumpRecorder(max: max), from: self?.navigationController)
+            }
+            viewModel.onPreviousJumps = { [weak self] in self?.navigate(to: .previousJumps) }
+            viewModel.onHelp = { [weak self] in
+                self?.present(.jumpInstructions, from: self?.navigationController)
+            }
+            return UIHostingController(rootView: VerticalJumpHomeScreen(viewModel: viewModel))
+
+        case .previousJumps:
+            let viewModel = PreviousJumpsViewModel(loader: jumpHistoryLoader)
+            return UIHostingController(rootView: PreviousJumpsScreen(viewModel: viewModel))
+
+        case .jumpInstructions:
+            return UIHostingController(rootView: JumpInstructionsScreen())
+
+        case .jumpRecorder(let max):
+            let recorder = JumpMeasuringViewController()
+            let navigationController = UINavigationController(rootViewController: recorder)
+            navigationController.modalPresentationStyle = .fullScreen
+            recorder.onRecorded = { [weak self, weak navigationController] url in
+                self?.present(.jumpReplay(fileURL: url, max: max), from: navigationController, animated: false)
+            }
+            return navigationController
+
+        case .jumpReplay(let fileURL, let max):
+            let replay = ReplayJumpMeasureViewController()
+            replay.viewModel.fileURL = fileURL
+            let navigationController = UINavigationController(rootViewController: replay)
+            navigationController.modalPresentationStyle = .fullScreen
+            replay.onHeightCalculated = { [weak self, weak navigationController] height in
+                self?.present(.jumpResult(height: height, max: max), from: navigationController)
+            }
+            return navigationController
+
+        case .jumpResult(let height, let max):
+            let viewModel = JumpResultsViewModel(height: height, max: max, writer: jumpWriter)
+            let vc = UIHostingController(rootView: JumpResultsScreen(viewModel: viewModel))
+            viewModel.onDismiss = { [weak vc] in vc?.dismiss(animated: true) }
+            return vc
         }
     }
 
     @MainActor
     func navigate(to route: PerformanceKitRoutes) {
         navigationController?.pushViewController(viewController(for: route), animated: true)
+    }
+
+    /// Vertical Jump's flow is a chain of presentations, camera then replay
+    /// then result, each over the last. So a route is presented from whichever
+    /// screen is on top, not always from this router's navigation controller.
+    @MainActor
+    func present(_ route: PerformanceKitRoutes, from presenter: UIViewController?, animated: Bool = true) {
+        presenter?.present(viewController(for: route), animated: animated)
     }
 
     @MainActor
@@ -129,7 +189,9 @@ extension PerformanceKitRouter {
         switch tool {
         case .journal:
             navigate(to: .journal)
-        case .matchTracker, .practiceTracker, .workload, .verticalJump:
+        case .verticalJump:
+            navigate(to: .verticalJump)
+        case .matchTracker, .practiceTracker, .workload:
             onOpenLegacyTool?(tool)
         }
     }

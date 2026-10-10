@@ -64,6 +64,17 @@ final class PerformanceKitRouterTests: XCTestCase {
         XCTAssertIdentical(navigationController.viewControllers.first, sut.rootViewController)
     }
 
+    func test_open_pushesVerticalJumpItselfWithPro() {
+        let navigationController = UINavigationController()
+        let (sut, events) = makeSUT(hasUnlockedPro: true, navigationController: navigationController)
+        sut.start()
+
+        sut.open(.verticalJump)
+
+        XCTAssertEqual(events.messages, [])
+        XCTAssertEqual(navigationController.viewControllers.count, 2)
+    }
+
     func test_start_offersNoDismissOnTheTab() {
         let navigationController = UINavigationController()
         let (sut, _) = makeSUT(navigationController: navigationController)
@@ -98,15 +109,19 @@ final class PerformanceKitRouterTests: XCTestCase {
     private func makeSUT(
         hasUnlockedPro: Bool = false,
         access: PerformanceProAccessStub? = nil,
-        navigationController: UINavigationController = UINavigationController()
+        navigationController: UINavigationController = UINavigationController(),
+        athleteId: String = "me"
     ) -> (PerformanceKitRouter, Events) {
         let sut = PerformanceKitRouter(
             navigationController: navigationController,
             proAccess: access ?? PerformanceProAccessStub(hasUnlockedPro: hasUnlockedPro),
             journalLoader: JournalServicesSpy(),
             journalWriter: JournalServicesSpy(),
+            maxJumpLoader: VerticalJumpServicesSpy(),
+            jumpHistoryLoader: VerticalJumpServicesSpy(),
+            jumpWriter: VerticalJumpServicesSpy(),
             currentUserId: "me",
-            athleteId: "me"
+            athleteId: athleteId
         )
         let events = Events()
         sut.onShowPaywall = { events.messages.append(.paywall) }
