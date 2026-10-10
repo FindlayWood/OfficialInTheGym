@@ -8,22 +8,6 @@
 
 import UIKit
 
-/// Performance Center, opened two ways.
-///
-/// **As the player tab bar's middle tab** (`startAsTab()`). The intro screen is
-/// the root of the tab's own navigation controller, so every tool pushes onto
-/// that stack, and there is no Dismiss button, since a tab has nothing to
-/// dismiss to.
-///
-/// **As a full-screen modal** (`start()`), which is how it was always opened and
-/// how the coach-side `PlayerDetailCoordinator`, the legacy
-/// `PlayerProfileMoreCoordinator` and `TimelineCoordinator` still open it. A
-/// non-pro user gets the paywall in place of the modal.
-///
-/// **The tab is built for every user, so the tab gates pro at tap time**, in
-/// `requirePro()`. Gating when the tab is built would leave a paywall sitting in
-/// the tab bar after the user subscribes, until relaunch. The modal path never
-/// reaches the intro screen without pro, so the check costs it nothing.
 class PerformanceHomeCoordinator: Coordinator {
     // MARK: - Properties
     var childCoordinators: [Coordinator] = [Coordinator]()
@@ -38,17 +22,6 @@ class PerformanceHomeCoordinator: Coordinator {
         self.subscriptionManager = subscriptionManager
     }
     // MARK: - Start
-    /// The player tab bar's PERFORMANCE tab: the intro screen as the root of
-    /// `navigationController`, which then doubles as the stack every tool
-    /// pushes onto.
-    func startAsTab() {
-        let vc = PerformanceIntroViewController()
-        vc.coordinator = self
-        vc.viewModel.user = user
-        vc.showsDismissButton = false
-        modalNavigationController = navigationController
-        navigationController.setViewControllers([vc], animated: false)
-    }
     func start() {
         if subscriptionManager.hasUnlockedPro {
             let vc = PerformanceIntroViewController()
@@ -67,17 +40,6 @@ class PerformanceHomeCoordinator: Coordinator {
     }
     func dismiss() {
         navigationController.dismiss(animated: true)
-    }
-    /// True when the user has pro. Otherwise presents the paywall and returns
-    /// false. See the type's comment for why the tab checks here and not when
-    /// it is built.
-    func requirePro() -> Bool {
-        guard !subscriptionManager.hasUnlockedPro else { return true }
-        let vc = PremiumAccountViewController()
-        vc.modalPresentationStyle = .fullScreen
-        vc.viewModel = PremiumAccountViewModel(purchaseManager: subscriptionManager)
-        navigationController.present(vc, animated: true)
-        return false
     }
 }
 // MARK: - Flow

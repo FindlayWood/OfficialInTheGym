@@ -12,8 +12,6 @@ class PlayerInitialViewController: UITabBarController {
 
     weak var coordinator: TabBarCoordinator?
     var subscriptionManager: PurchaseManager
-    /// Held here because nothing else retains it: the intro screen holds it weakly.
-    private var performanceCoordinator: PerformanceHomeCoordinator?
     
     init(subscriptionManager: PurchaseManager) {
         self.subscriptionManager = subscriptionManager
@@ -46,13 +44,11 @@ class PlayerInitialViewController: UITabBarController {
         discoverNavigationController.tabBarItem = UITabBarItem(title: "DISCOVER", image: UIImage(systemName: "magnifyingglass"), tag: 1)
 
         // MARK: - Performance
-        // The legacy Performance Center, moved as it is from a row in ProfileKit's
-        // settings to a tab of its own. Pro is checked when a tool is opened,
-        // not here. See `PerformanceHomeCoordinator`.
+        // PerformanceKit. Pro is checked when a tool is opened, not here.
+        let performanceKit = PerformanceKitComposition()
         let performanceNavigationController = UINavigationController()
+        performanceKit.composeCombination(performanceNavigationController, purchaseManager: subscriptionManager)
         performanceNavigationController.tabBarItem = UITabBarItem(title: "PERFORMANCE", image: UIImage(systemName: "gauge.with.dots.needle.67percent"), tag: 2)
-        performanceCoordinator = PerformanceHomeCoordinator(navigationController: performanceNavigationController, user: UserDefaults.currentUser, subscriptionManager: subscriptionManager)
-        performanceCoordinator?.startAsTab()
 
         // MARK: - Stats Kit
         let statsKit = StatsKitComposition()

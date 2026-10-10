@@ -26,6 +26,9 @@
       location = "group:ProfileKit/ProfileKit.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:PerformanceKit/PerformanceKit.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "container:InTheGym.xcodeproj">
    </FileRef>
 </Workspace>

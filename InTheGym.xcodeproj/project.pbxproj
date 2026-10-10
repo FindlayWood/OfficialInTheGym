@@ -65,6 +65,8 @@
 		BF1A00000000000000000027 /* FirebaseProfilePasswordReset.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000017 /* FirebaseProfilePasswordReset.swift */; };
 		BF1A00000000000000000002 /* ProfileKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000001 /* ProfileKit.framework */; };
 		BF1A00000000000000000003 /* ProfileKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BF1A00000000000000000001 /* ProfileKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A7FA00000000000000000002 /* PerformanceKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000001 /* PerformanceKit.framework */; };
+		A7FA00000000000000000003 /* PerformanceKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000001 /* PerformanceKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		10D000000000000000000002 /* LoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10D000000000000000000001 /* LoginKit.framework */; };
 		10D000000000000000000003 /* LoginKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 10D000000000000000000001 /* LoginKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D1CA00000000000000000020 /* DiscoverKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000010 /* DiscoverKitComposition.swift */; };
@@ -1021,6 +1023,8 @@
 		F0F6DFBA2F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6DFB92F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift */; };
 		F0F6E7CE2F81948B00D02F93 /* RemoteExerciseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7CD2F81948B00D02F93 /* RemoteExerciseLoader.swift */; };
 		F0F6E7D02F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7CF2F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift */; };
+		A7FA00000000000000000006 /* PerformanceKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000005 /* PerformanceKitComposition.swift */; };
+		A7FA00000000000000000008 /* PurchaseManagerPerformanceProAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000007 /* PurchaseManagerPerformanceProAccess.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1046,6 +1050,7 @@
 				10D000000000000000000003 /* LoginKit.framework in Embed Frameworks */,
 				D1CA00000000000000000003 /* DiscoverKit.framework in Embed Frameworks */,
 				BF1A00000000000000000003 /* ProfileKit.framework in Embed Frameworks */,
+				A7FA00000000000000000003 /* PerformanceKit.framework in Embed Frameworks */,
 				746DA0D52C090AD10094EA3B /* ITGWorkoutKitiOS.framework in Embed Frameworks */,
 				746DA0D32C090AD10094EA3B /* ITGWorkoutKit.framework in Embed Frameworks */,
 			);
@@ -1104,6 +1109,7 @@
 		BF1A0000000000000000001B /* StorageProfilePhotoUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageProfilePhotoUploader.swift; sourceTree = "<group>"; };
 		BF1A0000000000000000001C /* CachingProfilePhotoUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachingProfilePhotoUploader.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000001 /* ProfileKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ProfileKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7FA00000000000000000001 /* PerformanceKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PerformanceKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF1A00000000000000000010 /* ProfileKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileKitComposition.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000011 /* ProfileAppRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppRoutes.swift; sourceTree = "<group>"; };
 		BF1A00000000000000000012 /* AppSignOut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSignOut.swift; sourceTree = "<group>"; };
@@ -2051,6 +2057,8 @@
 		F0F6DFB92F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteExerciseDailyStatsLoader.swift; sourceTree = "<group>"; };
 		F0F6E7CD2F81948B00D02F93 /* RemoteExerciseLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteExerciseLoader.swift; sourceTree = "<group>"; };
 		F0F6E7CF2F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMuscleGroupsLoader.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000005 /* PerformanceKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceKitComposition.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000007 /* PurchaseManagerPerformanceProAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManagerPerformanceProAccess.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2084,6 +2092,7 @@
 				10D000000000000000000002 /* LoginKit.framework in Frameworks */,
 				D1CA00000000000000000002 /* DiscoverKit.framework in Frameworks */,
 				BF1A00000000000000000002 /* ProfileKit.framework in Frameworks */,
+				A7FA00000000000000000002 /* PerformanceKit.framework in Frameworks */,
 				7433044B289E962B00F2569A /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4973,6 +4982,7 @@
 		9FC11F5D29DDC9A20054D79A /* Composition */ = {
 			isa = PBXGroup;
 			children = (
+				A7FA00000000000000000004 /* PerformanceKit */,
 				F0A11D292F6C642A00CE1E9A /* StatsKit */,
 				D1CA00000000000000000004 /* DiscoverKit */,
 				BF1A00000000000000000004 /* ProfileKit */,
@@ -5017,6 +5027,7 @@
 				10D000000000000000000001 /* LoginKit.framework */,
 				D1CA00000000000000000001 /* DiscoverKit.framework */,
 				BF1A00000000000000000001 /* ProfileKit.framework */,
+				A7FA00000000000000000001 /* PerformanceKit.framework */,
 				F0F608352E42A5A70015F260 /* MyDayKit.framework */,
 				746DA0D02C090AD10094EA3B /* ITGWorkoutKit.framework */,
 				746DA0D12C090AD10094EA3B /* ITGWorkoutKitiOS.framework */,
@@ -5170,6 +5181,15 @@
 				A1D0E5F200024C0A9B110005 /* LegacyWorkoutTemplateStoreMigrator.swift */,
 			);
 			path = MyDay;
+			sourceTree = "<group>";
+		};
+		A7FA00000000000000000004 /* PerformanceKit */ = {
+			isa = PBXGroup;
+			children = (
+				A7FA00000000000000000007 /* PurchaseManagerPerformanceProAccess.swift */,
+				A7FA00000000000000000005 /* PerformanceKitComposition.swift */,
+			);
+			path = PerformanceKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -5352,6 +5372,8 @@
 				F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */,
 				D1CA00000000000000000020 /* DiscoverKitComposition.swift in Sources */,
 				BF1A00000000000000000020 /* ProfileKitComposition.swift in Sources */,
+				A7FA00000000000000000008 /* PurchaseManagerPerformanceProAccess.swift in Sources */,
+				A7FA00000000000000000006 /* PerformanceKitComposition.swift in Sources */,
 				BF1A00000000000000000021 /* ProfileAppRoutes.swift in Sources */,
 				BF1A00000000000000000022 /* AppSignOut.swift in Sources */,
 				BF1A00000000000000000023 /* AppSignOut+ProfileSignOutService.swift in Sources */,
