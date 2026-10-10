@@ -15,9 +15,13 @@ enum PerformanceKitRoutes {
     case verticalJump
     case previousJumps
     case jumpInstructions
-    /// The camera, presented full screen. Carries the best the home screen
-    /// loaded, through the replay to the result, so it is not read again.
-    case jumpRecorder(max: VerticalJump?)
-    case jumpReplay(fileURL: URL, max: VerticalJump?)
-    case jumpResult(height: Double, max: VerticalJump?)
+
+    // MARK: - Jump engine
+    /// A sitting of a jump test, presented full screen. `onSaved` hands the
+    /// saved session back to the screen that started it.
+    case jumpTest(JumpTestKind, onSaved: (JumpTestSession) -> Void)
+    /// The camera, presented over the session. `onMeasured` carries the
+    /// attempt back once it is tagged.
+    case jumpRecorder(JumpTestKind, onMeasured: (JumpAttempt) -> Void)
+    case jumpReplay(fileURL: URL, kind: JumpTestKind, onMeasured: (JumpAttempt) -> Void)
 }

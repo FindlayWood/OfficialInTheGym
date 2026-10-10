@@ -7,47 +7,62 @@
 import Combine
 import Foundation
 
-/// Vertical Jump's home: the athlete's best, and the way to record, review or
-/// read how to use it. The legacy `MyJumpsViewModel`, with its actions as
-/// closures rather than a published enum the view controller sinks.
+/// Vertical Jump's home: the athlete's best and latest results, and the way to
+/// start a test, see every session, or read how it works.
+///
+/// **The best is worked out from the sessions** (`JumpTestSession.best(of:)`),
+/// never read from a document of its own. The legacy screen read
+/// `VerticalJump/{uid}`, a best kept beside the history by a second write, which
+/// a failure between the two could leave disagreeing with it.
 ///
 /// **Recording is offered only on your own Performance Center** (`canRecord`).
-/// The legacy screens always read and wrote the signed-in user's jumps, so a
-/// coach opening an athlete's centre was shown their own. The jumps shown are
-/// the athlete's now, and a coach cannot record one on the athlete's behalf.
+/// The legacy screens always showed the signed-in user's jumps, so a coach
+/// opening an athlete's centre saw their own.
 @MainActor
 final class VerticalJumpHomeViewModel: ObservableObject {
 
     @Published private(set) var isLoading = false
-    @Published private(set) var max: VerticalJump?
+    @Published private(set) var sessions: [JumpTestSession] = []
 
     let canRecord: Bool
 
-    var onRecordNewJump: ((VerticalJump?) -> Void)?
+    var onStartTest: (() -> Void)?
     var onPreviousJumps: (() -> Void)?
     var onHelp: (() -> Void)?
 
-    private let loader: MaxVerticalJumpLoader
+    private let loader: JumpTestSessionsLoader
 
-    init(loader: MaxVerticalJumpLoader, canRecord: Bool) {
+    init(loader: JumpTestSessionsLoader, canRecord: Bool) {
         self.loader = loader
         self.canRecord = canRecord
+    }
+
+    var best: JumpTestSession? {
+        JumpTestSession.best(of: sessions)
+    }
+
+    var latest: JumpTestSession? {
+        sessions.max { $0.date < $1.date }
     }
 
     func load() async {
         isLoading = true
         defer { isLoading = false }
         do {
-            max = try await loader.loadMax()
+            sessions = try await loader.loadSessions(.verticalJump)
         } catch {
-            print("❌ Max jump load failed: \(error)")
+            print("❌ Vertical jump load failed: \(error)")
         }
     }
 
-    /// The best is handed on so the result screen can tell whether a new jump
-    /// beats it without reading it again.
-    func recordNewJump() {
-        onRecordNewJump?(max)
+    /// A session just saved counts at once, without a reload.
+    func sessionSaved(_ session: JumpTestSession) {
+        sessions.removeAll { $0.id == session.id }
+        sessions.append(session)
+    }
+
+    func startTest() {
+        onStartTest?()
     }
 
     func previousJumps() {

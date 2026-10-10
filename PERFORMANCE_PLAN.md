@@ -251,8 +251,26 @@ the ~150–300ms contact times in drop and repeated jumps. **The height formula 
     is set. Verified: the type is in the Emulator binary and absent from Debug.
   - The two unreachable `jumpMeasure()` / `showPerformanceMonitor` paths in the legacy More
     coordinators open Performance Center.
-- **B — Jump engine.** Generalise capture and tagging to N tags. Best-of-3 sessions. Store a result
-  per test in Firestore per athlete. Vertical Jump moves onto it, keeping its existing data readable.
+- **B — Jump engine — built.**
+  - `JumpTestKind` (Vertical Jump today) is a **tag plan** of `JumpEvent`s and a number of attempts
+    (3). `JumpTiming` turns tagged times into flights (take-off → landing) and ground contacts
+    (landing → take-off) for any plan, refusing tags out of order or at zero. `JumpPhysics` is the
+    one height formula. `JumpAttempt` is height from the last flight, plus its times.
+  - Tagging is `JumpTaggingViewModel` behind a reworked replay screen: one "Tag ‹event› (n of N)"
+    button stepping through the plan, Undo, a marker per tag, and a reason shown when a tag is
+    refused. The legacy screen had two fixed buttons and dropped a bad tag without a word.
+  - A test is a **session**: `JumpTestSessionScreen` has three attempt slots, records each through
+    camera → tag → back, marks the best, lets one be removed and re-recorded, and saves after one or
+    more. The session id is fixed when it starts, so a retried save overwrites. The router runs the
+    chain (`.jumpTest` → `.jumpRecorder` → `.jumpReplay`); the video is deleted once measured.
+  - Stored at **`Users/{uid}/JumpTests/{id}`**: `kind`, `date`, `attempts` and a query-only
+    `bestHeight`. One collection for every jump test, so the fatigue check and a coach's summary read
+    one place. **Firestore rules must allow the owner this subcollection; they are not in this repo.**
+  - Vertical Jump runs on it. Its pre-engine results (`VerticalJump/{uid}/Results`) are read as
+    one-attempt sessions by `LegacyVerticalJumpSessionsLoader`, merged by
+    `CurrentAndLegacyJumpTestSessionsLoader` (a failed legacy read does not hide new sessions).
+    Nothing writes the legacy paths now, and the separate best-jump document is no longer read: the
+    best is worked out from the sessions. `JumpResultsScreen` and the two legacy writers are gone.
 - **C — CMJ.** A test of its own, with power from the athlete's weight.
 - **D — Weekly fatigue check and the readiness home.** The recent max, zones, calibration, the due
   date, and the dashboard home with the hero card and key numbers.

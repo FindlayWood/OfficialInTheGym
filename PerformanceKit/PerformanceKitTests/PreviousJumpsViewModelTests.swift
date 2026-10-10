@@ -11,37 +11,31 @@ import XCTest
 @MainActor
 final class PreviousJumpsViewModelTests: XCTestCase {
 
-    func test_sortedJumps_deliversNewestFirstByDefault() async {
-        let (old, new) = (jump(daysAgo: 2, height: 50), jump(daysAgo: 0, height: 30))
-        let sut = PreviousJumpsViewModel(loader: VerticalJumpServicesSpy(jumpsResult: .success([old, new])))
+    func test_sortedSessions_deliversNewestFirstByDefault() async {
+        let (old, new) = (JumpTestSession.make(id: "old", daysAgo: 2, heights: [50]), JumpTestSession.make(id: "new", daysAgo: 0, heights: [30]))
+        let sut = PreviousJumpsViewModel(loader: JumpTestServicesSpy(sessionsResult: .success([old, new])))
 
         await sut.load()
 
-        XCTAssertEqual(sut.sortedJumps, [new, old])
+        XCTAssertEqual(sut.sortedSessions.map(\.id), ["new", "old"])
     }
 
-    func test_sortedJumps_deliversHighestFirstWhenSortedByHeight() async {
-        let (old, new) = (jump(daysAgo: 2, height: 50), jump(daysAgo: 0, height: 30))
-        let sut = PreviousJumpsViewModel(loader: VerticalJumpServicesSpy(jumpsResult: .success([new, old])))
+    func test_sortedSessions_deliversHighestBestFirstWhenSortedByHeight() async {
+        let (old, new) = (JumpTestSession.make(id: "old", daysAgo: 2, heights: [50]), JumpTestSession.make(id: "new", daysAgo: 0, heights: [30, 35]))
+        let sut = PreviousJumpsViewModel(loader: JumpTestServicesSpy(sessionsResult: .success([new, old])))
         await sut.load()
 
         sut.sortByDate(false)
 
-        XCTAssertEqual(sut.sortedJumps, [old, new])
+        XCTAssertEqual(sut.sortedSessions.map(\.id), ["old", "new"])
     }
 
     func test_load_keepsNothingAndStopsLoadingOnFailure() async {
-        let sut = PreviousJumpsViewModel(loader: VerticalJumpServicesSpy(jumpsResult: .failure(NSError(domain: "test", code: 0))))
+        let sut = PreviousJumpsViewModel(loader: JumpTestServicesSpy(sessionsResult: .failure(NSError(domain: "test", code: 0))))
 
         await sut.load()
 
-        XCTAssertEqual(sut.jumps, [])
+        XCTAssertEqual(sut.sessions, [])
         XCTAssertFalse(sut.isLoading)
-    }
-
-    // MARK: - Helpers
-
-    private func jump(daysAgo: Double, height: Double) -> VerticalJump {
-        VerticalJump(time: .fixed.addingTimeInterval(-daysAgo * 86_400), height: height)
     }
 }

@@ -45,27 +45,25 @@ class PerformanceKitComposition {
         proAccess = EmulatorUnlockPerformanceProAccess(wrapping: proAccess)
         #endif
 
-        // MARK: - Vertical Jump
-        // The athlete's jumps. Only the athlete can record one (the router
-        // offers recording on your own Performance Center only).
+        // MARK: - Jump tests
+        // The athlete's sessions, with Vertical Jump's pre-engine history read
+        // alongside. Only the athlete can record one (the router offers
+        // recording on your own Performance Center only).
 
-        let maxJumpLoader: MaxVerticalJumpLoader = FirestoreMaxVerticalJumpLoader(userId: athlete.uid)
-
-        let jumpHistoryLoader: VerticalJumpHistoryLoader = FirestoreVerticalJumpHistoryLoader(userId: athlete.uid)
-
-        let jumpWriter: VerticalJumpWriter = ResultAndBestVerticalJumpWriter(
-            result: FirestoreVerticalJumpResultWriter(userId: athlete.uid),
-            best: FirestoreBestVerticalJumpWriter(userId: athlete.uid)
+        let jumpSessionsLoader: JumpTestSessionsLoader = CurrentAndLegacyJumpTestSessionsLoader(
+            current: FirestoreJumpTestSessionsLoader(userId: athlete.uid),
+            legacy: LegacyVerticalJumpSessionsLoader(userId: athlete.uid)
         )
+
+        let jumpSessionWriter: JumpTestSessionWriter = FirestoreJumpTestSessionWriter(userId: athlete.uid)
 
         // MARK: - Router
 
         let router = PerformanceKitRouter(
             navigationController: navigationController,
             proAccess: proAccess,
-            maxJumpLoader: maxJumpLoader,
-            jumpHistoryLoader: jumpHistoryLoader,
-            jumpWriter: jumpWriter,
+            jumpSessionsLoader: jumpSessionsLoader,
+            jumpSessionWriter: jumpSessionWriter,
             currentUserId: UserDefaults.currentUser.uid,
             athleteId: athlete.uid
         )

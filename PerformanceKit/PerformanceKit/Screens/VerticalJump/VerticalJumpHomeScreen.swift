@@ -6,12 +6,9 @@
 //
 import SwiftUI
 
-/// Vertical Jump: the best jump as the screen's one big number, then My Jumps
-/// and How It Works as rows, with Record New Jump pinned to the bottom.
-///
-/// The legacy screen was a default `List` with three blue text buttons in
-/// sections of their own. Recording is the action people come here for, so it
-/// is the primary button, and it is absent when this is someone else's centre.
+/// Vertical Jump: the best as the screen's one big number with the latest
+/// beneath it, then My Jumps and How It Works, with Start Test pinned to the
+/// bottom. It is absent when this is someone else's centre.
 struct VerticalJumpHomeScreen: View {
 
     @ObservedObject var viewModel: VerticalJumpHomeViewModel
@@ -25,7 +22,7 @@ struct VerticalJumpHomeScreen: View {
 
                 PerformanceSectionHeader(title: "Jumps")
                 VStack(spacing: 0) {
-                    PerformanceRow(icon: "list.bullet", title: "My Jumps", subtitle: "Every jump you have saved", showsDivider: true) {
+                    PerformanceRow(icon: "list.bullet", title: "My Jumps", subtitle: "Every test you have done", showsDivider: true) {
                         viewModel.previousJumps()
                     }
                     PerformanceRow(icon: "questionmark", title: "How It Works", subtitle: "Recording and tagging a jump") {
@@ -40,8 +37,8 @@ struct VerticalJumpHomeScreen: View {
         .background(Color(.systemBackground).ignoresSafeArea())
         .performanceBottomBar {
             if viewModel.canRecord {
-                PerformancePrimaryButton(title: "Record New Jump", isEnabled: !viewModel.isLoading) {
-                    viewModel.recordNewJump()
+                PerformancePrimaryButton(title: "Start Test", isEnabled: !viewModel.isLoading) {
+                    viewModel.startTest()
                 }
             }
         }
@@ -54,17 +51,23 @@ struct VerticalJumpHomeScreen: View {
 
     @ViewBuilder
     private var bestJump: some View {
-        if let max = viewModel.max {
+        if let best = viewModel.best, let height = best.best?.height {
             VStack(spacing: 4) {
-                Text("\(max.height, specifier: "%.1f")")
+                Text("\(height, specifier: "%.1f")")
                     .font(.system(size: 48, weight: .bold))
                     .foregroundStyle(Color.darkColor)
                 + Text(" cm")
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(Color.secondary)
-                Text(max.time, format: .dateTime.day().month(.wide).year())
+                Text(best.date, format: .dateTime.day().month(.wide).year())
                     .font(.system(size: 13))
                     .foregroundStyle(Color.secondary)
+                if let latest = viewModel.latest, latest.id != best.id, let latestHeight = latest.best?.height {
+                    Text("Latest \(latestHeight, specifier: "%.1f") cm, \(latest.date.formatted(.dateTime.day().month(.abbreviated)))")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(Color.secondary)
+                        .padding(.top, 6)
+                }
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 20)

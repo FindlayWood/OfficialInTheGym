@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-/// Every saved jump, newest or highest first, in cm or inches. The two
+/// Every saved session, newest or highest first, in cm or inches. The two
 /// switches are pills over the list rather than the legacy circle icons and
 /// system segmented control.
 struct PreviousJumpsScreen: View {
@@ -27,14 +27,14 @@ struct PreviousJumpsScreen: View {
                 }
                 .padding(.bottom, 12)
 
-                PerformanceSectionHeader(title: "Jumps")
-                if viewModel.jumps.isEmpty {
+                PerformanceSectionHeader(title: "Tests")
+                if viewModel.sessions.isEmpty {
                     PerformanceEmptyCard(message: "No jumps saved yet.", isLoading: viewModel.isLoading)
                 } else {
-                    let jumps = viewModel.sortedJumps
+                    let sessions = viewModel.sortedSessions
                     VStack(spacing: 0) {
-                        ForEach(Array(jumps.enumerated()), id: \.element.time) { index, jump in
-                            VerticalJumpRow(jump: jump, measurement: viewModel.measurement, showsDivider: index < jumps.count - 1)
+                        ForEach(Array(sessions.enumerated()), id: \.element.id) { index, session in
+                            JumpSessionRow(session: session, measurement: viewModel.measurement, showsDivider: index < sessions.count - 1)
                         }
                     }
                     .performanceCard()

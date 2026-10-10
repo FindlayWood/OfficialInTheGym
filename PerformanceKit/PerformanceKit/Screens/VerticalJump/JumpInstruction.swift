@@ -6,18 +6,18 @@
 //
 import Foundation
 
-/// One numbered step of the jump instructions. The copy is the legacy
-/// `JumpInstructionsViewController`'s, with the first step's typos fixed.
+/// One numbered step of the jump instructions. Rewritten for the jump engine:
+/// a test is three attempts, and tagging is one button that names the event
+/// it marks next.
 struct JumpInstruction: Hashable {
     let number: Int
     let instruction: String
 
     static let all: [JumpInstruction] = [
-        .init(number: 1, instruction: "Find some space to record your jump, with room around you and about 2m from the camera."),
-        .init(number: 2, instruction: "When recording starts you have 16 seconds to jump and land. It is important that both your take off and landing are captured on the recording."),
-        .init(number: 3, instruction: "Once you have recorded your jump you will then be shown the tagging screen. Here you must tag your take off and landing."),
-        .init(number: 4, instruction: "To tag your take off, select last frame with your feet touching the ground before you jump. (you can't select the very first frame of the video)"),
-        .init(number: 5, instruction: "To tag your landing, select first frame with your feet touching the ground after you jump."),
-        .init(number: 6, instruction: "Once you have tagged your jump (take off must come before landing) then you will see a right arrow button in the top right. Tap this to see your results.")
+        .init(number: 1, instruction: "Prop the phone about 2m away with your whole body in frame, and leave room around you."),
+        .init(number: 2, instruction: "A test is your best of three jumps. Tap Record, jump, and land. Recording stops by itself after 16 seconds."),
+        .init(number: 3, instruction: "On the replay, step frame by frame. Tag take-off on the last frame your feet are on the ground."),
+        .init(number: 4, instruction: "Tag landing on the first frame your feet are back on the ground. Undo if you got one wrong."),
+        .init(number: 5, instruction: "Tap ✓ to keep the jump. Record the next attempt, then Save. Your highest jump is the result.")
     ]
 }

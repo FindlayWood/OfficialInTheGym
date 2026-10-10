@@ -7,33 +7,34 @@
 import Combine
 import Foundation
 
-/// Every saved jump, sorted newest first or highest first, shown in centimetres
-/// or inches. The legacy `PreviousJumpsView.ViewModel`, moved as it was.
+/// Every Vertical Jump session, newest first or highest first, shown in
+/// centimetres or inches. A session's height is its best attempt. Jumps saved
+/// before the engine read as sessions of one attempt.
 @MainActor
 final class PreviousJumpsViewModel: ObservableObject {
 
     @Published private(set) var isLoading = false
-    @Published private(set) var jumps: [VerticalJump] = []
+    @Published private(set) var sessions: [JumpTestSession] = []
     @Published private(set) var sortedByDate = true
     @Published var measurement: JumpMeasurement = .cm
 
-    private let loader: VerticalJumpHistoryLoader
+    private let loader: JumpTestSessionsLoader
 
-    init(loader: VerticalJumpHistoryLoader) {
+    init(loader: JumpTestSessionsLoader) {
         self.loader = loader
     }
 
-    var sortedJumps: [VerticalJump] {
+    var sortedSessions: [JumpTestSession] {
         sortedByDate
-            ? jumps.sorted { $0.time > $1.time }
-            : jumps.sorted { $0.height > $1.height }
+            ? sessions.sorted { $0.date > $1.date }
+            : sessions.sorted { ($0.best?.height ?? 0) > ($1.best?.height ?? 0) }
     }
 
     func load() async {
         isLoading = true
         defer { isLoading = false }
         do {
-            jumps = try await loader.loadJumps()
+            sessions = try await loader.loadSessions(.verticalJump)
         } catch {
             print("❌ Jump history load failed: \(error)")
         }

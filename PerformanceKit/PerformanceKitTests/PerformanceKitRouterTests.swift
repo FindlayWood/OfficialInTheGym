@@ -59,9 +59,8 @@ final class PerformanceKitRouterTests: XCTestCase {
         PerformanceKitRouter(
             navigationController: navigationController,
             proAccess: PerformanceProAccessStub(hasUnlockedPro: true),
-            maxJumpLoader: VerticalJumpServicesSpy(),
-            jumpHistoryLoader: VerticalJumpServicesSpy(),
-            jumpWriter: VerticalJumpServicesSpy(),
+            jumpSessionsLoader: JumpTestServicesSpy(),
+            jumpSessionWriter: JumpTestServicesSpy(),
             currentUserId: "me",
             athleteId: "me"
         )

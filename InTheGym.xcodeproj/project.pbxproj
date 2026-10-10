@@ -946,14 +946,13 @@
 		F0F6E7D02F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7CF2F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift */; };
 		A7FA00000000000000000006 /* PerformanceKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000005 /* PerformanceKitComposition.swift */; };
 		A7FA00000000000000000008 /* PurchaseManagerPerformanceProAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000007 /* PurchaseManagerPerformanceProAccess.swift */; };
-		A7FA00000000000000000016 /* VerticalJumpPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000015 /* VerticalJumpPath.swift */; };
-		A7FA00000000000000000018 /* VerticalJumpFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000017 /* VerticalJumpFields.swift */; };
-		A7FA0000000000000000001A /* FirestoreMaxVerticalJumpLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000019 /* FirestoreMaxVerticalJumpLoader.swift */; };
-		A7FA0000000000000000001C /* FirestoreVerticalJumpHistoryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000001B /* FirestoreVerticalJumpHistoryLoader.swift */; };
-		A7FA0000000000000000001E /* FirestoreVerticalJumpResultWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000001D /* FirestoreVerticalJumpResultWriter.swift */; };
-		A7FA00000000000000000020 /* FirestoreBestVerticalJumpWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000001F /* FirestoreBestVerticalJumpWriter.swift */; };
-		A7FA00000000000000000022 /* ResultAndBestVerticalJumpWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000021 /* ResultAndBestVerticalJumpWriter.swift */; };
 		A7FA00000000000000000032 /* EmulatorUnlockPerformanceProAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000031 /* EmulatorUnlockPerformanceProAccess.swift */; };
+		A7FA00000000000000000034 /* JumpTestPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000033 /* JumpTestPath.swift */; };
+		A7FA00000000000000000036 /* JumpTestFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000035 /* JumpTestFields.swift */; };
+		A7FA00000000000000000038 /* FirestoreJumpTestSessionsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000037 /* FirestoreJumpTestSessionsLoader.swift */; };
+		A7FA0000000000000000003A /* FirestoreJumpTestSessionWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA00000000000000000039 /* FirestoreJumpTestSessionWriter.swift */; };
+		A7FA0000000000000000003C /* LegacyVerticalJumpSessionsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000003B /* LegacyVerticalJumpSessionsLoader.swift */; };
+		A7FA0000000000000000003E /* CurrentAndLegacyJumpTestSessionsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0000000000000000003D /* CurrentAndLegacyJumpTestSessionsLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1909,14 +1908,13 @@
 		F0F6E7CF2F8194BE00D02F93 /* RemoteMuscleGroupsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMuscleGroupsLoader.swift; sourceTree = "<group>"; };
 		A7FA00000000000000000005 /* PerformanceKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceKitComposition.swift; sourceTree = "<group>"; };
 		A7FA00000000000000000007 /* PurchaseManagerPerformanceProAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManagerPerformanceProAccess.swift; sourceTree = "<group>"; };
-		A7FA00000000000000000015 /* VerticalJumpPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalJumpPath.swift; sourceTree = "<group>"; };
-		A7FA00000000000000000017 /* VerticalJumpFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalJumpFields.swift; sourceTree = "<group>"; };
-		A7FA00000000000000000019 /* FirestoreMaxVerticalJumpLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreMaxVerticalJumpLoader.swift; sourceTree = "<group>"; };
-		A7FA0000000000000000001B /* FirestoreVerticalJumpHistoryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreVerticalJumpHistoryLoader.swift; sourceTree = "<group>"; };
-		A7FA0000000000000000001D /* FirestoreVerticalJumpResultWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreVerticalJumpResultWriter.swift; sourceTree = "<group>"; };
-		A7FA0000000000000000001F /* FirestoreBestVerticalJumpWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreBestVerticalJumpWriter.swift; sourceTree = "<group>"; };
-		A7FA00000000000000000021 /* ResultAndBestVerticalJumpWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultAndBestVerticalJumpWriter.swift; sourceTree = "<group>"; };
 		A7FA00000000000000000031 /* EmulatorUnlockPerformanceProAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmulatorUnlockPerformanceProAccess.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000033 /* JumpTestPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTestPath.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000035 /* JumpTestFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTestFields.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000037 /* FirestoreJumpTestSessionsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreJumpTestSessionsLoader.swift; sourceTree = "<group>"; };
+		A7FA00000000000000000039 /* FirestoreJumpTestSessionWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreJumpTestSessionWriter.swift; sourceTree = "<group>"; };
+		A7FA0000000000000000003B /* LegacyVerticalJumpSessionsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyVerticalJumpSessionsLoader.swift; sourceTree = "<group>"; };
+		A7FA0000000000000000003D /* CurrentAndLegacyJumpTestSessionsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentAndLegacyJumpTestSessionsLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4733,14 +4731,13 @@
 		A7FA00000000000000000004 /* PerformanceKit */ = {
 			isa = PBXGroup;
 			children = (
+				A7FA0000000000000000003D /* CurrentAndLegacyJumpTestSessionsLoader.swift */,
+				A7FA0000000000000000003B /* LegacyVerticalJumpSessionsLoader.swift */,
+				A7FA00000000000000000039 /* FirestoreJumpTestSessionWriter.swift */,
+				A7FA00000000000000000037 /* FirestoreJumpTestSessionsLoader.swift */,
+				A7FA00000000000000000035 /* JumpTestFields.swift */,
+				A7FA00000000000000000033 /* JumpTestPath.swift */,
 				A7FA00000000000000000031 /* EmulatorUnlockPerformanceProAccess.swift */,
-				A7FA00000000000000000021 /* ResultAndBestVerticalJumpWriter.swift */,
-				A7FA0000000000000000001F /* FirestoreBestVerticalJumpWriter.swift */,
-				A7FA0000000000000000001D /* FirestoreVerticalJumpResultWriter.swift */,
-				A7FA0000000000000000001B /* FirestoreVerticalJumpHistoryLoader.swift */,
-				A7FA00000000000000000019 /* FirestoreMaxVerticalJumpLoader.swift */,
-				A7FA00000000000000000017 /* VerticalJumpFields.swift */,
-				A7FA00000000000000000015 /* VerticalJumpPath.swift */,
 				A7FA00000000000000000007 /* PurchaseManagerPerformanceProAccess.swift */,
 				A7FA00000000000000000005 /* PerformanceKitComposition.swift */,
 			);
@@ -4925,14 +4922,13 @@
 				F0A11D2B2F6C644200CE1E9A /* StatsKitComposition.swift in Sources */,
 				D1CA00000000000000000020 /* DiscoverKitComposition.swift in Sources */,
 				BF1A00000000000000000020 /* ProfileKitComposition.swift in Sources */,
+				A7FA0000000000000000003E /* CurrentAndLegacyJumpTestSessionsLoader.swift in Sources */,
+				A7FA0000000000000000003C /* LegacyVerticalJumpSessionsLoader.swift in Sources */,
+				A7FA0000000000000000003A /* FirestoreJumpTestSessionWriter.swift in Sources */,
+				A7FA00000000000000000038 /* FirestoreJumpTestSessionsLoader.swift in Sources */,
+				A7FA00000000000000000036 /* JumpTestFields.swift in Sources */,
+				A7FA00000000000000000034 /* JumpTestPath.swift in Sources */,
 				A7FA00000000000000000032 /* EmulatorUnlockPerformanceProAccess.swift in Sources */,
-				A7FA00000000000000000022 /* ResultAndBestVerticalJumpWriter.swift in Sources */,
-				A7FA00000000000000000020 /* FirestoreBestVerticalJumpWriter.swift in Sources */,
-				A7FA0000000000000000001E /* FirestoreVerticalJumpResultWriter.swift in Sources */,
-				A7FA0000000000000000001C /* FirestoreVerticalJumpHistoryLoader.swift in Sources */,
-				A7FA0000000000000000001A /* FirestoreMaxVerticalJumpLoader.swift in Sources */,
-				A7FA00000000000000000018 /* VerticalJumpFields.swift in Sources */,
-				A7FA00000000000000000016 /* VerticalJumpPath.swift in Sources */,
 				A7FA00000000000000000008 /* PurchaseManagerPerformanceProAccess.swift in Sources */,
 				A7FA00000000000000000006 /* PerformanceKitComposition.swift in Sources */,
 				BF1A00000000000000000021 /* ProfileAppRoutes.swift in Sources */,

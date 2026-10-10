@@ -525,7 +525,10 @@ Its SwiftUI screens are on MyDay's vocabulary through PerformanceKit's own `UI/`
 the legacy `MyProfileCoordinator` until the coach/player split is removed. **Every other way of opening a
 person** (DISCOVER, search, follow lists, and all nine legacy `UserProfileCoordinator` callers)
 shows ProfileKit's `UserProfileScreen`, through one `ProfileKitComposition.makeRouter` graph.
-Current focus: the PERFORMANCE tab, part 2 phase B (the jump engine).
+Current focus: the PERFORMANCE tab, part 2 phase C (CMJ). **Every jump test runs on one engine**: a
+`JumpTestKind` is a tag plan and a number of attempts, `JumpTiming` turns tagged times into flights and
+ground contacts, and `JumpPhysics` is the one height formula. A new jump test is a new case, not a new
+screen.
 
 Roadmap order:
 1. Fix workout stats → update STATS tab
@@ -1560,6 +1563,8 @@ appears on some screens and not others.
 | `ProfileHighlights/{uid}` | Firestore | **Cloud Functions only**: a profile's PB tiles, from `ExerciseStats` + `Users.pinnedHighlights`; read-gated like a private account's lists |
 | `Follows/{followerId}_{followeeId}` | Firestore | follower creates (`FirestoreFollowWriter`), either deletes; `mirrorLegacyFollow` bridges legacy RTDB follows in. Counts on `Profiles` by `profileFollowCounts` |
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
+| `Users/{uid}/JumpTests/{id}` | Firestore | `FirestoreJumpTestSessionWriter` — one document per jump-test session, every test told apart by `kind`; **needs a rule for the subcollection** |
+| `VerticalJump/{uid}/Results/{id}` | Firestore | **read-only now** (`LegacyVerticalJumpSessionsLoader`): Vertical Jump's pre-engine history |
 | `Users/{uid}/ExerciseStats/{exerciseID}/RawLogs/{logID}` | Firestore | both logging paths, per set |
 | `Users/{uid}/WorkoutSessions/{id}` | Firestore | `FirestoreCompletedWorkoutSessionSaver` (batched) |
 | `WorkoutSessions/{sessionId}` | Firestore | same batch — analytics copy, the only one to gain `deletedAt` |

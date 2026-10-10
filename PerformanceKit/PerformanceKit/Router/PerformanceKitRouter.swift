@@ -39,9 +39,8 @@ public final class PerformanceKitRouter {
     // MARK: - Dependencies
 
     let proAccess: PerformanceProAccess
-    let maxJumpLoader: MaxVerticalJumpLoader
-    let jumpHistoryLoader: VerticalJumpHistoryLoader
-    let jumpWriter: VerticalJumpWriter
+    let jumpSessionsLoader: JumpTestSessionsLoader
+    let jumpSessionWriter: JumpTestSessionWriter
     let currentUserId: String
     let athleteId: String
 
@@ -61,17 +60,15 @@ public final class PerformanceKitRouter {
     public init(
         navigationController: UINavigationController,
         proAccess: PerformanceProAccess,
-        maxJumpLoader: MaxVerticalJumpLoader,
-        jumpHistoryLoader: VerticalJumpHistoryLoader,
-        jumpWriter: VerticalJumpWriter,
+        jumpSessionsLoader: JumpTestSessionsLoader,
+        jumpSessionWriter: JumpTestSessionWriter,
         currentUserId: String,
         athleteId: String
     ) {
         self.navigationController = navigationController
         self.proAccess = proAccess
-        self.maxJumpLoader = maxJumpLoader
-        self.jumpHistoryLoader = jumpHistoryLoader
-        self.jumpWriter = jumpWriter
+        self.jumpSessionsLoader = jumpSessionsLoader
+        self.jumpSessionWriter = jumpSessionWriter
         self.currentUserId = currentUserId
         self.athleteId = athleteId
     }
@@ -114,9 +111,9 @@ extension PerformanceKitRouter {
             return vc
 
         case .verticalJump:
-            let viewModel = VerticalJumpHomeViewModel(loader: maxJumpLoader, canRecord: currentUserId == athleteId)
-            viewModel.onRecordNewJump = { [weak self] max in
-                self?.present(.jumpRecorder(max: max), from: self?.navigationController)
+            let viewModel = VerticalJumpHomeViewModel(loader: jumpSessionsLoader, canRecord: currentUserId == athleteId)
+            viewModel.onStartTest = { [weak self, weak viewModel] in
+                self?.present(.jumpTest(.verticalJump, onSaved: { viewModel?.sessionSaved($0) }), from: self?.navigationController)
             }
             viewModel.onPreviousJumps = { [weak self] in self?.navigate(to: .previousJumps) }
             viewModel.onHelp = { [weak self] in
@@ -125,36 +122,56 @@ extension PerformanceKitRouter {
             return UIHostingController(rootView: VerticalJumpHomeScreen(viewModel: viewModel))
 
         case .previousJumps:
-            let viewModel = PreviousJumpsViewModel(loader: jumpHistoryLoader)
+            let viewModel = PreviousJumpsViewModel(loader: jumpSessionsLoader)
             return UIHostingController(rootView: PreviousJumpsScreen(viewModel: viewModel))
 
         case .jumpInstructions:
             return UIHostingController(rootView: JumpInstructionsScreen())
 
-        case .jumpRecorder(let max):
+        case .jumpTest(let kind, let onSaved):
+            let viewModel = JumpTestSessionViewModel(kind: kind, writer: jumpSessionWriter)
+            let navigationController = UINavigationController(
+                rootViewController: UIHostingController(rootView: JumpTestSessionScreen(viewModel: viewModel))
+            )
+            navigationController.modalPresentationStyle = .fullScreen
+            navigationController.navigationBar.tintColor = UIColor(Color.darkColor)
+            viewModel.onRecordAttempt = { [weak self, weak navigationController, weak viewModel] in
+                // Dismissing the session's navigation controller takes down
+                // whatever is presented over it, the camera and the replay.
+                self?.present(.jumpRecorder(kind, onMeasured: { attempt in
+                    viewModel?.add(attempt)
+                    navigationController?.dismiss(animated: true)
+                }), from: navigationController)
+            }
+            viewModel.onFinished = { [weak navigationController] session in
+                onSaved(session)
+                navigationController?.presentingViewController?.dismiss(animated: true)
+            }
+            viewModel.onCancel = { [weak navigationController] in
+                navigationController?.presentingViewController?.dismiss(animated: true)
+            }
+            return navigationController
+
+        case .jumpRecorder(let kind, let onMeasured):
             let recorder = JumpMeasuringViewController()
             let navigationController = UINavigationController(rootViewController: recorder)
             navigationController.modalPresentationStyle = .fullScreen
             recorder.onRecorded = { [weak self, weak navigationController] url in
-                self?.present(.jumpReplay(fileURL: url, max: max), from: navigationController, animated: false)
+                self?.present(.jumpReplay(fileURL: url, kind: kind, onMeasured: onMeasured), from: navigationController, animated: false)
             }
             return navigationController
 
-        case .jumpReplay(let fileURL, let max):
-            let replay = ReplayJumpMeasureViewController()
-            replay.viewModel.fileURL = fileURL
+        case .jumpReplay(let fileURL, let kind, let onMeasured):
+            let replay = ReplayJumpMeasureViewController(plan: kind.tagPlan)
+            replay.fileURL = fileURL
+            replay.onMeasured = { attempt in
+                // The attempt is measured; the video is not kept.
+                try? FileManager.default.removeItem(at: fileURL)
+                onMeasured(attempt)
+            }
             let navigationController = UINavigationController(rootViewController: replay)
             navigationController.modalPresentationStyle = .fullScreen
-            replay.onHeightCalculated = { [weak self, weak navigationController] height in
-                self?.present(.jumpResult(height: height, max: max), from: navigationController)
-            }
             return navigationController
-
-        case .jumpResult(let height, let max):
-            let viewModel = JumpResultsViewModel(height: height, max: max, writer: jumpWriter)
-            let vc = UIHostingController(rootView: JumpResultsScreen(viewModel: viewModel))
-            viewModel.onDismiss = { [weak vc] in vc?.dismiss(animated: true) }
-            return vc
         }
     }
 
@@ -163,8 +180,8 @@ extension PerformanceKitRouter {
         navigationController?.pushViewController(viewController(for: route), animated: true)
     }
 
-    /// Vertical Jump's flow is a chain of presentations, camera then replay
-    /// then result, each over the last. So a route is presented from whichever
+    /// A jump test is a chain of presentations, session then camera then
+    /// replay, each over the last. So a route is presented from whichever
     /// screen is on top, not always from this router's navigation controller.
     @MainActor
     func present(_ route: PerformanceKitRoutes, from presenter: UIViewController?, animated: Bool = true) {

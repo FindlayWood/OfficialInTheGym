@@ -8,9 +8,7 @@ import Foundation
 
 /// How a jump height is shown. Stored heights are always centimetres.
 ///
-/// PerformanceKit's copy of the app target's `JumpMeasurement`, which stays
-/// behind for CMJ. The conversion factors are the app's
-/// `convertCMtoInches()` / `convertInchestoCM()`.
+/// The conversion factor is the app target's `convertCMtoInches()`.
 enum JumpMeasurement: CaseIterable {
     case cm
     case inches
@@ -26,7 +24,11 @@ enum JumpMeasurement: CaseIterable {
         value * 0.393701
     }
 
-    static func centimetres(fromInches value: Double) -> Double {
-        value * 2.54
+    /// A stored height, in centimetres, in this unit.
+    func display(centimetres value: Double) -> Double {
+        switch self {
+        case .cm: value
+        case .inches: Self.inches(fromCentimetres: value)
+        }
     }
 }

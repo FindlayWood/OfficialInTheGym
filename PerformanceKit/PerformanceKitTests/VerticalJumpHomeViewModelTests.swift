@@ -11,27 +11,36 @@ import XCTest
 @MainActor
 final class VerticalJumpHomeViewModelTests: XCTestCase {
 
-    func test_load_deliversTheBestJump() async {
-        let max = VerticalJump(time: .fixed, height: 42)
-        let sut = VerticalJumpHomeViewModel(loader: VerticalJumpServicesSpy(maxResult: .success(max)), canRecord: true)
+    func test_load_asksForVerticalJumpSessions() async {
+        let spy = JumpTestServicesSpy()
+        let sut = VerticalJumpHomeViewModel(loader: spy, canRecord: true)
 
         await sut.load()
 
-        XCTAssertEqual(sut.max, max)
+        XCTAssertEqual(spy.receivedMessages, [.loadSessions(.verticalJump)])
         XCTAssertFalse(sut.isLoading)
     }
 
-    // The result screen decides whether a new jump is a best against what is
-    // handed on here. Handing on nothing would make every jump a new best.
-    func test_recordNewJump_handsOnTheLoadedBest() async {
-        let max = VerticalJump(time: .fixed, height: 42)
-        let sut = VerticalJumpHomeViewModel(loader: VerticalJumpServicesSpy(maxResult: .success(max)), canRecord: true)
-        var handedOn: [VerticalJump?] = []
-        sut.onRecordNewJump = { handedOn.append($0) }
+    func test_best_andLatest_deliverFromTheSessions() async {
+        let old = JumpTestSession.make(id: "old", daysAgo: 20, heights: [46])
+        let new = JumpTestSession.make(id: "new", daysAgo: 1, heights: [41])
+        let sut = VerticalJumpHomeViewModel(loader: JumpTestServicesSpy(sessionsResult: .success([new, old])), canRecord: true)
+
         await sut.load()
 
-        sut.recordNewJump()
+        XCTAssertEqual(sut.best?.id, "old")
+        XCTAssertEqual(sut.latest?.id, "new")
+    }
 
-        XCTAssertEqual(handedOn, [max])
+    // A session just saved must count at once. Without it the best on screen
+    // ignores the jump the athlete has just made until they leave and return.
+    func test_sessionSaved_countsTowardTheBestAtOnce() async {
+        let sut = VerticalJumpHomeViewModel(loader: JumpTestServicesSpy(sessionsResult: .success([.make(id: "old", heights: [40])])), canRecord: true)
+        await sut.load()
+
+        sut.sessionSaved(.make(id: "new", heights: [45]))
+
+        XCTAssertEqual(sut.best?.id, "new")
+        XCTAssertEqual(sut.sessions.count, 2)
     }
 }
