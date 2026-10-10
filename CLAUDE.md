@@ -1253,11 +1253,20 @@ users unless moderation is rolled out with them** (Apple guideline 1.2).
 ### Search — people, workouts, exercises
 The app's one search, behind the magnifier on DISCOVER's title bar. It replaced ProfileKit's
 people-only search, which is deleted. Built, not rolled out — checklist in `DISCOVER_PLAN.md`.
-- **Prefix matches on lowercase copies**: `Profiles.usernameLower` / `displayNameLower`, and the
-  cards' `titleLower` / `nameLower`, which the card projections write. Firestore ranges are
-  case-sensitive and cannot do substrings, so "squat" does not find "Back Squat".
-  **`DiscoverSearchQuery.normalized` is the one query rule** (trim, lowercase, drop a leading "@")
-  and **`DiscoverSearchPrefix` the one range** — do not re-derive either at a call site.
+- **Workouts and people match the start of any word.** The functions write `searchTokens` — every
+  prefix of every word, lowercased, accents folded (`Search/SearchTokens.ts`) — onto workout cards
+  and `Profiles`, and the app asks for the query's longest word with `array-contains`, checking
+  any other words itself (`DiscoverSearchQuery.matches`). "upper" finds "Saturday Upper"; "pper"
+  finds nothing — Firestore cannot match inside a word. Usernames also keep a `usernameLower`
+  prefix range on the whole query, so a handle is found by exactly what was typed.
+- **Exercises are searched on the device.** The catalogue is small and curated, so
+  `CatalogueExerciseSearchLoader` reads it once per router and `DiscoverExerciseMatcher` matches
+  inside words and forgives one typo (a swap of two letters counts as one) for words of four
+  letters or more. **Never read workouts or people this way** — they grow with users.
+- **`DiscoverSearchQuery` is the one query rule** (`normalized`, `words`, `lookupToken`,
+  `matches`) and **`DiscoverSearchPrefix` the one range** — do not re-derive either at a call
+  site. `DiscoverSearchQuery.words` **must split exactly as the functions' `searchWords`**, and
+  `maxTokenLength` must equal `MAX_TOKEN_LENGTH`, or a stored token is one the app never asks for.
 - **Each kind loads and fails on its own**, as the home sections do; a kind with no matches is left
   out rather than drawn empty.
 - **The All / People / Workouts / Exercises filter narrows the query, not just the screen**
@@ -1635,7 +1644,7 @@ in this codebase.**
 | `DiscoverReportTarget+Firestore` path shapes | `Discover/Moderation/ReportTarget.ts` | DISCOVER Tab |
 | `FollowPath` (app) | the functions' `followId()` and the `Follows` create rule's id check | PROFILE_PLAN.md step 5 |
 | `DiscoverTagPath` subcollection names | `TAGGED_EXERCISES` / `TAGGED_WORKOUTS` in `SyncTagDirectory.ts` | DISCOVER Tab |
-| `titleLower` / `nameLower` in `WorkoutCard.ts` / `ExerciseCard.ts` | `FirestoreWorkoutSearchLoader` / `FirestoreExerciseSearchLoader` | DISCOVER Tab |
+| `searchWords` / `MAX_TOKEN_LENGTH` in the functions' `Search/SearchTokens.ts` | `DiscoverSearchQuery.words` / `.maxTokenLength` | DISCOVER Tab |
 | `DiscoverTaggingViewModel.maxMyTags` (10) | `MAX_TAGS_PER_VOTER` in `VoterTags.ts`, and the rules | DISCOVER Tab |
 | `DiscoverCommentsViewModel.maxLength` (500) | the comment rules' `text.size()` limit | DISCOVER Tab |
 | `DiscoverReportReason` raw values | ProfileKit's `ProfileReportReason`, and the rules' accepted `reason` list | DISCOVER Tab, PROFILE_PLAN.md step 9 |

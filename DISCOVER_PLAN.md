@@ -781,14 +781,18 @@ the DISCOVER tab covering **people, workouts and exercises**, which replaced the
 PROFILE step 7 put on the profile title bar.
 
 **Rollout checklist** — after DISCOVER and PROFILE are rolled out, in order:
-- [ ] Console indexes (collection scope): `DiscoverWorkouts` — `isPublic` ↑, `status` ↑,
-      `titleLower` ↑; `DiscoverExercises` — `status` ↑, `nameLower` ↑. Both searches fail without them.
-- [ ] Deploy functions from the `search` branch — `discoverExerciseCard`, `discoverWorkoutCard`, and
-      the tag triggers, which embed the card projection
-- [ ] `python RebuildDiscoverCards.py findlaywood1@gmail.com exercises` and `… workouts` — every card
-      projected before the deploy has no `titleLower` / `nameLower`, and **search cannot find it**
-- [ ] Search a username, a display name, a workout title and an exercise name from the magnifier on
-      DISCOVER's title bar; each opens its profile or page
+- [ ] Console index (collection scope): `DiscoverWorkouts` — `isPublic` ↑, `status` ↑,
+      `searchTokens` (Arrays / array-contains), `titleLower` ↑. Workout search fails without it.
+      People search (`searchTokens` alone, `usernameLower` range) and the exercise catalogue read
+      (`status` equality) run on automatic indexes.
+- [ ] Deploy functions from the `search` branch — `discoverExerciseCard`, `discoverWorkoutCard`,
+      `syncProfile`, and the tag triggers, which embed the card projection
+- [ ] `python RebuildDiscoverCards.py findlaywood1@gmail.com workouts` and
+      `python RebuildProfiles.py findlaywood1@gmail.com` — every card and profile projected before
+      the deploy has no `searchTokens`, and **search cannot find it**
+- [ ] Search a username, a surname, the second word of a workout title, the middle of an exercise
+      name ("quat") and a typo ("sqaut") from the magnifier on DISCOVER's title bar; each finds its
+      result and opens its profile or page
 - [ ] Block someone, search for them: they do not appear. Your own account never does.
 - [ ] The profile's title bar has no magnifier
 
@@ -830,10 +834,18 @@ icon tile and roughly doubled in height to carry author, date, exercise count, r
 tags (`DiscoverWorkoutRow`, `DiscoverAuthorDirectory`, `DiscoverMetaPill`). No new indexes — the
 queries are the same, only their limits differ.
 
-**Known limit: prefix, not substring.** "upper" does not find "Saturday Upper", and "squat" does not
-find "Back Squat". Firestore can only answer a prefix. Matching any word's start would mean a
-server-written array of word prefixes queried with `array-contains` — a projection change and new
-indexes, worth doing only once real searches show people typing second words.
+**Added after: matching beyond the start (2026-10-10).** Search first matched only the start of a
+title or name, so "upper" missed "Saturday Upper".
+- **Workouts and people** match the start of **any** word. The functions write `searchTokens`, every
+  prefix of every word (`Search/SearchTokens.ts`), onto workout cards and profiles (display name and
+  username). The app queries the longest query word with `array-contains` and checks the rest
+  itself (`DiscoverSearchQuery.matches`), over-fetching ×4 when there is more than one word.
+- **Exercises** are searched on the device: `CatalogueExerciseSearchLoader` reads the visible
+  catalogue once per router (`FirestoreExerciseCatalogueLoader`) and `DiscoverExerciseMatcher` ranks
+  word start → inside a word → one typo, for words of four letters or more. `nameLower` and its
+  index went; `FirestoreExerciseSearchLoader` became the catalogue loader.
+- **Still not done:** the middle of a word for workouts and people, typos for them, and relevance
+  ranking. Those need a search service (Algolia, Typesense), which was deliberately not taken on.
 
 ## Out of scope
 

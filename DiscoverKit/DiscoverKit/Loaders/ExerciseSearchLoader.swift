@@ -7,9 +7,10 @@
 
 import Foundation
 
-/// Visible exercise cards whose name **starts with** `query`, already
-/// normalised by `DiscoverSearchQuery`. Prefix only, for the reason given on
-/// `PeopleSearchLoader`.
+/// Visible exercise cards matching `query`, already normalised by
+/// `DiscoverSearchQuery`, best match first. Unlike workouts and people this is
+/// answered on the device — `CatalogueExerciseSearchLoader` — so it can match
+/// inside a word and forgive a typo.
 public protocol ExerciseSearchLoader {
     func exercises(matching query: String, limit: Int) async throws -> [DiscoverExerciseCard]
 }

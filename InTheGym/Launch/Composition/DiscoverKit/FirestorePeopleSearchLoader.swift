@@ -9,43 +9,62 @@
 import DiscoverKit
 import FirebaseFirestore
 
-/// Prefix search over `Profiles`: `usernameLower` and `displayNameLower` each
-/// matched as `>= query` and `< query + "\u{f8ff}"` (`DiscoverSearchPrefix`).
-/// Both fields are written lowercase by `syncProfile`. Moved from ProfileKit's
-/// `FirestoreUserSearchLoader` when search moved to DISCOVER.
+/// People search over `Profiles`, two queries in parallel, merged with
+/// **username matches first** — someone typing a handle wants that exact
+/// person:
 ///
-/// Profiles moderation has hidden are dropped from the results here, after the
-/// query. Filtering on `status` in the query would need a composite index per
-/// field for a rare case.
+/// 1. `usernameLower` as a prefix range (`DiscoverSearchPrefix`) on the whole
+///    query, so a handle with punctuation in it ("f_wood") still finds its
+///    owner by exactly what was typed.
+/// 2. `searchTokens` — every prefix of every word of the display name and
+///    username, written by `syncProfile` — for the query's longest word, so
+///    "wood" finds Findlay Wood. Any other words are checked here
+///    (`DiscoverSearchQuery.matches`). Moved from ProfileKit's
+///    `FirestoreUserSearchLoader` when search moved to DISCOVER, and from a
+///    `displayNameLower` prefix range when search stopped matching only the
+///    first word.
 ///
-/// Two queries in parallel, merged: **username matches first**, since someone
-/// typing a handle wants that exact person, then display-name matches not
-/// already found. Single-field range queries run on Firestore's automatic
-/// indexes, so this needs no composite index.
+/// Profiles moderation has hidden are dropped here, after the query. Filtering
+/// on `status` in the query would need a composite index for a rare case. Both
+/// queries are single-field — a range, and an `array-contains` — so neither
+/// needs a composite index.
 struct FirestorePeopleSearchLoader: PeopleSearchLoader {
+
+    /// How many more profiles to fetch when other words still have to be checked.
+    private static let multiWordOverfetch = 4
 
     func people(matching query: String, limit: Int) async throws -> [DiscoverUserProfile] {
         let profiles = Firestore.firestore().collection("Profiles")
+        let words = DiscoverSearchQuery.words(query)
+        guard let token = DiscoverSearchQuery.lookupToken(for: words) else { return [] }
 
         async let byUsername = DiscoverSearchPrefix.matching(query, on: "usernameLower", in: profiles)
             .limit(to: limit)
             .getDocuments()
-        async let byName = DiscoverSearchPrefix.matching(query, on: "displayNameLower", in: profiles)
-            .limit(to: limit)
+        async let byWord = profiles
+            .whereField("searchTokens", arrayContains: token)
+            .limit(to: words.count > 1 ? limit * Self.multiWordOverfetch : limit)
             .getDocuments()
 
-        let (usernames, names) = try await (byUsername, byName)
+        let (usernames, named) = try await (byUsername, byWord)
         var seen = Set<String>()
-        return (usernames.documents + names.documents).compactMap { document in
-            guard document.get("status") as? String != "hidden",
-                  seen.insert(document.documentID).inserted else { return nil }
-            return DiscoverUserProfile(
-                userId: document.documentID,
-                username: document.get("username") as? String ?? "",
-                displayName: document.get("displayName") as? String ?? ""
-            )
+        let usernameMatches = usernames.documents.compactMap(profile)
+        let wordMatches = named.documents.compactMap(profile).filter {
+            DiscoverSearchQuery.matches(words, in: [$0.displayName, $0.username])
         }
-        .prefix(limit)
-        .map { $0 }
+        return (usernameMatches + wordMatches)
+            .filter { seen.insert($0.userId).inserted }
+            .prefix(limit)
+            .map { $0 }
+    }
+
+    /// A profile as search lists it, or nil for one moderation has hidden.
+    private func profile(_ document: QueryDocumentSnapshot) -> DiscoverUserProfile? {
+        guard document.get("status") as? String != "hidden" else { return nil }
+        return DiscoverUserProfile(
+            userId: document.documentID,
+            username: document.get("username") as? String ?? "",
+            displayName: document.get("displayName") as? String ?? ""
+        )
     }
 }

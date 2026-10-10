@@ -8,7 +8,8 @@
 import Foundation
 
 /// Preview conformer for all three searches: a couple of people, and the
-/// preview workouts and exercises whose names start with the query.
+/// preview workouts and exercises matched by the same rules the real search
+/// uses — word starts for workouts, `DiscoverExerciseMatcher` for exercises.
 public final class PreviewSearchLoaders: PeopleSearchLoader, WorkoutSearchLoader, ExerciseSearchLoader, @unchecked Sendable {
 
     public init() {}
@@ -18,10 +19,11 @@ public final class PreviewSearchLoaders: PeopleSearchLoader, WorkoutSearchLoader
     }
 
     public func workouts(matching query: String, limit: Int) async throws -> [DiscoverWorkoutCard] {
-        Array(PreviewDiscoverWorkoutCardLoader.cards.filter { $0.title.lowercased().hasPrefix(query) }.prefix(limit))
+        let words = DiscoverSearchQuery.words(query)
+        return Array(PreviewDiscoverWorkoutCardLoader.cards.filter { DiscoverSearchQuery.matches(words, in: [$0.title]) }.prefix(limit))
     }
 
     public func exercises(matching query: String, limit: Int) async throws -> [DiscoverExerciseCard] {
-        Array(PreviewDiscoverExerciseCardLoader.cards.filter { $0.name.lowercased().hasPrefix(query) }.prefix(limit))
+        DiscoverExerciseMatcher.search(query, in: PreviewDiscoverExerciseCardLoader.cards, limit: limit)
     }
 }

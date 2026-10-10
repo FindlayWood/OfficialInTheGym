@@ -106,7 +106,7 @@
 		5EA1000000000000000000B1 /* DiscoverSearchPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA1000000000000000000A1 /* DiscoverSearchPrefix.swift */; };
 		5EA1000000000000000000B2 /* FirestorePeopleSearchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA1000000000000000000A2 /* FirestorePeopleSearchLoader.swift */; };
 		5EA1000000000000000000B3 /* FirestoreWorkoutSearchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA1000000000000000000A3 /* FirestoreWorkoutSearchLoader.swift */; };
-		5EA1000000000000000000B4 /* FirestoreExerciseSearchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA1000000000000000000A4 /* FirestoreExerciseSearchLoader.swift */; };
+		5EA1000000000000000000B4 /* FirestoreExerciseCatalogueLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA1000000000000000000A4 /* FirestoreExerciseCatalogueLoader.swift */; };
 		D1CA00000000000000000264 /* FirestoreExerciseClipsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000164 /* FirestoreExerciseClipsLoader.swift */; };
 		D1CA00000000000000000265 /* MyDayWorkoutLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000165 /* MyDayWorkoutLibrary.swift */; };
 		D1CA00000000000000000266 /* LibraryWorkoutCopySaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000166 /* LibraryWorkoutCopySaver.swift */; };
@@ -1153,7 +1153,7 @@
 		5EA1000000000000000000A1 /* DiscoverSearchPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSearchPrefix.swift; sourceTree = "<group>"; };
 		5EA1000000000000000000A2 /* FirestorePeopleSearchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePeopleSearchLoader.swift; sourceTree = "<group>"; };
 		5EA1000000000000000000A3 /* FirestoreWorkoutSearchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWorkoutSearchLoader.swift; sourceTree = "<group>"; };
-		5EA1000000000000000000A4 /* FirestoreExerciseSearchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreExerciseSearchLoader.swift; sourceTree = "<group>"; };
+		5EA1000000000000000000A4 /* FirestoreExerciseCatalogueLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreExerciseCatalogueLoader.swift; sourceTree = "<group>"; };
 		D1CA00000000000000000164 /* FirestoreExerciseClipsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreExerciseClipsLoader.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000165 /* MyDayWorkoutLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyDayWorkoutLibrary.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000166 /* LibraryWorkoutCopySaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryWorkoutCopySaver.swift"; sourceTree = "<group>"; };
@@ -5130,7 +5130,7 @@
 				5EA1000000000000000000A1 /* DiscoverSearchPrefix.swift */,
 				5EA1000000000000000000A2 /* FirestorePeopleSearchLoader.swift */,
 				5EA1000000000000000000A3 /* FirestoreWorkoutSearchLoader.swift */,
-				5EA1000000000000000000A4 /* FirestoreExerciseSearchLoader.swift */,
+				5EA1000000000000000000A4 /* FirestoreExerciseCatalogueLoader.swift */,
 			);
 			path = DiscoverKit;
 			sourceTree = "<group>";
@@ -5442,7 +5442,7 @@
 				5EA1000000000000000000B1 /* DiscoverSearchPrefix.swift in Sources */,
 				5EA1000000000000000000B2 /* FirestorePeopleSearchLoader.swift in Sources */,
 				5EA1000000000000000000B3 /* FirestoreWorkoutSearchLoader.swift in Sources */,
-				5EA1000000000000000000B4 /* FirestoreExerciseSearchLoader.swift in Sources */,
+				5EA1000000000000000000B4 /* FirestoreExerciseCatalogueLoader.swift in Sources */,
 				D1CA00000000000000000265 /* MyDayWorkoutLibrary.swift in Sources */,
 				D1CA00000000000000000266 /* LibraryWorkoutCopySaver.swift in Sources */,
 				D1CA00000000000000000267 /* LibraryWorkoutCopyChecker.swift in Sources */,

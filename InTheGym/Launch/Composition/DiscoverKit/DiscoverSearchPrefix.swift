@@ -8,8 +8,10 @@
 
 import FirebaseFirestore
 
-/// **The one definition of a prefix match**, shared by the three search
-/// loaders: `field >= query` and `field < query + "\u{f8ff}"`. `\u{f8ff}` is
+/// **The one definition of a prefix match**: `field >= query` and
+/// `field < query + "\u{f8ff}"`. Only the username half of people search uses
+/// it now — words are matched through `searchTokens` — but a prefix range
+/// written anywhere else must come through here. `\u{f8ff}` is
 /// the highest code point in common use, so the range covers every string
 /// that starts with `query` and nothing after it. Firestore has no
 /// "starts with", and this range is the documented way to ask for one.
