@@ -100,11 +100,22 @@ extension PerformanceKitRouter {
             if onUnlockForTesting != nil {
                 gate.onUnlockForTesting = { [weak self] in self?.onUnlockForTesting?() }
             }
-            let home = PerformanceHomeViewModel()
+            let home = PerformanceDashboardViewModel(loader: jumpSessionsLoader, canRecord: currentUserId == athleteId)
             home.onSelectTool = { [weak self] in self?.open($0) }
+            // The weekly check is a CMJ session (`FatigueCheck`).
+            home.onStartCheck = { [weak self, weak home] in
+                self?.present(.jumpTest(.cmj, onSaved: { home?.sessionSaved($0) }), from: self?.navigationController)
+            }
             let vc = PerformanceKitHostingController(rootView: PerformanceRootScreen(gate: gate, home: home))
             vc.router = self
-            vc.onWillAppear = { [weak gate] in gate?.refresh() }
+            // Coming back to the tab re-checks pro, and reloads the dashboard,
+            // which is how a test saved from a test's own screen reaches it.
+            // The first load is the screen's own `.task`.
+            vc.onWillAppear = { [weak gate, weak home] in
+                gate?.refresh()
+                guard let home, gate?.isUnlocked == true, home.hasLoaded else { return }
+                Task { await home.load() }
+            }
             if onDismiss != nil {
                 vc.navigationItem.leftBarButtonItem = UIBarButtonItem(
                     title: "Dismiss",

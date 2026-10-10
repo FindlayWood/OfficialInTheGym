@@ -14,12 +14,14 @@ extension Color {
     static let lightColor = Color(hex: 0x4179BD)
     static let darkColor = Color(hex: 0x1C496E)
 
-    /// The app's `premiumColour` colorset (`#79B49F`), which a framework cannot
-    /// read from the app's asset catalog. The legacy Performance Center read it
-    /// as `Color(.premiumColour)`, which resolves to that colorset, so this is
-    /// the colour it already drew. The purple `UIColor.premiumColour` literal is
-    /// the documented app-wide conflict and is not settled here.
-    static let premiumColor = Color(hex: 0x79B49F)
+    /// The matte zone colours, StatsKit's values. **Keep in step with
+    /// StatsKit's `Color+Extension.swift`.** Full-saturation system red, orange
+    /// and green read as alerts beside `darkColor`; these sit at a similar
+    /// lightness so no zone shouts louder than its meaning. `FatigueZone.color`
+    /// owns the mapping, this file the values.
+    static let matteGreen = Color(hex: 0x5E9C7C)
+    static let matteAmber = Color(hex: 0xC49A5C)
+    static let matteRed = Color(hex: 0xB96B5E)
 
     /// create a colour using a hex code
     init(hex: Int, opacity: Double = 1.0) {

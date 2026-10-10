@@ -12,7 +12,7 @@ import SwiftUI
 struct PerformanceRootScreen: View {
 
     @ObservedObject var gate: PerformanceGateViewModel
-    let home: PerformanceHomeViewModel
+    @ObservedObject var home: PerformanceDashboardViewModel
 
     var body: some View {
         Group {

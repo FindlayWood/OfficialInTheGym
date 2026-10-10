@@ -6,27 +6,41 @@
 //
 import SwiftUI
 
-/// The PERFORMANCE tab: every tool as a row in one card, under a line saying
-/// what the tab is for.
-///
-/// It used to be the legacy Performance Center: a 100pt icon, a paragraph,
-/// and a white shadowed card per tool over a gradient into the premium colour.
-/// It is on MyDay's vocabulary now, a `systemBackground` page with a
-/// `secondarySystemBackground` card, so the tab reads as part of the app
-/// rather than a different one.
+/// The PERFORMANCE tab's home, a readiness dashboard: this week's fatigue check
+/// as the lead card, the key numbers beneath, then the tests, with "Start
+/// weekly check" pinned to the bottom. It answers "am I fresh?" before it
+/// lists anything; the tab used to be a menu, and a menu always reads as a
+/// settings page.
 struct PerformanceHomeScreen: View {
 
-    let viewModel: PerformanceHomeViewModel
+    @ObservedObject var viewModel: PerformanceDashboardViewModel
+
+    private let columns = [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)]
 
     var body: some View {
         ScrollView {
             VStack(spacing: 8) {
-                Text("Tests for measuring your power and how fresh you are.")
-                    .font(.system(size: 15))
-                    .foregroundStyle(Color.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 4)
-                    .padding(.bottom, 16)
+                PerformanceSectionHeader(title: "This Week")
+                if viewModel.hasLoaded {
+                    FatigueCheckCard(check: viewModel.check, isDue: viewModel.isCheckDue)
+                        .padding(.bottom, 16)
+                } else {
+                    PerformanceEmptyCard(message: "", isLoading: true)
+                        .padding(.bottom, 16)
+                }
+
+                PerformanceSectionHeader(title: "Key Numbers")
+                LazyVGrid(columns: columns, spacing: 10) {
+                    PerformanceStatCell(value: height(viewModel.bestCMJ), label: "CMJ cm")
+                    PerformanceStatCell(value: height(viewModel.bestVerticalJump), label: "Vertical cm")
+                    PerformanceStatCell(
+                        value: viewModel.bestPower.map { $0.wattsPerKilogram.formatted(.number.precision(.fractionLength(1))) } ?? "—",
+                        label: "Power W/kg"
+                    )
+                }
+                .padding(12)
+                .performanceCard()
+                .padding(.bottom, 16)
 
                 PerformanceSectionHeader(title: "Tests")
                 VStack(spacing: 0) {
@@ -47,11 +61,19 @@ struct PerformanceHomeScreen: View {
             .padding(.vertical, 12)
         }
         .background(Color(.systemBackground).ignoresSafeArea())
+        .performanceBottomBar {
+            if viewModel.canRecord {
+                PerformancePrimaryButton(title: "Start weekly check") {
+                    viewModel.startCheck()
+                }
+            }
+        }
+        .task {
+            if !viewModel.hasLoaded { await viewModel.load() }
+        }
     }
-}
 
-#Preview {
-    NavigationStack {
-        PerformanceHomeScreen(viewModel: PerformanceHomeViewModel())
+    private func height(_ session: JumpTestSession?) -> String {
+        session?.best.map { $0.height.formatted(.number.precision(.fractionLength(1))) } ?? "—"
     }
 }

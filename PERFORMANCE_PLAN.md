@@ -288,8 +288,25 @@ the ~150–300ms contact times in drop and repeated jumps. **The height formula 
     say "Log your weight in Profile to see power."
   - Power shows on the session as you go, on the home's best card, and under each history row,
     marked "est.".
-- **D — Weekly fatigue check and the readiness home.** The recent max, zones, calibration, the due
-  date, and the dashboard home with the hero card and key numbers.
+- **D — Weekly fatigue check and the readiness home — built.**
+  - **Every CMJ session is a check** (`FatigueCheck`). The check is three CMJs, which is a CMJ
+    session, so it is not a second kind of record, and an ad-hoc CMJ counts too. "Start weekly check"
+    opens a CMJ session.
+  - The result is the latest session's best as a fraction of the best CMJ in the **eight weeks before
+    that session**. The window hangs off the latest session, not today, so a result does not drift
+    as days pass. **Calibrating until two earlier sessions** fall in the window. Above the max reads
+    over 100%, "New best".
+  - `FatigueZone` is the one definition of the boundaries (≥95% fresh, 90–95% caution, <90% fatigued)
+    and owns their colours: StatsKit's matte green / amber / red, copied into PerformanceKit's colour
+    extension (keep in step).
+  - Due seven days after the latest CMJ, or now if there is none.
+  - **The home is the dashboard** (layout A): `FatigueCheckCard` (result in its zone's colour with a
+    zone bar from 80% to 105% and a line of advice, or calibrating, or the first-check invitation;
+    the due line at its foot), key numbers (best CMJ, best Vertical Jump, best power per kg), then
+    the tests, with "Start weekly check" pinned. `PerformanceDashboardViewModel` reads CMJ and
+    Vertical Jump separately so one failing does not hide the other, and reloads every time the tab
+    appears, which is how a test saved from a test's own screen reaches it.
+  - Still open: whether the target and zones become per athlete (or per coach).
 - **E — Drop jump**, with RSI and box height.
 - **F — Single-leg CMJ and repeated jumps.**
 - **G — Balance**, from the motion sensors.
