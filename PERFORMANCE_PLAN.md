@@ -1,9 +1,10 @@
 # PERFORMANCE tab — plan
 
-Performance Center becomes its own tab and its own framework, `PerformanceKit`. **This plan is the
-move, not the redesign.** Every tool comes across as it is, so the redesign that follows starts from
-one module, not from code scattered through the app target. **None of Performance Center's code is
-deleted.** It moves.
+Performance Center becomes its own tab and its own framework, `PerformanceKit`. It happens in two
+parts. **Part 1, the move** (steps 1–7): every legacy tool comes across as it is, so the redesign
+starts from one module, not from code scattered through the app target. **Part 2, the testing hub**
+(phases A–G below): Performance becomes the place an athlete measures readiness and power, built
+around jump testing.
 
 ## Decisions
 
@@ -149,15 +150,13 @@ difference, so there was no step 6.
 - Still as before: a failure after the session is stored but before its load is logged leaves the
   session without a workload entry, and saving again records it twice.
 
-### Step 6 — Workload
-`PerformanceMonitorViewController` and the two child view controllers it embeds,
-`WorkloadChildViewController` and `OptimalWorkloadRatioViewController`. RTDB workloads. Nothing MyDay
-writes reaches this screen: its workloads come from the match and practice trackers, custom
-workloads and the legacy workout flow. That is a question for the redesign, not the move.
+### Step 6 — Workload — superseded
+Not moved: retired in phase A. STATS already does ACWR from MyDay's data, and this tool read an RTDB
+log MyDay never writes, so it could only show stale numbers. That also settled the Charts-package
+question it raised.
 
 ### Step 7 — Retiring the bridge
-`PerformanceHomeCoordinator` and `onOpenLegacyTool` go, and the app's copies of the icons go if
-nothing else names them.
+Folded into phase A: with Workload retired, `PerformanceHomeCoordinator` and `onOpenLegacyTool` go.
 
 ### Restyle — built
 Every SwiftUI screen moved onto MyDay's design vocabulary: a `systemBackground` page,
@@ -169,6 +168,89 @@ gone). System segmented controls became `PerformancePillPicker` and `RatingPicke
 which take the brand colour. The jump camera and replay are full-screen camera UI and stay as they
 were. Copy was tightened where it repeated the navigation title or had typos.
 
+## Part 2 — the testing hub
+
+Agreed 2026-10-10. Nothing in part 2 is built yet.
+
+### What Performance is for
+Testing readiness and power. **Jump testing is the core**, CMJ and Vertical Jump first, with a
+weekly fatigue check built on CMJ. Everything on the tab is a test with a number that can be tracked
+over time.
+
+### Decisions
+- **The tab is behind the paywall.** A non-pro user opening PERFORMANCE sees the paywall in the tab
+  itself, not the home screen, and it is checked each time the tab appears, so subscribing lets them
+  straight in. This replaces part 1's "home open, tools gated" rule.
+- **Emulator builds can unlock pro with one tap.** In `#if EMULATOR` builds the paywall shows an
+  extra "Unlock for testing" button, which sets an in-memory override on the pro check for the
+  session. It is compiled out of every other build, so it can never ship. Not built yet; it belongs
+  with phase A.
+- **Home is the readiness dashboard** (layout A from the design discussion): the weekly check as the
+  hero card with its zone, a row of key numbers (CMJ, Vertical Jump, RSI), then the tests. Not a menu.
+- **Vertical Jump and CMJ are two separate tests** on one capture engine (record → tag → calculate).
+  CMJ is hands on hips, no arm swing: the repeatable test, and the one the fatigue check uses.
+  Vertical Jump allows arm swing: the "how high can I go" number.
+- **A test is best of three attempts.** One jump is too noisy to track.
+- **Retired from Performance:** Workload, Journal, Match Tracker and Practice Tracker. Their stored
+  data is not touched (`Journal/`, `MatchTracking/`, `PracticeTracking/`, `Workloads/` stay where they
+  are); only the tools leave the tab. Deleting their code is a decision for that commit, and git keeps
+  it either way.
+- **Coach access is not in part 2, but is designed for.** A coach linked to an athlete by request and
+  approval will see a summary of that athlete's results. So every test result is stored per athlete
+  in Firestore in a shape a server-written, coach-readable summary can be built from later, and the
+  router keeps its `currentUserId` / `athleteId` split. The coach↔athlete link in Firestore is the
+  same piece *Coach-Assigned Workouts* in `CLAUDE.md` is blocked on, so it should be built once for
+  both.
+
+### The weekly fatigue check — % of a recent max
+The athlete does three CMJs; the best is compared with their **max**, and the result is a percentage
+and a zone. Proposed starting zones: **≥95% fresh, 90–95% caution, <90% fatigued**.
+- **The max is the best CMJ from the last 8 weeks, not of all time.** An all-time max is set once and
+  only ever rises: one outlier day, or a peak from earlier in the season, would make every later check
+  read as fatigued when the athlete is simply at their current normal. A recent max keeps the "% of
+  max" framing and a clear pass / fail moment, without an old PB setting the bar for good. The window
+  length is a parameter.
+- **Until there is enough history** (proposed: three CMJ sessions in the window), the check says it is
+  calibrating rather than giving a false result.
+- **Weekly:** the home card shows when the next one is due.
+- Open: whether the target and zones are fixed or per athlete (later, set by a coach).
+
+### Tests
+| Test | What it measures | Headline number |
+|---|---|---|
+| CMJ | Jump height, hands on hips, best of 3 | cm; peak power (Sayers: 60.7 × height + 45.3 × mass − 2055), using the latest weight from ProfileKit's weight log |
+| Vertical Jump | Jump height with arm swing, best of 3 | cm |
+| Weekly fatigue check | Best of 3 CMJs against the recent max | % of max and zone |
+| Drop jump | Step off a box, land, rebound. Three tags: landing, take-off, landing | RSI = jump height ÷ ground contact time; box height is an input |
+| Single-leg CMJ | CMJ on each leg | Height per leg, and the left / right asymmetry % |
+| Repeated jumps | Consecutive hops, as in the 10/5 test | Best five RSI over ten |
+| Balance | Single-leg stance, 30 s, eyes open and closed, phone held to the chest; motion sensors measure sway | Sway per leg, and left / right symmetry |
+
+**One capture engine for every jump.** The existing camera and replay grow from two tags to N, with
+the test deciding what the tags mean. Recording is at 240fps, about 4ms a frame, which is enough for
+the ~150–300ms contact times in drop and repeated jumps. **The height formula stays in one place**
+(`JumpMeasureViewModel`, h = t² × 1.22625); CMJ, Vertical Jump, drop jump and the rest all call it.
+
+### Phases
+- **A — Clear the deck.** Retire Workload, Journal and both trackers. Remove the bridge
+  (`onOpenLegacyTool`, `PerformanceHomeCoordinator`). Put the tab behind the paywall, with the
+  emulator unlock.
+- **B — Jump engine.** Generalise capture and tagging to N tags. Best-of-3 sessions. Store a result
+  per test in Firestore per athlete. Vertical Jump moves onto it, keeping its existing data readable.
+- **C — CMJ.** A test of its own, with power from the athlete's weight.
+- **D — Weekly fatigue check and the readiness home.** The recent max, zones, calibration, the due
+  date, and the dashboard home with the hero card and key numbers.
+- **E — Drop jump**, with RSI and box height.
+- **F — Single-leg CMJ and repeated jumps.**
+- **G — Balance**, from the motion sensors.
+
+Later, not scheduled: coach access, HealthKit resting HR / HRV in the readiness score, and manual
+entry for results measured elsewhere (grip strength, sprint times).
+
+### Open
+- The legacy dormant CMJ tool (`CMJ/` in the app target) has its own Firestore data (`CMJ/{uid}`) and
+  a fatigue level. Phase C decides whether that data is migrated, read, or left.
+- Whether the retired tools' code is deleted in phase A or kept for reference.
+
 ## Out of scope
-- Bringing back Wellness, Training Status, CMJ or Injury Tracker.
-- Feeding MyDay sessions into the Workload tool.
+- Bringing back Wellness, Training Status or Injury Tracker.
