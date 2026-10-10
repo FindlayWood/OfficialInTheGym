@@ -87,15 +87,16 @@ class JumpMeasuringViewController: UIViewController {
     }
 
     func switchCameraInput() {
+        guard let backInput = viewModel.backCameraInput, let frontInput = viewModel.frontCameraInput else { return }
         display.flipCameraButton.isUserInteractionEnabled = false
         viewModel.captureSession.beginConfiguration()
         if viewModel.backCameraOn {
-            viewModel.captureSession.removeInput(viewModel.backCameraInput)
-            viewModel.captureSession.addInput(viewModel.frontCameraInput)
+            viewModel.captureSession.removeInput(backInput)
+            viewModel.captureSession.addInput(frontInput)
             viewModel.backCameraOn = false
         } else {
-            viewModel.captureSession.removeInput(viewModel.frontCameraInput)
-            viewModel.captureSession.addInput(viewModel.backCameraInput)
+            viewModel.captureSession.removeInput(frontInput)
+            viewModel.captureSession.addInput(backInput)
             viewModel.backCameraOn = true
         }
         videoPreviewLayer.connection?.videoOrientation = .portrait
@@ -120,6 +121,7 @@ class JumpMeasuringViewController: UIViewController {
     }
 
     @objc func recordButtonTapped() {
+        guard viewModel.backCameraInput != nil else { return }
         if !viewModel.videoOutput.isRecording {
             if viewModel.countDownOn {
                 playSound()

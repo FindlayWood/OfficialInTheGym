@@ -20,12 +20,14 @@ class ReplayJumpMeasureViewController: UIViewController {
     var onMeasured: ((JumpAttempt) -> Void)?
     var fileURL: URL!
     var tagging: JumpTaggingViewModel
+    private let kind: JumpTestKind
     private var player: AVPlayer!
     private let display = ReplayJumpMeasureView()
 
     // MARK: - Initializer
-    init(plan: [JumpEvent]) {
-        self.tagging = JumpTaggingViewModel(plan: plan)
+    init(kind: JumpTestKind) {
+        self.tagging = JumpTaggingViewModel(kind: kind)
+        self.kind = kind
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -74,9 +76,9 @@ class ReplayJumpMeasureViewController: UIViewController {
         if let message {
             display.show(message: message)
         } else if let attempt = tagging.attempt {
-            display.show(message: String(format: "%.1f cm. Tap ✓ to keep it.", attempt.height))
+            display.show(message: "\(kind.headlineText(of: attempt)). Tap ✓ to keep it.")
         } else {
-            display.show(message: tagging.nextEvent?.hint)
+            display.show(message: tagging.hint)
         }
     }
 

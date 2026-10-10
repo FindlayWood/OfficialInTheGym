@@ -307,7 +307,27 @@ the ~150–300ms contact times in drop and repeated jumps. **The height formula 
     Vertical Jump separately so one failing does not hide the other, and reloads every time the tab
     appears, which is how a test saved from a test's own screen reaches it.
   - Still open: whether the target and zones become per athlete (or per coach).
-- **E — Drop jump**, with RSI and box height.
+- **Fix — the camera no longer crashes without a camera.** The recorder assumed a back and a front
+  camera and access to them; in the simulator, or with access denied, it force-unwrapped nil and
+  crashed on opening. `JumpCameraAvailability.check()` now runs first (asking for access if it never
+  has) and the router shows `JumpCameraUnavailableScreen` instead: "Open Settings" when access is
+  off; "Add a sample jump" **in the simulator only** (`#if targetEnvironment(simulator)`), which feeds
+  a plausible attempt, measured through the same `JumpTiming` and `JumpPhysics`, into the session.
+  The capture code also guards its inputs as a second line.
+- **E — Drop jump — built.**
+  - `JumpTestKind.dropJump` (stored `"dropJump"`): tag plan `[.landing, .takeOff, .landing]`. Tag
+    names and hints are now the test's (`tagTitles`, `tagHints`, `tagSteps`), so a drop jump's button
+    reads "Tag box landing (1 of 3)" and its two landings are told apart.
+  - **RSI = jump height (m) ÷ ground contact (s)** (`JumpAttempt.reactiveStrengthIndex`). A test has a
+    `headline` (height, or reactive strength), and **the best attempt is the best score**
+    (`score(for:)`), so a drop jump's best is its best RSI, not its highest rebound.
+    `JumpTestKind+Display` is the one formatting of a result ("RSI 1.84", with "34.1 cm · 0.21 s
+    contact" beneath), used by every screen.
+  - **Box height** is picked on the session (20–60 cm), fixed once the first attempt is in, and stored
+    as `boxHeight`. RSI is only comparable off the same box; the test's screens show the box, and the
+    dashboard's "Drop jump RSI" tile pools boxes.
+  - Drop Jump is on the home's test list, and the key numbers are now a 2×2 grid: CMJ, Vertical
+    Jump, drop-jump RSI, power per kg.
 - **F — Single-leg CMJ and repeated jumps.**
 - **G — Balance**, from the motion sensors.
 

@@ -152,10 +152,19 @@ extension PerformanceKitRouter {
             viewModel.onRecordAttempt = { [weak self, weak navigationController, weak viewModel] in
                 // Dismissing the session's navigation controller takes down
                 // whatever is presented over it, the camera and the replay.
-                self?.present(.jumpRecorder(kind, onMeasured: { attempt in
+                let onMeasured: (JumpAttempt) -> Void = { attempt in
                     viewModel?.add(attempt)
                     navigationController?.dismiss(animated: true)
-                }), from: navigationController)
+                }
+                // The camera is checked first: opening it without one, or
+                // without access, crashed.
+                Task { @MainActor [weak self, weak navigationController] in
+                    let availability = await JumpCameraAvailability.check()
+                    let route: PerformanceKitRoutes = availability == .available
+                        ? .jumpRecorder(kind, onMeasured: onMeasured)
+                        : .jumpCameraUnavailable(availability, kind: kind, onMeasured: onMeasured)
+                    self?.present(route, from: navigationController)
+                }
             }
             viewModel.onFinished = { [weak navigationController] session in
                 onSaved(session)
@@ -176,7 +185,7 @@ extension PerformanceKitRouter {
             return navigationController
 
         case .jumpReplay(let fileURL, let kind, let onMeasured):
-            let replay = ReplayJumpMeasureViewController(plan: kind.tagPlan)
+            let replay = ReplayJumpMeasureViewController(kind: kind)
             replay.fileURL = fileURL
             replay.onMeasured = { attempt in
                 // The attempt is measured; the video is not kept.
@@ -186,6 +195,19 @@ extension PerformanceKitRouter {
             let navigationController = UINavigationController(rootViewController: replay)
             navigationController.modalPresentationStyle = .fullScreen
             return navigationController
+
+        case .jumpCameraUnavailable(let availability, let kind, let onMeasured):
+            weak var host: UIViewController?
+            let screen = JumpCameraUnavailableScreen(
+                availability: availability,
+                kind: kind,
+                onClose: { host?.dismiss(animated: true) },
+                onSample: onMeasured
+            )
+            let vc = UIHostingController(rootView: screen)
+            vc.modalPresentationStyle = .fullScreen
+            host = vc
+            return vc
         }
     }
 

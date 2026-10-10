@@ -18,6 +18,7 @@ import PerformanceKit
 /// - `bodyMass`: kilograms at the time of the test, left out when unknown. A
 ///   session's power is worked out from it, so it does not move with later
 ///   weigh-ins.
+/// - `boxHeight`: centimetres, a drop jump's box; left out for other tests.
 /// - `bestHeight`: the best attempt's height, **written for queries only**
 ///   (the fatigue check's recent max, a coach's summary) and never read back.
 ///   The app always works the best out from `attempts`.
@@ -34,6 +35,9 @@ enum JumpTestFields {
         }
         if let bodyMass = session.bodyMass {
             fields["bodyMass"] = bodyMass
+        }
+        if let boxHeight = session.boxHeight {
+            fields["boxHeight"] = boxHeight
         }
         return fields
     }
@@ -52,7 +56,8 @@ enum JumpTestFields {
             kind: kind,
             date: date,
             attempts: attempts,
-            bodyMass: (document.get("bodyMass") as? NSNumber)?.doubleValue
+            bodyMass: (document.get("bodyMass") as? NSNumber)?.doubleValue,
+            boxHeight: (document.get("boxHeight") as? NSNumber)?.doubleValue
         )
     }
 

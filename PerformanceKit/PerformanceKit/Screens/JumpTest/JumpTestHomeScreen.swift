@@ -52,15 +52,20 @@ struct JumpTestHomeScreen: View {
 
     @ViewBuilder
     private var bestCard: some View {
-        if let best = viewModel.best, let height = best.best?.height {
+        if let best = viewModel.best, let attempt = best.best {
+            let headline = viewModel.kind.headline(of: attempt)
             VStack(spacing: 4) {
-                Text("\(height, specifier: "%.1f")")
+                Text(headline.value)
                     .font(.system(size: 48, weight: .bold))
                     .foregroundStyle(Color.darkColor)
-                + Text(" cm")
+                + Text(" \(headline.unit)")
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(Color.secondary)
-                Text(best.date, format: .dateTime.day().month(.wide).year())
+                if let detail = viewModel.kind.detail(of: attempt) {
+                    Text(detail)
+                        .font(.system(size: 14, weight: .medium))
+                }
+                Text(dateLine(for: best))
                     .font(.system(size: 13))
                     .foregroundStyle(Color.secondary)
                 if let power = best.power {
@@ -72,8 +77,8 @@ struct JumpTestHomeScreen: View {
                         .foregroundStyle(Color.secondary)
                         .padding(.top, 8)
                 }
-                if let latest = viewModel.latest, latest.id != best.id, let latestHeight = latest.best?.height {
-                    Text("Latest \(latestHeight, specifier: "%.1f") cm, \(latest.date.formatted(.dateTime.day().month(.abbreviated)))")
+                if let latest = viewModel.latest, latest.id != best.id, let latestAttempt = latest.best {
+                    Text("Latest \(viewModel.kind.headlineText(of: latestAttempt)), \(latest.date.formatted(.dateTime.day().month(.abbreviated)))")
                         .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(Color.secondary)
                         .padding(.top, 6)
@@ -85,5 +90,11 @@ struct JumpTestHomeScreen: View {
         } else {
             PerformanceEmptyCard(message: "No tests recorded yet.", isLoading: viewModel.isLoading)
         }
+    }
+
+    private func dateLine(for session: JumpTestSession) -> String {
+        let date = session.date.formatted(.dateTime.day().month(.wide).year())
+        guard let box = session.boxHeight else { return date }
+        return "\(date), off a \(Int(box)) cm box"
     }
 }

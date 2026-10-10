@@ -58,10 +58,15 @@ class RecordJumpViewModel: NSObject {
         startSession()
     }
     
+    /// The router only opens the recorder once `JumpCameraAvailability` says
+    /// both cameras exist and access is granted. These guards are the second
+    /// line: a missing camera leaves the session without inputs rather than
+    /// force-unwrapping nil, which is how it used to crash.
     func startSession() {
-        guard let backInput = try? AVCaptureDeviceInput(device: backCamera),
+        guard let backCamera, let frontCamera,
+              let backInput = try? AVCaptureDeviceInput(device: backCamera),
               let frontInput = try? AVCaptureDeviceInput(device: frontCamera)
-        else {return}
+        else { return }
         frontCameraInput = frontInput
         backCameraInput = backInput
         captureSession.addInput(backCameraInput)

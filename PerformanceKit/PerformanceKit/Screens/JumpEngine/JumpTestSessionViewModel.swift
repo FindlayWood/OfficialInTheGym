@@ -31,6 +31,12 @@ final class JumpTestSessionViewModel: ObservableObject {
     @Published private(set) var isSaving = false
     @Published private(set) var saveError: String?
     @Published private(set) var bodyMass: Double?
+    /// The box a drop jump is done off, in centimetres, for a test that uses
+    /// one. Chosen before the first attempt; RSI is only comparable off the
+    /// same box.
+    @Published var boxHeight: Double = 30
+
+    static let boxHeights: [Double] = [20, 30, 40, 50, 60]
 
     var onRecordAttempt: (() -> Void)?
     var onFinished: ((JumpTestSession) -> Void)?
@@ -57,11 +63,12 @@ final class JumpTestSessionViewModel: ObservableObject {
         !attempts.isEmpty
     }
 
-    /// The position of the highest attempt. The first of equal heights, so the
-    /// marker does not jump to a later attempt that only matched it.
+    /// The position of the best attempt by the test's score (height, or RSI).
+    /// The first of equal scores, so the marker does not jump to a later
+    /// attempt that only matched it.
     var bestIndex: Int? {
-        guard let best = attempts.map(\.height).max() else { return nil }
-        return attempts.firstIndex { $0.height == best }
+        guard let best = attempts.map({ $0.score(for: kind) }).max() else { return nil }
+        return attempts.firstIndex { $0.score(for: kind) == best }
     }
 
     /// The best attempt's power so far, for a test that estimates it.
@@ -113,6 +120,13 @@ final class JumpTestSessionViewModel: ObservableObject {
     }
 
     private var session: JumpTestSession {
-        JumpTestSession(id: sessionId, kind: kind, date: now(), attempts: attempts, bodyMass: kind.estimatesPower ? bodyMass : nil)
+        JumpTestSession(
+            id: sessionId,
+            kind: kind,
+            date: now(),
+            attempts: attempts,
+            bodyMass: kind.estimatesPower ? bodyMass : nil,
+            boxHeight: kind.usesBoxHeight ? boxHeight : nil
+        )
     }
 }

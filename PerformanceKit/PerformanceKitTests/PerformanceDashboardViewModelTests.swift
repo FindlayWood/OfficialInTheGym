@@ -14,7 +14,7 @@ final class PerformanceDashboardViewModelTests: XCTestCase {
     func test_tools_deliversEveryTestInOrder() {
         let sut = makeSUT()
 
-        XCTAssertEqual(sut.tools, [.cmj, .verticalJump])
+        XCTAssertEqual(sut.tools, [.cmj, .verticalJump, .dropJump])
     }
 
     func test_load_readsCMJAndVerticalJump() async {
@@ -115,6 +115,7 @@ private final class KindedSessionsLoader: JumpTestSessionsLoader, @unchecked Sen
         switch kind {
         case .cmj: try cmj.get()
         case .verticalJump: try verticalJump.get()
+        case .dropJump: []
         }
     }
 }

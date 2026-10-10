@@ -8,7 +8,8 @@ import Combine
 import Foundation
 
 /// Every session of one jump test, newest first or highest first, shown in
-/// centimetres or inches. A session's height is its best attempt. Vertical
+/// centimetres or inches. A session's result is its best attempt's score:
+/// height, or RSI for a drop jump. Vertical
 /// jumps saved before the engine read as sessions of one attempt.
 @MainActor
 final class JumpTestHistoryViewModel: ObservableObject {
@@ -30,7 +31,7 @@ final class JumpTestHistoryViewModel: ObservableObject {
     var sortedSessions: [JumpTestSession] {
         sortedByDate
             ? sessions.sorted { $0.date > $1.date }
-            : sessions.sorted { ($0.best?.height ?? 0) > ($1.best?.height ?? 0) }
+            : sessions.sorted { ($0.bestScore ?? 0) > ($1.bestScore ?? 0) }
     }
 
     func load() async {

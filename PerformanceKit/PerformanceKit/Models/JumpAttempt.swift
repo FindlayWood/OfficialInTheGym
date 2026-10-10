@@ -21,6 +21,23 @@ public struct JumpAttempt: Equatable, Sendable {
         self.contactTime = contactTime
     }
 
+    /// Reactive strength index: jump height in metres over ground contact time
+    /// in seconds, the usual field form. Nil without a contact, which only a
+    /// test that lands before it jumps has. Around 1.5 is moderate and above
+    /// 2.5 is very reactive for a trained athlete.
+    public var reactiveStrengthIndex: Double? {
+        guard let contactTime, contactTime > 0 else { return nil }
+        return (height / 100) / contactTime
+    }
+
+    /// The number a test's best attempt is chosen by.
+    func score(for kind: JumpTestKind) -> Double {
+        switch kind.headline {
+        case .height: height
+        case .reactiveStrength: reactiveStrengthIndex ?? 0
+        }
+    }
+
     init(timing: JumpTiming) {
         let flight = timing.flights.last ?? 0
         self.init(

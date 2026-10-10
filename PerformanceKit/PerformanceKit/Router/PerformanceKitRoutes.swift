@@ -24,4 +24,6 @@ enum PerformanceKitRoutes {
     /// attempt back once it is tagged.
     case jumpRecorder(JumpTestKind, onMeasured: (JumpAttempt) -> Void)
     case jumpReplay(fileURL: URL, kind: JumpTestKind, onMeasured: (JumpAttempt) -> Void)
+    /// Shown in place of the camera when it cannot run (`JumpCameraAvailability`).
+    case jumpCameraUnavailable(JumpCameraAvailability, kind: JumpTestKind, onMeasured: (JumpAttempt) -> Void)
 }

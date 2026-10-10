@@ -526,10 +526,13 @@ Its SwiftUI screens are on MyDay's vocabulary through PerformanceKit's own `UI/`
 the legacy `MyProfileCoordinator` until the coach/player split is removed. **Every other way of opening a
 person** (DISCOVER, search, follow lists, and all nine legacy `UserProfileCoordinator` callers)
 shows ProfileKit's `UserProfileScreen`, through one `ProfileKitComposition.makeRouter` graph.
-Current focus: the PERFORMANCE tab, part 2 phase E (drop jump). The home is a readiness dashboard led
+Current focus: the PERFORMANCE tab, part 2 phase F (single-leg CMJ and repeated jumps). The home is a readiness dashboard led
 by the **weekly fatigue check** (`FatigueCheck`): every CMJ session is a check, read as the latest
 best against the best CMJ of the **eight weeks before it**, zoned by `FatigueZone` (the one place the
-95% / 90% boundaries live), calibrating until two earlier sessions exist. **Every jump test runs on one engine**: a
+95% / 90% boundaries live), calibrating until two earlier sessions exist. **The camera is checked
+before it opens** (`JumpCameraAvailability`): with no camera (the simulator) or access denied it shows
+`JumpCameraUnavailableScreen`, which in the simulator only offers "Add a sample jump" so sessions can
+be tested without a device. Opening the recorder without a camera used to crash. **Every jump test runs on one engine**: a
 `JumpTestKind` is a tag plan and a number of attempts, `JumpTiming` turns tagged times into flights and
 ground contacts, and `JumpPhysics` is the one height formula. A new jump test is a new case, not a new
 screen.

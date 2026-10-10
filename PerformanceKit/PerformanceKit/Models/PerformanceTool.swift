@@ -8,8 +8,8 @@ import Foundation
 
 /// The tests on the PERFORMANCE tab, in the order the home screen lists them.
 ///
-/// CMJ and Vertical Jump today. The weekly fatigue check, drop jump, single-leg
-/// and repeated jumps, and balance join them phase by phase
+/// CMJ, Vertical Jump and Drop Jump today. Single-leg and repeated jumps, and
+/// balance, join them phase by phase
 /// (`PERFORMANCE_PLAN.md`, part 2). A jump test is a `JumpTestKind` on the
 /// shared engine; `jumpTest` is that mapping.
 ///
@@ -19,11 +19,13 @@ import Foundation
 public enum PerformanceTool: CaseIterable, Sendable {
     case cmj
     case verticalJump
+    case dropJump
 
     var jumpTest: JumpTestKind {
         switch self {
         case .cmj: .cmj
         case .verticalJump: .verticalJump
+        case .dropJump: .dropJump
         }
     }
 
@@ -36,6 +38,7 @@ public enum PerformanceTool: CaseIterable, Sendable {
         switch self {
         case .cmj: "bolt.fill"
         case .verticalJump: "arrow.up.to.line"
+        case .dropJump: "arrow.down.to.line"
         }
     }
 }

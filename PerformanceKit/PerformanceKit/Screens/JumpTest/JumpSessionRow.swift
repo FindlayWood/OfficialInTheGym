@@ -15,6 +15,12 @@ struct JumpSessionRow: View {
     let measurement: JumpMeasurement
     var showsDivider = false
 
+    private var subtitle: String {
+        let attempts = session.attempts.count == 1 ? "1 attempt" : "\(session.attempts.count) attempts"
+        guard let box = session.boxHeight else { return attempts }
+        return "\(attempts) · \(Int(box)) cm box"
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -22,16 +28,21 @@ struct JumpSessionRow: View {
                     Text(session.date, format: .dateTime.day().month(.abbreviated).year())
                         .font(.system(size: 15, weight: .medium))
                         .foregroundStyle(Color.primary)
-                    Text(session.attempts.count == 1 ? "1 attempt" : "\(session.attempts.count) attempts")
+                    Text(subtitle)
                         .font(.system(size: 12))
                         .foregroundStyle(Color.secondary)
                 }
                 Spacer()
                 if let best = session.best {
                     VStack(alignment: .trailing, spacing: 2) {
-                        Text("\(measurement.display(centimetres: best.height), specifier: "%.1f") \(measurement.title)")
+                        Text(session.kind.headlineText(of: best, measurement: measurement))
                             .font(.system(size: 17, weight: .bold))
                             .foregroundStyle(Color.darkColor)
+                        if let detail = session.kind.detail(of: best, measurement: measurement) {
+                            Text(detail)
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color.secondary)
+                        }
                         if let power = session.power {
                             Text("\(power.watts.formatted(.number.precision(.fractionLength(0)))) W")
                                 .font(.system(size: 12))

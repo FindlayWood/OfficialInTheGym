@@ -23,10 +23,14 @@ struct JumpTaggingViewModel {
     }
 
     let plan: [JumpEvent]
+    let titles: [String]
+    let hints: [String]
     private(set) var times: [Double] = []
 
-    init(plan: [JumpEvent]) {
-        self.plan = plan
+    init(kind: JumpTestKind) {
+        self.plan = kind.tagPlan
+        self.titles = kind.tagTitles
+        self.hints = kind.tagHints
     }
 
     /// The event the next tag will mark, or nil when every event is tagged.
@@ -40,8 +44,13 @@ struct JumpTaggingViewModel {
 
     /// What the tag button reads: "Tag take-off (1 of 2)".
     var prompt: String? {
-        guard let nextEvent else { return nil }
-        return "Tag \(nextEvent.title) (\(times.count + 1) of \(plan.count))"
+        guard nextEvent != nil else { return nil }
+        return "Tag \(titles[times.count]) (\(times.count + 1) of \(plan.count))"
+    }
+
+    /// How to spot the next tag.
+    var hint: String? {
+        nextEvent == nil ? nil : hints[times.count]
     }
 
     /// The measured jump, once every event is tagged.
@@ -50,10 +59,10 @@ struct JumpTaggingViewModel {
     }
 
     mutating func tag(at time: Double) -> TagResult {
-        guard let nextEvent else { return .rejected("Every event is tagged. Undo to change one.") }
+        guard nextEvent != nil else { return .rejected("Every event is tagged. Undo to change one.") }
         guard time > 0 else { return .rejected("The first frame can't be tagged. Step forward a frame.") }
         guard JumpTiming.canTag(time, after: times) else {
-            return .rejected("The \(nextEvent.title) has to come after the \(plan[times.count - 1].title).")
+            return .rejected("The \(titles[times.count]) has to come after the \(titles[times.count - 1]).")
         }
         times.append(time)
         return .accepted

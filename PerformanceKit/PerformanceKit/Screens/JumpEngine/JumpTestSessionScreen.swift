@@ -15,15 +15,40 @@ struct JumpTestSessionScreen: View {
     @ObservedObject var viewModel: JumpTestSessionViewModel
     @State private var isConfirmingCancel = false
 
+    private var intro: String {
+        switch viewModel.kind.headline {
+        case .height:
+            "Best of \(viewModel.kind.attempts). Record each jump, tag it, and the highest is your result."
+        case .reactiveStrength:
+            "Best of \(viewModel.kind.attempts). Pick your box, then record each jump and tag it. Your best RSI is your result."
+        }
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 8) {
-                Text("Best of \(viewModel.kind.attempts). Record each jump, tag it, and the highest is your result.")
+                Text(intro)
                     .font(.system(size: 15))
                     .foregroundStyle(Color.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.bottom, 16)
+
+                if viewModel.kind.usesBoxHeight {
+                    PerformanceSectionHeader(title: "Box Height")
+                    HStack {
+                        PerformancePillPicker(options: JumpTestSessionViewModel.boxHeights, selection: $viewModel.boxHeight) {
+                            "\(Int($0)) cm"
+                        }
+                        Spacer(minLength: 0)
+                    }
+                    .padding(12)
+                    .performanceCard()
+                    // Fixed once the first attempt is in: attempts off
+                    // different boxes would not make one result.
+                    .disabled(!viewModel.attempts.isEmpty)
+                    .padding(.bottom, 16)
+                }
 
                 HStack {
                     PerformanceSectionHeader(title: "Attempts")
@@ -33,6 +58,7 @@ struct JumpTestSessionScreen: View {
                     ForEach(0..<viewModel.kind.attempts, id: \.self) { index in
                         JumpAttemptRow(
                             number: index + 1,
+                            kind: viewModel.kind,
                             attempt: viewModel.attempts.indices.contains(index) ? viewModel.attempts[index] : nil,
                             isBest: viewModel.bestIndex == index,
                             measurement: viewModel.measurement,

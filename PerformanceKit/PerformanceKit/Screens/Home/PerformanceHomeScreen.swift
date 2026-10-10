@@ -15,7 +15,7 @@ struct PerformanceHomeScreen: View {
 
     @ObservedObject var viewModel: PerformanceDashboardViewModel
 
-    private let columns = [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)]
+    private let columns = [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)]
 
     var body: some View {
         ScrollView {
@@ -33,6 +33,10 @@ struct PerformanceHomeScreen: View {
                 LazyVGrid(columns: columns, spacing: 10) {
                     PerformanceStatCell(value: height(viewModel.bestCMJ), label: "CMJ cm")
                     PerformanceStatCell(value: height(viewModel.bestVerticalJump), label: "Vertical cm")
+                    PerformanceStatCell(
+                        value: viewModel.bestDropJump?.best?.reactiveStrengthIndex.map { $0.formatted(.number.precision(.fractionLength(2))) } ?? "—",
+                        label: "Drop jump RSI"
+                    )
                     PerformanceStatCell(
                         value: viewModel.bestPower.map { $0.wattsPerKilogram.formatted(.number.precision(.fractionLength(1))) } ?? "—",
                         label: "Power W/kg"

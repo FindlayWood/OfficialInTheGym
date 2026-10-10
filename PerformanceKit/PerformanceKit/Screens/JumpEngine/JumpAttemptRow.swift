@@ -6,13 +6,15 @@
 //
 import SwiftUI
 
-/// One attempt slot in a session: its number, its height once measured (the
-/// best in `darkColor` with a BEST badge), and a button to remove it so it
-/// can be recorded again. An empty slot says so rather than vanishing, so the
-/// three-attempt shape of the test is visible from the start.
+/// One attempt slot in a session: its number, its headline once measured
+/// (height, or RSI with height and contact beneath for a drop jump), the best
+/// in `darkColor` with a BEST badge, and a button to remove it so it can be
+/// recorded again. An empty slot says so rather than vanishing, so the shape of
+/// the test is visible from the start.
 struct JumpAttemptRow: View {
 
     let number: Int
+    let kind: JumpTestKind
     let attempt: JumpAttempt?
     let isBest: Bool
     let measurement: JumpMeasurement
@@ -36,9 +38,16 @@ struct JumpAttemptRow: View {
                 }
                 Spacer()
                 if let attempt {
-                    Text("\(measurement.display(centimetres: attempt.height), specifier: "%.1f") \(measurement.title)")
-                        .font(.system(size: 17, weight: .bold))
-                        .foregroundStyle(isBest ? Color.darkColor : Color.primary)
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text(kind.headlineText(of: attempt, measurement: measurement))
+                            .font(.system(size: 17, weight: .bold))
+                            .foregroundStyle(isBest ? Color.darkColor : Color.primary)
+                        if let detail = kind.detail(of: attempt, measurement: measurement) {
+                            Text(detail)
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color.secondary)
+                        }
+                    }
                     Button(action: onRemove) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 18))
@@ -53,7 +62,7 @@ struct JumpAttemptRow: View {
                 }
             }
             .padding(.horizontal, 16)
-            .frame(minHeight: 52)
+            .frame(minHeight: 56)
             if showsDivider {
                 Divider().padding(.leading, 16)
             }

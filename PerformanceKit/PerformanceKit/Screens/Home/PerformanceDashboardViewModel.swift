@@ -10,8 +10,8 @@ import Foundation
 /// The PERFORMANCE home: the weekly fatigue check first, then the key numbers,
 /// then the tests. It answers "am I fresh?" before it lists anything.
 ///
-/// It reads CMJ and Vertical Jump sessions **separately, and each fails on its
-/// own**, so a Vertical Jump read that fails does not hide this week's check.
+/// It reads each test's sessions **separately, and each fails on its own**, so
+/// a Vertical Jump read that fails does not hide this week's check.
 /// It reloads every time the tab appears, which is also how a test saved from
 /// a test's own screen reaches it.
 @MainActor
@@ -22,6 +22,7 @@ final class PerformanceDashboardViewModel: ObservableObject {
 
     @Published private(set) var cmjSessions: [JumpTestSession] = []
     @Published private(set) var verticalJumpSessions: [JumpTestSession] = []
+    @Published private(set) var dropJumpSessions: [JumpTestSession] = []
     @Published private(set) var isLoading = false
     @Published private(set) var hasLoaded = false
 
@@ -55,6 +56,12 @@ final class PerformanceDashboardViewModel: ObservableObject {
         JumpTestSession.best(of: verticalJumpSessions)
     }
 
+    /// The best RSI. Drop jumps off different boxes are pooled here; the
+    /// box is on each session for the test's own screens.
+    var bestDropJump: JumpTestSession? {
+        JumpTestSession.best(of: dropJumpSessions)
+    }
+
     /// The power of the best CMJ that has one, so a best jumped before a
     /// weight was logged does not leave the tile empty when a later one has it.
     var bestPower: JumpPower? {
@@ -71,8 +78,10 @@ final class PerformanceDashboardViewModel: ObservableObject {
         }
         async let cmj = sessions(.cmj)
         async let verticalJump = sessions(.verticalJump)
+        async let dropJump = sessions(.dropJump)
         if let cmj = await cmj { cmjSessions = cmj }
         if let verticalJump = await verticalJump { verticalJumpSessions = verticalJump }
+        if let dropJump = await dropJump { dropJumpSessions = dropJump }
     }
 
     /// A session just saved counts at once, without a reload.
@@ -84,6 +93,9 @@ final class PerformanceDashboardViewModel: ObservableObject {
         case .verticalJump:
             verticalJumpSessions.removeAll { $0.id == session.id }
             verticalJumpSessions.append(session)
+        case .dropJump:
+            dropJumpSessions.removeAll { $0.id == session.id }
+            dropJumpSessions.append(session)
         }
     }
 
