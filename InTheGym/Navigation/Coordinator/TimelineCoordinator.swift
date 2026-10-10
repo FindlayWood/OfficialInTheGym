@@ -82,9 +82,10 @@ extension TimelineCoordinator {
         child.start()
     }
     func showPerformance() {
-        let child = PerformanceHomeCoordinator(navigationController: navigationController, user: UserDefaults.currentUser, subscriptionManager: subscriptionManager)
-        childCoordinators.append(child)
-        child.start()
+        // Called from a button action, so already on the main thread.
+        MainActor.assumeIsolated {
+            PerformanceKitComposition().presentModally(from: navigationController, athlete: UserDefaults.currentUser, purchaseManager: subscriptionManager)
+        }
     }
     func showTaggedUsers(_ ids: [String]) {
         let child = TaggedUsersCoordinator(navigationController: navigationController, ids: ids, subscriptionManager: subscriptionManager)
@@ -110,9 +111,6 @@ extension TimelineCoordinator: UINavigationControllerDelegate {
         }
         if let CommentSectionViewController = fromViewController as? CommentSectionViewController {
             childDidFinish(CommentSectionViewController.coordinator)
-        }
-        if let performanceViewController = fromViewController as? PerformanceIntroViewController {
-            childDidFinish(performanceViewController.coordinator)
         }
     }
 }

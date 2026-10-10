@@ -512,7 +512,8 @@ root).
 at a time (see `PERFORMANCE_PLAN.md`). The router checks pro **when a tool is opened**, not when the
 tab is built: a tab built for every user and gated at launch would keep showing a paywall after the
 user subscribed. Tools not yet moved open through `onOpenLegacyTool` and the legacy
-`PerformanceHomeCoordinator`, whose modal `start()` still serves the coach-side and legacy callers.
+`PerformanceHomeCoordinator`. The coach-side and legacy callers present the same router modally
+(`PerformanceKitComposition.presentModally`).
 The redesign comes after the move. **None of its code is to be deleted** — it moves.
 **PROFILE is `ProfileKit`** on the player tab bar (see `PROFILE_PLAN.md`); the coach tab bar keeps
 the legacy `MyProfileCoordinator` until the coach/player split is removed. **Every other way of opening a

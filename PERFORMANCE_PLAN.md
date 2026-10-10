@@ -40,34 +40,47 @@ deleted.** It moves.
   `PerformanceIntroOptions` without the commented-out cases. The journal is still hidden from anyone
   but its owner.
 - `PerformanceKitComposition` builds the tab; `PurchaseManagerPerformanceProAccess` answers pro.
-- The legacy `PerformanceIntroViewController` and `PerformanceHomeCoordinator.start()` are unchanged
-  and still serve the three modal callers (step 7).
 
-### Step 2 — Journal
+### Step 2 — Every way in goes through the router — built
+Brought forward from the end, because the legacy callers reached each tool through the same
+coordinator the moves take apart.
+- `PerformanceKitComposition.presentModally(from:athlete:purchaseManager:)` presents the router full
+  screen with a Dismiss button (`onDismiss`). `PlayerDetailCoordinator` (a coach viewing an athlete,
+  so `athleteId` ≠ `currentUserId`), `PlayerProfileMoreCoordinator` and `TimelineCoordinator` call it.
+  A non-pro user now sees the home and meets the paywall on a tool, as on the tab, rather than
+  getting the paywall in place of the whole centre.
+- The legacy intro screen (`PerformanceIntroViewController`, its UIKit and SwiftUI views,
+  `PerformanceIntroViewModel`, `PerformanceIntroOptions`) is gone, replaced by step 1's home.
+- `PerformanceHomeCoordinator` is no longer a `Coordinator`: it only holds the flow methods for the
+  tools still in the app, on the router's stack, weakly.
+- **The router holds its navigation controller weakly.** The navigation controller holds the router
+  through its root screen, so a strong reference would keep every dismissed Performance Center alive.
+- `PlayerProfileMoreCoordinator.jumpMeasure()` opens `JumpCoordinator` directly, not through
+  Performance Center. Step 4 has to account for it.
+
+### Step 3 — Journal
 Firestore `Journal/{uid}` and `Journal/{uid}/Entries`.
 
-### Step 3 — Vertical Jump
+### Step 4 — Vertical Jump
 Firestore `VerticalJump/{uid}` and `/Results`, AVFoundation capture and replay, `JumpCoordinator` and
-its flows.
+its flows. Also opened directly by the legacy "More" menu (`PlayerProfileMoreCoordinator.jumpMeasure()`).
 
-### Step 4 — Match Tracker
+### Step 5 — Match Tracker
 RTDB through `FirebaseDatabaseManager` (`MatchTrackerModel`, `WorkloadModel`); reads Firestore
 `WellnessScores/{uid}` and `CMJ/{uid}`.
 
-### Step 5 — Practice Tracker
+### Step 6 — Practice Tracker
 The same shape as Match Tracker.
 
-### Step 6 — Workload
+### Step 7 — Workload
 `PerformanceMonitorViewController` and the two child view controllers it embeds,
 `WorkloadChildViewController` and `OptimalWorkloadRatioViewController`. RTDB workloads. Nothing MyDay
 writes reaches this screen: its workloads come from the match and practice trackers, custom
 workloads and the legacy workout flow. That is a question for the redesign, not the move.
 
-### Step 7 — The modal callers, and retiring the legacy home
-`PlayerDetailCoordinator` (a coach viewing an athlete, so `athleteId` ≠ `currentUserId`),
-`PlayerProfileMoreCoordinator` and `TimelineCoordinator` open the router instead of
-`PerformanceHomeCoordinator`. Then the legacy intro screen and coordinator go, `onOpenLegacyTool` goes,
-and the app's copies of the icons go if nothing else names them.
+### Step 8 — Retiring the bridge
+`PerformanceHomeCoordinator` and `onOpenLegacyTool` go, and the app's copies of the icons go if
+nothing else names them.
 
 ## Out of scope
 - The redesign. It is the next piece of work.

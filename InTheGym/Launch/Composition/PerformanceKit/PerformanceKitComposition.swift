@@ -12,17 +12,35 @@ import PerformanceKit
 class PerformanceKitComposition {
 
     /// The PERFORMANCE tab. Player tab bar only. See `PERFORMANCE_PLAN.md`.
-    ///
-    /// **The legacy tools are reached through `PerformanceHomeCoordinator`**,
-    /// built here on the tab's own stack and never `start()`ed: its `start()`
-    /// presents the legacy intro modally, which is the coach-side and legacy
-    /// callers' path. Its `modalNavigationController` is simply the stack its
-    /// flow methods push onto, so pointing it at this tab is all the tab needs.
-    /// Each tool comes off this switch as it moves into PerformanceKit.
     @MainActor
     func composeCombination(_ navigationController: UINavigationController, purchaseManager: PurchaseManager) {
+        let router = makeRouter(navigationController, athlete: UserDefaults.currentUser, purchaseManager: purchaseManager)
+        router.start()
+    }
 
-        let user = UserDefaults.currentUser
+    /// Performance Center presented full screen over `presenter`, for the
+    /// legacy ways in: a coach's athlete page (`athlete` is the athlete), the
+    /// old "More" menu and the timeline (`athlete` is the signed-in user). They
+    /// used to present the legacy intro screen; this is the same home the tab
+    /// shows, with a Dismiss button.
+    @MainActor
+    func presentModally(from presenter: UINavigationController, athlete: Users, purchaseManager: PurchaseManager) {
+        let navigationController = UINavigationController()
+        navigationController.modalPresentationStyle = .fullScreen
+        let router = makeRouter(navigationController, athlete: athlete, purchaseManager: purchaseManager)
+        router.onDismiss = { [weak presenter] in presenter?.dismiss(animated: true) }
+        router.start()
+        presenter.present(navigationController, animated: true)
+    }
+
+    /// A fully wired router on any navigation controller, **without** `start()`.
+    ///
+    /// **The legacy tools are reached through `PerformanceHomeCoordinator`**,
+    /// built on the router's own stack, so a tool that has not moved into
+    /// PerformanceKit yet pushes onto the same stack the home screen is on.
+    /// Each tool comes off this switch as it moves.
+    @MainActor
+    private func makeRouter(_ navigationController: UINavigationController, athlete: Users, purchaseManager: PurchaseManager) -> PerformanceKitRouter {
 
         // MARK: - Pro
 
@@ -33,8 +51,8 @@ class PerformanceKitComposition {
         let router = PerformanceKitRouter(
             navigationController: navigationController,
             proAccess: proAccess,
-            currentUserId: user.uid,
-            athleteId: user.uid
+            currentUserId: UserDefaults.currentUser.uid,
+            athleteId: athlete.uid
         )
 
         router.onShowPaywall = { [weak navigationController] in
@@ -48,10 +66,9 @@ class PerformanceKitComposition {
 
         let legacyTools = PerformanceHomeCoordinator(
             navigationController: navigationController,
-            user: user,
+            user: athlete,
             subscriptionManager: purchaseManager
         )
-        legacyTools.modalNavigationController = navigationController
 
         router.onOpenLegacyTool = { tool in
             switch tool {
@@ -63,6 +80,6 @@ class PerformanceKitComposition {
             }
         }
 
-        router.start()
+        return router
     }
 }

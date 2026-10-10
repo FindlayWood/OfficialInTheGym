@@ -8,11 +8,22 @@
 
 import UIKit
 
-class PerformanceHomeCoordinator: Coordinator {
+/// The Performance Center tools that have not moved into PerformanceKit yet.
+///
+/// It used to be Performance Center itself: `start()` presented the legacy
+/// intro screen full screen, or the paywall. That screen is now PerformanceKit's
+/// home, and every way in goes through `PerformanceKitComposition`. What is left
+/// here are the flow methods `PerformanceKitRouter.onOpenLegacyTool` calls,
+/// which push a tool onto the router's own stack. **Each method goes as its
+/// tool moves** (`PERFORMANCE_PLAN.md`), and then this type goes.
+///
+/// No longer a `Coordinator`, since it has nothing to `start()`. The navigation
+/// controller is weak because the router that owns this object is reached from
+/// that navigation controller's root screen.
+final class PerformanceHomeCoordinator {
     // MARK: - Properties
     var childCoordinators: [Coordinator] = [Coordinator]()
-    var navigationController: UINavigationController
-    var modalNavigationController: UINavigationController!
+    private weak var navigationController: UINavigationController?
     var user: Users
     var subscriptionManager: PurchaseManager
     // MARK: - Initializer
@@ -21,68 +32,52 @@ class PerformanceHomeCoordinator: Coordinator {
         self.user = user
         self.subscriptionManager = subscriptionManager
     }
-    // MARK: - Start
-    func start() {
-        if subscriptionManager.hasUnlockedPro {
-            let vc = PerformanceIntroViewController()
-            vc.coordinator = self
-            vc.viewModel.user = user
-            modalNavigationController = UINavigationController(rootViewController: vc)
-            modalNavigationController.modalPresentationStyle = .fullScreen
-            navigationController.present(modalNavigationController, animated: true)
-        } else {
-            let vc = PremiumAccountViewController()
-            vc.modalPresentationStyle = .fullScreen
-            vc.viewModel = PremiumAccountViewModel(purchaseManager: subscriptionManager)
-            navigationController.present(vc, animated: true)
-        }
-
-    }
-    func dismiss() {
-        navigationController.dismiss(animated: true)
-    }
 }
 // MARK: - Flow
 extension PerformanceHomeCoordinator {
     func showMatchTracker() {
-        let child = MatchTrackerCoordinator(navigationController: modalNavigationController)
+        guard let navigationController else { return }
+        let child = MatchTrackerCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
         child.start()
     }
     func showPracticeTracker() {
-        let child = PracticeTrackerCoordinator(navigationController: modalNavigationController)
+        guard let navigationController else { return }
+        let child = PracticeTrackerCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
         child.start()
     }
     func showWorkload() {
         let vc = PerformanceMonitorViewController()
         vc.viewModel.user = user
-        modalNavigationController.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     func showWellness() {
         let vc = WellnessMainViewController()
-        modalNavigationController.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     func showTrainingStatus() {
         let vc = TrainingStatusMainViewController()
-        modalNavigationController.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     func showVerticalJump() {
-        let child = JumpCoordinator(navigationController: modalNavigationController, subscriptionManager: subscriptionManager)
+        guard let navigationController else { return }
+        let child = JumpCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
         childCoordinators.append(child)
         child.start()
     }
     func showCMJ() {
-        let child = CMJCoordinator(navigationController: modalNavigationController)
+        guard let navigationController else { return }
+        let child = CMJCoordinator(navigationController: navigationController)
         childCoordinators.append(child)
         child.start()
     }
     func showInjuryTracker() {
         let vc = InjuryTrackerViewController()
-        modalNavigationController.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
     func showJournalHome() {
         let vc = JournalHomeViewController()
-        modalNavigationController.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

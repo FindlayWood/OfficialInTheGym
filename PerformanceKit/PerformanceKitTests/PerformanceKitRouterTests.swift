@@ -51,6 +51,27 @@ final class PerformanceKitRouterTests: XCTestCase {
         XCTAssertIdentical(navigationController.viewControllers.first, sut.rootViewController)
     }
 
+    func test_start_offersNoDismissOnTheTab() {
+        let navigationController = UINavigationController()
+        let (sut, _) = makeSUT(navigationController: navigationController)
+
+        sut.start()
+
+        XCTAssertNil(navigationController.viewControllers.first?.navigationItem.leftBarButtonItem)
+    }
+
+    // A presented Performance Center with no Dismiss button has no way out but
+    // the swipe, which a full-screen presentation does not offer.
+    func test_start_offersDismissWhenPresented() {
+        let navigationController = UINavigationController()
+        let (sut, _) = makeSUT(navigationController: navigationController)
+        sut.onDismiss = {}
+
+        sut.start()
+
+        XCTAssertEqual(navigationController.viewControllers.first?.navigationItem.leftBarButtonItem?.title, "Dismiss")
+    }
+
     // MARK: - Helpers
 
     private final class Events {

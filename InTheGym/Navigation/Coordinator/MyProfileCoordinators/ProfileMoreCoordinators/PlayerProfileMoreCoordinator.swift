@@ -63,9 +63,10 @@ extension PlayerProfileMoreCoordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     func showPerformanceMonitor(for user: Users) {
-        let child = PerformanceHomeCoordinator(navigationController: navigationController, user: user, subscriptionManager: subscriptionManager)
-        childCoordinators.append(child)
-        child.start()
+        // Called from a button action, so already on the main thread.
+        MainActor.assumeIsolated {
+            PerformanceKitComposition().presentModally(from: navigationController, athlete: user, purchaseManager: subscriptionManager)
+        }
     }
     func jumpMeasure() {
         let child = JumpCoordinator(navigationController: navigationController, subscriptionManager: subscriptionManager)
