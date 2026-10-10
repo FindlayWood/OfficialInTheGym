@@ -8,32 +8,33 @@ import Foundation
 
 /// The tests on the PERFORMANCE tab, in the order the home screen lists them.
 ///
-/// Vertical Jump is the one test today. CMJ, the weekly fatigue check, drop
-/// jump, single-leg and repeated jumps, and balance join it phase by phase
-/// (`PERFORMANCE_PLAN.md`, part 2). Workload, Journal, Match Tracker and
-/// Practice Tracker were retired in phase A.
+/// CMJ and Vertical Jump today. The weekly fatigue check, drop jump, single-leg
+/// and repeated jumps, and balance join them phase by phase
+/// (`PERFORMANCE_PLAN.md`, part 2). A jump test is a `JumpTestKind` on the
+/// shared engine; `jumpTest` is that mapping.
 ///
 /// `@frozen` because PerformanceKit builds with library evolution. Without it,
 /// every `switch` over a tool in the app needs an `@unknown default`.
 @frozen
 public enum PerformanceTool: CaseIterable, Sendable {
+    case cmj
     case verticalJump
 
-    var title: String {
+    var jumpTest: JumpTestKind {
         switch self {
-        case .verticalJump: "Vertical Jump"
+        case .cmj: .cmj
+        case .verticalJump: .verticalJump
         }
     }
 
-    var message: String {
-        switch self {
-        case .verticalJump: "Jump height with arm swing, measured on camera."
-        }
-    }
+    var title: String { jumpTest.title }
+
+    var message: String { jumpTest.summary }
 
     /// The SF Symbol on the tool's tile.
     var systemImage: String {
         switch self {
+        case .cmj: "bolt.fill"
         case .verticalJump: "arrow.up.to.line"
         }
     }

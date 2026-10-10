@@ -6,21 +6,23 @@
 //
 import SwiftUI
 
-/// How to measure a jump, as a sheet: six numbered steps in one card.
+/// How to do a jump test, as a sheet: its numbered steps in one card.
 struct JumpInstructionsScreen: View {
 
     @Environment(\.dismiss) private var dismiss
+    let kind: JumpTestKind
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 8) {
-                    PerformanceSectionHeader(title: "Measuring a jump")
+                    PerformanceSectionHeader(title: kind.title)
+                    let instructions = JumpInstruction.all(for: kind)
                     VStack(spacing: 0) {
-                        ForEach(JumpInstruction.all, id: \.self) { instruction in
+                        ForEach(instructions, id: \.self) { instruction in
                             JumpInstructionRow(
                                 instruction: instruction,
-                                showsDivider: instruction.number < JumpInstruction.all.count
+                                showsDivider: instruction.number < instructions.count
                             )
                         }
                     }

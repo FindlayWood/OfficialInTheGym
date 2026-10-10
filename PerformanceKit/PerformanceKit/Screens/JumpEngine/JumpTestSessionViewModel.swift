@@ -14,6 +14,10 @@ import Foundation
 /// so a save that fails and is tried again overwrites the same document rather
 /// than adding a second session.
 ///
+/// **Body mass is read when the sitting opens** (`loadBodyMass()`) and saved
+/// with the session, for a test that estimates power. A failed or empty read is
+/// no mass: the jumps still save, without power.
+///
 /// The session can be saved after any number of attempts from one up. Three
 /// is what the screen asks for, and the cap. An attempt can be removed and
 /// re-recorded, for a jump that went wrong or was tagged badly.
@@ -26,18 +30,21 @@ final class JumpTestSessionViewModel: ObservableObject {
     @Published var measurement: JumpMeasurement = .cm
     @Published private(set) var isSaving = false
     @Published private(set) var saveError: String?
+    @Published private(set) var bodyMass: Double?
 
     var onRecordAttempt: (() -> Void)?
     var onFinished: ((JumpTestSession) -> Void)?
     var onCancel: (() -> Void)?
 
     private let writer: JumpTestSessionWriter
+    private let bodyMassLoader: BodyMassLoader
     private let sessionId: String
     private let now: () -> Date
 
-    init(kind: JumpTestKind, writer: JumpTestSessionWriter, now: @escaping () -> Date = Date.init, makeId: () -> String = { UUID().uuidString }) {
+    init(kind: JumpTestKind, writer: JumpTestSessionWriter, bodyMassLoader: BodyMassLoader, now: @escaping () -> Date = Date.init, makeId: () -> String = { UUID().uuidString }) {
         self.kind = kind
         self.writer = writer
+        self.bodyMassLoader = bodyMassLoader
         self.now = now
         self.sessionId = makeId()
     }
@@ -55,6 +62,20 @@ final class JumpTestSessionViewModel: ObservableObject {
     var bestIndex: Int? {
         guard let best = attempts.map(\.height).max() else { return nil }
         return attempts.firstIndex { $0.height == best }
+    }
+
+    /// The best attempt's power so far, for a test that estimates it.
+    var bestPower: JumpPower? {
+        session.power
+    }
+
+    func loadBodyMass() async {
+        guard kind.estimatesPower, bodyMass == nil else { return }
+        do {
+            bodyMass = try await bodyMassLoader.loadBodyMass()
+        } catch {
+            print("❌ Body mass load failed: \(error)")
+        }
     }
 
     func recordAttempt() {
@@ -81,7 +102,7 @@ final class JumpTestSessionViewModel: ObservableObject {
         isSaving = true
         saveError = nil
         defer { isSaving = false }
-        let session = JumpTestSession(id: sessionId, kind: kind, date: now(), attempts: attempts)
+        let session = self.session
         do {
             try await writer.write(session)
             onFinished?(session)
@@ -89,5 +110,9 @@ final class JumpTestSessionViewModel: ObservableObject {
             print("❌ \(kind.title) session save failed: \(error)")
             saveError = "Your jumps couldn't be saved. Check your connection and try again."
         }
+    }
+
+    private var session: JumpTestSession {
+        JumpTestSession(id: sessionId, kind: kind, date: now(), attempts: attempts, bodyMass: kind.estimatesPower ? bodyMass : nil)
     }
 }

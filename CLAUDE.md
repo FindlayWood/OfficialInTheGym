@@ -222,7 +222,8 @@ private and deliberately not on Edit Profile (`PROFILE_PLAN.md` step 4).
 - **Weight is a log**, one entry per UTC day in `WeightTracking`. The `syncLatestWeight` function
   copies the newest entry onto `Users.weightKilograms`, so that field stays the latest weight
   without the app writing two places. It is what `WeightUnit.percentBodyweight` prescriptions should
-  eventually read; nothing does yet.
+  eventually read. PerformanceKit's CMJ reads it for power (`FirestoreBodyMassLoader`) and stores it
+  on each session, so an old test's power does not move with later weigh-ins.
 - The app's `Users` model still has **no** body properties. ProfileKit's adapters read them by hand.
   If `Users` ever gains them, **they must be optional**, since most documents lack them.
 
@@ -525,7 +526,7 @@ Its SwiftUI screens are on MyDay's vocabulary through PerformanceKit's own `UI/`
 the legacy `MyProfileCoordinator` until the coach/player split is removed. **Every other way of opening a
 person** (DISCOVER, search, follow lists, and all nine legacy `UserProfileCoordinator` callers)
 shows ProfileKit's `UserProfileScreen`, through one `ProfileKitComposition.makeRouter` graph.
-Current focus: the PERFORMANCE tab, part 2 phase C (CMJ). **Every jump test runs on one engine**: a
+Current focus: the PERFORMANCE tab, part 2 phase D (the weekly fatigue check and the readiness home). **Every jump test runs on one engine**: a
 `JumpTestKind` is a tag plan and a number of attempts, `JumpTiming` turns tagged times into flights and
 ground contacts, and `JumpPhysics` is the one height formula. A new jump test is a new case, not a new
 screen.

@@ -15,6 +15,9 @@ import PerformanceKit
 /// - `date`: a timestamp.
 /// - `attempts`: an array of `{ height, flightTime?, contactTime? }`, heights in
 ///   centimetres and times in seconds; an absent time is left out, not null.
+/// - `bodyMass`: kilograms at the time of the test, left out when unknown. A
+///   session's power is worked out from it, so it does not move with later
+///   weigh-ins.
 /// - `bestHeight`: the best attempt's height, **written for queries only**
 ///   (the fatigue check's recent max, a coach's summary) and never read back.
 ///   The app always works the best out from `attempts`.
@@ -29,6 +32,9 @@ enum JumpTestFields {
         if let best = session.best?.height {
             fields["bestHeight"] = best
         }
+        if let bodyMass = session.bodyMass {
+            fields["bodyMass"] = bodyMass
+        }
         return fields
     }
 
@@ -41,7 +47,13 @@ enum JumpTestFields {
         }
         let attempts = rawAttempts.compactMap(attempt(from:))
         guard attempts.count == rawAttempts.count else { return nil }
-        return JumpTestSession(id: document.documentID, kind: kind, date: date, attempts: attempts)
+        return JumpTestSession(
+            id: document.documentID,
+            kind: kind,
+            date: date,
+            attempts: attempts,
+            bodyMass: (document.get("bodyMass") as? NSNumber)?.doubleValue
+        )
     }
 
     private static func fields(of attempt: JumpAttempt) -> [String: Any] {

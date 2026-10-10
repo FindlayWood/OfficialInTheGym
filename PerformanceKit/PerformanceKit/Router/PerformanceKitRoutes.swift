@@ -11,10 +11,10 @@ import UIKit
 enum PerformanceKitRoutes {
     case home
 
-    // MARK: - Vertical Jump
-    case verticalJump
-    case previousJumps
-    case jumpInstructions
+    // MARK: - Jump tests
+    case jumpTestHome(JumpTestKind)
+    case jumpTestHistory(JumpTestKind)
+    case jumpInstructions(JumpTestKind)
 
     // MARK: - Jump engine
     /// A sitting of a jump test, presented full screen. `onSaved` hands the

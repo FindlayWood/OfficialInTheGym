@@ -271,7 +271,23 @@ the ~150–300ms contact times in drop and repeated jumps. **The height formula 
     `CurrentAndLegacyJumpTestSessionsLoader` (a failed legacy read does not hide new sessions).
     Nothing writes the legacy paths now, and the separate best-jump document is no longer read: the
     best is worked out from the sessions. `JumpResultsScreen` and the two legacy writers are gone.
-- **C — CMJ.** A test of its own, with power from the athlete's weight.
+- **C — CMJ — built.**
+  - `JumpTestKind.cmj` (stored `kind: "cmj"`): the same take-off / landing plan and best of three,
+    with its own technique step (hands on hips, no arm swing). On the home above Vertical Jump.
+  - **The jump-test screens are generic now**: `JumpTestHomeScreen`, `JumpTestHistoryScreen` and the
+    instructions take a kind, routed as `.jumpTestHome(kind)`, `.jumpTestHistory(kind)`,
+    `.jumpInstructions(kind)`. Vertical Jump's own screens became these. A new jump test needs a case,
+    a summary, a technique step and a tile icon.
+  - **Power, CMJ only** (`JumpTestKind.estimatesPower`): `JumpPower` is the Sayers equation,
+    60.7 × height + 45.3 × mass − 2055 watts, plus W/kg. It was fitted to jumps without arm swing,
+    so Vertical Jump does not show it. A result at or below zero is no power, not a negative one.
+  - **Body mass is stored on the session** (`bodyMass`), read when the sitting opens through
+    `BodyMassLoader` → `FirestoreBodyMassLoader` (`Users/{uid}.weightKilograms`, which
+    `syncLatestWeight` keeps as the latest weight-log entry). A session's power therefore does not
+    move with later weigh-ins. No logged weight is no power: the jumps still save, and the screens
+    say "Log your weight in Profile to see power."
+  - Power shows on the session as you go, on the home's best card, and under each history row,
+    marked "est.".
 - **D — Weekly fatigue check and the readiness home.** The recent max, zones, calibration, the due
   date, and the dashboard home with the hero card and key numbers.
 - **E — Drop jump**, with RSI and box height.

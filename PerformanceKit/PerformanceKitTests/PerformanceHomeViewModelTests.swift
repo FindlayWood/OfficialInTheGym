@@ -14,7 +14,7 @@ final class PerformanceHomeViewModelTests: XCTestCase {
     func test_tools_deliversEveryTestInOrder() {
         let sut = PerformanceHomeViewModel()
 
-        XCTAssertEqual(sut.tools, [.verticalJump])
+        XCTAssertEqual(sut.tools, [.cmj, .verticalJump])
     }
 
     func test_select_forwardsTheTool() {

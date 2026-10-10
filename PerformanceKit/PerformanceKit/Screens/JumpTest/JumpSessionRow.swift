@@ -7,7 +7,8 @@
 import SwiftUI
 
 /// One saved session in the history: its date and how many attempts, then
-/// its best height in the chosen unit, inside a card of joined rows.
+/// its best height in the chosen unit, with its power beneath for a test that
+/// estimates it, inside a card of joined rows.
 struct JumpSessionRow: View {
 
     let session: JumpTestSession
@@ -27,9 +28,16 @@ struct JumpSessionRow: View {
                 }
                 Spacer()
                 if let best = session.best {
-                    Text("\(measurement.display(centimetres: best.height), specifier: "%.1f") \(measurement.title)")
-                        .font(.system(size: 17, weight: .bold))
-                        .foregroundStyle(Color.darkColor)
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text("\(measurement.display(centimetres: best.height), specifier: "%.1f") \(measurement.title)")
+                            .font(.system(size: 17, weight: .bold))
+                            .foregroundStyle(Color.darkColor)
+                        if let power = session.power {
+                            Text("\(power.watts.formatted(.number.precision(.fractionLength(0)))) W")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color.secondary)
+                        }
+                    }
                 }
             }
             .padding(.horizontal, 16)

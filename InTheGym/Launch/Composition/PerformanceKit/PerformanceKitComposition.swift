@@ -57,6 +57,8 @@ class PerformanceKitComposition {
 
         let jumpSessionWriter: JumpTestSessionWriter = FirestoreJumpTestSessionWriter(userId: athlete.uid)
 
+        let bodyMassLoader: BodyMassLoader = FirestoreBodyMassLoader(userId: athlete.uid)
+
         // MARK: - Router
 
         let router = PerformanceKitRouter(
@@ -64,6 +66,7 @@ class PerformanceKitComposition {
             proAccess: proAccess,
             jumpSessionsLoader: jumpSessionsLoader,
             jumpSessionWriter: jumpSessionWriter,
+            bodyMassLoader: bodyMassLoader,
             currentUserId: UserDefaults.currentUser.uid,
             athleteId: athlete.uid
         )

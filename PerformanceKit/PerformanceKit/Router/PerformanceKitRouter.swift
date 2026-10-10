@@ -41,6 +41,7 @@ public final class PerformanceKitRouter {
     let proAccess: PerformanceProAccess
     let jumpSessionsLoader: JumpTestSessionsLoader
     let jumpSessionWriter: JumpTestSessionWriter
+    let bodyMassLoader: BodyMassLoader
     let currentUserId: String
     let athleteId: String
 
@@ -62,6 +63,7 @@ public final class PerformanceKitRouter {
         proAccess: PerformanceProAccess,
         jumpSessionsLoader: JumpTestSessionsLoader,
         jumpSessionWriter: JumpTestSessionWriter,
+        bodyMassLoader: BodyMassLoader,
         currentUserId: String,
         athleteId: String
     ) {
@@ -69,6 +71,7 @@ public final class PerformanceKitRouter {
         self.proAccess = proAccess
         self.jumpSessionsLoader = jumpSessionsLoader
         self.jumpSessionWriter = jumpSessionWriter
+        self.bodyMassLoader = bodyMassLoader
         self.currentUserId = currentUserId
         self.athleteId = athleteId
     }
@@ -110,26 +113,26 @@ extension PerformanceKitRouter {
             }
             return vc
 
-        case .verticalJump:
-            let viewModel = VerticalJumpHomeViewModel(loader: jumpSessionsLoader, canRecord: currentUserId == athleteId)
+        case .jumpTestHome(let kind):
+            let viewModel = JumpTestHomeViewModel(kind: kind, loader: jumpSessionsLoader, canRecord: currentUserId == athleteId)
             viewModel.onStartTest = { [weak self, weak viewModel] in
-                self?.present(.jumpTest(.verticalJump, onSaved: { viewModel?.sessionSaved($0) }), from: self?.navigationController)
+                self?.present(.jumpTest(kind, onSaved: { viewModel?.sessionSaved($0) }), from: self?.navigationController)
             }
-            viewModel.onPreviousJumps = { [weak self] in self?.navigate(to: .previousJumps) }
+            viewModel.onHistory = { [weak self] in self?.navigate(to: .jumpTestHistory(kind)) }
             viewModel.onHelp = { [weak self] in
-                self?.present(.jumpInstructions, from: self?.navigationController)
+                self?.present(.jumpInstructions(kind), from: self?.navigationController)
             }
-            return UIHostingController(rootView: VerticalJumpHomeScreen(viewModel: viewModel))
+            return UIHostingController(rootView: JumpTestHomeScreen(viewModel: viewModel))
 
-        case .previousJumps:
-            let viewModel = PreviousJumpsViewModel(loader: jumpSessionsLoader)
-            return UIHostingController(rootView: PreviousJumpsScreen(viewModel: viewModel))
+        case .jumpTestHistory(let kind):
+            let viewModel = JumpTestHistoryViewModel(kind: kind, loader: jumpSessionsLoader)
+            return UIHostingController(rootView: JumpTestHistoryScreen(viewModel: viewModel))
 
-        case .jumpInstructions:
-            return UIHostingController(rootView: JumpInstructionsScreen())
+        case .jumpInstructions(let kind):
+            return UIHostingController(rootView: JumpInstructionsScreen(kind: kind))
 
         case .jumpTest(let kind, let onSaved):
-            let viewModel = JumpTestSessionViewModel(kind: kind, writer: jumpSessionWriter)
+            let viewModel = JumpTestSessionViewModel(kind: kind, writer: jumpSessionWriter, bodyMassLoader: bodyMassLoader)
             let navigationController = UINavigationController(
                 rootViewController: UIHostingController(rootView: JumpTestSessionScreen(viewModel: viewModel))
             )
@@ -190,9 +193,6 @@ extension PerformanceKitRouter {
 
     @MainActor
     func open(_ tool: PerformanceTool) {
-        switch tool {
-        case .verticalJump:
-            navigate(to: .verticalJump)
-        }
+        navigate(to: .jumpTestHome(tool.jumpTest))
     }
 }

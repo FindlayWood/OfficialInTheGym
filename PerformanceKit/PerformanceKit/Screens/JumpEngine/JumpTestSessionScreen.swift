@@ -43,6 +43,21 @@ struct JumpTestSessionScreen: View {
                 }
                 .performanceCard()
 
+                if viewModel.kind.estimatesPower {
+                    Group {
+                        if let power = viewModel.bestPower {
+                            JumpPowerLine(power: power)
+                        } else if viewModel.bodyMass == nil {
+                            Text("Log your weight in Profile to see power.")
+                                .font(.system(size: 13))
+                                .foregroundStyle(Color.secondary)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 4)
+                    .padding(.top, 8)
+                }
+
                 if let error = viewModel.saveError {
                     Text(error)
                         .font(.system(size: 14, weight: .medium))
@@ -98,5 +113,8 @@ struct JumpTestSessionScreen: View {
             Text("They haven't been saved.")
         }
         .interactiveDismissDisabled(!viewModel.attempts.isEmpty)
+        .task {
+            await viewModel.loadBodyMass()
+        }
     }
 }

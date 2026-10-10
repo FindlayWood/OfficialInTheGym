@@ -1,5 +1,5 @@
 //
-//  PreviousJumpsViewModel.swift
+//  JumpTestHistoryViewModel.swift
 //  PerformanceKit
 //
 //  Created by Findlay Wood on 10/10/2026.
@@ -7,11 +7,13 @@
 import Combine
 import Foundation
 
-/// Every Vertical Jump session, newest first or highest first, shown in
-/// centimetres or inches. A session's height is its best attempt. Jumps saved
-/// before the engine read as sessions of one attempt.
+/// Every session of one jump test, newest first or highest first, shown in
+/// centimetres or inches. A session's height is its best attempt. Vertical
+/// jumps saved before the engine read as sessions of one attempt.
 @MainActor
-final class PreviousJumpsViewModel: ObservableObject {
+final class JumpTestHistoryViewModel: ObservableObject {
+
+    let kind: JumpTestKind
 
     @Published private(set) var isLoading = false
     @Published private(set) var sessions: [JumpTestSession] = []
@@ -20,7 +22,8 @@ final class PreviousJumpsViewModel: ObservableObject {
 
     private let loader: JumpTestSessionsLoader
 
-    init(loader: JumpTestSessionsLoader) {
+    init(kind: JumpTestKind, loader: JumpTestSessionsLoader) {
+        self.kind = kind
         self.loader = loader
     }
 
@@ -34,9 +37,9 @@ final class PreviousJumpsViewModel: ObservableObject {
         isLoading = true
         defer { isLoading = false }
         do {
-            sessions = try await loader.loadSessions(.verticalJump)
+            sessions = try await loader.loadSessions(kind)
         } catch {
-            print("❌ Jump history load failed: \(error)")
+            print("❌ \(kind.title) history load failed: \(error)")
         }
     }
 

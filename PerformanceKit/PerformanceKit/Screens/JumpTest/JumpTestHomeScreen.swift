@@ -1,29 +1,30 @@
 //
-//  VerticalJumpHomeScreen.swift
+//  JumpTestHomeScreen.swift
 //  PerformanceKit
 //
 //  Created by Findlay Wood on 10/10/2026.
 //
 import SwiftUI
 
-/// Vertical Jump: the best as the screen's one big number with the latest
-/// beneath it, then My Jumps and How It Works, with Start Test pinned to the
-/// bottom. It is absent when this is someone else's centre.
-struct VerticalJumpHomeScreen: View {
+/// A jump test's home: the best as the screen's one big number, its power for
+/// a test that estimates it, the latest beneath, then History and How It
+/// Works, with Start Test pinned to the bottom. Start Test is absent when this
+/// is someone else's centre.
+struct JumpTestHomeScreen: View {
 
-    @ObservedObject var viewModel: VerticalJumpHomeViewModel
+    @ObservedObject var viewModel: JumpTestHomeViewModel
 
     var body: some View {
         ScrollView {
             VStack(spacing: 8) {
-                PerformanceSectionHeader(title: "Best Jump")
-                bestJump
+                PerformanceSectionHeader(title: "Best")
+                bestCard
                     .padding(.bottom, 16)
 
-                PerformanceSectionHeader(title: "Jumps")
+                PerformanceSectionHeader(title: "Tests")
                 VStack(spacing: 0) {
-                    PerformanceRow(icon: "list.bullet", title: "My Jumps", subtitle: "Every test you have done", showsDivider: true) {
-                        viewModel.previousJumps()
+                    PerformanceRow(icon: "list.bullet", title: "History", subtitle: "Every test you have done", showsDivider: true) {
+                        viewModel.history()
                     }
                     PerformanceRow(icon: "questionmark", title: "How It Works", subtitle: "Recording and tagging a jump") {
                         viewModel.help()
@@ -45,12 +46,12 @@ struct VerticalJumpHomeScreen: View {
         .task {
             await viewModel.load()
         }
-        .navigationTitle("Vertical Jump")
+        .navigationTitle(viewModel.kind.title)
         .navigationBarTitleDisplayMode(.inline)
     }
 
     @ViewBuilder
-    private var bestJump: some View {
+    private var bestCard: some View {
         if let best = viewModel.best, let height = best.best?.height {
             VStack(spacing: 4) {
                 Text("\(height, specifier: "%.1f")")
@@ -62,6 +63,15 @@ struct VerticalJumpHomeScreen: View {
                 Text(best.date, format: .dateTime.day().month(.wide).year())
                     .font(.system(size: 13))
                     .foregroundStyle(Color.secondary)
+                if let power = best.power {
+                    JumpPowerLine(power: power)
+                        .padding(.top, 8)
+                } else if viewModel.kind.estimatesPower {
+                    Text("Log your weight in Profile to see power.")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Color.secondary)
+                        .padding(.top, 8)
+                }
                 if let latest = viewModel.latest, latest.id != best.id, let latestHeight = latest.best?.height {
                     Text("Latest \(latestHeight, specifier: "%.1f") cm, \(latest.date.formatted(.dateTime.day().month(.abbreviated)))")
                         .font(.system(size: 13, weight: .medium))
@@ -73,7 +83,7 @@ struct VerticalJumpHomeScreen: View {
             .padding(.vertical, 20)
             .performanceCard()
         } else {
-            PerformanceEmptyCard(message: "No jumps recorded yet.", isLoading: viewModel.isLoading)
+            PerformanceEmptyCard(message: "No tests recorded yet.", isLoading: viewModel.isLoading)
         }
     }
 }

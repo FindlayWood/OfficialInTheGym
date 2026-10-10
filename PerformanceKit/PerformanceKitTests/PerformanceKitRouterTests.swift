@@ -22,14 +22,15 @@ final class PerformanceKitRouterTests: XCTestCase {
         XCTAssertIdentical(navigationController.viewControllers.first, sut.rootViewController)
     }
 
-    func test_open_pushesVerticalJump() {
+    func test_open_pushesEachTestsHome() {
         let navigationController = UINavigationController()
         let sut = makeSUT(navigationController: navigationController)
         sut.start()
 
+        sut.open(.cmj)
         sut.open(.verticalJump)
 
-        XCTAssertEqual(navigationController.viewControllers.count, 2)
+        XCTAssertEqual(navigationController.viewControllers.count, 3)
     }
 
     func test_start_offersNoDismissOnTheTab() {
@@ -61,6 +62,7 @@ final class PerformanceKitRouterTests: XCTestCase {
             proAccess: PerformanceProAccessStub(hasUnlockedPro: true),
             jumpSessionsLoader: JumpTestServicesSpy(),
             jumpSessionWriter: JumpTestServicesSpy(),
+            bodyMassLoader: BodyMassLoaderStub(),
             currentUserId: "me",
             athleteId: "me"
         )
