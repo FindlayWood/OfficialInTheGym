@@ -6,68 +6,48 @@
 //
 import SwiftUI
 
-/// The legacy `PreviousJumpsView`, moved as it was: sort by date or height,
-/// convert to cm or inches, then every jump.
+/// Every saved jump, newest or highest first, in cm or inches. The two
+/// switches are pills over the list rather than the legacy circle icons and
+/// system segmented control.
 struct PreviousJumpsScreen: View {
 
     @ObservedObject var viewModel: PreviousJumpsViewModel
 
-    var body: some View {
-        List {
-            Section {
-                HStack(alignment: .bottom) {
-                    VStack {
-                        Text("SORT BY")
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                        HStack {
-                            Button {
-                                withAnimation { viewModel.sortByDate(true) }
-                            } label: {
-                                Image(systemName: viewModel.sortedByDate ? "calendar.circle.fill" : "calendar.circle")
-                                    .frame(width: 30, height: 30)
-                                    .foregroundColor(Color.darkColor)
-                            }
-                            .buttonStyle(.borderless)
-                            Button {
-                                withAnimation { viewModel.sortByDate(false) }
-                            } label: {
-                                Image(systemName: viewModel.sortedByDate ? "number.circle" : "number.circle.fill")
-                                    .frame(width: 30, height: 30)
-                                    .foregroundColor(Color.darkColor)
-                            }
-                            .buttonStyle(.borderless)
-                        }
-                    }
-                    Spacer()
-                    VStack {
-                        Text("CONVERT TO")
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                        Picker("Select Measurement", selection: $viewModel.measurement) {
-                            ForEach(JumpMeasurement.allCases, id: \.self) {
-                                Text($0.title)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .frame(maxWidth: 200)
-                        .frame(height: 30)
-                    }
-                }
-            }
-            .listRowBackground(Color.clear)
+    private var sortBinding: Binding<Bool> {
+        Binding(get: { viewModel.sortedByDate }, set: { viewModel.sortByDate($0) })
+    }
 
-            Section {
-                ForEach(viewModel.sortedJumps, id: \.time) { jump in
-                    VerticalJumpRow(jump: jump, measurement: viewModel.measurement)
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 8) {
+                HStack {
+                    PerformancePillPicker(options: [true, false], selection: sortBinding) { $0 ? "Newest" : "Highest" }
+                    Spacer()
+                    PerformancePillPicker(options: JumpMeasurement.allCases, selection: $viewModel.measurement) { $0.title }
                 }
-            } header: {
-                Text("Previous Jumps")
+                .padding(.bottom, 12)
+
+                PerformanceSectionHeader(title: "Jumps")
+                if viewModel.jumps.isEmpty {
+                    PerformanceEmptyCard(message: "No jumps saved yet.", isLoading: viewModel.isLoading)
+                } else {
+                    let jumps = viewModel.sortedJumps
+                    VStack(spacing: 0) {
+                        ForEach(Array(jumps.enumerated()), id: \.element.time) { index, jump in
+                            VerticalJumpRow(jump: jump, measurement: viewModel.measurement, showsDivider: index < jumps.count - 1)
+                        }
+                    }
+                    .performanceCard()
+                }
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
         }
+        .background(Color(.systemBackground).ignoresSafeArea())
         .task {
             await viewModel.load()
         }
-        .navigationTitle("My Vertical Jumps")
+        .navigationTitle("My Jumps")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

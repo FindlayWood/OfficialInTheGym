@@ -6,50 +6,44 @@
 //
 import SwiftUI
 
-/// A recorded session in the list: its date, the overall rating large, then the
-/// four ratings. The legacy `MatchTrackerListView` / `PracticeTrackerListView`,
-/// which were identical. Its card is `systemBackground`, not the legacy `.white`,
-/// which was unreadable in dark mode.
+/// A recorded session: the overall rating in a `darkColor` tile where other
+/// rows carry an icon, the date, and the four ratings on one line, as a card.
 struct TrackedSessionRow: View {
 
     let session: TrackedSession
 
     var body: some View {
-        VStack {
-            HStack {
-                Text(TrackedSessionDateFormat.string(from: session.date))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                Spacer()
+        HStack(spacing: 14) {
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(Color.darkColor)
+                .frame(width: 44, height: 44)
+                .overlay(
+                    Text("\(session.ratings.overall)")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(Color.white)
+                )
+            VStack(alignment: .leading, spacing: 3) {
+                Text(session.date, format: .dateTime.weekday(.abbreviated).day().month(.abbreviated).year())
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(Color.primary)
+                Text(summary)
+                    .font(.system(size: 13))
+                    .foregroundStyle(Color.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
             }
-            HStack {
-                Spacer()
-                Text(session.ratings.overall, format: .number)
-                    .font(.largeTitle.bold())
-                    .foregroundColor(Color.darkColor)
-                    .padding()
-                Spacer()
-            }
-            HStack {
-                rating(session.ratings.technical, "Technical")
-                rating(session.ratings.tactical, "Tactical")
-                rating(session.ratings.physical, "Physical")
-                rating(session.ratings.mental, "Mental")
-            }
+            Spacer(minLength: 8)
+            Image(systemName: "chevron.right")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(Color(.tertiaryLabel))
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(8)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .performanceCard()
     }
 
-    private func rating(_ value: Int, _ title: String) -> some View {
-        VStack {
-            Text(value, format: .number)
-                .font(.headline)
-                .foregroundColor(.primary)
-            Text(title)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-        }
+    private var summary: String {
+        let r = session.ratings
+        return "Tech \(r.technical) · Tact \(r.tactical) · Phys \(r.physical) · Ment \(r.mental)"
     }
 }

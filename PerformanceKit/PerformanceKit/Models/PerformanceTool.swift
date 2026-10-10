@@ -44,15 +44,15 @@ public enum PerformanceTool: CaseIterable, Sendable {
         }
     }
 
-    /// An image in PerformanceKit's own asset catalog. Copies of the app's
-    /// icons, because a framework cannot read the app's catalog.
-    var imageName: String {
+    /// The SF Symbol on the tool's tile. Symbols rather than the legacy icons8
+    /// PNGs, as every other tab uses, so the tile takes the brand colour.
+    var systemImage: String {
         switch self {
-        case .matchTracker: "contest_icon"
-        case .practiceTracker: "circuit_icon"
-        case .workload: "bar-chart_icon"
-        case .verticalJump: "jump_icon"
-        case .journal: "journal_icon"
+        case .matchTracker: "sportscourt.fill"
+        case .practiceTracker: "figure.run"
+        case .workload: "chart.bar.fill"
+        case .verticalJump: "arrow.up.to.line"
+        case .journal: "book.closed.fill"
         }
     }
 

@@ -6,38 +6,49 @@
 //
 import SwiftUI
 
-/// The legacy `PerformanceCenterView`, moved as it was: the monitor icon, the
-/// welcome copy, a card per tool, over a gradient into the premium colour.
-/// Redesigning it is the next piece of work, not part of the move.
+/// The PERFORMANCE tab: every tool as a row in one card, under a line saying
+/// what the tab is for.
+///
+/// It used to be the legacy Performance Center: a 100pt icon, a paragraph,
+/// and a white shadowed card per tool over a gradient into the premium colour.
+/// It is on MyDay's vocabulary now, a `systemBackground` page with a
+/// `secondarySystemBackground` card, so the tab reads as part of the app
+/// rather than a different one.
 struct PerformanceHomeScreen: View {
 
     let viewModel: PerformanceHomeViewModel
 
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack {
-                Image("monitor_icon", bundle: .performanceKit)
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                Text("Welcome to the performance center. Here you will have access to several performance monitoring tools. Workload, vertical jump, CMJ and more...")
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                ForEach(viewModel.tools, id: \.self) { tool in
-                    Button {
-                        viewModel.select(tool)
-                    } label: {
-                        PerformanceToolCard(tool: tool)
+        ScrollView {
+            VStack(spacing: 8) {
+                Text("Tools for tracking how you train, compete and recover.")
+                    .font(.system(size: 15))
+                    .foregroundStyle(Color.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 4)
+                    .padding(.bottom, 16)
+
+                PerformanceSectionHeader(title: "Tools")
+                VStack(spacing: 0) {
+                    ForEach(Array(viewModel.tools.enumerated()), id: \.element) { index, tool in
+                        PerformanceRow(
+                            icon: tool.systemImage,
+                            title: tool.title,
+                            subtitle: tool.message,
+                            showsDivider: index < viewModel.tools.count - 1
+                        ) {
+                            viewModel.select(tool)
+                        }
                     }
                 }
+                .performanceCard()
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
         }
-        .background(
-            LinearGradient(colors: [Color(.secondarySystemBackground), Color.premiumColor], startPoint: .top, endPoint: .bottom)
-        )
-        .navigationTitle("Performance Center")
-        .navigationBarTitleDisplayMode(.inline)
+        .background(Color(.systemBackground).ignoresSafeArea())
+        .navigationTitle("Performance")
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 

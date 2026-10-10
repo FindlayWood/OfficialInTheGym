@@ -6,14 +6,17 @@
 //
 import SwiftUI
 
-/// Writing a new entry. The legacy `JournalEntryView`, moved as it was: a
-/// full-screen editor with Dismiss on the left and an upload arrow on the
-/// right, which turns into a spinner while saving.
+/// Writing a new entry: a full-height editor in a card, Cancel top left, and
+/// Save as the bottom button, gated until there is more than three characters.
+///
+/// The legacy screen saved from a small arrow in the corner, faded to 30% when
+/// disabled with nothing saying why, and drew its placeholder as a second,
+/// disabled `TextEditor` behind the first.
 struct JournalEntryScreen: View {
 
     @Environment(\.dismiss) private var dismiss
-    @State private var placeholder = "enter text..."
     @StateObject var viewModel: JournalEntryViewModel
+    @FocusState private var isFocused: Bool
     let onAdded: (JournalEntry) -> Void
 
     init(viewModel: JournalEntryViewModel, onAdded: @escaping (JournalEntry) -> Void) {
@@ -23,51 +26,52 @@ struct JournalEntryScreen: View {
 
     var body: some View {
         NavigationStack {
-            ZStack {
-                if viewModel.entryText.isEmpty {
-                    TextEditor(text: $placeholder)
-                        .font(.title3.weight(.medium))
-                        .foregroundColor(.gray)
-                        .disabled(true)
-                        .padding()
+            VStack(spacing: 8) {
+                PerformanceSectionHeader(title: Date.now.formatted(.dateTime.weekday(.wide).day().month(.wide)))
+                ZStack(alignment: .topLeading) {
+                    if viewModel.entryText.isEmpty {
+                        Text("How did today go?")
+                            .font(.system(size: 16))
+                            .foregroundStyle(Color(.placeholderText))
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 8)
+                            .allowsHitTesting(false)
+                    }
+                    TextEditor(text: $viewModel.entryText)
+                        .font(.system(size: 16))
+                        .scrollContentBackground(.hidden)
+                        .focused($isFocused)
                 }
-                TextEditor(text: $viewModel.entryText)
-                    .font(.title3.weight(.medium))
-                    .opacity(viewModel.entryText.isEmpty ? 0.25 : 1)
-                    .padding()
+                .padding(12)
+                .frame(maxHeight: .infinity)
+                .performanceCard()
             }
-            .frame(maxHeight: .infinity, alignment: .top)
+            .padding(.horizontal, 20)
+            .padding(.top, 12)
+            .background(Color(.systemBackground).ignoresSafeArea())
+            .performanceBottomBar {
+                PerformancePrimaryButton(
+                    title: "Save Entry",
+                    isEnabled: viewModel.canUpload,
+                    isWorking: viewModel.isUploading
+                ) {
+                    Task {
+                        if let entry = try? await viewModel.upload() {
+                            onAdded(entry)
+                            dismiss()
+                        }
+                    }
+                }
+            }
             .navigationTitle("New Entry")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Text("Dismiss")
-                            .foregroundColor(Color.darkColor)
-                            .fontWeight(.bold)
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    if viewModel.isUploading {
-                        ProgressView()
-                    } else {
-                        Button {
-                            Task {
-                                if let entry = try? await viewModel.upload() {
-                                    onAdded(entry)
-                                    dismiss()
-                                }
-                            }
-                        } label: {
-                            Image(systemName: "arrow.up.circle.fill")
-                                .foregroundColor(viewModel.canUpload ? Color.darkColor : Color.darkColor.opacity(0.3))
-                        }
-                        .disabled(!viewModel.canUpload)
-                    }
+                    Button("Cancel") { dismiss() }
+                        .tint(Color.darkColor)
                 }
             }
+            .onAppear { isFocused = true }
         }
     }
 }

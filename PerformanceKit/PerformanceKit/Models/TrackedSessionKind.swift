@@ -44,57 +44,36 @@ public enum TrackedSessionKind: Sendable {
 
     var welcome: String {
         switch self {
-        case .match: "Welcome to the match tracker. Here you can record all of your matches/games/competitions."
-        case .practice: "Welcome to the practice tracker. Here you can record all of your practice sessions. (Do not record gym sessions here if you have entered them already)"
+        case .match: "Rate every match, game or competition, with a snapshot of your training going into it."
+        case .practice: "Rate every practice session. Gym sessions you already log in MyDay do not belong here."
         }
     }
 
     var newEntryIntro: String {
         switch self {
-        case .match: "Enter some details about your match below. Most important is to rate your performance honestly. We will then calculate other data to show you."
-        case .practice: "Enter some details about your practice session below. Most important is to rate your performance honestly. We will then calculate other data to show you."
+        case .match: "Rate how it went, honestly. Your workload going into it is saved alongside."
+        case .practice: "Rate how it went, honestly. Your workload going into it is saved alongside."
         }
     }
 
     var recordButtonTitle: String {
         switch self {
-        case .match: "Record New Match"
-        case .practice: "Record New Practice"
-        }
-    }
-
-    var newSectionHeader: String {
-        switch self {
-        case .match: "New Match"
-        case .practice: "New Practice"
+        case .match: "Record Match"
+        case .practice: "Record Practice"
         }
     }
 
     var previousHeader: String {
         switch self {
-        case .match: "Previous Matches"
-        case .practice: "Previous Practice Sessions"
+        case .match: "Matches"
+        case .practice: "Practice Sessions"
         }
     }
 
     var emptyMessage: String {
         switch self {
-        case .match: "No previous matches."
-        case .practice: "No previous practice sessions."
-        }
-    }
-
-    var iconName: String {
-        switch self {
-        case .match: "contest_icon"
-        case .practice: "circuit_icon"
-        }
-    }
-
-    var buttonIconName: String {
-        switch self {
-        case .match: "match_icon"
-        case .practice: "circuit_icon"
+        case .match: "No matches recorded yet."
+        case .practice: "No practice sessions recorded yet."
         }
     }
 

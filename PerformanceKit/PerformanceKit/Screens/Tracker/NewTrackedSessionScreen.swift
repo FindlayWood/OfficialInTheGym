@@ -6,20 +6,19 @@
 //
 import SwiftUI
 
-/// Recording a match or practice. The legacy `NewMatchTrackerSheet` and
-/// `NewPracticeTrackerSheet`, one sheet now: a practice adds its RPE and
-/// duration, and otherwise they were the same.
+/// Recording a match or practice: one card per question, notes, and Save as
+/// the bottom button. A practice adds its RPE and duration first.
 ///
-/// The section headers are the practice sheet's. The match sheet's had drifted,
-/// with "Physical" over the technical question, "Technical" over the tactical
-/// one and "Tactical" over the physical one.
+/// The legacy sheet was a default `List` with a segmented control per rating
+/// and an upload arrow in the corner. Its section headers repeated the
+/// question beneath them, so the questions carry their own headings now and the
+/// sections are captioned by group.
 struct NewTrackedSessionScreen: View {
 
     @StateObject var viewModel: NewTrackedSessionViewModel
     let onRecorded: (TrackedSession) -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @State private var placeholder = "enter note..."
     @FocusState private var isNoteFocused: Bool
 
     init(viewModel: NewTrackedSessionViewModel, onRecorded: @escaping (TrackedSession) -> Void) {
@@ -29,140 +28,114 @@ struct NewTrackedSessionScreen: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section {
+            ScrollView {
+                VStack(spacing: 8) {
                     Text(viewModel.kind.newEntryIntro)
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-                .listRowBackground(Color.clear)
+                        .font(.system(size: 15))
+                        .foregroundStyle(Color.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 4)
+                        .padding(.bottom, 16)
 
-                if viewModel.kind.asksForRPEAndDuration {
-                    Section {
-                        RatingPicker(value: $viewModel.rpe, title: "RPE", message: "What was your session RPE?")
-                    } header: {
-                        Text("RPE")
+                    if viewModel.kind.asksForRPEAndDuration {
+                        PerformanceSectionHeader(title: "Session")
+                        VStack(spacing: 10) {
+                            RatingPicker(value: $viewModel.rpe, title: "RPE", message: "How hard was it? (RPE)")
+                            durationCard
+                        }
+                        .padding(.bottom, 16)
                     }
-                    .disabled(viewModel.isUploading)
-                    Section {
-                        durationStepper
-                    } header: {
-                        Text("Duration")
+
+                    PerformanceSectionHeader(title: "Your Performance")
+                    VStack(spacing: 10) {
+                        RatingPicker(value: $viewModel.ratings.overall, title: "Overall", message: "Overall")
+                        RatingPicker(value: $viewModel.ratings.technical, title: "Technical", message: "Technical")
+                        RatingPicker(value: $viewModel.ratings.tactical, title: "Tactical", message: "Tactical")
+                        RatingPicker(value: $viewModel.ratings.physical, title: "Physical", message: "Physical")
+                        RatingPicker(value: $viewModel.ratings.mental, title: "Mental", message: "Mental")
                     }
-                    .disabled(viewModel.isUploading)
-                }
+                    .padding(.bottom, 16)
 
-                Section {
-                    RatingPicker(value: $viewModel.ratings.overall, title: "Rating", message: "How would you rate your performance?")
-                } header: {
-                    Text("Rate Your Overall Performance")
-                }
-                .disabled(viewModel.isUploading)
-                Section {
-                    RatingPicker(value: $viewModel.ratings.technical, title: "Technical Rating", message: "How would you rate your technical performance?")
-                } header: {
-                    Text("Technical")
-                }
-                .disabled(viewModel.isUploading)
-                Section {
-                    RatingPicker(value: $viewModel.ratings.tactical, title: "Tactical Rating", message: "How would you rate your tactical performance?")
-                } header: {
-                    Text("Tactical")
-                }
-                .disabled(viewModel.isUploading)
-                Section {
-                    RatingPicker(value: $viewModel.ratings.physical, title: "Physical Rating", message: "How would you rate your physical performance?")
-                } header: {
-                    Text("Physical")
-                }
-                .disabled(viewModel.isUploading)
-                Section {
-                    RatingPicker(value: $viewModel.ratings.mental, title: "Mental Rating", message: "How would you rate your mental performance?")
-                } header: {
-                    Text("Mental")
-                }
-                .disabled(viewModel.isUploading)
-
-                Section {
-                    ZStack {
+                    PerformanceSectionHeader(title: "Notes")
+                    ZStack(alignment: .topLeading) {
                         if viewModel.note.isEmpty {
-                            TextEditor(text: $placeholder)
-                                .font(.title3.weight(.medium))
-                                .foregroundColor(.gray)
-                                .disabled(true)
+                            Text("Anything worth remembering?")
+                                .font(.system(size: 16))
+                                .foregroundStyle(Color(.placeholderText))
+                                .padding(.horizontal, 5)
+                                .padding(.vertical, 8)
+                                .allowsHitTesting(false)
                         }
                         TextEditor(text: $viewModel.note)
-                            .font(.title3.weight(.medium))
-                            .opacity(viewModel.note.isEmpty ? 0.25 : 1)
+                            .font(.system(size: 16))
+                            .scrollContentBackground(.hidden)
                             .focused($isNoteFocused)
+                            .frame(minHeight: 120)
                     }
-                    .frame(minHeight: 160)
-                } header: {
-                    Text("Notes")
+                    .padding(12)
+                    .performanceCard()
                 }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
                 .disabled(viewModel.isUploading)
             }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Text("Dismiss")
-                            .foregroundColor(Color.darkColor)
-                            .font(.body.bold())
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    if viewModel.isUploading {
-                        ProgressView()
-                    } else {
-                        Button {
-                            Task {
-                                if let session = try? await viewModel.save() {
-                                    onRecorded(session)
-                                }
-                            }
-                        } label: {
-                            Image(systemName: "arrow.up.circle.fill")
-                                .foregroundColor(Color.darkColor)
+            .scrollDismissesKeyboard(.interactively)
+            .background(Color(.systemBackground).ignoresSafeArea())
+            .performanceBottomBar {
+                PerformancePrimaryButton(title: "Save", isWorking: viewModel.isUploading) {
+                    Task {
+                        if let session = try? await viewModel.save() {
+                            onRecorded(session)
                         }
-                    }
-                }
-                ToolbarItem(placement: .keyboard) {
-                    HStack {
-                        Spacer()
-                        Button("Done") { isNoteFocused = false }
                     }
                 }
             }
             .navigationTitle(viewModel.kind.newEntryTitle)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel") { dismiss() }
+                        .tint(Color.darkColor)
+                }
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button("Done") { isNoteFocused = false }
+                            .tint(Color.darkColor)
+                    }
+                }
+            }
         }
     }
 
-    private var durationStepper: some View {
-        HStack {
-            Button {
-                viewModel.duration = max(0, viewModel.duration - 1)
-            } label: {
-                Image(systemName: "minus.circle.fill")
-                    .foregroundColor(Color.darkColor)
+    private var durationCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("How long was it?")
+                .font(.system(size: 15, weight: .medium))
+            HStack(spacing: 14) {
+                stepButton("minus") { viewModel.duration = max(0, viewModel.duration - 5) }
+                VStack(spacing: 6) {
+                    Text("\(viewModel.duration, specifier: "%.0f") min")
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(Color.darkColor)
+                    Slider(value: $viewModel.duration, in: 0...240, step: 1)
+                        .tint(Color.darkColor)
+                }
+                stepButton("plus") { viewModel.duration = min(240, viewModel.duration + 5) }
             }
-            .buttonStyle(.borderless)
-            VStack {
-                Text("\(viewModel.duration, specifier: "%.0f") mins")
-                    .font(.headline)
-                Slider(value: $viewModel.duration, in: 0...240, step: 1)
-                    .tint(Color.darkColor)
-            }
-            Button {
-                viewModel.duration = min(240, viewModel.duration + 1)
-            } label: {
-                Image(systemName: "plus.circle.fill")
-                    .foregroundColor(Color.darkColor)
-            }
-            .buttonStyle(.borderless)
         }
+        .padding(16)
+        .performanceCard()
+    }
+
+    private func stepButton(_ systemName: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(Color.darkColor)
+                .frame(width: 44, height: 44)
+                .background(Circle().fill(Color(.tertiarySystemBackground)))
+        }
+        .buttonStyle(.plain)
     }
 }

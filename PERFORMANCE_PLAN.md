@@ -22,9 +22,8 @@ deleted.** It moves.
   tab's own stack. Each move takes one case off that switch.
 - **Wellness, Training Status, CMJ and Injury Tracker do not move.** They were already commented out
   of the menu. Their code stays in the app target, untouched.
-- **Images live in PerformanceKit's own asset catalog**, the first framework in the project to have
-  one, and are always loaded with `bundle: .performanceKit`. Without the bundle, `Image("x")` looks in
-  the app's catalog and draws nothing. The app keeps its copies while legacy code still names them.
+- **Icons are SF Symbols.** The move first copied the icons8 PNGs into an asset catalog; the restyle
+  replaced them and the catalog went.
 
 ## Steps
 
@@ -160,7 +159,16 @@ workloads and the legacy workout flow. That is a question for the redesign, not 
 `PerformanceHomeCoordinator` and `onOpenLegacyTool` go, and the app's copies of the icons go if
 nothing else names them.
 
+### Restyle — built
+Every SwiftUI screen moved onto MyDay's design vocabulary: a `systemBackground` page,
+`secondarySystemBackground` cards at radius 16, uppercase 13pt captions, explicit system fonts, no
+shadows, and the forward action as a 52pt `darkColor` button pinned to the bottom. The shared pieces
+live in PerformanceKit's `UI/`. Default `List`s (inset grouped) went, and so did white cards, drop
+shadows, the premium-colour gradient and the icons8 PNGs (SF Symbols now, so the asset catalog is
+gone). System segmented controls became `PerformancePillPicker` and `RatingPicker`'s eleven cells,
+which take the brand colour. The jump camera and replay are full-screen camera UI and stay as they
+were. Copy was tightened where it repeated the navigation title or had typos.
+
 ## Out of scope
-- The redesign. It is the next piece of work.
 - Bringing back Wellness, Training Status, CMJ or Injury Tracker.
 - Feeding MyDay sessions into the Workload tool.

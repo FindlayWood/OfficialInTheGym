@@ -6,27 +6,29 @@
 //
 import SwiftUI
 
-/// A jump: its date small in the corner, its height large in the middle. The
-/// legacy home and history screens each wrote this out.
+/// One saved jump in the history: its date, then its height in the chosen
+/// unit, on one line, inside a card of joined rows.
 struct VerticalJumpRow: View {
 
     let jump: VerticalJump
     let measurement: JumpMeasurement
+    var showsDivider = false
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HStack {
-                Text(jump.time, format: .dateTime.day().month())
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                Text(jump.time, format: .dateTime.day().month(.abbreviated).year())
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(Color.primary)
                 Spacer()
+                Text("\(displayedHeight, specifier: "%.1f") \(measurement.title)")
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundStyle(Color.darkColor)
             }
-            HStack {
-                Spacer()
-                Text("\(displayedHeight, specifier: "%.2f")\(measurement.title)")
-                    .font(.largeTitle.bold())
-                    .foregroundColor(Color.darkColor)
-                Spacer()
+            .padding(.horizontal, 16)
+            .frame(minHeight: 52)
+            if showsDivider {
+                Divider().padding(.leading, 16)
             }
         }
     }

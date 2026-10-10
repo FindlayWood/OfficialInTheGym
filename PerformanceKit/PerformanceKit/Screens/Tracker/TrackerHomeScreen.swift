@@ -6,73 +6,52 @@
 //
 import SwiftUI
 
-/// The legacy `MatchTrackerView` and `PracticeTrackerHomeView`, one screen now:
-/// the tracker's icon and welcome, a button to record a new session, then every
-/// session recorded, newest first.
+/// Match Tracker or Practice Tracker: a line on what it is for, every recorded
+/// session newest first as a card each, and Record pinned to the bottom.
+///
+/// The legacy screens were a default `List` led by a 100pt icon and a
+/// large-title heading repeating the navigation title, with white session cards
+/// that were unreadable in dark mode.
 struct TrackerHomeScreen: View {
 
     @ObservedObject var viewModel: TrackerHomeViewModel
     let makeNewEntryViewModel: () -> NewTrackedSessionViewModel
 
     var body: some View {
-        List {
-            Section {
-                HStack {
-                    Spacer()
-                    VStack {
-                        Image(viewModel.kind.iconName, bundle: .performanceKit)
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                        Text(viewModel.kind.title)
-                            .font(.largeTitle.bold())
-                            .foregroundColor(Color.darkColor)
-                        Text(viewModel.kind.welcome)
-                            .font(.body)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    Spacer()
-                }
-            }
-            .listRowBackground(Color.clear)
+        ScrollView {
+            VStack(spacing: 8) {
+                Text(viewModel.kind.welcome)
+                    .font(.system(size: 15))
+                    .foregroundStyle(Color.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 4)
+                    .padding(.bottom, 16)
 
-            if viewModel.canRecord {
-                Section {
-                    Button {
-                        viewModel.recordNew()
-                    } label: {
-                        HStack {
-                            Image(viewModel.kind.buttonIconName, bundle: .performanceKit)
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                            Text(viewModel.kind.recordButtonTitle)
-                                .font(.headline)
-                        }
-                        .padding(.vertical, 12)
-                    }
-                } header: {
-                    Text(viewModel.kind.newSectionHeader)
-                }
-            }
-
-            Section {
-                if viewModel.isLoading && viewModel.sessions.isEmpty {
-                    ProgressView()
-                } else if viewModel.sessions.isEmpty {
-                    Text(viewModel.kind.emptyMessage)
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
+                PerformanceSectionHeader(title: viewModel.kind.previousHeader)
+                if viewModel.sessions.isEmpty {
+                    PerformanceEmptyCard(message: viewModel.kind.emptyMessage, isLoading: viewModel.isLoading)
                 } else {
-                    ForEach(viewModel.sessions, id: \.id) { session in
-                        TrackedSessionRow(session: session)
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.clear)
-                            .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
-                            .onTapGesture { viewModel.select(session) }
+                    VStack(spacing: 10) {
+                        ForEach(viewModel.sessions, id: \.id) { session in
+                            Button {
+                                viewModel.select(session)
+                            } label: {
+                                TrackedSessionRow(session: session)
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
                 }
-            } header: {
-                Text(viewModel.kind.previousHeader)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+        }
+        .background(Color(.systemBackground).ignoresSafeArea())
+        .performanceBottomBar {
+            if viewModel.canRecord {
+                PerformancePrimaryButton(title: viewModel.kind.recordButtonTitle) {
+                    viewModel.recordNew()
+                }
             }
         }
         .sheet(isPresented: $viewModel.isShowingNewEntry) {
@@ -84,5 +63,6 @@ struct TrackerHomeScreen: View {
             await viewModel.load()
         }
         .navigationTitle(viewModel.kind.title)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

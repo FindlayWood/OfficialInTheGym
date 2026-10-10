@@ -43,8 +43,7 @@ All six use `PBXFileSystemSynchronizedRootGroup`, but only AccountCreationKit, L
 DiscoverKit and ProfileKit are driven *entirely* by it. DiscoverKit's project was generated from
 LoginKit's, with its object ids prefixed `D1C`; ProfileKit's from DiscoverKit's, prefixed `BF10`
 (and `BF1A` for its entries in the app's pbxproj); PerformanceKit's from ProfileKit's, prefixed
-`A7F0` (and `A7FA` in the app's pbxproj). **PerformanceKit is the only framework with an asset
-catalog**, so its images must be loaded with `bundle: .performanceKit`. StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
+`A7F0` (and `A7FA` in the app's pbxproj). StatsKit synchronises its `StatsKit/` folder and lists `Router/`,
 `Screens/`, `Models/` etc. individually; MyDayKit lists most of its tree.
 
 `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES` is set on **StatsKit, AccountCreationKit,
@@ -514,7 +513,12 @@ tab is built: a tab built for every user and gated at launch would keep showing 
 user subscribed. Tools not yet moved open through `onOpenLegacyTool` and the legacy
 `PerformanceHomeCoordinator`. The coach-side and legacy callers present the same router modally
 (`PerformanceKitComposition.presentModally`).
-The redesign comes after the move. **None of its code is to be deleted** — it moves.
+Its SwiftUI screens are on MyDay's vocabulary through PerformanceKit's own `UI/` components:
+`performanceCard()` (the one card), `PerformanceSectionHeader`, `PerformanceIconTile`,
+`PerformanceRow`, `PerformancePrimaryButton` (keep in step with the gated button in
+`SessionSetDetailOverlay`), `performanceBottomBar`, `PerformanceStatCell`, `PerformancePillPicker`,
+`PerformanceEmptyCard`. Tool icons are SF Symbols. The full-screen jump camera and replay stay UIKit.
+**None of its code is to be deleted** — it moves.
 **PROFILE is `ProfileKit`** on the player tab bar (see `PROFILE_PLAN.md`); the coach tab bar keeps
 the legacy `MyProfileCoordinator` until the coach/player split is removed. **Every other way of opening a
 person** (DISCOVER, search, follow lists, and all nine legacy `UserProfileCoordinator` callers)

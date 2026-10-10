@@ -6,72 +6,71 @@
 //
 import SwiftUI
 
-/// The legacy `VerticalJumpHomeView`, moved as it was: the jump icon, the best
-/// jump, then Record New Jump, My Jumps and Help.
+/// Vertical Jump: the best jump as the screen's one big number, then My Jumps
+/// and How It Works as rows, with Record New Jump pinned to the bottom.
+///
+/// The legacy screen was a default `List` with three blue text buttons in
+/// sections of their own. Recording is the action people come here for, so it
+/// is the primary button, and it is absent when this is someone else's centre.
 struct VerticalJumpHomeScreen: View {
 
     @ObservedObject var viewModel: VerticalJumpHomeViewModel
 
     var body: some View {
-        List {
-            HStack {
-                Spacer()
-                VStack {
-                    Image("jump_icon", bundle: .performanceKit)
-                        .resizable()
-                        .frame(width: 60, height: 60)
-                    Text("Welcome to the vertical jump measurement. Here you can measure the height of your vertical jump.")
-                        .font(.body.weight(.medium))
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-                Spacer()
-            }
-            .listRowBackground(Color.clear)
+        ScrollView {
+            VStack(spacing: 8) {
+                PerformanceSectionHeader(title: "Best Jump")
+                bestJump
+                    .padding(.bottom, 16)
 
-            Section {
-                if viewModel.isLoading {
-                    ProgressView()
-                } else if let max = viewModel.max {
-                    VerticalJumpRow(jump: max, measurement: .cm)
-                } else {
-                    Text("No Jumps recorded.")
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                }
-            } header: {
-                Text("Max Jump Height")
-            }
-
-            if viewModel.canRecord {
-                Section {
-                    Button {
-                        viewModel.recordNewJump()
-                    } label: {
-                        Text("Record New Jump")
+                PerformanceSectionHeader(title: "Jumps")
+                VStack(spacing: 0) {
+                    PerformanceRow(icon: "list.bullet", title: "My Jumps", subtitle: "Every jump you have saved", showsDivider: true) {
+                        viewModel.previousJumps()
                     }
-                    .disabled(viewModel.isLoading)
+                    PerformanceRow(icon: "questionmark", title: "How It Works", subtitle: "Recording and tagging a jump") {
+                        viewModel.help()
+                    }
                 }
+                .performanceCard()
             }
-
-            Section {
-                Button {
-                    viewModel.previousJumps()
-                } label: {
-                    Text("My Jumps")
-                }
-            }
-
-            Section {
-                Button {
-                    viewModel.help()
-                } label: {
-                    Text("Help")
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+        }
+        .background(Color(.systemBackground).ignoresSafeArea())
+        .performanceBottomBar {
+            if viewModel.canRecord {
+                PerformancePrimaryButton(title: "Record New Jump", isEnabled: !viewModel.isLoading) {
+                    viewModel.recordNewJump()
                 }
             }
         }
         .task {
             await viewModel.load()
+        }
+        .navigationTitle("Vertical Jump")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    @ViewBuilder
+    private var bestJump: some View {
+        if let max = viewModel.max {
+            VStack(spacing: 4) {
+                Text("\(max.height, specifier: "%.1f")")
+                    .font(.system(size: 48, weight: .bold))
+                    .foregroundStyle(Color.darkColor)
+                + Text(" cm")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(Color.secondary)
+                Text(max.time, format: .dateTime.day().month(.wide).year())
+                    .font(.system(size: 13))
+                    .foregroundStyle(Color.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 20)
+            .performanceCard()
+        } else {
+            PerformanceEmptyCard(message: "No jumps recorded yet.", isLoading: viewModel.isLoading)
         }
     }
 }

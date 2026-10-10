@@ -6,22 +6,25 @@
 //
 import SwiftUI
 
-/// One entry in the journal list: its date, then up to three lines of it. The
-/// legacy screen wrote this out twice, once per section.
+/// One entry in the journal: its date as a caption, then up to three lines of
+/// it, as a card of its own.
 struct JournalEntryRow: View {
 
     let entry: JournalEntry
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(entry.date, format: .dateTime.day().month().year())
-                .foregroundColor(.secondary)
-                .font(.footnote.bold())
+        VStack(alignment: .leading, spacing: 6) {
+            Text(entry.date, format: .dateTime.weekday(.wide).day().month(.wide))
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(Color.secondary)
             Text(entry.entry)
-                .foregroundColor(.primary)
-                .font(.body.weight(.medium))
+                .font(.system(size: 15))
+                .foregroundStyle(Color.primary)
                 .multilineTextAlignment(.leading)
                 .lineLimit(3)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .performanceCard()
     }
 }

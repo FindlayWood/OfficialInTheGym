@@ -6,8 +6,9 @@
 //
 import SwiftUI
 
-/// A 0–10 rating as a segmented control, "bad" to "great". PerformanceKit's
-/// copy of the app's `QuestionView`, which the Wellness tool still uses.
+/// A 0–10 rating as a row of eleven cells, the chosen one filled `darkColor`,
+/// with "Poor" and "Great" under the ends. It replaced a system segmented
+/// control, which does not take the brand colour.
 struct RatingPicker: View {
 
     @Binding var value: Int
@@ -15,24 +16,39 @@ struct RatingPicker: View {
     let message: String
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: 10) {
             Text(message)
-            Picker(title, selection: $value) {
+                .font(.system(size: 15, weight: .medium))
+                .foregroundStyle(Color.primary)
+            HStack(spacing: 4) {
                 ForEach(0..<11, id: \.self) { number in
-                    Text(number, format: .number)
+                    let isSelected = number == value
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.15)) { value = number }
+                    } label: {
+                        Text("\(number)")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(isSelected ? Color.white : Color.primary)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 38)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                    .fill(isSelected ? Color.darkColor : Color(.tertiarySystemBackground))
+                            )
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("\(title) \(number)")
                 }
             }
-            .pickerStyle(.segmented)
             HStack {
-                Text("bad")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
+                Text("Poor")
                 Spacer()
-                Text("great")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
+                Text("Great")
             }
+            .font(.system(size: 12))
+            .foregroundStyle(Color.secondary)
         }
-        .padding(.vertical)
+        .padding(16)
+        .performanceCard()
     }
 }

@@ -6,8 +6,9 @@
 //
 import SwiftUI
 
-/// One entry, read in full. The legacy `ViewJournalEntryView`, moved as it
-/// was, titled with the entry's day and month.
+/// One entry, read in full, in a sheet. It was a full-screen cover titled
+/// "dd/MM"; a sheet says it is a glance that swipes away, and the date is
+/// written out.
 struct JournalEntryDetailScreen: View {
 
     @Environment(\.dismiss) private var dismiss
@@ -16,29 +17,28 @@ struct JournalEntryDetailScreen: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                Text(entry.entry)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding()
+                VStack(alignment: .leading, spacing: 8) {
+                    PerformanceSectionHeader(title: entry.date.formatted(.dateTime.weekday(.wide).day().month(.wide).year()))
+                    Text(entry.entry)
+                        .font(.system(size: 16))
+                        .foregroundStyle(Color.primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(16)
+                        .performanceCard()
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
             }
-            .navigationTitle(Self.titleFormatter.string(from: entry.date))
+            .background(Color(.systemBackground).ignoresSafeArea())
+            .navigationTitle("Entry")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Text("Dismiss")
-                            .foregroundColor(Color.darkColor)
-                            .fontWeight(.bold)
-                    }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") { dismiss() }
+                        .fontWeight(.semibold)
+                        .tint(Color.darkColor)
                 }
             }
         }
     }
-
-    /// The app target's `getDayMonthFormat()`: "dd/MM".
-    private static let titleFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM"
-        return formatter
-    }()
 }
