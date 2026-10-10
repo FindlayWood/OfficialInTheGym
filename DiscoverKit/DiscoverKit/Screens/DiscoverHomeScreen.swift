@@ -17,6 +17,7 @@ struct DiscoverHomeScreen: View {
 
     @ObservedObject var viewModel: DiscoverHomeViewModel
     @ObservedObject var moderation: DiscoverModerationStore
+    let authors: DiscoverAuthorDirectory
 
     var body: some View {
         VStack(spacing: 0) {
@@ -44,15 +45,27 @@ struct DiscoverHomeScreen: View {
 
     // MARK: - Header
 
+    /// The magnifier is the app's one search — people, workouts and exercises.
+    /// It used to be people only, on the profile's title bar.
     private var header: some View {
         HStack {
             Text("Discover")
                 .font(.system(size: 28, weight: .bold))
                 .foregroundStyle(Color.darkColor)
             Spacer()
+            Button {
+                viewModel.onOpenSearch?()
+            } label: {
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(Color.darkColor)
+                    .frame(width: 44, height: 44)
+            }
+            .accessibilityLabel("Search")
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.leading, 16)
+        .padding(.trailing, 6)
+        .padding(.vertical, 6)
         .background {
             Color(.systemBackground).ignoresSafeArea()
         }
@@ -102,25 +115,30 @@ struct DiscoverHomeScreen: View {
 
     // MARK: - Workouts
 
+    /// Separate cards, not joined rows — see `DiscoverWorkoutRow`.
     private var workoutsSection: some View {
-        SectionContainer(
+        DiscoverSeparateCardsSection(
             title: "Workouts",
             headerTrailing: AnyView(SeeAllButton { viewModel.onSeeAllWorkouts?() })
         ) {
             switch viewModel.workouts {
             case .loading:
-                skeletonRows(count: 3)
+                ForEach(0..<3, id: \.self) { _ in
+                    DiscoverWorkoutRowSkeleton()
+                }
             case .loaded(let workouts) where workouts.allSatisfy(moderation.hides):
                 DiscoverSectionMessage(message: "No public workouts yet")
+                    .discoverCardChrome()
             case .loaded(let workouts):
-                rows(workouts.filter { !moderation.hides($0) }) { workout in
-                    DiscoverWorkoutRow(card: workout)
+                ForEach(workouts.filter { !moderation.hides($0) }) { workout in
+                    DiscoverWorkoutRow(card: workout, authors: authors)
                         .onTapGesture { viewModel.onWorkoutTapped?(workout) }
                 }
             case .failed:
                 DiscoverSectionMessage(message: "Couldn't load workouts") {
                     Task { await viewModel.loadWorkouts() }
                 }
+                .discoverCardChrome()
             }
         }
     }
@@ -216,6 +234,7 @@ struct DiscoverHomeScreen: View {
             exerciseLoader: PreviewDiscoverExerciseCardLoader(),
             tagLoader: PreviewTagLoaders()
         ),
-        moderation: PreviewModeration.store()
+        moderation: PreviewModeration.store(),
+        authors: DiscoverAuthorDirectory(loader: PreviewUserProfileLoader(), currentUserId: "me")
     )
 }

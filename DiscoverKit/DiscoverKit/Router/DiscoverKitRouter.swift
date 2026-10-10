@@ -13,7 +13,8 @@ import UIKit
 /// `viewController(for:)` is the one place a view model meets its screen.
 ///
 /// Exercises and workouts open their detail screens, clips open the player,
-/// and all three lead to their comments.
+/// and all three lead to their comments. Search, from the home title bar,
+/// finds people, workouts and exercises — the app's one search.
 ///
 /// `currentUserId` is the signed-in user, read once in the composition root.
 /// The router needs it to decide what a user may do to their own content:
@@ -63,6 +64,9 @@ public final class DiscoverKitRouter {
     let blockedUsersWriter: BlockedUsersWriter
     let workoutDetailLoader: DiscoverWorkoutDetailLoader
     let exerciseClipsLoader: ExerciseClipsLoader
+    let peopleSearchLoader: PeopleSearchLoader
+    let workoutSearchLoader: WorkoutSearchLoader
+    let exerciseSearchLoader: ExerciseSearchLoader
     let workoutCopySaver: WorkoutCopySaver?
     let savedWorkoutCopyChecker: SavedWorkoutCopyChecker?
     let profileOpener: UserProfileOpener?
@@ -79,6 +83,11 @@ public final class DiscoverKitRouter {
         reportWriter: reportWriter,
         blockWriter: blockedUsersWriter
     )
+
+    /// Workout authors' names, shared by every list for the reason given on
+    /// `DiscoverAuthorDirectory`.
+    @MainActor
+    private(set) lazy var authors = DiscoverAuthorDirectory(loader: profileLoader, currentUserId: currentUserId)
 
     // MARK: - Init
 
@@ -111,6 +120,9 @@ public final class DiscoverKitRouter {
         blockedUsersWriter: BlockedUsersWriter,
         workoutDetailLoader: DiscoverWorkoutDetailLoader,
         exerciseClipsLoader: ExerciseClipsLoader,
+        peopleSearchLoader: PeopleSearchLoader,
+        workoutSearchLoader: WorkoutSearchLoader,
+        exerciseSearchLoader: ExerciseSearchLoader,
         workoutCopySaver: WorkoutCopySaver?,
         savedWorkoutCopyChecker: SavedWorkoutCopyChecker?,
         profileOpener: UserProfileOpener?,
@@ -144,6 +156,9 @@ public final class DiscoverKitRouter {
         self.blockedUsersWriter = blockedUsersWriter
         self.workoutDetailLoader = workoutDetailLoader
         self.exerciseClipsLoader = exerciseClipsLoader
+        self.peopleSearchLoader = peopleSearchLoader
+        self.workoutSearchLoader = workoutSearchLoader
+        self.exerciseSearchLoader = exerciseSearchLoader
         self.workoutCopySaver = workoutCopySaver
         self.savedWorkoutCopyChecker = savedWorkoutCopyChecker
         self.profileOpener = profileOpener
@@ -188,8 +203,9 @@ extension DiscoverKitRouter {
             viewModel.onWorkoutTapped = { [weak self] in self?.navigate(to: .workoutDetail($0)) }
             viewModel.onExerciseTapped = { [weak self] in self?.navigate(to: .exerciseDetail($0)) }
             viewModel.onClipTapped = { [weak self] in self?.navigate(to: .clipPlayer($0)) }
+            viewModel.onOpenSearch = { [weak self] in self?.navigate(to: .search) }
             let vc = DiscoverKitBoundaryViewController()
-            vc.display = DiscoverHomeScreen(viewModel: viewModel, moderation: moderation)
+            vc.display = DiscoverHomeScreen(viewModel: viewModel, moderation: moderation, authors: authors)
             vc.router = self
             return vc
 
@@ -218,8 +234,10 @@ extension DiscoverKitRouter {
                     pager: pager,
                     moderation: moderation,
                     hides: { [moderation] in moderation.hides($0) },
+                    separatesCards: true,
+                    skeleton: AnyView(DiscoverWorkoutRowSkeleton()),
                     onTap: { [weak self] in self?.navigate(to: .workoutDetail($0)) },
-                    row: { DiscoverWorkoutRow(card: $0) }
+                    row: { [authors] in DiscoverWorkoutRow(card: $0, authors: authors) }
                 )
             )
             vc.hidesBottomBarWhenPushed = true
@@ -352,8 +370,29 @@ extension DiscoverKitRouter {
                     exercises: exercises,
                     workouts: workouts,
                     moderation: moderation,
+                    authors: authors,
                     onExerciseTapped: { [weak self] in self?.navigate(to: .exerciseDetail($0)) },
                     onWorkoutTapped: { [weak self] in self?.navigate(to: .workoutDetail($0)) }
+                )
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .search:
+            let viewModel = DiscoverSearchViewModel(
+                peopleLoader: peopleSearchLoader,
+                workoutLoader: workoutSearchLoader,
+                exerciseLoader: exerciseSearchLoader,
+                currentUserId: currentUserId
+            )
+            let vc = UIHostingController(
+                rootView: DiscoverSearchScreen(
+                    viewModel: viewModel,
+                    moderation: moderation,
+                    authors: authors,
+                    onPersonTapped: profileOpener.map { opener in { opener.openProfile($0.userId) } },
+                    onWorkoutTapped: { [weak self] in self?.navigate(to: .workoutDetail($0)) },
+                    onExerciseTapped: { [weak self] in self?.navigate(to: .exerciseDetail($0)) }
                 )
             )
             vc.hidesBottomBarWhenPushed = true

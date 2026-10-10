@@ -18,4 +18,5 @@ enum DiscoverKitRoutes {
     case clipPlayer(DiscoverClipCard)
     case tag(String)
     case blockedUsers
+    case search
 }

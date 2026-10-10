@@ -453,7 +453,7 @@ call sites and drifted apart. Do not re-inline any of them:
 `SessionSetInput.target(for:)` · `WorkoutTag.normalized(_:)` · `SessionSetPillValue.values(for:record:)` ·
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
 `ReportDocumentWriter` · `ProfileNamesReader` · `FollowsPageQuery` · `MyDayStoreLocation` ·
-`PendingSyncStoreLocation`
+`PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix`
 
 ## Testing
 Before writing any tests, read all test files and folders within `ITGWorkoutKit`
@@ -517,7 +517,8 @@ Roadmap order:
 2. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
 3. PROFILE tab, `ProfileKit` (built; rollout pending, see `PROFILE_PLAN.md`)
 4. Unified search on DISCOVER (people, workouts, exercises), built entirely in DiscoverKit, which
-   replaces ProfileKit's people search. See *Follow-up: unified search* in `DISCOVER_PLAN.md`.
+   replaced ProfileKit's people search (built; rollout pending, see *Follow-up — unified search* in
+   `DISCOVER_PLAN.md`).
 
 Those five are the **player** tab bar (`PlayerInitialViewController`). The **coach** tab bar
 (`CoachInitialViewController`) is a different four: NEWSFEED, DISCOVER, **PLAYERS**, MYPROFILE — no
@@ -1249,6 +1250,43 @@ users' comments, clips and workouts and anything the user reported, at once. Not
 automatically; restoring is the admin app's, from `ModerationQueue`. **Comments must not reach real
 users unless moderation is rolled out with them** (Apple guideline 1.2).
 
+### Search — people, workouts, exercises
+The app's one search, behind the magnifier on DISCOVER's title bar. It replaced ProfileKit's
+people-only search, which is deleted. Built, not rolled out — checklist in `DISCOVER_PLAN.md`.
+- **Workouts and people match the start of any word.** The functions write `searchTokens` — every
+  prefix of every word, lowercased, accents folded (`Search/SearchTokens.ts`) — onto workout cards
+  and `Profiles`, and the app asks for the query's longest word with `array-contains`, checking
+  any other words itself (`DiscoverSearchQuery.matches`). "upper" finds "Saturday Upper"; "pper"
+  finds nothing — Firestore cannot match inside a word. Usernames also keep a `usernameLower`
+  prefix range on the whole query, so a handle is found by exactly what was typed.
+- **Exercises are searched on the device.** The catalogue is small and curated, so
+  `CatalogueExerciseSearchLoader` reads it once per router and `DiscoverExerciseMatcher` matches
+  inside words and forgives one typo (a swap of two letters counts as one) for words of four
+  letters or more. **Never read workouts or people this way** — they grow with users.
+- **`DiscoverSearchQuery` is the one query rule** (`normalized`, `words`, `lookupToken`,
+  `matches`) and **`DiscoverSearchPrefix` the one range** — do not re-derive either at a call
+  site. `DiscoverSearchQuery.words` **must split exactly as the functions' `searchWords`**, and
+  `maxTokenLength` must equal `MAX_TOKEN_LENGTH`, or a stored token is one the app never asks for.
+- **Each kind loads and fails on its own**, as the home sections do; a kind with no matches is left
+  out rather than drawn empty.
+- **The All / People / Workouts / Exercises filter narrows the query, not just the screen**
+  (`DiscoverSearchScope`): one kind is searched alone at 25 results instead of 10, and a filter tap
+  re-runs at once, without the typing debounce.
+- You are never in your own people results, and moderation filters the rest, as on every list.
+
+### The workout row is one component everywhere
+`DiscoverWorkoutRow` is the workout on home, see-all, tag pages and search. It has **no icon tile**:
+every workout drew the same dumbbell, so the tile said nothing. It is about twice the exercise row's
+height and spends that on what tells workouts apart — title (two lines), "by Name · date",
+exercise-count / rating / comment pills, and up to three tags. Rating and comments show only once
+there are some. **Each workout is a card of its own, 10pt apart, never a row joined to the next by
+a divider** — at this height a joined list read as one long slab. The row draws its own
+`discoverCardChrome()` (the one definition of the card look, which `SectionContainer` uses too), and
+workout sections are `DiscoverSeparateCardsSection`; exercises and people stay joined rows.
+**Author names come from `DiscoverAuthorDirectory`**, one per flow on the router, which batches the
+ids rows request as they appear into one `UserProfileLoader` call. A per-row lookup would be a read
+per row. Your own workouts read "by You" without a lookup.
+
 ### Workout pages — Save to Library, a copy
 The workout page's one action is **Save to Library** — never "Add to Today"; a day is MyDay's. The
 save is a **copy** (`WorkoutTemplateModel.copy(savedBy:)` — new id, the saver's, private,
@@ -1336,8 +1374,8 @@ DISCOVER and search only once report, block and account deletion are live.
   public**, in DISCOVER and on the profile.
 - Body measurements live on their own private screen, not on Edit Profile, which edits what others
   see.
-- **Search moves to DISCOVER**, rebuilt there as people + workouts + exercises entirely in
-  DiscoverKit, after which ProfileKit's search is deleted. See *Follow-up: unified search* in
+- **Search lives on DISCOVER**, people + workouts + exercises entirely in DiscoverKit, and
+  ProfileKit has no search of its own. See *Follow-up — unified search* in
   `DISCOVER_PLAN.md`.
 
 ### Account deletion
@@ -1606,6 +1644,7 @@ in this codebase.**
 | `DiscoverReportTarget+Firestore` path shapes | `Discover/Moderation/ReportTarget.ts` | DISCOVER Tab |
 | `FollowPath` (app) | the functions' `followId()` and the `Follows` create rule's id check | PROFILE_PLAN.md step 5 |
 | `DiscoverTagPath` subcollection names | `TAGGED_EXERCISES` / `TAGGED_WORKOUTS` in `SyncTagDirectory.ts` | DISCOVER Tab |
+| `searchWords` / `MAX_TOKEN_LENGTH` in the functions' `Search/SearchTokens.ts` | `DiscoverSearchQuery.words` / `.maxTokenLength` | DISCOVER Tab |
 | `DiscoverTaggingViewModel.maxMyTags` (10) | `MAX_TAGS_PER_VOTER` in `VoterTags.ts`, and the rules | DISCOVER Tab |
 | `DiscoverCommentsViewModel.maxLength` (500) | the comment rules' `text.size()` limit | DISCOVER Tab |
 | `DiscoverReportReason` raw values | ProfileKit's `ProfileReportReason`, and the rules' accepted `reason` list | DISCOVER Tab, PROFILE_PLAN.md step 9 |

@@ -10,10 +10,12 @@ import Foundation
 /// Who wrote a comment, as much as a comment row shows. Resolved from the
 /// author's id at display time rather than copied onto the comment, so a
 /// changed display name is current everywhere.
-public struct DiscoverUserProfile: Hashable, Sendable {
+public struct DiscoverUserProfile: Identifiable, Hashable, Sendable {
     public let userId: String
     public let username: String
     public let displayName: String
+
+    public var id: String { userId }
 
     public init(userId: String, username: String, displayName: String) {
         self.userId = userId

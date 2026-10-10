@@ -15,7 +15,6 @@ enum ProfileKitRoutes {
     case followList(FollowListKind, userId: String)
     case followRequests
     case userProfile(userId: String)
-    case search
     case deleteAccount
     case editHighlights(pinned: [String], onSaved: (ProfileHighlights) -> Void)
     /// Carries what the profile already holds, so the editor opens filled in

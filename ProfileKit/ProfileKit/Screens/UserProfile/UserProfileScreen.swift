@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Someone else's profile, pushed with the system bar from a follow list,
-/// search, DISCOVER or a legacy screen. See `UserProfileViewModel`.
+/// DISCOVER (its search included) or a legacy screen. See `UserProfileViewModel`.
 ///
 /// The Follow button is full width under the header: the one action on the
 /// screen, at the size MyDay gives its primary actions. "Following" and

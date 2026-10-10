@@ -6,9 +6,8 @@
 //
 import Foundation
 
-/// Preview conformer for someone else's profile and for search: a public
-/// account with counts, and a couple of matches for any query.
-public final class PreviewPublicProfileServices: PublicProfileLoader, UserSearchLoader, @unchecked Sendable {
+/// Preview conformer for someone else's profile: a public account with counts.
+public final class PreviewPublicProfileServices: PublicProfileLoader, @unchecked Sendable {
 
     private let isPrivate: Bool
 
@@ -29,12 +28,5 @@ public final class PreviewPublicProfileServices: PublicProfileLoader, UserSearch
             isPrivate: isPrivate,
             counts: ProfileCounts(followers: 128, following: 54)
         )
-    }
-
-    public func search(_ query: String, limit: Int) async throws -> [ProfileSummary] {
-        [
-            ProfileSummary(userId: "u0", username: "\(query)alex", displayName: "Alex Morgan"),
-            ProfileSummary(userId: "u1", username: "\(query)sam", displayName: "Sam Reid")
-        ]
     }
 }

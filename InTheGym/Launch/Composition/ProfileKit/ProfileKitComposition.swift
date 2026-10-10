@@ -104,8 +104,6 @@ class ProfileKitComposition {
 
         let publicProfileLoader: PublicProfileLoader = FirestorePublicProfileLoader()
 
-        let userSearchLoader: UserSearchLoader = FirestoreUserSearchLoader()
-
         // MARK: - Highlights and clips
 
         let highlightsLoader: ProfileHighlightsLoader = FirestoreProfileHighlightsLoader()
@@ -173,7 +171,6 @@ class ProfileKitComposition {
             followRequestCountLoader: followRequestCountLoader,
             followRequestApprover: followRequestApprover,
             publicProfileLoader: publicProfileLoader,
-            userSearchLoader: userSearchLoader,
             highlightsLoader: highlightsLoader,
             clipsLoader: clipsLoader,
             highlightCandidatesLoader: highlightCandidatesLoader,
