@@ -53,7 +53,7 @@ struct SetDetailView: View {
         .background {
             RoundedRectangle(cornerRadius: 16)
                 .matchedGeometryEffect(id: "\(model.id)background", in: animation)
-                .foregroundStyle(Color(UIColor.systemBackground))
+                .foregroundStyle(Color(UIColor.secondarySystemGroupedBackground))
                 .overlay {
                     RoundedRectangle(cornerRadius: 16)
                         .inset(by: 0.5)
@@ -101,7 +101,7 @@ struct SetDetailView: View {
             } label: {
                 ZStack {
                     Circle()
-                        .fill(Color(UIColor.secondarySystemBackground))
+                        .fill(Color(UIColor.tertiarySystemGroupedBackground))
                         .frame(width: 36, height: 36)
                     Image(systemName: "xmark")
                         .font(.system(size: 12, weight: .semibold))
@@ -212,7 +212,7 @@ struct SetDetailView: View {
         content
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(14)
-            .background(Color(UIColor.secondarySystemBackground))
+            .background(Color(UIColor.tertiarySystemGroupedBackground))
             .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
@@ -483,7 +483,7 @@ struct SetDetailView: View {
                         .foregroundStyle(Color.primary)
                         .frame(maxWidth: .infinity)
                         .frame(height: 48)
-                        .background(Color(UIColor.secondarySystemBackground))
+                        .background(Color(UIColor.tertiarySystemGroupedBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }

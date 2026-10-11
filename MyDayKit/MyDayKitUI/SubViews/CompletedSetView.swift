@@ -108,5 +108,5 @@ struct CompletedSetView: View {
         CompletedSetView(index: 3, model: completion(8, 100, .kg, 90, nil), animation: animation)
     }
     .padding(20)
-    .background(Color.white)
+    .background(Color(UIColor.systemBackground))
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// The search field. `DiscoverSearchScreen` puts it on a white bar above the
-/// `darkColor` page — the same white-over-dark the home screen's title bar
+/// `pageColor` page — the same white-over-dark the home screen's title bar
 /// draws, so pushing into search keeps the frame. Autocapitalisation and autocorrect are off: usernames are
 /// lowercase, and correcting "deadlift" to something else finds nothing.
 struct DiscoverSearchField: View {

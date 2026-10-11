@@ -53,7 +53,7 @@ struct MyDayTemplateSetPillPlaceholder: View {
         .opacity(0.35)
         .background {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(UIColor.secondarySystemBackground).opacity(0.5))
+                .fill(Color(UIColor.tertiarySystemGroupedBackground).opacity(0.5))
         }
         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
@@ -67,5 +67,5 @@ struct MyDayTemplateSetPillPlaceholder: View {
         set: WorkoutSetModel(id: "s1", orderIndex: 0, reps: 8, weight: 80, weightUnit: .kg)
     )
     .padding(20)
-    .background(Color.white)
+    .background(Color(UIColor.systemBackground))
 }

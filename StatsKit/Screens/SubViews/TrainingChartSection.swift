@@ -258,7 +258,7 @@ private struct TrainingWeekBars: View {
         TrainingChartSection(totals: MockDailyTotalsProvider().previewTotals)
             .padding()
     }
-    .background(Color.darkColor.ignoresSafeArea())
+    .background(Color.pageColor.ignoresSafeArea())
 }
 
 #Preview("Empty") {
@@ -266,5 +266,5 @@ private struct TrainingWeekBars: View {
         TrainingChartSection(totals: [])
             .padding()
     }
-    .background(Color.darkColor.ignoresSafeArea())
+    .background(Color.pageColor.ignoresSafeArea())
 }

@@ -45,7 +45,7 @@ struct MyDayWorkoutSessionExerciseCard: View {
                 .padding(.horizontal, 16)
             actionsRow
         }
-        .background(Color.white)
+        .background(Color(UIColor.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .shadow(color: Color.black.opacity(0.06), radius: 8, x: 0, y: 2)
     }

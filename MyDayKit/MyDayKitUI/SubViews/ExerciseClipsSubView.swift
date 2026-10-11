@@ -34,7 +34,7 @@ struct ExerciseClipsSubView: View {
             HStack(spacing: 10) {
                 ZStack {
                     Circle()
-                        .fill(Color(UIColor.secondarySystemBackground))
+                        .fill(Color(UIColor.tertiarySystemGroupedBackground))
                         .frame(width: 48, height: 48)
                     
                     Image(systemName: "video.badge.plus")
@@ -59,7 +59,7 @@ struct ExerciseClipsSubView: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(Color(UIColor.secondarySystemBackground))
+            .background(Color(UIColor.tertiarySystemGroupedBackground))
             .clipShape(RoundedRectangle(cornerRadius: 14))
         }
     }
@@ -95,7 +95,7 @@ struct ExerciseClipsSubView: View {
                     } label: {
                         ZStack {
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(Color(UIColor.secondarySystemBackground))
+                                .fill(Color(UIColor.tertiarySystemGroupedBackground))
                                 .frame(width: 60, height: 60)
                                 .overlay {
                                     RoundedRectangle(cornerRadius: 12)

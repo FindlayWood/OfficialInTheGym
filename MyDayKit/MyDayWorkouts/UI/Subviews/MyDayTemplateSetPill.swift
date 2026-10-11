@@ -69,7 +69,7 @@ struct MyDayTemplateSetPill: View {
         .background {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .matchedGeometryEffect(id: "\(matchedId)background", in: animation)
-                .foregroundStyle(Color(UIColor.secondarySystemBackground))
+                .foregroundStyle(Color(UIColor.tertiarySystemGroupedBackground))
                 .overlay {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .inset(by: 0.5)
@@ -119,5 +119,5 @@ struct MyDayTemplateSetPill: View {
         )
     }
     .padding(20)
-    .background(Color.white)
+    .background(Color(UIColor.systemBackground))
 }

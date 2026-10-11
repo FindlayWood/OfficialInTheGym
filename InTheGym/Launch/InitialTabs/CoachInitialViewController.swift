@@ -42,7 +42,7 @@ class CoachInitialViewController: UITabBarController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
         tabBar.backgroundColor = .systemBackground
-        tabBar.tintColor = .darkColour
+        tabBar.tintColor = .adaptiveDarkColour
         tabBar.barTintColor = .systemBackground
     }
 }

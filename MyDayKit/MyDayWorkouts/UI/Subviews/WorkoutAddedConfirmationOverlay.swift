@@ -37,7 +37,7 @@ struct WorkoutAddedConfirmationOverlay: View {
             .padding(.vertical, 28)
             .background(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(Color(UIColor.systemBackground))
+                    .fill(Color(UIColor.secondarySystemGroupedBackground))
                     .shadow(color: .black.opacity(0.18), radius: 24, x: 0, y: -8)
             )
             .padding(.horizontal, 20)

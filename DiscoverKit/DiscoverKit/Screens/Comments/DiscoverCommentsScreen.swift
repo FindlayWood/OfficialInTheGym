@@ -10,7 +10,7 @@ import SwiftUI
 /// Every comment on one exercise, workout or clip, newest first, each with its
 /// replies one tap away, and the composer pinned to the bottom.
 ///
-/// Same `darkColor` page and `SectionContainer` card as every other DISCOVER
+/// Same `pageColor` page and `SectionContainer` card as every other DISCOVER
 /// screen. The composer sits outside the scroll view so the keyboard lifts it
 /// rather than covering it.
 struct DiscoverCommentsScreen: View {
@@ -52,7 +52,7 @@ struct DiscoverCommentsScreen: View {
             DiscoverCommentComposer(viewModel: viewModel)
         }
         .background {
-            Color.darkColor.ignoresSafeArea()
+            Color.pageColor.ignoresSafeArea()
         }
         .navigationTitle("Comments")
         .navigationBarTitleDisplayMode(.inline)

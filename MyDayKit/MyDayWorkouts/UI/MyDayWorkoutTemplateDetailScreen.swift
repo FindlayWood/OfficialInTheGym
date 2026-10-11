@@ -63,7 +63,7 @@ struct MyDayWorkoutTemplateDetailScreen: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
             }
-            .background(Color.darkColor)
+            .background(Color.pageColor)
         }
         // No `.navigationTitle` / `.toolbar`: the system bar is hidden by
         // `NavBarHidingHostingController` so the set detail overlay can dim

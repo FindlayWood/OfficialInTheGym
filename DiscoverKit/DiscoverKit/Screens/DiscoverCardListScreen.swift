@@ -11,7 +11,7 @@ import SwiftUI
 /// workout and exercise lists, which differ only in their row — one screen
 /// rather than two copies that would drift.
 ///
-/// Same `darkColor` page as the home screen, and the same layout as the
+/// Same `pageColor` page as the home screen, and the same layout as the
 /// section it came from, so pushing into the full list keeps the frame:
 /// exercises as rows joined inside one `SectionContainer` card, workouts as
 /// separate cards (`separatesCards`, see `DiscoverWorkoutRow`).
@@ -46,7 +46,7 @@ struct DiscoverCardListScreen<Card: Identifiable, Row: View>: View {
             .padding()
         }
         .background {
-            Color.darkColor.ignoresSafeArea()
+            Color.pageColor.ignoresSafeArea()
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)

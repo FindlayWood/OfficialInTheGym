@@ -58,7 +58,7 @@ struct WorkoutSessionDialogOverlay: View {
             case .confirmCancel: confirmContent
             }
         }
-        .background(Color.white)
+        .background(Color(UIColor.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .shadow(color: Color.black.opacity(0.25), radius: 24, x: 0, y: 10)
     }
@@ -178,14 +178,14 @@ struct WorkoutSessionDialogOverlay: View {
 
 #Preview("Options") {
     ZStack {
-        Color.darkColor.ignoresSafeArea()
+        Color.pageColor.ignoresSafeArea()
         WorkoutSessionDialogOverlay(dialog: .options)
     }
 }
 
 #Preview("Confirm Cancel") {
     ZStack {
-        Color.darkColor.ignoresSafeArea()
+        Color.pageColor.ignoresSafeArea()
         WorkoutSessionDialogOverlay(dialog: .confirmCancel)
     }
 }

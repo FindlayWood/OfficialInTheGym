@@ -31,7 +31,7 @@ struct DiscoverClipGridScreen: View {
             footer
         }
         .background {
-            Color.darkColor.ignoresSafeArea()
+            Color.pageColor.ignoresSafeArea()
         }
         .navigationTitle("Clips")
         .navigationBarTitleDisplayMode(.inline)

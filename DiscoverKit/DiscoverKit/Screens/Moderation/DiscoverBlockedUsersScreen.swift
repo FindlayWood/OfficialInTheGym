@@ -47,7 +47,7 @@ struct DiscoverBlockedUsersScreen: View {
             .padding()
         }
         .background {
-            Color.darkColor.ignoresSafeArea()
+            Color.pageColor.ignoresSafeArea()
         }
         .navigationTitle("Blocked Users")
         .navigationBarTitleDisplayMode(.inline)

@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// A section's uppercase title, with an optional trailing control, sitting on
-/// the `darkColor` page above its content — which is why it is `.white`, and
+/// the `pageColor` page above its content — which is why it is `.white`, and
 /// why anything passed as `trailing` must be light too. Shared by
 /// `SectionContainer` and `DiscoverSeparateCardsSection`, so a section of
 /// joined rows and a section of separate cards are headed identically.

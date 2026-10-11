@@ -52,7 +52,7 @@ struct PlaceholderSetView: View {
         .opacity(0.35)
         .background {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(UIColor.secondarySystemBackground).opacity(0.5))
+                .fill(Color(UIColor.tertiarySystemGroupedBackground).opacity(0.5))
         }
         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
@@ -79,5 +79,5 @@ struct PlaceholderSetView: View {
         )
     )
     .padding(20)
-    .background(Color.white)
+    .background(Color(UIColor.systemBackground))
 }

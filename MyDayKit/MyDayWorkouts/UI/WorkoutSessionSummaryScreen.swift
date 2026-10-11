@@ -72,7 +72,7 @@ struct WorkoutSessionSummaryScreen: View {
         .background(Color(UIColor.systemBackground))
         .navigationTitle("Summary")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color.white, for: .navigationBar)
+        .toolbarBackground(Color(UIColor.systemBackground), for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.light, for: .navigationBar)
         .safeAreaInset(edge: .bottom) {

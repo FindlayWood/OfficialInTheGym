@@ -80,10 +80,10 @@ public struct ACWRDetailScreen: View {
             .padding(.vertical, 8)
         }
         // The same page/card relationship as the home screen and
-        // `ExerciseDetailScreen`: `darkColor` behind `systemBackground` cards.
+        // `ExerciseDetailScreen`: `pageColor` behind `systemBackground` cards.
         // This was `systemGroupedBackground`, so pushing from the stats home
         // into a detail screen changed the whole frame of the app.
-        .background { Color.darkColor.ignoresSafeArea() }
+        .background { Color.pageColor.ignoresSafeArea() }
         .navigationTitle(metric.title)
         .navigationBarTitleDisplayMode(.large)
     }

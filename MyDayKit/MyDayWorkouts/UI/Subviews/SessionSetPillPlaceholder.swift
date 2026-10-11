@@ -49,7 +49,7 @@ struct SessionSetPillPlaceholder: View {
         .opacity(0.35)
         .background {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(UIColor.secondarySystemBackground).opacity(0.5))
+                .fill(Color(UIColor.tertiarySystemGroupedBackground).opacity(0.5))
         }
         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
     }

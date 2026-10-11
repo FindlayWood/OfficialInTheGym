@@ -97,7 +97,7 @@ struct MyDayWorkoutSessionScreen: View {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
                 }
-                .background(Color.darkColor)
+                .background(Color.pageColor)
             }
 
             if !sessionStarted {

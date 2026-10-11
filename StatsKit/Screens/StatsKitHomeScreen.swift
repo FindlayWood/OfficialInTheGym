@@ -42,7 +42,7 @@ struct StatsKitHomeScreen: View {
             }
         }
         .background {
-            Color.darkColor.ignoresSafeArea()
+            Color.pageColor.ignoresSafeArea()
         }
         .task { await viewModel.load() }
     }
@@ -63,7 +63,7 @@ struct StatsKitHomeScreen: View {
             .padding(.vertical, 12)
         }
         .background {
-            Color.white.ignoresSafeArea()
+            Color(UIColor.systemBackground).ignoresSafeArea()
         }
     }
 

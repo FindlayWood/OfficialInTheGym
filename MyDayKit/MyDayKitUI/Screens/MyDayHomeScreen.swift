@@ -73,7 +73,7 @@ struct MyDayHomeScreen: View {
             }
         }
         .background {
-            Color.darkColor.ignoresSafeArea()
+            Color.pageColor.ignoresSafeArea()
         }
         .overlay {
             if let selectedSet {
@@ -147,7 +147,7 @@ struct MyDayHomeScreen: View {
             }
         }
         .background {
-            Color.white.ignoresSafeArea()
+            Color(UIColor.systemBackground).ignoresSafeArea()
         }
     }
     

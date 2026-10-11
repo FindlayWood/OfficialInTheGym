@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// The `headerTrailing` for a `SectionContainer`: white on a translucent white
-/// capsule, matching StatsKit's "View all". It sits on the `darkColor` page, so
+/// capsule, matching StatsKit's "View all". It sits on the `pageColor` page, so
 /// it must be light — see `SectionContainer`.
 struct SeeAllButton: View {
     let action: () -> Void

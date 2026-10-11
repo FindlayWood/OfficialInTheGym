@@ -29,7 +29,7 @@ struct DailyWorkoutCard: View {
                 Button { showOptions = true } label: {
                     ZStack {
                         Circle()
-                            .fill(Color(UIColor.secondarySystemBackground))
+                            .fill(Color(UIColor.tertiarySystemGroupedBackground))
                             .frame(width: 32, height: 32)
                         Image(systemName: "ellipsis")
                             .font(.system(size: 13, weight: .medium))
@@ -84,7 +84,7 @@ struct DailyWorkoutCard: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white)
+        .background(Color(UIColor.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: Color.black.opacity(0.06), radius: 8, x: 0, y: 2)
         .onTapGesture {
