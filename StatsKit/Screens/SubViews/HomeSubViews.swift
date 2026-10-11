@@ -285,7 +285,7 @@ struct SectionContainer<Content: View>: View {
             VStack(alignment: .leading, spacing: 0) {
                 content
             }
-            .background(Color(.systemBackground))
+            .background(Color(.secondarySystemGroupedBackground))
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
@@ -562,7 +562,7 @@ public struct StatCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(14)
         .frame(height: 110)
-        .background(Color(.systemBackground))
+        .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(
             RoundedRectangle(cornerRadius: 14)

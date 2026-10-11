@@ -129,7 +129,7 @@ struct SessionSetDetailOverlay: View {
         .background {
             RoundedRectangle(cornerRadius: 16)
                 .matchedGeometryEffect(id: "\(detail.matchedId)background", in: animation)
-                .foregroundStyle(Color(UIColor.systemBackground))
+                .foregroundStyle(Color(UIColor.secondarySystemGroupedBackground))
                 .overlay {
                     RoundedRectangle(cornerRadius: 16)
                         .inset(by: 0.5)
@@ -335,7 +335,7 @@ struct SessionSetDetailOverlay: View {
             } label: {
                 ZStack {
                     Circle()
-                        .fill(Color(UIColor.secondarySystemBackground))
+                        .fill(Color(UIColor.tertiarySystemGroupedBackground))
                         .frame(width: 36, height: 36)
                     Image(systemName: "xmark")
                         .font(.system(size: 12, weight: .semibold))
@@ -459,7 +459,7 @@ struct SessionSetDetailOverlay: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(14)
-            .background(Color(UIColor.secondarySystemBackground))
+            .background(Color(UIColor.tertiarySystemGroupedBackground))
             .clipShape(RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
@@ -656,7 +656,7 @@ struct SessionSetDetailOverlay: View {
         content
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(14)
-            .background(Color(UIColor.secondarySystemBackground))
+            .background(Color(UIColor.tertiarySystemGroupedBackground))
             .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 

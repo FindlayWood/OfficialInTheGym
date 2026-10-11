@@ -89,7 +89,7 @@ public struct TrainingBalanceScreen: View {
         // Matches the stats home and every other detail screen: `darkColor`
         // behind `systemBackground` cards. It was `systemGroupedBackground`, so
         // pushing in from the home screen changed the frame of the whole app.
-        .background { Color.darkColor.ignoresSafeArea() }
+        .background { Color.pageColor.ignoresSafeArea() }
         .navigationTitle("Training Balance")
         .navigationBarTitleDisplayMode(.large)
     }

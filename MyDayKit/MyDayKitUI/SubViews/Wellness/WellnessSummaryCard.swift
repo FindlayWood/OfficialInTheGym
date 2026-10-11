@@ -28,7 +28,7 @@ struct WellnessSummaryCard: View {
                 pastDayView
             }
         }
-        .background(Color(.systemBackground))
+        .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .overlay(
             RoundedRectangle(cornerRadius: 16)

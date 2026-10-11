@@ -9,7 +9,7 @@ import SwiftUI
 
 /// An action in a `SectionContainer` header — white on a translucent white
 /// capsule, the same as `SeeAllButton`, because a header sits on the
-/// `darkColor` page and anything on it must be light.
+/// `pageColor` page and anything on it must be light.
 struct DiscoverHeaderButton: View {
     let title: String
     let systemImage: String

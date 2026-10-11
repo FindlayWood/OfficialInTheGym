@@ -64,7 +64,7 @@ struct ExerciseListScreen: View {
         // `SectionContainer`'s title — which is `.white`, because a header sits
         // on the page rather than on the card — was white on white. The section
         // heading was invisible in light appearance and only showed in dark.
-        .background { Color.darkColor.ignoresSafeArea() }
+        .background { Color.pageColor.ignoresSafeArea() }
         .navigationTitle("Exercises")
         .navigationBarTitleDisplayMode(.large)
         .task {

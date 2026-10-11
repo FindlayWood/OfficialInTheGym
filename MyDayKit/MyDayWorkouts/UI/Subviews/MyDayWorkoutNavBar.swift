@@ -81,7 +81,7 @@ struct MyDayWorkoutNavBar: View {
 
             Divider()
         }
-        .background(Color.white.ignoresSafeArea(edges: .top))
+        .background(Color(UIColor.systemBackground).ignoresSafeArea(edges: .top))
     }
 }
 

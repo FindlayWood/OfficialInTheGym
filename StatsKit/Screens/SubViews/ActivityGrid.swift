@@ -138,5 +138,5 @@ struct ActivityGrid: View {
 #Preview {
     ActivityGrid(totals: MockDailyTotalsProvider().previewTotals)
         .padding()
-        .background(Color(.systemBackground))
+        .background(Color(.secondarySystemGroupedBackground))
 }

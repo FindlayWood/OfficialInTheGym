@@ -44,7 +44,7 @@ struct WorkoutSessionFinishBar: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 12)
         }
-        .background(Color.white.ignoresSafeArea(edges: .bottom))
+        .background(Color(UIColor.systemBackground).ignoresSafeArea(edges: .bottom))
     }
 }
 
@@ -52,7 +52,7 @@ struct WorkoutSessionFinishBar: View {
 
 #Preview {
     ZStack(alignment: .bottom) {
-        Color.darkColor.ignoresSafeArea()
+        Color.pageColor.ignoresSafeArea()
         WorkoutSessionFinishBar()
     }
 }

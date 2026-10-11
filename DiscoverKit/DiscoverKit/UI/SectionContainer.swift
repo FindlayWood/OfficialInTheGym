@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-/// A titled card on the `darkColor` page — DiscoverKit's copy of StatsKit's
+/// A titled card on the `pageColor` page — DiscoverKit's copy of StatsKit's
 /// `SectionContainer`, **kept in step with it** so moving between the two tabs
 /// does not change the frame of the app.
 ///
 /// **The header sits on the page, not on the card**, which is why the title is
 /// `.white`. Anything passed as `headerTrailing` must be light too: StatsKit
-/// shipped a "View all" in `darkColor` — the page colour — which was present,
+/// shipped a "View all" in `darkColor` — then the page colour — which was present,
 /// tappable and invisible.
 struct SectionContainer<Content: View>: View {
     let title: String?

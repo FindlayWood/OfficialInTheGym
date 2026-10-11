@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// The DISCOVER tab root. Same frame as the STATS tab — white title bar over a
-/// `darkColor` page of `SectionContainer` cards — so switching between the two
+/// `pageColor` page of `SectionContainer` cards — so switching between the two
 /// does not change what the app looks like.
 ///
 /// Sections, in order: clips (the only visual content, so it leads), workouts,
@@ -34,7 +34,7 @@ struct DiscoverHomeScreen: View {
             .refreshable { await viewModel.load() }
         }
         .background {
-            Color.darkColor.ignoresSafeArea()
+            Color.pageColor.ignoresSafeArea()
         }
         .task {
             async let content: Void = viewModel.load()

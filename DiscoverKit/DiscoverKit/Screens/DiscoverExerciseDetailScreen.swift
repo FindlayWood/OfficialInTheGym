@@ -52,7 +52,7 @@ struct DiscoverExerciseDetailScreen: View {
             .padding()
         }
         .background {
-            Color.darkColor.ignoresSafeArea()
+            Color.pageColor.ignoresSafeArea()
         }
         .navigationTitle(card.name)
         .navigationBarTitleDisplayMode(.inline)

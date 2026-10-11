@@ -48,7 +48,7 @@ struct ExerciseCompletionView: View {
                             }
                             .padding()
                             .background {
-                                Color.white
+                                Color(UIColor.secondarySystemGroupedBackground)
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
                                     .shadow(radius: 2)
                             }

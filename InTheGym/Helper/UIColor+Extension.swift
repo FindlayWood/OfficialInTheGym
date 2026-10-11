@@ -21,4 +21,13 @@ extension UIColor {
     static let liveColour = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
     static let notStartedColour = #colorLiteral(red: 0.8643916561, green: 0.1293050488, blue: 0.007468156787, alpha: 1)
     static let premiumColour = #colorLiteral(red: 0.4470588235, green: 0.03529411765, blue: 0.7176470588, alpha: 1)
+
+    /// The app target's twin of the frameworks' adaptive `Color.darkColor`: `darkColour` in light
+    /// appearance, `lightColour` in dark. **Use it for anything chrome-level that must stay legible
+    /// in dark mode** — the selected tab item was `darkColour`, which on a black tab bar reads at
+    /// about 2:1 and left the current tab barely distinguishable from the others. `darkColour`
+    /// itself stays fixed because the legacy screens still rely on it.
+    static let adaptiveDarkColour = UIColor { traits in
+        traits.userInterfaceStyle == .dark ? .lightColour : .darkColour
+    }
 }

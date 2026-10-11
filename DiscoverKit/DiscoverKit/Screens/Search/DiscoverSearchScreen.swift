@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Search, pushed from the magnifier on DISCOVER's title bar. The field and the
-/// scope filter (`DiscoverSearchScopePicker`) sit on a white bar above a `darkColor` page of `SectionContainer` cards — People,
+/// scope filter (`DiscoverSearchScopePicker`) sit on a white bar above a `pageColor` page of `SectionContainer` cards — People,
 /// Workouts, Exercises — so results read like the home screen's sections.
 ///
 /// **A kind with no matches is left out rather than drawn as an empty card**;
@@ -58,7 +58,7 @@ struct DiscoverSearchScreen: View {
             .scrollDismissesKeyboard(.interactively)
         }
         .background {
-            Color.darkColor.ignoresSafeArea()
+            Color.pageColor.ignoresSafeArea()
         }
         .navigationTitle("Search")
         .navigationBarTitleDisplayMode(.inline)

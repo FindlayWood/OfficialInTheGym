@@ -119,5 +119,5 @@ private struct TrainingLoadTile: View {
         )
         .padding()
     }
-    .background(Color.darkColor.ignoresSafeArea())
+    .background(Color.pageColor.ignoresSafeArea())
 }

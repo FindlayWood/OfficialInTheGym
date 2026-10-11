@@ -404,6 +404,29 @@ pill, active-state fill, tint and primary button is now `Color.darkColor` across
   `WorkoutSettingsSheet`. These used `accentColor` rather than `Color.blue` and so survived the first
   sweep — **grep for both.**
 
+### Dark mode — brand navy in light, standard grouped surfaces in dark
+Dark mode is on: `UIUserInterfaceStyle = Light` was removed from `Info.plist`. The framework screens
+support it; the legacy UIKit screens do not yet and are fixed as they are touched.
+
+- **`darkColor` is the adaptive accent** — `#1C496E` in light, `lightColor` (`#4179BD`) in dark,
+  through `Color(light:dark:)`. Navy on a dark surface is ~2:1, under the 3:1 a control needs.
+  Light appearance is unchanged and **no new colour was added**.
+- **`pageColor` is the page** MyDay, Discover and Stats sit on — the navy in light,
+  `systemGroupedBackground` (black) in dark. A navy page was tried in dark mode and looked wrong;
+  in dark the brand lives in the accent alone. **Pages use `pageColor`; controls use `darkColor`.**
+- **On that page the surfaces are the grouped hierarchy**: cards
+  `secondarySystemGroupedBackground`, wells inside a card (set pills, measure cells, chips)
+  `tertiarySystemGroupedBackground`. Both are identical to the old white / `secondarySystemBackground`
+  in light. **Never `Color.white` or `systemBackground` for a card** — in dark either is a white slab
+  or a black card that vanishes into the page. `discoverCardChrome()` and StatsKit's
+  `SectionContainer` follow the same rule.
+- Clip and jump-camera views keep their hardcoded black/white: they sit over video.
+- **Both tab bars tint with `UIColor.adaptiveDarkColour`** (the app target's twin of `darkColor`);
+  `darkColour` on a black tab bar made the selected tab nearly invisible.
+- **The launch screen is `systemBackground`** and `logo_icon_transparent` has a brightened dark
+  variant. **`AppIcon` and `AppIconEmulator` are single-size 1024 sets with dark and tinted
+  variants** (transparent backgrounds, generated from the light icon) — iOS 26 needs no other sizes.
+
 The library row's icon is a **solid** `darkColor` tile with a white `dumbbell.fill`, not a 12%-tinted
 one: at 44pt on a `secondarySystemBackground` card a wash of colour barely registers and the rows had
 nothing anchoring them.

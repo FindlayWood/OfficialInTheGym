@@ -97,7 +97,7 @@ struct DiscoverWorkoutDetailScreen: View {
             .padding()
         }
         .background {
-            Color.darkColor.ignoresSafeArea()
+            Color.pageColor.ignoresSafeArea()
         }
         .navigationTitle(card.title)
         .navigationBarTitleDisplayMode(.inline)

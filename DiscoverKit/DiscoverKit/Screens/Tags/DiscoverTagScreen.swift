@@ -40,7 +40,7 @@ struct DiscoverTagScreen: View {
             .padding()
         }
         .background {
-            Color.darkColor.ignoresSafeArea()
+            Color.pageColor.ignoresSafeArea()
         }
         .navigationTitle("#\(tag)")
         .navigationBarTitleDisplayMode(.inline)

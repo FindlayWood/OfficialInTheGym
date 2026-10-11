@@ -82,7 +82,7 @@ struct SessionSetPill: View {
         .background {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .matchedGeometryEffect(id: "\(matchedId)background", in: animation)
-                .foregroundStyle(isLogged ? Color.darkColor : Color(UIColor.secondarySystemBackground))
+                .foregroundStyle(isLogged ? Color.darkColor : Color(UIColor.tertiarySystemGroupedBackground))
                 .overlay {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .inset(by: 0.5)

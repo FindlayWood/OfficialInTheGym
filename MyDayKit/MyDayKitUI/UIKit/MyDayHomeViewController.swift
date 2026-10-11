@@ -104,7 +104,7 @@ public class MyDayHomeViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         dateCollectionView.delegate = self
         dateCollectionView.dataSource = self
         
