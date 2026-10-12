@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 import XCTest
 @testable import PerformanceKit
 
@@ -52,22 +53,29 @@ final class PerformanceKitRouterTests: XCTestCase {
 
         sut.start()
 
-        XCTAssertNil(navigationController.viewControllers.first?.navigationItem.leftBarButtonItem)
+        XCTAssertNil(rootScreen(of: navigationController)?.onDismiss)
     }
 
-    // A presented Performance Center with no Dismiss button has no way out but
-    // the swipe, which a full-screen presentation does not offer.
+    // A presented Performance Center with no close button has no way out but
+    // the swipe, which a full-screen presentation does not offer. The button
+    // lives in the root's own header now that the system bar is hidden there.
     func test_start_offersDismissWhenPresented() {
         let navigationController = UINavigationController()
         let sut = makeSUT(navigationController: navigationController)
-        sut.onDismiss = {}
+        var dismissed = 0
+        sut.onDismiss = { dismissed += 1 }
 
         sut.start()
+        rootScreen(of: navigationController)?.onDismiss?()
 
-        XCTAssertEqual(navigationController.viewControllers.first?.navigationItem.leftBarButtonItem?.title, "Dismiss")
+        XCTAssertEqual(dismissed, 1)
     }
 
     // MARK: - Helpers
+
+    private func rootScreen(of navigationController: UINavigationController) -> PerformanceRootScreen? {
+        (navigationController.viewControllers.first as? PerformanceKitHostingController<PerformanceRootScreen>)?.rootView
+    }
 
     private func makeSUT(navigationController: UINavigationController = UINavigationController()) -> PerformanceKitRouter {
         PerformanceKitRouter(

@@ -24,7 +24,7 @@ import UIKit
 /// **One router for every way in.** The tab starts it on the tab's stack. The
 /// legacy callers (a coach's athlete page, the old "More" menu, the timeline)
 /// start it on a navigation controller they present full screen, and set
-/// `onDismiss`, which is what puts a Dismiss button on the root. The tab leaves
+/// `onDismiss`, which is what puts a close button in the root's header. The tab leaves
 /// it nil, since a tab has nothing to dismiss to.
 public final class PerformanceKitRouter {
 
@@ -112,7 +112,9 @@ extension PerformanceKitRouter {
             home.onStartCheck = { [weak self, weak home] in
                 self?.present(.jumpTest(.cmj, onSaved: { home?.sessionSaved($0) }), from: self?.navigationController)
             }
-            let vc = PerformanceKitHostingController(rootView: PerformanceRootScreen(gate: gate, home: home))
+            // Presented, not a tab: the header draws a close button.
+            let dismiss: (() -> Void)? = onDismiss == nil ? nil : { [weak self] in self?.onDismiss?() }
+            let vc = PerformanceKitHostingController(rootView: PerformanceRootScreen(gate: gate, home: home, onDismiss: dismiss))
             vc.router = self
             // Coming back to the tab re-checks pro, and reloads the dashboard,
             // which is how a test saved from a test's own screen reaches it.
@@ -121,12 +123,6 @@ extension PerformanceKitRouter {
                 gate?.refresh()
                 guard let home, gate?.isUnlocked == true, home.hasLoaded else { return }
                 Task { await home.load() }
-            }
-            if onDismiss != nil {
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(
-                    title: "Dismiss",
-                    primaryAction: UIAction { [weak self] _ in self?.onDismiss?() }
-                )
             }
             return vc
 
