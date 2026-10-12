@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A7500000000000000000002 /* StatsProAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000001 /* StatsProAccess.swift */; };
+		5A7500000000000000000004 /* PreviewStatsProAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000003 /* PreviewStatsProAccess.swift */; };
+		5A7500000000000000000006 /* StatsGateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000005 /* StatsGateViewModel.swift */; };
+		5A7500000000000000000008 /* StatsKitRootScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000007 /* StatsKitRootScreen.swift */; };
+		5A750000000000000000000A /* StatsLockedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000009 /* StatsLockedScreen.swift */; };
 		F026EE6F2F8D77990066FCB4 /* TrainingBalanceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE6E2F8D77990066FCB4 /* TrainingBalanceScreen.swift */; };
 		F026EE712F8D80D90066FCB4 /* MovementPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE702F8D80D90066FCB4 /* MovementPattern.swift */; };
 		F026EE732F8D8FB10066FCB4 /* MovementTypesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE722F8D8FB10066FCB4 /* MovementTypesLoader.swift */; };
@@ -59,6 +64,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5A7500000000000000000001 /* StatsProAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsProAccess.swift; sourceTree = "<group>"; };
+		5A7500000000000000000003 /* PreviewStatsProAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewStatsProAccess.swift; sourceTree = "<group>"; };
+		5A7500000000000000000005 /* StatsGateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsGateViewModel.swift; sourceTree = "<group>"; };
+		5A7500000000000000000007 /* StatsKitRootScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitRootScreen.swift; sourceTree = "<group>"; };
+		5A7500000000000000000009 /* StatsLockedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsLockedScreen.swift; sourceTree = "<group>"; };
 		F026EE6E2F8D77990066FCB4 /* TrainingBalanceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingBalanceScreen.swift; sourceTree = "<group>"; };
 		F026EE702F8D80D90066FCB4 /* MovementPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementPattern.swift; sourceTree = "<group>"; };
 		F026EE722F8D8FB10066FCB4 /* MovementTypesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementTypesLoader.swift; sourceTree = "<group>"; };
@@ -169,6 +179,7 @@
 		F0A11D1E2F6C618C00CE1E9A /* Router */ = {
 			isa = PBXGroup;
 			children = (
+				5A7500000000000000000005 /* StatsGateViewModel.swift */,
 				F0A11D1F2F6C61AC00CE1E9A /* StatsKitRouter.swift */,
 				F0A11D212F6C61E600CE1E9A /* StatsKitRoutes.swift */,
 				F0F6DF442F708AEA00D02F93 /* StatsKitBoundaryViewController.swift */,
@@ -179,6 +190,8 @@
 		F0A11D232F6C622C00CE1E9A /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				5A7500000000000000000009 /* StatsLockedScreen.swift */,
+				5A7500000000000000000007 /* StatsKitRootScreen.swift */,
 				F0F6DF382F705CED00D02F93 /* SubViews */,
 				F0A11D242F6C623900CE1E9A /* StatsKitHomeScreen.swift */,
 				F0F6DF3E2F70836800D02F93 /* ExerciseListScreen.swift */,
@@ -239,6 +252,8 @@
 		F0F6E7C22F81557000D02F93 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
+				5A7500000000000000000003 /* PreviewStatsProAccess.swift */,
+				5A7500000000000000000001 /* StatsProAccess.swift */,
 				F0F6E7C32F81557B00D02F93 /* ExerciseLoader.swift */,
 				F0F6E7C92F81594400D02F93 /* MuscleGroupsLoader.swift */,
 				F026EE722F8D8FB10066FCB4 /* MovementTypesLoader.swift */,
@@ -365,6 +380,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A7500000000000000000002 /* StatsProAccess.swift in Sources */,
+				5A7500000000000000000004 /* PreviewStatsProAccess.swift in Sources */,
+				5A7500000000000000000006 /* StatsGateViewModel.swift in Sources */,
+				5A7500000000000000000008 /* StatsKitRootScreen.swift in Sources */,
+				5A750000000000000000000A /* StatsLockedScreen.swift in Sources */,
 				F0A11D222F6C61E600CE1E9A /* StatsKitRoutes.swift in Sources */,
 				F0664E742F9FF5F70053DEE7 /* Color+Extension.swift in Sources */,
 				F0F6DF412F70849800D02F93 /* ExerciseStatsLoader.swift in Sources */,

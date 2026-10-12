@@ -16,7 +16,9 @@ import SwiftUI
 struct PurchaseErrorBanner: View {
 
     let message: String
-    let onRetry: () -> Void
+    /// "Try Again" for a failure there is something to retry; "OK" just clears it.
+    let actionTitle: String
+    let onAction: () -> Void
 
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
@@ -31,8 +33,8 @@ struct PurchaseErrorBanner: View {
 
             Spacer(minLength: 0)
 
-            Button(action: onRetry) {
-                Text("Try Again")
+            Button(action: onAction) {
+                Text(actionTitle)
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(Color.red)
             }
@@ -48,6 +50,6 @@ struct PurchaseErrorBanner: View {
 }
 
 #Preview {
-    PurchaseErrorBanner(message: PurchaseError.loadingProducts.description) {}
+    PurchaseErrorBanner(message: PurchaseError.loadingProducts.description, actionTitle: "Try Again") {}
         .padding()
 }

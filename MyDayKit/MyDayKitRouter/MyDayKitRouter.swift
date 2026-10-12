@@ -58,6 +58,16 @@ enum MyDayFullScreenCover: Identifiable {
     }
     case recordClip(String)
     case viewClip(MyDayClipModel, UIImage, CGRect)
+
+    /// Whether this cover is part of INTHEGYM pro. **The one place that is decided**:
+    /// `MyDayCoordinator.presentFullScreen(_:)` is the only way either is shown, so a case marked
+    /// here is gated wherever its button lives. Both clip covers are pro — recording and watching.
+    var requiresPro: Bool {
+        switch self {
+        case .recordClip, .viewClip:
+            return true
+        }
+    }
 }
 //
 //public class MyDayKitRouter: ObservableObject {

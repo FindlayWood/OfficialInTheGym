@@ -102,8 +102,6 @@ class StoreKitPurchaseManager: PurchaseManager, ObservableObject {
     var productsPublished: Published<[PurchaseableProduct]> { _products }
     var productsPublisher: Published<[PurchaseableProduct]>.Publisher { $products }
 
-    private let productIds = ["itg_499_1m"]
-
     private var productsLoaded = false
     
     private var subscriptions = Set<AnyCancellable>()
@@ -111,7 +109,17 @@ class StoreKitPurchaseManager: PurchaseManager, ObservableObject {
     func loadProducts() async throws -> [DisplayAndPurchaseProduct] {
         let offerings = try await Purchases.shared.offerings()
         guard let packages = offerings.current?.availablePackages else { return [] }
-        return packages
+        // One introductory offer per subscription group, ever — someone who has trialled before
+        // must not be shown "14 days free". `.unknown` (no receipt yet, the usual case on a fresh
+        // install) counts as eligible, which is what RevenueCat recommends and what Apple honours.
+        let eligibility = await Purchases.shared.checkTrialOrIntroDiscountEligibility(packages: packages)
+        return packages.map { package in
+            let status = eligibility[package]?.status
+            return RevenueCatPackageProduct(
+                package: package,
+                isTrialEligible: status == .eligible || status == .unknown
+            )
+        }
         
 //        guard !self.productsLoaded else { return try await Product.products(for: productIds) }
 //        self.products = try await Product.products(for: productIds)
@@ -365,7 +373,7 @@ class PreviewPurchaseManager: PurchaseManager, ObservableObject {
     var productsPublisher: Published<[PurchaseableProduct]>.Publisher { $products }
     
     func loadProducts() async throws -> [DisplayAndPurchaseProduct] {
-        return []
+        SampleProduct.samples
     }
     
     func purchase(_ product: PurchaseableProduct) async throws -> PurchaseProductResult {

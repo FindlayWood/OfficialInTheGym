@@ -31,7 +31,7 @@ class PlayerInitialViewController: UITabBarController {
         // MARK: - MyDay
         let myDayKit = MyDayKitComposition()
         let myDayNavigationController = UINavigationController()
-        myDayKit.composeCombination(myDayNavigationController)
+        myDayKit.composeCombination(myDayNavigationController, purchaseManager: subscriptionManager)
         myDayNavigationController.tabBarItem = UITabBarItem(title: "MYDAY", image: UIImage(systemName: "list.dash"), tag: 0)
 
         // MARK: - Discover
@@ -53,7 +53,7 @@ class PlayerInitialViewController: UITabBarController {
         // MARK: - Stats Kit
         let statsKit = StatsKitComposition()
         let statsKitNavigationController = UINavigationController()
-        statsKit.composeCombination(statsKitNavigationController)
+        statsKit.composeCombination(statsKitNavigationController, purchaseManager: subscriptionManager)
         statsKitNavigationController.tabBarItem = UITabBarItem(title: "STATS", image: UIImage(systemName: "chart.bar.fill"), tag: 3)
         
         // MARK: - Profile

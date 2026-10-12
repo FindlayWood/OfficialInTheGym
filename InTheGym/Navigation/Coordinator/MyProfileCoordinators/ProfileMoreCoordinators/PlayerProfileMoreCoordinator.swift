@@ -35,10 +35,7 @@ extension PlayerProfileMoreCoordinator {
         child.start()
     }
     func showMySubscriptions() {
-        let vc = PremiumAccountViewController()
-        vc.modalPresentationStyle = .fullScreen
-        vc.viewModel = PremiumAccountViewModel(purchaseManager: subscriptionManager)
-        navigationController.present(vc, animated: true)
+        navigationController.present(ProPaywallViewController.modal(purchaseManager: subscriptionManager), animated: true)
     }
     func showMyMeasurements() {
         let vc = MyMeasurementsViewController()

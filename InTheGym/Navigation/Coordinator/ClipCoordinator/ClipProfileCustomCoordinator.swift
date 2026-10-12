@@ -33,10 +33,7 @@ class ClipProfileCustomCoordinator: NSObject, Coordinator {
             vc.transitioningDelegate = self
             navigationController.present(vc, animated: true)
         } else {
-            let vc = PremiumAccountViewController()
-            vc.modalPresentationStyle = .fullScreen
-            vc.viewModel = PremiumAccountViewModel(purchaseManager: subscriptionManager)
-            navigationController.present(vc, animated: true)
+            navigationController.present(ProPaywallViewController.modal(purchaseManager: subscriptionManager), animated: true)
         }
     }
     

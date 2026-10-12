@@ -246,7 +246,8 @@ the ~150–300ms contact times in drop and repeated jumps. **The height formula 
     app's paywall full screen, so closing it makes the tab appear and re-check. Tools no longer check
     pro themselves.
   - **Emulator unlock:** `EmulatorUnlockPerformanceProAccess` (app, `#if EMULATOR`) wraps the real
-    check with a session-only override, shared by every router; the composition sets
+    check with a session-only override, shared by every router. *(Since replaced by
+    `EmulatorPurchaseManager`, which unlocks pro app-wide — see CLAUDE.md.)* The composition sets
     `router.onUnlockForTesting` only in that build, and the locked screen shows its button only when it
     is set. Verified: the type is in the Emulator binary and absent from Debug.
   - The two unreachable `jumpMeasure()` / `showPerformanceMonitor` paths in the legacy More

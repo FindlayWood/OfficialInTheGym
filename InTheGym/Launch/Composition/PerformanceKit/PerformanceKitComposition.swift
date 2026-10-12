@@ -37,13 +37,10 @@ class PerformanceKitComposition {
     private func makeRouter(_ navigationController: UINavigationController, athlete: Users, purchaseManager: PurchaseManager) -> PerformanceKitRouter {
 
         // MARK: - Pro
-        // The whole tab is pro. Emulator builds wrap the check so the locked
-        // screen can be unlocked for testing.
+        // The whole tab is pro. Emulator builds unlock it through
+        // `EmulatorPurchaseManager`, the same switch the paywall uses.
 
-        var proAccess: PerformanceProAccess = PurchaseManagerPerformanceProAccess(purchaseManager: purchaseManager)
-        #if EMULATOR
-        proAccess = EmulatorUnlockPerformanceProAccess(wrapping: proAccess)
-        #endif
+        let proAccess: PerformanceProAccess = PurchaseManagerProAccess(purchaseManager: purchaseManager)
 
         // MARK: - Jump tests
         // The athlete's sessions, with Vertical Jump's pre-engine history read
@@ -80,14 +77,11 @@ class PerformanceKitComposition {
         )
 
         router.onShowPaywall = { [weak navigationController] in
-            let vc = PremiumAccountViewController()
-            vc.modalPresentationStyle = .fullScreen
-            vc.viewModel = PremiumAccountViewModel(purchaseManager: purchaseManager)
-            navigationController?.present(vc, animated: true)
+            navigationController?.present(ProPaywallViewController.modal(purchaseManager: purchaseManager), animated: true)
         }
 
         #if EMULATOR
-        router.onUnlockForTesting = { EmulatorUnlockPerformanceProAccess.unlock() }
+        router.onUnlockForTesting = { (purchaseManager as? EmulatorPurchaseManager)?.unlockForTesting() }
         #endif
 
         return router
