@@ -51,11 +51,18 @@ struct StatsKitHomeScreen: View {
     
     private var header: some View {
         VStack(spacing: 0) {
-            HStack(alignment: .center) {
+            HStack(alignment: .lastTextBaseline, spacing: 6) {
                 Text("Stats")
                     .font(.system(size: 28, weight: .bold))
                     .foregroundStyle(Color.darkColor)
-                
+
+                // The paywall's "INTHEGYM pro" wordmark at the tab's scale. This screen is only
+                // drawn unlocked (`StatsKitRootScreen`), so it never claims pro for someone without it.
+                Text("pro")
+                    .font(.system(size: 22, weight: .heavy))
+                    .foregroundStyle(Color.premiumColor)
+                    .accessibilityLabel("Pro")
+
                 Spacer()
                 
             }

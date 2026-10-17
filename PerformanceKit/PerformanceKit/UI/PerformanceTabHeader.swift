@@ -14,16 +14,30 @@ import SwiftUI
 ///
 /// `onDismiss` is set only when PERFORMANCE is presented rather than a tab — a coach's athlete page
 /// and the legacy callers — and draws the close button that used to be the system bar's "Dismiss".
+///
+/// `showsPro` puts the paywall's "pro" wordmark, in `premiumColor`, beside the title once the tab is
+/// unlocked — the one hint of pro on a screen that otherwise looks like any other tab. It follows
+/// the gate, so the locked screen never shows it.
 struct PerformanceTabHeader: View {
 
     let title: String
+    var showsPro = false
     var onDismiss: (() -> Void)?
 
     var body: some View {
         HStack {
-            Text(title)
-                .font(.system(size: 28, weight: .bold))
-                .foregroundStyle(Color.darkColor)
+            HStack(alignment: .lastTextBaseline, spacing: 6) {
+                Text(title)
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundStyle(Color.darkColor)
+                if showsPro {
+                    Text("pro")
+                        .font(.system(size: 22, weight: .heavy))
+                        .foregroundStyle(Color.premiumColor)
+                        .accessibilityLabel("Pro")
+                        .transition(.opacity)
+                }
+            }
             Spacer()
             if let onDismiss {
                 Button(action: onDismiss) {

@@ -20,7 +20,7 @@ struct PerformanceRootScreen: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            PerformanceTabHeader(title: "Performance", onDismiss: onDismiss)
+            PerformanceTabHeader(title: "Performance", showsPro: gate.isUnlocked, onDismiss: onDismiss)
             Group {
                 if gate.isUnlocked {
                     PerformanceHomeScreen(viewModel: home)

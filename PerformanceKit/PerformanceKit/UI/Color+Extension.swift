@@ -30,6 +30,13 @@ extension Color {
     /// **Pages use `pageColor`; controls use `darkColor`.**
     static let pageColor = Color(light: Color(hex: 0x1C496E), dark: Color(UIColor.systemGroupedBackground))
 
+    /// The app's `premiumColour` colorset (`#79B49F`, the same in light and dark), which a
+    /// framework cannot read from the app's asset catalog. **Keep in step with ProfileKit's and
+    /// StatsKit's copies.** A **semantic** colour marking pro, not an accent — here it is
+    /// only the "pro" beside the tab title, the paywall's wordmark, so a subscriber sees the thing
+    /// they bought. Spend it anywhere else on this tab and it stops meaning pro.
+    static let premiumColor = Color(hex: 0x79B49F)
+
     /// The matte zone colours, StatsKit's values. **Keep in step with
     /// StatsKit's `Color+Extension.swift`.** Full-saturation system red, orange
     /// and green read as alerts beside `darkColor`; these sit at a similar
