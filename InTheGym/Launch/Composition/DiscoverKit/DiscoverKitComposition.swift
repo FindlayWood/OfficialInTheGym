@@ -161,8 +161,13 @@ class DiscoverKitComposition {
             workoutCopySaver: workoutCopySaver,
             savedWorkoutCopyChecker: savedWorkoutCopyChecker,
             profileOpener: profileOpener,
+            // Watching a clip is pro; everything else on DISCOVER is free.
+            proAccess: PurchaseManagerProAccess(purchaseManager: purchaseManager),
             currentUserId: userId
         )
+        router.onShowPaywall = { [weak navigationController] in
+            navigationController?.present(ProPaywallViewController.modal(purchaseManager: purchaseManager), animated: true)
+        }
 
         return router
     }

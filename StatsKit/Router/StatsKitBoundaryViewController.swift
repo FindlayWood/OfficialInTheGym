@@ -10,8 +10,10 @@ import UIKit
 
 class StatsKitBoundaryViewController: UIViewController {
 
-    var display: StatsKitHomeScreen!
+    var display: StatsKitRootScreen!
     var router: StatsKitRouter!
+    /// What re-checks pro (`StatsGateViewModel.refresh`) each time the tab appears.
+    var onWillAppear: (() -> Void)?
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -22,6 +24,7 @@ class StatsKitBoundaryViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        onWillAppear?()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

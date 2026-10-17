@@ -40,10 +40,7 @@ final class ProfileAppRoutes {
 extension ProfileAppRoutes {
 
     func showPaywall() {
-        let vc = PremiumAccountViewController()
-        vc.modalPresentationStyle = .fullScreen
-        vc.viewModel = PremiumAccountViewModel(purchaseManager: purchaseManager)
-        navigationController?.present(vc, animated: true)
+        navigationController?.present(ProPaywallViewController.modal(purchaseManager: purchaseManager), animated: true)
     }
 
     func showManageSubscription() {

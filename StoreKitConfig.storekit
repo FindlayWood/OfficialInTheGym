@@ -10,12 +10,8 @@
     ]
   },
   "identifier" : "B7AE9BD0",
-  "nonRenewingSubscriptions" : [
-
-  ],
-  "products" : [
-
-  ],
+  "nonRenewingSubscriptions" : [],
+  "products" : [],
   "settings" : {
     "_applicationInternalID" : "1510109526",
     "_compatibilityTimeRate" : {
@@ -23,7 +19,7 @@
     },
     "_developerTeamID" : "H6WZPTFL8D",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 739393425.42073405,
+    "_lastSynchronizedDate" : 739393425.420734,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [
@@ -79,65 +75,84 @@
     {
       "id" : "20974953",
       "localizations" : [
-
+        {
+          "description" : "",
+          "displayName" : "INTHEGYM pro",
+          "locale" : "en_GB"
+        }
       ],
-      "name" : "Premium Account",
+      "name" : "INTHEGYM pro",
       "subscriptions" : [
         {
-          "adHocOffers" : [
-
-          ],
-          "codeOffers" : [
-
-          ],
-          "displayPrice" : "48.99",
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "59.99",
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "1643968845",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "internalID" : "8C1A4E21",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P2W"
+          },
           "localizations" : [
             {
-              "description" : "Premium Account",
-              "displayName" : "Premium Account",
+              "description" : "Stats, clips and performance testing",
+              "displayName" : "INTHEGYM pro",
               "locale" : "en_GB"
             }
           ],
-          "productID" : "itg_4999_1y",
+          "productID" : "inthegym_pro_yearly",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Annual £49.99",
+          "referenceName" : "Pro Yearly",
           "subscriptionGroupID" : "20974953",
           "type" : "RecurringSubscription",
-          "winbackOffers" : [
-
-          ]
+          "winbackOffers" : []
         },
         {
-          "adHocOffers" : [
-
-          ],
-          "codeOffers" : [
-
-          ],
-          "displayPrice" : "4.99",
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "6.99",
           "familyShareable" : false,
-          "groupNumber" : 1,
+          "groupNumber" : 2,
           "internalID" : "1643968127",
           "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "Premium Account",
-              "displayName" : "Premium Account",
+              "description" : "Stats, clips and performance testing",
+              "displayName" : "INTHEGYM pro",
               "locale" : "en_GB"
             }
           ],
-          "productID" : "itg_499_1m",
+          "productID" : "inthegym_pro_monthly",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Monthly £4.99",
+          "referenceName" : "Pro Monthly",
           "subscriptionGroupID" : "20974953",
           "type" : "RecurringSubscription",
-          "winbackOffers" : [
-
-          ]
+          "winbackOffers" : []
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "2.99",
+          "familyShareable" : false,
+          "groupNumber" : 3,
+          "internalID" : "6F2B9D47",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Stats, clips and performance testing",
+              "displayName" : "INTHEGYM pro",
+              "locale" : "en_GB"
+            }
+          ],
+          "productID" : "inthegym_pro_weekly",
+          "recurringSubscriptionPeriod" : "P1W",
+          "referenceName" : "Pro Weekly",
+          "subscriptionGroupID" : "20974953",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : []
         }
       ]
     }

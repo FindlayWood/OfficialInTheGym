@@ -43,10 +43,16 @@ struct BasicBaseFlow: BaseFlow {
         accountCreationComposer.startAccountCreation(email: email, uid: uid)
     }
     func showAccountCreated(for user: Users) {
-        let vc = AccountCreatedViewController()
-        vc.viewModel = AccountCreatedViewModel(purchaseManager: subscriptionManager)
-        vc.baseFlow = self
-        vc.user = user
+        let vc = ProPaywallViewController()
+        vc.viewModel = ProPaywallViewModel(purchaseManager: subscriptionManager)
+        // After signup the paywall is a step, not a sheet: closing it enters the app.
+        vc.onFinish = {
+            if user.accountType == .coach {
+                self.showLoggedInCoach()
+            } else {
+                self.showLoggedInPlayer()
+            }
+        }
         navigationController.setViewControllers([vc], animated: true)
     }
 }

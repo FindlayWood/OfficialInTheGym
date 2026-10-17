@@ -51,13 +51,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // For iOS 10 display notification (sent via APNS)
         // register for Push Notifications
         UNUserNotificationCenter.current().delegate = self
-        
-        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-        UNUserNotificationCenter.current().requestAuthorization(
-            options: authOptions,
-            completionHandler: { _, _ in }
-        )
-        
+
+        // Notification permission is NOT asked for here. It used to be, at first launch before
+        // signup, when nobody had a reason to say yes — and iOS shows that prompt only once. It is
+        // asked in context instead (`TrialReminderPermissionScreen`). Registering for remote
+        // notifications below shows nothing; it only fetches the device token.
+
 
         application.registerForRemoteNotifications()
         

@@ -56,7 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private lazy var purchaseManager: PurchaseManager = {
 #if EMULATOR
-        return PreviewPurchaseManager()
+        return EmulatorPurchaseManager()
 #else
         return StoreKitPurchaseManager()
 #endif

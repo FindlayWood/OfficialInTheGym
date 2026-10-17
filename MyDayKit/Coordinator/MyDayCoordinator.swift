@@ -25,10 +25,13 @@ public final class MyDayCoordinator {
     let clipViewRecorder: ViewClipRecorder
     let workoutManager: WorkoutBuilderManager
     let workoutLibraryManager: WorkoutLibraryManager
+    let proAccess: MyDayProAccess
     
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
     private var rootViewController: UIViewController?
+    /// Shown instead of a cover whose `requiresPro` is set when the user has no pro.
+    public var onShowPaywall: (() -> Void)?
 
     // MARK: - Init
 
@@ -42,7 +45,8 @@ public final class MyDayCoordinator {
         clipLoader: ClipLoader,
         clipViewRecorder: ViewClipRecorder,
         workoutManager: WorkoutBuilderManager,
-        workoutLibraryManager: WorkoutLibraryManager
+        workoutLibraryManager: WorkoutLibraryManager,
+        proAccess: MyDayProAccess
     ) {
         self.navigationController = navigationController
         self.userId = userId
@@ -54,6 +58,7 @@ public final class MyDayCoordinator {
         self.clipViewRecorder = clipViewRecorder
         self.workoutManager = workoutManager
         self.workoutLibraryManager = workoutLibraryManager
+        self.proAccess = proAccess
     }
 
     // MARK: - Root
@@ -353,6 +358,10 @@ extension MyDayCoordinator {
 extension MyDayCoordinator {
 
     func presentFullScreen(_ cover: MyDayFullScreenCover) {
+        if cover.requiresPro && !proAccess.hasUnlockedPro {
+            onShowPaywall?()
+            return
+        }
         let vc: UIViewController
 
         switch cover {

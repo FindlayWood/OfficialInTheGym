@@ -100,31 +100,82 @@ itself once the address is verified.
 - The view reads `viewModel.email` rather than `viewModel.user?.email`, so it does not touch the
   Firebase `User` type — it only ever needed the address.
 
-### The screen after account creation is a paywall
-`AccountCreatedViewController` shows **`AccountCreatedSubscriptionView`** — INTHEGYM pro, not a
-"welcome" screen. `AccountCreatedView.swift` was the welcome screen it sounds like, was never used,
-and has been deleted; don't recreate it without wiring it up. Same design vocabulary as the rest of
-onboarding, in the app target rather than a framework.
+### INTHEGYM pro — one paywall, `InTheGym/ProPaywall/`
+`ProPaywallView` is shown straight after account creation **and** at every pro gate in the app
+(PERFORMANCE, ProfileKit settings, the legacy clip screens and More menus), always through
+`ProPaywallViewController` — `BasicBaseFlow` sets `onFinish` to enter the app; everything else uses
+`ProPaywallViewController.modal(purchaseManager:)`, where closing dismisses. It replaced two copies
+(`AccountCreatedSubscriptionView` / `PremiumAccountView` and their view models), the second of which
+still had the soft-lock bug the first had fixed. **Do not fork it again.**
 
+- **Three plans — weekly £2.99, monthly £6.99, yearly £59.99 — and yearly is recommended**
+  (`ProPlan.recommendedPeriod`): preselected, larger, badged, carrying the only free trial (two weeks),
+  and the only plan that states a saving. Monthly was recommended first; yearly replaced it because
+  annual subscribers stay longer and are worth more. Every claim is computed from the store's prices,
+  never typed in: the saving compares yearly with **monthly** (the next-shorter plan, ~28%), rounded
+  down, and the badge reads "Best value" only while yearly really is cheapest per week, otherwise
+  "Recommended" (`badgeTitle(among:)`). Every card leads with its real price for its real period;
+  per-week / per-month equivalents are secondary text.
+- **The trial comes from the store, per user.** `freeTrialDays` is `nil` unless the product has a free
+  trial *and* `checkTrialOrIntroDiscountEligibility` says this user can take it (Apple allows one intro
+  offer per subscription group, ever). The button reads "Start free trial" only then, "Subscribe"
+  otherwise. Which plans carry a trial is set in App Store Connect, not in code.
+- **`ProTrialTimeline`** puts the real dates on screen — today, the reminder, the charge — and
+  *promises* the reminder; it is part of what makes the trial feel safe, so it stays on the paywall.
+  **Permission is asked after the purchase**, on `TrialReminderPermissionScreen` (`ProPaywallStep`):
+  shown only when a trial started and notifications are not already allowed, "Remind me" / "Not now",
+  or "Open Settings" for someone who turned them off (re-checked when the app returns). The success
+  screen then states the trial's end date and whether a reminder is set. `StartedTrial` is the one
+  definition of the end date and reminder date.
+- **The app never asks for notifications at launch.** It used to, before signup, when nobody had a
+  reason to say yes — and iOS shows that prompt once. This screen is the app's one ask. **Do not add
+  a notification promise for something that does not send one**: today only the trial reminder
+  exists. When comments, likes and replies send pushes, a non-subscriber version of the screen asks
+  for those.
+- **A paywall must always be dismissible.** The close button is never hidden, delayed or disabled.
+  The old onboarding paywall once lost its "Not Now" behind a stuck `isLoading`.
+- **Required by App Review 3.1.2:** price and renewal terms beside the button (`termsText`), Restore,
+  and working Terms of Use and Privacy Policy links (`ProPaywallLinks`). **`privacyPolicy` is `nil` —
+  set it before submitting.**
+- **`ProFeatureList` lists only what pro actually gates** — the STATS tab, clips, the PERFORMANCE tab
+  and the pro badge. The old list sold free and retired features. Coaching joins it when it ships, not
+  before.
+
+### What pro gates, and how
+**Pro is the STATS tab, the PERFORMANCE tab, and clips — recording and watching, in MyDay and on
+DISCOVER.** Logging, workouts, DISCOVER's lists and pages, and profiles stay free. Everything a free
+user logs is still written (raw logs, `DailyTotal`s), so subscribing shows their whole history.
+
+- **Each framework declares its own `…ProAccess`** (`StatsProAccess`, `PerformanceProAccess`,
+  `MyDayProAccess`, `DiscoverProAccess`), since none may import the app. **One app-side adapter,
+  `PurchaseManagerProAccess`, answers all four** — "who has pro" is one question, and coach-granted
+  passes will change its answer in one place. Every gate reads it fresh, never at build time.
+- **A whole tab** (STATS, PERFORMANCE) is a gate view model re-checked on every appearance, switching
+  the root between the home and a locked screen. **Both locked screens draw the real home, blurred,
+  from sample data** — `StatsLockedScreen` from `MockDailyTotalsProvider`, `PerformanceLockedScreen`
+  from `PreviewJumpTestSessionsLoader` (fixed numbers, so the fatigue card never changes zone between
+  visits) — with the lock card over it. A tab sells a shape, which a paragraph cannot show.
+- **A single action** is gated at its one chokepoint by a `requiresPro` on the route:
+  `MyDayFullScreenCover.requiresPro` in `MyDayCoordinator.presentFullScreen(_:)` (record, view) and
+  `DiscoverKitRoutes.requiresPro` in `DiscoverKitRouter.navigate(to:)` (`.clipPlayer`, which also
+  covers ProfileKit's clips grid via `showClip`). Without pro the router calls `onShowPaywall`
+  instead. **Clips stay visible without pro** — the thumbnails are the advert. **Gate a new pro
+  screen by marking its route, never with a check at the button.**
+- The legacy coach tab bar (PLAYERS, the RTDB coaching graph) is **not** gated: no new coach accounts
+  are created and that UI is being replaced. Coaching becomes pro when it is rebuilt (*Future Ideas*).
 - **`premiumColour` is green, not purple.** There is a `premiumColour` **colorset** (`#79B49F`, with
   a dark variant) *and* a purple `UIColor.premiumColour` `#colorLiteral` in
   `Helper/UIColor+Extension.swift`. `Color(.premiumColour)` resolves to the asset, so every SwiftUI
   screen is green while UIKit callers (`editNavBarColour(to: .premiumColour)`, `UserStampsView`,
-  `UIProfileInfoView`) get purple. Pre-existing and app-wide — **not** a paywall bug, so it was left
-  alone here. Worth resolving centrally.
-- It keeps `premiumColour` as its accent rather than `darkColor`: that is a semantic colour marking
-  premium, like the category colours in `ExerciseCategory`, and it matches `PremiumAccountView`.
-- **"Not Now" is always on screen.** It used to sit in an `else` branch that any error or a stuck
-  `isLoading` removed, and `AccountCreatedViewModel` set `isLoading = true` in its `catch` blocks —
-  so a failed purchase hid both the purchase button and the way out, soft-locking onboarding. The
-  `catch` blocks now set `false`. **A paywall must always be dismissible.**
-- `SubscriptionProductRow` is one component with an `isSelected` flag; it was inlined twice, selected
-  and unselected, and the two copies had already drifted. `PurchaseErrorBanner` renders
-  `PurchaseError.description` — which already existed and was going unused behind four hand-written
-  `case` branches with their own duplicated buttons.
-- The feature list copy is unchanged and is data now (`SubscriptionFeatureList.features`). Some
-  entries — Vertical Jump, CMJ, Injury tracker, Journal — may no longer match what the app ships;
-  that is a product call, not a styling one.
+  `UIProfileInfoView`) get purple. Pre-existing and app-wide. Worth resolving centrally. The paywall
+  keeps `premiumColour` as its accent: it is a semantic colour marking premium.
+- **Emulator builds: `EmulatorPurchaseManager` is the one pro switch.** It sells `SampleProduct.samples`
+  (buying one succeeds) and the paywall's "Unlock pro for testing" button unlocks pro for the session,
+  everywhere — every flow reads `hasUnlockedPro` off the one instance `SceneDelegate` builds. Compiled
+  only with `-D EMULATOR`; in memory, so a relaunch is locked again.
+- The products come from RevenueCat's **current offering** (entitlement `Premium`), wrapped as
+  `RevenueCatPackageProduct`. `StoreKitConfig.storekit` mirrors the intended App Store Connect setup
+  for local testing.
 
 ## Account Creation
 The post-signup onboarding flow — a paged form between email verification and the tab bar. It was an
@@ -535,8 +586,8 @@ root).
 (see `PERFORMANCE_PLAN.md`, part 2). **The whole tab is pro**: its root, `PerformanceRootScreen`,
 shows the tests with pro and a locked screen without, and re-checks **every time the tab appears**,
 never once at launch, or a new subscriber would stay locked out until relaunch. **Emulator builds can
-unlock it with one tap**: `EmulatorUnlockPerformanceProAccess` wraps the pro check and the locked
-screen offers "Unlock for testing", both compiled only with `-D EMULATOR`. The coach-side and legacy
+unlock it with one tap**: the locked screen offers "Unlock for testing", which unlocks pro app-wide
+through `EmulatorPurchaseManager` (see *INTHEGYM pro*), both compiled only with `-D EMULATOR`. The coach-side and legacy
 callers present the same router modally (`PerformanceKitComposition.presentModally`). Workload,
 Journal, Match Tracker, Practice Tracker and the old CMJ tool were retired and their code removed;
 their stored data was left where it is.
@@ -1066,7 +1117,9 @@ enabled flag. **Keep new gated buttons in step with it** rather than inventing a
 
 ## STATS Tab — `StatsKit`
 Reads the `DailyTotal` documents and the raw exercise logs written by the MyDay path below, and turns
-them into training-load metrics. `StatsKitRouter` follows the shape under *Architecture*; the six read
+them into training-load metrics. **The whole tab is pro** — `StatsKitRootScreen` switches between the
+home and `StatsLockedScreen` on `StatsGateViewModel`, re-checked each time the tab appears (see
+*What pro gates, and how*). `StatsKitRouter` follows the shape under *Architecture*; the six read
 protocols (`DailyTotalsProviding`, `StatsKitExerciseLoader`, `ExerciseDailyStatsProviding`,
 `ExerciseLoader`, `MuscleGroupsLoader`, `MovementTypesLoader`) are implemented in
 `InTheGym/Launch/Composition/StatsKit/`, one adapter per file.
@@ -1658,11 +1711,16 @@ component has to be `public`. Scope it before committing.
 Ideas captured so they are not lost. **Nothing here is agreed or specified — do not start
 building any of it, and treat the details as a starting point for a conversation, not a spec.**
 
-- **Coach-granted premium passes (in-app purchase).** A subscribed coach buys 1-year passes and
-  grants them to their clients/athletes, giving each client the premium version of the app for that
-  year. The pass is what lets the coach programme workouts to that client for the year. The coach
+- **Coaching is pro.** Connecting with an athlete, setting them workouts and monitoring their
+  performance tests will require the coach to have pro. Whether the *athlete* also needs pro to be
+  coached is open — leaning no, since requiring both sides to pay before the link is useful would
+  stall adoption, and the credits below are the upsell to the athlete.
+- **Coach-granted premium passes (in-app purchase).** A subscribed coach buys credits and gifts them
+  to their athletes, each credit unlocking pro for that athlete for a set period. The coach
   must hold their own active subscription — a granted pass depends on the granting coach still
-  being subscribed. Open questions before this is buildable: what happens to a client's pass when
+  being subscribed. Apple allows gifting IAP-eligible items (guideline 3.1.1: refundable only to the
+  purchaser), so credits would be a consumable IAP redeemed server-side into a time-limited
+  entitlement — RevenueCat promotional entitlements, or Firestore read by `PurchaseManagerProAccess`. Open questions before this is buildable: what happens to a client's pass when
   the coach's subscription lapses mid-year; whether passes are transferable or revocable; whether
   a client can hold passes from more than one coach; how this interacts with a client who also
   subscribes directly; and how the entitlement is verified server-side (App Store Server

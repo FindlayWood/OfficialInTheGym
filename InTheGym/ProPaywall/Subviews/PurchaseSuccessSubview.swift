@@ -11,6 +11,10 @@ import RevenueCat
 
 struct PurchaseSuccessSubview: View {
 
+    /// Set when the purchase started a free trial: the screen then says when it ends and whether a
+    /// reminder is coming, so the last thing the user reads about the trial is its date.
+    var trial: StartedTrial? = nil
+    var isReminded: Bool = false
     var action: (() -> ())
 
     var body: some View {
@@ -23,17 +27,32 @@ struct PurchaseSuccessSubview: View {
                 .frame(width: 88, height: 88)
                 .foregroundStyle(Color(.premiumColour))
 
-            Text("Great!")
+            Text("You're in")
                 .font(.system(size: 28, weight: .bold))
                 .foregroundStyle(Color.primary)
                 .padding(.top, 20)
 
-            Text("You are now subscribed to InTheGym Pro")
+            Text("INTHEGYM pro is unlocked. Manage or cancel it any time in Settings.")
                 .font(.system(size: 15))
                 .foregroundStyle(Color.secondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.top, 6)
+
+            if let trial {
+                Text(trialText(trial))
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(Color.primary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(14)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .fill(Color(.secondarySystemBackground))
+                    )
+                    .padding(.top, 20)
+            }
 
             Spacer()
 
@@ -50,12 +69,16 @@ struct PurchaseSuccessSubview: View {
                         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                 }
 
-                Button {
-                    openManageSubscriptions()
-                } label: {
-                    Text("Manage Subscription")
-                        .font(.system(size: 15, weight: .medium))
-                        .foregroundStyle(Color.secondary)
+                // RevenueCat is never configured in emulator builds, and `Purchases.shared` traps
+                // when it is not — this screen is reachable there now that pro can be unlocked.
+                if Purchases.isConfigured {
+                    Button {
+                        openManageSubscriptions()
+                    } label: {
+                        Text("Manage Subscription")
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(Color.secondary)
+                    }
                 }
             }
         }
@@ -63,6 +86,13 @@ struct PurchaseSuccessSubview: View {
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground).ignoresSafeArea())
+    }
+
+    private func trialText(_ trial: StartedTrial) -> String {
+        let ends = "Your free trial ends on \(StartedTrial.display(trial.endsAt))."
+        return isReminded
+            ? "\(ends) We'll remind you the day before."
+            : "\(ends) Cancel before then in Settings and you won't be charged."
     }
 
     private func openManageSubscriptions() {

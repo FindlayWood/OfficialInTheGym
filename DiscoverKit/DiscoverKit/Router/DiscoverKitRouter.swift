@@ -70,9 +70,13 @@ public final class DiscoverKitRouter {
     let workoutCopySaver: WorkoutCopySaver?
     let savedWorkoutCopyChecker: SavedWorkoutCopyChecker?
     let profileOpener: UserProfileOpener?
+    let proAccess: DiscoverProAccess
     let currentUserId: String
 
     // MARK: - Properties
+
+    /// Shown instead of a screen whose route `requiresPro` when the user has no pro.
+    public var onShowPaywall: (() -> Void)?
 
     private(set) var rootViewController: UIViewController?
 
@@ -126,6 +130,7 @@ public final class DiscoverKitRouter {
         workoutCopySaver: WorkoutCopySaver?,
         savedWorkoutCopyChecker: SavedWorkoutCopyChecker?,
         profileOpener: UserProfileOpener?,
+        proAccess: DiscoverProAccess,
         currentUserId: String
     ) {
         self.navigationController = navigationController
@@ -162,6 +167,7 @@ public final class DiscoverKitRouter {
         self.workoutCopySaver = workoutCopySaver
         self.savedWorkoutCopyChecker = savedWorkoutCopyChecker
         self.profileOpener = profileOpener
+        self.proAccess = proAccess
         self.currentUserId = currentUserId
     }
 
@@ -466,6 +472,10 @@ extension DiscoverKitRouter {
 
     @MainActor
     func navigate(to route: DiscoverKitRoutes) {
+        if route.requiresPro && !proAccess.hasUnlockedPro {
+            onShowPaywall?()
+            return
+        }
         navigationController.pushViewController(viewController(for: route), animated: true)
     }
 }

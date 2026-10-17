@@ -11,7 +11,8 @@ import StatsKit
 
 class StatsKitComposition {
     
-    func composeCombination(_ navigationController: UINavigationController) {
+    @MainActor
+    func composeCombination(_ navigationController: UINavigationController, purchaseManager: PurchaseManager) {
         
         let dailyTotalLoader = StatsKitDailyTotalsLoader()
         
@@ -26,6 +27,10 @@ class StatsKitComposition {
         let muscleGroupLoader = RemoteMuscleGroupsLoader()
         
         let movementTypeLoader = RemoteMovementTypesLoader()
+
+        // MARK: - Pro
+        // The whole tab is pro, re-checked each time it appears.
+        let proAccess: StatsProAccess = PurchaseManagerProAccess(purchaseManager: purchaseManager)
         
         let router = StatsKitRouter(
             navigationController: navigationController,
@@ -35,9 +40,13 @@ class StatsKitComposition {
             exerciseDailyStatsLoader: exerciseDailyStatsLoader,
             exerciseLoader: exerciseLoader,
             muscleGroupLoader: muscleGroupLoader,
-            movementTypeLoader: movementTypeLoader
+            movementTypeLoader: movementTypeLoader,
+            proAccess: proAccess
         )
-        
+        router.onShowPaywall = { [weak navigationController] in
+            navigationController?.present(ProPaywallViewController.modal(purchaseManager: purchaseManager), animated: true)
+        }
+
         router.start()
     }
     

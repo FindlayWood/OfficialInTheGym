@@ -16,7 +16,7 @@ class MyDayKitComposition {
     /// saver and manager MyDay itself uses. Set by `composeCombination`.
     private(set) var workoutLibrary: MyDayWorkoutLibrary?
     
-    func composeCombination(_ navigationController: UINavigationController) {
+    func composeCombination(_ navigationController: UINavigationController, purchaseManager: PurchaseManager) {
         let loader: ExerciseLoader = FirebaseExerciseLoader()
         let mainThreadLoader: ExerciseLoader = MainThreadExerciseLoaderDecorator(decoratee: loader)
         let exerciseManager = ExerciseManager(loader: mainThreadLoader)
@@ -123,8 +123,13 @@ class MyDayKitComposition {
             clipLoader: clipLoader,
             clipViewRecorder: viewClipRecorder,
             workoutManager: workoutManager,
-            workoutLibraryManager: workoutLibraryManager
+            workoutLibraryManager: workoutLibraryManager,
+            // Recording and watching clips are pro; logging is not.
+            proAccess: PurchaseManagerProAccess(purchaseManager: purchaseManager)
         )
+        coordinator.onShowPaywall = { [weak navigationController] in
+            navigationController?.present(ProPaywallViewController.modal(purchaseManager: purchaseManager), animated: true)
+        }
         coordinator.start()
     }
 }

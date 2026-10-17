@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3DA700000000000000000002 /* MyDayProAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA700000000000000000001 /* MyDayProAccess.swift */; };
 		1D66013DCBE846A89E32BABB /* SessionSetEditTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E501441CAB4B9F9C547C90 /* SessionSetEditTarget.swift */; };
 		22C2001A6FF44A2CAAE6513E /* SessionSetNoteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055A3D97CF8B4DCFA300767D /* SessionSetNoteSheet.swift */; };
 		59B2D18A3AB0460A8FA0AA58 /* SessionSetTempoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860F47C12D564132AEC73AF5 /* SessionSetTempoSheet.swift */; };
@@ -168,6 +169,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3DA700000000000000000001 /* MyDayProAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayProAccess.swift; sourceTree = "<group>"; };
 		055A3D97CF8B4DCFA300767D /* SessionSetNoteSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetNoteSheet.swift; sourceTree = "<group>"; };
 		1071B8A726744C7BB57B2D36 /* SessionSetUnitOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetUnitOption.swift; sourceTree = "<group>"; };
 		2BCA7B6236E44CE6AD24A631 /* SessionSetDetailOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetDetailOverlay.swift; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 		F01E0E902E78A9BA008C1547 /* Clips */ = {
 			isa = PBXGroup;
 			children = (
+				3DA700000000000000000001 /* MyDayProAccess.swift */,
 				F07508D82F5380870026D021 /* ViewAnalytics */,
 				F0D528D32F392A4C00FA0636 /* Loader */,
 				F0D528512F34011800FA0636 /* Helpers */,
@@ -979,6 +982,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DA700000000000000000002 /* MyDayProAccess.swift in Sources */,
 				F01E0EA32E7A15FC008C1547 /* PlaybackOverlay.swift in Sources */,
 				F0D6C2552E36C12A00FEFEF1 /* MyDayExerciseModel.swift in Sources */,
 				F044A9962FCE2CD60038ADC8 /* MyDayWorkoutBuilderNoteScreen.swift in Sources */,

@@ -8,6 +8,11 @@
 import UIKit
 import SwiftUI
 
+/// The STATS tab's router.
+///
+/// **The whole tab is pro.** The root is `StatsKitRootScreen`, which shows the home with pro and
+/// `StatsLockedScreen` without, re-checked every time it appears (`StatsGateViewModel`). Nothing
+/// further in checks again: every other screen is reached from the home.
 public final class StatsKitRouter {
 
     // MARK: - Navigation
@@ -22,6 +27,11 @@ public final class StatsKitRouter {
     let exerciseLoader: ExerciseLoader
     let muscleGroupLoader: MuscleGroupsLoader
     let movementTypeLoader: MovementTypesLoader
+    let proAccess: StatsProAccess
+
+    // MARK: - Properties
+
+    public var onShowPaywall: (() -> Void)?
 
     // MARK: - Init
 
@@ -33,7 +43,8 @@ public final class StatsKitRouter {
         exerciseDailyStatsLoader: ExerciseDailyStatsProviding,
         exerciseLoader: ExerciseLoader,
         muscleGroupLoader: MuscleGroupsLoader,
-        movementTypeLoader: MovementTypesLoader
+        movementTypeLoader: MovementTypesLoader,
+        proAccess: StatsProAccess
     ) {
         self.navigationController = navigationController
         self.dailyTotalLoader = dailyTotalLoader
@@ -43,16 +54,19 @@ public final class StatsKitRouter {
         self.exerciseLoader = exerciseLoader
         self.muscleGroupLoader = muscleGroupLoader
         self.movementTypeLoader = movementTypeLoader
+        self.proAccess = proAccess
     }
 
     // MARK: - Root
 
+    @MainActor
     public func start() {
         let rootVC = viewController(for: .home)
         navigationController.setViewControllers([rootVC], animated: false)
     }
     
     
+    @MainActor
     func viewController(for route: StatsKitRoutes) -> UIViewController {
         switch route {
         case .home:
@@ -76,10 +90,13 @@ public final class StatsKitRouter {
                     self?.navigate(to: .trainingBalance(totals, groups, types))
                 }
             )
-            let display = StatsKitHomeScreen(viewModel: viewModel)
+            let gate = StatsGateViewModel(proAccess: proAccess)
+            gate.onShowPaywall = { [weak self] in self?.onShowPaywall?() }
             let vc = StatsKitBoundaryViewController()
-            vc.display = display
+            vc.display = StatsKitRootScreen(gate: gate, home: viewModel)
             vc.router = self
+            // Coming back to the tab re-checks pro — including from the full-screen paywall.
+            vc.onWillAppear = { [weak gate] in gate?.refresh() }
             return vc
         case .allExercises:
             let viewModel = ExerciseListScreenViewModel(
@@ -122,6 +139,7 @@ public final class StatsKitRouter {
         }
     }
     
+    @MainActor
     func navigate(to route: StatsKitRoutes) {
         let vc = viewController(for: route)
         navigationController.pushViewController(vc, animated: true)
