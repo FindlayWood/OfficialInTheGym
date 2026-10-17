@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C2DE00000000000000000002 /* ProPaywallViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE00000000000000000001 /* ProPaywallViewModelTests.swift */; };
+		C2DE00000000000000000004 /* StartedTrialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE00000000000000000003 /* StartedTrialTests.swift */; };
+		C2DE00000000000000000006 /* TrialReminderSchedulerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE00000000000000000005 /* TrialReminderSchedulerSpy.swift */; };
+		C2DE00000000000000000008 /* PurchaseManagerStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE00000000000000000007 /* PurchaseManagerStub.swift */; };
+		C1DE00000000000000000002 /* StartedTrial.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE00000000000000000001 /* StartedTrial.swift */; };
+		C1DE00000000000000000004 /* TrialReminderPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE00000000000000000003 /* TrialReminderPermission.swift */; };
+		C1DE00000000000000000006 /* ProPaywallStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE00000000000000000005 /* ProPaywallStep.swift */; };
+		C1DE00000000000000000008 /* TrialReminderPermissionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE00000000000000000007 /* TrialReminderPermissionScreen.swift */; };
 		C0DF00000000000000000002 /* PurchaseManagerProAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DF00000000000000000001 /* PurchaseManagerProAccess.swift */; };
 		C0DE00000000000000000002 /* SubscriptionBillingPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000001 /* SubscriptionBillingPeriod.swift */; };
 		C0DE00000000000000000004 /* SampleProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000003 /* SampleProduct.swift */; };
@@ -994,6 +1002,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C2DE00000000000000000001 /* ProPaywallViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProPaywallViewModelTests.swift; sourceTree = "<group>"; };
+		C2DE00000000000000000003 /* StartedTrialTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartedTrialTests.swift; sourceTree = "<group>"; };
+		C2DE00000000000000000005 /* TrialReminderSchedulerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrialReminderSchedulerSpy.swift; sourceTree = "<group>"; };
+		C2DE00000000000000000007 /* PurchaseManagerStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManagerStub.swift; sourceTree = "<group>"; };
+		C1DE00000000000000000001 /* StartedTrial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartedTrial.swift; sourceTree = "<group>"; };
+		C1DE00000000000000000003 /* TrialReminderPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrialReminderPermission.swift; sourceTree = "<group>"; };
+		C1DE00000000000000000005 /* ProPaywallStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProPaywallStep.swift; sourceTree = "<group>"; };
+		C1DE00000000000000000007 /* TrialReminderPermissionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrialReminderPermissionScreen.swift; sourceTree = "<group>"; };
 		C0DF00000000000000000001 /* PurchaseManagerProAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManagerProAccess.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000001 /* SubscriptionBillingPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionBillingPeriod.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000003 /* SampleProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleProduct.swift; sourceTree = "<group>"; };
@@ -1978,6 +1994,9 @@
 		C0DE00000000000000000020 /* ProPaywall */ = {
 			isa = PBXGroup;
 			children = (
+				C1DE00000000000000000005 /* ProPaywallStep.swift */,
+				C1DE00000000000000000003 /* TrialReminderPermission.swift */,
+				C1DE00000000000000000001 /* StartedTrial.swift */,
 				C0DE0000000000000000001F /* Subviews */,
 				C0DE00000000000000000007 /* ProPaywallViewController.swift */,
 				C0DE00000000000000000009 /* ProPaywallView.swift */,
@@ -1993,6 +2012,7 @@
 		C0DE0000000000000000001F /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
+				C1DE00000000000000000007 /* TrialReminderPermissionScreen.swift */,
 				C0DE00000000000000000015 /* ProPlanCard.swift */,
 				C0DE00000000000000000017 /* ProFeatureList.swift */,
 				C0DE00000000000000000019 /* ProTrialTimeline.swift */,
@@ -3224,6 +3244,8 @@
 		746DA0E12C0A7F980094EA3B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				C2DE00000000000000000007 /* PurchaseManagerStub.swift */,
+				C2DE00000000000000000005 /* TrialReminderSchedulerSpy.swift */,
 				7446E22A2C15DFC10060CEE6 /* UIImage+TestHelpers.swift */,
 				7446E22F2C15DFC20060CEE6 /* UIRefreshControl+TestHelpers.swift */,
 				7446E22C2C15DFC20060CEE6 /* UIButton+TestHelpers.swift */,
@@ -3359,6 +3381,8 @@
 		7479A91F229F2B4D00D39E2E /* InTheGymTests */ = {
 			isa = PBXGroup;
 			children = (
+				C2DE00000000000000000003 /* StartedTrialTests.swift */,
+				C2DE00000000000000000001 /* ProPaywallViewModelTests.swift */,
 				746DA0D72C0A615C0094EA3B /* InTheGymTests-Bridging-Header.h */,
 				7479A922229F2B4D00D39E2E /* Info.plist */,
 				746DA0E12C0A7F980094EA3B /* Helpers */,
@@ -4880,6 +4904,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1DE00000000000000000002 /* StartedTrial.swift in Sources */,
+				C1DE00000000000000000004 /* TrialReminderPermission.swift in Sources */,
+				C1DE00000000000000000006 /* ProPaywallStep.swift in Sources */,
+				C1DE00000000000000000008 /* TrialReminderPermissionScreen.swift in Sources */,
 				C0DF00000000000000000002 /* PurchaseManagerProAccess.swift in Sources */,
 				7420399728329A1D00074ECB /* MyFollowersViewController.swift in Sources */,
 				74E79E63283ABFB7002578BB /* PostUserSubview.swift in Sources */,
@@ -5772,6 +5800,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2DE00000000000000000002 /* ProPaywallViewModelTests.swift in Sources */,
+				C2DE00000000000000000004 /* StartedTrialTests.swift in Sources */,
+				C2DE00000000000000000006 /* TrialReminderSchedulerSpy.swift in Sources */,
+				C2DE00000000000000000008 /* PurchaseManagerStub.swift in Sources */,
 				7446E2402C16529A0060CEE6 /* ClientStub.swift in Sources */,
 				7446E2322C15DFC20060CEE6 /* FeedViewControllerTests+LoaderSpy.swift in Sources */,
 				746DA0E52C0A80420094EA3B /* SharedTestHelpers.swift in Sources */,

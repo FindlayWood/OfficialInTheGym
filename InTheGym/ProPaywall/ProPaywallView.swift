@@ -24,11 +24,27 @@ struct ProPaywallView: View {
 
     var onClose: (() -> Void)?
 
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some View {
-        if viewModel.success {
-            PurchaseSuccessSubview(action: { onClose?() })
-        } else {
+        switch viewModel.step {
+        case .paywall:
             paywall
+        case let .trialReminder(trial, permission):
+            TrialReminderPermissionScreen(
+                trial: trial,
+                permission: permission,
+                onAllow: { Task { await viewModel.allowTrialReminder() } },
+                onSkip: { viewModel.skipTrialReminder() }
+            )
+            // Back from Settings with notifications turned on: schedule it without a second tap.
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .active {
+                    Task { await viewModel.recheckTrialReminderPermission() }
+                }
+            }
+        case let .success(trial, isReminded):
+            PurchaseSuccessSubview(trial: trial, isReminded: isReminded, action: { onClose?() })
         }
     }
 
@@ -43,15 +59,7 @@ struct ProPaywallView: View {
                     ProFeatureList()
                     plansSection
                     if let plan = viewModel.selectedPlan, let days = plan.freeTrialDays {
-                        ProTrialTimeline(
-                            trialDays: days,
-                            priceText: plan.priceText,
-                            remindBeforeTrialEnds: viewModel.remindBeforeTrialEnds,
-                            notificationsBlocked: viewModel.notificationsBlocked,
-                            onReminderChange: { isOn in
-                                Task { await viewModel.setRemindBeforeTrialEnds(isOn) }
-                            }
-                        )
+                        ProTrialTimeline(trial: StartedTrial(startedAt: Date(), days: days, priceText: plan.priceText))
                         .transition(.opacity)
                     }
                     footerLinks
@@ -66,7 +74,6 @@ struct ProPaywallView: View {
         .background(Color(.systemBackground).ignoresSafeArea())
         .task {
             await viewModel.loadPlans()
-            await viewModel.checkNotificationPermission()
         }
     }
 

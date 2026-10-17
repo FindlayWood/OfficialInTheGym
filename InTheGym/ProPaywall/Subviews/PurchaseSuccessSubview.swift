@@ -11,6 +11,10 @@ import RevenueCat
 
 struct PurchaseSuccessSubview: View {
 
+    /// Set when the purchase started a free trial: the screen then says when it ends and whether a
+    /// reminder is coming, so the last thing the user reads about the trial is its date.
+    var trial: StartedTrial? = nil
+    var isReminded: Bool = false
     var action: (() -> ())
 
     var body: some View {
@@ -34,6 +38,21 @@ struct PurchaseSuccessSubview: View {
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.top, 6)
+
+            if let trial {
+                Text(trialText(trial))
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(Color.primary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(14)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .fill(Color(.secondarySystemBackground))
+                    )
+                    .padding(.top, 20)
+            }
 
             Spacer()
 
@@ -67,6 +86,13 @@ struct PurchaseSuccessSubview: View {
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground).ignoresSafeArea())
+    }
+
+    private func trialText(_ trial: StartedTrial) -> String {
+        let ends = "Your free trial ends on \(StartedTrial.display(trial.endsAt))."
+        return isReminded
+            ? "\(ends) We'll remind you the day before."
+            : "\(ends) Cancel before then in Settings and you won't be charged."
     }
 
     private func openManageSubscriptions() {

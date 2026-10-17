@@ -22,14 +22,8 @@ final class ProPaywallViewModel: ObservableObject {
     @Published var selectedPlanId: String?
     @Published private(set) var isLoadingPlans = false
     @Published private(set) var isPurchasing = false
-    @Published private(set) var success = false
+    @Published private(set) var step: ProPaywallStep
     @Published var error: PurchaseError?
-
-    /// Defaults **on**: the reminder is the promise that makes a trial safe to start, so it is the
-    /// default and opting out is the choice. Flipped off when notifications are turned off for the
-    /// app, since a toggle claiming a reminder that cannot arrive is worse than none.
-    @Published var remindBeforeTrialEnds = true
-    @Published private(set) var notificationsBlocked = false
 
     // MARK: - Properties
     let purchaseManager: PurchaseManager
@@ -47,7 +41,7 @@ final class ProPaywallViewModel: ObservableObject {
         self.backendService = backendService
         self.trialReminder = trialReminder
         // Already pro (a restored account, a second device) opens on the success screen.
-        self._success = Published(initialValue: purchaseManager.hasUnlockedPro)
+        self._step = Published(initialValue: purchaseManager.hasUnlockedPro ? .success(trial: nil, isReminded: false) : .paywall)
     }
 
     var selectedPlan: ProPlan? {
@@ -105,22 +99,35 @@ final class ProPaywallViewModel: ObservableObject {
     }
 
     // MARK: - Reminder
-    /// Checked once the screen is up: a reminder the system will not deliver is switched off.
-    func checkNotificationPermission() async {
-        if await trialReminder.isDenied() {
-            notificationsBlocked = true
-            remindBeforeTrialEnds = false
+    /// "Remind me": shows the system prompt and, if allowed, schedules the reminder. A refusal moves
+    /// on without one rather than asking again — the success screen says when the trial ends either
+    /// way.
+    func allowTrialReminder() async {
+        guard case .trialReminder(let trial, _) = step else { return }
+        let allowed = await trialReminder.requestPermission()
+        finishTrial(trial, remind: allowed)
+    }
+
+    /// "Not now", or "Continue without a reminder" after notifications were turned off.
+    func skipTrialReminder() {
+        guard case .trialReminder(let trial, _) = step else { return }
+        finishTrial(trial, remind: false)
+    }
+
+    /// Re-read when the app comes back to the front: someone sent to Settings to turn notifications
+    /// on should get their reminder without having to find a second button.
+    func recheckTrialReminderPermission() async {
+        guard case .trialReminder(let trial, .denied) = step else { return }
+        if await trialReminder.permission() == .allowed {
+            finishTrial(trial, remind: true)
         }
     }
 
-    func setRemindBeforeTrialEnds(_ isOn: Bool) async {
-        guard isOn else {
-            remindBeforeTrialEnds = false
-            return
+    private func finishTrial(_ trial: StartedTrial, remind: Bool) {
+        if remind {
+            trialReminder.scheduleReminder(for: trial)
         }
-        let allowed = await trialReminder.requestPermission()
-        notificationsBlocked = !allowed
-        remindBeforeTrialEnds = allowed
+        step = .success(trial: trial, isReminded: remind)
     }
 
     // MARK: - Purchase
@@ -131,7 +138,7 @@ final class ProPaywallViewModel: ObservableObject {
         defer { isPurchasing = false }
         do {
             let result = try await purchaseManager.purchase(plan.product)
-            handle(result, for: plan)
+            await handle(result, for: plan)
         } catch {
             print(String(describing: error))
             self.error = .purchasingProduct
@@ -144,7 +151,7 @@ final class ProPaywallViewModel: ObservableObject {
         do {
             try await purchaseManager.restorePurchase()
             if purchaseManager.hasUnlockedPro {
-                success = true
+                step = .success(trial: nil, isReminded: false)
             } else {
                 error = .nothingToRestore
             }
@@ -158,19 +165,26 @@ final class ProPaywallViewModel: ObservableObject {
     /// Unlocks pro across the app for this session. See `EmulatorPurchaseManager`.
     func unlockForTesting() {
         (purchaseManager as? EmulatorPurchaseManager)?.unlockForTesting()
-        success = true
+        step = .success(trial: nil, isReminded: false)
     }
     #endif
 
-    private func handle(_ result: PurchaseProductResult, for plan: ProPlan) {
+    private func handle(_ result: PurchaseProductResult, for plan: ProPlan) async {
         switch result {
         case .successVerified(let transaction):
             writeSuccessfulPurchase(transaction)
-            if let days = plan.freeTrialDays, remindBeforeTrialEnds {
-                let trialEnd = Calendar.current.date(byAdding: .day, value: days, to: transaction.purchaseDate) ?? transaction.purchaseDate
-                trialReminder.scheduleReminder(trialEndsAt: trialEnd, price: plan.product.displayPrice)
+            guard let days = plan.freeTrialDays else {
+                step = .success(trial: nil, isReminded: false)
+                return
             }
-            success = true
+            let trial = StartedTrial(startedAt: transaction.purchaseDate, days: days, priceText: plan.priceText)
+            // Already allowed: no need to ask, the paywall promised it.
+            let permission = await trialReminder.permission()
+            if permission == .allowed {
+                finishTrial(trial, remind: true)
+            } else {
+                step = .trialReminder(trial, permission)
+            }
         case .successUnverified:
             print("success unverified")
         case .pending:

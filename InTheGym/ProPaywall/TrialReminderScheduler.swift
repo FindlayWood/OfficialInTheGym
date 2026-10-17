@@ -11,12 +11,11 @@ import UserNotifications
 
 /// Schedules the "your trial ends tomorrow" reminder the paywall offers.
 protocol TrialReminderScheduling {
-    /// Whether a reminder could be delivered, asking for permission if it has never been asked.
-    /// `false` means the user has turned notifications off for the app.
+    /// Where permission stands. Never prompts.
+    func permission() async -> TrialReminderPermission
+    /// Shows the system prompt if the user has never been asked; `true` if reminders can be delivered.
     func requestPermission() async -> Bool
-    /// Whether the user has turned notifications off for the app. Never prompts.
-    func isDenied() async -> Bool
-    func scheduleReminder(trialEndsAt endDate: Date, price: String)
+    func scheduleReminder(for trial: StartedTrial)
 }
 
 /// A local notification, one day before the trial converts.
@@ -28,14 +27,29 @@ protocol TrialReminderScheduling {
 ///
 /// One identifier, so starting a second trial (another account on the device) replaces the first
 /// reminder rather than stacking two.
+///
+/// **Emulator builds fire it 60 seconds after scheduling** (`fireDate`), so the whole path —
+/// paywall, reminder screen, system prompt, notification — can be tested in a minute instead of
+/// thirteen days. Compiled only with `-D EMULATOR`, the same switch as `EmulatorPurchaseManager`,
+/// so no build that can ship gets it. The screens still show the real dates.
 final class LocalNotificationTrialReminder: TrialReminderScheduling {
 
     static let identifier = "pro-trial-ending"
 
     private let center: UNUserNotificationCenter
+    private let fireDate: (StartedTrial) -> Date
 
-    init(center: UNUserNotificationCenter = .current()) {
+    init(center: UNUserNotificationCenter = .current(), fireDate: @escaping (StartedTrial) -> Date = LocalNotificationTrialReminder.defaultFireDate) {
         self.center = center
+        self.fireDate = fireDate
+    }
+
+    static var defaultFireDate: (StartedTrial) -> Date {
+        #if EMULATOR
+        { _ in Date().addingTimeInterval(60) }
+        #else
+        { $0.remindsAt }
+        #endif
     }
 
     func requestPermission() async -> Bool {
@@ -52,20 +66,25 @@ final class LocalNotificationTrialReminder: TrialReminderScheduling {
         }
     }
 
-    func isDenied() async -> Bool {
-        await center.notificationSettings().authorizationStatus == .denied
+    func permission() async -> TrialReminderPermission {
+        switch await center.notificationSettings().authorizationStatus {
+        case .authorized, .provisional, .ephemeral: return .allowed
+        case .notDetermined: return .notAsked
+        case .denied: return .denied
+        @unknown default: return .denied
+        }
     }
 
-    func scheduleReminder(trialEndsAt endDate: Date, price: String) {
-        let fireDate = endDate.addingTimeInterval(-24 * 60 * 60)
+    func scheduleReminder(for trial: StartedTrial) {
+        let fireDate = fireDate(trial)
         guard fireDate > Date() else { return }
 
         let content = UNMutableNotificationContent()
         content.title = "Your INTHEGYM pro trial ends tomorrow"
-        content.body = "You'll be charged \(price) unless you cancel before then. You can cancel any time in Settings → Subscriptions."
+        content.body = "You'll be charged \(trial.priceText) unless you cancel before then. You can cancel any time in Settings → Subscriptions."
         content.sound = .default
 
-        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
+        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: fireDate)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: Self.identifier, content: content, trigger: trigger)
         center.add(request) { error in

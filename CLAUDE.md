@@ -120,10 +120,18 @@ still had the soft-lock bug the first had fixed. **Do not fork it again.**
   trial *and* `checkTrialOrIntroDiscountEligibility` says this user can take it (Apple allows one intro
   offer per subscription group, ever). The button reads "Start free trial" only then, "Subscribe"
   otherwise. Which plans carry a trial is set in App Store Connect, not in code.
-- **`ProTrialTimeline`** puts the real dates on screen — today, the reminder, the charge — with the
-  "Remind me before my trial ends" toggle on the reminder step. It defaults on and is switched off when
-  notifications are denied. `LocalNotificationTrialReminder` schedules one local notification a day
-  before the trial converts, after a successful purchase.
+- **`ProTrialTimeline`** puts the real dates on screen — today, the reminder, the charge — and
+  *promises* the reminder; it is part of what makes the trial feel safe, so it stays on the paywall.
+  **Permission is asked after the purchase**, on `TrialReminderPermissionScreen` (`ProPaywallStep`):
+  shown only when a trial started and notifications are not already allowed, "Remind me" / "Not now",
+  or "Open Settings" for someone who turned them off (re-checked when the app returns). The success
+  screen then states the trial's end date and whether a reminder is set. `StartedTrial` is the one
+  definition of the end date and reminder date.
+- **The app never asks for notifications at launch.** It used to, before signup, when nobody had a
+  reason to say yes — and iOS shows that prompt once. This screen is the app's one ask. **Do not add
+  a notification promise for something that does not send one**: today only the trial reminder
+  exists. When comments, likes and replies send pushes, a non-subscriber version of the screen asks
+  for those.
 - **A paywall must always be dismissible.** The close button is never hidden, delayed or disabled.
   The old onboarding paywall once lost its "Not Now" behind a stuck `isLoading`.
 - **Required by App Review 3.1.2:** price and renewal terms beside the button (`termsText`), Restore,
