@@ -26,9 +26,9 @@ struct PasswordField: View {
         HStack(spacing: 8) {
             Group {
                 if isRevealed {
-                    TextField(placeholder, text: $password)
+                    TextField(text: $password, prompt: LoginFieldPrompt.text(placeholder)) { Text("Password") }
                 } else {
-                    SecureField(placeholder, text: $password)
+                    SecureField(text: $password, prompt: LoginFieldPrompt.text(placeholder)) { Text("Password") }
                 }
             }
             .font(.system(size: 16))

@@ -24,7 +24,7 @@ struct SignupView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
                         LoginFieldCard(title: "Email", icon: "envelope") {
-                            TextField("you@example.com", text: $viewModel.email)
+                            TextField(text: $viewModel.email, prompt: LoginFieldPrompt.text("Your email address")) { Text("Email") }
                                 .font(.system(size: 16))
                                 .tint(Color.darkColor)
                                 .keyboardType(.emailAddress)

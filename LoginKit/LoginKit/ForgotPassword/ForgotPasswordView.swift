@@ -25,7 +25,7 @@ struct ForgotPasswordView: View {
                             .fixedSize(horizontal: false, vertical: true)
 
                         LoginFieldCard(title: "Email", icon: "envelope") {
-                            TextField("you@example.com", text: $viewModel.email)
+                            TextField(text: $viewModel.email, prompt: LoginFieldPrompt.text("The email you signed up with")) { Text("Email") }
                                 .font(.system(size: 16))
                                 .tint(Color.darkColor)
                                 .keyboardType(.emailAddress)
