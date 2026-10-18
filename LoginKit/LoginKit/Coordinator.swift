@@ -11,10 +11,12 @@ class BasicLoginFlow: LoginFlow {
     
     var navigationController: UINavigationController
     var viewControllerFactory: ViewControllerFactory
+    var tryWorkout: DemoWorkoutLauncher?
     
-    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactory) {
+    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactory, tryWorkout: DemoWorkoutLauncher? = nil) {
         self.navigationController = navigationController
         self.viewControllerFactory = viewControllerFactory
+        self.tryWorkout = tryWorkout
     }
     
     func start() {
@@ -34,10 +36,26 @@ class BasicLoginFlow: LoginFlow {
         navigationController.pushViewController(vc, animated: true)
     }
     
+    /// Signup straight from the end of the example workout. The demo's screens are replaced rather
+    /// than left underneath, so back from signup is the welcome screen, not a finished workout.
+    func presentSignupFromDemo() {
+        let vc = viewControllerFactory.makeSignUpViewController()
+        let welcome = Array(navigationController.viewControllers.prefix(1))
+        navigationController.setViewControllers(welcome + [vc], animated: true)
+    }
+    
     func forgotPassword() {
         let vc = viewControllerFactory.makeForgotPasswordViewController()
         let nav = UINavigationController(rootViewController: vc)
         navigationController.present(nav, animated: true)
+    }
+    
+    /// LoginKit draws the button and the app decides what it opens — the example workout is
+    /// MyDayKit's session screen, which this framework does not import.
+    func presentDemoWorkout() {
+        tryWorkout?(navigationController) { [weak self] in
+            self?.presentSignupFromDemo()
+        }
     }
 }
 
@@ -46,6 +64,7 @@ protocol LoginFlow {
     func presentLogin()
     func presentSignup()
     func forgotPassword()
+    func presentDemoWorkout()
 }
 
 protocol ViewControllerFactory {
@@ -60,11 +79,12 @@ struct BasicViewControllerFactory: ViewControllerFactory {
     var networkService: NetworkService
     var title: String
     var image: UIImage
+    var canTryWorkout: Bool
     var completion: () -> Void
         
     func makeWelcomeViewController() -> WelcomeViewController {
         let vc = WelcomeViewController()
-        vc.viewModel = .init(title: title)
+        vc.viewModel = .init(title: title, canTryWorkout: canTryWorkout)
         vc.image = image
         return vc
     }

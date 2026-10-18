@@ -24,6 +24,12 @@ struct MyDayWorkoutSessionExerciseCard: View {
     var onExerciseTapped: (() -> Void)?
     var onRPETapped: (() -> Void)?
     var onCameraTapped: (() -> Void)?
+    /// Adds a set to this exercise. `nil` hides the button — only the demo
+    /// workout passes one today, so a real session's card is unchanged.
+    var onAddSet: (() -> Void)?
+    /// The demo has nowhere to put a clip (no account, no upload), so it hides
+    /// the button rather than showing one that does nothing.
+    var showsClip: Bool = true
 
     private var completedRepsText: String {
         let reps = setRecords.filter(\.isCompleted).compactMap(\.reps)
@@ -145,23 +151,45 @@ struct MyDayWorkoutSessionExerciseCard: View {
             }
             .buttonStyle(.plain)
 
-            Divider()
-                .frame(height: 18)
+            if let onAddSet, isSessionStarted, !isSessionCompleted {
+                Divider()
+                    .frame(height: 18)
 
-            Button {
-                onCameraTapped?()
-            } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: "camera.fill")
-                        .font(.system(size: 14, weight: .medium))
-                    Text("Clip")
-                        .font(.system(size: 14, weight: .semibold))
+                Button {
+                    withAnimation(.easeInOut(duration: 0.2)) { onAddSet() }
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "plus")
+                            .font(.system(size: 14, weight: .medium))
+                        Text("Add Set")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                    .foregroundStyle(Color.darkColor)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
                 }
-                .foregroundStyle(Color.secondary)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
+
+            if showsClip {
+                Divider()
+                    .frame(height: 18)
+
+                Button {
+                    onCameraTapped?()
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "camera.fill")
+                            .font(.system(size: 14, weight: .medium))
+                        Text("Clip")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                    .foregroundStyle(Color.secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                }
+                .buttonStyle(.plain)
+            }
         }
         .padding(.horizontal, 16)
     }

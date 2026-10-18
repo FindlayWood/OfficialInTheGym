@@ -144,6 +144,75 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         }
     }
 
+    /// Append a set to an exercise, prescribed the same as the last one.
+    ///
+    /// The set lands on the **day's** snapshot of the template (`entry.template`)
+    /// and, once the session has started, gets an empty record alongside its
+    /// siblings — the screen renders pills from the template's sets and looks
+    /// each record up by set id, so a set present on only one side would either
+    /// not draw or never log. It never reaches the library template, which is
+    /// reused on later days.
+    ///
+    /// Copying the last set's prescription is what makes "one more" a single
+    /// tap: the new pill quick-completes at the same numbers, and the overlay
+    /// edits it like any other set. Only the demo workout offers this today.
+    public func addSet(toExercise exerciseId: String) {
+        guard sessionStatus != .completed else { return }
+        let exercises = entry.template.exercises
+        guard let exIdx = exercises.firstIndex(where: { $0.exerciseId == exerciseId }) else { return }
+
+        let exercise = exercises[exIdx]
+        let previous = exercise.sets.last
+        let newSet = WorkoutSetModel(
+            id: UUID().uuidString,
+            orderIndex: exercise.sets.count,
+            reps: previous?.reps,
+            weight: previous?.weight,
+            weightUnit: previous?.weightUnit,
+            time: previous?.time,
+            distance: previous?.distance,
+            distanceUnit: previous?.distanceUnit,
+            tempo: previous?.tempo,
+            note: previous?.note,
+            eachSide: previous?.eachSide
+        )
+
+        var updatedExercises = exercises
+        updatedExercises[exIdx] = WorkoutExerciseModel(
+            id: exercise.id,
+            exerciseId: exercise.exerciseId,
+            exerciseName: exercise.exerciseName,
+            exerciseCategory: exercise.exerciseCategory,
+            orderIndex: exercise.orderIndex,
+            sets: exercise.sets + [newSet],
+            restSeconds: exercise.restSeconds,
+            notes: exercise.notes
+        )
+        entry.template = WorkoutTemplateModel(
+            id: entry.template.id,
+            title: entry.template.title,
+            description: entry.template.description,
+            exercises: updatedExercises,
+            createdBy: entry.template.createdBy,
+            isPublic: entry.template.isPublic,
+            tags: entry.template.tags,
+            estimatedDuration: entry.template.estimatedDuration,
+            difficulty: entry.template.difficulty,
+            createdAt: entry.template.createdAt,
+            updatedAt: entry.template.updatedAt,
+            copiedFrom: entry.template.copiedFrom
+        )
+
+        if var record = sessionRecord,
+           let recIdx = record.exerciseRecords.firstIndex(where: { $0.exerciseId == exerciseId }) {
+            record.exerciseRecords[recIdx].setRecords.append(WorkoutSetRecord(id: newSet.id, isCompleted: false))
+            sessionRecord = record
+            entry.sessionRecord = record
+        }
+
+        onEntryUpdated?(entry)
+    }
+
     /// The stored record for a single set, if the session has started.
     public func setRecord(exerciseId: String, setId: String) -> WorkoutSetRecord? {
         setRecords(for: exerciseId).first(where: { $0.id == setId })

@@ -82,6 +82,29 @@ of these frameworks.**
 - **Forgot Password has a Cancel button.** It is presented modally in its own navigation controller
   and had no way out but the sheet's swipe-down, which is not obvious with the keyboard up.
 
+### Example workout — before signup
+The welcome screen's "Try an example workout" pushes `MyDayDemoWorkoutRouter` (MyDayKit) onto
+LoginKit's stack: the **real** session and summary screens on `MyDayDemoWorkout` (three exercises,
+three sets each), so what people try is what they get. LoginKit only raises the intent
+(`MainLoginKitInterface(tryWorkout:)`); `LoginComposition` builds the router.
+
+- **Nothing is saved, by construction**: the `WorkoutSessionManager` has none of its callbacks
+  wired, and those are the only way a session reaches disk or Firestore. **Never wire a saver into
+  this flow** — a demo set must not land in someone's stats after they sign up.
+- **"Add Set" is demo-only** (`MyDayWorkoutSessionScreen.canAddSets`). `addSet(toExercise:)` adds to
+  the day's snapshot of the template (`entry.template`, now `internal(set)`), never the library
+  copy. Whether real sessions offer it is undecided. The demo also hides Clip (`showsClips`).
+- **Hints, not a tutorial.** `WorkoutSessionNoticeBanner` under the nav bar carries `MyDayDemoHint`:
+  start → the pill's circle (quick-complete) → tap a set → Add Set → Finish, over "nothing you log
+  is saved". **Derived from the session on every render, never stored**, so un-logging walks it
+  back. Coach-mark overlays were rejected: the set detail overlay owns the full-screen layer.
+- **The ending asks once.** "Complete Workout" lands on `MyDayDemoWorkoutFinishedScreen` (what they
+  did, Create Account, Back to start), replacing the session and summary on the stack. Create
+  Account calls back into LoginKit (`DemoWorkoutLauncher`'s `signUp`), which swaps in signup above
+  welcome. The copy promises saving and history only — STATS is pro.
+- Rest is 20s, and "Cancel Workout" leaves without a confirmation (`confirmsCancel: false`) —
+  there is nothing to lose.
+
 ### Verify email — `VerifyAccountView`
 Sits between signup and account creation, polling `user.reload()` every two seconds and moving on by
 itself once the address is verified.
