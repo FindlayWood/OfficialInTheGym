@@ -37,6 +37,16 @@ enum WelcomeFeature: CaseIterable, Identifiable {
         }
     }
 
+    /// The line under the tagline while this card's scene plays, so the header and the card it is
+    /// pointing at say the same thing.
+    var headline: String {
+        switch self {
+        case .training: return "Log every set."
+        case .stats: return "See it add up."
+        case .performance: return "Know when you're fresh."
+        }
+    }
+
     var actionTitle: String {
         switch self {
         case .training: return "Try a workout"

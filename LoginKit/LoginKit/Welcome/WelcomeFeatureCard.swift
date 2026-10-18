@@ -15,10 +15,17 @@ import SwiftUI
 /// size, the welcome screen has kept its promise; a photo of someone lifting would only have said
 /// "gym app". The miniatures are hand-drawn here, since LoginKit imports none of the frameworks
 /// that own the real components, and they are illustrations with fixed numbers, not data.
+///
+/// `scene` counts how many times this card's miniature has played its scene since the intro; each
+/// new value is one more beat (see `WelcomeView`'s showcase). `isActive` is the card currently
+/// playing, drawn with a faint outline and a slight lift so the eye follows it down the list.
 struct WelcomeFeatureCard: View {
 
     let feature: WelcomeFeature
     let isRevealed: Bool
+    var scene: Int = 0
+    var isActive: Bool = false
+    var onPressChange: ((Bool) -> Void)?
     let action: () -> Void
 
     var body: some View {
@@ -62,17 +69,23 @@ struct WelcomeFeatureCard: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(UIColor.secondarySystemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .strokeBorder(Color.darkColor.opacity(isActive ? 0.35 : 0), lineWidth: 1.5)
+            }
+            .scaleEffect(isActive ? 1.01 : 1)
+            .animation(.easeInOut(duration: 0.35), value: isActive)
             .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(WelcomeCardButtonStyle(onPressChange: onPressChange))
     }
 
     @ViewBuilder
     private var illustration: some View {
         switch feature {
-        case .training: WelcomeSetPillsIllustration(isRevealed: isRevealed)
-        case .stats: WelcomeWeeklyBarsIllustration(isRevealed: isRevealed)
-        case .performance: WelcomeReadinessIllustration(isRevealed: isRevealed)
+        case .training: WelcomeSetPillsIllustration(isRevealed: isRevealed, scene: scene)
+        case .stats: WelcomeWeeklyBarsIllustration(isRevealed: isRevealed, scene: scene)
+        case .performance: WelcomeReadinessIllustration(isRevealed: isRevealed, scene: scene)
         }
     }
 }
@@ -80,7 +93,7 @@ struct WelcomeFeatureCard: View {
 #Preview {
     VStack(spacing: 10) {
         ForEach(WelcomeFeature.allCases) { feature in
-            WelcomeFeatureCard(feature: feature, isRevealed: true) {}
+            WelcomeFeatureCard(feature: feature, isRevealed: true, isActive: feature == .stats) {}
         }
     }
     .padding()

@@ -92,8 +92,14 @@ bottom, unchanged, so returning users are not slowed down.
   tells" account creation cut. **A card with no launcher is not drawn** (`WelcomePreviews`).
 - **The pictures are the app's own UI, drawn small** (`WelcomeSetPillsIllustration`,
   `WelcomeWeeklyBarsIllustration`, `WelcomeReadinessIllustration`), hand-built in LoginKit because
-  it imports none of the frameworks that own the real components. They animate **once** on
-  appear and respect Reduce Motion. No photos, no animation libraries.
+  it imports none of the frameworks that own the real components. No photos, no animation
+  libraries.
+- **The showcase: one card moves at a time.** After the intro the cards take turns playing a
+  scene (a pill logs, the chart rolls a week, the readiness check ticks), each outlined while it
+  plays, with the line under "Train like an athlete." naming it (`WelcomeFeature.headline`).
+  Animating once and stopping left the screen dead; all three at once would be noise. It pauses
+  while scrolling, pressing a card, or with the app inactive, and with Reduce Motion it never runs.
+  Cards press to 0.97 with a light haptic.
 - LoginKit only raises intent. `MainLoginKitInterface(previews:)` takes a `WelcomePreviews` and
   `LoginComposition` supplies MyDayKit's `MyDayDemoWorkoutRouter`, StatsKit's
   `StatsKitSamplePreviewRouter` and PerformanceKit's `PerformanceKitSamplePreviewRouter`.
