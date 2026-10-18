@@ -11,7 +11,11 @@ public struct DailyWorkoutEntry: Identifiable, Codable, Hashable {
     public static func == (lhs: DailyWorkoutEntry, rhs: DailyWorkoutEntry) -> Bool { lhs.id == rhs.id }
     public func hash(into hasher: inout Hasher) { hasher.combine(id) }
     public let id: String
-    public let template: WorkoutTemplateModel
+    /// Settable only inside MyDayKit, and only so a session can add a set
+    /// (`WorkoutSessionManager.addSet(toExercise:)`). This is the day's own
+    /// snapshot of the template, not the library's — changing it never edits
+    /// the saved workout.
+    public internal(set) var template: WorkoutTemplateModel
     public let assignedDate: Date
     public var status: DailyWorkoutStatus
     public var sessionId: String?

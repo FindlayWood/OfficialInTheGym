@@ -14,8 +14,13 @@ class WelcomeViewModel: ObservableObject {
     
     var title: String
     
-    init(title: String) {
+    /// The feature cards to draw — only those the app supplied a way to open. Before signup there is
+    /// nothing of the user's to show, so these are the one way to see what the app does.
+    let features: [WelcomeFeature]
+    
+    init(title: String, features: [WelcomeFeature] = []) {
         self.title = title
+        self.features = features
     }
     
     func signupAction() {
@@ -24,5 +29,13 @@ class WelcomeViewModel: ObservableObject {
     
     func loginAction() {
         coordinator?.presentLogin()
+    }
+    
+    func open(_ feature: WelcomeFeature) {
+        switch feature {
+        case .training: coordinator?.presentDemoWorkout()
+        case .stats: coordinator?.presentStatsPreview()
+        case .performance: coordinator?.presentPerformancePreview()
+        }
     }
 }

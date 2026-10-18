@@ -82,6 +82,66 @@ of these frameworks.**
 - **Forgot Password has a Cancel button.** It is presented modally in its own navigation controller
   and had no way out but the sheet's swipe-down, which is not obvious with the keyboard up.
 
+### Welcome screen — what the app is, and a way to try it
+The welcome screen used to be a logo, one sentence and two buttons, which told a newcomer nothing.
+It now has three cards (`WelcomeFeature`): **Log your training → Try a workout**, **See it add up →
+Preview** (pro), **Test your readiness → Preview** (pro). Sign Up / Log In stay pinned at the
+bottom, unchanged, so returning users are not slowed down.
+
+- **Every line has a proof one tap away** — no intro slides, which would be the "step that only
+  tells" account creation cut. **A card with no launcher is not drawn** (`WelcomePreviews`).
+- **The pictures are the app's own UI, drawn small** (`WelcomeSetPillsIllustration`,
+  `WelcomeWeeklyBarsIllustration`, `WelcomeReadinessIllustration`), hand-built in LoginKit because
+  it imports none of the frameworks that own the real components. No photos, no animation
+  libraries.
+- **The showcase: one card moves at a time.** After the intro the cards take turns, each
+  **rebuilding its miniature from empty** (`WelcomeRebuilding`: pills none → six, chart from
+  nothing, ring 0 → 96%). Single increments per turn only made sense if you had watched the last
+  one. The active card pulses once, outline and glow swelling with the build (`WelcomeCardPulse`) —
+  a light running round the edge was tried and never ended cleanly with the turn — with the line under "Train like an athlete." naming it (`WelcomeFeature.headline`).
+  Animating once and stopping left the screen dead; all three at once would be noise. It pauses
+  while scrolling, pressing a card, or with the app inactive, and with Reduce Motion it never runs.
+  Cards press to 0.97 with a light haptic.
+- LoginKit only raises intent. `MainLoginKitInterface(previews:)` takes a `WelcomePreviews` and
+  `LoginComposition` supplies MyDayKit's `MyDayDemoWorkoutRouter`, StatsKit's
+  `StatsKitSamplePreviewRouter` and PerformanceKit's `PerformanceKitSamplePreviewRouter`.
+- **The stats and performance previews are the locked screens' content, unblurred** —
+  `HomeScreenContent` on `MockDailyTotalsProvider`, `PerformanceHomeScreen` on
+  `PreviewJumpTestSessionsLoader` with `canRecord: false`. Blurring exists so sample data never
+  passes for a signed-in user's own; before signup there is nothing to confuse it with. **Both are
+  labelled SAMPLE DATA and PRO at the top** — a preview that let someone sign up expecting free
+  stats would end at the paywall. Drill-downs do nothing.
+- **One bar through the whole pre-signup flow.** The demo workout must hide the system bar (the set
+  detail overlay), so the previews and the demo's summary hide it too and draw the same 44pt
+  chevron/title bar: `StatsSamplePreviewNavBar` / `PerformanceSamplePreviewNavBar` are copies of
+  `MyDayWorkoutNavBar`, hosted in copies of `NavBarHidingHostingController`, and
+  `WorkoutSessionSummaryScreen(onBack:)` draws `MyDayWorkoutNavBar` when given one. System bars
+  here made moving between them read as two apps. MyDay's own summary still uses the system bar
+  (`onBack: nil`), which forces `.toolbarColorScheme(.light)` and so is wrong in dark mode.
+
+### Example workout — before signup
+"Try a workout" pushes `MyDayDemoWorkoutRouter` (MyDayKit) onto LoginKit's stack: the **real**
+session and summary screens on `MyDayDemoWorkout` (three exercises, three sets each), so what
+people try is what they get.
+
+- **Nothing is saved, by construction**: the `WorkoutSessionManager` has none of its callbacks
+  wired, and those are the only way a session reaches disk or Firestore. **Never wire a saver into
+  this flow** — a demo set must not land in someone's stats after they sign up.
+- **"Add Set" is demo-only** (`MyDayWorkoutSessionScreen.canAddSets`). `addSet(toExercise:)` adds to
+  the day's snapshot of the template (`entry.template`, now `internal(set)`), never the library
+  copy. Whether real sessions offer it is undecided. The demo also hides Clip (`showsClips`).
+- **Hints, not a tutorial.** `WorkoutSessionNoticeBanner` under the nav bar carries `MyDayDemoHint`:
+  start → the pill's circle (quick-complete) → tap a set → Add Set → Finish, over "nothing you log
+  is saved". **Derived from the session on every render, never stored**, so un-logging walks it
+  back. Coach-mark overlays were rejected: the set detail overlay owns the full-screen layer.
+- **The ending asks once.** "Complete Workout" lands on `MyDayDemoWorkoutFinishedScreen` (what they
+  did, Create Account, Back to start), replacing the session and summary on the stack. Create
+  Account calls back into LoginKit (`DemoWorkoutLauncher`'s `signUp`), which swaps in signup above
+  welcome. The copy promises saving and history only — STATS is pro. Its "See what your stats
+  could look like" opens the stats preview, at the moment it lands best.
+- Rest is 20s, and "Cancel Workout" leaves without a confirmation (`confirmsCancel: false`) —
+  there is nothing to lose.
+
 ### Verify email — `VerifyAccountView`
 Sits between signup and account creation, polling `user.reload()` every two seconds and moving on by
 itself once the address is verified.
@@ -1794,6 +1854,8 @@ in this codebase.**
 | `DiscoverTaggingViewModel.maxMyTags` (10) | `MAX_TAGS_PER_VOTER` in `VoterTags.ts`, and the rules | DISCOVER Tab |
 | `DiscoverCommentsViewModel.maxLength` (500) | the comment rules' `text.size()` limit | DISCOVER Tab |
 | `DiscoverReportReason` raw values | ProfileKit's `ProfileReportReason`, and the rules' accepted `reason` list | DISCOVER Tab, PROFILE_PLAN.md step 9 |
+| `StatsSamplePreviewBanner` | PerformanceKit's `PerformanceSamplePreviewBanner` | Welcome screen |
+| `MyDayWorkoutNavBar` / `NavBarHidingHostingController` | the Stats and Performance sample-preview copies | Welcome screen |
 | `FirestoreProfileReporter` (`profile`, `Profiles/{uid}`) | `reportTarget`'s `profile` kind in `Discover/Moderation/ReportTarget.ts` | PROFILE_PLAN.md step 9 |
 
 ## Analysis artefacts — `.results/`, gitignored

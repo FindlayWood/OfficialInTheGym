@@ -29,10 +29,11 @@ extension Color {
     static let pageColor = Color(light: Color(hex: 0x1C496E), dark: Color(UIColor.systemGroupedBackground))
 
     /// The app's `premiumColour` colorset (`#79B49F`, the same in light and dark), which a
-    /// framework cannot read from the app's asset catalog. **Keep in step with ProfileKit's and
-    /// PerformanceKit's copies.** A **semantic** colour marking pro, not an accent — here it is
+    /// framework cannot read from the app's asset catalog. **Keep in step with ProfileKit's,
+    /// PerformanceKit's and LoginKit's copies.** A **semantic** colour marking pro, not an accent — here it is
     /// only the "pro" beside the tab title, the paywall's wordmark, so a subscriber sees the thing
-    /// they bought. Spend it anywhere else on this tab and it stops meaning pro.
+    /// they bought — and the PRO tag on the sample preview shown before signup. Spend it anywhere
+    /// else on this tab and it stops meaning pro.
     static let premiumColor = Color(hex: 0x79B49F)
 
     // MARK: - Matte palette

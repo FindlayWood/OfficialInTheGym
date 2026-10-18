@@ -19,12 +19,15 @@ public struct MainLoginKitInterface: LoginKitInterface {
     var title: String
     var image: UIImage
     var completion: () -> Void
+    /// What the welcome screen's feature cards open. A card whose launcher is `nil` is not drawn.
+    var previews: WelcomePreviews
     
-    public init(navigationController: UINavigationController, networkService: NetworkService, title: String, image: UIImage, completion: @escaping () -> Void) {
+    public init(navigationController: UINavigationController, networkService: NetworkService, title: String, image: UIImage, previews: WelcomePreviews = WelcomePreviews(), completion: @escaping () -> Void) {
         self.navigationController = navigationController
         self.networkService = networkService
         self.title = title
         self.image = image
+        self.previews = previews
         self.completion = completion
     }
     
@@ -40,9 +43,10 @@ public struct MainLoginKitInterface: LoginKitInterface {
             networkService: networkService,
             title: title,
             image: image,
+            features: previews.features,
             completion: completion)
         
-        let flow = BasicLoginFlow(navigationController: navigationController, viewControllerFactory: viewControllerFactory)
+        let flow = BasicLoginFlow(navigationController: navigationController, viewControllerFactory: viewControllerFactory, previews: previews)
         
         
         return flow

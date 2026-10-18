@@ -51,6 +51,11 @@
 		F0F6E7C82F8155EF00D02F93 /* ExerciseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7C72F8155EF00D02F93 /* ExerciseCategory.swift */; };
 		F0F6E7CA2F81594400D02F93 /* MuscleGroupsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7C92F81594400D02F93 /* MuscleGroupsLoader.swift */; };
 		F0F6E7CC2F8159BD00D02F93 /* MuscleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7CB2F8159BD00D02F93 /* MuscleGroup.swift */; };
+		5A7500000000000000000102 /* StatsSamplePreviewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000101 /* StatsSamplePreviewScreen.swift */; };
+		5A7500000000000000000104 /* StatsSamplePreviewBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000103 /* StatsSamplePreviewBanner.swift */; };
+		5A7500000000000000000106 /* StatsKitSamplePreviewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000105 /* StatsKitSamplePreviewRouter.swift */; };
+		5A7500000000000000000108 /* StatsSamplePreviewNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000107 /* StatsSamplePreviewNavBar.swift */; };
+		5A750000000000000000010A /* StatsSamplePreviewHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000109 /* StatsSamplePreviewHostingController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +114,11 @@
 		F0F6E7C72F8155EF00D02F93 /* ExerciseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCategory.swift; sourceTree = "<group>"; };
 		F0F6E7C92F81594400D02F93 /* MuscleGroupsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroupsLoader.swift; sourceTree = "<group>"; };
 		F0F6E7CB2F8159BD00D02F93 /* MuscleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroup.swift; sourceTree = "<group>"; };
+		5A7500000000000000000101 /* StatsSamplePreviewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSamplePreviewScreen.swift; sourceTree = "<group>"; };
+		5A7500000000000000000103 /* StatsSamplePreviewBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSamplePreviewBanner.swift; sourceTree = "<group>"; };
+		5A7500000000000000000105 /* StatsKitSamplePreviewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitSamplePreviewRouter.swift; sourceTree = "<group>"; };
+		5A7500000000000000000107 /* StatsSamplePreviewNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSamplePreviewNavBar.swift; sourceTree = "<group>"; };
+		5A7500000000000000000109 /* StatsSamplePreviewHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSamplePreviewHostingController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -180,6 +190,8 @@
 			isa = PBXGroup;
 			children = (
 				5A7500000000000000000005 /* StatsGateViewModel.swift */,
+				5A7500000000000000000109 /* StatsSamplePreviewHostingController.swift */,
+				5A7500000000000000000105 /* StatsKitSamplePreviewRouter.swift */,
 				F0A11D1F2F6C61AC00CE1E9A /* StatsKitRouter.swift */,
 				F0A11D212F6C61E600CE1E9A /* StatsKitRoutes.swift */,
 				F0F6DF442F708AEA00D02F93 /* StatsKitBoundaryViewController.swift */,
@@ -191,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				5A7500000000000000000009 /* StatsLockedScreen.swift */,
+				5A7500000000000000000101 /* StatsSamplePreviewScreen.swift */,
 				5A7500000000000000000007 /* StatsKitRootScreen.swift */,
 				F0F6DF382F705CED00D02F93 /* SubViews */,
 				F0A11D242F6C623900CE1E9A /* StatsKitHomeScreen.swift */,
@@ -230,6 +243,8 @@
 			children = (
 				F0F6E50F2F77377800D02F93 /* ProgressChartSection.swift */,
 				F0F6DF392F705D0100D02F93 /* HomeSubViews.swift */,
+				5A7500000000000000000107 /* StatsSamplePreviewNavBar.swift */,
+				5A7500000000000000000103 /* StatsSamplePreviewBanner.swift */,
 				F034E5962F902FE800DDB10C /* TrainingLoadSummaryView.swift */,
 				F034E59C2F902FE800DDB10C /* TrainingChartSection.swift */,
 				F034E59E2F902FE800DDB10C /* ActivityGrid.swift */,
@@ -385,6 +400,11 @@
 				5A7500000000000000000006 /* StatsGateViewModel.swift in Sources */,
 				5A7500000000000000000008 /* StatsKitRootScreen.swift in Sources */,
 				5A750000000000000000000A /* StatsLockedScreen.swift in Sources */,
+				5A750000000000000000010A /* StatsSamplePreviewHostingController.swift in Sources */,
+				5A7500000000000000000108 /* StatsSamplePreviewNavBar.swift in Sources */,
+				5A7500000000000000000106 /* StatsKitSamplePreviewRouter.swift in Sources */,
+				5A7500000000000000000104 /* StatsSamplePreviewBanner.swift in Sources */,
+				5A7500000000000000000102 /* StatsSamplePreviewScreen.swift in Sources */,
 				F0A11D222F6C61E600CE1E9A /* StatsKitRoutes.swift in Sources */,
 				F0664E742F9FF5F70053DEE7 /* Color+Extension.swift in Sources */,
 				F0F6DF412F70849800D02F93 /* ExerciseStatsLoader.swift in Sources */,

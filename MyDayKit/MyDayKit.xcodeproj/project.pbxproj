@@ -7,16 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D4A700000000000000001020 /* MyDayWeekCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000020 /* MyDayWeekCard.swift */; };
-		D4A700000000000000001021 /* MyDayWeekDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000021 /* MyDayWeekDayCell.swift */; };
-		D4A700000000000000001010 /* MyDayTimelineNodeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000010 /* MyDayTimelineNodeState.swift */; };
-		D4A700000000000000001011 /* MyDayTimelineNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000011 /* MyDayTimelineNode.swift */; };
-		D4A700000000000000001012 /* MyDayTimelineStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000012 /* MyDayTimelineStep.swift */; };
-		D4A700000000000000001013 /* MyDayTimelinePlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000013 /* MyDayTimelinePlaceholder.swift */; };
-		D4A700000000000000001014 /* MyDayTimelineMissingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000014 /* MyDayTimelineMissingRow.swift */; };
-		D4A700000000000000001000 /* MyDayDayMarkerKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000000 /* MyDayDayMarkerKind.swift */; };
-		D4A700000000000000001001 /* MyDayDayMarkerDots.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000001 /* MyDayDayMarkerDots.swift */; };
-		D4A700000000000000001002 /* MyDayDayMarkerLegend.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000002 /* MyDayDayMarkerLegend.swift */; };
 		1D66013DCBE846A89E32BABB /* SessionSetEditTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E501441CAB4B9F9C547C90 /* SessionSetEditTarget.swift */; };
 		22C2001A6FF44A2CAAE6513E /* SessionSetNoteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055A3D97CF8B4DCFA300767D /* SessionSetNoteSheet.swift */; };
 		3DA700000000000000000002 /* MyDayProAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA700000000000000000001 /* MyDayProAccess.swift */; };
@@ -37,8 +27,24 @@
 		CE6D407F61F74E0096FAE36E /* WorkoutSessionSummaryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460FCF49623A468BA34BB4AD /* WorkoutSessionSummaryScreen.swift */; };
 		D1E5A7C13B9F44A28E610002 /* WorkoutSetRecord+Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E5A7C13B9F44A28E610001 /* WorkoutSetRecord+Stats.swift */; };
 		D1E5A7C13B9F44A28E610004 /* MyDayManager+WorkoutStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E5A7C13B9F44A28E610003 /* MyDayManager+WorkoutStats.swift */; };
+		D4A700000000000000001000 /* MyDayDayMarkerKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000000 /* MyDayDayMarkerKind.swift */; };
+		D4A700000000000000001001 /* MyDayDayMarkerDots.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000001 /* MyDayDayMarkerDots.swift */; };
+		D4A700000000000000001002 /* MyDayDayMarkerLegend.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000002 /* MyDayDayMarkerLegend.swift */; };
+		D4A700000000000000001010 /* MyDayTimelineNodeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000010 /* MyDayTimelineNodeState.swift */; };
+		D4A700000000000000001011 /* MyDayTimelineNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000011 /* MyDayTimelineNode.swift */; };
+		D4A700000000000000001012 /* MyDayTimelineStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000012 /* MyDayTimelineStep.swift */; };
+		D4A700000000000000001013 /* MyDayTimelinePlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000013 /* MyDayTimelinePlaceholder.swift */; };
+		D4A700000000000000001014 /* MyDayTimelineMissingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000014 /* MyDayTimelineMissingRow.swift */; };
+		D4A700000000000000001020 /* MyDayWeekCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000020 /* MyDayWeekCard.swift */; };
+		D4A700000000000000001021 /* MyDayWeekDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A700000000000000000021 /* MyDayWeekDayCell.swift */; };
 		D82F16A5943BC7E0521D8F46 /* MyDayWorkoutNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E97B24C60D1A85F7C42E930 /* MyDayWorkoutNavBar.swift */; };
 		D9A3F1C74B8E42D6A017E5B3 /* SessionSetValueSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E28B4D3A9F41708D2C7F15 /* SessionSetValueSheet.swift */; };
+		DE30A0012FF0000000000002 /* MyDayDemoWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE30A0012FF0000000000001 /* MyDayDemoWorkout.swift */; };
+		DE30A0012FF0000000000004 /* MyDayDemoWorkoutRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE30A0012FF0000000000003 /* MyDayDemoWorkoutRouter.swift */; };
+		DE30A0012FF0000000000006 /* WorkoutSessionNoticeBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE30A0012FF0000000000005 /* WorkoutSessionNoticeBanner.swift */; };
+		DE30A0012FF0000000000009 /* MyDayDemoHint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE30A0012FF0000000000008 /* MyDayDemoHint.swift */; };
+		DE30A0012FF000000000000B /* MyDayDemoWorkoutFinishedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE30A0012FF000000000000A /* MyDayDemoWorkoutFinishedScreen.swift */; };
+		DE30A0012FF000000000000D /* WorkoutSessionNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE30A0012FF000000000000C /* WorkoutSessionNotice.swift */; };
 		E4C90B7A15D24F8E9A330002 /* CompletedWorkoutSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330001 /* CompletedWorkoutSession.swift */; };
 		E4C90B7A15D24F8E9A330004 /* MyDayManager+CompletedSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330003 /* MyDayManager+CompletedSessions.swift */; };
 		E5B29A4761D3C08A24F7B913 /* SessionSetPillValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93A7D615C40E2871FA6D385 /* SessionSetPillValue.swift */; };
@@ -166,6 +172,7 @@
 		F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F608402E4405B50015F260 /* MyDayKitRouter.swift */; };
 		F60D3B821E75C49A08B6D253 /* WorkoutSessionFinishBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1F70A2B863D5E1067A4B8 /* WorkoutSessionFinishBar.swift */; };
 		F78D7EFDEE3F43E9B0F0628A /* SessionSetUnitOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1071B8A726744C7BB57B2D36 /* SessionSetUnitOption.swift */; };
+		DE30A0012FF000000000000F /* HidesNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE30A0012FF000000000000E /* HidesNavigationBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,16 +186,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D4A700000000000000000020 /* MyDayWeekCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWeekCard.swift; sourceTree = "<group>"; };
-		D4A700000000000000000021 /* MyDayWeekDayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWeekDayCell.swift; sourceTree = "<group>"; };
-		D4A700000000000000000010 /* MyDayTimelineNodeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimelineNodeState.swift; sourceTree = "<group>"; };
-		D4A700000000000000000011 /* MyDayTimelineNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimelineNode.swift; sourceTree = "<group>"; };
-		D4A700000000000000000012 /* MyDayTimelineStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimelineStep.swift; sourceTree = "<group>"; };
-		D4A700000000000000000013 /* MyDayTimelinePlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimelinePlaceholder.swift; sourceTree = "<group>"; };
-		D4A700000000000000000014 /* MyDayTimelineMissingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimelineMissingRow.swift; sourceTree = "<group>"; };
-		D4A700000000000000000000 /* MyDayDayMarkerKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDayMarkerKind.swift; sourceTree = "<group>"; };
-		D4A700000000000000000001 /* MyDayDayMarkerDots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDayMarkerDots.swift; sourceTree = "<group>"; };
-		D4A700000000000000000002 /* MyDayDayMarkerLegend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDayMarkerLegend.swift; sourceTree = "<group>"; };
 		055A3D97CF8B4DCFA300767D /* SessionSetNoteSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetNoteSheet.swift; sourceTree = "<group>"; };
 		1071B8A726744C7BB57B2D36 /* SessionSetUnitOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetUnitOption.swift; sourceTree = "<group>"; };
 		2BCA7B6236E44CE6AD24A631 /* SessionSetDetailOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetDetailOverlay.swift; sourceTree = "<group>"; };
@@ -213,7 +210,23 @@
 		D1E5A7C13B9F44A28E610003 /* MyDayManager+WorkoutStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyDayManager+WorkoutStats.swift"; sourceTree = "<group>"; };
 		D2E501441CAB4B9F9C547C90 /* SessionSetEditTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetEditTarget.swift; sourceTree = "<group>"; };
 		D35E8E17535542B3B9FDC4EB /* SessionSetDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetDetail.swift; sourceTree = "<group>"; };
+		D4A700000000000000000000 /* MyDayDayMarkerKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDayMarkerKind.swift; sourceTree = "<group>"; };
+		D4A700000000000000000001 /* MyDayDayMarkerDots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDayMarkerDots.swift; sourceTree = "<group>"; };
+		D4A700000000000000000002 /* MyDayDayMarkerLegend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDayMarkerLegend.swift; sourceTree = "<group>"; };
+		D4A700000000000000000010 /* MyDayTimelineNodeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimelineNodeState.swift; sourceTree = "<group>"; };
+		D4A700000000000000000011 /* MyDayTimelineNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimelineNode.swift; sourceTree = "<group>"; };
+		D4A700000000000000000012 /* MyDayTimelineStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimelineStep.swift; sourceTree = "<group>"; };
+		D4A700000000000000000013 /* MyDayTimelinePlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimelinePlaceholder.swift; sourceTree = "<group>"; };
+		D4A700000000000000000014 /* MyDayTimelineMissingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayTimelineMissingRow.swift; sourceTree = "<group>"; };
+		D4A700000000000000000020 /* MyDayWeekCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWeekCard.swift; sourceTree = "<group>"; };
+		D4A700000000000000000021 /* MyDayWeekDayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayWeekDayCell.swift; sourceTree = "<group>"; };
 		D7F2B1483C6E49A1852D0F37 /* SessionSetPillPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetPillPlaceholder.swift; sourceTree = "<group>"; };
+		DE30A0012FF0000000000001 /* MyDayDemoWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDemoWorkout.swift; sourceTree = "<group>"; };
+		DE30A0012FF0000000000003 /* MyDayDemoWorkoutRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDemoWorkoutRouter.swift; sourceTree = "<group>"; };
+		DE30A0012FF0000000000005 /* WorkoutSessionNoticeBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSessionNoticeBanner.swift; sourceTree = "<group>"; };
+		DE30A0012FF0000000000008 /* MyDayDemoHint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDemoHint.swift; sourceTree = "<group>"; };
+		DE30A0012FF000000000000A /* MyDayDemoWorkoutFinishedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayDemoWorkoutFinishedScreen.swift; sourceTree = "<group>"; };
+		DE30A0012FF000000000000C /* WorkoutSessionNotice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSessionNotice.swift; sourceTree = "<group>"; };
 		E4C90B7A15D24F8E9A330001 /* CompletedWorkoutSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedWorkoutSession.swift; sourceTree = "<group>"; };
 		E4C90B7A15D24F8E9A330003 /* MyDayManager+CompletedSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyDayManager+CompletedSessions.swift"; sourceTree = "<group>"; };
 		F00CD1712E4D2DBB0051042A /* MyDayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayManager.swift; sourceTree = "<group>"; };
@@ -339,6 +352,7 @@
 		F0F6082F2E42A20B0015F260 /* ExerciseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCategory.swift; sourceTree = "<group>"; };
 		F0F608402E4405B50015F260 /* MyDayKitRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRouter.swift; sourceTree = "<group>"; };
 		F4A9D8B26C3E4718B52A0E67 /* SessionSetMeasure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetMeasure.swift; sourceTree = "<group>"; };
+		DE30A0012FF000000000000E /* HidesNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HidesNavigationBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -373,6 +387,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D4A700000000000000002000 /* DayMarkers */ = {
+			isa = PBXGroup;
+			children = (
+				D4A700000000000000000000 /* MyDayDayMarkerKind.swift */,
+				D4A700000000000000000001 /* MyDayDayMarkerDots.swift */,
+				D4A700000000000000000002 /* MyDayDayMarkerLegend.swift */,
+			);
+			path = DayMarkers;
+			sourceTree = "<group>";
+		};
 		D4A700000000000000002001 /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
@@ -387,14 +411,15 @@
 			path = Timeline;
 			sourceTree = "<group>";
 		};
-		D4A700000000000000002000 /* DayMarkers */ = {
+		DE30A0012FF0000000000007 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
-				D4A700000000000000000000 /* MyDayDayMarkerKind.swift */,
-				D4A700000000000000000001 /* MyDayDayMarkerDots.swift */,
-				D4A700000000000000000002 /* MyDayDayMarkerLegend.swift */,
+				DE30A0012FF0000000000001 /* MyDayDemoWorkout.swift */,
+				DE30A0012FF0000000000003 /* MyDayDemoWorkoutRouter.swift */,
+				DE30A0012FF000000000000A /* MyDayDemoWorkoutFinishedScreen.swift */,
+				DE30A0012FF0000000000008 /* MyDayDemoHint.swift */,
 			);
-			path = DayMarkers;
+			path = Demo;
 			sourceTree = "<group>";
 		};
 		F01E0E902E78A9BA008C1547 /* Clips */ = {
@@ -505,6 +530,7 @@
 				F0664E752FA003C90053DEE7 /* Managers */,
 				F034EA9F2F9CF75D00DDB10C /* UI */,
 				F034E80F2F95213C00DDB10C /* Models */,
+				DE30A0012FF0000000000007 /* Demo */,
 			);
 			path = MyDayWorkouts;
 			sourceTree = "<group>";
@@ -531,6 +557,7 @@
 				4087E69E61014F2983DA52ED /* SessionSetDetailMode.swift */,
 				A1D0E5F200014C0A9B110001 /* WorkoutSessionDialog.swift */,
 				D2E501441CAB4B9F9C547C90 /* SessionSetEditTarget.swift */,
+				DE30A0012FF000000000000C /* WorkoutSessionNotice.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -554,6 +581,7 @@
 				F09C55612FF01600007CDAB4 /* MyDayWorkoutTemplateDetailScreen.swift */,
 				F09C55572FF013BC007CDAB4 /* MyDayWorkoutSessionScreen.swift */,
 				7B26D5F94A03E1C86D5470FA /* NavBarHidingHostingController.swift */,
+				DE30A0012FF000000000000E /* HidesNavigationBar.swift */,
 				460FCF49623A468BA34BB4AD /* WorkoutSessionSummaryScreen.swift */,
 			);
 			path = UI;
@@ -668,6 +696,7 @@
 		F09C54622FE08404007CDAB4 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
+				DE30A0012FF0000000000005 /* WorkoutSessionNoticeBanner.swift */,
 				F09C5B522FF32270007CDAB4 /* WorkoutExerciseRPESheet.swift */,
 				F09C5ACD2FF1B6A2007CDAB4 /* WorkoutSessionStartCard.swift */,
 				F09C55592FF013E5007CDAB4 /* MyDayWorkoutSessionExerciseCard.swift */,
@@ -1050,6 +1079,13 @@
 				AB061FDC6BC6496AAF3CDBC2 /* SessionSetDetailOverlay.swift in Sources */,
 				C4E1A9075B3D42F8B60C1E29 /* SessionSetPillPlaceholder.swift in Sources */,
 				F09C55582FF013BC007CDAB4 /* MyDayWorkoutSessionScreen.swift in Sources */,
+				DE30A0012FF000000000000F /* HidesNavigationBar.swift in Sources */,
+				DE30A0012FF000000000000D /* WorkoutSessionNotice.swift in Sources */,
+				DE30A0012FF000000000000B /* MyDayDemoWorkoutFinishedScreen.swift in Sources */,
+				DE30A0012FF0000000000009 /* MyDayDemoHint.swift in Sources */,
+				DE30A0012FF0000000000006 /* WorkoutSessionNoticeBanner.swift in Sources */,
+				DE30A0012FF0000000000004 /* MyDayDemoWorkoutRouter.swift in Sources */,
+				DE30A0012FF0000000000002 /* MyDayDemoWorkout.swift in Sources */,
 				CE6D407F61F74E0096FAE36E /* WorkoutSessionSummaryScreen.swift in Sources */,
 				F09C55602FF01600007CDAB4 /* MyDayWorkoutTemplateDetailScreen.swift in Sources */,
 				F09C55622FF01602007CDAB4 /* MyDayExerciseTemplateCard.swift in Sources */,

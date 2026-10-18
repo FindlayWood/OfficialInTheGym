@@ -16,6 +16,19 @@ struct MyDayWorkoutSessionScreen: View {
     var onBack: (() -> Void)?
     var onCancelled: (() -> Void)?
 
+    /// Offers "Add Set" on every exercise card. Off for a real session — only
+    /// `MyDayDemoWorkoutRouter` turns it on.
+    var canAddSets: Bool = false
+    var showsClips: Bool = true
+    /// A strip under the nav bar, asked for on every render so it can follow
+    /// the session. The demo uses it for step-by-step hints; a real session has
+    /// nothing to say and leaves it `nil`.
+    var notice: ((WorkoutSessionManager) -> WorkoutSessionNotice?)? = nil
+    /// Whether "Cancel Workout" asks first. It does in a real session, where
+    /// cancelling discards logged sets. The demo saves nothing, so there is
+    /// nothing to warn about and the menu row simply leaves.
+    var confirmsCancel: Bool = true
+
     @Namespace private var animation
 
     @State private var elapsedSeconds = 0
@@ -43,6 +56,10 @@ struct MyDayWorkoutSessionScreen: View {
                         withAnimation(dialogAnimation) { dialog = .options }
                     }
                 )
+
+                if let notice = notice?(manager) {
+                    WorkoutSessionNoticeBanner(notice: notice)
+                }
 
                 if sessionStarted {
                     if sessionCompleted {
@@ -89,7 +106,11 @@ struct MyDayWorkoutSessionScreen: View {
                                 },
                                 onRPETapped: sessionStarted && !sessionCompleted ? {
                                     rpeExercise = exercise
-                                } : nil
+                                } : nil,
+                                onAddSet: canAddSets ? {
+                                    manager.addSet(toExercise: exercise.exerciseId)
+                                } : nil,
+                                showsClip: showsClips
                             )
                         }
                         Color.clear.frame(height: sessionStarted ? 100 : 200)
@@ -128,6 +149,12 @@ struct MyDayWorkoutSessionScreen: View {
                     // Steps the same overlay from menu to confirmation rather
                     // than presenting a second one over it.
                     onCancelWorkoutTapped: {
+                        guard confirmsCancel else {
+                            self.dialog = nil
+                            manager.cancelSession()
+                            onCancelled?()
+                            return
+                        }
                         withAnimation(dialogAnimation) { self.dialog = .confirmCancel }
                     },
                     onConfirmCancel: {

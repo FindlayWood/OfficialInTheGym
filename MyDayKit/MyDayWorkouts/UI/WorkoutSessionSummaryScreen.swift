@@ -12,6 +12,11 @@ struct WorkoutSessionSummaryScreen: View {
     @ObservedObject var manager: WorkoutSessionManager
     let endedAt: Date
     var onComplete: (() -> Void)?
+    /// When set, the screen draws `MyDayWorkoutNavBar` itself and must be hosted in
+    /// `NavBarHidingHostingController`. The demo workout does this so the summary carries on the
+    /// session screen's bar rather than switching to a system one mid-flow. `nil` keeps the system
+    /// bar, as MyDay's own summary does today.
+    var onBack: (() -> Void)? = nil
 
     @State private var selectedRPE: Int?
     @State private var notes: String = ""
@@ -40,6 +45,25 @@ struct WorkoutSessionSummaryScreen: View {
     }
 
     var body: some View {
+        if let onBack {
+            VStack(spacing: 0) {
+                MyDayWorkoutNavBar(title: "Summary", onBack: onBack)
+                content
+            }
+        } else {
+            // The system bar's configuration only where there is a system bar. On the custom-bar
+            // path the forced-light toolbar applied to the hidden bar, and showed as a white flash
+            // in dark mode whenever the bar appeared during a transition.
+            content
+                .navigationTitle("Summary")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarBackground(Color(UIColor.systemBackground), for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
+                .toolbarColorScheme(.light, for: .navigationBar)
+        }
+    }
+
+    private var content: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
 
@@ -70,11 +94,6 @@ struct WorkoutSessionSummaryScreen: View {
             }
         }
         .background(Color(UIColor.systemBackground))
-        .navigationTitle("Summary")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color(UIColor.systemBackground), for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
-        .toolbarColorScheme(.light, for: .navigationBar)
         .safeAreaInset(edge: .bottom) {
             completeButton
         }
