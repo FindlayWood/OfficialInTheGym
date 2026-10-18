@@ -97,7 +97,8 @@ bottom, unchanged, so returning users are not slowed down.
 - **The showcase: one card moves at a time.** After the intro the cards take turns, each
   **rebuilding its miniature from empty** (`WelcomeRebuilding`: pills none → six, chart from
   nothing, ring 0 → 96%). Single increments per turn only made sense if you had watched the last
-  one. The active card lifts with a light running round its edge (`WelcomeCardSweep`), with the line under "Train like an athlete." naming it (`WelcomeFeature.headline`).
+  one. The active card pulses once, outline and glow swelling with the build (`WelcomeCardPulse`) —
+  a light running round the edge was tried and never ended cleanly with the turn — with the line under "Train like an athlete." naming it (`WelcomeFeature.headline`).
   Animating once and stopping left the screen dead; all three at once would be noise. It pauses
   while scrolling, pressing a card, or with the app inactive, and with Reduce Motion it never runs.
   Cards press to 0.97 with a light haptic.

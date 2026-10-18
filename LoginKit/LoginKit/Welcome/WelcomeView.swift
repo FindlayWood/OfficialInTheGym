@@ -17,8 +17,8 @@ import SwiftUI
 /// **The showcase.** After the intro, the cards take turns: each rebuilds its miniature from empty —
 /// the pills log from none to six, the chart grows from nothing, the ring fills from 0% — one card
 /// at a time with a still pause between, so the loop tells the app's story (log → it adds up →
-/// you're ready) and never moves two things at once. The playing card lifts slightly with a light
-/// running round its edge, and the line under the tagline names it. The first version animated once and then stopped, and the screen went dead; three cards
+/// you're ready) and never moves two things at once. The playing card pulses with light once as it
+/// builds, and the line under the tagline names it. The first version animated once and then stopped, and the screen went dead; three cards
 /// moving together would be noise. One beat every few seconds is the line between the two.
 ///
 /// It **holds still** while the user is scrolling or pressing a card, and stops when the screen is
@@ -67,7 +67,6 @@ struct WelcomeView: View {
                                 feature: feature,
                                 isRevealed: isRevealed,
                                 scene: scenes[feature, default: 0],
-                                isActive: activeFeature == feature,
                                 onPressChange: { isPressing = $0 }
                             ) {
                                 tapCount += 1
@@ -77,7 +76,7 @@ struct WelcomeView: View {
                     }
                 }
                 // Inside the scroll view, not around it: a scroll view clips to its bounds, and the
-                // active card's lift and the light round its edge reach past the card. With the
+                // active card's lift and its glow reach past the card. With the
                 // padding outside, both were cut off at the left and right.
                 .padding(.horizontal, 20)
                 .padding(.vertical, 4)

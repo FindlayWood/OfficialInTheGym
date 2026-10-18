@@ -17,14 +17,13 @@ import SwiftUI
 /// that own the real components, and they are illustrations with fixed numbers, not data.
 ///
 /// `scene` counts the turns this card has had in `WelcomeView`'s showcase; each new value rebuilds
-/// its miniature from empty (`WelcomeRebuilding`). `isActive` is the card whose turn it is, lifted
-/// slightly with a light running round its edge (`WelcomeCardSweep`) so the eye follows it.
+/// its miniature from empty (`WelcomeRebuilding`) and plays one pulse of light on the card
+/// (`WelcomeCardPulse`), so the eye follows the turn down the list.
 struct WelcomeFeatureCard: View {
 
     let feature: WelcomeFeature
     let isRevealed: Bool
     var scene: Int = 0
-    var isActive: Bool = false
     var onPressChange: ((Bool) -> Void)?
     let action: () -> Void
 
@@ -69,9 +68,7 @@ struct WelcomeFeatureCard: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(UIColor.secondarySystemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay { WelcomeCardSweep(isActive: isActive) }
-            .scaleEffect(isActive ? 1.01 : 1)
-            .animation(.easeInOut(duration: 0.35), value: isActive)
+            .welcomeCardPulse(trigger: scene)
             .contentShape(Rectangle())
         }
         .buttonStyle(WelcomeCardButtonStyle(onPressChange: onPressChange))
@@ -91,7 +88,7 @@ struct WelcomeFeatureCard: View {
 #Preview {
     VStack(spacing: 10) {
         ForEach(WelcomeFeature.allCases) { feature in
-            WelcomeFeatureCard(feature: feature, isRevealed: true, isActive: feature == .stats) {}
+            WelcomeFeatureCard(feature: feature, isRevealed: true) {}
         }
     }
     .padding()
