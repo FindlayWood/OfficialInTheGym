@@ -22,7 +22,16 @@ struct StatsSamplePreviewScreen: View {
     /// Generated once: the mock is random, and regenerating it on every render would shimmer.
     private static let previewTotals = MockDailyTotalsProvider().previewTotals
 
+    var onBack: (() -> Void)?
+
     var body: some View {
+        VStack(spacing: 0) {
+            StatsSamplePreviewNavBar(title: "Stats", onBack: onBack)
+            content
+        }
+    }
+
+    private var content: some View {
         ScrollView {
             VStack(spacing: 16) {
                 StatsSamplePreviewBanner()
@@ -47,7 +56,5 @@ struct StatsSamplePreviewScreen: View {
 }
 
 #Preview {
-    NavigationStack {
-        StatsSamplePreviewScreen()
-    }
+    StatsSamplePreviewScreen()
 }

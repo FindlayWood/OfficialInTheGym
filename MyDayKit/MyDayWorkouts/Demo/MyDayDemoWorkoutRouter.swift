@@ -81,9 +81,10 @@ extension MyDayDemoWorkoutRouter {
         let screen = WorkoutSessionSummaryScreen(
             manager: manager,
             endedAt: Date(),
-            onComplete: { self.showFinished(manager: manager) }
+            onComplete: { self.showFinished(manager: manager) },
+            onBack: { self.navigationController?.popViewController(animated: true) }
         )
-        navigationController?.pushViewController(UIHostingController(rootView: screen), animated: true)
+        navigationController?.pushViewController(NavBarHidingHostingController(rootView: screen), animated: true)
     }
 
     /// Replaces the session and summary rather than pushing over them, so

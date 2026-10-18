@@ -20,19 +20,22 @@ struct PerformanceSamplePreviewScreen: View {
         canRecord: false
     )
 
+    var onBack: (() -> Void)?
+
     var body: some View {
         PerformanceHomeScreen(viewModel: preview)
-            .safeAreaInset(edge: .top) {
-                PerformanceSamplePreviewBanner()
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(Color(.systemBackground))
+            .safeAreaInset(edge: .top, spacing: 0) {
+                VStack(spacing: 0) {
+                    PerformanceSamplePreviewNavBar(title: "Performance", onBack: onBack)
+                    PerformanceSamplePreviewBanner()
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                }
+                .background(Color(.systemBackground))
             }
     }
 }
 
 #Preview {
-    NavigationStack {
-        PerformanceSamplePreviewScreen()
-    }
+    PerformanceSamplePreviewScreen()
 }

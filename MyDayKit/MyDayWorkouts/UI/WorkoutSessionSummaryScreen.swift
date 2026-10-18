@@ -12,6 +12,11 @@ struct WorkoutSessionSummaryScreen: View {
     @ObservedObject var manager: WorkoutSessionManager
     let endedAt: Date
     var onComplete: (() -> Void)?
+    /// When set, the screen draws `MyDayWorkoutNavBar` itself and must be hosted in
+    /// `NavBarHidingHostingController`. The demo workout does this so the summary carries on the
+    /// session screen's bar rather than switching to a system one mid-flow. `nil` keeps the system
+    /// bar, as MyDay's own summary does today.
+    var onBack: (() -> Void)? = nil
 
     @State private var selectedRPE: Int?
     @State private var notes: String = ""
@@ -40,6 +45,17 @@ struct WorkoutSessionSummaryScreen: View {
     }
 
     var body: some View {
+        if let onBack {
+            VStack(spacing: 0) {
+                MyDayWorkoutNavBar(title: "Summary", onBack: onBack)
+                content
+            }
+        } else {
+            content
+        }
+    }
+
+    private var content: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
 

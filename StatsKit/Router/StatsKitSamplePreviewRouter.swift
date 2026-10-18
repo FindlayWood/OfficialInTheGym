@@ -12,8 +12,8 @@ import UIKit
 /// screen and from the end of the example workout. It needs no dependencies: everything on the
 /// screen is sample data, and nothing is read or written.
 ///
-/// The bar is made opaque `systemBackground` on this screen only. The page is `pageColor` — navy
-/// in light — and a transparent bar over it would put the navy title and back chevron on navy.
+/// The system bar is hidden and the screen draws `StatsSamplePreviewNavBar`, the example workout's
+/// bar, so the welcome screen's three previews read as one flow.
 public final class StatsKitSamplePreviewRouter {
 
     // MARK: - Navigation
@@ -29,17 +29,9 @@ public final class StatsKitSamplePreviewRouter {
     // MARK: - Root
 
     public func start() {
-        let vc = UIHostingController(rootView: StatsSamplePreviewScreen())
-        vc.title = "Stats"
-
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .systemBackground
-        appearance.titleTextAttributes = [.foregroundColor: UIColor(Color.darkColor)]
-        vc.navigationItem.standardAppearance = appearance
-        vc.navigationItem.scrollEdgeAppearance = appearance
-
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        navigationController?.pushViewController(vc, animated: true)
+        let screen = StatsSamplePreviewScreen(onBack: { [weak navigationController] in
+            navigationController?.popViewController(animated: true)
+        })
+        navigationController?.pushViewController(StatsSamplePreviewHostingController(rootView: screen), animated: true)
     }
 }

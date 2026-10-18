@@ -103,6 +103,13 @@ bottom, unchanged, so returning users are not slowed down.
   passes for a signed-in user's own; before signup there is nothing to confuse it with. **Both are
   labelled SAMPLE DATA and PRO at the top** — a preview that let someone sign up expecting free
   stats would end at the paywall. Drill-downs do nothing.
+- **One bar through the whole pre-signup flow.** The demo workout must hide the system bar (the set
+  detail overlay), so the previews and the demo's summary hide it too and draw the same 44pt
+  chevron/title bar: `StatsSamplePreviewNavBar` / `PerformanceSamplePreviewNavBar` are copies of
+  `MyDayWorkoutNavBar`, hosted in copies of `NavBarHidingHostingController`, and
+  `WorkoutSessionSummaryScreen(onBack:)` draws `MyDayWorkoutNavBar` when given one. System bars
+  here made moving between them read as two apps. MyDay's own summary still uses the system bar
+  (`onBack: nil`), which forces `.toolbarColorScheme(.light)` and so is wrong in dark mode.
 
 ### Example workout — before signup
 "Try a workout" pushes `MyDayDemoWorkoutRouter` (MyDayKit) onto LoginKit's stack: the **real**
@@ -1840,6 +1847,7 @@ in this codebase.**
 | `DiscoverCommentsViewModel.maxLength` (500) | the comment rules' `text.size()` limit | DISCOVER Tab |
 | `DiscoverReportReason` raw values | ProfileKit's `ProfileReportReason`, and the rules' accepted `reason` list | DISCOVER Tab, PROFILE_PLAN.md step 9 |
 | `StatsSamplePreviewBanner` | PerformanceKit's `PerformanceSamplePreviewBanner` | Welcome screen |
+| `MyDayWorkoutNavBar` / `NavBarHidingHostingController` | the Stats and Performance sample-preview copies | Welcome screen |
 | `FirestoreProfileReporter` (`profile`, `Profiles/{uid}`) | `reportTarget`'s `profile` kind in `Discover/Moderation/ReportTarget.ts` | PROFILE_PLAN.md step 9 |
 
 ## Analysis artefacts — `.results/`, gitignored

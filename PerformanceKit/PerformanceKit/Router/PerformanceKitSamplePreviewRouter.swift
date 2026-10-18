@@ -9,7 +9,8 @@ import UIKit
 
 /// Pushes `PerformanceSamplePreviewScreen` onto a stack it does not own — LoginKit's, from the
 /// welcome screen. No dependencies: the sessions are `PreviewJumpTestSessionsLoader`'s and nothing
-/// is written. The system bar stays, so the back chevron is the way out.
+/// is written. The system bar is hidden and the screen draws `PerformanceSamplePreviewNavBar`, the
+/// example workout's bar, so the welcome screen's three previews read as one flow.
 public final class PerformanceKitSamplePreviewRouter {
 
     // MARK: - Navigation
@@ -25,9 +26,9 @@ public final class PerformanceKitSamplePreviewRouter {
     // MARK: - Root
 
     public func start() {
-        let vc = UIHostingController(rootView: PerformanceSamplePreviewScreen())
-        vc.title = "Performance"
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        navigationController?.pushViewController(vc, animated: true)
+        let screen = PerformanceSamplePreviewScreen(onBack: { [weak navigationController] in
+            navigationController?.popViewController(animated: true)
+        })
+        navigationController?.pushViewController(PerformanceSamplePreviewHostingController(rootView: screen), animated: true)
     }
 }
