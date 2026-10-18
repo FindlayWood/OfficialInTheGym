@@ -11,12 +11,12 @@ class BasicLoginFlow: LoginFlow {
     
     var navigationController: UINavigationController
     var viewControllerFactory: ViewControllerFactory
-    var tryWorkout: DemoWorkoutLauncher?
+    var previews: WelcomePreviews
     
-    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactory, tryWorkout: DemoWorkoutLauncher? = nil) {
+    init(navigationController: UINavigationController, viewControllerFactory: ViewControllerFactory, previews: WelcomePreviews = WelcomePreviews()) {
         self.navigationController = navigationController
         self.viewControllerFactory = viewControllerFactory
-        self.tryWorkout = tryWorkout
+        self.previews = previews
     }
     
     func start() {
@@ -53,9 +53,17 @@ class BasicLoginFlow: LoginFlow {
     /// LoginKit draws the button and the app decides what it opens — the example workout is
     /// MyDayKit's session screen, which this framework does not import.
     func presentDemoWorkout() {
-        tryWorkout?(navigationController) { [weak self] in
+        previews.workout?(navigationController) { [weak self] in
             self?.presentSignupFromDemo()
         }
+    }
+    
+    func presentStatsPreview() {
+        previews.stats?(navigationController)
+    }
+    
+    func presentPerformancePreview() {
+        previews.performance?(navigationController)
     }
 }
 
@@ -65,6 +73,8 @@ protocol LoginFlow {
     func presentSignup()
     func forgotPassword()
     func presentDemoWorkout()
+    func presentStatsPreview()
+    func presentPerformancePreview()
 }
 
 protocol ViewControllerFactory {
@@ -79,12 +89,12 @@ struct BasicViewControllerFactory: ViewControllerFactory {
     var networkService: NetworkService
     var title: String
     var image: UIImage
-    var canTryWorkout: Bool
+    var features: [WelcomeFeature]
     var completion: () -> Void
         
     func makeWelcomeViewController() -> WelcomeViewController {
         let vc = WelcomeViewController()
-        vc.viewModel = .init(title: title, canTryWorkout: canTryWorkout)
+        vc.viewModel = .init(title: title, features: features)
         vc.image = image
         return vc
     }

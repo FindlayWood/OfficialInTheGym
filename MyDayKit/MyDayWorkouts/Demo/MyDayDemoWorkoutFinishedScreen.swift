@@ -25,6 +25,9 @@ struct MyDayDemoWorkoutFinishedScreen: View {
     let exerciseCount: Int
     var onCreateAccount: (() -> Void)?
     var onBack: (() -> Void)?
+    /// Opens STATS on sample data — what a few months of this turns into. The moment a workout has
+    /// just been logged is when that lands best. `nil` hides the link.
+    var onSeeStats: (() -> Void)?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -49,6 +52,20 @@ struct MyDayDemoWorkoutFinishedScreen: View {
 
             statsCard
                 .padding(.top, 28)
+
+            if let onSeeStats {
+                Button(action: onSeeStats) {
+                    HStack(spacing: 4) {
+                        Text("See what your stats could look like")
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                    }
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Color.darkColor)
+                    .frame(minHeight: 44)
+                }
+                .padding(.top, 12)
+            }
 
             Spacer()
 

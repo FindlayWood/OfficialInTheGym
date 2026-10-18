@@ -7,40 +7,42 @@
 
 import SwiftUI
 
+/// The first screen anyone sees. It used to be a logo, one sentence and two buttons, which told
+/// someone who had never heard of the app nothing about what it does. It now says it in three
+/// cards (`WelcomeFeature`), each with a miniature of the screen it describes and a way to try it.
+///
+/// **Sign Up and Log In stay pinned at the bottom, unchanged**, so a returning user is not slowed
+/// down by the pitch; on a small phone the cards scroll and the buttons do not.
+///
+/// The miniatures animate **once**, as the screen appears, and then stop — a loop on a screen
+/// people read is noise. With Reduce Motion on they are drawn already finished.
 struct WelcomeView: View {
 
     @ObservedObject var viewModel: WelcomeViewModel
 
     var image: UIImage
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isRevealed = false
+
     var body: some View {
         VStack(spacing: 0) {
-            Spacer()
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 0) {
+                    header
+                        .padding(.top, 24)
+                        .padding(.bottom, 24)
 
-            Image(uiImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: 180, maxHeight: 180)
-
-            Text(viewModel.title)
-                .font(.system(size: 34, weight: .bold))
-                .foregroundStyle(Color.darkColor)
-                .padding(.top, 16)
-
-            Text("Plan your training, log every set, and see it add up.")
-                .font(.system(size: 15))
-                .foregroundStyle(Color.secondary)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.top, 8)
-                .padding(.horizontal, 24)
-
-            if viewModel.canTryWorkout {
-                tryWorkoutButton
-                    .padding(.top, 24)
+                    VStack(spacing: 10) {
+                        ForEach(viewModel.features) { feature in
+                            WelcomeFeatureCard(feature: feature, isRevealed: isRevealed) {
+                                viewModel.open(feature)
+                            }
+                        }
+                    }
+                }
+                .padding(.bottom, 16)
             }
-
-            Spacer()
 
             // Two full-width buttons rather than a primary and a word inside a sentence. Logging in
             // is half of what this screen is for, and "LOGIN" tucked into "Already have an
@@ -53,37 +55,59 @@ struct WelcomeView: View {
                     viewModel.loginAction()
                 }
             }
+            .padding(.top, 12)
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground).ignoresSafeArea())
+        .onAppear(perform: reveal)
     }
 
-    /// A tinted capsule rather than a third full-width button: signing up and logging in are what
-    /// this screen is for, and the example workout is a look before choosing — it sits with the
-    /// pitch it illustrates, not with the actions.
-    private var tryWorkoutButton: some View {
-        Button {
-            viewModel.tryWorkoutAction()
-        } label: {
-            HStack(spacing: 8) {
-                Image(systemName: "play.fill")
-                    .font(.system(size: 12, weight: .semibold))
-                Text("Try an example workout")
-                    .font(.system(size: 15, weight: .semibold))
+    // MARK: - Header
+
+    private var header: some View {
+        VStack(spacing: 0) {
+            Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: 88, maxHeight: 88)
+
+            Text(viewModel.title)
+                .font(.system(size: 30, weight: .bold))
+                .foregroundStyle(Color.darkColor)
+                .padding(.top, 12)
+
+            Text("Plan your training, log every set, and see it add up.")
+                .font(.system(size: 15))
+                .foregroundStyle(Color.secondary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, 6)
+                .padding(.horizontal, 12)
+        }
+    }
+
+    // MARK: - Reveal
+
+    private func reveal() {
+        guard !isRevealed else { return }
+        if reduceMotion {
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) { isRevealed = true }
+        } else {
+            // A beat after the screen lands, so the movement is seen rather than missed in the push.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                isRevealed = true
             }
-            .foregroundStyle(Color.darkColor)
-            .padding(.horizontal, 18)
-            .frame(height: 44)
-            .background(Capsule().fill(Color.darkColor.opacity(0.12)))
         }
     }
 }
 
 #Preview {
     WelcomeView(
-        viewModel: WelcomeViewModel(title: "INTHEGYM", canTryWorkout: true),
+        viewModel: WelcomeViewModel(title: "INTHEGYM", features: WelcomeFeature.allCases),
         image: UIImage(systemName: "figure.strengthtraining.traditional")!
     )
 }

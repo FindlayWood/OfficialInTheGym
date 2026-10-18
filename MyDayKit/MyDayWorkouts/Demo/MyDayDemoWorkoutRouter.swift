@@ -32,6 +32,9 @@ public final class MyDayDemoWorkoutRouter {
     // MARK: - Dependencies
 
     private let onSignUp: (() -> Void)?
+    /// Opens the STATS preview from the finished screen. MyDayKit does not import StatsKit, so the
+    /// app supplies it.
+    private let onSeeStats: (() -> Void)?
 
     // MARK: - Properties
 
@@ -40,9 +43,10 @@ public final class MyDayDemoWorkoutRouter {
 
     // MARK: - Init
 
-    public init(navigationController: UINavigationController, onSignUp: (() -> Void)? = nil) {
+    public init(navigationController: UINavigationController, onSignUp: (() -> Void)? = nil, onSeeStats: (() -> Void)? = nil) {
         self.navigationController = navigationController
         self.onSignUp = onSignUp
+        self.onSeeStats = onSeeStats
     }
 
     // MARK: - Root
@@ -97,7 +101,8 @@ extension MyDayDemoWorkoutRouter {
             durationSeconds: duration,
             exerciseCount: manager.entry.template.exercises.count,
             onCreateAccount: { self.onSignUp?() },
-            onBack: { self.popToRoot() }
+            onBack: { self.popToRoot() },
+            onSeeStats: onSeeStats
         )
         let vc = NavBarHidingHostingController(rootView: screen)
 

@@ -14,13 +14,13 @@ class WelcomeViewModel: ObservableObject {
     
     var title: String
     
-    /// Whether the app supplied an example workout to open. Before signup there is nothing of the
-    /// user's to show, so this is the one way to see what logging a workout is like.
-    let canTryWorkout: Bool
+    /// The feature cards to draw — only those the app supplied a way to open. Before signup there is
+    /// nothing of the user's to show, so these are the one way to see what the app does.
+    let features: [WelcomeFeature]
     
-    init(title: String, canTryWorkout: Bool = false) {
+    init(title: String, features: [WelcomeFeature] = []) {
         self.title = title
-        self.canTryWorkout = canTryWorkout
+        self.features = features
     }
     
     func signupAction() {
@@ -31,7 +31,11 @@ class WelcomeViewModel: ObservableObject {
         coordinator?.presentLogin()
     }
     
-    func tryWorkoutAction() {
-        coordinator?.presentDemoWorkout()
+    func open(_ feature: WelcomeFeature) {
+        switch feature {
+        case .training: coordinator?.presentDemoWorkout()
+        case .stats: coordinator?.presentStatsPreview()
+        case .performance: coordinator?.presentPerformancePreview()
+        }
     }
 }

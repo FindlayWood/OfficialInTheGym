@@ -8,6 +8,8 @@
 
 import LoginKit
 import MyDayKit
+import PerformanceKit
+import StatsKit
 import UIKit
 
 class LoginComposition {
@@ -27,10 +29,25 @@ class LoginComposition {
             networkService: LoginKitNetworkService(),
             title: "INTHEGYM",
             image: UIImage(named: "inthegym_icon3")!,
-            // Before signup: the real session screen on an example workout, saving nothing.
-            tryWorkout: { navigationController, signUp in
-                MyDayDemoWorkoutRouter(navigationController: navigationController, onSignUp: signUp).start()
-            },
+            // Before signup: the real screens on sample data, saving and reading nothing.
+            previews: WelcomePreviews(
+                workout: { navigationController, signUp in
+                    MyDayDemoWorkoutRouter(
+                        navigationController: navigationController,
+                        onSignUp: signUp,
+                        onSeeStats: { [weak navigationController] in
+                            guard let navigationController else { return }
+                            StatsKitSamplePreviewRouter(navigationController: navigationController).start()
+                        }
+                    ).start()
+                },
+                stats: { navigationController in
+                    StatsKitSamplePreviewRouter(navigationController: navigationController).start()
+                },
+                performance: { navigationController in
+                    PerformanceKitSamplePreviewRouter(navigationController: navigationController).start()
+                }
+            ),
             completion: completion)
         
         return mainInterface

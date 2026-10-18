@@ -19,16 +19,15 @@ public struct MainLoginKitInterface: LoginKitInterface {
     var title: String
     var image: UIImage
     var completion: () -> Void
-    /// Opens the example workout from the welcome screen, pushed onto the stack it is handed.
-    /// `nil` hides the button.
-    var tryWorkout: DemoWorkoutLauncher?
+    /// What the welcome screen's feature cards open. A card whose launcher is `nil` is not drawn.
+    var previews: WelcomePreviews
     
-    public init(navigationController: UINavigationController, networkService: NetworkService, title: String, image: UIImage, tryWorkout: DemoWorkoutLauncher? = nil, completion: @escaping () -> Void) {
+    public init(navigationController: UINavigationController, networkService: NetworkService, title: String, image: UIImage, previews: WelcomePreviews = WelcomePreviews(), completion: @escaping () -> Void) {
         self.navigationController = navigationController
         self.networkService = networkService
         self.title = title
         self.image = image
-        self.tryWorkout = tryWorkout
+        self.previews = previews
         self.completion = completion
     }
     
@@ -44,20 +43,16 @@ public struct MainLoginKitInterface: LoginKitInterface {
             networkService: networkService,
             title: title,
             image: image,
-            canTryWorkout: tryWorkout != nil,
+            features: previews.features,
             completion: completion)
         
-        let flow = BasicLoginFlow(navigationController: navigationController, viewControllerFactory: viewControllerFactory, tryWorkout: tryWorkout)
+        let flow = BasicLoginFlow(navigationController: navigationController, viewControllerFactory: viewControllerFactory, previews: previews)
         
         
         return flow
     }
 }
 
-
-/// Opens the example workout on the given stack. `signUp` is what its "Create Account" calls —
-/// LoginKit owns signup, so the app hands the intent back rather than building the screen itself.
-public typealias DemoWorkoutLauncher = (_ navigationController: UINavigationController, _ signUp: @escaping () -> Void) -> Void
 
 public protocol NetworkService {
     func login(with email: String, password: String) async throws
