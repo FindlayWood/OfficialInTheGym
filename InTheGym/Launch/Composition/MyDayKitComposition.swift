@@ -50,7 +50,8 @@ class MyDayKitComposition {
             workoutSaver: localAndRemoteMyDaySaver,
             workoutStatsSaver: rawLogRemoteStatsSaver,
             completedSessionSaver: FirestoreCompletedWorkoutSessionSaver(),
-            completedSessionDeleter: FirestoreCompletedWorkoutSessionDeleter()
+            completedSessionDeleter: FirestoreCompletedWorkoutSessionDeleter(),
+            rangeLoader: MyDayFirestoreRangeLoader()
         )
         
         // Clip

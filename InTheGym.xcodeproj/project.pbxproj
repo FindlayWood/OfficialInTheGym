@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D4AA00000000000000000002 /* MyDayFirestoreRangeLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AA00000000000000000001 /* MyDayFirestoreRangeLoader.swift */; };
 		C2DE00000000000000000002 /* ProPaywallViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE00000000000000000001 /* ProPaywallViewModelTests.swift */; };
 		C2DE00000000000000000004 /* StartedTrialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE00000000000000000003 /* StartedTrialTests.swift */; };
 		C2DE00000000000000000006 /* TrialReminderSchedulerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE00000000000000000005 /* TrialReminderSchedulerSpy.swift */; };
@@ -1002,6 +1003,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D4AA00000000000000000001 /* MyDayFirestoreRangeLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayFirestoreRangeLoader.swift; sourceTree = "<group>"; };
 		C2DE00000000000000000001 /* ProPaywallViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProPaywallViewModelTests.swift; sourceTree = "<group>"; };
 		C2DE00000000000000000003 /* StartedTrialTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartedTrialTests.swift; sourceTree = "<group>"; };
 		C2DE00000000000000000005 /* TrialReminderSchedulerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrialReminderSchedulerSpy.swift; sourceTree = "<group>"; };
@@ -4745,6 +4747,7 @@
 				A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */,
 				A1D0E5F200024C0A9B110003 /* WorkoutTemplateStoreLocation.swift */,
 				BF1A00000000000000000118 /* MyDayStoreLocation.swift */,
+				D4AA00000000000000000001 /* MyDayFirestoreRangeLoader.swift */,
 				BF1A00000000000000000119 /* PendingSyncStoreLocation.swift */,
 				A1D0E5F200024C0A9B110005 /* LegacyWorkoutTemplateStoreMigrator.swift */,
 			);
@@ -5013,6 +5016,7 @@
 				BF1A00000000000000000122 /* LocalUserDataEraser.swift in Sources */,
 				BF1A00000000000000000123 /* FirebaseAccountDeleter.swift in Sources */,
 				BF1A00000000000000000128 /* MyDayStoreLocation.swift in Sources */,
+				D4AA00000000000000000002 /* MyDayFirestoreRangeLoader.swift in Sources */,
 				BF1A00000000000000000129 /* PendingSyncStoreLocation.swift in Sources */,
 				BF1A00000000000000000108 /* ReportDocumentWriter.swift in Sources */,
 				BF1A000000000000000000C8 /* ProfileKitUserProfileOpener.swift in Sources */,

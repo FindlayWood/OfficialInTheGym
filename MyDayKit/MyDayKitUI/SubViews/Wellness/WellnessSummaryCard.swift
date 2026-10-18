@@ -28,11 +28,11 @@ struct WellnessSummaryCard: View {
                 pastDayView
             }
         }
-        .background(Color(.secondarySystemGroupedBackground))
+        .background(isPrompting ? Color.clear : Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(borderColor, lineWidth: borderWidth)
+                .stroke(isPrompting ? Color.clear : borderColor, lineWidth: borderWidth)
         )
         .animation(.spring(response: 0.4, dampingFraction: 0.85), value: isExpanded)
         .animation(.spring(response: 0.4, dampingFraction: 0.85), value: viewModel.isComplete)
@@ -40,32 +40,16 @@ struct WellnessSummaryCard: View {
     }
 
     // MARK: - Prompt
+    /// Not started today: the timeline's dashed slot rather than a card, because nothing is on
+    /// it yet. "Start" expands the card inline exactly as before.
     private var promptView: some View {
-        Button(action: { withAnimation { isExpanded = true } }) {
-            HStack(spacing: 14) {
-                cardIcon(systemName: "sun.max.fill", color: .orange)
-
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Daily Check-in")
-                        .font(.subheadline).fontWeight(.semibold)
-                    Text("How are you feeling today?")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                Text("Start")
-                    .font(.caption).fontWeight(.semibold)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.orange)
-                    .foregroundStyle(.white)
-                    .clipShape(Capsule())
-            }
-            .padding(16)
-        }
-        .buttonStyle(.plain)
+        MyDayTimelinePlaceholder(
+            title: "Check in",
+            subtitle: "Sleep, body, focus and mood",
+            actionTitle: "Start",
+            actionTint: .matteGreen,
+            action: { withAnimation { isExpanded = true } }
+        )
     }
 
     // MARK: - Expanded
@@ -73,7 +57,7 @@ struct WellnessSummaryCard: View {
         VStack(spacing: 12) {
             // Header
             HStack(spacing: 14) {
-                cardIcon(systemName: "sun.max.fill", color: .orange)
+                cardIcon(systemName: "sun.max.fill", color: .matteGreen)
 
                 VStack(alignment: .leading, spacing: 3) {
                     Text("Daily Check-in")
@@ -115,7 +99,7 @@ struct WellnessSummaryCard: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 13)
-                        .background(Color.orange)
+                        .background(Color.matteGreen)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
                 .transition(.asymmetric(
@@ -135,8 +119,6 @@ struct WellnessSummaryCard: View {
 
         VStack(alignment: .leading, spacing: isActive ? 10 : 0) {
             HStack(spacing: 8) {
-                Text(question.emoji).font(.body)
-
                 VStack(alignment: .leading, spacing: 1) {
                     Text(question.title)
                         .font(.subheadline).fontWeight(.semibold)
@@ -154,7 +136,7 @@ struct WellnessSummaryCard: View {
                     HStack(spacing: 4) {
                         Text(question.labels[selected.rawValue - 1])
                             .font(.caption).fontWeight(.medium)
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Color.matteGreen)
                         if viewModel.allAnswered && !isActive {
                             Image(systemName: "pencil")
                                 .font(.caption2)
@@ -177,11 +159,11 @@ struct WellnessSummaryCard: View {
             }
         }
         .padding(12)
-        .background(isActive ? Color.orange.opacity(0.05) : Color(.secondarySystemFill).opacity(0.4))
+        .background(isActive ? Color.matteGreen.opacity(0.05) : Color(.secondarySystemFill).opacity(0.4))
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(isActive ? Color.orange.opacity(0.4) : Color.clear, lineWidth: 1)
+                .stroke(isActive ? Color.matteGreen.opacity(0.4) : Color.clear, lineWidth: 1)
         )
         .opacity(isActive || viewModel.allAnswered ? 1.0 : (isAnswered ? 0.5 : 1.0))
         .animation(.spring(response: 0.4, dampingFraction: 0.85), value: isActive)
@@ -189,31 +171,39 @@ struct WellnessSummaryCard: View {
     }
 
     // MARK: - Score Buttons
+    /// Five numbered buttons with the scale's two ends captioned beneath, as the RPE card labels
+    /// its 1–10. Each button used to carry its own label at 7pt — shrunk further by
+    /// `minimumScaleFactor` — which no one can read on a phone. The chosen score's label is still
+    /// shown in full, beside the question title.
     private func scoreButtons(for question: WellnessQuestion) -> some View {
-        HStack(spacing: 5) {
-            ForEach(WellnessScore.allCases, id: \.rawValue) { score in
-                let isSelected = viewModel.scores[question.id] == score
-                Button(action: { handleScoreSelection(score: score, for: question) }) {
-                    VStack(spacing: 3) {
+        VStack(spacing: 6) {
+            HStack(spacing: 5) {
+                ForEach(WellnessScore.allCases, id: \.rawValue) { score in
+                    let isSelected = viewModel.scores[question.id] == score
+                    Button(action: { handleScoreSelection(score: score, for: question) }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(isSelected ? Color.orange : Color(.secondarySystemFill))
+                                .fill(isSelected ? Color.matteGreen : Color(.secondarySystemFill))
                                 .frame(height: 38)
                             Text("\(score.rawValue)")
                                 .font(.system(size: 14, weight: .semibold, design: .rounded))
                                 .foregroundStyle(isSelected ? .white : .primary)
                         }
-                        Text(question.labels[score.rawValue - 1])
-                            .font(.system(size: 7, weight: .medium))
-                            .foregroundStyle(isSelected ? .orange : .secondary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.6)
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
+                    .buttonStyle(.plain)
+                    .animation(.easeInOut(duration: 0.15), value: isSelected)
                 }
-                .buttonStyle(.plain)
-                .animation(.easeInOut(duration: 0.15), value: isSelected)
             }
+
+            HStack {
+                Text("1 · \(question.labels.first ?? "")")
+                Spacer()
+                Text("5 · \(question.labels.last ?? "")")
+            }
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+            .padding(.horizontal, 2)
         }
     }
 
@@ -291,30 +281,35 @@ struct WellnessSummaryCard: View {
     }
 
     // MARK: - Helpers
+    /// The prompt draws its own dashed outline on the page, so the card's chrome steps aside.
+    private var isPrompting: Bool {
+        viewModel.completedEntry == nil && isCurrentDay && !isExpanded
+    }
+
     private var borderColor: Color {
         if viewModel.isComplete  { return Color(.separator).opacity(0.4) }
-        if isExpanded            { return Color.orange.opacity(0.4) }
-        return isCurrentDay ? Color.orange.opacity(0.25) : Color(.separator).opacity(0.4)
+        if isExpanded            { return Color.matteGreen.opacity(0.4) }
+        return isCurrentDay ? Color.matteGreen.opacity(0.25) : Color(.separator).opacity(0.4)
     }
 
     private var borderWidth: CGFloat { isExpanded ? 1.5 : 0.5 }
 
     private func readinessColor(_ entry: WellnessEntry) -> Color {
         switch entry.readinessLevel {
-        case .low:       return .red
-        case .moderate:  return .orange
-        case .good:      return .blue
-        case .excellent: return .green
+        case .low:       return .matteRed
+        case .moderate:  return .matteAmber
+        case .good:      return .matteBlue
+        case .excellent: return .matteGreen
         }
     }
 
     private func scoreColor(_ score: WellnessScore) -> Color {
         switch score {
-        case .one:   return .red
-        case .two:   return .orange
-        case .three: return .yellow
-        case .four:  return .blue
-        case .five:  return .green
+        case .one:   return .matteRed
+        case .two:   return .matteAmber
+        case .three: return Color(.systemGray)
+        case .four:  return .matteBlue
+        case .five:  return .matteGreen
         }
     }
 }

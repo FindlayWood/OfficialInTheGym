@@ -32,52 +32,27 @@ struct RPECard: View {
                 pastDayView
             }
         }
-        .background(Color(.secondarySystemGroupedBackground))
+        .background(isPrompting ? Color.clear : Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(borderColor, lineWidth: borderWidth)
+                .stroke(isPrompting ? Color.clear : borderColor, lineWidth: borderWidth)
         )
         .animation(.spring(response: 0.4, dampingFraction: 0.85), value: isExpanded)
         .animation(.spring(response: 0.4, dampingFraction: 0.85), value: pendingScore)
     }
 
     // MARK: - Prompt (collapsed)
+    /// Not rated yet today: the timeline's dashed slot, as the check-in's is. "Log RPE" expands
+    /// the picker inline exactly as before.
     private var promptView: some View {
-        Button(action: {
-            withAnimation { isExpanded = true }
-        }) {
-            HStack(spacing: 14) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.purple.opacity(0.12))
-                        .frame(width: 50, height: 50)
-                    Image(systemName: "dial.medium.fill")
-                        .font(.system(size: 22))
-                        .foregroundStyle(.purple)
-                }
-
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Session Intensity")
-                        .font(.subheadline).fontWeight(.semibold)
-                    Text("How hard was today's training?")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                Text("Log RPE")
-                    .font(.caption).fontWeight(.semibold)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.purple)
-                    .foregroundStyle(.white)
-                    .clipShape(Capsule())
-            }
-            .padding(16)
-        }
-        .buttonStyle(.plain)
+        MyDayTimelinePlaceholder(
+            title: "Rate today",
+            subtitle: "How hard was today's training?",
+            actionTitle: "Log RPE",
+            actionTint: .matteAmber,
+            action: { withAnimation { isExpanded = true } }
+        )
     }
 
     // MARK: - Expanded picker
@@ -87,11 +62,11 @@ struct RPECard: View {
             HStack(spacing: 14) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.purple.opacity(0.12))
+                        .fill(Color.matteAmber.opacity(0.12))
                         .frame(width: 50, height: 50)
                     Image(systemName: "dial.medium.fill")
                         .font(.system(size: 22))
-                        .foregroundStyle(.purple)
+                        .foregroundStyle(Color.matteAmber)
                 }
 
                 VStack(alignment: .leading, spacing: 3) {
@@ -180,7 +155,7 @@ struct RPECard: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 13)
-                    .background(pendingScore != nil ? Color.purple : Color.gray.opacity(0.4))
+                    .background(pendingScore != nil ? Color.matteAmber : Color.gray.opacity(0.4))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             .disabled(pendingScore == nil)
@@ -250,10 +225,15 @@ struct RPECard: View {
     }
 
     // MARK: - Helpers
+    /// The prompt draws its own dashed outline on the page, so the card's chrome steps aside.
+    private var isPrompting: Bool {
+        entry == nil && isCurrentDay && !isExpanded
+    }
+
     private var borderColor: Color {
-        if isExpanded { return .purple.opacity(0.4) }
+        if isExpanded { return Color.matteAmber.opacity(0.4) }
         if entry != nil { return Color(.separator).opacity(0.4) }
-        return isCurrentDay ? .purple.opacity(0.25) : Color(.separator).opacity(0.4)
+        return isCurrentDay ? Color.matteAmber.opacity(0.25) : Color(.separator).opacity(0.4)
     }
 
     private var borderWidth: CGFloat {
@@ -262,10 +242,10 @@ struct RPECard: View {
 
     private func rpeColor(_ score: Int) -> Color {
         switch score {
-        case 1...3:  return .blue
-        case 4...6:  return .green
-        case 7...8:  return .orange
-        case 9...10: return .red
+        case 1...3:  return .matteBlue
+        case 4...6:  return .matteGreen
+        case 7...8:  return .matteAmber
+        case 9...10: return .matteRed
         default:     return .gray
         }
     }
