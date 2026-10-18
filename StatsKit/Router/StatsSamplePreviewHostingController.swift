@@ -12,8 +12,12 @@ import UIKit
 /// workout beside it. **A copy of MyDayKit's `NavBarHidingHostingController` — keep in step.**
 ///
 /// Hiding the bar takes the swipe-from-edge pop with it, so this takes over the gesture's delegate
-/// while showing and allows it whenever there is somewhere to go back to. The bar is restored on
-/// the way out: LoginKit's screens expect it.
+/// while showing and allows it whenever there is somewhere to go back to.
+///
+/// **Unlike the original, it does not restore the bar on the way out.** Nothing is pushed from a
+/// preview, and both screens it pops back to — LoginKit's welcome screen and the example workout's
+/// finished screen — hide the bar themselves. Restoring it showed the bar for the length of the pop
+/// before they hid it again, a white flash in dark mode.
 final class StatsSamplePreviewHostingController<Content: View>: UIHostingController<Content>, UIGestureRecognizerDelegate {
 
     private weak var previousPopGestureDelegate: UIGestureRecognizerDelegate?
@@ -30,7 +34,6 @@ final class StatsSamplePreviewHostingController<Content: View>: UIHostingControl
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = previousPopGestureDelegate
     }
 

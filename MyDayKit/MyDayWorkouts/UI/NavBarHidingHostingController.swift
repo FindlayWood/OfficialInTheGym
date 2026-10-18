@@ -22,7 +22,8 @@ import UIKit
 ///
 /// Nothing here is screen-specific — host any screen that needs the bar gone.
 final class NavBarHidingHostingController<Content: View>: UIHostingController<Content>,
-                                                            UIGestureRecognizerDelegate {
+                                                            UIGestureRecognizerDelegate,
+                                                            HidesNavigationBar {
 
     private weak var previousPopGestureDelegate: UIGestureRecognizerDelegate?
 
@@ -43,10 +44,14 @@ final class NavBarHidingHostingController<Content: View>: UIHostingController<Co
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        // Screens pushed on top of these use the standard bar (the session
+        // Screens pushed on top of these use the standard bar (MyDay's session
         // summary, for one), so restore it on the way out rather than once at
-        // teardown.
-        navigationController?.setNavigationBarHidden(false, animated: animated)
+        // teardown — unless the screen coming in hides it too. By now the
+        // incoming screen is already `topViewController`, on push and pop
+        // alike; restoring for it flashed the bar for the whole transition.
+        if !(navigationController?.topViewController is HidesNavigationBar) {
+            navigationController?.setNavigationBarHidden(false, animated: animated)
+        }
         navigationController?.interactivePopGestureRecognizer?.delegate = previousPopGestureDelegate
     }
 

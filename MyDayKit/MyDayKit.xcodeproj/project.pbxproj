@@ -172,6 +172,7 @@
 		F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F608402E4405B50015F260 /* MyDayKitRouter.swift */; };
 		F60D3B821E75C49A08B6D253 /* WorkoutSessionFinishBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1F70A2B863D5E1067A4B8 /* WorkoutSessionFinishBar.swift */; };
 		F78D7EFDEE3F43E9B0F0628A /* SessionSetUnitOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1071B8A726744C7BB57B2D36 /* SessionSetUnitOption.swift */; };
+		DE30A0012FF000000000000F /* HidesNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE30A0012FF000000000000E /* HidesNavigationBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -351,6 +352,7 @@
 		F0F6082F2E42A20B0015F260 /* ExerciseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCategory.swift; sourceTree = "<group>"; };
 		F0F608402E4405B50015F260 /* MyDayKitRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRouter.swift; sourceTree = "<group>"; };
 		F4A9D8B26C3E4718B52A0E67 /* SessionSetMeasure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetMeasure.swift; sourceTree = "<group>"; };
+		DE30A0012FF000000000000E /* HidesNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HidesNavigationBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -579,6 +581,7 @@
 				F09C55612FF01600007CDAB4 /* MyDayWorkoutTemplateDetailScreen.swift */,
 				F09C55572FF013BC007CDAB4 /* MyDayWorkoutSessionScreen.swift */,
 				7B26D5F94A03E1C86D5470FA /* NavBarHidingHostingController.swift */,
+				DE30A0012FF000000000000E /* HidesNavigationBar.swift */,
 				460FCF49623A468BA34BB4AD /* WorkoutSessionSummaryScreen.swift */,
 			);
 			path = UI;
@@ -1076,6 +1079,7 @@
 				AB061FDC6BC6496AAF3CDBC2 /* SessionSetDetailOverlay.swift in Sources */,
 				C4E1A9075B3D42F8B60C1E29 /* SessionSetPillPlaceholder.swift in Sources */,
 				F09C55582FF013BC007CDAB4 /* MyDayWorkoutSessionScreen.swift in Sources */,
+				DE30A0012FF000000000000F /* HidesNavigationBar.swift in Sources */,
 				DE30A0012FF000000000000D /* WorkoutSessionNotice.swift in Sources */,
 				DE30A0012FF000000000000B /* MyDayDemoWorkoutFinishedScreen.swift in Sources */,
 				DE30A0012FF0000000000009 /* MyDayDemoHint.swift in Sources */,

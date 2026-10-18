@@ -51,7 +51,15 @@ struct WorkoutSessionSummaryScreen: View {
                 content
             }
         } else {
+            // The system bar's configuration only where there is a system bar. On the custom-bar
+            // path the forced-light toolbar applied to the hidden bar, and showed as a white flash
+            // in dark mode whenever the bar appeared during a transition.
             content
+                .navigationTitle("Summary")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarBackground(Color(UIColor.systemBackground), for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
+                .toolbarColorScheme(.light, for: .navigationBar)
         }
     }
 
@@ -86,11 +94,6 @@ struct WorkoutSessionSummaryScreen: View {
             }
         }
         .background(Color(UIColor.systemBackground))
-        .navigationTitle("Summary")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color(UIColor.systemBackground), for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
-        .toolbarColorScheme(.light, for: .navigationBar)
         .safeAreaInset(edge: .bottom) {
             completeButton
         }
