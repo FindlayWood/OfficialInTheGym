@@ -16,8 +16,8 @@ class SignUpTextFieldView: UIView {
 //    var errorPrompt: String
     
     let imageDiemsion: CGFloat = 20
-    let inValidImage = UIImage(named: "alert_icon")
-    let validImage = UIImage(named: "tick_icon")
+    let inValidImage = UIImage.legacyIcon("exclamationmark.triangle.fill", colour: .systemRed)
+    let validImage = UIImage.legacyIcon("checkmark.circle.fill", colour: .systemGreen)
     
     // MARK: - Subviews
     lazy var textFieldView: SkyFloatingLabelTextField = {

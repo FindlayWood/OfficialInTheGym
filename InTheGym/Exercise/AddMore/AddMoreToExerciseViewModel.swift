@@ -26,11 +26,11 @@ class AddMoreToExerciseViewModel {
     
     var exerciseCreationViewModel: ExerciseCreationViewModel!
     
-    let data: [AddMoreCellModel] = [.init(title: "Time", imageName: "clock_icon", value: Observable<String>()),
-                                    .init(title: "Distance", imageName: "distance_icon", value: Observable<String>()),
-                                    .init(title: "Rest Time", imageName: "restTime_icon", value: Observable<String>()),
-                                    .init(title: "Note", imageName: "note_icon", value: Observable<String>()),
-                                    .init(title: "Tempo", imageName: "tempo_icon", value: Observable<String>())]
+    let data: [AddMoreCellModel] = [.init(title: "Time", imageName: "clock.fill", value: Observable<String>()),
+                                    .init(title: "Distance", imageName: "arrow.left.and.right", value: Observable<String>()),
+                                    .init(title: "Rest Time", imageName: "hourglass", value: Observable<String>()),
+                                    .init(title: "Note", imageName: "note.text", value: Observable<String>()),
+                                    .init(title: "Tempo", imageName: "metronome.fill", value: Observable<String>())]
     
     var numberOfItems: Int {
         return data.count

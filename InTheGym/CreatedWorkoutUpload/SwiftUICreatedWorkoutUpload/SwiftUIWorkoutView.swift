@@ -21,14 +21,14 @@ struct SwiftUIWorkoutView: View {
                         .font(Font.system(size: 22, weight: .bold, design: .monospaced))
                         .padding(.bottom, 10)
                     HStack(alignment: .center, spacing: 5, content: {
-                        Image("coach_icon")
+                        Image(uiImage: UIImage.legacyIcon("person.badge.shield.checkmark.fill"))
                             .resizable()
                             .frame(width: 30, height: 30, alignment: .leading)
                         Text("Creator Username")
                             .font(.subheadline)
                     }).padding(.leading, 15)
                     HStack(alignment: .center, spacing: 5, content: {
-                        Image("dumbbell_icon")
+                        Image(uiImage: UIImage.legacyIcon("dumbbell.fill"))
                             .resizable()
                             .frame(width: 30, height: 30, alignment: .leading)
                         Text("7")

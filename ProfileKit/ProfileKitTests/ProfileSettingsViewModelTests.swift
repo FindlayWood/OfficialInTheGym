@@ -186,7 +186,6 @@ final class ProfileSettingsViewModelTests: XCTestCase {
         ProfileSettingsLinks(
             instagram: URL(string: "https://instagram.com")!,
             website: URL(string: "https://example.com")!,
-            icons: URL(string: "https://icons8.com")!,
             contactEmail: "contact@example.com"
         )
     }

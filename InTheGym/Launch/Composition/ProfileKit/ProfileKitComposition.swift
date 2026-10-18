@@ -138,7 +138,6 @@ class ProfileKitComposition {
         let links = ProfileSettingsLinks(
             instagram: URL(string: Constants.instagramLink)!,
             website: URL(string: Constants.websiteString)!,
-            icons: URL(string: Constants.icons8Link)!,
             contactEmail: Constants.contactEmail
         )
 

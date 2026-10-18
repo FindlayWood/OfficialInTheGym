@@ -17,7 +17,7 @@ struct PlayerProfileMoreView: View {
         Form {
             Section {
                 HStack {
-                    Image(uiImage: UIImage(named: "name_icon")!)
+                    Image(uiImage: UIImage.legacyIcon("person.text.rectangle.fill"))
                         .resizable()
                         .frame(width: 30, height: 30)
                         .cornerRadius(4)
@@ -26,7 +26,7 @@ struct PlayerProfileMoreView: View {
                         .foregroundColor(.primary)
                 }
                 HStack {
-                    Image(uiImage: UIImage(named: "at_icon")!)
+                    Image(uiImage: UIImage.legacyIcon("at"))
                         .resizable()
                         .frame(width: 30, height: 30)
                         .cornerRadius(4)
@@ -35,7 +35,7 @@ struct PlayerProfileMoreView: View {
                         .foregroundColor(.primary)
                 }
                 HStack {
-                    Image(uiImage: UIImage(named: "email2_icon")!)
+                    Image(uiImage: UIImage.legacyIcon("envelope.open.fill"))
                         .resizable()
                         .frame(width: 30, height: 30)
                         .cornerRadius(4)
@@ -44,7 +44,7 @@ struct PlayerProfileMoreView: View {
                         .foregroundColor(.primary)
                 }
 //                HStack {
-//                    Image(uiImage: UserDefaults.currentUser.accountType == .coach ? UIImage(named: "coach_icon")! : UIImage(named: "player_icon")!)
+//                    Image(uiImage: UserDefaults.currentUser.accountType == .coach ? UIImage.legacyIcon("person.badge.shield.checkmark.fill") : UIImage.legacyIcon("figure.run"))
 //                        .resizable()
 //                        .frame(width: 30, height: 30)
 //                        .cornerRadius(4)
@@ -53,7 +53,7 @@ struct PlayerProfileMoreView: View {
 //                        .foregroundColor(.primary)
 //                }
                 HStack {
-                    Image(uiImage: UIImage(named: "hammer_icon")!)
+                    Image(uiImage: UIImage.legacyIcon("hammer.fill"))
                         .resizable()
                         .frame(width: 30, height: 30)
                         .cornerRadius(4)
@@ -65,7 +65,7 @@ struct PlayerProfileMoreView: View {
                     viewModel.action(.editProfile)
                 } label: {
                     HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "edit_icon")!)
+                        Image(uiImage: UIImage.legacyIcon("pencil"))
                             .resizable()
                             .frame(width: 30, height: 30)
                             .cornerRadius(4)
@@ -98,7 +98,7 @@ struct PlayerProfileMoreView: View {
 //                    viewModel.action(.measurements)
 //                } label: {
 //                    HStack(spacing: 16) {
-//                        Image(uiImage: UIImage(named: "ruler_icon")!)
+//                        Image(uiImage: UIImage.legacyIcon("ruler.fill"))
 //                            .resizable()
 //                            .frame(width: 30, height: 30)
 //                            .cornerRadius(4)
@@ -115,7 +115,7 @@ struct PlayerProfileMoreView: View {
 //                    viewModel.action(.myCoaches)
 //                } label: {
 //                    HStack(spacing: 16) {
-//                        Image(uiImage: UIImage(named: "coach_icon")!)
+//                        Image(uiImage: UIImage.legacyIcon("person.badge.shield.checkmark.fill"))
 //                            .resizable()
 //                            .frame(width: 30, height: 30)
 //                            .cornerRadius(4)
@@ -128,7 +128,7 @@ struct PlayerProfileMoreView: View {
 //                    viewModel.action(.requests)
 //                } label: {
 //                    HStack(spacing: 16) {
-//                        Image(uiImage: UIImage(named: "trainer_icon")!)
+//                        Image(uiImage: UIImage.legacyIcon("figure.strengthtraining.functional"))
 //                            .resizable()
 //                            .frame(width: 30, height: 30)
 //                            .cornerRadius(4)
@@ -146,7 +146,7 @@ struct PlayerProfileMoreView: View {
                     viewModel.action(.exerciseStats)
                 } label: {
                     HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "clipboard_icon")!)
+                        Image(uiImage: UIImage.legacyIcon("list.clipboard.fill"))
                             .resizable()
                             .frame(width: 30, height: 30)
                             .cornerRadius(4)
@@ -159,7 +159,7 @@ struct PlayerProfileMoreView: View {
                     viewModel.action(.workoutStats)
                 } label: {
                     HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "linechart_icon")!)
+                        Image(uiImage: UIImage.legacyIcon("chart.line.uptrend.xyaxis"))
                             .resizable()
                             .frame(width: 30, height: 30)
                             .cornerRadius(4)
@@ -172,7 +172,7 @@ struct PlayerProfileMoreView: View {
                     viewModel.action(.performanceMonitor)
                 } label: {
                     HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "monitor_icon")!)
+                        Image(uiImage: UIImage.legacyIcon("waveform.path.ecg"))
                             .resizable()
                             .frame(width: 30, height: 30)
                             .cornerRadius(4)
@@ -190,7 +190,7 @@ struct PlayerProfileMoreView: View {
                     viewModel.action(.settings)
                 } label: {
                     HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "settings_icon")!)
+                        Image(uiImage: UIImage.legacyIcon("gearshape.fill"))
                             .resizable()
                             .frame(width: 30, height: 30)
                             .cornerRadius(4)

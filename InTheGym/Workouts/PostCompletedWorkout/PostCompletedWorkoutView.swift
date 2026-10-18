@@ -32,7 +32,7 @@ struct PostCompletedWorkoutView: View {
                     viewModel.postWorkoutSelected.send(())
                 } label: {
                     HStack {
-                        Image("benchpress_icon")
+                        Image(uiImage: UIImage.legacyIcon("figure.strengthtraining.traditional"))
                             .resizable()
                             .frame(width: 40, height: 40)
                         VStack (alignment: .leading) {
@@ -54,7 +54,7 @@ struct PostCompletedWorkoutView: View {
                         
                     } label: {
                         HStack {
-                            Image("clip_icon")
+                            Image(uiImage: UIImage.legacyIcon("video.fill"))
                                 .resizable()
                                 .frame(width: 40, height: 40)
                             VStack (alignment: .leading) {
@@ -77,7 +77,7 @@ struct PostCompletedWorkoutView: View {
                         
                     } label: {
                         HStack {
-                            Image("clipboard_icon")
+                            Image(uiImage: UIImage.legacyIcon("list.clipboard.fill"))
                                 .resizable()
                                 .frame(width: 40, height: 40)
                             VStack (alignment: .leading) {

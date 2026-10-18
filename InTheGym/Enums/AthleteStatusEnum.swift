@@ -71,17 +71,17 @@ enum AthleteStatus: String, Codable, CaseIterable {
     var icon: UIImage? {
         switch self {
         case .inSeason:
-            return UIImage(named: "trophy_icon")
+            return UIImage.legacyIcon("trophy.fill")
         case .preSeason:
-            return UIImage(named: "running_icon")
+            return UIImage.legacyIcon("figure.run")
         case .offSeason:
-            return UIImage(named: "offseason_icon")
+            return UIImage.legacyIcon("dumbbell")
         case .injured:
-            return UIImage(named: "injury_icon")
+            return UIImage.legacyIcon("bandage.fill")
         case .rehab:
-            return UIImage(named: "rehab_icon")
+            return UIImage.legacyIcon("bed.double.fill")
         case .holiday:
-            return UIImage(named: "beach_icon")
+            return UIImage.legacyIcon("beach.umbrella.fill")
         }
     }
 }

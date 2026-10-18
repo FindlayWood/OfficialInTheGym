@@ -111,7 +111,7 @@ class UIWorkoutView: UIView {
     lazy var errorIcon: UIImageView = {
         let view = UIImageView()
         view.isHidden = true
-        view.image = UIImage(named: "alert_icon")
+        view.image = UIImage.legacyIcon("exclamationmark.triangle.fill", colour: .systemRed)
         view.widthAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.heightAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false

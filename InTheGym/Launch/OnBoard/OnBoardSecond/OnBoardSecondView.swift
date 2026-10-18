@@ -11,7 +11,7 @@ import SwiftUI
 struct OnBoardSecondView: View {
     var body: some View {
         VStack {
-            Image("benchpress_icon")
+            Image(uiImage: UIImage.legacyIcon("figure.strengthtraining.traditional"))
                 .resizable()
                 .frame(width: 100, height: 100)
             Text("Create and Share Workouts")

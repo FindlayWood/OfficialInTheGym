@@ -37,7 +37,7 @@ class WorkoutViewHStack: UIView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.backgroundColor = .clear
-        view.image = UIImage(named: "dumbbell_icon")
+        view.image = UIImage.legacyIcon("dumbbell.fill")
         view.widthAnchor.constraint(equalToConstant: 30).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -73,7 +73,7 @@ class WorkoutViewHStack: UIView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.backgroundColor = .clear
-        view.image = UIImage(named: "clock_icon")
+        view.image = UIImage.legacyIcon("clock.fill")
         view.widthAnchor.constraint(equalToConstant: 30).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

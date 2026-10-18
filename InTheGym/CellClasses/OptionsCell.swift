@@ -31,7 +31,7 @@ final class OptionsCell: FullWidthCollectionViewCell {
     // ICONS
     lazy var optionIcon: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "coach_icon")
+        view.image = UIImage.legacyIcon("person.badge.shield.checkmark.fill")
         view.tintColor = .darkColour
         view.widthAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.heightAnchor.constraint(equalToConstant: iconDimension).isActive = true

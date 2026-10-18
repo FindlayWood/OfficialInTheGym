@@ -48,7 +48,7 @@ class PublicProfileViewController: UIViewController, EmptyDataSetSource, EmptyDa
         
         username.text = "@" + user.username!
         fullName.text = user.firstName! + " " + user.lastName!
-        profileImage.image = UIImage(named: "player_icon")
+        profileImage.image = UIImage.legacyIcon("figure.run")
         
         DBRef = Database.database().reference()
         PostRef = Database.database().reference()
@@ -95,10 +95,10 @@ class PublicProfileViewController: UIViewController, EmptyDataSetSource, EmptyDa
     func initUI(){
         if user.admin!{
             self.userType.text = "Coach"
-            self.userTypeButton.setImage(UIImage(named: "coach_icon"), for: .normal)
+            self.userTypeButton.setImage(UIImage.legacyIcon("person.badge.shield.checkmark.fill"), for: .normal)
         }else{
             self.userType.text = "Player"
-            self.userTypeButton.setImage(UIImage(named: "player_icon"), for: .normal)
+            self.userTypeButton.setImage(UIImage.legacyIcon("figure.run"), for: .normal)
         }
         self.followerCount.isUserInteractionEnabled = false
         self.followingCount.isUserInteractionEnabled = false
@@ -178,7 +178,7 @@ class PublicProfileViewController: UIViewController, EmptyDataSetSource, EmptyDa
         
         
         let topView = CustomTopView(frame: startingPoint)
-        topView.image = UIImage(named: "added_icon")
+        topView.image = UIImage.legacyIcon("text.badge.plus")
         topView.message = message
         topView.label.textColor = .white
         topView.backgroundColor = Constants.darkColour

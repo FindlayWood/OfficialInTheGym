@@ -15,13 +15,11 @@ import Foundation
 public struct ProfileSettingsLinks: Sendable {
     public let instagram: URL
     public let website: URL
-    public let icons: URL
     public let contactEmail: String
 
-    public init(instagram: URL, website: URL, icons: URL, contactEmail: String) {
+    public init(instagram: URL, website: URL, contactEmail: String) {
         self.instagram = instagram
         self.website = website
-        self.icons = icons
         self.contactEmail = contactEmail
     }
 

@@ -13,12 +13,12 @@ class CreateNewPostView: UIView {
     // MARK: - Properties
     let placeholder = "write something here.."
     
-    let cameraImage: UIImage = UIImage(named: "camera_icon")!
-    let clipImage: UIImage = UIImage(named: "clip_icon")!
-    let workoutImage: UIImage = UIImage(named: "benchpress_icon")!
+    let cameraImage: UIImage = UIImage.legacyIcon("camera.fill")
+    let clipImage: UIImage = UIImage.legacyIcon("video.fill")
+    let workoutImage: UIImage = UIImage.legacyIcon("figure.strengthtraining.traditional")
     
-    private var privateImage = UIImage(named:"locked_icon")
-    private var publicImage = UIImage(named: "public_icon")
+    private var privateImage = UIImage.legacyIcon("lock.fill")
+    private var publicImage = UIImage.legacyIcon("globe")
     
     // MARK: - Subviews
     var cancelButton: UIButton = {

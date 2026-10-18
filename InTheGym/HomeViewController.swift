@@ -167,7 +167,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.type.text = type
         cell.time.text = final
         cell.message.text = self.activities[indexPath.row]["message"] as? String
-        cell.pic.image = UIImage(named: type!)
+        cell.pic.image = UIImage.legacyActivityIcon(for: type!)
         
         return cell
     }

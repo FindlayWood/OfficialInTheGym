@@ -154,6 +154,7 @@
 		74028E5C25E693FB005A1D21 /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E5B25E693FB005A1D21 /* TopView.swift */; };
 		74028E6425E69B52005A1D21 /* TextFieldReturning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74028E6325E69B52005A1D21 /* TextFieldReturning.swift */; };
 		7403A5FA26C54F6B000588CE /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A5F926C54F6B000588CE /* UIColor+Extension.swift */; };
+		1C0A1C0A1C0A1C0A1C0A0002 /* UIImage+LegacyIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0A1C0A1C0A1C0A1C0A0001 /* UIImage+LegacyIcon.swift */; };
 		7403A60B26C6D634000588CE /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60A26C6D633000588CE /* LoadingTableViewCell.swift */; };
 		7403A60D26C6DDF6000588CE /* StretchyTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A60C26C6DDF6000588CE /* StretchyTableHeaderView.swift */; };
 		7403A61B26C9B3B3000588CE /* UITableViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7403A61A26C9B3B3000588CE /* UITableViewView.swift */; };
@@ -1145,6 +1146,7 @@
 		74028E5B25E693FB005A1D21 /* TopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
 		74028E6325E69B52005A1D21 /* TextFieldReturning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldReturning.swift; sourceTree = "<group>"; };
 		7403A5F926C54F6B000588CE /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		1C0A1C0A1C0A1C0A1C0A0001 /* UIImage+LegacyIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+LegacyIcon.swift"; sourceTree = "<group>"; };
 		7403A60A26C6D633000588CE /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		7403A60C26C6DDF6000588CE /* StretchyTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyTableHeaderView.swift; sourceTree = "<group>"; };
 		7403A61A26C9B3B3000588CE /* UITableViewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewView.swift; sourceTree = "<group>"; };
@@ -2098,6 +2100,7 @@
 				74D7F4FE262A5552006C3D5C /* StringExtension.swift */,
 				74FDB5AF26A49C17000649CC /* RoundingExtension.swift */,
 				7403A5F926C54F6B000588CE /* UIColor+Extension.swift */,
+				1C0A1C0A1C0A1C0A1C0A0001 /* UIImage+LegacyIcon.swift */,
 				7403A60C26C6DDF6000588CE /* StretchyTableHeaderView.swift */,
 				7444D06626CD42370009C7A6 /* FrameExtension.swift */,
 				7444D08D26D11CDE0009C7A6 /* UITextView+Extension.swift */,
@@ -5741,6 +5744,7 @@
 				744AED3827989E68000D2D74 /* OptionsDataSource.swift in Sources */,
 				74221B3B2642D86800D05527 /* TabBarCoordinator.swift in Sources */,
 				7403A5FA26C54F6B000588CE /* UIColor+Extension.swift in Sources */,
+				1C0A1C0A1C0A1C0A1C0A0002 /* UIImage+LegacyIcon.swift in Sources */,
 				749E9FEF260B9633000E96AE /* TimelineTapProtocol.swift in Sources */,
 				74F0C710284F9CBE00FE3A01 /* WorkoutCreationOptionsNavigationModel.swift in Sources */,
 				74DE6D9C27D3D7F6009FB44A /* PlayerDetailViewModel.swift in Sources */,

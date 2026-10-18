@@ -172,9 +172,6 @@ struct ProfileSettingsScreen: View {
             ProfileSettingsRow(icon: "envelope", title: "Contact", trailing: .detail(viewModel.links.contactEmail)) {
                 if let url = viewModel.links.contactURL { openURL(url) }
             }
-            ProfileSettingsRow(icon: "paintpalette", title: "Icons by Icons8") {
-                openURL(viewModel.links.icons)
-            }
             ProfileSettingsRow(
                 icon: "number",
                 title: "Version",
@@ -220,7 +217,6 @@ struct ProfileSettingsScreen: View {
                 links: ProfileSettingsLinks(
                     instagram: URL(string: "https://instagram.com")!,
                     website: URL(string: "https://example.com")!,
-                    icons: URL(string: "https://icons8.com")!,
                     contactEmail: "officialinthegym@gmail.com"
                 )
             )

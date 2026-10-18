@@ -153,7 +153,7 @@ class PostTableView: NSObject, UITableViewDelegate, UITableViewDataSource, worko
                         }
                     }
                 }else{
-                    cell.postProfilePhoto.setImage(UIImage(named: "coach_icon"), for: .normal)
+                    cell.postProfilePhoto.setImage(UIImage.legacyIcon("person.badge.shield.checkmark.fill"), for: .normal)
                     
                 }
             }
@@ -213,12 +213,12 @@ class PostTableView: NSObject, UITableViewDelegate, UITableViewDataSource, worko
                         }
                     }
                 }else{
-                    cell.workoutProfilePhoto.setImage(UIImage(named: "benchpress_icon"), for: .normal)
-                    //cell.profilePhoto.image = UIImage(named: "benchpress_icon")
+                    cell.workoutProfilePhoto.setImage(UIImage.legacyIcon("figure.strengthtraining.traditional"), for: .normal)
+                    //cell.profilePhoto.image = UIImage.legacyIcon("figure.strengthtraining.traditional")
                 }
             }
             
-            //cell.profilePhoto.image = UIImage(named: "benchpress_icon")
+            //cell.profilePhoto.image = UIImage.legacyIcon("figure.strengthtraining.traditional")
             cell.workoutUsername.setTitle(rowsToDisplay[indexPath.row]["username"] as? String, for: .normal)
             //cell.workoutUsername.text = rowsToDisplay[indexPath.row]["username"] as? String
             cell.workoutPostTime.text = final
@@ -287,12 +287,12 @@ class PostTableView: NSObject, UITableViewDelegate, UITableViewDataSource, worko
                         }
                     }
                 }else{
-                    cell.workoutProfilePhoto.setImage(UIImage(named: "benchpress_icon"), for: .normal)
-                    //cell.profilePhoto.image = UIImage(named: "benchpress_icon")
+                    cell.workoutProfilePhoto.setImage(UIImage.legacyIcon("figure.strengthtraining.traditional"), for: .normal)
+                    //cell.profilePhoto.image = UIImage.legacyIcon("figure.strengthtraining.traditional")
                 }
             }
             
-            //cell.profilePhoto.image = UIImage(named: "benchpress_icon")
+            //cell.profilePhoto.image = UIImage.legacyIcon("figure.strengthtraining.traditional")
             cell.workoutUsername.setTitle(rowsToDisplay[indexPath.row]["username"] as? String, for: .normal)
             //cell.username.text = rowsToDisplay[indexPath.row]["username"] as? String
             cell.workoutPostTime.text = final
@@ -348,7 +348,7 @@ class PostTableView: NSObject, UITableViewDelegate, UITableViewDataSource, worko
             cell.activityType.text = type
             cell.activityTime.text = final
             cell.activityText.text = self.rowsToDisplay[indexPath.row]["message"] as? String
-            cell.activityIcon.image = UIImage(named: type!)
+            cell.activityIcon.image = UIImage.legacyActivityIcon(for: type!)
             cell.selectionStyle = .none
             return cell
 

@@ -150,7 +150,7 @@ Follows/{followerId}_{followeeId}        follower creates; followee approves / r
     Restore Purchases with its own states.
   - **Account:** Reset Password, confirmed first, sends once per visit, with sent / failed states.
   - **Tools:** Performance Center.
-  - **About:** About, Instagram, Website, Contact, Icons8, Version.
+  - **About:** About, Instagram, Website, Contact, Version.
   - **Session:** Log Out, confirmed first, with an error alert on failure.
 - Protocols: `MyProfileLoader`, `ProfilePhotoLoader`, `ProfileSubscriptionService` (named so it
   does not clash with the app's own `SubscriptionService`), `ProfileSignOutService`,
