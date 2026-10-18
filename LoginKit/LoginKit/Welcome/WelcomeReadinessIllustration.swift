@@ -21,7 +21,9 @@ struct WelcomeReadinessIllustration: View {
 
     var body: some View {
         let value = isBuilt ? reading : 0
-        let animation: Animation = isBuilt ? .easeOut(duration: 1.1) : .easeOut(duration: 0.2)
+        // Clearing is instant: animated, the count ran back down from 96 to 0 before building up
+        // again, which read as the reading dropping rather than a fresh start.
+        let animation: Animation? = isBuilt ? .easeOut(duration: 1.1) : nil
 
         ZStack {
             Circle()
