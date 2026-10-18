@@ -63,11 +63,7 @@ struct MyDayHomeScreen: View {
             
             // ── Content ────────────────────────────────────────────────
             if let selectedDay = dayManager.selectedDay {
-                if selectedDay.exercises.isEmpty && selectedDay.workouts.isEmpty {
-                    emptyState
-                } else {
-                    exerciseList(for: selectedDay)
-                }
+                dayTimeline(for: selectedDay)
             } else {
                 loadingView
             }
@@ -154,58 +150,73 @@ struct MyDayHomeScreen: View {
     // MARK: - Date Strip
     
     private var dateStrip: some View {
-        ScrollViewReader { proxy in
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(dates, id: \.self) { date in
-                        let isSelected = dayManager.isDaySelected(date)
-                        let isToday = calendar.isDateInToday(date)
-                        let isFuture = date > Date()
+        VStack(spacing: 0) {
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(dates, id: \.self) { date in
+                            let isSelected = dayManager.isDaySelected(date)
+                            let isToday = calendar.isDateInToday(date)
+                            let isFuture = date > Date()
                         
-                        VStack(spacing: 3) {
-                            Text(isToday ? "Today" : formattedDateDay(date))
-                                .font(.system(size: 10, weight: .medium))
-                                .foregroundStyle(isSelected ? Color.white.opacity(0.8) : Color.secondary)
+                            VStack(spacing: 3) {
+                                Text(isToday ? "Today" : formattedDateDay(date))
+                                    .font(.system(size: 10, weight: .medium))
+                                    .foregroundStyle(isSelected ? Color.white.opacity(0.8) : Color.secondary)
                             
-                            Text(formattedDateNumber(date))
-                                .font(.system(size: 16, weight: .bold))
-                                .foregroundStyle(isSelected ? Color.white : Color.primary)
-                        }
-                        .frame(width: 44, height: 56)
-                        .background(
-                            isSelected
-                                ? Color.darkColor
-                                : Color(UIColor.secondarySystemBackground)
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(
-                                    isSelected ? Color.clear : Color(UIColor.separator),
-                                    lineWidth: 0.5
+                                Text(formattedDateNumber(date))
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundStyle(isSelected ? Color.white : Color.primary)
+
+                                MyDayDayMarkerDots(
+                                    markers: dayManager.markers(for: date),
+                                    isSelected: isSelected
                                 )
-                        }
-                        .opacity(isFuture ? 0.3 : 1.0)
-                        .onTapGesture {
-                            guard !isFuture else { return }
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                dayManager.changeSelectedDay(to: date)
-                                proxy.scrollTo(date, anchor: .center)
                             }
+                            .frame(width: 44, height: 62)
+                            .background(
+                                isSelected
+                                    ? Color.darkColor
+                                    : Color(UIColor.secondarySystemBackground)
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(
+                                        isSelected ? Color.clear : Color(UIColor.separator),
+                                        lineWidth: 0.5
+                                    )
+                            }
+                            .opacity(isFuture ? 0.3 : 1.0)
+                            .onTapGesture {
+                                guard !isFuture else { return }
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    dayManager.changeSelectedDay(to: date)
+                                    proxy.scrollTo(date, anchor: .center)
+                                }
+                            }
+                            .id(date)
                         }
-                        .id(date)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 10)
+                    .padding(.bottom, 8)
+                }
+                .task {
+                    if let first = dates.first, let last = dates.last {
+                        dayManager.loadDayMarkersIfNeeded(from: first, to: last)
+                    }
+                    if let today = dates.last {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                            proxy.scrollTo(today, anchor: .trailing)
+                        }
                     }
                 }
+            }
+
+            MyDayDayMarkerLegend()
                 .padding(.horizontal, 16)
-                .padding(.vertical, 10)
-            }
-            .task {
-                if let today = dates.last {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                        proxy.scrollTo(today, anchor: .trailing)
-                    }
-                }
-            }
+                .padding(.bottom, 10)
         }
     }
     
@@ -251,21 +262,162 @@ struct MyDayHomeScreen: View {
         .padding(.horizontal, 8)
     }
     
-    // MARK: - Exercise List
-    
-    private func exerciseList(for day: MyDayFullDayModel) -> some View {
+    // MARK: - Day Timeline
+
+    /// The day as a timeline in the order it goes: check in, train, rate. Each step is a node on
+    /// a rail with its content beside it, and a step not done yet is drawn where it will be — a
+    /// dashed slot today, one quiet line on a past day — so the screen shows the shape of the day
+    /// before anything is on it. This replaced a centred "Nothing recorded yet" illustration (black
+    /// text on the navy page, and an "Add Activity" button repeating the header's) and a
+    /// full-height "No Check-in" card on past days, which between them said very little. A past
+    /// day never says "Rest day": nothing logged is not the same as rested.
+    ///
+    /// **The train step holds the workout and exercise cards exactly as they were.** The timeline
+    /// adds the rail and the empty states; it does not restyle the cards.
+    ///
+    /// Rating opens once anything is recorded, workouts included (`MyDayDayMarkers.hasExercise`).
+    /// It used to need a standalone exercise, so a day trained only through a workout could never
+    /// be rated.
+    @ViewBuilder
+    private func dayTimeline(for day: MyDayFullDayModel) -> some View {
+        let markers = MyDayDayMarkers(day: day)
+        if !isToday && markers.isEmpty && day.workouts.isEmpty && day.exercises.isEmpty {
+            emptyPastDay(for: day)
+        } else {
+            activeTimeline(for: day, markers: markers)
+        }
+    }
+
+    private func activeTimeline(for day: MyDayFullDayModel, markers: MyDayDayMarkers) -> some View {
         ScrollView(showsIndicators: false) {
-            LazyVStack(spacing: 12) {
-                WellnessSummaryCard(
-                    viewModel: WellnessQuestionnaireViewModel(
-                        existingEntry: day.wellnessEntry,
-                        onComplete: { entry in
-                            dayManager.saveWellnessEntry(entry)
+            VStack(spacing: 0) {
+                MyDayTimelineStep(
+                    kind: .checkIn,
+                    state: nodeState(done: markers.hasCheckIn, available: true),
+                    isFirst: true
+                ) {
+                    checkInStep(for: day)
+                }
+
+                MyDayTimelineStep(
+                    kind: .exercise,
+                    state: nodeState(
+                        done: markers.hasExercise,
+                        available: true,
+                        hasContent: !day.workouts.isEmpty || !day.exercises.isEmpty
+                    )
+                ) {
+                    trainStep(for: day)
+                }
+
+                MyDayTimelineStep(
+                    kind: .rpe,
+                    state: nodeState(done: markers.hasRPE, available: markers.hasExercise),
+                    isLast: true
+                ) {
+                    rateStep(for: day, canRate: markers.hasExercise)
+                }
+            }
+            .padding(.leading, 12)
+            .padding(.trailing, 16)
+            .padding(.vertical, 12)
+        }
+    }
+
+    /// A past day with nothing on it at all: the day named once, the three steps as rows saying
+    /// "Not recorded", and the week around it. The timeline alone said the same three facts in
+    /// three small captions and left the page empty; the week is what gives a blank day meaning.
+    /// Past days stay read-only — backfilling them is a possible feature, not a decided one.
+    private func emptyPastDay(for day: MyDayFullDayModel) -> some View {
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(day.date, format: .dateTime.weekday(.wide).day())
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(Color.white)
+                    Text("Nothing was recorded on this day.")
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundStyle(Color.white.opacity(0.7))
+                }
+                .padding(.bottom, 4)
+
+                MyDayTimelineStep(kind: .checkIn, state: .missing, isFirst: true, spacing: 0) {
+                    MyDayTimelineMissingRow(title: "Check-in")
+                }
+                MyDayTimelineStep(kind: .exercise, state: .missing, spacing: 0) {
+                    MyDayTimelineMissingRow(title: "Training")
+                }
+                MyDayTimelineStep(kind: .rpe, state: .missing, isLast: true, spacing: 0) {
+                    MyDayTimelineMissingRow(title: "RPE", showsDivider: false)
+                }
+
+                if let first = dates.first {
+                    MyDayWeekCard(
+                        date: day.date,
+                        reachable: first...calendar.startOfDay(for: Date()),
+                        markers: { dayManager.markers(for: $0) },
+                        onSelect: { date in
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                dayManager.changeSelectedDay(to: date)
+                            }
                         }
-                    ),
-                    isCurrentDay: isToday
+                    )
+                    .padding(.top, 16)
+                }
+            }
+            .padding(.leading, 12)
+            .padding(.trailing, 16)
+            .padding(.vertical, 16)
+        }
+        .task {
+            if let first = dates.first, let last = dates.last {
+                dayManager.loadDayMarkersIfNeeded(from: first, to: last)
+            }
+        }
+    }
+
+    /// A past day cannot be edited, so anything not done on it is simply missing. A past step
+    /// that has content (a planned workout never logged) still draws its card, with an open node.
+    private func nodeState(done: Bool, available: Bool, hasContent: Bool = false) -> MyDayTimelineNodeState {
+        if done { return .done }
+        if !isToday { return hasContent ? .pending : .missing }
+        return available ? .pending : .unavailable
+    }
+
+    @ViewBuilder
+    private func checkInStep(for day: MyDayFullDayModel) -> some View {
+        if day.wellnessEntry == nil && !isToday {
+            MyDayTimelineMissingRow(title: "Check-in", showsDivider: false)
+        } else {
+            WellnessSummaryCard(
+                viewModel: WellnessQuestionnaireViewModel(
+                    existingEntry: day.wellnessEntry,
+                    onComplete: { entry in
+                        dayManager.saveWellnessEntry(entry)
+                    }
+                ),
+                isCurrentDay: isToday
+            )
+        }
+    }
+
+    @ViewBuilder
+    private func trainStep(for day: MyDayFullDayModel) -> some View {
+        if day.workouts.isEmpty && day.exercises.isEmpty {
+            if isToday {
+                MyDayTimelinePlaceholder(
+                    title: "Train",
+                    subtitle: "Log an exercise or add a workout",
+                    actionTitle: "Add",
+                    actionTint: .white,
+                    actionLabelColor: .darkColor,
+                    action: { addButtonAction?() }
                 )
-     
+            } else {
+                MyDayTimelineMissingRow(title: "Training", showsDivider: false)
+            }
+        } else {
+            LazyVStack(spacing: 12) {
                 // MARK: - Workout Cards
                 if !day.workouts.isEmpty {
                     HStack {
@@ -332,84 +484,28 @@ struct MyDayHomeScreen: View {
                         clipSelected: clipSelected
                     )
                 }
-     
-                if day.exercises.count > 0 {
-                    RPECard(
-                        entry: dayManager.selectedDay?.rpeEntry,
-                        isCurrentDay: isToday,
-                        onConfirm: { entry in
-                            dayManager.saveRPEEntry(entry)
-                        }
-                    )
-                }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
         }
     }
-    
-    // MARK: - Empty State
-    
-    private var emptyState: some View {
-        VStack(spacing: 16) {
-            
-            WellnessSummaryCard(
-                viewModel: WellnessQuestionnaireViewModel(
-                    existingEntry: dayManager.selectedDay?.wellnessEntry,
-                    onComplete: { entry in
-                        dayManager.saveWellnessEntry(entry)
-                    }
-                ),
-                isCurrentDay: isToday
+
+    @ViewBuilder
+    private func rateStep(for day: MyDayFullDayModel, canRate: Bool) -> some View {
+        if let entry = day.rpeEntry {
+            RPECard(entry: entry, isCurrentDay: isToday, onConfirm: { entry in
+                dayManager.saveRPEEntry(entry)
+            })
+        } else if !isToday {
+            MyDayTimelineMissingRow(title: "RPE", showsDivider: false)
+        } else if canRate {
+            RPECard(entry: nil, isCurrentDay: true, onConfirm: { entry in
+                dayManager.saveRPEEntry(entry)
+            })
+        } else {
+            MyDayTimelinePlaceholder(
+                title: "Rate today",
+                subtitle: "Opens once you've trained"
             )
-            
-            Spacer()
-            
-            ZStack {
-                Circle()
-                    .fill(Color(UIColor.secondarySystemBackground))
-                    .frame(width: 72, height: 72)
-                Image(systemName: isToday ? "plus.circle" : "calendar.badge.minus")
-                    .font(.system(size: 28, weight: .semibold))
-                    .foregroundStyle(Color.secondary)
-            }
-            
-            VStack(spacing: 6) {
-                Text(isToday ? "Nothing recorded yet" : "Rest day")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(Color.primary)
-                
-                Text(isToday
-                     ? "Start tracking your exercises, fitness or sport"
-                     : "No activity was recorded on this day")
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundStyle(Color.secondary)
-                    .multilineTextAlignment(.center)
-            }
-            
-            if isToday {
-                Button {
-                    addButtonAction?()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "plus")
-                            .font(.system(size: 14, weight: .bold))
-                        Text("Add Activity")
-                            .font(.system(size: 15, weight: .semibold))
-                    }
-                    .foregroundStyle(Color.white)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 12)
-                    .background(Color.darkColor)
-                    .clipShape(Capsule())
-                }
-            }
-            
-            Spacer()
-            
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
     }
     
     // MARK: - Loading

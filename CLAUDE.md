@@ -772,6 +772,39 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   other set pill, ending with the **dimmed empty circle** a `.planned` `SessionSetPill` draws — a
   template set has not been performed, so the empty state is the honest one, and it fills the slot
   that otherwise left these pills looking lopsided. Indicator only; the whole pill is the tap target.
+- **The MyDay home is a timeline: check in → train → rate** (`dayTimeline(for:)`). Each step is a
+  `MyDayTimelineStep` — a node on a rail beside the step's content — and replaced both the old
+  empty state (a centred illustration, black text on the navy page, an "Add Activity" button
+  repeating the header's, and "Rest day" for any past day with nothing logged) and the full-height
+  "No Check-in" / "No RPE" past-day cards. A step not done today is a dashed
+  `MyDayTimelinePlaceholder`; on a past day it is a `MyDayTimelineMissingRow` (step name, "Not
+  recorded"). **Never "Rest day"** — nothing logged is not the same as rested.
+  **A past day with nothing on it at all** (`emptyPastDay(for:)`) names the day once, lists the
+  three steps as rows, and shows `MyDayWeekCard`: that Monday-to-Sunday week with each day's
+  markers, "N of M days trained", tap to open a day. It reads `dayMarkers`, so no extra reads.
+  Days outside the strip's window draw dimmed and inert. Three captions alone read as unfinished;
+  the week is what gives a blank day meaning. **Past days stay read-only** — backfilling them is
+  a possible feature, not a decided one, and would touch logging, raw logs and `DailyTotal`s. Node states are
+  `MyDayTimelineNodeState` (done / pending / unavailable / missing).
+  **The train step holds the workout and exercise cards exactly as they were** — workouts and
+  standalone exercises together, under their existing headings. The timeline adds the rail; it
+  does not restyle the cards. Check-in and RPE still expand **inline**; only their not-started
+  state became the dashed slot (moving them to a sheet is under consideration).
+  **Rating opens once anything is recorded, workouts included** (`MyDayDayMarkers.hasExercise`);
+  it used to need a standalone exercise, so a workout-only day could never be rated. Before that
+  the step is drawn dimmed ("Opens once you've trained") so the user knows it is coming.
+- **Check-in is `matteGreen`, RPE `matteAmber`** — the cards, their score scales and the markers.
+  They were system `.orange` / `.purple` over system red/orange/yellow/blue/green scales, which
+  read as another app beside `darkColor`. MyDayKit's matte set is a copy of StatsKit's — keep in
+  step. The Sports / Fitness session screens still use the system colours.
+- **Date strip markers**: each day pill carries three fixed-slot dots — check-in (`matteGreen`),
+  exercise (`darkColor`, white on a `darkColor` surface), RPE (`matteAmber`) — with a legend under
+  the strip. `MyDayDayMarkers(day:)` is the one definition; a set
+  logged inside a workout counts as exercise, a workout merely on the day does not. The 33 days are
+  read in **one** `MyDayRangeLoader` query (`MyDayFirestoreRangeLoader`, a document-id range on
+  `Users/{uid}/MyDay`), once per manager, when the strip first opens; after that `selectedDay`'s
+  `didSet` keeps them live. Never load them with `MyDayLoader` per date — that is a remote read
+  per day, mostly for days with no document.
 - **`DailyWorkoutEntry`**: `id`, `template`, `assignedDate`, `status` (`planned` / `inProgress` /
   `completed` / `incomplete`), `sessionId?`, `startedAt?`, `sessionRecord?`
 - **`WorkoutExerciseModel`**: carries `exerciseName: String` and `exerciseCategory: ExerciseCategory`
@@ -1750,6 +1783,7 @@ in this codebase.**
 | `ProfileDetails` limits (100 / 300) | `AccountCreationHomeViewModel` limits, and the `Users` update rule | PROFILE_PLAN.md step 3 |
 | `LoginFieldCard` / `LoginPrimaryButton` / `LoginErrorBanner` | their AccountCreationKit twins | Auth, Shared UI |
 | the seven `Color+Extension.swift` | each other | Brand Colours, Shared UI |
+| MyDayKit's matte colours | StatsKit's (`matteGreen` / `Amber` / `Red` / `Blue`) | MYDAY Workout Flow |
 | StatsKit's matte zone colours | PerformanceKit's copies (`matteGreen` / `Amber` / `Red`) | PERFORMANCE_PLAN.md phase D |
 | DiscoverKit's `SectionContainer` | StatsKit's `SectionContainer` | DISCOVER_PLAN.md step 2 |
 | `WorkoutTag.maxLength` | `MAX_TAG_LENGTH` in the Cloud Functions' `Tags/TagRejection.ts` | DISCOVER_PLAN.md step 1 |

@@ -29,6 +29,16 @@ extension Color {
     static let pageColor = Color(light: Color(hex: 0x1C496E), dark: Color(UIColor.systemGroupedBackground))
     
     static let thirdColour = Color(hex: 0xF3F9FF)
+
+    /// StatsKit's matte palette, copied here as the brand colours are — **keep the two in step**.
+    /// The check-in and RPE cards and the date strip's markers were system `.orange` / `.purple`,
+    /// with their score scales on system red / orange / yellow / blue / green. At full saturation
+    /// beside `darkColor` those read as another app's alerts. These sit at a similar lightness,
+    /// so no score stands out just by being brighter. Check-in is `matteGreen`, RPE `matteAmber`.
+    static let matteGreen = Color(hex: 0x5E9C7C)
+    static let matteAmber = Color(hex: 0xC49A5C)
+    static let matteRed   = Color(hex: 0xB96B5E)
+    static let matteBlue  = Color(hex: 0x6D8FB0)
     
     /// A colour that follows the appearance (light / dark) of whatever draws it.
     init(light: Color, dark: Color) {

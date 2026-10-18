@@ -12,7 +12,16 @@ public class MyDayManager: ObservableObject {
     
     @Published var loadedDays: [MyDayFullDayModel] = []
     
-    @Published var selectedDay: MyDayFullDayModel?
+    @Published var selectedDay: MyDayFullDayModel? {
+        didSet { recordMarkers(for: selectedDay) }
+    }
+
+    /// The date strip's markers, keyed by the start of each day in the device calendar — the
+    /// calendar day files are named in. Filled once from `rangeLoader`, then kept current from
+    /// `selectedDay`, which every save on this screen goes through, so logging something lights
+    /// its marker without a reload.
+    @Published private(set) var dayMarkers: [Date: MyDayDayMarkers] = [:]
+    private var hasLoadedDayMarkers = false
     
     @Published var selectedWellness: WellnessEntry?
     @Published var loadedWellness: [WellnessEntry] = []
@@ -21,6 +30,7 @@ public class MyDayManager: ObservableObject {
     let clipSaver: MyDaySaver
     let deleteSaver: MyDaySaver
     let loader: MyDayLoader
+    let rangeLoader: MyDayRangeLoader
     let deleter: MyDayDeleter
     
     // wellness
@@ -54,12 +64,14 @@ public class MyDayManager: ObservableObject {
         workoutSaver: MyDaySaver,
         workoutStatsSaver: ExerciseStatsSaver,
         completedSessionSaver: CompletedWorkoutSessionSaver,
-        completedSessionDeleter: CompletedWorkoutSessionDeleter
+        completedSessionDeleter: CompletedWorkoutSessionDeleter,
+        rangeLoader: MyDayRangeLoader = EmptyMyDayRangeLoader()
     ) {
         self.saver = saver
         self.clipSaver = clipSaver
         self.deleteSaver = deleteSaver
         self.loader = loader
+        self.rangeLoader = rangeLoader
         self.deleter = deleter
         self.wellnessSaver = wellnessSaver
         self.rpeSaver = rpeSaver
@@ -207,6 +219,42 @@ public class MyDayManager: ObservableObject {
         }
     }
     
+    func markers(for date: Date) -> MyDayDayMarkers {
+        dayMarkers[Calendar.current.startOfDay(for: date)] ?? .none
+    }
+
+    /// Loads the strip's markers once per manager. The manager outlives the screen, and after
+    /// the first load `selectedDay` keeps them current, so reopening the strip costs nothing.
+    /// A failed load leaves the strip unmarked and is retried the next time the strip opens.
+    func loadDayMarkersIfNeeded(from start: Date, to end: Date) {
+        guard !hasLoadedDayMarkers else { return }
+        hasLoadedDayMarkers = true
+        Task {
+            do {
+                let days = try await rangeLoader.loadDays(from: start, to: end)
+                await MainActor.run {
+                    for day in days {
+                        dayMarkers[Calendar.current.startOfDay(for: day.date)] = MyDayDayMarkers(day: day)
+                    }
+                    // The selected day is the freshest copy there is — something may have been
+                    // logged on it while the range was loading.
+                    recordMarkers(for: selectedDay)
+                }
+            } catch {
+                print("❌ Error loading day markers: \(error)")
+                await MainActor.run { hasLoadedDayMarkers = false }
+            }
+        }
+    }
+
+    private func recordMarkers(for day: MyDayFullDayModel?) {
+        guard let day else { return }
+        let key = Calendar.current.startOfDay(for: day.date)
+        let markers = MyDayDayMarkers(day: day)
+        guard dayMarkers[key] != markers else { return }
+        dayMarkers[key] = markers
+    }
+
     // save wellness
     func saveWellnessEntry(_ entry: WellnessEntry) {
         guard var selectedDay else { return }
