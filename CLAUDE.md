@@ -94,9 +94,10 @@ bottom, unchanged, so returning users are not slowed down.
   `WelcomeWeeklyBarsIllustration`, `WelcomeReadinessIllustration`), hand-built in LoginKit because
   it imports none of the frameworks that own the real components. No photos, no animation
   libraries.
-- **The showcase: one card moves at a time.** After the intro the cards take turns playing a
-  scene (a pill logs, the chart rolls a week, the readiness check ticks), each outlined while it
-  plays, with the line under "Train like an athlete." naming it (`WelcomeFeature.headline`).
+- **The showcase: one card moves at a time.** After the intro the cards take turns, each
+  **rebuilding its miniature from empty** (`WelcomeRebuilding`: pills none → six, chart from
+  nothing, ring 0 → 96%). Single increments per turn only made sense if you had watched the last
+  one. The active card lifts with a light running round its edge (`WelcomeCardSweep`), with the line under "Train like an athlete." naming it (`WelcomeFeature.headline`).
   Animating once and stopping left the screen dead; all three at once would be noise. It pauses
   while scrolling, pressing a card, or with the app inactive, and with Reduce Motion it never runs.
   Cards press to 0.97 with a light haptic.

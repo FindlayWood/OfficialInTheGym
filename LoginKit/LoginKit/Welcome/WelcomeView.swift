@@ -14,11 +14,11 @@ import SwiftUI
 /// **Sign Up and Log In stay pinned at the bottom, unchanged**, so a returning user is not slowed
 /// down by the pitch; on a small phone the cards scroll and the buttons do not.
 ///
-/// **The showcase.** After the intro, the cards take turns playing a scene — a pill logs, the chart
-/// rolls forward a week, the readiness check ticks — one card at a time with a still pause between,
-/// so the loop tells the app's story (log → it adds up → you're ready) and never moves two things
-/// at once. The playing card is outlined and lifted slightly, and the line under the tagline names
-/// it. The first version animated once and then stopped, and the screen went dead; three cards
+/// **The showcase.** After the intro, the cards take turns: each rebuilds its miniature from empty —
+/// the pills log from none to six, the chart grows from nothing, the ring fills from 0% — one card
+/// at a time with a still pause between, so the loop tells the app's story (log → it adds up →
+/// you're ready) and never moves two things at once. The playing card lifts slightly with a light
+/// running round its edge, and the line under the tagline names it. The first version animated once and then stopped, and the screen went dead; three cards
 /// moving together would be noise. One beat every few seconds is the line between the two.
 ///
 /// It **holds still** while the user is scrolling or pressing a card, and stops when the screen is
@@ -76,7 +76,12 @@ struct WelcomeView: View {
                         }
                     }
                 }
-                .padding(.bottom, 16)
+                // Inside the scroll view, not around it: a scroll view clips to its bounds, and the
+                // active card's lift and the light round its edge reach past the card. With the
+                // padding outside, both were cut off at the left and right.
+                .padding(.horizontal, 20)
+                .padding(.vertical, 4)
+                .padding(.bottom, 12)
             }
             .onScrollPhaseChange { _, phase in
                 isScrolling = phase.isScrolling
@@ -94,8 +99,8 @@ struct WelcomeView: View {
                 }
             }
             .padding(.top, 12)
+            .padding(.horizontal, 20)
         }
-        .padding(.horizontal, 20)
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground).ignoresSafeArea())

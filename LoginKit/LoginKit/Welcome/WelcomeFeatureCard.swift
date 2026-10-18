@@ -16,9 +16,9 @@ import SwiftUI
 /// "gym app". The miniatures are hand-drawn here, since LoginKit imports none of the frameworks
 /// that own the real components, and they are illustrations with fixed numbers, not data.
 ///
-/// `scene` counts how many times this card's miniature has played its scene since the intro; each
-/// new value is one more beat (see `WelcomeView`'s showcase). `isActive` is the card currently
-/// playing, drawn with a faint outline and a slight lift so the eye follows it down the list.
+/// `scene` counts the turns this card has had in `WelcomeView`'s showcase; each new value rebuilds
+/// its miniature from empty (`WelcomeRebuilding`). `isActive` is the card whose turn it is, lifted
+/// slightly with a light running round its edge (`WelcomeCardSweep`) so the eye follows it.
 struct WelcomeFeatureCard: View {
 
     let feature: WelcomeFeature
@@ -69,10 +69,7 @@ struct WelcomeFeatureCard: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(UIColor.secondarySystemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .strokeBorder(Color.darkColor.opacity(isActive ? 0.35 : 0), lineWidth: 1.5)
-            }
+            .overlay { WelcomeCardSweep(isActive: isActive) }
             .scaleEffect(isActive ? 1.01 : 1)
             .animation(.easeInOut(duration: 0.35), value: isActive)
             .contentShape(Rectangle())
@@ -80,12 +77,13 @@ struct WelcomeFeatureCard: View {
         .buttonStyle(WelcomeCardButtonStyle(onPressChange: onPressChange))
     }
 
-    @ViewBuilder
     private var illustration: some View {
-        switch feature {
-        case .training: WelcomeSetPillsIllustration(isRevealed: isRevealed, scene: scene)
-        case .stats: WelcomeWeeklyBarsIllustration(isRevealed: isRevealed, scene: scene)
-        case .performance: WelcomeReadinessIllustration(isRevealed: isRevealed, scene: scene)
+        WelcomeRebuilding(isRevealed: isRevealed, scene: scene) { isBuilt in
+            switch feature {
+            case .training: WelcomeSetPillsIllustration(isBuilt: isBuilt)
+            case .stats: WelcomeWeeklyBarsIllustration(isBuilt: isBuilt)
+            case .performance: WelcomeReadinessIllustration(isBuilt: isBuilt)
+            }
         }
     }
 }
