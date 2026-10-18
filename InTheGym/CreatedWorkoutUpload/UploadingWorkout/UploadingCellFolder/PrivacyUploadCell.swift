@@ -13,7 +13,7 @@ class PrivacyUploadCell: BaseUploadCell {
     // MARK: - Properties
     private let imageDimension: CGFloat = 40
     
-    private let initialImage: UIImage = UIImage(named: "public_icon")!
+    private let initialImage: UIImage = UIImage.legacyIcon("globe")
     
     private var isPrivate: Bool = false
     
@@ -95,7 +95,7 @@ extension PrivacyUploadCell {
     }
     func setToPrivate() {
         isPrivate.toggle()
-        privacyButton.setImage(UIImage(named: "locked_icon"), for: .normal)
+        privacyButton.setImage(UIImage.legacyIcon("lock.fill"), for: .normal)
         privacyLabel.text = "Private"
         UIView.animate(withDuration: 0.3) {
             self.label.textColor = .darkGray
@@ -105,7 +105,7 @@ extension PrivacyUploadCell {
     }
     func setToPublic() {
         isPrivate.toggle()
-        privacyButton.setImage(UIImage(named: "public_icon"), for: .normal)
+        privacyButton.setImage(UIImage.legacyIcon("globe"), for: .normal)
         privacyLabel.text = "Public"
         UIView.animate(withDuration: 0.3) {
             self.label.textColor = .darkColour

@@ -111,7 +111,7 @@ class ProfileViewController: UIViewController, EmptyDataSetSource, EmptyDataSetD
                         self.profileImage.layer.cornerRadius = self.profileImage.bounds.width / 2.0
                     }
                 }else if snap["admin"] as! Bool == true{
-                    self.profileImage.image = UIImage(named: "coach_icon")
+                    self.profileImage.image = UIImage.legacyIcon("person.badge.shield.checkmark.fill")
                 }
             
             }

@@ -196,7 +196,7 @@ class ExerciseRatingView: UIView {
     }()
     var newButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "stamp_icon"), for: .normal)
+        button.setImage(UIImage.legacyIcon("seal.fill"), for: .normal)
         button.widthAnchor.constraint(equalToConstant: 80).isActive = true
         button.heightAnchor.constraint(equalToConstant: 80).isActive = true
         button.translatesAutoresizingMaskIntoConstraints = false

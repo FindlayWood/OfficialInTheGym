@@ -19,15 +19,15 @@ enum ProfileOptions: CaseIterable {
     var image: UIImage {
         switch self {
         case .savedWorkouts:
-            return UIImage(named: "benchpress_icon")!
+            return UIImage.legacyIcon("figure.strengthtraining.traditional")
         case .createdWorkouts:
-            return UIImage(named: "hammer_icon")!
+            return UIImage.legacyIcon("hammer.fill")
         case .scores:
-            return UIImage(named: "scores_icon")!
+            return UIImage.legacyIcon("chart.pie.fill")
         case .edit:
-            return UIImage(named: "edit_icon")!
+            return UIImage.legacyIcon("pencil")
         case .more:
-            return UIImage(named: "more_icon")!
+            return UIImage.legacyIcon("ellipsis.circle.fill")
         }
     }
 }

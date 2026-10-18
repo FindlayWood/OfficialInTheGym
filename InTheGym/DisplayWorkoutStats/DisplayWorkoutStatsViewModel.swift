@@ -15,7 +15,7 @@ class DisplayWorkoutStatsViewModel {
     var updateLoadingStatusClosure: (() -> ())?
     // MARK: - Properties
     var savedWorkoutModel: SavedWorkoutModel!
-    let images: [UIImage] = [UIImage(named: "eye_icon")!, UIImage(named: "download_icon")!, UIImage(named: "clock_icon")!, UIImage(named: "scores_icon")!, UIImage(named: "Workout Completed")!]
+    let images: [UIImage] = [UIImage.legacyIcon("eye.fill"), UIImage.legacyIcon("arrow.down.circle.fill"), UIImage.legacyIcon("clock.fill"), UIImage.legacyIcon("chart.pie.fill"), UIImage(named: "Workout Completed")!]
     let titles = ["Views", "Downloads", "Average Time", "Average Score", "Completions"]
     
     var stats: WorkoutStatsModel! {

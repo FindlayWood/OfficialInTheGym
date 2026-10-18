@@ -21,7 +21,7 @@ final class LiveWorkoutPlusCollectionCell: FullWidthCollectionViewCell {
     // MARK: - Subviews
     var plusButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Set Workout"), for: .normal)
+        button.setImage(UIImage.legacyIcon("plus.circle.fill"), for: .normal)
         button.backgroundColor = .clear
 //        button.addTarget(LiveWorkoutPlusCollectionCell.self, action: #selector(plusTapped(_:)), for: .touchUpInside)
         button.imageView?.contentMode = .scaleAspectFit

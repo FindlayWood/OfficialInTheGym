@@ -34,23 +34,8 @@ struct SettingsView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
                 }
-                Button {
-                    viewModel.icons()
-                } label: {
-                    HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "icons8_logo")!)
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .cornerRadius(4)
-                        Text("Icons")
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                    }
-                }
             } header: {
                 Text("About")
-            } footer: {
-                Text("Our awesome icons are provided by Icons8. They have a great service for icons, check them out above.")
             }
             
             Section {
@@ -58,7 +43,7 @@ struct SettingsView: View {
                     viewModel.instagram()
                 } label: {
                     HStack(spacing: 16) {
-                        Image(uiImage: UIImage(named: "instagram_logo")!)
+                        Image(uiImage: UIImage.legacyIcon("camera"))
                             .resizable()
                             .frame(width: 30, height: 30)
                             .cornerRadius(4)

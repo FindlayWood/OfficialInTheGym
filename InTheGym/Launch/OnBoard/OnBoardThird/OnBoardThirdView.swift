@@ -14,7 +14,7 @@ struct OnBoardThirdView: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Image("clip_icon")
+                Image(uiImage: UIImage.legacyIcon("video.fill"))
                     .resizable()
                     .frame(width: 50, height: 50)
                 VStack(alignment: .leading) {
@@ -29,7 +29,7 @@ struct OnBoardThirdView: View {
                 }
             }
             HStack {
-                Image("monitor_icon")
+                Image(uiImage: UIImage.legacyIcon("waveform.path.ecg"))
                     .resizable()
                     .frame(width: 50, height: 50)
                 VStack(alignment: .leading) {

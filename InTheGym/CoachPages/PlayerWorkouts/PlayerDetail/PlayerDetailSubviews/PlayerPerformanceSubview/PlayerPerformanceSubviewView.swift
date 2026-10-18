@@ -14,7 +14,7 @@ class PlayerPerformanceSubviewView: UIView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.backgroundColor = .clear
-        view.image = UIImage(named: "monitor_icon")
+        view.image = UIImage.legacyIcon("waveform.path.ecg")
         view.heightAnchor.constraint(equalToConstant: 60).isActive = true
         view.widthAnchor.constraint(equalToConstant: 60).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false

@@ -87,7 +87,7 @@ extension AddMoreCollectionCell {
     public func configure(with model: AddMoreCellModel) {
         cellModel = model
         titleLabel.text = cellModel.title
-        imageView.image = UIImage(named: cellModel.imageName)
+        imageView.image = UIImage.legacyIcon(cellModel.imageName)
         valueLabel.text = cellModel.value.value
         
         cellModel.value.valueChanged = { [weak self] (newValue) in

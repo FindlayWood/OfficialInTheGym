@@ -16,7 +16,7 @@ class CompletedWorkoutPageView: UIView {
     var timeView: CompletedInfoView = {
         let view = CompletedInfoView()
         view.titleLabel.text = "Time"
-        view.imageView.image = UIImage(named: "clock_icon")
+        view.imageView.image = UIImage.legacyIcon("clock.fill")
         view.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.15).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -24,7 +24,7 @@ class CompletedWorkoutPageView: UIView {
     var averageRPEView: CompletedInfoView = {
         let view = CompletedInfoView()
         view.titleLabel.text = "Average RPE"
-        view.imageView.image = UIImage(named: "scores_icon")
+        view.imageView.image = UIImage.legacyIcon("chart.pie.fill")
         view.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.15).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -55,7 +55,7 @@ class CompletedWorkoutPageView: UIView {
     var workLoadView: CompletedInfoView = {
         let view = CompletedInfoView()
         view.titleLabel.text = "Workload"
-        view.imageView.image = UIImage(named: "linechart_icon")
+        view.imageView.image = UIImage.legacyIcon("chart.line.uptrend.xyaxis")
         view.heightAnchor.constraint(equalToConstant: Constants.screenSize.height * 0.15).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -320,7 +320,7 @@ class CompletedSummaryView: UIView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.backgroundColor = .clear
-        view.image = UIImage(named: "note_icon")
+        view.image = UIImage.legacyIcon("note.text")
         view.heightAnchor.constraint(equalToConstant: 30).isActive = true
         view.widthAnchor.constraint(equalToConstant: 30).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false

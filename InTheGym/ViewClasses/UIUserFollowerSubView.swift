@@ -134,7 +134,7 @@ private extension UIUserFollowerSubView {
 // MARK: - Public Configuration
 extension UIUserFollowerSubView {
     public func configure(admin: Bool) {
-        let image: UIImage = admin ? UIImage(named: "coach_icon")! : UIImage(named: "player_icon")!
+        let image: UIImage = admin ? UIImage.legacyIcon("person.badge.shield.checkmark.fill") : UIImage.legacyIcon("figure.run")
         accountTypeButton.setImage(image, for: .normal)
         let accountType: String = admin ? "Coach" : "Player"
         accountTypeLabel.text = accountType

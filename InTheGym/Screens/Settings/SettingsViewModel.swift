@@ -35,9 +35,6 @@ class SettingsViewModel {
     func about() {
         settingActions.send(.about)
     }
-    func icons() {
-        settingActions.send(.icons)
-    }
     func instagram() {
         settingActions.send(.instagram)
     }
@@ -77,7 +74,6 @@ class SettingsViewModel {
 
 enum SettingsAction {
     case about
-    case icons
     case instagram
     case website
     case resetPassword

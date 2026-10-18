@@ -29,13 +29,13 @@ class ProfileInfoTableViewCell: UITableViewCell {
     }()
     var clipButton: ProfileButton = {
         let button = ProfileButton()
-        button.configure(with: "Clips", and: UIImage(named: "clip_icon"))
+        button.configure(with: "Clips", and: UIImage.legacyIcon("video.fill"))
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     var workoutsButton: ProfileButton = {
         let button = ProfileButton()
-        button.configure(with: "Saved Workouts", and: UIImage(named: "benchpress_icon"))
+        button.configure(with: "Saved Workouts", and: UIImage.legacyIcon("figure.strengthtraining.traditional"))
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

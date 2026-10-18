@@ -75,7 +75,7 @@ class SavedWorkoutTableViewCell: UITableViewCell {
         // ICONS
     lazy var creatorIcon: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "coach_icon")
+        view.image = UIImage.legacyIcon("person.badge.shield.checkmark.fill")
         view.widthAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.heightAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -83,7 +83,7 @@ class SavedWorkoutTableViewCell: UITableViewCell {
     }()
     lazy var exerciseIcon: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "dumbbell_icon")
+        view.image = UIImage.legacyIcon("dumbbell.fill")
         view.widthAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.heightAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -91,7 +91,7 @@ class SavedWorkoutTableViewCell: UITableViewCell {
     }()
     lazy var clockIcon: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "clock_icon")
+        view.image = UIImage.legacyIcon("clock.fill")
         view.widthAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.heightAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -99,7 +99,7 @@ class SavedWorkoutTableViewCell: UITableViewCell {
     }()
     lazy var privacyIcon: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "clock_icon")
+        view.image = UIImage.legacyIcon("clock.fill")
         view.widthAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.heightAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -180,6 +180,6 @@ extension SavedWorkoutTableViewCell {
         averageTimeLabel.text = data.averageTime()
         averageRPEScoreLabel.text = data.averageScore().description
         exerciseCountLabel.text = data.totalExerciseCount().description
-        privacyIcon.image = data.isPrivate ? UIImage(named: "locked_icon") : UIImage(named: "public_icon")
+        privacyIcon.image = data.isPrivate ? UIImage.legacyIcon("lock.fill") : UIImage.legacyIcon("globe")
     }
 }

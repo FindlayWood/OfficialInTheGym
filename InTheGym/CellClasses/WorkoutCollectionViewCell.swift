@@ -67,7 +67,7 @@ class WorkoutCollectionViewCell: FullWidthCollectionViewCell {
     // ICONS
     lazy var creatorIcon: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "coach_icon")
+        view.image = UIImage.legacyIcon("person.badge.shield.checkmark.fill")
         view.widthAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.heightAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +75,7 @@ class WorkoutCollectionViewCell: FullWidthCollectionViewCell {
     }()
     lazy var exerciseIcon: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "dumbbell_icon")
+        view.image = UIImage.legacyIcon("dumbbell.fill")
         view.widthAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.heightAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -83,7 +83,7 @@ class WorkoutCollectionViewCell: FullWidthCollectionViewCell {
     }()
     lazy var clockIcon: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "clock_icon")
+        view.image = UIImage.legacyIcon("clock.fill")
         view.widthAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.heightAnchor.constraint(equalToConstant: iconDimension).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false

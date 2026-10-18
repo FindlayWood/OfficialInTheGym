@@ -52,7 +52,7 @@ class PlayerTimelineView: UIView {
         button.layer.cornerRadius = 15
         button.widthAnchor.constraint(equalToConstant: 30).isActive = true
         button.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        button.setImage(UIImage(named: "bell_icon"), for: .normal)
+        button.setImage(UIImage.legacyIcon("bell.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

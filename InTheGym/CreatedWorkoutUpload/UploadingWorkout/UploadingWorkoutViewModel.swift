@@ -16,7 +16,7 @@ class UploadingWorkoutViewModel {
     
     var privacyLabel: String = "Public"
     
-    var privacyImageName: String = "public_icon"
+    var privacyImageName: String = "globe"
     
     lazy var items: [UploadCellModelProtocol] = [
         SavingUploadCellModel(title: "Save Workout", message: StaticMessages.savingWorkoutMessage, isSaving: true),

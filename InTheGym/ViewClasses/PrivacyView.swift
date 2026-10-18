@@ -25,7 +25,7 @@ class PrivacyView: UIView {
     }()
     var privacyButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "public_icon"), for: .normal)
+        button.setImage(UIImage.legacyIcon("globe"), for: .normal)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -80,7 +80,7 @@ private extension PrivacyView {
     
     @objc func buttonTapped(_ sender: UIButton) {
         self.isPrivate.toggle()
-        let newButtonImage = isPrivate ? UIImage(named: "locked_icon") : UIImage(named: "public_icon")
+        let newButtonImage = isPrivate ? UIImage.legacyIcon("lock.fill") : UIImage.legacyIcon("globe")
         privacyButton.setImage(newButtonImage, for: .normal)
         bottomLabel.text = isPrivate ? "Private" : "Public"
     }
@@ -89,7 +89,7 @@ private extension PrivacyView {
 // MARK: - Public Configuration
 extension PrivacyView {
     public func configure(with isPrivate: Bool) {
-        let newButtonImage = isPrivate ? UIImage(named: "locked_icon") : UIImage(named: "public_icon")
+        let newButtonImage = isPrivate ? UIImage.legacyIcon("lock.fill") : UIImage.legacyIcon("globe")
         privacyButton.setImage(newButtonImage, for: .normal)
         bottomLabel.text = isPrivate ? "Private" : "Public"
     }

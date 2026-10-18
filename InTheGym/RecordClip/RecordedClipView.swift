@@ -22,8 +22,8 @@ class RecordedClipView: UIView {
         return button
     }()
     
-    private var privateImage = UIImage(named:"locked_icon")
-    private var publicImage = UIImage(named: "public_icon")
+    private var privateImage = UIImage.legacyIcon("lock.fill")
+    private var publicImage = UIImage.legacyIcon("globe")
     var isPrivate: Bool = false
     
     lazy var privacyButton: UIButton = {

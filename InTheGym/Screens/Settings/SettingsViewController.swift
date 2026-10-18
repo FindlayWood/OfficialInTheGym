@@ -68,8 +68,6 @@ private extension SettingsViewController {
             let Storyboard = UIStoryboard(name: "Main", bundle: nil)
             let SVC = Storyboard.instantiateViewController(withIdentifier: "BestUseMessageViewController") as! BestUseMessageViewController
             self.navigationController?.pushViewController(SVC, animated: true)
-        case .icons:
-            UIApplication.shared.open(URL(string: Constants.icons8Link)!)
         case .instagram:
             UIApplication.shared.open(URL(string: Constants.instagramLink)!)
         case .website:

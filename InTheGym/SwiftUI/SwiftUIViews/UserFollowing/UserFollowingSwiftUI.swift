@@ -29,7 +29,7 @@ struct UserFollowingSwiftUI: View {
             }
             Spacer()
             VStack {
-                Image(user.accountType == .coach ? "coach_icon" : "player_icon")
+                Image(uiImage: user.accountType == .coach ? UIImage.legacyIcon("person.badge.shield.checkmark.fill") : UIImage.legacyIcon("figure.run"))
                     .resizable()
                     .frame(width: 30, height: 30)
                 Text(user.accountType == .coach ? "Coach" : "Player")

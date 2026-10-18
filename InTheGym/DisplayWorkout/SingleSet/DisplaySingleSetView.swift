@@ -57,7 +57,7 @@ class DisplaySingleSetView: UIView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.backgroundColor = .clear
-        view.image = UIImage(named: "clock_icon")
+        view.image = UIImage.legacyIcon("clock.fill")
         view.heightAnchor.constraint(equalToConstant: 48).isActive = true
         view.widthAnchor.constraint(equalToConstant: 48).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -77,7 +77,7 @@ class DisplaySingleSetView: UIView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.backgroundColor = .clear
-        view.image = UIImage(named: "distance_icon")
+        view.image = UIImage.legacyIcon("arrow.left.and.right")
         view.heightAnchor.constraint(equalToConstant: 48).isActive = true
         view.widthAnchor.constraint(equalToConstant: 48).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -97,7 +97,7 @@ class DisplaySingleSetView: UIView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.backgroundColor = .clear
-        view.image = UIImage(named: "restTime_icon")
+        view.image = UIImage.legacyIcon("hourglass")
         view.heightAnchor.constraint(equalToConstant: 48).isActive = true
         view.widthAnchor.constraint(equalToConstant: 48).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -105,13 +105,13 @@ class DisplaySingleSetView: UIView {
     }()
     var timerView: UIImageLabelView = {
         var view = UIImageLabelView()
-        view.configureView(image: UIImage(named: "clock_icon")!, label: "Timer")
+        view.configureView(image: UIImage.legacyIcon("clock.fill"), label: "Timer")
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     var calculatorView: UIImageLabelView = {
         var view = UIImageLabelView()
-        view.configureView(image: UIImage(named: "calculator_icon")!, label: "Calculator")
+        view.configureView(image: UIImage.legacyIcon("plus.forwardslash.minus"), label: "Calculator")
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

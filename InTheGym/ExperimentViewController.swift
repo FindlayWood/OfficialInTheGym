@@ -25,7 +25,7 @@ class ExperimentViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "WorkoutCell") as! TimeLineTableViewCell
-        cell.profileImage.image = UIImage(named: "coach_icon")
+        cell.profileImage.image = UIImage.legacyIcon("person.badge.shield.checkmark.fill")
         cell.username.text = "Big Barry"
         cell.time.text = "12 June 15:40"
         return cell
