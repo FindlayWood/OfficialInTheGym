@@ -26,7 +26,7 @@ struct StatsSamplePreviewBanner: View {
                     .foregroundStyle(Color.white)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
-                    .background(Capsule().fill(Color.darkColor))
+                    .background(Capsule().fill(Color.premiumColor))
             }
 
             Text("Twelve weeks of example training. Stats are part of INTHEGYM pro, and everything you log is counted from day one, so your history is here whenever you subscribe.")

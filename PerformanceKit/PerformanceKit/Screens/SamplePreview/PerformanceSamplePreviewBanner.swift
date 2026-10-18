@@ -24,7 +24,7 @@ struct PerformanceSamplePreviewBanner: View {
                     .foregroundStyle(Color.white)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
-                    .background(Capsule().fill(Color.darkColor))
+                    .background(Capsule().fill(Color.premiumColor))
             }
 
             Text("Ten weeks of example jump tests. Measure jumps on your phone's camera and check every week whether you're fresh or fatigued — part of INTHEGYM pro.")

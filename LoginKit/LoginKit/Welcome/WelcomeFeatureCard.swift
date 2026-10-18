@@ -44,7 +44,7 @@ struct WelcomeFeatureCard: View {
                                 .foregroundStyle(Color.white)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(Capsule().fill(Color.darkColor))
+                                .background(Capsule().fill(Color.premiumColor))
                         }
                     }
                     Text(feature.subtitle)

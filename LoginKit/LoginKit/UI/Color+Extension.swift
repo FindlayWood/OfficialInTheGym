@@ -28,6 +28,12 @@ extension Color {
     /// **Pages use `pageColor`; controls use `darkColor`.**
     static let pageColor = Color(light: Color(hex: 0x1C496E), dark: Color(UIColor.systemGroupedBackground))
 
+    /// The app's `premiumColour` colorset (`#79B49F`), which a framework cannot read from the app's
+    /// asset catalog. **Keep in step with StatsKit's, ProfileKit's and PerformanceKit's copies.** A
+    /// **semantic** colour marking pro — here only the PRO tags on the welcome screen's cards, so
+    /// the pro features are marked in the same green the paywall and the pro tabs use.
+    static let premiumColor = Color(hex: 0x79B49F)
+
     /// A colour that follows the appearance (light / dark) of whatever draws it.
     init(light: Color, dark: Color) {
         self.init(uiColor: UIColor { traits in
