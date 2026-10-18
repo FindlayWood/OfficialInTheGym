@@ -78,6 +78,14 @@ struct WelcomeView: View {
                 .foregroundStyle(Color.darkColor)
                 .padding(.top, 12)
 
+            // The tone, then what the app does. "Powering elite athletes" was considered and set
+            // aside: it claims who uses the app, and reads as "not for me" to most people
+            // downloading it — revisit once there are athletes to name.
+            Text("Train like an athlete.")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(Color.primary)
+                .padding(.top, 4)
+
             Text("Plan your training, log every set, and see it add up.")
                 .font(.system(size: 15))
                 .foregroundStyle(Color.secondary)
