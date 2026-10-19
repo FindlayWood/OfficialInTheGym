@@ -142,6 +142,35 @@ people try is what they get.
 - Rest is 20s, and "Cancel Workout" leaves without a confirmation (`confirmsCancel: false`) —
   there is nothing to lose.
 
+### Welcome on MyDay — after signup
+Signup used to end on an empty day with nothing that said hello. On the signup day MyDay now opens
+with `MyDayWelcomeCard` above the timeline ("Day one", a greeting, the check in → train → rate
+line, **Getting started**); on any later visit to that day it is the quieter `MyDayJoinedRow`.
+
+- **A card on the page, never a pager or a tour.** It comes straight after the paywall, and a step
+  that only tells is what account creation cut. Spotlights were rejected for the demo for a
+  reason that still holds: the set detail overlay owns the full-screen layer.
+- **Derived from `Users.createdDate`, never a stored "seen" flag** (`MyDayWelcome`, built in
+  `MyDayKitComposition`). It shows on every device and becomes a landmark in the user's history
+  rather than something to dismiss. The day is judged in **`Calendar.current`**, as MyDay's
+  strip is, **not `StatsDay`'s UTC**.
+- **`MyDayGettingStartedScreen` is a list read in any order**: Your day (in the marker colours),
+  Try it (rows that *do*: practice workout, log an exercise, build a workout), and Good to know
+  (only what the screen cannot show, chiefly the set pill's circle). It sells nothing.
+- **The practice workout is `MyDayDemoWorkoutRouter`** on MyDay's stack, which saves nothing.
+  With no `onSignUp`, its finished screen drops Create Account and offers "Back to MyDay".
+- **The date strip starts at the signup day** (`MyDayWelcome.daysSinceSignup`, which never goes
+  below 0), at most a month back as before. Before the signup day there is nothing to find, and
+  blank pills would read as missed days. `MyDayWeekCard` takes its reachable range from the same
+  dates, so days before signup draw dimmed there too.
+- **The signup day carries `MyDaySignupBadge`**, the welcome card's sparkles, on its strip pill
+  and week-card cell, with a "Joined" legend entry while it is in range. It is a badge, not an
+  outline (in the week card an outline means the day being viewed) and not a fourth dot (a dot's
+  slot is its meaning).
+- **Second way in: Settings → About → Getting Started.** `ProfileKitRouter.onOpenGettingStarted`
+  is `nil` on routers other than the player tab's, and the row is then left out.
+  `PlayerInitialViewController` switches to MYDAY and calls `MyDayCoordinator.showGettingStarted()`.
+
 ### Verify email — `VerifyAccountView`
 Sits between signup and account creation, polling `user.reload()` every two seconds and moving on by
 itself once the address is verified.

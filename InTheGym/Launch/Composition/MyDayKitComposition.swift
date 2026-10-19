@@ -15,6 +15,9 @@ class MyDayKitComposition {
     /// MyDay's workout library, for DISCOVER's "Save to Library" — the same
     /// saver and manager MyDay itself uses. Set by `composeCombination`.
     private(set) var workoutLibrary: MyDayWorkoutLibrary?
+    /// Opens MyDay's Getting Started, for Settings on the PROFILE tab. Holds the
+    /// coordinator weakly — the tab's stack owns it. Set by `composeCombination`.
+    private(set) var showGettingStarted: (() -> Void)?
     
     func composeCombination(_ navigationController: UINavigationController, purchaseManager: PurchaseManager) {
         let loader: ExerciseLoader = FirebaseExerciseLoader()
@@ -126,8 +129,15 @@ class MyDayKitComposition {
             workoutManager: workoutManager,
             workoutLibraryManager: workoutLibraryManager,
             // Recording and watching clips are pro; logging is not.
-            proAccess: PurchaseManagerProAccess(purchaseManager: purchaseManager)
+            proAccess: PurchaseManagerProAccess(purchaseManager: purchaseManager),
+            // Read off the cached user, like the uid above: the signup day is
+            // derived from `createdDate` on every render, never stored.
+            welcome: MyDayWelcome(
+                name: UserDefaults.currentUser.displayName,
+                signupDate: UserDefaults.currentUser.createdDate
+            )
         )
+        showGettingStarted = { [weak coordinator] in coordinator?.showGettingStarted() }
         coordinator.onShowPaywall = { [weak navigationController] in
             navigationController?.present(ProPaywallViewController.modal(purchaseManager: purchaseManager), animated: true)
         }

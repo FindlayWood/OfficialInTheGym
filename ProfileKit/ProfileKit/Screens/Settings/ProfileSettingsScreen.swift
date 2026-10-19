@@ -160,6 +160,11 @@ struct ProfileSettingsScreen: View {
 
     private var aboutSection: some View {
         ProfileSettingsSection(title: "About") {
+            if let onOpenGettingStarted = viewModel.onOpenGettingStarted {
+                ProfileSettingsRow(icon: "sparkles", title: "Getting Started") {
+                    onOpenGettingStarted()
+                }
+            }
             ProfileSettingsRow(icon: "info.circle", title: "About INTHEGYM") {
                 viewModel.onOpenAbout?()
             }

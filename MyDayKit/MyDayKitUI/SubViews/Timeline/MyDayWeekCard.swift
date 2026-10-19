@@ -25,6 +25,7 @@ struct MyDayWeekCard: View {
     let reachable: ClosedRange<Date>
     let markers: (Date) -> MyDayDayMarkers
     let onSelect: (Date) -> Void
+    var isSignupDay: (Date) -> Bool = { _ in false }
 
     private let calendar = Calendar.current
 
@@ -51,6 +52,7 @@ struct MyDayWeekCard: View {
                         markers: markers(day),
                         isCurrent: calendar.isDate(day, inSameDayAs: date),
                         isReachable: reachable.contains(day),
+                        isSignupDay: isSignupDay(day),
                         onTap: { onSelect(day) }
                     )
                 }

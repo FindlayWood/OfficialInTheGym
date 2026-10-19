@@ -18,6 +18,10 @@ import UIKit
 /// demo set landing in someone's stats after they sign up would be a lie. Do
 /// not wire a saver into this flow.
 ///
+/// It is also MyDay's "Practice workout" in Getting Started, after signup. There
+/// it is built with no `onSignUp`, and the finished screen drops Create Account
+/// and says the session was practice.
+///
 /// It pushes onto the navigation stack it is given (LoginKit's), so back from
 /// the session returns to the welcome screen. "Complete Workout" lands on
 /// `MyDayDemoWorkoutFinishedScreen`, whose Create Account calls `onSignUp` —
@@ -69,6 +73,10 @@ public final class MyDayDemoWorkoutRouter {
             confirmsCancel: false
         )
         let vc = NavBarHidingHostingController(rootView: screen)
+        // Pushed onto MyDay's stack from Getting Started, under the tab bar —
+        // which would sit over the start and finish bars. LoginKit's stack has
+        // no tab bar, so this changes nothing there.
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
 }
@@ -84,7 +92,9 @@ extension MyDayDemoWorkoutRouter {
             onComplete: { self.showFinished(manager: manager) },
             onBack: { self.navigationController?.popViewController(animated: true) }
         )
-        navigationController?.pushViewController(NavBarHidingHostingController(rootView: screen), animated: true)
+        let vc = NavBarHidingHostingController(rootView: screen)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     /// Replaces the session and summary rather than pushing over them, so
@@ -101,11 +111,12 @@ extension MyDayDemoWorkoutRouter {
             setsLogged: manager.totalSetsLogged,
             durationSeconds: duration,
             exerciseCount: manager.entry.template.exercises.count,
-            onCreateAccount: { self.onSignUp?() },
+            onCreateAccount: onSignUp.map { signUp in { signUp() } },
             onBack: { self.popToRoot() },
             onSeeStats: onSeeStats
         )
         let vc = NavBarHidingHostingController(rootView: screen)
+        vc.hidesBottomBarWhenPushed = true
 
         var stack = navigationController.viewControllers
         if let rootViewController, let rootIndex = stack.firstIndex(of: rootViewController) {

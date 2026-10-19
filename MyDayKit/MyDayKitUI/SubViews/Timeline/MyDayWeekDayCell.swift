@@ -15,6 +15,7 @@ struct MyDayWeekDayCell: View {
     let markers: MyDayDayMarkers
     let isCurrent: Bool
     let isReachable: Bool
+    var isSignupDay: Bool = false
     let onTap: () -> Void
 
     var body: some View {
@@ -35,6 +36,12 @@ struct MyDayWeekDayCell: View {
             .overlay {
                 RoundedRectangle(cornerRadius: 10)
                     .strokeBorder(isCurrent ? Color.darkColor : Color.clear, lineWidth: 1.5)
+            }
+            .overlay(alignment: .topTrailing) {
+                if isSignupDay {
+                    MyDaySignupBadge(size: 12)
+                        .padding(3)
+                }
             }
         }
         .buttonStyle(.plain)
