@@ -223,15 +223,18 @@ struct WellnessSummaryCard: View {
 
             Spacer()
 
+            let scores = [
+                entry.sleepQuality,
+                entry.physicalReadiness,
+                entry.mentalEnergy,
+                entry.overallMood
+            ]
             HStack(spacing: 4) {
-                ForEach([
-                    entry.sleepQuality,
-                    entry.physicalReadiness,
-                    entry.mentalEnergy,
-                    entry.overallMood
-                ], id: \.rawValue) { score in
+                // Keyed by position, not by score: two answers of the same value
+                // are two dots, and keying by `rawValue` gave them one id.
+                ForEach(scores.indices, id: \.self) { index in
                     Circle()
-                        .fill(scoreColor(score))
+                        .fill(scoreColor(scores[index]))
                         .frame(width: 8, height: 8)
                 }
             }
