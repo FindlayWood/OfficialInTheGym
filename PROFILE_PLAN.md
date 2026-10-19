@@ -915,6 +915,14 @@ matters most:
       `Follows` create rule
 - [ ] Then steps 7–9 may ship together
 
+**Follow-up — join month on the profile card**
+- [ ] Deploy the updated `syncProfile` and `rebuildProfiles` from the functions
+      `profile-joined-month` branch (cut from `main`; it touches only `ProfileProjection.ts`)
+- [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, so every profile carries `joinedMonth`.
+      Until then other people's cards simply leave the line out
+- [ ] No rule change: `Profiles` is already readable by any signed-in user and written by
+      functions only
+
 **Step 10 — Account deletion**
 - [ ] Deploy `deleteAccount` from the functions `profile` branch
 - [ ] Check the single-field exemptions `deleteDiscoverData` needs (`authorId` on Ratings, Comments,

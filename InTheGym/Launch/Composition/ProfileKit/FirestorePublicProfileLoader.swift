@@ -23,7 +23,8 @@ struct FirestorePublicProfileLoader: PublicProfileLoader {
                 username: snapshot.get("username") as? String ?? "",
                 bio: snapshot.get("bio") as? String ?? "",
                 isVerified: snapshot.get("verified") as? Bool == true,
-                isElite: snapshot.get("elite") as? Bool == true
+                isElite: snapshot.get("elite") as? Bool == true,
+                joinedMonth: (snapshot.get("joinedMonth") as? Timestamp)?.dateValue()
             ),
             isPrivate: snapshot.get("isPrivate") as? Bool == true,
             counts: ProfileCounts(

@@ -12,13 +12,6 @@ struct MyDayHomeScreen: View {
     @Namespace var animation
     
     let calendar = Calendar.current
-    let dates: [Date] = {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        return (-3..<30).compactMap { offset in
-            calendar.date(byAdding: .day, value: -offset, to: today)
-        }.reversed()
-    }()
     
     @State private var dateDropDown: Bool = false
     @State private var selectedSet: ExerciseCompletions?
@@ -45,8 +38,28 @@ struct MyDayHomeScreen: View {
     var edit: ((MyDayNewExerciseManager) -> ())?
     var clipSelected: ((MyDayClipModel, UIImage, CGRect) -> ())?
     var startWorkout: ((DailyWorkoutEntry) -> ())?
-    
+    /// Who signed up and when; `nil` draws no welcome at all.
+    var welcome: MyDayWelcome?
+    var openGettingStarted: (() -> ())?
+
     private var isToday: Bool { dayManager.isTodaySelected() }
+
+    /// The strip's days, oldest first: three ahead of today, and back a month — **but never past
+    /// the day the user joined.** Before it there is nothing to find, and thirty blank pills read
+    /// as thirty missed days rather than days before the account existed. Everything that asks
+    /// what is reachable (`MyDayWeekCard`, the marker range) reads it from here, so the floor
+    /// holds everywhere.
+    private var dates: [Date] {
+        let today = calendar.startOfDay(for: Date())
+        let oldest = min(29, welcome?.daysSinceSignup(to: today, calendar: calendar) ?? 29)
+        return (-3...oldest).compactMap { offset in
+            calendar.date(byAdding: .day, value: -offset, to: today)
+        }.reversed()
+    }
+
+    private func isSignupDay(_ date: Date) -> Bool {
+        welcome?.isSignupDay(date, calendar: calendar) ?? false
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -187,6 +200,12 @@ struct MyDayHomeScreen: View {
                                         lineWidth: 0.5
                                     )
                             }
+                            .overlay(alignment: .topTrailing) {
+                                if isSignupDay(date) {
+                                    MyDaySignupBadge()
+                                        .offset(x: 5, y: -5)
+                                }
+                            }
                             .opacity(isFuture ? 0.3 : 1.0)
                             .onTapGesture {
                                 guard !isFuture else { return }
@@ -214,7 +233,7 @@ struct MyDayHomeScreen: View {
                 }
             }
 
-            MyDayDayMarkerLegend()
+            MyDayDayMarkerLegend(showsJoined: dates.contains(where: isSignupDay))
                 .padding(.horizontal, 16)
                 .padding(.bottom, 10)
         }
@@ -291,6 +310,8 @@ struct MyDayHomeScreen: View {
     private func activeTimeline(for day: MyDayFullDayModel, markers: MyDayDayMarkers) -> some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
+                welcomeHeader(for: day, hasTrained: markers.hasExercise)
+
                 MyDayTimelineStep(
                     kind: .checkIn,
                     state: nodeState(done: markers.hasCheckIn, available: true),
@@ -341,6 +362,9 @@ struct MyDayHomeScreen: View {
                 }
                 .padding(.bottom, 4)
 
+                welcomeHeader(for: day, hasTrained: false)
+                    .padding(.top, 12)
+
                 MyDayTimelineStep(kind: .checkIn, state: .missing, isFirst: true, spacing: 0) {
                     MyDayTimelineMissingRow(title: "Check-in")
                 }
@@ -360,7 +384,8 @@ struct MyDayHomeScreen: View {
                             withAnimation(.easeInOut(duration: 0.2)) {
                                 dayManager.changeSelectedDay(to: date)
                             }
-                        }
+                        },
+                        isSignupDay: isSignupDay
                     )
                     .padding(.top, 16)
                 }
@@ -373,6 +398,29 @@ struct MyDayHomeScreen: View {
             if let first = dates.first, let last = dates.last {
                 dayManager.loadDayMarkersIfNeeded(from: first, to: last)
             }
+        }
+    }
+
+    /// The day someone signed up: the welcome card while it is that day, the joined row on every
+    /// later visit to it, nothing on any other day. Full width, above the rail — it is not a step
+    /// of the day, so it does not get a node. See `MyDayWelcome` for why this is derived from the
+    /// signup date rather than a stored flag.
+    @ViewBuilder
+    private func welcomeHeader(for day: MyDayFullDayModel, hasTrained: Bool) -> some View {
+        if let welcome, welcome.isSignupDay(day.date) {
+            Group {
+                if isToday {
+                    MyDayWelcomeCard(
+                        firstName: welcome.firstName,
+                        hasTrained: hasTrained,
+                        onGettingStarted: { openGettingStarted?() }
+                    )
+                } else {
+                    MyDayJoinedRow(onGettingStarted: { openGettingStarted?() })
+                }
+            }
+            .padding(.leading, 4)
+            .padding(.bottom, 16)
         }
     }
 

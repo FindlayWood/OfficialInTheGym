@@ -70,6 +70,9 @@ public final class ProfileKitRouter {
     public var onShowPaywall: (() -> Void)?
     public var onManageSubscription: (() -> Void)?
     public var onOpenAbout: (() -> Void)?
+    /// MyDay's Getting Started, which ProfileKit cannot build. `nil` leaves the
+    /// row out of Settings — the coach tab bar has no MyDay to open it in.
+    public var onOpenGettingStarted: (() -> Void)?
     /// A clip from a profile grid, opened in DISCOVER's clip player, which
     /// ProfileKit cannot build. Set on every router, tab or embedded, by
     /// `ProfileKitComposition.makeRouter`.
@@ -228,6 +231,9 @@ extension ProfileKitRouter {
             viewModel.onShowPaywall = { [weak self] in self?.onShowPaywall?() }
             viewModel.onManageSubscription = { [weak self] in self?.onManageSubscription?() }
             viewModel.onOpenAbout = { [weak self] in self?.onOpenAbout?() }
+            if onOpenGettingStarted != nil {
+                viewModel.onOpenGettingStarted = { [weak self] in self?.onOpenGettingStarted?() }
+            }
             viewModel.onOpenBodyMeasurements = { [weak self] in self?.navigate(to: .bodyMeasurements) }
             viewModel.onOpenDeleteAccount = { [weak self] in self?.navigate(to: .deleteAccount) }
             let vc = UIHostingController(rootView: ProfileSettingsScreen(viewModel: viewModel))

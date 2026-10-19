@@ -142,6 +142,35 @@ people try is what they get.
 - Rest is 20s, and "Cancel Workout" leaves without a confirmation (`confirmsCancel: false`) —
   there is nothing to lose.
 
+### Welcome on MyDay — after signup
+Signup used to end on an empty day with nothing that said hello. On the signup day MyDay now opens
+with `MyDayWelcomeCard` above the timeline ("Day one", a greeting, the check in → train → rate
+line, **Getting started**); on any later visit to that day it is the quieter `MyDayJoinedRow`.
+
+- **A card on the page, never a pager or a tour.** It comes straight after the paywall, and a step
+  that only tells is what account creation cut. Spotlights were rejected for the demo for a
+  reason that still holds: the set detail overlay owns the full-screen layer.
+- **Derived from `Users.createdDate`, never a stored "seen" flag** (`MyDayWelcome`, built in
+  `MyDayKitComposition`). It shows on every device and becomes a landmark in the user's history
+  rather than something to dismiss. The day is judged in **`Calendar.current`**, as MyDay's
+  strip is, **not `StatsDay`'s UTC**.
+- **`MyDayGettingStartedScreen` is a list read in any order**: Your day (in the marker colours),
+  Try it (rows that *do*: practice workout, log an exercise, build a workout), and Good to know
+  (only what the screen cannot show, chiefly the set pill's circle). It sells nothing.
+- **The practice workout is `MyDayDemoWorkoutRouter`** on MyDay's stack, which saves nothing.
+  With no `onSignUp`, its finished screen drops Create Account and offers "Back to MyDay".
+- **The date strip starts at the signup day** (`MyDayWelcome.daysSinceSignup`, which never goes
+  below 0), at most a month back as before. Before the signup day there is nothing to find, and
+  blank pills would read as missed days. `MyDayWeekCard` takes its reachable range from the same
+  dates, so days before signup draw dimmed there too.
+- **The signup day carries `MyDaySignupBadge`**, the welcome card's sparkles, on its strip pill
+  and week-card cell, with a "Joined" legend entry while it is in range. It is a badge, not an
+  outline (in the week card an outline means the day being viewed) and not a fourth dot (a dot's
+  slot is its meaning).
+- **Second way in: Settings → About → Getting Started.** `ProfileKitRouter.onOpenGettingStarted`
+  is `nil` on routers other than the player tab's, and the row is then left out.
+  `PlayerInitialViewController` switches to MYDAY and calls `MyDayCoordinator.showGettingStarted()`.
+
 ### Verify email — `VerifyAccountView`
 Sits between signup and account creation, polling `user.reload()` every two seconds and moving on by
 itself once the address is verified.
@@ -590,7 +619,7 @@ call sites and drifted apart. Do not re-inline any of them:
 `WeightUnit.kilograms(_:unit:)` · `StatsDay.key(for:)` · `ACWR.Zone(ratio:)` ·
 `SessionSetInput.target(for:)` · `WorkoutTag.normalized(_:)` · `SessionSetPillValue.values(for:record:)` ·
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
-`ReportDocumentWriter` · `ProfileNamesReader` · `FollowsPageQuery` · `MyDayStoreLocation` ·
+`ReportDocumentWriter` · `ProfileNamesReader` · `ProfileJoinedMonth` · `FollowsPageQuery` · `MyDayStoreLocation` ·
 `PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix`
 
 ## Testing
@@ -1518,11 +1547,17 @@ DISCOVER and search only once report, block and account deletion are live.
 ### Two documents per person, and why
 - **`Users/{uid}` is private to its owner.** It holds the email and body measurements, and Firestore
   rules cannot hide fields, so after rollout nobody else may read it.
-- **`Profiles/{uid}` is the public projection**: name, @username, bio, stamps, `isPrivate`, the
-  follow and clip counts, and moderation's `status`. Only Cloud Functions write it (`syncProfile`,
+- **`Profiles/{uid}` is the public projection**: name, @username, bio, stamps, `isPrivate`,
+  `joinedMonth`, the follow and clip counts, and moderation's `status`. Only Cloud Functions write it (`syncProfile`,
   the counts triggers). **It is an allow-list**, and a field is public only if `profileProjection`
   copies it. Every read of another person (DISCOVER's author names, lists, search, profiles) goes
   here.
+- **`joinedMonth` is the signup month, never the signup moment.** `profileProjection` cuts
+  `Users.createdDate` to midnight UTC on the first of the month, since a public field should not
+  say more than the card shows ("Joined Oct 2026", under the @username, on everyone's card as a
+  trust signal). `ProfileJoinedMonth` is the one formatter, and it reads the date **in UTC**:
+  in the device's zone, anyone west of GMT would see the month before. It is optional on
+  `ProfileHeader`, and the line is left out until `rebuildProfiles` has run.
 - **`ProfileHighlights/{uid}`** is separate again, so a private account's PBs can be read-gated by
   the same "public, or an approved follower" check as its follow lists.
 - Your own header still comes from the cached `currentUser` (fresher after an edit); counts,

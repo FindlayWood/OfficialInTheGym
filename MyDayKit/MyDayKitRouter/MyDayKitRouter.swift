@@ -38,6 +38,8 @@ enum MyDaySheets: Identifiable {
             return "option"
         case .workoutSettings:
             return "workoutSettings"
+        case .gettingStarted:
+            return "gettingStarted"
         }
     }
     
@@ -45,6 +47,7 @@ enum MyDaySheets: Identifiable {
     case option
     
     case workoutSettings
+    case gettingStarted
 }
 
 enum MyDayFullScreenCover: Identifiable {

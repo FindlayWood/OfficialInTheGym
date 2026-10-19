@@ -60,6 +60,7 @@ final class ProfileSettingsViewModel: ObservableObject {
     var onShowPaywall: (() -> Void)?
     var onManageSubscription: (() -> Void)?
     var onOpenAbout: (() -> Void)?
+    var onOpenGettingStarted: (() -> Void)?
     var onOpenBodyMeasurements: (() -> Void)?
     var onOpenDeleteAccount: (() -> Void)?
 

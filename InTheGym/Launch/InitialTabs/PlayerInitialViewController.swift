@@ -60,7 +60,12 @@ class PlayerInitialViewController: UITabBarController {
         // ProfileKit. The coach tab bar still uses the legacy MyProfileCoordinator.
         let profileKit = ProfileKitComposition()
         let myProfileNavigationController = UINavigationController()
-        profileKit.composeCombination(myProfileNavigationController, purchaseManager: subscriptionManager)
+        // Settings' Getting Started is MyDay's: switch to the MYDAY tab, then open it there.
+        let showGettingStarted = myDayKit.showGettingStarted
+        profileKit.composeCombination(myProfileNavigationController, purchaseManager: subscriptionManager, openGettingStarted: { [weak self] in
+            self?.selectedIndex = 0
+            showGettingStarted?()
+        })
         myProfileNavigationController.tabBarItem = UITabBarItem(title: "MYPROFILE", image: UIImage(systemName: "person.fill"), tag: 4)
         
         viewControllers = [myDayNavigationController, discoverNavigationController, performanceNavigationController, statsKitNavigationController, myProfileNavigationController]

@@ -19,6 +19,11 @@ import Foundation
 ///
 /// **Premium is not here.** It is known only on the device (RevenueCat), so it
 /// can be true for the signed-in user and nobody else. See `ProfileStamp`.
+///
+/// `joinedMonth` is when the account was made, to the month — all
+/// `Profiles/{uid}` carries, so a public field never says more than the screen
+/// shows. `nil` for a profile the projection has not rebuilt since it gained the
+/// field, and the card then leaves the line out. See `ProfileJoinedMonth`.
 public struct ProfileHeader: Equatable, Sendable {
     public let userId: String
     public let displayName: String
@@ -26,6 +31,7 @@ public struct ProfileHeader: Equatable, Sendable {
     public let bio: String
     public let isVerified: Bool
     public let isElite: Bool
+    public let joinedMonth: Date?
 
     public init(
         userId: String,
@@ -33,7 +39,8 @@ public struct ProfileHeader: Equatable, Sendable {
         username: String,
         bio: String,
         isVerified: Bool,
-        isElite: Bool
+        isElite: Bool,
+        joinedMonth: Date? = nil
     ) {
         self.userId = userId
         self.displayName = displayName
@@ -41,5 +48,6 @@ public struct ProfileHeader: Equatable, Sendable {
         self.bio = bio
         self.isVerified = isVerified
         self.isElite = isElite
+        self.joinedMonth = joinedMonth
     }
 }

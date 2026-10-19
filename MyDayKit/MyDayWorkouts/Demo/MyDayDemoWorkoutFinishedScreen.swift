@@ -18,6 +18,10 @@ import SwiftUI
 ///
 /// The copy claims only what an account does for everyone: the work is saved
 /// and kept. It does not sell STATS here, which is pro.
+///
+/// **With no `onCreateAccount` the user already has an account** — this is the
+/// practice workout from MyDay's Getting Started. It then asks for nothing: the
+/// line says the session was practice, and "Back to MyDay" is the one button.
 struct MyDayDemoWorkoutFinishedScreen: View {
 
     let setsLogged: Int
@@ -42,7 +46,7 @@ struct MyDayDemoWorkoutFinishedScreen: View {
                 .foregroundStyle(Color.primary)
                 .padding(.top, 16)
 
-            Text("That's how every workout works. With an account, each set you log is saved to your day and kept in your history.")
+            Text(message)
                 .font(.system(size: 15))
                 .foregroundStyle(Color.secondary)
                 .multilineTextAlignment(.center)
@@ -70,27 +74,29 @@ struct MyDayDemoWorkoutFinishedScreen: View {
             Spacer()
 
             VStack(spacing: 10) {
-                Button {
-                    onCreateAccount?()
-                } label: {
-                    Text("Create Account")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(Color.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 52)
-                        .background(Color.darkColor)
-                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                if let onCreateAccount {
+                    Button {
+                        onCreateAccount()
+                    } label: {
+                        Text("Create Account")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(Color.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 52)
+                            .background(Color.darkColor)
+                            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    }
                 }
 
                 Button {
                     onBack?()
                 } label: {
-                    Text("Back to start")
+                    Text(isPractice ? "Back to MyDay" : "Back to start")
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(Color.darkColor)
+                        .foregroundStyle(isPractice ? Color.white : Color.darkColor)
                         .frame(maxWidth: .infinity)
                         .frame(height: 52)
-                        .background(Color.darkColor.opacity(0.12))
+                        .background(isPractice ? Color.darkColor : Color.darkColor.opacity(0.12))
                         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                 }
             }
@@ -99,6 +105,14 @@ struct MyDayDemoWorkoutFinishedScreen: View {
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground).ignoresSafeArea())
+    }
+
+    private var isPractice: Bool { onCreateAccount == nil }
+
+    private var message: String {
+        isPractice
+            ? "That's how every workout works. This one was practice, so nothing was saved."
+            : "That's how every workout works. With an account, each set you log is saved to your day and kept in your history."
     }
 
     // MARK: - Stats

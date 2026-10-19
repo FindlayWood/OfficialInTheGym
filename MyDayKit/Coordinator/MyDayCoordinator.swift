@@ -26,6 +26,8 @@ public final class MyDayCoordinator {
     let workoutManager: WorkoutBuilderManager
     let workoutLibraryManager: WorkoutLibraryManager
     let proAccess: MyDayProAccess
+    /// Marks the signup day on the home screen. `nil` draws no welcome.
+    let welcome: MyDayWelcome?
     
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
@@ -46,7 +48,8 @@ public final class MyDayCoordinator {
         clipViewRecorder: ViewClipRecorder,
         workoutManager: WorkoutBuilderManager,
         workoutLibraryManager: WorkoutLibraryManager,
-        proAccess: MyDayProAccess
+        proAccess: MyDayProAccess,
+        welcome: MyDayWelcome? = nil
     ) {
         self.navigationController = navigationController
         self.userId = userId
@@ -59,6 +62,7 @@ public final class MyDayCoordinator {
         self.workoutManager = workoutManager
         self.workoutLibraryManager = workoutLibraryManager
         self.proAccess = proAccess
+        self.welcome = welcome
     }
 
     // MARK: - Root
@@ -97,6 +101,10 @@ extension MyDayCoordinator {
             )
             display.startWorkout = { [weak self] entry in
                 self?.navigate(to: .workoutSession(entry))
+            }
+            display.welcome = welcome
+            display.openGettingStarted = { [weak self] in
+                self?.presentSheet(.gettingStarted)
             }
             let vc = MyDayBoundaryViewController()
             vc.display = display
@@ -302,6 +310,33 @@ extension MyDayCoordinator {
 
 extension MyDayCoordinator {
 
+    /// Opens Getting Started from outside MyDay — Settings, through the app.
+    /// Lands back on MyDay's root first so its "Try it" rows push from home,
+    /// where they would have from the welcome card.
+    public func showGettingStarted() {
+        if navigationController.presentedViewController != nil {
+            navigationController.dismiss(animated: false)
+        }
+        if let rootViewController {
+            navigationController.popToViewController(rootViewController, animated: false)
+        }
+        presentSheet(.gettingStarted)
+    }
+
+    private func dismissThen(_ action: @escaping (MyDayCoordinator) -> Void) {
+        navigationController.dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            action(self)
+        }
+    }
+
+    /// The welcome screen's example workout, on MyDay's stack. Nothing it logs
+    /// is saved — `MyDayDemoWorkoutRouter` wires no saver, by construction —
+    /// and with no `onSignUp` its finished screen offers no Create Account.
+    private func startPracticeWorkout() {
+        MyDayDemoWorkoutRouter(navigationController: navigationController).start()
+    }
+
     func presentSheet(_ sheet: MyDaySheets) {
         let vc: UIViewController
 
@@ -348,6 +383,26 @@ extension MyDayCoordinator {
                 rootView: WorkoutSettingsSheet(manager: workoutManager)
             )
             vc = hosting
+
+        case .gettingStarted:
+            // Each action closes the sheet first and pushes once it has gone,
+            // so the push lands on MyDay's stack rather than under the sheet.
+            vc = UIHostingController(
+                rootView: MyDayGettingStartedScreen(
+                    onClose: { [weak self] in
+                        self?.navigationController.dismiss(animated: true)
+                    },
+                    onPracticeWorkout: { [weak self] in
+                        self?.dismissThen { $0.startPracticeWorkout() }
+                    },
+                    onLogExercise: { [weak self] in
+                        self?.dismissThen { $0.navigate(to: .add) }
+                    },
+                    onBuildWorkout: { [weak self] in
+                        self?.dismissThen { $0.navigate(to: .workoutCreationHome) }
+                    }
+                )
+            )
 
         }
 
