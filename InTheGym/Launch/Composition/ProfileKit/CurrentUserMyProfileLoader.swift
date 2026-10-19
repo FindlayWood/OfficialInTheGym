@@ -28,7 +28,10 @@ struct CurrentUserMyProfileLoader: MyProfileLoader {
             username: user.username,
             bio: user.bio,
             isVerified: user.verifiedAccount,
-            isElite: user.eliteAccount
+            isElite: user.eliteAccount,
+            // The exact date, where Profiles holds only its month; the card
+            // shows the month either way, read in UTC as the server cut it.
+            joinedMonth: user.createdDate
         )
     }
 }

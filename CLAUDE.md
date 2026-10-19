@@ -590,7 +590,7 @@ call sites and drifted apart. Do not re-inline any of them:
 `WeightUnit.kilograms(_:unit:)` · `StatsDay.key(for:)` · `ACWR.Zone(ratio:)` ·
 `SessionSetInput.target(for:)` · `WorkoutTag.normalized(_:)` · `SessionSetPillValue.values(for:record:)` ·
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
-`ReportDocumentWriter` · `ProfileNamesReader` · `FollowsPageQuery` · `MyDayStoreLocation` ·
+`ReportDocumentWriter` · `ProfileNamesReader` · `ProfileJoinedMonth` · `FollowsPageQuery` · `MyDayStoreLocation` ·
 `PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix`
 
 ## Testing
@@ -1518,11 +1518,17 @@ DISCOVER and search only once report, block and account deletion are live.
 ### Two documents per person, and why
 - **`Users/{uid}` is private to its owner.** It holds the email and body measurements, and Firestore
   rules cannot hide fields, so after rollout nobody else may read it.
-- **`Profiles/{uid}` is the public projection**: name, @username, bio, stamps, `isPrivate`, the
-  follow and clip counts, and moderation's `status`. Only Cloud Functions write it (`syncProfile`,
+- **`Profiles/{uid}` is the public projection**: name, @username, bio, stamps, `isPrivate`,
+  `joinedMonth`, the follow and clip counts, and moderation's `status`. Only Cloud Functions write it (`syncProfile`,
   the counts triggers). **It is an allow-list**, and a field is public only if `profileProjection`
   copies it. Every read of another person (DISCOVER's author names, lists, search, profiles) goes
   here.
+- **`joinedMonth` is the signup month, never the signup moment.** `profileProjection` cuts
+  `Users.createdDate` to midnight UTC on the first of the month, since a public field should not
+  say more than the card shows ("Joined Oct 2026", under the @username, on everyone's card as a
+  trust signal). `ProfileJoinedMonth` is the one formatter, and it reads the date **in UTC**:
+  in the device's zone, anyone west of GMT would see the month before. It is optional on
+  `ProfileHeader`, and the line is left out until `rebuildProfiles` has run.
 - **`ProfileHighlights/{uid}`** is separate again, so a private account's PBs can be read-gated by
   the same "public, or an approved follower" check as its follow lists.
 - Your own header still comes from the cached `currentUser` (fresher after an edit); counts,

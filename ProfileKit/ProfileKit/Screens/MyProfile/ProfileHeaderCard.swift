@@ -18,6 +18,10 @@ import SwiftUI
 /// An empty bio draws nothing, not a prompt. This card is also what other people
 /// will see (step 7), and "Add a bio" on someone else's profile is a dead end.
 /// Prompting belongs on Edit Profile (step 3).
+///
+/// "Joined Oct 2026" under the @username is for whoever is looking: an account
+/// made yesterday reads differently from one a year old, which is worth knowing
+/// before trusting a comment or a workout.
 struct ProfileHeaderCard: View {
 
     let header: ProfileHeader
@@ -51,6 +55,11 @@ struct ProfileHeaderCard: View {
                 Text("@\(header.username)")
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(Color.secondary)
+                if let joinedMonth = header.joinedMonth {
+                    Text(ProfileJoinedMonth.text(for: joinedMonth))
+                        .font(.system(size: 13))
+                        .foregroundStyle(Color.secondary)
+                }
             }
 
             if let counts {
