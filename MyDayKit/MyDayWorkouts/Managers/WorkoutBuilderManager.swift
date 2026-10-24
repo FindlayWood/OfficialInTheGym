@@ -150,7 +150,9 @@ public final class WorkoutBuilderManager: ObservableObject {
                             note: setManager.note,
                             eachSide: setManager.eachSide
                         )
-                    }
+                    },
+                    muscleGroups: manager.exercise.muscleGroups,
+                    movementPatterns: manager.exercise.movementPatterns
                 )
             },
             createdBy: userId,

@@ -52,6 +52,7 @@
 		E1C000000000000000001003 /* MyDayGettingStartedInfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C000000000000000000003 /* MyDayGettingStartedInfoRow.swift */; };
 		E1C000000000000000001004 /* MyDayGettingStartedActionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C000000000000000000004 /* MyDayGettingStartedActionRow.swift */; };
 		E1C000000000000000001005 /* MyDayGettingStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C000000000000000000005 /* MyDayGettingStartedScreen.swift */; };
+		E1C000000000000000001006 /* MyDaySignupBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C000000000000000000006 /* MyDaySignupBadge.swift */; };
 		E4C90B7A15D24F8E9A330002 /* CompletedWorkoutSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330001 /* CompletedWorkoutSession.swift */; };
 		E4C90B7A15D24F8E9A330004 /* MyDayManager+CompletedSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330003 /* MyDayManager+CompletedSessions.swift */; };
 		E5B29A4761D3C08A24F7B913 /* SessionSetPillValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93A7D615C40E2871FA6D385 /* SessionSetPillValue.swift */; };
@@ -179,7 +180,6 @@
 		F0F608412E4405B50015F260 /* MyDayKitRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F608402E4405B50015F260 /* MyDayKitRouter.swift */; };
 		F60D3B821E75C49A08B6D253 /* WorkoutSessionFinishBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1F70A2B863D5E1067A4B8 /* WorkoutSessionFinishBar.swift */; };
 		F78D7EFDEE3F43E9B0F0628A /* SessionSetUnitOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1071B8A726744C7BB57B2D36 /* SessionSetUnitOption.swift */; };
-		E1C000000000000000001006 /* MyDaySignupBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C000000000000000000006 /* MyDaySignupBadge.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -241,6 +241,7 @@
 		E1C000000000000000000003 /* MyDayGettingStartedInfoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayGettingStartedInfoRow.swift; sourceTree = "<group>"; };
 		E1C000000000000000000004 /* MyDayGettingStartedActionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayGettingStartedActionRow.swift; sourceTree = "<group>"; };
 		E1C000000000000000000005 /* MyDayGettingStartedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayGettingStartedScreen.swift; sourceTree = "<group>"; };
+		E1C000000000000000000006 /* MyDaySignupBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDaySignupBadge.swift; sourceTree = "<group>"; };
 		E4C90B7A15D24F8E9A330001 /* CompletedWorkoutSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedWorkoutSession.swift; sourceTree = "<group>"; };
 		E4C90B7A15D24F8E9A330003 /* MyDayManager+CompletedSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyDayManager+CompletedSessions.swift"; sourceTree = "<group>"; };
 		F00CD1712E4D2DBB0051042A /* MyDayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayManager.swift; sourceTree = "<group>"; };
@@ -366,7 +367,6 @@
 		F0F6082F2E42A20B0015F260 /* ExerciseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCategory.swift; sourceTree = "<group>"; };
 		F0F608402E4405B50015F260 /* MyDayKitRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayKitRouter.swift; sourceTree = "<group>"; };
 		F4A9D8B26C3E4718B52A0E67 /* SessionSetMeasure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetMeasure.swift; sourceTree = "<group>"; };
-		E1C000000000000000000006 /* MyDaySignupBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDaySignupBadge.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */

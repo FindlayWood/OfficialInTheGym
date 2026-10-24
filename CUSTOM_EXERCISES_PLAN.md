@@ -50,7 +50,13 @@ too.
 
 ## Steps
 
-### 1. Server — one exercise lookup
+### 1. Server — one exercise lookup — **built**
+The app side is on `exercise-model`. The functions side is on `log-body-parts` in
+`InTheGym-CloudFunctions`, as `MyDay/DailyStats/LogBody.ts`. That branch also fixed a worse bug:
+Update and Delete wrote the volume maps with `update()` and a nested map, which wiped the day's
+other muscle groups on every edit or delete. Days already affected are not repaired; a backfill
+over `RawLogs` would rebuild them.
+
 `DailyStatsFromRawLogCreate`, `…Update` and `…Delete` each read `Exercises/${exerciseID}`
 separately. Replace all three with one helper, `exerciseBody(db, exerciseId)`, which reads
 `Exercises/{id}` and then `CustomExercises/{id}`. This is the only server change needed for a

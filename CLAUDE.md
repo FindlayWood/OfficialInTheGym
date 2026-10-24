@@ -1680,6 +1680,14 @@ how the user happened to record it.**
   existing, and it is offered whatever the status; logs left behind would count toward stats for a
   workout the user can no longer see.
 - `finishSession` writes no logs — the sets were logged as they happened.
+- **Each raw log carries the `muscleGroups` / `movementPatterns` it was counted under**, fixed at
+  completion: from the picked `Exercise` on the standalone path, and from the template's
+  `WorkoutExerciseModel` in a session (the builder copies them on, as it does `exerciseName`).
+  The DailyTotals triggers read the log's copy through `LogBody.ts` in the functions, so an edit or
+  delete moves volume on exactly the groups it was added to. **Absent means unknown, not none:**
+  a log without the keys (older logs, older templates) makes the server look the exercise up, so
+  never coerce `nil` to `[]`. `WorkoutSessionManager.addSet` rebuilds the exercise and must carry
+  both fields.
 
 ## Completed Workout Sessions
 A finished session is written as a document of its own, to **two** paths, on `finishSession` only —
