@@ -37,9 +37,11 @@ public final class WorkoutBuilderManager: ObservableObject {
 
     @Published var title: String = ""
     @Published var exercises: [WorkoutExerciseBuilderManager] = []
-    /// Public by default — templates are shared unless the author opts out in
-    /// the options sheet.
-    @Published var isPublic: Bool = true
+    /// **Private by default** — a template reaches DISCOVER only when the
+    /// author turns it public in the options sheet. It used to default to
+    /// public, so every new user published their workouts without ever
+    /// choosing to, and found out from a stranger's rating.
+    @Published var isPublic: Bool = false
     @Published private(set) var tags: [String] = []
     @Published var uploadState: WorkoutUploadState = .idle
 
@@ -110,12 +112,12 @@ public final class WorkoutBuilderManager: ObservableObject {
     // MARK: - Reset
 
     /// Clears everything the builder collects, including the options sheet's
-    /// visibility and tags — a private workout must not leave the next one
-    /// private, or carry its tags into it.
+    /// visibility and tags — a public workout must not leave the next one
+    /// public, or carry its tags into it.
     private func reset() {
         title = ""
         exercises = []
-        isPublic = true
+        isPublic = false
         tags = []
     }
 
