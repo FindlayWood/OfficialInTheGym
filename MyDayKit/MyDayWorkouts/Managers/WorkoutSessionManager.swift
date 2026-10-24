@@ -103,11 +103,16 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
         // Re-logging an already-logged set rewrites the same raw log document,
         // so an edit corrects the stats rather than adding a second entry.
         let exerciseRecord = record.exerciseRecords[exIdx]
+        // The record's id is the template exercise's id, which is how the
+        // record was built from the template in the first place.
+        let templateExercise = entry.template.exercises.first { $0.id == exerciseRecord.id }
         onSetLogged?(
             exerciseRecord.setRecords[setIdx].getStats(
                 exerciseId: exerciseRecord.exerciseId,
                 exerciseName: exerciseRecord.exerciseName,
-                sessionId: sessionId
+                sessionId: sessionId,
+                muscleGroups: templateExercise?.muscleGroups,
+                movementPatterns: templateExercise?.movementPatterns
             )
         )
     }
@@ -186,7 +191,9 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
             orderIndex: exercise.orderIndex,
             sets: exercise.sets + [newSet],
             restSeconds: exercise.restSeconds,
-            notes: exercise.notes
+            notes: exercise.notes,
+            muscleGroups: exercise.muscleGroups,
+            movementPatterns: exercise.movementPatterns
         )
         entry.template = WorkoutTemplateModel(
             id: entry.template.id,
