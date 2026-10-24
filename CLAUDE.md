@@ -1637,6 +1637,10 @@ The catalogue is edited by hand-run scripts in `InTheGym-Scripts`, never by the 
   Custom exercises will make duplicate names normal.
 - **Writing to `Exercises/{id}` creates a DISCOVER card** (`discoverExerciseCard`). Anything
   that must stay private, such as custom exercises, cannot live there.
+- **Custom exercises are designed, not built — see `CUSTOM_EXERCISES_PLAN.md`.** They are written
+  to `Users/{uid}/CustomExercises` and a top-level `CustomExercises`, reviewed in the dashboards,
+  and promoted into `Exercises` under the **same id**. DISCOVER body-part votes are suggestions
+  only.
 - `ExerciseAudit.py` (read-only) reports exercises missing body fields, with unknown ids or
   categories, or with duplicate names. The emulator seeders take their body fields from
   `Emulator/ExerciseBody.py`.
