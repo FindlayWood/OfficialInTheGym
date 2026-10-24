@@ -18,7 +18,17 @@ extension WorkoutSetRecord {
     /// step with `ExerciseCompletions.getStats()` — anything either one records
     /// that the other does not becomes a gap in the stats that depends on how
     /// the user happened to log the work.
-    func getStats(exerciseId: String, exerciseName: String, sessionId: String) -> ExerciseStatsSaveModel {
+    ///
+    /// `muscleGroups` / `movementPatterns` come from the template's
+    /// `WorkoutExerciseModel`, the session's only record of the exercise; both
+    /// are `nil` for templates built before it carried them.
+    func getStats(
+        exerciseId: String,
+        exerciseName: String,
+        sessionId: String,
+        muscleGroups: [String]?,
+        movementPatterns: [String]?
+    ) -> ExerciseStatsSaveModel {
         ExerciseStatsSaveModel(
             id: WorkoutSetRecord.statsLogId(sessionId: sessionId, setId: id),
             exerciseID: exerciseId,
@@ -26,7 +36,9 @@ extension WorkoutSetRecord {
             dateComplete: completedAt ?? Date(),
             reps: reps ?? 0,
             weight: WeightUnit.kilograms(weight, unit: weightUnit),
-            time: time ?? 0
+            time: time ?? 0,
+            muscleGroups: muscleGroups,
+            movementPatterns: movementPatterns
         )
     }
 

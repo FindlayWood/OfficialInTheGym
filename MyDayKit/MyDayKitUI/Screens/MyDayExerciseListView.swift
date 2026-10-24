@@ -18,41 +18,58 @@ struct MyDayExerciseListView: View {
     var selectedExercise: ((MyDayNewExerciseManager) -> ())?
     var selectedWorkoutExercise: ((Exercise) -> ())?
     
+    /// A search looks across **every** category, not only the selected one.
+    /// It used to filter inside the selected chip, so "deadlift" typed while
+    /// Upper Body was selected found nothing, and the empty state blamed the
+    /// spelling.
     var filteredExercises: [Exercise] {
-        let base = exerciseManager.exercises
-            .filter { $0.category == selectedCategory }
-            .sorted { $0.name < $1.name }
-        
-        guard !searchText.isEmpty else { return base }
-        
-        return base.filter {
-            $0.name.lowercased().contains(searchText.lowercased())
-        }
+        let query = searchText.trimmingCharacters(in: .whitespaces)
+        let base = query.isEmpty
+            ? exerciseManager.exercises.filter { $0.category == selectedCategory }
+            : exerciseManager.exercises.filter { $0.name.localizedStandardContains(query) }
+        return base.sorted { $0.name < $1.name }
+    }
+
+    /// Only the categories the catalogue actually holds. `cardio` is a case
+    /// the enum keeps for decoding but the catalogue may have nothing in, and a
+    /// chip that always opens an empty list reads as broken. Every case shows
+    /// until the exercises have loaded, so the row does not jump about.
+    var availableCategories: [ExerciseCategory] {
+        let present = Set(exerciseManager.exercises.map(\.category))
+        guard !present.isEmpty else { return ExerciseCategory.allCases }
+        return ExerciseCategory.allCases.filter { present.contains($0) }
     }
     
+    /// No chip reads as selected while a search is showing every category;
+    /// tapping one clears the search and goes back to browsing it.
+    private func isSelected(_ category: ExerciseCategory) -> Bool {
+        searchText.isEmpty && selectedCategory == category
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             
             // ── Category filter ────────────────────────────────────────
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    ForEach(ExerciseCategory.allCases, id: \.self) { cat in
+                    ForEach(availableCategories, id: \.self) { cat in
                         Button {
                             withAnimation(.easeInOut(duration: 0.2)) {
                                 selectedCategory = cat
+                                searchText = ""
                             }
                         } label: {
                             Text(cat.title)
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(
-                                    selectedCategory == cat
+                                    isSelected(cat)
                                         ? Color.white
                                         : Color.primary
                                 )
                                 .padding(.horizontal, 14)
                                 .padding(.vertical, 8)
                                 .background(
-                                    selectedCategory == cat
+                                    isSelected(cat)
                                         ? Color.darkColor
                                         : Color(UIColor.secondarySystemBackground)
                                 )
@@ -60,7 +77,7 @@ struct MyDayExerciseListView: View {
                                 .overlay {
                                     Capsule()
                                         .stroke(
-                                            selectedCategory == cat
+                                            isSelected(cat)
                                                 ? Color.clear
                                                 : Color(UIColor.separator),
                                             lineWidth: 0.5
@@ -128,16 +145,19 @@ struct MyDayExerciseListView: View {
     
     private var exerciseList: some View {
         List {
-            ForEach(filteredExercises, id: \.name) { exercise in
+            // Keyed by id: two exercises may share a name, and keyed by name
+            // SwiftUI would draw one of them twice and drop the other.
+            ForEach(filteredExercises, id: \.id) { exercise in
                 Button {
                     let newExercise = MyDayNewExerciseManager(exercise: exercise)
                     selectedExercise?(newExercise)
                     selectedWorkoutExercise?(exercise)
                 } label: {
                     HStack(spacing: 12) {
-                        // Category colour dot
+                        // Category colour dot — the exercise's own, since a
+                        // search lists every category at once
                         Circle()
-                            .fill(selectedCategory.color.opacity(0.8))
+                            .fill(exercise.category.color.opacity(0.8))
                             .frame(width: 8, height: 8)
                         
                         Text(exercise.name)

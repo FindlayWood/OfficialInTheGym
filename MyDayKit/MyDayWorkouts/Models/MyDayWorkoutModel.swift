@@ -47,6 +47,14 @@ public struct WorkoutExerciseModel: Identifiable, Codable {
     public let sets: [WorkoutSetModel]
     public let restSeconds: Int?
     public let notes: String?
+    /// What the exercise worked, copied from the picked `Exercise` when the
+    /// template was built, as `exerciseName` is. A set logged in a session
+    /// knows the exercise only through this model, and its raw log records
+    /// these (see `ExerciseStatsSaveModel`). **Optional, and must stay so**:
+    /// every template already on disk and in Firestore lacks both, and a
+    /// required field would stop all of them decoding.
+    public let muscleGroups: [String]?
+    public let movementPatterns: [String]?
 
     public init(
         id: String,
@@ -56,7 +64,9 @@ public struct WorkoutExerciseModel: Identifiable, Codable {
         orderIndex: Int,
         sets: [WorkoutSetModel],
         restSeconds: Int? = nil,
-        notes: String? = nil
+        notes: String? = nil,
+        muscleGroups: [String]? = nil,
+        movementPatterns: [String]? = nil
     ) {
         self.id = id
         self.exerciseId = exerciseId
@@ -66,6 +76,8 @@ public struct WorkoutExerciseModel: Identifiable, Codable {
         self.sets = sets
         self.restSeconds = restSeconds
         self.notes = notes
+        self.muscleGroups = muscleGroups
+        self.movementPatterns = movementPatterns
     }
 }
 

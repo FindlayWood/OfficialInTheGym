@@ -68,7 +68,9 @@ struct ExerciseCompletions: Identifiable, Codable {
             dateComplete: dateCompleted,
             reps: reps,
             weight: WeightUnit.kilograms(weight, unit: weightUnit),
-            time: time ?? 0
+            time: time ?? 0,
+            muscleGroups: exercise.muscleGroups,
+            movementPatterns: exercise.movementPatterns
         )
     }
 }
