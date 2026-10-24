@@ -1618,6 +1618,29 @@ while `Users/{uid}` exists. It is idempotent. The app re-authenticates with the 
 device's day files, templates and sync queue only after the server succeeds. **A feature that adds
 per-user data adds it to one of the deletion modules** in `functions/src/Account/`.
 
+## Exercise Catalogue — `Exercises/{id}`
+The catalogue is edited by hand-run scripts in `InTheGym-Scripts`, never by the app. MyDayKit's
+`Exercise` is what the picker offers and what every logged exercise embeds.
+
+- **Category is the region; muscle groups are the body parts.** `category` (`ExerciseCategory`,
+  required) is what the picker filters on. `muscleGroups` (ids from `MuscleGroups`) and
+  `movementPatterns` (ids from `MovementTypes`) are the detail, and the DailyTotals function reads
+  both from `Exercises/{id}` to build training balance. The app ignored both until October 2026.
+- **Both are optional, and must stay that way.** `Exercise` is embedded in every day file through
+  `MyDayExerciseModel.exercise`, and none written before carries them.
+- **`FirebaseExerciseLoader` decodes per document**, like the template fetcher. One exercise with a
+  category the app does not know is skipped and logged rather than emptying the picker.
+- **`cardio` stays in `ExerciseCategory`** even if the catalogue holds none: it is a persisted
+  `Codable` enum. The picker shows only the categories that actually have exercises, so an empty
+  one never shows a chip.
+- **The picker's search looks across every category**, and rows are keyed by `id`, not `name`.
+  Custom exercises will make duplicate names normal.
+- **Writing to `Exercises/{id}` creates a DISCOVER card** (`discoverExerciseCard`). Anything
+  that must stay private, such as custom exercises, cannot live there.
+- `ExerciseAudit.py` (read-only) reports exercises missing body fields, with unknown ids or
+  categories, or with duplicate names. The emulator seeders take their body fields from
+  `Emulator/ExerciseBody.py`.
+
 ## Exercise Stats Raw Logs
 Two things are written when work is recorded, and **both paths write the same two things**:
 1. the whole day document — `Users/{uid}/MyDay/{yyyy-MM-dd}`, `setData(merge: true)` with the entire
@@ -1788,6 +1811,7 @@ appears on some screens and not others.
 | `WorkoutSessions/{sessionId}` | Firestore | same batch — analytics copy, the only one to gain `deletedAt` |
 | `Users/{uid}/WorkoutTemplates/{id}` | Firestore | `FirestoreWorkoutTemplateUploader` — the author's library, what `FirestoreWorkoutTemplateFetcher` reads |
 | `WorkoutTemplates/{id}` | Firestore | `FirestoreTopLevelWorkoutTemplateUploader` — every template, top level; both composed by `UserAndTopLevelWorkoutTemplateUploader` |
+| `Exercises/{id}` | Firestore | **scripts only** — the catalogue; every write also creates a `DiscoverExercises` card |
 | `Usernames/{username}` | Firestore | `FirestoreUsernameReserver` — **case-sensitive document id** |
 | `Clips/{clipId}` | Firestore | `FirestoreMetadataDecorator` — **not `TestClips`** (the Storage files still are) |
 | `DiscoverExercises/{id}`, `DiscoverWorkouts/{id}`, `DiscoverClips/{id}` | Firestore | **Cloud Functions only** — DISCOVER's cards |

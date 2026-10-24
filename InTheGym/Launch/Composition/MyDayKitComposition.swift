@@ -159,15 +159,23 @@ class MainThreadExerciseLoaderDecorator: ExerciseLoader {
 }
 
 class FirebaseExerciseLoader: ExerciseLoader {
-    
-    let firestoreService: FirestoreService
-    
-    init(firestoreService: FirestoreService = FirestoreManager.shared) {
-        self.firestoreService = firestoreService
-    }
-    
+
     func loadAll() async throws -> [Exercise] {
-        return try await firestoreService.readAll(at: "Exercises")
+        let snapshot = try await Firestore.firestore()
+            .collection("Exercises")
+            .getDocuments()
+
+        // Decode per document, as the template fetcher does. The catalogue is
+        // edited by hand-run scripts, and one exercise with a category the app
+        // does not know would otherwise empty the whole picker.
+        return snapshot.documents.compactMap { document in
+            do {
+                return try document.data(as: Exercise.self)
+            } catch {
+                print("❌ Skipping exercise \(document.documentID): \(error)")
+                return nil
+            }
+        }
     }
 }
 
