@@ -905,7 +905,9 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   with. A failed upload resets nothing; the input is what the user needs to retry.
   **`WorkoutSettingsSheet` binds to the manager**, not to its own `@State` — it used to hold
   visibility and tags locally while `buildTemplate()` hardcoded `isPublic: false, tags: nil`, so the
-  sheet changed nothing. `isPublic` defaults to **public**, and `reset()` restores that default.
+  sheet changed nothing. `isPublic` defaults to **private**, and `reset()` restores that default.
+  It defaulted to public until the persona reviews: every new user published to DISCOVER
+  without choosing to. **Publishing is opt-in — do not flip the default back.**
   The sheet's "Save to library" toggle is still local state and still does nothing.
 - **Tags are lowercase ASCII letters and digits only — `WorkoutTag.normalized(_:)` is the one
   definition.** No spaces, no punctuation; accents are folded ("Café" → "cafe"), anything else
