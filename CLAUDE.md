@@ -544,6 +544,15 @@ pill, active-state fill, tint and primary button is now `Color.darkColor` across
   `WorkoutSettingsSheet`. These used `accentColor` rather than `Color.blue` and so survived the first
   sweep — **grep for both.**
 
+**Every text input carries `.tint(Color.darkColor)` — the cursor and selection handles are an
+accent too.** A `TextField`, `TextEditor` or `SecureField` with no tint draws its blinking cursor in
+the environment's tint, which with no `AccentColor` asset is system blue — the one place the rule
+above hides, because nothing in the code says "blue". Put `.tint(Color.darkColor)` in the field's
+own modifier chain (or on a wrapper that holds only fields, as `PasswordField` does). On 25 October
+2026 fifteen framework fields lacked it, the custom exercise name field among them, and all were
+fixed. **Check for it on every new field.** The legacy UIKit `UITextField`s in the app target are
+not covered yet (their `tintColor`) and are fixed as they are touched, like their dark mode.
+
 ### Dark mode — brand navy in light, standard grouped surfaces in dark
 Dark mode is on: `UIUserInterfaceStyle = Light` was removed from `Info.plist`. The framework screens
 support it; the legacy UIKit screens do not yet and are fixed as they are touched.
@@ -790,9 +799,14 @@ the next user to sign in opened their library and saw the previous user's workou
   decoded is **left in place, not deleted**: the fetcher has always skipped those, its owner cannot
   be read off it, and destroying it gains nothing.
 
-Not covered, and still open: `WorkoutTemplateSyncService.stop()` has no caller, so signing out leaves
-its `NWPathMonitor` running and a second sign-in starts another one. The queue it flushes is
-uid-scoped, so it uploads the right data — this is a leak, not a correctness bug.
+**The sync services are held for the session.** `WorkoutTemplateSyncService` used to be a local in
+`MyDayKitComposition.composeCombination`, and the composition a local in
+`PlayerInitialViewController.viewDidLoad`, so nothing held it after launch: its flush and network
+monitor each hold it weakly, found it gone, and **a template queued offline was never retried** —
+it stayed on the phone, still visible in the library because the library reads local first. Now the
+tab bar holds the composition as a property, the composition holds both sync services (templates
+and custom exercises), and `Notification.signOut` stops them. **Do not build a sync service as a
+local again.**
 
 The loading skeleton mirrors the real row (icon tile, title bar, subtitle bar) under the same
 "Your Library" heading, so the list fills in rather than swapping layouts. It is only the local read;
@@ -1489,7 +1503,9 @@ people-only search, which is deleted. Rolled out 2026-10-25 — see `DISCOVER_PL
 - **Exercises are searched on the device.** The catalogue is small and curated, so
   `CatalogueExerciseSearchLoader` reads it once per router and `DiscoverExerciseMatcher` matches
   inside words and forgives one typo (a swap of two letters counts as one) for words of four
-  letters or more. **Never read workouts or people this way** — they grow with users.
+  letters or more. **It is the app's one exercise-name matcher**: MyDay's custom exercise form
+  reaches it through `SimilarExerciseFinder` (answered by `DiscoverSimilarExerciseFinder`) for
+  "did you mean…?" — do not write a second. **Never read workouts or people this way** — they grow with users.
 - **`DiscoverSearchQuery` is the one query rule** (`normalized`, `words`, `lookupToken`,
   `matches`) and **`DiscoverSearchPrefix` the one range** — do not re-derive either at a call
   site. `DiscoverSearchQuery.words` **must split exactly as the functions' `searchWords`**, and
@@ -1638,10 +1654,14 @@ The catalogue is edited by hand-run scripts in `InTheGym-Scripts`, never by the 
   Custom exercises will make duplicate names normal.
 - **Writing to `Exercises/{id}` creates a DISCOVER card** (`discoverExerciseCard`). Anything
   that must stay private, such as custom exercises, cannot live there.
-- **Custom exercises are designed, not built — see `CUSTOM_EXERCISES_PLAN.md`.** They are written
-  to `Users/{uid}/CustomExercises` and a top-level `CustomExercises`, reviewed in the dashboards,
-  and promoted into `Exercises` under the **same id**. DISCOVER body-part votes are suggestions
-  only.
+- **Custom exercises are built — see `CUSTOM_EXERCISES_PLAN.md`** (October 2026; not yet deployed
+  or released). Made from MyDay's exercise picker, saved local-first to
+  `Users/{uid}/CustomExercises` and a top-level `CustomExercises`, reviewed in both dashboards, and
+  promoted into `Exercises` under the **same id**, so the creator's history needs no migration.
+  DISCOVER shows what each exercise works and takes **body-part votes, which are suggestions
+  only** — a curator applies or dismisses them in the dashboards; nothing writes `Exercises` from
+  votes. **The Firestore rules and functions must be deployed before an app build that saves
+  custom exercises ships**, or every upload is refused.
 - `ExerciseAudit.py` (read-only) reports exercises missing body fields, with unknown ids or
   categories, or with duplicate names. The emulator seeders take their body fields from
   `Emulator/ExerciseBody.py`.
@@ -1825,7 +1845,11 @@ appears on some screens and not others.
 | `WorkoutSessions/{sessionId}` | Firestore | same batch — analytics copy, the only one to gain `deletedAt` |
 | `Users/{uid}/WorkoutTemplates/{id}` | Firestore | `FirestoreWorkoutTemplateUploader` — the author's library, what `FirestoreWorkoutTemplateFetcher` reads |
 | `WorkoutTemplates/{id}` | Firestore | `FirestoreTopLevelWorkoutTemplateUploader` — every template, top level; both composed by `UserAndTopLevelWorkoutTemplateUploader` |
-| `Exercises/{id}` | Firestore | **scripts only** — the catalogue; every write also creates a `DiscoverExercises` card |
+| `Exercises/{id}` | Firestore | **scripts and the two dashboards only** — the catalogue; every write also creates a `DiscoverExercises` card and (`seedExerciseTags`) its starting tags |
+| `Exercises/{id}/BodyVotes/{uid}` | Firestore | `FirestoreBodyVoteWriter` — a user's suggested muscle groups and patterns, whole set |
+| `BodySuggestions/{id}` | Firestore | **Cloud Functions only** (`discoverExerciseBodyVotes`) — the tally of BodyVotes; a curator may only dismiss |
+| `Users/{uid}/CustomExercises/{id}` | Firestore | `FirestoreCustomExerciseUploader` (merge); `status` mirrored by `syncCustomExerciseStatus` |
+| `CustomExercises/{id}` | Firestore | `FirestoreTopLevelCustomExerciseUploader` (merge) — the review copy; `status` set by the functions and the dashboards, never the app |
 | `Usernames/{username}` | Firestore | `FirestoreUsernameReserver` — **case-sensitive document id** |
 | `Clips/{clipId}` | Firestore | `FirestoreMetadataDecorator` — **not `TestClips`** (the Storage files still are) |
 | `DiscoverExercises/{id}`, `DiscoverWorkouts/{id}`, `DiscoverClips/{id}` | Firestore | **Cloud Functions only** — DISCOVER's cards |
@@ -1843,6 +1867,9 @@ appears on some screens and not others.
 | `Documents/MyDays/{uid}/{date}.json` | disk | `MyDayFileManagerSaver` |
 | `Documents/WorkoutTemplates/{uid}/{id}.json` | disk | `FileManagerWorkoutTemplateUploader` |
 | `Documents/PendingSync/workoutTemplates_{uid}.json` | disk | `SyncQueueWorkoutTemplateUploader` |
+| `Documents/CustomExercises/{uid}/{id}.json` | disk | `FileManagerCustomExerciseWriter` — `CustomExerciseStoreLocation` |
+| `Documents/PendingSync/customExercises_{uid}.json` | disk | `SyncQueueCustomExerciseUploader` |
+| `Documents/ExerciseBody/{muscleGroups,movementPatterns}.json` | disk | the muscle group / pattern list cache — `ExerciseBodyListStoreLocation`, not user-scoped |
 
 **The path lives on the model, never at the call site.** `FirebaseInstance` requires
 `var internalPath: String`, `FirebaseModel` requires `static var path: String`, and

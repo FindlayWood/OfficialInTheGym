@@ -79,6 +79,7 @@ struct DiscoverTagSheet: View {
     private var field: some View {
         HStack(spacing: 10) {
             TextField("Add a tag", text: $viewModel.query)
+                .tint(Color.darkColor)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .font(.system(size: 15))

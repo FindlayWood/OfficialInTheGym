@@ -28,6 +28,9 @@ public final class MyDayCoordinator {
     let proAccess: MyDayProAccess
     /// Marks the signup day on the home screen. `nil` draws no welcome.
     let welcome: MyDayWelcome?
+    /// What the custom exercise form needs. `nil` leaves Create out of the
+    /// exercise picker.
+    let customExercises: CustomExerciseDependencies?
     
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
@@ -49,7 +52,8 @@ public final class MyDayCoordinator {
         workoutManager: WorkoutBuilderManager,
         workoutLibraryManager: WorkoutLibraryManager,
         proAccess: MyDayProAccess,
-        welcome: MyDayWelcome? = nil
+        welcome: MyDayWelcome? = nil,
+        customExercises: CustomExerciseDependencies? = nil
     ) {
         self.navigationController = navigationController
         self.userId = userId
@@ -63,6 +67,7 @@ public final class MyDayCoordinator {
         self.workoutLibraryManager = workoutLibraryManager
         self.proAccess = proAccess
         self.welcome = welcome
+        self.customExercises = customExercises
     }
 
     // MARK: - Root
@@ -117,7 +122,45 @@ extension MyDayCoordinator {
                     exerciseManager: exerciseManager,
                     selectedExercise: { [weak self] exercise in
                         self?.navigate(to: .reps(exercise))
+                    },
+                    createExercise: customExercises == nil ? nil : { [weak self] name in
+                        self?.navigate(to: .createExercise(name))
                     }
+                )
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .createExercise(let name):
+            guard let customExercises else {
+                assertionFailure("Create is only offered when customExercises is set")
+                return UIViewController()
+            }
+            let existingExercises = exerciseManager.exercises
+            let vc = NavBarHidingHostingController(
+                rootView: CustomExerciseFormScreen(
+                    model: CustomExerciseFormModel(
+                        name: name,
+                        existingExercises: existingExercises,
+                        dependencies: customExercises
+                    ),
+                    // Carries on as if the new exercise had been picked — the
+                    // user came here to log it.
+                    onSaved: { [weak self] saved in
+                        guard let self else { return }
+                        exerciseManager.add(saved)
+                        replaceTopViewController(
+                            with: viewController(for: .reps(MyDayNewExerciseManager(exercise: saved.exercise)))
+                        )
+                    },
+                    // A similar exercise used instead: the same, with nothing saved.
+                    onPickExisting: { [weak self] exercise in
+                        guard let self else { return }
+                        replaceTopViewController(
+                            with: viewController(for: .reps(MyDayNewExerciseManager(exercise: exercise)))
+                        )
+                    },
+                    onBack: { [weak self] in self?.popBack() }
                 )
             )
             vc.hidesBottomBarWhenPushed = true
@@ -199,7 +242,8 @@ extension MyDayCoordinator {
                 clipLoader: clipLoader,
                 clipViewRecorder: clipViewRecorder,
                 workoutManager: workoutManager,
-                libraryManager: workoutLibraryManager
+                libraryManager: workoutLibraryManager,
+                customExercises: customExercises
             )
             sub.onWorkoutAddedToDay = { [weak self] in self?.popToCoordinatorRoot() }
             workoutCoordinator = sub
@@ -282,6 +326,16 @@ extension MyDayCoordinator {
 
     func popBack() {
         navigationController.popViewController(animated: true)
+    }
+
+    /// Swaps the screen on top for `viewController`, so back from it skips the
+    /// one it replaced — leaving a saved form under the next screen would let
+    /// back reopen it and save the exercise twice.
+    func replaceTopViewController(with viewController: UIViewController) {
+        var stack = navigationController.viewControllers
+        stack.removeLast()
+        stack.append(viewController)
+        navigationController.setViewControllers(stack, animated: true)
     }
 
     /// Pops back to this coordinator's own root VC, not the nav stack's root.

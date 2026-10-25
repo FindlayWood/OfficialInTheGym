@@ -55,6 +55,7 @@ struct MyDayNoteSelectorView: View {
                     }
                     
                     TextEditor(text: $noteText)
+                        .tint(Color.darkColor)
                         .font(.system(size: 15, weight: .regular))
                         .focused($isFocused)
                         .scrollContentBackground(.hidden)

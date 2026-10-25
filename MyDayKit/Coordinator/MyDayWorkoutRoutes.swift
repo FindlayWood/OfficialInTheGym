@@ -12,6 +12,8 @@ enum MyDayWorkoutRoutes {
     case templateDetail(WorkoutTemplateModel)
     case creation
     case exercise
+    /// The custom exercise form, its name filled in from the picker's search.
+    case createExercise(String)
     case sets(WorkoutExerciseBuilderManager)
     case reps(WorkoutExerciseBuilderManager)
     case units(WorkoutExerciseBuilderManager)

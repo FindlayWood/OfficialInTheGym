@@ -24,27 +24,42 @@ import Foundation
 /// written before this carries either key — a required field would stop every
 /// one of those days decoding (see *Workout Library Loading* in CLAUDE.md). A
 /// catalogue exercise nobody has tagged yet has neither, too.
+///
+/// **`isCompound` and `isUnilateral` are optional for the same reason.** The
+/// catalogue has carried both since the admin app was built, and a custom
+/// exercise is not saved without them (`CustomExercise`), but no day file
+/// written before now has either key.
 public struct Exercise: Codable, Hashable {
-    let id: String
-    let name: String
+    public let id: String
+    /// Public so the composition root can match names for the custom exercise
+    /// form (`SimilarExerciseFinder`).
+    public let name: String
     let category: ExerciseCategory
     /// Ids from `MuscleGroups` — `chest`, `quads`, `rotator_cuff`.
     let muscleGroups: [String]?
     /// Ids from `MovementTypes` — `hinge`, `push_horizontal`.
     let movementPatterns: [String]?
+    /// Works several joints at once — a squat, not a leg extension.
+    let isCompound: Bool?
+    /// Works one side at a time — a split squat, not a squat.
+    let isUnilateral: Bool?
 
     init(
         id: String,
         name: String,
         category: ExerciseCategory,
         muscleGroups: [String]? = nil,
-        movementPatterns: [String]? = nil
+        movementPatterns: [String]? = nil,
+        isCompound: Bool? = nil,
+        isUnilateral: Bool? = nil
     ) {
         self.id = id
         self.name = name
         self.category = category
         self.muscleGroups = muscleGroups
         self.movementPatterns = movementPatterns
+        self.isCompound = isCompound
+        self.isUnilateral = isUnilateral
     }
 
     static let pressUps = Exercise(

@@ -25,6 +25,9 @@ class MyDayWorkoutCoordinator {
     /// Held here so every route in the exercise-add flow can read/write it.
     let workoutManager: WorkoutBuilderManager
     let libraryManager: WorkoutLibraryManager
+    /// What the custom exercise form needs. `nil` leaves Create out of the
+    /// exercise picker.
+    let customExercises: CustomExerciseDependencies?
     
     // MARK: - Callbacks
 
@@ -48,7 +51,8 @@ class MyDayWorkoutCoordinator {
         clipLoader: ClipLoader,
         clipViewRecorder: ViewClipRecorder,
         workoutManager: WorkoutBuilderManager,
-        libraryManager: WorkoutLibraryManager
+        libraryManager: WorkoutLibraryManager,
+        customExercises: CustomExerciseDependencies? = nil
     ) {
         self.navigationController = navigationController
         self.exerciseManager = exerciseManager
@@ -59,6 +63,7 @@ class MyDayWorkoutCoordinator {
         self.clipViewRecorder = clipViewRecorder
         self.workoutManager = workoutManager
         self.libraryManager = libraryManager
+        self.customExercises = customExercises
     }
 
     // MARK: - Root
@@ -131,10 +136,45 @@ extension MyDayWorkoutCoordinator {
                     selectedWorkoutExercise: { [weak self] exercise in
                         let manager = WorkoutExerciseBuilderManager(exercise: exercise)
                         self?.navigate(to: .sets(manager))
+                    },
+                    createExercise: customExercises == nil ? nil : { [weak self] name in
+                        self?.navigate(to: .createExercise(name))
                     }
                 )
             )
             return vc
+        case .createExercise(let name):
+            guard let customExercises else {
+                assertionFailure("Create is only offered when customExercises is set")
+                return UIViewController()
+            }
+            let existingExercises = exerciseManager.exercises
+            return NavBarHidingHostingController(
+                rootView: CustomExerciseFormScreen(
+                    model: CustomExerciseFormModel(
+                        name: name,
+                        existingExercises: existingExercises,
+                        dependencies: customExercises
+                    ),
+                    // Carries on as if the new exercise had been picked, into
+                    // its sets.
+                    onSaved: { [weak self] saved in
+                        guard let self else { return }
+                        exerciseManager.add(saved)
+                        replaceTopViewController(
+                            with: viewController(for: .sets(WorkoutExerciseBuilderManager(exercise: saved.exercise)))
+                        )
+                    },
+                    // A similar exercise used instead: the same, with nothing saved.
+                    onPickExisting: { [weak self] exercise in
+                        guard let self else { return }
+                        replaceTopViewController(
+                            with: viewController(for: .sets(WorkoutExerciseBuilderManager(exercise: exercise)))
+                        )
+                    },
+                    onBack: { [weak self] in self?.popBack() }
+                )
+            )
         case .sets(let manager):
             let vc = UIHostingController(
                 rootView: MyDayWorkoutSetsScreen(
@@ -253,6 +293,15 @@ extension MyDayWorkoutCoordinator {
 
     func popBack() {
         navigationController.popViewController(animated: true)
+    }
+
+    /// Swaps the screen on top for `viewController`, so back skips the saved
+    /// form rather than reopening it — see `MyDayCoordinator`'s twin.
+    func replaceTopViewController(with viewController: UIViewController) {
+        var stack = navigationController.viewControllers
+        stack.removeLast()
+        stack.append(viewController)
+        navigationController.setViewControllers(stack, animated: true)
     }
 
     func popToRoot() {

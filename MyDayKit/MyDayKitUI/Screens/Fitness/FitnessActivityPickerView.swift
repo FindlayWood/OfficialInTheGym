@@ -113,6 +113,7 @@ struct FitnessActivityPickerView: View {
                     .foregroundStyle(Color.secondary)
                 
                 TextField("Search activities...", text: $searchText)
+                    .tint(Color.darkColor)
                     .font(.system(size: 15))
                     .focused($searchFocused)
                     .autocorrectionDisabled()

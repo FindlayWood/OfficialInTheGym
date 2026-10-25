@@ -26,6 +26,10 @@ final class WorkoutTemplateSyncService {
         self.syncQueue = syncQueue
     }
 
+    deinit {
+        monitor.cancel()
+    }
+
     // MARK: - Public
 
     /// Call on app launch and on user login.

@@ -26,7 +26,12 @@ import Foundation
 /// the first query word ("Bench Press" before "Incline Bench Press" for
 /// "bench"), then shorter names, then alphabetically — a fixed order, so the
 /// list does not reshuffle between keystrokes that score the same.
-enum DiscoverExerciseMatcher {
+///
+/// **Public, and the one exercise-name matcher in the app.** MyDay's custom
+/// exercise form asks "did you mean…?" through its own `SimilarExerciseFinder`,
+/// which the composition root answers with this — so a name that DISCOVER's
+/// search would find is exactly a name the form warns about.
+public enum DiscoverExerciseMatcher {
 
     static let typoMinimumLength = 4
 
@@ -35,22 +40,33 @@ enum DiscoverExerciseMatcher {
         in exercises: [DiscoverExerciseCard],
         limit: Int
     ) -> [DiscoverExerciseCard] {
+        search(query, in: exercises, name: \.name, limit: limit)
+    }
+
+    /// The items whose name matches `query`, best first, at most `limit`.
+    public static func search<Item>(
+        _ query: String,
+        in items: [Item],
+        name: (Item) -> String,
+        limit: Int
+    ) -> [Item] {
         let queryWords = DiscoverSearchQuery.words(query)
         guard !queryWords.isEmpty else { return [] }
-        let scored: [(card: DiscoverExerciseCard, score: Int, leads: Bool)] = exercises.compactMap { card in
-            let nameWords = DiscoverSearchQuery.words(card.name)
+        let scored: [(item: Item, name: String, score: Int, leads: Bool)] = items.compactMap { item in
+            let itemName = name(item)
+            let nameWords = DiscoverSearchQuery.words(itemName)
             guard let score = score(queryWords, against: nameWords) else { return nil }
-            return (card, score, nameWords.first?.hasPrefix(queryWords[0]) ?? false)
+            return (item, itemName, score, nameWords.first?.hasPrefix(queryWords[0]) ?? false)
         }
         return scored
             .sorted { lhs, rhs in
                 if lhs.score != rhs.score { return lhs.score < rhs.score }
                 if lhs.leads != rhs.leads { return lhs.leads }
-                if lhs.card.name.count != rhs.card.name.count { return lhs.card.name.count < rhs.card.name.count }
-                return lhs.card.name.localizedCaseInsensitiveCompare(rhs.card.name) == .orderedAscending
+                if lhs.name.count != rhs.name.count { return lhs.name.count < rhs.name.count }
+                return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
             }
             .prefix(limit)
-            .map(\.card)
+            .map(\.item)
     }
 
     /// The total score, or nil if any query word matches nothing.

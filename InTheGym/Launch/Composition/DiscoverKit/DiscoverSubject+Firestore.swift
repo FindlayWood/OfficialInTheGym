@@ -56,4 +56,11 @@ extension DiscoverSubject {
     func tagVotePath(userId: String) -> String {
         "\(documentPath)/TagVotes/\(userId)"
     }
+
+    /// One user's suggestion of what an exercise works — the whole set in one
+    /// document, like a tag vote. Exercises only; nothing votes on a workout's
+    /// body parts.
+    func bodyVotePath(userId: String) -> String {
+        "\(documentPath)/BodyVotes/\(userId)"
+    }
 }
