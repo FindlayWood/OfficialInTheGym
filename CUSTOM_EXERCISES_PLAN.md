@@ -155,7 +155,7 @@ twice. The name is trimmed with spaces collapsed and capped at 60 characters; mu
 grouped under their region; body parts are stored in the lists' order, not tap order.
 `FlowLayout` moved out of `WorkoutSettingsSheet` into `MyDayKit/MyDayKit/UI/` so both share it.
 
-### 7. Similar-exercise check
+### 7. Similar-exercise check — **built**
 - **While typing the name**, list close catalogue and own-custom matches under the field ("Did you
   mean Bench Press?"), each one tappable to pick it instead. MyDayKit declares a
   `SimilarExerciseFinder`; the composition root answers it with `DiscoverExerciseMatcher`, made
@@ -163,6 +163,16 @@ grouped under their region; body parts are stored in the lists' order, not tap o
 - **On Save**, a second check on the body: same movement pattern plus overlapping muscle groups,
   under a different name. Shown once as a confirmation ("Similar to Romanian Deadlift. Save
   anyway?"), never a block.
+
+As built: `DiscoverExerciseMatcher` is public with a generic `search(_:in:name:limit:)`, and the
+app's `DiscoverSimilarExerciseFinder` answers MyDayKit's `SimilarExerciseFinder` with it. Name
+matches (up to 3, from 3 characters) show under the name field as "Already in the list — use one
+instead?", each with a Use button. `ExerciseBodySimilarity` is the body check (tests:
+`ExerciseBodySimilarityTests`); `saveOrAskFirst()` asks on the first Save only, in
+`CustomExerciseSimilarDialog` — Use one of up to 3 matches, Save Anyway (the filled button), or
+Keep Editing. Using an existing exercise from either check carries on as if it had been picked,
+saving nothing. To let that card dim the whole screen, the form now hides the system bar
+(`NavBarHidingHostingController` + `MyDayWorkoutNavBar`), as the session and template screens do.
 
 ### 8. Server — rules, index, deletion — **built**
 - Rules:

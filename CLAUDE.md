@@ -1503,7 +1503,9 @@ people-only search, which is deleted. Rolled out 2026-10-25 — see `DISCOVER_PL
 - **Exercises are searched on the device.** The catalogue is small and curated, so
   `CatalogueExerciseSearchLoader` reads it once per router and `DiscoverExerciseMatcher` matches
   inside words and forgives one typo (a swap of two letters counts as one) for words of four
-  letters or more. **Never read workouts or people this way** — they grow with users.
+  letters or more. **It is the app's one exercise-name matcher**: MyDay's custom exercise form
+  reaches it through `SimilarExerciseFinder` (answered by `DiscoverSimilarExerciseFinder`) for
+  "did you mean…?" — do not write a second. **Never read workouts or people this way** — they grow with users.
 - **`DiscoverSearchQuery` is the one query rule** (`normalized`, `words`, `lookupToken`,
   `matches`) and **`DiscoverSearchPrefix` the one range** — do not re-derive either at a call
   site. `DiscoverSearchQuery.words` **must split exactly as the functions' `searchWords`**, and

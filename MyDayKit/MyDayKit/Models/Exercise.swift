@@ -30,8 +30,10 @@ import Foundation
 /// exercise is not saved without them (`CustomExercise`), but no day file
 /// written before now has either key.
 public struct Exercise: Codable, Hashable {
-    let id: String
-    let name: String
+    public let id: String
+    /// Public so the composition root can match names for the custom exercise
+    /// form (`SimilarExerciseFinder`).
+    public let name: String
     let category: ExerciseCategory
     /// Ids from `MuscleGroups` — `chest`, `quads`, `rotator_cuff`.
     let muscleGroups: [String]?

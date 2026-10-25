@@ -136,9 +136,14 @@ extension MyDayCoordinator {
                 assertionFailure("Create is only offered when customExercises is set")
                 return UIViewController()
             }
-            let vc = UIHostingController(
+            let existingExercises = exerciseManager.exercises
+            let vc = NavBarHidingHostingController(
                 rootView: CustomExerciseFormScreen(
-                    model: CustomExerciseFormModel(name: name, dependencies: customExercises),
+                    model: CustomExerciseFormModel(
+                        name: name,
+                        existingExercises: existingExercises,
+                        dependencies: customExercises
+                    ),
                     // Carries on as if the new exercise had been picked — the
                     // user came here to log it.
                     onSaved: { [weak self] saved in
@@ -147,7 +152,15 @@ extension MyDayCoordinator {
                         replaceTopViewController(
                             with: viewController(for: .reps(MyDayNewExerciseManager(exercise: saved.exercise)))
                         )
-                    }
+                    },
+                    // A similar exercise used instead: the same, with nothing saved.
+                    onPickExisting: { [weak self] exercise in
+                        guard let self else { return }
+                        replaceTopViewController(
+                            with: viewController(for: .reps(MyDayNewExerciseManager(exercise: exercise)))
+                        )
+                    },
+                    onBack: { [weak self] in self?.popBack() }
                 )
             )
             vc.hidesBottomBarWhenPushed = true

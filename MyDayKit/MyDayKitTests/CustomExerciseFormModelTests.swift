@@ -119,18 +119,78 @@ final class CustomExerciseFormModelTests: XCTestCase {
         XCTAssertTrue(saver.receivedMessages.isEmpty)
     }
 
+    // Asking on every Save would turn a nudge into a gate.
+    func test_saveOrAskFirst_asksOnceThenSaves() async {
+        let saver = CustomExerciseUploaderSpy()
+        let sut = makeSUT(saver: saver, existing: [similarPress])
+        await sut.loadOptions()
+        fillIn(sut)
+
+        let first = await sut.saveOrAskFirst()
+        XCTAssertNil(first)
+        XCTAssertEqual(sut.similarOnSave?.map(\.name), ["Overhead Press"])
+        XCTAssertTrue(saver.receivedMessages.isEmpty)
+
+        sut.similarOnSave = nil
+        let second = await sut.saveOrAskFirst()
+
+        XCTAssertNotNil(second)
+        XCTAssertEqual(saver.receivedMessages.count, 1)
+    }
+
+    func test_saveOrAskFirst_savesAtOnceWhenNothingIsSimilar() async {
+        let saver = CustomExerciseUploaderSpy()
+        let sut = makeSUT(saver: saver)
+        await sut.loadOptions()
+        fillIn(sut)
+
+        let saved = await sut.saveOrAskFirst()
+
+        XCTAssertNotNil(saved)
+        XCTAssertNil(sut.similarOnSave)
+    }
+
+    // One or two letters match almost anything and would fill the screen
+    // with suggestions before the user has said what they mean.
+    func test_nameMatches_deliversNothingBelowThreeCharacters() {
+        let sut = makeSUT(name: "Pr", existing: [similarPress], finder: EverythingFinder())
+
+        XCTAssertTrue(sut.nameMatches.isEmpty)
+    }
+
+    func test_nameMatches_deliversWhatTheFinderFinds() {
+        let sut = makeSUT(name: "Press", existing: [similarPress], finder: EverythingFinder())
+
+        XCTAssertEqual(sut.nameMatches.map(\.name), ["Overhead Press"])
+    }
+
     // MARK: - Helpers
+
+    private let similarPress = Exercise(
+        id: "ohp", name: "Overhead Press", category: .upperBody,
+        muscleGroups: ["chest", "shoulders"], movementPatterns: ["push_horizontal"]
+    )
+
+    private struct EverythingFinder: SimilarExerciseFinder {
+        func exercises(named name: String, in exercises: [Exercise], limit: Int) -> [Exercise] {
+            Array(exercises.prefix(limit))
+        }
+    }
 
     private func makeSUT(
         name: String = "",
-        saver: CustomExerciseUploading = CustomExerciseUploaderSpy()
+        saver: CustomExerciseUploading = CustomExerciseUploaderSpy(),
+        existing: [Exercise] = [],
+        finder: SimilarExerciseFinder = EmptySimilarExerciseFinder()
     ) -> CustomExerciseFormModel {
         CustomExerciseFormModel(
             name: name,
+            existingExercises: existing,
             dependencies: CustomExerciseDependencies(
                 saver: saver,
                 muscleGroups: PreviewExerciseMuscleGroupsLoader(),
                 movementPatterns: PreviewExerciseMovementPatternsLoader(),
+                similarExercises: finder,
                 userId: "user-1"
             )
         )

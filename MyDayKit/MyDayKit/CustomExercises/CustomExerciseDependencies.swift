@@ -18,6 +18,8 @@ public struct CustomExerciseDependencies {
     let saver: CustomExerciseUploading
     let muscleGroups: ExerciseMuscleGroupsLoader
     let movementPatterns: ExerciseMovementPatternsLoader
+    /// "Did you mean…?" while the name is typed.
+    let similarExercises: SimilarExerciseFinder
     /// The creator — the signed-in user, read once in the composition root.
     let userId: String
 
@@ -25,11 +27,13 @@ public struct CustomExerciseDependencies {
         saver: CustomExerciseUploading,
         muscleGroups: ExerciseMuscleGroupsLoader,
         movementPatterns: ExerciseMovementPatternsLoader,
+        similarExercises: SimilarExerciseFinder = EmptySimilarExerciseFinder(),
         userId: String
     ) {
         self.saver = saver
         self.muscleGroups = muscleGroups
         self.movementPatterns = movementPatterns
+        self.similarExercises = similarExercises
         self.userId = userId
     }
 }

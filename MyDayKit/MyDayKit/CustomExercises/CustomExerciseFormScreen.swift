@@ -15,6 +15,12 @@ import SwiftUI
 /// what it needs, so the user is never left wondering why. The name says it
 /// cannot be changed once saved: raw logs, templates and stats each keep the
 /// name they were written with, so a rename would split one exercise's history.
+///
+/// **Two similar-exercise checks, neither a block.** While the name is typed,
+/// close names already in the list are offered in place of making a copy;
+/// on the first Save, exercises that work the same way are shown once in
+/// `CustomExerciseSimilarDialog`. The system bar is hidden
+/// (`NavBarHidingHostingController`) so that card can dim the whole screen.
 struct CustomExerciseFormScreen: View {
 
     @StateObject var model: CustomExerciseFormModel
@@ -23,8 +29,37 @@ struct CustomExerciseFormScreen: View {
     /// Called with the saved exercise; the coordinator carries on as if it had
     /// been picked.
     var onSaved: (@MainActor (CustomExercise) -> Void)?
+    /// An existing exercise picked instead of making a new one.
+    var onPickExisting: ((Exercise) -> Void)?
+    var onBack: (() -> Void)?
 
     var body: some View {
+        VStack(spacing: 0) {
+            MyDayWorkoutNavBar(title: "New Exercise", onBack: onBack)
+            form
+        }
+        .background(Color(UIColor.systemBackground))
+        .task { await model.loadOptions() }
+        .overlay {
+            if let matches = model.similarOnSave {
+                CustomExerciseSimilarDialog(
+                    matches: matches,
+                    onUse: { exercise in
+                        model.similarOnSave = nil
+                        onPickExisting?(exercise)
+                    },
+                    onSaveAnyway: {
+                        model.similarOnSave = nil
+                        save()
+                    },
+                    onDismiss: { model.similarOnSave = nil }
+                )
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: model.similarOnSave != nil)
+    }
+
+    private var form: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 nameSection
@@ -46,11 +81,15 @@ struct CustomExerciseFormScreen: View {
             .padding(16)
         }
         .scrollDismissesKeyboard(.interactively)
-        .background(Color(UIColor.systemBackground))
         .safeAreaInset(edge: .bottom) { bottomBar }
-        .navigationTitle("New Exercise")
-        .navigationBarTitleDisplayMode(.inline)
-        .task { await model.loadOptions() }
+    }
+
+    private func save() {
+        Task {
+            if let saved = await model.saveOrAskFirst() {
+                onSaved?(saved)
+            }
+        }
     }
 
     // MARK: - Name
@@ -79,6 +118,52 @@ struct CustomExerciseFormScreen: View {
             Label("The name can't be changed after saving.", systemImage: "lock")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(Color.secondary)
+
+            nameMatches
+        }
+    }
+
+    /// "Already in the list" — each one tappable to use it instead.
+    @ViewBuilder
+    private var nameMatches: some View {
+        let matches = model.nameMatches
+        if !matches.isEmpty {
+            VStack(alignment: .leading, spacing: 0) {
+                Text("Already in the list — use one instead?")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Color.secondary)
+                    .padding(.horizontal, 14)
+                    .padding(.top, 12)
+                    .padding(.bottom, 4)
+                ForEach(matches, id: \.id) { exercise in
+                    Button {
+                        onPickExisting?(exercise)
+                    } label: {
+                        HStack(spacing: 10) {
+                            Circle()
+                                .fill(exercise.category.color.opacity(0.8))
+                                .frame(width: 8, height: 8)
+                            Text(exercise.name)
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundStyle(Color.primary)
+                            Spacer()
+                            Text("Use")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(Color.darkColor)
+                        }
+                        .padding(.horizontal, 14)
+                        .frame(height: 44)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.bottom, 4)
+            .background(
+                RoundedRectangle(cornerRadius: 14).fill(Color(UIColor.secondarySystemBackground))
+            )
+            .padding(.top, 4)
+            .transition(.opacity)
         }
     }
 
@@ -227,11 +312,7 @@ struct CustomExerciseFormScreen: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             Button {
-                Task {
-                    if let saved = await model.save() {
-                        onSaved?(saved)
-                    }
-                }
+                save()
             } label: {
                 ZStack {
                     if model.isSaving {

@@ -51,12 +51,46 @@ final class CustomExerciseFormModel: ObservableObject {
     @Published private(set) var options: Options = .loading
     @Published private(set) var isSaving = false
     @Published private(set) var saveError: String?
+    /// Exercises that work the same way, found on the first Save; non-nil
+    /// shows the "save anyway?" card.
+    @Published var similarOnSave: [Exercise]?
 
     private let dependencies: CustomExerciseDependencies
+    /// What the picker lists — the catalogue and the user's own — which both
+    /// similar-exercise checks look through.
+    private let existingExercises: [Exercise]
+    /// The body check asks once per form. Asking again on every Save would
+    /// turn a nudge into a gate.
+    private var hasAskedAboutSimilar = false
 
-    init(name: String = "", dependencies: CustomExerciseDependencies) {
+    init(name: String = "", existingExercises: [Exercise] = [], dependencies: CustomExerciseDependencies) {
         self.name = String(name.prefix(Self.maxNameLength))
+        self.existingExercises = existingExercises
         self.dependencies = dependencies
+    }
+
+    // MARK: - Similar exercises
+
+    /// A shorter name matches almost anything and says nothing yet.
+    static let nameMatchMinimumLength = 3
+
+    /// "Did you mean…?" — exercises already in the list whose name is close to
+    /// the one typed, best first. Each is offered in place of creating a copy.
+    var nameMatches: [Exercise] {
+        guard cleanedName.count >= Self.nameMatchMinimumLength else { return [] }
+        return dependencies.similarExercises.exercises(named: cleanedName, in: existingExercises, limit: 3)
+    }
+
+    /// Exercises that work the same way under another name — see
+    /// `ExerciseBodySimilarity`.
+    var bodyMatches: [Exercise] {
+        ExerciseBodySimilarity.matches(
+            muscleGroups: muscleGroups,
+            movementPatterns: movementPatterns,
+            excludingName: cleanedName,
+            in: existingExercises,
+            limit: 3
+        )
     }
 
     // MARK: - Validation
@@ -108,6 +142,23 @@ final class CustomExerciseFormModel: ObservableObject {
     }
 
     // MARK: - Save
+
+    /// Save, unless this is the first attempt and something already works
+    /// the same way — then `similarOnSave` is set and nothing is saved. It
+    /// asks once, never blocks: the next Save goes through.
+    @MainActor
+    func saveOrAskFirst() async -> CustomExercise? {
+        guard canSave else { return nil }
+        if !hasAskedAboutSimilar {
+            hasAskedAboutSimilar = true
+            let matches = bodyMatches
+            if !matches.isEmpty {
+                similarOnSave = matches
+                return nil
+            }
+        }
+        return await save()
+    }
 
     /// Saves and returns the exercise, or `nil` with `saveError` set. Only the
     /// local write can fail it; the remote copies are queued if they fail.

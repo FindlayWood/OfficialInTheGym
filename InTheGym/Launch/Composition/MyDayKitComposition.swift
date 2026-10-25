@@ -159,6 +159,7 @@ class MyDayKitComposition {
                 remote: RemoteMovementTypesLoader(),
                 cache: FileExerciseBodyListCache(url: ExerciseBodyListStoreLocation.movementPatterns)
             ),
+            similarExercises: DiscoverSimilarExerciseFinder(),
             userId: userId
         )
 
