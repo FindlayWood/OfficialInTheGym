@@ -4,9 +4,9 @@ Users create exercises the catalogue lacks. Each one is private to its creator, 
 to decide whether it joins the catalogue. DISCOVER users can suggest corrections to a catalogue
 exercise's muscle groups and movement patterns, and every suggestion goes through you.
 
-**Status: designed 24 October 2026, nothing built.** Part 1 is on the `exercise-model` branch: MyDayKit's
-`Exercise` now decodes `muscleGroups` / `movementPatterns`, and the picker keys rows by id and
-searches across categories. Everything below builds on it.
+**Status: designed 24 October 2026; building from 25 October.** Part 1 (MyDayKit's `Exercise`
+decodes `muscleGroups` / `movementPatterns`; the picker keys rows by id and searches across
+categories), step 1 and the admin app's merge fix are merged and deployed. Steps 2–11 are not.
 
 ## Decisions — agreed, do not relitigate
 - **A custom exercise is complete or it is not saved.** Name, category, at least one muscle group,
@@ -67,7 +67,7 @@ on a custom exercise has no exercise on its card. Decide whether it uses the sam
 
 **Logs carry their own body parts — decided.** Update and Delete used to look the exercise up
 again when they ran, not as it was when the log was counted. Once muscle groups are edited (step
-9), deleting an old log would take volume away from the *new* groups, and some would go negative.
+10), deleting an old log would take volume away from the *new* groups, and some would go negative.
 So:
 - `ExerciseStatsSaveModel` gains optional `muscleGroups` / `movementPatterns`, written at
   completion through **both** `getStats` paths. They must stay in step, as everything on that pair
@@ -80,7 +80,7 @@ So:
 - **The three triggers read the log's own copy** and fall back to `exerciseBody` only for a log
   without one: everything already logged, and sets from older templates. Create and Update must
   resolve a log identically, or the Update diff moves volume between groups.
-- This must ship before the suggestions queue (step 9) lets anyone edit muscle groups.
+- This must ship before the suggestions queue (step 10) lets anyone edit muscle groups.
 
 ### 2. MyDayKit — model
 - `Exercise` gains optional `isCompound` / `isUnilateral`, optional for the same reason as part 1:
@@ -141,7 +141,31 @@ would count as answered when it was not.
   documents that are `pending` / `rejected` / `duplicate`. Approved ones are catalogue by then and
   stay.
 
-### 9. Review — admin app and React dashboard
+### 9. One complete catalogue exercise — dashboards and starting tags
+An exercise created in either dashboard and an approved custom exercise (step 10) write the same
+document, `Exercises/{id}`, and must come out identical. **Every catalogue exercise carries
+every field**: `id`, `name`, `category`, `bodyArea` (a copy of `category`), `muscleGroups`,
+`movementPatterns`, `isCompound`, `isUnilateral`, `dateAdded`, `dateLastEdit`, and `tags`.
+
+- **The DISCOVER card is not the dashboard's job.** Any write to `Exercises/{id}` fires
+  `discoverExerciseCard` (the card) and `discoverExerciseTags` (the tag directory). A dashboard
+  writes a complete exercise and the server does the rest.
+- **The React dashboard's `UploadExercise` writes `id`, `name` and `category` only.** Its
+  create and edit forms gain the full field set, with muscle groups and patterns as multi-select
+  from `MuscleGroups` / `MovementTypes`, and compound / unilateral with neither preselected, as in
+  step 6. Its category values are wrong: it writes `upperBody` / `lowerBody`, but `ExerciseCategory`'s raw values are `upper_body` / `lower_body` / `core` / `cardio` / `full_body`, so the app's loader skips every exercise the React form has made. The form writes those raw values, gains `full_body`, and the exercises already written are corrected (`ExerciseAudit.py` lists unknown categories). The admin app's
+  `Exercise` decodes every field as required, so an exercise the React dashboard made today does
+  not load there.
+- **Starting tags come from one server function, `seedExerciseTags`**, on `Exercises/{id}`
+  writes. It unions the existing `tags` with the normalised `muscleGroups`, `movementPatterns`
+  and `category` — the rule `SeedExerciseTags.py` applies today — capped at 20, and writes only if
+  that changes them, so its own write ends the loop. Tags already on an exercise are never
+  removed. **The rule then lives only in the function**: the script's derivation is retired, not
+  kept alongside, and neither dashboard computes tags. Approving a custom exercise gets its tags
+  the same way.
+- `ExerciseAudit.py` reports any exercise still missing fields; run it after this ships.
+
+### 10. Review — admin app and React dashboard
 - **Pending queue**, grouped by normalised name across users, so five people's "landmine press" is
   one decision.
 - Each entry shows the creator's fields and the closest catalogue exercises.
@@ -150,11 +174,11 @@ would count as answered when it was not.
     **merge**, and set status `approved`.
   - **Duplicate of X**: set status `duplicate` with `duplicateOf`. The creator's copy stays theirs.
   - **Reject**: set status `rejected`.
-- **Body suggestions queue**: catalogue exercises whose votes (step 10) disagree with what is
+- **Body suggestions queue**: catalogue exercises whose votes (step 11) disagree with what is
   stored. Each shows the vote counts beside the current values, and an Apply button that merges the
   chosen values into `Exercises/{id}`.
 
-### 10. DISCOVER — showing and voting on body parts
+### 11. DISCOVER — showing and voting on body parts
 - The exercise card projection gains `muscleGroups` / `movementPatterns`. The exercise page shows
   "Works: Chest · Triceps · Horizontal push". Display names come from the `MuscleGroups` /
   `MovementTypes` documents, never prettified ids.
