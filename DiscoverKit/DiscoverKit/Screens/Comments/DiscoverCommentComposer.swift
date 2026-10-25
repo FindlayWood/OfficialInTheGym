@@ -36,6 +36,7 @@ struct DiscoverCommentComposer: View {
 
             HStack(alignment: .bottom, spacing: 10) {
                 TextField(viewModel.replyingTo == nil ? "Add a comment" : "Add a reply", text: $viewModel.draft, axis: .vertical)
+                    .tint(Color.darkColor)
                     .lineLimit(1...5)
                     .font(.system(size: 15))
                     .focused($isFocused)

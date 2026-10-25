@@ -242,6 +242,7 @@ struct WorkoutSessionSummaryScreen: View {
                         .allowsHitTesting(false)
                 }
                 TextEditor(text: $notes)
+                    .tint(Color.darkColor)
                     .focused($notesFocused)
                     .font(.system(size: 15))
                     .scrollContentBackground(.hidden)

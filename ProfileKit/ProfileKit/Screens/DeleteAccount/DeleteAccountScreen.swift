@@ -71,6 +71,7 @@ struct DeleteAccountScreen: View {
                     footer: "Enter your password to confirm it's you."
                 ) {
                     SecureField("Password", text: $viewModel.password)
+                        .tint(Color.darkColor)
                         .font(.system(size: 16))
                         .textContentType(.password)
                         .focused($passwordFocused)

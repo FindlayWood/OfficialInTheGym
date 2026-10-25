@@ -50,6 +50,7 @@ struct WorkoutSettingsSheet: View {
                         VStack(alignment: .leading, spacing: 10) {
                             HStack(spacing: 8) {
                                 TextField("Add a tag...", text: $tagInput)
+                                    .tint(Color.darkColor)
                                     .focused($tagFieldFocused)
                                     .font(.system(size: 15))
                                     .submitLabel(.done)

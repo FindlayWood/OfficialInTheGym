@@ -66,6 +66,7 @@ struct MyDayWorkoutCreationHomeScreen: View {
                             .font(.system(size: 16, weight: .medium))
                         
                         TextField("Workout title...", text: $manager.title)
+                            .tint(Color.darkColor)
                             .focused($isFocused)
                             .font(.system(size: 17, weight: .medium))
                             .submitLabel(.done)

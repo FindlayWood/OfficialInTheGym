@@ -56,6 +56,7 @@ struct SportNoteSelectorView: View {
                             .allowsHitTesting(false)
                     }
                     TextEditor(text: $noteText)
+                        .tint(Color.darkColor)
                         .font(.system(size: 15))
                         .focused($isFocused)
                         .scrollContentBackground(.hidden)

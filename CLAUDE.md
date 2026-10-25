@@ -544,6 +544,15 @@ pill, active-state fill, tint and primary button is now `Color.darkColor` across
   `WorkoutSettingsSheet`. These used `accentColor` rather than `Color.blue` and so survived the first
   sweep — **grep for both.**
 
+**Every text input carries `.tint(Color.darkColor)` — the cursor and selection handles are an
+accent too.** A `TextField`, `TextEditor` or `SecureField` with no tint draws its blinking cursor in
+the environment's tint, which with no `AccentColor` asset is system blue — the one place the rule
+above hides, because nothing in the code says "blue". Put `.tint(Color.darkColor)` in the field's
+own modifier chain (or on a wrapper that holds only fields, as `PasswordField` does). On 25 October
+2026 fifteen framework fields lacked it, the custom exercise name field among them, and all were
+fixed. **Check for it on every new field.** The legacy UIKit `UITextField`s in the app target are
+not covered yet (their `tintColor`) and are fixed as they are touched, like their dark mode.
+
 ### Dark mode — brand navy in light, standard grouped surfaces in dark
 Dark mode is on: `UIUserInterfaceStyle = Light` was removed from `Info.plist`. The framework screens
 support it; the legacy UIKit screens do not yet and are fixed as they are touched.

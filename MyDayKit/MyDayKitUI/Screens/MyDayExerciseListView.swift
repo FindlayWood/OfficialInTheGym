@@ -109,6 +109,7 @@ struct MyDayExerciseListView: View {
                     .foregroundStyle(Color.secondary)
                 
                 TextField("Search exercises...", text: $searchText)
+                    .tint(Color.darkColor)
                     .font(.system(size: 15))
                     .focused($searchFocused)
                     .autocorrectionDisabled()

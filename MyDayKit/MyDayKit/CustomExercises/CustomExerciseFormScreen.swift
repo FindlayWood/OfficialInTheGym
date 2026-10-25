@@ -60,6 +60,7 @@ struct CustomExerciseFormScreen: View {
             sectionHeader("Name")
 
             TextField("Exercise name", text: $model.name)
+                .tint(Color.darkColor)
                 .focused($nameFocused)
                 .font(.system(size: 17, weight: .medium))
                 .submitLabel(.done)

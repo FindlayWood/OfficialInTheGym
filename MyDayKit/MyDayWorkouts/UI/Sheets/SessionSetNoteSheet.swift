@@ -106,6 +106,7 @@ struct SessionSetNoteSheet: View {
             }
 
             TextEditor(text: $note)
+                .tint(Color.darkColor)
                 .font(.system(size: 15, weight: .regular))
                 .foregroundStyle(Color.primary)
                 .scrollContentBackground(.hidden)

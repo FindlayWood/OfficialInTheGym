@@ -52,6 +52,7 @@ struct SportPickerView: View {
                     .foregroundStyle(Color.secondary)
                 
                 TextField("Search sports...", text: $searchText)
+                    .tint(Color.darkColor)
                     .font(.system(size: 15))
                     .focused($searchFocused)
                     .autocorrectionDisabled()
