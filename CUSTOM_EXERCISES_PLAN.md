@@ -121,7 +121,7 @@ launch, so a write queued offline was never retried. `MyDayKitComposition` now h
 bar holds the composition, and sign-out stops them (see CLAUDE.md, *Local stores are scoped by
 user id*).
 
-### 5. Read path — the picker
+### 5. Read path — the picker — **built**
 - An `ExerciseLibrary`, like `WorkoutLibraryManager`, merges the catalogue, the local custom store
   and the remote custom store **by id, catalogue first**. Once an exercise is approved the
   catalogue holds the same id, and the user's copy disappears from the picker. Part 1's id-keyed
@@ -130,6 +130,14 @@ user id*).
 - Two ways in: a **Create exercise** button in the picker, and **Create "<search text>"** in the
   empty search state, with the name filled in. Logging and the workout builder share
   `MyDayExerciseListView`, so both get it.
+
+As built: `ExerciseLibrary` is the merge, a value with tests (`ExerciseLibraryTests`): catalogue
+wins by id, the two custom stores union with the newer `updatedAt` winning and remote winning a
+tie (it alone carries `status`), archived exercises left out. `ExerciseManager` takes
+`customLocal:` / `customRemote:` (`FileManagerCustomExerciseFetcher`,
+`FirestoreCustomExerciseFetcher`) and reads all three at once, each allowed to fail alone. Both
+Create entry points call the picker's `createExercise` closure, which is `nil` until step 6 wires
+the form, so they are not drawn yet.
 
 ### 6. Create screen
 One form in MyDay's builder vocabulary. Everything required; Save disabled until it is all

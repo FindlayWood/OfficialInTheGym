@@ -17,6 +17,15 @@ struct MyDayExerciseListView: View {
     
     var selectedExercise: ((MyDayNewExerciseManager) -> ())?
     var selectedWorkoutExercise: ((Exercise) -> ())?
+    /// Opens the custom exercise form, with the name filled in from the search
+    /// when there is one. `nil` hides both ways in — the toolbar's Create and
+    /// the empty search's Create "<text>" — so a host that cannot create draws
+    /// neither.
+    var createExercise: ((String) -> ())?
+
+    private var trimmedSearch: String {
+        searchText.trimmingCharacters(in: .whitespaces)
+    }
     
     /// A search looks across **every** category, not only the selected one.
     /// It used to filter inside the selected chip, so "deadlift" typed while
@@ -136,6 +145,17 @@ struct MyDayExerciseListView: View {
         }
         .navigationTitle("Select Exercise")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if let createExercise {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Create") {
+                        createExercise(trimmedSearch)
+                    }
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Color.darkColor)
+                }
+            }
+        }
         .task {
             await exerciseManager.load()
         }
@@ -164,6 +184,10 @@ struct MyDayExerciseListView: View {
                             .font(.system(size: 15, weight: .medium))
                             .foregroundStyle(Color.primary)
                         
+                        if exerciseManager.library.isCustom(exercise) {
+                            yoursMarker
+                        }
+                        
                         Spacer()
                         
                         Image(systemName: "chevron.right")
@@ -176,6 +200,18 @@ struct MyDayExerciseListView: View {
             }
         }
         .listStyle(.plain)
+    }
+    
+    /// A custom exercise the user made. It goes once the exercise is approved,
+    /// because the catalogue's copy replaces it under the same id.
+    private var yoursMarker: some View {
+        Text("Yours")
+            .font(.system(size: 11, weight: .semibold))
+            .foregroundStyle(Color.darkColor)
+            .padding(.horizontal, 7)
+            .padding(.vertical, 2)
+            .background(Color.darkColor.opacity(0.12))
+            .clipShape(Capsule())
     }
     
     // MARK: - Loading
@@ -218,6 +254,24 @@ struct MyDayExerciseListView: View {
                 .font(.system(size: 13, weight: .regular))
                 .foregroundStyle(Color.secondary)
                 .multilineTextAlignment(.center)
+            
+            if let createExercise, !trimmedSearch.isEmpty {
+                // Not finding it is exactly when making it is the answer, so
+                // the name the user already typed carries into the form.
+                Button {
+                    createExercise(trimmedSearch)
+                } label: {
+                    Text("Create \"\(trimmedSearch)\"")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(Color.white)
+                        .lineLimit(1)
+                        .padding(.horizontal, 20)
+                        .frame(height: 44)
+                        .background(Color.darkColor)
+                        .clipShape(Capsule())
+                }
+                .padding(.top, 4)
+            }
             
             if !searchText.isEmpty {
                 Button {

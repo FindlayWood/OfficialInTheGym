@@ -42,9 +42,17 @@ class MyDayKitComposition {
     }
     
     func composeCombination(_ navigationController: UINavigationController, purchaseManager: PurchaseManager) {
+        let userId = UserDefaults.currentUser.uid
+
         let loader: ExerciseLoader = FirebaseExerciseLoader()
         let mainThreadLoader: ExerciseLoader = MainThreadExerciseLoaderDecorator(decoratee: loader)
-        let exerciseManager = ExerciseManager(loader: mainThreadLoader)
+        // The picker lists the catalogue and the user's custom exercises,
+        // local first like the template library — see `ExerciseLibrary`.
+        let exerciseManager = ExerciseManager(
+            loader: mainThreadLoader,
+            customLocal: FileManagerCustomExerciseFetcher(userId: userId),
+            customRemote: FirestoreCustomExerciseFetcher(userId: userId)
+        )
         let localSaver = MyDayFileManagerSaver()
         let remoteSaver = MyDayFirestoreSaver()
         let localAndRemoteMyDaySaver: MyDaySaver = LocalAndRemoteMyDaySaver(local: localSaver, remote: remoteSaver)
@@ -93,8 +101,6 @@ class MyDayKitComposition {
         let viewClipRecorder = FirebaseFunctionsViewClipRecorder()
         
         // Workout
-        let userId = UserDefaults.currentUser.uid
-
         // The local template store is scoped by user id. Anything still at the
         // old unscoped path is filed under its own author before the library
         // reads — see `LegacyWorkoutTemplateStoreMigrator`.
