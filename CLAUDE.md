@@ -790,9 +790,14 @@ the next user to sign in opened their library and saw the previous user's workou
   decoded is **left in place, not deleted**: the fetcher has always skipped those, its owner cannot
   be read off it, and destroying it gains nothing.
 
-Not covered, and still open: `WorkoutTemplateSyncService.stop()` has no caller, so signing out leaves
-its `NWPathMonitor` running and a second sign-in starts another one. The queue it flushes is
-uid-scoped, so it uploads the right data — this is a leak, not a correctness bug.
+**The sync services are held for the session.** `WorkoutTemplateSyncService` used to be a local in
+`MyDayKitComposition.composeCombination`, and the composition a local in
+`PlayerInitialViewController.viewDidLoad`, so nothing held it after launch: its flush and network
+monitor each hold it weakly, found it gone, and **a template queued offline was never retried** —
+it stayed on the phone, still visible in the library because the library reads local first. Now the
+tab bar holds the composition as a property, the composition holds both sync services (templates
+and custom exercises), and `Notification.signOut` stops them. **Do not build a sync service as a
+local again.**
 
 The loading skeleton mirrors the real row (icon tile, title bar, subtitle bar) under the same
 "Your Library" heading, so the list fills in rather than swapping layouts. It is only the local read;

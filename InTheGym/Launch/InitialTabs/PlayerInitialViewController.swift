@@ -12,6 +12,10 @@ class PlayerInitialViewController: UITabBarController {
 
     weak var coordinator: TabBarCoordinator?
     var subscriptionManager: PurchaseManager
+    /// Held for the life of the tab bar, not built as a local: it owns MyDay's
+    /// sync services, which retry writes queued offline and would otherwise be
+    /// freed as soon as `viewDidLoad` returned.
+    private let myDayKit = MyDayKitComposition()
     
     init(subscriptionManager: PurchaseManager) {
         self.subscriptionManager = subscriptionManager
@@ -29,7 +33,6 @@ class PlayerInitialViewController: UITabBarController {
         // coordinators remain: the coach tab bar still has NEWSFEED.
 
         // MARK: - MyDay
-        let myDayKit = MyDayKitComposition()
         let myDayNavigationController = UINavigationController()
         myDayKit.composeCombination(myDayNavigationController, purchaseManager: subscriptionManager)
         myDayNavigationController.tabBarItem = UITabBarItem(title: "MYDAY", image: UIImage(systemName: "list.dash"), tag: 0)

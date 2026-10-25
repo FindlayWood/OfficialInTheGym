@@ -7,9 +7,10 @@
 //
 import Foundation
 
-/// The one definition of where the template sync queue lives:
-/// `Documents/PendingSync/workoutTemplates_{userId}.json`, used by
-/// `SyncQueueWorkoutTemplateUploader` and by account deletion's local erase.
+/// The one definition of where the sync queues live:
+/// `Documents/PendingSync/workoutTemplates_{userId}.json` and
+/// `Documents/PendingSync/customExercises_{userId}.json`, used by their
+/// `SyncQueue…Uploader`s and by account deletion's local erase.
 enum PendingSyncStoreLocation {
 
     static var root: URL {
@@ -19,5 +20,9 @@ enum PendingSyncStoreLocation {
 
     static func workoutTemplatesFile(for userId: String) -> URL {
         root.appendingPathComponent("workoutTemplates_\(userId).json")
+    }
+
+    static func customExercisesFile(for userId: String) -> URL {
+        root.appendingPathComponent("customExercises_\(userId).json")
     }
 }

@@ -18,6 +18,28 @@ class MyDayKitComposition {
     /// Opens MyDay's Getting Started, for Settings on the PROFILE tab. Holds the
     /// coordinator weakly — the tab's stack owns it. Set by `composeCombination`.
     private(set) var showGettingStarted: (() -> Void)?
+    /// Writes a custom exercise: local file first, then both Firestore copies,
+    /// queued while offline. Set by `composeCombination`; the create screen
+    /// (step 6 of `CUSTOM_EXERCISES_PLAN.md`) is its first caller.
+    private(set) var customExerciseSaver: CustomExerciseUploading?
+
+    /// **The sync services live here, for the signed-in session.** They used
+    /// to be locals in `composeCombination`, and this composition a local in
+    /// `PlayerInitialViewController.viewDidLoad`, so nothing held them once
+    /// launch finished: each one's flush and network monitor hold it weakly,
+    /// found it gone, and a write queued offline was never retried. The tab
+    /// bar now holds this composition, this holds the services, and signing
+    /// out stops them — `stop()` had no caller before.
+    private var templateSyncService: WorkoutTemplateSyncService?
+    private var customExerciseSyncService: CustomExerciseSyncService?
+    private var signOutObserver: NSObjectProtocol?
+
+    deinit {
+        stopSyncServices()
+        if let signOutObserver {
+            NotificationCenter.default.removeObserver(signOutObserver)
+        }
+    }
     
     func composeCombination(_ navigationController: UINavigationController, purchaseManager: PurchaseManager) {
         let loader: ExerciseLoader = FirebaseExerciseLoader()
@@ -105,6 +127,32 @@ class MyDayKitComposition {
             syncQueue: syncQueue
         )
         syncService.start()
+        templateSyncService = syncService
+
+        // Custom exercises — the template pipeline again, one writer per path.
+        let customExerciseQueue = SyncQueueCustomExerciseUploader(userId: userId)
+        let remoteCustomExerciseUploader: CustomExerciseUploading = UserAndTopLevelCustomExerciseUploader(
+            user: FirestoreCustomExerciseUploader(),
+            topLevel: FirestoreTopLevelCustomExerciseUploader()
+        )
+        customExerciseSaver = CustomExerciseSaver(
+            local: FileManagerCustomExerciseWriter(userId: userId),
+            remote: CustomExerciseSyncer(remote: remoteCustomExerciseUploader, queue: customExerciseQueue)
+        )
+        let customExerciseSyncService = CustomExerciseSyncService(
+            remote: remoteCustomExerciseUploader,
+            syncQueue: customExerciseQueue
+        )
+        customExerciseSyncService.start()
+        self.customExerciseSyncService = customExerciseSyncService
+
+        signOutObserver = NotificationCenter.default.addObserver(
+            forName: Notification.signOut,
+            object: nil,
+            queue: nil
+        ) { [weak self] _ in
+            self?.stopSyncServices()
+        }
         
         // Local-first, mirroring the write path: `WorkoutTemplateSaver` writes
         // FileManager then queues the remote write, so the library has to read
@@ -142,6 +190,19 @@ class MyDayKitComposition {
             navigationController?.present(ProPaywallViewController.modal(purchaseManager: purchaseManager), animated: true)
         }
         coordinator.start()
+    }
+}
+
+// MARK: - Sync services
+extension MyDayKitComposition {
+
+    /// Stops both monitors. Queued writes stay on disk, scoped by user id, and
+    /// are flushed by the next session that user signs in to.
+    private func stopSyncServices() {
+        templateSyncService?.stop()
+        customExerciseSyncService?.stop()
+        templateSyncService = nil
+        customExerciseSyncService = nil
     }
 }
 

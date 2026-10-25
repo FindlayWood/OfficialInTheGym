@@ -100,13 +100,26 @@ disk cache at `Documents/ExerciseBody/` (`ExerciseBodyListStoreLocation`): cache
 refresh behind it, so the form works offline. Not yet built in `MyDayKitComposition` — the form
 (step 6) is their first consumer.
 
-### 4. Write path — mirror the template pipeline
+### 4. Write path — mirror the template pipeline — **built**
 `CustomExerciseSaver` → local `FileManagerCustomExerciseWriter`
 (`Documents/CustomExercises/{uid}/{id}.json`, its path from one `CustomExerciseStoreLocation`) →
 sync queue → `UserAndTopLevelCustomExerciseUploader(user:topLevel:)` over
 `FirestoreCustomExerciseUploader` and `FirestoreTopLevelCustomExerciseUploader`. It is saved
 locally first so an exercise made offline can be picked at once. Built in `MyDayKitComposition`,
 user id injected.
+
+As built: MyDayKit's `CustomExerciseUploading` is the one protocol at every layer, and create,
+edit and archive are all the same whole-exercise write. `CustomExerciseSyncer`,
+`SyncQueueCustomExerciseUploader` (`Documents/PendingSync/customExercises_{uid}.json`) and
+`CustomExerciseSyncService` mirror their template twins. **Both Firestore writes merge**, because
+`status` is never encoded and a replace would delete the server's copy of it.
+`LocalUserDataEraser` removes the local store and the queue. The saver is exposed as
+`MyDayKitComposition.customExerciseSaver` for step 6.
+
+**Fixed with it, for templates too:** both sync services used to be locals that nothing held after
+launch, so a write queued offline was never retried. `MyDayKitComposition` now holds them, the tab
+bar holds the composition, and sign-out stops them (see CLAUDE.md, *Local stores are scoped by
+user id*).
 
 ### 5. Read path — the picker
 - An `ExerciseLibrary`, like `WorkoutLibraryManager`, merges the catalogue, the local custom store
@@ -137,8 +150,16 @@ would count as answered when it was not.
 ### 8. Server — rules, index, deletion
 - Rules:
   - `Users/{uid}/CustomExercises`: the owner reads and writes.
-  - `CustomExercises/{id}`: the owner creates it with `createdBy == uid` and `status == "pending"`,
-    and may update the catalogue fields only while it is pending. No client ever writes `status`.
+  - `CustomExercises/{id}`: the owner creates it with `createdBy == uid` and **no `status`**, and
+    may update the catalogue fields only while it is pending (or has no status yet). **No client
+    ever writes `status`**: the app's model never encodes it, so a create carrying `pending` would
+    be the one exception, and a late edit or archive would then put a reviewed exercise back in
+    the queue. A function sets `pending` on create instead, beside the one that mirrors `status`
+    onto the user copy.
+  - Archiving (`archivedAt`) is allowed on both copies whatever the status — it is how a pending
+    exercise is withdrawn, and harmless once reviewed. An edit queued while pending and flushed
+    after review is denied for good, so the sync service should drop a write the rules reject
+    rather than retry it forever.
   - Reads: the owner and admins.
 - Index: `CustomExercises` on `status` + `createdAt`.
 - Deletion module in `functions/src/Account/`: delete the user's copies, plus their top-level
