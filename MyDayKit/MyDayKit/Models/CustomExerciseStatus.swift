@@ -20,11 +20,15 @@ import Foundation
 /// and templates intact — so they read exactly as an exercise that is simply
 /// the user's own, with no verdict. `isInReview` and `isInCatalogue` are the
 /// only questions the app asks of it.
+///
+/// `withdrawn` is the server's for an exercise archived while still pending:
+/// it takes it out of the review queue (`syncCustomExerciseStatus`).
 public enum CustomExerciseStatus: String, Codable, Sendable {
     case pending
     case approved
     case rejected
     case duplicate
+    case withdrawn
 
     /// Shown as "In review".
     var isInReview: Bool { self == .pending }

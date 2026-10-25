@@ -164,7 +164,7 @@ grouped under their region; body parts are stored in the lists' order, not tap o
   under a different name. Shown once as a confirmation ("Similar to Romanian Deadlift. Save
   anyway?"), never a block.
 
-### 8. Server — rules, index, deletion
+### 8. Server — rules, index, deletion — **built**
 - Rules:
   - `Users/{uid}/CustomExercises`: the owner reads and writes.
   - `CustomExercises/{id}`: the owner creates it with `createdBy == uid` and **no `status`**, and
@@ -182,6 +182,27 @@ grouped under their region; body parts are stored in the lists' order, not tap o
 - Deletion module in `functions/src/Account/`: delete the user's copies, plus their top-level
   documents that are `pending` / `rejected` / `duplicate`. Approved ones are catalogue by then and
   stay.
+
+As built, in `InTheGym-CloudFunctions` (branch `custom-exercises`):
+- **Rules** (`isValidCustomExercise` and friends): every catalogue field required and typed, the
+  category one of `ExerciseCategory`'s raw values, at least one muscle group and pattern, no other
+  keys. Create without `status`; no client change to `status`, `name`, `id`, `createdBy` or
+  `createdAt`; body fields only while `pending` (or no status yet); `archivedAt` always; no client
+  deletes. The review copy is read by its creator and catalogue editors (`canEditCatalogue`), who
+  may also update it. Tests in `test/Rules/firestoreRules.test.ts`.
+- **`syncCustomExerciseStatus`** on `CustomExercises/{id}`: sets `pending` on arrival, `withdrawn`
+  when archived while pending (a new status, so the `pending` queue drops it), and mirrors the
+  status onto `Users/{createdBy}/CustomExercises/{id}`. This is the "function mirrors status" of
+  *Also decided*. Tests in `test/CustomExercises/`.
+- **Index**: `CustomExercises` on `status` + `createdAt`, both ascending (oldest first).
+- **Deletion**: `deleteCustomExercises` removes the user's review copies except `approved`, called
+  from `deleteAccount` after `deleteUserData`, which already takes `Users/{uid}/CustomExercises`.
+- **App**: `CustomExerciseStatus.withdrawn`; `CustomExerciseSyncService` drops a queued write the
+  rules refuse (permission denied) instead of retrying it forever.
+
+**Deploy order matters:** these rules must be live before an app build that saves custom exercises
+reaches users. Until then every upload is refused, and with the drop above it would be dropped from
+the queue — the exercise survives only on that phone.
 
 ### 9. One complete catalogue exercise — dashboards and starting tags
 An exercise created in either dashboard and an approved custom exercise (step 10) write the same

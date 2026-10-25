@@ -6,6 +6,7 @@
 //  Copyright © 2026 FindlayWood. All rights reserved.
 //
 
+import FirebaseFirestore
 import Foundation
 import MyDayKit
 import Network
@@ -49,6 +50,14 @@ final class CustomExerciseSyncService {
 
     // MARK: - Private
 
+    /// Permission denied is the one failure retrying cannot fix: the SDK
+    /// never retries it either.
+    private static func isRefusedByRules(_ error: Error) -> Bool {
+        let error = error as NSError
+        return error.domain == FirestoreErrorDomain
+            && error.code == FirestoreErrorCode.permissionDenied.rawValue
+    }
+
     private func startMonitoringConnectivity() {
         monitor.pathUpdateHandler = { [weak self] path in
             guard let self else { return }
@@ -70,8 +79,15 @@ final class CustomExerciseSyncService {
                 do {
                     try await self.remote.upload(exercise)
                     try? self.syncQueue.dequeue(exercise)
+                } catch where Self.isRefusedByRules(error) {
+                    // The rules will refuse it every time — an edit queued
+                    // while the exercise was in review and flushed after it
+                    // was approved, say. Retrying forever would block nothing
+                    // else but would never end; the local copy keeps the edit.
+                    print("❌ Dropping custom exercise \(exercise.id) the rules refuse: \(error)")
+                    try? self.syncQueue.dequeue(exercise)
                 } catch {
-                    // Left in the queue for the next flush.
+                    // Anything else is worth retrying: left for the next flush.
                 }
             }
         }
