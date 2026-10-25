@@ -327,7 +327,7 @@ Order matters — the app must not ship before the server it writes to.
    `seedExerciseTags`, `discoverExerciseBodyVotes`, `discoverExerciseBodySuggestions`,
    `deleteAccount`, `discoverExerciseCard`.
 2. Rebuild existing exercise cards so they carry body parts:
-   `RebuildDiscoverCards.py <admin> exercise` from `InTheGym-Scripts`.
+   `python RebuildDiscoverCards.py <admin> exercises` from `InTheGym-Scripts`.
 3. Fix existing incomplete catalogue exercises in the dashboard (the old `upperBody` ones).
 4. Ship the dashboards; then the app.
 
