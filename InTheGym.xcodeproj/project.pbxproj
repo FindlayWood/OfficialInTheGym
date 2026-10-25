@@ -944,6 +944,10 @@
 		E4C90B7A15D24F8E9A330008 /* FirestoreCompletedWorkoutSessionDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */; };
 		A1D0E5F200024C0A9B110002 /* FileManagerWorkoutTemplateFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */; };
 		A1D0E5F200024C0A9B110004 /* WorkoutTemplateStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D0E5F200024C0A9B110003 /* WorkoutTemplateStoreLocation.swift */; };
+		CE0E00000000000000000002 /* ExerciseBodyListStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000001 /* ExerciseBodyListStoreLocation.swift */; };
+		CE0E00000000000000000004 /* FileExerciseBodyListCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000003 /* FileExerciseBodyListCache.swift */; };
+		CE0E00000000000000000006 /* CachedExerciseMuscleGroupsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000005 /* CachedExerciseMuscleGroupsLoader.swift */; };
+		CE0E00000000000000000008 /* CachedExerciseMovementPatternsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000007 /* CachedExerciseMovementPatternsLoader.swift */; };
 		A1D0E5F200024C0A9B110006 /* LegacyWorkoutTemplateStoreMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D0E5F200024C0A9B110005 /* LegacyWorkoutTemplateStoreMigrator.swift */; };
 		F0A11D272F6C637100CE1E9A /* StatsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; };
 		F0A11D282F6C637100CE1E9A /* StatsKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F0A11D262F6C637100CE1E9A /* StatsKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -1924,6 +1928,10 @@
 		E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreCompletedWorkoutSessionDeleter.swift"; sourceTree = "<group>"; };
 		A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerWorkoutTemplateFetcher.swift; sourceTree = "<group>"; };
 		A1D0E5F200024C0A9B110003 /* WorkoutTemplateStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateStoreLocation.swift; sourceTree = "<group>"; };
+		CE0E00000000000000000001 /* ExerciseBodyListStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseBodyListStoreLocation.swift; sourceTree = "<group>"; };
+		CE0E00000000000000000003 /* FileExerciseBodyListCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExerciseBodyListCache.swift; sourceTree = "<group>"; };
+		CE0E00000000000000000005 /* CachedExerciseMuscleGroupsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedExerciseMuscleGroupsLoader.swift; sourceTree = "<group>"; };
+		CE0E00000000000000000007 /* CachedExerciseMovementPatternsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedExerciseMovementPatternsLoader.swift; sourceTree = "<group>"; };
 		A1D0E5F200024C0A9B110005 /* LegacyWorkoutTemplateStoreMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyWorkoutTemplateStoreMigrator.swift; sourceTree = "<group>"; };
 		F0A11D262F6C637100CE1E9A /* StatsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StatsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitComposition.swift; sourceTree = "<group>"; };
@@ -4753,6 +4761,10 @@
 				D4AA00000000000000000001 /* MyDayFirestoreRangeLoader.swift */,
 				BF1A00000000000000000119 /* PendingSyncStoreLocation.swift */,
 				A1D0E5F200024C0A9B110005 /* LegacyWorkoutTemplateStoreMigrator.swift */,
+				CE0E00000000000000000001 /* ExerciseBodyListStoreLocation.swift */,
+				CE0E00000000000000000003 /* FileExerciseBodyListCache.swift */,
+				CE0E00000000000000000005 /* CachedExerciseMuscleGroupsLoader.swift */,
+				CE0E00000000000000000007 /* CachedExerciseMovementPatternsLoader.swift */,
 			);
 			path = MyDay;
 			sourceTree = "<group>";
@@ -4931,6 +4943,10 @@
 				E4C90B7A15D24F8E9A330008 /* FirestoreCompletedWorkoutSessionDeleter.swift in Sources */,
 				A1D0E5F200024C0A9B110002 /* FileManagerWorkoutTemplateFetcher.swift in Sources */,
 				A1D0E5F200024C0A9B110004 /* WorkoutTemplateStoreLocation.swift in Sources */,
+				CE0E00000000000000000002 /* ExerciseBodyListStoreLocation.swift in Sources */,
+				CE0E00000000000000000004 /* FileExerciseBodyListCache.swift in Sources */,
+				CE0E00000000000000000006 /* CachedExerciseMuscleGroupsLoader.swift in Sources */,
+				CE0E00000000000000000008 /* CachedExerciseMovementPatternsLoader.swift in Sources */,
 				A1D0E5F200024C0A9B110006 /* LegacyWorkoutTemplateStoreMigrator.swift in Sources */,
 				74B48DEC27A1FCBF00BBFC16 /* PostReferencesModel.swift in Sources */,
 				744AED52279B08AB000D2D74 /* WorkouCollectionDataSource.swift in Sources */,

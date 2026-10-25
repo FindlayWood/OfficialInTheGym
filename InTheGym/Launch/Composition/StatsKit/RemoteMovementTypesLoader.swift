@@ -8,18 +8,29 @@
 
 import FirebaseFirestore
 import Foundation
+import MyDayKit
 import StatsKit
 
-class RemoteMovementTypesLoader: MovementTypesLoader {
+/// The one reader of `MovementTypes`, answering StatsKit and MyDayKit — see
+/// `RemoteMuscleGroupsLoader`.
+class RemoteMovementTypesLoader: MovementTypesLoader, ExerciseMovementPatternsLoader {
     private let db = Firestore.firestore()
     
     func loadAll() async throws -> [MovementPattern] {
-        let path = "MovementTypes"
-        
-        let snapshot = try await db.collection(path).getDocuments()
-        
-        return snapshot.documents.compactMap { document in
+        try await documents().compactMap { document in
             try? document.data(as: MovementPattern.self)
         }
+    }
+
+    func loadMovementPatterns() async throws -> [ExerciseMovementPattern] {
+        try await documents().compactMap { document in
+            try? document.data(as: ExerciseMovementPattern.self)
+        }
+    }
+
+    private func documents() async throws -> [QueryDocumentSnapshot] {
+        let path = "MovementTypes"
+        
+        return try await db.collection(path).getDocuments().documents
     }
 }

@@ -82,7 +82,7 @@ So:
   resolve a log identically, or the Update diff moves volume between groups.
 - This must ship before the suggestions queue (step 10) lets anyone edit muscle groups.
 
-### 2. MyDayKit — model
+### 2. MyDayKit — model — **built**
 - `Exercise` gains optional `isCompound` / `isUnilateral`, optional for the same reason as part 1:
   every existing day file embeds an `Exercise`.
 - `CustomExercise` is the stored shape: the catalogue fields plus `createdBy`, `createdAt`,
@@ -90,11 +90,15 @@ So:
 - `status` (`pending` / `approved` / `rejected` / `duplicate`, plus `duplicateOf`) exists only on
   the top-level copy, and only the dashboard writes it.
 
-### 3. MyDayKit — muscle groups and movement patterns to choose from
-`MuscleGroupsLoader` / `MovementTypesLoader` protocols in MyDayKit, with adapters in the
-composition root over `MuscleGroups` and `MovementTypes`. StatsKit has its own protocols and
-adapters for the same collections: the adapters may conform to both, so there is one reader per
-path. Cache them on disk: the form must work offline, and the lists rarely change.
+### 3. MyDayKit — muscle groups and movement patterns to choose from — **built**
+`ExerciseMuscleGroupsLoader` / `ExerciseMovementPatternsLoader` in MyDayKit, returning
+`ExerciseMuscleGroup` / `ExerciseMovementPattern`. Named apart from StatsKit's
+`MuscleGroupsLoader` / `MovementTypesLoader`, which read the same collections: the app's
+`RemoteMuscleGroupsLoader` / `RemoteMovementTypesLoader` now conform to both, so there is one
+reader per path. `CachedExerciseMuscleGroupsLoader` / `…MovementPatternsLoader` wrap them with a
+disk cache at `Documents/ExerciseBody/` (`ExerciseBodyListStoreLocation`): cache first with a
+refresh behind it, so the form works offline. Not yet built in `MyDayKitComposition` — the form
+(step 6) is their first consumer.
 
 ### 4. Write path — mirror the template pipeline
 `CustomExerciseSaver` → local `FileManagerCustomExerciseWriter`
