@@ -256,7 +256,7 @@ As built:
   field (`try?`), so exercises the React form made before this do not show there — fix them in the
   React dashboard.
 
-### 10. Review — admin app and React dashboard
+### 10. Review — admin app and React dashboard — **built** (body suggestions queue moves to step 11)
 - **Pending queue**, grouped by normalised name across users, so five people's "landmine press" is
   one decision.
 - Each entry shows the creator's fields and the closest catalogue exercises.
@@ -268,6 +268,24 @@ As built:
 - **Body suggestions queue**: catalogue exercises whose votes (step 11) disagree with what is
   stored. Each shows the vote counts beside the current values, and an Apply button that merges the
   chosen values into `Exercises/{id}`.
+
+As built — the review queue in both dashboards; the body suggestions queue is built with step 11,
+since until votes exist it has nothing to show:
+- **React** `ReviewCustomExercises.js` on `customExerciseReview.js`; **admin app** a Review tab,
+  `CustomExerciseReviewView` / `…DetailView` on `CustomExerciseReviewViewModel`. Each dashboard
+  keeps its own small copy of the grouping and "closest" rules — both are due a rework.
+- **A group is one decision.** Approve writes the group's **oldest** submission to
+  `Exercises/{id}` under its own id (merged, in one batch with the verdicts) and marks the rest
+  `duplicate` with `duplicateOf` it. Duplicate-of and Reject apply to every submission in the group.
+- **The name is locked at approval**; category, muscle groups, patterns and the two flags can be
+  corrected first.
+- **Closest** = a shared name word (3+ letters) scores 3, plus the shared muscle groups when a
+  movement pattern is shared too.
+- Creators are shown by `@username` from `Profiles`.
+- The rules now allow `duplicateOf` to be present on a creator's merged write (never changed), or a
+  creator could not archive an exercise reviewed as a duplicate.
+- Verified on the emulator: submit → both copies `pending`; approve → both `approved`, and the new
+  catalogue entry tagged by `seedExerciseTags`.
 
 ### 11. DISCOVER — showing and voting on body parts
 - The exercise card projection gains `muscleGroups` / `movementPatterns`. The exercise page shows
