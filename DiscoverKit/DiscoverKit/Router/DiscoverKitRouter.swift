@@ -58,6 +58,9 @@ public final class DiscoverKitRouter {
     let myTagVotesLoader: MyTagVotesLoader
     let tagVoteWriter: TagVoteWriter
     let tagNormalizer: TagNormalizer
+    let bodyPartsLoader: BodyPartsLoader
+    let myBodyVoteLoader: MyBodyVoteLoader
+    let bodyVoteWriter: BodyVoteWriter
     let blockedUsersLoader: BlockedUsersLoader
     let myReportsLoader: MyReportsLoader
     let reportWriter: ReportWriter
@@ -118,6 +121,9 @@ public final class DiscoverKitRouter {
         myTagVotesLoader: MyTagVotesLoader,
         tagVoteWriter: TagVoteWriter,
         tagNormalizer: TagNormalizer,
+        bodyPartsLoader: BodyPartsLoader,
+        myBodyVoteLoader: MyBodyVoteLoader,
+        bodyVoteWriter: BodyVoteWriter,
         blockedUsersLoader: BlockedUsersLoader,
         myReportsLoader: MyReportsLoader,
         reportWriter: ReportWriter,
@@ -155,6 +161,9 @@ public final class DiscoverKitRouter {
         self.myTagVotesLoader = myTagVotesLoader
         self.tagVoteWriter = tagVoteWriter
         self.tagNormalizer = tagNormalizer
+        self.bodyPartsLoader = bodyPartsLoader
+        self.myBodyVoteLoader = myBodyVoteLoader
+        self.bodyVoteWriter = bodyVoteWriter
         self.blockedUsersLoader = blockedUsersLoader
         self.myReportsLoader = myReportsLoader
         self.reportWriter = reportWriter
@@ -282,6 +291,14 @@ extension DiscoverKitRouter {
                         visibleTags: card.visibleTags,
                         counts: card.tagCounts,
                         canVote: true
+                    ),
+                    bodyPartsViewModel: DiscoverBodyPartsViewModel(
+                        exerciseId: card.exerciseId,
+                        muscleGroups: card.muscleGroups,
+                        movementPatterns: card.movementPatterns,
+                        partsLoader: bodyPartsLoader,
+                        myVoteLoader: myBodyVoteLoader,
+                        writer: bodyVoteWriter
                     ),
                     moderation: moderation,
                     onOpenComments: { [weak self] in self?.navigate(to: .comments(.exercise(id: card.exerciseId))) },

@@ -7,14 +7,15 @@
 
 import SwiftUI
 
-/// An exercise's DISCOVER page: its header, rating, tags, the clips of people
-/// doing it, and the way into its comments.
+/// An exercise's DISCOVER page: its header, what it works, rating, tags, the
+/// clips of people doing it, and the way into its comments.
 struct DiscoverExerciseDetailScreen: View {
 
     let card: DiscoverExerciseCard
     @ObservedObject var clipsViewModel: DiscoverExerciseClipsViewModel
     @ObservedObject var ratingViewModel: DiscoverRatingViewModel
     @ObservedObject var taggingViewModel: DiscoverTaggingViewModel
+    @ObservedObject var bodyPartsViewModel: DiscoverBodyPartsViewModel
     @ObservedObject var moderation: DiscoverModerationStore
     var onOpenComments: () -> Void = {}
     var onTagTapped: (String) -> Void = { _ in }
@@ -41,6 +42,8 @@ struct DiscoverExerciseDetailScreen: View {
                     .padding(16)
                 }
 
+                DiscoverBodyPartsSection(viewModel: bodyPartsViewModel)
+
                 DiscoverRatingSection(viewModel: ratingViewModel)
 
                 DiscoverTagsSection(viewModel: taggingViewModel, moderation: moderation, onTagTapped: onTagTapped)
@@ -60,14 +63,18 @@ struct DiscoverExerciseDetailScreen: View {
             async let clips: Void = clipsViewModel.load()
             async let rating: Void = ratingViewModel.load()
             async let tags: Void = taggingViewModel.load()
+            async let bodyParts: Void = bodyPartsViewModel.load()
             async let moderationState: Void = moderation.loadIfNeeded()
-            _ = await (clips, rating, tags, moderationState)
+            _ = await (clips, rating, tags, bodyParts, moderationState)
         }
     }
 }
 
 #Preview {
-    let card = DiscoverExerciseCard(exerciseId: "squat", name: "Squat", category: "lower_body")
+    let card = DiscoverExerciseCard(
+        exerciseId: "squat", name: "Squat", category: "lower_body",
+        muscleGroups: ["quads", "glutes"], movementPatterns: ["squat"]
+    )
     NavigationStack {
         DiscoverExerciseDetailScreen(
             card: card,
@@ -89,6 +96,14 @@ struct DiscoverExerciseDetailScreen: View {
                 myTagsLoader: PreviewTagLoaders(),
                 writer: PreviewTagServices(),
                 suggestionLoader: PreviewTagLoaders()
+            ),
+            bodyPartsViewModel: DiscoverBodyPartsViewModel(
+                exerciseId: card.exerciseId,
+                muscleGroups: card.muscleGroups,
+                movementPatterns: card.movementPatterns,
+                partsLoader: PreviewBodyPartServices(),
+                myVoteLoader: PreviewBodyPartServices(),
+                writer: PreviewBodyPartServices()
             ),
             moderation: PreviewModeration.store()
         )

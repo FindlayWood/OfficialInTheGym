@@ -30,6 +30,11 @@ public struct DiscoverExerciseCard: Decodable, Identifiable, Hashable, Sendable 
     public let visibleTags: [String]?
     /// Vote counts for the subject's most-voted tags, visible or not.
     public let tagCounts: [String: Int]?
+    /// What the exercise works, as ids — named on the page through
+    /// `BodyPartsLoader`. Absent on cards projected before the field existed
+    /// and on exercises with none.
+    public let muscleGroups: [String]?
+    public let movementPatterns: [String]?
 
     public var id: String { exerciseId }
 
@@ -41,7 +46,9 @@ public struct DiscoverExerciseCard: Decodable, Identifiable, Hashable, Sendable 
         ratingSum: Int? = nil,
         commentCount: Int? = nil,
         visibleTags: [String]? = nil,
-        tagCounts: [String: Int]? = nil
+        tagCounts: [String: Int]? = nil,
+        muscleGroups: [String]? = nil,
+        movementPatterns: [String]? = nil
     ) {
         self.exerciseId = exerciseId
         self.name = name
@@ -51,6 +58,8 @@ public struct DiscoverExerciseCard: Decodable, Identifiable, Hashable, Sendable 
         self.commentCount = commentCount
         self.visibleTags = visibleTags
         self.tagCounts = tagCounts
+        self.muscleGroups = muscleGroups
+        self.movementPatterns = movementPatterns
     }
 
     /// `upper_body` → `Upper Body`.

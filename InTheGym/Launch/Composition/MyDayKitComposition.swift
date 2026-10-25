@@ -151,14 +151,8 @@ class MyDayKitComposition {
         // readers StatsKit uses — one reader per collection.
         let customExercises = CustomExerciseDependencies(
             saver: customExerciseSaver,
-            muscleGroups: CachedExerciseMuscleGroupsLoader(
-                remote: RemoteMuscleGroupsLoader(),
-                cache: FileExerciseBodyListCache(url: ExerciseBodyListStoreLocation.muscleGroups)
-            ),
-            movementPatterns: CachedExerciseMovementPatternsLoader(
-                remote: RemoteMovementTypesLoader(),
-                cache: FileExerciseBodyListCache(url: ExerciseBodyListStoreLocation.movementPatterns)
-            ),
+            muscleGroups: CachedExerciseBodyLoaders.muscleGroups(),
+            movementPatterns: CachedExerciseBodyLoaders.movementPatterns(),
             similarExercises: DiscoverSimilarExerciseFinder(),
             userId: userId
         )

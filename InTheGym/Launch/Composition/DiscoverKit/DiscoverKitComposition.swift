@@ -78,6 +78,18 @@ class DiscoverKitComposition {
 
         let tagNormalizer: TagNormalizer = WorkoutTagNormalizer()
 
+        // MARK: - Body parts
+        // Suggestions only: votes are tallied for a curator, never applied.
+
+        let bodyPartsLoader: BodyPartsLoader = MyDayBodyPartsLoader(
+            muscleGroups: CachedExerciseBodyLoaders.muscleGroups(),
+            movementPatterns: CachedExerciseBodyLoaders.movementPatterns()
+        )
+
+        let myBodyVoteLoader: MyBodyVoteLoader = FirestoreMyBodyVoteLoader(userId: userId)
+
+        let bodyVoteWriter: BodyVoteWriter = FirestoreBodyVoteWriter(userId: userId)
+
         // MARK: - Moderation
 
         let blockedUsersLoader: BlockedUsersLoader = FirestoreBlockedUsersLoader(userId: userId)
@@ -149,6 +161,9 @@ class DiscoverKitComposition {
             myTagVotesLoader: myTagVotesLoader,
             tagVoteWriter: tagVoteWriter,
             tagNormalizer: tagNormalizer,
+            bodyPartsLoader: bodyPartsLoader,
+            myBodyVoteLoader: myBodyVoteLoader,
+            bodyVoteWriter: bodyVoteWriter,
             blockedUsersLoader: blockedUsersLoader,
             myReportsLoader: myReportsLoader,
             reportWriter: reportWriter,

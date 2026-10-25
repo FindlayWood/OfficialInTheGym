@@ -944,6 +944,10 @@
 		E4C90B7A15D24F8E9A330008 /* FirestoreCompletedWorkoutSessionDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */; };
 		A1D0E5F200024C0A9B110002 /* FileManagerWorkoutTemplateFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */; };
 		A1D0E5F200024C0A9B110004 /* WorkoutTemplateStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D0E5F200024C0A9B110003 /* WorkoutTemplateStoreLocation.swift */; };
+		CE0E00000000000000000058 /* FirestoreBodyVoteWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000057 /* FirestoreBodyVoteWriter.swift */; };
+		CE0E00000000000000000056 /* FirestoreMyBodyVoteLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000055 /* FirestoreMyBodyVoteLoader.swift */; };
+		CE0E00000000000000000054 /* MyDayBodyPartsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000053 /* MyDayBodyPartsLoader.swift */; };
+		CE0E00000000000000000052 /* CachedExerciseBodyLoaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000051 /* CachedExerciseBodyLoaders.swift */; };
 		CE0E00000000000000000042 /* DiscoverSimilarExerciseFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000041 /* DiscoverSimilarExerciseFinder.swift */; };
 		CE0E00000000000000000032 /* FileManagerCustomExerciseFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000031 /* FileManagerCustomExerciseFetcher.swift */; };
 		CE0E00000000000000000034 /* FirestoreCustomExerciseFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000033 /* FirestoreCustomExerciseFetcher.swift */; };
@@ -1940,6 +1944,10 @@
 		E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreCompletedWorkoutSessionDeleter.swift"; sourceTree = "<group>"; };
 		A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerWorkoutTemplateFetcher.swift; sourceTree = "<group>"; };
 		A1D0E5F200024C0A9B110003 /* WorkoutTemplateStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateStoreLocation.swift; sourceTree = "<group>"; };
+		CE0E00000000000000000057 /* FirestoreBodyVoteWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreBodyVoteWriter.swift; sourceTree = "<group>"; };
+		CE0E00000000000000000055 /* FirestoreMyBodyVoteLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreMyBodyVoteLoader.swift; sourceTree = "<group>"; };
+		CE0E00000000000000000053 /* MyDayBodyPartsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayBodyPartsLoader.swift; sourceTree = "<group>"; };
+		CE0E00000000000000000051 /* CachedExerciseBodyLoaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedExerciseBodyLoaders.swift; sourceTree = "<group>"; };
 		CE0E00000000000000000041 /* DiscoverSimilarExerciseFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverSimilarExerciseFinder.swift; sourceTree = "<group>"; };
 		CE0E00000000000000000031 /* FileManagerCustomExerciseFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerCustomExerciseFetcher.swift; sourceTree = "<group>"; };
 		CE0E00000000000000000033 /* FirestoreCustomExerciseFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreCustomExerciseFetcher.swift; sourceTree = "<group>"; };
@@ -4726,6 +4734,9 @@
 				D1CA00000000000000000124 /* FirestoreTaggedWorkoutsLoader.swift */,
 				D1CA00000000000000000125 /* FirestoreMyTagVotesLoader.swift */,
 				D1CA00000000000000000126 /* FirestoreTagVoteWriter.swift */,
+				CE0E00000000000000000057 /* FirestoreBodyVoteWriter.swift */,
+				CE0E00000000000000000055 /* FirestoreMyBodyVoteLoader.swift */,
+				CE0E00000000000000000053 /* MyDayBodyPartsLoader.swift */,
 				D1CA00000000000000000127 /* WorkoutTagNormalizer.swift */,
 				D1CA00000000000000000140 /* DiscoverReportTarget+Firestore.swift */,
 				D1CA00000000000000000141 /* FirestoreReportWriter.swift */,
@@ -4785,6 +4796,7 @@
 				D4AA00000000000000000001 /* MyDayFirestoreRangeLoader.swift */,
 				BF1A00000000000000000119 /* PendingSyncStoreLocation.swift */,
 				A1D0E5F200024C0A9B110005 /* LegacyWorkoutTemplateStoreMigrator.swift */,
+				CE0E00000000000000000051 /* CachedExerciseBodyLoaders.swift */,
 				CE0E00000000000000000041 /* DiscoverSimilarExerciseFinder.swift */,
 				CE0E00000000000000000031 /* FileManagerCustomExerciseFetcher.swift */,
 				CE0E00000000000000000033 /* FirestoreCustomExerciseFetcher.swift */,
@@ -4979,6 +4991,10 @@
 				E4C90B7A15D24F8E9A330008 /* FirestoreCompletedWorkoutSessionDeleter.swift in Sources */,
 				A1D0E5F200024C0A9B110002 /* FileManagerWorkoutTemplateFetcher.swift in Sources */,
 				A1D0E5F200024C0A9B110004 /* WorkoutTemplateStoreLocation.swift in Sources */,
+				CE0E00000000000000000058 /* FirestoreBodyVoteWriter.swift in Sources */,
+				CE0E00000000000000000056 /* FirestoreMyBodyVoteLoader.swift in Sources */,
+				CE0E00000000000000000054 /* MyDayBodyPartsLoader.swift in Sources */,
+				CE0E00000000000000000052 /* CachedExerciseBodyLoaders.swift in Sources */,
 				CE0E00000000000000000042 /* DiscoverSimilarExerciseFinder.swift in Sources */,
 				CE0E00000000000000000032 /* FileManagerCustomExerciseFetcher.swift in Sources */,
 				CE0E00000000000000000034 /* FirestoreCustomExerciseFetcher.swift in Sources */,
